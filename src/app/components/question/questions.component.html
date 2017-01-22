@@ -1,0 +1,11 @@
+<h3>Questions</h3>
+<ul>
+  <li *ngFor="let question of questions">
+    <span>{{question.questionText}}</span>
+    <ul>
+      <li *ngFor="let answer of question.answers" class="answer" [class.correct]="answer.correct">
+        <span>{{answer.answerText}}</span>
+      </li>  
+    </ul>
+  </li>
+</ul>

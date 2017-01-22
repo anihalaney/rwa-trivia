@@ -1,0 +1,18 @@
+<h1>
+  {{title}}
+</h1>
+<div>
+  <ul>
+    <li>
+      <a [routerLink]="['/categories']">Categories</a>
+    </li>
+    <li>
+      <a [routerLink]="['/tags']">Tags</a>
+    </li>
+    <li>
+      <a [routerLink]="['/questions']">Questions</a>
+    </li>
+  </ul>  
+</div>
+
+<router-outlet></router-outlet>

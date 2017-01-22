@@ -1,10 +1,10 @@
-import { RwaPage } from './app.po';
+import { TriviaPage } from './app.po';
 
-describe('rwa App', function() {
-  let page: RwaPage;
+describe('trivia App', function() {
+  let page: TriviaPage;
 
   beforeEach(() => {
-    page = new RwaPage();
+    page = new TriviaPage();
   });
 
   it('should display message saying app works', () => {
