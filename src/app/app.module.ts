@@ -3,18 +3,21 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppComponent } from './app.component';
+import { AppComponent, CategoriesComponent, TagsComponent, QuestionsComponent } from './components';
+import { CategoryService, TagService, QuestionService } from './services';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent, CategoriesComponent, TagsComponent, QuestionsComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [ 
+    CategoryService, TagService, QuestionService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
