@@ -2,12 +2,17 @@
   {{title}}
 </h1>
 <div>
-  <category-list></category-list>
+  <ul>
+    <li>
+      <a [routerLink]="['/categories']">Categories</a>
+    </li>
+    <li>
+      <a [routerLink]="['/tags']">Tags</a>
+    </li>
+    <li>
+      <a [routerLink]="['/questions']">Questions</a>
+    </li>
+  </ul>  
 </div>
-<div>
-  <question-list></question-list>
-</div>
-<div>
-  <tag-list></tag-list>
-</div>
-  
+
+<router-outlet></router-outlet>
