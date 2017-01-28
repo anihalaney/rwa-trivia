@@ -4,6 +4,10 @@ import { RouterModule  } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import 'hammerjs';
+import { MaterialModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+
 import { routes }   from './app.route';
 import { AppComponent, CategoriesComponent, TagsComponent, QuestionsComponent } from './components';
 import { CategoryService, TagService, QuestionService } from './services';
@@ -17,7 +21,12 @@ import { CategoryService, TagService, QuestionService } from './services';
     // Router
     RouterModule.forRoot(routes), 
     FormsModule,
-    HttpModule
+    HttpModule,
+
+    //Material
+    MaterialModule.forRoot(),
+    //Flex
+    FlexLayoutModule.forRoot()
   ],
   providers: [ 
     CategoryService, TagService, QuestionService

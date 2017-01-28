@@ -8,6 +8,7 @@ export class Question {
   explanation?: string;
   tags: string[];
   categories: Category[];
+  categoryIds: number[];
   published: boolean;
   status: QuestionStatus;
   createdBy?: string;
@@ -23,6 +24,7 @@ export class Question {
     this.ordered = false;
     this.tags = [];
     this.categories = [];
+    this.categoryIds = [];
     this.published = false;
     this.status = QuestionStatus.SAVED;
   }
