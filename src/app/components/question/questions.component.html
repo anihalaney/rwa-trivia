@@ -1,11 +1,34 @@
-<h3>Questions</h3>
-<ul>
-  <li *ngFor="let question of questions">
-    <span>{{question.questionText}}</span>
-    <ul>
-      <li *ngFor="let answer of question.answers" class="answer" [class.correct]="answer.correct">
-        <span>{{answer.answerText}}</span>
-      </li>  
-    </ul>
-  </li>
-</ul>
+<md-card>
+  <md-card-title>Questions</md-card-title>
+  <md-card-content class="flex-container" 
+      fxLayoutWrap="wrap"
+      fxLayout="row"
+      fxLayoutAlign="center" fxLayoutAlign.xs="start">    
+
+  <md-card *ngFor="let question of questions" class="flex-item question-card">
+    <md-card-header>
+      <md-card-title>
+        <span *ngFor="let category of question.categories">
+          {{category.categoryName}}
+        </span>
+      </md-card-title>
+      <md-card-subtitle>
+        {{question.questionText}}
+      </md-card-subtitle>
+    </md-card-header>
+    <md-card-content>
+      <md-list dense> 
+        <md-list-item *ngFor="let answer of question.answers">
+          {{answer.answerText}}<md-icon *ngIf="answer.correct" md-list-icon>check</md-icon>
+        </md-list-item>
+      </md-list>
+
+      <md-chip-list>
+        <md-chip *ngFor="let tag of question.tags">
+          {{tag}}
+        </md-chip>
+      </md-chip-list>
+    </md-card-content>
+  </md-card>
+  </md-card-content>    
+</md-card>

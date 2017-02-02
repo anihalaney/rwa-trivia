@@ -18,7 +18,8 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
-        "styles.css"
+        "rwa-trivia.theme.scss",
+        "styles.scss"
       ],
       "scripts": [],
       "environments": {

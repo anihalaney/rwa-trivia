@@ -169,10 +169,8 @@
                 "correct": false}
             ],
             "ordered": false,
-            "tags": ["JavaScript"],
-            "categories": [
-                {"id": 2}
-            ]
+            "tags": ["JavaScript", "front-end", "ES5"],
+            "categoryIds": [2]
         },
         {
             "id": 2,
@@ -192,10 +190,8 @@
                 "correct": true}
             ],
             "ordered": false,
-            "tags": ["JavaScript"],
-            "categories": [
-                {"id": 2}
-            ]
+            "tags": ["JavaScript", "front-end"],
+            "categoryIds": [2]
         },
         {
             "id": 3,
@@ -216,9 +212,7 @@
             ],
             "ordered": false,
             "tags": ["JavaScript"],
-            "categories": [
-                {"id": 2}
-            ]
+            "categoryIds": [2]
         },
         {
             "id": 4,
@@ -239,9 +233,7 @@
             ],
             "ordered": false,
             "tags": ["JavaScript"],
-            "categories": [
-                {"id": 2}
-            ]
+            "categoryIds": [2]
         },
         {
             "id": 5,
@@ -261,10 +253,8 @@
                 "correct": false}
             ],
             "ordered": true,
-            "tags": ["JavaScript"],
-            "categories": [
-                {"id": 2}
-            ]
+            "tags": ["JavaScript", "ES5"],
+            "categoryIds": [2]
         },
         {
             "id": 6,
@@ -284,10 +274,8 @@
                 "correct": false}
             ],
             "ordered": false,
-            "tags": [],
-            "categories": [
-                {"id": 1}
-            ]
+            "tags": ["gaming"],
+            "categoryIds": [1]
         }
     ]  
 }

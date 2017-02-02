@@ -24,9 +24,6 @@ export class QuestionsComponent implements OnInit {
   ngOnInit() {
     this.sub = this.questionService.getQuestions()
                    .subscribe(questions => this.questions = questions);
-
-    this.sub = this.questionService.getQuestions()
-                   .subscribe(questions => this.questions = questions);
   }
 
   ngOnDestroy() {

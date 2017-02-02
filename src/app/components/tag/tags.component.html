@@ -1,6 +1,8 @@
-<h3>Tags</h3>
-<ul>
-  <li *ngFor="let tag of tags">
+<md-card>
+<md-card-title>Tags</md-card-title>
+<md-list dense>
+   <md-list-item *ngFor="let tag of tags">
     <span>{{tag}}</span>
-  </li>
-</ul>
+    </md-list-item>
+</md-list>
+</md-card>
