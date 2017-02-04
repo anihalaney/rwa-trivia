@@ -1,0 +1,49 @@
+<md-card>
+  <form class="question-form">
+    <md-card-title>Add Question</md-card-title>
+    <md-card-header>
+      <md-card-title>
+          <md-select placeholder="Category" name="category">
+            <md-option *ngFor="let category of categories" [value]="category.id">
+              {{category.categoryName}}
+            </md-option>
+          </md-select>
+      </md-card-title>
+    </md-card-header>
+
+    <md-card-content>
+      <md-list> 
+        <md-input-container class="full-width">
+          <input md-input placeholder="Question">
+        </md-input-container>
+        <p *ngFor="let index of [1,2,3,4]">
+          
+          <md-input-container class="full-width">
+            <md-checkbox md-prefix></md-checkbox>
+            <input md-input [placeholder]="'Answer ' + index" />
+            <md-hint align="end">Answer {{index}}</md-hint>
+          </md-input-container>
+        </p>
+      </md-list>
+      <p> 
+        <md-input-container>
+          <input md-input placeholder="Tag">
+        </md-input-container>
+      </p> 
+
+      <md-chip-list>
+        <md-chip>
+          Tag 1
+        </md-chip>
+        <md-chip>
+          Tag 2
+        </md-chip>
+      </md-chip-list>
+    </md-card-content>
+
+    <md-card-actions>
+      <button md-button>SAVE</button>
+      <button md-button>CANCEL</button>
+    </md-card-actions>
+  </form>  
+</md-card>
