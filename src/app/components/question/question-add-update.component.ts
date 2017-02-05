@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { Category, Question }     from '../../model';
+import { Category, Question, Answer }     from '../../model';
 import { CategoryService, TagService, QuestionService } from '../../services';
 
 @Component({
@@ -26,6 +26,9 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
   get answers(): FormArray { 
     return this.questionForm.get('answers') as FormArray; 
+  }
+  get tagsArray(): FormArray { 
+    return this.questionForm.get('tagsArray') as FormArray; 
   }
 
   //Constructor
@@ -68,12 +71,15 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
         this.enteredTags.push(tag);
       this.questionForm.get('tags').setValue('');
     }
+    this.setTagsArray();
   }
   removeEnteredTag(tag) {
     this.enteredTags = this.enteredTags.filter(t => t !== tag); 
+    this.setTagsArray();
   }
   onSubmit() {
     //validations
+    this.questionForm.updateValueAndValidity();
     if (this.questionForm.invalid)
       return;
 
@@ -98,7 +104,6 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   }
 
   saveQuestion(question: Question) {
-    console.log("saveQuestion");
     this.questionService.saveQuestion(question).subscribe(response => {
       console.log("navigating ...");
       this.router.navigate(['/questions']);
@@ -120,8 +125,13 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
         matchingTags.push(tag);
     });
     this.autoTags = matchingTags;
-  }
 
+    this.setTagsArray();
+  }
+  setTagsArray() {
+    this.tagsArray.controls = [];
+    [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
+  }
   createForm(question: Question) {
 
     let fgs:FormGroup[] = question.answers.map(answer => {
@@ -149,8 +159,21 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
       answers: answersFA,
       ordered: [question.ordered],
       explanation: [question.explanation]
-
-    })
+      }, {validator: questionFormValidator}
+    );
   }
 
+}
+
+//Custom Validators
+function questionFormValidator(fg: FormGroup): {[key: string]: boolean} {
+  let answers: Answer[] = fg.get('answers').value;
+  if (answers.filter(answer => answer.correct).length !== 1)
+    return {'correctAnswerCountInvalid': true}
+
+  let tags: string[] = fg.get('tagsArray').value;
+  if (tags.length  < 3)
+    return {'tagCountInvalid': true}
+
+  return null;
 }

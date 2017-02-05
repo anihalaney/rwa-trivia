@@ -19,6 +19,6 @@ md-card-actions {
 /deep/md-input-container.ng-invalid.ng-touched .md-input-underline {
   border-color: red;
 }
-/deep/md-hint.error {
+/deep/md-hint.error, .error {
   color: red;
 }
