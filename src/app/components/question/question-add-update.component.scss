@@ -13,3 +13,12 @@ md-card-actions {
 .full-width {
   width: 100%;
 }
+.remove-tag {
+  cursor: pointer;
+}
+/deep/md-input-container.ng-invalid.ng-touched .md-input-underline {
+  border-color: red;
+}
+/deep/md-hint.error {
+  color: red;
+}
