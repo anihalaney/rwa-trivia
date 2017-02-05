@@ -1,8 +1,14 @@
 # rwa-trivia app
 
 This is part of building a new app for my series - Real World Angular @ https://blog.realworldfullstack.io/
-Part 0 (https://blog.realworldfullstack.io/real-world-angular-part-0-from-zero-to-cli-ng-a2ff646b90cc)
-Part 1 ()
+
+Part 0: From zero to cli-ng (https://blog.realworldfullstack.io/real-world-angular-part-0-from-zero-to-cli-ng-a2ff646b90cc)
+
+Part 1: Not another todo list app (https://blog.realworldfullstack.io/real-world-angular-part-1-not-another-todo-list-c2ea5020f944)
+
+Part 2: It's a Material world (https://blog.realworldfullstack.io/real-world-angular-part-2-its-a-material-world-2d70238ef8ef)
+
+Part 3: Form Formation (https://blog.realworldfullstack.io/real-world-angular-part-3-form-formation-f78d8462da70)
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.25.5.
 
