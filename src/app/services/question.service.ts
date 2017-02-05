@@ -32,4 +32,11 @@ export class QuestionService {
         })
   }
 
+  saveQuestion(question: Question): Observable<Question> {
+      let url = this._serviceUrl;
+
+      return this.http.post(url, question)
+                 .map(res => res.json());
+  }
+
 }

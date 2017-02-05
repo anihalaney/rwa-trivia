@@ -1,0 +1,68 @@
+<md-card>
+  <form (ngSubmit)="onSubmit()" class="question-form" [formGroup]="questionForm" novalidate>
+    <md-card-title>Add Question</md-card-title>
+    <md-card-header>
+      <md-card-title>
+        <md-select placeholder="Category" name="category" class="required" formControlName="category">
+          <md-option *ngFor="let category of categories" [value]="category.id">
+            {{category.categoryName}}
+          </md-option>
+        </md-select>
+        <p *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine" style="font-size: 11px;">Select a category</p>
+      </md-card-title>
+    </md-card-header>
+
+    <md-card-content>
+      <md-input-container class="full-width required">
+        <input md-input placeholder="Question" formControlName="questionText" class="required">
+        <md-hint align="end" *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</md-hint>
+      </md-input-container>
+
+      <div formArrayName="answers" class="well well-lg">
+        <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" >
+          <md-input-container class="full-width">
+            <md-checkbox md-prefix formControlName="correct"></md-checkbox>
+            <input md-input [placeholder]="'Answer ' + (i+1)" formControlName="answerText" />
+            <md-hint align="end" *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine" class="error">Answer required</md-hint>
+          </md-input-container>
+        </div>
+      </div>
+      <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
+        Pick one and only one correct answer
+      </div>
+
+      <p>
+        <md-checkbox formControlName="ordered">Ordered?</md-checkbox>
+      </p>
+      <p> 
+        <md-input-container class="full-width required">
+          <textarea md-input placeholder="Explanation" formControlName="explanation"></textarea>
+        </md-input-container>
+      </p> 
+
+      <p> 
+        <md-input-container>
+          <input md-input placeholder="Tag" formControlName="tags">
+        </md-input-container>
+        <button md-button color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+      </p> 
+
+      <md-chip-list>
+        <md-chip *ngFor="let tag of autoTags">
+          {{tag}}
+        </md-chip>
+        <md-chip *ngFor="let tag of enteredTags">
+          {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+        </md-chip>
+      </md-chip-list>
+    </md-card-content>
+    <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
+      Must have atleast 3 tags
+    </div>
+
+    <md-card-actions>
+      <button md-button color="primary" type="submit" [disabled]="!questionForm.valid">SAVE</button>
+      <button md-button>CANCEL</button>
+    </md-card-actions>
+  </form>  
+</md-card>

@@ -30,7 +30,7 @@ export class Question {
   }
 }
 
-class Answer {
+export class Answer {
   id: number;
   answerText: string;
   correct: boolean;
