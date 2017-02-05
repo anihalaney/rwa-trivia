@@ -84,7 +84,9 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
       return;
 
     //get question object from the forms
+    console.log(this.questionForm.value);
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
+    console.log(question);
 
     //call saveQuestion
     this.saveQuestion(question);
@@ -99,6 +101,8 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     question.answers = formValue.answers;
     question.categoryIds = [formValue.category];
     question.tags = [...this.autoTags, ...this.enteredTags]
+    question.ordered = formValue.ordered;
+    question.explanation = formValue.explanation;
 
     return question;
   }
