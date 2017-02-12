@@ -16,8 +16,8 @@ import { CategoryService, TagService, QuestionService } from './services';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-import {CategoryActions} from './store/actions';
-import {CategoryEffects} from './store/effects';
+import {CategoryActions, TagActions, QuestionActions} from './store/actions';
+import {CategoryEffects, TagEffects, QuestionEffects} from './store/effects';
 import { default as reducer } from './store/app-store';
 
 
@@ -45,11 +45,13 @@ import { default as reducer } from './store/app-store';
     
     //ngrx effects
     EffectsModule.run(CategoryEffects),
+    EffectsModule.run(TagEffects),
+    EffectsModule.run(QuestionEffects)
 
   ],
   providers: [ 
     CategoryService, TagService, QuestionService,
-    CategoryActions,
+    CategoryActions, TagActions, QuestionActions
 
   ],                                                                      
   bootstrap: [AppComponent]

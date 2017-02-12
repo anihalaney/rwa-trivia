@@ -10,7 +10,7 @@ import { Category }     from '../../model';
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
-export class CategoriesComponent implements OnInit {
+export class CategoriesComponent implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
   sub: any;

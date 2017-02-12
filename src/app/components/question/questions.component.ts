@@ -1,24 +1,26 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 
+import { AppStore } from '../../store/app-store';
 import { Question }     from '../../model';
-import { QuestionService } from '../../services'
 
 @Component({
   selector: 'question-list',
   templateUrl: './questions.component.html',
   styleUrls: ['./questions.component.scss']
 })
-export class QuestionsComponent implements OnInit {
+export class QuestionsComponent implements OnInit, OnDestroy {
+  questionsObs: Observable<Question[]>;
   questions: Question[];
   sub: any;
 
-  constructor(private questionService: QuestionService) {
+  constructor(private store: Store<AppStore>) {
+    this.questionsObs = store.select(s => s.questions);
   }
 
   ngOnInit() {
-    this.sub = this.questionService.getQuestions()
-                   .subscribe(questions => this.questions = questions);
+    this.sub = this.questionsObs.subscribe(questions => this.questions = questions);
   }
 
   ngOnDestroy() {
