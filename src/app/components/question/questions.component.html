@@ -12,8 +12,8 @@
   <md-card *ngFor="let question of questions" class="flex-item question-card">
     <md-card-header>
       <md-card-title>
-        <span *ngFor="let category of question.categories">
-          {{category.categoryName}}
+        <span *ngFor="let id of question.categoryIds">
+          {{categoryDictionary[id].categoryName}}
         </span>
       </md-card-title>
       <md-card-subtitle>
