@@ -13,6 +13,14 @@ import { AppComponent, CategoriesComponent, TagsComponent,
          QuestionsComponent, QuestionAddUpdateComponent } from './components';
 import { CategoryService, TagService, QuestionService } from './services';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+
+import {CategoryActions} from './store/actions';
+import {CategoryEffects} from './store/effects';
+import { default as reducer } from './store/app-store';
+
+
 @NgModule({
   declarations: [
     AppComponent, CategoriesComponent, TagsComponent, 
@@ -30,11 +38,20 @@ import { CategoryService, TagService, QuestionService } from './services';
     //Material
     MaterialModule.forRoot(),
     //Flex
-    FlexLayoutModule.forRoot()
+    FlexLayoutModule.forRoot(),
+
+    //store
+    StoreModule.provideStore(reducer),
+    
+    //ngrx effects
+    EffectsModule.run(CategoryEffects),
+
   ],
   providers: [ 
-    CategoryService, TagService, QuestionService
-  ],
+    CategoryService, TagService, QuestionService,
+    CategoryActions,
+
+  ],                                                                      
   bootstrap: [AppComponent]
 })
 export class AppModule { }
