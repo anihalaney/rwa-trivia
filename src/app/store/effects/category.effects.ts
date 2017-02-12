@@ -3,6 +3,7 @@ import {Effect, Actions} from '@ngrx/effects';
 
 import {AppStore} from '../app-store';
 import {CategoryActions} from '../actions';
+import {Category} from '../../model';
 import {CategoryService} from '../../services';
 
 @Injectable()
@@ -17,5 +18,5 @@ export class CategoryEffects {
     loadCategories$ = this.actions$
         .ofType(CategoryActions.LOAD_CATEGORIES)
         .switchMap(() => this.svc.getCategories())
-        .map(categories => this.categoryActions.loadCategoriesSuccess(categories))
+        .map((categories: Category[]) => this.categoryActions.loadCategoriesSuccess(categories))
 }
