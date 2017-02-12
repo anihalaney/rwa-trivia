@@ -21,4 +21,20 @@ export class QuestionActions {
     };
   }
 
+  static ADD_QUESTION = 'ADD_QUESTION';
+  addQuestion(question: Question): Action {
+    return {
+      type: QuestionActions.ADD_QUESTION,
+      payload: question
+    };
+  }
+
+  static ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
+  addQuestionSuccess(question: Question): Action {
+    return {
+      type: QuestionActions.ADD_QUESTION_SUCCESS,
+      payload: question
+    };
+  }
+
 }

@@ -20,4 +20,9 @@ export class QuestionEffects {
         .switchMap(() => this.svc.getQuestions())
         .map((questions: Question[]) => this.questionActions.loadQuestionsSuccess(questions));
 
+    @Effect() 
+    addQuestion$ = this.actions$
+        .ofType(QuestionActions.ADD_QUESTION)
+        .switchMap((action) => this.svc.saveQuestion(action.payload))
+        .map((question: Question) => this.questionActions.addQuestionSuccess(question));
 }
