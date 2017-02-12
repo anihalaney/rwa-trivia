@@ -10,6 +10,8 @@ Part 2: It's a Material world (https://blog.realworldfullstack.io/real-world-ang
 
 Part 3: Form Formation (https://blog.realworldfullstack.io/real-world-angular-part-3-form-formation-f78d8462da70)
 
+Part 4: State of my SPA (https://blog.realworldfullstack.io/real-world-angular-part-4-state-of-my-spa-10bf90c5a15)
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.25.5.
 
 ## Development server
