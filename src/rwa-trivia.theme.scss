@@ -1,45 +1,46 @@
 @import '~@angular/material/core/theming/all-theme';
 
 // Include the base styles for Angular Material core. 
-@include md-core();
+@include mat-core();
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$trivia-app-primary: md-palette($md-indigo);
-$trivia-app-accent:  md-palette($md-pink, A200, A100, A400);
+$trivia-app-primary: mat-palette($mat-indigo);
+$trivia-app-accent:  mat-palette($mat-pink, A200, A100, A400);
 
 // The warn palette is optional (defaults to red).
-$trivia-app-warn:    md-palette($md-red);
+$trivia-app-warn:    mat-palette($mat-red);
 
 //customize the background theme
 $trivia-app-theme-background: (
-  status-bar: map_get($md-teal, 300),
-  app-bar:    map_get($md-teal, 100),
-  background: map_get($md-teal, 50),
+  status-bar: map_get($mat-teal, 300),
+  app-bar:    map_get($mat-teal, 100),
+  background: map_get($mat-teal, 50),
   hover:      rgba(black, 0.04),
   card:       white,
   dialog:     white,
-  disabled-button:   rgba(black, 0.12)
+  disabled-button:   rgba(black, 0.12),
+  raised-button: white
 );
 
 //app theme funtion returns the theme from the palletes
-@function md-app-theme($primary, $accent, $warn, $background) {
+@function trivia-app-theme-fn($primary, $accent, $warn, $foreground, $background) {
   @return (
     primary: $primary,
     accent: $accent,
     warn: $warn,
     is-dark: false,
-    foreground: $md-light-theme-foreground,
+    foreground: $foreground,
     background: $background,
   );
 }
 
 // Create the theme object (a Sass map containing all of the palettes).
-$trivia-app-theme: md-app-theme($trivia-app-primary, $trivia-app-accent, $trivia-app-warn, $trivia-app-theme-background);
+$trivia-app-theme: trivia-app-theme-fn($trivia-app-primary, $trivia-app-accent, $trivia-app-warn, 
+                                       $mat-light-theme-foreground, $trivia-app-theme-background);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include angular-material-theme($trivia-app-theme);
-

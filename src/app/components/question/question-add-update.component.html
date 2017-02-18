@@ -14,15 +14,15 @@
 
     <md-card-content>
       <md-input-container class="full-width required">
-        <input md-input placeholder="Question" formControlName="questionText" class="required">
+        <input mdInput placeholder="Question" formControlName="questionText" class="required">
         <md-hint align="end" *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</md-hint>
       </md-input-container>
 
       <div formArrayName="answers" class="well well-lg">
         <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" >
           <md-input-container class="full-width">
-            <md-checkbox md-prefix formControlName="correct"></md-checkbox>
-            <input md-input [placeholder]="'Answer ' + (i+1)" formControlName="answerText" />
+            <md-checkbox mdPrefix formControlName="correct"></md-checkbox>
+            <input mdInput [placeholder]="'Answer ' + (i+1)" formControlName="answerText" />
             <md-hint align="end" *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine" class="error">Answer required</md-hint>
           </md-input-container>
         </div>
@@ -36,13 +36,13 @@
       </p>
       <p> 
         <md-input-container class="full-width required">
-          <textarea md-input placeholder="Explanation" formControlName="explanation"></textarea>
+          <textarea mdInput placeholder="Explanation" formControlName="explanation"></textarea>
         </md-input-container>
       </p> 
 
       <p> 
         <md-input-container>
-          <input md-input placeholder="Tag" formControlName="tags">
+          <input mdInput placeholder="Tag" formControlName="tags">
         </md-input-container>
         <button md-button color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
       </p> 
@@ -56,6 +56,7 @@
         </md-chip>
       </md-chip-list>
     </md-card-content>
+    
     <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
       Must have atleast 3 tags
     </div>
