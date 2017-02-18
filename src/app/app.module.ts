@@ -36,9 +36,9 @@ import { default as reducer } from './store/app-store';
     HttpModule,
 
     //Material
-    MaterialModule.forRoot(),
+    MaterialModule,
     //Flex
-    FlexLayoutModule.forRoot(),
+    FlexLayoutModule,
 
     //store
     StoreModule.provideStore(reducer),
