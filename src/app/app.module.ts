@@ -15,12 +15,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { routes }   from './app.route';
-import { AppComponent, CategoriesComponent, TagsComponent, 
+import { LoginComponent, AppComponent, 
+         CategoriesComponent, TagsComponent, 
          QuestionsComponent, QuestionAddUpdateComponent } from './components';
-import { CategoryService, TagService, QuestionService } from './services';
+import { AuthenticationService, CategoryService, TagService, QuestionService } from './services';
 
-import {CategoryActions, TagActions, QuestionActions} from './store/actions';
-import {CategoryEffects, TagEffects, QuestionEffects} from './store/effects';
+import { UserActions, CategoryActions, TagActions, QuestionActions } from './store/actions';
+import { CategoryEffects, TagEffects, QuestionEffects } from './store/effects';
 import { default as reducer } from './store/app-store';
 
 export const firebaseConfig = {
@@ -33,8 +34,12 @@ export const firebaseConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent, CategoriesComponent, TagsComponent, 
+    AppComponent, LoginComponent, 
+    CategoriesComponent, TagsComponent, 
     QuestionsComponent, QuestionAddUpdateComponent
+  ],
+  entryComponents: [
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -68,8 +73,8 @@ export const firebaseConfig = {
 
   ],
   providers: [ 
-    CategoryService, TagService, QuestionService,
-    CategoryActions, TagActions, QuestionActions
+    AuthenticationService, CategoryService, TagService, QuestionService,
+    UserActions, CategoryActions, TagActions, QuestionActions
 
   ],                                                                      
   bootstrap: [AppComponent]

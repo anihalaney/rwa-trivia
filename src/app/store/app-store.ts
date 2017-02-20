@@ -1,11 +1,12 @@
-import { Category, Question } from '../model';
+import { User, Category, Question } from '../model';
 
-import { categories, categoryDictionary, tags, questions, questionSaveStatus } from './reducers';
+import { user, categories, categoryDictionary, tags, questions, questionSaveStatus } from './reducers';
 
 import { combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
 
 export interface AppStore {
+  user: User;
   categories: Category[];
   categoryDictionary: {[key: number]: Category};
   tags: string[];
@@ -14,9 +15,10 @@ export interface AppStore {
 }
 
 export default compose(combineReducers)({
-    categories: categories,
-    categoryDictionary: categoryDictionary,
-    tags: tags,
-    questions: questions,
-    questionSaveStatus: questionSaveStatus
+  user: user,
+  categories: categories,
+  categoryDictionary: categoryDictionary,
+  tags: tags,
+  questions: questions,
+  questionSaveStatus: questionSaveStatus
 });
