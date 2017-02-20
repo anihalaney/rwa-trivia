@@ -26,4 +26,25 @@ export class LoginComponent {
     });
   }
 
+  fbLogin() {
+    this.af.auth.login({
+      provider: AuthProviders.Facebook,
+      method: AuthMethods.Popup
+    });
+  }
+
+  twitterLogin() {
+    this.af.auth.login({
+      provider: AuthProviders.Twitter,
+      method: AuthMethods.Popup
+    });
+  }
+
+  githubLogin() {
+    this.af.auth.login({
+      provider: AuthProviders.Github,
+      method: AuthMethods.Popup
+    });
+  }
+
 }
