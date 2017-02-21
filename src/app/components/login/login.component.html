@@ -1,0 +1,15 @@
+<h1 md-dialog-title>Choose Login Method</h1>
+
+<md-dialog-actions class="flex-container" 
+                   fxLayout="column"
+                   fxLayoutAlign="space-around">
+  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="googleLogin()">Google</button>
+  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="fbLogin()">facebook</button>
+  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="twitterLogin()">Twitter</button>
+  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="githubLogin()">Github</button>
+  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="passwordLogin()">Email/Password</button>
+</md-dialog-actions>
+
+<md-dialog-actions>
+  <button md-dialog-close>Cancel</button>
+</md-dialog-actions>

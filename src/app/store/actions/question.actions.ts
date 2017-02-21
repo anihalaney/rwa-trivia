@@ -30,10 +30,10 @@ export class QuestionActions {
   }
 
   static ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
-  addQuestionSuccess(question: Question): Action {
+  addQuestionSuccess(): Action {
     return {
       type: QuestionActions.ADD_QUESTION_SUCCESS,
-      payload: question
+      payload: null
     };
   }
 
