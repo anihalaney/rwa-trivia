@@ -37,7 +37,6 @@ export class AuthenticationService {
   };
 
   showLogin = function() {
-    console.log("showLogin");
     this.dialogRef = this.dialog.open(LoginComponent, {
       disableClose: false
     });

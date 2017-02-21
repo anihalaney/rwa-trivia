@@ -46,10 +46,12 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if (this.sub)
       this.sub.unsubscribe();
+    
+    if (this.sub2)
+      this.sub2.unsubscribe();
   }
 
   login() {
-    
     this.authService.ensureLogin();
   }
 

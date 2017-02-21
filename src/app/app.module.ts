@@ -15,7 +15,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { routes }   from './app.route';
-import { LoginComponent, AppComponent, 
+import { AppComponent, LoginComponent, PasswordAuthComponent, 
          CategoriesComponent, TagsComponent, 
          QuestionsComponent, QuestionAddUpdateComponent } from './components';
 import { AuthenticationService, CategoryService, TagService, QuestionService } from './services';
@@ -34,12 +34,12 @@ export const firebaseConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, 
+    AppComponent, LoginComponent, PasswordAuthComponent,
     CategoriesComponent, TagsComponent, 
     QuestionsComponent, QuestionAddUpdateComponent
   ],
   entryComponents: [
-    LoginComponent
+    LoginComponent, PasswordAuthComponent
   ],
   imports: [
     BrowserModule,
