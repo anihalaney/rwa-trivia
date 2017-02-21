@@ -12,6 +12,8 @@ Part 3: Form Formation (https://blog.realworldfullstack.io/real-world-angular-pa
 
 Part 4: State of my SPA (https://blog.realworldfullstack.io/real-world-angular-part-4-state-of-my-spa-10bf90c5a15)
 
+Part 5: Light my fire (https://blog.realworldfullstack.io/real-world-angular-part-5-light-my-fire-34b0bcb351a8)
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.25.5.
 
 ## Development server
