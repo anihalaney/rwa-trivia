@@ -2,8 +2,8 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 import {Action} from '@ngrx/store';
 
-import { QuestionActions } from '../actions/question.actions';
-import { Question } from '../../model/question';
+import { QuestionActions } from '../actions';
+import { Question } from '../../model';
 
 export const questions = (state: any = [], action: Action): Question[] => {
   switch (action.type) {

@@ -18,9 +18,10 @@ import { routes }   from './app.route';
 import { AppComponent, LoginComponent, PasswordAuthComponent, 
          CategoriesComponent, TagsComponent, 
          QuestionsComponent, QuestionAddUpdateComponent } from './components';
-import { AuthenticationService, CategoryService, TagService, QuestionService } from './services';
+import { AuthenticationService, AuthGuard,
+         CategoryService, TagService, QuestionService } from './services';
 
-import { UserActions, CategoryActions, TagActions, QuestionActions } from './store/actions';
+import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions } from './store/actions';
 import { CategoryEffects, TagEffects, QuestionEffects } from './store/effects';
 import { default as reducer } from './store/app-store';
 
@@ -73,8 +74,12 @@ export const firebaseConfig = {
 
   ],
   providers: [ 
-    AuthenticationService, CategoryService, TagService, QuestionService,
-    UserActions, CategoryActions, TagActions, QuestionActions
+    //Services
+    AuthenticationService, AuthGuard,
+    CategoryService, TagService, QuestionService,
+
+    //Actions
+    UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions
 
   ],                                                                      
   bootstrap: [AppComponent]

@@ -2,11 +2,11 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 import {Action} from '@ngrx/store';
 
-import { TagActions } from '../actions';
+import { UIStateActions } from '../actions';
 
-export const tags = (state: any = [], action: Action): string[] => {
+export const loginRedirectUrl = (state: any = null, action: Action): string => {
   switch (action.type) {
-    case TagActions.LOAD_TAGS_SUCCESS:
+    case UIStateActions.LOGIN_REDIRECT_URL:
       return action.payload;
     default:
       return state;

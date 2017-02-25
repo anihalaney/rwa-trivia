@@ -1,6 +1,7 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { CategoriesComponent, TagsComponent, QuestionsComponent, QuestionAddUpdateComponent } 
   from './components/index';
+import { AuthGuard } from './services';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,7 @@ export const routes: Routes = [
   },
   {
     path: 'question/add',
-    component: QuestionAddUpdateComponent
+    component: QuestionAddUpdateComponent,
+    canActivate: [AuthGuard]
   }
 ];

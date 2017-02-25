@@ -6,7 +6,7 @@ import '../rxjs-extensions';
 
 import { AppStore } from '../store/app-store';
 import { LoginComponent } from '../components/login/login.component';
-import { UserActions } from '../store/actions';
+import { UserActions, UIStateActions } from '../store/actions';
 import { User } from '../model';
 
 
@@ -14,6 +14,7 @@ import { User } from '../model';
 export class AuthenticationService {
   constructor(private store: Store<AppStore>,
               private userActions: UserActions,
+              private uiStateActions: UIStateActions,
               public af: AngularFire,
               public dialog: MdDialog) {
 
@@ -36,7 +37,8 @@ export class AuthenticationService {
       this.showLogin();
   };
 
-  showLogin = function() {
+  showLogin = function(url?: string) {
+    this.store.dispatch(this.uiStateActions.setLoginRedirectUrl(url));
     this.dialogRef = this.dialog.open(LoginComponent, {
       disableClose: false
     });
