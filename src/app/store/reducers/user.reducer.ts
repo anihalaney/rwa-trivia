@@ -7,10 +7,10 @@ import {User} from '../../model';
 
 export const user = (state: any = null, action: Action): User => {
   switch (action.type) {
-    case UserActions.LOGIN_SUCCESS:
-      return action.payload;
     case UserActions.LOGOFF:
       return null;
+    case UserActions.ADD_USER_WITH_ROLES:
+      return action.payload;
     default:
       return state;
   }

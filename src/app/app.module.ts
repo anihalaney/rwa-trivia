@@ -15,14 +15,16 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { routes }   from './app.route';
-import { AppComponent, LoginComponent, PasswordAuthComponent, 
+import { AppComponent, DashboardComponent,
+         LoginComponent, PasswordAuthComponent, 
+         AdminComponent,
          CategoriesComponent, TagsComponent, 
-         QuestionsComponent, QuestionAddUpdateComponent } from './components';
+         QuestionsComponent, QuestionAddUpdateComponent, MyQuestionsComponent, AdminQuestionsComponent } from './components';
 import { AuthenticationService, AuthGuard,
          CategoryService, TagService, QuestionService } from './services';
 
 import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions } from './store/actions';
-import { CategoryEffects, TagEffects, QuestionEffects } from './store/effects';
+import { UserEffects, CategoryEffects, TagEffects, QuestionEffects } from './store/effects';
 import { default as reducer } from './store/app-store';
 
 export const firebaseConfig = {
@@ -35,9 +37,11 @@ export const firebaseConfig = {
 
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, PasswordAuthComponent,
+    AppComponent, DashboardComponent,
+    LoginComponent, PasswordAuthComponent,
+    AdminComponent,
     CategoriesComponent, TagsComponent, 
-    QuestionsComponent, QuestionAddUpdateComponent
+    QuestionsComponent, QuestionAddUpdateComponent, MyQuestionsComponent, AdminQuestionsComponent
   ],
   entryComponents: [
     LoginComponent, PasswordAuthComponent
@@ -68,6 +72,7 @@ export const firebaseConfig = {
     }),
 
     //ngrx effects
+    EffectsModule.run(UserEffects),
     EffectsModule.run(CategoryEffects),
     EffectsModule.run(TagEffects),
     EffectsModule.run(QuestionEffects)

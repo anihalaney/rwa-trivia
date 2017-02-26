@@ -1,0 +1,17 @@
+<div *ngIf="!user?.roles.admin">
+  Access Denied
+</div>
+<md-tab-group *ngIf="user?.roles.admin">
+  <md-tab label="Dashboard">
+    <dashboard></dashboard>
+  </md-tab>
+  <md-tab label="Categories">
+    <category-list></category-list>
+  </md-tab>
+  <md-tab label="Tags">
+    <tag-list></tag-list>
+  </md-tab>
+  <md-tab label="Questions">
+    <admin-questions></admin-questions>
+  </md-tab>
+</md-tab-group>

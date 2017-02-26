@@ -150,7 +150,8 @@
       "Distributed",
       "GIT"
     ],
-    "questions": [
+    "questions": {
+        "published": [
         {
             "id": 1,
             "questionText": "Which of the following function of Array object reverses the order of the elements of an array?",
@@ -277,5 +278,7 @@
             "tags": ["gaming"],
             "categoryIds": [1]
         }
-    ]  
+        ],
+        "unpublished": []
+    }  
 }

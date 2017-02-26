@@ -46,12 +46,6 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
               private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.tagsObs = store.select(s => s.tags);
-
-    this.sub2 = store.select(s => s.user).subscribe(user => {
-      this.user = user
-      if (!user)
-        this.router.navigate(['/']);
-    });
   }
 
   //Lifecycle hooks
@@ -101,6 +95,8 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
     console.log(question);
 
+    this.store.take(1).subscribe(s => this.user = s.user);
+    question.created_uid = this.user.userId;
     //call saveQuestion
     this.saveQuestion(question);
   }

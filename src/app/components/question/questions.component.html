@@ -1,14 +1,3 @@
-<md-card>
-  <button md-fab class="page-action" [routerLink]="['/question/add']">
-    <md-icon class="md-24">add</md-icon>
-  </button>
-
-  <md-card-title>Questions</md-card-title>
-  <md-card-content class="flex-container" 
-      fxLayoutWrap="wrap"
-      fxLayout="row"
-      fxLayoutAlign="center" fxLayoutAlign.xs="start">    
-
   <md-card *ngFor="let question of questions" class="flex-item question-card">
     <md-card-header>
       <md-card-title>
@@ -34,5 +23,3 @@
       </md-chip-list>
     </md-card-content>
   </md-card>
-  </md-card-content>    
-</md-card>

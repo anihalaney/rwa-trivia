@@ -18,12 +18,14 @@ export class QuestionService {
   }
 
   getQuestions(): Observable<Question[]> {
-    return this.af.database.list('/questions');
+    return this.af.database.list('/questions/published');
   }
 
   saveQuestion(question: Question) {
-    this.af.database.list('/questions').push(question).then(
+    this.af.database.list('/questions/unpublished').push(question).then(
       (ret) => {  //success
+        if (ret.key)
+          this.af.database.object('/users/' + question.created_uid + '/questions').set({[ret.key]: "unpublished"});
         this.store.dispatch(this.questionActions.addQuestionSuccess());
       },
       (error: Error) => {//error

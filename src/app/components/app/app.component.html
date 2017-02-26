@@ -6,20 +6,15 @@
         <span md-line>Home</span>
         <span md-line class="secondary">Home</span>
       </a>
-      <a md-list-item (click)="sidenav.close()" [routerLink]="['/categories']">
-        <md-icon md-list-icon>list</md-icon>
-        <span md-line>Categories</span>
-        <span md-line class="secondary">Categories</span>
-      </a>
-      <a md-list-item (click)="sidenav.close()" [routerLink]="['/tags']">
-        <md-icon md-list-icon>bookmark</md-icon>
-        <span md-line>Tags</span>
-        <span md-line class="secondary">Tags</span>
-      </a>
       <a md-list-item (click)="sidenav.close()" [routerLink]="['/questions']">
         <md-icon md-list-icon>question_answer</md-icon>
-        <span md-line>Questions</span>
-        <span md-line class="secondary">Questions</span>
+        <span md-line>My Questions</span>
+        <span md-line class="secondary">My Questions</span>
+      </a>
+      <a md-list-item (click)="sidenav.close()" [routerLink]="['/admin']">
+        <md-icon md-list-icon>settings</md-icon>
+        <span md-line>Admin</span>
+        <span md-line class="secondary">Admin</span>
       </a>
       <a *ngIf="user" md-list-item (click)="sidenav.close(); logout()">
         <md-icon md-list-icon>account_circle</md-icon>

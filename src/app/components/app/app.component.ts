@@ -38,10 +38,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.user = user
       if (user)
       {
+        console.log(user);
         let url: string;
         this.store.take(1).subscribe(s => url = s.loginRedirectUrl);
         if (url)
           this.router.navigate([url]);
+      }
+      else {
+        //if user logsout then redirect to home page
+        this.router.navigate(['/']);
       }
     });
   }
