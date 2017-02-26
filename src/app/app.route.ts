@@ -27,18 +27,15 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
+    component: AdminComponent,
     data: { roles: ["admin"] },
     canActivate: [AuthGuard],
     canActivateChild: [AuthGuard],
     children: [
       {
         path: '',
-        redirectTo: 'admin',
-        pathMatch: 'full'
-      },
-      {
-        path: 'admin',
-        component: AdminComponent
+        pathMatch: 'full',
+        component: DashboardComponent
       },
       {
         path: 'categories',
