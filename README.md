@@ -14,6 +14,8 @@ Part 4: State of my SPA (https://blog.realworldfullstack.io/real-world-angular-p
 
 Part 5: Light my fire (https://blog.realworldfullstack.io/real-world-angular-part-5-light-my-fire-34b0bcb351a8)
 
+Part 6: 3Rs ... Rules, Roles & Routes (https://blog.realworldfullstack.io/real-world-angular-part-6-3rs-rules-roles-routes-9e7de5a3ea8e)
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.25.5.
 
 ## Development server
