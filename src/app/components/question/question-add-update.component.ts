@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../store/app-store';
 import { QuestionActions } from '../../store/actions';
-import { User, Category, Question, Answer }     from '../../model';
+import { User, Category, Question, QuestionStatus, Answer }     from '../../model';
 
 @Component({
   templateUrl: './question-add-update.component.html',
@@ -93,9 +93,11 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     //get question object from the forms
     console.log(this.questionForm.value);
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
+
+    question.status = QuestionStatus.SUBMITTED;
+    this.store.take(1).subscribe(s => this.user = s.user);
     console.log(question);
 
-    this.store.take(1).subscribe(s => this.user = s.user);
     question.created_uid = this.user.userId;
     //call saveQuestion
     this.saveQuestion(question);

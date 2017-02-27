@@ -3,7 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../store/app-store';
-import { Category, Question }     from '../../model';
+import { QuestionActions } from '../../store/actions';
+import { Category, Question } from '../../model';
 
 @Component({
   selector: 'dashboard',
@@ -15,15 +16,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
   categoryDictObs: Observable<{[key: number] :Category}>;
   tagsObs: Observable<string[]>;
   questionsObs: Observable<Question[]>;
+  sampleQuestionsObs: Observable<Question[]>;
 
-  constructor(private store: Store<AppStore>) {
+  constructor(private store: Store<AppStore>,
+              private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.tagsObs = store.select(s => s.tags);
     this.questionsObs = store.select(s => s.questions);
+    this.sampleQuestionsObs = store.select(s => s.sampleQuestions);
   }
 
   ngOnInit() {
+    this.store.dispatch(this.questionActions.loadSampleQuestions());
   }
 
   ngOnDestroy() {

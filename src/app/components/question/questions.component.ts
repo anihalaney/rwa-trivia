@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../store/app-store';
-import { Question, Category }     from '../../model';
+import { Question, QuestionStatus, Category }     from '../../model';
 
 @Component({
   selector: 'question-list',
@@ -13,6 +13,8 @@ import { Question, Category }     from '../../model';
 export class QuestionsComponent implements OnInit, OnDestroy {
   @Input() questions: Question[];
   @Input() categoryDictionary: {[key: number]: Category};
+  @Input() showApproveButton: boolean;
+  @Output() approveClicked = new EventEmitter<Question>();
 
   constructor() {
   }
@@ -23,4 +25,10 @@ export class QuestionsComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
+  getDisplayStatus(status: number): string {
+    return QuestionStatus[status];
+  }
+  approveButtonClicked(question: Question ) {
+    this.approveClicked.emit(question)
+  }
 }
