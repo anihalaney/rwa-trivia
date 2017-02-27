@@ -5,6 +5,7 @@ export class User {
   displayName: string;
   email: string;
   authState: FirebaseAuthState;
+  roles: any[];
 
   constructor(authState: FirebaseAuthState) 
   {

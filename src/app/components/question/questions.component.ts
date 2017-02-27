@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../store/app-store';
-import { Question, Category }     from '../../model';
+import { Question, QuestionStatus, Category }     from '../../model';
 
 @Component({
   selector: 'question-list',
@@ -11,28 +11,24 @@ import { Question, Category }     from '../../model';
   styleUrls: ['./questions.component.scss']
 })
 export class QuestionsComponent implements OnInit, OnDestroy {
-  questionsObs: Observable<Question[]>;
-  questions: Question[];
-  categoryDictObs: Observable<{[key: number]: Category}>;
-  categoryDictionary: {[key: number]: Category};
-  sub: any;
-  sub2: any;
+  @Input() questions: Question[];
+  @Input() categoryDictionary: {[key: number]: Category};
+  @Input() showApproveButton: boolean;
+  @Output() approveClicked = new EventEmitter<Question>();
 
-  constructor(private store: Store<AppStore>) {
-    this.questionsObs = store.select(s => s.questions);
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
+  constructor() {
   }
 
   ngOnInit() {
-    this.sub = this.questionsObs.subscribe(questions => this.questions = questions);
-    this.sub2 = this.categoryDictObs.subscribe(cd => this.categoryDictionary = cd);
   }
 
   ngOnDestroy() {
-    if (this.sub)
-      this.sub.unsubscribe();
-    if (this.sub2)
-      this.sub2.unsubscribe();
   }
 
+  getDisplayStatus(status: number): string {
+    return QuestionStatus[status];
+  }
+  approveButtonClicked(question: Question ) {
+    this.approveClicked.emit(question)
+  }
 }

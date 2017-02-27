@@ -1,0 +1,29 @@
+<md-card>
+  <md-card-title>Questions</md-card-title>
+  <md-card-content>    
+
+  <md-tab-group>
+    <md-tab label="Published">
+      <question-list [questions]="questionsObs | async" 
+                    [categoryDictionary]="categoryDictObs | async"
+                    class="flex-container" 
+                    fxLayoutWrap="wrap"
+                    fxLayout="row"
+                    fxLayoutAlign="center" fxLayoutAlign.xs="start">
+      </question-list>
+    </md-tab>
+    <md-tab label="Unpublished">
+      <question-list [questions]="unpublishedQuestionsObs | async" 
+                    [categoryDictionary]="categoryDictObs | async"
+                    [showApproveButton]="true"
+                    (approveClicked)="approveQuestion($event)"
+                    class="flex-container" 
+                    fxLayoutWrap="wrap"
+                    fxLayout="row"
+                    fxLayoutAlign="center" fxLayoutAlign.xs="start">
+      </question-list>
+    </md-tab>
+  </md-tab-group>
+
+  </md-card-content>    
+</md-card>

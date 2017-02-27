@@ -1,0 +1,7 @@
+<nav md-tab-nav-bar *ngIf="user?.roles.admin">
+  <a md-tab-link routerLinkActive="active" [routerLink]="['./']">Dashboard</a>
+  <a md-tab-link routerLinkActive="active" [routerLink]="['./categories']">Categories</a>
+  <a md-tab-link routerLinkActive="active" [routerLink]="['./tags']">Tags</a>
+  <a md-tab-link routerLinkActive="active" [routerLink]="['./questions']">Questions</a>
+</nav>
+<router-outlet></router-outlet>

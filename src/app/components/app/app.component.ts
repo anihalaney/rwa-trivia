@@ -34,7 +34,21 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate(['/questions']);
     })
 
-    this.sub2 = store.select(s => s.user).subscribe(user => this.user = user);
+    this.sub2 = store.select(s => s.user).subscribe(user => {
+      this.user = user
+      if (user)
+      {
+        console.log(user);
+        let url: string;
+        this.store.take(1).subscribe(s => url = s.loginRedirectUrl);
+        if (url)
+          this.router.navigate([url]);
+      }
+      else {
+        //if user logsout then redirect to home page
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   ngOnInit () {

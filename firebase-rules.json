@@ -1,0 +1,27 @@
+{
+  "rules": {
+    ".read": "auth != null  && root.child('users/' + auth.uid + '/roles/admin').val() == true",
+    ".write": "auth != null  && root.child('users/' + auth.uid + '/roles/admin').val() == true",
+    
+    "categories": { ".read": true } ,
+    "tagList": { ".read": true } ,
+    "users": {
+      "$uid": {
+      	".read": "auth != null && $uid == auth.uid",
+        "roles": { ".write": false },
+        "questions": { ".write": "auth != null && $uid == auth.uid" }
+      }
+    },
+    "questions": {
+      "published": { ".read": true },
+
+      "unpublished": { 
+        "$question_id": {
+      	  ".read": "auth != null && data.child('created_uid').val() == auth.uid",
+          ".validate": "newData.child('created_uid').val() === auth.uid",
+          ".write": "auth != null && ((data.exists() && data.child('created_uid').val() == auth.uid && data.child('status').val() != 2) || (!data.exists() && newData.child('created_uid').val() == auth.uid))"
+      }
+     }
+    }  
+  }
+}

@@ -1,0 +1,18 @@
+<md-card>
+  <button md-fab class="page-action" [routerLink]="['/question/add']">
+    <md-icon class="md-24">add</md-icon>
+  </button>
+
+  <md-card-title>Questions</md-card-title>
+  <md-card-content>    
+
+    <question-list [questions]="questionsObs | async" 
+                  [categoryDictionary]="categoryDictObs | async"
+                  class="flex-container" 
+                  fxLayoutWrap="wrap"
+                  fxLayout="row"
+                  fxLayoutAlign="center" fxLayoutAlign.xs="start">
+    </question-list>
+
+  </md-card-content>    
+</md-card>

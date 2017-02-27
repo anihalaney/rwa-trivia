@@ -11,11 +11,11 @@ export class Question {
   categoryIds: number[];
   published: boolean;
   status: QuestionStatus;
-  createdBy?: string;
+  created_uid?: string;
   createdOn?: Date;
-  lastUpdatedBy?: string;
+  lastUpdated_uid?: string;
   lastUpdatedOn?: Date;
-  approvedBy1?: string;
+  approved_uid?: string;
   approvedOn?: Date;
   
   constructor() {

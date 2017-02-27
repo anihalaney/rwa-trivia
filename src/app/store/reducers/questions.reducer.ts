@@ -2,12 +2,39 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 import {Action} from '@ngrx/store';
 
-import { QuestionActions } from '../actions/question.actions';
-import { Question } from '../../model/question';
+import { QuestionActions } from '../actions';
+import { Question } from '../../model';
 
 export const questions = (state: any = [], action: Action): Question[] => {
   switch (action.type) {
     case QuestionActions.LOAD_QUESTIONS_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export const unpublishedQuestions = (state: any = [], action: Action): Question[] => {
+  switch (action.type) {
+    case QuestionActions.LOAD_UNPUBLISHED_QUESTIONS_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export const userQuestions = (state: any = [], action: Action): Question[] => {
+  switch (action.type) {
+    case QuestionActions.LOAD_USER_QUESTIONS_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export const sampleQuestions = (state: any = [], action: Action): Question[] => {
+  switch (action.type) {
+    case QuestionActions.LOAD_SAMPLE_QUESTIONS_SUCCESS:
       return action.payload;
     default:
       return state;

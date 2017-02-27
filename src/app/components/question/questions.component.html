@@ -1,14 +1,3 @@
-<md-card>
-  <button md-fab class="page-action" [routerLink]="['/question/add']">
-    <md-icon class="md-24">add</md-icon>
-  </button>
-
-  <md-card-title>Questions</md-card-title>
-  <md-card-content class="flex-container" 
-      fxLayoutWrap="wrap"
-      fxLayout="row"
-      fxLayoutAlign="center" fxLayoutAlign.xs="start">    
-
   <md-card *ngFor="let question of questions" class="flex-item question-card">
     <md-card-header>
       <md-card-title>
@@ -32,7 +21,12 @@
           {{tag}}
         </md-chip>
       </md-chip-list>
+
+      <div>
+        <button *ngIf="showApproveButton && (question.status == 0 || question.status == 1)" 
+                (click)="approveButtonClicked(question)"
+                md-button color="primary">APPROVE</button>
+        <span class="question-status" *ngIf="question.status != 2">{{getDisplayStatus(question.status)}}</span>
+      </div>
     </md-card-content>
   </md-card>
-  </md-card-content>    
-</md-card>
