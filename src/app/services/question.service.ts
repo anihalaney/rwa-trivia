@@ -10,8 +10,6 @@ import { QuestionActions } from '../store/actions';
 
 @Injectable()
 export class QuestionService {
-  private _serviceUrl = 'http://localhost:3000/questions';  // URL to web api
-
   constructor(private af: AngularFire,
               private store: Store<AppStore>,
               private questionActions: QuestionActions) { 
