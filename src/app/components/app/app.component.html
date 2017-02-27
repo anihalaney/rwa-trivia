@@ -11,7 +11,7 @@
         <span md-line>My Questions</span>
         <span md-line class="secondary">My Questions</span>
       </a>
-      <a md-list-item (click)="sidenav.close()" [routerLink]="['/admin']">
+      <a md-list-item *ngIf="user?.roles.admin" (click)="sidenav.close()" [routerLink]="['/admin']">
         <md-icon md-list-icon>settings</md-icon>
         <span md-line>Admin</span>
         <span md-line class="secondary">Admin</span>
