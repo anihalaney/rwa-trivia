@@ -16,14 +16,12 @@ Part 5: Light my fire (https://blog.realworldfullstack.io/real-world-angular-par
 
 Part 6: 3Rs ... Rules, Roles & Routes (https://blog.realworldfullstack.io/real-world-angular-part-6-3rs-rules-roles-routes-9e7de5a3ea8e)
 
+Part 6.1: Upgrading to 4.0.0-rc.2 (https://blog.realworldfullstack.io/real-world-angular-part-6-1-upgrading-to-4-0-0-rc-2-fcaab81603fa)
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.25.5.
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class/module`.
 
 ## Build
 
@@ -37,10 +35,6 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 Before running the tests make sure you are serving the app via `ng serve`.
-
-## Deploying to GitHub Pages
-
-Run `ng github-pages:deploy` to deploy to GitHub Pages.
 
 ## Further help
 
