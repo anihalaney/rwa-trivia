@@ -1,7 +1,6 @@
 import { Routes, RouterModule }  from '@angular/router';
-import { DashboardComponent, CategoriesComponent, TagsComponent, 
-         QuestionAddUpdateComponent, MyQuestionsComponent, 
-         AdminQuestionsComponent, AdminComponent } 
+import { DashboardComponent, 
+         QuestionAddUpdateComponent, MyQuestionsComponent } 
   from '../components/index';
 import { AuthGuard } from '../core/services';
 
@@ -27,29 +26,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    component: AdminComponent,
-    data: { roles: ["admin"] },
-    canActivate: [AuthGuard],
-    canActivateChild: [AuthGuard],
-    children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        component: DashboardComponent
-      },
-      {
-        path: 'categories',
-        component: CategoriesComponent
-      },
-      {
-        path: 'tags',
-        component: TagsComponent
-      },
-      {
-        path: 'questions',
-        component: AdminQuestionsComponent
-      }
-
-    ]
+    loadChildren: 'app/admin/admin.module#AdminModule',
+    canActivate: [AuthGuard]
   }
 ];

@@ -2,9 +2,9 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../core/store/app-store';
-import { QuestionActions } from '../../core/store/actions';
-import { User, Question, Category }     from '../../model';
+import { AppStore } from '../../../core/store/app-store';
+import { QuestionActions } from '../../../core/store/actions';
+import { User, Question, Category }     from '../../../model';
 
 @Component({
   selector: 'admin-questions',

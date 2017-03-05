@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../core/store/app-store';
-import { User } from '../../model';
+import { AppStore } from '../../../core/store/app-store';
+import { User } from '../../../model';
 
 @Component({
   selector: 'admin-dashboard',
