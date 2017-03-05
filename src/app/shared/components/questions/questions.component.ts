@@ -2,7 +2,6 @@ import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angu
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../store/app-store';
 import { Question, QuestionStatus, Category }     from '../../../model';
 
 @Component({
