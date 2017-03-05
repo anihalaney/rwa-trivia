@@ -1,6 +1,5 @@
 import { Routes, RouterModule }  from '@angular/router';
-import { DashboardComponent, 
-         QuestionAddUpdateComponent, MyQuestionsComponent } 
+import { DashboardComponent } 
   from '../components/index';
 import { AuthGuard } from '../core/services';
 
@@ -15,13 +14,8 @@ export const routes: Routes = [
     component: DashboardComponent
   },
   {
-    path: 'questions',
-    component: MyQuestionsComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'question/add',
-    component: QuestionAddUpdateComponent,
+    path: 'my-questions',
+    loadChildren: 'app/myQuestions/my-questions.module#MyQuestionsModule',
     canActivate: [AuthGuard]
   },
   {

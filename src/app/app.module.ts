@@ -4,14 +4,13 @@ import { NgModule } from '@angular/core';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from  './shared/shared.module';
 import { RoutingModule } from  './routing/routing.module';
+import { MyQuestionsModule } from  './myQuestions/my-questions.module';
 
-import { AppComponent, DashboardComponent,
-         QuestionAddUpdateComponent, MyQuestionsComponent } from './components';
+import { AppComponent, DashboardComponent } from './components';
 
 @NgModule({
   declarations: [
-    AppComponent, DashboardComponent,
-    QuestionAddUpdateComponent, MyQuestionsComponent
+    AppComponent, DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -19,7 +18,8 @@ import { AppComponent, DashboardComponent,
     //rwa modules
     CoreModule,
     SharedModule,
-    RoutingModule
+    RoutingModule,
+    MyQuestionsModule
   ],
   providers: [ 
   ],                                                                      

@@ -4,9 +4,9 @@ import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormCon
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../core/store/app-store';
-import { QuestionActions } from '../../core/store/actions';
-import { User, Category, Question, QuestionStatus, Answer }     from '../../model';
+import { AppStore } from '../../../core/store/app-store';
+import { QuestionActions } from '../../../core/store/actions';
+import { User, Category, Question, QuestionStatus, Answer }     from '../../../model';
 
 @Component({
   templateUrl: './question-add-update.component.html',
