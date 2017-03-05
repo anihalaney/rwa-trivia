@@ -1,6 +1,6 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { DashboardComponent, CategoriesComponent, TagsComponent, 
-         QuestionsComponent, QuestionAddUpdateComponent, MyQuestionsComponent, 
+         QuestionAddUpdateComponent, MyQuestionsComponent, 
          AdminQuestionsComponent, AdminComponent } 
   from './components/index';
 import { AuthGuard } from './services';

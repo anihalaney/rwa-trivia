@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule  } from '@angular/router';
-import { FormsModule, ReactiveFormsModule }     from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import 'hammerjs';
@@ -15,11 +14,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { routes }   from './app.route';
+import { SharedModule } from  './shared/shared.module';
+
 import { AppComponent, DashboardComponent,
          LoginComponent, PasswordAuthComponent, 
          AdminComponent,
          CategoriesComponent, TagsComponent, 
-         QuestionsComponent, QuestionAddUpdateComponent, MyQuestionsComponent, AdminQuestionsComponent } from './components';
+         QuestionAddUpdateComponent, MyQuestionsComponent, AdminQuestionsComponent } from './components';
 import { AuthenticationService, AuthGuard,
          CategoryService, TagService, QuestionService } from './services';
 
@@ -41,7 +42,7 @@ export const firebaseConfig = {
     LoginComponent, PasswordAuthComponent,
     AdminComponent,
     CategoriesComponent, TagsComponent, 
-    QuestionsComponent, QuestionAddUpdateComponent, MyQuestionsComponent, AdminQuestionsComponent
+    QuestionAddUpdateComponent, MyQuestionsComponent, AdminQuestionsComponent
   ],
   entryComponents: [
     LoginComponent, PasswordAuthComponent
@@ -56,15 +57,6 @@ export const firebaseConfig = {
     // Router
     RouterModule.forRoot(routes), 
 
-    // Forms
-    FormsModule,
-    ReactiveFormsModule, 
-
-    //Material
-    MaterialModule,
-    //Flex
-    FlexLayoutModule,
-
     //store
     StoreModule.provideStore(reducer),
     StoreDevtoolsModule.instrumentOnlyWithExtension({
@@ -75,8 +67,10 @@ export const firebaseConfig = {
     EffectsModule.run(UserEffects),
     EffectsModule.run(CategoryEffects),
     EffectsModule.run(TagEffects),
-    EffectsModule.run(QuestionEffects)
+    EffectsModule.run(QuestionEffects),
 
+    //rwa modules
+    SharedModule
   ],
   providers: [ 
     //Services
