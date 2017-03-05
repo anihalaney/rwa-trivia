@@ -35,15 +35,27 @@ export class QuestionService {
                     });
                  });
                  return questions;
+              })
+              .catch(error => {
+                console.log(error);
+                return Observable.of(null);
               });
   }
 
   getQuestions(): Observable<Question[]> {
-    return this.af.database.list('/questions/published');
+    return this.af.database.list('/questions/published')
+              .catch(error => {
+                console.log(error);
+                return Observable.of(null);
+              });
   }
 
   getUnpublishedQuestions(): Observable<Question[]> {
-    return this.af.database.list('/questions/unpublished');
+    return this.af.database.list('/questions/unpublished')
+              .catch(error => {
+                console.log(error);
+                return Observable.of(null);
+              });
   }
 
   saveQuestion(question: Question) {
