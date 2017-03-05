@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../store/app-store';
+import { AppStore } from '../../core/store/app-store';
 import { Category }     from '../../model';
 
 @Component({

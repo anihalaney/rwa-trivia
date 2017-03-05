@@ -3,7 +3,7 @@ import { DashboardComponent, CategoriesComponent, TagsComponent,
          QuestionAddUpdateComponent, MyQuestionsComponent, 
          AdminQuestionsComponent, AdminComponent } 
   from './components/index';
-import { AuthGuard } from './services';
+import { AuthGuard } from './core/services';
 
 export const routes: Routes = [
   {

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
 
-import { Question, User } from '../../model';
+import { Question, User } from '../../../model';
 
 @Injectable()
 export class QuestionActions {

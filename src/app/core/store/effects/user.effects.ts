@@ -3,7 +3,7 @@ import { Effect, Actions } from '@ngrx/effects';
 
 import { AppStore } from '../app-store';
 import { UserActions } from '../actions';
-import { User } from '../../model';
+import { User } from '../../../model';
 import { AuthenticationService } from '../../services'
 
 @Injectable()

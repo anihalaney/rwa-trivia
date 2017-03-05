@@ -1,7 +1,5 @@
 import { AppComponent } from './app/app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { LoginComponent } from './login/login.component';
-import { PasswordAuthComponent } from './login/password-auth.component';
 import { CategoriesComponent } from './category/categories.component';
 import { TagsComponent } from './tag/tags.component';
 import { QuestionAddUpdateComponent } from './question/question-add-update.component';
@@ -12,8 +10,6 @@ import { AdminQuestionsComponent } from './admin/admin-questions.component';
 export {
     AppComponent,
     DashboardComponent,
-    LoginComponent,
-    PasswordAuthComponent,
     CategoriesComponent,
     TagsComponent,
     QuestionAddUpdateComponent,
@@ -25,8 +21,6 @@ export {
 export default [
     AppComponent,
     DashboardComponent,
-    LoginComponent,
-    PasswordAuthComponent,
     CategoriesComponent,
     TagsComponent,
     QuestionAddUpdateComponent,

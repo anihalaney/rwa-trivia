@@ -1,4 +1,4 @@
-import { User, Category, Question } from '../model';
+import { User, Category, Question } from '../../model';
 
 import { user, categories, categoryDictionary, tags, 
          questions, unpublishedQuestions, sampleQuestions, questionSaveStatus, userQuestions,

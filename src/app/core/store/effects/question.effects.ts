@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Effect, Actions} from '@ngrx/effects';
 
 import {AppStore} from '../app-store';
-import {Question} from '../../model';
+import {Question} from '../../../model';
 import {QuestionActions} from '../actions';
 import {QuestionService} from '../../services'
 

@@ -1,9 +1,9 @@
 import { Injectable }    from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
-import '../rxjs-extensions';
+import '../../rxjs-extensions';
 
-import { User, Question, QuestionStatus }     from '../model';
+import { User, Question, QuestionStatus }     from '../../model';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
 import { QuestionActions } from '../store/actions';

@@ -2,8 +2,8 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../store/app-store';
-import { QuestionActions } from '../../store/actions';
+import { AppStore } from '../../core/store/app-store';
+import { QuestionActions } from '../../core/store/actions';
 import { Category, Question } from '../../model';
 
 @Component({
