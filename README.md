@@ -18,6 +18,8 @@ This is part of building a new app for my series - Real World Angular @ https://
 
 [Part 6.1: Upgrading to 4.0.0-rc.2](https://blog.realworldfullstack.io/real-world-angular-part-6-1-upgrading-to-4-0-0-rc-2-fcaab81603fa)
 
+[Part 7: Split my lazy loaded code](https://blog.realworldfullstack.io/real-world-angular-part-7-lazy-coding-load-splitting-4552f5f54ef7)
+
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 

@@ -1,91 +1,27 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule  } from '@angular/router';
-import { FormsModule, ReactiveFormsModule }     from '@angular/forms';
-import { HttpModule } from '@angular/http';
 
-import 'hammerjs';
-import { MaterialModule } from '@angular/material';
-import { FlexLayoutModule } from '@angular/flex-layout';
+import { CoreModule } from './core/core.module';
+import { SharedModule } from  './shared/shared.module';
+import { RoutingModule } from  './routing/routing.module';
+import { MyQuestionsModule } from  './myQuestions/my-questions.module';
 
-import { AngularFireModule } from 'angularfire2';
-
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-
-import { routes }   from './app.route';
-import { AppComponent, DashboardComponent,
-         LoginComponent, PasswordAuthComponent, 
-         AdminComponent,
-         CategoriesComponent, TagsComponent, 
-         QuestionsComponent, QuestionAddUpdateComponent, MyQuestionsComponent, AdminQuestionsComponent } from './components';
-import { AuthenticationService, AuthGuard,
-         CategoryService, TagService, QuestionService } from './services';
-
-import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions } from './store/actions';
-import { UserEffects, CategoryEffects, TagEffects, QuestionEffects } from './store/effects';
-import { default as reducer } from './store/app-store';
-
-export const firebaseConfig = {
-    apiKey: "AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y",
-    authDomain: "rwa-trivia.firebaseapp.com",
-    databaseURL: "https://rwa-trivia.firebaseio.com",
-    storageBucket: "rwa-trivia.appspot.com",
-    messagingSenderId: "479350787602"
-};
+import { AppComponent, DashboardComponent } from './components';
 
 @NgModule({
   declarations: [
-    AppComponent, DashboardComponent,
-    LoginComponent, PasswordAuthComponent,
-    AdminComponent,
-    CategoriesComponent, TagsComponent, 
-    QuestionsComponent, QuestionAddUpdateComponent, MyQuestionsComponent, AdminQuestionsComponent
-  ],
-  entryComponents: [
-    LoginComponent, PasswordAuthComponent
+    AppComponent, DashboardComponent
   ],
   imports: [
     BrowserModule,
-    HttpModule,
 
-    //firebase
-    AngularFireModule.initializeApp(firebaseConfig),
-    
-    // Router
-    RouterModule.forRoot(routes), 
-
-    // Forms
-    FormsModule,
-    ReactiveFormsModule, 
-
-    //Material
-    MaterialModule,
-    //Flex
-    FlexLayoutModule,
-
-    //store
-    StoreModule.provideStore(reducer),
-    StoreDevtoolsModule.instrumentOnlyWithExtension({
-      maxAge: 20
-    }),
-
-    //ngrx effects
-    EffectsModule.run(UserEffects),
-    EffectsModule.run(CategoryEffects),
-    EffectsModule.run(TagEffects),
-    EffectsModule.run(QuestionEffects)
-
+    //rwa modules
+    CoreModule,
+    SharedModule,
+    RoutingModule,
+    MyQuestionsModule
   ],
   providers: [ 
-    //Services
-    AuthenticationService, AuthGuard,
-    CategoryService, TagService, QuestionService,
-
-    //Actions
-    UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions
-
   ],                                                                      
   bootstrap: [AppComponent]
 })

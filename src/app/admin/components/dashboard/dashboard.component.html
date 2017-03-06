@@ -1,0 +1,29 @@
+<md-card>
+  <md-card-title>rwa Stats</md-card-title>
+  <md-list>
+    <md-list-item>
+      <span>Categories Count: {{(categoriesObs | async).length}}</span>
+    </md-list-item>
+    <md-list-item>
+      <span>Tag Count: {{(tagsObs | async).length}}</span>
+    </md-list-item>
+    <md-list-item>
+      <span>Question Count: {{(questionsObs | async).length}}</span>
+    </md-list-item>
+  </md-list>
+</md-card>
+
+<md-card>
+  <md-card-title>Sample Questions</md-card-title>
+  <md-card-content>    
+
+    <question-list [questions]="sampleQuestionsObs | async" 
+                  [categoryDictionary]="categoryDictObs | async"
+                  class="flex-container" 
+                  fxLayoutWrap="wrap"
+                  fxLayout="row"
+                  fxLayoutAlign="center" fxLayoutAlign.xs="start">
+    </question-list>
+
+  </md-card-content>    
+</md-card>
