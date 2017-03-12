@@ -6,6 +6,8 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
+import { CONFIG } from '../../environments/environment';
+
 import { AuthenticationService, AuthGuard,
          CategoryService, TagService, QuestionService } from './services';
 
@@ -16,14 +18,8 @@ import { default as reducer } from './store/app-store';
 import { LoginComponent, PasswordAuthComponent } from './components';
 
 import { SharedModule } from  '../shared/shared.module';
-
-export const firebaseConfig: FirebaseAppConfig = {
-    apiKey: "AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y",
-    authDomain: "rwa-trivia.firebaseapp.com",
-    databaseURL: "https://rwa-trivia.firebaseio.com",
-    storageBucket: "rwa-trivia.appspot.com",
-    messagingSenderId: "479350787602"
-};
+ 
+export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 @NgModule({
   declarations: [

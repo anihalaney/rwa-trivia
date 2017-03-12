@@ -2,6 +2,8 @@
 
 This is part of building a new app for my series - Real World Angular @ https://blog.realworldfullstack.io/
 
+See demo (development server) - https://rwa-trivia.firebaseapp.com
+
 [Part 0: From zero to cli-ng](https://blog.realworldfullstack.io/real-world-angular-part-0-from-zero-to-cli-ng-a2ff646b90cc)
 
 [Part 1: Not another todo list app](https://blog.realworldfullstack.io/real-world-angular-part-1-not-another-todo-list-c2ea5020f944)
@@ -20,22 +22,64 @@ This is part of building a new app for my series - Real World Angular @ https://
 
 [Part 7: Split my lazy loaded code](https://blog.realworldfullstack.io/real-world-angular-part-7-lazy-coding-load-splitting-4552f5f54ef7)
 
-## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+[Part 8: Just Ahead of In Time](https://blog.realworldfullstack.io/real-world-angular-part-8-just-ahead-of-in-time-ae2d3cc89656)
 
-## Build
+## Quick Installation Instructions
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+* Install cli globally
 
-## Running unit tests
+`npm install -g @angular/cli@1.0.0-rc.1`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+* Install npm packages
 
-## Running end-to-end tests
+`npm install`
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+* Setup your firebase instance @ https://firebase.google.com/
 
-## Further help
+* Setup providers in Firebase Authentication
 
-To get more help on the `angular-cli` use `ng help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+* Use the firebase configuration information and plug it in src/environment.ts
+
+* Import src/db.json to your firebase database instance to get the initial set of test data
+
+* Run the application using ng serve
+
+`ng serve`
+
+* Add yourself as a user using the application. Ensure you are added as a user in Authentication tab of firebase console.
+
+* Add your user id as an admin in the firebase database (admins need to be added manually) -
+
+Set: users/<user id>/roles/admin: true
+
+* Use firebase-rules.json file to setup the firebase rules for your database
+
+* Serve the application again. Ensure you have admin privileges
+
+`ng serve`
+
+## Deploy to Firebase Server
+
+* Install firebase tools globally
+
+`npm install -g firebase-tools`
+
+* Authenticate with your firebase credentials
+
+`firebase login`
+
+* Setup firebase hosting configuration for the application, using "dist" instead of public as the public folder name
+
+`firebase init`
+
+* Create a build
+
+`ng build`
+
+* Serve up the app using firebase server locally
+
+`firebase serve`
+
+* Deploy to firebase
+
+`firebase deploy`
