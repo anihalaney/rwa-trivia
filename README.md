@@ -26,49 +26,49 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 ## Quick Installation Instructions
 
-Install cli globally
-`npm install -g @angular/cli@1.0.0-rc.1`
+* Install cli globally
+```npm install -g @angular/cli@1.0.0-rc.1```
 
-Install npm packages
+* Install npm packages
 `npm install`
 
-Setup your firebase instance @ https://firebase.google.com/
+* Setup your firebase instance @ https://firebase.google.com/
 
-Setup providers in Firebase Authentication
+* Setup providers in Firebase Authentication
 
-Use the firebase configuration information and plug it in src/environment.ts
+* Use the firebase configuration information and plug it in src/environment.ts
 
-Import src/db.json to your firebase database instance to get the initial set of test data
+* Import src/db.json to your firebase database instance to get the initial set of test data
 
-Run the application using ng serve
+* Run the application using ng serve
 `ng serve`
 
-Add yourself as a user using the application. Ensure you are added as a user in Authentication tab of firebase console.
+* Add yourself as a user using the application. Ensure you are added as a user in Authentication tab of firebase console.
 
-Add your user id as an admin in the firebase database (admins need to be added manually) -
+* Add your user id as an admin in the firebase database (admins need to be added manually) -
 Set: users/<user id>/roles/admin: true
 
-Use firebase-rules.json file to setup the firebase rules for your database
+* Use firebase-rules.json file to setup the firebase rules for your database
 
-Serve the application again. Ensure you have admin privileges
+* Serve the application again. Ensure you have admin privileges
 `ng serve`
 
 ## Deploy to Firebase Server
 
-Install firebase tools globally
+* Install firebase tools globally
 `npm install -g firebase-tools`
 
-Authenticate with your firebase credentials
+* Authenticate with your firebase credentials
 `firebase login`
 
-Setup firebase hosting configuration for the application, using "dist" instead of public as the public folder name
+* Setup firebase hosting configuration for the application, using "dist" instead of public as the public folder name
 `firebase init`
 
-Create a build
+* Create a build
 `ng build`
 
-Serve up the app using firebase server locally
+* Serve up the app using firebase server locally
 `firebase serve`
 
-Deploy to firebase
+* Deploy to firebase
 `firebase deploy`
