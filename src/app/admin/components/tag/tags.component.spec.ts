@@ -2,12 +2,10 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { DebugElement }    from '@angular/core';
 import { MaterialModule } from '@angular/material';
+import { Store } from '@ngrx/store';
 
-import { StoreModule, Store } from '@ngrx/store';
-
+import { MockStore } from '../../../core/store/mock-store';
 import { TagsComponent } from './tags.component';
-import { AppStore, default as reducer } from '../../../core/store/app-store';
-import { TagActions } from '../../../core/store/actions';
 
 describe('TagsComponent', () => {
 
@@ -16,10 +14,9 @@ describe('TagsComponent', () => {
   let de: DebugElement;
   let _titleEl: HTMLElement;
   let _tagListEl: HTMLElement;
-  let _store: Store<AppStore>;
-  let _tagActions: TagActions;
+  let _store: any;  // MockStore<{tags: string[]}>;
 
-  let tags: string[] = [
+  let tagList: string[] = [
     "Typescript",
     "Angular",
     "ngrx",
@@ -33,19 +30,17 @@ describe('TagsComponent', () => {
       declarations: [ TagsComponent ], // declare the test component
       imports: [
         //Material
-        MaterialModule,
-
-        //store
-        StoreModule.provideStore(reducer),
+        MaterialModule
       ],
-      providers: [ TagActions ]
+      providers:[
+        {provide:Store, useValue: new MockStore({tags: []})}
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TagsComponent);
 
     //get the injected instances
     _store = fixture.debugElement.injector.get(Store);
-    _tagActions = fixture.debugElement.injector.get(TagActions);
     
     comp = fixture.componentInstance; // Component test instance
 
@@ -62,20 +57,19 @@ describe('TagsComponent', () => {
   });
 
   it('Tag Count', () => {
-    _store.dispatch(_tagActions.loadTagsSuccess(tags));
+    _store.next({tags: tagList});
 
     fixture.detectChanges();
-    expect(_tagListEl.childElementCount).toEqual(tags.length);
+    expect(_tagListEl.childElementCount).toEqual(tagList.length);
   });
 
   it('Tag List Contains', () => {
-    _store.dispatch(_tagActions.loadTagsSuccess(tags));
+    _store.next({tags: tagList});
 
     fixture.detectChanges();
-    tags.forEach(t =>{
+    tagList.forEach(t =>{
       expect(_tagListEl.textContent).toContain(t);
     })
   });
 
 });
-
