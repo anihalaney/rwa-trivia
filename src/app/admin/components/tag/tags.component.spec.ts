@@ -44,7 +44,7 @@ describe('TagsComponent', () => {
     
     comp = fixture.componentInstance; // Component test instance
 
-    // query for the title <h1> by CSS element selector
+    // query for the title by CSS element selector
     de = fixture.debugElement.query(By.css('md-card-title'));
     _titleEl = de.nativeElement;
 
