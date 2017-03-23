@@ -24,6 +24,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 8: Just Ahead of In Time](https://blog.realworldfullstack.io/real-world-angular-part-8-just-ahead-of-in-time-ae2d3cc89656)
 
+[Part 9: Unit Testing](https://blog.realworldfullstack.io/real-world-angular-part-9-unit-testing-c62ba20b1d93)
+
 ## Quick Installation Instructions
 
 * Install cli globally
@@ -83,3 +85,9 @@ Set: users/<user id>/roles/admin: true
 * Deploy to firebase
 
 `firebase deploy`
+
+## Testing
+* Test the application using
+
+`ng test`
+
