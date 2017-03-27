@@ -1,35 +1,34 @@
+import { TEST_DATA } from '../../../testing/test.data';
 import { tags } from './tags.reducer';
 import { TagActions } from '../actions';
 
-describe('TagsReducer', () => {
+describe('Reducer: tags', () => {
   
-  it('Tags Reducer Initial State', () => {
+  it('Initial State', () => {
     let state: string[] = tags(undefined, {type: null, payload: null});
 
     expect(Array.isArray(state)).toEqual(true);
     expect(state.length).toEqual(0);
   });
 
-  it('Tags Reducer Load Tags Success', () => {
+  it('Load Tags Success Action', () => {
     let initialTagList: string[] = ["C++", "Swift", "Ionic"];
     let state: string[] = tags(["C++"], {type: TagActions.LOAD_TAGS_SUCCESS, payload: initialTagList});
     expect(Array.isArray(state)).toEqual(true);
     expect(state.length).toEqual(initialTagList.length);
 
-    let tagList: string[] = ["Python", "Scala"];
-    let newState: string[] = tags(["C++"], {type: TagActions.LOAD_TAGS_SUCCESS, payload: tagList});
+    let newState: string[] = tags(["C++"], {type: TagActions.LOAD_TAGS_SUCCESS, payload: TEST_DATA.tagList});
 
     expect(Array.isArray(newState)).toEqual(true);
-    expect(newState.length).toEqual(tagList.length);
+    expect(newState.length).toEqual(TEST_DATA.tagList.length);
     expect(newState).not.toEqual(state);
   });
 
-  it('Tags Reducer Other', () => {
-    let tagList: string[] = ["Python", "Scala"];
-    let state: string[] = tags(tagList, {type: "any other action", payload: null});
+  it('Any other action', () => {
+    let state: string[] = tags(TEST_DATA.tagList, {type: "any other action", payload: null});
 
     expect(Array.isArray(state)).toEqual(true);
-    expect(state.length).toEqual(tagList.length);
+    expect(state).toEqual(TEST_DATA.tagList);
   });
 
 });

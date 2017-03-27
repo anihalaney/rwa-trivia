@@ -7,10 +7,10 @@ export class Question {
   ordered: boolean;
   explanation?: string;
   tags: string[];
-  categories: Category[];
+  categories?: Category[];
   categoryIds: number[];
-  published: boolean;
-  status: QuestionStatus;
+  published?: boolean;
+  status?: QuestionStatus;
   created_uid?: string;
   createdOn?: Date;
   lastUpdated_uid?: string;

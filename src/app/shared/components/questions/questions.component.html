@@ -24,7 +24,7 @@
 
       <div>
         <button *ngIf="showApproveButton && (question.status == 0 || question.status == 1)" 
-                (click)="approveButtonClicked(question)"
+                (click)="approveButtonClicked(question)" class="approve-button"
                 md-button color="primary">APPROVE</button>
         <span class="question-status" *ngIf="question.status != 2">{{getDisplayStatus(question.status)}}</span>
       </div>
