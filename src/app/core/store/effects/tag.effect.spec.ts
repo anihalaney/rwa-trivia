@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { EffectsTestingModule, EffectsRunner } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs/Observable';
+import { AngularFire } from 'angularfire2';
 
 import { TagEffects } from './tag.effects';
 import { TagActions } from '../actions';
@@ -16,11 +17,12 @@ describe('Tag Effect', () => {
       EffectsTestingModule
     ],
     providers: [
-      TagEffects, TagActions, TagService
+      TagEffects, TagActions, TagService,
+      { "provide": AngularFire, "useValue": null }
     ]
   }));
 
-  it('Call Load Tags Success action after Load Tags', () => {
+  it('Call Load Tags Success action after Load Tags',
     inject([
       EffectsRunner, TagEffects, TagService
     ],
@@ -35,10 +37,11 @@ describe('Tag Effect', () => {
       runner.queue({ type: TagActions.LOAD_TAGS });
 
       tagEffects.loadTags$.subscribe(result => {
-        expect(result).toEqual({ type: TagActions.LOAD_TAGS_SUCCESS });
+        expect(result.type).toEqual(TagActions.LOAD_TAGS_SUCCESS);
+        expect(result.payload.length).toEqual(1);
+        expect(result.payload[0]).toEqual('C#');
       });
+    })
+  );
 
-    });
-
-  });
 });
