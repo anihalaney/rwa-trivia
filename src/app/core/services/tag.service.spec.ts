@@ -1,13 +1,15 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
-
 import { AngularFire } from 'angularfire2';
+
+import { TEST_DATA } from '../../testing/test.data';
 import { TagService } from './tag.service';
 
-describe('TagService', () => {
-  let tagList: string[] = ["C++", "Swift", "Ionic", "Azure", "AWS"];
+describe('Service: TagService', () => {
+  let tagList: string[] = TEST_DATA.tagList;
   let afDbMock = { "database": {
-                    list: () => Observable.of(tagList) } 
+                    list: () => Observable.of(tagList.map(t => {return {"$value":  t}}))
+                    } 
                   };
 
   beforeEach(() => TestBed.configureTestingModule({
@@ -17,7 +19,7 @@ describe('TagService', () => {
     ]
   }));
 
-  it('Call getTags to return Observable of Tags', () => {
+  it('Call getTags to return Observable of Tags', 
     inject([
       TagService
     ],
@@ -25,16 +27,12 @@ describe('TagService', () => {
 
       let tagsObs = service.getTags();
 
-      //spyOn(af.database, "list")
-      //    .and.returnValue(Observable.of(['C#']));
-
       tagsObs.subscribe(tags => {
         expect(tags.length).toEqual(tagList.length);
-        expect(tags[0]).toEqual(jasmine.any(tagList));
+        expect(tags[0]).toEqual(tagList[0]);
       });
 
-    });
-
-  });
+    })
+  );
 
 });

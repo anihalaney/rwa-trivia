@@ -4,7 +4,8 @@ import { DebugElement }    from '@angular/core';
 import { MaterialModule } from '@angular/material';
 import { Store } from '@ngrx/store';
 
-import { MockStore } from '../../../core/store/mock-store';
+import { TEST_DATA } from '../../../testing/test.data';
+import { MockStore } from '../../../testing/mock-store';
 import { CategoriesComponent } from './categories.component';
 import { Category }     from '../../../model';
 
@@ -17,11 +18,10 @@ describe('CategoriesComponent', () => {
   let _categoryListEl: HTMLElement;
   let _store: any;
 
-  let categoryList: Category[] = [
-    {"id": 1, "categoryName": "Special"},
-    {"id": 2, "categoryName": "Programming"},
-    {"id": 3, "categoryName": "Architecture"}
-  ];
+  let categoryList: Category[] = TEST_DATA.categories;
+  //Define intial state and test state
+  let _initialState = {categories: []};
+  let _testState = {categories: categoryList};
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -31,7 +31,7 @@ describe('CategoriesComponent', () => {
         MaterialModule
       ],
       providers:[
-        {provide:Store, useValue: new MockStore({categories: []})}
+        {provide:Store, useValue: new MockStore(_initialState)}
       ]
     }).compileComponents();
 
@@ -55,14 +55,14 @@ describe('CategoriesComponent', () => {
   });
 
   it('Category Count', () => {
-    _store.next({categories: categoryList});
+    _store.next(_testState);
 
     fixture.detectChanges();
     expect(_categoryListEl.childElementCount).toEqual(categoryList.length);
   });
 
   it('Categories List Contains', () => {
-    _store.next({categories: categoryList});
+    _store.next(_testState);
 
     fixture.detectChanges();
     categoryList.forEach(cat =>{

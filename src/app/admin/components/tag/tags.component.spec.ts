@@ -4,7 +4,8 @@ import { DebugElement }    from '@angular/core';
 import { MaterialModule } from '@angular/material';
 import { Store } from '@ngrx/store';
 
-import { MockStore } from '../../../core/store/mock-store';
+import { TEST_DATA } from '../../../testing/test.data';
+import { MockStore } from '../../../testing/mock-store';
 import { TagsComponent } from './tags.component';
 
 describe('TagsComponent', () => {
@@ -16,14 +17,11 @@ describe('TagsComponent', () => {
   let _tagListEl: HTMLElement;
   let _store: any;  // MockStore<{tags: string[]}>;
 
-  let tagList: string[] = [
-    "Typescript",
-    "Angular",
-    "ngrx",
-    "RxJS",
-    "Redux",
-    "Firebase"
-  ];
+  let tagList: string[] = TEST_DATA.tagList;
+
+  //Define intial state and test state
+  let _initialState = {tags: []};
+  let _testState = {tags: tagList};
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -33,7 +31,7 @@ describe('TagsComponent', () => {
         MaterialModule
       ],
       providers:[
-        {provide:Store, useValue: new MockStore({tags: []})}
+        { provide:Store, useValue: new MockStore(_initialState) }
       ]
     }).compileComponents();
 
@@ -57,14 +55,14 @@ describe('TagsComponent', () => {
   });
 
   it('Tag Count', () => {
-    _store.next({tags: tagList});
+    _store.next(_testState);
 
     fixture.detectChanges();
     expect(_tagListEl.childElementCount).toEqual(tagList.length);
   });
 
   it('Tag List Contains', () => {
-    _store.next({tags: tagList});
+    _store.next(_testState);
 
     fixture.detectChanges();
     tagList.forEach(t =>{

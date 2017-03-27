@@ -1,6 +1,4 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
 
 import { Question, QuestionStatus, Category }     from '../../../model';
 
