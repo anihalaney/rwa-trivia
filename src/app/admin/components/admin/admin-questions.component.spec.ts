@@ -6,38 +6,36 @@ import { Store } from '@ngrx/store';
 
 import { TEST_DATA } from '../../../testing/test.data';
 import { MockStore } from '../../../testing/mock-store';
-import { DashboardComponent } from './dashboard.component';
+import { AdminQuestionsComponent } from './admin-questions.component';
 import { QuestionActions } from '../../../core/store/actions';
+import { Question } from '../../../model';
 
-describe('Component: DashboardComponent (Admin)', () => {
+describe('Component: AdminQuestionsComponent', () => {
 
-  let comp: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+  let comp: AdminQuestionsComponent;
+  let fixture: ComponentFixture<AdminQuestionsComponent>;
   let de: DebugElement;
   let _titleEl: HTMLElement;
   let _store: any;
 
   //Define intial state and test state
   let _initialState = {
-                        tags: [],
-                        categories: [],
                         categoryDictionary: {},
                         questions: [],
-                        sampleQuestions: []
+                        unpublishedQuestions: [],
+                        user: null
                       };
-
-  let sampleQuestions = TEST_DATA.questions.published.slice(1,4);
+  let user = TEST_DATA.userList[0];
   let _testState = {
-                    tags: TEST_DATA.tagList,
-                    categories: TEST_DATA.categories,
                     categoryDictionary: TEST_DATA.categoryDictionary,
                     questions: TEST_DATA.questions.published,
-                    sampleQuestions: sampleQuestions
+                    unpublishedQuestions: TEST_DATA.questions.unpublished,
+                    user: user
                   };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardComponent ], // declare the test component
+      declarations: [ AdminQuestionsComponent ], // declare the test component
       imports: [
         //Material
         MaterialModule
@@ -49,7 +47,7 @@ describe('Component: DashboardComponent (Admin)', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(AdminQuestionsComponent);
 
     //get the injected instances
     _store = fixture.debugElement.injector.get(Store);
@@ -59,26 +57,30 @@ describe('Component: DashboardComponent (Admin)', () => {
     // query for the title by CSS element selector
     de = fixture.debugElement.query(By.css('md-card-title'));
     _titleEl = de.nativeElement;
+
   }));
 
   //Unit Tests
   it('Display Title', () => {
     fixture.detectChanges();
-    expect(_titleEl.textContent).toContain("rwa Stats");
+    expect(_titleEl.textContent).toContain("Questions");
   });
 
-  it('Dashboard Counts', () => {
+  it('Approve Question', () => {
     _store.next(_testState);
-
     fixture.detectChanges();
 
-    let tagCountEl = fixture.debugElement.query(By.css('#tag-count')).nativeElement;
-    let catCountEl = fixture.debugElement.query(By.css('#category-count')).nativeElement;
-    let qCountEl = fixture.debugElement.query(By.css('#question-count')).nativeElement;
+    let question: Question = TEST_DATA.questions.published[0];
+    spyOn(_store, 'dispatch')
+          .and.callFake((action: any) => {
+            expect(action.type).toEqual(QuestionActions.APPROVE_QUESTION);
+            expect(action.payload).toEqual(question);
+            expect(action.payload.approved_uid).toEqual(user.userId);
+          });
 
-    expect(tagCountEl.textContent).toEqual(TEST_DATA.tagList.length.toString());
-    expect(catCountEl.textContent).toEqual(TEST_DATA.categories.length.toString());
-    expect(qCountEl.textContent).toEqual(TEST_DATA.questions.published.length.toString());
+    comp.approveQuestion(question);
+    expect(_store.dispatch).toHaveBeenCalled();
+
   });
 
   //TODO: Test with questions child component

@@ -6,38 +6,33 @@ import { Store } from '@ngrx/store';
 
 import { TEST_DATA } from '../../../testing/test.data';
 import { MockStore } from '../../../testing/mock-store';
-import { DashboardComponent } from './dashboard.component';
+import { RouterLinkStubDirective } from '../../../testing/router-stubs';
+import { MyQuestionsComponent } from './my-questions.component';
 import { QuestionActions } from '../../../core/store/actions';
 
-describe('Component: DashboardComponent (Admin)', () => {
+describe('Component: MyQuestionsComponent', () => {
 
-  let comp: DashboardComponent;
-  let fixture: ComponentFixture<DashboardComponent>;
+  let comp: MyQuestionsComponent;
+  let fixture: ComponentFixture<MyQuestionsComponent>;
   let de: DebugElement;
   let _titleEl: HTMLElement;
   let _store: any;
 
   //Define intial state and test state
   let _initialState = {
-                        tags: [],
-                        categories: [],
                         categoryDictionary: {},
-                        questions: [],
-                        sampleQuestions: []
+                        userQuestions: []
                       };
 
-  let sampleQuestions = TEST_DATA.questions.published.slice(1,4);
+  let userQuestions = TEST_DATA.questions.published.slice(1,4);
   let _testState = {
-                    tags: TEST_DATA.tagList,
-                    categories: TEST_DATA.categories,
                     categoryDictionary: TEST_DATA.categoryDictionary,
-                    questions: TEST_DATA.questions.published,
-                    sampleQuestions: sampleQuestions
+                    userQuestions: userQuestions
                   };
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DashboardComponent ], // declare the test component
+      declarations: [ MyQuestionsComponent, RouterLinkStubDirective ], // declare the test component
       imports: [
         //Material
         MaterialModule
@@ -49,7 +44,7 @@ describe('Component: DashboardComponent (Admin)', () => {
       ]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DashboardComponent);
+    fixture = TestBed.createComponent(MyQuestionsComponent);
 
     //get the injected instances
     _store = fixture.debugElement.injector.get(Store);
@@ -59,26 +54,17 @@ describe('Component: DashboardComponent (Admin)', () => {
     // query for the title by CSS element selector
     de = fixture.debugElement.query(By.css('md-card-title'));
     _titleEl = de.nativeElement;
+
   }));
 
   //Unit Tests
-  it('Display Title', () => {
+  it('Display Title and Add Q Link', () => {
     fixture.detectChanges();
-    expect(_titleEl.textContent).toContain("rwa Stats");
-  });
+    expect(_titleEl.textContent).toContain("Questions");
 
-  it('Dashboard Counts', () => {
-    _store.next(_testState);
-
-    fixture.detectChanges();
-
-    let tagCountEl = fixture.debugElement.query(By.css('#tag-count')).nativeElement;
-    let catCountEl = fixture.debugElement.query(By.css('#category-count')).nativeElement;
-    let qCountEl = fixture.debugElement.query(By.css('#question-count')).nativeElement;
-
-    expect(tagCountEl.textContent).toEqual(TEST_DATA.tagList.length.toString());
-    expect(catCountEl.textContent).toEqual(TEST_DATA.categories.length.toString());
-    expect(qCountEl.textContent).toEqual(TEST_DATA.questions.published.length.toString());
+    let deAddLink = fixture.debugElement.query(By.directive(RouterLinkStubDirective));
+    let dirLink = deAddLink.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective;
+    expect(dirLink.linkParams[0]).toBe('add', 'Link to Add new question');
   });
 
   //TODO: Test with questions child component

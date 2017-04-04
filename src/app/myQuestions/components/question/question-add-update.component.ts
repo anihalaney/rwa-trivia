@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -42,7 +41,6 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   //Constructor
   constructor(private fb: FormBuilder,
               private store: Store<AppStore>,
-              private router: Router,
               private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.tagsObs = store.select(s => s.tags);
@@ -91,12 +89,12 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
       return;
 
     //get question object from the forms
-    console.log(this.questionForm.value);
+    //console.log(this.questionForm.value);
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
     question.status = QuestionStatus.SUBMITTED;
     this.store.take(1).subscribe(s => this.user = s.user);
-    console.log(question);
+    //console.log(question);
 
     question.created_uid = this.user.userId;
     //call saveQuestion

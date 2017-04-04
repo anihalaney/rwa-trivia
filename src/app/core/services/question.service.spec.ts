@@ -3,9 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { AngularFire } from 'angularfire2';
 import { Store } from '@ngrx/store';
 
-import { MockStore } from '../../testing/mock-store';
+import { MockStore, TEST_DATA } from '../../testing';
 import { QuestionActions } from '../../core/store/actions';
-import { TEST_DATA } from '../../testing/test.data';
 import { Question } from '../../model';
 import { QuestionService } from './question.service';
 

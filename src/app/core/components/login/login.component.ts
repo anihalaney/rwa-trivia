@@ -14,11 +14,9 @@ import { PasswordAuthComponent } from './password-auth.component';
 })
 export class LoginComponent {
 
-  constructor(private store: Store<AppStore>,
-              private af: AngularFire,
+  constructor(private af: AngularFire,
               private dialog: MdDialog,
-              private passwordAuthDialogRef: MdDialogRef<PasswordAuthComponent>,
-              public dialogRef: MdDialogRef<LoginComponent>) {
+              private passwordAuthDialogRef: MdDialogRef<PasswordAuthComponent>) {
 
   }
 

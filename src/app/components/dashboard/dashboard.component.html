@@ -2,13 +2,13 @@
   <md-card-title>rwa Stats</md-card-title>
   <md-list>
     <md-list-item>
-      <span>Categories Count: {{(categoriesObs | async).length}}</span>
+      <span>Categories Count: <span id="category-count">{{(categoriesObs | async).length}}</span></span>
     </md-list-item>
     <md-list-item>
-      <span>Tag Count: {{(tagsObs | async).length}}</span>
+      <span>Tag Count: <span id="tag-count">{{(tagsObs | async).length}}</span></span>
     </md-list-item>
     <md-list-item>
-      <span>Question Count: {{(questionsObs | async).length}}</span>
+      <span>Question Count: <span id="question-count">{{(questionsObs | async).length}}</span></span>
     </md-list-item>
   </md-list>
 </md-card>

@@ -8,7 +8,7 @@ import { Question, QuestionStatus }     from '../../../model';
 import { QuestionsComponent } from './questions.component';
 
 //Isolated Test
-describe('QuestionsComponent', () => {
+describe('Component: QuestionsComponent', () => {
 
   let comp: QuestionsComponent;
   let fixture: ComponentFixture<QuestionsComponent>;
@@ -72,7 +72,7 @@ describe('QuestionsComponent', () => {
 });
 
 //Using a test host component
-describe('QuestionsComponent using Test Host', () => {
+describe('Component: QuestionsComponent using Test Host', () => {
 
   let comp: TestHostComponent;
   let fixture: ComponentFixture<TestHostComponent>;

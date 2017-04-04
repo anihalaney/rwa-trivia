@@ -16,12 +16,12 @@
         <span md-line>Admin</span>
         <span md-line class="secondary">Admin</span>
       </a>
-      <a *ngIf="user" md-list-item (click)="sidenav.close(); logout()">
+      <a *ngIf="user" md-list-item (click)="sidenav.close(); logout()" class="logout-button">
         <md-icon md-list-icon>account_circle</md-icon>
         <span md-line>{{user.displayName}}</span>
         <span md-line class="secondary">Logout</span>
       </a>
-      <a *ngIf="!user" md-list-item (click)="sidenav.close(); login()">
+      <a *ngIf="!user" md-list-item (click)="sidenav.close(); login()" class="login-button">
         <md-icon md-list-icon>mood_bad</md-icon>
         <span md-line>Login</span>
         <span md-line class="secondary">Login</span>

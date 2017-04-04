@@ -8,7 +8,7 @@ import { TEST_DATA } from '../../../testing/test.data';
 import { MockStore } from '../../../testing/mock-store';
 import { TagsComponent } from './tags.component';
 
-describe('TagsComponent', () => {
+describe('Component: TagsComponent', () => {
 
   let comp: TagsComponent;
   let fixture: ComponentFixture<TagsComponent>;
