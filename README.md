@@ -28,6 +28,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 9.1: More Unit Testing](https://blog.realworldfullstack.io/real-world-angular-part-9-1-more-unit-testing-f0545ece586d)
 
+[Part 9.2: Even More Unit Tests](https://blog.realworldfullstack.io/real-world-angular-part-9-2-even-more-unit-tests-f903df40530a)
+
 ## Quick Installation Instructions
 
 * Install cli globally

@@ -213,7 +213,6 @@ describe('Component: QuestionAddUpdateComponent', () => {
             expect(action.payload.status).toEqual(QuestionStatus.SUBMITTED);
           });
 
-    //TODO: Form submission
     comp.onSubmit()
     expect(_store.dispatch).toHaveBeenCalled();
   })
