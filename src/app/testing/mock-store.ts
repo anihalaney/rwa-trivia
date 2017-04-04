@@ -5,7 +5,6 @@ import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { map } from 'rxjs/operator/map';
 
-
 export class MockStore<T> extends BehaviorSubject<T> {
 
   constructor(private _initialState: T) {

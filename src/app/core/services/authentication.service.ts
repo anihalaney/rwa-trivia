@@ -6,10 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
 import { AppStore } from '../store/app-store';
-import { LoginComponent } from '../components/login/login.component';
+import { LoginComponent } from '../components';
 import { UserActions, UIStateActions } from '../store/actions';
 import { User } from '../../model';
-
 
 @Injectable()
 export class AuthenticationService {

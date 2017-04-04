@@ -4,9 +4,6 @@ import { MdDialogRef } from '@angular/material';
 import * as firebase from 'firebase';
 import { AngularFire, AuthMethods, FirebaseAuthState } from 'angularfire2';
 import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
-
-import { AppStore } from '../../store/app-store';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -24,7 +21,6 @@ export class PasswordAuthComponent implements OnInit {
   forgotPasswordForm: FormGroup;
 
   constructor(private fb: FormBuilder,
-              private store: Store<AppStore>,
               private af: AngularFire,
               public dialogRef: MdDialogRef<PasswordAuthComponent>) {
     this.mode = SignInMode.signIn;
@@ -94,7 +90,7 @@ export class PasswordAuthComponent implements OnInit {
   }
 }
 
-enum SignInMode {
+export enum SignInMode {
   signIn,
   signUp,
   forgotPassword
@@ -106,7 +102,6 @@ function signupFormValidator(fg: FormGroup): {[key: string]: boolean} {
   //Password match validation
   if (fg.get('password').value !== fg.get('confirmPassword').value)
     return {'passwordmismatch': true}
-
 
   return null;
 }

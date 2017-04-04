@@ -9,7 +9,7 @@ import { MockStore } from '../../../testing/mock-store';
 import { CategoriesComponent } from './categories.component';
 import { Category }     from '../../../model';
 
-describe('CategoriesComponent', () => {
+describe('Component: CategoriesComponent', () => {
 
   let comp: CategoriesComponent;
   let fixture: ComponentFixture<CategoriesComponent>;

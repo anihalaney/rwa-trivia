@@ -44,7 +44,7 @@
         <md-input-container>
           <input mdInput placeholder="Tag" formControlName="tags">
         </md-input-container>
-        <button md-button color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+        <button md-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
       </p> 
 
       <md-chip-list>

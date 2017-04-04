@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing'
 import { Observable } from 'rxjs/Observable';
 import { AngularFire } from 'angularfire2';
 
-import { TEST_DATA } from '../../testing/test.data';
+import { TEST_DATA } from '../../testing';
 import { Category } from '../../model';
 import { CategoryService } from './category.service';
 

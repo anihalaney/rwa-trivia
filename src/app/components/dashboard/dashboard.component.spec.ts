@@ -4,12 +4,12 @@ import { DebugElement, NO_ERRORS_SCHEMA }    from '@angular/core';
 import { MaterialModule } from '@angular/material';
 import { Store } from '@ngrx/store';
 
-import { TEST_DATA } from '../../../testing/test.data';
-import { MockStore } from '../../../testing/mock-store';
+import { TEST_DATA } from '../../testing/test.data';
+import { MockStore } from '../../testing/mock-store';
 import { DashboardComponent } from './dashboard.component';
-import { QuestionActions } from '../../../core/store/actions';
+import { QuestionActions } from '../../core/store/actions';
 
-describe('Component: DashboardComponent (Admin)', () => {
+describe('Component: DashboardComponent', () => {
 
   let comp: DashboardComponent;
   let fixture: ComponentFixture<DashboardComponent>;

@@ -34,7 +34,6 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
     let user: User;
 
     this.store.take(1).subscribe(s => user = s.user);
-    console.log(question);
     question.approved_uid = user.userId;
 
     this.store.dispatch(this.questionActions.approveQuestion(question));
