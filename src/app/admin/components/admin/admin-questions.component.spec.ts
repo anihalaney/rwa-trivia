@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DebugElement, NO_ERRORS_SCHEMA }    from '@angular/core';
 import { MaterialModule } from '@angular/material';
 import { Store } from '@ngrx/store';
@@ -37,6 +38,7 @@ describe('Component: AdminQuestionsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ AdminQuestionsComponent ], // declare the test component
       imports: [
+        NoopAnimationsModule,
         //Material
         MaterialModule
       ],

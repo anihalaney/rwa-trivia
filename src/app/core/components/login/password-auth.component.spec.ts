@@ -122,13 +122,13 @@ describe('Component: PasswordAuthComponent', () => {
 
     spyOn(af.auth, 'login')
         .and.callFake((emailPass: any, method: any) => Promise.resolve(user))
-    spyOn(dRef, 'close')
+    let spy = spyOn(dRef, 'close')
       .and.callFake(() => { });
 
     comp.onSigninSubmit();
     expect(af.auth.login).toHaveBeenCalled();
     setTimeout(function() { //since the prior method is async call
-            expect(dRef.close).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalled();
         },1000);
   }));
 
@@ -177,13 +177,13 @@ describe('Component: PasswordAuthComponent', () => {
 
     spyOn(af.auth, 'createUser')
         .and.callFake((emailPass: any) => Promise.resolve(user))
-    spyOn(dRef, 'close')
+    let spy = spyOn(dRef, 'close')
       .and.callFake(() => { });
 
     comp.onSignupSubmit();
     expect(af.auth.createUser).toHaveBeenCalled();
     setTimeout(function() { //since the prior method is async call
-            expect(dRef.close).toHaveBeenCalled();
+            expect(spy).toHaveBeenCalled();
         },1000);
   }));
 
