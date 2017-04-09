@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DebugElement }    from '@angular/core';
 import { ReactiveFormsModule }    from '@angular/forms';
 import { FormBuilder, FormControl } from '@angular/forms';
@@ -29,6 +30,7 @@ describe('Component: QuestionAddUpdateComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ QuestionAddUpdateComponent ], // declare the test component
       imports: [
+        NoopAnimationsModule,
         //Material
         MaterialModule,
         ReactiveFormsModule
