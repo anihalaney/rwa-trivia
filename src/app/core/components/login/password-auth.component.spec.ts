@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DebugElement }    from '@angular/core';
 import { ReactiveFormsModule }    from '@angular/forms';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from '../../../shared/shared-material.module';
 import { MdDialogRef, MdDialog } from '@angular/material';
 import * as firebase from 'firebase';
 import { AngularFire, AuthProviders, AuthMethods, FirebaseAuthConfig, FirebaseAuthState } from 'angularfire2';
@@ -35,8 +36,9 @@ describe('Component: PasswordAuthComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ PasswordAuthComponent ], // declare the test component
       imports: [
+        NoopAnimationsModule,
         //Material
-        MaterialModule,
+        SharedMaterialModule,
         ReactiveFormsModule
       ],
       providers:[

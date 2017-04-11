@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DebugElement, NO_ERRORS_SCHEMA }    from '@angular/core';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from '../../../shared/shared-material.module';
 import { Store } from '@ngrx/store';
 
 import { TEST_DATA } from '../../../testing/test.data';
@@ -40,7 +40,7 @@ describe('Component: AdminQuestionsComponent', () => {
       imports: [
         NoopAnimationsModule,
         //Material
-        MaterialModule
+        SharedMaterialModule
       ],
     schemas:      [ NO_ERRORS_SCHEMA ],
     providers:[

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { Component, DebugElement }    from '@angular/core';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from '../../../shared/shared-material.module';
 
 import { TEST_DATA } from '../../../testing/test.data';
 import { Question, QuestionStatus }     from '../../../model';
@@ -19,7 +19,7 @@ describe('Component: QuestionsComponent', () => {
       declarations: [ QuestionsComponent ], // declare the test component
       imports: [
         //Material
-        MaterialModule
+        SharedMaterialModule
       ],
     providers:[
         
@@ -83,7 +83,7 @@ describe('Component: QuestionsComponent using Test Host', () => {
       declarations: [ QuestionsComponent, TestHostComponent ], // declare the test component
       imports: [
         //Material
-        MaterialModule
+        SharedMaterialModule
       ],
     providers:[
         

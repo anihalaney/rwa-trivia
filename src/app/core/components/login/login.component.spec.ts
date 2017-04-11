@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { DebugElement, NO_ERRORS_SCHEMA }    from '@angular/core';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from '../../../shared/shared-material.module';
 import { MdDialogRef, MdDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { AngularFire, AuthProviders, AuthMethods, FirebaseAuthConfig } from 'angularfire2';
@@ -29,7 +29,7 @@ describe('Component: LoginComponent', () => {
       declarations: [ LoginComponent ], // declare the test component
       imports: [
         //Material
-        MaterialModule
+        SharedMaterialModule
       ],
     schemas:      [ NO_ERRORS_SCHEMA ],
     providers:[

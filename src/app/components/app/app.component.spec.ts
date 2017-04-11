@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { DebugElement, NO_ERRORS_SCHEMA }    from '@angular/core';
 import { Router } from '@angular/router';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from '../../shared/shared-material.module';
 import { Store } from '@ngrx/store';
 
 import { MockStore, MockAuthService, TEST_DATA } from '../../testing';
@@ -40,7 +40,7 @@ describe('Component: AppComponent', () => {
       declarations: [ AppComponent, RouterOutletStubComponent, RouterLinkStubDirective ], // declare the test component
       imports: [
         //Material
-        MaterialModule
+        SharedMaterialModule
       ],
     schemas:      [ NO_ERRORS_SCHEMA ],
     providers:[
