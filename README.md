@@ -34,9 +34,9 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 ## Quick Installation Instructions
 
-* Install cli globally
+* Install cli globally (version should match the one in package.json)
 
-`npm install -g @angular/cli@1.0.0-rc.1`
+`npm install -g @angular/cli@1.0.0`
 
 * Install npm packages
 
