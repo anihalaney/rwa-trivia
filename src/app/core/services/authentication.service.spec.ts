@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
-import { MaterialModule, MdDialogRef, MdDialog, OverlayRef, MdDialogConfig } from '@angular/material';
+import { SharedMaterialModule } from '../../shared/shared-material.module';
+import { MdDialogRef, MdDialog, OverlayRef, MdDialogConfig } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AngularFire, FirebaseAuthState, AuthProviders } from 'angularfire2';
@@ -34,7 +35,7 @@ describe('Service: AuthenticationService', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [
       //Material
-      MaterialModule
+      SharedMaterialModule
     ],
     providers: [
       AuthenticationService, MdDialog,

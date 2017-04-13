@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { DebugElement }    from '@angular/core';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from '../../../shared/shared-material.module';
 import { Store } from '@ngrx/store';
 
 import { TEST_DATA } from '../../../testing/test.data';
@@ -28,7 +28,7 @@ describe('Component: TagsComponent', () => {
       declarations: [ TagsComponent ], // declare the test component
       imports: [
         //Material
-        MaterialModule
+        SharedMaterialModule
       ],
       providers:[
         { provide:Store, useValue: new MockStore(_initialState) }

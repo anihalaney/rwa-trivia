@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule }     from '@angular/forms';
 
-import 'hammerjs';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import { QuestionsComponent } from './components';
@@ -19,7 +18,8 @@ import { QuestionsComponent } from './components';
     ReactiveFormsModule, 
 
     //Material
-    MaterialModule,
+    SharedMaterialModule,
+
     //Flex
     FlexLayoutModule
 
@@ -28,6 +28,7 @@ import { QuestionsComponent } from './components';
   ],                                                                      
   exports:  [ QuestionsComponent,
               CommonModule, ReactiveFormsModule,
-              MaterialModule, FlexLayoutModule ]
+              FlexLayoutModule, 
+              SharedMaterialModule ]
 })
 export class SharedModule { }

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, async } from '@angular/core/testing';
 import { By }              from '@angular/platform-browser';
 import { DebugElement, NO_ERRORS_SCHEMA }    from '@angular/core';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from '../../../shared/shared-material.module';
 import { Store } from '@ngrx/store';
 
 import { TEST_DATA } from '../../../testing/test.data';
@@ -35,7 +35,7 @@ describe('Component: MyQuestionsComponent', () => {
       declarations: [ MyQuestionsComponent, RouterLinkStubDirective ], // declare the test component
       imports: [
         //Material
-        MaterialModule
+        SharedMaterialModule
       ],
     schemas:      [ NO_ERRORS_SCHEMA ],
     providers:[

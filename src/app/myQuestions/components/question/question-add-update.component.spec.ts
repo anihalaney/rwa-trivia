@@ -4,7 +4,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { DebugElement }    from '@angular/core';
 import { ReactiveFormsModule }    from '@angular/forms';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { MaterialModule } from '@angular/material';
+import { SharedMaterialModule } from '../../../shared/shared-material.module';
 import { Store } from '@ngrx/store';
 
 import { TEST_DATA } from '../../../testing/test.data';
@@ -32,7 +32,7 @@ describe('Component: QuestionAddUpdateComponent', () => {
       imports: [
         NoopAnimationsModule,
         //Material
-        MaterialModule,
+        SharedMaterialModule,
         ReactiveFormsModule
       ],
       providers:[
