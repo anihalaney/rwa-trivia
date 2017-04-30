@@ -8,11 +8,12 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { CONFIG } from '../../environments/environment';
 
-import { AuthenticationService, AuthGuard,
-         CategoryService, TagService, QuestionService } from './services';
+import { Utils, AuthenticationService, AuthGuard,
+         CategoryService, TagService, QuestionService,
+         GameService } from './services';
 
-import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions } from './store/actions';
-import { UserEffects, CategoryEffects, TagEffects, QuestionEffects } from './store/effects';
+import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
+import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects } from './store/effects';
 import { default as reducer } from './store/app-store';
 
 import { LoginComponent, PasswordAuthComponent } from './components';
@@ -44,17 +45,20 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     EffectsModule.run(CategoryEffects),
     EffectsModule.run(TagEffects),
     EffectsModule.run(QuestionEffects),
+    EffectsModule.run(GameEffects),
 
     //rwa module
     SharedModule
   ],
   providers: [ 
     //Services
-    AuthenticationService, AuthGuard,
+    Utils, AuthenticationService, AuthGuard,
     CategoryService, TagService, QuestionService,
+    GameService,
 
     //Actions
-    UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions
+    UserActions, CategoryActions, TagActions, QuestionActions, 
+    UIStateActions, GameActions
 
   ]
 })

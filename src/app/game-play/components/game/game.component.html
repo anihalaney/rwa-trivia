@@ -1,0 +1,12 @@
+<md-card class="flex-container" 
+          fxLayoutWrap="wrap"
+          fxLayout="row"
+          fxLayoutAlign="center" fxLayoutAlign.xs="start">
+  <game-question *ngIf="currentQuestion" 
+                [categoryName]="categoryName"
+                [question]="currentQuestion"
+                [timer]="timer"
+                (answerClicked)="answerClicked($event)"
+                >
+  </game-question>
+</md-card>

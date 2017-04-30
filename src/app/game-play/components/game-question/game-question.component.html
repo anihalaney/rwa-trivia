@@ -1,0 +1,24 @@
+<md-card class="flex-item" class="game-question">
+    <md-card-title fxLayout="row">
+      <div>{{question.questionText}}</div>
+      <div fxFlexAlign="center"></div>
+      <div>{{timer}}</div>
+    </md-card-title>
+  <md-card-header>
+    <md-card-subtitle>
+      {{categoryName}}:
+      <span *ngFor="let tag of question.tags">
+        {{tag}}
+      </span>
+    </md-card-subtitle>
+  </md-card-header>
+  <md-card-content>
+    <md-list dense> 
+      <md-list-item *ngFor="let answer of question.answers">
+        <button md-button color="primary" (click)="answerButtonClicked(answer)" class="answer-button">{{answer.answerText}}</button>
+      </md-list-item>
+    </md-list>
+
+
+  </md-card-content>
+</md-card>
