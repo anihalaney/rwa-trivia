@@ -46,6 +46,14 @@ export class GameActions {
     };
   }
 
+  static RESET_CURRENT_GAME = 'RESET_CURRENT_GAME';
+  resetCurrentGame(): Action {
+    return {
+      type: GameActions.RESET_CURRENT_GAME,
+      payload: null
+    };
+  }
+
   static GET_NEXT_QUESTION = 'GET_NEXT_QUESTION';
   getNextQuestion(gameId: string): Action {
     return {
@@ -62,4 +70,28 @@ export class GameActions {
     };
   }
 
+
+  static RESET_CURRENT_QUESTION = 'RESET_CURRENT_QUESTION';
+  resetCurrentQuestion(): Action {
+    return {
+      type: GameActions.RESET_CURRENT_QUESTION,
+      payload: null
+    };
+  }
+
+  static GET_ACTIVE_GAMES = 'GET_ACTIVE_GAMES';
+  getActiveGames(user: User): Action {
+    return {
+      type: GameActions.GET_ACTIVE_GAMES,
+      payload: user
+    };
+  }
+
+  static GET_ACTIVE_GAMES_SUCCESS = 'GET_ACTIVE_GAMES_SUCCESS';
+  getActiveGamesSuccess(games: string[]): Action {
+    return {
+      type: GameActions.GET_ACTIVE_GAMES_SUCCESS,
+      payload: games
+    };
+  }
 }

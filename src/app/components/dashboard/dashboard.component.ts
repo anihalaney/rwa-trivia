@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../core/store/app-store';
-import { QuestionActions } from '../../core/store/actions';
+import { QuestionActions, GameActions } from '../../core/store/actions';
 import { Category, Question } from '../../model';
 
 @Component({
@@ -17,14 +17,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   questionsObs: Observable<Question[]>;
   sampleQuestionsObs: Observable<Question[]>;
+  activeGamesObs: Observable<string[]>;
 
   constructor(private store: Store<AppStore>,
-              private questionActions: QuestionActions) {
+              private questionActions: QuestionActions,
+              private gameActions: GameActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.tagsObs = store.select(s => s.tags);
     this.questionsObs = store.select(s => s.questions);
     this.sampleQuestionsObs = store.select(s => s.sampleQuestions);
+    this.activeGamesObs = store.select(s => s.activeGames);
   }
 
   ngOnInit() {

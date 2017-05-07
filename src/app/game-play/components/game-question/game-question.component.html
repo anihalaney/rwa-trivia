@@ -1,8 +1,8 @@
 <md-card class="flex-item" class="game-question">
     <md-card-title fxLayout="row">
-      <div>{{question.questionText}}</div>
-      <div fxFlexAlign="center"></div>
-      <div>{{timer}}</div>
+      <div >{{question.questionText}}</div>
+      <div fxFlex></div>
+      <div >{{timer}}</div>
     </md-card-title>
   <md-card-header>
     <md-card-subtitle>
@@ -14,11 +14,30 @@
   </md-card-header>
   <md-card-content>
     <md-list dense> 
-      <md-list-item *ngFor="let answer of question.answers">
-        <button md-button color="primary" (click)="answerButtonClicked(answer)" class="answer-button">{{answer.answerText}}</button>
+      <md-list-item *ngFor="let answer of question.answers; let i=index">
+        <button md-button color="primary" 
+                (click)="answerButtonClicked(answer, i)" class="answer-button"
+                [disabled]="answeredIndex >= 0"
+                [ngClass]="{answered: answeredIndex === i, correct: correctAnswerIndex === i}">{{answer.answerText}}</button>
       </md-list-item>
     </md-list>
-
-
   </md-card-content>
+
+  <md-card-footer *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" 
+                  fxLayout="row" fxLayoutAlign="space-between center">
+    <button md-button>SHARE</button>
+    <div fxFlexAlign="center"[hidden]="correctAnswerIndex !== answeredIndex">CORRECT</div>
+    <div  fxFlexAlign="center" [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)">INCORRECT</div>
+    <div  fxFlexAlign="center"[hidden]="answeredIndex !== null && answeredIndex !== undefined">TIMEOUT</div>
+    <button md-button>CONTINUE</button>
+  </md-card-footer>
+<!--  <div class="overlay" [hidden]="correctAnswerIndex === null || correctAnswerIndex === undefined">
+    <md-card-title fxLayout="row">
+      <div [hidden]="correctAnswerIndex !== answeredIndex">CORRECT</div>
+      <div [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)">INCORRECT</div>
+      <div [hidden]="answeredIndex !== null && answeredIndex !== undefined">TIMEOUT</div>
+    </md-card-title>
+  </div>
+  -->
 </md-card>
+ 

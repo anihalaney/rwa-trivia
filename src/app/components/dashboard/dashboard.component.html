@@ -3,11 +3,20 @@
           fxLayout="row"
           fxLayoutAlign="center" fxLayoutAlign.xs="start">
   <md-card class="dash-card">
-    <md-card-title>Welcome</md-card-title>
-    <md-card-content>
+    <md-card-title>
       <a [routerLink]="['/game-play']">
-        <button md-button color="primary">NEW GAME</button>
+        <button md-button color="primary">START NEW GAME</button>
       </a>
+    </md-card-title>
+    <md-card-content>
+      Active Games:
+      <md-list>
+        <md-list-item *ngFor="let game of activeGamesObs | async">
+          <a [routerLink]="['/game', game]">
+            <button md-button color="primary">GAME: {{game}}</button>
+          </a>
+        </md-list-item>
+      </md-list>
     </md-card-content>
   </md-card>
 

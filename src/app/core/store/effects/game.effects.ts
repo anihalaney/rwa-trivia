@@ -36,4 +36,11 @@ export class GameEffects {
         .map((action: Action) => action.payload)
         .switchMap((payload: string) => this.svc.getNextQuestion(payload))
         .map((question: Question[]) => this.gameActions.getNextQuestionSuccess(question[0]));
+
+    @Effect() 
+    getActiveGames$ = this.actions$
+        .ofType(GameActions.GET_ACTIVE_GAMES)
+        .map((action: Action) => action.payload)
+        .switchMap((payload: User) => this.svc.getActiveGames(payload))
+        .map((games: string[]) => this.gameActions.getActiveGamesSuccess(games));
 }

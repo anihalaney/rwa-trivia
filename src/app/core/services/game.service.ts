@@ -38,6 +38,11 @@ export class GameService {
     return tmp;
   }
 
+  getActiveGames(user: User): Observable<string[]>{
+    return this.af.database.list('/users/' + user.userId + '/games/active')
+            .map(gids => gids.map(gid => gid['$key'])); //game ids
+  }
+
   getGame(gameId: string): Observable<Game> {
     return this.af.database.object('/games/' + gameId)
               .map(dbGame => {

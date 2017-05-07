@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 import { Question, Answer }     from '../../../model';
 
@@ -13,6 +13,10 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   @Input() timer: number;
   @Output() answerClicked = new EventEmitter<Answer>();
 
+  answeredIndex: number;
+  correctAnswerIndex: number;
+  @ViewChild('overlay') overlay: ElementRef;
+
   constructor() {
   }
 
@@ -22,7 +26,12 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  answerButtonClicked(answer: Answer ) {
+  answerButtonClicked(answer: Answer, index: number ) {
+    this.answeredIndex = index;
     this.answerClicked.emit(answer)
+  }
+
+  disableQuestions(correctAnswerIndex: number) {
+    this.correctAnswerIndex = correctAnswerIndex;
   }
 }

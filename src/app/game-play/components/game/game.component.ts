@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -7,6 +7,7 @@ import '../../../rxjs-extensions';
 
 import { AppStore } from '../../../core/store/app-store';
 
+import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
 import { Game, GameOptions, GameMode, User, Question, Category }     from '../../../model';
@@ -26,7 +27,10 @@ export class GameComponent implements OnInit, OnDestroy {
   timer: number;
   categoryDictionary: {[key: number]: Category}
   categoryName: string;
-  
+
+  @ViewChild(GameQuestionComponent)
+  private questionComponent: GameQuestionComponent;
+
   constructor(private store: Store<AppStore>, private gameActions: GameActions,
               private route: ActivatedRoute) {
     this.gameObs = store.select(s => s.currentGame).filter(g => g != null);
@@ -57,6 +61,8 @@ export class GameComponent implements OnInit, OnDestroy {
           null,
           () => {
             console.log("Time Expired");
+            //disable all buttons
+            this.questionComponent.disableQuestions(2);
           })
         
       })
@@ -66,14 +72,23 @@ export class GameComponent implements OnInit, OnDestroy {
   answerClicked($event) {
     console.log($event);
     Utils.unsubscribe([this.timerSub]);
+    //disable all buttons
+    this.questionComponent.disableQuestions(2);
+
     if ($event.correct)
     {
       console.log("CORRECT");
     }
   }
 
+  afterAnswer()
+  {
+
+  }
+
   ngOnDestroy() {
-    Utils.unsubscribe(this.sub);
     Utils.unsubscribe([this.timerSub]);
+    Utils.unsubscribe(this.sub);
+    this.store.dispatch(this.gameActions.resetCurrentGame());
   }
 }

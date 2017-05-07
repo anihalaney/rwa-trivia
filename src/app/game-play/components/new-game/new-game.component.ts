@@ -24,7 +24,6 @@ export class NewGameComponent implements OnInit, OnDestroy {
   sub: Subscription;
   sub2: Subscription;
   sub3: Subscription;
-  sub4: Subscription;
 
   newGameForm: FormGroup;
   gameOptions: GameOptions;
@@ -52,13 +51,10 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
-    this.sub3 = this.store.select(s => s.currentGame).filter(g => g != null).subscribe(g => {
-      console.log("Navigating to game: " + g.gameId);
-      this.router.navigate(['game', g.gameId])
-    })
-    this.sub4 = this.store.select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
+    this.sub3 = this.store.select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
       console.log("Navigating to game: " + gameId);
-      this.router.navigate(['game', gameId])
+      this.router.navigate(['game', gameId]);
+      this.store.dispatch(this.gameActions.resetCurrentQuestion());
     })
 
     this.gameOptions = new GameOptions();
@@ -117,7 +113,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
       this.selectedTags.push(tag);
    }
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4]);
+    Utils.unsubscribe([this.sub, this.sub2, this.sub3]);
   }
 
   toggleShowCategoryList()

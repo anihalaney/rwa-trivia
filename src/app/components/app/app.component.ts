@@ -1,11 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { MdSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 
 import { AppStore } from '../../core/store/app-store';
-import { CategoryActions, TagActions, QuestionActions } from '../../core/store/actions';
-import { MdSnackBar } from '@angular/material';
-import { AuthenticationService } from '../../core/services';
+import { CategoryActions, TagActions, QuestionActions, GameActions } from '../../core/store/actions';
+import { AuthenticationService, Utils } from '../../core/services';
 import { User } from '../../model';
 
 @Component({
@@ -16,14 +17,15 @@ import { User } from '../../model';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'trivia!';
   user: User;
-  sub: any;
-  sub2: any;
+  sub: Subscription;
+  sub2: Subscription;
 
   constructor(
               private authService: AuthenticationService,
               private categoryActions: CategoryActions,
               private tagActions: TagActions,
               private questionActions: QuestionActions,
+              private gameActions: GameActions,
               private store: Store<AppStore>,
               private router: Router,
               public snackBar: MdSnackBar) {
@@ -39,6 +41,8 @@ export class AppComponent implements OnInit, OnDestroy {
       if (user)
       {
         console.log(user);
+        //Load active Games
+        this.store.dispatch(this.gameActions.getActiveGames(user));
         let url: string;
         this.store.take(1).subscribe(s => url = s.loginRedirectUrl);
         if (url)
@@ -58,11 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub)
-      this.sub.unsubscribe();
-    
-    if (this.sub2)
-      this.sub2.unsubscribe();
+    Utils.unsubscribe([this.sub, this.sub2]);
   }
 
   login() {
