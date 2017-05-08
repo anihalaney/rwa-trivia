@@ -8,10 +8,11 @@ import { Question, Answer }     from '../../../model';
   styleUrls: ['./game-question.component.scss']
 })
 export class GameQuestionComponent implements OnInit, OnDestroy {
+  @Input() questionIndex: number;
   @Input() question: Question;
   @Input() categoryName: string;
   @Input() timer: number;
-  @Output() answerClicked = new EventEmitter<Answer>();
+  @Output() answerClicked = new EventEmitter<number>();
 
   answeredIndex: number;
   correctAnswerIndex: number;
@@ -28,7 +29,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
 
   answerButtonClicked(answer: Answer, index: number ) {
     this.answeredIndex = index;
-    this.answerClicked.emit(answer)
+    this.answerClicked.emit(index)
   }
 
   disableQuestions(correctAnswerIndex: number) {

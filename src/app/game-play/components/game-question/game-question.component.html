@@ -1,8 +1,8 @@
 <md-card class="flex-item" class="game-question">
     <md-card-title fxLayout="row">
-      <div >{{question.questionText}}</div>
+      <div>{{questionIndex}}. {{question.questionText}}</div>
       <div fxFlex></div>
-      <div >{{timer}}</div>
+      <div>{{timer}}</div>
     </md-card-title>
   <md-card-header>
     <md-card-subtitle>
@@ -26,10 +26,12 @@
   <md-card-footer *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" 
                   fxLayout="row" fxLayoutAlign="space-between center">
     <button md-button>SHARE</button>
-    <div fxFlexAlign="center"[hidden]="correctAnswerIndex !== answeredIndex">CORRECT</div>
-    <div  fxFlexAlign="center" [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)">INCORRECT</div>
-    <div  fxFlexAlign="center"[hidden]="answeredIndex !== null && answeredIndex !== undefined">TIMEOUT</div>
-    <button md-button>CONTINUE</button>
+    <div fxFlexAlign="center">
+      <span [hidden]="correctAnswerIndex !== answeredIndex">CORRECT</span>
+      <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)">INCORRECT</span>
+      <span [hidden]="answeredIndex !== null && answeredIndex !== undefined">TIMEOUT</span>
+    </div>
+    <button md-button>OK</button>
   </md-card-footer>
 <!--  <div class="overlay" [hidden]="correctAnswerIndex === null || correctAnswerIndex === undefined">
     <md-card-title fxLayout="row">

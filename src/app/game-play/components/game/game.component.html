@@ -6,9 +6,20 @@
     <game-question *ngIf="currentQuestion" 
                   [categoryName]="categoryName"
                   [question]="currentQuestion"
+                  [questionIndex]="questionIndex"
                   [timer]="timer"
                   (answerClicked)="answerClicked($event)"
                   >
     </game-question>
+    <game-question-continue *ngIf="currentQuestion && continueNext" class="overlay"
+                  [categoryName]="categoryName"
+                  [question]="currentQuestion"
+                  (continueClicked)="continueClicked($event)"
+                  >
+    </game-question-continue>
+    <game-over *ngIf="gameOver" class="overlay"
+                  (gameOverContinueClicked)="gameOverContinueClicked($event)"
+                  >
+    </game-over>
   </md-card-content>
 </md-card>

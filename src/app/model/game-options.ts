@@ -4,6 +4,7 @@ export class GameOptions {
   gameMode: GameMode;
   categoryIds: number[];
   tags: string[];
+  maxQuestions: number;
 
   constructor() {
     //defaults
@@ -11,6 +12,7 @@ export class GameOptions {
     this.gameMode = GameMode.Normal;
     this.categoryIds = [];
     this.tags = [];
+    this.maxQuestions = 4;
   }
 }
 export enum PlayerMode {

@@ -61,6 +61,11 @@ export class GameService {
       query: {
         limitToLast: 1
       }
-    });
+    }).map(qs => 
+      qs.map(q => {
+        q["id"] = q['$key']; //map key to quesion id
+        return q
+      })
+    );
   }
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
@@ -10,7 +10,8 @@ import { AppStore } from '../../../core/store/app-store';
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Game, GameOptions, GameMode, User, Question, Category }     from '../../../model';
+import { Game, GameOptions, GameMode, PlayerQnA,
+         User, Question, Category } from '../../../model';
 
 @Component({
   selector: 'game',
@@ -18,41 +19,58 @@ import { Game, GameOptions, GameMode, User, Question, Category }     from '../..
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit, OnDestroy {
+  user: User;
   gameObs: Observable<Game>;
   game: Game;
   gameQuestionObs: Observable<Question>;
   currentQuestion: Question;
+  questionIndex: number;
   sub: Subscription[] = [];
   timerSub: Subscription;
   timer: number;
   categoryDictionary: {[key: number]: Category}
   categoryName: string;
 
+  continueNext: boolean = false;
+  gameOver: boolean = false;
+
+  MAX_TIME_IN_SECONDS: number = 16;
+
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
 
   constructor(private store: Store<AppStore>, private gameActions: GameActions,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute, private router: Router) {
+    this.questionIndex = 0;
     this.gameObs = store.select(s => s.currentGame).filter(g => g != null);
-    this.gameQuestionObs = store.select(s => s.currentGameQuestion).filter(g => g != null);
+    this.gameQuestionObs = store.select(s => s.currentGameQuestion);
   }
 
   ngOnInit() {
     this.route.params
       .subscribe((params: Params) => this.store.dispatch(this.gameActions.loadGame(params['id'])));
-    
+
+    this.store.take(1).subscribe(s => this.user = s.user); //logged in user
+
     this.store.select(s => s.categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
-        this.store.dispatch(this.gameActions.getNextQuestion(game.gameId));
+        this.getNextQuestion();
     }));
 
     this.sub.push(
       this.gameQuestionObs.subscribe(question => {
+        if (!question)
+        {
+          this.currentQuestion = null;
+          return;
+        }
         this.currentQuestion = question;
+        this.questionIndex ++;
+        console.log(this.questionIndex);
         this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
-        this.timer = 16;
+        this.timer = this.MAX_TIME_IN_SECONDS;
 
         this.timerSub =
           Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
@@ -62,28 +80,60 @@ export class GameComponent implements OnInit, OnDestroy {
           () => {
             console.log("Time Expired");
             //disable all buttons
-            this.questionComponent.disableQuestions(2);
-          })
+            this.afterAnswer();
+          });
         
       })
     );
   }
 
-  answerClicked($event) {
+  getNextQuestion()
+  {
+    this.store.dispatch(this.gameActions.getNextQuestion(this.game.gameId));
+  }
+
+  answerClicked($event: number) {
     console.log($event);
     Utils.unsubscribe([this.timerSub]);
     //disable all buttons
-    this.questionComponent.disableQuestions(2);
-
-    if ($event.correct)
-    {
-      console.log("CORRECT");
-    }
+    this.afterAnswer($event);
   }
 
-  afterAnswer()
-  {
+  continueClicked($event) {
+    this.store.dispatch(this.gameActions.resetCurrentQuestion());
+    this.continueNext = false;
+    if (this.questionIndex >= this.game.gameOptions.maxQuestions)
+    {
+      //game over
+      this.gameOver = true;
+      return;
+    }
+    this.getNextQuestion();
+  }
 
+  gameOverContinueClicked() {
+    this.router.navigate(['/']);
+  }
+  afterAnswer(userAnswerId?: number)
+  {
+    let correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
+    let seconds = this.MAX_TIME_IN_SECONDS - this.timer;
+    let playerQnA: PlayerQnA = {
+            playerId: this.user.userId,
+            playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
+            playerAnswerInSeconds: seconds,
+            answerCorrect: (userAnswerId === correctAnswerId),
+            questionId: this.currentQuestion.id
+          }
+    console.log(playerQnA);
+
+    //TODO: dispatch action to push player answer
+    //TODO: then check how many Qs left and set questionindex
+    
+    this.questionComponent.disableQuestions(2);
+    Observable.timer(1000).take(1).subscribe(t => {
+      this.continueNext = true;
+    });
   }
 
   ngOnDestroy() {

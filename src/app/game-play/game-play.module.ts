@@ -2,13 +2,17 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from  '../shared/shared.module';
 import { GamePlayRoutingModule } from  './routing/game-play-routing.module';
-import { NewGameComponent, GameComponent, GameQuestionComponent } from  './components';
+import { NewGameComponent, GameComponent, 
+         GameQuestionComponent, GameQuestionContinueComponent,
+         GameOverComponent } from  './components';
 
 @NgModule({
   declarations: [
     NewGameComponent,
     GameComponent,
-    GameQuestionComponent
+    GameQuestionComponent,
+    GameQuestionContinueComponent,
+    GameOverComponent
   ],
   imports: [
     //rwa modules
