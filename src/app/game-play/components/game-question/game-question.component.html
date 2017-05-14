@@ -2,7 +2,7 @@
     <md-card-title fxLayout="row">
       <div>{{questionIndex}}. {{question.questionText}}</div>
       <div fxFlex></div>
-      <div>{{timer}}</div>
+      <div [ngClass]="{abouttoexpire: timer <= 5}">{{timer}}</div>
     </md-card-title>
   <md-card-header>
     <md-card-subtitle>
@@ -33,13 +33,5 @@
     </div>
     <button md-button (click)="okClick.emit($event)">OK</button>
   </md-card-footer>
-<!--  <div class="overlay" [hidden]="correctAnswerIndex === null || correctAnswerIndex === undefined">
-    <md-card-title fxLayout="row">
-      <div [hidden]="correctAnswerIndex !== answeredIndex">CORRECT</div>
-      <div [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)">INCORRECT</div>
-      <div [hidden]="answeredIndex !== null && answeredIndex !== undefined">TIMEOUT</div>
-    </md-card-title>
-  </div>
-  -->
 </md-card>
  
