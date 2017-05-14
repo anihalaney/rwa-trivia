@@ -27,9 +27,9 @@
                   fxLayout="row" fxLayoutAlign="space-between center">
     <button md-button>SHARE</button>
     <div fxFlexAlign="center">
-      <span [hidden]="correctAnswerIndex !== answeredIndex">CORRECT</span>
-      <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)">INCORRECT</span>
-      <span [hidden]="answeredIndex !== null && answeredIndex !== undefined">TIMEOUT</span>
+      <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
+      <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
+      <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
     </div>
     <button md-button (click)="okClick.emit($event)">OK</button>
   </md-card-footer>
