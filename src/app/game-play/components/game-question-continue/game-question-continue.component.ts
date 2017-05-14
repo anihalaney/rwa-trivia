@@ -11,6 +11,7 @@ export class GameQuestionContinueComponent implements OnInit, OnDestroy {
   @Input() question: Question;
   @Input() categoryName: string;
   @Output() continueClicked = new EventEmitter();
+  @Output() viewQuestionClicked = new EventEmitter();
 
   constructor() {
   }
@@ -19,10 +20,6 @@ export class GameQuestionContinueComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-  }
-
-  continueButtonClicked() {
-    this.continueClicked.emit();
   }
 
 }

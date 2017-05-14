@@ -13,6 +13,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   @Input() categoryName: string;
   @Input() timer: number;
   @Output() answerClicked = new EventEmitter<number>();
+  @Output() okClick = new EventEmitter();
 
   answeredIndex: number;
   correctAnswerIndex: number;

@@ -24,6 +24,7 @@ export class GameComponent implements OnInit, OnDestroy {
   game: Game;
   gameQuestionObs: Observable<Question>;
   currentQuestion: Question;
+  correctAnswerCount: number;
   questionIndex: number;
   sub: Subscription[] = [];
   timerSub: Subscription;
@@ -42,21 +43,25 @@ export class GameComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppStore>, private gameActions: GameActions,
               private route: ActivatedRoute, private router: Router) {
     this.questionIndex = 0;
+    this.correctAnswerCount = 0;
     this.gameObs = store.select(s => s.currentGame).filter(g => g != null);
     this.gameQuestionObs = store.select(s => s.currentGameQuestion);
   }
 
   ngOnInit() {
-    this.route.params
-      .subscribe((params: Params) => this.store.dispatch(this.gameActions.loadGame(params['id'])));
-
     this.store.take(1).subscribe(s => this.user = s.user); //logged in user
+
+    this.route.params
+      .subscribe((params: Params) => this.store.dispatch(this.gameActions.loadGame({"gameId": params['id'], "user": this.user})));
 
     this.store.select(s => s.categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
-        this.getNextQuestion();
+        this.questionIndex = this.game.playerQnAs.length;
+        this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
+        if (!this.currentQuestion)
+          this.getNextQuestion();
     }));
 
     this.sub.push(
@@ -68,7 +73,7 @@ export class GameComponent implements OnInit, OnDestroy {
         }
         this.currentQuestion = question;
         this.questionIndex ++;
-        console.log(this.questionIndex);
+        //console.log(this.questionIndex);
         this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
         this.timer = this.MAX_TIME_IN_SECONDS;
 
@@ -89,14 +94,20 @@ export class GameComponent implements OnInit, OnDestroy {
 
   getNextQuestion()
   {
-    this.store.dispatch(this.gameActions.getNextQuestion(this.game.gameId));
+    this.store.dispatch(this.gameActions.getNextQuestion({"game": this.game, "user": this.user}));
   }
 
   answerClicked($event: number) {
-    console.log($event);
+    //console.log($event);
     Utils.unsubscribe([this.timerSub]);
     //disable all buttons
     this.afterAnswer($event);
+  }
+  okClick($event){
+    if (this.questionIndex >= this.game.gameOptions.maxQuestions)
+      this.gameOver = true;
+    else
+      this.continueNext = true;
   }
 
   continueClicked($event) {
@@ -111,12 +122,21 @@ export class GameComponent implements OnInit, OnDestroy {
     this.getNextQuestion();
   }
 
+  viewQuestionClicked($event) 
+  {
+    if (this.continueNext)
+      this.continueNext = false;
+    if (this.gameOver)
+      this.gameOver = false;
+  }
   gameOverContinueClicked() {
     this.router.navigate(['/']);
   }
   afterAnswer(userAnswerId?: number)
   {
     let correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
+    if (userAnswerId === correctAnswerId)
+      this.correctAnswerCount ++;
     let seconds = this.MAX_TIME_IN_SECONDS - this.timer;
     let playerQnA: PlayerQnA = {
             playerId: this.user.userId,
@@ -125,11 +145,17 @@ export class GameComponent implements OnInit, OnDestroy {
             answerCorrect: (userAnswerId === correctAnswerId),
             questionId: this.currentQuestion.id
           }
-    console.log(playerQnA);
-
-    //TODO: dispatch action to push player answer
-    //TODO: then check how many Qs left and set questionindex
+    //console.log(playerQnA);
     
+    //dispatch action to push player answer
+    this.store.dispatch(this.gameActions.addPlayerQnA({"game": this.game, "playerQnA": playerQnA}));
+    
+    if (this.questionIndex >= this.game.gameOptions.maxQuestions)
+    {
+      //game over
+      this.store.dispatch(this.gameActions.setGameOver({"game": this.game, "user": this.user}));
+    }
+
     this.questionComponent.disableQuestions(2);
     Observable.timer(1000).take(1).subscribe(t => {
       this.continueNext = true;

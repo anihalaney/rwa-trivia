@@ -7,7 +7,7 @@ import { Game, Question } from '../../../model';
 export const currentGame = (state: any = null, action: Action): Game => {
   switch (action.type) {
     case GameActions.LOAD_GAME_SUCCESS:
-      console.log(action.payload);
+      //console.log(action.payload);
       return action.payload;
     case UserActions.LOGOFF:
     case GameActions.RESET_CURRENT_GAME:
@@ -20,7 +20,7 @@ export const currentGame = (state: any = null, action: Action): Game => {
 export const currentGameQuestion = (state: any = null, action: Action): Question => {
   switch (action.type) {
     case GameActions.GET_NEXT_QUESTION_SUCCESS:
-      console.log(action.payload);
+      //console.log(action.payload);
       return action.payload;
     case UserActions.LOGOFF:
     case GameActions.RESET_CURRENT_GAME:
@@ -34,7 +34,7 @@ export const currentGameQuestion = (state: any = null, action: Action): Question
 export const newGameId = (state: any = "", action: Action): string => {
   switch (action.type) {
     case GameActions.CREATE_NEW_GAME_SUCCESS:
-      console.log(action.payload);
+      //console.log(action.payload);
       return action.payload;
     case UserActions.LOGOFF:
     case GameActions.RESET_NEW_GAME:

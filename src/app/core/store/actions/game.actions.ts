@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
 
-import { User, GameOptions, Game, Question } from '../../../model';
+import { User, GameOptions, Game, PlayerQnA, Question } from '../../../model';
 
 @Injectable()
 export class GameActions {
@@ -31,10 +31,10 @@ export class GameActions {
   }
 
   static LOAD_GAME = 'LOAD_GAME';
-  loadGame(gameId: string): Action {
+  loadGame(payload: {gameId: string, user: User}): Action {
     return {
       type: GameActions.LOAD_GAME,
-      payload: gameId
+      payload: payload
     };
   }
 
@@ -55,10 +55,10 @@ export class GameActions {
   }
 
   static GET_NEXT_QUESTION = 'GET_NEXT_QUESTION';
-  getNextQuestion(gameId: string): Action {
+  getNextQuestion(payload: {game: Game, user: User}): Action {
     return {
       type: GameActions.GET_NEXT_QUESTION,
-      payload: gameId
+      payload: payload
     };
   }
 
@@ -70,6 +70,29 @@ export class GameActions {
     };
   }
 
+  static ADD_PLAYER_QNA = 'ADD_PLAYER_QNA';
+  addPlayerQnA(payload: {game: Game, playerQnA: PlayerQnA}): Action {
+    return {
+      type: GameActions.ADD_PLAYER_QNA,
+      payload: payload
+    };
+  }
+
+  static ADD_PLAYER_QNA_SUCCESS = 'ADD_PLAYER_QNA_SUCCESS';
+  addPlayerQnASuccess(): Action {
+    return {
+      type: GameActions.ADD_PLAYER_QNA_SUCCESS,
+      payload: null
+    };
+  }
+
+  static SET_GAME_OVER = 'SET_GAME_OVER';
+  setGameOver(payload: {game: Game, user: User}): Action {
+    return {
+      type: GameActions.SET_GAME_OVER,
+      payload: payload
+    };
+  }
 
   static RESET_CURRENT_QUESTION = 'RESET_CURRENT_QUESTION';
   resetCurrentQuestion(): Action {

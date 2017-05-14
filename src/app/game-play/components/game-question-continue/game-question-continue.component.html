@@ -13,11 +13,11 @@
     </md-card-subtitle>
   </md-card-header>
   <md-card-content fxLayoutAlign="center center">
-    <button md-button (click)="continueButtonClicked($event)">CONTINUE</button>
+    <button md-button (click)="continueClicked.emit($event)">CONTINUE</button>
   </md-card-content>
 
   <md-card-footer fxLayout="row" fxLayoutAlign="space-between center">
-    <button md-button>VIEW QUESTION</button>
+    <button md-button (click)="viewQuestionClicked.emit($event)">VIEW QUESTION</button>
     <div fxFlexAlign="center"></div>
     <button md-button>REPORT ISSUE</button>
   </md-card-footer>

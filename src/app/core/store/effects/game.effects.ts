@@ -3,7 +3,7 @@ import {Effect, Actions} from '@ngrx/effects';
 import {Action} from '@ngrx/store';
 
 import {AppStore} from '../app-store';
-import {Game, GameOptions, User, Question} from '../../../model';
+import {Game, PlayerQnA, GameOptions, User, Question} from '../../../model';
 import {GameActions} from '../actions';
 import {GameService} from '../../services'
 
@@ -27,15 +27,29 @@ export class GameEffects {
     loadGame$ = this.actions$
         .ofType(GameActions.LOAD_GAME)
         .map((action: Action) => action.payload)
-        .switchMap((payload: string) => this.svc.getGame(payload))
+        .switchMap((payload: {gameId: string, user: User}) => this.svc.getGame(payload.gameId, payload.user))
         .map((game: Game) => this.gameActions.loadGameSuccess(game));
 
     @Effect() 
     loadNextQuestion$ = this.actions$
         .ofType(GameActions.GET_NEXT_QUESTION)
         .map((action: Action) => action.payload)
-        .switchMap((payload: string) => this.svc.getNextQuestion(payload))
+        .switchMap((payload: {game: Game, user: User}) => this.svc.getNextQuestion(payload.game, payload.user))
         .map((question: Question[]) => this.gameActions.getNextQuestionSuccess(question[0]));
+
+    @Effect() 
+    addPlayerQnA$ = this.actions$
+        .ofType(GameActions.ADD_PLAYER_QNA)
+        .map((action: Action) => action.payload)
+        .do((payload: {game: Game, playerQnA: PlayerQnA}) => this.svc.addPlayerQnAToGame(payload.game, payload.playerQnA))
+        .filter(() => false);
+
+    @Effect() 
+    setGameOver$ = this.actions$
+        .ofType(GameActions.SET_GAME_OVER)
+        .map((action: Action) => action.payload)
+        .do((payload: {game: Game, user: User}) => this.svc.setGameOver(payload.game, payload.user))
+        .filter(() => false);
 
     @Effect() 
     getActiveGames$ = this.actions$

@@ -8,7 +8,7 @@
     <md-card-subtitle>
       {{categoryName}}:
       <span *ngFor="let tag of question.tags">
-        {{tag}}
+        #{{tag}}
       </span>
     </md-card-subtitle>
   </md-card-header>
@@ -31,7 +31,7 @@
       <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)">INCORRECT</span>
       <span [hidden]="answeredIndex !== null && answeredIndex !== undefined">TIMEOUT</span>
     </div>
-    <button md-button>OK</button>
+    <button md-button (click)="okClick.emit($event)">OK</button>
   </md-card-footer>
 <!--  <div class="overlay" [hidden]="correctAnswerIndex === null || correctAnswerIndex === undefined">
     <md-card-title fxLayout="row">
