@@ -32,6 +32,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 10: Angular 4 upgrade](https://blog.realworldfullstack.io/real-world-angular-part-x-fantastic-4-c714b04640ab)
 
+[Part 11: Gameplay with Angular](https://blog.realworldfullstack.io/real-world-app-part-11-gameplay-with-angular-2a660fad52c2)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)
