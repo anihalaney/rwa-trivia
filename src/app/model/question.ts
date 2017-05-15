@@ -1,7 +1,7 @@
 import { Category } from './category'
 
 export class Question {
-  id: number;
+  id: string;
   questionText: string;
   answers: Answer[];
   ordered: boolean;
@@ -19,7 +19,7 @@ export class Question {
   approvedOn?: Date;
   
   constructor() {
-    this.id = 0;
+    this.id = "";
     this.answers = [new Answer(), new Answer(), new Answer(), new Answer()];
     this.ordered = false;
     this.tags = [];

@@ -1,5 +1,5 @@
 { "categories": [
-    {"id": 1, "categoryName": "Special"},
+    {"id": 1, "categoryName": "Special", "requiredForGamePlay": true},
     {"id": 2, "categoryName": "Programming"},
     {"id": 3, "categoryName": "Architecture"},
     {"id": 4, "categoryName": "Networking/Infrastructure"},

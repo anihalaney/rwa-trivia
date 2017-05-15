@@ -1,0 +1,30 @@
+<md-card class="flex-container" 
+          fxLayoutWrap="wrap"
+          fxLayout="row"
+          fxLayoutAlign="center" fxLayoutAlign.xs="start">
+  <md-card-content class="question-container">
+    <game-question *ngIf="currentQuestion" 
+                  [categoryName]="categoryName"
+                  [question]="currentQuestion"
+                  [questionIndex]="questionIndex"
+                  [timer]="timer"
+                  (answerClicked)="answerClicked($event)"
+                  (okClick)="okClick($event)"
+                  >
+    </game-question>
+    <game-question-continue *ngIf="currentQuestion && continueNext" class="overlay"
+                  [categoryName]="categoryName"
+                  [question]="currentQuestion"
+                  (continueClicked)="continueClicked($event)"
+                  (viewQuestionClicked)="viewQuestionClicked($event)"
+                  >
+    </game-question-continue>
+    <game-over *ngIf="gameOver" class="overlay"
+                  [correctCount]="correctAnswerCount"
+                  [noOfQuestions]="questionIndex"
+                  (gameOverContinueClicked)="gameOverContinueClicked($event)"
+                  (viewQuestionClicked)="viewQuestionClicked($event)"
+                  >
+    </game-over>
+  </md-card-content>
+</md-card>

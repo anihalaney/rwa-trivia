@@ -3,13 +3,15 @@ import {CategoryActions} from './category.actions';
 import {TagActions} from './tag.actions';
 import {QuestionActions} from './question.actions';
 import {UIStateActions} from './ui-state.actions';
+import {GameActions} from './game.actions';
 
 export {
     UserActions,
     CategoryActions,
     TagActions,
     QuestionActions,
-    UIStateActions
+    UIStateActions,
+    GameActions
 };
 
 export default [
@@ -17,5 +19,6 @@ export default [
     CategoryActions,
     TagActions,
     QuestionActions,
-    UIStateActions
+    UIStateActions,
+    GameActions
 ];

@@ -1,0 +1,89 @@
+
+  <md-card>
+  <form (ngSubmit)="onSubmit()" class="new-game-form" [formGroup]="newGameForm" novalidate>
+    <md-card-title>Start New Game</md-card-title>
+    <md-card-content>
+
+      <div>
+        <h3 md-subheader>Player Mode</h3>
+        <md-button-toggle-group #group="mdButtonToggleGroup" formControlName="playerMode" value="0">
+          <md-button-toggle value="0">
+            Single Player
+          </md-button-toggle>
+          <md-button-toggle value="1">
+            Two Player
+          </md-button-toggle>
+        </md-button-toggle-group>
+
+      </div>
+
+      <div>
+        <md-button-toggle-group #group="mdButtonToggleGroup" formControlName="opponentType">
+          <md-button-toggle value="0">
+            Against Computer
+          </md-button-toggle>
+          <md-button-toggle value="1">
+            Random Opponent
+          </md-button-toggle>
+          <md-button-toggle value="2">
+            Friend
+          </md-button-toggle>
+        </md-button-toggle-group>
+      </div>
+      <md-divider></md-divider>
+      <div class="category-container">
+        <h3 md-subheader>Selected Categories
+          <a md-button class="add-tag-button" color="primary" (click)="toggleShowCategoryList()">Change</a>
+        </h3>
+        <md-chip *ngIf="allCategoriesSelected">
+          All
+        </md-chip>
+        <md-chip-list *ngIf="!allCategoriesSelected">
+          <span *ngFor="let category of categoriesFA.value; let i=index">
+          <md-chip *ngIf="category.categorySelected || category.requiredForGamePlay">
+            {{category.categoryName}}
+          </md-chip>
+          </span>
+        </md-chip-list>
+        
+
+        <div class="category-list" [hidden]="!showCategoryList">
+          <md-list formArrayName="categoriesFA">
+            <md-list-item *ngFor="let category of categoriesFA.controls; let i=index" [formGroupName]="i">
+              <md-checkbox mdPrefix formControlName="categorySelected"></md-checkbox>
+              <span>{{categoriesFA.value[i].categoryName}}</span>
+            </md-list-item>
+          </md-list>
+        </div>
+      </div>
+      <md-divider></md-divider>
+      <div class="tag-container">
+        <h3 md-subheader>Tag Preference</h3>
+        <p> 
+          <md-chip *ngIf="selectedTags.length === 0">
+            None
+          </md-chip>
+          <md-chip-list>
+            <md-chip *ngFor="let tag of selectedTags">
+              {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+            </md-chip>
+          </md-chip-list>
+        </p> 
+
+        <p> 
+          <md-input-container>
+            <input type="text" placeholder="Tag" mdInput formControlName="tagControl" [mdAutocomplete]="tagAuto"  (change)="autoOptionClick($event)">
+          </md-input-container>
+          <md-autocomplete #tagAuto="mdAutocomplete">
+            <md-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                {{ tag }}
+            </md-option>
+          </md-autocomplete>
+          <a md-button class="add-tag-button" color="primary" (click)="addTag()">ADD</a>
+        </p> 
+      </div>
+
+      <button md-button color="primary">START</button>
+    </md-card-content>
+    </form>
+  </md-card>

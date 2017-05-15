@@ -1,8 +1,9 @@
-import { User, Category, Question } from '../../model';
+import { User, Category, Question, Game } from '../../model';
 
 import { user, categories, categoryDictionary, tags, 
          questions, unpublishedQuestions, sampleQuestions, questionSaveStatus, userQuestions,
-         loginRedirectUrl } from './reducers';
+         loginRedirectUrl, 
+         currentGame, newGameId, currentGameQuestion, activeGames } from './reducers';
 
 import { combineReducers } from '@ngrx/store';
 import { compose } from '@ngrx/core/compose';
@@ -18,6 +19,10 @@ export interface AppStore {
   sampleQuestions: Question[];
   questionSaveStatus: string;
   loginRedirectUrl: string;
+  currentGame: Game;
+  newGameId: string;
+  currentGameQuestion: Question;
+  activeGames: string[];
 }
 
 export default compose(combineReducers)({
@@ -30,5 +35,9 @@ export default compose(combineReducers)({
   userQuestions: userQuestions,
   sampleQuestions: sampleQuestions,
   questionSaveStatus: questionSaveStatus,
-  loginRedirectUrl: loginRedirectUrl
+  loginRedirectUrl: loginRedirectUrl,
+  currentGame: currentGame,
+  newGameId: newGameId,
+  currentGameQuestion: currentGameQuestion,
+  activeGames: activeGames
 });

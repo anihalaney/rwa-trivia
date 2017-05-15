@@ -6,6 +6,7 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from  './shared/shared.module';
 import { RoutingModule } from  './routing/routing.module';
 import { MyQuestionsModule } from  './myQuestions/my-questions.module';
+import { GamePlayModule } from  './game-play/game-play.module';
 
 import { AppComponent, DashboardComponent } from './components';
 
@@ -21,7 +22,8 @@ import { AppComponent, DashboardComponent } from './components';
     CoreModule,
     SharedModule,
     RoutingModule,
-    MyQuestionsModule
+    MyQuestionsModule,
+    GamePlayModule
   ],
   providers: [ 
   ],                                                                      

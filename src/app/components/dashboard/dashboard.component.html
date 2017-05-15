@@ -1,16 +1,39 @@
-<md-card>
-  <md-card-title>rwa Stats</md-card-title>
-  <md-list>
-    <md-list-item>
-      <span>Categories Count: <span id="category-count">{{(categoriesObs | async).length}}</span></span>
-    </md-list-item>
-    <md-list-item>
-      <span>Tag Count: <span id="tag-count">{{(tagsObs | async).length}}</span></span>
-    </md-list-item>
-    <md-list-item>
-      <span>Question Count: <span id="question-count">{{(questionsObs | async).length}}</span></span>
-    </md-list-item>
-  </md-list>
+<md-card class="flex-container" 
+          fxLayoutWrap="wrap"
+          fxLayout="row"
+          fxLayoutAlign="center" fxLayoutAlign.xs="start">
+  <md-card class="dash-card">
+    <md-card-title>
+      <a [routerLink]="['/game-play']">
+        <button md-button color="primary">START NEW GAME</button>
+      </a>
+    </md-card-title>
+    <md-card-content>
+      Active Games:
+      <md-list>
+        <md-list-item *ngFor="let game of activeGamesObs | async">
+          <a [routerLink]="['/game', game]">
+            <button md-button color="primary">GAME: {{game}}</button>
+          </a>
+        </md-list-item>
+      </md-list>
+    </md-card-content>
+  </md-card>
+
+  <md-card class="dash-card">
+    <md-card-title>rwa Stats</md-card-title>
+    <md-list>
+      <md-list-item>
+        <span>Categories Count: <span id="category-count">{{(categoriesObs | async).length}}</span></span>
+      </md-list-item>
+      <md-list-item>
+        <span>Tag Count: <span id="tag-count">{{(tagsObs | async).length}}</span></span>
+      </md-list-item>
+      <md-list-item>
+        <span>Question Count: <span id="question-count">{{(questionsObs | async).length}}</span></span>
+      </md-list-item>
+    </md-list>
+  </md-card>
 </md-card>
 
 <md-card>

@@ -1,0 +1,37 @@
+<md-card class="flex-item" class="game-question">
+    <md-card-title fxLayout="row">
+      <div>{{questionIndex}}. {{question.questionText}}</div>
+      <div fxFlex></div>
+      <div [ngClass]="{abouttoexpire: timer <= 5}">{{timer}}</div>
+    </md-card-title>
+  <md-card-header>
+    <md-card-subtitle>
+      {{categoryName}}:
+      <span *ngFor="let tag of question.tags">
+        #{{tag}}
+      </span>
+    </md-card-subtitle>
+  </md-card-header>
+  <md-card-content>
+    <md-list dense> 
+      <md-list-item *ngFor="let answer of question.answers; let i=index">
+        <button md-button color="primary" 
+                (click)="answerButtonClicked(answer, i)" class="answer-button"
+                [disabled]="answeredIndex >= 0"
+                [ngClass]="{answered: answeredIndex === i, correct: correctAnswerIndex === i}">{{answer.answerText}}</button>
+      </md-list-item>
+    </md-list>
+  </md-card-content>
+
+  <md-card-footer *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" 
+                  fxLayout="row" fxLayoutAlign="space-between center">
+    <button md-button>SHARE</button>
+    <div fxFlexAlign="center">
+      <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
+      <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
+      <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
+    </div>
+    <button md-button (click)="okClick.emit($event)">OK</button>
+  </md-card-footer>
+</md-card>
+ 
