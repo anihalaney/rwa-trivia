@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
-import { AngularFire } from 'angularfire2';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Store } from '@ngrx/store';
 
 import { MockStore, TEST_DATA } from '../../testing';
@@ -11,10 +11,9 @@ import { QuestionService } from './question.service';
 describe('Service: QuestionService', () => {
   let questionList: Question[] = [...TEST_DATA.questions.published, ...TEST_DATA.questions.published, ...TEST_DATA.questions.published];
   let MAX_SAMPLE_Qs_COUNT = 4;
-  let afDbMock = { "database": {
+  let afDbMock = { 
                      "list": () => Observable.of(questionList),
                      "object": () => null
-                    } 
                   };
 
   //Define intial state and test state
@@ -24,7 +23,7 @@ describe('Service: QuestionService', () => {
     providers: [
       QuestionService, QuestionActions,
       { "provide": Store, "useValue": new MockStore(_initialState) },
-      { "provide": AngularFire, "useValue": afDbMock }
+      { "provide": AngularFireDatabase, "useValue": afDbMock }
     ]
   })
   
@@ -64,11 +63,11 @@ describe('Service: QuestionService', () => {
 
   it('Call getSampleQuestions to return Observable of sample questions', 
     inject([
-      QuestionService, AngularFire
+      QuestionService, AngularFireDatabase
     ],
-    (service: QuestionService, af: AngularFire) => {
+    (service: QuestionService, db: AngularFireDatabase) => {
 
-      spyOn(af.database, 'list')
+      spyOn(db, 'list')
           .and.returnValue(Observable.of(questionList.slice(0, 4)));
       let qObs = service.getSampleQuestions();
 
@@ -80,14 +79,14 @@ describe('Service: QuestionService', () => {
 
   it('Call getUserQuestions to return Observable of Questions',
     inject([
-      QuestionService, AngularFire
+      QuestionService, AngularFireDatabase
     ],
-    (service: QuestionService, af: AngularFire) => {
+    (service: QuestionService, db: AngularFireDatabase) => {
 
       let qids = TEST_DATA.questions.published.map(q => q.id);
-      spyOn(af.database, 'list')
+      spyOn(db, 'list')
           .and.returnValue(Observable.of(qids));
-      spyOn(af.database, 'object')
+      spyOn(db, 'object')
           .and.returnValue(Observable.of(TEST_DATA.questions.published[0]));
       
       let qObs = service.getUserQuestions(TEST_DATA.userList[0]);
@@ -101,32 +100,32 @@ describe('Service: QuestionService', () => {
 
   it('Call saveQuestion to save a question',
     inject([
-      QuestionService, AngularFire
+      QuestionService, AngularFireDatabase
     ],
-    (service: QuestionService, af: AngularFire) => {
+    (service: QuestionService, db: AngularFireDatabase) => {
 
       let question = TEST_DATA.questions.published[0];
-      spyOn(af.database, 'list')
+      spyOn(db, 'list')
           .and.returnValue({ "push": () => Promise.resolve(question) });
       
       let qObs = service.saveQuestion(TEST_DATA.questions.published[0]);
-      expect(af.database.list).toHaveBeenCalled();
+      expect(db.list).toHaveBeenCalled();
     })
   );
 
   it('Call approveQuestion to save a question',
     inject([
-      QuestionService, AngularFire
+      QuestionService, AngularFireDatabase
     ],
-    (service: QuestionService, af: AngularFire) => {
+    (service: QuestionService, db: AngularFireDatabase) => {
 
       let question = TEST_DATA.questions.published[0];
-      spyOn(af.database, 'object')
+      spyOn(db, 'object')
           .and.returnValue({ "update": () => Promise.resolve(question),
                              "remove": () => null });
       
       let qObs = service.approveQuestion(TEST_DATA.questions.published[0]);
-      expect(af.database.object).toHaveBeenCalled();
+      expect(db.object).toHaveBeenCalled();
     })
   );
 

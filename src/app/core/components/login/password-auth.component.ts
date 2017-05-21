@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { MdDialogRef } from '@angular/material';
-import * as firebase from 'firebase';
-import { AngularFire, AuthMethods, FirebaseAuthState } from 'angularfire2';
+import * as firebase from 'firebase/app';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -21,7 +21,7 @@ export class PasswordAuthComponent implements OnInit {
   forgotPasswordForm: FormGroup;
 
   constructor(private fb: FormBuilder,
-              private af: AngularFire,
+              private afAuth: AngularFireAuth,
               public dialogRef: MdDialogRef<PasswordAuthComponent>) {
     this.mode = SignInMode.signIn;
   }
@@ -49,12 +49,10 @@ export class PasswordAuthComponent implements OnInit {
 
   //signin
   onSigninSubmit() {
-    this.af.auth.login({
-      email: this.signinForm.get('email').value,
-      password: this.signinForm.get('password').value
-    }, {
-      method: AuthMethods.Password
-    }).then((user: FirebaseAuthState) => {
+    this.afAuth.auth.signInWithEmailAndPassword(
+      this.signinForm.get('email').value,
+      this.signinForm.get('password').value
+    ).then((user: any) => {
       //success
       this.dialogRef.close();
     }, (error: Error) => {
@@ -66,10 +64,10 @@ export class PasswordAuthComponent implements OnInit {
 
   //register
   onSignupSubmit() {
-    this.af.auth.createUser({
-      email: this.signupForm.get('email').value,
-      password: this.signupForm.get('password').value
-    }).then((user: FirebaseAuthState) => {
+    this.afAuth.auth.createUserWithEmailAndPassword(
+      this.signupForm.get('email').value,
+      this.signupForm.get('password').value
+    ).then((user: any) => {
       //success
       this.dialogRef.close();
     }, (error: Error) => {

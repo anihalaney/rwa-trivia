@@ -1,6 +1,7 @@
 import { Injectable }    from '@angular/core';
 import { MdDialog, MdDialogRef } from '@angular/material';
-import { AngularFire } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
@@ -17,13 +18,15 @@ export class AuthenticationService {
   constructor(private store: Store<AppStore>,
               private userActions: UserActions,
               private uiStateActions: UIStateActions,
-              public af: AngularFire,
+              public afAuth: AngularFireAuth,
+              public db: AngularFireDatabase,
               public dialog: MdDialog) {
 
-  this.af.auth.subscribe(user => {
+  this.afAuth.authState.subscribe(user => {
       if(user) {
         // user logged in
         console.log(user);
+        console.log(user.getIdToken(false));
         this.store.dispatch(this.userActions.loginSuccess(new User(user)));
         if (this.dialogRef)
           this.dialogRef.close();
@@ -36,7 +39,7 @@ export class AuthenticationService {
   }
 
   getUserRoles(user: User): Observable<User> {
-    return this.af.database.object('/users/' + user.userId + "/roles")
+    return this.db.object('/users/' + user.userId + "/roles")
            .take(1)
            .map(roles => {
              user.roles = roles;
@@ -57,7 +60,7 @@ export class AuthenticationService {
   };
 
   logout = function() {
-    this.af.auth.logout();    
+    this.afAuth.auth.signOut();
   };
 
   get isAuthenticated () : boolean {

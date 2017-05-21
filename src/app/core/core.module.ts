@@ -1,6 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -33,6 +35,8 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
   imports: [
     //firebase
     AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule,
     
     //store
     StoreModule.provideStore(reducer),
