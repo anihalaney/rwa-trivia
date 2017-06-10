@@ -60,7 +60,7 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 * Add your user id as an admin in the firebase database (admins need to be added manually) -
 
-Set: users/<user id>/roles/admin: true
+Set: users/\<user id\>/roles/admin: true
 
 * Use firebase-rules.json file to setup the firebase rules for your database
 
