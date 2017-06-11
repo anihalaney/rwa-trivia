@@ -4,6 +4,7 @@ export class User {
   userId: string;
   displayName: string;
   email: string;
+  idToken?: string;
   authState: firebase.User;
   roles: any[];
 

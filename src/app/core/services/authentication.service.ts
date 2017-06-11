@@ -22,12 +22,17 @@ export class AuthenticationService {
               public db: AngularFireDatabase,
               public dialog: MdDialog) {
 
-  this.afAuth.authState.subscribe(user => {
-      if(user) {
+
+  this.afAuth.authState.subscribe(afUser => {
+      if(afUser) {
         // user logged in
-        console.log(user);
-        console.log(user.getIdToken(false));
-        this.store.dispatch(this.userActions.loginSuccess(new User(user)));
+        //console.log(afUser);
+        let user = new User(afUser);
+        afUser.getIdToken(false).then((token) => {
+          //console.log(token);
+          user.idToken = token;
+          this.store.dispatch(this.userActions.loginSuccess(user));
+        });
         if (this.dialogRef)
           this.dialogRef.close();
       }
@@ -37,6 +42,7 @@ export class AuthenticationService {
       }
     });
   }
+
 
   getUserRoles(user: User): Observable<User> {
     return this.db.object('/users/' + user.userId + "/roles")

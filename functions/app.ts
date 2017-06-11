@@ -1,4 +1,4 @@
-import { Game } from '../src/app/model/Game';
+import { Game, Question } from '../src/app/model';
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -102,10 +102,18 @@ app.get('/getNextQuestion/:gameId', validateFirebaseIdToken, (req, res, next) =>
       return;
     }
 
-    admin.database().ref("/questions/published").orderByKey().limitToLast(1).once("value").then(q => {
-      console.log("q");
-      let question = q.val();
-      res.send(q.toJSON());      
+    admin.database().ref("/questions/published").orderByKey().limitToLast(1).once("value").then(qs => {
+      console.log(qs.key);
+      console.log(qs.val());
+      qs.forEach(q => {
+        console.log(q.key);
+        console.log(q.val());
+
+        let question: Question = q.val();
+        question.id = q.key;
+        res.send(question);
+        return;
+      })
       return;
     })
     .catch(error => {

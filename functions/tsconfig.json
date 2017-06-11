@@ -4,15 +4,7 @@
     "declaration": false,
     "moduleResolution": "node",
     "target": "es6",
-    "outDir": "../server",
-    "rootDirs": [
-      ".",
-      "../src/app/model"
-    ],
-    "paths": {
-      "model": ["../src/app/model"]
-    },
-    "baseUrl": ".",
+    "outDir": "./server",
     "lib": [
       "es2016"
     ],
