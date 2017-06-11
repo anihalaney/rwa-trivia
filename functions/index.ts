@@ -1,3 +1,5 @@
+import { Game } from '../src/app/model/Game';
+
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
@@ -55,9 +57,80 @@ const validateFirebaseIdToken = (req, res, next) => {
 
 app.use(cors);
 app.use(cookieParser);
-app.use(validateFirebaseIdToken);
-app.get('/hello', (req, res) => {
+//app.use(validateFirebaseIdToken);
+app.get('/hello', validateFirebaseIdToken, (req, res) => {
   res.send(`Hello ${req.user.email}`);
+});
+
+app.get('/getNextQuestion/:gameId', validateFirebaseIdToken, (req, res, next) => {
+
+  console.log(req.user.uid);
+  console.log(req.params.gameId);
+
+  let userId = req.user.uid;
+  let gameId = req.params.gameId;
+  let resp = `Hello ${req.user.email} - ${req.params.gameId}`;
+
+  //admin.database().enableLogging(true);
+
+  let game: Game;
+  admin.database().ref("/games/" + gameId).once("value").then(g => {
+    if (!g.exists()) {
+      //game not found
+      res.status(404).send('Game not found');
+      return;
+    }
+    game = Game.getViewModel(g.val());
+    console.log(game);
+    resp += " - Game Found !!!"
+
+    if (game.playerIds.indexOf(userId) < 0) {
+      //user not part of this game
+      res.status(403).send('User not part of this game');
+      return;
+    }
+
+    if (game.gameOver) {
+      //gameOver
+      res.status(403).send('Game over. No more Questions');
+      return;
+    }
+
+    if (game.gameOptions.gameMode !== 0) {
+      //Multiplayer mode - check whose turn it is. Not yet implemented
+      res.status(501).send('Wait for your turn. Not yet implemented.');
+      return;
+    }
+
+    admin.database().ref("/questions/published").orderByKey().limitToLast(1).once("value").then(q => {
+      console.log("q");
+      let question = q.val();
+      res.send(q.toJSON());      
+      return;
+    })
+    .catch(error => {
+      res.status(500).send('Failed to get Q');
+      return;
+    });
+  })
+  .catch(error => {
+    res.status(500).send('Uncaught Error');
+    return;
+  });
+  
+
+  //get the user
+  //get the game
+
+  //validation - user is player of the game, it's the user's turn, etc
+  
+  //get the question
+  //question should not be repeated in the game
+  //get a random question from a category and tags matching
+
+  //let ref = admin.database().ref("/questions/published");
+  
+  //res.send(`Hello ${req.user.email}`);
 });
 
 exports.app = functions.https.onRequest(app);
