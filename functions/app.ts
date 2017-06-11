@@ -126,19 +126,6 @@ app.get('/getNextQuestion/:gameId', validateFirebaseIdToken, (req, res, next) =>
     return;
   });
   
-
-  //get the user
-  //get the game
-
-  //validation - user is player of the game, it's the user's turn, etc
-  
-  //get the question
-  //question should not be repeated in the game
-  //get a random question from a category and tags matching
-
-  //let ref = admin.database().ref("/questions/published");
-  
-  //res.send(`Hello ${req.user.email}`);
 });
 
 exports.app = functions.https.onRequest(app);
