@@ -1,21 +1,18 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
-import { AngularFire } from 'angularfire2';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 import { TEST_DATA } from '../../testing';
 import { TagService } from './tag.service';
 
 describe('Service: TagService', () => {
   let tagList: string[] = TEST_DATA.tagList;
-  let afDbMock = { "database": {
-                    list: () => Observable.of(tagList.map(t => {return {"$value":  t}}))
-                    } 
-                  };
+  let afDbMock = { "list": () => Observable.of(tagList.map(t => {return {"$value":  t}})) };
 
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       TagService,
-      {"provide": AngularFire, "useValue": afDbMock}
+      {"provide": AngularFireDatabase, "useValue": afDbMock}
     ]
   }));
 

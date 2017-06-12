@@ -1,6 +1,6 @@
 import { Injectable }    from '@angular/core';
 import { Headers, Http } from '@angular/http';
-import { AngularFire } from 'angularfire2';
+import { AngularFireDatabase } from 'angularfire2/database';
 //import * as firebase from 'firebase';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
@@ -8,11 +8,11 @@ import '../../rxjs-extensions';
 @Injectable()
 export class TagService {
 
-  constructor(private af: AngularFire) { 
+  constructor(private db: AngularFireDatabase) { 
   }
 
   getTags(): Observable<string[]> {
     //console.log(firebase.app().options);
-    return this.af.database.list('/tagList').map(t => t.map(a => a["$value"]));
+    return this.db.list('/tagList').map(t => t.map(a => a["$value"]));
   }
 }

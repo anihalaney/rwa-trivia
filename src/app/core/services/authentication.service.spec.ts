@@ -3,7 +3,9 @@ import { SharedMaterialModule } from '../../shared/shared-material.module';
 import { MdDialogRef, MdDialog, OverlayRef, MdDialogConfig } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { AngularFire, FirebaseAuthState, AuthProviders } from 'angularfire2';
+//import { AngularFire, FirebaseAuthState, AuthProviders } from 'angularfire2';
+import { AngularFireAuth, AngularFireAuthProvider } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../store/app-store';
@@ -20,11 +22,6 @@ class MockAngularFireAuth extends ReplaySubject<FirebaseAuthState> {
 }
 describe('Service: AuthenticationService', () => {
   let afAuthMock = new MockAngularFireAuth(); 
-  let afMock = { "database": {
-                    "object": () => null 
-                  },
-                  "auth": afAuthMock
-                };
   let dialogRef = { "close": () => {}};
 
   //Define intial state and test state
@@ -42,53 +39,50 @@ describe('Service: AuthenticationService', () => {
       UserActions, UIStateActions,
       //{ "provide": MdDialogRef, "useValue": dialogRef },
       { "provide": Store, "useValue": new MockStore<{user: User}>(_initialState) },
-      { "provide": AngularFire, "useValue": afMock }
+      { "provide": AngularFireAuth, "useValue": afAuthMock }
     ]
   }));
 
   it('Login', 
     inject([
-      AuthenticationService, MdDialog, AngularFire, Store
+      AuthenticationService, MdDialog, AngularFireAuth, Store
     ],  //MdDialogRef, dRef: MdDialogRef<LoginComponent>, 
-    (service: AuthenticationService, dialog: MdDialog, af: AngularFire, store: Store<AppStore>) => {
+    (service: AuthenticationService, dialog: MdDialog, afAuth: AngularFireAuth, store: Store<AppStore>) => {
 
       let auth: any = { "providerData": [{
                           "displayName": "trivia",
                           "email": "trivia@realworldfullstack.io"
                         }] };
-      let fas: FirebaseAuthState = { 
-                                    "uid": user.userId,
-                                    "provider" : AuthProviders.Google,
-                                    "auth": auth 
-                                  };
+      let fas: firebase.User;
+      fas.uid = "";
 
       spyOn(store, 'dispatch')
           .and.callFake((action: any) => {
             if (action.payload) {
               expect(action.type).toEqual(UserActions.LOGIN_SUCCESS);
               expect(action.payload.userId).toEqual(fas.uid);
-              expect(action.payload.email).toEqual(fas.auth.providerData[0].email);
-              expect(action.payload.displayName).toEqual(fas.auth.providerData[0].displayName);
+              expect(action.payload.email).toEqual(fas.providerData[0].email);
+              expect(action.payload.displayName).toEqual(fas.providerData[0].displayName);
             }
             else
               expect(action.type).toEqual(UserActions.LOGOFF);
           });
 
-      af.auth.next(fas);
+      afAuth.authState.next(fas);
       expect(store.dispatch).toHaveBeenCalled();
 
-      af.auth.next(fas);
+      afAuth.next(fas);
       expect(store.dispatch).toHaveBeenCalledTimes(2);
     })
   );
 
   it('getUserRoles', 
     inject([
-      AuthenticationService, MdDialog, AngularFire, Store
+      AuthenticationService, MdDialog, AngularFireDatabase, Store
     ],
-    (service: AuthenticationService, dialog: MdDialog, af: AngularFire, store: Store<AppStore>) => {
+    (service: AuthenticationService, dialog: MdDialog, db: AngularFireDatabase, store: Store<AppStore>) => {
 
-      spyOn(af.database, 'object')
+      spyOn(db, 'object')
           .and.returnValue(Observable.of(["admin", "supervisor"]));
 
       service.getUserRoles(user).subscribe(user => {
@@ -97,15 +91,15 @@ describe('Service: AuthenticationService', () => {
           expect(user.roles[1]).toEqual("supervisor");
       });
 
-      expect(af.database.object).toHaveBeenCalled();
+      expect(db.object).toHaveBeenCalled();
     })
   );
 
   it('ensureLogin', 
     inject([
-      AuthenticationService, MdDialog, AngularFire, Store
+      AuthenticationService, MdDialog, AngularFireAuth, Store
     ],
-    (service: AuthenticationService, dialog: MdDialog, af: AngularFire, store: MockStore<{user: User}>) => {
+    (service: AuthenticationService, dialog: MdDialog, afAuth: AngularFireAuth, store: MockStore<{user: User}>) => {
 
       let redirect_url = "redirect_url";
       store.next(_initialState);
@@ -135,13 +129,13 @@ describe('Service: AuthenticationService', () => {
 
   it('logout', 
     inject([
-      AuthenticationService, MdDialog, AngularFire, Store
+      AuthenticationService, MdDialog, AngularFireAuth, Store
     ],
-    (service: AuthenticationService, dialog: MdDialog, af: AngularFire, store: MockStore<{user: User}>) => {
+    (service: AuthenticationService, dialog: MdDialog, afAuth: AngularFireAuth, store: MockStore<{user: User}>) => {
 
-      spyOn(af.auth, 'logout');
+      spyOn(afAuth.auth, 'signOut');
       service.logout();
-      expect(af.auth.logout).toHaveBeenCalled();
+      expect(afAuth.auth.signOut).toHaveBeenCalled();
     })
   );
 

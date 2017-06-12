@@ -35,7 +35,7 @@ export class GameEffects {
         .ofType(GameActions.GET_NEXT_QUESTION)
         .map((action: Action) => action.payload)
         .switchMap((payload: {game: Game, user: User}) => this.svc.getNextQuestion(payload.game, payload.user))
-        .map((question: Question[]) => this.gameActions.getNextQuestionSuccess(question[0]));
+        .map((question: Question) => this.gameActions.getNextQuestionSuccess(question));
 
     @Effect() 
     addPlayerQnA$ = this.actions$

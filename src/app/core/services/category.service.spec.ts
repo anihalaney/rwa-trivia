@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { Observable } from 'rxjs/Observable';
-import { AngularFire } from 'angularfire2';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 import { TEST_DATA } from '../../testing';
 import { Category } from '../../model';
@@ -8,14 +8,12 @@ import { CategoryService } from './category.service';
 
 describe('Service: CategoryService', () => {
   let categoryList: Category[] = TEST_DATA.categories;
-  let afDbMock = { "database": {
-                    list: () => Observable.of(categoryList) } 
-                  };
+  let afDbMock = { "list": () => Observable.of(categoryList) };
 
   beforeEach(() => TestBed.configureTestingModule({
     providers: [
       CategoryService,
-      {"provide": AngularFire, "useValue": afDbMock}
+      {"provide": AngularFireDatabase, "useValue": afDbMock}
     ]
   }));
 

@@ -6,7 +6,7 @@ import { ReactiveFormsModule }    from '@angular/forms';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { SharedMaterialModule } from '../../../shared/shared-material.module';
 import { MdDialogRef, MdDialog } from '@angular/material';
-import * as firebase from 'firebase';
+import * as firebase from 'firebase/app';
 import { AngularFire, AuthProviders, AuthMethods, FirebaseAuthConfig, FirebaseAuthState } from 'angularfire2';
 
 import { TEST_DATA } from '../../../testing';

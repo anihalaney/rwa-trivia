@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 import { MdDialogRef, MdDialog } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
 
 import { AppStore } from '../../store/app-store';
 import { PasswordAuthComponent } from './password-auth.component';
@@ -14,38 +15,26 @@ import { PasswordAuthComponent } from './password-auth.component';
 })
 export class LoginComponent {
 
-  constructor(private af: AngularFire,
+  constructor(private afAuth: AngularFireAuth,
               private dialog: MdDialog,
               private passwordAuthDialogRef: MdDialogRef<PasswordAuthComponent>) {
 
   }
 
   googleLogin() {
-    this.af.auth.login({
-      provider: AuthProviders.Google,
-      method: AuthMethods.Popup
-    });
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   }
 
   fbLogin() {
-    this.af.auth.login({
-      provider: AuthProviders.Facebook,
-      method: AuthMethods.Popup
-    });
+    this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
   }
 
   twitterLogin() {
-    this.af.auth.login({
-      provider: AuthProviders.Twitter,
-      method: AuthMethods.Popup
-    });
+    this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
   }
 
   githubLogin() {
-    this.af.auth.login({
-      provider: AuthProviders.Github,
-      method: AuthMethods.Popup
-    });
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
   }
 
   passwordLogin() {
