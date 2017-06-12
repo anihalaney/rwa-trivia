@@ -34,6 +34,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 11: Gameplay with Angular](https://blog.realworldfullstack.io/real-world-app-part-11-gameplay-with-angular-2a660fad52c2)
 
+[Part 12: Cloud Functions for Firebase](https://blog.realworldfullstack.io/real-world-app-part-12-cloud-functions-for-firebase-8359787e26f3)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)
@@ -90,9 +92,17 @@ Set: users/<user id>/roles/admin: true
 
 `firebase serve`
 
-* Deploy to firebase
+* Deploy Site to firebase
 
-`firebase deploy`
+`firebase deploy --only hosting`
+
+* Setup firebase functions - creates functions folder and installs dependencies
+
+`firebase init`
+
+* Deploy functions to firebase
+
+`npm run deploy-functions`
 
 ## Testing
 * Test the application using
