@@ -61,32 +61,44 @@ const validateFirebaseIdToken = (req, res, next) => {
   });
 };
 
-app.get('/testES', (req, res) => {
+const adminOnly = (req, res, next) => { 
+  console.log(req.user.uid);
 
-  let client = getElasticSearchClient();
-
-  client.ping({
-    requestTimeout: 10000,
-  }, function (error) {
-    if (error) {
-      console.error('elasticsearch cluster is down!');
-      res.send('elasticsearch cluster is down!');
-    } else {
-      console.log('All is well');
-      res.send(`Hello. ES is up`);
+  if (!req.user.uid) {
+    console.error('User not authenticated');
+    res.status(401).send('Unauthenticated');
+  }
+  admin.database().ref("/users/" + req.user.uid + "/roles").once("value").then(r => { 
+    console.log(r.val());
+    if (r.val().admin)
+      //check if user is admin
+      next();
+    else {
+      console.error('Not an admin: ', req.user.uid);
+      res.status(403).send('Unauthorized');
     }
-  });
 
-});
+  })
+
+};
 
 app.use(cors);
 app.use(cookieParser);
-//app.use(validateFirebaseIdToken);
-app.get('/hello', validateFirebaseIdToken, (req, res) => {
+
+//Does not need authorization
+app.get('/getQuestionOfTheDay', (req, res) => { 
+  getRandomQuestionOfTheDay().then((question) => {
+    res.send(question);
+  });
+})
+
+app.use(validateFirebaseIdToken);
+
+app.get('/hello', (req, res) => {
   res.send(`Hello ${req.user.email}`);
 });
 
-app.get('/getNextQuestion/:gameId', validateFirebaseIdToken, (req, res, next) => {
+app.get('/getNextQuestion/:gameId', (req, res, next) => {
 
   console.log(req.user.uid);
   console.log(req.params.gameId);
@@ -152,6 +164,7 @@ app.get('/getNextQuestion/:gameId', validateFirebaseIdToken, (req, res, next) =>
   
 });
 
+/*
 app.get('/parseCsv', (req, res, next) => {
 
     let categories: Category[] = [];
@@ -237,11 +250,10 @@ app.get('/parseCsv', (req, res, next) => {
     });
 
 });
+*/
 
 app.get('/getQuestion', (req, res, next) => {
     admin.database().ref("/questions/published").orderByKey().limitToLast(1).once("value").then(qs => {
-      console.log(qs.key);
-      console.log(qs.val());
       qs.forEach(q => {
         console.log(q.key);
         console.log(q.val());
@@ -260,11 +272,58 @@ app.get('/getQuestion', (req, res, next) => {
   
 });
 
-exports.onQuestionWrite = functions.database.ref('/questions/unpublished/{questionId}').onWrite(event => {
-  console.log(event.params.questionId);
-  console.log(event.params);
-  console.log(event.data);
-  console.log(event);
+app.get('/testES', (req, res) => {
+
+  let client = getElasticSearchClient();
+
+  client.ping({
+    requestTimeout: 10000,
+  }, function (error) {
+    if (error) {
+      console.error('elasticsearch cluster is down!');
+      res.send('elasticsearch cluster is down!');
+    } else {
+      console.log('All is well');
+      res.send(`Hello. ES is up`);
+    }
+  });
+
+});
+
+app.get('/rebuild_index/:index', adminOnly, (req, res) => {
+
+  console.log(req.params.index);
+
+  let indexName = req.params.index;
+  let client = getElasticSearchClient();
+
+  //delete entire index
+  deleteIndex(client, indexName, () => {
+    let body = [];
+    //TODO: build index bulk 50 at a time
+    admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
+      body = [];
+      //console.log("Questions Count: " + qs.length);
+      qs.forEach(q => {
+        body.push({ index:  { _index: indexName, _type: q.val().categoryIds["0"], _id: q.key } });
+        body.push(q.val());
+      });
+      client.bulk({"body": body});
+
+      console.log("All questions indexed");
+      res.send(`Questions indexed`);
+    });
+  }, (error) => {
+    res.send(error);
+  });   
+  
+});
+
+exports.onQuestionWrite = functions.database.ref('/questions/published/{questionId}').onWrite(event => {
+  //console.log(event.params.questionId);
+  //console.log(event.params);
+  //console.log(event.data);
+  //console.log(event);
 
   let client = getElasticSearchClient();
 
@@ -279,8 +338,9 @@ exports.onQuestionWrite = functions.database.ref('/questions/unpublished/{questi
   //});
 });
 
-let searchClient: any;
-function getElasticSearchClient(): any {
+
+let searchClient: Elasticsearch.Client;
+function getElasticSearchClient(): Elasticsearch.Client {
   if (!searchClient)
     searchClient = new elasticsearch.Client(Object.assign({}, elasticsearchConfig)); //cloning config object to avoid resuing the same object (same object causes error)
   return searchClient;
@@ -311,13 +371,80 @@ function removeIndex(client, index, type, key) {
     id: key
   }, function (error, response) {
     if (error) {
-      console.log('Error in deleting from index');
+      console.log('Error in removing from index');
       console.log(error);
     }
     else {
-      console.log('deleted indexed ', key);
+      console.log('removed indexed ', key);
     }
     console.log(response);
+  });
+}
+
+function deleteIndex(client, index, cb, errcb) {
+
+  client.indices.exists({"index": index}, function (error, response) {
+    if (error) {
+      console.log('Error in checking for index');
+      console.log(error);
+    }
+    console.log(response);
+    if (!response) {
+      //doesn't exist
+      console.log("Index does not exist. Skipping delete");
+      cb();
+      return;
+    }
+    //if exists, then delete
+    client.indices.delete({"index": index}, function (error, response) {
+      if (error) {
+        console.log('Error in deleting index');
+        console.log(error);
+        errcb(error);
+      }
+      else {
+        console.log('indexed deleted ', index);
+        console.log(response);
+        cb();
+      }
+    });
+  });
+}
+
+function getRandomQuestionOfTheDay(): Promise<any> { 
+  let client = getElasticSearchClient();
+  
+  let date = new Date();
+  let seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
+  return getRandomItems(client, "questions", 1, seed).then((hits)=>{
+    //convert hit to Question
+    return Question.getViewModelFromES(hits[0]);
+  });  
+}
+
+function getRandomItems(client: Elasticsearch.Client, index: string, size: number, seed: string): Promise<any>
+{
+  return client.search({
+    "index": index,
+    "size": size,
+    "body": {
+      "query" : {
+        
+        "function_score": {
+          "functions": [
+              {
+                "random_score": {
+                    "seed": seed
+                }
+              }
+          ]
+        }
+      }
+    }
+  }).then(function (body) {
+    return(body.hits.hits);
+  }, function (error) {
+    console.trace(error.message);
   });
 }
 
