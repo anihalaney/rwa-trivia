@@ -1,4 +1,5 @@
 import { Game, Question, Category } from '../src/app/model';
+import { ESUtils } from './ESUtils';
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -13,8 +14,6 @@ const cors = require('cors')({origin: true});
 const app = express();
 const elasticsearch = require('elasticsearch');
 
-const elasticsearchConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../config/elasticsearch.config.json'), 'utf8'));
-
 // Take the text parameter passed to this HTTP endpoint and insert it into the
 // Realtime Database under the path /messages/:pushId/original
 exports.addMessage = functions.https.onRequest((req, res) => {
@@ -28,17 +27,21 @@ exports.addMessage = functions.https.onRequest((req, res) => {
   });
 });
 
+//authorization middlewares
 const validateFirebaseIdToken = (req, res, next) => {
-  console.log('Check if request is authorized with Firebase ID token');
+  //Get user from auth headers. 
+  //If found set req.user
+  //If not found, go to next middleware, the next middleware needs to check for req.user to allow/deny unauthorized access
 
+  //console.log('Check if request is authorized with Firebase ID token');
   if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
       !req.cookies.__session) {
     console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
         'Make sure you authorize your request by providing the following HTTP header:',
         'Authorization: Bearer <Firebase ID Token>',
         'or by passing a "__session" cookie.');
-    res.status(403).send('Unauthorized');
-    return;
+    //res.status(403).send('Unauthorized');
+    return next();
   }
 
   let idToken;
@@ -54,20 +57,34 @@ const validateFirebaseIdToken = (req, res, next) => {
   admin.auth().verifyIdToken(idToken).then(decodedIdToken => {
     console.log('ID Token correctly decoded', decodedIdToken);
     req.user = decodedIdToken;
-    next();
+    return next();
   }).catch(error => {
     console.error('Error while verifying Firebase ID token:', error);
-    res.status(403).send('Unauthorized');
+    //res.status(403).send('Unauthorized');
+    return next();
   });
 };
 
-const adminOnly = (req, res, next) => { 
-  console.log(req.user.uid);
+//middleware to check for authorized users
+const authorizedOnly = (req, res, next) => { 
+  if (!req.user || !req.user.uid) {
+    console.error('User not authenticated');
+    res.status(403).send('Unauthorized');
+  }
 
-  if (!req.user.uid) {
+  console.log(req.user.uid);
+  next();
+};
+
+//middleware to check for admins Only
+const adminOnly = (req, res, next) => { 
+
+  if (!req.user || !req.user.uid) {
     console.error('User not authenticated');
     res.status(401).send('Unauthenticated');
   }
+  console.log(req.user.uid);
+
   admin.database().ref("/users/" + req.user.uid + "/roles").once("value").then(r => { 
     console.log(r.val());
     if (r.val().admin)
@@ -78,27 +95,24 @@ const adminOnly = (req, res, next) => {
       res.status(403).send('Unauthorized');
     }
 
-  })
+  });
 
 };
 
 app.use(cors);
 app.use(cookieParser);
+app.use(validateFirebaseIdToken);
+
+//Routes
 
 //Does not need authorization
 app.get('/getQuestionOfTheDay', (req, res) => { 
-  getRandomQuestionOfTheDay().then((question) => {
+  ESUtils.getRandomQuestionOfTheDay().then((question) => {
     res.send(question);
   });
 })
 
-app.use(validateFirebaseIdToken);
-
-app.get('/hello', (req, res) => {
-  res.send(`Hello ${req.user.email}`);
-});
-
-app.get('/getNextQuestion/:gameId', (req, res, next) => {
+app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
 
   console.log(req.user.uid);
   console.log(req.params.gameId);
@@ -138,9 +152,53 @@ app.get('/getNextQuestion/:gameId', (req, res, next) => {
       return;
     }
 
+    ESUtils.getRandomGameQuestion().then((question) => {
+      res.send(question);
+    })
+    .catch(error => {
+      res.status(500).send('Failed to get Q');
+      return;
+    });
+  })
+  .catch(error => {
+    res.status(500).send('Uncaught Error');
+    return;
+  });
+
+});
+
+//rebuild questions index
+app.get('/rebuild_questions_index', adminOnly, (req, res) => {
+
+  let questions = [];
+  admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
+    //console.log("Questions Count: " + qs.length);
+    qs.forEach(q => {
+      //console.log(q.key);
+      //console.log(q.val());
+
+      let question: {"id": string, "type": string, "source": any} = {"id": q.key, "type": q.val().categoryIds["0"], "source": q.val()};
+      questions.push(question);
+    });
+
+    ESUtils.rebuildIndex(ESUtils.QUESTIONS_INDEX, questions).then((response) => {
+      res.send(`Questions indexed`);
+    })
+    .catch((error) => {
+      res.send(error);
+    })
+  });  
+});
+
+///////////////////////
+//TEST FUNCTIONS
+//
+app.get('/hello', authorizedOnly, (req, res) => {
+  res.send(`Hello ${req.user.email}`);
+});
+
+app.get('/getTestQuestion', authorizedOnly, (req, res, next) => {
     admin.database().ref("/questions/published").orderByKey().limitToLast(1).once("value").then(qs => {
-      console.log(qs.key);
-      console.log(qs.val());
       qs.forEach(q => {
         console.log(q.key);
         console.log(q.val());
@@ -156,16 +214,44 @@ app.get('/getNextQuestion/:gameId', (req, res, next) => {
       res.status(500).send('Failed to get Q');
       return;
     });
-  })
-  .catch(error => {
-    res.status(500).send('Uncaught Error');
-    return;
-  });
   
 });
 
+app.get('/getGameQuestionTest', authorizedOnly, (req, res) => { 
+  ESUtils.getRandomGameQuestion().then((question) => {
+    res.send(question);
+  });
+})
+
+app.get('/testES', adminOnly, (req, res) => {
+
+  let client = ESUtils.getElasticSearchClient();
+
+  client.ping({
+    requestTimeout: 10000,
+  }, function (error) {
+    if (error) {
+      console.error('elasticsearch cluster is down!');
+      res.send('elasticsearch cluster is down!');
+    } else {
+      console.log('All is well');
+      res.send(`Hello. ES is up`);
+    }
+  });
+
+});
+
+//END - TEST FUNCTIONS
+///////////////////////
+
+exports.app = functions.https.onRequest(app);
+
+
+
+
+
 /*
-app.get('/parseCsv', (req, res, next) => {
+app.get('/parseCsv', adminOnly, (req, res, next) => {
 
     let categories: Category[] = [];
     let catRef = admin.database().ref("/categories");
@@ -252,215 +338,3 @@ app.get('/parseCsv', (req, res, next) => {
 });
 */
 
-app.get('/getQuestion', (req, res, next) => {
-    admin.database().ref("/questions/published").orderByKey().limitToLast(1).once("value").then(qs => {
-      qs.forEach(q => {
-        console.log(q.key);
-        console.log(q.val());
-
-        let question: Question = q.val();
-        question.id = q.key;
-        res.send(question);
-        return;
-      })
-      return;
-    })
-    .catch(error => {
-      res.status(500).send('Failed to get Q');
-      return;
-    });
-  
-});
-
-app.get('/testES', (req, res) => {
-
-  let client = getElasticSearchClient();
-
-  client.ping({
-    requestTimeout: 10000,
-  }, function (error) {
-    if (error) {
-      console.error('elasticsearch cluster is down!');
-      res.send('elasticsearch cluster is down!');
-    } else {
-      console.log('All is well');
-      res.send(`Hello. ES is up`);
-    }
-  });
-
-});
-
-app.get('/rebuild_index/:index', adminOnly, (req, res) => {
-
-  console.log(req.params.index);
-
-  let indexName = req.params.index;
-  let client = getElasticSearchClient();
-
-  //delete entire index
-  deleteIndex(client, indexName, () => {
-    let body = [];
-    //TODO: build index bulk 50 at a time
-    admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
-      body = [];
-      //console.log("Questions Count: " + qs.length);
-      qs.forEach(q => {
-        body.push({ index:  { _index: indexName, _type: q.val().categoryIds["0"], _id: q.key } });
-        body.push(q.val());
-      });
-      client.bulk({"body": body});
-
-      console.log("All questions indexed");
-      res.send(`Questions indexed`);
-    });
-  }, (error) => {
-    res.send(error);
-  });   
-  
-});
-
-exports.onQuestionWrite = functions.database.ref('/questions/published/{questionId}').onWrite(event => {
-  //console.log(event.params.questionId);
-  //console.log(event.params);
-  //console.log(event.data);
-  //console.log(event);
-
-  let client = getElasticSearchClient();
-
-  //getCategories().then(function (categories: Category[]) {
-    //console.log(categories);
-    if (event.data.exists()) 
-      //add or update
-      createOrUpdateIndex(client, "questions", event.data.val().categoryIds["0"], event.data.val(), event.params.questionId);
-    else
-      //delete
-      removeIndex(client, "questions", "database", event.params.questionId);
-  //});
-});
-
-
-let searchClient: Elasticsearch.Client;
-function getElasticSearchClient(): Elasticsearch.Client {
-  if (!searchClient)
-    searchClient = new elasticsearch.Client(Object.assign({}, elasticsearchConfig)); //cloning config object to avoid resuing the same object (same object causes error)
-  return searchClient;
-}
-
-function createOrUpdateIndex(client, index: string, type: string, data: any, key: string) {
-  client.index({
-    index: index,
-    type: type,
-    id: key,
-    body: data
-  }, function (error, response) {
-    if (error) {
-      console.log('Error in indexing');
-      console.log(error);
-    }
-    else {
-      console.log('indexed ', key);
-    }
-    console.log(response);
-  });
-}
-
-function removeIndex(client, index, type, key) {
-  client.delete({
-    index: index,
-    type: type,
-    id: key
-  }, function (error, response) {
-    if (error) {
-      console.log('Error in removing from index');
-      console.log(error);
-    }
-    else {
-      console.log('removed indexed ', key);
-    }
-    console.log(response);
-  });
-}
-
-function deleteIndex(client, index, cb, errcb) {
-
-  client.indices.exists({"index": index}, function (error, response) {
-    if (error) {
-      console.log('Error in checking for index');
-      console.log(error);
-    }
-    console.log(response);
-    if (!response) {
-      //doesn't exist
-      console.log("Index does not exist. Skipping delete");
-      cb();
-      return;
-    }
-    //if exists, then delete
-    client.indices.delete({"index": index}, function (error, response) {
-      if (error) {
-        console.log('Error in deleting index');
-        console.log(error);
-        errcb(error);
-      }
-      else {
-        console.log('indexed deleted ', index);
-        console.log(response);
-        cb();
-      }
-    });
-  });
-}
-
-function getRandomQuestionOfTheDay(): Promise<any> { 
-  let client = getElasticSearchClient();
-  
-  let date = new Date();
-  let seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
-  return getRandomItems(client, "questions", 1, seed).then((hits)=>{
-    //convert hit to Question
-    return Question.getViewModelFromES(hits[0]);
-  });  
-}
-
-function getRandomItems(client: Elasticsearch.Client, index: string, size: number, seed: string): Promise<any>
-{
-  return client.search({
-    "index": index,
-    "size": size,
-    "body": {
-      "query" : {
-        
-        "function_score": {
-          "functions": [
-              {
-                "random_score": {
-                    "seed": seed
-                }
-              }
-          ]
-        }
-      }
-    }
-  }).then(function (body) {
-    return(body.hits.hits);
-  }, function (error) {
-    console.trace(error.message);
-  });
-}
-
-function getCategories(): Promise<Category[]> {
-    let categories: Category[] = [];
-    let catRef = admin.database().ref("/categories");
-    return catRef.once("value", function(cs) {
-      cs.forEach(c => {
-        //console.log(c.key);
-        //console.log(c.val());
-        let category: Category = { "id": c.key, "categoryName": c.val()["categoryName"]};
-        categories.push(category);
-        return;
-      })
-
-      return categories;
-    });
-}
-exports.app = functions.https.onRequest(app);
