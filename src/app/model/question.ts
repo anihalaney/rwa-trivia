@@ -28,6 +28,26 @@ export class Question {
     this.published = false;
     this.status = QuestionStatus.SAVED;
   }
+
+  static getViewModelFromES(hit: any): Question 
+  {
+    //console.log(dbModel);
+    let question: Question = new Question();
+
+    question.id = hit["_id"];
+    let source = hit["_source"];
+
+    question.answers = source.answers;
+    question.categoryIds = source.categoryIds;
+    question.published = source.published;
+    question.questionText = source.questionText;
+    question.status = source.status;
+    question.tags = source.tags;
+    
+    //console.log(game);
+    return question;
+  }
+
 }
 
 export class Answer {

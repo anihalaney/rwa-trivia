@@ -73,7 +73,6 @@ export class GameComponent implements OnInit, OnDestroy {
         }
         this.currentQuestion = question;
         this.questionIndex ++;
-        //console.log(this.questionIndex);
         this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
         this.timer = this.MAX_TIME_IN_SECONDS;
 
@@ -135,6 +134,7 @@ export class GameComponent implements OnInit, OnDestroy {
   afterAnswer(userAnswerId?: number)
   {
     let correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
+    //console.log(correctAnswerId);
     if (userAnswerId === correctAnswerId)
       this.correctAnswerCount ++;
     let seconds = this.MAX_TIME_IN_SECONDS - this.timer;
@@ -156,7 +156,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.gameActions.setGameOver({"game": this.game, "user": this.user}));
     }
 
-    this.questionComponent.disableQuestions(2);
+    this.questionComponent.disableQuestions(correctAnswerId);
     Observable.timer(1000).take(1).subscribe(t => {
       this.continueNext = true;
     });
