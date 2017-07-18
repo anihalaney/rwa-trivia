@@ -36,6 +36,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 12: Cloud Functions for Firebase](https://blog.realworldfullstack.io/real-world-app-part-12-cloud-functions-for-firebase-8359787e26f3)
 
+[Part 13: Elasticsearch on Google Cloud with Firebase functions](https://blog.realworldfullstack.io/real-world-app-part-13-elasticsearch-on-google-cloud-with-firebase-functions-8a24fa2b95ed)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)
