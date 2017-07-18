@@ -40,3 +40,4 @@ testem.log
 Thumbs.db
 functions/node_modules/
 functions/server/
+functions/config/
