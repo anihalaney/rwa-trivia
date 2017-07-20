@@ -9,9 +9,9 @@ export class GameOverComponent  {
   @Input() correctCount: number;
   @Input() noOfQuestions: number;
   @Output() gameOverContinueClicked = new EventEmitter();
-  @Output() viewQuestionClicked = new EventEmitter();
+  @Output() viewQuestionClicked = new EventEmitter<any>();
 
-  continueButtonClicked() {
+  continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
 }
