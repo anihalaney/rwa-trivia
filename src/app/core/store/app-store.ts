@@ -5,8 +5,7 @@ import { user, categories, categoryDictionary, tags,
          loginRedirectUrl, 
          currentGame, newGameId, currentGameQuestion, activeGames } from './reducers';
 
-import { combineReducers } from '@ngrx/store';
-import { compose } from '@ngrx/core/compose';
+import { compose, ActionReducerMap } from '@ngrx/store';
 
 export interface AppStore {
   user: User;
@@ -25,7 +24,7 @@ export interface AppStore {
   activeGames: string[];
 }
 
-export default compose(combineReducers)({
+export const reducer: ActionReducerMap<AppStore> = {
   user: user,
   categories: categories,
   categoryDictionary: categoryDictionary,
@@ -40,4 +39,4 @@ export default compose(combineReducers)({
   newGameId: newGameId,
   currentGameQuestion: currentGameQuestion,
   activeGames: activeGames
-});
+};

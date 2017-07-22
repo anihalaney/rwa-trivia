@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs/Observable';
 import {Action} from '@ngrx/store';
 
-import { QuestionActions } from '../actions';
+import { ActionWithPayload, QuestionActions } from '../actions';
 import { Question } from '../../../model';
 
-export const questions = (state: any = [], action: Action): Question[] => {
+export function questions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
   switch (action.type) {
     case QuestionActions.LOAD_QUESTIONS_SUCCESS:
       return action.payload;
@@ -13,7 +13,7 @@ export const questions = (state: any = [], action: Action): Question[] => {
   }
 };
 
-export const unpublishedQuestions = (state: any = [], action: Action): Question[] => {
+export function unpublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
   switch (action.type) {
     case QuestionActions.LOAD_UNPUBLISHED_QUESTIONS_SUCCESS:
       return action.payload;
@@ -22,7 +22,7 @@ export const unpublishedQuestions = (state: any = [], action: Action): Question[
   }
 };
 
-export const userQuestions = (state: any = [], action: Action): Question[] => {
+export function userQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
   switch (action.type) {
     case QuestionActions.LOAD_USER_QUESTIONS_SUCCESS:
       return action.payload;
@@ -31,7 +31,7 @@ export const userQuestions = (state: any = [], action: Action): Question[] => {
   }
 };
 
-export const sampleQuestions = (state: any = [], action: Action): Question[] => {
+export function sampleQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
   switch (action.type) {
     case QuestionActions.LOAD_SAMPLE_QUESTIONS_SUCCESS:
       return action.payload;
@@ -40,7 +40,7 @@ export const sampleQuestions = (state: any = [], action: Action): Question[] => 
   }
 };
 
-export const questionSaveStatus = (state: any = "NONE", action: Action): string => {
+export function questionSaveStatus(state: any = "NONE", action: ActionWithPayload<string>): string {
   switch (action.type) {
     case QuestionActions.ADD_QUESTION:
       return "IN PROGRESS";

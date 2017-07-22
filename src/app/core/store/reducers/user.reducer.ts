@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs/Observable';
 import {Action} from '@ngrx/store';
 
-import {UserActions} from '../actions';
+import {ActionWithPayload, UserActions} from '../actions';
 import {User} from '../../../model';
 
-export const user = (state: any = null, action: Action): User => {
+export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
     case UserActions.LOGOFF:
       return null;
@@ -14,4 +14,4 @@ export const user = (state: any = null, action: Action): User => {
     default:
       return state;
   }
-};
+}

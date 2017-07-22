@@ -16,7 +16,7 @@ import { Utils, AuthenticationService, AuthGuard,
 
 import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
 import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects } from './store/effects';
-import { default as reducer } from './store/app-store';
+import { reducer } from './store/app-store';
 
 import { LoginComponent, PasswordAuthComponent } from './components';
 
@@ -39,17 +39,19 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AngularFireAuthModule,
     
     //store
-    StoreModule.provideStore(reducer),
-    StoreDevtoolsModule.instrumentOnlyWithExtension({
+    StoreModule.forRoot(reducer),
+    StoreDevtoolsModule.instrument({
       maxAge: 20
     }),
 
     //ngrx effects
-    EffectsModule.run(UserEffects),
-    EffectsModule.run(CategoryEffects),
-    EffectsModule.run(TagEffects),
-    EffectsModule.run(QuestionEffects),
-    EffectsModule.run(GameEffects),
+    EffectsModule.forFeature([
+      UserEffects,
+      CategoryEffects,
+      TagEffects,
+      QuestionEffects,
+      GameEffects
+    ]),
 
     //rwa module
     SharedModule

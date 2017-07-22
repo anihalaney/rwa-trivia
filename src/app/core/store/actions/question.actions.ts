@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
+import {ActionWithPayload} from './action-with-payload';
 
 import { Question, User } from '../../../model';
 
@@ -7,14 +8,15 @@ import { Question, User } from '../../../model';
 export class QuestionActions {
 
   static LOAD_QUESTIONS = 'LOAD_QUESTIONS';
-  loadQuestions(): Action {
+  loadQuestions(): ActionWithPayload<null> {
     return {
-      type: QuestionActions.LOAD_QUESTIONS
+      type: QuestionActions.LOAD_QUESTIONS,
+      payload: null
     };
   }
 
   static LOAD_QUESTIONS_SUCCESS = 'LOAD_QUESTIONS_SUCCESS';
-  loadQuestionsSuccess(questions: Question[]): Action {
+  loadQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
     return {
       type: QuestionActions.LOAD_QUESTIONS_SUCCESS,
       payload: questions
@@ -22,14 +24,15 @@ export class QuestionActions {
   }
 
   static LOAD_UNPUBLISHED_QUESTIONS = 'LOAD_UNPUBLISHED_QUESTIONS';
-  loadUnpublishedQuestions(): Action {
+  loadUnpublishedQuestions(): ActionWithPayload<null> {
     return {
-      type: QuestionActions.LOAD_UNPUBLISHED_QUESTIONS
+      type: QuestionActions.LOAD_UNPUBLISHED_QUESTIONS,
+      payload: null
     };
   }
 
   static LOAD_UNPUBLISHED_QUESTIONS_SUCCESS = 'LOAD_UNPUBLISHED_QUESTIONS_SUCCESS';
-  loadUnpublishedQuestionsSuccess(questions: Question[]): Action {
+  loadUnpublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
     return {
       type: QuestionActions.LOAD_UNPUBLISHED_QUESTIONS_SUCCESS,
       payload: questions
@@ -37,7 +40,7 @@ export class QuestionActions {
   }
 
   static LOAD_USER_QUESTIONS = 'LOAD_USER_QUESTIONS';
-  loadUserQuestions(user: User): Action {
+  loadUserQuestions(user: User): ActionWithPayload<User> {
     return {
       type: QuestionActions.LOAD_USER_QUESTIONS,
       payload: user
@@ -45,7 +48,7 @@ export class QuestionActions {
   }
 
   static LOAD_USER_QUESTIONS_SUCCESS = 'LOAD_USER_QUESTIONS_SUCCESS';
-  loadUserQuestionsSuccess(questions: Question[]): Action {
+  loadUserQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
     return {
       type: QuestionActions.LOAD_USER_QUESTIONS_SUCCESS,
       payload: questions
@@ -53,14 +56,15 @@ export class QuestionActions {
   }
 
   static LOAD_SAMPLE_QUESTIONS = 'LOAD_SAMPLE_QUESTIONS';
-  loadSampleQuestions(): Action {
+  loadSampleQuestions(): ActionWithPayload<null> {
     return {
-      type: QuestionActions.LOAD_SAMPLE_QUESTIONS
+      type: QuestionActions.LOAD_SAMPLE_QUESTIONS,
+      payload: null
     };
   }
 
   static LOAD_SAMPLE_QUESTIONS_SUCCESS = 'LOAD_SAMPLE_QUESTIONS_SUCCESS';
-  loadSampleQuestionsSuccess(questions: Question[]): Action {
+  loadSampleQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
     return {
       type: QuestionActions.LOAD_SAMPLE_QUESTIONS_SUCCESS,
       payload: questions
@@ -68,7 +72,7 @@ export class QuestionActions {
   }
 
   static ADD_QUESTION = 'ADD_QUESTION';
-  addQuestion(question: Question): Action {
+  addQuestion(question: Question): ActionWithPayload<Question> {
     return {
       type: QuestionActions.ADD_QUESTION,
       payload: question
@@ -76,7 +80,7 @@ export class QuestionActions {
   }
 
   static ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
-  addQuestionSuccess(): Action {
+  addQuestionSuccess(): ActionWithPayload<null> {
     return {
       type: QuestionActions.ADD_QUESTION_SUCCESS,
       payload: null
@@ -84,7 +88,7 @@ export class QuestionActions {
   }
 
   static APPROVE_QUESTION = 'APPROVE_QUESTION';
-  approveQuestion(question: Question): Action {
+  approveQuestion(question: Question): ActionWithPayload<Question> {
     return {
       type: QuestionActions.APPROVE_QUESTION,
       payload: question

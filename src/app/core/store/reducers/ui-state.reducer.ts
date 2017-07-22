@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs/Observable';
 import {Action} from '@ngrx/store';
 
-import { UIStateActions } from '../actions';
+import { ActionWithPayload, UIStateActions } from '../actions';
 
-export const loginRedirectUrl = (state: any = null, action: Action): string => {
+export function loginRedirectUrl(state: any = null, action: ActionWithPayload<string>): string {
   switch (action.type) {
     case UIStateActions.LOGIN_REDIRECT_URL:
       return action.payload;
