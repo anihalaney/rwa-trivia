@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule }     from '@angular/forms';
-import { HttpModule }     from '@angular/http';
+import { HttpClientModule }     from '@angular/common/http';
 
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -15,8 +15,8 @@ import { QuestionsComponent } from './components';
   imports: [
     CommonModule,
 
-    //http
-    HttpModule,
+    //http client
+    HttpClientModule,
 
     // Forms
     ReactiveFormsModule, 

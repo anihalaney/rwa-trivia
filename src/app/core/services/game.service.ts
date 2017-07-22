@@ -1,5 +1,5 @@
 import { Injectable }    from '@angular/core';
-import { Http, Headers }    from '@angular/http';
+import { HttpClient, HttpHeaders }    from '@angular/common/http';
 //import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +15,7 @@ import { Utils } from '../services/utils';
 @Injectable()
 export class GameService {
   constructor(private db: AngularFireDatabase,
-              private http: Http,
+              private http: HttpClient,
               private store: Store<AppStore>,
               private gameActions: GameActions) { 
   }
@@ -59,10 +59,9 @@ export class GameService {
 
   getNextQuestion(game: Game, user: User): Observable<Question> {
     let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getNextQuestion/";
-    let headers = new Headers({'Authorization': 'Bearer ' + user.idToken});
+    let headers = new HttpHeaders({'Authorization': 'Bearer ' + user.idToken});
 
-    return this.http.get(url + game.gameId, {"headers": headers})
-    .map(res => res.json());
+    return this.http.get<Question>(url + game.gameId, {"headers": headers});
   }
 /*
   getNextQuestion(game: Game, user: User): Observable<Question[]> {
