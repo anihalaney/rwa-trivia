@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Trivia</title>
+    <link rel="icon" type="image/png" href="images/favicon.png" />
+    <link href="css/owl.carousel.css" rel="stylesheet" type="text/css" />
+    <link href="css/tag-basic-style.css" rel="stylesheet" type="text/css" />
+    <link href="css/popup.css" rel="stylesheet" type="text/css" />
+    <link href="css/style.css" rel="stylesheet" type="text/css" /> 
+    <link href="css/white.css" rel="stylesheet" type="text/css" />  
+    <link href="css/media.css" rel="stylesheet" type="text/css" />
+    <!-- <link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css?v=2.1.5" media="screen" /> -->
+</head>
+<body>
+    <!--Header Start Here-->
+    <header>        
+        <section class="headermain innerhead" id="stickyheader">      
+            <div class="container">
+                <div class="row">
+                    <div class="logo col-xs-6 col-md-3"><a href="index.html" title="trivia.com"><img src="images/logo.png"></a></div>
+                    <div class="col-xs-6 pull-right align-right">
+                        <div class="headerdrop">
+                            <a href="#"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>                        
+                        </div>
+                        <div class="headerdrop">
+                            <a href="#" class="logout"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>                        
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <div class="clear"></div>
+    </header><!--Header End-->
+
+    <!-- Page Layout -->
+    <div class="container pagelayout innerpage">
+        <div class="breadcrumbs hidden-xs">
+            <a href="index.html" title="Dashboard">Dashboard</a><span class="breadarrow">»</span><span>Game Options</span>
+        </div>
+        <main>
+            <div class="mainpage">
+                <div class="row hidden-xs">
+                    <div class="pageheading col-sm-6 col-xs-12">Game Options</div>          
+                </div>
+                <section id="curentactive" class="card">
+                    <div class="h1block">
+                        <h1>Game Options</h1>
+                        <p>Please seclet a player mode to start a new game</p>
+                    </div>
+                    <div class="optionbox">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h2>Select <span>Player Mode</span></h2>
+                            </div>
+                            <div class="col-sm-9 radiobtn">
+                                <input type="radio" id="p-radio1" name="Player">
+                                <label for="p-radio1"><span class="sprite siglep-icon"></span> Sigle Player</label>
+
+                                <input type="radio" id="p-radio2" name="Player">
+                                <label for="p-radio2"><span class="sprite towp-icon"></span> Tow Player</label>
+                                <div class="towplayer" style="display: none;">
+                                    <input type="radio" id="tp-radio1" name="TowPlayer">
+                                    <label for="tp-radio1"><span class="sprite randomp-icon"></span>Random</label>
+                                    <input type="radio" id="tp-radio2" name="TowPlayer">
+                                    <label for="tp-radio2"><span class="sprite friendsp-icon"></span>With Friends</label>
+                                    <input type="radio" id="tp-radio3" name="TowPlayer">
+                                    <label for="tp-radio3"><span class="sprite computerp-icon"></span>With Computer</label>
+                                    <div class="withfriends" style="display: none;">
+                                        <ul class="friendsslider">
+                                            <li>
+                                                <input type="radio" id="friends1" name="withfriends">
+                                                <label for="friends1"><span class="labelimg"><img src="images/frnd/john.jpg" alt="John"></span> <span class="dark">John</span> 
+                                                <span class="expertise">
+                                                    <span class="light">Expertise</span>
+                                                    <span class="dark">PHP</span>
+                                                </span>
+                                                <span class="light">Favorite</span>
+                                                <span class="dark">C++</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="friends2" name="withfriends">
+                                                <label for="friends2"><span class="labelimg"><img src="images/frnd/kaanishhk.jpg" alt="John"></span> <span class="dark">Kaanishhk</span> <span class="expertise">
+                                                    <span class="light">Expertise</span>
+                                                    <span class="dark">C++, Java</span>
+                                                </span>
+                                                <span class="light">Favorite</span>
+                                                <span class="dark">Dot Net</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="friends3" name="withfriends">
+                                                <label for="friends3"><span class="labelimg"><img src="images/frnd/user1.jpg" alt="John"></span> <span class="dark">Abram</span> <span class="expertise">
+                                                    <span class="light">Expertise</span>
+                                                    <span class="dark">PHP, Java</span>
+                                                </span>
+                                                <span class="light">Favorite</span>
+                                                <span class="dark">C++</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="friends4" name="withfriends">
+                                                <label for="friends4"><span class="labelimg"><img src="images/frnd/user2.jpg" alt="John"></span> <span class="dark">Rocky</span> <span class="expertise">
+                                                    <span class="light">Expertise</span>
+                                                    <span class="dark">C++, PHP</span>
+                                                </span>
+                                                <span class="light">Favorite</span>
+                                                <span class="dark">Java</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="friends5" name="withfriends">
+                                                <label for="friends5"><span class="labelimg"><img src="images/frnd/user3.jpg" alt="John"></span> <span class="dark">Miya</span> <span class="expertise">
+                                                    <span class="light">Expertise</span>
+                                                    <span class="dark">PHP, Java</span>
+                                                </span>
+                                                <span class="light">Favorite</span>
+                                                <span class="dark">C++</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="friends6" name="withfriends">
+                                                <label for="friends6"><span class="labelimg"><img src="images/frnd/john.jpg" alt="John"></span> <span class="dark">John</span> <span class="expertise">
+                                                    <span class="light">Expertise</span>
+                                                    <span class="dark">C++</span>
+                                                </span>
+                                                <span class="light">Favorite</span>
+                                                <span class="dark">Java</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <input type="radio" id="friends7" name="withfriends">
+                                                <label for="friends7">
+                                                    <span class="labelimg"><img src="images/frnd/kaanishhk.jpg" alt="John"></span> 
+                                                    <span class="dark">Kaanishhk</span> 
+                                                    <span class="expertise">
+                                                    <span class="light">Expertise</span>
+                                                    <span class="dark">Java</span>
+                                                </span>
+                                                <span class="light">Favorite</span>
+                                                <span class="dark">C++</span>
+                                                </label>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>                
+                            </div>
+                            <!-- Prefered Categories -->
+                            <div class="row pcategories">
+                                <div class="col-sm-3">
+                                    <h2>Prefered <span>Categories</span></h2>
+                                </div>
+                                <div class="col-sm-9">                            
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="row">
+                                                <div class="formfield">
+                                                    <label>
+                                                        <input type="checkbox" name="" checked="">Special
+                                                    </label>                      
+                                                </div>
+
+                                                <div class="formfield">
+                                                    <label>
+                                                        <input type="checkbox" name="" checked="">General
+                                                    </label>                      
+                                                </div>
+
+                                                <div class="formfield">
+                                                    <label>
+                                                        <input type="checkbox" name="" checked="">Programming
+                                                    </label>                      
+                                                </div>
+                                            </div>
+                                            <div class="preference">
+                                                <div class="formfield">
+                                                    <label>
+                                                        <input type="checkbox" name="">Architecture
+                                                    </label>                      
+                                                </div>
+                                                <div class="formfield">
+                                                    <label>
+                                                        <input type="checkbox" name="">Networking
+                                                    </label>                      
+                                                </div>
+                                                <div class="formfield">
+                                                    <label>
+                                                        <input type="checkbox" name="">Database
+                                                    </label>                      
+                                                </div>
+                                                <div class="formfield">
+                                                    <label>
+                                                        <input type="checkbox" name="">Dev Ops
+                                                    </label>                      
+                                                </div>
+                                                <div class="formfield">
+                                                    <label>
+                                                        <input type="checkbox" name="">UX/UI
+                                                    </label>                      
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="chancat"><span class="sprite chancaticon"></span><span class="chancat-text">Change Category Preference</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="tags">
+                                        <p>Tags associated categories</p>
+                                        <div data-tags-input-name="tag" id="tagBox" class="tagging-js">Social, Unity, App Store</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Prefered Categories end -->
+
+                            <div class="row">
+                                <div class="col-sm-3"></div>
+                                <div id="sidebar" class="col-sm-9 btnbox">
+                                    <a href="#0" class="btn startg cd-popup-trigger">Start Game</a>
+                                </div>
+                            </div>               
+                        </div> 
+
+                    </section>
+
+
+                </div>        
+            </main>
+        </div>
+        <!-- Page Layout end -->
+
+
+
+        <div class="clear"></div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-xs-12">
+                        <a href="#" title="Home">Home</a>
+                        <a href="#" title="Blog">Blog</a>
+                        <a href="#" title="Sing Up">Sing Up</a>
+                        <a href="#" title="Sign in">Sign in</a>
+
+                    </div>
+                    <div class="col-sm-6 col-xs-12 copyright textrigth">Trivia © 2017. All rights reserved.</div>
+                </div>
+            </div>
+        </footer>
+        <!-- Footer end -->
+
+        <div class="cd-popup gameplay"  id="0" role="alert"  >
+            <div class="cd-popup-container">
+                <h1>Special, General, Programming</h1>
+                <p>Playing with <a href="#">Random Player</a></p>
+
+                <!-- Timer -->
+                <div class="timer">
+                    <svg class="rotate" viewbox="0 0 250 250">
+                        <path id="loader" transform="translate(125, 125)"/>
+                    </svg>
+                    <div class="dots">
+                        <span class="time deg0"></span>
+                        <!-- <span class="time deg45"></span> -->
+                        <span class="time deg90"></span>
+                        <!-- <span class="time deg135"></span> -->
+                    </div>
+                </div>
+                <!-- Timer end -->
+
+                <div class="secondbg">
+                    <h2>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium dolor sit voluptatem accusantium emque laudantium?</h2>
+                    <ul>
+                        <li class="right">Exercitationem</li>
+                        <li class="wrong">Consequuntur</li>
+                        <li>Quis autem vel eum</li>
+                        <li>Voluptas nulla pariatur</li>
+                    </ul>
+                </div>
+                <div class="popupbottom">Tags associated categories : Social, Unity, App Store, C#, Swift, Selenium </div>
+            </div>
+        </div>
+
+        <script src="js/jquery-2.2.0.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="js/tagging.js"></script> 
+        <script type="text/javascript" src="js/owl.carousel.min.js"></script> 
+
+        <script src="js/custom.js" type="text/javascript"></script> 
+        <script src="js/popup.js"></script>
+        <script src="js/scrollToFixed.js"></script>
+        <script type="text/javascript">
+        //$("#tagBox").tagging();
+    </script>
+
+    <script>
+        var seconds = 30;
+        var doPlay = true;
+        var loader = document.getElementById('loader')
+        , α = 0
+        , π = Math.PI
+        , t = (seconds / 360 * 1000);
+
+        (function draw() {
+            α++;
+            α %= 360;
+            var r = (α * π / 180)
+            , x = Math.sin(r) * 125
+            , y = Math.cos(r) * -125
+            , mid = (α > 180) ? 1 : 0
+            , anim = 'M 0 0 v -125 A 125 125 1 '
+            + mid + ' 1 '
+            + x + ' '
+            + y + ' z';
+            //[x,y].forEach(function( d ){
+            //  d = Math.round( d * 1e3 ) / 1e3;
+            //});
+
+            loader.setAttribute('d', anim);
+
+            if (doPlay) {
+                setTimeout(draw, t); // Redraw
+            }
+        })();
+
+        
+        
+        
+
+
+        $(document).ready(function() {
+            if(screen.width <= 999){
+               $('#sidebar').scrollToFixed({
+                bottom: 0,
+                limit: $('footer').offset().top - 200 
+            });
+           }
+
+       });
+   </script>
+
+</body>
+</html>
