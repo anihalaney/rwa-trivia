@@ -13,7 +13,8 @@
     "e2e": "protractor",
     "compile-functions": "rmdir /s/q functions\\server & tsc --project functions",
     "deploy-functions": "rmdir /s/q functions\\server & tsc --project functions && firebase deploy --only functions",
-    "deploy-functions-local": "rmdir /s/q functions\\server & tsc --project functions && firebase serve --only functions"
+    "deploy-functions-local": "rmdir /s/q functions\\server & tsc --project functions && firebase serve --only functions",
+    "deploy-functions-local2": "firebasex serve --only functions"
   },
   "private": true,
   "dependencies": {

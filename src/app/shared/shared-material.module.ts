@@ -6,7 +6,8 @@ import { MdInputModule, MdButtonModule, MdButtonToggleModule,
          MdCardModule, MdListModule, MdTabsModule,
          MdMenuModule, MdSidenavModule, MdToolbarModule,
          MdIconModule, MdChipsModule,
-         MdDialogModule, MdSnackBarModule } from '@angular/material';
+         MdDialogModule, MdSnackBarModule, 
+         MdTableModule, MdPaginatorModule, MdSortModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { MdInputModule, MdButtonModule, MdButtonToggleModule,
     MdCardModule, MdListModule, MdTabsModule,
     MdMenuModule, MdSidenavModule, MdToolbarModule,
     MdIconModule, MdChipsModule,
-    MdDialogModule, MdSnackBarModule
+    MdDialogModule, MdSnackBarModule, 
+    MdTableModule, MdPaginatorModule, MdSortModule
   ],
   exports:  [ MdInputModule, MdButtonModule, MdButtonToggleModule, 
               MdCheckboxModule, MdRadioModule, 
@@ -25,6 +27,7 @@ import { MdInputModule, MdButtonModule, MdButtonToggleModule,
               MdCardModule, MdListModule, MdTabsModule,
               MdMenuModule, MdSidenavModule, MdToolbarModule,
               MdIconModule, MdChipsModule,
-              MdDialogModule, MdSnackBarModule ]
+              MdDialogModule, MdSnackBarModule, 
+              MdTableModule, MdPaginatorModule, MdSortModule ]
 })
 export class SharedMaterialModule { }

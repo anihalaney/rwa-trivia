@@ -4,13 +4,13 @@
 
   <md-tab-group>
     <md-tab label="Published">
-      <question-list [questions]="questionsObs | async" 
+      <question-table [questions]="questionsObs | async" 
                     [categoryDictionary]="categoryDictObs | async"
                     class="flex-container" 
                     fxLayoutWrap="wrap"
                     fxLayout="row"
                     fxLayoutAlign="center" fxLayoutAlign.xs="start">
-      </question-list>
+      </question-table>
     </md-tab>
     <md-tab label="Unpublished">
       <question-list [questions]="unpublishedQuestionsObs | async" 

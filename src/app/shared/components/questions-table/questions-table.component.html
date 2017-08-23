@@ -1,0 +1,59 @@
+<div class="example-container mat-elevation-z8">
+  <md-table #table [dataSource]="questionsDS" mdSort>
+
+    <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+    <ng-container cdkColumnDef="chkBox">
+      <md-header-cell *cdkHeaderCellDef><md-checkbox></md-checkbox></md-header-cell>
+      <md-cell class="col-chkbox" *cdkCellDef="let row"> <md-checkbox></md-checkbox> </md-cell>
+    </ng-container>
+
+    <!-- Question Column -->
+    <ng-container cdkColumnDef="questionText">
+      <md-header-cell class="col-question" *cdkHeaderCellDef md-sort-header> Question </md-header-cell>
+      <md-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between"> 
+        <div>
+          {{row.questionText}} 
+        </div>
+
+        <div fxLayout="row" fxLayoutWrap>
+          <span *ngFor="let answer of row.answers" class="answer" [class.correct]="answer.correct">
+            <md-icon *ngIf="answer.correct" md-list-icon>check</md-icon> {{answer.answerText}}
+          </span>
+        </div>
+
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <div>
+            <span class="subtitle">Category:</span>
+            <span *ngFor="let id of row.categoryIds">
+              {{categoryDictionary[id].categoryName}}
+            </span>
+          </div>
+          
+          <div>
+            <span class="subtitle">Tags:</span>
+            <span *ngFor="let tag of row.tags">
+              {{tag}},
+            </span>
+          </div>
+        </div>
+      </md-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="status">
+      <md-header-cell *cdkHeaderCellDef md-sort-header> Status </md-header-cell>
+      <md-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </md-cell>
+    </ng-container>
+
+    <md-header-row *cdkHeaderRowDef="['chkBox', 'questionText', 'status']"></md-header-row>
+    <md-row class="row-question" *cdkRowDef="let row; columns: ['chkBox', 'questionText', 'status'];"></md-row>
+  </md-table>
+
+  <md-paginator #paginator
+                [length]="300"
+                [pageIndex]="0"
+                [pageSize]="25"
+                [pageSizeOptions]="[25, 50, 100, 200, 500]">
+  </md-paginator>  
+</div>
