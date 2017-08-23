@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Trivia</title>
+  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <link href="css/owl.carousel.css" rel="stylesheet" type="text/css" />
+  <link href="css/tag-basic-style.css" rel="stylesheet" type="text/css" />
+  <link href="css/style.css" rel="stylesheet" type="text/css" /> 
+  <link href="css/white.css" rel="stylesheet" type="text/css" />  
+  <link href="css/media.css" rel="stylesheet" type="text/css" />
+  <!-- <link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css?v=2.1.5" media="screen" /> -->
+</head>
+<body>
+  <!--Header Start Here-->
+  <header>        
+    <section class="headermain innerhead" id="stickyheader">      
+      <div class="container">
+        <div class="row">
+          <div class="logo col-xs-6 col-md-3"><a href="index.html" title="trivia.com"><img src="images/logo.png"></a></div>
+          <div class="col-xs-6 pull-right align-right">
+            <div class="headerdrop">
+              <a href="#"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>                        
+            </div>
+            <div class="headerdrop">
+              <a href="#" class="logout"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>                        
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <div class="clear"></div>
+  </header><!--Header End-->
+
+  <!-- Page Layout -->
+  <div class="container pagelayout innerpage">
+    <div class="breadcrumbs hidden-xs">
+      <a href="index.html" title="Dashboard">Dashboard</a><span class="breadarrow">»</span><span>My Settings</span>
+    </div>
+    <main>
+      <!-- My setting -->
+      <div class="mainpage submitpage mysetting">
+        <div class="row hidden-xs">
+          <div class="pageheading col-sm-6 col-xs-12">My Settings</div>          
+        </div>
+        <section id="curentactive" class="card">
+          <div class="h1block">
+            <h1>My Settings</h1>
+            <p>Control You profile information, both what is says and what other people see</p>
+          </div>
+          <div class="optionbox">
+            <!-- Prefered Categories -->
+            <div class="pcategories row">
+              <div class="col-sm-6 col-xs-12"><h2><span>Daniel Chi</span></h2></div>
+              <div class=" col-sm-6 col-xs-12 textrigth ">
+                <a href="#" class="viewbublic">view my public profile</a>
+              </div>              
+            </div>
+            <!-- Prefered Categories end -->
+          </div> 
+
+          <!-- Profile pik -->
+          <div class="enterquestion secondbg">
+            <div class="optionbox">
+              <h3>Upload Avatar :-</h3>
+              <!-- Upload avatar -->
+              <div class="row">
+               <!--  <div class="col-sm-3 col-xs-12">
+                  <div class="avatarimg">
+                    <img src="images/avatarimg.jpg"  alt="Avatar" />
+                  </div>
+                </div> -->
+                <div class="col-sm-3 col-xs-12">
+                  <label for="file-upload" class="custom-file-upload">
+                      <img src="images/avatarimg.jpg"  alt="Avatar" />
+                    </label> 
+                </div>
+                <div class="col-sm-9 col-xs-12 avatarinput">
+                  <div>  
+                    <input id="file-upload" name='upload_cont_img' type="file" style="display:none;">
+                    <label id="file-name">add tags</label>
+                  </div>
+                  <p>Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
+                </div>
+
+              </div>
+              <div class="clearfix namefield">
+                                   
+                  <div class="formfield"> 
+                  <label>Name</label>                                  
+                  <input placeholder="Enter Name" type="text" name="Enter Name" value="" required="">
+                  <p>Enter your real name, so people you know and recogize you</p>
+                </div>
+                
+
+                                    
+                  <div class="formfield"> 
+                  <label>Display Name</label>                                  
+                  <input placeholder="Enter Display Name" type="text" name="Enter Display Name" value="" required="">
+                </div>
+               
+
+                                   
+                  <div class="formfield"> 
+                  <label>Location</label>                                  
+                  <input placeholder="Enter Location" type="text" name="Enter Location" value="" required="">
+                  <p>Where in the world you are</p>
+                </div>
+                
+              </div>
+              <!-- Upload avatar end -->
+
+              <!-- Categories -->
+              <div class="row pcategories">
+                <div class="col-sm-3">
+                  <h3>Categories</h3>
+                </div>
+                <div class="col-sm-9">                            
+                  <div class="formfield">
+                    <label>
+                      <input type="checkbox" name="" checked="">Special
+                    </label>                      
+                  </div>
+                  <div class="formfield">
+                    <label>
+                      <input type="checkbox" name="" checked="">General
+                    </label>                      
+                  </div>
+                  <div class="formfield">
+                    <label>
+                      <input type="checkbox" name="" checked="">Programming
+                    </label>                      
+                  </div>
+                  <div class="formfield">
+                    <label>
+                      <input type="checkbox" name="">Architecture
+                    </label>                      
+                  </div>
+                  <div class="formfield">
+                    <label>
+                      <input type="checkbox" name="">Networking
+                    </label>                      
+                  </div>
+                  <div class="formfield">
+                    <label>
+                      <input type="checkbox" name="">Database
+                    </label>                      
+                  </div>
+                  <div class="formfield">
+                    <label>
+                      <input type="checkbox" name="">Dev Ops
+                    </label>                      
+                  </div>
+                  <div class="formfield">
+                    <label>
+                      <input type="checkbox" name="">UX/UI
+                    </label>                      
+                  </div>
+
+                  <div class="tags">
+                    <p>Tags associated categories</p>
+                    <div data-tags-input-name="tag" id="tagBox">
+                      Social, Unity
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- Categories end -->
+
+
+              <!-- Social Accounts -->
+              <div class="row pcategories saccount">
+                <div class="col-sm-3">
+                  <h3>Social Accounts </h3>
+                </div>
+                <div class="col-md-6 col-sm-9">                            
+                  <div class="formfield">                                   
+                    <input placeholder="Facebook" type="text" name="Facebook" value="" required="">       
+                  </div>
+
+                  <div class="formfield">                                   
+                    <input placeholder="Twitter" type="text" name="Twitter" value="" required="">       
+                  </div>
+
+                  <div class="formfield">                                   
+                    <input placeholder="Linkedin" type="text" name="Linkedin" value="" required="">       
+                  </div>                
+                  
+                </div>
+
+                <div class="col-xs-12">
+
+                 <div class="row">
+                  <!-- Security Setting -->
+                  <div class="col-sm-3">
+                    <h3>Security Setting </h3>
+                  </div>
+                  <div class="col-md-6 col-sm-9">                            
+                    <div class="formfield">
+                      <label>Profile:</label>
+                      <select>
+                        <option>Only with friends</option>
+                        <option>General</option>
+                        <option>Programming</option>
+                        <option>Architecture</option>
+                      </select>
+                    </div>
+
+                    <div class="formfield">
+                      <label>Location:</label>
+                      <select>
+                        <option>Only with friends</option>
+                        <option>General</option>
+                        <option>Programming</option>
+                        <option>Architecture</option>
+                      </select>
+                    </div>
+
+                    <div class="formfield">
+                      <label>Privacy:</label>
+                      <label>
+                        <input type="checkbox" name="">
+                        Keep your profile activity private
+                      </label>
+                      <p>This means no one can invite you or can see you profile.</p>
+                    </div>
+
+                    <!-- Security Setting end -->
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- Social Accounts end -->
+
+          </div>
+        </div>
+        <!-- Profile pik end -->
+
+        <div class="savebox">
+          <a href="#" class="btn startg">Save</a>
+          <a href="#">Cancle</a>
+        </div>
+
+      </section>
+
+
+    </div>
+    <!-- My setting end -->
+  </main>
+</div>
+<!-- Page Layout end -->
+
+
+
+<div class="clear"></div>
+
+<!-- Footer -->
+<footer>
+ <div class="container">
+   <div class="row">
+     <div class="col-sm-6 col-xs-12">
+       <a href="#" title="Home">Home</a>
+       <a href="#" title="Blog">Blog</a>
+       <a href="#" title="Sing Up">Sing Up</a>
+       <a href="#" title="Sign in">Sign in</a>
+     </div>
+     <div class="col-sm-6 col-xs-12 copyright textrigth">Trivia © 2017. All rights reserved.</div>
+   </div>
+ </div>
+</footer>
+<!-- Footer end -->
+
+
+
+
+<script src="js/jquery-2.2.0.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/tagging.js"></script> 
+<script type="text/javascript" src="js/owl.carousel.min.js"></script> 
+
+<script src="js/custom.js" type="text/javascript"></script>  
+<script type="text/javascript">
+ $("#tagBox").tagging();
+
+
+ $("#file-upload").change(function(){
+  $("#file-name").text(this.files[0].name);
+});
+
+ 
+</script>
+
+
+</body>
+</html>
