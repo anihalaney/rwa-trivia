@@ -1,0 +1,30 @@
+.img-replace{ display:inline-block;overflow:hidden;text-indent:100%;color:transparent;white-space:nowrap;}
+.cd-popup-trigger{display:block;margin:1em auto;text-align:center;color:#FFF;text-transform:none;background:none;}
+@media only screen and (min-width:1170px){
+  .cd-popup-trigger{margin:1em auto;}
+}
+.cd-popup{position:fixed;left:0;top:0;height:100%;width:100%;overflow-y:auto;background-color:rgba(38,48,60, 0.9);opacity:0;visibility:hidden;-webkit-transition:opacity 0.8s 0s, visibility 0s 0.8s;-moz-transition:opacity 0.8s 0s, visibility 0s 0.8s;transition:opacity 0.8s 0s, visibility 0s 0.8s;z-index:9999;}
+.cd-popup.is-visible{opacity:1;visibility:visible;-webkit-transition:opacity 0.8s 0s, visibility 0s 0s;-moz-transition:opacity 0.8s 0s, visibility 0s 0s;transition:opacity 0.8s 0s, visibility 0s 0s;}
+.cd-popup-container{margin:auto;top:10px;left:0;right:0;position:absolute;width:96%;height:auto;border-radius:3px;text-align:center;box-shadow:0 0 20px rgba(0, 0, 0, 0.2);
+ -webkit-backface-visibility:hidden;-webkit-transition-property:-webkit-transform;-moz-transition-property:-moz-transform;transition-property:transform;transition-duration:0.8s;
+box-shadow:5px 0 12px 0px rgba(0,0,0,.37); background: #fff; padding-top: 35px}
+.cd-popup-container .cd-buttons:after{content:"";display:table;clear:both;}
+.cd-popup-container .cd-popup-close{position:absolute;top:0;right:0;width:30px;height:30px;background:rgba(255,255,255,0.2);}
+.cd-popup-container .cd-popup-close::before, .cd-popup-container .cd-popup-close::after{content:'';position:absolute;top:12px;width:14px;height:3px;background-color:#8f9cb5;}
+.cd-popup-container .cd-popup-close::before{transform:rotate(45deg);left:8px;top:11px}
+.cd-popup-container .cd-popup-close::after{transform:rotate(-45deg);right:8px;}
+.cd-popup-container1{transform:translateY(-50%);top:50%;left:0;right:0;position:absolute;width:96%;color:#FFF;margin:auto;background:#063662;padding:30px;border-radius:.25em .25em .4em .4em;text-align:center;border:2px #0f477b solid;box-shadow:0 0 20px rgba(0, 0, 0, 0.2);/* Force Hardware Acceleration in WebKit */
+ -webkit-backface-visibility:hidden;-webkit-transition-property:-webkit-transform;-moz-transition-property:-moz-transform;transition-property:transform;-webkit-transition-duration:0.8s;-moz-transition-duration:0.8s;transition-duration:0.8s;
+box-shadow:0px 0px 50px #000000;}
+.cd-popup-container1 .cd-popup-close{position:absolute;top:8px;right:8px;width:30px;height:30px;}
+.cd-popup-container1 .cd-popup-close::before, .cd-popup-container1 .cd-popup-close::after{content:'';position:absolute;top:12px;width:14px;height:3px;background-color:#8f9cb5;}
+.cd-popup-container1 .cd-popup-close::before{transform:rotate(45deg);left:8px;}
+.cd-popup-container1 .cd-popup-close::after{transform:rotate(-45deg);right:8px;}
+@media screen and ( min-width:1000px){
+.fl_l{float:left;}
+.cd-popup-container{width:960px;top:50%;position:absolute;height:auto;transform:translateY(-40px);}
+.is-visible .cd-popup-container{transform:translateY(-50%);}
+.cd-popup-container .cd-popup-close{position:absolute;top:8px;right:8px;background:transparent;}
+.cd-popup-container1{width:30%;}
+.cd-popup{ overflow: hidden; }
+}
