@@ -128,7 +128,16 @@ export class ESUtils {
     });   
   }
 
-  static getRandomQuestionOfTheDay(): Promise<any> { 
+  static getQuestions(start: number, size: number): Promise<Question[]> { 
+    let date = new Date();
+    return this.getItems(this.QUESTIONS_INDEX, start, size).then((hits)=>{
+      //convert hits to Questions
+      //console.log(hits);
+      return hits.map(hit => Question.getViewModelFromES(hit));
+    });  
+  }
+
+  static getRandomQuestionOfTheDay(): Promise<Question> { 
     let date = new Date();
     let seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
     return this.getRandomItems(this.QUESTIONS_INDEX, 1, seed).then((hits)=>{
@@ -137,11 +146,27 @@ export class ESUtils {
     });  
   }
 
-  static getRandomGameQuestion(): Promise<any> { 
+  static getRandomGameQuestion(): Promise<Question> { 
     return this.getRandomQuestionES(this.QUESTIONS_INDEX, 1, "", [2, 5, 7, 8], [], []).then((hits)=>{
       //convert hit to Question
       return Question.getViewModelFromES(hits[0]);
     });  
+  }
+
+  static getItems(index: string, start: number, size: number): Promise<any>
+  {
+    let client: Elasticsearch.Client = this.getElasticSearchClient();
+
+    return client.search({
+      "index": index,
+      "from": start,
+      "size": size
+    }).then(function (body) {
+      return(body.hits.hits);
+    }, function (error) {
+      console.trace(error.message);
+      throw(error);
+    });
   }
 
   static getRandomItems(index: string, size: number, seed: string): Promise<any>

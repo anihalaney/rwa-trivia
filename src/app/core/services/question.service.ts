@@ -1,8 +1,10 @@
 import { Injectable }    from '@angular/core';
+import { HttpClient, HttpHeaders }    from '@angular/common/http';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
+import { CONFIG } from '../../../environments/environment';
 import { User, Question, QuestionStatus }     from '../../model';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
@@ -12,7 +14,8 @@ import { QuestionActions } from '../store/actions';
 export class QuestionService {
   constructor(private db: AngularFireDatabase,
               private store: Store<AppStore>,
-              private questionActions: QuestionActions) { 
+              private questionActions: QuestionActions,
+              private http: HttpClient) { 
   }
 
   getSampleQuestions(): Observable<Question[]> {
@@ -41,13 +44,25 @@ export class QuestionService {
                 return Observable.of(null);
               });
   }
-
+/*
   getQuestions(): Observable<Question[]> {
     return this.db.list('/questions/published')
               .catch(error => {
                 console.log(error);
                 return Observable.of(null);
               });
+  }
+*/
+  getQuestions(startRow: number, pageSize: number, user: User): Observable<Question[]> {
+    let url: string = CONFIG.functionsUrl + "/app/getQuestions/";
+    //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getNextQuestion/";
+
+    let headers: HttpHeaders;
+    if (user)
+      headers = new HttpHeaders({'Authorization': 'Bearer ' + user.idToken});
+
+    return this.http.get<Question[]>(url + startRow + "/" + pageSize, {"headers": headers});
+
   }
 
   getUnpublishedQuestions(): Observable<Question[]> {

@@ -106,6 +106,15 @@ app.use(validateFirebaseIdToken);
 //Routes
 
 //Does not need authorization
+app.get('/getQuestions/:start/:size', (req, res) => { 
+  let start = req.params.start;
+  let size = req.params.size;
+  ESUtils.getQuestions(start, size).then((questions) => {
+    res.send(questions);
+  });
+})
+
+//Does not need authorization
 app.get('/getQuestionOfTheDay', (req, res) => { 
   ESUtils.getRandomQuestionOfTheDay().then((question) => {
     res.send(question);

@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
+import { CONFIG } from '../../../environments/environment';
 import { User, GameOptions, Game, Question, PlayerQnA }     from '../../model';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
@@ -55,10 +56,9 @@ export class GameService {
               });
   }
 
-//http
-
   getNextQuestion(game: Game, user: User): Observable<Question> {
-    let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getNextQuestion/";
+    let url: string = CONFIG.functionsUrl + "/app/getNextQuestion/";
+    //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getNextQuestion/";
     let headers = new HttpHeaders({'Authorization': 'Bearer ' + user.idToken});
 
     return this.http.get<Question>(url + game.gameId, {"headers": headers});

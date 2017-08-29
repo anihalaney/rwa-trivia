@@ -17,7 +17,7 @@ export class QuestionEffects {
     @Effect() 
     loadQuestions$ = this.actions$
         .ofType(QuestionActions.LOAD_QUESTIONS)
-        .switchMap(() => this.svc.getQuestions())
+        .switchMap(() => this.svc.getQuestions(0, 10, null))
         .map((questions: Question[]) => this.questionActions.loadQuestionsSuccess(questions));
 
     @Effect() 
