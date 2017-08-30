@@ -53,16 +53,11 @@ export class QuestionService {
               });
   }
 */
-  getQuestions(startRow: number, pageSize: number, user: User): Observable<Question[]> {
+  getQuestions(startRow: number, pageSize: number): Observable<Question[]> {
     let url: string = CONFIG.functionsUrl + "/app/getQuestions/";
-    //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getNextQuestion/";
+    //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";
 
-    let headers: HttpHeaders;
-    if (user)
-      headers = new HttpHeaders({'Authorization': 'Bearer ' + user.idToken});
-
-    return this.http.get<Question[]>(url + startRow + "/" + pageSize, {"headers": headers});
-
+    return this.http.get<Question[]>(url + startRow + "/" + pageSize);
   }
 
   getUnpublishedQuestions(): Observable<Question[]> {

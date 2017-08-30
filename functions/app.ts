@@ -106,18 +106,19 @@ app.use(validateFirebaseIdToken);
 //Routes
 
 //Does not need authorization
-app.get('/getQuestions/:start/:size', (req, res) => { 
+app.get('/getQuestionOfTheDay', (req, res) => { 
+  ESUtils.getRandomQuestionOfTheDay().then((question) => {
+    res.send(question);
+  });
+})
+
+app.get('/getQuestions/:start/:size', adminOnly, (req, res) => { 
+  //Admins can get all Qs, while authorized users can only get Qs created by them
+  //TODO: For now restricting it to admins only till we add security
   let start = req.params.start;
   let size = req.params.size;
   ESUtils.getQuestions(start, size).then((questions) => {
     res.send(questions);
-  });
-})
-
-//Does not need authorization
-app.get('/getQuestionOfTheDay', (req, res) => { 
-  ESUtils.getRandomQuestionOfTheDay().then((question) => {
-    res.send(question);
   });
 })
 

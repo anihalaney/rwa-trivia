@@ -56,12 +56,9 @@ export class GameService {
               });
   }
 
-  getNextQuestion(game: Game, user: User): Observable<Question> {
+  getNextQuestion(game: Game): Observable<Question> {
     let url: string = CONFIG.functionsUrl + "/app/getNextQuestion/";
-    //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getNextQuestion/";
-    let headers = new HttpHeaders({'Authorization': 'Bearer ' + user.idToken});
-
-    return this.http.get<Question>(url + game.gameId, {"headers": headers});
+    return this.http.get<Question>(url + game.gameId);
   }
 /*
   getNextQuestion(game: Game, user: User): Observable<Question[]> {

@@ -56,7 +56,7 @@ export class GameActions {
   }
 
   static GET_NEXT_QUESTION = 'GET_NEXT_QUESTION';
-  getNextQuestion(payload: {game: Game, user: User}): ActionWithPayload<{game: Game, user: User}> {
+  getNextQuestion(payload: {game: Game}): ActionWithPayload<{game: Game}> {
     return {
       type: GameActions.GET_NEXT_QUESTION,
       payload: payload

@@ -93,7 +93,7 @@ export class GameComponent implements OnInit, OnDestroy {
 
   getNextQuestion()
   {
-    this.store.dispatch(this.gameActions.getNextQuestion({"game": this.game, "user": this.user}));
+    this.store.dispatch(this.gameActions.getNextQuestion({"game": this.game}));
   }
 
   answerClicked($event: number) {

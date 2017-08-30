@@ -1,4 +1,5 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -10,7 +11,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { CONFIG } from '../../environments/environment';
 
-import { Utils, AuthenticationService, AuthGuard,
+import { Utils, AuthenticationService, AuthGuard, AuthInterceptor,
          CategoryService, TagService, QuestionService,
          GameService } from './services';
 
@@ -64,8 +65,13 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions, 
-    UIStateActions, GameActions
+    UIStateActions, GameActions,
 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    }
   ]
 })
 export class CoreModule { };

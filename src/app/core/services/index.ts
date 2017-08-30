@@ -1,6 +1,7 @@
 import {Utils} from './utils';
 import {AuthenticationService} from './authentication.service';
 import {AuthGuard} from './auth-guard';
+import {AuthInterceptor} from './auth-interceptor';
 import {CategoryService} from './category.service';
 import {TagService} from './tag.service';
 import {QuestionService} from './question.service';
@@ -10,6 +11,7 @@ export {
     Utils,
     AuthenticationService,
     AuthGuard,
+    AuthInterceptor,
     CategoryService,
     TagService,
     QuestionService,
@@ -20,6 +22,7 @@ export default [
     Utils,
     AuthenticationService,
     AuthGuard,
+    AuthInterceptor,
     CategoryService,
     TagService,
     QuestionService,

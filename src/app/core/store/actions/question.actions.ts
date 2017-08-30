@@ -8,10 +8,10 @@ import { Question, User } from '../../../model';
 export class QuestionActions {
 
   static LOAD_QUESTIONS = 'LOAD_QUESTIONS';
-  loadQuestions(): ActionWithPayload<null> {
+  loadQuestions(payload: {startRow: number, pageSize: number}): ActionWithPayload<{startRow: number, pageSize: number}> {
     return {
       type: QuestionActions.LOAD_QUESTIONS,
-      payload: null
+      payload: payload
     };
   }
 
