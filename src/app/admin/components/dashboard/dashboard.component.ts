@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
 import { QuestionActions } from '../../../core/store/actions';
-import { Category, Question } from '../../../model';
+import { Category, Question, SearchResults } from '../../../model';
 
 @Component({
   selector: 'dashboard',
@@ -15,7 +15,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
   categoryDictObs: Observable<{[key: number] :Category}>;
   tagsObs: Observable<string[]>;
-  questionsObs: Observable<Question[]>;
+  questionsSearchResultsObs: Observable<SearchResults>;
   sampleQuestionsObs: Observable<Question[]>;
 
   constructor(private store: Store<AppStore>,
@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.categoriesObs = store.select(s => s.categories);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.tagsObs = store.select(s => s.tags);
-    this.questionsObs = store.select(s => s.questions);
+    this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
     this.sampleQuestionsObs = store.select(s => s.sampleQuestions);
   }
 

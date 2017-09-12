@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Effect, Actions} from '@ngrx/effects';
 
 import {AppStore} from '../app-store';
-import {Question, User} from '../../../model';
+import {Question, User, SearchResults} from '../../../model';
 import {ActionWithPayload, QuestionActions} from '../actions';
 import {QuestionService} from '../../services'
 
@@ -18,7 +18,7 @@ export class QuestionEffects {
     loadQuestions$ = this.actions$
         .ofType(QuestionActions.LOAD_QUESTIONS)
         .switchMap((action: ActionWithPayload<{startRow: number, pageSize: number}>) => this.svc.getQuestions(action.payload.startRow, action.payload.pageSize))
-        .map((questions: Question[]) => this.questionActions.loadQuestionsSuccess(questions));
+        .map((results: SearchResults) => this.questionActions.loadQuestionsSuccess(results));
 
     @Effect() 
     loadUnpublishedQuestions$ = this.actions$

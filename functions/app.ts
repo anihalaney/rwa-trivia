@@ -117,8 +117,8 @@ app.get('/getQuestions/:start/:size', adminOnly, (req, res) => {
   //TODO: For now restricting it to admins only till we add security
   let start = req.params.start;
   let size = req.params.size;
-  ESUtils.getQuestions(start, size).then((questions) => {
-    res.send(questions);
+  ESUtils.getQuestions(start, size).then((results) => {
+    res.send(results);
   });
 })
 

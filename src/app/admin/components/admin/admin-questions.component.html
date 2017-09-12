@@ -4,8 +4,10 @@
 
   <md-tab-group>
     <md-tab label="Published">
-      <question-table [questions]="questionsObs | async" 
+      <question-table [questionsSearchResults]="(questionsSearchResultsObs | async)" 
                     [categoryDictionary]="categoryDictObs | async"
+                    (pageChanged)="pageChange($event)"
+                    (searchCriteriaChanged)="searchCriteriaChange($event)"
                     class="flex-container" 
                     fxLayoutWrap="wrap"
                     fxLayout="row"

@@ -8,7 +8,7 @@
       <span>Tag Count: <span id="tag-count">{{(tagsObs | async).length}}</span></span>
     </md-list-item>
     <md-list-item>
-      <span>Question Count: <span id="question-count">{{(questionsObs | async).length}}</span></span>
+      <span>Question Count: <span id="question-count">{{(questionsSearchResultsObs | async).totalCount}}</span></span>
     </md-list-item>
   </md-list>
 </md-card>

@@ -1,59 +1,143 @@
-<div class="example-container mat-elevation-z8">
-  <md-table #table [dataSource]="questionsDS" mdSort>
+<form *ngIf="questions && categoryAggregation" (ngSubmit)="onSubmit()" class="question-table-form" [formGroup]="questionTableForm" novalidate>
+<div fxLayout="row" fxLayoutAlign="space-between">
+  <div class="filter-facet-column" fxLayout="column">
+    <md-list dense>
+      <h3 mdSubheader>Categories</h3>
+      <md-list-item *ngFor="let category of categoriesObs | async">
+        <md-checkbox 
+          [disabled]="!categoryAggregation.hasOwnProperty(category.id) || categoryAggregation[category.id] === 0"
+          [value]="category.id"
+          (change)="categoryChanged($event, category)"
+        >
+          {{category.categoryName}} ({{categoryAggregation.hasOwnProperty(category.id) ? categoryAggregation[category.id] : 0}})
+        </md-checkbox>
+      </md-list-item>
+      <md-divider></md-divider>
 
-    <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
+      <h3 mdSubheader>Tags</h3>
+      <md-list-item>
+        <md-checkbox>Javascript</md-checkbox>
+      </md-list-item>
+      <md-list-item>
+        <md-checkbox>Python</md-checkbox>
+      </md-list-item>
+      <md-list-item>
+        <md-checkbox>Java</md-checkbox>
+      </md-list-item>
+      <md-list-item>
+        <md-checkbox>C#</md-checkbox>
+      </md-list-item>
+      <md-list-item>
+        <md-checkbox>C++</md-checkbox>
+      </md-list-item>
+      <md-list-item>
+        <md-checkbox>Swift</md-checkbox>
+      </md-list-item>
+      <md-list-item>
+        <md-checkbox>Swift</md-checkbox>
+      </md-list-item>
+      <md-input-container>
+        <input mdInput placeholder="Enter Tag">
+      </md-input-container>
+      <md-divider></md-divider>
 
-    <ng-container cdkColumnDef="chkBox">
-      <md-header-cell *cdkHeaderCellDef><md-checkbox></md-checkbox></md-header-cell>
-      <md-cell class="col-chkbox" *cdkCellDef="let row"> <md-checkbox></md-checkbox> </md-cell>
-    </ng-container>
+      <h3 mdSubheader>Status</h3>
+      <md-divider></md-divider>
+      
+      <h3 mdSubheader>Updated By</h3>
+      <md-divider></md-divider>
+      
+      <h3 mdSubheader>Created By</h3>
+      <md-divider></md-divider>
+      
+      <h3 mdSubheader>Updated On</h3>
+      <md-divider></md-divider>
+      
+      <h3 mdSubheader>Created By</h3>
+    </md-list>    
+  </div>
 
-    <!-- Question Column -->
-    <ng-container cdkColumnDef="questionText">
-      <md-header-cell class="col-question" *cdkHeaderCellDef md-sort-header> Question </md-header-cell>
-      <md-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between"> 
-        <div>
-          {{row.questionText}} 
-        </div>
-
-        <div fxLayout="row" fxLayoutWrap>
-          <span *ngFor="let answer of row.answers" class="answer" [class.correct]="answer.correct">
-            <md-icon *ngIf="answer.correct" md-list-icon>check</md-icon> {{answer.answerText}}
-          </span>
-        </div>
-
-        <div fxLayout="row" fxLayoutAlign="space-between center">
-          <div>
-            <span class="subtitle">Category:</span>
-            <span *ngFor="let id of row.categoryIds">
-              {{categoryDictionary[id].categoryName}}
-            </span>
-          </div>
+  <div class="example-container mat-elevation-z8">
           
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <md-select placeholder="Sort Order" formControlName="sortOrder">
+        <md-option [value]="Category">Category</md-option>
+        <md-option [value]="Status">Status</md-option>
+        <md-option [value]="CreatedTimeDesc">Created On (Latest)</md-option>
+        <md-option [value]="CreatedTimeAsc">Created On (Earliest)</md-option>
+        <md-option [value]="UpdatedTimeDesc">Updated On (Latest)</md-option>
+        <md-option [value]="UpdatedTimeAsc">Updated On (Earliest)</md-option>
+      </md-select>
+
+      <md-paginator
+        [length]="300"
+        [pageIndex]="0"
+        [pageSize]="25"
+        [pageSizeOptions]="[25, 50, 100, 200, 500]"
+        (page)="pageChange($event)">
+      </md-paginator>  
+    </div>
+
+    <md-table #table [dataSource]="questionsDS" mdSort>
+
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <ng-container cdkColumnDef="chkBox">
+        <md-header-cell *cdkHeaderCellDef><md-checkbox></md-checkbox></md-header-cell>
+        <md-cell class="col-chkbox" *cdkCellDef="let row"> <md-checkbox></md-checkbox> </md-cell>
+      </ng-container>
+
+      <!-- Question Column -->
+      <ng-container cdkColumnDef="questionText">
+        <md-header-cell class="col-question" *cdkHeaderCellDef md-sort-header> Question </md-header-cell>
+        <md-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between"> 
           <div>
-            <span class="subtitle">Tags:</span>
-            <span *ngFor="let tag of row.tags">
-              {{tag}},
+            {{row.questionText}} 
+          </div>
+
+          <div fxLayout="row" fxLayoutWrap>
+            <span *ngFor="let answer of row.answers" class="answer" [class.correct]="answer.correct">
+              <md-icon *ngIf="answer.correct" md-list-icon>check</md-icon> {{answer.answerText}}
             </span>
           </div>
-        </div>
-      </md-cell>
-    </ng-container>
 
-    <ng-container cdkColumnDef="status">
-      <md-header-cell *cdkHeaderCellDef md-sort-header> Status </md-header-cell>
-      <md-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </md-cell>
-    </ng-container>
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div>
+              <span class="subtitle">Category:</span>
+              <span *ngFor="let id of row.categoryIds">
+                {{categoryDictionary[id].categoryName}}
+              </span>
+            </div>
+            
+            <div>
+              <span class="subtitle">Tags:</span>
+              <span *ngFor="let tag of row.tags">
+                {{tag}},
+              </span>
+            </div>
+          </div>
+        </md-cell>
+      </ng-container>
 
-    <md-header-row *cdkHeaderRowDef="['chkBox', 'questionText', 'status']"></md-header-row>
-    <md-row class="row-question" *cdkRowDef="let row; columns: ['chkBox', 'questionText', 'status'];"></md-row>
-  </md-table>
+      <ng-container cdkColumnDef="status">
+        <md-header-cell *cdkHeaderCellDef md-sort-header> Status </md-header-cell>
+        <md-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </md-cell>
+      </ng-container>
 
-  <md-paginator #paginator
-                [length]="300"
-                [pageIndex]="0"
-                [pageSize]="25"
-                [pageSizeOptions]="[25, 50, 100, 200, 500]">
-  </md-paginator>  
+      <md-header-row *cdkHeaderRowDef="['chkBox', 'questionText', 'status']"></md-header-row>
+      <md-row class="row-question" *cdkRowDef="let row; columns: ['chkBox', 'questionText', 'status'];"></md-row>
+    </md-table>
+
+    <md-paginator
+        [length]="300"
+        [pageIndex]="0"
+        [pageSize]="25"
+        [pageSizeOptions]="[25, 50, 100, 200, 500]"
+        (page)="pageChange($event)">
+    </md-paginator>  
+
+  </div>
+
 </div>
+</form>

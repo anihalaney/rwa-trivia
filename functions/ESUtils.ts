@@ -1,4 +1,4 @@
-import { Game, Question, Category } from '../src/app/model';
+import { Game, Question, Category, SearchResults } from '../src/app/model';
 
 const fs = require('fs');
 const path = require('path');
@@ -128,12 +128,21 @@ export class ESUtils {
     });   
   }
 
-  static getQuestions(start: number, size: number): Promise<Question[]> { 
+  static getQuestions(start: number, size: number): Promise<SearchResults> { 
     let date = new Date();
-    return this.getItems(this.QUESTIONS_INDEX, start, size).then((hits)=>{
+    return this.getSearchResults(this.QUESTIONS_INDEX, start, size).then((results)=>{
       //convert hits to Questions
-      //console.log(hits);
-      return hits.map(hit => Question.getViewModelFromES(hit));
+      //console.log(results);
+
+      let searchResults: SearchResults = new SearchResults();
+      searchResults.totalCount = results.hits.total; 
+      searchResults.categoryAggregation = {};
+      results.aggregations.category_counts.buckets.forEach(b => {
+        searchResults.categoryAggregation[b.key] = b.doc_count;
+      });
+      searchResults.questions = results.hits.hits.map(hit => Question.getViewModelFromES(hit));
+
+      return searchResults;
     });  
   }
 
@@ -153,16 +162,23 @@ export class ESUtils {
     });  
   }
 
-  static getItems(index: string, start: number, size: number): Promise<any>
+  static getSearchResults(index: string, start: number, size: number): Promise<any>
   {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
 
     return client.search({
       "index": index,
       "from": start,
-      "size": size
+      "size": size,
+      "body": {
+        "aggregations" : {
+          "category_counts" : {
+                  "terms": {"field": "categoryIds"}
+              }
+        }  
+      }
     }).then(function (body) {
-      return(body.hits.hits);
+      return(body);
     }, function (error) {
       console.trace(error.message);
       throw(error);

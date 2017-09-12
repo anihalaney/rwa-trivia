@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
 import {ActionWithPayload} from './action-with-payload';
 
-import { Question, User } from '../../../model';
+import { Question, User, SearchResults } from '../../../model';
 
 @Injectable()
 export class QuestionActions {
@@ -16,10 +16,10 @@ export class QuestionActions {
   }
 
   static LOAD_QUESTIONS_SUCCESS = 'LOAD_QUESTIONS_SUCCESS';
-  loadQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+  loadQuestionsSuccess(results: SearchResults): ActionWithPayload<SearchResults> {
     return {
       type: QuestionActions.LOAD_QUESTIONS_SUCCESS,
-      payload: questions
+      payload: results
     };
   }
 
