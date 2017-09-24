@@ -1,0 +1,79 @@
+.submitpage .card{ padding: 25px 0 0 }
+.pcategories > .col-sm-9{ border-top: 1px solid; padding:46px 15px 0; }
+#curentactive { text-align: center; }
+.submitpage .optionbox{ padding: 0 10px }
+.optionbox{ margin-top: 30px; text-align: left;}
+.optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
+.optionbox h2 span{ font-size: 20px; text-transform: none; letter-spacing: .10px; padding-left: 0; font-family: 'hindmedium' }
+.card .enterquestion h3{ font-size: 18px; margin: 30px 0 16px}
+.card .enterquestion h3:before{ display: none;  }
+
+.enterquestion .formfield > input, .formfield select{padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px)}
+.enterquestion .formfield > label{ width: 30px; display: inline-block; vertical-align: -4px}
+
+.viewbublic{ border:1px solid; border-radius: 4px; font-size: 18px; font-family: 'hindmedium'; box-shadow: 0 1px 1px rgba(0,0,0,0.63); padding:10px 0;  display: block; text-align: center; margin-top: 20px;}
+.avatarinput p{ margin-top: 15px; }
+.mysetting .formfield{ padding:0px 30px 0px 0; margin-bottom: 20px}
+.mysetting .formfield > label{ width: auto; }
+.saccount .formfield{ padding:0;}
+.saccount .formfield > input{ font-size: 14px; padding: 13px 17px; }
+.saccount .formfield select{ font-size: 14px; }
+.saccount .formfield label{ font-size: 18px; font-family: 'hindmedium'; width: 90px}
+.saccount .formfield label:nth-child(2){ width: auto; font-family: 'hindregular'; font-size: 16px; }
+.saccount .formfield label + p{margin-top: 13px }
+.savebox{ padding: 20px 15px }
+.savebox a:nth-child(2){ font-size: 18px; font-family: 'hindmedium'; margin-top: 30px; display: inline-block; }
+.btn-sticky{position: fixed;bottom: 0;left:0;}
+
+#file-name{ border:1px solid; border-radius: 4px; padding: 7px 10px; font-size: 16px; min-width:100%; display: inline-block; }
+.custom-file-upload { border: 1px solid ; display: block; border-radius: 4px; overflow: hidden; cursor: pointer; transition: .3s ease-in-out; width: 151px; margin: 0 auto 20px; position: relative;}
+label.custom-file-upload:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(../images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
+label.custom-file-upload:hover:after{ opacity: 0.5 }
+
+/*Custom File Upload*/
+.custom-file-upload img{ display: block; }
+.namefield{ margin-top: 30px }
+.namefield .formfield{display: block !important; text-align: left;}
+.namefield .formfield > label{ text-align: left; font-size: 18px; font-family: 'hindmedium' }
+.namefield .formfield > p{ margin-top: 5px }
+/*Custom File Upload End*/
+@media screen and ( min-width:767px){
+  .optionbox h2{ margin-top: 17px }
+  .optionbox h2 span{ font-size: 22px }
+  .savebox a:nth-child(2){ display: inline; margin-top: 0 }
+
+  .viewbublic{ padding: 10px 20px; display: inline-block; margin-top: 30px;}
+  .saccount .formfield select{ width: calc(100% - 94px) }
+  .mysetting .formfield{ padding:0 30px 0 0;} 
+  .saccount .col-xs-12  { margin-top: 30px }
+  .card .saccount .col-xs-12 h3{ margin-top: 16px; }
+  .saccount .col-xs-12 .col-sm-9{ padding: 10px 0;}
+  .saccount .formfield label + p{ padding-left:90px; }
+  .savebox a.btn.startg{ display: inline-block; margin-right: 70px}
+  #file-name{min-width: 280px;}
+  .card .enterquestion h3{margin-top: 40px}
+  .card .saccount h3{ margin-top: 53px }
+  .custom-file-upload { display: inline-block;}
+  .namefield .formfield > label{ width: 25% }
+  .namefield .formfield > input{ width: 55% }
+  .namefield .formfield > p{ margin-left: calc(25% + 4px ) }  
+}
+@media screen and ( min-width:1000px){
+  .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
+  .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
+  .pcategories > .col-sm-9{padding:46px 0 0; }
+  .optionbox{width: 765px; margin: 60px auto 0;}  
+  .submitpage .optionbox{ margin-top: 0; padding: 0 }
+  .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
+  .optionbox .pcategories h2{ margin-top: 40px}
+  .submitpage .optionbox h2{ margin-bottom: 7px }
+
+  .avatarimg{ margin: 0}
+  .mysetting .formfield{ width: auto; }
+  .saccount .formfield{ width: 100% }
+  .saccount .formfield > input{ width: 100% }
+  .saccount .formfield:nth-child(2n + 2), .namefield .formfield:nth-child(2n + 2){ text-align: left; }
+  .namefield .formfield{ width: 100% }
+  .namefield .formfield > input{ width: 55% }
+  .custom-file-upload:hover{ box-shadow: 0 2px 5px rgba(0,0,0,.30)}
+}

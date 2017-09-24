@@ -1,5 +1,5 @@
-.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { background: url(../images/sprite.png) no-repeat; display: inline-block; vertical-align: middle; }
-.optionbox input:checked + label .sprite{ background:#fff url(../images/sprite.png) no-repeat;}
+/*.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { background: url(../images/sprite.png) no-repeat; display: inline-block; vertical-align: middle; }*/
+/*.optionbox input:checked + label .sprite{ background:#fff url(../images/sprite.png) no-repeat;}
 
 .settingicon{ background-position: -1px -1px; height: 15px; width: 15px; transition: 0.3s ease-in}
 .logouticon{ background-position: -18px 0px; height: 16px; width: 11px;}
@@ -35,7 +35,7 @@
 .withfriends .owl-next:hover:after{ background-position: -192px -91px; }
 .chancaticon{ background-position: -163px -151px; height: 30px; width:30px; margin-right: 8px}
 .active .chancaticon{ background-position: -174px -112px;}
-.resubmiticon{ background-position: -129px -262px; height: 28px; width: 28px; margin-bottom: 3px}
+.resubmiticon{ background-position: -129px -262px; height: 28px; width: 28px; margin-bottom: 3px}*/
 
 
 
@@ -116,9 +116,7 @@ input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .f
 ::-moz-placeholder { color: #b5b4b1;}
 :-ms-input-placeholder { color: #b5b4b1;}
 :-moz-placeholder { color: #b5b4b1;}
-@media screen and ( min-width:767px){
-	.rocateicon{margin:0 16px 0 0; }
-}
+
 @media screen and ( min-width:1000px){
 	.playwith a:hover .playwithicon{ background-position: -125px -22px;}
 
