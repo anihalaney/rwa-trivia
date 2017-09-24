@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Effect, Actions} from '@ngrx/effects';
 
 import {AppStore} from '../app-store';
-import {Question, User, SearchResults} from '../../../model';
+import {Question, User, SearchResults, SearchCriteria} from '../../../model';
 import {ActionWithPayload, QuestionActions} from '../actions';
 import {QuestionService} from '../../services'
 
@@ -17,7 +17,7 @@ export class QuestionEffects {
     @Effect() 
     loadQuestions$ = this.actions$
         .ofType(QuestionActions.LOAD_QUESTIONS)
-        .switchMap((action: ActionWithPayload<{startRow: number, pageSize: number}>) => this.svc.getQuestions(action.payload.startRow, action.payload.pageSize))
+        .switchMap((action: ActionWithPayload<{startRow: number, pageSize: number, criteria: SearchCriteria}>) => this.svc.getQuestions(action.payload.startRow, action.payload.pageSize, action.payload.criteria))
         .map((results: SearchResults) => this.questionActions.loadQuestionsSuccess(results));
 
     @Effect() 

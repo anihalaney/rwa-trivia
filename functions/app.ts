@@ -1,4 +1,4 @@
-import { Game, Question, Category } from '../src/app/model';
+import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 
 const functions = require('firebase-functions');
@@ -10,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser')();
+const bodyParser = require('body-parser');
 const cors = require('cors')({origin: true});
 const app = express();
 const elasticsearch = require('elasticsearch');
@@ -102,6 +103,8 @@ const adminOnly = (req, res, next) => {
 app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json())
 
 //Routes
 
@@ -112,16 +115,19 @@ app.get('/getQuestionOfTheDay', (req, res) => {
   });
 })
 
-app.get('/getQuestions/:start/:size', adminOnly, (req, res) => { 
+app.post('/getQuestions/:start/:size', adminOnly, (req, res) => { 
   //Admins can get all Qs, while authorized users can only get Qs created by them
   //TODO: For now restricting it to admins only till we add security
   let start = req.params.start;
   let size = req.params.size;
-  ESUtils.getQuestions(start, size).then((results) => {
+  let criteria: SearchCriteria = req.body;
+  console.log(criteria);
+
+  ESUtils.getQuestions(start, size, criteria).then((results) => {
     res.send(results);
   });
 })
-
+  
 app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
 
   console.log(req.user.uid);

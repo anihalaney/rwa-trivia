@@ -60,17 +60,17 @@
   <div class="example-container mat-elevation-z8">
           
     <div fxLayout="row" fxLayoutAlign="space-between center">
-      <md-select placeholder="Sort Order" formControlName="sortOrder">
-        <md-option [value]="Category">Category</md-option>
-        <md-option [value]="Status">Status</md-option>
-        <md-option [value]="CreatedTimeDesc">Created On (Latest)</md-option>
-        <md-option [value]="CreatedTimeAsc">Created On (Earliest)</md-option>
-        <md-option [value]="UpdatedTimeDesc">Updated On (Latest)</md-option>
-        <md-option [value]="UpdatedTimeAsc">Updated On (Earliest)</md-option>
+      <md-select placeholder="Sort Order" (change)="sortOrderChanged($event)">
+        <md-option [value]="'Category'">Category</md-option>
+        <md-option [value]="'Status'">Status</md-option>
+        <md-option [value]="'CreatedTimeDesc'">Created On (Latest)</md-option>
+        <md-option [value]="'CreatedTimeAsc'">Created On (Earliest)</md-option>
+        <md-option [value]="'UpdatedTimeDesc'">Updated On (Latest)</md-option>
+        <md-option [value]="'UpdatedTimeAsc'">Updated On (Earliest)</md-option>
       </md-select>
 
       <md-paginator
-        [length]="300"
+        [length]="totalCount"
         [pageIndex]="0"
         [pageSize]="25"
         [pageSizeOptions]="[25, 50, 100, 200, 500]"

@@ -1,4 +1,4 @@
-import { Game, Question, Category, SearchResults } from '../src/app/model';
+import { Game, Question, Category, SearchResults, SearchCriteria } from '../src/app/model';
 
 const fs = require('fs');
 const path = require('path');
@@ -128,9 +128,9 @@ export class ESUtils {
     });   
   }
 
-  static getQuestions(start: number, size: number): Promise<SearchResults> { 
+  static getQuestions(start: number, size: number, criteria: SearchCriteria): Promise<SearchResults> { 
     let date = new Date();
-    return this.getSearchResults(this.QUESTIONS_INDEX, start, size).then((results)=>{
+    return this.getSearchResults(this.QUESTIONS_INDEX, start, size, criteria).then((results)=>{
       //convert hits to Questions
       //console.log(results);
 
@@ -162,21 +162,43 @@ export class ESUtils {
     });  
   }
 
-  static getSearchResults(index: string, start: number, size: number): Promise<any>
+  static getSearchResults(index: string, start: number, size: number, criteria: SearchCriteria): Promise<any>
   {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
+    let body = {
+      "aggregations" : {
+        "category_counts" : {
+          "terms": {"field": "categoryIds"}
+        }
+      }  
+    };
+
+    let filter = null;
+    if (criteria) {
+      if (criteria.categoryIds && criteria.categoryIds.length > 0) {
+        filter = { "terms" : { "categoryIds" : criteria.categoryIds } };
+      }
+      if (filter) {
+        body["filter"] = filter;
+      }
+
+      //sortOrder
+      switch (criteria.sortOrder) {
+        case "Category":
+          body["sort"] = [{ "categoryIds" : {"order" : "asc"} }];
+          break;
+        case "Status":
+          body["sort"] = [{ "status" : {"order" : "asc"} }];
+          break;
+      }
+    }
+
 
     return client.search({
       "index": index,
       "from": start,
       "size": size,
-      "body": {
-        "aggregations" : {
-          "category_counts" : {
-                  "terms": {"field": "categoryIds"}
-              }
-        }  
-      }
+      "body": body
     }).then(function (body) {
       return(body);
     }, function (error) {

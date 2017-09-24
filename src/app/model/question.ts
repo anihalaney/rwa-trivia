@@ -44,7 +44,6 @@ export class Question {
     question.status = source.status;
     question.tags = source.tags;
     
-    //console.log(game);
     return question;
   }
 

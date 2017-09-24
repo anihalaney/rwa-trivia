@@ -2,13 +2,13 @@ import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
 import {ActionWithPayload} from './action-with-payload';
 
-import { Question, User, SearchResults } from '../../../model';
+import { Question, User, SearchResults, SearchCriteria } from '../../../model';
 
 @Injectable()
 export class QuestionActions {
 
   static LOAD_QUESTIONS = 'LOAD_QUESTIONS';
-  loadQuestions(payload: {startRow: number, pageSize: number}): ActionWithPayload<{startRow: number, pageSize: number}> {
+  loadQuestions(payload: {startRow: number, pageSize: number, criteria: SearchCriteria}): ActionWithPayload<{startRow: number, pageSize: number, criteria: SearchCriteria}> {
     return {
       type: QuestionActions.LOAD_QUESTIONS,
       payload: payload

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, Question, QuestionStatus, SearchResults }     from '../../model';
+import { User, Question, QuestionStatus, SearchResults, SearchCriteria }     from '../../model';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
 import { QuestionActions } from '../store/actions';
@@ -53,11 +53,11 @@ export class QuestionService {
               });
   }
 */
-  getQuestions(startRow: number, pageSize: number): Observable<SearchResults> {
+  getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
     let url: string = CONFIG.functionsUrl + "/app/getQuestions/";
     //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";
 
-    return this.http.get<SearchResults>(url + startRow + "/" + pageSize);
+    return this.http.post<SearchResults>(url + startRow + "/" + pageSize, criteria);
   }
 
   getUnpublishedQuestions(): Observable<Question[]> {

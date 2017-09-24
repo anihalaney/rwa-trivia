@@ -3,4 +3,5 @@ export class SearchCriteria {
   tags: string[];
   status: string; //QuestionStatus
   searchInput: string;
+  sortOrder: string;
 }

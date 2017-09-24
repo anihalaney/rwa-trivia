@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import {DataSource} from '@angular/cdk';
-import {PageEvent, MdCheckboxChange} from '@angular/material';
+import {PageEvent, MdCheckboxChange, MdSelectChange} from '@angular/material';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
@@ -18,15 +18,16 @@ import { Question, QuestionStatus, Category, SearchResults, SearchCriteria }    
 })
 export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() questionsSearchResults: SearchResults;
-  @Input() criteria: SearchCriteria;
   @Input() categoryDictionary: {[key: number]: Category};
   @Input() showApproveButton: boolean;
   @Output() approveClicked = new EventEmitter<Question>();
   @Output() pageChanged = new EventEmitter<PageEvent>();
-  @Output() searchCriteriaChanged = new EventEmitter<SearchCriteria>();
+  @Output() onCategoryChanged = new EventEmitter<{categoryId: number, added: boolean}>();
+  @Output() onSortOrderChanged = new EventEmitter<string>();
   
   sortOrder: string;
   questions: Question[];
+  totalCount: number;
   questionsSubject: BehaviorSubject<Question[]>;
   questionsDS: QuestionsDataSource;
 
@@ -49,6 +50,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges() {
     this.questions = this.questionsSearchResults.questions;
+    this.totalCount = this.questionsSearchResults.totalCount;
     this.categoryAggregation = this.questionsSearchResults.categoryAggregation
     this.questionsSubject.next(this.questions);
   }
@@ -72,15 +74,16 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
     this.pageChanged.emit(pageEvent);
   }
   categoryChanged(event: MdCheckboxChange, category: Category) {
-    console.log(event);
-    //console.log(event.source.value);
-    if (event.checked) {
-      this.criteria.categoryIds.push(category.id);
-    }
-    else {
-      this.criteria.categoryIds = this.criteria.categoryIds.filter(c => c != category.id);
-    }
-    this.searchCriteriaChanged.emit(this.criteria);
+    //console.log(event);
+    //console.log(category);
+    this.onCategoryChanged.emit({categoryId: category.id, added: event.checked});
+  }
+  sortOrderChanged(event: MdSelectChange) {
+    //console.log(event);
+    this.onSortOrderChanged.emit(event.value);
+  }
+  onSubmit() {
+
   }
 }
 

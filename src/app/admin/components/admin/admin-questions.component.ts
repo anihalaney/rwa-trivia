@@ -16,16 +16,18 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
   questionsSearchResultsObs: Observable<SearchResults>;
   unpublishedQuestionsObs: Observable<Question[]>;
   categoryDictObs: Observable<{[key: number]: Category}>;
+  criteria: SearchCriteria;
 
   constructor(private store: Store<AppStore>,
               private questionActions: QuestionActions) {
     this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
     this.unpublishedQuestionsObs = store.select(s => s.unpublishedQuestions);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
+    this.criteria = new SearchCriteria();
   }
 
   ngOnInit() {
-    this.store.dispatch(this.questionActions.loadQuestions({"startRow": 0, "pageSize": 25}));
+    this.store.dispatch(this.questionActions.loadQuestions({"startRow": 0, "pageSize": 25, criteria: this.criteria}));
     this.store.dispatch(this.questionActions.loadUnpublishedQuestions());
   }
 
@@ -43,9 +45,28 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
 
   pageChange(pageEvent: PageEvent) {
     let startRow = (pageEvent.pageIndex) * pageEvent.pageSize;
-    this.store.dispatch(this.questionActions.loadQuestions({"startRow": startRow, "pageSize": pageEvent.pageSize}));
+    this.store.dispatch(this.questionActions.loadQuestions({"startRow": startRow, "pageSize": pageEvent.pageSize, criteria: this.criteria}));
   }
-  searchCriteriaChange(criteria: SearchCriteria) {
-    this.store.dispatch(this.questionActions.loadQuestions({"startRow": 0, "pageSize": 25}));
+  categoryChanged(event: {categoryId: number, added: boolean}) {
+    if (!this.criteria.categoryIds) {
+      this.criteria.categoryIds = [];
+    }
+
+    if (event.added) {
+      this.criteria.categoryIds.push(event.categoryId);
+    }
+    else {
+      this.criteria.categoryIds = this.criteria.categoryIds.filter(c => c != event.categoryId);
+    }
+
+    this.searchCriteriaChange();
+  }
+  sortOrderChanged(sortOrder: string) {
+    this.criteria.sortOrder = sortOrder;
+    this.searchCriteriaChange();
+  }
+  searchCriteriaChange() {
+    //console.log(this.criteria);
+    this.store.dispatch(this.questionActions.loadQuestions({"startRow": 0, "pageSize": 25, criteria: this.criteria}));
   }
 }
