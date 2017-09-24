@@ -1,0 +1,41 @@
+/*Tabbing*/
+.tabbing{box-shadow: 0 2px 6px rgba(0,0,0,0.12) }
+.tabbing li{  font-family: 'hindsemibold';width: 50%; float: left; height: 57px; line-height: 57px; font-size: 16px; border-bottom: 3px solid transparent; text-align: center; transition: 0.3s ease-in-out; cursor: pointer;}
+.tab-content { display: none;}
+.tab-content.active { display: block;}
+
+.dark{ font-size: 16px; }
+#curentactive { text-align: center;}
+.optionbox{ margin-top: 30px; text-align: left;}
+@media screen and ( min-width:767px){
+  .optionbox{width: 765px; margin: 60px auto 0;}  
+}
+/*Question Status*/
+.questionstatus .tabbing li{ border:1px solid; position: relative; font-size:15px; font-family: 'hindregular'; line-height: 1.5;
+    padding: 5px 0;}
+.questionstatus .tabbing li:nth-child(2){margin-left: -1px}
+.questionstatus .tabbing li:after{ content: ""; position: absolute; left: 0; right: 0; margin: auto; bottom: 0; height: 5px; width: 0; transition: 0.3s ease-in-out}
+.questionstatus .tabbing li.active:after{ width: 100% }
+.questionstatus .tab-content > ul{ padding-top: 30px }
+.questionstatus .tab-content > ul > li{ padding: 20px 0; border-bottom: 1px solid; margin:0; }
+.questionstatus .tab-content > ul > li:last-child{ border-bottom: 0 }
+.questionstatus .tab-content > ul > li .col-sm-9, .questionstatus .tab-content > ul > li .col-sm-3{ padding-left:0; padding-right: 0 }
+.questionstatus .tab-content > ul > li p{ font-size: 16px }
+.questionstatus .dark{ font-family: 'hindsemibold'; display: inline-block; }
+.questionstatus .light{ display: inline-block; }
+.currentans li:nth-child(3){ margin-top: 10px }
+
+/*Reasons*/
+.reasons{ border:1px solid; border-radius: 5px; margin-top: 20px}
+.reasons .cont{padding:7px 20px 13px !important;}
+.reasons .reasonstitle{ font-size: 16px; font-family: 'hindbold' }
+.reasons p{ line-height: 1.2 }
+.resubmit{ border-radius: 0 0 5px 5px; padding: 14px 0; text-align: center; font-size: 16px; font-family: 'hindbold' }
+/*Reasons End*/
+
+@media screen and ( min-width:1000px){
+  .questionstatus .btn{ width: 190px }
+  .questionstatus .tabbing li{ font-size: 22px; line-height: 57px; padding: 0 }
+  .loginlink a.forgot:hover{border-bottom: 1px solid; }
+  .subscrib-cont{ min-height: 232px } 
+}
