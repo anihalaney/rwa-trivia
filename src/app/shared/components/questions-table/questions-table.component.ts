@@ -23,6 +23,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   @Output() approveClicked = new EventEmitter<Question>();
   @Output() pageChanged = new EventEmitter<PageEvent>();
   @Output() onCategoryChanged = new EventEmitter<{categoryId: number, added: boolean}>();
+  @Output() onTagChanged = new EventEmitter<{tag: string, added: boolean}>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
   
   sortOrder: string;
@@ -33,6 +34,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
 
   categoriesObs: Observable<Category[]>;
   categoryAggregation: {[key: number]: number};
+  tagsCount: {tag: string, count: number}[];
+  tagsChecked: {[key: string]: boolean};
   
   questionTableForm: FormGroup;
   
@@ -51,7 +54,11 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges() {
     this.questions = this.questionsSearchResults.questions;
     this.totalCount = this.questionsSearchResults.totalCount;
-    this.categoryAggregation = this.questionsSearchResults.categoryAggregation
+    this.categoryAggregation = this.questionsSearchResults.categoryAggregation;
+    this.tagsCount = this.questionsSearchResults.tagsCount;
+    if (this.questionsSearchResults.searchCriteria) {
+      this.tagsChecked = this.questionsSearchResults.searchCriteria.tags.reduce((map, tag) => {map[tag] = true; return map}, {});
+    }
     this.questionsSubject.next(this.questions);
   }
 
@@ -76,7 +83,10 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   categoryChanged(event: MdCheckboxChange, category: Category) {
     //console.log(event);
     //console.log(category);
-    this.onCategoryChanged.emit({categoryId: category.id, added: event.checked});
+    this.onCategoryChanged.emit({"categoryId": category.id, "added": event.checked});
+  }
+  tagChanged(event: MdCheckboxChange, tag: string) {
+    this.onTagChanged.emit({"tag": tag, "added": event.checked});
   }
   sortOrderChanged(event: MdSelectChange) {
     //console.log(event);

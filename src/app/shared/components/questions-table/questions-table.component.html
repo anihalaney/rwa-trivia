@@ -1,4 +1,4 @@
-<form *ngIf="questions && categoryAggregation" (ngSubmit)="onSubmit()" class="question-table-form" [formGroup]="questionTableForm" novalidate>
+<form *ngIf="questions && categoryAggregation && tagsCount" (ngSubmit)="onSubmit()" class="question-table-form" [formGroup]="questionTableForm" novalidate>
 <div fxLayout="row" fxLayoutAlign="space-between">
   <div class="filter-facet-column" fxLayout="column">
     <md-list dense>
@@ -15,26 +15,10 @@
       <md-divider></md-divider>
 
       <h3 mdSubheader>Tags</h3>
-      <md-list-item>
-        <md-checkbox>Javascript</md-checkbox>
-      </md-list-item>
-      <md-list-item>
-        <md-checkbox>Python</md-checkbox>
-      </md-list-item>
-      <md-list-item>
-        <md-checkbox>Java</md-checkbox>
-      </md-list-item>
-      <md-list-item>
-        <md-checkbox>C#</md-checkbox>
-      </md-list-item>
-      <md-list-item>
-        <md-checkbox>C++</md-checkbox>
-      </md-list-item>
-      <md-list-item>
-        <md-checkbox>Swift</md-checkbox>
-      </md-list-item>
-      <md-list-item>
-        <md-checkbox>Swift</md-checkbox>
+      <md-list-item *ngFor="let tagCount of tagsCount">
+        <md-checkbox 
+          [checked]="tagsChecked[tagCount.tag]"
+          (change)="tagChanged($event, tagCount.tag)">{{tagCount.tag}} ({{tagCount.count}})</md-checkbox>
       </md-list-item>
       <md-input-container>
         <input mdInput placeholder="Enter Tag">
@@ -59,7 +43,7 @@
 
   <div class="example-container mat-elevation-z8">
           
-    <div fxLayout="row" fxLayoutAlign="space-between center">
+    <div fxLayout="row" fxLayoutAlign="space-between center" class="sort-page-header">
       <md-select placeholder="Sort Order" (change)="sortOrderChanged($event)">
         <md-option [value]="'Category'">Category</md-option>
         <md-option [value]="'Status'">Status</md-option>

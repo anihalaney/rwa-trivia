@@ -61,6 +61,20 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
 
     this.searchCriteriaChange();
   }
+  tagChanged(event: {tag: string, added: boolean}) {
+    if (!this.criteria.tags) {
+      this.criteria.tags = [];
+    }
+
+    if (event.added) {
+      this.criteria.tags.push(event.tag);
+    }
+    else {
+      this.criteria.tags = this.criteria.tags.filter(c => c != event.tag);
+    }
+
+    this.searchCriteriaChange();
+  }
   sortOrderChanged(sortOrder: string) {
     this.criteria.sortOrder = sortOrder;
     this.searchCriteriaChange();

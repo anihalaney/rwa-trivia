@@ -6,5 +6,5 @@ export class SearchResults {
   totalCount: number;
   questions: Question[];
   categoryAggregation: {[key: number]: number};
-  
+  tagsCount: {tag: string, count: number}[];
 }

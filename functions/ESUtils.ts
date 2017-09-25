@@ -140,7 +140,13 @@ export class ESUtils {
       results.aggregations.category_counts.buckets.forEach(b => {
         searchResults.categoryAggregation[b.key] = b.doc_count;
       });
+      searchResults.tagsCount = [];
+      let tag_counts = (results.aggregations.tags_in_categories) ? results.aggregations.tags_in_categories.tag_counts : results.aggregations.tag_counts;
+      tag_counts.buckets.forEach(b => {
+        searchResults.tagsCount.push({"tag": b.key, "count": b.doc_count});
+      });
       searchResults.questions = results.hits.hits.map(hit => Question.getViewModelFromES(hit));
+      searchResults.searchCriteria = criteria;  // send the originating criteria back with the results
 
       return searchResults;
     });  
@@ -169,17 +175,36 @@ export class ESUtils {
       "aggregations" : {
         "category_counts" : {
           "terms": {"field": "categoryIds"}
+        },
+        "tag_counts" : {
+          "terms": {"field": "tags", "size": 10}
         }
       }  
     };
 
-    let filter = null;
     if (criteria) {
+      let filter = [];
+      let aggs = null;
       if (criteria.categoryIds && criteria.categoryIds.length > 0) {
-        filter = { "terms" : { "categoryIds" : criteria.categoryIds } };
+        filter.push({ "terms" : { "categoryIds" : criteria.categoryIds } });
+        aggs = { 
+                  "filter" : { 
+                    "terms": { "categoryIds": criteria.categoryIds } 
+                  },
+                  "aggs": {
+                    "tag_counts" : {
+                      "terms": {"field": "tags", "size": 10}
+                    }
+                  }
+                };
       }
-      if (filter) {
-        body["filter"] = filter;
+      if (criteria.tags && criteria.tags.length > 0) {
+        filter.push({ "terms" : { "tags" : criteria.tags } });
+      }
+      body["query"] = { "bool" : { "filter": filter } };
+
+      if (aggs) {
+        body["aggregations"]["tags_in_categories"] = aggs;
       }
 
       //sortOrder

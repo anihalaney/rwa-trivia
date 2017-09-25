@@ -8,6 +8,7 @@
                     [categoryDictionary]="categoryDictObs | async"
                     (pageChanged)="pageChange($event)"
                     (onCategoryChanged)="categoryChanged($event)"
+                    (onTagChanged)="tagChanged($event)"
                     (onSortOrderChanged)="sortOrderChanged($event)"
                     class="flex-container" 
                     fxLayoutWrap="wrap"
