@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
+import {ActionWithPayload} from './action-with-payload';
 
 import {User} from '../../../model';
 
@@ -7,7 +8,7 @@ import {User} from '../../../model';
 export class UserActions {
 
   static LOGOFF = 'LOGOFF';
-  logoff(): Action {
+  logoff(): ActionWithPayload<null> {
     return {
       type: UserActions.LOGOFF,
       payload: null
@@ -15,7 +16,7 @@ export class UserActions {
   }
 
   static LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-  loginSuccess(user: User): Action {
+  loginSuccess(user: User): ActionWithPayload<User> {
     return {
       type: UserActions.LOGIN_SUCCESS,
       payload: user
@@ -23,7 +24,7 @@ export class UserActions {
   }
 
   static ADD_USER_WITH_ROLES = 'ADD_USER_WITH_ROLES';
-  addUserWithRoles(user: User): Action {
+  addUserWithRoles(user: User): ActionWithPayload<User> {
     return {
       type: UserActions.ADD_USER_WITH_ROLES,
       payload: user

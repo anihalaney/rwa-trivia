@@ -15,5 +15,6 @@ export const CONFIG: IConfig = {
       databaseURL: "https://rwa-trivia.firebaseio.com",
       storageBucket: "rwa-trivia.appspot.com",
       messagingSenderId: "479350787602"
-  }
+  },
+  "functionsUrl": "https://us-central1-rwa-trivia.cloudfunctions.net"
 };

@@ -2,6 +2,7 @@
   "name": "functions",
   "description": "Cloud Functions for Firebase",
   "dependencies": {
+    "body-parser": "1.18.2",
     "cookie-parser": "1.4.3",
     "cors": "2.8.3",
     "csv": "1.1.1",

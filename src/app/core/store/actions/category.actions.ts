@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
+import {ActionWithPayload} from './action-with-payload';
 
 import {Category} from '../../../model';
 
@@ -7,14 +8,15 @@ import {Category} from '../../../model';
 export class CategoryActions {
 
   static LOAD_CATEGORIES = 'LOAD_CATEGORIES';
-  loadCategories(): Action {
+  loadCategories(): ActionWithPayload<null> {
     return {
-      type: CategoryActions.LOAD_CATEGORIES
+      type: CategoryActions.LOAD_CATEGORIES,
+      payload: null
     };
   }
 
   static LOAD_CATEGORIES_SUCCESS = 'LOAD_CATEGORIES_SUCCESS';
-  loadCategoriesSuccess(categories: Category[]): Action {
+  loadCategoriesSuccess(categories: Category[]): ActionWithPayload<Category[]> {
     return {
       type: CategoryActions.LOAD_CATEGORIES_SUCCESS,
       payload: categories

@@ -1,9 +1,12 @@
 import { QuestionsComponent } from './questions/questions.component';
+import { QuestionsTableComponent } from './questions-table/questions-table.component';
 
 export {
-    QuestionsComponent
+    QuestionsComponent, 
+    QuestionsTableComponent
 };
 
 export default [
-    QuestionsComponent
+    QuestionsComponent,
+    QuestionsTableComponent
 ];

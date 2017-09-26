@@ -1,19 +1,18 @@
-import { User, Category, Question, Game } from '../../model';
+import { User, Category, Question, Game, SearchResults } from '../../model';
 
 import { user, categories, categoryDictionary, tags, 
-         questions, unpublishedQuestions, sampleQuestions, questionSaveStatus, userQuestions,
+         questionsSearchResults, unpublishedQuestions, sampleQuestions, questionSaveStatus, userQuestions,
          loginRedirectUrl, 
          currentGame, newGameId, currentGameQuestion, activeGames } from './reducers';
 
-import { combineReducers } from '@ngrx/store';
-import { compose } from '@ngrx/core/compose';
+import { compose, ActionReducerMap } from '@ngrx/store';
 
 export interface AppStore {
   user: User;
   categories: Category[];
   categoryDictionary: {[key: number]: Category};
   tags: string[];
-  questions: Question[];
+  questionsSearchResults: SearchResults;
   unpublishedQuestions: Question[];
   userQuestions: Question[];
   sampleQuestions: Question[];
@@ -25,12 +24,12 @@ export interface AppStore {
   activeGames: string[];
 }
 
-export default compose(combineReducers)({
+export const reducer: ActionReducerMap<AppStore> = {
   user: user,
   categories: categories,
   categoryDictionary: categoryDictionary,
   tags: tags,
-  questions: questions,
+  questionsSearchResults: questionsSearchResults,
   unpublishedQuestions: unpublishedQuestions,
   userQuestions: userQuestions,
   sampleQuestions: sampleQuestions,
@@ -40,4 +39,4 @@ export default compose(combineReducers)({
   newGameId: newGameId,
   currentGameQuestion: currentGameQuestion,
   activeGames: activeGames
-});
+};

@@ -1,4 +1,4 @@
-import { Game, Question, Category } from '../src/app/model';
+import { Game, Question, Category, SearchResults, SearchCriteria } from '../src/app/model';
 
 const fs = require('fs');
 const path = require('path');
@@ -128,7 +128,31 @@ export class ESUtils {
     });   
   }
 
-  static getRandomQuestionOfTheDay(): Promise<any> { 
+  static getQuestions(start: number, size: number, criteria: SearchCriteria): Promise<SearchResults> { 
+    let date = new Date();
+    return this.getSearchResults(this.QUESTIONS_INDEX, start, size, criteria).then((results)=>{
+      //convert hits to Questions
+      //console.log(results);
+
+      let searchResults: SearchResults = new SearchResults();
+      searchResults.totalCount = results.hits.total; 
+      searchResults.categoryAggregation = {};
+      results.aggregations.category_counts.buckets.forEach(b => {
+        searchResults.categoryAggregation[b.key] = b.doc_count;
+      });
+      searchResults.tagsCount = [];
+      let tag_counts = (results.aggregations.tags_in_categories) ? results.aggregations.tags_in_categories.tag_counts : results.aggregations.tag_counts;
+      tag_counts.buckets.forEach(b => {
+        searchResults.tagsCount.push({"tag": b.key, "count": b.doc_count});
+      });
+      searchResults.questions = results.hits.hits.map(hit => Question.getViewModelFromES(hit));
+      searchResults.searchCriteria = criteria;  // send the originating criteria back with the results
+
+      return searchResults;
+    });  
+  }
+
+  static getRandomQuestionOfTheDay(): Promise<Question> { 
     let date = new Date();
     let seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
     return this.getRandomItems(this.QUESTIONS_INDEX, 1, seed).then((hits)=>{
@@ -137,11 +161,79 @@ export class ESUtils {
     });  
   }
 
-  static getRandomGameQuestion(): Promise<any> { 
+  static getRandomGameQuestion(): Promise<Question> { 
     return this.getRandomQuestionES(this.QUESTIONS_INDEX, 1, "", [2, 5, 7, 8], [], []).then((hits)=>{
       //convert hit to Question
       return Question.getViewModelFromES(hits[0]);
     });  
+  }
+
+  static getSearchResults(index: string, start: number, size: number, criteria: SearchCriteria): Promise<any>
+  {
+    let client: Elasticsearch.Client = this.getElasticSearchClient();
+    let body = {
+      "aggregations" : {
+        "category_counts" : {
+          "terms": {"field": "categoryIds"}
+        },
+        "tag_counts" : {
+          "terms": {"field": "tags", "size": 10}
+        }
+      }  
+    };
+
+    if (criteria) {
+      let catFilter = null;
+      let tagFilter = null;
+      let aggs = null;
+      if (criteria.categoryIds && criteria.categoryIds.length > 0) {
+        catFilter = { "terms" : { "categoryIds" : criteria.categoryIds } };
+        aggs = { 
+                  "filter" : { 
+                    "terms": { "categoryIds": criteria.categoryIds } 
+                  },
+                  "aggs": {
+                    "tag_counts" : {
+                      "terms": {"field": "tags", "size": 10}
+                    }
+                  }
+                };
+      }
+      if (catFilter) {
+        body["filter"] = catFilter;
+      }
+      if (criteria.tags && criteria.tags.length > 0) {
+        tagFilter = { "terms" : { "tags" : criteria.tags } };
+        body["query"] = { "bool" : { "filter": tagFilter } };
+      }
+
+      if (aggs) {
+        body["aggregations"]["tags_in_categories"] = aggs;
+      }
+
+      //sortOrder
+      switch (criteria.sortOrder) {
+        case "Category":
+          body["sort"] = [{ "categoryIds" : {"order" : "asc"} }];
+          break;
+        case "Status":
+          body["sort"] = [{ "status" : {"order" : "asc"} }];
+          break;
+      }
+    }
+
+
+    return client.search({
+      "index": index,
+      "from": start,
+      "size": size,
+      "body": body
+    }).then(function (body) {
+      return(body);
+    }, function (error) {
+      console.trace(error.message);
+      throw(error);
+    });
   }
 
   static getRandomItems(index: string, size: number, seed: string): Promise<any>

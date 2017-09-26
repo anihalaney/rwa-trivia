@@ -31,7 +31,7 @@ export class Question {
 
   static getViewModelFromES(hit: any): Question 
   {
-    //console.log(dbModel);
+    //console.log(hit);
     let question: Question = new Question();
 
     question.id = hit["_id"];
@@ -44,7 +44,6 @@ export class Question {
     question.status = source.status;
     question.tags = source.tags;
     
-    //console.log(game);
     return question;
   }
 

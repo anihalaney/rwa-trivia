@@ -4,13 +4,17 @@
 
   <md-tab-group>
     <md-tab label="Published">
-      <question-list [questions]="questionsObs | async" 
+      <question-table [questionsSearchResults]="(questionsSearchResultsObs | async)" 
                     [categoryDictionary]="categoryDictObs | async"
+                    (pageChanged)="pageChange($event)"
+                    (onCategoryChanged)="categoryChanged($event)"
+                    (onTagChanged)="tagChanged($event)"
+                    (onSortOrderChanged)="sortOrderChanged($event)"
                     class="flex-container" 
                     fxLayoutWrap="wrap"
                     fxLayout="row"
                     fxLayoutAlign="center" fxLayoutAlign.xs="start">
-      </question-list>
+      </question-table>
     </md-tab>
     <md-tab label="Unpublished">
       <question-list [questions]="unpublishedQuestionsObs | async" 

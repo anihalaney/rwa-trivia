@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs/Observable';
 import {Action} from '@ngrx/store';
 
-import { TagActions } from '../actions';
+import { ActionWithPayload, TagActions } from '../actions';
 
-export const tags = (state: any = [], action: Action): string[] => {
+export function tags(state: any = [], action: ActionWithPayload<string[]>): string[] {
   switch (action.type) {
     case TagActions.LOAD_TAGS_SUCCESS:
       return action.payload;

@@ -1,4 +1,5 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -10,13 +11,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { CONFIG } from '../../environments/environment';
 
-import { Utils, AuthenticationService, AuthGuard,
+import { Utils, AuthenticationService, AuthGuard, AuthInterceptor,
          CategoryService, TagService, QuestionService,
          GameService } from './services';
 
 import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
 import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects } from './store/effects';
-import { default as reducer } from './store/app-store';
+import { reducer } from './store/app-store';
 
 import { LoginComponent, PasswordAuthComponent } from './components';
 
@@ -39,17 +40,19 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AngularFireAuthModule,
     
     //store
-    StoreModule.provideStore(reducer),
-    StoreDevtoolsModule.instrumentOnlyWithExtension({
+    StoreModule.forRoot(reducer),
+    StoreDevtoolsModule.instrument({
       maxAge: 20
     }),
 
     //ngrx effects
-    EffectsModule.run(UserEffects),
-    EffectsModule.run(CategoryEffects),
-    EffectsModule.run(TagEffects),
-    EffectsModule.run(QuestionEffects),
-    EffectsModule.run(GameEffects),
+    EffectsModule.forFeature([
+      UserEffects,
+      CategoryEffects,
+      TagEffects,
+      QuestionEffects,
+      GameEffects
+    ]),
 
     //rwa module
     SharedModule
@@ -62,8 +65,13 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions, 
-    UIStateActions, GameActions
+    UIStateActions, GameActions,
 
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+    }
   ]
 })
 export class CoreModule { };

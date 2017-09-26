@@ -84,4 +84,8 @@ export class AuthenticationService {
     return user;
   };
 
+  get authorizationHeader(): string {
+    return (this.user) ? 'Bearer ' + this.user.idToken : null;
+  }
+
 }
