@@ -183,10 +183,11 @@ export class ESUtils {
     };
 
     if (criteria) {
-      let filter = [];
+      let catFilter = null;
+      let tagFilter = null;
       let aggs = null;
       if (criteria.categoryIds && criteria.categoryIds.length > 0) {
-        filter.push({ "terms" : { "categoryIds" : criteria.categoryIds } });
+        catFilter = { "terms" : { "categoryIds" : criteria.categoryIds } };
         aggs = { 
                   "filter" : { 
                     "terms": { "categoryIds": criteria.categoryIds } 
@@ -198,10 +199,13 @@ export class ESUtils {
                   }
                 };
       }
-      if (criteria.tags && criteria.tags.length > 0) {
-        filter.push({ "terms" : { "tags" : criteria.tags } });
+      if (catFilter) {
+        body["filter"] = catFilter;
       }
-      body["query"] = { "bool" : { "filter": filter } };
+      if (criteria.tags && criteria.tags.length > 0) {
+        tagFilter = { "terms" : { "tags" : criteria.tags } };
+        body["query"] = { "bool" : { "filter": tagFilter } };
+      }
 
       if (aggs) {
         body["aggregations"]["tags_in_categories"] = aggs;
