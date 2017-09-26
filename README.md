@@ -38,6 +38,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 13: Elasticsearch on Google Cloud with Firebase functions](https://blog.realworldfullstack.io/real-world-app-part-13-elasticsearch-on-google-cloud-with-firebase-functions-8a24fa2b95ed)
 
+[Part 14: Faceted search with Elasticsearch and Angular Material data-table](https://blog.realworldfullstack.io/real-world-app-part-14-faceted-search-with-elasticsearch-and-angular-material-data-table-d90ebaf2ee4b)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)
