@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
-import {DataSource} from '@angular/cdk';
+import {DataSource} from '@angular/cdk/table';
 import {PageEvent, MdCheckboxChange, MdSelectChange} from '@angular/material';
 import { Store } from '@ngrx/store';
 
