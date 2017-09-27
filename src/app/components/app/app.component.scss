@@ -29,6 +29,12 @@ nav .card{ border-bottom: 1px solid }
 }
 /*side nav - end*/
 
+/* Footer */
+.signup, .logout, .login {
+  cursor: pointer;
+}
+/* Footer - end */
+
 md-sidenav-container, .my-content {
   margin: 0;
   width: 100%;

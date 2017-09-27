@@ -10,17 +10,19 @@
           </div>
           <div class="headerdrop">
             <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>                        
-            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Login</span></a>                        
+            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>                        
           </div>
         </div>
       </div>
     </div>
   </section>
   <div class="clear"></div>
-</header><!--Header End-->
+</header>
+<!--Header End-->
+
 <!-- Page Layout -->
 <div class="container pagelayout">
-  <nav id="nav" tabindex="0">
+  <nav *ngIf="user" id="nav" tabindex="0">
     <div class="smartphone-menu-trigger" id="nav-icon1" >
       <span></span>
       <span></span>
@@ -33,7 +35,28 @@
     <router-outlet></router-outlet>
   </main>
 </div>
+<!-- Page Layout End -->
 
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <a href="/" title="Home">Home</a>
+        <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
+        <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
+        <ng-container *ngIf="!user">
+          <!--<a class="signup" href="#" title="Sign Up">Sign Up</a>-->
+          <a class="logout" (click)="login()" title="Sign in">Sign in</a>
+        </ng-container>
+        <a *ngIf="user" class="login" (click)="logout()" title="Logout">Logout</a>
+      </div>
+      <div class="col-sm-6 col-xs-12 copyright textrigth">bitWiser © 2017. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+<!-- Footer end -->
+   
 <md-sidenav-container *ngIf="false">
   <md-sidenav #sidenav class="sidenav">
     <md-nav-list>
