@@ -41,8 +41,6 @@ export class AppComponent implements OnInit, OnDestroy {
       if (user)
       {
         console.log(user);
-        //Load active Games
-        this.store.dispatch(this.gameActions.getActiveGames(user));
         let url: string;
         this.store.take(1).subscribe(s => url = s.loginRedirectUrl);
         if (url)
@@ -58,7 +56,6 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit () {
     this.store.dispatch(this.categoryActions.loadCategories());
     this.store.dispatch(this.tagActions.loadTags());
-    //this.store.dispatch(this.questionActions.loadQuestions());
   }
 
   ngOnDestroy() {

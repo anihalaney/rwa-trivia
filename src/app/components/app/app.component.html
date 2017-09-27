@@ -9,7 +9,8 @@
             <a href="#"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>                        
           </div>
           <div class="headerdrop">
-            <a href="#" class="logout"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>                        
+            <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>                        
+            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Login</span></a>                        
           </div>
         </div>
       </div>
@@ -17,8 +18,23 @@
   </section>
   <div class="clear"></div>
 </header><!--Header End-->
+<!-- Page Layout -->
+<div class="container pagelayout">
+  <nav id="nav" tabindex="0">
+    <div class="smartphone-menu-trigger" id="nav-icon1" >
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <side-nav></side-nav>
+  </nav>
 
-<md-sidenav-container>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+<md-sidenav-container *ngIf="false">
   <md-sidenav #sidenav class="sidenav">
     <md-nav-list>
       <a md-list-item (click)="sidenav.close()" [routerLink]="['/']">

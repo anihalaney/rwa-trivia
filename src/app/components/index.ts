@@ -7,6 +7,11 @@ import { LeaderboardComponent } from './leaderboard/leaderboard.component';
 import { BlogComponent } from './blog/blog.component';
 import { RealtimeStatsComponent } from './realtime-stats/realtime-stats.component';
 
+import { SideNavComponent } from './side-nav/side-nav.component';
+import { ProfileCardComponent } from './profile-card/profile-card.component';
+import { RecentGamesComponent } from './recent-games/recent-games.component';
+import { UserStatsCardComponent } from './user-stats-card/user-stats-card.component';
+
 export {
     AppComponent,
     DashboardComponent,
@@ -15,7 +20,11 @@ export {
     NewsletterComponent,
     LeaderboardComponent,
     BlogComponent,
-    RealtimeStatsComponent
+    RealtimeStatsComponent,
+    SideNavComponent,
+    ProfileCardComponent,
+    RecentGamesComponent,
+    UserStatsCardComponent
 };
 
 export default [
@@ -26,5 +35,9 @@ export default [
     NewsletterComponent,
     LeaderboardComponent,
     BlogComponent,
-    RealtimeStatsComponent
+    RealtimeStatsComponent,
+    SideNavComponent,
+    ProfileCardComponent,
+    RecentGamesComponent,
+    UserStatsCardComponent
 ];

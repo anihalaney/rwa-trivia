@@ -1,268 +1,96 @@
-
-  <!-- Page Layout -->
-  <div class="container pagelayout">
-    <nav id="nav" tabindex="0">
-      <div class="smartphone-menu-trigger" id="nav-icon1" >
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <a href="#" class="user card">
-        <img src="/assets/images/avatar.jpg" alt="user" />
-        <span class="username">
-          <span class="name">Dantiel Chi</span>
-          <span class="userstatus">Beginner</span>
-          <span class="userlocation"><span class="sprite mapicon"></span>San Fransisco, CA</span>
-        </span>
-      </a>
-
-      <div class="card recentlygames">
-        <h2>Recently Completed Games</h2>
-        <ul>
-          <li>
-            <a href="#">
-              <div class="sprite architicon"></div>
-              <div class="datebox">
-                <div class="light">Yesterday</div>
-                <div class="dark">In Architecture</div>
-              </div>
-              <div class="scorebox align-right">
-                <div class="light">Score 10</div>
-                <div class="dark">Won</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <div class="sprite rogrammingicon"></div>
-              <div class="datebox">
-                <div class="light">1st May, 2017</div>
-                <div class="dark">In Programming</div>
-              </div>
-              <div class="scorebox align-right">
-                <div class="light">Score 8</div>
-                <div class="dark">Lost</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <div class="sprite rogrammingicon"></div>
-              <div class="datebox">
-                <div class="light">3rd May, 2017</div>
-                <div class="dark">In Architecture</div>
-              </div>
-              <div class="scorebox align-right">
-                <div class="light">Score 6</div>
-                <div class="dark">Lost</div>
-              </div>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <div class="sprite architicon"></div>
-              <div class="datebox">
-                <div class="light">10th May, 2017</div>
-                <div class="dark">In Database</div>
-              </div>
-              <div class="scorebox align-right">
-                <div class="light">Score 10</div>
-                <div class="dark">Won</div>
-              </div>
-            </a>
-          </li>
-        </ul>
-        <a class="viewall" href="#" title="view all">view all<span class="a-arrow"></span></a>
-      </div>
-
-      <div class="card navview">
-        <ul class="tabbing clearfix">
-          <li class="active" data-tab="statis">Statis View</li>
-          <li data-tab="graph">Graph View</li>
-        </ul>
-        <ul id="statis" class="tab-content active">
-          <li>
-            <a href="#">
-              <div class="sprite playedicon"></div>
-              <div class="viewtext">Game Played</div>
-              <div class="viewcount align-right">18</div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#">
-              <div class="sprite topicsicon"></div>
-              <div class="viewtext">Topics</div>
-              <div class="viewcount align-right">10</div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#">
-              <div class="sprite winsicon"></div>
-              <div class="viewtext">Wins</div>
-              <div class="viewcount align-right">15</div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#">
-              <div class="sprite badgesicon"></div>
-              <div class="viewtext">Badges</div>
-              <div class="viewcount align-right">02</div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#">
-              <div class="sprite losessicon"></div>
-              <div class="viewtext">Losess</div>
-              <div class="viewcount align-right">01</div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#">
-              <div class="sprite avgicon"></div>
-              <div class="viewtext">Avg. answer time</div>
-              <div class="viewcount align-right">09
-                <div class="sec">sec</div>
-              </div>
-            </a>
-          </li>
-
-          <li>
-            <a href="#">
-              <div class="sprite contributicon"></div>
-              <div class="viewtext">Contribution</div>
-              <div class="viewcount align-right">05</div>
-            </a>
-          </li>
-        </ul>          
-
-        <div id="graph" class="tab-content">
-          <img style="display: block; margin:0 auto" src="/assets/images/chart.jpg" alt="chart" />          
-
-        </div>
-
-      </div>
-
-      <div class="card playwith">
-        <a href="#">
-          <span class="sprite playwithicon"></span>
-          <span class="playtext">Play with your<span>Friends</span></span>
-        </a>
-      </div>
-
-      <div class="card socialicon">
-        <a href="#" class="sprite facebookicon"></a>
-        <a href="#" class="sprite twiticon"></a>
-        <a href="#" class="sprite linkdenicon"></a>
-      </div>
-      <div class="card playwith visible-xs">
-        <a class="playtext" href="#"><span>Blog</span></a>
-      </div>
-      <div class="card playwith visible-xs">
-        <a class="playtext" href="#"><span>System Stats</span></a>
-      </div>
-    </nav>
-    <main>
-      <div class="pageinner">
-        <div class="row">
-          <div class="pageheading col-md-6 col-xs-12 hidden-xs">Dashboard</div>
-          <div class="col-md-6 col-xs-12 align-right"><a [routerLink]="['/game-play']" class="startgame">Start New Game</a></div>
-        </div>
-        <!-- Currently active games -->
-        <section id="curentactive" class="card">
-          <div class="h1block">
-            <h1><span class="sprite sunicon"></span>Good Morning Daniel!</h1>
-            <p>Nice to see you again, are you ready for a new challenge</p>
-          </div>
-          <div id="currentgame">
-            <div class="row">
-              <div class=" col-sm-9 col-xs-12"><h2>Currently active games</h2></div>
-              <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
-            </div>            
-            <ul class="row">
-                <li *ngFor="let game of activeGamesObs | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-                  <game-card [game]="game"></game-card>
-                </li>
-              <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
-                <a href="#" class="innerli textcenter">
-                 <div class="viewallbtn">view all</div>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </section>  
-        <!-- Currently active games end -->
-
-        <!-- Invitation to play games -->
-        <section class="card">
-          <div class="row">
-            <div class="col-sm-9 col-xs-12"><h2>Invitation to play games <span>3 from friends & 1 from random player</span></h2></div>
-            <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
-          </div>
-          <ul class="invitationlist">
-            <li *ngFor="let game of gameInvites">
-              <game-invite [game]="game"></game-invite>
-            </li>
-            <li class="visible-xs textcenter">
-              <a href="#" >
-                 <div class="viewallbtn">view all</div>
-              </a>
-            </li>
-          </ul> 
-        </section>    
-        <!-- Invitation to play games end   -->
-
-        <!-- Category leaderboard -->
-        <section class="card">
-          <div class="row">
-            <div class="col-sm-9 col-xs-12"><h2>Category leaderboard</h2></div>
-            <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
-          </div>
-          <leaderboard></leaderboard>
-        </section>
-        <!-- Category leaderboard end-->
-
-        <div class="row">
-          <!-- Question of the day -->
-          <div class="col-lg-7 col-md-12 col-sm-12 ">
-            <question [question]="questionOfTheDayObs | async"></question>
-          </div>
-          <!-- Question of the day end -->
-
-          <!-- Subscribe -->
-          <div class="col-lg-5 col-md-12 col-sm-12 ">
-            <newsletter></newsletter>
-          </div>
-          <!-- Subscribe end -->
-        </div>
-
-        <!-- <blog -->
-        <div class="row blog hidden-xs">
-          <div class="col-md-4 col-xs-12">
-            <blog [blogId]="1"></blog>
-          </div>
-
-          <div class="col-md-4 col-xs-12">
-            <blog [blogId]="2"></blog>
-          </div>
-
-          <div class="col-md-4 col-xs-12 hidden-md">
-            <blog [blogId]="3 "></blog>
-          </div>
-        </div>
-        <!-- blog end -->
-
-        <!-- Real-time System Stats -->
-        <div class="card hidden-xs">
-          <realtime-stats></realtime-stats>
-        </div>
-        <!-- Real-time System Stats end -->
-
-      </div>        
-    </main>
+<div class="pageinner">
+  <div class="row">
+    <div class="pageheading col-md-6 col-xs-12 hidden-xs">Dashboard</div>
+    <div class="col-md-6 col-xs-12 align-right"><a [routerLink]="['/game-play']" class="startgame">Start New Game</a></div>
   </div>
-  <!-- Page Layout end -->
+  <!-- Currently active games -->
+  <section *ngIf="user" id="curentactive" class="card">
+    <div class="h1block">
+      <h1><span class="sprite sunicon"></span>Good Morning {{user.displayName}}!</h1>
+      <p>Nice to see you again, are you ready for a new challenge</p>
+    </div>
+    <div id="currentgame">
+      <div class="row">
+        <div class=" col-sm-9 col-xs-12"><h2>Currently active games</h2></div>
+        <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+      </div>            
+      <ul class="row">
+          <li *ngFor="let game of activeGamesObs | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            <game-card [game]="game"></game-card>
+          </li>
+        <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
+          <a href="#" class="innerli textcenter">
+            <div class="viewallbtn">view all</div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </section>  
+  <!-- Currently active games end -->
+
+  <!-- Invitation to play games -->
+  <section *ngIf="user" class="card">
+    <div class="row">
+      <div class="col-sm-9 col-xs-12"><h2>Invitation to play games <span>3 from friends & 1 from random player</span></h2></div>
+      <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+    </div>
+    <ul class="invitationlist">
+      <li *ngFor="let game of gameInvites">
+        <game-invite [game]="game"></game-invite>
+      </li>
+      <li class="visible-xs textcenter">
+        <a href="#" >
+            <div class="viewallbtn">view all</div>
+        </a>
+      </li>
+    </ul> 
+  </section>    
+  <!-- Invitation to play games end   -->
+
+  <div class="row">
+    <!-- Question of the day -->
+    <div class="col-lg-7 col-md-12 col-sm-12 ">
+      <question [question]="questionOfTheDayObs | async"></question>
+    </div>
+    <!-- Question of the day end -->
+
+    <!-- Subscribe -->
+    <div class="col-lg-5 col-md-12 col-sm-12 ">
+      <newsletter></newsletter>
+    </div>
+    <!-- Subscribe end -->
+  </div>
+  
+  <!-- Category leaderboard -->
+  <section class="card">
+    <div class="row">
+      <div class="col-sm-9 col-xs-12"><h2>Category leaderboard</h2></div>
+      <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+    </div>
+    <leaderboard></leaderboard>
+  </section>
+  <!-- Category leaderboard end-->
+
+  <!-- <blog -->
+  <div class="row blog hidden-xs">
+    <div class="col-md-4 col-xs-12">
+      <blog [blogId]="1"></blog>
+    </div>
+
+    <div class="col-md-4 col-xs-12">
+      <blog [blogId]="2"></blog>
+    </div>
+
+    <div class="col-md-4 col-xs-12 hidden-md">
+      <blog [blogId]="3 "></blog>
+    </div>
+  </div>
+  <!-- blog end -->
+
+  <!-- Real-time System Stats -->
+  <div class="card hidden-xs">
+    <realtime-stats></realtime-stats>
+  </div>
+  <!-- Real-time System Stats end -->
+
+</div>        

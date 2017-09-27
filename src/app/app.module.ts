@@ -11,12 +11,14 @@ import { MyQuestionsModule } from  './myQuestions/my-questions.module';
 import { GamePlayModule } from  './game-play/game-play.module';
 
 import { AppComponent, DashboardComponent, GameCardComponent, GameInviteComponent,
-  NewsletterComponent, LeaderboardComponent, BlogComponent, RealtimeStatsComponent } from './components';
+  NewsletterComponent, LeaderboardComponent, BlogComponent, RealtimeStatsComponent,
+  SideNavComponent, ProfileCardComponent, RecentGamesComponent, UserStatsCardComponent } from './components';
 
 @NgModule({
   declarations: [
     AppComponent, DashboardComponent, GameCardComponent, GameInviteComponent,
-    NewsletterComponent, LeaderboardComponent, BlogComponent, RealtimeStatsComponent
+    NewsletterComponent, LeaderboardComponent, BlogComponent, RealtimeStatsComponent,
+    SideNavComponent, ProfileCardComponent, RecentGamesComponent, UserStatsCardComponent
   ],
   imports: [
     BrowserModule,
