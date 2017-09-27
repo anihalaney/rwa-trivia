@@ -112,7 +112,7 @@ export class GameActions {
   }
 
   static GET_ACTIVE_GAMES_SUCCESS = 'GET_ACTIVE_GAMES_SUCCESS';
-  getActiveGamesSuccess(games: string[]): ActionWithPayload<string[]> {
+  getActiveGamesSuccess(games: Game[]): ActionWithPayload<Game[]> {
     return {
       type: GameActions.GET_ACTIVE_GAMES_SUCCESS,
       payload: games

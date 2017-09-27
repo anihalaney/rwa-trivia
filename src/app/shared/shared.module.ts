@@ -7,10 +7,11 @@ import { CdkTableModule }     from '@angular/cdk/table';
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { QuestionsComponent, QuestionsTableComponent } from './components';
+import { QuestionComponent, QuestionsComponent, QuestionsTableComponent } from './components';
 
 @NgModule({
   declarations: [
+    QuestionComponent,
     QuestionsComponent,
     QuestionsTableComponent
   ],
@@ -35,7 +36,7 @@ import { QuestionsComponent, QuestionsTableComponent } from './components';
   ],
   providers: [ 
   ],                                                                      
-  exports:  [ QuestionsComponent, QuestionsTableComponent,
+  exports:  [ QuestionComponent, QuestionsComponent, QuestionsTableComponent,
               CommonModule, HttpClientModule, ReactiveFormsModule,
               FlexLayoutModule, 
               SharedMaterialModule, CdkTableModule ]

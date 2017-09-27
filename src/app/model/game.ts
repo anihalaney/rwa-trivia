@@ -14,11 +14,13 @@ export class Game {
   private _playerIds: string[];
   public gameOver: boolean;
   public playerQnAs: PlayerQnA[];
+  public nextTurnPlayerId: string;
 
-  constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean) {
+  constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean, nextTurnPlayerId?: string) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
+    this.nextTurnPlayerId = nextTurnPlayerId ? nextTurnPlayerId : player1UUId;
     this.gameOver = (gameOver) ? true : false;
     this.playerQnAs = [];
     if (playerQnAs)
@@ -87,7 +89,10 @@ export class Game {
   {
     //console.log(dbModel);
     let game: Game = new Game(dbModel["gameOptions"], dbModel["playerIds"][0], dbModel["$key"], 
-                              dbModel["playerQnA"], dbModel["gameOver"]);
+                              dbModel["playerQnA"], dbModel["gameOver"], dbModel["nextTurnPlayerId"]);
+    if (dbModel["playerIds"].length > 0) {
+      game.addPlayer(dbModel["playerIds"][1]);  //2 players
+    }
     //console.log(game);
     return game;
   }

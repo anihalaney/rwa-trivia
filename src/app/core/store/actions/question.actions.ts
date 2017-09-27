@@ -55,19 +55,19 @@ export class QuestionActions {
     };
   }
 
-  static LOAD_SAMPLE_QUESTIONS = 'LOAD_SAMPLE_QUESTIONS';
-  loadSampleQuestions(): ActionWithPayload<null> {
+  static GET_QUESTION_OF_THE_DAY = 'GET_QUESTION_OF_THE_DAY';
+  getQuestionOfTheDay(): ActionWithPayload<null> {
     return {
-      type: QuestionActions.LOAD_SAMPLE_QUESTIONS,
+      type: QuestionActions.GET_QUESTION_OF_THE_DAY,
       payload: null
     };
   }
 
-  static LOAD_SAMPLE_QUESTIONS_SUCCESS = 'LOAD_SAMPLE_QUESTIONS_SUCCESS';
-  loadSampleQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+  static GET_QUESTION_OF_THE_DAY_SUCCESS = 'GET_QUESTION_OF_THE_DAY_SUCCESS';
+  getQuestionOfTheDaySuccess(question: Question): ActionWithPayload<Question> {
     return {
-      type: QuestionActions.LOAD_SAMPLE_QUESTIONS_SUCCESS,
-      payload: questions
+      type: QuestionActions.GET_QUESTION_OF_THE_DAY_SUCCESS,
+      payload: question
     };
   }
 

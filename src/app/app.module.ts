@@ -10,11 +10,11 @@ import { RoutingModule } from  './routing/routing.module';
 import { MyQuestionsModule } from  './myQuestions/my-questions.module';
 import { GamePlayModule } from  './game-play/game-play.module';
 
-import { AppComponent, DashboardComponent } from './components';
+import { AppComponent, DashboardComponent, GameCardComponent, GameInviteComponent } from './components';
 
 @NgModule({
   declarations: [
-    AppComponent, DashboardComponent
+    AppComponent, DashboardComponent, GameCardComponent, GameInviteComponent
   ],
   imports: [
     BrowserModule,

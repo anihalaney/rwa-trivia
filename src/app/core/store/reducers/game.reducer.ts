@@ -45,7 +45,7 @@ export function newGameId (state: any = "", action: ActionWithPayload<string>): 
   }
 };
 
-export function activeGames (state: any = [], action: ActionWithPayload<string[]>): string[] {
+export function activeGames (state: any = [], action: ActionWithPayload<Game[]>): Game[] {
   switch (action.type) {
     case GameActions.GET_ACTIVE_GAMES_SUCCESS:
       return action.payload;

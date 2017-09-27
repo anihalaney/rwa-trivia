@@ -34,9 +34,9 @@ export class QuestionEffects {
 
     @Effect() 
     loadSampleQuestions$ = this.actions$
-        .ofType(QuestionActions.LOAD_SAMPLE_QUESTIONS)
-        .switchMap(() => this.svc.getSampleQuestions())
-        .map((questions: Question[]) => this.questionActions.loadSampleQuestionsSuccess(questions));
+        .ofType(QuestionActions.GET_QUESTION_OF_THE_DAY)
+        .switchMap(() => this.svc.getQuestionOfTheDay())
+        .map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question));
 
     @Effect() 
     addQuestion$ = this.actions$

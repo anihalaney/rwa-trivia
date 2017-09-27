@@ -18,12 +18,10 @@ export class QuestionService {
               private http: HttpClient) { 
   }
 
-  getSampleQuestions(): Observable<Question[]> {
-    return this.db.list('/questions/published', {
-      query: {
-        limitToLast: 4,
-      }
-    });
+  getQuestionOfTheDay(): Observable<Question> {
+    let url: string = CONFIG.functionsUrl + "/app/getQuestionOfTheDay";
+
+    return this.http.get<Question>(url);
   }
 
   getUserQuestions(user: User): Observable<Question[]> {

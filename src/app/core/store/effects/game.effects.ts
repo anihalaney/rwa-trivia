@@ -56,5 +56,5 @@ export class GameEffects {
         .ofType(GameActions.GET_ACTIVE_GAMES)
         .map((action: ActionWithPayload<User>) => action.payload)
         .switchMap((payload: User) => this.svc.getActiveGames(payload))
-        .map((games: string[]) => this.gameActions.getActiveGamesSuccess(games));
+        .map((games: Game[]) => this.gameActions.getActiveGamesSuccess(games));
 }

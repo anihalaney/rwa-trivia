@@ -1,0 +1,13 @@
+<div class="card">
+  <div class="rocateicon sprite"></div>
+  <div class="question-cont">
+    <h2>Question of the day!</h2>
+    <p>{{question.questionText}}</p>
+    <ul class="question-list clearfix">
+      <li *ngFor="let answer of question.answers">
+        <input type="radio" name="question">
+        <label>{{answer.answerText}}</label>
+      </li>
+    </ul>
+  </div>
+</div>

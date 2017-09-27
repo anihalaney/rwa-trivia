@@ -1,25 +1,518 @@
+
+  <!-- Page Layout -->
+  <div class="container pagelayout">
+    <nav id="nav" tabindex="0">
+      <div class="smartphone-menu-trigger" id="nav-icon1" >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <a href="#" class="user card">
+        <img src="/assets/images/avatar.jpg" alt="user" />
+        <span class="username">
+          <span class="name">Dantiel Chi</span>
+          <span class="userstatus">Beginner</span>
+          <span class="userlocation"><span class="sprite mapicon"></span>San Fransisco, CA</span>
+        </span>
+      </a>
+
+      <div class="card recentlygames">
+        <h2>Recently Completed Games</h2>
+        <ul>
+          <li>
+            <a href="#">
+              <div class="sprite architicon"></div>
+              <div class="datebox">
+                <div class="light">Yesterday</div>
+                <div class="dark">In Architecture</div>
+              </div>
+              <div class="scorebox align-right">
+                <div class="light">Score 10</div>
+                <div class="dark">Won</div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <div class="sprite rogrammingicon"></div>
+              <div class="datebox">
+                <div class="light">1st May, 2017</div>
+                <div class="dark">In Programming</div>
+              </div>
+              <div class="scorebox align-right">
+                <div class="light">Score 8</div>
+                <div class="dark">Lost</div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <div class="sprite rogrammingicon"></div>
+              <div class="datebox">
+                <div class="light">3rd May, 2017</div>
+                <div class="dark">In Architecture</div>
+              </div>
+              <div class="scorebox align-right">
+                <div class="light">Score 6</div>
+                <div class="dark">Lost</div>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#">
+              <div class="sprite architicon"></div>
+              <div class="datebox">
+                <div class="light">10th May, 2017</div>
+                <div class="dark">In Database</div>
+              </div>
+              <div class="scorebox align-right">
+                <div class="light">Score 10</div>
+                <div class="dark">Won</div>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <a class="viewall" href="#" title="view all">view all<span class="a-arrow"></span></a>
+      </div>
+
+      <div class="card navview">
+        <ul class="tabbing clearfix">
+          <li class="active" data-tab="statis">Statis View</li>
+          <li data-tab="graph">Graph View</li>
+        </ul>
+        <ul id="statis" class="tab-content active">
+          <li>
+            <a href="#">
+              <div class="sprite playedicon"></div>
+              <div class="viewtext">Game Played</div>
+              <div class="viewcount align-right">18</div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <div class="sprite topicsicon"></div>
+              <div class="viewtext">Topics</div>
+              <div class="viewcount align-right">10</div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <div class="sprite winsicon"></div>
+              <div class="viewtext">Wins</div>
+              <div class="viewcount align-right">15</div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <div class="sprite badgesicon"></div>
+              <div class="viewtext">Badges</div>
+              <div class="viewcount align-right">02</div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <div class="sprite losessicon"></div>
+              <div class="viewtext">Losess</div>
+              <div class="viewcount align-right">01</div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <div class="sprite avgicon"></div>
+              <div class="viewtext">Avg. answer time</div>
+              <div class="viewcount align-right">09
+                <div class="sec">sec</div>
+              </div>
+            </a>
+          </li>
+
+          <li>
+            <a href="#">
+              <div class="sprite contributicon"></div>
+              <div class="viewtext">Contribution</div>
+              <div class="viewcount align-right">05</div>
+            </a>
+          </li>
+        </ul>          
+
+        <div id="graph" class="tab-content">
+          <img style="display: block; margin:0 auto" src="/assets/images/chart.jpg" alt="chart" />          
+
+        </div>
+
+      </div>
+
+      <div class="card playwith">
+        <a href="#">
+          <span class="sprite playwithicon"></span>
+          <span class="playtext">Play with your<span>Friends</span></span>
+        </a>
+      </div>
+
+      <div class="card socialicon">
+        <a href="#" class="sprite facebookicon"></a>
+        <a href="#" class="sprite twiticon"></a>
+        <a href="#" class="sprite linkdenicon"></a>
+      </div>
+      <div class="card playwith visible-xs">
+        <a class="playtext" href="#"><span>Blog</span></a>
+      </div>
+      <div class="card playwith visible-xs">
+        <a class="playtext" href="#"><span>System Stats</span></a>
+      </div>
+    </nav>
+    <main>
+      <div class="pageinner">
+        <div class="row">
+          <div class="pageheading col-md-6 col-xs-12 hidden-xs">Dashboard</div>
+          <div class="col-md-6 col-xs-12 align-right"><a [routerLink]="['/game-play']" class="startgame">Start New Game</a></div>
+        </div>
+        <!-- Currently active games -->
+        <section id="curentactive" class="card">
+          <div class="h1block">
+            <h1><span class="sprite sunicon"></span>Good Morning Daniel!</h1>
+            <p>Nice to see you again, are you ready for a new challenge</p>
+          </div>
+          <div id="currentgame">
+            <div class="row">
+              <div class=" col-sm-9 col-xs-12"><h2>Currently active games</h2></div>
+              <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+            </div>            
+            <ul class="row">
+                <li *ngFor="let game of activeGamesObs | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+                  <game-card [game]="game"></game-card>
+                </li>
+              <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
+                <a href="#" class="innerli textcenter">
+                 <div class="viewallbtn">view all</div>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </section>  
+        <!-- Currently active games end -->
+
+        <!-- Invitation to play games -->
+        <section class="card">
+          <div class="row">
+            <div class="col-sm-9 col-xs-12"><h2>Invitation to play games <span>3 from friends & 1 from random player</span></h2></div>
+            <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+          </div>
+          <ul class="invitationlist">
+            <li *ngFor="let game of gameInvites">
+              <game-invite [game]="game"></game-invite>
+            </li>
+            <li class="visible-xs textcenter">
+              <a href="#" >
+                 <div class="viewallbtn">view all</div>
+              </a>
+            </li>
+          </ul> 
+        </section>    
+        <!-- Invitation to play games end   -->
+
+        <!-- Category leaderboard -->
+        <section class="card">
+          <div class="row">
+            <div class="col-sm-9 col-xs-12"><h2>Category leaderboard</h2></div>
+            <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+          </div>
+          <div class="row">
+            <div class="col-md-4 col-xs-12 categorybox skyblue">
+              <h3>Programming</h3>
+              <ul>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#1</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user1.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">William</a>
+                      <div class="light">Springfield</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">25879</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#2</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user2.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">Michael</a>
+                      <div class="light">Franklin</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">24781</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#3</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user3.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">Elizabeth</a>
+                      <div class="light">Greenville</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">23547</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-4 col-xs-12 categorybox red">
+              <h3>DataBase</h3>
+              <ul>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#1</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user1.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">William</a>
+                      <div class="light">Springfield</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">25879</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#2</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user2.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">Michael</a>
+                      <div class="light">Franklin</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">24781</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#3</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user3.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">Elizabeth</a>
+                      <div class="light">Greenville</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">23547</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="col-md-4 col-xs-12 categorybox green">
+              <h3>UI & UX</h3>
+              <ul>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#1</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user1.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">William</a>
+                      <div class="light">Springfield</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">25879</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#2</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user2.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">Michael</a>
+                      <div class="light">Franklin</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">24781</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+                <li>
+                  <div class="row">
+                    <div class="col-xs-2 has">#3</div>
+                    <div class="col-xs-3"><a href="#"><img src="/assets/images/user3.jpg" alt="user1" /></a></div>
+                    <div class="col-xs-4">
+                      <a href="#" class="dark">Elizabeth</a>
+                      <div class="light">Greenville</div>
+                    </div>
+                    <div class="col-xs-3">
+                      <div class="dark">23547</div>
+                      <div class="light">points</div>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div> 
+        </section>
+        <!-- Category leaderboard end-->
+
+        <div class="row">
+          <!-- Question of the day -->
+          <div class="col-lg-7 col-md-12 col-sm-12 ">
+            <question [question]="questionOfTheDayObs | async"></question>
+          </div>
+          <!-- Question of the day end -->
+
+          <!-- Subscribe -->
+          <div class="col-lg-5 col-md-12 col-sm-12 ">
+            <div class="card">
+              <div class="subscrib-cion sprite"></div>
+              <div class="subscrib-cont">
+                <h2>Sign Up  our newsletter to stay connected </h2>
+                <p>Subscribe to our email newsletter for useful tips and valuable resources, sent out every second Tuesday.</p>
+                  <div class="row">
+                    <div class="col-sm-7 col-xs-12">
+                      <input placeholder="enter your email ID" type="email" name="enter your email ID" value="" required="">
+                    </div>
+                    <div class="col-sm-5 col-xs-12">
+                      <button class="btn">Subscrib</button>
+                    </div>
+                  </div>
+                <div class="subs-bottom">2145 Subscribers</div>
+                <div class="subs-bottom">powerd by mail chimp</div>
+              </div>
+            </div>
+          </div>
+          <!-- Subscribe end -->
+        </div>
+
+        <!-- <blog -->
+        <div class="row blog hidden-xs">
+          <div class="col-md-4 col-xs-12">
+            <div class="card">
+
+              <a class="blogimg"href="#"><img src="/assets/images/blog1.jpg" alt="Real World Angular: Hiring" /></a>
+              
+              <div class="blog-cont">
+                <div class="T-tagging">Programming</div>
+                <h2><a href="#">Real World Angular: Hiring</a></h2>
+                <p class="minimize">In this part of the series, I won’t talk about the technical side of building our app, but rather one of the technical side</p>
+              </div>
+              <div class="blog-social">
+                <div class="col-xs-5">
+                  <div class="commenticon sprite"></div>349
+                </div>
+                <div class="col-xs-5">
+                  <div class="viewicon sprite"></div>49500
+                </div>
+                <div class="col-xs-2 align-right">
+                  <a href="#"><span class="shareicon sprite"></span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-xs-12">
+            <div class="card">
+
+              <a class="blogimg"href="#"><img src="/assets/images/blog2.jpg" alt="Real World Angular - Part 9.1: More Unit Testing" /></a>
+              
+              <div class="blog-cont">
+                <div class="T-tagging">database</div>
+                <h2><a href="#">Real World Angular - Part 9.1: More Unit Testing</a></h2>
+                <p class="minimize">This is a continuation of Part 9 of our Real World Angular series. In Part 9, we wrote unit tests for one set Angular series</p>
+              </div>
+              <div class="blog-social">
+                <div class="col-xs-5">
+                  <div class="commenticon sprite"></div>349
+                </div>
+                <div class="col-xs-5">
+                  <div class="viewicon sprite"></div>49500
+                </div>
+                <div class="col-xs-2 align-right">
+                  <a href="#"><span class="shareicon sprite"></span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 col-xs-12 hidden-md">
+            <div class="card">
+
+              <a class="blogimg"href="#"><img src="/assets/images/blog3.jpg" alt="Real World Angular -Part 6.1: Upgrading to 4.0.0-rc.2" /></a>
+              
+              <div class="blog-cont">
+                <div class="T-tagging">networking</div>
+                <h2><a href="#">Real World Angular -Part 6.1: Upgrading to 4.0.0-rc.2</a></h2>
+                <p class="minimize">Upgrading our application to Angular Release Candidate (rc 2). We’ll take slight detour from We’ll take We’ll take</p>
+              </div>
+              <div class="blog-social">
+                <div class="col-xs-5">
+                  <div class="commenticon sprite"></div>349
+                </div>
+                <div class="col-xs-5">
+                  <div class="viewicon sprite"></div>49500
+                </div>
+                <div class="col-xs-2 align-right">
+                  <a href="#"><span class="shareicon sprite"></span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- blog end -->
+
+        <!-- Real-time System Stats -->
+        <div class="card hidden-xs">
+          <div class="row">
+            <div class=" col-sm-3 col-xs-12 clearfix">
+              <div class="timestats-icon sprite"></div>
+              <h2>Real-time System Stats</h2>
+            </div>
+            <div class=" col-sm-9 col-xs-12">
+              <div class="time-stats">
+                Total No of Users
+                <div class="time-count">25879</div>
+              </div>
+              <div class="time-stats">
+                Total No Of Questions
+                <div class="time-count">65478</div>
+              </div>
+              <div class="time-stats">
+                Users Currently playing
+                <div class="time-count">1541</div>
+              </div>
+              <div class="time-stats">
+                Current Server Load
+                <div class="time-count">3.01</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Real-time System Stats end -->
+
+      </div>        
+    </main>
+  </div>
+  <!-- Page Layout end -->
+
+
 <md-card class="flex-container" 
           fxLayoutWrap="wrap"
           fxLayout="row"
           fxLayoutAlign="center" fxLayoutAlign.xs="start">
-  <md-card class="dash-card">
-    <md-card-title>
-      <a [routerLink]="['/game-play']">
-        <button md-button color="primary">START NEW GAME</button>
-      </a>
-    </md-card-title>
-    <md-card-content>
-      Active Games:
-      <md-list>
-        <md-list-item *ngFor="let game of activeGamesObs | async">
-          <a [routerLink]="['/game', game]">
-            <button md-button color="primary">GAME: {{game}}</button>
-          </a>
-        </md-list-item>
-      </md-list>
-    </md-card-content>
-  </md-card>
-
   <md-card class="dash-card">
     <md-card-title>rwa Stats</md-card-title>
     <md-list>
@@ -34,19 +527,4 @@
       </md-list-item>
     </md-list>
   </md-card>
-</md-card>
-
-<md-card>
-  <md-card-title>Sample Questions</md-card-title>
-  <md-card-content>    
-
-    <question-list [questions]="sampleQuestionsObs | async" 
-                  [categoryDictionary]="categoryDictObs | async"
-                  class="flex-container" 
-                  fxLayoutWrap="wrap"
-                  fxLayout="row"
-                  fxLayoutAlign="center" fxLayoutAlign.xs="start">
-    </question-list>
-
-  </md-card-content>    
 </md-card>

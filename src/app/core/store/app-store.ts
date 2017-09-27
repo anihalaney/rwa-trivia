@@ -1,7 +1,7 @@
 import { User, Category, Question, Game, SearchResults } from '../../model';
 
 import { user, categories, categoryDictionary, tags, 
-         questionsSearchResults, unpublishedQuestions, sampleQuestions, questionSaveStatus, userQuestions,
+         questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus, userQuestions,
          loginRedirectUrl, 
          currentGame, newGameId, currentGameQuestion, activeGames } from './reducers';
 
@@ -15,13 +15,13 @@ export interface AppStore {
   questionsSearchResults: SearchResults;
   unpublishedQuestions: Question[];
   userQuestions: Question[];
-  sampleQuestions: Question[];
+  questionOfTheDay: Question;
   questionSaveStatus: string;
   loginRedirectUrl: string;
   currentGame: Game;
   newGameId: string;
   currentGameQuestion: Question;
-  activeGames: string[];
+  activeGames: Game[];
 }
 
 export const reducer: ActionReducerMap<AppStore> = {
@@ -32,7 +32,7 @@ export const reducer: ActionReducerMap<AppStore> = {
   questionsSearchResults: questionsSearchResults,
   unpublishedQuestions: unpublishedQuestions,
   userQuestions: userQuestions,
-  sampleQuestions: sampleQuestions,
+  questionOfTheDay: questionOfTheDay,
   questionSaveStatus: questionSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
   currentGame: currentGame,
