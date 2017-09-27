@@ -1,0 +1,12 @@
+.card{ padding: 0; margin: 0 20px 30px 0}
+.blog-cont{ padding: 25px 30px 0; cursor: pointer; min-height: 200px}
+.blogimg{ display: block; transition: 0.3s ease-in-out}
+.blogimg img{ height: 220px; width: 100%; object-fit: cover; }
+h2{margin: 15px 0 10px; line-height: 1}
+h2 a{ font-family:'hindmedium'; font-size: 16px; transition: 0.3s ease-in-out;}
+.more{ display: none; }
+.blog-social{line-height: 50px; height: 50px; border-top: 1px solid; border-color: rgba(204,204,204,0.44);}
+@media screen and ( min-width:1000px){
+  .card{margin:0 0 30px }
+  .card:hover .blogimg{ opacity: 0.7 }
+}

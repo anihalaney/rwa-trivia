@@ -1,0 +1,18 @@
+.categorybox{ border-right: 1px solid transparent; margin-top:40px }
+.categorybox:last-child{ border-right: 0 }
+.categorybox li{padding: 15px 0}
+.categorybox li:last-child{ padding-bottom: 0 }
+.has { line-height: 40px; height: 40px; font-size: 16px; font-family: 'hindmedium'}
+.categorybox img{ width: 120%; max-width: 50px }
+@media screen and ( min-width:767px){
+  .has { line-height: 50px;; height: 50px; }
+}
+@media screen and ( min-width:1000px){
+.categorybox{ margin-top: 16px }
+.categorybox img{ width: 44px }  
+}
+@media screen and ( min-width:1000px) and ( max-width:1160px){
+  .categorybox img{ width: 36px }
+  .categorybox .dark{ font-size: 13px }
+  .categorybox .light{ font-size: 12px; }
+}
