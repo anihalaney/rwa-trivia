@@ -4,7 +4,9 @@
         <p>Playing with <a>Random Player</a></p>
 
         <!-- Timer -->
-        <div class="timer">{{timer}}
+        <div *ngIf="continueNext" class="score">Score: {{correctCount}}/{{noOfQuestions}}</div>
+        <div *ngIf="!continueNext" [ngClass]="{abouttoexpire: timer <= 5}">{{timer}}</div>
+        <div *ngIf="!continueNext"   class="timer">
             <svg class="rotate" viewbox="0 0 250 250">
                 <path id="loader" transform="translate(125, 125)"/>
             </svg>
@@ -17,26 +19,47 @@
         </div>
         <!-- Timer end -->
 
-        <div class="secondbg">
-            <h2>{{questionIndex}}. {{question.questionText}}</h2>
-            <ul>
-                <li *ngFor="let answer of question.answers; let i=index"
-                  (click)="answerButtonClicked(answer, i)"
-                  [class.question-answered]="answeredIndex >= 0"
-                  [class.players-answer]="answeredIndex === i"
-                  [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
-                  [class.right]="answeredIndex >= 0 && correctAnswerIndex === i"
-                  [ngClass]="{wrong: answeredIndex === i, right: correctAnswerIndex === i}">
-                  {{answer.answerText}}
-                </li>
-            </ul>
+        <div *ngIf="continueNext" class="secondbg">
+          <div>
+            <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
+            <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
+            <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
+          </div>
+          <div>
+            <button md-button class="btn" (click)="continueClicked.emit($event)">CONTINUE</button>
+          </div>
         </div>
-        <div class="popupbottom">Tags : 
-          <span *ngFor="let tag of question.tags">
-            {{tag}}
-          </span> 
-        </div>
+        <ng-container *ngIf="!continueNext">
+          <div class="secondbg">
+              <h2>{{questionIndex}}. {{question.questionText}}</h2>
+              <ul *ngIf="!continueNext">
+                  <li *ngFor="let answer of question.answers; let i=index"
+                    (click)="answerButtonClicked(answer, i)"
+                    [class.question-answered]="answeredIndex >= 0"
+                    [class.players-answer]="answeredIndex === i"
+                    [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
+                    [class.right]="answeredIndex >= 0 && correctAnswerIndex === i">
+                    {{answer.answerText}}
+                  </li>
+              </ul>
+          </div>
+          <div class="popupbottom">Tags : 
+            <span *ngFor="let tag of question.tags">
+              {{tag}}
+            </span> 
+          </div>
+        </ng-container>
     </div>
+
+    <md-card-footer *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" 
+    fxLayout="row" fxLayoutAlign="space-between center">
+      <button md-button>SHARE</button>
+      <div fxFlexAlign="center">       
+        <button *ngIf="continueNext" md-button (click)="viewQuestionClicked.emit($event)">VIEW QUESTION</button> 
+        <button *ngIf="!continueNext" md-button >REPORT ISSUE</button> 
+      </div>
+      <button md-button (click)="okClick.emit($event)">OK</button>
+    </md-card-footer>
 </div>
 
 <md-card *ngIf="false" class="flex-item" class="game-question">

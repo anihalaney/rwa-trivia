@@ -11,6 +11,7 @@
 
 
 /*--Game-Option--*/
+/*
 .optionbox input[type="radio"]{ display: none; }
 
 .optionbox{ margin-top: 30px; text-align: left;}
@@ -31,7 +32,7 @@
 .towplayer{ padding: 22px 0 0}
 .optionbox .towplayer label{font-size: 15px; }
 .optionbox .towplayer label .sprite{ vertical-align:-16px }
-
+*/
 .withfriends{border:1px solid; margin-top: 30px; padding:0 45px; overflow: hidden;}
 .optionbox .withfriends label{ text-align: center; padding:10px; border:0; display: block; border-radius: 0}
 .expertise{ border-top: 1px solid; border-bottom: 1px solid; padding: 5px 0; margin: 5px 0; display: inline-block; }
@@ -57,6 +58,7 @@
 .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
 .btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px ;line-height: 1.2; margin:0 auto}
 #curentactive .btnbox{ background: #fff; }
+.btn {color: white;}
 
 @media (min-width: 767px){
   main h2 span{ display: inline-block; padding-left: 15px; }
@@ -103,7 +105,7 @@
 @media screen and ( min-width:767px){
   .gameplay ul{ max-width: 576px; margin: 0 auto}
   .gameplay li{ display: inline-block; padding: 15px 0; width: 219px }
-  .timer{position: absolute; right: 48px; top: 33px;} 
+  //.timer{position: absolute; right: 48px; top: 33px;} 
 }
 @media screen and ( min-width:1000px){
   .gameplay p a:hover{text-decoration: underline;}
@@ -112,15 +114,23 @@
 /*Game Play End*/
 
 
+
+//.gameplay li.right:before, .gameplay li.wrong:before{ content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent;}
+//.gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right: 2px solid; border-bottom: 2px solid; transition: 0.3s ease-in-out}
+.gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
+//.gameplay li.wrong:after{content: "+"; border: 0; height: auto;width: auto;font-size: 24px; top: 2px; line-height: 1; right: 6px;}
+
+
 .gameplay li.question-answered {cursor: not-allowed;}
+.gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right-width: 2px; border-right-style: solid; border-bottom-width: 2px; border-bottom-style: solid; transition: 0.3s ease-in-out}
 
 .gameplay li.players-answer.wrong:before{ content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent; }
-.gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right: 2px solid; border-bottom: 2px solid; transition: 0.3s ease-in-out}
-.gameplay li.players-answer.wrong.wrong:after{ height: 13px;transform: rotate(45deg); }
+.gameplay li.players-answer.wrong:before{ border-right-color: #af3424; border-top-color: #af3424;  }
+.gameplay li.players-answer.wrong:after{ height: 13px;transform: rotate(45deg); }
 .gameplay li.players-answer.wrong:after{content: "+"; border: 0; height: auto;width: auto;font-size: 24px; top: 2px; line-height: 1; right: 6px;}
 
 .gameplay li.players-answer.right:before { content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent;}
-.gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right: 2px solid; border-bottom: 2px solid; transition: 0.3s ease-in-out}
+.gameplay li.players-answer.right:before { border-right-color: #1f7b2b; border-top-color: #1f7b2b}
 .gameplay li.players-answer.right:after{ height: 13px;transform: rotate(45deg); }
 
 

@@ -10,12 +10,8 @@
     </md-card-subtitle>
   </md-card-header>
   <md-card-content fxLayoutAlign="center center">
-    <button md-button (click)="continueButtonClicked($event)">CONTINUE</button>
+    <a [routerLink]="['/game-play']" class="btn">PLAY AGAIN</a>
+    <a [routerLink]="['/']" class="btn">HOME</a>
   </md-card-content>
 
-  <md-card-footer fxLayout="row" fxLayoutAlign="space-between center">
-    <button md-button (click)="viewQuestionClicked.emit($event)">VIEW QUESTION</button>
-    <div fxFlexAlign="center"></div>
-    <button md-button>REPORT ISSUE</button>
-  </md-card-footer>
 </md-card>

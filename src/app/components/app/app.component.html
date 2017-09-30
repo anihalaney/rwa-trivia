@@ -42,7 +42,9 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-6 col-xs-12">
-        <a href="/" title="Home">Home</a>
+        <a [routerLink]="['/']" title="Home">Home</a>
+        <a [routerLink]="['/my-questions']" title="My Questions">My Questions</a>
+        <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
         <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
         <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
         <ng-container *ngIf="!user">

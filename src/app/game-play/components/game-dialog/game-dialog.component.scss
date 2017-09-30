@@ -1,3 +1,14 @@
+/* Popup */
+
+.cd-popup-container{border-radius:3px;text-align:center;box-shadow:0 0 20px rgba(0, 0, 0, 0.2);
+  padding-top: 35px}
+ 
+ @media screen and ( min-width:1000px){
+  .cd-popup-container{width:960px;}
+  }
+  /* Popup - end  */
+
+
 /*--Game-Option--*/
 .optionbox input[type="radio"]{ display: none; }
 
