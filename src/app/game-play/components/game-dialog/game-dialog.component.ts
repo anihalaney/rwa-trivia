@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Component, Inject, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { MD_DIALOG_DATA } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
@@ -8,7 +7,6 @@ import '../../../rxjs-extensions';
 
 import { AppStore } from '../../../core/store/app-store';
 
-import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
@@ -16,52 +14,12 @@ import { Game, GameOptions, GameMode, PlayerQnA,
          User, Question, Category } from '../../../model';
 
 @Component({
-  selector: 'game',
-  templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
+  selector: 'game-dialog',
+  templateUrl: './game-dialog.component.html',
+  styleUrls: ['./game-dialog.component.scss']
 })
-export class GameComponent implements OnInit, OnDestroy {
-  gameId: string;
-  user: User;
-
-  dialogRef: MdDialogRef<GameDialogComponent>;
-
-  constructor(private store: Store<AppStore>,
-              public dialog: MdDialog, 
-              private route: ActivatedRoute, 
-              private router: Router) { }
-
-  ngOnInit() {
-    this.store.take(1).subscribe(s => this.user = s.user); //logged in user
-
-    this.route.params.subscribe((params: Params) => { 
-      this.gameId = params['id'] ;
-      //this.openDialog();
-      
-      //use the setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
-      //The error happens as bindings change after change detection has run. using setTimeout runs another round of CD
-      // REF: https://github.com/angular/angular/issues/6005
-      // REF: https://github.com/angular/angular/issues/17572
-      // REF: https://github.com/angular/angular/issues/10131
-      //TODO: se what's causing the error and fix.
-      setTimeout(() => this.openDialog(), 0);
-    });
-
-  }
-
-  openDialog() {
-    console.log("openDialog");
-    this.dialogRef = this.dialog.open(GameDialogComponent, {
-      disableClose: true,
-      data: { "gameId": this.gameId, "user": this.user }
-    });
-  }
-  ngOnDestroy() {
-    if (this.dialogRef)
-      this.dialogRef.close();
-  }
-}
-/*
+export class GameDialogComponent implements OnInit, OnDestroy {
+  private _gameId: string;
   user: User;
   gameObs: Observable<Game>;
   game: Game;
@@ -84,7 +42,11 @@ export class GameComponent implements OnInit, OnDestroy {
   private questionComponent: GameQuestionComponent;
 
   constructor(private store: Store<AppStore>, private gameActions: GameActions,
-              private route: ActivatedRoute, private router: Router) {
+    @Inject(MD_DIALOG_DATA) public data: any) {
+    
+    this._gameId = data.gameId;
+    this.user = data.user;
+
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
     this.gameObs = store.select(s => s.currentGame).filter(g => g != null);
@@ -92,10 +54,9 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.take(1).subscribe(s => this.user = s.user); //logged in user
+    //this.store.take(1).subscribe(s => this.user = s.user); //logged in user
 
-    this.route.params
-      .subscribe((params: Params) => this.store.dispatch(this.gameActions.loadGame({"gameId": params['id'], "user": this.user})));
+    this.store.dispatch(this.gameActions.loadGame({"gameId": this._gameId, "user": this.user}));
 
     this.store.select(s => s.categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
     this.sub.push(
@@ -127,7 +88,7 @@ export class GameComponent implements OnInit, OnDestroy {
           () => {
             console.log("Time Expired");
             //disable all buttons
-            this.afterAnswer();
+            //this.afterAnswer();
           });
         
       })
@@ -172,7 +133,7 @@ export class GameComponent implements OnInit, OnDestroy {
       this.gameOver = false;
   }
   gameOverContinueClicked() {
-    this.router.navigate(['/']);
+    //this.router.navigate(['/']);
   }
   afterAnswer(userAnswerId?: number)
   {
@@ -211,4 +172,3 @@ export class GameComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.gameActions.resetCurrentGame());
   }
 }
-*/

@@ -3,14 +3,14 @@
 }
 /*side nav*/
 .pagelayout{ padding: 26px 0 0 }
-nav { min-height: 500px; position: relative; z-index: 9999; width: 263px; display: table-cell;}
+nav { min-height: 500px; position: relative; z-index: 998; width: 263px; min-width: 263px; display: table-cell;}
 nav .card{ border-bottom: 1px solid }
 
 @media (min-width: 1200px){
   nav .card{ margin-bottom: 14px; border-bottom: 0;  box-shadow: 0 2px 6px rgba(0,0,0,0.12);}
 }
 @media screen and ( max-width:1024px){
-  nav { position: absolute; top: 15px; z-index: 99999; box-shadow: 0 0 0 100em rgba(0, 0, 0, 0); transform: translate3d(-263px, 0, 0); transition: all 0.3s ease-in-out;}
+  nav { position: absolute; top: 15px; z-index: 999; box-shadow: 0 0 0 100em rgba(0, 0, 0, 0); transform: translate3d(-263px, 0, 0); transition: all 0.3s ease-in-out;}
   nav .smartphone-menu-trigger {width: 40px; cursor: pointer; height: 40px; position: absolute; left: 100%;}
   nav .smartphone-menu-trigger span { content: ''; width: 50%; height: 2px; border-radius: 10px; position: absolute; left: 50%; transform: translate3d(-50%, -50%, 0);}
   nav .smartphone-menu-trigger span:first-child { top: 35%;}
@@ -29,6 +29,9 @@ nav .card{ border-bottom: 1px solid }
 }
 /*side nav - end*/
 
+main {
+  width: 100%;
+}
 /* Footer */
 .signup, .logout, .login {
   cursor: pointer;

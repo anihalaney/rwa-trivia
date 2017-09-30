@@ -1,13 +1,14 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { NewGameComponent, GameComponent } 
   from '../components';
-import { AuthGuard } from '../../core/services';
+import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/services';
 
 export const gamePlayRoutes: Routes = [
   {
     path: '',
     component: NewGameComponent,
-    canActivate: [AuthGuard],
+    canActivate: [AuthGuard],   
+    resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'game/:id',

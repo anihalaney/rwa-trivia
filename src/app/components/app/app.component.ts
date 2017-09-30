@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate(['/my-questions']);
     })
 
-    this.sub2 = store.select(s => s.user).subscribe(user => {
+    this.sub2 = store.select(s => s.user).skip(1).subscribe(user => {
       this.user = user
       if (user)
       {
@@ -48,12 +48,14 @@ export class AppComponent implements OnInit, OnDestroy {
       }
       else {
         //if user logsout then redirect to home page
-        this.router.navigate(['/']);
+        console.log("logsout"); 
+        // this.router.navigate(['/']);
       }
     });
   }
 
   ngOnInit () {
+    console.log("dispatch");
     this.store.dispatch(this.categoryActions.loadCategories());
     this.store.dispatch(this.tagActions.loadTags());
   }

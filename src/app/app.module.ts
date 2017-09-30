@@ -9,16 +9,17 @@ import { SharedModule } from  './shared/shared.module';
 import { RoutingModule } from  './routing/routing.module';
 import { MyQuestionsModule } from  './myQuestions/my-questions.module';
 import { GamePlayModule } from  './game-play/game-play.module';
+import { SocialModule } from  './social/social.module';
+import { UserModule } from  './user/user.module';
+import { StatsModule } from  './stats/stats.module';
 
-import { AppComponent, DashboardComponent, GameCardComponent, GameInviteComponent,
-  NewsletterComponent, LeaderboardComponent, BlogComponent, RealtimeStatsComponent,
-  SideNavComponent, ProfileCardComponent, RecentGamesComponent, UserStatsCardComponent } from './components';
+import { AppComponent, DashboardComponent, SideNavComponent } from './components';
 
 @NgModule({
   declarations: [
-    AppComponent, DashboardComponent, GameCardComponent, GameInviteComponent,
-    NewsletterComponent, LeaderboardComponent, BlogComponent, RealtimeStatsComponent,
-    SideNavComponent, ProfileCardComponent, RecentGamesComponent, UserStatsCardComponent
+    AppComponent, 
+    DashboardComponent, 
+    SideNavComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +32,10 @@ import { AppComponent, DashboardComponent, GameCardComponent, GameInviteComponen
     SharedModule,
     RoutingModule,
     MyQuestionsModule,
-    GamePlayModule
+    GamePlayModule,
+    SocialModule,
+    UserModule,
+    StatsModule
   ],
   providers: [ 
   ],                                                                      

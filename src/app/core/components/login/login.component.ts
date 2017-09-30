@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { MdDialogRef, MdDialog } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -6,19 +7,95 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
 import { AppStore } from '../../store/app-store';
-import { PasswordAuthComponent } from './password-auth.component';
+
+const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent {
-
-  constructor(private afAuth: AngularFireAuth,
+export class LoginComponent implements OnInit {
+  mode: SignInMode;
+  loginForm: FormGroup;
+  
+  constructor(private fb: FormBuilder,
+              private afAuth: AngularFireAuth,
               private dialog: MdDialog,
-              private passwordAuthDialogRef: MdDialogRef<PasswordAuthComponent>) {
+              public dialogRef: MdDialogRef<LoginComponent>) {
+    this.mode = SignInMode.signIn;  //default
+  }
 
+  ngOnInit() {
+    this.loginForm = this.fb.group({
+      mode: [0],
+      email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
+      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
+      confirmPassword: ['']
+      }, {validator: loginFormValidator}
+    );
+
+    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
+      //console.log(mode);
+      switch (mode) {
+        case 1:
+          //Signup
+          this.loginForm.get('confirmPassword').setValidators([Validators.required, Validators.minLength(6)]);
+          //no break - fall thru
+        case 0:
+          //Login or Signup
+          this.loginForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);
+          break;
+        default:
+          //Forgot Password
+          this.loginForm.get('password').clearValidators();
+          this.loginForm.get('confirmPassword').clearValidators();
+      }
+      this.loginForm.get('password').updateValueAndValidity();
+    });
+  }
+
+  onSubmit() {
+    if (!this.loginForm.valid) {
+      return;
+    }
+    switch (this.mode) {
+      case 0:
+        //Login
+        this.afAuth.auth.signInWithEmailAndPassword(
+          this.loginForm.get('email').value,
+          this.loginForm.get('password').value
+        ).then((user: any) => {
+          //success
+          this.dialogRef.close();
+        }, (error: Error) => {
+          //error
+          console.log(error);
+        });
+        break;
+      case 1:
+        //Signup
+        this.afAuth.auth.createUserWithEmailAndPassword(
+          this.loginForm.get('email').value,
+          this.loginForm.get('password').value
+        ).then((user: any) => {
+          //success
+          this.dialogRef.close();
+        }, (error: Error) => {
+          //error
+          console.log(error);
+        });
+        break;
+      case 2:
+        //Forgot Password
+        firebase.auth().sendPasswordResetEmail(this.loginForm.get('email').value)
+        .then((a: any) => {
+          console.log("success. check your email");
+        },
+        (error: Error) => {
+          console.log(error);
+        });
+    }
   }
 
   googleLogin() {
@@ -36,12 +113,21 @@ export class LoginComponent {
   githubLogin() {
     this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
   }
+}
 
-  passwordLogin() {
-    this.passwordAuthDialogRef = this.dialog.open(PasswordAuthComponent, {
-      disableClose: false,
-      width: "600px",
-      height: "400px"
-    });
+export enum SignInMode {
+  signIn,
+  signUp,
+  forgotPassword
+}
+
+function loginFormValidator(fg: FormGroup): {[key: string]: boolean} {
+  //TODO: check if email is already taken
+
+  //Password match validation for Signup only
+  if (fg.get('mode').value == 1 && fg.get('password').value !== fg.get('confirmPassword').value) {
+    return {'passwordmismatch': true}
   }
+
+  return null;
 }

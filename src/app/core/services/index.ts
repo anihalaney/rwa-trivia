@@ -1,30 +1,37 @@
 import {Utils} from './utils';
 import {AuthenticationService} from './authentication.service';
-import {AuthGuard} from './auth-guard';
 import {AuthInterceptor} from './auth-interceptor';
 import {CategoryService} from './category.service';
 import {TagService} from './tag.service';
 import {QuestionService} from './question.service';
 import {GameService} from './game.service';
 
+import {AuthGuard} from './auth-guard';
+import {CategoriesResolver} from './route-guards/categories-resolver';
+import {TagsResolver} from './route-guards/tags-resolver';
+
 export {
     Utils,
     AuthenticationService,
-    AuthGuard,
     AuthInterceptor,
     CategoryService,
     TagService,
     QuestionService,
-    GameService
+    GameService,
+    AuthGuard,
+    CategoriesResolver,
+    TagsResolver
 };
 
 export default [
     Utils,
     AuthenticationService,
-    AuthGuard,
     AuthInterceptor,
     CategoryService,
     TagService,
     QuestionService,
-    GameService
+    GameService,
+    AuthGuard,
+    CategoriesResolver,
+    TagsResolver
 ];

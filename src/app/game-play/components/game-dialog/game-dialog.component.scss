@@ -12,17 +12,13 @@
 .optionbox input:checked + label{ box-shadow: 0 2px 5px rgba(0,0,0,0.3) }
 .optionbox input:checked + label:after, .gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
 .optionbox .radiobtn label .sprite{ vertical-align:-20px }
-.optionbox input:checked + label:before, .gameplay li.right:before{border-top-color:#1f7b2b;}
-.optionbox input:checked + label:before, .gameplay li.right:before{border-right-color:#1f7b2b;}
 .gameplay li.wrong:after{content: "+"; border: 0; height: auto;width: auto;font-size: 24px; top: 2px; line-height: 1; right: 6px;}
 
-.optionbox .radiobtn label:after{border-color: #fff;}
-
-.twoplayer,.withfriends{ display: none;}
-#p-radio2:checked ~ .twoplayer, #tp-radio2:checked ~ .withfriends{ display: block !important; }
-.twoplayer{ padding: 22px 0 0}
-.optionbox .twoplayer label{font-size: 15px; }
-.optionbox .twoplayer label .sprite{ vertical-align:-16px }
+.towplayer,.withfriends{ display: none;}
+#p-radio2:checked ~ .towplayer, #tp-radio2:checked ~ .withfriends{ display: block !important; }
+.towplayer{ padding: 22px 0 0}
+.optionbox .towplayer label{font-size: 15px; }
+.optionbox .towplayer label .sprite{ vertical-align:-16px }
 
 .withfriends{border:1px solid; margin-top: 30px; padding:0 45px; overflow: hidden;}
 .optionbox .withfriends label{ text-align: center; padding:10px; border:0; display: block; border-radius: 0}
@@ -37,13 +33,9 @@
 .pcategories > .col-sm-9{ border-top: 1px solid; padding:46px 0 0; }
 .formfield { padding: 8px 15px; }
 .formfield input[type="checkbox"],.enterquestion .formfield input[type="radio"]{  position: relative; height: 18px; width: 18px; vertical-align: -4px; margin-right: 8px;}
-.formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before{ content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 100%; border-radius: 2px; border-width:1px; border-style: solid; cursor: pointer;}
-
-.formfield input[type="checkbox"]:after,.enterquestion .formfield input[type="radio"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  cursor: pointer;}
+.formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before{ content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 100%; border-radius: 2px; border:1px solid; transition: 0.3s ease-in-out; cursor: pointer;}
+.formfield input[type="checkbox"]:after,.enterquestion .formfield input[type="radio"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  transition: 0.3s ease-in-out; cursor: pointer;}
 .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ height: 10px; transform: rotate(45deg); }
-.formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ border-color:#fff; }
-.formfield input[type="checkbox"]:disabled:after,.enterquestion .formfield input[type="radio"]:disabled:after{ border-color: transparent; }
-
 .formfield label{ font-size: 20px; cursor: pointer;}
 .chancat{ cursor: pointer; transition: 0.3s ease-in-out; margin-top: 10px}
 .chancat span:nth-child(2){ display: inline-block;width: calc(100% - 40px); line-height: 1.1; vertical-align: -2px;}
@@ -51,7 +43,7 @@
 .preference .formfield { padding: 17px 15px;}
 .chancat.active span:nth-child(2){vertical-align: middle;}
 .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
-.btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px ;line-height: 1.2; margin:0 auto; color: #fff}
+.btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px ;line-height: 1.2; margin:0 auto}
 #curentactive .btnbox{ background: #fff; }
 
 @media (min-width: 767px){
@@ -59,10 +51,10 @@
   .optionbox h2{ margin-top: 17px }
   .optionbox h2 span{ font-size: 22px }
   .optionbox .radiobtn label { width: calc(50% - 17px); margin-right:30px }
-  .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .twoplayer label:nth-child(6) { margin-right:0; }
+  .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .towplayer label:nth-child(6) { margin-right:0; }
 
-  .optionbox .radiobtn .twoplayer label{ width: calc(33.33% - 10px); margin-right: 10px; }
-  .optionbox .twoplayer .withfriends label{ width: 100%; margin-right: 0 }
+  .optionbox .radiobtn .towplayer label{ width: calc(33.33% - 10px); margin-right: 10px; }
+  .optionbox .towplayer .withfriends label{ width: 100%; margin-right: 0 }
   .formfield, .mysetting .formfield { display: inline-block;}
 }
 @media (min-width: 1000px){
@@ -79,16 +71,43 @@
   .secondbg{ padding-top: 35px }
   .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
 }
-.hide {display: none !important;}
 /*--Game-Option End--*/
 
+/*Game Play*/
+.gameplay h1{ font-size: 24px; font-family: 'hindmedium'; padding: 0}
+.gameplay h2{ font-size: 20px; font-family: 'hindregular'; margin: 0 auto; }
+.popupbottom{ font-size: 14px; padding: 15px 0; }
+.gameplay p a{font-family: 'hindmedium'}
+.gameplay li{ margin:30px 20px 0; padding: 15px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer; overflow: hidden; position: relative;}
 
-/*
-div {
-  margin-bottom: 20px;
+.timer{width:61px;height:61px;margin:0 auto; position: relative;}
+.timer .rotate{width:51px;height:51px;display:block;position:absolute;z-index:16; margin: 5px 0 0 5px}
+.timer .rotate #loader{fill:#ffae0b;}
+.timer .dots{width:100%;height:100%;position:absolute;z-index:15;top:0;left:0; border:3px solid; border-radius: 50%; box-sizing: border-box; box-shadow:2px 3px 5px rgba(0,0,0,0.16)}
+.timer .dots .time{height:50px;width:5%;display:block;background-image:-moz-linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);background-image:-webkit-linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);background-image:linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);margin-left:-3%;left:50%;position:absolute; top: 2px}
+.timer .dots .time.deg45{-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);-webkit-transform:rotate(45deg);transform:rotate(45deg);}
+.timer .dots .time.deg90{-moz-transform:rotate(90deg);-ms-transform:rotate(90deg);-webkit-transform:rotate(90deg);transform:rotate(90deg);}
+.timer .dots .time.deg135{-moz-transform:rotate(135deg);-ms-transform:rotate(135deg);-webkit-transform:rotate(135deg);transform:rotate(135deg);}
+@media screen and ( min-width:767px){
+  .gameplay ul{ max-width: 576px; margin: 0 auto}
+  .gameplay li{ display: inline-block; padding: 15px 0; width: 219px }
+  .timer{position: absolute; right: 48px; top: 33px;} 
 }
-.remove-tag {
-  margin-left: 10px;
-  cursor: pointer;
+@media screen and ( min-width:1000px){
+  .gameplay p a:hover{text-decoration: underline;}
+  .gameplay h2{ width: 80% }  
 }
-*/
+/*Game Play End*/
+
+
+
+
+md-card {
+  margin: 15px;
+}
+.question-container {
+  position: relative;
+  width: 500px;
+  min-width: 450px;
+  min-height: 300px;
+}

@@ -1,4 +1,45 @@
-<md-card class="flex-item" class="game-question">
+<div class="cd-popup gameplay"  id="0" role="alert"  >
+    <div class="cd-popup-container">
+        <h1>{{categoryName}}</h1>
+        <p>Playing with <a>Random Player</a></p>
+
+        <!-- Timer -->
+        <div class="timer">{{timer}}
+            <svg class="rotate" viewbox="0 0 250 250">
+                <path id="loader" transform="translate(125, 125)"/>
+            </svg>
+            <div class="dots">
+                <span class="time deg0"></span>
+                <!-- <span class="time deg45"></span> -->
+                <span class="time deg90"></span>
+                <!-- <span class="time deg135"></span> -->
+            </div>
+        </div>
+        <!-- Timer end -->
+
+        <div class="secondbg">
+            <h2>{{questionIndex}}. {{question.questionText}}</h2>
+            <ul>
+                <li *ngFor="let answer of question.answers; let i=index"
+                  (click)="answerButtonClicked(answer, i)"
+                  [class.question-answered]="answeredIndex >= 0"
+                  [class.players-answer]="answeredIndex === i"
+                  [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
+                  [class.right]="answeredIndex >= 0 && correctAnswerIndex === i"
+                  [ngClass]="{wrong: answeredIndex === i, right: correctAnswerIndex === i}">
+                  {{answer.answerText}}
+                </li>
+            </ul>
+        </div>
+        <div class="popupbottom">Tags : 
+          <span *ngFor="let tag of question.tags">
+            {{tag}}
+          </span> 
+        </div>
+    </div>
+</div>
+
+<md-card *ngIf="false" class="flex-item" class="game-question">
     <md-card-title fxLayout="row">
       <div>{{questionIndex}}. {{question.questionText}}</div>
       <div fxFlex></div>
@@ -34,4 +75,3 @@
     <button md-button (click)="okClick.emit($event)">OK</button>
   </md-card-footer>
 </md-card>
- 

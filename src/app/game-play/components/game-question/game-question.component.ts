@@ -29,6 +29,8 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   }
 
   answerButtonClicked(answer: Answer, index: number ) {
+    if (this.answeredIndex >= 0)
+      return;
     this.answeredIndex = index;
     this.answerClicked.emit(index)
   }
