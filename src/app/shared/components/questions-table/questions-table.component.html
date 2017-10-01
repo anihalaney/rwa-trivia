@@ -31,31 +31,50 @@
   <ng-container cdkColumnDef="questionText">
     <md-header-cell class="col-question" *cdkHeaderCellDef md-sort-header> Question </md-header-cell>
     <md-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between"> 
-      <div>
-        {{row.questionText}} 
+      <div class="row">
+        <div class="col-sm-9 col-xs-12">
+          <div class="date">13 May 2017</div>
+          <p>{{row.questionText}}</p>
+          <ul class="currentans">
+            <li>
+              <div class="dark">Correct answer :</div>
+              <div class="light">
+                <span *ngFor="let answer of row.answers">
+                  <span *ngIf="answer.correct">{{answer.answerText}}</span> 
+                </span>                  
+              </div>
+            </li>
+            <li>
+              <div class="dark">Other options :</div>
+              <div class="light">
+                <span *ngFor="let answer of row.answers">
+                  <span *ngIf="!answer.correct">{{answer.answerText}}, </span> 
+                </span>                  
+              </div>
+            </li>
+            <li>
+              <div class="dark">Category :</div>
+              <div class="light">
+                <span *ngFor="let id of row.categoryIds">
+                  {{categoryDictionary[id].categoryName}}
+                </span>
+              </div>
+            </li>
+            <li>
+              <div class="dark">Tags :</div>
+              <div class="light">
+                <span *ngFor="let tag of row.tags">
+                  {{tag}},
+                </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-sm-3 col-xs-12 textrigth">
+          <a href="#" class="btn">{{getDisplayStatus(row.status)}}</a>
+        </div>
       </div>
 
-      <div fxLayout="row" fxLayoutWrap>
-        <span *ngFor="let answer of row.answers" class="answer" [class.correct]="answer.correct">
-          <md-icon *ngIf="answer.correct" md-list-icon>check</md-icon> {{answer.answerText}}
-        </span>
-      </div>
-
-      <div fxLayout="row" fxLayoutAlign="space-between center">
-        <div>
-          <span class="subtitle">Category:</span>
-          <span *ngFor="let id of row.categoryIds">
-            {{categoryDictionary[id].categoryName}}
-          </span>
-        </div>
-        
-        <div>
-          <span class="subtitle">Tags:</span>
-          <span *ngFor="let tag of row.tags">
-            {{tag}},
-          </span>
-        </div>
-      </div>
     </md-cell>
   </ng-container>
 
@@ -64,8 +83,8 @@
     <md-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </md-cell>
   </ng-container>
 
-  <md-header-row *cdkHeaderRowDef="['chkBox', 'questionText', 'status']"></md-header-row>
-  <md-row class="row-question" *cdkRowDef="let row; columns: ['chkBox', 'questionText', 'status'];"></md-row>
+  <md-header-row *cdkHeaderRowDef="['questionText']"></md-header-row>
+  <md-row class="row-question" *cdkRowDef="let row; columns: ['questionText'];"></md-row>
 </md-table>
 
 <md-paginator *ngIf="showPaginator"

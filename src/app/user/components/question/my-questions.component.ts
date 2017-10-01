@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
 import { QuestionActions } from '../../../core/store/actions';
-import { User, Question, Category }     from '../../../model';
+import { User, Question, QuestionStatus, Category }     from '../../../model';
 
 @Component({
   selector: 'my-questions',
@@ -16,10 +16,18 @@ export class MyQuestionsComponent implements OnInit, OnDestroy {
   categoryDictObs: Observable<{[key: number]: Category}>;
   user: User;
 
+  publishedQuestions: Question[];
+  unpublishedQuestions: Question[];
+  
   constructor(private store: Store<AppStore>,
               private questionActions: QuestionActions) {
     this.questionsObs = store.select(s => s.userQuestions);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
+    
+    this.questionsObs.subscribe((userQuestions: Question[]) => {
+      this.publishedQuestions = userQuestions.filter(q => q.status === QuestionStatus.APPROVED);
+      this.unpublishedQuestions = userQuestions.filter(q => q.status !== QuestionStatus.APPROVED);
+    })
   }
 
   ngOnInit() {

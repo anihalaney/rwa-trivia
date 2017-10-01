@@ -3,15 +3,28 @@
     <md-icon class="md-24">add</md-icon>
   </button>
 
-  <md-card-title>Questions</md-card-title>
   <md-card-content>  
-    <question-table
-      [showSort]="false"
-      [showPaginator]="false"
-      [questions]="questionsObs | async"
-      [totalCount]="10"
-      [categoryDictionary]="categoryDictObs | async"
-      [showApproveButton]="false">
-    </question-table>
+    <md-tab-group>
+      <md-tab label="Published">
+        <question-table
+          [showSort]="false"
+          [showPaginator]="false"
+          [questions]="publishedQuestions"
+          [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async"
+          [showApproveButton]="false">
+        </question-table>
+      </md-tab>
+      <md-tab label="Pending">
+        <question-table
+          [showSort]="false"
+          [showPaginator]="false"
+          [questions]="unpublishedQuestions"
+          [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async"
+          [showApproveButton]="false">
+        </question-table>
+      </md-tab>
+    </md-tab-group>
   </md-card-content>    
 </md-card>
