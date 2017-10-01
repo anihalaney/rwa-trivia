@@ -3,13 +3,21 @@ import { UserStatsCardComponent } from './user-stats-card/user-stats-card.compon
 import { GameCardComponent } from './game-card/game-card.component';
 import { GameInviteComponent } from './game-invite/game-invite.component';
 import { RecentGamesComponent } from './recent-games/recent-games.component';
+import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
+
+import { QuestionAddUpdateComponent } from './question/question-add-update.component';
+import { MyQuestionsComponent } from './question/my-questions.component';
 
 export {
     ProfileCardComponent,
     UserStatsCardComponent,
     GameCardComponent,
     GameInviteComponent,
-    RecentGamesComponent
+    RecentGamesComponent,
+    ProfileSettingsComponent,
+
+    QuestionAddUpdateComponent,
+    MyQuestionsComponent
 };
 
 export default [
@@ -17,5 +25,9 @@ export default [
     UserStatsCardComponent,
     GameCardComponent,
     GameInviteComponent,
-    RecentGamesComponent
+    RecentGamesComponent,
+    ProfileSettingsComponent,
+
+    QuestionAddUpdateComponent,
+    MyQuestionsComponent
 ];

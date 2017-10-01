@@ -1,14 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule  } from '@angular/router';
 
-import { myQuestionsRoutes }   from './my-questions.route';
+import { userRoutes }   from './user.route';
 
 @NgModule({
   imports: [
-    RouterModule.forChild(myQuestionsRoutes)
+    RouterModule.forChild(userRoutes)
   ],
   exports: [
     RouterModule
   ]
 })
-export class MyQuestionsRoutingModule { }
+export class UserRoutingModule { }

@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
-import { RouterModule }  from '@angular/router';
 
 import { SharedModule } from  '../shared/shared.module';
+import { UserRoutingModule } from  './routing/user-routing.module';
+
 import { 
   ProfileCardComponent, 
   UserStatsCardComponent,
   GameCardComponent,
   GameInviteComponent,
-  RecentGamesComponent } from  './components';
+  RecentGamesComponent,
+  ProfileSettingsComponent,
+  MyQuestionsComponent,
+  QuestionAddUpdateComponent} from  './components';
 
 @NgModule({
   declarations: [
@@ -15,12 +19,15 @@ import {
     UserStatsCardComponent,
     GameCardComponent,
     GameInviteComponent,
-    RecentGamesComponent
+    RecentGamesComponent,
+    ProfileSettingsComponent,
+    MyQuestionsComponent,
+    QuestionAddUpdateComponent
   ],
   imports: [
     //rwa modules
     SharedModule,
-    RouterModule
+    UserRoutingModule
   ],
   providers: [ 
   ],                                                                      
@@ -29,7 +36,10 @@ import {
     UserStatsCardComponent,
     GameCardComponent,
     GameInviteComponent,
-    RecentGamesComponent
+    RecentGamesComponent,
+    ProfileSettingsComponent,
+    MyQuestionsComponent,
+    QuestionAddUpdateComponent
   ]
 })
 export class UserModule { }

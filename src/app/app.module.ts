@@ -7,7 +7,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from  './shared/shared.module';
 import { RoutingModule } from  './routing/routing.module';
-import { MyQuestionsModule } from  './myQuestions/my-questions.module';
+//import { MyQuestionsModule } from  './myQuestions/my-questions.module';
 import { GamePlayModule } from  './game-play/game-play.module';
 import { SocialModule } from  './social/social.module';
 import { UserModule } from  './user/user.module';
@@ -31,7 +31,7 @@ import { AppComponent, DashboardComponent, SideNavComponent } from './components
     CoreModule,
     SharedModule,
     RoutingModule,
-    MyQuestionsModule,
+   // MyQuestionsModule,
     GamePlayModule,
     SocialModule,
     UserModule,

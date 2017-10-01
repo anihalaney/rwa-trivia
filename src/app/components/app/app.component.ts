@@ -33,7 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
       if (status === "SUCCESS")
         this.snackBar.open("Question saved!", "", {duration: 2000});
       if (status === "IN PROGRESS")
-        this.router.navigate(['/my-questions']);
+        this.router.navigate(['/my/questions']);
     })
 
     this.sub2 = store.select(s => s.user).skip(1).subscribe(user => {

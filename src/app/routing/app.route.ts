@@ -14,10 +14,15 @@ export const routes: Routes = [
     component: DashboardComponent
   },
   {
+    path: 'my',
+    loadChildren: 'app/user/user.module#UserModule',
+    canActivate: [AuthGuard]
+  },
+  /*{
     path: 'my-questions',
     loadChildren: 'app/myQuestions/my-questions.module#MyQuestionsModule',
     canActivate: [AuthGuard]
-  },
+  },*/
   {
     path: 'game-play',
     loadChildren: 'app/game-play/game-play.module#GamePlayModule',
