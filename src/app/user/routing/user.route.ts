@@ -3,7 +3,7 @@ import { ProfileSettingsComponent,
   MyQuestionsComponent,
   QuestionAddUpdateComponent } 
   from '../components';
-import { AuthGuard } from '../../core/services';
+import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/services';
 
 export const userRoutes: Routes = [
   {
@@ -19,7 +19,8 @@ export const userRoutes: Routes = [
   {
     path: 'questions',
     component: MyQuestionsComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'questions/add',

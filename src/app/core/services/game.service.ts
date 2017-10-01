@@ -40,20 +40,13 @@ export class GameService {
   }
 
   getActiveGames(user: User): Observable<Game[]> {
-    //TODO: limit games to a max number
+    //TODO: Limit to a max
     return this.db.list('/users/' + user.userId + '/games/active')
-      .map(gids => gids.map(gid => gid['$key']))  //game ids
-      .map((gids: string[]) => {
-        let games: Game[] = [];
-        gids.forEach(gameId => {
-          this.db.object('/games/' + gameId).take(1)
-          .subscribe(g => {
-            //console.log(g);
-            games.push(Game.getViewModel(g))
-          });
-        });
-        return games;
-      }); 
+    .map(gids => gids.map(gid => gid['$key']))  //game ids
+    .mergeMap((gids: string[]) => {
+      return Observable.forkJoin(
+        gids.map((gameId : string) => this.db.object('/games/' + gameId).take(1).map(g => Game.getViewModel(g))))
+    });
   }
 
   getGame(gameId: string, user: User): Observable<Game> {

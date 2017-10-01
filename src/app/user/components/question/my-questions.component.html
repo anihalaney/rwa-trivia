@@ -4,13 +4,14 @@
   </button>
 
   <md-card-title>Questions</md-card-title>
-  <md-card-content>    
-    <question-list [questions]="questionsObs | async" 
-                  [categoryDictionary]="categoryDictObs | async"
-                  class="flex-container" 
-                  fxLayoutWrap="wrap"
-                  fxLayout="row"
-                  fxLayoutAlign="center" fxLayoutAlign.xs="start">
-    </question-list>
+  <md-card-content>  
+    <question-table
+      [showSort]="false"
+      [showPaginator]="false"
+      [questions]="questionsObs | async"
+      [totalCount]="10"
+      [categoryDictionary]="categoryDictObs | async"
+      [showApproveButton]="false">
+    </question-table>
   </md-card-content>    
 </md-card>

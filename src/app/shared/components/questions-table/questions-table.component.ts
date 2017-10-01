@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import {DataSource} from '@angular/cdk/table';
 import {PageEvent, MdCheckboxChange, MdSelectChange} from '@angular/material';
@@ -14,7 +14,8 @@ import { Question, QuestionStatus, Category, SearchResults, SearchCriteria }    
 @Component({
   selector: 'question-table',
   templateUrl: './questions-table.component.html',
-  styleUrls: ['./questions-table.component.scss']
+  styleUrls: ['./questions-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() showSort: boolean;
@@ -43,6 +44,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
+    console.log(this.questions);
     this.questionsSubject.next(this.questions);
   }
 
