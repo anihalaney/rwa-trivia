@@ -4,9 +4,9 @@
 
   <md-tab-group>
     <md-tab label="Published">
-      <question-table [questionsSearchResults]="(questionsSearchResultsObs | async)" 
+      <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" 
                     [categoryDictionary]="categoryDictObs | async"
-                    (pageChanged)="pageChange($event)"
+                    (onPageChanged)="pageChanged($event)"
                     (onCategoryChanged)="categoryChanged($event)"
                     (onTagChanged)="tagChanged($event)"
                     (onSortOrderChanged)="sortOrderChanged($event)"
@@ -14,7 +14,7 @@
                     fxLayoutWrap="wrap"
                     fxLayout="row"
                     fxLayoutAlign="center" fxLayoutAlign.xs="start">
-      </question-table>
+      </question-search>
     </md-tab>
     <md-tab label="Unpublished">
       <question-list [questions]="unpublishedQuestionsObs | async" 

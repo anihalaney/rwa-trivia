@@ -43,7 +43,7 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.questionActions.approveQuestion(question));
   }
 
-  pageChange(pageEvent: PageEvent) {
+  pageChanged(pageEvent: PageEvent) {
     let startRow = (pageEvent.pageIndex) * pageEvent.pageSize;
     this.store.dispatch(this.questionActions.loadQuestions({"startRow": startRow, "pageSize": pageEvent.pageSize, criteria: this.criteria}));
   }
