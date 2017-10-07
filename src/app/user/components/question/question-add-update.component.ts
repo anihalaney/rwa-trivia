@@ -178,8 +178,9 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 //Custom Validators
 function questionFormValidator(fg: FormGroup): {[key: string]: boolean} {
   let answers: Answer[] = fg.get('answers').value;
-  if (answers.filter(answer => answer.correct).length !== 1)
+  if (answers.filter(answer => answer.correct).length !== 1) {
     return {'correctAnswerCountInvalid': true}
+  }
 
   let tags: string[] = fg.get('tagsArray').value;
   if (tags.length  < 3)

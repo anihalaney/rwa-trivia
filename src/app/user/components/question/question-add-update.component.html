@@ -1,4 +1,89 @@
-<md-card>
+<form (ngSubmit)="onSubmit()" class="question-form" [formGroup]="questionForm" novalidate>
+    
+<div class="mainpage submitpage">
+  <div class="row hidden-xs">
+    <div class="pageheading col-sm-6 col-xs-12">Submit Question</div>          
+  </div>
+    <section id="curentactive" class="card">
+    <div class="h1block">
+      <h1>Submit Question</h1>
+      <p>You can submit your question for trivia game</p>
+    </div>
+      <div class="optionbox">
+      <!-- Category -->
+        <div class="pcategories">
+        <h2><span>Select Your Prefered Category for the Question:</span></h2>
+        <div class="row">
+          <div class="formfield">
+          <select placeholder="Select Category" class="required" formControlName="category">
+            <option value="">
+              Select a Category
+            </option>
+            <option *ngFor="let category of categories" [value]="category.id">
+              {{category.categoryName}}
+            </option>
+          </select>
+          <p *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine" class="error">
+            Select a category
+          </p>
+        </div>
+        </div>
+      </div>
+      <!-- Category end -->
+    </div> 
+
+    <!-- Enter Your Question -->
+    <div class="enterquestion secondbg">
+      <div class="optionbox">
+        <h2><span>Enter Your Question:</span></h2>
+        <textarea class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"></textarea>
+        <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</p>
+                
+          <h3>Answers</h3>
+          <ng-container formArrayName="answers">
+            <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
+              <label>
+                <input type="checkbox" formControlName="correct"> 
+              </label>  
+              <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required">       
+            </div>
+          </ng-container>
+          <div class="error" *ngIf="!answers.valid && !answers.pristine > 0">
+            All answers required
+          </div>
+          <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
+            Pick one and only one correct answer
+          </div>
+                
+          <div class="tags">
+          <p>Tags associated categories</p>
+          <div data-tags-input-name="tag" id="tagBox" class="tagging">
+            <md-chip-list>
+              <md-basic-chip *ngFor="let tag of autoTags" class="tag">
+                {{tag}}
+              </md-basic-chip>
+              <md-basic-chip *ngFor="let tag of enteredTags" class="tag">
+                {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+              </md-basic-chip>
+            </md-chip-list>
+            <input class="type-zone" contenteditable="true" formControlName="tags">
+            <button md-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+            <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
+              Must have atleast 3 tags
+            </div>
+          </div>
+        </div>
+          <div class="btnbox">
+            <button class="btn startg" type="submit" [disabled]="!questionForm.valid">SAVE</button>
+          </div>
+      </div>
+    </div>
+    <!-- Enter Your Question end -->
+</section>
+</div>        
+</form>
+
+<md-card *ngIf="false">
   <form (ngSubmit)="onSubmit()" class="question-form" [formGroup]="questionForm" novalidate>
     <md-card-title>Add Question</md-card-title>
     <md-card-header>
