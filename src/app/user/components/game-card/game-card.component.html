@@ -23,7 +23,7 @@
       <div class="dark">Score  07</div>
     </div>
   </div>
-  <a *ngIf="myTurn" [routerLink]="['/game', game.gameId]" class="playnow btn">
+  <a *ngIf="myTurn" [routerLink]="['/game-play/game', game.gameId]" class="playnow btn">
     <span>Your Turn</span>Play Now
   </a>
   <div *ngIf="!myTurn" class="opponent">Opponent’s Turn</div>

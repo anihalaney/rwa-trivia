@@ -23,7 +23,7 @@ export class AuthenticationService {
               public dialog: MdDialog) {
 
 
-  this.afAuth.authState.subscribe(afUser => {
+    this.afAuth.authState.subscribe(afUser => {
       if(afUser) {
         // user logged in
         //console.log(afUser);

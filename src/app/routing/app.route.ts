@@ -27,7 +27,8 @@ export const routes: Routes = [
   {
     path: 'game-play',
     loadChildren: 'app/game-play/game-play.module#GamePlayModule',
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'admin',

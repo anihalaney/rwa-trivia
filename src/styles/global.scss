@@ -437,3 +437,8 @@ footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
     transform:rotate(360deg);
   }
 }
+@media screen and ( max-width:760px){      
+    .mat-dialog-container {
+    max-height: 120vh !important;
+  }
+}

@@ -47,9 +47,9 @@ export class AppComponent implements OnInit, OnDestroy {
           this.router.navigate([url]);
       }
       else {
-        //if user logsout then redirect to home page
-        console.log("logsout"); 
-        // this.router.navigate(['/']);
+        //if user logs out then redirect to home page
+        console.log("logout"); 
+        this.router.navigate(['/']);
       }
     });
   }

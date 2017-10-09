@@ -45,10 +45,10 @@
               <label>
                 <input type="checkbox" formControlName="correct"> 
               </label>  
-              <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required">       
+              <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required">
             </div>
           </ng-container>
-          <div class="error" *ngIf="!answers.valid && !answers.pristine > 0">
+          <div class="error" *ngIf="!answers.valid && !answers.pristine">
             All answers required
           </div>
           <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">

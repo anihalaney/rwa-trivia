@@ -6,6 +6,11 @@ import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/services
 export const gamePlayRoutes: Routes = [
   {
     path: '',
+    redirectTo: 'new',
+    pathMatch: 'full'
+  },
+  {
+    path: 'new',
     component: NewGameComponent,
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
@@ -13,7 +18,7 @@ export const gamePlayRoutes: Routes = [
   {
     path: 'game/:id',
     component: GameComponent,
-    canActivate: [AuthGuard],   
+    canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   }
 ];
