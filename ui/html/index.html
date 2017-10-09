@@ -5,12 +5,12 @@
   <meta name="SKYPE_TOOLBAR" content="SKYPE_TOOLBAR_PARSER_COMPATIBLE" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Trivia</title>
-  <link rel="icon" type="image/png" href="images/favicon.png" />
-  <link href="css/owl.carousel.css" rel="stylesheet" type="text/css" />
+  <link rel="icon" type="image/png" href="images/favicon.ico" />
+  <!-- <link href="css/owl.carousel.css" rel="stylesheet" type="text/css" /> -->
+  <link href="css/popup.css" rel="stylesheet" type="text/css" />
   <link href="css/globle.css" rel="stylesheet" type="text/css" /> 
   <link href="css/dashboard.css" rel="stylesheet" type="text/css" /> 
-  <link href="css/white.css" rel="stylesheet" type="text/css" />    
-  <!-- <link rel="stylesheet" type="text/css" href="css/jquery.fancybox.css?v=2.1.5" media="screen" /> -->
+  <link href="css/dark.css" rel="stylesheet" type="text/css" />      
 </head>
 <body>
   <!--Header Start Here-->
@@ -108,6 +108,12 @@
         </ul>
         <a class="viewall" href="#" title="view all">view all<span class="a-arrow"></span></a>
       </div>
+      <div class="card playwith">
+        <a href="submitquestion.html">
+          <span class="sprite myqestion"></span>
+          <span class="playtext">Submit<span>Question</span></span>
+        </a>
+      </div>
 
       <div class="card navview">
         <ul class="tabbing clearfix">
@@ -182,7 +188,7 @@
       </div>
 
       <div class="card playwith">
-        <a href="#">
+        <a href="signup.html">
           <span class="sprite playwithicon"></span>
           <span class="playtext">Play with your<span>Friends</span></span>
         </a>
@@ -214,13 +220,12 @@
           </div>
           <div id="currentgame">
             <div class="row">
-              <div class=" col-sm-9 col-xs-12"><h2>Currently active games</h2></div>
-              <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+              <div class=" col-sm-9 col-xs-12"><h2>Currently active games</h2></div>              
             </div>            
             <ul class="row">
-              <li class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+              <li class="col-md-3 col-sm-4 col-xs-12">
                 <div class="innerli">
-                  <div class="T-tagging">Programming</div>
+                  <div class="T-tagging">Pro, C++, Java</div>
                   <div class="row">
                     <div class="col-xs-6">
                       <div class="yourimg vs">
@@ -249,9 +254,9 @@
                   </a>
                 </div>
               </li>
-              <li class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+              <li class="col-md-3 col-sm-4 col-xs-12">
                 <div class="innerli">
-                  <div class="T-tagging">Programming</div>
+                  <div class="T-tagging">C++, Java, PHP</div>
                   <div class="row">
                     <div class="col-xs-6">
                       <div class="yourimg vs">
@@ -280,21 +285,13 @@
                   </a>
                 </div>
               </li>
-              <li class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+              <li class="col-md-3 col-sm-4 col-xs-12">
                 <div class="innerli">
-                  <div class="T-tagging">Networking</div>
+                  <div class="T-tagging">dat, C++, Java, PHP </div>
                   <div class="row">                    
-                    <div class="col-xs-6">
-                      <div class="yourimg vs">
-                        <a href="#"><img src="images/kaanishhk.jpg" alt="Kaanishhk" /></a>
-                      </div>
-                      <a href="#" class="dark">William</a>
-                      <div class="light">Mumbai</div><hr>
-                      <div class="light">&nbsp;</div>
-                      <div class="dark">Score  09</div>
-                    </div>
-                    <div class="col-xs-6 clearfix">
-                      <div class="yourimg floatright" >
+
+                    <div class="col-xs-12 textcenter clearfix">
+                      <div class="yourimg" >
                         <img src="images/yourimg.jpg" alt="yourimg" />
                       </div>
                       <div class="clear"></div>
@@ -306,12 +303,14 @@
 
                     </div>
                   </div>
-                  <div class="opponent">Opponent’s Turn</div>
+                  <a href="#" class="playnow btn">
+                    <span>Your Turn</span>Play Now
+                  </a>
                 </div>
               </li>
-              <li class="col-lg-3 col-md-3 col-sm-12 col-xs-12 hidden-md">
+              <li class="col-md-3 col-sm-4 col-xs-12 hidden-md">
                 <div class="innerli">
-                  <div class="T-tagging">database</div>
+                  <div class="T-tagging">C++, dat, Java</div>
                   <div class="row">                    
                     <div class="col-xs-6">
                       <div class="yourimg vs">
@@ -339,423 +338,729 @@
                 </div>
               </li>
 
-              <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
+              <li class="col-md-3 col-sm-4 col-xs-12">
+                <div class="innerli">
+                  <div class="T-tagging">Pro, C++, Java</div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="yourimg vs">
+                        <a href="#"><img src="images/yourimg.jpg" alt="yourimg" /></a>
+                      </div>
+                      <a href="#" class="dark">You</a>
+                      <div class="light">Mumbai</div>
+                      <hr>
+                      <div class="light">Round 2</div>
+                      <div class="dark">Score  10</div>                    
+
+                    </div>
+                    <div class="col-xs-6 clearfix">
+                      <div class="yourimg floatright">
+                        <a href="#"><img src="images/kaanishhk.jpg" alt="Kaanishhk" /></a>
+                      </div>
+                      <div class="clear"></div>
+                      <a href="#" class="dark">Kaanishhk</a>
+                      <div class="light">hristol</div><hr>
+                      <div class="light">&nbsp;</div>
+                      <div class="dark">Score  07</div>
+                    </div>
+                  </div>
+                  <a href="#" class="playnow btn">
+                    <span>Your Turn</span>Play Now
+                  </a>
+                </div>
+              </li>
+              <li class="col-md-3 col-sm-4 col-xs-12">
+                <div class="innerli">
+                  <div class="T-tagging">Pro, C++, Java</div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="yourimg vs">
+                        <a href="#"><img src="images/yourimg.jpg" alt="yourimg" /></a>
+                      </div>
+                      <a href="#" class="dark">You</a>
+                      <div class="light">Mumbai</div>
+                      <hr>
+                      <div class="light">Round 2</div>
+                      <div class="dark">Score  10</div>                    
+
+                    </div>
+                    <div class="col-xs-6 clearfix">
+                      <div class="yourimg floatright">
+                        <a href="#"><img src="images/kaanishhk.jpg" alt="Kaanishhk" /></a>
+                      </div>
+                      <div class="clear"></div>
+                      <a href="#" class="dark">Kaanishhk</a>
+                      <div class="light">hristol</div><hr>
+                      <div class="light">&nbsp;</div>
+                      <div class="dark">Score  07</div>
+                    </div>
+                  </div>
+                  <a href="#" class="playnow btn">
+                    <span>Your Turn</span>Play Now
+                  </a>
+                </div>
+              </li>
+              <li class="col-md-3 col-sm-4 col-xs-12">
+                <div class="innerli">
+                  <div class="T-tagging">Pro, C++, Java</div>
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <div class="yourimg vs">
+                        <a href="#"><img src="images/yourimg.jpg" alt="yourimg" /></a>
+                      </div>
+                      <a href="#" class="dark">You</a>
+                      <div class="light">Mumbai</div>
+                      <hr>
+                      <div class="light">Round 2</div>
+                      <div class="dark">Score  10</div>                    
+
+                    </div>
+                    <div class="col-xs-6 clearfix">
+                      <div class="yourimg floatright">
+                        <a href="#"><img src="images/kaanishhk.jpg" alt="Kaanishhk" /></a>
+                      </div>
+                      <div class="clear"></div>
+                      <a href="#" class="dark">Kaanishhk</a>
+                      <div class="light">hristol</div><hr>
+                      <div class="light">&nbsp;</div>
+                      <div class="dark">Score  07</div>
+                    </div>
+                  </div>
+                  <a href="#" class="playnow btn">
+                    <span>Your Turn</span>Play Now
+                  </a>
+                </div>
+              </li>
+              <!-- <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
                 <a href="#" class="innerli textcenter">
                  <div class="viewallbtn">view all</div>
-                </a>
+               </a>
+             </li> -->
+           </ul>
+           <div class="col-xs-12 textcenter"><a href="#/" class="viewall loadMore">view all</a> <a style="display: none;" href="#/" class="viewall showLess">view less</a></div>
+         </div>
+       </section>  
+       <!-- Currently active games end -->
+
+       <!-- Invitation to play games -->
+       <section class="card">
+        <div class="row">
+          <div class="col-sm-9 col-xs-12"><h2>Invitation to play games <span>3 from friends & 1 from random player</span></h2></div>          
+        </div>
+        <ul class="invitationlist clearfix">
+          <li>
+            <div class="row">
+              <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
+              <div class="col-md-2 col-xs-12">
+                <a href="#" class="dark">Edhas</a>
+                <div class="light">Friend</div>
+              </div>
+              <div class="row col-md-4 col-xs-12">
+                <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Programming</div>
+                <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
+              </div>                                
+              <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
+              <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
+            </div>
+          </li>
+          <li>
+            <div class="row">
+              <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
+              <div class="col-md-2 col-xs-12">
+                <a href="" class="dark">Hetaksh</a>
+                <div class="light">Friend</div>
+              </div>
+              <div class="row col-md-4 col-xs-12">
+                <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Database</div>
+                <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
+              </div>                
+              <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
+              <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
+            </div>
+          </li>
+          <li>
+            <div class="row">
+              <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
+              <div class="col-md-2 col-xs-12">
+                <a href="#" class="dark">Iravaj</a>
+                <div class="light">Random</div>
+              </div>
+              <div class="row col-md-4 col-xs-12">
+                <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Networking</div>
+                <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
+              </div>                  
+              <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
+              <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
+            </div>
+          </li>
+
+<li>
+            <div class="row">
+              <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
+              <div class="col-md-2 col-xs-12">
+                <a href="#" class="dark">Edhas</a>
+                <div class="light">Friend</div>
+              </div>
+              <div class="row col-md-4 col-xs-12">
+                <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Programming</div>
+                <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
+              </div>                                
+              <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
+              <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
+            </div>
+          </li>
+          <li>
+            <div class="row">
+              <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
+              <div class="col-md-2 col-xs-12">
+                <a href="" class="dark">Hetaksh</a>
+                <div class="light">Friend</div>
+              </div>
+              <div class="row col-md-4 col-xs-12">
+                <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Database</div>
+                <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
+              </div>                
+              <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
+              <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
+            </div>
+          </li>
+          <li>
+            <div class="row">
+              <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
+              <div class="col-md-2 col-xs-12">
+                <a href="#" class="dark">Iravaj</a>
+                <div class="light">Random</div>
+              </div>
+              <div class="row col-md-4 col-xs-12">
+                <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Networking</div>
+                <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
+              </div>                  
+              <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
+              <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
+            </div>
+          </li>
+          <!-- <li class="visible-xs textcenter">
+            <a href="#" >
+             <div class="viewallbtn">view all</div>
+           </a>
+         </li> -->
+       </ul> 
+       <div class="col-xs-12 textcenter margint20"><a href="#/" class="viewall loadMore2">view all</a> <a style="display: none;" href="#/" class="viewall showLess2">view less</a></div>
+     </section>    
+     <!-- Invitation to play games end   -->
+
+     <!-- Category leaderboard -->
+     <section class="card">
+      <div class="row">
+        <div class="col-sm-9 col-xs-12"><h2>Category leaderboard</h2></div>        
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-xs-12 categorybox skyblue">
+          <h3>Programming</h3>
+          <ul>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#1</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">William</a>
+                  <div class="light">Springfield</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">25879</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#2</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Michael</a>
+                  <div class="light">Franklin</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">24781</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#3</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Elizabeth</a>
+                  <div class="light">Greenville</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">23547</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-xs-12 categorybox red">
+          <h3>DataBase</h3>
+          <ul>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#1</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">William</a>
+                  <div class="light">Springfield</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">25879</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#2</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Michael</a>
+                  <div class="light">Franklin</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">24781</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#3</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Elizabeth</a>
+                  <div class="light">Greenville</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">23547</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+          </ul>          
+        </div>
+        <div class="col-md-4 col-xs-12 categorybox green">
+          <h3>UI & UX</h3>
+          <ul>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#1</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">William</a>
+                  <div class="light">Springfield</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">25879</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#2</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Michael</a>
+                  <div class="light">Franklin</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">24781</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#3</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Elizabeth</a>
+                  <div class="light">Greenville</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">23547</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 col-xs-12 categorybox yellow">
+          <h3>Hardware</h3>
+          <ul>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#1</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">William</a>
+                  <div class="light">Springfield</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">25879</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#2</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Michael</a>
+                  <div class="light">Franklin</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">24781</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#3</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Elizabeth</a>
+                  <div class="light">Greenville</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">23547</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 col-xs-12 categorybox bluegrey">
+          <h3>Networking</h3>
+          <ul>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#1</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">William</a>
+                  <div class="light">Springfield</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">25879</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#2</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Michael</a>
+                  <div class="light">Franklin</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">24781</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#3</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Elizabeth</a>
+                  <div class="light">Greenville</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">23547</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="col-md-4 col-xs-12 categorybox orrange">
+          <h3>Dev Ops</h3>
+          <ul>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#1</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">William</a>
+                  <div class="light">Springfield</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">25879</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#2</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Michael</a>
+                  <div class="light">Franklin</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">24781</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-xs-2 has">#3</div>
+                <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
+                <div class="col-xs-4">
+                  <a href="#" class="dark">Elizabeth</a>
+                  <div class="light">Greenville</div>
+                </div>
+                <div class="col-xs-3">
+                  <div class="dark">23547</div>
+                  <div class="light">points</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-xs-12 textcenter margint20"><a href="#/" class="viewall loadMore3">view all</a> <a style="display: none;" href="#/" class="viewall showLess3">view less</a></div>
+      </div> 
+    </section>
+    <!-- Category leaderboard end-->
+
+    <div class="row">
+      <!-- Question of the day -->
+      <div class="col-lg-7 col-md-12 col-sm-12 ">
+        <div class="card">
+          <div class="rocateicon sprite"></div>
+          <div class="question-cont">
+            <h2>Question of the day!</h2>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus antium dolor emque laudantium?</p>
+            <ul class="question-list clearfix">
+              <li>
+                <input type="radio" id="q-radio1" name="question">
+                <label for="q-radio1">Voluptas nulla pariatur</label>
+              </li>
+              <li>
+                <input type="radio" id="q-radio2" name="question">
+                <label for="q-radio2">Exercitationem</label>
+              </li>
+              <li>
+                <input type="radio" id="q-radio3" name="question">
+                <label for="q-radio3">Consequuntur</label>
+              </li>
+              <li>
+                <input type="radio" id="q-radio4" name="question">
+                <label for="q-radio4">Quis autem vel eum</label>
               </li>
             </ul>
+            <a href="#" class="btn">Submit</a>
           </div>
-        </section>  
-        <!-- Currently active games end -->
 
-        <!-- Invitation to play games -->
-        <section class="card">
-          <div class="row">
-            <div class="col-sm-9 col-xs-12"><h2>Invitation to play games <span>3 from friends & 1 from random player</span></h2></div>
-            <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
-          </div>
-          <ul class="invitationlist">
-            <li>
-              <div class="row">
-                <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
-                <div class="col-md-2 col-xs-12">
-                  <a href="#" class="dark">Edhas</a>
-                  <div class="light">Friend</div>
-                </div>
-                <div class="row col-md-4 col-xs-12">
-                  <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Programming</div>
-                  <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
-                </div>                                
-                <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
-                <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
-                <div class="col-md-2 col-xs-12">
-                  <a href="" class="dark">Hetaksh</a>
-                  <div class="light">Friend</div>
-                </div>
-                <div class="row col-md-4 col-xs-12">
-                  <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Database</div>
-                  <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
-                </div>                
-                <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
-                <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
-              </div>
-            </li>
-            <li>
-              <div class="row">
-                <div class="col-md-1 col-xs-12 usreimg"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
-                <div class="col-md-2 col-xs-12">
-                  <a href="#" class="dark">Iravaj</a>
-                  <div class="light">Random</div>
-                </div>
-                <div class="row col-md-4 col-xs-12">
-                  <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">Networking</div>
-                  <div class="col-lg-6 col-md-12 col-xs-4 clinton">Clinton</div>
-                </div>                  
-                <div class="col-md-3 col-xs-12"><a href="#" class="btn">Accept Inviatation</a></div>
-                <div class="col-md-2 col-xs-12 invitationleft">1 days left to accept invitation</div>
-              </div>
-            </li>
-
-            <li class="visible-xs textcenter">
-              <a href="#" >
-                 <div class="viewallbtn">view all</div>
-              </a>
-            </li>
-          </ul> 
-        </section>    
-        <!-- Invitation to play games end   -->
-
-        <!-- Category leaderboard -->
-        <section class="card">
-          <div class="row">
-            <div class="col-sm-9 col-xs-12"><h2>Category leaderboard</h2></div>
-            <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
-          </div>
-          <div class="row">
-            <div class="col-md-4 col-xs-12 categorybox skyblue">
-              <h3>Programming</h3>
-              <ul>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#1</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">William</a>
-                      <div class="light">Springfield</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">25879</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#2</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">Michael</a>
-                      <div class="light">Franklin</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">24781</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#3</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">Elizabeth</a>
-                      <div class="light">Greenville</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">23547</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-4 col-xs-12 categorybox red">
-              <h3>DataBase</h3>
-              <ul>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#1</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">William</a>
-                      <div class="light">Springfield</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">25879</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#2</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">Michael</a>
-                      <div class="light">Franklin</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">24781</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#3</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">Elizabeth</a>
-                      <div class="light">Greenville</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">23547</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="col-md-4 col-xs-12 categorybox green">
-              <h3>UI & UX</h3>
-              <ul>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#1</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user1.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">William</a>
-                      <div class="light">Springfield</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">25879</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#2</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user2.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">Michael</a>
-                      <div class="light">Franklin</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">24781</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-                <li>
-                  <div class="row">
-                    <div class="col-xs-2 has">#3</div>
-                    <div class="col-xs-3"><a href="#"><img src="images/user3.jpg" alt="user1" /></a></div>
-                    <div class="col-xs-4">
-                      <a href="#" class="dark">Elizabeth</a>
-                      <div class="light">Greenville</div>
-                    </div>
-                    <div class="col-xs-3">
-                      <div class="dark">23547</div>
-                      <div class="light">points</div>
-                    </div>
-                  </div>
-                </li>
-              </ul>
-            </div>
-          </div> 
-        </section>
-        <!-- Category leaderboard end-->
-
-        <div class="row">
-          <!-- Question of the day -->
-          <div class="col-lg-7 col-md-12 col-sm-12 ">
-            <div class="card">
-              <div class="rocateicon sprite"></div>
-              <div class="question-cont">
-                <h2>Question of the day!</h2>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accus antium dolor emque laudantium?</p>
-                <ul class="question-list clearfix">
-                  <li>
-                    <input type="radio" id="q-radio1" name="question">
-                    <label for="q-radio1">Voluptas nulla pariatur</label>
-                  </li>
-                  <li>
-                    <input type="radio" id="q-radio2" name="question">
-                    <label for="q-radio2">Exercitationem</label>
-                  </li>
-                  <li>
-                    <input type="radio" id="q-radio3" name="question">
-                    <label for="q-radio3">Consequuntur</label>
-                  </li>
-                  <li>
-                    <input type="radio" id="q-radio4" name="question">
-                    <label for="q-radio4">Quis autem vel eum</label>
-                  </li>
-                </ul>
-                <a href="#" class="btn">Submit</a>
-              </div>
-
-            </div>
-          </div>
-          <!-- Question of the day end -->
-
-          <!-- Subscribe -->
-          <div class="col-lg-5 col-md-12 col-sm-12 ">
-            <div class="card">
-              <div class="subscrib-cion sprite"></div>
-              <div class="subscrib-cont">
-                <h2>Sign Up  our newsletter to stay connected </h2>
-                <p>Subscribe to our email newsletter for useful tips and valuable resources, sent out every second Tuesday.</p>
-                <form>
-                  <div class="row">
-                    <div class="col-sm-7 col-xs-12">
-                      <input placeholder="enter your email ID" type="email" name="enter your email ID" value="" required="">
-                    </div>
-                    <div class="col-sm-5 col-xs-12">
-                      <button class="btn">Subscrib</button>
-                    </div>
-                  </div>
-                </form>
-                <div class="subs-bottom">2145 Subscribers</div>
-                <div class="subs-bottom">powerd by mail chimp</div>
-              </div>
-            </div>
-          </div>
-          <!-- Subscribe end -->
         </div>
+      </div>
+      <!-- Question of the day end -->
 
-        <!-- <blog -->
-        <div class="row blog hidden-xs">
-          <div class="col-md-4 col-xs-12">
-            <div class="card">
-
-              <a class="blogimg"href="#"><img src="images/blog1.jpg" alt="Real World Angular: Hiring" /></a>
-              
-              <div class="blog-cont">
-                <div class="T-tagging">Programming</div>
-                <h2><a href="#">Real World Angular: Hiring</a></h2>
-                <p class="minimize">In this part of the series, I won’t talk about the technical side of building our app, but rather one of the technical side</p>
-              </div>
-              <div class="blog-social">
-                <div class="col-xs-5">
-                  <div class="commenticon sprite"></div>349
+      <!-- Subscribe -->
+      <div class="col-lg-5 col-md-12 col-sm-12 ">
+        <div class="card">
+          <div class="subscrib-cion sprite"></div>
+          <div class="subscrib-cont subscrib-thx">
+            <h2>Sign Up  our newsletter to stay connected </h2>
+            <p>Subscribe to our email newsletter for useful tips and valuable resources, sent out every second Tuesday.</p>
+            <div class="subscrib-b">
+              <form>
+                <div class="row">
+                  <div class="col-sm-7 col-xs-12">
+                    <input placeholder="enter your email ID" type="email" name="enter your email ID" value="" required="">
+                  </div>
+                  <div class="col-sm-5 col-xs-12">
+                    <button class="btn">Subscrib</button>
+                  </div>
                 </div>
-                <div class="col-xs-5">
-                  <div class="viewicon sprite"></div>49500
-                </div>
-                <div class="col-xs-2 align-right">
-                  <a href="#"><span class="shareicon sprite"></span></a>
-                </div>
-              </div>
+              </form>
+              <div class="subs-bottom">2145 Subscribers</div>
+              <div class="subs-bottom">powerd by mail chimp</div>
             </div>
-          </div>
-
-          <div class="col-md-4 col-xs-12">
-            <div class="card">
-
-              <a class="blogimg"href="#"><img src="images/blog2.jpg" alt="Real World Angular - Part 9.1: More Unit Testing" /></a>
-              
-              <div class="blog-cont">
-                <div class="T-tagging">database</div>
-                <h2><a href="#">Real World Angular - Part 9.1: More Unit Testing</a></h2>
-                <p class="minimize">This is a continuation of Part 9 of our Real World Angular series. In Part 9, we wrote unit tests for one set Angular series</p>
-              </div>
-              <div class="blog-social">
-                <div class="col-xs-5">
-                  <div class="commenticon sprite"></div>349
-                </div>
-                <div class="col-xs-5">
-                  <div class="viewicon sprite"></div>49500
-                </div>
-                <div class="col-xs-2 align-right">
-                  <a href="#"><span class="shareicon sprite"></span></a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-4 col-xs-12 hidden-md">
-            <div class="card">
-
-              <a class="blogimg"href="#"><img src="images/blog3.jpg" alt="Real World Angular -Part 6.1: Upgrading to 4.0.0-rc.2" /></a>
-              
-              <div class="blog-cont">
-                <div class="T-tagging">networking</div>
-                <h2><a href="#">Real World Angular -Part 6.1: Upgrading to 4.0.0-rc.2</a></h2>
-                <p class="minimize">Upgrading our application to Angular Release Candidate (rc 2). We’ll take slight detour from We’ll take We’ll take</p>
-              </div>
-              <div class="blog-social">
-                <div class="col-xs-5">
-                  <div class="commenticon sprite"></div>349
-                </div>
-                <div class="col-xs-5">
-                  <div class="viewicon sprite"></div>49500
-                </div>
-                <div class="col-xs-2 align-right">
-                  <a href="#"><span class="shareicon sprite"></span></a>
-                </div>
-              </div>
+            <div class="subscrib-a">
+              <h3>Thank You</h3>
+              <p>Your subscription request has been received.</p>
+              <p>We respect your privacy. Your information is safe and will never be shard.</p>
             </div>
           </div>
         </div>
-        <!-- blog end -->
+      </div>
+      <!-- Subscribe end -->
+    </div>
 
-        <!-- Real-time System Stats -->
-        <div class="card hidden-xs">
-          <div class="row">
-            <div class=" col-sm-3 col-xs-12 clearfix">
-              <div class="timestats-icon sprite"></div>
-              <h2>Real-time System Stats</h2>
+    <!-- <blog -->
+    <div class="row blog hidden-xs">
+      <div class="col-md-4 col-xs-12">
+        <div class="card">
+
+          <a class="blogimg"href="#"><img src="images/blog1.jpg" alt="Real World Angular: Hiring" /></a>
+
+          <div class="blog-cont">
+            <div class="T-tagging">Programming</div>
+            <h2><a href="#">Real World Angular: Hiring</a></h2>
+            <p class="minimize">In this part of the series, I won’t talk about the technical side of building our app, but rather one of the technical side</p>
+          </div>
+          <div class="blog-social">
+            <div class="col-xs-5">
+              <div class="commenticon sprite"></div>349
             </div>
-            <div class=" col-sm-9 col-xs-12">
-              <div class="time-stats">
-                Total No of Users
-                <div class="time-count">25879</div>
-              </div>
-              <div class="time-stats">
-                Total No Of Questions
-                <div class="time-count">65478</div>
-              </div>
-              <div class="time-stats">
-                Users Currently playing
-                <div class="time-count">1541</div>
-              </div>
-              <div class="time-stats">
-                Current Server Load
-                <div class="time-count">3.01</div>
-              </div>
+            <div class="col-xs-5">
+              <div class="viewicon sprite"></div>49500
+            </div>
+            <div class="col-xs-2 align-right">
+              <a href="#1" class="cd-popup-trigger"><span class="shareicon sprite"></span></a>
             </div>
           </div>
         </div>
-        <!-- Real-time System Stats end -->
+      </div>
 
-      </div>        
-    </main>
-  </div>
-  <!-- Page Layout end -->
+      <div class="col-md-4 col-xs-12">
+        <div class="card">
+
+          <a class="blogimg"href="#"><img src="images/blog2.jpg" alt="Real World Angular - Part 9.1: More Unit Testing" /></a>
+
+          <div class="blog-cont">
+            <div class="T-tagging">database</div>
+            <h2><a href="#">Real World Angular - Part 9.1: More Unit Testing</a></h2>
+            <p class="minimize">This is a continuation of Part 9 of our Real World Angular series. In Part 9, we wrote unit tests for one set Angular series</p>
+          </div>
+          <div class="blog-social">
+            <div class="col-xs-5">
+              <div class="commenticon sprite"></div>349
+            </div>
+            <div class="col-xs-5">
+              <div class="viewicon sprite"></div>49500
+            </div>
+            <div class="col-xs-2 align-right">
+              <a  href="#1" class="cd-popup-trigger"><span class="shareicon sprite"></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xs-12 hidden-md">
+        <div class="card">
+
+          <a class="blogimg"href="#"><img src="images/blog3.jpg" alt="Real World Angular -Part 6.1: Upgrading to 4.0.0-rc.2" /></a>
+
+          <div class="blog-cont">
+            <div class="T-tagging">networking</div>
+            <h2><a href="#">Real World Angular -Part 6.1: Upgrading to 4.0.0-rc.2</a></h2>
+            <p class="minimize">Upgrading our application to Angular Release Candidate (rc 2). We’ll take slight detour from We’ll take We’ll take</p>
+          </div>
+          <div class="blog-social">
+            <div class="col-xs-5">
+              <div class="commenticon sprite"></div>349
+            </div>
+            <div class="col-xs-5">
+              <div class="viewicon sprite"></div>49500
+            </div>
+            <div class="col-xs-2 align-right">
+              <a  href="#1" class="cd-popup-trigger"><span class="shareicon sprite"></span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- blog end -->
+
+    <!-- Real-time System Stats -->
+    <div class="card hidden-xs">
+      <div class="row">
+        <div class=" col-sm-3 col-xs-12 clearfix">
+          <div class="timestats-icon sprite"></div>
+          <h2>Real-time System Stats</h2>
+        </div>
+        <div class=" col-sm-9 col-xs-12">
+          <div class="time-stats">
+            Total No of Users
+            <div class="time-count">25879</div>
+          </div>
+          <div class="time-stats">
+            Total No Of Questions
+            <div class="time-count">65478</div>
+          </div>
+          <div class="time-stats">
+            Users Currently playing
+            <div class="time-count">1541</div>
+          </div>
+          <div class="time-stats">
+            Current Server Load
+            <div class="time-count">3.01</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Real-time System Stats end -->
+
+  </div>        
+</main>
+</div>
+<!-- Page Layout end -->
 
 
 
-  <div class="clear"></div>
+<div class="clear"></div>
 
-  <!-- Footer -->
-  <footer>
-   <div class="container">
-     <div class="row">
-       <div class="col-sm-6 col-xs-12">
-         <a href="#" title="Home">Home</a>
-         <a href="#" title="Blog">Blog</a>
-         <a href="#" title="Sing Up">Sing Up</a>
-         <a href="#" title="Sign in">Sign in</a>
-       </div>
-       <div class="col-sm-6 col-xs-12 copyright textrigth">Trivia © 2017. All rights reserved.</div>
+<!-- Footer -->
+<footer>
+ <div class="container">
+   <div class="row">
+     <div class="col-lg-3 col-md-4 col-sm-5 col-xs-12">
+       <a href="#" title="Home">Home</a>
+       <a href="#" title="Blog">Blog</a>
+       <a href="#" title="Sing Up">Sing Up</a>
+       <a href="#" title="Sign in">Sign in</a>
      </div>
-   </div>
- </footer>
- <!-- Footer end -->
+     <div class="col-lg-5 col-md-4 col-sm-3 col-xs-12 socialicon-f">
+      <a href="#" class="sprite facebookicon-f"></a>
+      <a href="#" class="sprite twiticon-f"></a>
+      <a href="#" class="sprite linkdenicon-f"></a>
+    </div>
+    <div class="col-sm-4 col-xs-12 copyright textrigth">Trivia © 2017. All rights reserved.</div>
+  </div>
+</div>
+</footer>
+<!-- Footer end -->
+
+<!-- Blog Share Popup -->
+<div class="cd-popup sharepop"  id="1" role="alert"  >
+  <div class="cd-popup-container">
+  <a href="#" class="sprite facebookicon"></a>
+  <a href="#" class="sprite twiticon"></a>
+  <a href="#" class="sprite linkdenicon"></a>
+  <a href="#0" class="cd-popup-close img-replace">Close</a>
+  </div>  
+</div>
 
 
- <script src="js/jquery-2.2.0.min.js" type="text/javascript"></script>
- <script type="text/javascript" src="js/owl.carousel.min.js"></script> 
- <script src="js/custom.js" type="text/javascript"></script>  
- 
+<script src="js/jquery-2.2.0.min.js" type="text/javascript"></script>
+<!-- <script type="text/javascript" src="js/owl.carousel.min.js"></script>  -->
+<script src="js/popup.js"></script>
+<script src="js/custom.js" type="text/javascript"></script>  
+
 
 
 </body>

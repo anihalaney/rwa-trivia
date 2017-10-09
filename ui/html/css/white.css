@@ -1,44 +1,6 @@
-/*.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { background: url(../images/sprite.png) no-repeat; display: inline-block; vertical-align: middle; }*/
-/*.optionbox input:checked + label .sprite{ background:#fff url(../images/sprite.png) no-repeat;}
-
-.settingicon{ background-position: -1px -1px; height: 15px; width: 15px; transition: 0.3s ease-in}
-.logouticon{ background-position: -18px 0px; height: 16px; width: 11px;}
-.mapicon{ background-position: -31px 0; width: 11px; height: 15px; margin-right: 12px; vertical-align: -3px }
-.architicon{ background-position: 0 -22px; width: 29px; height: 33px; margin-right: 12px; }
-.rogrammingicon{ background-position: -35px -22px; width: 29px; height: 33px; margin-right: 12px; }
-.playedicon{ background-position: 0 -63px; }
-.topicsicon{background-position: -30px -63px; }
-.winsicon{ background-position: -54px -63px}
-.badgesicon{ background-position: -80px -63px }
-.losessicon{ background-position: -103px -63px }
-.avgicon{ background-position: -125px -63px }
-.contributicon{ background-position: -150px -63px }
-.playwithicon{ background-position: -69px -22px; width: 50px; height: 30px; margin-right: 16px;}
-.facebookicon{ background-position: -1px -99px; }
-.twiticon{ background-position: -41px -99px; }
-.linkdenicon{ background-position: -82px -99px; }
-.sunicon{ background-position: -129px -101px;vertical-align: -12px; }
-.rocateicon{ background-position:0px -142px; height: 58px; width: 44px; margin: 0 16px 5px 0; float: left; }
-.subscrib-cion{ background-position:-45px -142px; height: 50px; width: 54px; float: left; margin-right: 16px; }
-.commenticon{background-position:0px -208px; height:20px; width: 20px; margin:0 10px 0 13px }
-.viewicon{background-position:-21px -208px; height:12px; width: 20px; margin-right: 10px; vertical-align:-2px}
-.shareicon{background-position:-42px -208px; height:20px; width: 20px; margin-right: 10px}
-.timestats-icon{ background-position: -102px -146px; height: 42px; width: 44px; float: left; margin-right: 20px;}
-.siglep-icon{ background-position: -88px -200px !important; height: 53px; width: 53px; margin-right: 10px; }
-.towp-icon{ background-position: -139px -200px !important; height: 53px; width: 53px; margin-right: 10px;}
-.randomp-icon{ background-position: -0px -251px !important; height:43px; width: 43px; margin-right: 7px;}
-.friendsp-icon{ background-position: -42px -251px !important; height:43px; width: 43px; margin-right: 7px;}
-.computerp-icon{ background-position: -86px -251px !important; height:43px; width: 43px; margin-right: 7px;}
-.withfriends .owl-prev:after, .withfriends .owl-next:after{background-position: -181px -73px; width: 5px; height: 12px; position: absolute; left: 0; right: 0; bottom: 0; top: 0; margin: auto; content: "";}
-.withfriends .owl-next:after{background-position: -192px -73px;}
-.withfriends .owl-prev:hover:after{ background-position: -181px -91px; }
-.withfriends .owl-next:hover:after{ background-position: -192px -91px; }
-.chancaticon{ background-position: -163px -151px; height: 30px; width:30px; margin-right: 8px}
-.active .chancaticon{ background-position: -174px -112px;}
-.resubmiticon{ background-position: -129px -262px; height: 28px; width: 28px; margin-bottom: 3px}*/
-
-
-
+@media screen and ( min-width:400px){  
+  .settingicon, .logouticon{ margin-right: 12px; vertical-align: -3px;}
+}
 /*Header*/
 .card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name{ background: #fff }
 body, .playwith a:after, .h1block:after, .question-list li label,.recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial{ background: #f1f2f2 }
@@ -54,8 +16,7 @@ footer{ background: #0b214f}
 .reasons{ background: #ffe8e4 }
 
 .form-group .bar:before{ background: #4285f4 }
-
-
+.invitationlist li:nth-child(odd){ background:#fafafa;}
 
 /*Text*/
 .copyright{ color: rgba(255,255,255,0.5); }
@@ -98,6 +59,9 @@ input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .f
 .skyblue h3:before{ border-color:#01d5d8  }
 .red h3:before{ border-color:#ff2d55  }
 .green h3:before{ border-color:#7ec856  }
+.yellow h3:before{ border-color:#C0CA33  }
+.orrange h3:before{ border-color: #FF3D00 }
+.bluegrey h3:before{ border-color: #78909C}
 .optionbox input:checked + label, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .gameplay li:hover, .gameplay li.right{border-color:#71b02f}
 .secondbg{ border-color: #dddddd }
 .logininner .formfield input[type="checkbox"]:before, .gameplay li.wrong, .reasons{ border-color: #d54937;}
@@ -136,4 +100,7 @@ input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .f
 }
 @media screen and ( max-width:1024px){
 	nav { background: #f1f2f2 }
+}
+@media screen and ( max-width:989px){
+	.invitationlist li{ background:#fafafa;}
 }
