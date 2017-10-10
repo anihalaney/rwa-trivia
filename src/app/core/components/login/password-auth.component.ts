@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import * as firebase from 'firebase/app';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
@@ -22,7 +22,7 @@ export class PasswordAuthComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private afAuth: AngularFireAuth,
-              public dialogRef: MdDialogRef<PasswordAuthComponent>) {
+              public dialogRef: MatDialogRef<PasswordAuthComponent>) {
     this.mode = SignInMode.signIn;
   }
 

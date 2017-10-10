@@ -1,33 +1,33 @@
 import { NgModule } from '@angular/core';
 import 'hammerjs';
-import { MdInputModule, MdButtonModule, MdButtonToggleModule, 
-         MdCheckboxModule, MdRadioModule, 
-         MdSelectModule, MdAutocompleteModule,
-         MdCardModule, MdListModule, MdTabsModule,
-         MdMenuModule, MdSidenavModule, MdToolbarModule,
-         MdIconModule, MdChipsModule,
-         MdDialogModule, MdSnackBarModule, 
-         MdTableModule, MdPaginatorModule, MdSortModule } from '@angular/material';
+import { MatInputModule, MatButtonModule, MatButtonToggleModule, 
+         MatCheckboxModule, MatRadioModule, 
+         MatSelectModule, MatAutocompleteModule,
+         MatCardModule, MatListModule, MatTabsModule,
+         MatMenuModule, MatSidenavModule, MatToolbarModule,
+         MatIconModule, MatChipsModule,
+         MatDialogModule, MatSnackBarModule, 
+         MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
 
 @NgModule({
   imports: [
     //Material
-    MdInputModule, MdButtonModule, MdButtonToggleModule, 
-    MdCheckboxModule, MdRadioModule, 
-    MdSelectModule, MdAutocompleteModule, 
-    MdCardModule, MdListModule, MdTabsModule,
-    MdMenuModule, MdSidenavModule, MdToolbarModule,
-    MdIconModule, MdChipsModule,
-    MdDialogModule, MdSnackBarModule, 
-    MdTableModule, MdPaginatorModule, MdSortModule
+    MatInputModule, MatButtonModule, MatButtonToggleModule, 
+    MatCheckboxModule, MatRadioModule, 
+    MatSelectModule, MatAutocompleteModule, 
+    MatCardModule, MatListModule, MatTabsModule,
+    MatMenuModule, MatSidenavModule, MatToolbarModule,
+    MatIconModule, MatChipsModule,
+    MatDialogModule, MatSnackBarModule, 
+    MatTableModule, MatPaginatorModule, MatSortModule
   ],
-  exports:  [ MdInputModule, MdButtonModule, MdButtonToggleModule, 
-              MdCheckboxModule, MdRadioModule, 
-              MdSelectModule, MdAutocompleteModule,
-              MdCardModule, MdListModule, MdTabsModule,
-              MdMenuModule, MdSidenavModule, MdToolbarModule,
-              MdIconModule, MdChipsModule,
-              MdDialogModule, MdSnackBarModule, 
-              MdTableModule, MdPaginatorModule, MdSortModule ]
+  exports:  [ MatInputModule, MatButtonModule, MatButtonToggleModule, 
+              MatCheckboxModule, MatRadioModule, 
+              MatSelectModule, MatAutocompleteModule,
+              MatCardModule, MatListModule, MatTabsModule,
+              MatMenuModule, MatSidenavModule, MatToolbarModule,
+              MatIconModule, MatChipsModule,
+              MatDialogModule, MatSnackBarModule, 
+              MatTableModule, MatPaginatorModule, MatSortModule ]
 })
 export class SharedMaterialModule { }

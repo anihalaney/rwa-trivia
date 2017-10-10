@@ -1,5 +1,5 @@
 import { Injectable }    from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Store } from '@ngrx/store';
@@ -13,14 +13,14 @@ import { User } from '../../model';
 
 @Injectable()
 export class AuthenticationService {
-  dialogRef: MdDialogRef<LoginComponent>;
+  dialogRef: MatDialogRef<LoginComponent>;
 
   constructor(private store: Store<AppStore>,
               private userActions: UserActions,
               private uiStateActions: UIStateActions,
               public afAuth: AngularFireAuth,
               public db: AngularFireDatabase,
-              public dialog: MdDialog) {
+              public dialog: MatDialog) {
 
 
     this.afAuth.authState.subscribe(afUser => {

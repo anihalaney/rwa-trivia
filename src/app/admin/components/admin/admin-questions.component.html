@@ -1,9 +1,9 @@
-<md-card>
-  <md-card-title>Questions</md-card-title>
-  <md-card-content>    
+<mat-card>
+  <mat-card-title>Questions</mat-card-title>
+  <mat-card-content>    
 
-  <md-tab-group>
-    <md-tab label="Published">
+  <mat-tab-group>
+    <mat-tab label="Published">
       <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" 
                     [categoryDictionary]="categoryDictObs | async"
                     (onPageChanged)="pageChanged($event)"
@@ -15,8 +15,8 @@
                     fxLayout="row"
                     fxLayoutAlign="center" fxLayoutAlign.xs="start">
       </question-search>
-    </md-tab>
-    <md-tab label="Unpublished">
+    </mat-tab>
+    <mat-tab label="Unpublished">
       <question-list [questions]="unpublishedQuestionsObs | async" 
                     [categoryDictionary]="categoryDictObs | async"
                     [showApproveButton]="true"
@@ -26,8 +26,8 @@
                     fxLayout="row"
                     fxLayoutAlign="center" fxLayoutAlign.xs="start">
       </question-list>
-    </md-tab>
-  </md-tab-group>
+    </mat-tab>
+  </mat-tab-group>
 
-  </md-card-content>    
-</md-card>
+  </mat-card-content>    
+</mat-card>

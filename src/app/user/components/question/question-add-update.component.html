@@ -58,16 +58,16 @@
           <div class="tags">
           <p>Tags associated categories</p>
           <div data-tags-input-name="tag" id="tagBox" class="tagging">
-            <md-chip-list>
-              <md-basic-chip *ngFor="let tag of autoTags" class="tag">
+            <mat-chip-list>
+              <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
                 {{tag}}
-              </md-basic-chip>
-              <md-basic-chip *ngFor="let tag of enteredTags" class="tag">
+              </mat-basic-chip>
+              <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
                 {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-              </md-basic-chip>
-            </md-chip-list>
+              </mat-basic-chip>
+            </mat-chip-list>
             <input class="type-zone" contenteditable="true" formControlName="tags">
-            <button md-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+            <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
             <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
               Must have atleast 3 tags
             </div>
@@ -83,33 +83,33 @@
 </div>        
 </form>
 
-<md-card *ngIf="false">
+<mat-card *ngIf="false">
   <form (ngSubmit)="onSubmit()" class="question-form" [formGroup]="questionForm" novalidate>
-    <md-card-title>Add Question</md-card-title>
-    <md-card-header>
-      <md-card-title>
-        <md-select placeholder="Category" name="category" class="required" formControlName="category">
-          <md-option *ngFor="let category of categories" [value]="category.id">
+    <mat-card-title>Add Question</mat-card-title>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-select placeholder="Category" name="category" class="required" formControlName="category">
+          <mat-option *ngFor="let category of categories" [value]="category.id">
             {{category.categoryName}}
-          </md-option>
-        </md-select>
+          </mat-option>
+        </mat-select>
         <p *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine" style="font-size: 11px;">Select a category</p>
-      </md-card-title>
-    </md-card-header>
+      </mat-card-title>
+    </mat-card-header>
 
-    <md-card-content>
-      <md-input-container class="full-width required">
-        <input mdInput placeholder="Question" formControlName="questionText" class="required">
-        <md-hint align="end" *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</md-hint>
-      </md-input-container>
+    <mat-card-content>
+      <mat-input-container class="full-width required">
+        <input matInput placeholder="Question" formControlName="questionText" class="required">
+        <mat-hint align="end" *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</mat-hint>
+      </mat-input-container>
 
       <div formArrayName="answers" class="well well-lg">
         <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" >
-          <md-input-container class="full-width">
-            <md-checkbox mdPrefix formControlName="correct"></md-checkbox>
-            <input mdInput [placeholder]="'Answer ' + (i+1)" formControlName="answerText" />
-            <md-hint align="end" *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine" class="error">Answer required</md-hint>
-          </md-input-container>
+          <mat-input-container class="full-width">
+            <mat-checkbox mdPrefix formControlName="correct"></mat-checkbox>
+            <input matInput [placeholder]="'Answer ' + (i+1)" formControlName="answerText" />
+            <mat-hint align="end" *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine" class="error">Answer required</mat-hint>
+          </mat-input-container>
         </div>
       </div>
       <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
@@ -117,38 +117,38 @@
       </div>
 
       <p>
-        <md-checkbox formControlName="ordered">Ordered?</md-checkbox>
+        <mat-checkbox formControlName="ordered">Ordered?</mat-checkbox>
       </p>
       <p> 
-        <md-input-container class="full-width required">
-          <textarea mdInput placeholder="Explanation" formControlName="explanation"></textarea>
-        </md-input-container>
+        <mat-input-container class="full-width required">
+          <textarea matInput placeholder="Explanation" formControlName="explanation"></textarea>
+        </mat-input-container>
       </p> 
 
       <p> 
-        <md-input-container>
-          <input mdInput placeholder="Tag" formControlName="tags">
-        </md-input-container>
-        <button md-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+        <mat-input-container>
+          <input matInput placeholder="Tag" formControlName="tags">
+        </mat-input-container>
+        <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
       </p> 
 
-      <md-chip-list>
-        <md-chip *ngFor="let tag of autoTags">
+      <mat-chip-list>
+        <mat-chip *ngFor="let tag of autoTags">
           {{tag}}
-        </md-chip>
-        <md-chip *ngFor="let tag of enteredTags">
+        </mat-chip>
+        <mat-chip *ngFor="let tag of enteredTags">
           {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-        </md-chip>
-      </md-chip-list>
-    </md-card-content>
+        </mat-chip>
+      </mat-chip-list>
+    </mat-card-content>
     
     <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
       Must have atleast 3 tags
     </div>
 
-    <md-card-actions>
-      <button md-button color="primary" type="submit" [disabled]="!questionForm.valid">SAVE</button>
-      <button md-button>CANCEL</button>
-    </md-card-actions>
+    <mat-card-actions>
+      <button mat-button color="primary" type="submit" [disabled]="!questionForm.valid">SAVE</button>
+      <button mat-button>CANCEL</button>
+    </mat-card-actions>
   </form>  
-</md-card>
+</mat-card>

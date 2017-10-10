@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
-import { MdDialogRef, MdDialog } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -21,8 +21,8 @@ export class LoginComponent implements OnInit {
   
   constructor(private fb: FormBuilder,
               private afAuth: AngularFireAuth,
-              private dialog: MdDialog,
-              public dialogRef: MdDialogRef<LoginComponent>) {
+              private dialog: MatDialog,
+              public dialogRef: MatDialogRef<LoginComponent>) {
     this.mode = SignInMode.signIn;  //default
   }
 

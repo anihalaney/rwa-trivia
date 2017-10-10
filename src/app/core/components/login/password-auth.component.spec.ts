@@ -5,7 +5,7 @@ import { DebugElement }    from '@angular/core';
 import { ReactiveFormsModule }    from '@angular/forms';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { SharedMaterialModule } from '../../../shared/shared-material.module';
-import { MdDialogRef, MdDialog } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material';
 import * as firebase from 'firebase/app';
 import { AngularFire, AuthProviders, AuthMethods, FirebaseAuthConfig, FirebaseAuthState } from 'angularfire2';
 
@@ -42,7 +42,7 @@ describe('Component: PasswordAuthComponent', () => {
         ReactiveFormsModule
       ],
       providers:[
-        {provide: MdDialogRef, useValue: dialogRef},
+        {provide: MatDialogRef, useValue: dialogRef},
         {provide: AngularFire, useValue: afAuthMock}
       ]
     }).compileComponents();
@@ -58,7 +58,7 @@ describe('Component: PasswordAuthComponent', () => {
     de = fixture.debugElement.query(By.css('h1'));
     _titleEl = de.nativeElement;
 
-    //_categoryListEl = fixture.debugElement.query(By.css('md-list')).nativeElement;
+    //_categoryListEl = fixture.debugElement.query(By.css('mat-list')).nativeElement;
   }));
 
   it('Display Sign In title', () => {
@@ -89,9 +89,9 @@ describe('Component: PasswordAuthComponent', () => {
 
   it('Mode: signIn',
     inject([
-      AngularFire, MdDialogRef
+      AngularFire, MatDialogRef
     ],
-    (af: AngularFire, dRef: MdDialogRef<PasswordAuthComponent>) => {
+    (af: AngularFire, dRef: MatDialogRef<PasswordAuthComponent>) => {
 
     fixture.detectChanges();
 
@@ -136,9 +136,9 @@ describe('Component: PasswordAuthComponent', () => {
 
   it('Mode: signUp',
     inject([
-      AngularFire, MdDialogRef
+      AngularFire, MatDialogRef
     ],
-    (af: AngularFire, dRef: MdDialogRef<PasswordAuthComponent>) => {
+    (af: AngularFire, dRef: MatDialogRef<PasswordAuthComponent>) => {
 
     comp.mode = SignInMode.signUp;
     fixture.detectChanges();
@@ -191,9 +191,9 @@ describe('Component: PasswordAuthComponent', () => {
 
   it('Mode: forgotPassword',
     inject([
-      AngularFire, MdDialogRef
+      AngularFire, MatDialogRef
     ],
-    (af: AngularFire, dRef: MdDialogRef<PasswordAuthComponent>) => {
+    (af: AngularFire, dRef: MatDialogRef<PasswordAuthComponent>) => {
 
     comp.mode = SignInMode.forgotPassword;
     fixture.detectChanges();

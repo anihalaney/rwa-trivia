@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MD_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
@@ -42,7 +42,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   private questionComponent: GameQuestionComponent;
 
   constructor(private store: Store<AppStore>, private gameActions: GameActions,
-    @Inject(MD_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any) {
     
     this._gameId = data.gameId;
     this.user = data.user;

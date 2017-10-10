@@ -1,19 +1,19 @@
 <div *ngIf="false">
-<h1 md-dialog-title>Choose Login Method</h1> 
+<h1 mat-dialog-title>Choose Login Method</h1> 
 
-<md-dialog-actions class="flex-container" 
+<mat-dialog-actions class="flex-container" 
                    fxLayout="column"
                    fxLayoutAlign="space-around">
-  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="googleLogin()">Google</button>
-  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="fbLogin()">facebook</button>
-  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="twitterLogin()">Twitter</button>
-  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="githubLogin()">Github</button>
-  <button class="flex-item" md-raised-button md-dialog-close color="primary" (click)="passwordLogin()">Email/Password</button>
-</md-dialog-actions>
+  <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="googleLogin()">Google</button>
+  <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="fbLogin()">facebook</button>
+  <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="twitterLogin()">Twitter</button>
+  <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="githubLogin()">Github</button>
+  <button class="flex-item" mat-raised-button mat-dialog-close color="primary" (click)="passwordLogin()">Email/Password</button>
+</mat-dialog-actions>
 
-<md-dialog-actions>
-  <button md-dialog-close>Cancel</button>
-</md-dialog-actions>
+<mat-dialog-actions>
+  <button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
 </div>
 
 <div class="logininner textleft">
@@ -27,18 +27,18 @@
             <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>
             <span *ngSwitchCase="2">Forgot Password</span>
           </div>
-          <md-input-container class="full-width required">
-            <input mdInput placeholder="Email *" formControlName="email" class="required">
-            <md-hint align="end" *ngIf="loginForm.controls.email.errors && !loginForm.controls.email.pristine" class="error">Invalid Email!</md-hint>
-          </md-input-container>
-          <md-input-container [class.hide]="mode === 2" class="full-width required">
-            <input type="password" mdInput placeholder="Password *" class="required" formControlName="password">
-            <md-hint align="end" *ngIf="mode !== 2 && (loginForm.controls.password.errors && !loginForm.controls.password.pristine)" class="error">Password must be atleast 6 characters</md-hint>
-          </md-input-container>
-          <md-input-container [class.hide]="mode !== 1" class="full-width required">
-            <input type="password" mdInput placeholder="Confirm Password" class="required" formControlName="confirmPassword">
-            <md-hint align="end" *ngIf="mode === 1 && (loginForm.controls.password.valid && loginForm.hasError('passwordmismatch'))" class="error">Must match Password</md-hint>
-          </md-input-container>
+          <mat-input-container class="full-width required">
+            <input matInput placeholder="Email *" formControlName="email" class="required">
+            <mat-hint align="end" *ngIf="loginForm.controls.email.errors && !loginForm.controls.email.pristine" class="error">Invalid Email!</mat-hint>
+          </mat-input-container>
+          <mat-input-container [class.hide]="mode === 2" class="full-width required">
+            <input type="password" matInput placeholder="Password *" class="required" formControlName="password">
+            <mat-hint align="end" *ngIf="mode !== 2 && (loginForm.controls.password.errors && !loginForm.controls.password.pristine)" class="error">Password must be atleast 6 characters</mat-hint>
+          </mat-input-container>
+          <mat-input-container [class.hide]="mode !== 1" class="full-width required">
+            <input type="password" matInput placeholder="Confirm Password" class="required" formControlName="confirmPassword">
+            <mat-hint align="end" *ngIf="mode === 1 && (loginForm.controls.password.valid && loginForm.hasError('passwordmismatch'))" class="error">Must match Password</mat-hint>
+          </mat-input-container>
           <ng-container [ngSwitch]="mode">
             <ng-container *ngSwitchCase="0">
               <div class="formfield">
@@ -46,19 +46,19 @@
                   <input type="checkbox" name="" >Keep me logged in
                 </label>                      
               </div>
-              <button md-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Login</button>
+              <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Login</button>
               <div class="row loginlink">
                 <div class="col-xs-6"><a (click)="this.mode=2" title="Forgot Password?">Forgot Password?</a></div>
                 <div class="col-xs-6 textrigth"><a (click)="this.mode=1" title="New Signup">New Signup</a></div>
               </div>
             </ng-container>
             <ng-container *ngSwitchCase="1">
-              <button md-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Sign Up</button>
+              <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Sign Up</button>
               <div class="signupfree">by clicking "Sign Up" I agree to bitWiser's Terms & Conditions</div>
               <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">Already have an account? Login</a></div>
             </ng-container>
             <ng-container *ngSwitchCase="2">
-              <button md-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Forgot Password</button>
+              <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Forgot Password</button>
               <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">No. I remember it now!</a></div>
             </ng-container>
           </ng-container>

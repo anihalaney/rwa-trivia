@@ -1,36 +1,36 @@
 <div *ngIf="showSort || showPaginator" fxLayout="row" fxLayoutAlign="space-between center" class="sort-page-header">
-  <md-select *ngIf="showSort" placeholder="Sort Order" (change)="sortOrderChanged($event)">
-    <md-option [value]="'Category'">Category</md-option>
-    <md-option [value]="'Status'">Status</md-option>
-    <md-option [value]="'CreatedTimeDesc'">Created On (Latest)</md-option>
-    <md-option [value]="'CreatedTimeAsc'">Created On (Earliest)</md-option>
-    <md-option [value]="'UpdatedTimeDesc'">Updated On (Latest)</md-option>
-    <md-option [value]="'UpdatedTimeAsc'">Updated On (Earliest)</md-option>
-  </md-select>
+  <mat-select *ngIf="showSort" placeholder="Sort Order" (change)="sortOrderChanged($event)">
+    <mat-option [value]="'Category'">Category</mat-option>
+    <mat-option [value]="'Status'">Status</mat-option>
+    <mat-option [value]="'CreatedTimeDesc'">Created On (Latest)</mat-option>
+    <mat-option [value]="'CreatedTimeAsc'">Created On (Earliest)</mat-option>
+    <mat-option [value]="'UpdatedTimeDesc'">Updated On (Latest)</mat-option>
+    <mat-option [value]="'UpdatedTimeAsc'">Updated On (Earliest)</mat-option>
+  </mat-select>
 
-  <md-paginator *ngIf="showPaginator"
+  <mat-paginator *ngIf="showPaginator"
     [length]="totalCount"
     [pageIndex]="0"
     [pageSize]="25"
     [pageSizeOptions]="[25, 50, 100, 200]"
     (page)="pageChanged($event)">
-  </md-paginator>  
+  </mat-paginator>  
 </div>
 
-<md-table #table [dataSource]="questionsDS" mdSort>
+<mat-table #table [dataSource]="questionsDS">
 
   <!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
   <ng-container cdkColumnDef="chkBox">
-    <md-header-cell *cdkHeaderCellDef><md-checkbox></md-checkbox></md-header-cell>
-    <md-cell class="col-chkbox" *cdkCellDef="let row"> <md-checkbox></md-checkbox> </md-cell>
+    <mat-header-cell *cdkHeaderCellDef><mat-checkbox></mat-checkbox></mat-header-cell>
+    <mat-cell class="col-chkbox" *cdkCellDef="let row"> <mat-checkbox></mat-checkbox> </mat-cell>
   </ng-container>
 
   <!-- Question Column -->
   <ng-container cdkColumnDef="questionText">
-    <md-header-cell class="col-question" *cdkHeaderCellDef md-sort-header> Question </md-header-cell>
-    <md-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between"> 
+    <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
+    <mat-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between"> 
       <div class="row">
         <div class="col-sm-9 col-xs-12">
           <div class="date">13 May 2017</div>
@@ -75,22 +75,22 @@
         </div>
       </div>
 
-    </md-cell>
+    </mat-cell>
   </ng-container>
 
   <ng-container cdkColumnDef="status">
-    <md-header-cell *cdkHeaderCellDef md-sort-header> Status </md-header-cell>
-    <md-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </md-cell>
+    <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+    <mat-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </mat-cell>
   </ng-container>
 
-  <md-header-row *cdkHeaderRowDef="['questionText']"></md-header-row>
-  <md-row class="row-question" *cdkRowDef="let row; columns: ['questionText'];"></md-row>
-</md-table>
+  <mat-header-row *cdkHeaderRowDef="['questionText']"></mat-header-row>
+  <mat-row class="row-question" *cdkRowDef="let row; columns: ['questionText'];"></mat-row>
+</mat-table>
 
-<md-paginator *ngIf="showPaginator"
+<mat-paginator *ngIf="showPaginator"
     [length]="totalCount"
     [pageIndex]="0"
     [pageSize]="25"
     [pageSizeOptions]="[25, 50, 100, 200]"
     (page)="pageChanged($event)">
-</md-paginator>  
+</mat-paginator>  

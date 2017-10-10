@@ -1,17 +1,17 @@
-<md-card class="flex-item">
-  <md-card-title fxLayout="row">
+<mat-card class="flex-item">
+  <mat-card-title fxLayout="row">
     <div >GAME OVER</div>
     <div fxFlex></div>
     <div></div>
-  </md-card-title>
-  <md-card-header>
-    <md-card-subtitle>
+  </mat-card-title>
+  <mat-card-header>
+    <mat-card-subtitle>
       Score: {{correctCount}}/{{noOfQuestions}}
-    </md-card-subtitle>
-  </md-card-header>
-  <md-card-content fxLayoutAlign="center center">
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content fxLayoutAlign="center center">
     <a [routerLink]="['/game-play']" class="btn">PLAY AGAIN</a>
     <a [routerLink]="['/']" class="btn">HOME</a>
-  </md-card-content>
+  </mat-card-content>
 
-</md-card>
+</mat-card>

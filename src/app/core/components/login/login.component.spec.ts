@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing'
 import { By }              from '@angular/platform-browser';
 import { DebugElement, NO_ERRORS_SCHEMA }    from '@angular/core';
 import { SharedMaterialModule } from '../../../shared/shared-material.module';
-import { MdDialogRef, MdDialog } from '@angular/material';
+import { MatDialogRef, MatDialog } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { AngularFire, AuthProviders, AuthMethods, FirebaseAuthConfig } from 'angularfire2';
 
@@ -33,8 +33,8 @@ describe('Component: LoginComponent', () => {
       ],
     schemas:      [ NO_ERRORS_SCHEMA ],
     providers:[
-        MdDialog,
-        {provide: MdDialogRef, useValue: dialogRef},
+        MatDialog,
+        {provide: MatDialogRef, useValue: dialogRef},
         {provide: AngularFire, useValue: afAuthMock}
       ]
     }).compileComponents();
@@ -73,9 +73,9 @@ describe('Component: LoginComponent', () => {
 
   it('Button Actions', 
     inject([
-      MdDialog, AngularFire, MdDialogRef
+      MatDialog, AngularFire, MatDialogRef
     ],
-    (dialog: MdDialog, af: AngularFire, dRef: MdDialogRef<LoginComponent>) => {
+    (dialog: MatDialog, af: AngularFire, dRef: MatDialogRef<LoginComponent>) => {
 
     let spy = spyOn(af.auth, "login");
     fixture.detectChanges();

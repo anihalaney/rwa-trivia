@@ -1,11 +1,11 @@
-<md-card>
-  <button md-fab class="page-action" [routerLink]="['add']">
-    <md-icon class="md-24">add</md-icon>
+<mat-card>
+  <button mat-fab class="page-action" [routerLink]="['add']">
+    <mat-icon class="mat-24">add</mat-icon>
   </button>
 
-  <md-card-content>  
-    <md-tab-group>
-      <md-tab label="Published">
+  <mat-card-content>  
+    <mat-tab-group>
+      <mat-tab label="Published">
         <question-table
           [showSort]="false"
           [showPaginator]="false"
@@ -14,8 +14,8 @@
           [categoryDictionary]="categoryDictObs | async"
           [showApproveButton]="false">
         </question-table>
-      </md-tab>
-      <md-tab label="Pending">
+      </mat-tab>
+      <mat-tab label="Pending">
         <question-table
           [showSort]="false"
           [showPaginator]="false"
@@ -24,7 +24,7 @@
           [categoryDictionary]="categoryDictObs | async"
           [showApproveButton]="false">
         </question-table>
-      </md-tab>
-    </md-tab-group>
-  </md-card-content>    
-</md-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>    
+</mat-card>

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MdDialog, MdDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -24,10 +24,10 @@ export class GameComponent implements OnInit, OnDestroy {
   gameId: string;
   user: User;
 
-  dialogRef: MdDialogRef<GameDialogComponent>;
+  dialogRef: MatDialogRef<GameDialogComponent>;
 
   constructor(private store: Store<AppStore>,
-              public dialog: MdDialog, 
+              public dialog: MatDialog, 
               private route: ActivatedRoute, 
               private router: Router) { }
 

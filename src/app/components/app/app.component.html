@@ -59,48 +59,48 @@
 </footer>
 <!-- Footer end -->
    
-<md-sidenav-container *ngIf="false">
-  <md-sidenav #sidenav class="sidenav">
-    <md-nav-list>
-      <a md-list-item (click)="sidenav.close()" [routerLink]="['/']">
-        <md-icon md-list-icon>Home</md-icon>
-        <span md-line>Home</span>
-        <span md-line class="secondary">Home</span>
+<mat-sidenav-container *ngIf="false">
+  <mat-sidenav #sidenav class="sidenav">
+    <mat-nav-list>
+      <a mat-list-item (click)="sidenav.close()" [routerLink]="['/']">
+        <mat-icon mat-list-icon>Home</mat-icon>
+        <span mat-line>Home</span>
+        <span mat-line class="secondary">Home</span>
       </a>
-      <a md-list-item (click)="sidenav.close()" [routerLink]="['/my/questions']">
-        <md-icon md-list-icon>question_answer</md-icon>
-        <span md-line>My Questions</span>
-        <span md-line class="secondary">My Questions</span>
+      <a mat-list-item (click)="sidenav.close()" [routerLink]="['/my/questions']">
+        <mat-icon mat-list-icon>question_answer</mat-icon>
+        <span mat-line>My Questions</span>
+        <span mat-line class="secondary">My Questions</span>
       </a>
-      <a md-list-item *ngIf="user?.roles?.admin" (click)="sidenav.close()" [routerLink]="['/admin']">
-        <md-icon md-list-icon>settings</md-icon>
-        <span md-line>Admin</span>
-        <span md-line class="secondary">Admin</span>
+      <a mat-list-item *ngIf="user?.roles?.admin" (click)="sidenav.close()" [routerLink]="['/admin']">
+        <mat-icon mat-list-icon>settings</mat-icon>
+        <span mat-line>Admin</span>
+        <span mat-line class="secondary">Admin</span>
       </a>
-      <a *ngIf="user" md-list-item (click)="sidenav.close(); logout()" class="logout-button">
-        <md-icon md-list-icon>account_circle</md-icon>
-        <span md-line>{{user.displayName}}</span>
-        <span md-line class="secondary">Logout</span>
+      <a *ngIf="user" mat-list-item (click)="sidenav.close(); logout()" class="logout-button">
+        <mat-icon mat-list-icon>account_circle</mat-icon>
+        <span mat-line>{{user.displayName}}</span>
+        <span mat-line class="secondary">Logout</span>
       </a>
-      <a *ngIf="!user" md-list-item (click)="sidenav.close(); login()" class="login-button">
-        <md-icon md-list-icon>mood_bad</md-icon>
-        <span md-line>Login</span>
-        <span md-line class="secondary">Login</span>
+      <a *ngIf="!user" mat-list-item (click)="sidenav.close(); login()" class="login-button">
+        <mat-icon mat-list-icon>mood_bad</mat-icon>
+        <span mat-line>Login</span>
+        <span mat-line class="secondary">Login</span>
       </a>
-    </md-nav-list>
-  </md-sidenav>
+    </mat-nav-list>
+  </mat-sidenav>
 
   <div class="my-content">
-    <md-toolbar color="primary">
-      <button md-icon-button (click)="sidenav.open()">
-        <md-icon>menu</md-icon>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.open()">
+        <mat-icon>menu</mat-icon>
       </button>
 
       <span>{{title}}</span>
       <span class="fill-remaining-space"></span>
-      <span *ngIf="user" md-line class="toolbar-user-name">{{user.displayName}}</span>
-    </md-toolbar>
+      <span *ngIf="user" mat-line class="toolbar-user-name">{{user.displayName}}</span>
+    </mat-toolbar>
 
     <router-outlet></router-outlet>
   </div>
-</md-sidenav-container>
+</mat-sidenav-container>

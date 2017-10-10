@@ -50,13 +50,13 @@
 }
 
 
-md-card {
+mat-card {
   margin: 15px;
 }
-md-card-title {
+mat-card-title {
   margin-bottom: 50px;
 }
-md-card-actions {
+mat-card-actions {
   margin-bottom: 0px;
 }
 //.question-form {
@@ -68,9 +68,9 @@ md-card-actions {
 .remove-tag {
   cursor: pointer;
 }
-::ng-deep md-input-container.ng-invalid.ng-touched .md-input-underline {
+::ng-deep mat-input-container.ng-invalid.ng-touched .mat-input-underline {
   border-color: red;
 }
-::ng-deep md-hint.error, .error {
+::ng-deep mat-hint.error, .error {
   color: red;
 }

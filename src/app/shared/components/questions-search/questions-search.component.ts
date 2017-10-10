@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 //import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
-import {PageEvent, MdCheckboxChange, MdSelectChange} from '@angular/material';
+import {PageEvent, MatCheckboxChange, MatSelectChange} from '@angular/material';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
@@ -61,12 +61,12 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
     //console.log(pageEvent);
     this.onPageChanged.emit(pageEvent);
   }
-  categoryChanged(event: MdCheckboxChange, category: Category) {
+  categoryChanged(event: MatCheckboxChange, category: Category) {
     //console.log(event);
     //console.log(category);
     this.onCategoryChanged.emit({"categoryId": category.id, "added": event.checked});
   }
-  tagChanged(event: MdCheckboxChange, tag: string) {
+  tagChanged(event: MatCheckboxChange, tag: string) {
     this.onTagChanged.emit({"tag": tag, "added": event.checked});
   }
   sortOrderChanged(event: string) {

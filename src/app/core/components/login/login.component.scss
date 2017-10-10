@@ -4,10 +4,10 @@ button {
 .full-width {
   width: 100%;
 }
-::ng-deep md-input-container.ng-invalid.ng-touched .md-input-underline {
+::ng-deep mat-input-container.ng-invalid.ng-touched .mat-input-underline {
   border-color: red;
 }
-::ng-deep md-hint.error, .error {
+::ng-deep mat-hint.error, .error {
   color: red;
 }
 /*Login page*/

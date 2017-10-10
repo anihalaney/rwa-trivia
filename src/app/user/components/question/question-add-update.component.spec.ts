@@ -49,10 +49,10 @@ describe('Component: QuestionAddUpdateComponent', () => {
     comp = fixture.componentInstance; // Component test instance
 
     // query for the title by CSS element selector
-    de = fixture.debugElement.query(By.css('md-card-title'));
+    de = fixture.debugElement.query(By.css('mat-card-title'));
     _titleEl = de.nativeElement;
 
-    //_categoryListEl = fixture.debugElement.query(By.css('md-list')).nativeElement;
+    //_categoryListEl = fixture.debugElement.query(By.css('mat-list')).nativeElement;
   }));
 
   it('Display Add Question title', () => {
@@ -73,7 +73,7 @@ describe('Component: QuestionAddUpdateComponent', () => {
     let form = comp.questionForm;
     expect(comp.answers.length).toEqual(4); //form has 4 answers
     
-    let categorySelectEl = fixture.debugElement.query(By.css("md-select[name='category']")).nativeElement;
+    let categorySelectEl = fixture.debugElement.query(By.css("mat-select[name='category']")).nativeElement;
     //expect(categorySelectEl.childElementCount).toEqual(TEST_DATA.categories.length);
 
   });

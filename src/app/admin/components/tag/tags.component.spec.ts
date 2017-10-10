@@ -43,10 +43,10 @@ describe('Component: TagsComponent', () => {
     comp = fixture.componentInstance; // Component test instance
 
     // query for the title by CSS element selector
-    de = fixture.debugElement.query(By.css('md-card-title'));
+    de = fixture.debugElement.query(By.css('mat-card-title'));
     _titleEl = de.nativeElement;
 
-    _tagListEl = fixture.debugElement.query(By.css('md-list')).nativeElement;
+    _tagListEl = fixture.debugElement.query(By.css('mat-list')).nativeElement;
   }));
 
   it('Display Tags title', () => {

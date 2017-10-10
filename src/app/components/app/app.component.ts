@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppStore } from '../../core/store/app-store';
@@ -27,8 +27,8 @@ export class AppComponent implements OnInit, OnDestroy {
               private questionActions: QuestionActions,
               private gameActions: GameActions,
               private store: Store<AppStore>,
-              private router: Router,
-              public snackBar: MdSnackBar) {
+              public router: Router,
+              public snackBar: MatSnackBar) {
     this.sub = store.select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === "SUCCESS")
         this.snackBar.open("Question saved!", "", {duration: 2000});

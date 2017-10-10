@@ -40,7 +40,7 @@ describe('Component: QuestionsComponent', () => {
     comp.showApproveButton = false;
 
     fixture.detectChanges();
-    let qNodes = fixture.debugElement.queryAll(By.css('md-card'));
+    let qNodes = fixture.debugElement.queryAll(By.css('mat-card'));
 
     expect(qNodes.length).toEqual(TEST_DATA.questions.published.length);
   });
@@ -58,7 +58,7 @@ describe('Component: QuestionsComponent', () => {
     let selectedQuestion: Question;
     comp.approveClicked.subscribe((question: Question) => selectedQuestion = question);
 
-    let qNodes = fixture.debugElement.queryAll(By.css('md-card'));
+    let qNodes = fixture.debugElement.queryAll(By.css('mat-card'));
     let qApproveButtons = fixture.debugElement.queryAll(By.css('.approve-button'));
     expect(qApproveButtons.length).toEqual(1);  //only one approve button should exist
 
@@ -104,7 +104,7 @@ describe('Component: QuestionsComponent using Test Host', () => {
     //comp.showApproveButton = false;
 
     fixture.detectChanges();
-    let qNodes = fixture.debugElement.query(By.css('question-list')).queryAll(By.css('md-card'));
+    let qNodes = fixture.debugElement.query(By.css('question-list')).queryAll(By.css('mat-card'));
 
     expect(qNodes.length).toEqual(TEST_DATA.questions.published.length);
   });
@@ -117,7 +117,7 @@ describe('Component: QuestionsComponent using Test Host', () => {
 
     fixture.detectChanges();
 
-    let qNodes = fixture.debugElement.query(By.css('question-list')).queryAll(By.css('md-card'));
+    let qNodes = fixture.debugElement.query(By.css('question-list')).queryAll(By.css('mat-card'));
     let qApproveButtons = fixture.debugElement.queryAll(By.css('.approve-button'));
     expect(qApproveButtons.length).toEqual(1);  //only one approve button should exist
 

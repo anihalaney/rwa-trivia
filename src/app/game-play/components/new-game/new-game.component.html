@@ -136,23 +136,23 @@
                         <div class="tags">
                             <p>Tags associated categories</p>
                             <div data-tags-input-name="tag" id="tagBox" class="tagging-js">
-                                    <md-chip-list>
-                                        <md-basic-chip *ngIf="selectedTags.length === 0" class="tag">
+                                    <mat-chip-list>
+                                        <mat-basic-chip *ngIf="selectedTags.length === 0" class="tag">
                                             None
-                                        </md-basic-chip>
-                                        <md-basic-chip *ngFor="let tag of selectedTags" class="tag">
+                                        </mat-basic-chip>
+                                        <mat-basic-chip *ngFor="let tag of selectedTags" class="tag">
                                             {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-                                        </md-basic-chip>
-                                    </md-chip-list>
+                                        </mat-basic-chip>
+                                    </mat-chip-list>
                                                                   
                             </div>
-                            <input type="text" placeholder="Tag" mdInput formControlName="tagControl" [mdAutocomplete]="tagAuto"  (change)="autoOptionClick($event)">
-                            <md-autocomplete #tagAuto="mdAutocomplete">
-                            <md-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                            <input type="text" placeholder="Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto"  (change)="autoOptionClick($event)">
+                            <mat-autocomplete #tagAuto="matAutocomplete">
+                            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
                                 {{ tag }}
-                            </md-option>
-                            </md-autocomplete>
-                            <a md-button class="add-tag-button" color="primary" (click)="addTag()">ADD</a>
+                            </mat-option>
+                            </mat-autocomplete>
+                            <a mat-button class="add-tag-button" color="primary" (click)="addTag()">ADD</a>
                         </div>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                 <div class="row">
                     <div class="col-sm-3"></div>
                     <div id="sidebar" class="col-sm-9 btnbox">
-                        <button md-button class="btn startg">Start Game</button>
+                        <button mat-button class="btn startg">Start Game</button>
                     </div>
                 </div>               
             </div> 
@@ -171,54 +171,54 @@
 
 
 
-<md-card *ngIf="false">
-  <md-card-title>Start New Game</md-card-title>
-  <md-card-content>
+<mat-card *ngIf="false">
+  <mat-card-title>Start New Game</mat-card-title>
+  <mat-card-content>
 
     <div>
-      <h3 md-subheader>Player Mode</h3>
-      <md-button-toggle-group #group="mdButtonToggleGroup" formControlName="playerMode" value="0">
-        <md-button-toggle value="0">
+      <h3 mat-subheader>Player Mode</h3>
+      <mat-button-toggle-group #group="matButtonToggleGroup" formControlName="playerMode" value="0">
+        <mat-button-toggle value="0">
           Single Player
-        </md-button-toggle>
-        <md-button-toggle value="1">
+        </mat-button-toggle>
+        <mat-button-toggle value="1">
           Two Player
-        </md-button-toggle>
-      </md-button-toggle-group>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
 
     </div>
 
     <div>
-      <md-button-toggle-group #group="mdButtonToggleGroup" formControlName="opponentType">
-        <md-button-toggle value="0">
+      <mat-button-toggle-group #group="matButtonToggleGroup" formControlName="opponentType">
+        <mat-button-toggle value="0">
           Against Computer
-        </md-button-toggle>
-        <md-button-toggle value="1">
+        </mat-button-toggle>
+        <mat-button-toggle value="1">
           Random Opponent
-        </md-button-toggle>
-        <md-button-toggle value="2">
+        </mat-button-toggle>
+        <mat-button-toggle value="2">
           Friend
-        </md-button-toggle>
-      </md-button-toggle-group>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
-    <md-divider></md-divider>
-    <md-divider></md-divider>
+    <mat-divider></mat-divider>
+    <mat-divider></mat-divider>
     <div class="tag-container">
-      <h3 md-subheader>Tag Preference</h3>
+      <h3 mat-subheader>Tag Preference</h3>
       <p> 
-        <md-chip *ngIf="selectedTags.length === 0">
+        <mat-chip *ngIf="selectedTags.length === 0">
           None
-        </md-chip>
-        <md-chip-list>
-          <md-chip *ngFor="let tag of selectedTags">
+        </mat-chip>
+        <mat-chip-list>
+          <mat-chip *ngFor="let tag of selectedTags">
             {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-          </md-chip>
-        </md-chip-list>
+          </mat-chip>
+        </mat-chip-list>
       </p> 
 
     </div>
 
-    <button md-button color="primary">START</button>
-  </md-card-content>
-</md-card>
+    <button mat-button color="primary">START</button>
+  </mat-card-content>
+</mat-card>
 </form>

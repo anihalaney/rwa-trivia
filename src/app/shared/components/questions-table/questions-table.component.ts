@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import {DataSource} from '@angular/cdk/table';
-import {PageEvent, MdCheckboxChange, MdSelectChange} from '@angular/material';
+import {PageEvent, MatCheckboxChange, MatSelectChange} from '@angular/material';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
@@ -61,7 +61,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
     //console.log(pageEvent);
     this.onPageChanged.emit(pageEvent);
   }
-  sortOrderChanged(event: MdSelectChange) {
+  sortOrderChanged(event: MatSelectChange) {
     //console.log(event);
     this.onSortOrderChanged.emit(event.value);
   }
