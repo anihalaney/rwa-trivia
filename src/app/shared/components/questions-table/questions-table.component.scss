@@ -1,3 +1,21 @@
+.row{ font-family: 'hindregular'; }
+.row {
+  padding: 20px 0;
+  border-bottom: 1px solid;
+  margin: 0;
+  border-color: rgba(204,204,204,0.44);
+}
+.dark{ font-size: 16px; }
+.dark{ font-family: 'hindsemibold'; display: inline-block; }
+.light{ display: inline-block; }
+.currentans li:nth-child(3) {
+  margin-top: 10px;
+}
+
+.mat-header-row, .mat-row { 
+  border-bottom-style: none;
+}
+
 .sort-page-header {
   margin-left: 30px;
   margin-top: 30px;

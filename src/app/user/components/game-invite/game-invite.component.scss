@@ -1,0 +1,18 @@
+.dark{ width: 66.66666667%; float: left;}
+.light{ width: 33.33333333%; float: left; padding-left:20px;}
+.usreimg{ text-align: center; margin-bottom: 20px }
+img{ border-radius: 50%; width: 50%; max-width:70px;  display: inline-block; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ border:1px solid; padding: 2px }
+.invitationleft{ text-align: center;}
+.btn{ margin: 10px 0 }
+.clinton{ font-size: 16px; }
+.T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px}
+
+@media screen and ( min-width:1000px){
+  .dark, .light{ width:100%; float: none; padding-left:0;}
+  .usreimg{ margin-bottom: 0 }
+  img { width: 44px;max-width: inherit; }
+  .btn{ margin: 0 }
+  .clinton, .T-tagging{ line-height: 45px; }
+  img { padding: 1px }
+  .invitationleft{ text-align: left; }
+}

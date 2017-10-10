@@ -1,0 +1,209 @@
+<!-- My setting -->
+<div class="mainpage submitpage mysetting">
+    <div class="row hidden-xs">
+      <div class="pageheading col-sm-6 col-xs-12">My Settings</div>          
+    </div>
+    <section id="curentactive" class="card">
+      <div class="h1block">
+        <h1>My Settings</h1>
+        <p>Control You profile information, both what is says and what other people see</p>
+      </div>
+      <div class="optionbox">
+        <!-- Prefered Categories -->
+        <div class="pcategories row">
+          <div class="col-sm-6 col-xs-12"><h2><span>Daniel Chi</span></h2></div>
+          <div class=" col-sm-6 col-xs-12 textrigth ">
+            <a href="#" class="viewbublic">view my public profile</a>
+          </div>              
+        </div>
+        <!-- Prefered Categories end -->
+      </div> 
+
+      <!-- Profile pik -->
+      <div class="enterquestion secondbg">
+        <div class="optionbox">
+          <h3>Upload Avatar :-</h3>
+          <!-- Upload avatar -->
+          <div class="row">
+            <!--  <div class="col-sm-3 col-xs-12">
+              <div class="avatarimg">
+                <img src="images/avatarimg.jpg"  alt="Avatar" />
+              </div>
+            </div> -->
+            <div class="col-sm-3 col-xs-12">
+              <label for="file-upload" class="custom-file-upload">
+                  <img src="/assets/images/avatarimg.jpg"  alt="Avatar" />
+                </label> 
+            </div>
+            <div class="col-sm-9 col-xs-12 avatarinput">
+              <div>  
+                <input id="file-upload" name='upload_cont_img' type="file" style="display:none;">
+                <label id="file-name">add tags</label>
+              </div>
+              <p>Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
+            </div>
+
+          </div>
+          <div class="clearfix namefield">
+                                
+              <div class="formfield"> 
+              <label>Name</label>                                  
+              <input placeholder="Enter Name" type="text" name="Enter Name" value="" required="">
+              <p>Enter your real name, so people you know and recogize you</p>
+            </div>
+            
+
+                                
+              <div class="formfield"> 
+              <label>Display Name</label>                                  
+              <input placeholder="Enter Display Name" type="text" name="Enter Display Name" value="" required="">
+            </div>
+            
+
+                                
+              <div class="formfield"> 
+              <label>Location</label>                                  
+              <input placeholder="Enter Location" type="text" name="Enter Location" value="" required="">
+              <p>Where in the world you are</p>
+            </div>
+            
+          </div>
+          <!-- Upload avatar end -->
+
+          <!-- Categories -->
+          <div class="row pcategories">
+            <div class="col-sm-3">
+              <h3>Categories</h3>
+            </div>
+            <div class="col-sm-9">                            
+              <div class="formfield">
+                <label>
+                  <input type="checkbox" name="" checked="">Special
+                </label>                      
+              </div>
+              <div class="formfield">
+                <label>
+                  <input type="checkbox" name="" checked="">General
+                </label>                      
+              </div>
+              <div class="formfield">
+                <label>
+                  <input type="checkbox" name="" checked="">Programming
+                </label>                      
+              </div>
+              <div class="formfield">
+                <label>
+                  <input type="checkbox" name="">Architecture
+                </label>                      
+              </div>
+              <div class="formfield">
+                <label>
+                  <input type="checkbox" name="">Networking
+                </label>                      
+              </div>
+              <div class="formfield">
+                <label>
+                  <input type="checkbox" name="">Database
+                </label>                      
+              </div>
+              <div class="formfield">
+                <label>
+                  <input type="checkbox" name="">Dev Ops
+                </label>                      
+              </div>
+              <div class="formfield">
+                <label>
+                  <input type="checkbox" name="">UX/UI
+                </label>                      
+              </div>
+
+              <div class="tags">
+                <p>Tags associated categories</p>
+                <div data-tags-input-name="tag" id="tagBox">
+                  Social, Unity
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Categories end -->
+
+
+          <!-- Social Accounts -->
+          <div class="row pcategories saccount">
+            <div class="col-sm-3">
+              <h3>Social Accounts </h3>
+            </div>
+            <div class="col-md-6 col-sm-9">                            
+              <div class="formfield">                                   
+                <input placeholder="Facebook" type="text" name="Facebook" value="" required="">       
+              </div>
+
+              <div class="formfield">                                   
+                <input placeholder="Twitter" type="text" name="Twitter" value="" required="">       
+              </div>
+
+              <div class="formfield">                                   
+                <input placeholder="Linkedin" type="text" name="Linkedin" value="" required="">       
+              </div>                
+              
+            </div>
+
+            <div class="col-xs-12">
+
+              <div class="row">
+              <!-- Security Setting -->
+              <div class="col-sm-3">
+                <h3>Security Setting </h3>
+              </div>
+              <div class="col-md-6 col-sm-9">                            
+                <div class="formfield">
+                  <label>Profile:</label>
+                  <select>
+                    <option>Only with friends</option>
+                    <option>General</option>
+                    <option>Programming</option>
+                    <option>Architecture</option>
+                  </select>
+                </div>
+
+                <div class="formfield">
+                  <label>Location:</label>
+                  <select>
+                    <option>Only with friends</option>
+                    <option>General</option>
+                    <option>Programming</option>
+                    <option>Architecture</option>
+                  </select>
+                </div>
+
+                <div class="formfield">
+                  <label>Privacy:</label>
+                  <label>
+                    <input type="checkbox" name="">
+                    Keep your profile activity private
+                  </label>
+                  <p>This means no one can invite you or can see you profile.</p>
+                </div>
+
+                <!-- Security Setting end -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- Social Accounts end -->
+
+      </div>
+    </div>
+    <!-- Profile pik end -->
+
+    <div class="savebox">
+      <a href="#" class="btn startg">Save</a>
+      <a href="#">Cancel</a>
+    </div>
+
+  </section>
+
+
+</div>
+<!-- My setting end -->

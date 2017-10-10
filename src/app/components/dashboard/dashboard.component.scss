@@ -1,13 +1,13 @@
-md-card {
+mat-card {
   margin: 15px;
 }
 .dash-card {
   width: 400px;
   min-width: 350px;
 }
-md-card>:last-child{
+mat-card>:last-child{
   margin-bottom: 15px;
 }
-md-card>:first-child{
+mat-card>:first-child{
   margin-top: 15px;
 }

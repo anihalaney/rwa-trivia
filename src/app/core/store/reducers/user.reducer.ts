@@ -15,3 +15,13 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
       return state;
   }
 }
+
+export function authInitialized(state: any = false, action: ActionWithPayload<any>): boolean {
+  switch (action.type) {
+    case UserActions.LOGOFF:
+    case UserActions.LOGIN_SUCCESS:
+      return true;
+    default:
+      return state;
+  }
+}

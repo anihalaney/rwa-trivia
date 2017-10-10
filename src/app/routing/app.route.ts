@@ -1,7 +1,7 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { DashboardComponent } 
   from '../components/index';
-import { AuthGuard } from '../core/services';
+import { AuthGuard, CategoriesResolver, TagsResolver } from '../core/services';
 
 export const routes: Routes = [
   {
@@ -14,14 +14,21 @@ export const routes: Routes = [
     component: DashboardComponent
   },
   {
+    path: 'my',
+    loadChildren: 'app/user/user.module#UserModule',
+    canActivate: [AuthGuard],
+    resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
+  },
+  /*{
     path: 'my-questions',
     loadChildren: 'app/myQuestions/my-questions.module#MyQuestionsModule',
     canActivate: [AuthGuard]
-  },
+  },*/
   {
     path: 'game-play',
     loadChildren: 'app/game-play/game-play.module#GamePlayModule',
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+    resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'admin',

@@ -4,7 +4,7 @@ import { SharedModule } from  '../shared/shared.module';
 import { GamePlayRoutingModule } from  './routing/game-play-routing.module';
 import { NewGameComponent, GameComponent, 
          GameQuestionComponent, GameQuestionContinueComponent,
-         GameOverComponent } from  './components';
+         GameOverComponent, GameDialogComponent } from  './components';
 
 @NgModule({
   declarations: [
@@ -12,7 +12,11 @@ import { NewGameComponent, GameComponent,
     GameComponent,
     GameQuestionComponent,
     GameQuestionContinueComponent,
-    GameOverComponent
+    GameOverComponent,
+    GameDialogComponent
+  ],
+  entryComponents: [
+    GameDialogComponent
   ],
   imports: [
     //rwa modules

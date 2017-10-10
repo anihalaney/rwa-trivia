@@ -330,7 +330,7 @@ main h2 span{ font-size: 14px; font-family: 'hindregular';}
 .card h3{ font-family: 'hindmedium'; font-size: 16px;}
 .card h3:before{ height: 11px; width:11px; border-radius: 50%; border:1px solid; content: ""; display: inline-block; margin-right: 10px}
 .btnbox{ border-top:1px solid; padding: 20px 0; margin-top: 10px; }
-
+.margint20{ margin-top: 20px }
 input[type="text"], input[type="email"], select{ border:1px solid; border-radius: 3px; padding: 8px 12px; font-size: 16px; width: 100%}
 
 .formfield { padding: 8px 15px; }
@@ -339,6 +339,9 @@ input[type="text"], input[type="email"], select{ border:1px solid; border-radius
 .formfield input[type="checkbox"]:after,.enterquestion .formfield input[type="radio"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  transition: 0.3s ease-in-out; cursor: pointer;}
 .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ height: 10px; transform: rotate(45deg); }
 .formfield label{ font-size: 20px; cursor: pointer;}
+
+.formfield input[disabled=""]:before{ background:#bdbdbd!important; border-color: #bdbdbd !important}
+
 .tags{padding: 40px 0 26px}
 .tags p{ font-size: 16px; margin-bottom: 15px}
 .tagging input{ line-height: 24px; padding: 4px 10px; border-radius: 3px; display: block; width: 250px}
@@ -348,7 +351,7 @@ input[type="text"], input[type="email"], select{ border:1px solid; border-radius
 form .tags{ padding-top: 20px }
 .formfield select{ padding: 10px 15px; line-height: 1.5; width: 100% }
 .formfield select option{ font-size: 16px;}
-
+.myqestion{ background-position: -179px -22px; width: 30px; height: 30px; margin-right: 16px; }
 
 @media screen and ( min-width:767px){
   .breadcrumbs{ padding-left: 0 }
@@ -361,7 +364,6 @@ form .tags{ padding-top: 20px }
 }
 
 @media screen and ( min-width:1000px){
-
   a img{ transition: 0.3s ease-in-out }
   a:hover img{ opacity: 0.7 }
   .btn:hover{box-shadow: 0 4px 5px rgba(0,0,0,0.3)}
@@ -395,9 +397,10 @@ form .tags{ padding-top: 20px }
 .headerdrop{ display: inline-block; margin-left: 20px; vertical-align: middle;}
 .align-right{ text-align: right; }
 .headerdrop a{ opacity: 0.8; padding: 8px; display: block;}
+.logo a { display: inline-block;}
+.logo a img{ transition: unset; }
 @media screen and ( min-width:400px){
-  .headerdrop{ margin-left: 35px; }
-  .settingicon, .logouticon{ margin-right: 12px; vertical-align: -3px;}
+  .headerdrop{ margin-left: 35px; }  
 }
 @media screen and ( min-width:1000px){
   .headerdrop a:hover{ opacity:1;}
@@ -405,7 +408,7 @@ form .tags{ padding-top: 20px }
   h1{ font-size: 40px;}
 }
 @media screen and ( max-width:1024px){  
-  .logo a { display: inline-block; padding-left: 40px;}
+  .logo a { padding-left: 40px;}
   .innerhead .logo a{ padding-left: 0 }
   .logo a img{ height: 100%; max-width: none;  }
 }
@@ -413,11 +416,16 @@ form .tags{ padding-top: 20px }
 /*Hedding*/
 h1 + p{ font-size: 18px; font-family: 'hindlight'; }
 .h1block{ display: inline-block; padding:0 0 20px;  border-bottom: 1px solid; position: relative;}
-.h1block:after{ content: ""; border-radius: 4px; position: absolute; left: 0; right: 0; margin: auto; bottom: -8px; height: 7px; width: 7px; border:5px solid; box-sizing: content-box;}
+.h1block:after{ content: ""; border-radius: 50%; position: absolute; left: 0; right: 0; margin: auto; bottom: -8px; height: 7px; width: 7px; border:5px solid; box-sizing: content-box;}
 /*Hedding End*/
 /*footer*/
-footer{ font-size: 13px; padding:15px 0 }
+footer{ font-size: 13px; line-height: 45px}
 footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
+.socialicon-f a{height: 32px; width: 30px; margin:0 7px;}
+.socialicon-f a:hover{ opacity: 0.8 }
+.facebookicon-f{ background-position:0 -293px; }
+.twiticon-f{ background-position:-31px -293px;}
+.linkdenicon-f{ background-position:-62px -293px;}
 @media screen and ( max-width:760px){      
   footer{ text-align: center; line-height: 2 }
 }

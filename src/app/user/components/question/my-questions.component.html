@@ -1,0 +1,30 @@
+<mat-card>
+  <button mat-fab class="page-action" [routerLink]="['add']">
+    <mat-icon class="mat-24">add</mat-icon>
+  </button>
+
+  <mat-card-content>  
+    <mat-tab-group>
+      <mat-tab label="Published">
+        <question-table
+          [showSort]="false"
+          [showPaginator]="false"
+          [questions]="publishedQuestions"
+          [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async"
+          [showApproveButton]="false">
+        </question-table>
+      </mat-tab>
+      <mat-tab label="Pending">
+        <question-table
+          [showSort]="false"
+          [showPaginator]="false"
+          [questions]="unpublishedQuestions"
+          [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async"
+          [showApproveButton]="false">
+        </question-table>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>    
+</mat-card>

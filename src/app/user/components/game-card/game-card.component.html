@@ -1,0 +1,45 @@
+<div class="innerli">
+  <div class="T-tagging">Programming</div>
+  <div class="row">
+    <ng-container *ngIf="this.game.gameOptions.playerMode == 0">
+      <div class="col-xs-12 textcenter clearfix">
+        <div class="yourimg">
+          <img src="/assets/images/yourimg.jpg" alt="yourimg">
+        </div>
+        <div class="clear"></div>
+        <a href="#" class="dark">You</a>
+        <div class="light">Mumbai</div>
+        <hr>
+        <div class="light">Round 2</div>
+        <div class="dark">Score  06</div>                    
+      </div>
+    </ng-container>
+    <ng-container *ngIf="this.game.gameOptions.playerMode == 1">
+    <div class="col-xs-6">
+      <div class="yourimg vs">
+        <a href="#"><img src="/assets/images/yourimg.jpg" alt="yourimg" /></a>
+      </div>
+      <a href="#" class="dark">You</a>
+      <div class="light">Mumbai</div>
+      <hr>
+      <div class="light"><span *ngIf="myTurn">Round 2</span></div>
+      <div class="dark">Score  10</div>                    
+
+    </div>
+    <div class="col-xs-6 clearfix">
+      <div class="yourimg floatright">
+        <a href="#"><img src="/assets/images/kaanishhk.jpg" alt="Kaanishhk" /></a>
+      </div>
+      <div class="clear"></div>
+      <a href="#" class="dark">Kaanishhk</a>
+      <div class="light">hristol</div><hr>
+      <div class="light"><span *ngIf="!myTurn">Round 2</span></div>
+      <div class="dark">Score  07</div>
+    </div>
+    </ng-container>
+  </div>
+  <a *ngIf="myTurn" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
+    <span>Your Turn</span>Play Now
+  </a>
+  <div *ngIf="!myTurn" class="opponent">Opponent’s Turn</div>
+</div>

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppStore } from '../../core/store/app-store';
@@ -27,38 +27,37 @@ export class AppComponent implements OnInit, OnDestroy {
               private questionActions: QuestionActions,
               private gameActions: GameActions,
               private store: Store<AppStore>,
-              private router: Router,
-              public snackBar: MdSnackBar) {
+              public router: Router,
+              public snackBar: MatSnackBar) {
     this.sub = store.select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === "SUCCESS")
         this.snackBar.open("Question saved!", "", {duration: 2000});
       if (status === "IN PROGRESS")
-        this.router.navigate(['/my-questions']);
+        this.router.navigate(['/my/questions']);
     })
 
-    this.sub2 = store.select(s => s.user).subscribe(user => {
+    this.sub2 = store.select(s => s.user).skip(1).subscribe(user => {
       this.user = user
       if (user)
       {
         console.log(user);
-        //Load active Games
-        this.store.dispatch(this.gameActions.getActiveGames(user));
         let url: string;
         this.store.take(1).subscribe(s => url = s.loginRedirectUrl);
         if (url)
           this.router.navigate([url]);
       }
       else {
-        //if user logsout then redirect to home page
+        //if user logs out then redirect to home page
+        console.log("logout"); 
         this.router.navigate(['/']);
       }
     });
   }
 
   ngOnInit () {
+    console.log("dispatch");
     this.store.dispatch(this.categoryActions.loadCategories());
     this.store.dispatch(this.tagActions.loadTags());
-    //this.store.dispatch(this.questionActions.loadQuestions());
   }
 
   ngOnDestroy() {

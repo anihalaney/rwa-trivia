@@ -18,41 +18,19 @@ export class QuestionService {
               private http: HttpClient) { 
   }
 
-  getSampleQuestions(): Observable<Question[]> {
-    return this.db.list('/questions/published', {
-      query: {
-        limitToLast: 4,
-      }
-    });
+  getQuestionOfTheDay(): Observable<Question> {
+    let url: string = CONFIG.functionsUrl + "/app/getQuestionOfTheDay";
+
+    return this.http.get<Question>(url);
   }
 
   getUserQuestions(user: User): Observable<Question[]> {
     return this.db.list('/users/' + user.userId + '/questions')
-               .map((qids: any[]) => {
-                 let questions: Question[] = [];
-                 qids.forEach(qid => {
-                    this.db.object('/questions/' + qid['$value'] + '/' + qid['$key']).take(1)
-                    .subscribe(q => {
-                      console.log(q);
-                      questions.push(q)
-                    });
-                 });
-                 return questions;
-              })
-              .catch(error => {
-                console.log(error);
-                return Observable.of(null);
-              });
+    .mergeMap((qids: any[]) => {
+      return Observable.forkJoin(
+        qids.map((qid : any) => this.db.object('/questions/' + qid['$value'] + '/' + qid['$key']).take(1).map(q => Question.getViewModelFromDb(q))))
+    });
   }
-/*
-  getQuestions(): Observable<Question[]> {
-    return this.db.list('/questions/published')
-              .catch(error => {
-                console.log(error);
-                return Observable.of(null);
-              });
-  }
-*/
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
     let url: string = CONFIG.functionsUrl + "/app/getQuestions/";
     //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";

@@ -16,7 +16,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   categoryDictObs: Observable<{[key: number] :Category}>;
   tagsObs: Observable<string[]>;
   questionsSearchResultsObs: Observable<SearchResults>;
-  sampleQuestionsObs: Observable<Question[]>;
 
   constructor(private store: Store<AppStore>,
               private questionActions: QuestionActions) {
@@ -24,11 +23,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.tagsObs = store.select(s => s.tags);
     this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
-    this.sampleQuestionsObs = store.select(s => s.sampleQuestions);
   }
 
   ngOnInit() {
-    this.store.dispatch(this.questionActions.loadSampleQuestions());
   }
 
   ngOnDestroy() {

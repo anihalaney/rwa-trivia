@@ -1,52 +1,96 @@
-<md-card class="flex-container" 
-          fxLayoutWrap="wrap"
-          fxLayout="row"
-          fxLayoutAlign="center" fxLayoutAlign.xs="start">
-  <md-card class="dash-card">
-    <md-card-title>
-      <a [routerLink]="['/game-play']">
-        <button md-button color="primary">START NEW GAME</button>
-      </a>
-    </md-card-title>
-    <md-card-content>
-      Active Games:
-      <md-list>
-        <md-list-item *ngFor="let game of activeGamesObs | async">
-          <a [routerLink]="['/game', game]">
-            <button md-button color="primary">GAME: {{game}}</button>
+<div class="pageinner">
+  <div class="row">
+    <div class="pageheading col-md-6 col-xs-12 hidden-xs">Dashboard</div>
+    <div class="col-md-6 col-xs-12 align-right"><a [routerLink]="['/game-play']" class="startgame">Start New Game</a></div>
+  </div>
+  <!-- Currently active games -->
+  <section *ngIf="user" id="curentactive" class="card">
+    <div class="h1block">
+      <h1><span class="sprite sunicon"></span>Good Morning {{user.displayName}}!</h1>
+      <p>Nice to see you again, are you ready for a new challenge</p>
+    </div>
+    <div id="currentgame">
+      <div class="row">
+        <div class=" col-sm-9 col-xs-12"><h2>Currently active games</h2></div>
+        <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+      </div>            
+      <ul class="row">
+          <li *ngFor="let game of activeGamesObs | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+            <game-card [game]="game"></game-card>
+          </li>
+        <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
+          <a href="#" class="innerli textcenter">
+            <div class="viewallbtn">view all</div>
           </a>
-        </md-list-item>
-      </md-list>
-    </md-card-content>
-  </md-card>
+        </li>
+      </ul>
+    </div>
+  </section>  
+  <!-- Currently active games end -->
 
-  <md-card class="dash-card">
-    <md-card-title>rwa Stats</md-card-title>
-    <md-list>
-      <md-list-item>
-        <span>Categories Count: <span id="category-count">{{(categoriesObs | async).length}}</span></span>
-      </md-list-item>
-      <md-list-item>
-        <span>Tag Count: <span id="tag-count">{{(tagsObs | async).length}}</span></span>
-      </md-list-item>
-      <md-list-item>
-        <span>Question Count: <span id="question-count">{{(questionsSearchResultsObs | async).totalCount}}</span></span>
-      </md-list-item>
-    </md-list>
-  </md-card>
-</md-card>
+  <!-- Invitation to play games -->
+  <section *ngIf="user" class="card">
+    <div class="row">
+      <div class="col-sm-9 col-xs-12"><h2>Invitation to play games <span>3 from friends & 1 from random player</span></h2></div>
+      <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+    </div>
+    <ul class="invitationlist">
+      <li *ngFor="let game of gameInvites">
+        <game-invite [game]="game"></game-invite>
+      </li>
+      <li class="visible-xs textcenter">
+        <a href="#" >
+            <div class="viewallbtn">view all</div>
+        </a>
+      </li>
+    </ul> 
+  </section>    
+  <!-- Invitation to play games end   -->
 
-<md-card>
-  <md-card-title>Sample Questions</md-card-title>
-  <md-card-content>    
+  <div class="row">
+    <!-- Question of the day -->
+    <div class="col-lg-7 col-md-12 col-sm-12 ">
+      <question [question]="questionOfTheDayObs | async"></question>
+    </div>
+    <!-- Question of the day end -->
 
-    <question-list [questions]="sampleQuestionsObs | async" 
-                  [categoryDictionary]="categoryDictObs | async"
-                  class="flex-container" 
-                  fxLayoutWrap="wrap"
-                  fxLayout="row"
-                  fxLayoutAlign="center" fxLayoutAlign.xs="start">
-    </question-list>
+    <!-- Subscribe -->
+    <div class="col-lg-5 col-md-12 col-sm-12 ">
+      <newsletter></newsletter>
+    </div>
+    <!-- Subscribe end -->
+  </div>
+  
+  <!-- Category leaderboard -->
+  <section class="card">
+    <div class="row">
+      <div class="col-sm-9 col-xs-12"><h2>Category leaderboard</h2></div>
+      <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+    </div>
+    <leaderboard></leaderboard>
+  </section>
+  <!-- Category leaderboard end-->
 
-  </md-card-content>    
-</md-card>
+  <!-- <blog -->
+  <div class="row blog hidden-xs">
+    <div class="col-md-4 col-xs-12">
+      <blog [blogId]="1"></blog>
+    </div>
+
+    <div class="col-md-4 col-xs-12">
+      <blog [blogId]="2"></blog>
+    </div>
+
+    <div class="col-md-4 col-xs-12 hidden-md">
+      <blog [blogId]="3 "></blog>
+    </div>
+  </div>
+  <!-- blog end -->
+
+  <!-- Real-time System Stats -->
+  <div class="card hidden-xs">
+    <realtime-stats></realtime-stats>
+  </div>
+  <!-- Real-time System Stats end -->
+
+</div>        

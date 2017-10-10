@@ -29,6 +29,22 @@ export class Question {
     this.status = QuestionStatus.SAVED;
   }
 
+  static getViewModelFromDb(db: any): Question 
+  {
+    console.log(db);
+    let question: Question = new Question();
+
+    question.id = db["$key"];
+    question.answers = db.answers;
+    question.categoryIds = db.categoryIds;
+    question.published = db.published;
+    question.questionText = db.questionText;
+    question.status = db.status;
+    question.tags = db.tags;
+    
+    return question;
+  }
+
   static getViewModelFromES(hit: any): Question 
   {
     //console.log(hit);

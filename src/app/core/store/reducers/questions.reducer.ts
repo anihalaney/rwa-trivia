@@ -31,9 +31,9 @@ export function userQuestions(state: any = [], action: ActionWithPayload<Questio
   }
 };
 
-export function sampleQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
+export function questionOfTheDay(state: any = [], action: ActionWithPayload<Question>): Question {
   switch (action.type) {
-    case QuestionActions.LOAD_SAMPLE_QUESTIONS_SUCCESS:
+    case QuestionActions.GET_QUESTION_OF_THE_DAY_SUCCESS:
       return action.payload;
     default:
       return state;

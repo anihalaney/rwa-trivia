@@ -39,21 +39,26 @@ export class GameService {
     return gameIdSubject;
   }
 
-  getActiveGames(user: User): Observable<string[]>{
+  getActiveGames(user: User): Observable<Game[]> {
+    //TODO: Limit to a max
     return this.db.list('/users/' + user.userId + '/games/active')
-            .map(gids => gids.map(gid => gid['$key'])); //game ids
+    .map(gids => gids.map(gid => gid['$key']))  //game ids
+    .mergeMap((gids: string[]) => {
+      return Observable.forkJoin(
+        gids.map((gameId : string) => this.db.object('/games/' + gameId).take(1).map(g => Game.getViewModel(g))))
+    });
   }
 
   getGame(gameId: string, user: User): Observable<Game> {
     return this.db.object('/games/' + gameId)
-              .map(dbGame => {
-                //console.log(dbGame);
-                return Game.getViewModel(dbGame);
-              })
-              .catch(error => {
-                console.log(error);
-                return Observable.of(null);
-              });
+      .map(dbGame => {
+        //console.log(dbGame);
+        return Game.getViewModel(dbGame);
+      })
+      .catch(error => {
+        console.log(error);
+        return Observable.of(null);
+      });
   }
 
   getNextQuestion(game: Game): Observable<Question> {

@@ -2,16 +2,18 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule }     from '@angular/forms';
 import { HttpClientModule }     from '@angular/common/http';
-import { CdkTableModule }     from '@angular/cdk';
+import { CdkTableModule }     from '@angular/cdk/table';
 
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
-import { QuestionsComponent, QuestionsTableComponent } from './components';
+import { QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent } from './components';
 
 @NgModule({
   declarations: [
+    QuestionComponent,
     QuestionsComponent,
+    QuestionsSearchComponent,
     QuestionsTableComponent
   ],
   imports: [
@@ -35,7 +37,7 @@ import { QuestionsComponent, QuestionsTableComponent } from './components';
   ],
   providers: [ 
   ],                                                                      
-  exports:  [ QuestionsComponent, QuestionsTableComponent,
+  exports:  [ QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
               CommonModule, HttpClientModule, ReactiveFormsModule,
               FlexLayoutModule, 
               SharedMaterialModule, CdkTableModule ]

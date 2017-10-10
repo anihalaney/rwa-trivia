@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { SharedMaterialModule } from '../../shared/shared-material.module';
-import { MdDialogRef, MdDialog, OverlayRef, MdDialogConfig } from '@angular/material';
+//import { OverlayRef } from '@angular/cdk';
+import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 //import { AngularFire, FirebaseAuthState, AuthProviders } from 'angularfire2';
@@ -35,9 +36,9 @@ describe('Service: AuthenticationService', () => {
       SharedMaterialModule
     ],
     providers: [
-      AuthenticationService, MdDialog,
+      AuthenticationService, MatDialog,
       UserActions, UIStateActions,
-      //{ "provide": MdDialogRef, "useValue": dialogRef },
+      //{ "provide": MatDialogRef, "useValue": dialogRef },
       { "provide": Store, "useValue": new MockStore<{user: User}>(_initialState) },
       { "provide": AngularFireAuth, "useValue": afAuthMock }
     ]
@@ -45,9 +46,9 @@ describe('Service: AuthenticationService', () => {
 
   it('Login', 
     inject([
-      AuthenticationService, MdDialog, AngularFireAuth, Store
-    ],  //MdDialogRef, dRef: MdDialogRef<LoginComponent>, 
-    (service: AuthenticationService, dialog: MdDialog, afAuth: AngularFireAuth, store: Store<AppStore>) => {
+      AuthenticationService, MatDialog, AngularFireAuth, Store
+    ],  //MdDialogRef, dRef: MatDialogRef<LoginComponent>, 
+    (service: AuthenticationService, dialog: MatDialog, afAuth: AngularFireAuth, store: Store<AppStore>) => {
 
       let auth: any = { "providerData": [{
                           "displayName": "trivia",
@@ -78,9 +79,9 @@ describe('Service: AuthenticationService', () => {
 
   it('getUserRoles', 
     inject([
-      AuthenticationService, MdDialog, AngularFireDatabase, Store
+      AuthenticationService, MatDialog, AngularFireDatabase, Store
     ],
-    (service: AuthenticationService, dialog: MdDialog, db: AngularFireDatabase, store: Store<AppStore>) => {
+    (service: AuthenticationService, dialog: MatDialog, db: AngularFireDatabase, store: Store<AppStore>) => {
 
       spyOn(db, 'object')
           .and.returnValue(Observable.of(["admin", "supervisor"]));
@@ -97,9 +98,9 @@ describe('Service: AuthenticationService', () => {
 
   it('ensureLogin', 
     inject([
-      AuthenticationService, MdDialog, AngularFireAuth, Store
+      AuthenticationService, MatDialog, AngularFireAuth, Store
     ],
-    (service: AuthenticationService, dialog: MdDialog, afAuth: AngularFireAuth, store: MockStore<{user: User}>) => {
+    (service: AuthenticationService, dialog: MatDialog, afAuth: AngularFireAuth, store: MockStore<{user: User}>) => {
 
       let redirect_url = "redirect_url";
       store.next(_initialState);
@@ -129,9 +130,9 @@ describe('Service: AuthenticationService', () => {
 
   it('logout', 
     inject([
-      AuthenticationService, MdDialog, AngularFireAuth, Store
+      AuthenticationService, MatDialog, AngularFireAuth, Store
     ],
-    (service: AuthenticationService, dialog: MdDialog, afAuth: AngularFireAuth, store: MockStore<{user: User}>) => {
+    (service: AuthenticationService, dialog: MatDialog, afAuth: AngularFireAuth, store: MockStore<{user: User}>) => {
 
       spyOn(afAuth.auth, 'signOut');
       service.logout();

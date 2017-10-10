@@ -28,7 +28,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   newGameForm: FormGroup;
   gameOptions: GameOptions;
 
-  showCategoryList: boolean = false;
+  showUncheckedCategories: boolean = false;
   allCategoriesSelected: boolean = true;
 
   filteredTags: Observable<string[]>;
@@ -53,7 +53,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
     this.sub3 = this.store.select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
       console.log("Navigating to game: " + gameId);
-      this.router.navigate(['game', gameId]);
+      this.router.navigate(['/game-play', gameId]);
       this.store.dispatch(this.gameActions.resetCurrentQuestion());
     })
 
@@ -74,6 +74,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
       }
     });
 
+    /*
     this.categoriesFA.valueChanges.subscribe(v => {
       //console.log(v);
       let categoryValues: any[] = v;
@@ -83,7 +84,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
         this.allCategoriesSelected = true;
       }
     });
-  
+    */
+
     this.filteredTags = this.newGameForm.get('tagControl').valueChanges
          .map(val => val.length > 0 ? this.filter(val) : []);
   }
@@ -116,9 +118,9 @@ export class NewGameComponent implements OnInit, OnDestroy {
     Utils.unsubscribe([this.sub, this.sub2, this.sub3]);
   }
 
-  toggleShowCategoryList()
+  toggleShowUncheckedCategories()
   {
-    this.showCategoryList = !this.showCategoryList;
+    this.showUncheckedCategories = true;
   }
   addTag() 
   {
@@ -133,7 +135,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
   createForm(gameOptions: GameOptions) {
 
-    let fgs:FormGroup[] = this.categories.map(category => {
+    let sortedCategories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)]
+    let fgs:FormGroup[] = sortedCategories.map(category => {
       let fg = new FormGroup({
         categorySelected: new FormControl({value: true, disabled: category.requiredForGamePlay}),
         categoryId: new FormControl(category.id),

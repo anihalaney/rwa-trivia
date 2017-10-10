@@ -11,11 +11,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { CONFIG } from '../../environments/environment';
 
-import { Utils, AuthenticationService, AuthGuard, AuthInterceptor,
+import { Utils, AuthenticationService, AuthInterceptor,
          CategoryService, TagService, QuestionService,
          GameService } from './services';
 
-import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
+import { AuthGuard, CategoriesResolver, TagsResolver } from './services';
+
+ import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
 import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects } from './store/effects';
 import { reducer } from './store/app-store';
 
@@ -59,9 +61,12 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
   ],
   providers: [ 
     //Services
-    Utils, AuthenticationService, AuthGuard,
+    Utils, AuthenticationService, 
     CategoryService, TagService, QuestionService,
     GameService,
+    
+    //route guards
+    AuthGuard, CategoriesResolver, TagsResolver,
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions, 

@@ -1,0 +1,29 @@
+<div *ngIf="!currentQuestion && !gameOver" class="cd-popup-container">
+  Loading
+</div>
+<game-question *ngIf="currentQuestion" 
+  [categoryName]="categoryName"
+  [question]="currentQuestion"
+  [questionIndex]="questionIndex"
+  [timer]="timer"
+  [continueNext]="continueNext"
+  [correctCount]="correctAnswerCount"
+  [noOfQuestions]="questionIndex"
+
+  (answerClicked)="answerClicked($event)"
+  (okClick)="okClick($event)"
+  (continueClicked)="continueClicked($event)"
+  (viewQuestionClicked)="viewQuestionClicked($event)">
+</game-question>
+<game-question-continue *ngIf="false" class="overlay"
+  [categoryName]="categoryName"
+  [question]="currentQuestion"
+  (continueClicked)="continueClicked($event)"
+  (viewQuestionClicked)="viewQuestionClicked($event)">
+</game-question-continue>
+<game-over *ngIf="gameOver" class="overlay"
+  [correctCount]="correctAnswerCount"
+  [noOfQuestions]="questionIndex"
+  (gameOverContinueClicked)="gameOverContinueClicked($event)"
+  (viewQuestionClicked)="viewQuestionClicked($event)">
+</game-over>

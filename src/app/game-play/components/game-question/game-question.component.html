@@ -1,37 +1,100 @@
-<md-card class="flex-item" class="game-question">
-    <md-card-title fxLayout="row">
+<div class="cd-popup gameplay"  id="0" role="alert"  >
+    <div class="cd-popup-container">
+        <h1>{{categoryName}}</h1>
+        <p>Playing with <a>Random Player</a></p>
+
+        <!-- Timer -->
+        <div *ngIf="continueNext" class="score">Score: {{correctCount}}/{{noOfQuestions}}</div>
+        <div *ngIf="!continueNext" [ngClass]="{abouttoexpire: timer <= 5}">{{timer}}</div>
+        <div *ngIf="!continueNext"   class="timer">
+            <svg class="rotate" viewbox="0 0 250 250">
+                <path id="loader" transform="translate(125, 125)"/>
+            </svg>
+            <div class="dots">
+                <span class="time deg0"></span>
+                <!-- <span class="time deg45"></span> -->
+                <span class="time deg90"></span>
+                <!-- <span class="time deg135"></span> -->
+            </div>
+        </div>
+        <!-- Timer end -->
+
+        <div *ngIf="continueNext" class="secondbg">
+          <div>
+            <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
+            <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
+            <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
+          </div>
+          <div>
+            <button mat-button class="btn" (click)="continueClicked.emit($event)">CONTINUE</button>
+          </div>
+        </div>
+        <ng-container *ngIf="!continueNext">
+          <div class="secondbg">
+              <h2>{{questionIndex}}. {{question.questionText}}</h2>
+              <ul *ngIf="!continueNext">
+                  <li *ngFor="let answer of question.answers; let i=index"
+                    (click)="answerButtonClicked(answer, i)"
+                    [class.question-answered]="answeredIndex >= 0"
+                    [class.players-answer]="answeredIndex === i"
+                    [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
+                    [class.right]="answeredIndex >= 0 && correctAnswerIndex === i">
+                    {{answer.answerText}}
+                  </li>
+              </ul>
+          </div>
+          <div class="popupbottom">Tags : 
+            <span *ngFor="let tag of question.tags">
+              {{tag}}
+            </span> 
+          </div>
+        </ng-container>
+    </div>
+
+    <mat-card-footer *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" 
+    fxLayout="row" fxLayoutAlign="space-between center">
+      <button mat-button>SHARE</button>
+      <div fxFlexAlign="center">       
+        <button *ngIf="continueNext" mat-button (click)="viewQuestionClicked.emit($event)">VIEW QUESTION</button> 
+        <button *ngIf="!continueNext" mat-button >REPORT ISSUE</button> 
+      </div>
+      <button mat-button (click)="okClick.emit($event)">OK</button>
+    </mat-card-footer>
+</div>
+
+<mat-card *ngIf="false" class="flex-item" class="game-question">
+    <mat-card-title fxLayout="row">
       <div>{{questionIndex}}. {{question.questionText}}</div>
       <div fxFlex></div>
       <div [ngClass]="{abouttoexpire: timer <= 5}">{{timer}}</div>
-    </md-card-title>
-  <md-card-header>
-    <md-card-subtitle>
+    </mat-card-title>
+  <mat-card-header>
+    <mat-card-subtitle>
       {{categoryName}}:
       <span *ngFor="let tag of question.tags">
         #{{tag}}
       </span>
-    </md-card-subtitle>
-  </md-card-header>
-  <md-card-content>
-    <md-list dense> 
-      <md-list-item *ngFor="let answer of question.answers; let i=index">
-        <button md-button color="primary" 
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list dense> 
+      <mat-list-item *ngFor="let answer of question.answers; let i=index">
+        <button mat-button color="primary" 
                 (click)="answerButtonClicked(answer, i)" class="answer-button"
                 [disabled]="answeredIndex >= 0"
                 [ngClass]="{answered: answeredIndex === i, correct: correctAnswerIndex === i}">{{answer.answerText}}</button>
-      </md-list-item>
-    </md-list>
-  </md-card-content>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
 
-  <md-card-footer *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" 
+  <mat-card-footer *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" 
                   fxLayout="row" fxLayoutAlign="space-between center">
-    <button md-button>SHARE</button>
+    <button mat-button>SHARE</button>
     <div fxFlexAlign="center">
       <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
       <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
       <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
     </div>
-    <button md-button (click)="okClick.emit($event)">OK</button>
-  </md-card-footer>
-</md-card>
- 
+    <button mat-button (click)="okClick.emit($event)">OK</button>
+  </mat-card-footer>
+</mat-card>

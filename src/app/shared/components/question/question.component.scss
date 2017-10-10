@@ -1,0 +1,13 @@
+.question-list{ margin:21px 0 10px; }
+.question-list li{ margin-bottom: 12px; }
+.question-list li input[type="radio"], .optionbox input[type="radio"]{ display: none; }
+.question-list li label{ cursor: pointer; font-family: 'hindmedium'; font-size: 16px; padding: 6px 13px; border-radius: 17px; transition: 0.3s ease-in-out; position: relative; display: inline-block; width: 100%}
+.question-list li label:before{ content: "";position: absolute; height: 17px; width: 8px; border-width:0 2px 2px 0; border-style: solid; transform: rotate(45deg); left: 22px; display: none;}
+.question-list li input:checked ~ label{ padding-left: 40px; }
+.question-list li input:checked ~ label:before{ display: block; }
+@media screen and ( min-width:767px){
+  .rocateicon{margin:0 16px 0 0; }
+  .question-cont{ float: left; width: calc(100% - 65px) ;}
+  .question-list li{ width: 48%; margin-right: 4%; float: left; }
+  .question-list li:nth-child(2n +2){ margin-right: 0 }
+}

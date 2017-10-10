@@ -1,45 +1,106 @@
-<md-sidenav-container>
-  <md-sidenav #sidenav class="sidenav">
-    <md-nav-list>
-      <a md-list-item (click)="sidenav.close()" [routerLink]="['/']">
-        <md-icon md-list-icon>Home</md-icon>
-        <span md-line>Home</span>
-        <span md-line class="secondary">Home</span>
+<!--Header Start Here-->
+<header>        
+  <section class="headermain" id="stickyheader">      
+    <div class="container">
+      <div class="row">
+        <div class="logo col-xs-6 col-md-3"><a [routerLink]="['/']" title="trivia.com"><img src="/assets/images/logo.png"></a></div>
+        <div class="col-xs-6 pull-right align-right">
+          <div class="headerdrop">
+            <a [routerLink]="['/my']"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>                        
+          </div>
+          <div class="headerdrop">
+            <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>                        
+            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>                        
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="clear"></div>
+</header>
+<!--Header End-->
+
+<!-- Page Layout -->
+<div class="container pagelayout">
+  <nav *ngIf="user && !router.url.startsWith('/admin')" id="nav" tabindex="0">
+    <div class="smartphone-menu-trigger" id="nav-icon1" >
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <side-nav></side-nav>
+  </nav>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+<!-- Page Layout End -->
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-6 col-xs-12">
+        <a [routerLink]="['/']" title="Home">Home</a>
+        <a [routerLink]="['/my/questions']" title="My Questions">My Questions</a>
+        <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
+        <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
+        <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
+        <ng-container *ngIf="!user">
+          <!--<a class="signup" href="#" title="Sign Up">Sign Up</a>-->
+          <a class="logout" (click)="login()" title="Sign in">Sign in</a>
+        </ng-container>
+        <a *ngIf="user" class="login" (click)="logout()" title="Logout">Logout</a>
+      </div>
+      <div class="col-sm-6 col-xs-12 copyright textrigth">bitWiser © 2017. All rights reserved.</div>
+    </div>
+  </div>
+</footer>
+<!-- Footer end -->
+   
+<mat-sidenav-container *ngIf="false">
+  <mat-sidenav #sidenav class="sidenav">
+    <mat-nav-list>
+      <a mat-list-item (click)="sidenav.close()" [routerLink]="['/']">
+        <mat-icon mat-list-icon>Home</mat-icon>
+        <span mat-line>Home</span>
+        <span mat-line class="secondary">Home</span>
       </a>
-      <a md-list-item (click)="sidenav.close()" [routerLink]="['/my-questions']">
-        <md-icon md-list-icon>question_answer</md-icon>
-        <span md-line>My Questions</span>
-        <span md-line class="secondary">My Questions</span>
+      <a mat-list-item (click)="sidenav.close()" [routerLink]="['/my/questions']">
+        <mat-icon mat-list-icon>question_answer</mat-icon>
+        <span mat-line>My Questions</span>
+        <span mat-line class="secondary">My Questions</span>
       </a>
-      <a md-list-item *ngIf="user?.roles?.admin" (click)="sidenav.close()" [routerLink]="['/admin']">
-        <md-icon md-list-icon>settings</md-icon>
-        <span md-line>Admin</span>
-        <span md-line class="secondary">Admin</span>
+      <a mat-list-item *ngIf="user?.roles?.admin" (click)="sidenav.close()" [routerLink]="['/admin']">
+        <mat-icon mat-list-icon>settings</mat-icon>
+        <span mat-line>Admin</span>
+        <span mat-line class="secondary">Admin</span>
       </a>
-      <a *ngIf="user" md-list-item (click)="sidenav.close(); logout()" class="logout-button">
-        <md-icon md-list-icon>account_circle</md-icon>
-        <span md-line>{{user.displayName}}</span>
-        <span md-line class="secondary">Logout</span>
+      <a *ngIf="user" mat-list-item (click)="sidenav.close(); logout()" class="logout-button">
+        <mat-icon mat-list-icon>account_circle</mat-icon>
+        <span mat-line>{{user.displayName}}</span>
+        <span mat-line class="secondary">Logout</span>
       </a>
-      <a *ngIf="!user" md-list-item (click)="sidenav.close(); login()" class="login-button">
-        <md-icon md-list-icon>mood_bad</md-icon>
-        <span md-line>Login</span>
-        <span md-line class="secondary">Login</span>
+      <a *ngIf="!user" mat-list-item (click)="sidenav.close(); login()" class="login-button">
+        <mat-icon mat-list-icon>mood_bad</mat-icon>
+        <span mat-line>Login</span>
+        <span mat-line class="secondary">Login</span>
       </a>
-    </md-nav-list>
-  </md-sidenav>
+    </mat-nav-list>
+  </mat-sidenav>
 
   <div class="my-content">
-    <md-toolbar color="primary">
-      <button md-icon-button (click)="sidenav.open()">
-        <md-icon>menu</md-icon>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.open()">
+        <mat-icon>menu</mat-icon>
       </button>
 
       <span>{{title}}</span>
       <span class="fill-remaining-space"></span>
-      <span *ngIf="user" md-line class="toolbar-user-name">{{user.displayName}}</span>
-    </md-toolbar>
+      <span *ngIf="user" mat-line class="toolbar-user-name">{{user.displayName}}</span>
+    </mat-toolbar>
 
     <router-outlet></router-outlet>
   </div>
-</md-sidenav-container>
+</mat-sidenav-container>

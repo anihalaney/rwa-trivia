@@ -7,14 +7,19 @@ import { EffectsModule } from '@ngrx/effects';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from  './shared/shared.module';
 import { RoutingModule } from  './routing/routing.module';
-import { MyQuestionsModule } from  './myQuestions/my-questions.module';
+//import { MyQuestionsModule } from  './myQuestions/my-questions.module';
 import { GamePlayModule } from  './game-play/game-play.module';
+import { SocialModule } from  './social/social.module';
+import { UserModule } from  './user/user.module';
+import { StatsModule } from  './stats/stats.module';
 
-import { AppComponent, DashboardComponent } from './components';
+import { AppComponent, DashboardComponent, SideNavComponent } from './components';
 
 @NgModule({
   declarations: [
-    AppComponent, DashboardComponent
+    AppComponent, 
+    DashboardComponent, 
+    SideNavComponent
   ],
   imports: [
     BrowserModule,
@@ -26,8 +31,11 @@ import { AppComponent, DashboardComponent } from './components';
     CoreModule,
     SharedModule,
     RoutingModule,
-    MyQuestionsModule,
-    GamePlayModule
+   // MyQuestionsModule,
+    GamePlayModule,
+    SocialModule,
+    UserModule,
+    StatsModule
   ],
   providers: [ 
   ],                                                                      

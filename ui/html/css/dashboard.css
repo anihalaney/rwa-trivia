@@ -12,7 +12,7 @@ nav .card{ border-bottom: 1px solid }
 
 /*Recently Game*/
 .recentlygames h2{ font-size:18px; font-family: 'hindsemibold'; letter-spacing: 0.1px; margin-bottom: 13px;}
-.recentlygames{ padding: 17px; text-align: center; }
+.recentlygames{ padding: 16px; text-align: center; }
 .recentlygames li{  border-bottom: 1px solid transparent; text-align: left; }
 .recentlygames li a, .navview #statis li a{padding: 7px 0; display: block;}
 .recentlygames li:last-child, .navview #statis li:last-child, .navview #graph li:last-child{ border-bottom: 0 }
@@ -38,7 +38,7 @@ nav .card{ border-bottom: 1px solid }
 /*Play with*/
 .playwith a{ display: block; padding:20px 25px; position: relative; }
 .playwith a:after{ content: ""; position: absolute; right: 35px; height: 26px; width: 26px; border-radius: 23px;margin: auto; top: 0; bottom: 0;z-index: 99; transition: 0.3s ease-in-out}
-.playwith a:before{ content: ""; position: absolute; right: 45px; height:8px; width:8px; border-width: 1px 1px 0 0; border-style: solid; transform: rotate(45deg); z-index: 999; margin: auto; top: 0; bottom: 0; transition: .3s ease-in-out;}
+.playwith a:before{ content: ""; position: absolute; right: 46px; height:8px; width:8px; border-width: 1px 1px 0 0; border-style: solid; transform: rotate(45deg); z-index: 999; margin: auto; top: 0; bottom: 0; transition: .3s ease-in-out;}
 .playtext{ display: inline-block;vertical-align: -9px; font-family: 'hindmedium';}
 .playtext span{ display: block; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px;}
 
@@ -89,11 +89,11 @@ nav .card{ border-bottom: 1px solid }
 /*Heading End*/
 /*Currentgame*/
 #currentgame{ text-align: left; margin-top: 30px;}
-#currentgame ul{ margin-top: 16px }
 #currentgame li .innerli{ border:1px solid; border-radius: 4px; padding: 15px; display: block; }
 .T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px}
 #currentgame .T-tagging{ margin-bottom: 15px;}
 #currentgame li .innerli .yourimg{ width: 94%; max-width: 70px; border-radius: 50%; height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 16px; border:1px solid; padding: 2px}
+#currentgame li .textcenter.clearfix .yourimg{ margin: 0 auto 16px }
 #currentgame li .yourimg img{ display: block; width: 100%; height: auto; border-radius: 50% }
 .vs:after{ content: "Vs"; position: absolute; right: -10px; top: 25px; font-size: 18px; font-family: 'hindmedium';}
 #currentgame .light{font-family: 'hindmedium';}
@@ -104,6 +104,7 @@ nav .card{ border-bottom: 1px solid }
 hr{height:15px; visibility: hidden; margin: 0;}
 .viewallbtn{     background: #f0f0f0;  height: 100px; width: 100px; display: inline-block; border-radius: 50%;font-size: 29px; line-height: 1.2; padding: 19px; margin: 94px 0; color: #3b5998 }
 
+#currentgame li{ display:none; padding: 15px}
 @media screen and ( min-width:1000px){  
 #currentgame{ margin-top: 70px }
 }
@@ -112,10 +113,9 @@ hr{height:15px; visibility: hidden; margin: 0;}
 /*Invitation to play games*/
 main h2 span{ font-size: 14px; font-family: 'hindregular';}
 .invitationlist{ margin-top: 16px; }
-.invitationlist li{ padding: 15px 30px; margin:0 10px}
+.invitationlist li{ padding: 15px 30px; margin:0 10px; display: none;}
 .invitationlist li .dark{ width: 66.66666667%; float: left;}
 .invitationlist li .light{ width: 33.33333333%; float: left; padding-left:20px;}
-.invitationlist li:nth-child(odd){ background:#fafafa;  }
 .invitationlist  .usreimg{ text-align: center; margin-bottom: 20px }
 .invitationlist img, .categorybox img{ border-radius: 50%; width: 50%; max-width:70px;  display: inline-block; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ border:1px solid; padding: 2px }
 .invitationleft{ text-align: center;}
@@ -124,6 +124,7 @@ main h2 span{ font-size: 14px; font-family: 'hindregular';}
 .invitationlist .viewallbtn{  margin: 75px 0}
 @media screen and ( min-width:767px){
   main h2 span{ display: inline-block; padding-left: 15px; }
+  #currentgame .owl-item li{ width: 100% }
 }
 @media screen and ( min-width:1000px){
   main h2 span{ display: block;}
@@ -132,16 +133,22 @@ main h2 span{ font-size: 14px; font-family: 'hindregular';}
   .invitationlist li .dark, .invitationlist li .light{ width:100%; float: none; padding-left:0;}
   .invitationlist  .usreimg{ margin-bottom: 0 }
   .invitationlist img { width: 44px;max-width: inherit; }
-  .invitationlist .btn{ margin: 0 }
+  .invitationlist .btn{ margin: 0 ; padding: 10px 18px}
   .clinton, .invitationlist .T-tagging{ line-height: 45px; }
   .invitationlist img, .categorybox img{ padding: 1px }
   .invitationleft{ text-align: left; }
+}
+@media screen and ( max-width:989px){
+  .invitationlist li{ width: 32%; margin: 10px .50%; float: left; }
+}
+@media screen and ( max-width:680px){
+  .invitationlist li{ width: 100%; margin: 10px 0; float: none; }
 }
 
 /*Category*/
 .card h3{ font-family: 'hindmedium'; font-size: 16px;}
 .card h3:before{ height: 11px; width:11px; border-radius: 50%; border:1px solid; content: ""; display: inline-block; margin-right: 10px}
-.categorybox{ border-right: 1px solid transparent; margin-top:40px }
+.categorybox{ border-right: 1px solid transparent; margin-top:40px; display: none; }
 .categorybox:last-child{ border-right: 0 }
 .categorybox li{padding: 15px 0}
 .categorybox li:last-child{ padding-bottom: 0 }
@@ -151,7 +158,7 @@ main h2 span{ font-size: 14px; font-family: 'hindregular';}
   .has { line-height: 50px;; height: 50px; }
 }
 @media screen and ( min-width:1000px){
-.categorybox{ margin-top: 16px }
+.categorybox{ margin: 16px 0}
 .categorybox img{ width: 44px }  
 }
 @media screen and ( min-width:1000px) and ( max-width:1160px){
@@ -182,6 +189,10 @@ main h2 span{ font-size: 14px; font-family: 'hindregular';}
 input[type="text"], input[type="email"]{ border:1px solid; border-radius: 3px; padding: 8px 12px; font-size: 16px; width: 100%}
 .subscrib-cont form{ margin-bottom: 25px }
 .subs-bottom{ line-height: 1.3 }
+.subscrib-a, .subscrib-thx .subscrib-b{ display: none; }
+.subscrib-thx .subscrib-a{ display: block; }
+.subscrib-thx h3:before{ display: none; }
+.subscrib-thx p:last-child{ margin-bottom: 0 }
 @media screen and ( min-width:1000px){
   .subscrib-cont{ min-height: 232px } 
 }
@@ -198,6 +209,8 @@ input[type="text"], input[type="email"]{ border:1px solid; border-radius: 3px; p
 .blog h2 a{ font-family:'hindmedium'; font-size: 16px; transition: 0.3s ease-in-out;}
 .blog .more{ display: none; }
 .blog-social{line-height: 50px; height: 50px; border-top: 1px solid;}
+.sharepop .cd-popup-container{ width: 300px; padding: 20px 0; text-align: center; }
+.sharepop .cd-popup-container a.sprite{ height: 41px; width: 40px; margin: 7px; }
 @media screen and ( min-width:1000px){
   .blog .card{margin:0 0 30px }
   .blog .card:hover .blogimg{ opacity: 0.7 }

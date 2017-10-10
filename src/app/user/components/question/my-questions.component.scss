@@ -1,0 +1,15 @@
+mat-card-content>:last-child, mat-card>:last-child{
+  margin-bottom: 15px;
+}
+mat-card-content>:first-child, mat-card>:first-child{
+  margin-top: 15px;
+}
+mat-card {
+  margin: 15px;
+}
+.page-action {
+  display: inline-block;
+  position: fixed;
+  top: 40px;
+  right: 30px;
+}

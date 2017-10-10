@@ -1,0 +1,172 @@
+.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { background: url(../images/sprite-dark.png) no-repeat; display: inline-block; vertical-align: middle; }
+.optionbox input:checked + label .sprite{ background:#fff url(../images/sprite-dark.png) no-repeat;}
+
+.settingicon{ background-position: -1px -1px; height: 15px; width: 15px; transition: 0.3s ease-in}
+.logouticon{ background-position: -18px 0px; height: 16px; width: 11px;}
+.mapicon{ background-position: -31px 0; width: 11px; height: 15px; margin-right: 12px; vertical-align: -3px }
+.architicon{ background-position: 0 -22px; width: 29px; height: 33px; margin-right: 12px; }
+.rogrammingicon{ background-position: -35px -22px; width: 29px; height: 33px; margin-right: 12px; }
+.playedicon{ background-position: 0 -63px; }
+.topicsicon{background-position: -30px -63px; }
+.winsicon{ background-position: -54px -63px}
+.badgesicon{ background-position: -80px -63px }
+.losessicon{ background-position: -103px -63px }
+.avgicon{ background-position: -125px -63px }
+.contributicon{ background-position: -150px -63px }
+.playwithicon{ background-position: -69px -22px; width: 50px; height: 30px; margin-right: 16px;}
+.facebookicon{ background-position: -1px -99px; }
+.twiticon{ background-position: -41px -99px; }
+.linkdenicon{ background-position: -82px -99px; }
+.sunicon{ background-position: -129px -101px;vertical-align: -4px; }
+.rocateicon{ background-position:0px -142px; height: 58px; width: 44px; margin: 0 16px 5px 0; float: left; }
+.subscrib-cion{ background-position:-45px -142px; height: 50px; width: 54px; float: left; margin-right: 16px; }
+.commenticon{background-position:0px -208px; height:20px; width: 20px; margin:0 10px 0 13px }
+.viewicon{background-position:-21px -208px; height:12px; width: 20px; margin-right: 10px; vertical-align:-2px}
+.shareicon{background-position:-42px -208px; height:20px; width: 20px; margin-right: 10px}
+.timestats-icon{ background-position: -102px -146px; height: 42px; width: 44px; float: left; margin-right: 20px;}
+.siglep-icon{ background-position: -88px -200px !important; height: 53px; width: 53px; margin-right: 10px; }
+.towp-icon{ background-position: -139px -200px !important; height: 53px; width: 53px; margin-right: 10px;}
+.randomp-icon{ background-position: -0px -251px !important; height:43px; width: 43px; margin-right: 7px;}
+.friendsp-icon{ background-position: -42px -251px !important; height:43px; width: 43px; margin-right: 7px;}
+.computerp-icon{ background-position: -86px -251px !important; height:43px; width: 43px; margin-right: 7px;}
+.withfriends .owl-prev:after, .withfriends .owl-next:after{background-position: -181px -73px; width: 5px; height: 12px; position: absolute; left: 0; right: 0; bottom: 0; top: 0; margin: auto; content: "";}
+.withfriends .owl-next:after{background-position: -192px -73px;}
+.withfriends .owl-prev:hover:after{ background-position: -181px -91px; }
+.withfriends .owl-next:hover:after{ background-position: -192px -91px; }
+.chancaticon{ background-position: -163px -151px; height: 30px; width:30px; margin-right: 8px}
+.active .chancaticon{ background-position: -174px -112px;}
+.resubmiticon{ background-position: -129px -262px; height: 28px; width: 28px; margin-bottom: 3px}
+.facebookicon-f{ background-position:0 -293px; }
+.twiticon-f{ background-position:-31px -293px;}
+.linkdenicon-f{ background-position:-62px -293px;}
+.myqestion{ background-position: -179px -22px; width: 30px; height: 30px; margin-right: 16px; }
+
+@media screen and ( min-width:400px){  
+  .settingicon, .logouticon{ margin-right: 12px; vertical-align: -3px;}
+}
+
+/*Header*/
+input, textarea, select, button { background: #384760;}
+.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name,#currentgame li .innerli{ background: #273142 }
+body, .h1block:after, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .logininner .withsocial, #curentactive .btnbox, .reasons{ background: #1b2431 }
+.secondbg{ background: #273142 }
+.cd-popup-container{background: #141c26;}
+.question-list li label{ background: #fff }
+#curentactive{ background: #141c26; border:0;}
+.playwith a:after{ background: #566784 }
+.question-list li label:hover{ background: #e8e8e8 }
+.headermain{ background: #3b5998 }
+.startgame{ background: #f50057; }
+.btn, .question-list li input:checked ~ label, .optionbox input:checked + label, .formfield input[type="checkbox"]:checked:before,.enterquestion .formfield input[type="radio"]:checked:before, .gameplay li.right,.questionstatus .tabbing li:after{ background: #71b02f }
+footer{ background: #0b214f}
+/*.landingpage{ background:url(../images/landing-bg.png) center center, radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%); }*/
+.landingpage,.loginpage{ background:radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%); }
+.btn.signup, .logininner .formfield input[type="checkbox"]:checked:before, .gameplay li.wrong, .rejected{ background: #d54937;}
+.approval{ background: #efbf00;}
+
+.form-group .bar:before{ background: #4285f4 }
+.invitationlist li:nth-child(odd){ background:#2d384a;}
+.subscrib-cont input[type="email"]{ background: #384760 }
+
+/*Text*/
+.copyright{ color: rgba(255,255,255,0.5); }
+footer a{ color: rgba(255,255,255,0.8); }
+.startgame, .btn, .question-list li input:checked ~ label, .optionbox .radiobtn input:checked + label, .optionbox input:checked + label .dark, .optionbox input:checked + label .light, .landinginner, .gameplay li.right, .gameplay li.wrong{ color: #fff }
+body,.recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic{ color: #fff }
+.question-list li label{ color: #263238 }
+.headerdrop a, .ladding-copyr{color: #f1f2f2;}
+.light, .breadcrumbs span, .tag .tag-i,.subscrib-cont p, .subs-bottom{color: #7f8fa4}
+.dark, .viewtext, .viewcount, .sec, .playwith a, .clinton,.card h3, .breadcrumbs a, .optionbox .radiobtn label, .formfield label, .tags p, .questionstatus .tab-content > ul > li p, .questionstatus .light, .saccount select ~ label, .savebox a:nth-child(2){ color: #fff }
+.vs:after, .opponent, main h2 span, .invitationleft, .chancat, .tag, .popupbottom,.date, .signupfree, .avatarinput p, .saccount .formfield label + p, #file-name, .namefield .formfield > p{ color: #7c7c7c }
+.tabbing li{color: rgba(255,255,255,0.6);}
+h1, .gameplay h1, .custom-file-upload{ color: #fff;  }
+h1 + p{ color: #7f8fa4 }
+.gameplay p{ color: #7c7c7c }
+.tabbing li.active, .form-group input:focus,.form-group input:valid{ color: #fff }
+.T-tagging{ color: #b09724 }
+.viewall, a.dark:hover,.gameplay p a, .loginlink a.forgot{ color: #5c697c }
+.logininner .heading, .form-group .control-label, .logininner .formfield label, .logininner .withsocial h3{ color: #fff}
+.form-group input:focus ~ .control-label{color: #4285f4}
+.loginlink a{ color: #f50057 }
+.resubmit{color:#71b02f}
+.blog-social{ color: #9b9b9b }
+.formfield select{ color: #8995aa }
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #7c7c7c;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: #7c7c7c;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: #7c7c7c;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: #7c7c7c;
+}
+/*border*/
+.card{ border: 1px solid #313d4f;}
+nav .user.card{ border:0 !important}
+.recentlygames li, .viewall, .navview #statis li, .navview #graph li, .blog-social, .time-stats, .pcategories > .col-sm-9, .tag, .btnbox, .form-group .bar, .questionstatus .tab-content > ul > li, nav .card{ border-color: #313d4f; }
+.viewall:after{ border-color: #b8b8b8 }
+.gameplay li, .questionstatus .tabbing li, .questionstatus .tabbing li.active,.viewbublic, .tag, .avatarimg, #file-name, .custom-file-upload, .expertise, .reasons{ border-color: #313d4f }
+#currentgame li .innerli{ border-color: #313d4f}
+input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .tagging input{ border-color:#384760}
+.subscrib-cont input[type="email"]{ border-color:#384760 }
+.viewall:hover{ border-color: #fff}
+.tabbing li.active{ border-color: #141c26 }
+.optionbox .radiobtn label, .withfriends,.friendsslider .owl-prev,.friendsslider .owl-next, .formfield select{ border-color: #384760 }
+.h1block{ border-color: #373e46 }
+.question-list li input:checked ~ label:before, .optionbox .radiobtn label:after, .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after, .gameplay li:after{ border-color: #fff }
+.h1block:after{border-color:#273142}
+.skyblue h3:before{ border-color:#01d5d8  }
+.red h3:before{ border-color:#ff2d55  }
+.green h3:before{ border-color:#7ec856  }
+.yellow h3:before{ border-color:#C0CA33  }
+.orrange h3:before{ border-color: #FF3D00 }
+.bluegrey h3:before{ border-color: #78909C}
+.optionbox input:checked + label, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .gameplay li:hover, .gameplay li.right{border-color:#71b02f}
+.secondbg{ border-color: #dddddd }
+.logininner .formfield input[type="checkbox"]:before, .gameplay li.wrong{ border-color: #d54937;}
+.timer .dots{ border-color: #10383d }
+
+.optionbox input:checked + label:before, .gameplay li.right:before{ border-top-color:#1f7b2b; }
+.optionbox input:checked + label:before, .gameplay li.right:before{ border-right-color:#1f7b2b; }
+
+.gameplay li.wrong:before{ border-top-color:#af3424; }
+.gameplay li.wrong:before{ border-right-color:#af3424; }
+.secondbg:before{border-color: #313d4f transparent transparent transparent;}
+.secondbg:after{border-color: #141c26 transparent transparent transparent;}
+.secondbg{border-color: #313d4f;}
+
+.submitpage textarea, .enterquestion .formfield > input{ box-shadow: inset 5px 5px 5px rgba(0,0,0,0.06); }
+
+::-webkit-input-placeholder {  color: #b5b4b1;}
+::-moz-placeholder { color: #b5b4b1;}
+:-ms-input-placeholder { color: #b5b4b1;}
+:-moz-placeholder { color: #b5b4b1;}
+
+@media screen and ( min-width:1000px){
+	.playwith a:hover .playwithicon{ background-position: -125px -22px;}
+
+	.playwith a:hover, .viewall:hover, .blog .card:hover h2 a, .breadcrumbs a:hover, .chancat:hover{ color: #fff}
+	.tabbing li:hover, .tag;hover, .tag .tag-i:hover{ color: #424242 }
+	.startgame:hover{ background-color: #e50051 }
+	.btn:hover{background: #1f7b2b}
+	.btn.signup:hover, .rejected:hover{ background: #af3424 }
+	.approval:hover{ background: #d5aa00;}
+	.categorybox{border-color: #354358}
+	.blog-social a:hover .shareicon{background-position:-63px -208px;}
+	footer a:hover, .viewbublic:hover{ color:#fff; }
+	.viewbublic:hover{ background: #71b02f }
+	.withfriends .owl-prev:hover,.withfriends .owl-next:hover, .viewbublic:hover{ border-color: #71b02f }
+	.resubmit:hover, .savebox a:nth-child(2):hover{color:#1f7b2b}
+	nav .card{ border: 1px solid #313d4f}
+}
+@media screen and ( max-width:1024px){
+	nav { background: #f1f2f2 }
+
+}
+@media screen and ( max-width:989px){
+	.invitationlist li{ background:#2d384a;}
+}

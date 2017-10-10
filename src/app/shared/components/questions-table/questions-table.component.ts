@@ -1,7 +1,7 @@
-import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
-import {DataSource} from '@angular/cdk';
-import {PageEvent, MdCheckboxChange, MdSelectChange} from '@angular/material';
+import {DataSource} from '@angular/cdk/table';
+import {PageEvent, MatCheckboxChange, MatSelectChange} from '@angular/material';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
@@ -14,86 +14,56 @@ import { Question, QuestionStatus, Category, SearchResults, SearchCriteria }    
 @Component({
   selector: 'question-table',
   templateUrl: './questions-table.component.html',
-  styleUrls: ['./questions-table.component.scss']
+  styleUrls: ['./questions-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Default
 })
 export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() questionsSearchResults: SearchResults;
+  @Input() showSort: boolean;
+  @Input() showPaginator: boolean;
+  @Input() questions: Question[];
+  @Input() totalCount: number;
   @Input() categoryDictionary: {[key: number]: Category};
+
   @Input() showApproveButton: boolean;
-  @Output() approveClicked = new EventEmitter<Question>();
-  @Output() pageChanged = new EventEmitter<PageEvent>();
-  @Output() onCategoryChanged = new EventEmitter<{categoryId: number, added: boolean}>();
-  @Output() onTagChanged = new EventEmitter<{tag: string, added: boolean}>();
+  @Output() onApproveClicked = new EventEmitter<Question>();
+  @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
   
   sortOrder: string;
-  questions: Question[];
-  totalCount: number;
   questionsSubject: BehaviorSubject<Question[]>;
   questionsDS: QuestionsDataSource;
 
-  categoriesObs: Observable<Category[]>;
-  categoryAggregation: {[key: number]: number};
-  tagsCount: {tag: string, count: number}[];
-  tagsChecked: {[key: string]: boolean};
-  
-  questionTableForm: FormGroup;
-  
   constructor(private store: Store<AppStore>,
               private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
-    this.categoriesObs = store.select(s => s.categories);
     this.sortOrder = "Category";
   }
 
   ngOnInit() {
-    this.createForm();
   }
 
   ngOnChanges() {
-    this.questions = this.questionsSearchResults.questions;
-    this.totalCount = this.questionsSearchResults.totalCount;
-    this.categoryAggregation = this.questionsSearchResults.categoryAggregation;
-    this.tagsCount = this.questionsSearchResults.tagsCount;
-    if (this.questionsSearchResults.searchCriteria) {
-      this.tagsChecked = this.questionsSearchResults.searchCriteria.tags.reduce((map, tag) => {map[tag] = true; return map}, {});
-    }
+    console.log(this.questions);
     this.questionsSubject.next(this.questions);
   }
 
   ngOnDestroy() {
   }
 
-  createForm() {
-    this.questionTableForm = this.fb.group({
-      sortOrder: ['Category', Validators.required]
-    });
-  }
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];
   }
   approveButtonClicked(question: Question ) {
-    this.approveClicked.emit(question)
+    this.onApproveClicked.emit(question)
   }
-  pageChange(pageEvent: PageEvent) {
+  pageChanged(pageEvent: PageEvent) {
     //console.log(pageEvent);
-    this.pageChanged.emit(pageEvent);
+    this.onPageChanged.emit(pageEvent);
   }
-  categoryChanged(event: MdCheckboxChange, category: Category) {
-    //console.log(event);
-    //console.log(category);
-    this.onCategoryChanged.emit({"categoryId": category.id, "added": event.checked});
-  }
-  tagChanged(event: MdCheckboxChange, tag: string) {
-    this.onTagChanged.emit({"tag": tag, "added": event.checked});
-  }
-  sortOrderChanged(event: MdSelectChange) {
+  sortOrderChanged(event: MatSelectChange) {
     //console.log(event);
     this.onSortOrderChanged.emit(event.value);
-  }
-  onSubmit() {
-
   }
 }
 
