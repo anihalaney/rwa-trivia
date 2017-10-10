@@ -22,7 +22,7 @@
 
 <!-- Page Layout -->
 <div class="container pagelayout">
-  <nav *ngIf="user" id="nav" tabindex="0">
+  <nav *ngIf="user && !router.url.startsWith('/admin')" id="nav" tabindex="0">
     <div class="smartphone-menu-trigger" id="nav-icon1" >
       <span></span>
       <span></span>
