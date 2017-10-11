@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
@@ -10,8 +10,10 @@ import { User, Game } from '../../../model';
   templateUrl: './game-card.component.html',
   styleUrls: ['./game-card.component.scss']
 })
-export class GameCardComponent implements OnInit  {
+export class GameCardComponent implements OnInit, OnChanges  {
   @Input() game: Game;
+  correctAnswerCount: number;
+  questionIndex: number;
   
   user: User;
   myTurn: boolean;
@@ -23,7 +25,11 @@ export class GameCardComponent implements OnInit  {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
     }); //logged in user
-    
+  }
+
+  ngOnChanges() {
+    this.questionIndex = this.game.playerQnAs.length;
+    this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
   }
 
 }
