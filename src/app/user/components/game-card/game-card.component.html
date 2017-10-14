@@ -1,14 +1,14 @@
 <div class="innerli">
-  <div class="T-tagging">Programming</div>
+  <div class="T-tagging">PROG, NETW, UI/UX</div>
   <div class="row">
     <ng-container *ngIf="game.gameOptions.playerMode == 0">
       <div class="col-xs-12 textcenter clearfix">
         <div class="yourimg">
-          <img src="/assets/images/yourimg.jpg" alt="yourimg">
+          <img src="/assets/images/yourimg.png" alt="yourimg">
         </div>
         <div class="clear"></div>
         <a href="#" class="dark">You</a>
-        <div class="light">Galaxy far away</div>
+        <div class="light">Earth, Milky way</div>
         <hr>
         <div class="light">Round {{questionIndex}}</div>
         <div class="dark">Score {{correctAnswerCount}}</div>                    
@@ -17,10 +17,10 @@
     <ng-container *ngIf="game.gameOptions.playerMode == 1">
     <div class="col-xs-6">
       <div class="yourimg vs">
-        <a href="#"><img src="/assets/images/yourimg.jpg" alt="yourimg" /></a>
+        <a href="#"><img src="/assets/images/yourimg.png" alt="yourimg" /></a>
       </div>
       <a href="#" class="dark">You</a>
-      <div class="light">Mumbai</div>
+      <div class="light">Earth</div>
       <hr>
       <div class="light"><span *ngIf="myTurn">Round 2</span></div>
       <div class="dark">Score  10</div>                    
@@ -28,7 +28,7 @@
     </div>
     <div class="col-xs-6 clearfix">
       <div class="yourimg floatright">
-        <a href="#"><img src="/assets/images/kaanishhk.jpg" alt="Kaanishhk" /></a>
+        <a href="#"><img src="/assets/images/opponent.png" alt="Kaanishhk" /></a>
       </div>
       <div class="clear"></div>
       <a href="#" class="dark">Kaanishhk</a>

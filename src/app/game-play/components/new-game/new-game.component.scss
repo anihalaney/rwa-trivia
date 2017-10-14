@@ -42,7 +42,8 @@
 .formfield input[type="checkbox"]:after,.enterquestion .formfield input[type="radio"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  cursor: pointer;}
 .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ height: 10px; transform: rotate(45deg); }
 .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ border-color:#fff; }
-.formfield input[type="checkbox"]:disabled:after,.enterquestion .formfield input[type="radio"]:disabled:after{ border-color: transparent; }
+
+.formfield input[disabled=""]:before { background: #bdbdbd; border-color: #bdbdbd;}
 
 .formfield label{ font-size: 20px; cursor: pointer;}
 .chancat{ cursor: pointer; transition: 0.3s ease-in-out; margin-top: 10px}

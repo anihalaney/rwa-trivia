@@ -437,8 +437,16 @@ footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
     transform:rotate(360deg);
   }
 }
+.mat-dialog-content {
+  max-height: none !important;
+}
 @media screen and ( max-width:760px){      
-    .mat-dialog-container {
-    max-height: 120vh !important;
+  .mat-dialog-container {
+    height: 90vh !important;
+    width: 90vh !important;
+    //max-height: 90vh !important;
   }
+}
+body.dialog-open {
+  overflow: hidden;
 }

@@ -25,6 +25,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   activeGamesObs: Observable<Game[]>;
   gameInvites: number[];  //change this to game invites
 
+  now: Date;
+  greeting: string;
+  message: string;
+  
   constructor(private store: Store<AppStore>,
               private questionActions: QuestionActions,
               private gameActions: GameActions) {
@@ -47,6 +51,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.dispatch(this.questionActions.getQuestionOfTheDay());
+    this.now = new Date();
+    let hourOfDay = this.now.getHours();
+    if (hourOfDay < 12) {
+      this.greeting = "Morning";
+      this.message = "Glad to see you. Start your day with a new challenge!"
+    }
+    else if (hourOfDay < 17) {
+      this.greeting = "Afternoon";
+      this.message = "Caught you napping? Jog your mind with a new challenge!"
+    }
+    else {
+      this.greeting = "Evening";
+      this.message = "Relax your mind. Spice it up with a new game!"
+    }
   }
 
   ngOnDestroy() {

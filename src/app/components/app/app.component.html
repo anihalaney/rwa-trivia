@@ -41,9 +41,9 @@
 <footer>
   <div class="container">
     <div class="row">
-      <div class="col-sm-6 col-xs-12">
+      <div class="col-sm-8 col-xs-12">
         <a [routerLink]="['/']" title="Home">Home</a>
-        <a [routerLink]="['/my/questions']" title="My Questions">My Questions</a>
+        <a *ngIf="user" [routerLink]="['/my/questions']" title="My Questions">My Questions</a>
         <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
         <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
         <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
@@ -52,8 +52,14 @@
           <a class="logout" (click)="login()" title="Sign in">Sign in</a>
         </ng-container>
         <a *ngIf="user" class="login" (click)="logout()" title="Logout">Logout</a>
-      </div>
-      <div class="col-sm-6 col-xs-12 copyright textrigth">bitWiser © 2017. All rights reserved.</div>
+
+        <span *ngIf="!user" class="socialicon-f">
+          <a href="#" class="sprite facebookicon-f"></a>
+          <a href="#" class="sprite twiticon-f"></a>
+          <a href="#" class="sprite linkdenicon-f"></a>
+        </span>
+        </div>
+      <div class="col-sm-4 col-xs-12 copyright textright">bitWiser © 2017. All rights reserved.</div>
     </div>
   </div>
 </footer>

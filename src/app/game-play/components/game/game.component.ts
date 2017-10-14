@@ -52,9 +52,12 @@ export class GameComponent implements OnInit, OnDestroy {
   openDialog() {
     console.log("openDialog");
     this.dialogRef = this.dialog.open(GameDialogComponent, {
-      disableClose: true,
+      disableClose: false,
       data: { "gameId": this.gameId, "user": this.user }
     });
+
+    this.dialogRef.afterOpen().subscribe(x => {window.document.body.classList.add("dialog-open")});
+    this.dialogRef.afterClosed().subscribe(x => {window.document.body.classList.remove("dialog-open")});
   }
   ngOnDestroy() {
     if (this.dialogRef)

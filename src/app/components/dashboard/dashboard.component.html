@@ -6,8 +6,8 @@
   <!-- Currently active games -->
   <section *ngIf="user" id="curentactive" class="card">
     <div class="h1block">
-      <h1><span class="sprite sunicon"></span>Good Morning {{user.displayName}}!</h1>
-      <p>Nice to see you again, are you ready for a new challenge</p>
+      <h1><span class="sprite sunicon"></span>Good {{greeting}} {{user.displayName}}!</h1>
+      <p>{{message}}</p>
     </div>
     <div id="currentgame">
       <div class="row">
