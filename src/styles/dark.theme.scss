@@ -3,6 +3,11 @@
 $dark-theme-background : (
 	primary: #1b2431,
 	secondary: #273142,
+	card: #273142,
+	popup-container: #141c26,
+	question-list-label: #fff,
+	current-active: #141c26,
+	playwith-after: #566784,
 	overlay: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%), 
 	header: #3b5998,
 	footer: #0b214f,
@@ -13,8 +18,38 @@ $dark-theme-background : (
 	button-important: #f50057,
 	button-error: #d54937,
 	button-warning: #efbf00,
-
-	input: #384760
+	input: #384760,
+	invitationlist-alt: #2d384a,
+	subscribe-email: #384760 
 );
 
-@include apply-theme($dark-theme-background, "dark")
+$dark-theme-text-color : (
+	primary: #fff,
+	primary-light: #7f8fa4,
+	primary-dark: #fff,
+	secondary: #7c7c7c,
+	header: #f1f2f2,
+	footer: rgba(255,255,255,0.8),
+	copyright: rgba(255,255,255,0.5),
+	heading: #fff,
+	heading-alt: #7f8fa4,
+	heading-secondary: #7c7c7c,
+	tab-text: rgba(255,255,255,0.6),
+	btn-text: #fff,
+	active: #fff,
+	tags: #b09724,
+	viewall: #5c697c,
+	login: #fff,
+	form-focus: #4285f4,
+	form-select: #8995aa,
+	login-link: #f50057,
+	resubmit: #71b02f,
+	placeholder: #7c7c7c,
+	question-list-label: #263238,
+	blog-social: #9b9b9b
+	);
+
+
+
+
+@include apply-theme("dark", $dark-theme-background, $dark-theme-text-color)

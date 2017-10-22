@@ -1,8 +1,15 @@
 @import './theme';
 
+$bg-default: #f1f2f2;
+
 $light-theme-background : (
-	primary: #f1f2f2,
-	secondary: #fff,
+	primary: $bg-default,
+	secondary: $bg-default,
+	card: #fff,
+	popup-container: $bg-default,
+	question-list-label: $bg-default,
+	current-active: #fff,
+	playwith-after: $bg-default,
 	overlay: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%), 
 	header: #3b5998,
 	footer: #0b214f,
@@ -13,9 +20,37 @@ $light-theme-background : (
 	button-important: #f50057,
 	button-error: #d54937,
 	button-warning: #efbf00,
-
-	input: #fff
+	input: #fff,
+	invitationlist-alt: #fafafa,
+	subscribe-email: #fff 
 );
 
-@include apply-theme($light-theme-background, "")
+$light-theme-text-color : (
+	primary: #263238,
+	primary-light: #8c8c8c,
+	primary-dark: #282828,
+	secondary: #7c7c7c,
+	header: #f1f2f2,
+	footer: rgba(255,255,255,0.8),
+	copyright: rgba(255,255,255,0.5),
+	heading: #1b1c1c,
+	heading-alt: #1b1c1c,
+	heading-secondary: #1b1c1c,
+	tab-text: rgba(66,66,66,0.6),
+	btn-text: #fff,
+	active: #424242,
+	tags: #fe4f20,
+	viewall: #3b5998,
+	login: #3d3d3d,
+	form-focus: #4285f4,
+	form-select: #263238,
+	login-link: #f50057,
+	resubmit: #71b02f,
+	placeholder: #7c7c7c,
+	question-list-label:  #263238,
+	blog-social: #263238
+);
+
+
+@include apply-theme("", $light-theme-background, $light-theme-text-color)
 

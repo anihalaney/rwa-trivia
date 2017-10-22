@@ -1,31 +1,48 @@
-/*
+@mixin apply-theme($theme-class-name, $theme-background, $theme-text) {
+	@if $theme-class-name == "" {
+		//default theme
+		app-root > div {
+			@include theme-text-color($theme-text);
+			@include theme-background-color($theme-background);
+		}
+	}
+	@else {
+		app-root > div.#{$theme-class-name} {
+			@include theme-text-color($theme-text);
+			@include theme-background-color($theme-background);
+		}
+	}
+}
 
-//these are not listed in light theme
-
-input, textarea, select, button { background: #384760;}
-.secondbg{ background: #273142 }
-.cd-popup-container{background: #141c26;}
-.question-list li label{ background: #fff }
-#curentactive{ background: #141c26; border:0;}
-.playwith a:after{ background: #566784 }
-.invitationlist li:nth-child(odd){ background:#2d384a;}
-.subscrib-cont input[type="email"]{ background: #384760 }
-*/
-
-@mixin default-theme($theme) {
+@mixin theme-background-color($theme) {
 	input, textarea, select, button { 
 		background: map-get($theme, input);
 	}
 	
 	/*Header*/
 	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name { 
-		background: map-get($theme, secondary);
+		background: map-get($theme, card);
 	}
 	body, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
 		background: map-get($theme, primary);
 	}
+	.secondbg{ 
+		background: map-get($theme, secondary);
+	}
+	.cd-popup-container{
+		background: map-get($theme, popup-container);
+	}
+	.question-list li label{ 
+		background: map-get($theme, question-list-label);
+	}
 	.question-list li label:hover{ 
 		background: map-get($theme, li-hover); 
+	}
+	#curentactive{ 
+		background: map-get($theme, current-active);
+	}
+	.playwith a:after{ 
+		background: map-get($theme, playwith-after);
 	}
 	.headermain{ 
 		background: map-get($theme, header);
@@ -52,90 +69,97 @@ input, textarea, select, button { background: #384760;}
 		background: map-get($theme, reasons);  
 	}
 	.form-group .bar:before{ 
-		background: map-get($theme, form-group);  
+		background: map-get($theme, form-group);
+	}
+	.invitationlist li:nth-child(odd){ 
+		background:map-get($theme, invitationlist-alt);
+	}
+	.subscrib-cont input[type="email"]{ 
+		background: map-get($theme, subscribe-email);
 	}
 }
 
-
-@mixin apply-theme($theme, $theme-class-name) {
-	@if $theme-class-name == "" {
-		//default theme
-		app-root > div {
-			@include default-theme($theme);
-		}
+@mixin theme-text-color($theme) {
+	body,.recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic{ 
+		color: map-get($theme, primary);
 	}
-	@else {
-		app-root > div.#{$theme-class-name} {
-			@include default-theme($theme);
-		}
+	.question-list li label{ 
+		color: map-get($theme, question-list-label); 
 	}
-}
+	.copyright{ 
+		color: map-get($theme, copyright);
+	}
+	footer a{ 
+		color: map-get($theme, footer);
+	}
+	.startgame, .btn, .question-list li input:checked ~ label, .optionbox .radiobtn input:checked + label, .optionbox input:checked + label .dark, .optionbox input:checked + label .light, .landinginner, .gameplay li.right, .gameplay li.wrong{ 
+		color: map-get($theme, btn-text);
+	}
 
-
-/*Text*/
-.copyright{ 
-	color: rgba(255,255,255,0.5); 
-}
-footer a{ 
-	color: rgba(255,255,255,0.8); 
-}
-.startgame, .btn, .question-list li input:checked ~ label, .optionbox .radiobtn input:checked + label, .optionbox input:checked + label .dark, .optionbox input:checked + label .light, .landinginner, .gameplay li.right, .gameplay li.wrong{ 
-	color: #fff 
-}
-body,.recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic{ 
-	color: #263238 
-}
-.headerdrop a, .ladding-copyr{
-	color: #f1f2f2;
-}
-.light, .breadcrumbs span, .tag .tag-i{
-	color: #8c8c8c
-}
-.dark, .viewtext, .playwith a, .clinton,.card h3, .breadcrumbs a, .optionbox .radiobtn label, .formfield label, .tags p, .questionstatus .tab-content > ul > li p, .questionstatus .light, .saccount select ~ label, .savebox a:nth-child(2){ 
-	color: #282828 
-}
-.sec, .vs:after, .opponent, main h2 span, .invitationleft, .subscrib-cont p, .subs-bottom, .chancat, .tag, .popupbottom,.date, .signupfree, .avatarinput p, .saccount .formfield label + p, #file-name, .namefield .formfield > p{ 
-	color: #7c7c7c 
-}
-.tabbing li{
-	color: rgba(66,66,66,0.6);
-}
-h1, h1 + p, .gameplay h1, .gameplay p, .custom-file-upload{ 
-	color: #1b1c1c;  
-}
-.tabbing li.active, .form-group input:focus,.form-group input:valid{ 
-	color: #424242 
-}
-.T-tagging{ 
-	color: #fe4f20 
-}
-.viewall, .viewcount, a.dark:hover,.gameplay p a, .loginlink a.forgot{ 
-	color: #3b5998 
-}
-.logininner .heading, .form-group .control-label, .logininner .formfield label, .logininner .withsocial h3{ 
-	color: #3d3d3d 
-}
-.form-group input:focus ~ .control-label{
-	color: #4285f4
-}
-.loginlink a{ 
-	color: #f50057 
-}
-.resubmit{
-	color:#71b02f
-}
-
-::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color: #7c7c7c;
-}
-::-moz-placeholder { /* Firefox 19+ */
-  color: #7c7c7c;
-}
-:-ms-input-placeholder { /* IE 10+ */
-  color: #7c7c7c;
-}
-:-moz-placeholder { /* Firefox 18- */
-  color: #7c7c7c;
+	.headerdrop a, .ladding-copyr{
+		color: map-get($theme, header);
+	}
+	.light, .breadcrumbs span, .tag .tag-i{
+		color: map-get($theme, primary-light);
+	}
+	.dark, .viewtext, .playwith a, .clinton,.card h3, .breadcrumbs a, .optionbox .radiobtn label, .formfield label, .tags p, .questionstatus .tab-content > ul > li p, .questionstatus .light, .saccount select ~ label, .savebox a:nth-child(2){ 
+		color: map-get($theme, primary-dark);
+	}
+	.sec, .vs:after, .opponent, main h2 span, .invitationleft, .subscrib-cont p, .subs-bottom, .chancat, .tag, .popupbottom,.date, .signupfree, .avatarinput p, .saccount .formfield label + p, #file-name, .namefield .formfield > p{ 
+		color: map-get($theme, secondary);
+	}
+	.tabbing li{
+		color: map-get($theme, tab-text);
+	}
+	h1, .gameplay h1, .custom-file-upload{ 
+		color: map-get($theme, heading);
+	}
+	h1 + p{ 
+		color: map-get($theme, heading-alt);
+	}
+	.gameplay p{ 
+		color: map-get($theme, heading-secondary);
+	}
+	.tabbing li.active, .form-group input:focus,.form-group input:valid{ 
+		color: map-get($theme, active); 
+	}
+	.T-tagging{ 
+		color: map-get($theme, tags);
+	}
+	.viewall, .viewcount, a.dark:hover,.gameplay p a, .loginlink a.forgot{ 
+		color: map-get($theme, viewall);
+	}
+	.logininner .heading, .form-group .control-label, .logininner .formfield label, .logininner .withsocial h3{ 
+		color: map-get($theme, login); 
+	}
+	.form-group input:focus ~ .control-label{
+		color: map-get($theme, form-focus);
+	}
+	.loginlink a{ 
+		color: map-get($theme, login-link);
+	}
+	.resubmit{
+		color: map-get($theme, resubmit);
+	}
+	.blog-social{ 
+		color: map-get($theme, blog-social);
+	}
+	.formfield select{ 
+		color: map-get($theme, form-select); 
+	}
+	
+	::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+		color: map-get($theme, placeholder);
+	}
+	::-moz-placeholder { /* Firefox 19+ */
+		color: map-get($theme, placeholder);
+	}
+	:-ms-input-placeholder { /* IE 10+ */
+		color: map-get($theme, placeholder);
+	}
+	:-moz-placeholder { /* Firefox 18- */
+		color: map-get($theme, placeholder);
+	}
 }
 
 /*border*/
@@ -251,6 +275,11 @@ input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .f
 	}
 	
 }
+#curentactive{ 
+//TODO: coming from dark-theme. should be with borders
+border:0;
+}
+
 @media screen and ( max-width:1024px){
 	nav { 
 		background: #f1f2f2; 
