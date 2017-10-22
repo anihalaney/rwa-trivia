@@ -1,0 +1,20 @@
+@import './theme';
+
+$dark-theme-background : (
+	primary: #1b2431,
+	secondary: #273142,
+	overlay: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%), 
+	header: #3b5998,
+	footer: #0b214f,
+	li-hover: #e8e8e8,
+	reasons: #ffe8e4,
+	form-group: #4285f4,
+	button-primary: #71b02f,
+	button-important: #f50057,
+	button-error: #d54937,
+	button-warning: #efbf00,
+
+	input: #384760
+);
+
+@include apply-theme($dark-theme-background, "dark")

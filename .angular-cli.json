@@ -22,7 +22,8 @@
         "styles/rwa-trivia.theme.scss",
         "styles/styles.scss",
         "styles/global.scss",
-        "styles/white.scss"
+        "styles/light.theme.scss",
+        "styles/dark.theme.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",

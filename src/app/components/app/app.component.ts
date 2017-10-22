@@ -20,6 +20,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sub: Subscription;
   sub2: Subscription;
 
+  theme: string = "";
   constructor(
               private authService: AuthenticationService,
               private categoryActions: CategoryActions,
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private store: Store<AppStore>,
               public router: Router,
               public snackBar: MatSnackBar) {
+    
     this.sub = store.select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === "SUCCESS")
         this.snackBar.open("Question saved!", "", {duration: 2000});
@@ -70,5 +72,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
+  }
+
+  toggleTheme() {
+    this.theme = (this.theme === "") ? "dark" : "";
   }
 }

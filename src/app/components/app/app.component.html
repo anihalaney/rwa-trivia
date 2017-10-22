@@ -1,4 +1,5 @@
 <!--Header Start Here-->
+<div [ngClass]="theme">
 <header>        
   <section class="headermain" id="stickyheader">      
     <div class="container">
@@ -6,11 +7,14 @@
         <div class="logo col-xs-6 col-md-3"><a [routerLink]="['/']" title="trivia.com"><img src="/assets/images/logo.png"></a></div>
         <div class="col-xs-6 pull-right align-right">
           <div class="headerdrop">
-            <a [routerLink]="['/my']"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>                        
+            <a (click)="toggleTheme()"><mat-icon mat-list-icon>flip</mat-icon></a>
           </div>
           <div class="headerdrop">
-            <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>                        
-            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>                        
+            <a [routerLink]="['/my']"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>
+          </div>
+          <div class="headerdrop">
+            <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>
+            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>
           </div>
         </div>
       </div>
@@ -64,7 +68,8 @@
   </div>
 </footer>
 <!-- Footer end -->
-   
+</div>
+
 <mat-sidenav-container *ngIf="false">
   <mat-sidenav #sidenav class="sidenav">
     <mat-nav-list>
