@@ -1,0 +1,100 @@
+@mixin theme-background-color($theme) {
+	input, textarea, select, button { 
+		background: map-get($theme, input);
+	}
+	
+	/*Header*/
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name { 
+		background: map-get($theme, card);
+	}
+	body, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
+		background: map-get($theme, primary);
+	}
+	.secondbg{ 
+		background: map-get($theme, secondary);
+	}
+	.cd-popup-container{
+		background: map-get($theme, popup-container);
+	}
+	.question-list li label{ 
+		background: map-get($theme, question-list-label);
+	}
+	.question-list li label:hover{ 
+		background: map-get($theme, li-hover); 
+	}
+	#curentactive{ 
+		background: map-get($theme, current-active);
+	}
+	.playwith a:after{ 
+		background: map-get($theme, playwith-after);
+	}
+	.headermain{ 
+		background: map-get($theme, header);
+	}
+	.startgame{ 
+		background: map-get($theme, button-important); 
+	}
+	.btn, .question-list li input:checked ~ label, .optionbox input:checked + label, .formfield input[type="checkbox"]:checked:before,.enterquestion .formfield input[type="radio"]:checked:before, .gameplay li.right,.questionstatus .tabbing li:after{ 
+		background: map-get($theme, button-primary); 
+	}
+	footer{ 
+		background:  map-get($theme, footer);
+	}
+	.landingpage, .loginpage{ 
+		background: map-get($theme, overlay); 
+	}
+	.btn.signup, .logininner .formfield input[type="checkbox"]:checked:before, .gameplay li.wrong, .rejected{ 
+		background: map-get($theme, button-error);
+	}
+	.approval{ 
+		background: map-get($theme, button-warning); 
+	}
+	.reasons{ 
+		background: map-get($theme, reasons);  
+	}
+	.form-group .bar:before{ 
+		background: map-get($theme, form-group);
+	}
+	.invitationlist li:nth-child(odd){ 
+		background:map-get($theme, invitationlist-alt);
+	}
+	.subscrib-cont input[type="email"]{ 
+		background: map-get($theme, subscribe-email);
+	}
+
+	.cdk-overlay-dark-backdrop {
+		background: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%);
+	}
+	.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+		opacity: 1;
+	}
+	@media screen and ( min-width:1000px){
+		.startgame:hover{ 
+			background: map-get($theme, startgame-hover-lg);
+		}
+		.btn:hover{
+			background: map-get($theme, button-hover-lg);
+		}
+		.btn.signup:hover, .rejected:hover{ 
+			background: map-get($theme, button-error-hover-lg);
+		}
+		.approval:hover{ 
+			background: map-get($theme, button-warning-lg);
+		}
+		.viewbublic:hover{ 
+			background: map-get($theme, viewpublic-hover-lg);
+		}
+	}
+
+	@media screen and ( max-width:1024px){
+		nav { 
+			background: map-get($theme, nav-sm);
+		}
+	}
+	
+	@media screen and ( max-width:989px){
+		.invitationlist li{ 
+			background:map-get($theme, invitationlist-list-sm);
+		}
+	}
+}

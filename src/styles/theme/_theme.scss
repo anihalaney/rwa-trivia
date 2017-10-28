@@ -1,0 +1,24 @@
+@import './background';
+@import './text';
+@import './border';
+
+@mixin apply-theme($theme-class-name, $theme-background, $theme-text, $theme-border) {
+	@if $theme-class-name == "" {
+		//default theme
+		app-root > div {
+			@include color-themes($theme-background, $theme-text, $theme-border);
+		}
+	}
+	@else {
+		app-root > div.#{$theme-class-name} {
+			@include color-themes($theme-background, $theme-text, $theme-border);
+		}
+	}
+}
+
+@mixin color-themes($theme-background, $theme-text, $theme-border) {
+	@include theme-text-color($theme-text);
+	@include theme-background-color($theme-background);
+	@include theme-border-color($theme-border);
+}
+	
