@@ -450,3 +450,33 @@ footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
 body.dialog-open {
   overflow: hidden;
 }
+
+
+
+
+
+//TODO: Check these ... Coming from theme file
+@media screen and ( min-width:1000px){
+	.playwith a:hover .playwithicon{ background-position: -125px -22px;}
+	.blog-social a:hover .shareicon {
+		background-position:-63px -208px;
+	}
+  nav .card{ 
+    border-width: 1px;
+    border-style: solid;
+  }
+}
+#curentactive{ 
+	//TODO: coming from dark-theme. should be with borders
+	border-width:0;
+}
+.card{ 
+	//TODO: coming from dark-theme. should be with borders
+	border-width: 1px;
+	border-style: solid;
+}
+nav .user.card{ 
+	//TODO: coming from dark-theme. should be with borders
+	border-width: 0 !important
+}
+

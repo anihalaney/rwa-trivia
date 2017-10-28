@@ -22,7 +22,15 @@ $light-theme-background : (
 	button-warning: #efbf00,
 	input: #fff,
 	invitationlist-alt: #fafafa,
-	subscribe-email: #fff 
+	subscribe-email: #fff,
+
+	startgame-hover-lg: #e50051,
+	button-hover-lg: #1f7b2b,
+	button-error-hover-lg: #af3424,
+	button-warning-lg: #d5aa00,
+	viewpublic-hover-lg: #71b02f,
+
+	nav-sm: #f1f2f2,
 );
 
 $light-theme-text-color : (
@@ -48,9 +56,41 @@ $light-theme-text-color : (
 	resubmit: #71b02f,
 	placeholder: #7c7c7c,
 	question-list-label:  #263238,
-	blog-social: #263238
+	blog-social: #263238,
+	hover-lg: #3b5998,
+	tag-hover-lg: #424242,
+	footer-hover-lg:#fff,
+	box-hover-lg: #1f7b2b,
 );
 
 
-@include apply-theme("", $light-theme-background, $light-theme-text-color)
+$light-theme-border : (
+	card: rgba(204,204,204,0.44),
+	default: rgba(204,204,204,0.44),
+	primary: #b8b8b8,
+	viewall-after: #b8b8b8,
+	currentgame-list: #b8b8b8,
+	input:#9a9a9a,
+	hover: #3b5998,
+	active: #3b5998,
+	header-block: #dfe0e1,
+	header-block-after: #fff,
+	form-options: #dfe0e1,
+	form-options-label: #fff,
+	skyblue-before:#01d5d8,  
+	red-before:#ff2d55,
+	green-before:#7ec856,  
+	form-checkbox:#71b02f,
+	secondary: #dddddd,
+	secondary-after:#dddddd,
+	login: #d54937,
+	timer: #10383d,
+	form-checkbox-checked:#1f7b2b,
+	gameplay-wrong:#af3424, 
+	input-box-shadow: inset 5px 5px 5px rgba(0,0,0,0.06),
 
+	categorybox-lg: #ececec,
+	hover-lg: #71b02f,
+);
+
+@include apply-theme("", $light-theme-background, $light-theme-text-color, $light-theme-border)
