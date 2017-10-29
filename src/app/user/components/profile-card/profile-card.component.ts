@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+
+import { User } from '../../../model';
 
 @Component({
   selector: 'profile-card',
@@ -6,4 +8,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./profile-card.component.scss']
 })
 export class ProfileCardComponent {
+  @Input() user: User;
 }
