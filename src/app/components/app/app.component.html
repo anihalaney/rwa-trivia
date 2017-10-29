@@ -1,4 +1,5 @@
 <!--Header Start Here-->
+<div>
 <header>        
   <section class="headermain" id="stickyheader">      
     <div class="container">
@@ -6,11 +7,14 @@
         <div class="logo col-xs-6 col-md-3"><a [routerLink]="['/']" title="trivia.com"><img src="/assets/images/logo.png"></a></div>
         <div class="col-xs-6 pull-right align-right">
           <div class="headerdrop">
-            <a [routerLink]="['/my']"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>                        
+            <a (click)="toggleTheme()"><mat-icon mat-list-icon>flip</mat-icon></a>
           </div>
           <div class="headerdrop">
-            <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>                        
-            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>                        
+            <a [routerLink]="['/my']"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>
+          </div>
+          <div class="headerdrop">
+            <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>
+            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>
           </div>
         </div>
       </div>
@@ -28,7 +32,7 @@
       <span></span>
       <span></span>
     </div>
-    <side-nav></side-nav>
+    <side-nav [user]="user"></side-nav>
   </nav>
 
   <main>
@@ -41,9 +45,9 @@
 <footer>
   <div class="container">
     <div class="row">
-      <div class="col-sm-6 col-xs-12">
+      <div class="col-sm-8 col-xs-12">
         <a [routerLink]="['/']" title="Home">Home</a>
-        <a [routerLink]="['/my/questions']" title="My Questions">My Questions</a>
+        <a *ngIf="user" [routerLink]="['/my/questions']" title="My Questions">My Questions</a>
         <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
         <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
         <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
@@ -52,13 +56,20 @@
           <a class="logout" (click)="login()" title="Sign in">Sign in</a>
         </ng-container>
         <a *ngIf="user" class="login" (click)="logout()" title="Logout">Logout</a>
-      </div>
-      <div class="col-sm-6 col-xs-12 copyright textrigth">bitWiser © 2017. All rights reserved.</div>
+
+        <span *ngIf="!user" class="socialicon-f">
+          <a href="#" class="sprite facebookicon-f"></a>
+          <a href="#" class="sprite twiticon-f"></a>
+          <a href="#" class="sprite linkdenicon-f"></a>
+        </span>
+        </div>
+      <div class="col-sm-4 col-xs-12 copyright textright">bitWiser © 2017. All rights reserved.</div>
     </div>
   </div>
 </footer>
 <!-- Footer end -->
-   
+</div>
+
 <mat-sidenav-container *ngIf="false">
   <mat-sidenav #sidenav class="sidenav">
     <mat-nav-list>

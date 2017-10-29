@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { User } from '../../model';
 
 @Component({
   selector: 'side-nav',
@@ -6,4 +7,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./side-nav.component.scss']
 })
 export class SideNavComponent {
+  @Input() user: User;
 }

@@ -4,7 +4,7 @@
 button { transition: all 0.4s ease-in-out 0s; -webkit-transition: all 0.4s ease-in-out 0s; -moz-transition: all 0.4s ease-in-out 0s; -ms-transition: all 0.4s ease-in-out 0s; -o-transition: all 0.4s ease-in-out 0s; display: inline-block; padding: 4px 15px; text-decoration: none; font-family: 'robotolight'; }
 .no_scroll { overflow: hidden; }
 article, aside, details, figcaption, figure, footer, header, main, nav, section, summary, title { display: block; }
-body { background: #fff; font-family: 'hindregular', sans-serif; font-style: normal; font-size: 14px; line-height: 15px; color: #000; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+body { font-family: 'hindregular', sans-serif; font-style: normal; font-size: 14px; line-height: 15px; color: #000; -webkit-font-smoothing: antialiased; margin: 0; padding: 0; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
 dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, legend, input, textarea, p, blockquote, th, td { margin: 0; padding: 0; line-height: 1.5; }
 form{ line-height: inherit; }
 h1, h2, h3, h4, h5, h6{ font-weight: normal; }
@@ -437,8 +437,46 @@ footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
     transform:rotate(360deg);
   }
 }
+.mat-dialog-content {
+  max-height: none !important;
+}
 @media screen and ( max-width:760px){      
-    .mat-dialog-container {
-    max-height: 120vh !important;
+  .mat-dialog-container {
+    height: 90vh !important;
+    width: 90vh !important;
+    //max-height: 90vh !important;
   }
 }
+body.dialog-open {
+  overflow: hidden;
+}
+
+
+
+
+
+//TODO: Check these ... Coming from theme file
+@media screen and ( min-width:1000px){
+	.playwith a:hover .playwithicon{ background-position: -125px -22px;}
+	.blog-social a:hover .shareicon {
+		background-position:-63px -208px;
+	}
+  nav .card{ 
+    border-width: 1px;
+    border-style: solid;
+  }
+}
+#curentactive{ 
+	//TODO: coming from dark-theme. should be with borders
+	border-width:0;
+}
+.card{ 
+	//TODO: coming from dark-theme. should be with borders
+	border-width: 1px;
+	border-style: solid;
+}
+nav .user.card{ 
+	//TODO: coming from dark-theme. should be with borders
+	border-width: 0 !important
+}
+

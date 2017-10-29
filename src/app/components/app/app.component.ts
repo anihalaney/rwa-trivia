@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
@@ -20,7 +20,8 @@ export class AppComponent implements OnInit, OnDestroy {
   sub: Subscription;
   sub2: Subscription;
 
-  constructor(
+  theme: string = "";
+  constructor(private renderer: Renderer2,
               private authService: AuthenticationService,
               private categoryActions: CategoryActions,
               private tagActions: TagActions,
@@ -29,6 +30,7 @@ export class AppComponent implements OnInit, OnDestroy {
               private store: Store<AppStore>,
               public router: Router,
               public snackBar: MatSnackBar) {
+    
     this.sub = store.select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === "SUCCESS")
         this.snackBar.open("Question saved!", "", {duration: 2000});
@@ -70,5 +72,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
+  }
+
+  toggleTheme() {
+    if (this.theme === "") {
+      this.theme = "dark";
+      this.renderer.addClass(document.body, this.theme)
+    } else {
+      this.renderer.removeClass(document.body, this.theme)
+      this.theme = "";
+    }
   }
 }

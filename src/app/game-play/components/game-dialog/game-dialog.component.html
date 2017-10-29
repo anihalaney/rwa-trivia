@@ -1,3 +1,4 @@
+<mat-dialog-content>
 <div *ngIf="!currentQuestion && !gameOver" class="cd-popup-container">
   Loading
 </div>
@@ -27,3 +28,4 @@
   (gameOverContinueClicked)="gameOverContinueClicked($event)"
   (viewQuestionClicked)="viewQuestionClicked($event)">
 </game-over>
+</mat-dialog-content>
