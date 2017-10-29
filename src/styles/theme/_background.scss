@@ -2,12 +2,11 @@
 	input, textarea, select, button { 
 		background: map-get($theme, input);
 	}
-	
 	/*Header*/
 	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name { 
 		background: map-get($theme, card);
 	}
-	body, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
+	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
 		background: map-get($theme, primary);
 	}
 	.secondbg{ 
@@ -62,12 +61,6 @@
 		background: map-get($theme, subscribe-email);
 	}
 
-	.cdk-overlay-dark-backdrop {
-		background: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%);
-	}
-	.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
-		opacity: 1;
-	}
 	@media screen and ( min-width:1000px){
 		.startgame:hover{ 
 			background: map-get($theme, startgame-hover-lg);
@@ -97,4 +90,13 @@
 			background:map-get($theme, invitationlist-list-sm);
 		}
 	}
+
+	/* For material overlay */
+	.cdk-overlay-dark-backdrop {
+		background: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%);
+	}
+	.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+		opacity: 1;
+	}
+
 }

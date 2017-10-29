@@ -5,12 +5,12 @@
 @mixin apply-theme($theme-class-name, $theme-background, $theme-text, $theme-border) {
 	@if $theme-class-name == "" {
 		//default theme
-		app-root > div {
+		body {
 			@include color-themes($theme-background, $theme-text, $theme-border);
 		}
 	}
 	@else {
-		app-root > div.#{$theme-class-name} {
+		body.#{$theme-class-name} {
 			@include color-themes($theme-background, $theme-text, $theme-border);
 		}
 	}

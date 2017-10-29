@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
@@ -21,7 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   sub2: Subscription;
 
   theme: string = "";
-  constructor(
+  constructor(private renderer: Renderer2,
               private authService: AuthenticationService,
               private categoryActions: CategoryActions,
               private tagActions: TagActions,
@@ -75,6 +75,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   toggleTheme() {
-    this.theme = (this.theme === "") ? "dark" : "";
+    if (this.theme === "") {
+      this.theme = "dark";
+      this.renderer.addClass(document.body, this.theme)
+    } else {
+      this.renderer.removeClass(document.body, this.theme)
+      this.theme = "";
+    }
   }
 }
