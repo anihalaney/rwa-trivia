@@ -1,4 +1,4 @@
-@mixin theme-background-color($theme) {
+@mixin theme-background-color($theme, $sprite) {
 	input, textarea, select, button { 
 		background: map-get($theme, input);
 	}
@@ -99,4 +99,14 @@
 		opacity: 1;
 	}
 
+	.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { 
+		background-image: url(/assets/images/#{$sprite});
+		background-repeat: no-repeat;
+	}
+	.optionbox input:checked + label .sprite{ 
+		background-color: #fff;
+		background-image: url(/assets/images/#{$sprite});
+		background-repeat: no-repeat;
+	}
+	
 }

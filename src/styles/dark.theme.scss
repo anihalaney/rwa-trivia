@@ -95,4 +95,4 @@ $dark-theme-border : (
 	hover-lg: #71b02f,
 );
 
-@include apply-theme("dark", $dark-theme-background, $dark-theme-text-color, $dark-theme-border)
+@include apply-theme("dark", $dark-theme-background, $dark-theme-text-color, $dark-theme-border, 'sprite-dark.png')

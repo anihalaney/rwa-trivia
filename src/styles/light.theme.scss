@@ -93,4 +93,4 @@ $light-theme-border : (
 	hover-lg: #71b02f,
 );
 
-@include apply-theme("", $light-theme-background, $light-theme-text-color, $light-theme-border)
+@include apply-theme("", $light-theme-background, $light-theme-text-color, $light-theme-border, 'sprite.png')
