@@ -3,7 +3,7 @@
 		background: map-get($theme, input);
 	}
 	/*Header*/
-	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name { 
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox { 
 		background: map-get($theme, card);
 	}
 	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
@@ -44,6 +44,9 @@
 	}
 	.btn.signup, .logininner .formfield input[type="checkbox"]:checked:before, .gameplay li.wrong, .rejected{ 
 		background: map-get($theme, button-error);
+	}
+	.formfield input[type="checkbox"]:disabled:before { 
+		background: map-get($theme, form-checkbox-disabled);
 	}
 	.approval{ 
 		background: map-get($theme, button-warning); 

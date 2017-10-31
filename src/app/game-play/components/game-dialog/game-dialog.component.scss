@@ -19,9 +19,13 @@
 .optionbox .radiobtn label{ font-size: 20px; display: inline-block; width: 100%; border:1px solid; border-radius: 4px; padding: 9px 0; text-align: center; cursor: pointer; transition: 0.3s ease-in-out; position: relative; overflow: hidden;}
 .optionbox .radiobtn label .sprite{ border-radius: 50% }
 .optionbox .radiobtn label:before, .gameplay li.right:before, .gameplay li.wrong:before{ content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent;}
-.optionbox .radiobtn label:after, .gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right: 2px solid; border-bottom: 2px solid; transition: 0.3s ease-in-out}
+.optionbox .radiobtn label:after, .gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right: 2px solid; border-bottom: 2px solid; transition: 0.3s ease-in-out; opacity: 0;}
 .optionbox input:checked + label{ box-shadow: 0 2px 5px rgba(0,0,0,0.3) }
-.optionbox input:checked + label:after, .gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
+.optionbox input:checked + label:after, .gameplay li.right:after, .gameplay li.wrong:after{ 
+  height: 13px;
+  transform: rotate(45deg); 
+  opacity: 1;
+}
 .optionbox .radiobtn label .sprite{ vertical-align:-20px }
 .gameplay li.wrong:after{content: "+"; border: 0; height: auto;width: auto;font-size: 24px; top: 2px; line-height: 1; right: 6px;}
 
