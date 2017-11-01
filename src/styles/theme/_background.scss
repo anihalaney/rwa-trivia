@@ -96,7 +96,7 @@
 
 	/* For material overlay */
 	.cdk-overlay-dark-backdrop {
-		background: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%);
+		background: map-get($theme, overlay); 
 	}
 	.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
 		opacity: 1;

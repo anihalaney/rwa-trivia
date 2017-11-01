@@ -440,11 +440,23 @@ footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
 .mat-dialog-content {
   max-height: none !important;
 }
-@media screen and ( max-width:760px){      
+.mat-dialog-container {
+  padding: 0px !important;
+}
+
+@media screen and ( min-width:1000px){      
+  .mat-dialog-container {
+    height: auto !important;
+    width: 960px !important;
+    max-width: 960px !important;
+    //max-height: 90vh !important;
+  }
+}
+@media screen and ( max-width:1000px){      
   .mat-dialog-container {
     height: 90vh !important;
-    width: 90vh !important;
-    //max-height: 90vh !important;
+    width: 96vw !important;
+    max-width: 96vw !important;
   }
 }
 body.dialog-open {
