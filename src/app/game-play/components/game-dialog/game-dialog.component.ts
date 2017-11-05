@@ -88,7 +88,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           () => {
             console.log("Time Expired");
             //disable all buttons
-            //this.afterAnswer();
+            this.afterAnswer();
           });
         
       })
@@ -125,6 +125,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.getNextQuestion();
   }
 
+  /*
   viewQuestionClicked($event) 
   {
     if (this.continueNext)
@@ -132,6 +133,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     if (this.gameOver)
       this.gameOver = false;
   }
+  */
   gameOverContinueClicked() {
     //this.router.navigate(['/']);
   }
@@ -161,7 +163,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     }
 
     this.questionComponent.disableQuestions(correctAnswerId);
-    Observable.timer(1000).take(1).subscribe(t => {
+    Observable.timer(500).take(1).subscribe(t => {
       this.continueNext = true;
     });
   }

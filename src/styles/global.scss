@@ -438,6 +438,8 @@ footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
   }
 }
 .mat-dialog-content {
+  padding: 0 !important;
+  margin: 0 !important;
   max-height: none !important;
 }
 .mat-dialog-container {
@@ -454,9 +456,13 @@ footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
 }
 @media screen and ( max-width:1000px){      
   .mat-dialog-container {
-    height: 90vh !important;
     width: 96vw !important;
     max-width: 96vw !important;
+  }
+}
+@media screen and ( max-width:767px){      
+  .mat-dialog-container {
+    height: 90vh !important;
   }
 }
 body.dialog-open {

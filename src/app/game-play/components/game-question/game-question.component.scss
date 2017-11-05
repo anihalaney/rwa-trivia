@@ -148,13 +148,15 @@ mat-card {
 .correct {
   border: 4px solid green;
 }
+.answer-status {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
 .correct-text {
   color: green;
-  font-size: 2 em;
 }
 .timeout-text, .incorrect-text {
   color: red;
-  font-size: 2 em;
 }
 .abouttoexpire {
   color: red;
