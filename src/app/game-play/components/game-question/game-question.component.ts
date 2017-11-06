@@ -35,7 +35,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   }
 
   answerButtonClicked(answer: Answer, index: number ) {
-    if (this.answeredIndex >= 0)
+    if (this.answeredIndex >= 0 || this.continueNext)
       return;
     this.answeredIndex = index;
     this.answerClicked.emit(index)

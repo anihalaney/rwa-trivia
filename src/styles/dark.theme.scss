@@ -8,12 +8,13 @@ $dark-theme-background : (
 	question-list-label: #fff,
 	current-active: #141c26,
 	playwith-after: #566784,
-	overlay: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%), 
+	overlay: rgba(38, 48, 60, 1), 
 	header: #3b5998,
 	footer: #0b214f,
 	li-hover: #e8e8e8,
 	reasons: #ffe8e4,
 	form-group: #4285f4,
+	form-checkbox-disabled: #bdbdbd,
 	button-primary: #71b02f,
 	button-important: #f50057,
 	button-error: #d54937,
@@ -83,6 +84,7 @@ $dark-theme-border : (
 	orange-before: #FF3D00,
 	bluegrey-before: #78909C,
 	form-checkbox:#71b02f,
+	form-checkbox-disabled: #bdbdbd,
 	secondary: #313d4f,
 	secondary-after:#141c26,
 	login: #d54937,
@@ -95,4 +97,4 @@ $dark-theme-border : (
 	hover-lg: #71b02f,
 );
 
-@include apply-theme("dark", $dark-theme-background, $dark-theme-text-color, $dark-theme-border)
+@include apply-theme("dark", $dark-theme-background, $dark-theme-text-color, $dark-theme-border, 'sprite-dark.png')

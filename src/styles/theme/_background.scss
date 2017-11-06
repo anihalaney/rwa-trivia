@@ -1,9 +1,9 @@
-@mixin theme-background-color($theme) {
+@mixin theme-background-color($theme, $sprite) {
 	input, textarea, select, button { 
 		background: map-get($theme, input);
 	}
 	/*Header*/
-	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name { 
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox { 
 		background: map-get($theme, card);
 	}
 	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
@@ -44,6 +44,9 @@
 	}
 	.btn.signup, .logininner .formfield input[type="checkbox"]:checked:before, .gameplay li.wrong, .rejected{ 
 		background: map-get($theme, button-error);
+	}
+	.formfield input[type="checkbox"]:disabled:before { 
+		background: map-get($theme, form-checkbox-disabled);
 	}
 	.approval{ 
 		background: map-get($theme, button-warning); 
@@ -93,10 +96,22 @@
 
 	/* For material overlay */
 	.cdk-overlay-dark-backdrop {
-		background: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%);
+		background: map-get($theme, overlay); 
 	}
 	.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
 		opacity: 1;
 	}
-
+	.mat-dialog-container {
+		background-color: map-get($theme, primary) !important;
+	}
+	.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { 
+		background-image: url(/assets/images/#{$sprite});
+		background-repeat: no-repeat;
+	}
+	.optionbox input:checked + label .sprite{ 
+		background-color: #fff;
+		background-image: url(/assets/images/#{$sprite});
+		background-repeat: no-repeat;
+	}
+	
 }

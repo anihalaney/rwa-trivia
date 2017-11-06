@@ -122,18 +122,16 @@
 
 
 .gameplay li.question-answered {cursor: not-allowed;}
-.gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right-width: 2px; border-right-style: solid; border-bottom-width: 2px; border-bottom-style: solid; transition: 0.3s ease-in-out}
+.gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right-width: 2px; border-right-style: solid; border-bottom-width: 2px; border-bottom-style: solid; transition: 0.3s ease-in-out; opacity: 0;}
 
 .gameplay li.players-answer.wrong:before{ content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent; }
 .gameplay li.players-answer.wrong:before{ border-right-color: #af3424; border-top-color: #af3424;  }
-.gameplay li.players-answer.wrong:after{ height: 13px;transform: rotate(45deg); }
+.gameplay li.players-answer.wrong:after{ height: 13px;transform: rotate(45deg); opacity: 1; }
 .gameplay li.players-answer.wrong:after{content: "+"; border: 0; height: auto;width: auto;font-size: 24px; top: 2px; line-height: 1; right: 6px;}
 
 .gameplay li.players-answer.right:before { content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent;}
 .gameplay li.players-answer.right:before { border-right-color: #1f7b2b; border-top-color: #1f7b2b}
-.gameplay li.players-answer.right:after{ height: 13px;transform: rotate(45deg); }
-
-
+.gameplay li.players-answer.right:after{ height: 13px;transform: rotate(45deg); opacity: 1; }
 
 
 mat-card {
@@ -150,13 +148,15 @@ mat-card {
 .correct {
   border: 4px solid green;
 }
+.answer-status {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
 .correct-text {
   color: green;
-  font-size: 2 em;
 }
 .timeout-text, .incorrect-text {
   color: red;
-  font-size: 2 em;
 }
 .abouttoexpire {
   color: red;
