@@ -21,7 +21,7 @@ import { AuthGuard, CategoriesResolver, TagsResolver } from './services';
 import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects } from './store/effects';
 import { reducer } from './store/app-store';
 
-import { LoginComponent, PasswordAuthComponent } from './components';
+import { LoginComponent } from './components';
 
 import { SharedModule } from  '../shared/shared.module';
  
@@ -29,11 +29,11 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 @NgModule({
   declarations: [
-    LoginComponent, PasswordAuthComponent
+    LoginComponent
   ],
 
   entryComponents: [
-    LoginComponent, PasswordAuthComponent
+    LoginComponent
   ],
   imports: [
     //firebase
