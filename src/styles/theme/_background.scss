@@ -101,7 +101,9 @@
 	.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
 		opacity: 1;
 	}
-
+	.mat-dialog-container {
+		background-color: map-get($theme, primary) !important;
+	}
 	.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { 
 		background-image: url(/assets/images/#{$sprite});
 		background-repeat: no-repeat;

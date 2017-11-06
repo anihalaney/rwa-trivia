@@ -449,9 +449,8 @@ footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
 @media screen and ( min-width:1000px){      
   .mat-dialog-container {
     height: auto !important;
-    width: 960px !important;
+    min-width: 800px !important;
     max-width: 960px !important;
-    //max-height: 90vh !important;
   }
 }
 @media screen and ( max-width:1000px){      

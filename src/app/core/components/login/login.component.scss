@@ -11,7 +11,6 @@ button {
   color: red;
 }
 /*Login page*/
-.logininner .card{ margin-top: 17px; }
 .logininner .card .row{margin: 0 }
 .logininner .withsocial, .logininner .col-xs-12{ padding: 30px }
 .heading{ font-size: 24px; font-family:'hindlight'; line-height: 1.2 }
@@ -62,4 +61,7 @@ a {
 }
 .hide {
   display: none;
+}
+.logininner input {
+	background-color: transparent;
 }

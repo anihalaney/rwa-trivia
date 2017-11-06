@@ -15,7 +15,7 @@
 		color: map-get($theme, btn-text);
 	}
 
-	.headerdrop a, .ladding-copyr{
+	.headerdrop a, .logo a, .ladding-copyr {
 		color: map-get($theme, header);
 	}
 	.light, .breadcrumbs span, .tag .tag-i{
@@ -78,6 +78,9 @@
 	}
 	:-moz-placeholder { /* Firefox 18- */
 		color: map-get($theme, placeholder);
+	}
+	.mat-dialog-container {
+		color: map-get($theme, primary) !important;
 	}
 
 	@media screen and ( min-width:1000px){
