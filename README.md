@@ -40,6 +40,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 14: Faceted search with Elasticsearch and Angular Material data-table](https://blog.realworldfullstack.io/real-world-app-part-14-faceted-search-with-elasticsearch-and-angular-material-data-table-d90ebaf2ee4b)
 
+[Part 15: Incorporate Material UI design into the app](https://blog.realworldfullstack.io/real-world-app-part-15-ui-design-with-angular-material-1a5c597c679e)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)
