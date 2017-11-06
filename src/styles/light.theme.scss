@@ -6,16 +6,17 @@ $light-theme-background : (
 	primary: $bg-default,
 	secondary: $bg-default,
 	card: #fff,
-	popup-container: $bg-default,
+	popup-container:  #fff,
 	question-list-label: $bg-default,
 	current-active: #fff,
 	playwith-after: $bg-default,
-	overlay: radial-gradient(ellipse at center, #6d8ac6 1%,#3b5998 100%), 
+	overlay: rgba(38, 48, 60, 1), 
 	header: #3b5998,
 	footer: #0b214f,
 	li-hover: #e8e8e8,
 	reasons: #ffe8e4,
 	form-group: #4285f4,
+	form-checkbox-disabled: #bdbdbd,
 	button-primary: #71b02f,
 	button-important: #f50057,
 	button-error: #d54937,
@@ -81,11 +82,12 @@ $light-theme-border : (
 	red-before:#ff2d55,
 	green-before:#7ec856,  
 	form-checkbox:#71b02f,
+	form-checkbox-disabled: #bdbdbd,
 	secondary: #dddddd,
-	secondary-after:#dddddd,
+	secondary-after:#fff,
 	login: #d54937,
 	timer: #10383d,
-	form-checkbox-checked:#1f7b2b,
+	form-checkbox-checked: #1f7b2b,
 	gameplay-wrong:#af3424, 
 	input-box-shadow: inset 5px 5px 5px rgba(0,0,0,0.06),
 
@@ -93,4 +95,4 @@ $light-theme-border : (
 	hover-lg: #71b02f,
 );
 
-@include apply-theme("", $light-theme-background, $light-theme-text-color, $light-theme-border)
+@include apply-theme("", $light-theme-background, $light-theme-text-color, $light-theme-border, 'sprite.png')

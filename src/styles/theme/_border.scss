@@ -56,6 +56,9 @@
 	.optionbox input:checked + label, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .gameplay li:hover, .gameplay li.right{
 		border-color: map-get($theme, form-checkbox);
 	}
+	.formfield input[type="checkbox"]:disabled:before { 
+		border-color: map-get($theme, form-checkbox-disabled);
+	}
 	.secondbg{ 
 		border-color: map-get($theme, secondary);
 		&:before {

@@ -1,5 +1,5 @@
 @mixin theme-text-color($theme) {
-	body,.recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic{ 
+	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic{ 
 		color: map-get($theme, primary);
 	}
 	.question-list li label{ 
@@ -15,7 +15,7 @@
 		color: map-get($theme, btn-text);
 	}
 
-	.headerdrop a, .ladding-copyr{
+	.headerdrop a, .logo a, .ladding-copyr {
 		color: map-get($theme, header);
 	}
 	.light, .breadcrumbs span, .tag .tag-i{
@@ -78,6 +78,9 @@
 	}
 	:-moz-placeholder { /* Firefox 18- */
 		color: map-get($theme, placeholder);
+	}
+	.mat-dialog-container {
+		color: map-get($theme, primary) !important;
 	}
 
 	@media screen and ( min-width:1000px){
