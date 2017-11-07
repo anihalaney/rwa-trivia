@@ -3,6 +3,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 
 import { StoreModule } from '@ngrx/store';
@@ -39,6 +40,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     //firebase
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
+    AngularFirestoreModule,
     AngularFireAuthModule,
     
     //store
