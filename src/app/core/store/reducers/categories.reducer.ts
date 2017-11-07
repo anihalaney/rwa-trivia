@@ -7,6 +7,7 @@ import { Category } from '../../../model';
 export function categories(state: any = [], action: ActionWithPayload<Category[]>): Category[] {
   switch (action.type) {
     case CategoryActions.LOAD_CATEGORIES_SUCCESS:
+    console.log(action.payload);
       return action.payload;
     default:
       return state;

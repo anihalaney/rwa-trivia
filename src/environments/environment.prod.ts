@@ -9,6 +9,7 @@ export const CONFIG: IConfig = {
       apiKey: "AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y",
       authDomain: "rwa-trivia.firebaseapp.com",
       databaseURL: "https://rwa-trivia.firebaseio.com",
+      projectId: 'rwa-trivia',
       storageBucket: "rwa-trivia.appspot.com",
       messagingSenderId: "479350787602"
   },
