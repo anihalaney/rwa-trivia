@@ -4,13 +4,13 @@
   "dependencies": {
     "body-parser": "1.18.2",
     "cookie-parser": "1.4.3",
-    "cors": "2.8.3",
+    "cors": "2.8.4",
     "csv": "1.1.1",
-    "elasticsearch": "13.2.0",
-    "express": "4.15.3",
-    "firebase-admin": "5.0.0",
-    "firebase-functions": "0.5.7",
-    "google-cloud": "0.55.0"
+    "elasticsearch": "13.3.1",
+    "express": "4.16.2",
+    "firebase-admin": "5.4.3",
+    "firebase-functions": "0.7.2",
+    "google-cloud": "0.57.0"
   },
   "private": true,
   "devDependencies": {
