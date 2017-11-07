@@ -183,6 +183,38 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
 
 });
 
+app.get('/migrate_to_firestore', adminOnly, (req, res) => {
+  let categories: Category[] = [];
+  let catRef = admin.database().ref("/categories");
+  catRef.once("value", function(cs) {
+    cs.forEach(c => {
+      //console.log(c.key);
+      console.log(c.val());
+      let category: Category = { 
+        "id": c.val()["id"], 
+        "categoryName": c.val()["categoryName"], 
+        "requiredForGamePlay": (c.val()["requiredForGamePlay"]) ? true : false
+      };
+      categories.push(category);
+      return;
+    })
+
+    console.log(categories);
+
+    let batch = admin.firestore().batch();
+    categories.forEach (category => {
+      let doc = admin.firestore().doc("categories/" + category.id);
+      console.log(doc);
+      batch.set(doc, category);
+
+      //let catCollection = admin.firestore().collection("categories");
+    });
+    console.log("Commiting batch");
+    batch.commit();
+    res.send(categories);
+  });
+});
+
 //rebuild questions index
 app.get('/rebuild_questions_index', adminOnly, (req, res) => {
 
