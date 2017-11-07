@@ -12,7 +12,7 @@ export class CategoryService {
   }
 
   getCategories(): Observable<Category[]> {
-    return this.db.list('/categories');
+    return this.db.list('/categories').valueChanges();
   }
   
 }
