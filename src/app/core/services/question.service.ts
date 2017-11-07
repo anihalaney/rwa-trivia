@@ -25,10 +25,16 @@ export class QuestionService {
   }
 
   getUserQuestions(user: User): Observable<Question[]> {
-    return this.db.list('/users/' + user.userId + '/questions')
-    .mergeMap((qids: any[]) => {
-      return Observable.forkJoin(
-        qids.map((qid : any) => this.db.object('/questions/' + qid['$value'] + '/' + qid['$key']).take(1).map(q => Question.getViewModelFromDb(q))))
+    return this.db.list('/users/' + user.userId + '/questions').snapshotChanges()
+      .mergeMap((qids) => {
+        return Observable.forkJoin(
+          qids.map((qid) => this.db.object('/questions/' + qid.payload.val() + '/' + qid.payload.key).snapshotChanges().take(1)
+            .map(action => {
+              const $key = action.payload.key;
+              const data = { $key, ...action.payload.val() };
+              return data;
+            })
+            .map(q => Question.getViewModelFromDb(q))))
     });
   }
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
@@ -39,7 +45,7 @@ export class QuestionService {
   }
 
   getUnpublishedQuestions(): Observable<Question[]> {
-    return this.db.list('/questions/unpublished')
+    return this.db.list('/questions/unpublished').valueChanges()
               .catch(error => {
                 console.log(error);
                 return Observable.of(null);

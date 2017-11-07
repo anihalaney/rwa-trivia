@@ -12,6 +12,6 @@ export class TagService {
 
   getTags(): Observable<string[]> {
     //console.log(firebase.app().options);
-    return this.db.list('/tagList').map(t => t.map(a => a["$value"]));
+    return this.db.list('/tagList').snapshotChanges().map(t => t.map(a => a.payload.val()));
   }
 }

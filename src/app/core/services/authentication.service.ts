@@ -45,7 +45,7 @@ export class AuthenticationService {
 
 
   getUserRoles(user: User): Observable<User> {
-    return this.db.object('/users/' + user.userId + "/roles")
+    return this.db.object('/users/' + user.userId + "/roles").valueChanges()
            .take(1)
            .map(roles => {
              user.roles = roles;
