@@ -1,5 +1,6 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
+import { FirestoreMigration } from './firestore-migration';
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -183,36 +184,37 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
 
 });
 
-app.get('/migrate_to_firestore', adminOnly, (req, res) => {
-  let categories: Category[] = [];
-  let catRef = admin.database().ref("/categories");
-  catRef.once("value", function(cs) {
-    cs.forEach(c => {
-      //console.log(c.key);
-      console.log(c.val());
-      let category: Category = { 
-        "id": c.val()["id"], 
-        "categoryName": c.val()["categoryName"], 
-        "requiredForGamePlay": (c.val()["requiredForGamePlay"]) ? true : false
-      };
-      categories.push(category);
-      return;
-    })
+app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 
-    console.log(categories);
+  console.log(req.params.collection);
 
-    let batch = admin.firestore().batch();
-    categories.forEach (category => {
-      let doc = admin.firestore().doc("categories/" + category.id);
-      console.log(doc);
-      batch.set(doc, category);
+  let migration = new FirestoreMigration(admin);
 
-      //let catCollection = admin.firestore().collection("categories");
-    });
-    console.log("Commiting batch");
-    batch.commit();
-    res.send(categories);
-  });
+  switch (req.params.collection) {
+    case "categories":
+      //Migrate categories
+      console.log("Migrating categories ...");
+      migration.migrateCategories.then(cats => {res.send(cats)});
+      break;
+    case "tags":
+      //Migrate Tags
+      console.log("Migrating tags ...");
+      migration.migrateTags.then(tags => {res.send(tags)});
+      break;
+    case "questions":
+      //Migrate questions
+      console.log("Migrating questions ...");
+      migration.migrateQuestions("/questions/published", "questions").then(q => {res.send("Question Count: " + q)});
+      break;
+    case "unpublished_questions":
+      //Migrate questions
+      console.log("Migrating unpublished questions ...");
+      migration.migrateQuestions("/questions/unpublished", "unpublished_questions").then(q => {res.send("Question Count: " + q)});
+      break;
+  }
+
+  //res.send("Check firestore db for migration details");
+  
 });
 
 //rebuild questions index
