@@ -44,7 +44,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    console.log(this.questions);
+    //console.log(this.questions);
     this.questionsSubject.next(this.questions);
   }
 
