@@ -39,18 +39,34 @@ export class QuestionActions {
     };
   }
 
-  static LOAD_USER_QUESTIONS = 'LOAD_USER_QUESTIONS';
-  loadUserQuestions(user: User): ActionWithPayload<User> {
+  static LOAD_USER_PUBLISHED_QUESTIONS = 'LOAD_USER_PUBLISHED_QUESTIONS';
+  loadUserPublishedQuestions(user: User): ActionWithPayload<User> {
     return {
-      type: QuestionActions.LOAD_USER_QUESTIONS,
+      type: QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS,
       payload: user
     };
   }
 
-  static LOAD_USER_QUESTIONS_SUCCESS = 'LOAD_USER_QUESTIONS_SUCCESS';
-  loadUserQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+  static LOAD_USER_UNPUBLISHED_QUESTIONS = 'LOAD_USER_UNPUBLISHED_QUESTIONS';
+  loadUserUnpublishedQuestions(user: User): ActionWithPayload<User> {
     return {
-      type: QuestionActions.LOAD_USER_QUESTIONS_SUCCESS,
+      type: QuestionActions.LOAD_USER_UNPUBLISHED_QUESTIONS,
+      payload: user
+    };
+  }
+
+  static LOAD_USER_PUBLISHED_QUESTIONS_SUCCESS = 'LOAD_USER_PUBLISHED_QUESTIONS_SUCCESS';
+  loadUserPublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+    return {
+      type: QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS_SUCCESS,
+      payload: questions
+    };
+  }
+
+  static LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS = 'LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS';
+  loadUserUnpublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+    return {
+      type: QuestionActions.LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS,
       payload: questions
     };
   }

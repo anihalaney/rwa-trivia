@@ -31,10 +31,10 @@ export class Question {
 
   static getViewModelFromDb(db: any): Question 
   {
-    console.log(db);
+    //console.log(db);
     let question: Question = new Question();
 
-    question.id = db["$key"];
+    question.id = db.id;
     question.answers = db.answers;
     question.categoryIds = db.categoryIds;
     question.published = db.published;

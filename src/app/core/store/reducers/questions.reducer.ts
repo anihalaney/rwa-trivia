@@ -22,9 +22,18 @@ export function unpublishedQuestions(state: any = [], action: ActionWithPayload<
   }
 };
 
-export function userQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
+export function userPublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
   switch (action.type) {
-    case QuestionActions.LOAD_USER_QUESTIONS_SUCCESS:
+    case QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+export function userUnpublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
+  switch (action.type) {
+    case QuestionActions.LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS:
       return action.payload;
     default:
       return state;
