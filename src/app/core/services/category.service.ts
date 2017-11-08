@@ -1,5 +1,4 @@
 import { Injectable }    from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
@@ -13,7 +12,7 @@ export class CategoryService {
   }
 
   getCategories(): Observable<Category[]> {
-    return this.db.collection<Category>('/categories').valueChanges();
+    return this.db.collection<Category>('/categories').valueChanges().take(1);
   }
   
 }
