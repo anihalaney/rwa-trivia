@@ -20,7 +20,7 @@ const elasticsearch = require('elasticsearch');
 // Realtime Database under the path /messages/:pushId/original
 exports.addMessage = functions.https.onRequest((req, res) => {
   // Grab the text parameter.
-  
+
   const original = req.query.text;
   // Push it into the Realtime Database then send a response
   admin.database().ref('/messages').push({original: original}).then(snapshot => {
@@ -227,13 +227,15 @@ app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 app.get('/rebuild_questions_index', adminOnly, (req, res) => {
 
   let questions = [];
-  admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
+  admin.firestore().collection("/questions").orderBy("id").get().then(qs => {
+  //admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
     //console.log("Questions Count: " + qs.length);
     qs.forEach(q => {
       //console.log(q.key);
-      //console.log(q.val());
+      console.log(q.data());
 
-      let question: {"id": string, "type": string, "source": any} = {"id": q.key, "type": q.val().categoryIds["0"], "source": q.val()};
+      const data = q.data();
+      const question: {"id": string, "type": string, "source": any} = {"id": data.id, "type": data.categoryIds["0"], "source": data};
       questions.push(question);
     });
 

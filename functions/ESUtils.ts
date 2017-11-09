@@ -111,21 +111,25 @@ export class ESUtils {
 
     //delete entire index
     return this.deleteIndex(index)
-    .then((response) => {
-      let body = [];
-      //TODO: build bulk index in batches (maybe 1000 at a time)
-      data.forEach(d => {
-        body.push({ index:  { _index: index, _type: d.type, _id: d.id } });
-        body.push(d.source);
-      });
-      client.bulk({"body": body});
-
-      console.log("All items indexed");
-    })
-    .catch((error) => {
-      console.log(error);
-      throw(error);
-    });   
+      .then((response) => {
+        let body = [];
+        //TODO: build bulk index in batches (maybe 1000 at a time)
+        data.forEach(d => {
+          body.push({ index:  { _index: index, _type: d.type, _id: d.id } });
+          body.push(d.source);
+        });
+        client.bulk({"body": body}).then(resp => {;
+          console.log("All items indexed");
+        })
+        .catch((error) => {
+          console.log(error);
+          throw(error);
+        });   
+      })
+      .catch((error) => {
+        console.log(error);
+        throw(error);
+      });   
   }
 
   static getQuestions(start: number, size: number, criteria: SearchCriteria): Promise<SearchResults> { 
