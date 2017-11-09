@@ -1,7 +1,6 @@
 import { Injectable }    from '@angular/core';
 import { HttpClient, HttpHeaders }    from '@angular/common/http';
-//import { AngularFire, FirebaseListObservable } from 'angularfire2';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
@@ -15,7 +14,7 @@ import { Utils } from '../services/utils';
 
 @Injectable()
 export class GameService {
-  constructor(private db: AngularFireDatabase,
+  constructor(private db: AngularFirestore,
               private http: HttpClient,
               private store: Store<AppStore>,
               private gameActions: GameActions) { 
@@ -24,98 +23,46 @@ export class GameService {
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
     let gameIdSubject = new Subject<string>();
     let game: Game = new Game(gameOptions, user.userId);
-    this.db.list('/games').push(game.getDbModel()).then(
-      (ret) => {  //success
-        let gameId: string = ret.key;
-        if (gameId) {
-          this.db.object('/users/' + user.userId + '/games/active').update({[gameId]: "true"});
-          gameIdSubject.next(gameId)
-        }
-      },
-      (error: Error) => {//error
-        console.error(error);
-      }
-    );
+
+    let dbGame = game.getDbModel(); //object to be saved
+
+    let id = this.db.createId();
+    dbGame.id = id;
+
+    //Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
+    this.db.doc('/games/' + id).set(dbGame).then(ref => {
+      gameIdSubject.next(id);
+    });
     return gameIdSubject;
   }
 
   getActiveGames(user: User): Observable<Game[]> {
     //TODO: Limit to a max
-    return this.db.list('/users/' + user.userId + '/games/active').snapshotChanges()
-    .map(gids => gids.map(gid => gid.payload.key))  //game ids
-    .mergeMap((gids: string[]) => {
-      return Observable.forkJoin(
-        gids.map((gameId : string) => 
-          this.db.object('/games/' + gameId).snapshotChanges().take(1)
-            .map(action => {
-              const $key = action.payload.key;
-              const data = { $key, ...action.payload.val() };
-              return data;
-            })
-            .map(g => Game.getViewModel(g))
-        )
-      )
-    });
+    return this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
+              .valueChanges()
+              .map(gs => gs.map(g => Game.getViewModel(g)));
   }
 
   getGame(gameId: string, user: User): Observable<Game> {
-    return this.db.object('/games/' + gameId).snapshotChanges()
-      .map(action => {
-          const $key = action.payload.key;
-          const data = { $key, ...action.payload.val() };
-          return data;
-        })
-      .map(dbGame => {
-        //console.log(dbGame);
-        return Game.getViewModel(dbGame);
-      })
-      .catch(error => {
-        console.log(error);
-        return Observable.of(null);
-      });
+    return this.db.doc('/games/' + gameId)
+    .valueChanges()
+    .map(g => Game.getViewModel(g));
   }
 
   getNextQuestion(game: Game): Observable<Question> {
     let url: string = CONFIG.functionsUrl + "/app/getNextQuestion/";
     return this.http.get<Question>(url + game.gameId);
   }
-/*
-  getNextQuestion(game: Game, user: User): Observable<Question[]> {
-    //let random = Utils.getRandomInt(1, 20);
-    return this.db.list('/questions/published', {
-      query: {
-        limitToLast: 1
-      }
-    }).map(qs => 
-      qs.map(q => {
-        q["id"] = q['$key']; //map key to quesion id
-        //this.addQuestionToGame(game, user, q);
-        return q
-      })
-    );
-  }
-*/
-  addQuestionToGame(game: Game, user: User, question: Question) {
-
-    let playerQnA: PlayerQnA = game.addPlayerQnA(user.userId, question.id);
-    this.db.list('/games/' + game.gameId + '/playerQnA').push(playerQnA);
-
-  }
-
   addPlayerQnAToGame(game: Game, playerQnA: PlayerQnA) {
-    this.db.list('/games/' + game.gameId + '/playerQnA').push(playerQnA)
-        .then((ret)=>{
-          //success
-        });
+    game.playerQnAs.push(playerQnA);
+    let dbGame = game.getDbModel();
+    
+    this.db.doc('/games/' + game.gameId).update(dbGame);
   }
 
   setGameOver(game: Game, user: User) {
-    this.db.object('/games/' + game.gameId).update({gameOver: true})
-        .then((ret)=>{
-          //success
-          //remove game from user's active list and add to inactive list
-          this.db.object('/users/' + user.userId + '/games/active/' + game.gameId).remove();
-          this.db.object('/users/' + user.userId + '/games/inactive').update({[game.gameId]: "true"});
-        });
+    let dbGame = game.getDbModel();
+    dbGame.gameOver = true;
+    this.db.doc('/games/' + game.gameId).update(dbGame);
   }
 }

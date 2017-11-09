@@ -131,8 +131,8 @@ app.post('/getQuestions/:start/:size', adminOnly, (req, res) => {
   
 app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
 
-  console.log(req.user.uid);
-  console.log(req.params.gameId);
+  //console.log(req.user.uid);
+  //console.log(req.params.gameId);
 
   let userId = req.user.uid;
   let gameId = req.params.gameId;
@@ -141,14 +141,15 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
   //admin.database().enableLogging(true);
 
   let game: Game;
-  admin.database().ref("/games/" + gameId).once("value").then(g => {
-    if (!g.exists()) {
+  admin.firestore().doc("/games/" + gameId).get().then(g => {
+    //admin.database().ref("/games/" + gameId).once("value").then(g => {
+    if (!g.exists) {
       //game not found
       res.status(404).send('Game not found');
       return;
     }
-    game = Game.getViewModel(g.val());
-    console.log(game);
+    game = Game.getViewModel(g.data());
+    //console.log(game);
     resp += " - Game Found !!!"
 
     if (game.playerIds.indexOf(userId) < 0) {
@@ -201,13 +202,18 @@ app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
       console.log("Migrating tags ...");
       migration.migrateTags.then(tags => {res.send(tags)});
       break;
+    case "games":
+      //Migrate games
+      console.log("Migrating games ...");
+      migration.migrateGames("/games", "games").then(q => {res.send("Game Count: " + q)});
+      break;
     case "questions":
       //Migrate questions
       console.log("Migrating questions ...");
       migration.migrateQuestions("/questions/published", "questions").then(q => {res.send("Question Count: " + q)});
       break;
     case "unpublished_questions":
-      //Migrate questions
+      //Migrate unpublished questions
       console.log("Migrating unpublished questions ...");
       migration.migrateQuestions("/questions/unpublished", "unpublished_questions").then(q => {res.send("Question Count: " + q)});
       break;
