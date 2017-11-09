@@ -1,0 +1,45 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /users/{userId} {
+          allow read: if request.auth != null && request.auth.uid == userId;
+    }
+    
+		match /{document=**} {
+      allow read, write: if request.auth != null && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.roles.admin;
+    }
+    
+    match /categories {
+      match /{document=**} {
+        allow read;
+      }
+    }
+
+    match /lists {
+      match /{document=**} {
+        allow read;
+      }
+    }
+    
+    match /questions {
+      match /{document=**} {
+        allow read: if request.auth != null && request.auth.uid == resource.data.created_uid;
+      }
+    }
+    
+    match /unpublished_questions {
+      match /{document=**} {
+        allow read, update: if request.auth != null && request.auth.uid == resource.data.created_uid;
+        allow create: if request.auth != null && request.auth.uid == request.resource.data.created_uid;
+      }
+    }
+    
+    match /games {
+      match /{document=**} {
+        allow read, update: if request.auth != null && (request.auth.uid == resource.data.playerId_0 || request.auth.uid == resource.data.playerId_1);
+        allow create: if request.auth != null && request.auth.uid == request.resource.data.playerId_0;
+      }
+    }
+    
+  }
+}
