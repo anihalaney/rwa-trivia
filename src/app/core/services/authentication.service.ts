@@ -1,7 +1,7 @@
 import { Injectable }    from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
@@ -19,7 +19,7 @@ export class AuthenticationService {
               private userActions: UserActions,
               private uiStateActions: UIStateActions,
               public afAuth: AngularFireAuth,
-              public db: AngularFireDatabase,
+              private db: AngularFirestore,
               public dialog: MatDialog) {
 
 
@@ -45,12 +45,19 @@ export class AuthenticationService {
 
 
   getUserRoles(user: User): Observable<User> {
-    return this.db.object('/users/' + user.userId + "/roles").valueChanges()
-           .take(1)
-           .map(roles => {
-             user.roles = roles;
-             return user;
-            });
+    //return this.db2.collection("/users", ref => ref.where()).doc<any>('/users/' + user.userId).valueChanges();
+    return this.db.doc<any>('/users/' + user.userId).snapshotChanges()
+              .take(1)
+              .map(u => {
+                if (u.payload.exists && u.payload.data().roles) {
+                  user.roles = u.payload.data().roles;
+                }
+                return user;
+              })
+              .catch(error => {
+                console.log(error);
+                return Observable.of(user);
+              });
   }
 
   ensureLogin = function(url?: string) {
