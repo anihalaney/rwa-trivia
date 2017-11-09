@@ -27,10 +27,16 @@ export class QuestionEffects {
         .map((questions: Question[]) => this.questionActions.loadUnpublishedQuestionsSuccess(questions));
 
     @Effect() 
-    loadUserQuestions$ = this.actions$
-        .ofType(QuestionActions.LOAD_USER_QUESTIONS)
-        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserQuestions(action.payload))
-        .map((questions: Question[]) => this.questionActions.loadUserQuestionsSuccess(questions));
+    loadUserPublishedQuestions$ = this.actions$
+        .ofType(QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS)
+        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserQuestions(action.payload, true))
+        .map((questions: Question[]) => this.questionActions.loadUserPublishedQuestionsSuccess(questions));
+
+    @Effect() 
+    loadUserUnpublishedQuestions$ = this.actions$
+        .ofType(QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS)
+        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserQuestions(action.payload, false))
+        .map((questions: Question[]) => this.questionActions.loadUserUnpublishedQuestionsSuccess(questions));
 
     @Effect() 
     loadSampleQuestions$ = this.actions$

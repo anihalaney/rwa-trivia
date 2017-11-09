@@ -12,7 +12,8 @@ import { User, Question, QuestionStatus, Category }     from '../../../model';
   styleUrls: ['./my-questions.component.scss']
 })
 export class MyQuestionsComponent implements OnInit, OnDestroy {
-  questionsObs: Observable<Question[]>;
+  publishedQuestions$: Observable<Question[]>;
+  unpublishedQuestions$: Observable<Question[]>;
   categoryDictObs: Observable<{[key: number]: Category}>;
   user: User;
 
@@ -21,18 +22,15 @@ export class MyQuestionsComponent implements OnInit, OnDestroy {
   
   constructor(private store: Store<AppStore>,
               private questionActions: QuestionActions) {
-    this.questionsObs = store.select(s => s.userQuestions);
+    this.publishedQuestions$ = store.select(s => s.userPublishedQuestions);
+    this.unpublishedQuestions$ = store.select(s => s.userUnpublishedQuestions);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
-    
-    this.questionsObs.subscribe((userQuestions: Question[]) => {
-      this.publishedQuestions = userQuestions.filter(q => q.status === QuestionStatus.APPROVED);
-      this.unpublishedQuestions = userQuestions.filter(q => q.status !== QuestionStatus.APPROVED);
-    })
   }
 
   ngOnInit() {
     this.store.take(1).subscribe(s => this.user = s.user);
-    this.store.dispatch(this.questionActions.loadUserQuestions(this.user));
+    this.store.dispatch(this.questionActions.loadUserPublishedQuestions(this.user));
+    this.store.dispatch(this.questionActions.loadUserUnpublishedQuestions(this.user));
   }
 
   ngOnDestroy() {

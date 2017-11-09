@@ -9,7 +9,7 @@
         <question-table
           [showSort]="false"
           [showPaginator]="false"
-          [questions]="publishedQuestions"
+          [questions]="publishedQuestions$ | async"
           [totalCount]="10"
           [categoryDictionary]="categoryDictObs | async"
           [showApproveButton]="false">
@@ -19,7 +19,7 @@
         <question-table
           [showSort]="false"
           [showPaginator]="false"
-          [questions]="unpublishedQuestions"
+          [questions]="unpublishedQuestions$ | async"
           [totalCount]="10"
           [categoryDictionary]="categoryDictObs | async"
           [showApproveButton]="false">
