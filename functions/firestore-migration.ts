@@ -76,30 +76,60 @@ export class FirestoreMigration {
     
         console.log(questions[0]);
     
-        firestoreBatchWrite(destinationCollection, questions, 0, admin.firestore()).then(l => {
+        firestoreBatchWrite(destinationCollection, questions, "id", 0, admin.firestore()).then(l => {
           resolve(l);
         });
       });
     });
   }
+
+  migrateGames(sourceList, destinationCollection) {
+    return new Promise<number>((resolve, reject) => {
+      let admin = this.admin;
+      let games: Game[] = [];
+      let gRef = admin.database().ref(sourceList);
+      gRef.once("value", function(gs) {
+        gs.forEach(g => {
+          //console.log(c.key);
+          const game = { "id": g.key, ...g.val() };
+          for (let i = 0; i < game.playerIds.length; i ++) {
+            //array to map as firestore cannot query arrays yet
+            game["playerId_" + i] = game.playerIds[i];
+          }
+          game.gameOver = (game.gameOver) ? true : false;
+          console.log(game);
+          games.push(game);
+        })
+    
+        console.log(games[0]);
+    
+        firestoreBatchWrite(destinationCollection, games, "id", 0, admin.firestore()).then(l => {
+          resolve(l);
+        });
+      });
+    });
+  }
+
 }
 
-function firestoreBatchWrite(collection: string, questions: Question[], start: number, firestore: any): Promise<number> {
-  let arr = questions.slice(start, start + 100);
+const BATCH_SIZE = 100;
+function firestoreBatchWrite(collection: string, dataItems: any[], idField: string,
+    start: number, firestore: any): Promise<number> {
+  let arr = dataItems.slice(start, start + BATCH_SIZE);
 
   if (arr.length === 0) {
-    return Promise.resolve(questions.length);
+    return Promise.resolve(dataItems.length);
   }
 
   let batch = firestore.batch();
-  arr.forEach (question => {
-    let doc = firestore.doc(collection + "/" + question.id);
+  arr.forEach (item => {
+    let doc = firestore.doc(collection + "/" + item[idField]);
     console.log(doc);
-    batch.set(doc, question);
+    batch.set(doc, item);
   });
   console.log("Commiting questions batch: " + start);
   return batch.commit().then(() => {
-    return firestoreBatchWrite(collection, questions, start + 100, firestore);
+    return firestoreBatchWrite(collection, dataItems, idField, start + BATCH_SIZE, firestore);
   });
 
 }
