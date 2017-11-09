@@ -1,5 +1,6 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
+import { FirestoreMigration } from './firestore-migration';
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -19,7 +20,7 @@ const elasticsearch = require('elasticsearch');
 // Realtime Database under the path /messages/:pushId/original
 exports.addMessage = functions.https.onRequest((req, res) => {
   // Grab the text parameter.
-  
+
   const original = req.query.text;
   // Push it into the Realtime Database then send a response
   admin.database().ref('/messages').push({original: original}).then(snapshot => {
@@ -130,8 +131,8 @@ app.post('/getQuestions/:start/:size', adminOnly, (req, res) => {
   
 app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
 
-  console.log(req.user.uid);
-  console.log(req.params.gameId);
+  //console.log(req.user.uid);
+  //console.log(req.params.gameId);
 
   let userId = req.user.uid;
   let gameId = req.params.gameId;
@@ -140,14 +141,15 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
   //admin.database().enableLogging(true);
 
   let game: Game;
-  admin.database().ref("/games/" + gameId).once("value").then(g => {
-    if (!g.exists()) {
+  admin.firestore().doc("/games/" + gameId).get().then(g => {
+    //admin.database().ref("/games/" + gameId).once("value").then(g => {
+    if (!g.exists) {
       //game not found
       res.status(404).send('Game not found');
       return;
     }
-    game = Game.getViewModel(g.val());
-    console.log(game);
+    game = Game.getViewModel(g.data());
+    //console.log(game);
     resp += " - Game Found !!!"
 
     if (game.playerIds.indexOf(userId) < 0) {
@@ -183,17 +185,57 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
 
 });
 
+app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
+
+  console.log(req.params.collection);
+
+  let migration = new FirestoreMigration(admin);
+
+  switch (req.params.collection) {
+    case "categories":
+      //Migrate categories
+      console.log("Migrating categories ...");
+      migration.migrateCategories.then(cats => {res.send(cats)});
+      break;
+    case "tags":
+      //Migrate Tags
+      console.log("Migrating tags ...");
+      migration.migrateTags.then(tags => {res.send(tags)});
+      break;
+    case "games":
+      //Migrate games
+      console.log("Migrating games ...");
+      migration.migrateGames("/games", "games").then(q => {res.send("Game Count: " + q)});
+      break;
+    case "questions":
+      //Migrate questions
+      console.log("Migrating questions ...");
+      migration.migrateQuestions("/questions/published", "questions").then(q => {res.send("Question Count: " + q)});
+      break;
+    case "unpublished_questions":
+      //Migrate unpublished questions
+      console.log("Migrating unpublished questions ...");
+      migration.migrateQuestions("/questions/unpublished", "unpublished_questions").then(q => {res.send("Question Count: " + q)});
+      break;
+  }
+
+  //res.send("Check firestore db for migration details");
+  
+});
+
 //rebuild questions index
 app.get('/rebuild_questions_index', adminOnly, (req, res) => {
 
   let questions = [];
-  admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
+  admin.firestore().collection("/questions").orderBy("id").get().then(qs => {
+  //admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
     //console.log("Questions Count: " + qs.length);
     qs.forEach(q => {
       //console.log(q.key);
-      //console.log(q.val());
+      console.log(q.data());
 
-      let question: {"id": string, "type": string, "source": any} = {"id": q.key, "type": q.val().categoryIds["0"], "source": q.val()};
+      const data = q.data();
+      const question: {"id": string, "type": string, "source": any} = {"id": data.id, "type": data.categoryIds["0"], "source": data};
       questions.push(question);
     });
 

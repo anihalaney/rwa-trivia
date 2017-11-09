@@ -1,6 +1,6 @@
 import { Injectable }    from '@angular/core';
 import { HttpClient, HttpHeaders }    from '@angular/common/http';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
@@ -12,25 +12,19 @@ import { QuestionActions } from '../store/actions';
 
 @Injectable()
 export class QuestionService {
-  constructor(private db: AngularFireDatabase,
+  constructor(private db: AngularFirestore,
               private store: Store<AppStore>,
               private questionActions: QuestionActions,
               private http: HttpClient) { 
   }
 
+  //Elasticsearch
   getQuestionOfTheDay(): Observable<Question> {
     let url: string = CONFIG.functionsUrl + "/app/getQuestionOfTheDay";
 
     return this.http.get<Question>(url);
   }
 
-  getUserQuestions(user: User): Observable<Question[]> {
-    return this.db.list('/users/' + user.userId + '/questions')
-    .mergeMap((qids: any[]) => {
-      return Observable.forkJoin(
-        qids.map((qid : any) => this.db.object('/questions/' + qid['$value'] + '/' + qid['$key']).take(1).map(q => Question.getViewModelFromDb(q))))
-    });
-  }
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
     let url: string = CONFIG.functionsUrl + "/app/getQuestions/";
     //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";
@@ -38,8 +32,16 @@ export class QuestionService {
     return this.http.post<SearchResults>(url + startRow + "/" + pageSize, criteria);
   }
 
+  //Firestore
+  getUserQuestions(user: User, published: boolean): Observable<Question[]> {
+    let collection = (published) ? "questions" : "unpublished_questions";
+    return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', user.userId))
+        .valueChanges()
+        .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
+  }
+
   getUnpublishedQuestions(): Observable<Question[]> {
-    return this.db.list('/questions/unpublished')
+    return this.db.collection('/unpublished_questions').valueChanges()
               .catch(error => {
                 console.log(error);
                 return Observable.of(null);
@@ -47,30 +49,30 @@ export class QuestionService {
   }
 
   saveQuestion(question: Question) {
-    this.db.list('/questions/unpublished').push(question).then(
-      (ret) => {  //success
-        if (ret.key)
-          this.db.object('/users/' + question.created_uid + '/questions').update({[ret.key]: "unpublished"});
-        this.store.dispatch(this.questionActions.addQuestionSuccess());
-      },
-      (error: Error) => {//error
-        console.error(error);
-      }
-    );
+    let dbQuestion = Object.assign({}, question); //object to be saved
+
+    let questionId = this.db.createId();
+    dbQuestion.id = questionId;
+
+    //Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
+    this.db.doc('/unpublished_questions/' + questionId).set(dbQuestion).then(ref => {
+      this.store.dispatch(this.questionActions.addQuestionSuccess());
+    });
   }
 
   approveQuestion(question: Question) {
-    let key: string = question["$key"];
-    question.status = QuestionStatus.APPROVED;
-    this.db.object('/questions/published').update({[key]: question}).then(
-      (ret) => {  //success
-        this.db.object('/users/' + question.created_uid + '/questions').update({[key]: "published"});
-        this.db.object('/questions/unpublished/' + key).remove();
-      },
-      (error: Error) => {//error
-        console.error(error);
-      }
-    );
+    let dbQuestion = Object.assign({}, question); //object to be saved
+
+    let questionId = dbQuestion.id;
+    dbQuestion.status = QuestionStatus.APPROVED;
+
+    //Transaction to remove from unpublished and add to published questions collection    
+    this.db.firestore.runTransaction(transaction => {
+      return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
+       transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
+      );
+    })
+
   }
 
 }

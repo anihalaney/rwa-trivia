@@ -79,8 +79,13 @@ export class Game {
   getDbModel(): any 
   {
     let dbModel = {
-      "gameOptions": this.gameOptions,
-      "playerIds": this.playerIds
+      "gameOptions": Object.assign({}, this.gameOptions),
+      "playerIds": this.playerIds,
+      "gameOver": false,
+      "playerQnAs": this.playerQnAs
+    }
+    for (let i = 0; i < this.playerIds.length; i ++) {
+      dbModel["playerId_" + i] = this.playerIds[i];
     }
     return dbModel;
   }
@@ -88,9 +93,9 @@ export class Game {
   static getViewModel(dbModel: any): Game 
   {
     //console.log(dbModel);
-    let game: Game = new Game(dbModel["gameOptions"], dbModel["playerIds"][0], dbModel["$key"], 
-                              dbModel["playerQnA"], dbModel["gameOver"], dbModel["nextTurnPlayerId"]);
-    if (dbModel["playerIds"].length > 0) {
+    let game: Game = new Game(dbModel["gameOptions"], dbModel["playerIds"][0], dbModel["id"], 
+                              dbModel["playerQnAs"], dbModel["gameOver"], dbModel["nextTurnPlayerId"]);
+    if (dbModel["playerIds"].length > 1) {
       game.addPlayer(dbModel["playerIds"][1]);  //2 players
     }
     //console.log(game);

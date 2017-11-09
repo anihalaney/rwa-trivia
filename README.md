@@ -42,6 +42,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 15: Incorporate Material UI design into the app](https://blog.realworldfullstack.io/real-world-app-part-15-ui-design-with-angular-material-1a5c597c679e)
 
+[Part 16: Migrating from Firebase to Firestore](https://blog.realworldfullstack.io/real-world-app-part-16-from-firebase-to-firestore-f6c494e80237)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)
