@@ -1,0 +1,88 @@
+<div class="row">
+  <div class="pageheading col-md-6 col-xs-12 hidden-xs">Bulk Upload</div>
+</div>
+
+<mat-horizontal-stepper [linear]="isLinear">
+  <mat-step>
+    <ng-template matStepLabel>Instructions</ng-template>
+    <div>
+      <p>
+        The bulk upload feature allows you to submit your questions in a batch, instead of one at a time.
+        Please read the instructions carefully before using this feature.
+      </p>
+      <div>
+        <ul>
+          <li>The bulk upload allows you to upload a csv file with multiple questions</li>
+          <li>The format of the csv file must be similar to the sample file, else your upload will be rejected</li>
+          <li>
+            You can only submit questions of a single category in a single file. 
+            For questions spanning multiple categories, please use multiple files.
+          </li>
+          <li>
+            It is recommended to keep all questions in a file related with a single topic and have a single primary tag. 
+            For example you can upload a file with Category: Programming and Primary Tag: React. 
+            Another file could have Category: Programming with Primary Tag: Angular.
+            The questions themselves can have additional tags associated with them.
+            This helps us streamline the approval workflow which reduces time involved in getting all questions approved.
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step [stepControl]="uploadFormGroup">
+    <form [formGroup]="uploadFormGroup">
+      <ng-template matStepLabel>Upload Questions</ng-template>
+      <div class="pcategories">
+        <h2><span>Select Your Prefered Category for the Question:</span></h2>
+        <div class="row">
+          <div class="formfield">
+          <select placeholder="Select Category" class="required" formControlName="category">
+            <option value="">
+              Select a Category
+            </option>
+            <option *ngFor="let category of categories" [value]="category.id">
+              {{category.categoryName}}
+            </option>
+          </select>
+          <p *ngIf="uploadFormGroup.controls.category.errors && !uploadFormGroup.controls.category.pristine" class="error">
+            Select a category
+          </p>
+        </div>
+        </div>
+      </div>
+      <mat-form-field>
+        <input type="text" placeholder="Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto">
+        <mat-autocomplete #tagAuto="matAutocomplete">
+        <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+            {{ tag }}
+        </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <div>
+        <input type="file" placeholder="Upload csv file" formControlName="fileControl">
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Review</ng-template>
+    You are now done.
+    <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button matStepperNext>Next</button>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Submit</ng-template>
+    You are now done.
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
