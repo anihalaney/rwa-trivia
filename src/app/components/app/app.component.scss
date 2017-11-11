@@ -1,6 +1,3 @@
-.headerdrop {
-  cursor: pointer;
-}
 /*side nav*/
 .pagelayout{ padding: 26px 0 0 }
 nav { min-height: 500px; position: relative; z-index: 998; width: 263px; min-width: 263px; display: table-cell;}
@@ -32,28 +29,6 @@ nav .card{ border-bottom: 1px solid }
 main {
   width: 100%;
 }
-/* Footer */
-.signup, .logout, .login {
-  cursor: pointer;
-}
-/* Footer - end */
-
-/*footer*/
-footer{ font-size: 13px; line-height: 45px}
-footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
-.socialicon-f a{height: 32px; width: 30px; margin:0 7px;}
-.socialicon-f a:hover{ opacity: 0.8 }
-.facebookicon-f{ background-position:0 -293px; }
-.twiticon-f{ background-position:-31px -293px;}
-.linkdenicon-f{ background-position:-62px -293px;}
-@media screen and ( min-width:768px){      
-  .textright{text-align: right;}
-}
-@media screen and ( max-width:768px){      
-  footer{ text-align: center; line-height: 2 }
-}
-/*footer End*/
-
 mat-sidenav-container, .my-content {
   margin: 0;
   width: 100%;
