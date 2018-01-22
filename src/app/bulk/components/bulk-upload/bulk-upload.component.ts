@@ -42,8 +42,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
     this.uploadFormGroup = this.fb.group({
       category: ['', Validators.required],
-      tagControl: ['', Validators.required],
-      fileControl: ['', Validators.required]
+      tagControl: [''] ,
+      csvFile: null
     });
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
@@ -52,6 +52,38 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   filter(val: string): string[] {
     return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option)); 
+  }
+
+  onFileChange(event) {
+    let reader = new FileReader();
+    if(event.target.files && event.target.files.length > 0) {
+      let file = event.target.files[0];
+      this.uploadFormGroup.get('csvFile').setValue(file);
+      /*reader.readAsText(file);
+      reader.onload = () => {
+        console.log(file);
+        console.log(reader.result);
+      };*/
+    }
+  }
+
+  private prepareUpload(): any {
+    let input = new FormData();
+    
+    input.append('category', this.uploadFormGroup.get('category').value);
+    input.append('tag', this.uploadFormGroup.get('tagControl').value);
+    input.append('csvFile', this.uploadFormGroup.get('csvFile').value);
+    return input;
+  }
+
+  onUploadSubmit() {
+    //validate
+    if (!this.uploadFormGroup.valid) 
+      return;
+
+    const formModel = this.prepareUpload();
+
+    //dispatch action
   }
 
   ngOnDestroy() {

@@ -4,6 +4,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -40,6 +41,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
     
     //store
     StoreModule.forRoot(reducer),
