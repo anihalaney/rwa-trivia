@@ -1,10 +1,12 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
+import {DataSource} from '@angular/cdk/table';
 import { Observable } from 'rxjs/Observable';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
-import { User } from '../../../model';
+import { BulkUploadFileInfo } from '../../../model';
 
 @Component({
   selector: 'bulk-summary',
@@ -13,13 +15,41 @@ import { User } from '../../../model';
 })
 export class BulkSummaryComponent implements OnInit, OnDestroy {
 
+  uploadFileInfos: BulkUploadFileInfo[];
+  uploadsDS: FileUploadsDataSource;
+  uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
+
   constructor(private store: Store<AppStore>,
               private router: Router) {
+    this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
+    this.uploadsDS = new FileUploadsDataSource(this.uploadsSubject);
   }
 
   ngOnInit() {
+    this.uploadFileInfos = [ 
+      { "file": new File([], "reactQuestions.csv"), 
+        "categoryId": 1, 
+        "primaryTag": "test", 
+        "uploadedOn": new Date(), 
+        "status": "Under Review" }
+    ];
+    //this.uploadFileInfos[0].file.name
+    this.uploadsSubject.next(this.uploadFileInfos);
   }
 
   ngOnDestroy() {
   }
+}
+
+export class FileUploadsDataSource extends DataSource<BulkUploadFileInfo> {
+  constructor(private uploadsObs: BehaviorSubject<BulkUploadFileInfo[]>) {
+    super();
+  }
+
+  /** Connect function called by the table to retrieve one stream containing the data to render. */
+  connect(): Observable<BulkUploadFileInfo[]> {
+    return this.uploadsObs;
+  }
+
+  disconnect() {}
 }

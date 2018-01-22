@@ -5,3 +5,4 @@ export * from './game-options';
 export * from './game';
 export * from './search-criteria';
 export * from './search-results';
+export * from './bulk-upload-file-info';
