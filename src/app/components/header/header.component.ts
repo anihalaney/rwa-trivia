@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -13,6 +13,9 @@ import { User } from '../../model';
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   @Input() user: User;
+  @Output() logoutClicked = new EventEmitter();
+  @Output() loginClicked = new EventEmitter();
+  @Output() toggleThemeClicked = new EventEmitter();
   
   constructor(private store: Store<AppStore>,
               private router: Router) {

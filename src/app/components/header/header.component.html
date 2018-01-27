@@ -7,14 +7,14 @@
       </div>
       <div class="col-xs-6 pull-right align-right">
         <div class="headerdrop">
-          <a (click)="toggleTheme()"><mat-icon mat-list-icon>flip</mat-icon></a>
+          <a (click)="toggleThemeClicked.emit($event)"><mat-icon mat-list-icon>flip</mat-icon></a>
         </div>
         <div class="headerdrop">
           <a [routerLink]="['/my']"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>
         </div>
         <div class="headerdrop">
-          <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>
-          <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>
+          <a *ngIf="user" class="logout" (click)="logoutClicked.emit($event)"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>
+          <a *ngIf="!user" class="login" (click)="loginClicked.emit($event)"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>
         </div>
       </div>
     </div>
