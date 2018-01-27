@@ -9,9 +9,9 @@
         <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
         <ng-container *ngIf="!user">
           <!--<a class="signup" href="#" title="Sign Up">Sign Up</a>-->
-          <a class="logout" (click)="login()" title="Sign in">Sign in</a>
+          <a class="login" (click)="loginClicked.emit($event)" title="Sign in">Sign in</a>
         </ng-container>
-        <a *ngIf="user" class="login" (click)="logout()" title="Logout">Logout</a>
+        <a *ngIf="user" class="logout" (click)="logoutClicked.emit($event)" title="Logout">Logout</a>
 
         <span *ngIf="!user" class="socialicon-f">
           <a href="#" class="sprite facebookicon-f"></a>

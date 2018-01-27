@@ -1,7 +1,7 @@
 <!--Header Start Here-->
 <div>
 <header>
-  <app-header [user]="user"></app-header>
+  <app-header [user]="user" (logoutClicked)="logout()" (loginClicked)="login()" (toggleThemeClicked)="toggleTheme()"></app-header>
 </header>
 <!--Header End-->
 
@@ -24,7 +24,7 @@
 
 <!-- Footer -->
 <footer>
-  <app-footer [user]="user"></app-footer>
+  <app-footer [user]="user" (logoutClicked)="logout()" (loginClicked)="login()"></app-footer>
 </footer>
 <!-- Footer end -->
 </div>

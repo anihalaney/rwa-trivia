@@ -18,7 +18,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
 
-  subs: Subscription[];
+  subs: Subscription[] = [];
 
   //Properties
   categories: Category[];
