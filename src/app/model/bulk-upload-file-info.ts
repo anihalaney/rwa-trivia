@@ -4,4 +4,7 @@ export interface BulkUploadFileInfo {
   primaryTag: string;
   uploadedOn: Date;
   status: string;
+  uploaded: number;
+  approved: number;
+  rejected: number;
 }

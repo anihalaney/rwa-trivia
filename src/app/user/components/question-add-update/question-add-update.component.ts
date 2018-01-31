@@ -115,6 +115,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   }
 
   saveQuestion(question: Question) {
+    console.log('question--->', JSON.stringify(question));
     this.store.dispatch(this.questionActions.addQuestion(question));
   }
 

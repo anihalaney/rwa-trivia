@@ -1,12 +1,12 @@
 <div>
   Upload Questions
 </div>
-<mat-table #table [dataSource]="bulkQuestionsDS">
+<!-- <mat-table #table [dataSource]="bulkQuestionsDS"> -->
 
-  <!--- Note that these columns can be defined in any order.
+<!--- Note that these columns can be defined in any order.
         The actual rendered columns are set as a property on the row definition" -->
 
-  <ng-container cdkColumnDef="uploadDate">
+<!-- <ng-container cdkColumnDef="uploadDate">
     <mat-header-cell *cdkHeaderCellDef>Date Uploaded</mat-header-cell>
     <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.uploadedOn | date:'MM/dd/yyyy' }}</mat-cell>
   </ng-container>
@@ -51,5 +51,9 @@
   </mat-header-row>
   <mat-row class="row-question" 
       *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];">
-  </mat-row>
-</mat-table>
+  </mat-row> -->
+<!-- </mat-table> -->
+<question-search [questionsSearchResults]="questionsSearchResultsObs" [categoryDictionary]="categoryDictObs | async"
+  (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)" (onTagChanged)="tagChanged($event)" (onSortOrderChanged)="sortOrderChanged($event)"
+  class="flex-container" fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+</question-search>
