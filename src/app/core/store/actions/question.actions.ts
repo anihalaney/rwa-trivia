@@ -95,6 +95,14 @@ export class QuestionActions {
     };
   }
 
+  static ADD_BULK_QUESTIONS = 'ADD_BULK_QUESTIONS';
+  addBulkQuestions(questions: Array<Question>): ActionWithPayload<Array<Question>> {
+    return {
+      type: QuestionActions.ADD_BULK_QUESTIONS,
+      payload: questions
+    };
+  }
+
   static ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
   addQuestionSuccess(): ActionWithPayload<null> {
     return {

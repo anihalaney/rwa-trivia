@@ -75,7 +75,7 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Review</ng-template>
-    <bulk-details></bulk-details>
+    <bulk-details [questionsSearchResultsObs]="_SearchResults"></bulk-details>
     <div>
         <button mat-button matStepperPrevious>Back</button>
         <button mat-button matStepperNext>Next</button>
