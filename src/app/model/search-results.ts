@@ -8,7 +8,5 @@ export class SearchResults {
   categoryAggregation: { [key: number]: number };
   tagsCount: { tag: string, count: number }[];
 
-  constructor() {
-
-  }
+ 
 }

@@ -78,7 +78,33 @@ const authorizedOnly = (req, res, next) => {
   next();
 };
 
-// middleware to check for admins Only
+// // middleware to check for admins Only
+// const adminOnly = (req, res, next) => {
+
+//   if (!req.user || !req.user.uid) {
+//     console.error('User not authenticated');
+//     res.status(401).send('Unauthenticated');
+//   }
+//   console.log(req.user.uid);
+
+//   admin.firestore().doc(`/users/${req.user.uid}`)
+//     .get()
+//     .then(u => {
+//       const user = u.data();
+//       console.log(user);
+//       if (user.roles && user.roles.admin) {
+//         return next();
+//       } else {
+//         console.error('Not an admin: ', req.user.uid);
+//         res.status(403).send('Unauthorized');
+//       }
+//     })
+//     .catch(error => {
+//       console.error(error);
+//      // res.status(403).send('Unauthorized');
+//     });
+// };
+
 const adminOnly = (req, res, next) => {
 
   if (!req.user || !req.user.uid) {
@@ -86,7 +112,7 @@ const adminOnly = (req, res, next) => {
     res.status(401).send('Unauthenticated');
   }
   console.log(req.user.uid);
-
+ 
   admin.firestore().doc(`/users/${req.user.uid}`)
     .get()
     .then(u => {
@@ -103,8 +129,8 @@ const adminOnly = (req, res, next) => {
       console.error(error);
      // res.status(403).send('Unauthorized');
     });
-};
-
+ };
+ 
 app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);

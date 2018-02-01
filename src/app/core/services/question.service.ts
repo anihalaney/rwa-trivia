@@ -53,7 +53,7 @@ export class QuestionService {
 
     let questionId = this.db.createId();
     dbQuestion.id = questionId;
-    console.log('dbQuestion--->', JSON.stringify(dbQuestion));
+    // console.log('dbQuestion--->', JSON.stringify(dbQuestion));
     //Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
     this.db.doc('/unpublished_questions/' + questionId).set(dbQuestion).then(ref => {
       this.store.dispatch(this.questionActions.addQuestionSuccess());
@@ -61,26 +61,36 @@ export class QuestionService {
   }
 
   saveBulkQuestions(questions: Array<Question>) {
-    const dbQuestions: Array<Question> = [];
+    const dbQuestions = [];
 
     for (const question of questions) {
       if (question !== null) {
         const dbQuestion = Object.assign({}, question); //object to be saved
         dbQuestion.id = this.db.createId();
+        dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
         dbQuestions.push(dbQuestion);
       }
     }
+    // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
     this.storeQuestion(0, dbQuestions)
 
   }
 
-  storeQuestion(index: number, questions: Array<Question>): void {
+  storeQuestion(index: number, questions): void {
     // save question
+    // console.log('index--->', index);
     const question = questions[index];
-    console.log('question--->', JSON.stringify(question));
-    this.db.doc('/unpublished_questions/' + question.id).set(question).then(ref => {
-      (index === questions.length) ? this.store.dispatch(this.questionActions.addQuestionSuccess())
-        : this.storeQuestion(index++, questions);
+    // console.log('question--->', JSON.stringify(question));
+    const dbQuestion = Object.assign({}, question);
+    this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
+     // console.log(' questions.length --->',  questions.length );
+      if (index === questions.length - 1) {
+        this.store.dispatch(this.questionActions.addQuestionSuccess())
+      } else {
+        index++;
+        this.storeQuestion(index, questions);
+      }
+
     });
   }
 
