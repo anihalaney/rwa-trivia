@@ -53,7 +53,13 @@
       *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];">
   </mat-row> -->
 <!-- </mat-table> -->
-<question-search [questionsSearchResults]="questionsSearchResultsObs" [categoryDictionary]="categoryDictObs | async"
-  (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)" (onTagChanged)="tagChanged($event)" (onSortOrderChanged)="sortOrderChanged($event)"
-  class="flex-container" fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.xs="start">
-</question-search>
+  
+<question-table
+[showSort]="false"
+[showPaginator]="true"
+[questions]="found_questions"
+[totalCount]="totalCount"
+[categoryDictionary]="categoryDictObs| async"
+[showApproveButton]="false"
+>
+</question-table>

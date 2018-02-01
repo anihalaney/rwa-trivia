@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
@@ -9,6 +8,7 @@ import { QuestionActions } from '../../../core/store/actions';
 import { AppStore } from '../../../core/store/app-store';
 import { Utils } from '../../../core/services';
 import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, SearchResults } from '../../../model';
+import { parse } from 'csv';
 
 @Component({
   selector: 'bulk-upload',
@@ -22,6 +22,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
+  parseError: boolean;
 
   //Properties
   categories: Category[];
@@ -35,7 +36,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   //user Object
   user: User;
   // bulk upload object
-  _SearchResults: SearchResults;
+  found_questions: Array<Question>;
 
 
   constructor(private fb: FormBuilder,
@@ -43,7 +44,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.tagsObs = store.select(s => s.tags);
-    this._SearchResults = new SearchResults();
+    // this._SearchResults = new SearchResults();
+    this.store.take(1).subscribe(s => this.user = s.user);
   }
 
   ngOnInit() {
@@ -66,62 +68,65 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   onFileChange(event) {
     const reader = new FileReader();
+    this.parseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.uploadFormGroup.get('csvFile').setValue(file);
-      reader.readAsText(file);
-      reader.onload = () => {
-        console.log(file);
-        // this._bulkUploadFileInfo.file = file.name;
-        // this._bulkUploadFileInfo.uploadedOn = file.lastModifiedDate;
+      if (file.type === 'text/csv') {
+        this.uploadFormGroup.get('csvFile').setValue(file);
+        reader.readAsText(file);
+        reader.onload = () => {
+          console.log(file);
+          // this._bulkUploadFileInfo.file = file.name;
+          // this._bulkUploadFileInfo.uploadedOn = file.lastModifiedDate;
 
-        // console.log(reader.result);
+          // console.log(reader.result);
 
-        // generate Question Objects
-        this.generateQuestions(reader.result);
-      };
+          // generate Question Objects
+          this.generateQuestions(reader.result);
+        };
+      } else {
+        this.parseError = true;
+      }
+
     }
   }
 
   generateQuestions(csvString: string): void {
-    const lines = csvString.split(/\r\n|\n/);
-    this.store.take(1).subscribe(s => this.user = s.user);
-    for (let l_no = 1; l_no < lines.length - 1; l_no++) {
-      const csvData: Array<string> = lines[l_no].split(',');
-      const question: Question = new Question();
-      question.questionText = csvData[0];
-      question.answers[0].answerText = csvData[1];
-      question.answers[0].correct = (Number(csvData[5]) === 1) ? true : null;
-      question.answers[1].answerText = csvData[2];
-      question.answers[1].correct = (Number(csvData[5]) === 2) ? true : null;
-      question.answers[2].answerText = csvData[3];
-      question.answers[2].correct = (Number(csvData[5]) === 3) ? true : null;
-      question.answers[3].answerText = csvData[4];
-      question.answers[3].correct = (Number(csvData[5]) === 4) ? true : null;
-      for (let i = 6; i < csvData.length; i++) {
-        const tag = csvData[i];
-        if (tag !== '' && question.tags.indexOf(tag)) {
-          question.tags.push(csvData[i]);
-        }
-      }
-      question.status = QuestionStatus.SUBMITTED;
+    parse(csvString, { 'columns': true, 'skip_empty_lines': true },
+      (err, output) => {
+        this.questions =
+          output.map(element => {
+            const question: Question = new Question();
+            question.questionText = element['Question'];
+            question.answers = [
+              { 'id': 1, 'answerText': element['Option 1'], correct: false },
+              { 'id': 2, 'answerText': element['Option 2'], correct: false },
+              { 'id': 3, 'answerText': element['Option 3'], correct: false },
+              { 'id': 4, 'answerText': element['Option 4'], correct: false }
+            ]
+            question.answers[element['Answer Index'] - 1].correct = true;
+            question.tags = [];
 
+            for (let i = 1; i < 10; i++) {
+              if (element['Tag ' + i] && element['Tag ' + i] !== '') {
+                question.tags.push(element['Tag ' + i]);
+              }
+            }
 
-      question.created_uid = this.user.userId;
-      question.explanation = null;
-      if (this.questions.indexOf(question)) {
-        this.questions.push(question);
-      }
-    }
+            question.published = false;
+            question.explanation = 'status - not approved';
+            question.status = QuestionStatus.PENDING;
+            question.created_uid = this.user.userId;
+            return question;
+          });
+      });
     // this._bulkUploadFileInfo.status = 'SUBMITTED';
     // this._bulkUploadFileInfo.uploaded = this.questions.length;
     // this._bulkUploadFileInfo.approved = 0;
     // this._bulkUploadFileInfo.rejected = 0;
 
-    console.log('questions--->', JSON.stringify(this.questions));
+    //  console.log('questions--->', JSON.stringify(this.questions));
   }
-
-
 
   private prepareUpload(): any {
     const input = new FormData();
@@ -147,13 +152,16 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       dbQuestions.push(question);
     }
     //dispatch action
-    console.log('dbQuestions--->', JSON.stringify(dbQuestions));
+    // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
     // this._bulkUploadFileInfo.rejected = 0;
     // this._bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
     // this._bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
     // this._bulkUploadFileInfoList.push(this._bulkUploadFileInfo);
-    this.store.dispatch(this.questionActions.addBulkQuestions(dbQuestions));
-    this._SearchResults.questions = dbQuestions;
+    this.found_questions = dbQuestions;
+  }
+
+  dispatch_action(): void {
+    this.store.dispatch(this.questionActions.addBulkQuestions(this.found_questions));
   }
 
   ngOnDestroy() {

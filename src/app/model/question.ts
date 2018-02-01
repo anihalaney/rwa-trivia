@@ -75,5 +75,6 @@ export enum QuestionStatus {
   SAVED,
   SUBMITTED,
   APPROVED,
-  INACTIVE
+  INACTIVE,
+  PENDING
 }
