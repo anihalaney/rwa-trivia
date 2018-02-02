@@ -12,7 +12,7 @@ const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser')();
 const bodyParser = require('body-parser');
-const cors = require('cors')({origin: true});
+const cors = require('cors')({ origin: true });
 const app = express();
 const elasticsearch = require('elasticsearch');
 
@@ -23,7 +23,7 @@ exports.addMessage = functions.https.onRequest((req, res) => {
 
   const original = req.query.text;
   // Push it into the Realtime Database then send a response
-  admin.database().ref('/messages').push({original: original}).then(snapshot => {
+  admin.database().ref('/messages').push({ original: original }).then(snapshot => {
     // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
     res.redirect(303, snapshot.ref);
   });
@@ -37,11 +37,11 @@ const validateFirebaseIdToken = (req, res, next) => {
 
   // console.log('Check if request is authorized with Firebase ID token');
   if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
-      !req.cookies.__session) {
+    !req.cookies.__session) {
     console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
-        'Make sure you authorize your request by providing the following HTTP header:',
-        'Authorization: Bearer <Firebase ID Token>',
-        'or by passing a "__session" cookie.');
+      'Make sure you authorize your request by providing the following HTTP header:',
+      'Authorization: Bearer <Firebase ID Token>',
+      'or by passing a "__session" cookie.');
     // res.status(403).send('Unauthorized');
     return next();
   }
@@ -78,32 +78,7 @@ const authorizedOnly = (req, res, next) => {
   next();
 };
 
-// // middleware to check for admins Only
-// const adminOnly = (req, res, next) => {
-
-//   if (!req.user || !req.user.uid) {
-//     console.error('User not authenticated');
-//     res.status(401).send('Unauthenticated');
-//   }
-//   console.log(req.user.uid);
-
-//   admin.firestore().doc(`/users/${req.user.uid}`)
-//     .get()
-//     .then(u => {
-//       const user = u.data();
-//       console.log(user);
-//       if (user.roles && user.roles.admin) {
-//         return next();
-//       } else {
-//         console.error('Not an admin: ', req.user.uid);
-//         res.status(403).send('Unauthorized');
-//       }
-//     })
-//     .catch(error => {
-//       console.error(error);
-//      // res.status(403).send('Unauthorized');
-//     });
-// };
+// middleware to check for admins Only
 
 const adminOnly = (req, res, next) => {
 
@@ -112,12 +87,11 @@ const adminOnly = (req, res, next) => {
     res.status(401).send('Unauthenticated');
   }
   console.log(req.user.uid);
- 
+
   admin.firestore().doc(`/users/${req.user.uid}`)
     .get()
     .then(u => {
       const user = u.data();
-      console.log(user);
       if (user.roles && user.roles.admin) {
         return next();
       } else {
@@ -127,10 +101,9 @@ const adminOnly = (req, res, next) => {
     })
     .catch(error => {
       console.error(error);
-     // res.status(403).send('Unauthorized');
     });
- };
- 
+};
+
 app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);
@@ -203,15 +176,15 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
     ESUtils.getRandomGameQuestion().then((question) => {
       res.send(question);
     })
+      .catch(error => {
+        res.status(500).send('Failed to get Q');
+        return;
+      });
+  })
     .catch(error => {
-      res.status(500).send('Failed to get Q');
+      res.status(500).send('Uncaught Error');
       return;
     });
-  })
-  .catch(error => {
-    res.status(500).send('Uncaught Error');
-    return;
-  });
 
 });
 
@@ -225,27 +198,27 @@ app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
     case 'categories':
       // Migrate categories
       console.log('Migrating categories ...');
-      migration.migrateCategories.then(cats => {res.send(cats)});
+      migration.migrateCategories.then(cats => { res.send(cats) });
       break;
     case 'tags':
       // Migrate Tags
       console.log('Migrating tags ...');
-      migration.migrateTags.then(tags => {res.send(tags)});
+      migration.migrateTags.then(tags => { res.send(tags) });
       break;
     case 'games':
       // Migrate games
       console.log('Migrating games ...');
-      migration.migrateGames('/games', 'games').then(q => {res.send('Game Count: ' + q)});
+      migration.migrateGames('/games', 'games').then(q => { res.send('Game Count: ' + q) });
       break;
     case 'questions':
       // Migrate questions
       console.log('Migrating questions ...');
-      migration.migrateQuestions('/questions/published', 'questions').then(q => {res.send('Question Count: ' + q)});
+      migration.migrateQuestions('/questions/published', 'questions').then(q => { res.send('Question Count: ' + q) });
       break;
     case 'unpublished_questions':
       // Migrate unpublished questions
       console.log('Migrating unpublished questions ...');
-      migration.migrateQuestions('/questions/unpublished', 'unpublished_questions').then(q => {res.send('Question Count: ' + q)});
+      migration.migrateQuestions('/questions/unpublished', 'unpublished_questions').then(q => { res.send('Question Count: ' + q) });
       break;
   }
 
@@ -258,23 +231,23 @@ app.get('/rebuild_questions_index', adminOnly, (req, res) => {
 
   const questions = [];
   admin.firestore().collection('/questions').orderBy('id').get().then(qs => {
-  // admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
+    // admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
     // console.log("Questions Count: " + qs.length);
     qs.forEach(q => {
       // console.log(q.key);
       console.log(q.data());
 
       const data = q.data();
-      const question: {'id': string, 'type': string, 'source': any} = {'id': data.id, 'type': data.categoryIds['0'], 'source': data};
+      const question: { 'id': string, 'type': string, 'source': any } = { 'id': data.id, 'type': data.categoryIds['0'], 'source': data };
       questions.push(question);
     });
 
     ESUtils.rebuildIndex(ESUtils.QUESTIONS_INDEX, questions).then((response) => {
       res.send(`Questions indexed`);
     })
-    .catch((error) => {
-      res.send(error);
-    })
+      .catch((error) => {
+        res.send(error);
+      })
   });
 });
 
@@ -286,18 +259,18 @@ app.get('/hello', authorizedOnly, (req, res) => {
 });
 
 app.get('/getTestQuestion', authorizedOnly, (req, res, next) => {
-    admin.database().ref('/questions/published').orderByKey().limitToLast(1).once('value').then(qs => {
-      qs.forEach(q => {
-        console.log(q.key);
-        console.log(q.val());
+  admin.database().ref('/questions/published').orderByKey().limitToLast(1).once('value').then(qs => {
+    qs.forEach(q => {
+      console.log(q.key);
+      console.log(q.val());
 
-        const question: Question = q.val();
-        question.id = q.key;
-        res.send(question);
-        return;
-      })
+      const question: Question = q.val();
+      question.id = q.key;
+      res.send(question);
       return;
     })
+    return;
+  })
     .catch(error => {
       res.status(500).send('Failed to get Q');
       return;

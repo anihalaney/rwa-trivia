@@ -26,16 +26,16 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   
   fileTrack: FileTrack;
 
-  //Properties
+  // Properties
   categories: Category[];
   subs: Subscription[] = [];
 
   tags: string[];
   filteredTags$: Observable<string[]>;
 
-  //Question List
+  // Question List
   questions: Array<Question> = [];
-  //user Object
+  // user Object
   user: User;
   // bulk upload object
   parsedQuestions: Array<Question> = [];
@@ -75,8 +75,13 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.parseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
+<<<<<<< HEAD
       
       if (file.type === 'text/csv') {
+=======
+      // on windows with liber office type is not set to text/csv
+      if (file.type === 'text/csv' || file.type === '') {
+>>>>>>> 7dd332387196783b00ecd2c047bdb7fd2c24e3ad
         this.uploadFormGroup.get('csvFile').setValue(file);
         reader.readAsText(file);
         reader.onload = () => {
@@ -165,7 +170,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       question.categoryIds = [this.uploadFormGroup.get('category').value];
       dbQuestions.push(question);
     }
-    //dispatch action
+    // dispatch action
     // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
     // this._bulkUploadFileInfo.rejected = 0;
     // this._bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
