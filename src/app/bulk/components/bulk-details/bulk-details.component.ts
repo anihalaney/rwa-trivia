@@ -16,7 +16,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class BulkDetailsComponent implements OnInit, OnChanges, OnDestroy {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
-  @Input() found_questions: Array<Question>;
+  @Input() parsedQuestions: Array<Question>;
   questions: Question[];
   totalCount: number;
 
@@ -33,8 +33,8 @@ export class BulkDetailsComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    if (this.found_questions) {
-      this.totalCount = this.found_questions.length;
+    if (this.parsedQuestions) {
+      this.totalCount = this.parsedQuestions.length;
     }
 
   }

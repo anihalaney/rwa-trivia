@@ -5,6 +5,7 @@ import {QuestionActions} from './question.actions';
 import {UIStateActions} from './ui-state.actions';
 import {GameActions} from './game.actions';
 import {ActionWithPayload} from './action-with-payload';
+import {FileSummaryActions} from './file-summary.actions';
 
 export {
     ActionWithPayload,
@@ -13,7 +14,8 @@ export {
     TagActions,
     QuestionActions,
     UIStateActions,
-    GameActions
+    GameActions,
+    FileSummaryActions
 };
 
 export default [
@@ -22,5 +24,6 @@ export default [
     TagActions,
     QuestionActions,
     UIStateActions,
-    GameActions
+    GameActions,
+    FileSummaryActions
 ];

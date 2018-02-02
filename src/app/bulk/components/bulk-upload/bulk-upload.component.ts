@@ -4,10 +4,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-import { QuestionActions } from '../../../core/store/actions';
+import { QuestionActions, FileSummaryActions } from '../../../core/store/actions';
 import { AppStore } from '../../../core/store/app-store';
 import { Utils } from '../../../core/services';
-import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, SearchResults } from '../../../model';
+import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, SearchResults, FileTrack } from '../../../model';
 import { parse } from 'csv';
 
 @Component({
@@ -23,6 +23,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
   parseError: boolean;
+  
+  fileTrack: FileTrack;
 
   //Properties
   categories: Category[];
@@ -41,11 +43,13 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
     private store: Store<AppStore>,
+    private fileSummaryActions: FileSummaryActions,
     private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.tagsObs = store.select(s => s.tags);
     // this._SearchResults = new SearchResults();
     this.store.take(1).subscribe(s => this.user = s.user);
+    
   }
 
   ngOnInit() {
@@ -71,11 +75,17 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.parseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
+      
       if (file.type === 'text/csv') {
         this.uploadFormGroup.get('csvFile').setValue(file);
         reader.readAsText(file);
         reader.onload = () => {
           console.log(file);
+          this.fileTrack = new FileTrack;
+
+          this.fileTrack.fileName = file['name'];
+          
+
           // this._bulkUploadFileInfo.file = file.name;
           // this._bulkUploadFileInfo.uploadedOn = file.lastModifiedDate;
 
@@ -119,6 +129,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
             question.created_uid = this.user.userId;
             return question;
           });
+
+          this.fileTrack.uploaded = this.questions.length;
       });
     // this._bulkUploadFileInfo.status = 'SUBMITTED';
     // this._bulkUploadFileInfo.uploaded = this.questions.length;
@@ -148,6 +160,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     const dbQuestions: Array<Question> = [];
 
     for (const question of this.questions) {
+      this.fileTrack.categoryId = this.uploadFormGroup.get('category').value;
+      this.fileTrack.primaryTag = this.uploadFormGroup.get('tagControl').value;
       question.categoryIds = [this.uploadFormGroup.get('category').value];
       dbQuestions.push(question);
     }
@@ -157,10 +171,17 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     // this._bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
     // this._bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
     // this._bulkUploadFileInfoList.push(this._bulkUploadFileInfo);
+    this.fileTrack.date = new Date().getTime()+"";
     this.parsedQuestions = dbQuestions;
+    
+
   }
 
   onReviewSubmit(): void {
+    // console.log(this.fileTrack);
+    
+    console.log(this.fileSummaryActions.addFileRecord(this.fileTrack));
+
     this.store.dispatch(this.questionActions.addBulkQuestions(this.parsedQuestions));
   }
 
