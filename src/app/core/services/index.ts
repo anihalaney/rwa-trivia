@@ -10,6 +10,7 @@ import {AuthGuard} from './auth-guard';
 import {AdminLoadGuard, BulkLoadGuard} from './load-guard';
 import {CategoriesResolver} from './route-guards/categories-resolver';
 import {TagsResolver} from './route-guards/tags-resolver';
+import { FileSummaryService } from './file-summary.service';
 
 export {
     Utils,
@@ -23,7 +24,8 @@ export {
     AdminLoadGuard,
     BulkLoadGuard,
     CategoriesResolver,
-    TagsResolver
+    TagsResolver,
+    FileSummaryService
 };
 
 export default [
@@ -38,5 +40,6 @@ export default [
     AdminLoadGuard,
     BulkLoadGuard,
     CategoriesResolver,
-    TagsResolver
+    TagsResolver,
+    FileSummaryService
 ];

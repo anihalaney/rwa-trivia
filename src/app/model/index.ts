@@ -6,3 +6,4 @@ export * from './game';
 export * from './search-criteria';
 export * from './search-results';
 export * from './bulk-upload-file-info';
+export * from './file-track';
