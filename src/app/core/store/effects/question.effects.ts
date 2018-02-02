@@ -8,16 +8,12 @@ import { QuestionService } from '../../services'
 
 @Injectable()
 export class QuestionEffects {
-    constructor(
-        private actions$: Actions,
-        private questionActions: QuestionActions,
-        private svc: QuestionService
-    ) { }
 
     @Effect()
     loadQuestions$ = this.actions$
         .ofType(QuestionActions.LOAD_QUESTIONS)
-        .switchMap((action: ActionWithPayload<{ startRow: number, pageSize: number, criteria: SearchCriteria }>) => this.svc.getQuestions(action.payload.startRow, action.payload.pageSize, action.payload.criteria))
+        .switchMap((action: ActionWithPayload<{ startRow: number, pageSize: number, criteria: SearchCriteria }>) =>
+        this.svc.getQuestions(action.payload.startRow, action.payload.pageSize, action.payload.criteria))
         .map((results: SearchResults) => this.questionActions.loadQuestionsSuccess(results));
 
     @Effect()
@@ -53,7 +49,7 @@ export class QuestionEffects {
     @Effect()
     addBulkQuestions$ = this.actions$
         .ofType(QuestionActions.ADD_BULK_QUESTIONS)
-        .do((action: ActionWithPayload<Question>) => this.svc.saveBulkQuestions(action.payload))
+        .do((action: ActionWithPayload<Question[]>) => this.svc.saveBulkQuestions(action.payload))
         .filter(() => false);
 
     @Effect()
@@ -61,4 +57,10 @@ export class QuestionEffects {
         .ofType(QuestionActions.APPROVE_QUESTION)
         .do((action: ActionWithPayload<Question>) => this.svc.approveQuestion(action.payload))
         .filter(() => false);
+
+    constructor(
+            private actions$: Actions,
+            private questionActions: QuestionActions,
+            private svc: QuestionService
+        ) { }
 }

@@ -18,23 +18,23 @@ export class QuestionService {
     private http: HttpClient) {
   }
 
-  //Elasticsearch
+  // Elasticsearch
   getQuestionOfTheDay(): Observable<Question> {
-    let url: string = CONFIG.functionsUrl + "/app/getQuestionOfTheDay";
+    const url: string = CONFIG.functionsUrl + '/app/getQuestionOfTheDay';
 
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    let url: string = CONFIG.functionsUrl + "/app/getQuestions/";
-    //let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";
+    const url: string = CONFIG.functionsUrl + '/app/getQuestions/';
+    // let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";
 
-    return this.http.post<SearchResults>(url + startRow + "/" + pageSize, criteria);
+    return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }
 
-  //Firestore
+  // Firestore
   getUserQuestions(user: User, published: boolean): Observable<Question[]> {
-    let collection = (published) ? "questions" : "unpublished_questions";
+    const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', user.userId))
       .valueChanges()
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
@@ -49,24 +49,26 @@ export class QuestionService {
   }
 
   saveQuestion(question: Question) {
-    let dbQuestion = Object.assign({}, question); //object to be saved
+    const dbQuestion = Object.assign({}, question); // object to be saved
 
-    let questionId = this.db.createId();
+    const questionId = this.db.createId();
     dbQuestion.id = questionId;
     // console.log('dbQuestion--->', JSON.stringify(dbQuestion));
-    //Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
+    // Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
     this.db.doc('/unpublished_questions/' + questionId).set(dbQuestion).then(ref => {
       this.store.dispatch(this.questionActions.addQuestionSuccess());
     });
   }
 
   saveBulkQuestions(questions: Array<Question>) {
-    const dbQuestions = [];
+    const dbQuestions: Array<Question> = [];
 
     for (const question of questions) {
       if (question !== null) {
-        const dbQuestion = Object.assign({}, question); //object to be saved
+        const dbQuestion = Object.assign({}, question); // object to be saved
         dbQuestion.id = this.db.createId();
+
+        // Do we really need to copy answer object as well?
         dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
         dbQuestions.push(dbQuestion);
       }
@@ -76,31 +78,25 @@ export class QuestionService {
 
   }
 
-  storeQuestion(index: number, questions): void {
-    // save question
-    // console.log('index--->', index);
-    const question = questions[index];
-    // console.log('question--->', JSON.stringify(question));
-    const dbQuestion = Object.assign({}, question);
-    this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
-     // console.log(' questions.length --->',  questions.length );
-      if (index === questions.length - 1) {
-        this.store.dispatch(this.questionActions.addQuestionSuccess())
-      } else {
-        index++;
-        this.storeQuestion(index, questions);
-      }
+  storeQuestion(index: number, questions: Array<Question>): void {
 
-    });
+    const question = questions[index];
+    console.log('question--->', JSON.stringify(question));
+    this.db.doc(`/unpublished_questions/${question.id}`)
+      .set(question)
+      .then(ref => {
+        (index === questions.length) ? this.store.dispatch(this.questionActions.addQuestionSuccess())
+          : this.storeQuestion(index++, questions);
+      });
   }
 
   approveQuestion(question: Question) {
-    let dbQuestion = Object.assign({}, question); //object to be saved
+    const dbQuestion = Object.assign({}, question); // object to be saved
 
-    let questionId = dbQuestion.id;
+    const questionId = dbQuestion.id;
     dbQuestion.status = QuestionStatus.APPROVED;
 
-    //Transaction to remove from unpublished and add to published questions collection    
+    // Transaction to remove from unpublished and add to published questions collection
     this.db.firestore.runTransaction(transaction => {
       return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
         transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
