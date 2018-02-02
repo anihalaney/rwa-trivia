@@ -78,10 +78,10 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Review</ng-template>
-    <bulk-details *ngIf="found_questions && found_questions.length>0" [found_questions]="found_questions"></bulk-details>
+    <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
     <div>
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext type="button" (click)="dispatch_action()">Submit</button>
+        <button mat-button matStepperNext type="button" (click)="onReviewSubmit()">Submit</button>
     </div>
   </mat-step>
   <mat-step>
