@@ -36,7 +36,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   //user Object
   user: User;
   // bulk upload object
-  found_questions: Array<Question>;
+  parsedQuestions: Array<Question> = [];
 
 
   constructor(private fb: FormBuilder,
@@ -157,11 +157,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     // this._bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
     // this._bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
     // this._bulkUploadFileInfoList.push(this._bulkUploadFileInfo);
-    this.found_questions = dbQuestions;
+    this.parsedQuestions = dbQuestions;
   }
 
-  dispatch_action(): void {
-    this.store.dispatch(this.questionActions.addBulkQuestions(this.found_questions));
+  onReviewSubmit(): void {
+    this.store.dispatch(this.questionActions.addBulkQuestions(this.parsedQuestions));
   }
 
   ngOnDestroy() {
