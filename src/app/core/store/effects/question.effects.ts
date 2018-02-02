@@ -53,7 +53,7 @@ export class QuestionEffects {
     @Effect()
     addBulkQuestions$ = this.actions$
         .ofType(QuestionActions.ADD_BULK_QUESTIONS)
-        .do((action: ActionWithPayload<Question>) => this.svc.saveBulkQuestions(action.payload))
+        .do((action: ActionWithPayload<Question[]>) => this.svc.saveBulkQuestions(action.payload))
         .filter(() => false);
 
     @Effect()
