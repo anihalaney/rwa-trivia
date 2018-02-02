@@ -71,6 +71,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.parseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
+      // on windows with liber office type is not set to text/csv
       if (file.type === 'text/csv' || file.type === '') {
         this.uploadFormGroup.get('csvFile').setValue(file);
         reader.readAsText(file);
