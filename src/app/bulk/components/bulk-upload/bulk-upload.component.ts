@@ -24,16 +24,16 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
   parseError: boolean;
 
-  //Properties
+  // Properties
   categories: Category[];
   subs: Subscription[] = [];
 
   tags: string[];
   filteredTags$: Observable<string[]>;
 
-  //Question List
+  // Question List
   questions: Array<Question> = [];
-  //user Object
+  // user Object
   user: User;
   // bulk upload object
   parsedQuestions: Array<Question> = [];
@@ -71,7 +71,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.parseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-      if (file.type === 'text/csv') {
+      if (file.type === 'text/csv' || file.type === '') {
         this.uploadFormGroup.get('csvFile').setValue(file);
         reader.readAsText(file);
         reader.onload = () => {
@@ -151,7 +151,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       question.categoryIds = [this.uploadFormGroup.get('category').value];
       dbQuestions.push(question);
     }
-    //dispatch action
+    // dispatch action
     // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
     // this._bulkUploadFileInfo.rejected = 0;
     // this._bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
