@@ -7,6 +7,7 @@ import '../../rxjs-extensions';
 
 import { HttpClient, HttpHeaders }    from '@angular/common/http';
 import { Category } from '../../model/category';
+import { BulkUploadFileInfo } from '../../model';
 
 @Injectable()
 export class BulkService {
@@ -24,6 +25,14 @@ export class BulkService {
     //return task.percentageChanges();
     // get notified when the download URL is available
     return task.downloadURL();
+  }
+
+  loadFileRecord(): Observable<BulkUploadFileInfo[]> {
+    return this.db.collection('/bulk_uploads').valueChanges()
+      .catch(error => {
+        console.log(error);
+        return Observable.of(null);
+      });
   }
   
 }

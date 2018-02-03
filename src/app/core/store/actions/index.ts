@@ -5,7 +5,7 @@ import {QuestionActions} from './question.actions';
 import {UIStateActions} from './ui-state.actions';
 import {GameActions} from './game.actions';
 import {ActionWithPayload} from './action-with-payload';
-import {FileSummaryActions} from './file-summary.actions';
+import {BulkUploadActions} from './bulk-upload.actions';
 
 export {
     ActionWithPayload,
@@ -15,7 +15,7 @@ export {
     QuestionActions,
     UIStateActions,
     GameActions,
-    FileSummaryActions
+    BulkUploadActions
 };
 
 export default [
@@ -25,5 +25,5 @@ export default [
     QuestionActions,
     UIStateActions,
     GameActions,
-    FileSummaryActions
+    BulkUploadActions
 ];

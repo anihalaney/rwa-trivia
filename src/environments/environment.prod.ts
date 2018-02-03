@@ -14,5 +14,4 @@ export const CONFIG: IConfig = {
       messagingSenderId: "479350787602"
   },
    "functionsUrl": "https://us-central1-rwa-trivia.cloudfunctions.net"
-//  "functionsUrl": "http://localhost:5000/rwa-trivia/us-central1"
 };

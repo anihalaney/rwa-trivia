@@ -14,12 +14,12 @@ import { CONFIG } from '../../environments/environment';
 
 import { Utils, AuthenticationService, AuthInterceptor,
          CategoryService, TagService, QuestionService,
-         GameService, FileSummaryService } from './services';
+         GameService, BulkService } from './services';
 
 import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './services';
 
- import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions, FileSummaryActions } from './store/actions';
-import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects, FileSummaryEffects } from './store/effects';
+ import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions, BulkUploadActions } from './store/actions';
+import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects, BulkUploadEffects } from './store/effects';
 import { reducer } from './store/app-store';
 
 import { LoginComponent } from './components';
@@ -56,7 +56,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
       TagEffects,
       QuestionEffects,
       GameEffects,
-      FileSummaryEffects
+      BulkUploadEffects
     ]),
 
     //rwa module
@@ -66,14 +66,14 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     //Services
     Utils, AuthenticationService, 
     CategoryService, TagService, QuestionService,
-    GameService,FileSummaryService,
+    GameService,BulkService,
     
     //route guards
     AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions, 
-    UIStateActions, GameActions,FileSummaryActions,
+    UIStateActions, GameActions,BulkUploadActions,
 
     {
       provide: HTTP_INTERCEPTORS,
