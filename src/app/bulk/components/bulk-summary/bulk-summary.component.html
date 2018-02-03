@@ -11,12 +11,12 @@
     
       <ng-container cdkColumnDef="uploadDate">
         <mat-header-cell *cdkHeaderCellDef>Date Uploaded</mat-header-cell>
-        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.uploadedOn | date:'MM/dd/yyyy' }}</mat-cell>
+        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>
       </ng-container>
     
       <ng-container cdkColumnDef="fileName">
         <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
-        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.file.name}}</mat-cell>
+        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
       </ng-container>
     
       <ng-container cdkColumnDef="category">
@@ -31,17 +31,17 @@
     
       <ng-container cdkColumnDef="countQuestionsUploaded">
         <mat-header-cell *cdkHeaderCellDef>Uploaded #</mat-header-cell>
-        <mat-cell class="col-chkbox" *cdkCellDef="let row">[35]</mat-cell>
+        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.uploaded}}</mat-cell>
       </ng-container>
     
       <ng-container cdkColumnDef="countQuestionsApproved">
         <mat-header-cell *cdkHeaderCellDef>Approved #</mat-header-cell>
-        <mat-cell class="col-chkbox" *cdkCellDef="let row">[15]</mat-cell>
+        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.approved}}</mat-cell>
       </ng-container>
     
       <ng-container cdkColumnDef="countQuestionsRejected">
         <mat-header-cell *cdkHeaderCellDef>Rejected #</mat-header-cell>
-        <mat-cell class="col-chkbox" *cdkCellDef="let row">[20]</mat-cell>
+        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.rejected}}</mat-cell>
       </ng-container>
     
       <ng-container cdkColumnDef="status">
