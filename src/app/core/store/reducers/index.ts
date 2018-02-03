@@ -4,4 +4,4 @@ export * from './tags.reducer';
 export * from './questions.reducer';
 export * from './ui-state.reducer';
 export * from './game.reducer';
-export * from './file-summary.reducer';
+export * from './bulk-upload.reducer';

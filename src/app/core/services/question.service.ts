@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, Question, QuestionStatus, SearchResults, SearchCriteria, FileTrack } from '../../model';
+import { User, Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo } from '../../model';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
 import { QuestionActions } from '../store/actions';
@@ -81,7 +81,7 @@ export class QuestionService {
   saveBulkQuestions(data: Array<any>) {
     const dbQuestions: Array<any> = [];
 
-    const filetrack = data[0];
+    const bulkUploadFileInfo = data[0];
     const questions = data[1];
 
     const fileId = this.db.createId();
@@ -100,20 +100,20 @@ export class QuestionService {
       }
       // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
       // this.storeQuestion(0, dbQuestions);
-      this.addFileRecord(filetrack,fileId,dbQuestions);
+      this.addFileRecord(bulkUploadFileInfo,fileId,dbQuestions);
   }
 
-  addFileRecord(filetrack: FileTrack,id: any,questions: Array<Question>) {
+  addFileRecord(bulkUploadFileInfo: BulkUploadFileInfo,id: any,questions: Array<Question>) {
     
     // save question
-    const dbFile = Object.assign({}, filetrack);
-    dbFile.id = id;
+    const dbFile = Object.assign({}, bulkUploadFileInfo);
+    dbFile['id'] = id;
     dbFile.rejected=0;
     dbFile.approved = 0;
     dbFile.status = "Under Review";
     
 
-    this.db.doc('/file_track_records/' + dbFile.id).set(dbFile).then(ref => {
+    this.db.doc('/bulk_uploads/' + dbFile['id']).set(dbFile).then(ref => {
      // console.log(' questions.length --->',  questions.length );
      console.log("file");
       this.storeQuestion(0, questions);
@@ -134,6 +134,7 @@ export class QuestionService {
           index++;
           this.storeQuestion(index, questions);
         }
+        console.log(question);
       });
   }
 

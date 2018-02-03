@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
 import {ActionWithPayload} from './action-with-payload';
 
-import { Question, User, SearchResults, SearchCriteria, FileTrack } from '../../../model';
+import { Question, User, SearchResults, SearchCriteria} from '../../../model';
 
 @Injectable()
 export class QuestionActions {

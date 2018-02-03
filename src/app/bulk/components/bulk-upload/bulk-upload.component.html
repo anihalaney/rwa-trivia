@@ -87,5 +87,8 @@
   <mat-step>
     <ng-template matStepLabel>Submit</ng-template>
     You have submitted questions.
+    <div>
+      <button mat-button [routerLink]="['/bulk']">Back</button>
+    </div>
   </mat-step>
 </mat-horizontal-stepper>

@@ -10,7 +10,7 @@ import {AuthGuard} from './auth-guard';
 import {AdminLoadGuard, BulkLoadGuard} from './load-guard';
 import {CategoriesResolver} from './route-guards/categories-resolver';
 import {TagsResolver} from './route-guards/tags-resolver';
-import { FileSummaryService } from './file-summary.service';
+import { BulkService } from './bulk.service';
 
 export {
     Utils,
@@ -25,7 +25,7 @@ export {
     BulkLoadGuard,
     CategoriesResolver,
     TagsResolver,
-    FileSummaryService
+    BulkService
 };
 
 export default [
@@ -41,5 +41,5 @@ export default [
     BulkLoadGuard,
     CategoriesResolver,
     TagsResolver,
-    FileSummaryService
+    BulkService
 ];
