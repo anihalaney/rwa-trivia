@@ -1,0 +1,5 @@
+<div class="matrix" #matrix>	
+  <ng-container *ngFor="let line of lines; index as i; first as isFirst">
+    <div [ngClass]="line.classes" [style.left.px]="line.left">{{line.text}}</div>
+  </ng-container>
+</div>

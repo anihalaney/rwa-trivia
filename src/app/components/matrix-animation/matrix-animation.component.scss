@@ -1,0 +1,98 @@
+@keyframes fade {
+	0%   { opacity: 1; }
+	100% { opacity: 0; }
+}
+@keyframes fall {
+  from {top: -250px;}
+  to 	{top: 300px;}
+}
+@keyframes spin {
+	from {transform:rotate3d(0, 0, 0, 0deg);}
+	to {transform:rotate3d(1, 0, 0, 360deg);}
+}
+.matrix {
+	margin: 1em auto;
+	width: inherit;
+	height: inherit;
+	overflow: hidden;
+	background: #000;
+	background-image: gradient(linear, 0% 90%, 0% 100%, from(rgba(0, 255, 0, 0)), to(rgba(0, 255, 0, 0.1)));
+	color: rgba(0, 255, 0, .7);
+	text-shadow: rgba(255, 255, 255, .8) 0px 0px 4px;
+	position: relative;	
+
+	div {
+		//for vertical letters
+		writing-mode: vertical-rl;
+		text-orientation: upright;
+
+		//to got from bottom to top
+		unicode-bidi:bidi-override;
+		direction:rtl; 
+
+		position: absolute;	
+		white-space: nowrap;
+		top: 0;
+
+		/* appearance */
+		transform-origin: 0%;
+		
+		/* animation */
+		animation-name: fall, fade;			
+		animation-iteration-count: infinite; /* use 0 to infinite */
+		animation-direction: normal; /* default is normal. use 'alternate' to reverse direction */
+		animation-timing-function: ease-out;
+
+		&::first-letter{
+			color: white;
+			}
+
+		/*
+		//spin animation for first character. this is not good, needs work
+		//note: it'll not work with pseudo selector like ::first-letter
+		//, so it'll need first character to be in a span in the ts code
+		
+		.first-character {
+			display: inline-block;	
+			color: white;
+			animation-name: spin;
+			animation-duration: 500ms;			
+			animation-iteration-count: infinite;
+			animation-direction: normal;
+			animation-timing-function: ease-in-out;
+		}
+		*/
+	}
+
+	.f1{
+		font-size: 1.2em;
+	}
+	.f2{
+		font-size: .9em;
+	}
+	.c1{
+		color: rgba(0, 255, 0, .5);
+	}
+	.delay{	
+		animation-delay: 3s;
+	}
+	//different durations below
+	.d1{
+		animation-duration: 4s;
+	}
+	.d2{
+		animation-duration: 6s;
+	}
+	.d3{
+		animation-duration: 8s;
+	}
+	.d4{
+		animation-duration: 10s;
+	}
+}
+/*
+.matrix span{
+	color: rgb(0, 255, 0);
+	text-shadow: rgb(255, 255, 255) 0px 0px 5px;
+}
+*/

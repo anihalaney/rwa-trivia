@@ -14,7 +14,8 @@ import { UserModule } from  './user/user.module';
 import { StatsModule } from  './stats/stats.module';
 
 import { AppComponent, DashboardComponent, 
-         SideNavComponent, HeaderComponent, FooterComponent } from './components';
+         SideNavComponent, HeaderComponent, FooterComponent,
+         MatrixAnimationComponent, MatrixComponent } from './components';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,9 @@ import { AppComponent, DashboardComponent,
     DashboardComponent, 
     SideNavComponent, 
     HeaderComponent, 
-    FooterComponent
+    FooterComponent,
+    MatrixAnimationComponent,
+    MatrixComponent
   ],
   imports: [
     BrowserModule,

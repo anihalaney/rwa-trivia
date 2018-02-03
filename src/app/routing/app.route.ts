@@ -1,6 +1,5 @@
 import { Routes, RouterModule }  from '@angular/router';
-import { DashboardComponent } 
-  from '../components/index';
+import { DashboardComponent, MatrixComponent } from '../components';
 import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from '../core/services';
 
 export const routes: Routes = [
@@ -12,6 +11,11 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent
+  },
+  {
+    path: 'matrix',
+    component: MatrixComponent,
+    resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'my',
