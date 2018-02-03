@@ -1,10 +1,10 @@
-import { User, Category, Question, Game, SearchResults } from '../../model';
+import { User, Category, Question, Game, SearchResults, FileTrack } from '../../model';
 
 import { user, authInitialized, categories, categoryDictionary, tags, 
          questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus, 
          userPublishedQuestions, userUnpublishedQuestions,
          loginRedirectUrl, 
-         currentGame, newGameId, currentGameQuestion, activeGames } from './reducers';
+         currentGame, newGameId, currentGameQuestion, activeGames, fileTrack } from './reducers';
 
 import { compose, ActionReducerMap } from '@ngrx/store';
 
@@ -25,6 +25,7 @@ export interface AppStore {
   newGameId: string;
   currentGameQuestion: Question;
   activeGames: Game[];
+  fileTrack: FileTrack[];
 }
 
 export const reducer: ActionReducerMap<AppStore> = {
@@ -43,5 +44,6 @@ export const reducer: ActionReducerMap<AppStore> = {
   currentGame: currentGame,
   newGameId: newGameId,
   currentGameQuestion: currentGameQuestion,
-  activeGames: activeGames
+  activeGames: activeGames,
+  fileTrack: fileTrack
 };
