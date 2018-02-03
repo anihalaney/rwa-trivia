@@ -75,13 +75,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.parseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-<<<<<<< HEAD
-      
-      if (file.type === 'text/csv') {
-=======
       // on windows with liber office type is not set to text/csv
       if (file.type === 'text/csv' || file.type === '') {
->>>>>>> 7dd332387196783b00ecd2c047bdb7fd2c24e3ad
         this.uploadFormGroup.get('csvFile').setValue(file);
         reader.readAsText(file);
         reader.onload = () => {
@@ -176,18 +171,25 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     // this._bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
     // this._bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
     // this._bulkUploadFileInfoList.push(this._bulkUploadFileInfo);
+    this.fileTrack.userId = this.user.userId;
     this.fileTrack.date = new Date().getTime()+"";
     this.parsedQuestions = dbQuestions;
     
-
   }
 
   onReviewSubmit(): void {
     // console.log(this.fileTrack);
     
-    console.log(this.fileSummaryActions.addFileRecord(this.fileTrack));
+    const sendData = [];
 
-    this.store.dispatch(this.questionActions.addBulkQuestions(this.parsedQuestions));
+    sendData.push(this.fileTrack);
+    sendData.push(this.parsedQuestions);
+
+    this.store.dispatch(this.questionActions.addBulkQuestions(sendData));
+
+    // console.log(this.fileSummaryActions.addFileRecord(this.fileTrack));
+
+    // this.store.dispatch(this.questionActions.addBulkQuestions(this.parsedQuestions,this.fileTrack));
   }
 
   ngOnDestroy() {

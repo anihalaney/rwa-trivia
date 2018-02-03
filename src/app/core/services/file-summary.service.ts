@@ -20,23 +20,30 @@ export class FileSummaryService {
 
   
 
-  addFileRecord(filetrack: FileTrack) {
-    console.log("sd");
-    // save question
-    // console.log('index--->', index);
-    // console.log('question--->', JSON.stringify(question));
-    const dbFile = Object.assign({}, filetrack);
-    dbFile.id = this.db.createId();
-    dbFile.rejected=0;
-    dbFile.approved = 0;
-    // dbFile.status
+  // addFileRecord(filetrack: FileTrack) {
+  //   console.log("sd");
+  //   // save question
+  //   // console.log('index--->', index);
+  //   // console.log('question--->', JSON.stringify(question));
+  //   const dbFile = Object.assign({}, filetrack);
+  //   dbFile.id = this.db.createId();
+  //   dbFile.rejected=0;
+  //   dbFile.approved = 0;
+  //   // dbFile.status
     
 
-    this.db.doc('/file_track_records/' + dbFile.id).set(dbFile).then(ref => {
-     // console.log(' questions.length --->',  questions.length );
-      console.log(dbFile);
-    });
+  //   this.db.doc('/file_track_records/' + dbFile.id).set(dbFile).then(ref => {
+  //    // console.log(' questions.length --->',  questions.length );
+  //     console.log(dbFile);
+  //   });
+  // }
+
+  loadFileRecord(): Observable<FileTrack[]> {
+    return this.db.collection('/file_track_records').valueChanges()
+      .catch(error => {
+        console.log(error);
+        return Observable.of(null);
+      });
   }
-  
 
 }

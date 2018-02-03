@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, Question, QuestionStatus, SearchResults, SearchCriteria } from '../../model';
+import { User, Question, QuestionStatus, SearchResults, SearchCriteria, FileTrack } from '../../model';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
 import { QuestionActions } from '../store/actions';
@@ -60,22 +60,64 @@ export class QuestionService {
     });
   }
 
-  saveBulkQuestions(questions: Array<Question>) {
-    const dbQuestions: Array<Question> = [];
+  // saveBulkQuestions(questions: Array<Question>) {
+  //   const dbQuestions: Array<Question> = [];
 
-    for (const question of questions) {
-      if (question !== null) {
-        const dbQuestion = Object.assign({}, question); // object to be saved
-        dbQuestion.id = this.db.createId();
+  //   for (const question of questions) {
+  //     if (question !== null) {
+  //       const dbQuestion = Object.assign({}, question); // object to be saved
+  //       dbQuestion.id = this.db.createId();
 
-        // Do we really need to copy answer object as well?
-        dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
-        dbQuestions.push(dbQuestion);
+  //       // Do we really need to copy answer object as well?
+  //       dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
+  //       dbQuestions.push(dbQuestion);
+  //     }
+  //   }
+  //   // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
+  //   this.storeQuestion(0, dbQuestions)
+
+  // }
+
+  saveBulkQuestions(data: Array<any>) {
+    const dbQuestions: Array<any> = [];
+
+    const filetrack = data[0];
+    const questions = data[1];
+
+    const fileId = this.db.createId();
+      for (const question of questions) {
+
+        if (question !== null) {
+
+          question.fileId = fileId;
+
+          const dbQuestion = Object.assign({}, question); // object to be saved
+          dbQuestion.id = this.db.createId();
+          // Do we really need to copy answer object as well?
+          dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
+          dbQuestions.push(dbQuestion);
+        }
       }
-    }
-    // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
-    this.storeQuestion(0, dbQuestions)
+      // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
+      // this.storeQuestion(0, dbQuestions);
+      this.addFileRecord(filetrack,fileId,dbQuestions);
+  }
 
+  addFileRecord(filetrack: FileTrack,id: any,questions: Array<Question>) {
+    
+    // save question
+    const dbFile = Object.assign({}, filetrack);
+    dbFile.id = id;
+    dbFile.rejected=0;
+    dbFile.approved = 0;
+    dbFile.status = "Under Review";
+    
+
+    this.db.doc('/file_track_records/' + dbFile.id).set(dbFile).then(ref => {
+     // console.log(' questions.length --->',  questions.length );
+     console.log("file");
+      this.storeQuestion(0, questions);
+    });
   }
 
   storeQuestion(index: number, questions: Array<Question>): void {
@@ -85,8 +127,13 @@ export class QuestionService {
     this.db.doc(`/unpublished_questions/${question.id}`)
       .set(question)
       .then(ref => {
-        (index === questions.length) ? this.store.dispatch(this.questionActions.addQuestionSuccess())
-          : this.storeQuestion(index++, questions);
+        if(index === questions.length-1) 
+        {
+          this.store.dispatch(this.questionActions.addQuestionSuccess());
+        }else{
+          index++;
+          this.storeQuestion(index, questions);
+        }
       });
   }
 
@@ -101,8 +148,7 @@ export class QuestionService {
       return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
         transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
       );
-    })
-
+    });
   }
 
 }
