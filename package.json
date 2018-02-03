@@ -37,12 +37,8 @@
     "angularfire2": "^5.0.0-rc.6",
     "cookie-parser": "^1.4.3",
     "core-js": "2.5.3",
-<<<<<<< HEAD
     "csv": "^2.0.0",
     "elasticsearch": "^14.1.0",
-=======
-    "csv": "2.0.0",
->>>>>>> 7dd332387196783b00ecd2c047bdb7fd2c24e3ad
     "firebase": "4.9.0",
     "firebase-admin": "^5.8.2",
     "firebase-functions": "^0.8.1",

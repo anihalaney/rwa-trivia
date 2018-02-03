@@ -6,7 +6,8 @@ import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
-import { BulkUploadFileInfo } from '../../../model';
+import { BulkUploadFileInfo, FileTrack } from '../../../model';
+import { FileSummaryActions } from '../../../core/store/actions';
 
 @Component({
   selector: 'bulk-summary',
@@ -19,11 +20,21 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   uploadsDS: FileUploadsDataSource;
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
 
+  fileTrack: FileTrack[];
+
+  fileTrackObs: Observable<FileTrack[]>;
+  sub: any;
+
   constructor(private store: Store<AppStore>,
+    private fileSummaryActions: FileSummaryActions,
               private router: Router) {
     this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
     this.uploadsDS = new FileUploadsDataSource(this.uploadsSubject);
-  }
+
+    this.fileTrackObs = store.select(s => s.fileTrack);
+
+    // this.fileTrackObs = store.select(s => s.fileTrack);
+  } 
 
   ngOnInit() {
     this.uploadFileInfos = [ 
@@ -31,10 +42,21 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
         "categoryId": 1, 
         "primaryTag": "test", 
         "uploadedOn": new Date(), 
+        "status": "Under Review" },
+        { "file": new File([], "reactQuestions.csv"), 
+        "categoryId": 1, 
+        "primaryTag": "test", 
+        "uploadedOn": new Date(), 
         "status": "Under Review" }
     ];
     //this.uploadFileInfos[0].file.name
     this.uploadsSubject.next(this.uploadFileInfos);
+    this.store.dispatch(this.fileSummaryActions.loadFileRecord());
+
+    this.sub = this.fileTrackObs.subscribe(fileTrack => this.fileTrack = fileTrack);
+
+    console.log(this.fileTrack);
+
   }
 
   ngOnDestroy() {

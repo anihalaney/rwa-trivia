@@ -8,4 +8,5 @@ export class FileTrack {
     approved: number;
     rejected: number;
     status: String;
+    userId: String;
 }

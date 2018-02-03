@@ -29,6 +29,7 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.dispatch(this.questionActions.loadQuestions({"startRow": 0, "pageSize": 25, criteria: this.criteria}));
     this.store.dispatch(this.questionActions.loadUnpublishedQuestions());
+    console.log(this.unpublishedQuestionsObs);
   }
 
   ngOnDestroy() {
