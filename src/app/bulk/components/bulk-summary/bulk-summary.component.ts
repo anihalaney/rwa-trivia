@@ -1,14 +1,14 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import {DataSource} from '@angular/cdk/table';
-import { Observable } from 'rxjs/Observable';
+import { Observable} from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
-
 import { AppStore } from '../../../core/store/app-store';
-import { BulkUploadFileInfo } from '../../../model';
+import { BulkUploadFileInfo, Category } from '../../../model';
 import { BulkUploadActions } from '../../../core/store/actions';
-import { bulkUploadFileInfo } from 'app/core/store/reducers';
+import { Utils } from '../../../core/services';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'bulk-summary',
@@ -20,44 +20,29 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   uploadFileInfos: BulkUploadFileInfo[];
   uploadsDS: FileUploadsDataSource;
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
-
-  fileTrackObs: Observable<BulkUploadFileInfo[]>;
-  sub: any;
+  categoryDictObs: Observable<{ [key: number]: Category }>;
+  categoryDict: { [key: number]: Category };
+  bulkUploadFile: Observable<BulkUploadFileInfo[]>;
+  sub: Subscription;
+  catSub: Subscription;
 
   constructor(private store: Store<AppStore>,
-              private router: Router) {
+              private router: Router,
+              private bulkUploadActions: BulkUploadActions) {
     this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
     this.uploadsDS = new FileUploadsDataSource(this.uploadsSubject);
-
-    this.fileTrackObs = store.select(s => s.bulkUploadFileInfo);
-
-    
-  } 
-
-  ngOnInit() {
-    // this.uploadFileInfos = [ 
-    //   { "file": new File([], "reactQuestions.csv"), 
-    //     "categoryId": 1, 
-    //     "primaryTag": "test", 
-    //     "uploadedOn": new Date(), 
-    //     "status": "Under Review" },
-    //     { "file": new File([], "reactQuestions.csv"), 
-    //     "categoryId": 1, 
-    //     "primaryTag": "test", 
-    //     "uploadedOn": new Date(), 
-    //     "status": "Under Review" }
-    // ];
-    //this.uploadFileInfos[0].file.name
-    // this.uploadsSubject.next(this.uploadFileInfos);
-    // this.store.dispatch(this.fileSummaryActions.loadFileRecord());
-
-    this.sub = this.fileTrackObs.subscribe(uploadFileInfos => this.uploadFileInfos = uploadFileInfos);
-
-    this.uploadsSubject.next(this.uploadFileInfos);
-
+    this.bulkUploadFile = store.select(s => s.bulkUploadFileInfos);
+    this.categoryDictObs = store.select(s => s.categoryDictionary);
   }
 
+  ngOnInit() {
+    this.store.dispatch(this.bulkUploadActions.loadBulkUpload());
+    this.sub = this.bulkUploadFile.subscribe(uploadFileInfos => this.uploadsSubject.next(uploadFileInfos));
+    this.catSub = this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+    }
+
   ngOnDestroy() {
+    Utils.unsubscribe([this.sub, this.catSub]);
   }
 }
 
