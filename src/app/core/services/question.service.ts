@@ -71,7 +71,7 @@ export class QuestionService {
     const bulkUploadId = this.db.createId();
     // store file in file storage
     // Not written any code monitor progress or error
-    this.storage.upload(`bulk_upload/${bulkUploadId}-${bulkUpload.file.name}`, bulkUpload.file);
+    this.storage.upload(`bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadId}-${bulkUpload.file.name}`, bulkUpload.file);
     for (const question of questions) {
       if (question !== null) {
         question.bulkUploadId = bulkUploadId;
