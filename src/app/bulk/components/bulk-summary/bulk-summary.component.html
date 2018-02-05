@@ -21,7 +21,7 @@
     
       <ng-container cdkColumnDef="category">
         <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
-        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.categoryId}}</mat-cell>
+        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
       </ng-container>
     
       <ng-container cdkColumnDef="primaryTag">
