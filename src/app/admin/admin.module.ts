@@ -7,13 +7,15 @@ import { DashboardComponent,
          AdminComponent,
          CategoriesComponent, TagsComponent, 
          AdminQuestionsComponent } from './components';
+import { BulkComponent } from './components/bulk/bulk.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     AdminComponent,
     CategoriesComponent, TagsComponent,
-    AdminQuestionsComponent
+    AdminQuestionsComponent,
+    BulkComponent
   ],
   imports: [
     //rwa modules
