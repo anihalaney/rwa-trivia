@@ -10,6 +10,7 @@ import { User, Question, QuestionStatus, SearchResults, SearchCriteria, BulkUplo
 import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
 import { QuestionActions } from '../store/actions';
+import { query } from '@angular/core/src/render3/instructions';
 
 @Injectable()
 export class QuestionService {
@@ -45,8 +46,8 @@ export class QuestionService {
   // get Questions by fileId
   getFileQuestions(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
 
-    let id = "";
-    let d = (bulkUploadFileInfo.id) ? bulkUploadFileInfo.id: id;
+    const id = '';
+    const d = (bulkUploadFileInfo.id) ? bulkUploadFileInfo.id : id;
     const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => ref.where('bulkUploadId', '==', d))
       .valueChanges()
@@ -118,6 +119,7 @@ export class QuestionService {
         } else {
           index++;
           this.storeQuestion(index, questions);
+          console.log(questions);
         }
       });
   }
@@ -135,7 +137,4 @@ export class QuestionService {
       );
     });
   }
-
-
-  
 }
