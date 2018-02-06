@@ -1,6 +1,6 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { DashboardComponent, CategoriesComponent, TagsComponent, 
-         AdminQuestionsComponent, AdminComponent } 
+         AdminQuestionsComponent, AdminComponent, BulkComponent } 
   from '../components/index';
 import { AuthGuard } from '../../core/services';
 
@@ -27,8 +27,11 @@ export const adminRoutes: Routes = [
       {
         path: 'questions',
         component: AdminQuestionsComponent
+      },
+      {
+        path: 'bulk',
+        component: BulkComponent
       }
-
     ]
   }
 ];

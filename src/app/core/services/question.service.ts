@@ -40,6 +40,17 @@ export class QuestionService {
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
   }
 
+  // get Questions by fileId
+  getFileQuestions(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
+
+    let id = "";
+    let d = (bulkUploadFileInfo.id) ? bulkUploadFileInfo.id: id;
+    const collection = (published) ? 'questions' : 'unpublished_questions';
+    return this.db.collection(`/${collection}`, ref => ref.where('fileId', '==', d))
+      .valueChanges()
+      .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
+  }
+
   getUnpublishedQuestions(): Observable<Question[]> {
     return this.db.collection('/unpublished_questions').valueChanges()
       .catch(error => {
@@ -152,4 +163,6 @@ export class QuestionService {
     });
   }
 
+
+  
 }

@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { AppStore } from '../../core/store/app-store';
 import { CategoryActions, TagActions, QuestionActions, GameActions, BulkUploadActions } from '../../core/store/actions';
 import { AuthenticationService, Utils } from '../../core/services';
-import { User } from '../../model';
+import { User, BulkUploadFileInfo } from '../../model';
 
 @Component({
   selector: 'app-root',

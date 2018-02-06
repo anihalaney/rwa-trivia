@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 
 import { AppStore } from '../app-store';
-import { Question, User, SearchResults, SearchCriteria } from '../../../model';
+import { Question, User, SearchResults, SearchCriteria, BulkUploadFileInfo } from '../../../model';
 import { ActionWithPayload, QuestionActions } from '../actions';
 import { QuestionService } from '../../services'
 
@@ -33,6 +33,23 @@ export class QuestionEffects {
         .ofType(QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS)
         .switchMap((action: ActionWithPayload<User>) => this.svc.getUserQuestions(action.payload, false))
         .map((questions: Question[]) => this.questionActions.loadUserUnpublishedQuestionsSuccess(questions));
+
+
+    // get File Unpublished Questions
+    @Effect()
+    loadFileUnpublishedQuestions$ = this.actions$
+        .ofType(QuestionActions.LOAD_FILE_UNPUBLISHED_QUESTIONS)
+        .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getFileQuestions(action.payload, false))
+        .map((questions: Question[]) => this.questionActions.loadFileUnpublishedQuestionsSuccess(questions));
+
+    // get File Published Questions
+    @Effect()
+    loadFilePublishedQuestions$ = this.actions$
+        .ofType(QuestionActions.LOAD_FILE_PUBLISHED_QUESTIONS)
+        .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getFileQuestions(action.payload, true))
+        .map((questions: Question[]) => this.questionActions.loadFilePublishedQuestionsSuccess(questions));
+
+
 
     @Effect()
     loadSampleQuestions$ = this.actions$
