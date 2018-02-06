@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 
 import { AppStore } from '../app-store';
-import { Question, User, SearchResults, SearchCriteria, BulkUploadFileInfo } from '../../../model';
+import { Question, User, SearchResults, SearchCriteria, BulkUpload, BulkUploadFileInfo } from '../../../model';
 import { ActionWithPayload, QuestionActions } from '../actions';
 import { QuestionService } from '../../services'
 
@@ -66,7 +66,7 @@ export class QuestionEffects {
     @Effect()
     addBulkQuestions$ = this.actions$
         .ofType(QuestionActions.ADD_BULK_QUESTIONS)
-        .do((action: ActionWithPayload<any[]>) => this.svc.saveBulkQuestions(action.payload))
+        .do((action: ActionWithPayload<BulkUpload>) => this.svc.saveBulkQuestions(action.payload))
         .filter(() => false);
 
     @Effect()

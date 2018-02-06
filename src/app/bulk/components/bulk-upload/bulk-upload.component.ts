@@ -22,9 +22,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
-  parseError: boolean;
-  
+  parseError: boolean;  
   bulkUploadFileInfo: BulkUploadFileInfo;
+  file: File;
 
   // Properties
   categories: Category[];
@@ -49,7 +49,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.tagsObs = store.select(s => s.tags);
     // this._SearchResults = new SearchResults();
     this.store.take(1).subscribe(s => this.user = s.user);
-    
   }
 
   ngOnInit() {
@@ -74,27 +73,19 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     const reader = new FileReader();
     this.parseError = false;
     if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
+      const file = this.file = event.target.files[0];
       // on windows with liber office type is not set to text/csv
       if (file.type === 'text/csv' || file.type === '') {
         this.uploadFormGroup.get('csvFile').setValue(file);
         reader.readAsText(file);
         reader.onload = () => {
-          console.log(file);
-
-
           this.bulkUploadFileInfo = new BulkUploadFileInfo;
-
-          console.log(file['name']);
-
           this.bulkUploadFileInfo.fileName = file['name'];
-          
           this.generateQuestions(reader.result);
         };
       } else {
         this.parseError = true;
       }
-
     }
   }
 
@@ -133,7 +124,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   private prepareUpload(): any {
     const input = new FormData();
-
     input.append('category', this.uploadFormGroup.get('category').value);
     input.append('tag', this.uploadFormGroup.get('tagControl').value);
     input.append('csvFile', this.uploadFormGroup.get('csvFile').value);
@@ -156,23 +146,15 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       question.categoryIds = [this.uploadFormGroup.get('category').value];
       dbQuestions.push(question);
     }
-    this.bulkUploadFileInfo.userId = this.user.userId;
-    this.bulkUploadFileInfo.date = new Date().getTime()+"";
+    this.bulkUploadFileInfo.created_uid = this.user.userId;
+    this.bulkUploadFileInfo.date = new Date().getTime().toString();
     this.parsedQuestions = dbQuestions;
-    
   }
 
   onReviewSubmit(): void {
-    
-    const sendData = [];
-
-    sendData.push(this.bulkUploadFileInfo);
-    sendData.push(this.parsedQuestions);
-
-
-    console.log(this.parsedQuestions);
-
-    this.store.dispatch(this.questionActions.addBulkQuestions(sendData));
+    this.store.dispatch(this.questionActions
+      .addBulkQuestions({bulkUploadFileInfo: this.bulkUploadFileInfo,
+        questions: this.parsedQuestions, file: this.file}));
   }
 
   ngOnDestroy() {

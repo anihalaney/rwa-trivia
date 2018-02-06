@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo } from '../../model';
+import { User, Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../model';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
 import { QuestionActions } from '../store/actions';
@@ -13,6 +14,7 @@ import { QuestionActions } from '../store/actions';
 @Injectable()
 export class QuestionService {
   constructor(private db: AngularFirestore,
+    private storage: AngularFireStorage,
     private store: Store<AppStore>,
     private questionActions: QuestionActions,
     private http: HttpClient) {
@@ -46,7 +48,7 @@ export class QuestionService {
     let id = "";
     let d = (bulkUploadFileInfo.id) ? bulkUploadFileInfo.id: id;
     const collection = (published) ? 'questions' : 'unpublished_questions';
-    return this.db.collection(`/${collection}`, ref => ref.where('fileId', '==', d))
+    return this.db.collection(`/${collection}`, ref => ref.where('bulkUploadId', '==', d))
       .valueChanges()
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
   }
@@ -71,81 +73,52 @@ export class QuestionService {
     });
   }
 
-  // saveBulkQuestions(questions: Array<Question>) {
-  //   const dbQuestions: Array<Question> = [];
-
-  //   for (const question of questions) {
-  //     if (question !== null) {
-  //       const dbQuestion = Object.assign({}, question); // object to be saved
-  //       dbQuestion.id = this.db.createId();
-
-  //       // Do we really need to copy answer object as well?
-  //       dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
-  //       dbQuestions.push(dbQuestion);
-  //     }
-  //   }
-  //   // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
-  //   this.storeQuestion(0, dbQuestions)
-
-  // }
-
-  saveBulkQuestions(data: Array<any>) {
+  saveBulkQuestions(bulkUpload: BulkUpload) {
     const dbQuestions: Array<any> = [];
 
-    const bulkUploadFileInfo = data[0];
-    const questions = data[1];
+    const bulkUploadFileInfo = bulkUpload.bulkUploadFileInfo;
+    const questions = bulkUpload.questions;
 
-    const fileId = this.db.createId();
-      for (const question of questions) {
-
-        if (question !== null) {
-
-          question.fileId = fileId;
-
-          const dbQuestion = Object.assign({}, question); // object to be saved
-          dbQuestion.id = this.db.createId();
-          // Do we really need to copy answer object as well?
-          dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
-          dbQuestions.push(dbQuestion);
-        }
+    const bulkUploadId = this.db.createId();
+    // store file in file storage
+    // Not written any code monitor progress or error
+    this.storage.upload(`bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadId}-${bulkUpload.file.name}`, bulkUpload.file);
+    for (const question of questions) {
+      if (question !== null) {
+        question.bulkUploadId = bulkUploadId;
+        const dbQuestion = Object.assign({}, question); // object to be saved
+        dbQuestion.id = this.db.createId();
+        // Do we really need to copy answer object as well?
+        dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
+        dbQuestions.push(dbQuestion);
       }
-      // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
-      // this.storeQuestion(0, dbQuestions);
-      this.addFileRecord(bulkUploadFileInfo,fileId,dbQuestions);
+    }
+    this.addBulkUpload(bulkUploadFileInfo, dbQuestions, bulkUploadId);
   }
-
-  addFileRecord(bulkUploadFileInfo: BulkUploadFileInfo,id: any,questions: Array<Question>) {
-    
+  addBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, questions: Array<Question>, id: string) {
     // save question
     const dbFile = Object.assign({}, bulkUploadFileInfo);
-    dbFile['id'] = id;
-    dbFile.rejected=0;
+    dbFile.id = id;
+    dbFile.rejected = 0;
     dbFile.approved = 0;
-    dbFile.status = "Under Review";
-    
-
+    dbFile.status = 'Under Review';
     this.db.doc('/bulk_uploads/' + dbFile['id']).set(dbFile).then(ref => {
-     // console.log(' questions.length --->',  questions.length );
-     console.log("file");
       this.storeQuestion(0, questions);
     });
   }
 
   storeQuestion(index: number, questions: Array<Question>): void {
-
     const question = questions[index];
     console.log('question--->', JSON.stringify(question));
     this.db.doc(`/unpublished_questions/${question.id}`)
       .set(question)
       .then(ref => {
-        if(index === questions.length-1) 
-        {
+        if (index === questions.length - 1) {
           this.store.dispatch(this.questionActions.addQuestionSuccess());
-        }else{
+        } else {
           index++;
           this.storeQuestion(index, questions);
         }
-        console.log(question);
       });
   }
 

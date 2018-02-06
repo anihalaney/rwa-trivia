@@ -7,7 +7,7 @@ import { Store } from '@ngrx/store';
 import { AppStore } from '../../../core/store/app-store';
 import { BulkUploadFileInfo, Question, Category } from '../../../model';
 import { BulkUploadActions, QuestionActions } from '../../../core/store/actions';
-import { bulkUploadFileInfo, filePublishedQuestions } from 'app/core/store/reducers';
+import { filePublishedQuestions, fileUnpublishedQuestions, bulkUploadFileInfos } from 'app/core/store/reducers';
 import { concat } from 'rxjs/operator/concat';
 import { PageEvent } from '@angular/material';
 
@@ -20,7 +20,7 @@ import { PageEvent } from '@angular/material';
 export class BulkComponent implements OnInit {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
-  uploadFileInfos: BulkUploadFileInfo[];
+  bulkUploadFileInfo: BulkUploadFileInfo[];
   uploadsDS: FileUploadsDataSource;
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
   totalCount: number;
@@ -43,14 +43,14 @@ export class BulkComponent implements OnInit {
     this.UnPublishedQuestionObs = store.select(s => s.fileUnpublishedQuestions);
     this.PublishedQuestionObs = store.select(s => s.filePublishedQuestions);
 
-    this.bulkUploadObs = store.select(s => s.bulkUploadFileInfo);
+    this.bulkUploadObs = store.select(s => s.bulkUploadFileInfos);
     this.sub = this.UnPublishedQuestionObs.subscribe(question => this.unPublishedquestion = question);
     this.sub = this.PublishedQuestionObs.subscribe(question => this.publishedquestion = question);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
   } 
   ngOnInit() {
-    this.sub = this.bulkUploadObs.subscribe(uploadFileInfos => this.uploadFileInfos = uploadFileInfos);
-    this.uploadsSubject.next(this.uploadFileInfos);
+    this.sub = this.bulkUploadObs.subscribe(bulkUploadFileInfo => this.bulkUploadFileInfo = bulkUploadFileInfo);
+    this.uploadsSubject.next(this.bulkUploadFileInfo);
   }
 
   getFileQuestions(id)

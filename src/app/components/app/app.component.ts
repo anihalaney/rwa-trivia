@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppStore } from '../../core/store/app-store';
-import { CategoryActions, TagActions, QuestionActions, GameActions, BulkUploadActions } from '../../core/store/actions';
+import { CategoryActions, TagActions, QuestionActions, GameActions, BulkUploadActions} from '../../core/store/actions';
 import { AuthenticationService, Utils } from '../../core/services';
 import { User, BulkUploadFileInfo } from '../../model';
 
@@ -60,8 +60,8 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit () {
     console.log("dispatch");
     this.store.dispatch(this.categoryActions.loadCategories());
-    this.store.dispatch(this.tagActions.loadTags());
-    this.store.dispatch(this.bulkUploadActions.loadFileRecord());
+    this.store.dispatch(this.tagActions.loadTags());   
+    this.store.dispatch(this.bulkUploadActions.loadBulkUpload()); 
   }
 
   ngOnDestroy() {
