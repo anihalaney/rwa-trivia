@@ -8,15 +8,23 @@ import { BulkService } from '../../services'
 
 @Injectable()
 export class BulkUploadEffects {
+    @Effect()
+    loadBulkUpload$ = this.actions$
+        .ofType(BulkUploadActions.LOAD_BULK_UPLOAD)
+        .switchMap(() => this.svc.getBulkUpload())
+        .map((bulkUploadInfoFile: BulkUploadFileInfo[]) => this.bulkUploadAction.loadBulkUploadSuccess(bulkUploadInfoFile));
+
+    @Effect()
+    loadUserBulkUpload$  = this.actions$
+        .ofType(BulkUploadActions.LOAD_USER_BULK_UPLOAD)
+        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserBulkUpload(action.payload))
+        .map((bulkUploadFileInfos: BulkUploadFileInfo[]) => this.bulkUploadAction.loadUserBulkUploadSuccess(bulkUploadFileInfos));
+
     constructor(
         private actions$: Actions,
-        private Actions: BulkUploadActions,
+        private bulkUploadAction: BulkUploadActions,
         private svc: BulkService
     ) { }
 
-    @Effect() 
-    loadFileRecord$ = this.actions$
-        .ofType(BulkUploadActions.LOAD_FILE_RECORD)
-        .switchMap(() => this.svc.loadFileRecord())
-        .map((bulkUploadInfoFile: BulkUploadFileInfo[]) => this.Actions.loadFileRecordSuccess(bulkUploadInfoFile))
+
 }

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
 import {ActionWithPayload} from './action-with-payload';
 
-import { Question, User, SearchResults, SearchCriteria, BulkUploadFileInfo} from '../../../model';
+import { Question, User, SearchResults, SearchCriteria, BulkUpload, BulkUploadFileInfo} from '../../../model';
 
 @Injectable()
 export class QuestionActions {
@@ -133,21 +133,13 @@ export class QuestionActions {
   }
 
   static ADD_BULK_QUESTIONS = 'ADD_BULK_QUESTIONS';
-  addBulkQuestions(questions: Array<any>): ActionWithPayload<Array<any>> {
+  addBulkQuestions(bulkUpload: BulkUpload ):
+  ActionWithPayload<BulkUpload> {
     return {
       type: QuestionActions.ADD_BULK_QUESTIONS,
-      payload: questions
+      payload: bulkUpload
     };
   }
-
-  // static ADD_BULK_QUESTIONS = 'ADD_BULK_QUESTIONS';
-  // addBulkQuestions(questions: Array<Question>, fileTrack: FileTrack): ActionWithPayload<Array<Question>> {
-  //   return {
-  //     type: QuestionActions.ADD_BULK_QUESTIONS,
-  //     payload: questions
-  //   };
-  // }
-
   static ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
   addQuestionSuccess(): ActionWithPayload<null> {
     return {

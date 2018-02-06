@@ -1,5 +1,4 @@
 export class BulkUploadFileInfo {
-  
     id: String;
     date: String;
     fileName: String;
@@ -9,15 +8,5 @@ export class BulkUploadFileInfo {
     approved: number;
     rejected: number;
     status: String;
-    userId: String;
-
-  // file: File;
-  // categoryId: number;
-  // primaryTag: string;
-  // uploadedOn: Date;
-  // status: string;
-  // uploaded?: number;
-  // approved?: number;
-  // rejected?: number;
-
+    created_uid?: string;
 }
