@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataSource} from '@angular/cdk/table';
 import { Observable } from 'rxjs/Observable';
@@ -9,15 +9,15 @@ import { BulkUploadFileInfo, Question, Category } from '../../../model';
 import { BulkUploadActions, QuestionActions } from '../../../core/store/actions';
 import { bulkUploadFileInfo, filePublishedQuestions } from 'app/core/store/reducers';
 import { concat } from 'rxjs/operator/concat';
-
 import { PageEvent } from '@angular/material';
 
+
 @Component({
-  selector: 'bulk-summary',
-  templateUrl: './bulk-summary.component.html',
-  styleUrls: ['./bulk-summary.component.scss']
+  selector: 'app-bulk',
+  templateUrl: './bulk.component.html',
+  styleUrls: ['./bulk.component.scss']
 })
-export class BulkSummaryComponent implements OnInit, OnDestroy {
+export class BulkComponent implements OnInit {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   uploadFileInfos: BulkUploadFileInfo[];
@@ -26,7 +26,7 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   totalCount: number;
 
   fileQuestionsStatus:boolean = false;
-  parsedQuestions: Array<Question>;  
+  parsedQuestions: Array<Question>;
   unPublishedquestion: Question[];
   publishedquestion: Question[];
 
@@ -55,7 +55,7 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
 
   getFileQuestions(id)
   {
-    let bulkUploadFileInfoObject = new BulkUploadFileInfo();
+    const bulkUploadFileInfoObject = new BulkUploadFileInfo();
     bulkUploadFileInfoObject.id = id;  
 
     // for unpublished questions
@@ -75,7 +75,7 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
           {
             this.parsedQuestions.push(this.publishedquestion[i]);
           }
-      }
+      } 
       this.totalCount = this.parsedQuestions.length;
     },500);
     
@@ -112,7 +112,5 @@ export class FileUploadsDataSource extends DataSource<BulkUploadFileInfo> {
   }
 
   disconnect() {}
-
-  
 
 }

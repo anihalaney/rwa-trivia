@@ -89,13 +89,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
           this.bulkUploadFileInfo.fileName = file['name'];
           
-
-          // this._bulkUploadFileInfo.file = file.name;
-          // this._bulkUploadFileInfo.uploadedOn = file.lastModifiedDate;
-
-          // console.log(reader.result);
-
-          // generate Question Objects
           this.generateQuestions(reader.result);
         };
       } else {
@@ -136,12 +129,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
           this.bulkUploadFileInfo.uploaded = this.questions.length;
       });
-    // this._bulkUploadFileInfo.status = 'SUBMITTED';
-    // this._bulkUploadFileInfo.uploaded = this.questions.length;
-    // this._bulkUploadFileInfo.approved = 0;
-    // this._bulkUploadFileInfo.rejected = 0;
-
-    //  console.log('questions--->', JSON.stringify(this.questions));
   }
 
   private prepareUpload(): any {
@@ -169,13 +156,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       question.categoryIds = [this.uploadFormGroup.get('category').value];
       dbQuestions.push(question);
     }
-    // dispatch action
-    // console.log('dbQuestions--->', JSON.stringify(dbQuestions));
-    // this._bulkUploadFileInfo.rejected = 0;
-    // this._bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
-    // this._bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
-    // this._bulkUploadFileInfoList.push(this._bulkUploadFileInfo);
-
     this.bulkUploadFileInfo.userId = this.user.userId;
     this.bulkUploadFileInfo.date = new Date().getTime()+"";
     this.parsedQuestions = dbQuestions;
@@ -183,18 +163,16 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   onReviewSubmit(): void {
-    // console.log(this.fileTrack);
     
     const sendData = [];
 
     sendData.push(this.bulkUploadFileInfo);
     sendData.push(this.parsedQuestions);
 
+
+    console.log(this.parsedQuestions);
+
     this.store.dispatch(this.questionActions.addBulkQuestions(sendData));
-
-    // console.log(this.fileSummaryActions.addFileRecord(this.fileTrack));
-
-    // this.store.dispatch(this.questionActions.addBulkQuestions(this.parsedQuestions,this.fileTrack));
   }
 
   ngOnDestroy() {

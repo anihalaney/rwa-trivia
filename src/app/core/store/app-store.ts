@@ -2,7 +2,7 @@ import { User, Category, Question, Game, SearchResults, BulkUploadFileInfo } fro
 
 import { user, authInitialized, categories, categoryDictionary, tags, 
          questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus, 
-         userPublishedQuestions, userUnpublishedQuestions,
+         userPublishedQuestions, userUnpublishedQuestions,fileUnpublishedQuestions, filePublishedQuestions,
          loginRedirectUrl, 
          currentGame, newGameId, currentGameQuestion, activeGames, bulkUploadFileInfo } from './reducers';
 
@@ -26,6 +26,8 @@ export interface AppStore {
   currentGameQuestion: Question;
   activeGames: Game[];
   bulkUploadFileInfo: BulkUploadFileInfo[];
+  fileUnpublishedQuestions: Question[];
+  filePublishedQuestions: Question[];
 }
 
 export const reducer: ActionReducerMap<AppStore> = {
@@ -45,5 +47,7 @@ export const reducer: ActionReducerMap<AppStore> = {
   newGameId: newGameId,
   currentGameQuestion: currentGameQuestion,
   activeGames: activeGames,
-  bulkUploadFileInfo: bulkUploadFileInfo
+  bulkUploadFileInfo: bulkUploadFileInfo,
+  fileUnpublishedQuestions: fileUnpublishedQuestions,
+  filePublishedQuestions: filePublishedQuestions
 };

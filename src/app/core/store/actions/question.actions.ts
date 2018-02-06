@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Action} from '@ngrx/store';
 import {ActionWithPayload} from './action-with-payload';
 
-import { Question, User, SearchResults, SearchCriteria} from '../../../model';
+import { Question, User, SearchResults, SearchCriteria, BulkUploadFileInfo} from '../../../model';
 
 @Injectable()
 export class QuestionActions {
@@ -59,6 +59,43 @@ export class QuestionActions {
   loadUserPublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
     return {
       type: QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS_SUCCESS,
+      payload: questions
+    };
+  }
+
+
+  // get File Unpublished Questions
+  static LOAD_FILE_UNPUBLISHED_QUESTIONS = 'LOAD_FILE_UNPUBLISHED_QUESTIONS';
+  loadFileUnpublishedQuestions(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
+    return {
+      type: QuestionActions.LOAD_FILE_UNPUBLISHED_QUESTIONS,
+      payload: bulkUploadFileInfo
+    };
+  }
+  
+  // get File Published Questions
+  static LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS = 'LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS';
+  loadFileUnpublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+    return {
+      type: QuestionActions.LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS,
+      payload: questions
+    };
+  }
+
+  // get File Published Questions
+  static LOAD_FILE_PUBLISHED_QUESTIONS = 'LOAD_FILE_PUBLISHED_QUESTIONS';
+  loadFilePublishedQuestions(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
+    return {
+      type: QuestionActions.LOAD_FILE_PUBLISHED_QUESTIONS,
+      payload: bulkUploadFileInfo
+    };
+  }
+  
+  // get File Published Questions
+  static LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS = 'LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS';
+  loadFilePublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+    return {
+      type: QuestionActions.LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS,
       payload: questions
     };
   }

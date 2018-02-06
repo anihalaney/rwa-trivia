@@ -17,6 +17,7 @@ export class Question {
   lastUpdatedOn?: Date;
   approved_uid?: string;
   approvedOn?: Date;
+  fileId?: String;
   
   constructor() {
     this.id = "";
@@ -41,6 +42,7 @@ export class Question {
     question.questionText = db.questionText;
     question.status = db.status;
     question.tags = db.tags;
+    question.fileId = db.fileId;
     
     return question;
   }
