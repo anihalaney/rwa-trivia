@@ -1,14 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Action} from '@ngrx/store';
-import {ActionWithPayload} from './action-with-payload';
+import { Injectable } from '@angular/core';
+import { Action } from '@ngrx/store';
+import { ActionWithPayload } from './action-with-payload';
 
-import { Question, User, SearchResults, SearchCriteria, BulkUpload, BulkUploadFileInfo} from '../../../model';
+import { Question, User, SearchResults, SearchCriteria, BulkUpload, BulkUploadFileInfo } from '../../../model';
 
 @Injectable()
 export class QuestionActions {
 
   static LOAD_QUESTIONS = 'LOAD_QUESTIONS';
-  loadQuestions(payload: {startRow: number, pageSize: number, criteria: SearchCriteria}): ActionWithPayload<{startRow: number, pageSize: number, criteria: SearchCriteria}> {
+  loadQuestions(payload: { startRow: number, pageSize: number, criteria: SearchCriteria }): ActionWithPayload<{ startRow: number, pageSize: number, criteria: SearchCriteria }> {
     return {
       type: QuestionActions.LOAD_QUESTIONS,
       payload: payload
@@ -72,7 +72,7 @@ export class QuestionActions {
       payload: bulkUploadFileInfo
     };
   }
-  
+
   // get File Published Questions
   static LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS = 'LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS';
   loadFileUnpublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
@@ -90,7 +90,7 @@ export class QuestionActions {
       payload: bulkUploadFileInfo
     };
   }
-  
+
   // get File Published Questions
   static LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS = 'LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS';
   loadFilePublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
@@ -133,8 +133,8 @@ export class QuestionActions {
   }
 
   static ADD_BULK_QUESTIONS = 'ADD_BULK_QUESTIONS';
-  addBulkQuestions(bulkUpload: BulkUpload ):
-  ActionWithPayload<BulkUpload> {
+  addBulkQuestions(bulkUpload: BulkUpload):
+    ActionWithPayload<BulkUpload> {
     return {
       type: QuestionActions.ADD_BULK_QUESTIONS,
       payload: bulkUpload

@@ -10,7 +10,7 @@ import { Utils } from '../../../core/services';
 import { BulkUploadActions, QuestionActions } from '../../../core/store/actions';
 import { filePublishedQuestions, fileUnpublishedQuestions, bulkUploadFileInfos } from 'app/core/store/reducers';
 import { concat } from 'rxjs/operator/concat';
-
+import { Subscription } from 'rxjs/Subscription';
 import { PageEvent } from '@angular/material';
 
 @Component({
@@ -25,6 +25,7 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   uploadsDS: FileUploadsDataSource;
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
   totalCount: number;
+  categoryDict: { [key: number]: Category };
 
   fileQuestionsStatus = false;
   parsedQuestions: Array<Question>;
@@ -37,6 +38,7 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   publishedSub: any;
   unPublishedSub: any;
   bulkUploadSub: any;
+  catSub: Subscription;
 
   constructor(private store: Store<AppStore>,
     private questionActions: QuestionActions,
@@ -51,9 +53,11 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.bulkUploadSub = this.bulkUploadObs.subscribe(bulkUploadFileInfo => this.bulkUploadFileInfo = bulkUploadFileInfo);
+    this.catSub = this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict)
     this.uploadsSubject.next(this.bulkUploadFileInfo);
   }
 
+  // get Questions by File Id
   getFileQuestions(id) {
     const bulkUploadFileInfoObject = new BulkUploadFileInfo();
     bulkUploadFileInfoObject.id = id;
@@ -68,8 +72,7 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.fileQuestionsStatus = true;
-      this.parsedQuestions = this.unPublishedquestion;
-      this.totalCount = this.parsedQuestions.length;
+      this.totalCount = this.publishedquestion.length;
     }, 500);
 
   }
