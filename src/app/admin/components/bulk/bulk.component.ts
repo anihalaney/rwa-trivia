@@ -10,6 +10,7 @@ import { Utils } from '../../../core/services';
 import { BulkUploadActions, QuestionActions } from '../../../core/store/actions';
 import { filePublishedQuestions, fileUnpublishedQuestions, bulkUploadFileInfos } from 'app/core/store/reducers';
 import { concat } from 'rxjs/operator/concat';
+import { Subscription } from 'rxjs/Subscription';
 import { PageEvent } from '@angular/material';
 
 
@@ -25,7 +26,7 @@ export class BulkComponent implements OnInit, OnDestroy {
   uploadsDS: FileUploadsDataSource;
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
   totalCount: number;
-  id: String;
+  categoryDict: { [key: number]: Category };
 
   fileQuestionsStatus = false;
   unPublishedquestion: Question[];
@@ -37,6 +38,7 @@ export class BulkComponent implements OnInit, OnDestroy {
   publishedSub: any;
   unPublishedSub: any;
   bulkUploadSub: any;
+  catSub: Subscription;
 
   constructor(private store: Store<AppStore>,
     private questionActions: QuestionActions,
@@ -51,14 +53,14 @@ export class BulkComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.bulkUploadSub = this.bulkUploadObs.subscribe(bulkUploadFileInfo => this.bulkUploadFileInfo = bulkUploadFileInfo);
+    this.catSub = this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict)
     this.uploadsSubject.next(this.bulkUploadFileInfo);
   }
 
   // get Questions by File Id
   getFileQuestions(id) {
-    this.id = id;
     const bulkUploadFileInfoObject = new BulkUploadFileInfo();
-    bulkUploadFileInfoObject.id = this.id;
+    bulkUploadFileInfoObject.id = id;
 
     // for unpublished questions
     this.store.dispatch(this.questionActions.loadFileUnpublishedQuestions(bulkUploadFileInfoObject));
