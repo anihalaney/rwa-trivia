@@ -37,17 +37,17 @@ export class QuestionEffects {
 
     // get File Unpublished Questions
     @Effect()
-    loadFileUnpublishedQuestions$ = this.actions$
-        .ofType(QuestionActions.LOAD_FILE_UNPUBLISHED_QUESTIONS)
-        .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getFileQuestions(action.payload, false))
-        .map((questions: Question[]) => this.questionActions.loadFileUnpublishedQuestionsSuccess(questions));
+    loadBulkUploadUnpublishedQuestions$ = this.actions$
+        .ofType(QuestionActions.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS)
+        .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getQuestionsForBulkUpload(action.payload, false))
+        .map((questions: Question[]) => this.questionActions.loadBulkUploadUnpublishedQuestionsSuccess(questions));
 
     // get File Published Questions
     @Effect()
-    loadFilePublishedQuestions$ = this.actions$
-        .ofType(QuestionActions.LOAD_FILE_PUBLISHED_QUESTIONS)
-        .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getFileQuestions(action.payload, true))
-        .map((questions: Question[]) => this.questionActions.loadFilePublishedQuestionsSuccess(questions));
+    loadBulkUploadPublishedQuestions$ = this.actions$
+        .ofType(QuestionActions.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS)
+        .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getQuestionsForBulkUpload(action.payload, true))
+        .map((questions: Question[]) => this.questionActions.loadBulkUploadPublishedQuestionsSuccess(questions));
 
 
 

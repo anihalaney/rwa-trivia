@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from  '../shared/shared.module';
-import { AdminRoutingModule } from  './routing/admin-routing.module';
+import { SharedModule } from '../shared/shared.module';
+import { AdminRoutingModule } from './routing/admin-routing.module';
 
 import { DashboardComponent,
          AdminComponent,
-         CategoriesComponent, TagsComponent, 
+         CategoriesComponent, TagsComponent,
          AdminQuestionsComponent } from './components';
 import { BulkComponent } from './components/bulk/bulk.component';
 
@@ -18,7 +18,6 @@ import { BulkComponent } from './components/bulk/bulk.component';
     BulkComponent
   ],
   imports: [
-    //rwa modules
     SharedModule,
     AdminRoutingModule
   ]
