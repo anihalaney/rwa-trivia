@@ -1,5 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
-import { BulkSummaryComponent, BulkDetailsComponent, BulkUploadComponent } from '../components/index';
+import { BulkSummaryComponent, BulkDetailsComponent, BulkUploadComponent, BulkSummaryQuestionListComponent } from '../components/index';
 import { AuthGuard } from '../../core/services';
 
 export const bulkRoutes: Routes = [
@@ -11,7 +11,7 @@ export const bulkRoutes: Routes = [
   },
   {
     path: 'details/:id',
-    component: BulkDetailsComponent,
+    component: BulkSummaryQuestionListComponent,
     canActivate: [AuthGuard]
   },
   {
