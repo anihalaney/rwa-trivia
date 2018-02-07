@@ -32,11 +32,11 @@
       </div>
     </div>
     <div>
-      <button mat-button matStepperNext>Next</button>
+      <button mat-button matStepperNext type="button">Next</button>
     </div>
   </mat-step>
   <mat-step [stepControl]="uploadFormGroup">
-    <form [formGroup]="uploadFormGroup" (submit)="onUploadSubmit()">
+    <form [formGroup]="uploadFormGroup" >
       <ng-template matStepLabel>Upload Questions</ng-template>
       <div class="pcategories">
         <h2><span>Select Your Prefered Category for the Question:</span></h2>
@@ -66,26 +66,29 @@
       </mat-form-field>
       <div>
         <input type="file" placeholder="Upload csv file" (change)="onFileChange($event)" #fileInput>
+        <p *ngIf="parseError" class="error">
+            Only .csv file is supported
+          </p>
       </div>
       <div>
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button matStepperNext type="button" (click)="onUploadSubmit()">Next</button>
       </div>
     </form>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Review</ng-template>
-    <bulk-details></bulk-details>
+    <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
     <div>
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button matStepperNext type="button" (click)="onReviewSubmit()">Submit</button>
     </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Submit</ng-template>
-    You are now done.
+    You have submitted questions.
     <div>
-      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button [routerLink]="['/bulk']">Back</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>
