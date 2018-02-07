@@ -6,7 +6,7 @@ import {
   userPublishedQuestions, userUnpublishedQuestions,
   loginRedirectUrl,
   currentGame, newGameId, currentGameQuestion, activeGames,
-  bulkUploadFileInfos, userBulkUploadFileInfos, fileUnpublishedQuestions, filePublishedQuestions
+  bulkUploadFileInfos, userBulkUploadFileInfos, bulkUploadUnpublishedQuestions, bulkUploadPublishedQuestions
 } from './reducers';
 
 import { compose, ActionReducerMap } from '@ngrx/store';
@@ -30,8 +30,8 @@ export interface AppStore {
   activeGames: Game[];
   bulkUploadFileInfos: BulkUploadFileInfo[];
   userBulkUploadFileInfos: BulkUploadFileInfo[];
-  fileUnpublishedQuestions: Question[];
-  filePublishedQuestions: Question[];
+  bulkUploadUnpublishedQuestions: Question[];
+  bulkUploadPublishedQuestions: Question[];
 }
 
 export const reducer: ActionReducerMap<AppStore> = {
@@ -53,6 +53,6 @@ export const reducer: ActionReducerMap<AppStore> = {
   activeGames: activeGames,
   bulkUploadFileInfos: bulkUploadFileInfos,
   userBulkUploadFileInfos: userBulkUploadFileInfos,
-  fileUnpublishedQuestions: fileUnpublishedQuestions,
-  filePublishedQuestions: filePublishedQuestions
+  bulkUploadUnpublishedQuestions: bulkUploadUnpublishedQuestions,
+  bulkUploadPublishedQuestions: bulkUploadPublishedQuestions
 };

@@ -1,7 +1,6 @@
-import { Routes, RouterModule }  from '@angular/router';
-import { DashboardComponent, CategoriesComponent, TagsComponent, 
-         AdminQuestionsComponent, AdminComponent, BulkComponent } 
-  from '../components/index';
+import { Routes, RouterModule } from '@angular/router';
+import { DashboardComponent, CategoriesComponent, TagsComponent,
+         AdminQuestionsComponent, AdminComponent, BulkComponent } from '../components/index';
 import { AuthGuard } from '../../core/services';
 
 export const adminRoutes: Routes = [

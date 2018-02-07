@@ -1,4 +1,4 @@
-<div *ngIf="!fileQuestionsStatus">
+<div *ngIf="!showBulkUploadDetail">
   <div class="row">
     <div class="pageheading col-md-6 col-xs-12 hidden-xs">My Bulk Upload Summary</div>
     <div class="col-md-6 col-xs-12 align-right">
@@ -19,7 +19,7 @@
 
         <ng-container cdkColumnDef="fileName">
           <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
-          <mat-cell (click)="getFileQuestions(row.id)" class="col-chkbox cursor" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
+          <mat-cell (click)="getBulkUploadQuestions(row.id)" class="col-chkbox cursor" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
         </ng-container>
 
         <ng-container cdkColumnDef="category">
@@ -61,18 +61,18 @@
     </mat-card-content>
   </mat-card>
 </div>
-<div *ngIf="fileQuestionsStatus">
+<div *ngIf="showBulkUploadDetail">
   <mat-card>
     <mat-card-title (click)="backToSummary()" class="cursor">Back To Summary</mat-card-title>
     <mat-card-content>
       <mat-tab-group>
         <mat-tab label="Published">
-          <question-table *ngIf="totalCount != 0" [showSort]="false" [showPaginator]="true" [questions]="publishedquestion" [totalCount]="totalCount"
+          <question-table *ngIf="totalCount != 0" [showSort]="false" [showPaginator]="true" [questions]="publishedQuestions" [totalCount]="totalCount"
             [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
           </question-table>
         </mat-tab>
         <mat-tab label="Unpublished">
-          <question-list [questions]="unPublishedquestion" [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true"
+          <question-list [questions]="unPublishedQuestions" [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true"
             (approveClicked)="approveQuestion($event)" class="flex-container" fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center"
             fxLayoutAlign.xs="start">
           </question-list>

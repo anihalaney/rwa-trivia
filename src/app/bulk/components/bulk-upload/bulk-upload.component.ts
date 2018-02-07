@@ -22,7 +22,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
-  parseError: boolean;  
+  parseError: boolean;
   bulkUploadFileInfo: BulkUploadFileInfo;
   file: File;
 
