@@ -3,13 +3,14 @@ import { CategoriesComponent } from './category/categories.component';
 import { TagsComponent } from './tag/tags.component';
 import { AdminComponent } from './admin/admin.component';
 import { AdminQuestionsComponent } from './admin-questions/admin-questions.component';
-
+import { BulkComponent } from './bulk/bulk.component';
 export {
     DashboardComponent,
     CategoriesComponent,
     TagsComponent,
     AdminQuestionsComponent,
-    AdminComponent
+    AdminComponent,
+    BulkComponent
 };
 
 export default [
@@ -17,5 +18,6 @@ export default [
     CategoriesComponent,
     TagsComponent,
     AdminQuestionsComponent,
-    AdminComponent
+    AdminComponent,
+    BulkComponent
 ];

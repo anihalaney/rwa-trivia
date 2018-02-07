@@ -1,6 +1,6 @@
-import { Component, Input, Output, OnInit, OnChanges  , OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 
-import { Question, QuestionStatus, Category }     from '../../../model';
+import { Question, QuestionStatus, Category } from '../../../model';
 
 @Component({
   selector: 'question-list',
@@ -9,7 +9,7 @@ import { Question, QuestionStatus, Category }     from '../../../model';
 })
 export class QuestionsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() questions: Question[];
-  @Input() categoryDictionary: {[key: number]: Category};
+  @Input() categoryDictionary: { [key: number]: Category };
   @Input() showApproveButton: boolean;
   @Output() approveClicked = new EventEmitter<Question>();
 
@@ -28,7 +28,7 @@ export class QuestionsComponent implements OnInit, OnDestroy, OnChanges {
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];
   }
-  approveButtonClicked(question: Question ) {
+  approveButtonClicked(question: Question) {
     this.approveClicked.emit(question)
   }
 }
