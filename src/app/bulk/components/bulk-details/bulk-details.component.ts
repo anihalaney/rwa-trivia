@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -13,7 +13,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
   templateUrl: './bulk-details.component.html',
   styleUrls: ['./bulk-details.component.scss']
 })
-export class BulkDetailsComponent implements OnInit, OnChanges, OnDestroy {
+export class BulkDetailsComponent implements OnChanges {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   @Input() parsedQuestions: Array<Question>;
@@ -26,30 +26,10 @@ export class BulkDetailsComponent implements OnInit, OnChanges, OnDestroy {
     this.categoryDictObs = store.select(s => s.categoryDictionary);
   }
 
-  ngOnInit() {
-  }
-
-  ngOnDestroy() {
-  }
-
   ngOnChanges() {
     if (this.parsedQuestions) {
       this.totalCount = this.parsedQuestions.length;
     }
-
-  }
-
-
-  pageChanged(pageEvent: PageEvent) {
-
-  }
-  categoryChanged(event: { categoryId: number, added: boolean }) {
-
-  }
-  tagChanged(event: { tag: string, added: boolean }) {
-
-  }
-  sortOrderChanged(sortOrder: string) {
 
   }
 }

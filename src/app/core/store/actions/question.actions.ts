@@ -65,37 +65,37 @@ export class QuestionActions {
 
 
   // get File Unpublished Questions
-  static LOAD_FILE_UNPUBLISHED_QUESTIONS = 'LOAD_FILE_UNPUBLISHED_QUESTIONS';
-  loadFileUnpublishedQuestions(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
+  static LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS = 'LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS';
+  loadBulkUploadUnpublishedQuestions(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
     return {
-      type: QuestionActions.LOAD_FILE_UNPUBLISHED_QUESTIONS,
+      type: QuestionActions.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS,
       payload: bulkUploadFileInfo
     };
   }
 
   // get File Published Questions
-  static LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS = 'LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS';
-  loadFileUnpublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+  static LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS = 'LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS';
+  loadBulkUploadUnpublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
     return {
-      type: QuestionActions.LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS,
+      type: QuestionActions.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS,
       payload: questions
     };
   }
 
   // get File Published Questions
-  static LOAD_FILE_PUBLISHED_QUESTIONS = 'LOAD_FILE_PUBLISHED_QUESTIONS';
-  loadFilePublishedQuestions(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
+  static LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS = 'LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS';
+  loadBulkUploadPublishedQuestions(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
     return {
-      type: QuestionActions.LOAD_FILE_PUBLISHED_QUESTIONS,
+      type: QuestionActions.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS,
       payload: bulkUploadFileInfo
     };
   }
 
   // get File Published Questions
-  static LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS = 'LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS';
-  loadFilePublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
+  static LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS = 'LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS';
+  loadBulkUploadPublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
     return {
-      type: QuestionActions.LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS,
+      type: QuestionActions.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS,
       payload: questions
     };
   }
