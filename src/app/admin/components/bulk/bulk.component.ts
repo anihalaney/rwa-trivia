@@ -8,7 +8,7 @@ import { AppStore } from '../../../core/store/app-store';
 import { BulkUploadFileInfo, Question, Category, User } from '../../../model';
 import { Utils } from '../../../core/services';
 import { BulkUploadActions, QuestionActions } from '../../../core/store/actions';
-import { filePublishedQuestions, fileUnpublishedQuestions, bulkUploadFileInfos } from 'app/core/store/reducers';
+import { bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions, bulkUploadFileInfos } from 'app/core/store/reducers';
 import { concat } from 'rxjs/operator/concat';
 import { Subscription } from 'rxjs/Subscription';
 import { PageEvent } from '@angular/material';
@@ -29,12 +29,12 @@ export class BulkComponent implements OnInit, OnDestroy {
   categoryDict: { [key: number]: Category };
 
   fileQuestionsStatus = false;
-  unPublishedquestion: Question[];
-  publishedquestion: Question[];
+  unPublishedQuestions: Question[];
+  publishedQuestions: Question[];
 
   bulkUploadObs: Observable<BulkUploadFileInfo[]>;
-  UnPublishedQuestionObs: Observable<Question[]>;
-  PublishedQuestionObs: Observable<Question[]>;
+  unPublishedQuestionObs: Observable<Question[]>;
+  publishedQuestionObs: Observable<Question[]>;
   publishedSub: any;
   unPublishedSub: any;
   bulkUploadSub: any;
@@ -45,8 +45,8 @@ export class BulkComponent implements OnInit, OnDestroy {
     private router: Router) {
     this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
     this.uploadsDS = new FileUploadsDataSource(this.uploadsSubject);
-    this.UnPublishedQuestionObs = store.select(s => s.fileUnpublishedQuestions);
-    this.PublishedQuestionObs = store.select(s => s.filePublishedQuestions);
+    this.unPublishedQuestionObs = store.select(s => s.bulkUploadUnpublishedQuestions);
+    this.publishedQuestionObs = store.select(s => s.bulkUploadPublishedQuestions);
 
     this.bulkUploadObs = store.select(s => s.bulkUploadFileInfos);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
@@ -63,16 +63,16 @@ export class BulkComponent implements OnInit, OnDestroy {
     bulkUploadFileInfoObject.id = id;
 
     // for unpublished questions
-    this.store.dispatch(this.questionActions.loadFileUnpublishedQuestions(bulkUploadFileInfoObject));
-    this.unPublishedSub = this.UnPublishedQuestionObs.subscribe(question => this.unPublishedquestion = question);
+    this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
+    this.unPublishedSub = this.unPublishedQuestionObs.subscribe(question => this.unPublishedQuestions = question);
 
     // for published questions
-    this.store.dispatch(this.questionActions.loadFilePublishedQuestions(bulkUploadFileInfoObject));
-    this.publishedSub = this.PublishedQuestionObs.subscribe(question => this.publishedquestion = question);
+    this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(bulkUploadFileInfoObject));
+    this.publishedSub = this.publishedQuestionObs.subscribe(question => this.publishedQuestions = question);
 
     setTimeout(() => {
       this.fileQuestionsStatus = true;
-      this.totalCount = this.publishedquestion.length;
+      this.totalCount = this.publishedQuestions.length;
     }, 500);
 
   }

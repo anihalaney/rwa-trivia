@@ -43,8 +43,8 @@ export class QuestionService {
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
   }
 
-  // get Questions by fileId
-  getFileQuestions(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
+  // get Questions by bulk upload id
+  getQuestionsForBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
 
     const id = '';
     const d = (bulkUploadFileInfo.id) ? bulkUploadFileInfo.id : id;

@@ -42,9 +42,9 @@ export function userUnpublishedQuestions(state: any = [], action: ActionWithPayl
 
 
 // file Unpublished Questions
-export function fileUnpublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
+export function bulkUploadUnpublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
   switch (action.type) {
-    case QuestionActions.LOAD_FILE_UNPUBLISHED_QUESTIONS_SUCCESS:
+    case QuestionActions.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS:
       return action.payload;
     default:
       return state;
@@ -52,9 +52,9 @@ export function fileUnpublishedQuestions(state: any = [], action: ActionWithPayl
 };
 
 // file Published Questions
-export function filePublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
+export function bulkUploadPublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
   switch (action.type) {
-    case QuestionActions.LOAD_FILE_PUBLISHED_QUESTIONS_SUCCESS:
+    case QuestionActions.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS:
       return action.payload;
     default:
       return state;
