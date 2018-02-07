@@ -26,6 +26,7 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
   totalCount: number;
   categoryDict: { [key: number]: Category };
+  selectedFile: BulkUploadFileInfo;
 
   showBulkUploadDetail = false;
   parsedQuestions: Array<Question>;
@@ -53,16 +54,19 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.store.dispatch(this.bulkUploadActions.loadBulkUpload());
-    this.subs.push(this.bulkUploadObs.subscribe( bulkUploadFileInfo => this.uploadsSubject.next(bulkUploadFileInfo)));
+    this.subs.push(this.bulkUploadObs.subscribe(bulkUploadFileInfo => this.uploadsSubject.next(bulkUploadFileInfo)));
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.uploadsSubject.next(this.bulkUploadFileInfo);
   }
 
   // get Questions by bulk upload Id
-  getBulkUploadQuestions(id) {
-   // This is temp coe will be changed
+  getBulkUploadQuestions(id, row) {
+    // This is temp coe will be changed
+
+    this.selectedFile = row;
+
     const bulkUploadFileInfoObject = new BulkUploadFileInfo();
     bulkUploadFileInfoObject.id = id;
-
     // for unpublished questions
     this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
     this.unPublishedSub = this.unPublishedQuestionObs.subscribe(questions => this.unPublishedQuestions = questions);
@@ -70,7 +74,6 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
     // for published questions
     this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(bulkUploadFileInfoObject));
     this.publishedSub = this.publishedQuestionObs.subscribe(questions => this.publishedQuestions = questions);
-
     setTimeout(() => {
       this.showBulkUploadDetail = true;
       this.totalCount = this.publishedQuestions.length;
