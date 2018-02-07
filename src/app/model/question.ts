@@ -20,9 +20,7 @@ export class Question {
   bulkUploadId?: string;
 
   static getViewModelFromDb(db: any): Question {
-    // console.log(db);
     const question: Question = new Question();
-
     question.id = db.id;
     question.answers = db.answers;
     question.categoryIds = db.categoryIds;
