@@ -27,7 +27,6 @@ export class BulkComponent implements OnInit, OnDestroy {
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
   totalCount: number;
   categoryDict: { [key: number]: Category };
-
   fileQuestionsStatus = false;
   unPublishedQuestions: Question[];
   publishedQuestions: Question[];
@@ -61,7 +60,6 @@ export class BulkComponent implements OnInit, OnDestroy {
   getFileQuestions(id) {
     const bulkUploadFileInfoObject = new BulkUploadFileInfo();
     bulkUploadFileInfoObject.id = id;
-
     // for unpublished questions
     this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
     this.unPublishedSub = this.unPublishedQuestionObs.subscribe(question => this.unPublishedQuestions = question);
@@ -69,7 +67,6 @@ export class BulkComponent implements OnInit, OnDestroy {
     // for published questions
     this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(bulkUploadFileInfoObject));
     this.publishedSub = this.publishedQuestionObs.subscribe(question => this.publishedQuestions = question);
-
     setTimeout(() => {
       this.fileQuestionsStatus = true;
       this.totalCount = this.publishedQuestions.length;
