@@ -6,8 +6,9 @@ import { Store } from '@ngrx/store';
 import { AppStore } from '../../../../core/store/app-store';
 import { BulkUploadFileInfo, Question, Category, User } from '../../../../model';
 import { BulkUploadActions, QuestionActions } from '../../../../core/store/actions';
+import { bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions } from 'app/core/store/reducers';
 import { Subscription } from 'rxjs/Subscription';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-bulk-summary-question-list',
@@ -16,38 +17,63 @@ import { Router } from '@angular/router';
 })
 export class BulkSummaryQuestionListComponent implements OnInit, OnChanges {
 
-  @Input() bulkUploadFileInfo: BulkUploadFileInfo;
-  @Input() unPublishedQuestions: Question[];
-  @Input() publishedQuestions: Question[];
+  unPublishedQuestions: Question[];
+  publishedQuestions: Question[];
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
   bulkUploadFileInfoArray: BulkUploadFileInfo[] = [];
-  totalCount: number;
-  uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
-  uploadsDS: FileUploadsDataSource;
+  publishedCount: number;
+  unPublishedCount: number;
+
+  fileId: String;
+
+  unPublishedQuestionObs: Observable<Question[]>;
+  publishedQuestionObs: Observable<Question[]>;
   subs: Subscription[] = [];
+  unPublishedSub: Subscription;
+  publishedSub: Subscription;
 
   constructor(private store: Store<AppStore>,
-     public router: Router,
-     private questionActions: QuestionActions) {
-    this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
-    this.uploadsDS = new FileUploadsDataSource(this.uploadsSubject);
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
+    public router: Router,
+    private route: ActivatedRoute,
+    private questionActions: QuestionActions) {
+
+    this.route.params.subscribe((params) => {
+      this.fileId = params['id'];
+      const bulkUploadFileInfoObject = new BulkUploadFileInfo();
+      bulkUploadFileInfoObject.id = this.fileId;
+
+      this.unPublishedQuestionObs = store.select(s => s.bulkUploadUnpublishedQuestions);
+      this.publishedQuestionObs = store.select(s => s.bulkUploadPublishedQuestions);
+
+      this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
+      this.unPublishedSub = this.unPublishedQuestionObs.subscribe((questions) => {
+        this.unPublishedCount = questions.length;
+        this.unPublishedQuestions = questions;
+        // console.log('unPublishedQuestions', this.unPublishedQuestions);
+      });
+
+      this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(bulkUploadFileInfoObject));
+      this.publishedSub = this.publishedQuestionObs.subscribe((questions) => {
+        this.publishedCount = questions.length;
+        this.publishedQuestions = questions;
+        // console.log('published', this.publishedQuestions);
+      });
+
+    });
+
+
+
+
   }
 
   ngOnInit() {
+    this.categoryDictObs = this.store.select(s => s.categoryDictionary);
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
   }
 
   ngOnChanges() {
-    this.totalCount = this.publishedQuestions.length;
-
-    if (this.bulkUploadFileInfo !== undefined) {
-      this.bulkUploadFileInfoArray = [];
-      this.bulkUploadFileInfoArray.push(this.bulkUploadFileInfo);
-    }
-    this.uploadsSubject.next(this.bulkUploadFileInfoArray);
   }
 
   // approveQuestions

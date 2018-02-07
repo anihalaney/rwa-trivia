@@ -63,21 +63,23 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   getBulkUploadQuestions(id, row) {
     // This is temp coe will be changed
 
-    this.selectedFile = row;
+    // this.selectedFile = row;
 
-    const bulkUploadFileInfoObject = new BulkUploadFileInfo();
-    bulkUploadFileInfoObject.id = id;
-    // for unpublished questions
-    this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
-    this.unPublishedSub = this.unPublishedQuestionObs.subscribe(questions => this.unPublishedQuestions = questions);
+    // const bulkUploadFileInfoObject = new BulkUploadFileInfo();
+    // bulkUploadFileInfoObject.id = id;
+    // // for unpublished questions
+    // this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
+    // this.unPublishedSub = this.unPublishedQuestionObs.subscribe(questions => this.unPublishedQuestions = questions);
 
-    // for published questions
-    this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(bulkUploadFileInfoObject));
-    this.publishedSub = this.publishedQuestionObs.subscribe(questions => this.publishedQuestions = questions);
-    setTimeout(() => {
-      this.showBulkUploadDetail = true;
-      this.totalCount = this.publishedQuestions.length;
-    }, 500);
+    // // for published questions
+    // this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(bulkUploadFileInfoObject));
+    // this.publishedSub = this.publishedQuestionObs.subscribe(questions => this.publishedQuestions = questions);
+    // setTimeout(() => {
+    //   this.showBulkUploadDetail = true;
+    //   this.totalCount = this.publishedQuestions.length;
+    // }, 500);
+
+    this.router.navigate(['/bulk/details' , id]);
 
   }
 
