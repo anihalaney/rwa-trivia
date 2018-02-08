@@ -5,7 +5,7 @@ import {
   questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus,
   userPublishedQuestions, userUnpublishedQuestions,
   loginRedirectUrl,
-  currentGame, newGameId, currentGameQuestion, activeGames,
+  currentGame, newGameId, currentGameQuestion, activeGames, bulkUploadFileInfosById,
   bulkUploadFileInfos, userBulkUploadFileInfos, bulkUploadUnpublishedQuestions, bulkUploadPublishedQuestions
 } from './reducers';
 
@@ -32,6 +32,7 @@ export interface AppStore {
   userBulkUploadFileInfos: BulkUploadFileInfo[];
   bulkUploadUnpublishedQuestions: Question[];
   bulkUploadPublishedQuestions: Question[];
+  bulkUploadFileInfosById: BulkUploadFileInfo;
 }
 
 export const reducer: ActionReducerMap<AppStore> = {
@@ -54,5 +55,6 @@ export const reducer: ActionReducerMap<AppStore> = {
   bulkUploadFileInfos: bulkUploadFileInfos,
   userBulkUploadFileInfos: userBulkUploadFileInfos,
   bulkUploadUnpublishedQuestions: bulkUploadUnpublishedQuestions,
-  bulkUploadPublishedQuestions: bulkUploadPublishedQuestions
+  bulkUploadPublishedQuestions: bulkUploadPublishedQuestions,
+  bulkUploadFileInfosById: bulkUploadFileInfosById
 };

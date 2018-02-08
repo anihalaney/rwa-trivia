@@ -45,11 +45,8 @@ export class QuestionService {
 
   // get Questions by bulk upload id
   getQuestionsForBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
-
-    const id = '';
-    const d = (bulkUploadFileInfo.id) ? bulkUploadFileInfo.id : id;
     const collection = (published) ? 'questions' : 'unpublished_questions';
-    return this.db.collection(`/${collection}`, ref => ref.where('bulkUploadId', '==', d))
+    return this.db.collection(`/${collection}`, ref => ref.where('bulkUploadId', '==', bulkUploadFileInfo.id))
       .valueChanges()
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
   }
