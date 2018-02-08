@@ -1,20 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule }     from '@angular/forms';
-import { HttpClientModule }     from '@angular/common/http';
-import { CdkTableModule }     from '@angular/cdk/table';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { CdkTableModule } from '@angular/cdk/table';
 
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { RouterModule } from '@angular/router';
 
-import { QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent } from './components';
+import {
+  QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
+  BulkSummaryChildComponent, BulkSummaryQuestionListComponent
+} from './components';
 
 @NgModule({
   declarations: [
     QuestionComponent,
     QuestionsComponent,
     QuestionsSearchComponent,
-    QuestionsTableComponent
+    QuestionsTableComponent,
+    BulkSummaryChildComponent,
+    BulkSummaryQuestionListComponent
   ],
   imports: [
     CommonModule,
@@ -23,7 +29,7 @@ import { QuestionComponent, QuestionsComponent, QuestionsSearchComponent, Questi
     HttpClientModule,
 
     // Forms
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
 
     //cdk
     CdkTableModule,
@@ -32,14 +38,16 @@ import { QuestionComponent, QuestionsComponent, QuestionsSearchComponent, Questi
     SharedMaterialModule,
 
     //Flex
-    FlexLayoutModule
+    FlexLayoutModule,
+
+    RouterModule
 
   ],
-  providers: [ 
-  ],                                                                      
-  exports:  [ QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-              CommonModule, HttpClientModule, ReactiveFormsModule,
-              FlexLayoutModule, 
-              SharedMaterialModule, CdkTableModule ]
+  providers: [
+  ],
+  exports: [QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
+    BulkSummaryChildComponent, BulkSummaryQuestionListComponent, CommonModule, HttpClientModule, ReactiveFormsModule,
+    FlexLayoutModule,
+    SharedMaterialModule, CdkTableModule]
 })
 export class SharedModule { }
