@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import {PageEvent} from '@angular/material';
-import { AppStore } from '../../../core/store/app-store';
+import { AppStore, categoryDictionary } from '../../../core/store/app-store';
 import { QuestionActions } from '../../../core/store/actions';
 import { User, Question, Category, SearchResults, SearchCriteria }     from '../../../model';
 
@@ -22,7 +22,7 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
               private questionActions: QuestionActions) {
     this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
     this.unpublishedQuestionsObs = store.select(s => s.unpublishedQuestions);
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
+    this.categoryDictObs = store.select(categoryDictionary);
     this.criteria = new SearchCriteria();
   }
 

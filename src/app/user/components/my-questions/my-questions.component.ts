@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@a
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppStore, categoryDictionary } from '../../../core/store/app-store';
 import { QuestionActions } from '../../../core/store/actions';
 import { User, Question, QuestionStatus, Category }     from '../../../model';
 
@@ -24,7 +24,7 @@ export class MyQuestionsComponent implements OnInit, OnDestroy {
               private questionActions: QuestionActions) {
     this.publishedQuestions$ = store.select(s => s.userPublishedQuestions);
     this.unpublishedQuestions$ = store.select(s => s.userUnpublishedQuestions);
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
+    this.categoryDictObs = store.select(categoryDictionary);
   }
 
   ngOnInit() {

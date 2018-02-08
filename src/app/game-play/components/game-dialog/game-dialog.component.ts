@@ -5,7 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import '../../../rxjs-extensions';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppStore, categoryDictionary } from '../../../core/store/app-store';
 
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
@@ -58,7 +58,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.gameActions.loadGame({"gameId": this._gameId, "user": this.user}));
 
-    this.store.select(s => s.categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
+    this.store.select(categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;

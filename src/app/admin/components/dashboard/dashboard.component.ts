@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppStore, categoryDictionary } from '../../../core/store/app-store';
 import { QuestionActions } from '../../../core/store/actions';
 import { Category, Question, SearchResults } from '../../../model';
 
@@ -20,7 +20,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppStore>,
               private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
+    this.categoryDictObs = store.select(categoryDictionary);
     this.tagsObs = store.select(s => s.tags);
     this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
   }

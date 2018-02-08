@@ -18,8 +18,8 @@ import { Utils, AuthenticationService, AuthInterceptor,
 
 import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './services';
 
- import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
-import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects } from './store/effects';
+import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store';
+import { effects } from './store/effects';
 import { reducer } from './store/app-store';
 
 import { LoginComponent } from './components';
@@ -50,13 +50,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     }),
 
     //ngrx effects
-    EffectsModule.forFeature([
-      UserEffects,
-      CategoryEffects,
-      TagEffects,
-      QuestionEffects,
-      GameEffects
-    ]),
+    EffectsModule.forFeature(effects),
 
     //rwa module
     SharedModule

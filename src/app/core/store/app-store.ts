@@ -1,18 +1,18 @@
 import { User, Category, Question, Game, SearchResults } from '../../model';
 
-import { user, authInitialized, categories, categoryDictionary, tags, 
+import { user, authInitialized, categories, getCategoryDictionary, tags, //categoryDictionary,
          questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus, 
          userPublishedQuestions, userUnpublishedQuestions,
          loginRedirectUrl, 
          currentGame, newGameId, currentGameQuestion, activeGames } from './reducers';
 
-import { compose, ActionReducerMap } from '@ngrx/store';
+import { ActionReducerMap, createSelector } from '@ngrx/store';
 
 export interface AppStore {
   user: User;
   authInitialized: boolean;
   categories: Category[];
-  categoryDictionary: {[key: number]: Category};
+  //categoryDictionary: {[key: number]: Category};
   tags: string[];
   questionsSearchResults: SearchResults;
   unpublishedQuestions: Question[];
@@ -31,7 +31,7 @@ export const reducer: ActionReducerMap<AppStore> = {
   user: user,
   authInitialized: authInitialized,
   categories: categories,
-  categoryDictionary: categoryDictionary,
+  //categoryDictionary: categoryDictionary,
   tags: tags,
   questionsSearchResults: questionsSearchResults,
   unpublishedQuestions: unpublishedQuestions,
@@ -45,3 +45,9 @@ export const reducer: ActionReducerMap<AppStore> = {
   currentGameQuestion: currentGameQuestion,
   activeGames: activeGames
 };
+
+export const getState = (state: AppStore) => state;
+
+//Categories selector
+export const getCategories = createSelector(getState, (state: AppStore) => state.categories);
+export const categoryDictionary = createSelector(getCategories, getCategoryDictionary);
