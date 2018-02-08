@@ -1,7 +1,7 @@
 <!-- My setting -->
 <div class="mainpage submitpage mysetting">
     <div class="row hidden-xs">
-      <div class="pageheading col-sm-6 col-xs-12">My Settings</div>          
+      <div class="pageheading col-sm-6 col-xs-12">My Settings</div>
     </div>
     <section id="curentactive" class="card">
       <div class="h1block">
@@ -14,10 +14,10 @@
           <div class="col-sm-6 col-xs-12"><h2><span>{{user.displayName}}</span></h2></div>
           <div class=" col-sm-6 col-xs-12 textrigth ">
             <a href="#" class="viewbublic">view my public profile</a>
-          </div>              
+          </div>
         </div>
         <!-- Prefered Categories end -->
-      </div> 
+      </div>
 
       <!-- Profile pik -->
       <div class="enterquestion secondbg">
@@ -33,10 +33,10 @@
             <div class="col-sm-3 col-xs-12">
               <label for="file-upload" class="custom-file-upload">
                   <img src="/assets/images/avatarimg.jpg"  alt="Avatar" />
-                </label> 
+                </label>
             </div>
             <div class="col-sm-9 col-xs-12 avatarinput">
-              <div>  
+              <div>
                 <input id="file-upload" name='upload_cont_img' type="file" style="display:none;">
                 <label id="file-name">add tags</label>
               </div>
@@ -45,28 +45,28 @@
 
           </div>
           <div class="clearfix namefield">
-                                
-              <div class="formfield"> 
-              <label>Name</label>                                  
-              <input placeholder="Enter Name" type="text" name="Enter Name" value="" required="">
+
+              <div class="formfield">
+              <label>Name</label>
+              <input placeholder="Enter Name" type="text" name="Enter Name" formControlName="name" required="">
               <p>Enter your real name, so people you know and recogize you</p>
             </div>
-            
 
-                                
-              <div class="formfield"> 
-              <label>Display Name</label>                                  
-              <input placeholder="Enter Display Name" type="text" name="Enter Display Name" value="" required="">
+
+
+              <div class="formfield">
+              <label>Display Name</label>
+              <input placeholder="Enter Display Name" type="text" name="Enter Display Name" formControlName="displayName" required="">
             </div>
-            
 
-                                
-              <div class="formfield"> 
-              <label>Location</label>                                  
-              <input placeholder="Enter Location" type="text" name="Enter Location" value="" required="">
+
+
+              <div class="formfield">
+              <label>Location</label>
+              <input placeholder="Enter Location" type="text" name="Enter Location" formControlName="location" required="">
               <p>Where in the world you are</p>
             </div>
-            
+
           </div>
           <!-- Upload avatar end -->
 
@@ -75,46 +75,46 @@
             <div class="col-sm-3">
               <h3>Categories</h3>
             </div>
-            <div class="col-sm-9">                            
+            <div class="col-sm-9">
               <div class="formfield">
                 <label>
                   <input type="checkbox" name="" checked="">Special
-                </label>                      
+                </label>
               </div>
               <div class="formfield">
                 <label>
                   <input type="checkbox" name="" checked="">General
-                </label>                      
+                </label>
               </div>
               <div class="formfield">
                 <label>
                   <input type="checkbox" name="" checked="">Programming
-                </label>                      
+                </label>
               </div>
               <div class="formfield">
                 <label>
                   <input type="checkbox" name="">Architecture
-                </label>                      
+                </label>
               </div>
               <div class="formfield">
                 <label>
                   <input type="checkbox" name="">Networking
-                </label>                      
+                </label>
               </div>
               <div class="formfield">
                 <label>
                   <input type="checkbox" name="">Database
-                </label>                      
+                </label>
               </div>
               <div class="formfield">
                 <label>
                   <input type="checkbox" name="">Dev Ops
-                </label>                      
+                </label>
               </div>
               <div class="formfield">
                 <label>
                   <input type="checkbox" name="">UX/UI
-                </label>                      
+                </label>
               </div>
 
               <div class="tags">
@@ -133,19 +133,19 @@
             <div class="col-sm-3">
               <h3>Social Accounts </h3>
             </div>
-            <div class="col-md-6 col-sm-9">                            
-              <div class="formfield">                                   
-                <input placeholder="Facebook" type="text" name="Facebook" value="" required="">       
+            <div class="col-md-6 col-sm-9">
+              <div class="formfield">
+                <input placeholder="Facebook" type="text" name="Facebook" formControlName="facebook" required="">
               </div>
 
-              <div class="formfield">                                   
-                <input placeholder="Twitter" type="text" name="Twitter" value="" required="">       
+              <div class="formfield">
+                <input placeholder="Twitter" type="text" name="Twitter" formControlName="twitter" required="">
               </div>
 
-              <div class="formfield">                                   
-                <input placeholder="Linkedin" type="text" name="Linkedin" value="" required="">       
-              </div>                
-              
+              <div class="formfield">
+                <input placeholder="Linkedin" type="text" name="Linkedin" formControlName="linkedin" required="">
+              </div>
+
             </div>
 
             <div class="col-xs-12">
@@ -155,7 +155,7 @@
               <div class="col-sm-3">
                 <h3>Security Setting </h3>
               </div>
-              <div class="col-md-6 col-sm-9">                            
+              <div class="col-md-6 col-sm-9">
                 <div class="formfield">
                   <label>Profile:</label>
                   <select>
@@ -198,8 +198,8 @@
     <!-- Profile pik end -->
 
     <div class="savebox">
-      <a href="#" class="btn startg">Save</a>
-      <a href="#">Cancel</a>
+      <a class="btn startg" (click)="save()">Save</a>
+      <a>Cancel</a>
     </div>
 
   </section>

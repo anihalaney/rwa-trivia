@@ -13,7 +13,7 @@ import { CONFIG } from '../../environments/environment';
 
 import { Utils, AuthenticationService, AuthInterceptor,
          CategoryService, TagService, QuestionService,
-         GameService } from './services';
+         GameService, UserService } from './services';
 
 import { AuthGuard, CategoriesResolver, TagsResolver } from './services';
 
@@ -24,14 +24,13 @@ import { reducer } from './store/app-store';
 import { LoginComponent } from './components';
 
 import { SharedModule } from  '../shared/shared.module';
- 
+
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 @NgModule({
   declarations: [
     LoginComponent
   ],
-
   entryComponents: [
     LoginComponent
   ],
@@ -40,7 +39,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
-    
+
     //store
     StoreModule.forRoot(reducer),
     StoreDevtoolsModule.instrument({
@@ -53,23 +52,23 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
       CategoryEffects,
       TagEffects,
       QuestionEffects,
-      GameEffects
+      GameEffects,
     ]),
 
     //rwa module
     SharedModule
   ],
-  providers: [ 
+  providers: [
     //Services
-    Utils, AuthenticationService, 
+    Utils, AuthenticationService,
     CategoryService, TagService, QuestionService,
-    GameService,
-    
+    GameService,UserService,
+
     //route guards
     AuthGuard, CategoriesResolver, TagsResolver,
 
     //Actions
-    UserActions, CategoryActions, TagActions, QuestionActions, 
+    UserActions, CategoryActions, TagActions, QuestionActions,
     UIStateActions, GameActions,
 
     {
