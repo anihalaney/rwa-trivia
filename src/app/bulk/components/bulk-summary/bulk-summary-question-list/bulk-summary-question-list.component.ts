@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppStore } from '../../../../core/store/app-store';
 import { BulkUploadFileInfo, Question, Category, User } from '../../../../model';
 import { BulkUploadActions, QuestionActions } from '../../../../core/store/actions';
-import { bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions } from 'app/core/store/reducers';
+import { bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions, bulkUploadFileInfosById } from 'app/core/store/reducers';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -22,38 +22,59 @@ export class BulkSummaryQuestionListComponent implements OnInit, OnChanges {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
-  bulkUploadFileInfoArray: BulkUploadFileInfo[] = [];
   publishedCount: number;
   unPublishedCount: number;
 
   fileId: String;
+  user: User;
 
   unPublishedQuestionObs: Observable<Question[]>;
   publishedQuestionObs: Observable<Question[]>;
+
   subs: Subscription[] = [];
   unPublishedSub: Subscription;
   publishedSub: Subscription;
+  bulkSubs: Subscription;
+
+  userBulkUploadFileInfo: BulkUploadFileInfo;
+  uploadsDS: FileUploadsDataSource;
+  bulkUploadObs: Observable<BulkUploadFileInfo>;
+  uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
+  uploadsSubjectArray: Array<BulkUploadFileInfo>;
 
   constructor(private store: Store<AppStore>,
     public router: Router,
     private route: ActivatedRoute,
-    private questionActions: QuestionActions) {
+    private questionActions: QuestionActions,
+    private bulkUploadAction: BulkUploadActions) {
+
+    this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
+    this.uploadsDS = new FileUploadsDataSource(this.uploadsSubject);
 
     this.route.params.subscribe((params) => {
+
       this.fileId = params['id'];
       const bulkUploadFileInfoObject = new BulkUploadFileInfo();
       bulkUploadFileInfoObject.id = this.fileId;
 
       this.unPublishedQuestionObs = store.select(s => s.bulkUploadUnpublishedQuestions);
       this.publishedQuestionObs = store.select(s => s.bulkUploadPublishedQuestions);
+      this.bulkUploadObs = store.select(s => s.bulkUploadFileInfosById);
 
-      this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
-      this.unPublishedSub = this.unPublishedQuestionObs.subscribe((questions) => {
-        this.unPublishedCount = questions.length;
-        this.unPublishedQuestions = questions;
-        // console.log('unPublishedQuestions', this.unPublishedQuestions);
+      // get the bulk Upload Recored by Id
+      this.store.dispatch(this.bulkUploadAction.loadBulkUploadById(bulkUploadFileInfoObject));
+      this.bulkSubs = this.bulkUploadObs.subscribe((userBulkUploadFileInfo) => {
+
+        this.uploadsSubjectArray = [];
+        this.userBulkUploadFileInfo = userBulkUploadFileInfo;
+
+        if (userBulkUploadFileInfo !== undefined) {
+          this.uploadsSubjectArray.push(userBulkUploadFileInfo[0]);
+          this.uploadsSubject.next(this.uploadsSubjectArray);
+        }
       });
 
+      // get published question by BulkUpload Id
       this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(bulkUploadFileInfoObject));
       this.publishedSub = this.publishedQuestionObs.subscribe((questions) => {
         this.publishedCount = questions.length;
@@ -61,10 +82,15 @@ export class BulkSummaryQuestionListComponent implements OnInit, OnChanges {
         // console.log('published', this.publishedQuestions);
       });
 
+      // get unpublished question by BulkUpload Id
+      this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
+      this.unPublishedSub = this.unPublishedQuestionObs.subscribe((questions) => {
+        this.unPublishedCount = questions.length;
+        this.unPublishedQuestions = questions;
+        // console.log('unPublishedQuestions', this.unPublishedQuestions);
+      });
+
     });
-
-
-
 
   }
 
@@ -77,12 +103,12 @@ export class BulkSummaryQuestionListComponent implements OnInit, OnChanges {
   }
 
   // approveQuestions
-  approveQuestion(question: Question) {
-    let user: User;
-    this.store.take(1).subscribe(s => user = s.user);
-    question.approved_uid = user.userId;
-    this.store.dispatch(this.questionActions.approveQuestion(question));
-  }
+  // approveQuestion(question: Question) {
+  //   let user: User;
+  //   this.store.take(1).subscribe(s => user = s.user);
+  //   question.approved_uid = user.userId;
+  //   this.store.dispatch(this.questionActions.approveQuestion(question));
+  // }
 
   backToSummary() {
     this.router.navigate(['./bulk']);
