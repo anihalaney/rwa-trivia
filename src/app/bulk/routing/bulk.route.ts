@@ -1,5 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
-import { BulkSummaryComponent, BulkDetailsComponent, BulkUploadComponent, BulkSummaryQuestionListComponent } from '../components/index';
+import { BulkDetailsComponent, BulkUploadComponent,BulkSummaryComponent } from '../components/index';
+import { BulkSummaryQuestionListComponent } from '../../shared/components/index';
 import { AuthGuard } from '../../core/services';
 
 export const bulkRoutes: Routes = [
