@@ -39,6 +39,8 @@ export class BulkComponent implements OnInit, OnDestroy {
   bulkUploadSub: any;
   catSub: Subscription;
 
+  private bulkSummaryDetailPath = 'admin/';
+
   constructor(private store: Store<AppStore>,
     private questionActions: QuestionActions,
     private router: Router) {

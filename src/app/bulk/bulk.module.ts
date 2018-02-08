@@ -3,13 +3,14 @@ import { NgModule } from '@angular/core';
 import { SharedModule } from '../shared/shared.module';
 import { BulkRoutingModule } from './routing/bulk-routing.module';
 
-import { BulkSummaryComponent, BulkDetailsComponent, BulkUploadComponent, BulkSummaryQuestionListComponent } from './components';
+import { BulkDetailsComponent, BulkUploadComponent, BulkSummaryComponent } from './components';
+
 
 @NgModule({
   declarations: [
-    BulkSummaryComponent,
     BulkDetailsComponent,
-    BulkUploadComponent, BulkSummaryQuestionListComponent
+    BulkUploadComponent,
+    BulkSummaryComponent
   ],
   imports: [
     SharedModule,

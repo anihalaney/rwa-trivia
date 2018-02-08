@@ -9,6 +9,7 @@ import { BulkUploadActions, QuestionActions } from '../../../../core/store/actio
 import { bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions, bulkUploadFileInfosById } from 'app/core/store/reducers';
 import { Subscription } from 'rxjs/Subscription';
 import { Router, ActivatedRoute } from '@angular/router';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'app-bulk-summary-question-list',
@@ -46,7 +47,8 @@ export class BulkSummaryQuestionListComponent implements OnInit, OnChanges {
     public router: Router,
     private route: ActivatedRoute,
     private questionActions: QuestionActions,
-    private bulkUploadAction: BulkUploadActions) {
+    private bulkUploadAction: BulkUploadActions,
+    private _location: Location) {
 
     this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
     this.uploadsDS = new FileUploadsDataSource(this.uploadsSubject);
@@ -111,7 +113,7 @@ export class BulkSummaryQuestionListComponent implements OnInit, OnChanges {
   // }
 
   backToSummary() {
-    this.router.navigate(['./bulk']);
+    this._location.back();
   }
 
 }

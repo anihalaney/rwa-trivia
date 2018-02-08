@@ -1,0 +1,56 @@
+  <mat-card>
+    <mat-card-content>
+      <mat-table #table [dataSource]="uploadsDS">
+
+        <!--- Note that these columns can be defined in any order.
+              The actual rendered columns are set as a property on the row definition" -->
+
+        <ng-container cdkColumnDef="uploadDate">
+          <mat-header-cell *cdkHeaderCellDef>Date Uploaded</mat-header-cell>
+          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="fileName">
+          <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
+          <mat-cell (click)="getBulkUploadQuestions(row.id)" class="col-chkbox cursor" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="category">
+          <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
+          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="primaryTag">
+          <mat-header-cell *cdkHeaderCellDef>Primary Tag</mat-header-cell>
+          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="countQuestionsUploaded">
+          <mat-header-cell *cdkHeaderCellDef>Uploaded #</mat-header-cell>
+          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.uploaded}}</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="countQuestionsApproved">
+          <mat-header-cell *cdkHeaderCellDef>Approved #</mat-header-cell>
+          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.approved}}</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="countQuestionsRejected">
+          <mat-header-cell *cdkHeaderCellDef>Rejected #</mat-header-cell>
+          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.rejected}}</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="status">
+          <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+          <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status']">
+        </mat-header-row>
+        <mat-row class="row-question" *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];">
+        </mat-row>
+      </mat-table>
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
