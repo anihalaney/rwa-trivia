@@ -5,7 +5,7 @@
     <mat-table #table [dataSource]="uploadsDS">
       <ng-container cdkColumnDef="fileName">
         <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
-        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
+        <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.fileName}}s</mat-cell>
       </ng-container>
 
       <ng-container cdkColumnDef="category">
@@ -28,6 +28,7 @@
       <mat-row class="row-question" *cdkRowDef="let row; columns: ['fileName', 'category', 'primaryTag', 'status'];">
       </mat-row>
     </mat-table>
+    
     <br /><br />
     <mat-card-title>Questions</mat-card-title>
     <mat-tab-group>

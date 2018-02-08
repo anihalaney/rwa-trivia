@@ -8,6 +8,12 @@ import { BulkUploadFileInfo, User } from '../../../model';
 export class BulkUploadActions {
 
     static LOAD_BULK_UPLOAD = 'LOAD_BULK_UPLOAD';
+    static LOAD_BULK_UPLOAD_SUCCESS = 'LOAD_BULK_UPLOAD_SUCCESS';
+    static LOAD_USER_BULK_UPLOAD = 'LOAD_USER_BULK_UPLOAD';
+    static LOAD_USER_BULK_UPLOAD_SUCCESS = 'LOAD_USER_BULK_UPLOAD_SUCCESS';
+    static LOAD_BULK_UPLOAD_BY_ID = 'LOAD_BULK_UPLOAD_BY_ID';
+    static LOAD_BULK_UPLOAD_BY_ID_SUCCESS = 'LOAD_BULK_UPLOAD_BY_ID_SUCCESS';
+
     loadBulkUpload(): ActionWithPayload<null> {
         return {
             type: BulkUploadActions.LOAD_BULK_UPLOAD,
@@ -15,7 +21,6 @@ export class BulkUploadActions {
         };
     }
 
-    static LOAD_BULK_UPLOAD_SUCCESS = 'LOAD_BULK_UPLOAD_SUCCESS';
     loadBulkUploadSuccess(bulkUploadFileInfo: BulkUploadFileInfo[]): ActionWithPayload<BulkUploadFileInfo[]> {
         return {
             type: BulkUploadActions.LOAD_BULK_UPLOAD_SUCCESS,
@@ -23,7 +28,7 @@ export class BulkUploadActions {
         };
     }
 
-    static LOAD_USER_BULK_UPLOAD = 'LOAD_USER_BULK_UPLOAD';
+
     loadUserBulkUpload(user: User): ActionWithPayload<User> {
         return {
             type: BulkUploadActions.LOAD_USER_BULK_UPLOAD,
@@ -31,7 +36,7 @@ export class BulkUploadActions {
         };
     }
 
-    static LOAD_USER_BULK_UPLOAD_SUCCESS = 'LOAD_USER_BULK_UPLOAD_SUCCESS';
+
     loadUserBulkUploadSuccess(bulkUploadFileInfo: BulkUploadFileInfo[]): ActionWithPayload<BulkUploadFileInfo[]> {
         return {
             type: BulkUploadActions.LOAD_USER_BULK_UPLOAD_SUCCESS,
@@ -39,4 +44,18 @@ export class BulkUploadActions {
         };
     }
 
+
+    loadBulkUploadById(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
+        return {
+            type: BulkUploadActions.LOAD_BULK_UPLOAD_BY_ID,
+            payload: bulkUploadFileInfo
+        };
+    }
+
+    loadBulkUploadByIdSuccess(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
+        return {
+            type: BulkUploadActions.LOAD_BULK_UPLOAD_BY_ID_SUCCESS,
+            payload: bulkUploadFileInfo
+        };
+    }
 }

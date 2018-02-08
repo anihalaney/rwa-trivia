@@ -1,32 +1,37 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataSource } from '@angular/cdk/table';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../../../core/store/app-store';
-import { BulkUploadFileInfo, Question, Category } from '../../../model';
+import { BulkUploadFileInfo, Question, Category, User } from '../../../model';
 import { Utils } from '../../../core/services';
 import { BulkUploadActions, QuestionActions } from '../../../core/store/actions';
-import { bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions, bulkUploadFileInfos } from 'app/core/store/reducers';
+import { bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions, userBulkUploadFileInfos } from 'app/core/store/reducers';
 import { concat } from 'rxjs/operator/concat';
 import { Subscription } from 'rxjs/Subscription';
 import { PageEvent } from '@angular/material';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
+
 
 @Component({
   selector: 'bulk-summary',
   templateUrl: './bulk-summary.component.html',
   styleUrls: ['./bulk-summary.component.scss']
 })
-export class BulkSummaryComponent implements OnInit, OnDestroy {
+export class BulkSummaryComponent implements OnInit, OnDestroy, AfterViewInit {
+
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
-  bulkUploadFileInfo: BulkUploadFileInfo[];
+  userBulkUploadFileInfo: BulkUploadFileInfo[];
   uploadsDS: FileUploadsDataSource;
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
   totalCount: number;
   categoryDict: { [key: number]: Category };
   selectedFile: BulkUploadFileInfo;
+
+  user: User;
 
   showBulkUploadDetail = false;
   parsedQuestions: Array<Question>;
@@ -40,6 +45,10 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   unPublishedSub: Subscription;
   publishedSub: Subscription;
 
+
+  // @ViewChild(MatPaginator) paginator: MatPaginator;
+  // dataSource: MatTableDataSource<BulkUploadFileInfo>;
+
   constructor(private store: Store<AppStore>,
     private questionActions: QuestionActions,
     private bulkUploadActions: BulkUploadActions,
@@ -49,38 +58,30 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
     this.unPublishedQuestionObs = store.select(s => s.bulkUploadUnpublishedQuestions);
     this.publishedQuestionObs = store.select(s => s.bulkUploadPublishedQuestions);
 
-    this.bulkUploadObs = store.select(s => s.bulkUploadFileInfos);
+    this.bulkUploadObs = store.select(s => s.userBulkUploadFileInfos);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
+
+    this.store.take(1).subscribe(s => this.user = s.user);
+
   }
   ngOnInit() {
-    this.store.dispatch(this.bulkUploadActions.loadBulkUpload());
-    this.subs.push(this.bulkUploadObs.subscribe(bulkUploadFileInfo => this.uploadsSubject.next(bulkUploadFileInfo)));
+    this.store.dispatch(this.bulkUploadActions.loadUserBulkUpload(this.user));
+    this.subs.push(this.bulkUploadObs.subscribe(userBulkUploadFileInfo => this.uploadsSubject.next(userBulkUploadFileInfo)));
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-    this.uploadsSubject.next(this.bulkUploadFileInfo);
+    this.uploadsSubject.next(this.userBulkUploadFileInfo);
+    // this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(this.userBulkUploadFileInfo);
+    // this.dataSource.paginator = this.paginator;
+    // console.log("sd", this.v);
+    // console.log(this.userBulkUploadFileInfo);
+  }
+
+  ngAfterViewInit() {
+    // this.dataSource.paginator = this.paginator;
   }
 
   // get Questions by bulk upload Id
   getBulkUploadQuestions(id, row) {
-    // This is temp coe will be changed
-
-    // this.selectedFile = row;
-
-    // const bulkUploadFileInfoObject = new BulkUploadFileInfo();
-    // bulkUploadFileInfoObject.id = id;
-    // // for unpublished questions
-    // this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(bulkUploadFileInfoObject));
-    // this.unPublishedSub = this.unPublishedQuestionObs.subscribe(questions => this.unPublishedQuestions = questions);
-
-    // // for published questions
-    // this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(bulkUploadFileInfoObject));
-    // this.publishedSub = this.publishedQuestionObs.subscribe(questions => this.publishedQuestions = questions);
-    // setTimeout(() => {
-    //   this.showBulkUploadDetail = true;
-    //   this.totalCount = this.publishedQuestions.length;
-    // }, 500);
-
-    this.router.navigate(['/bulk/details' , id]);
-
+    this.router.navigate(['/bulk/details', id]);
   }
 
   ngOnDestroy() {
