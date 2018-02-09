@@ -8,7 +8,10 @@ import { Question, User, SearchResults, SearchCriteria, BulkUpload, BulkUploadFi
 export class QuestionActions {
 
   static LOAD_QUESTIONS = 'LOAD_QUESTIONS';
-  loadQuestions(payload: { startRow: number, pageSize: number, criteria: SearchCriteria }): ActionWithPayload<{ startRow: number, pageSize: number, criteria: SearchCriteria }> {
+  loadQuestions(payload: { startRow: number, pageSize: number, criteria: SearchCriteria }): ActionWithPayload<{
+    startRow: number,
+    pageSize: number, criteria: SearchCriteria
+  }> {
     return {
       type: QuestionActions.LOAD_QUESTIONS,
       payload: payload
@@ -97,6 +100,15 @@ export class QuestionActions {
     return {
       type: QuestionActions.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS,
       payload: questions
+    };
+  }
+
+  // delete Unpublished Questions
+  static DELETE_UNPUBLISHED_QUESTION = 'DELETE_UNPUBLISHED_QUESTION';
+  deleteUnpublishedQuestion(question: Question): ActionWithPayload<Question> {
+    return {
+      type: QuestionActions.DELETE_UNPUBLISHED_QUESTION,
+      payload: question
     };
   }
 

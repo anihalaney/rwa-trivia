@@ -13,7 +13,7 @@ export class QuestionEffects {
     loadQuestions$ = this.actions$
         .ofType(QuestionActions.LOAD_QUESTIONS)
         .switchMap((action: ActionWithPayload<{ startRow: number, pageSize: number, criteria: SearchCriteria }>) =>
-        this.svc.getQuestions(action.payload.startRow, action.payload.pageSize, action.payload.criteria))
+            this.svc.getQuestions(action.payload.startRow, action.payload.pageSize, action.payload.criteria))
         .map((results: SearchResults) => this.questionActions.loadQuestionsSuccess(results));
 
     @Effect()
@@ -50,6 +50,13 @@ export class QuestionEffects {
         .map((questions: Question[]) => this.questionActions.loadBulkUploadPublishedQuestionsSuccess(questions));
 
 
+    // delete Unpublished Questions
+    @Effect()
+    deleteUnpublishedQuestions$ = this.actions$
+        .ofType(QuestionActions.DELETE_UNPUBLISHED_QUESTION)
+        .do((action: ActionWithPayload<Question>) => this.svc.deleteUnpublishedQuestion(action.payload))
+        .filter(() => false);
+
 
     @Effect()
     loadSampleQuestions$ = this.actions$
@@ -76,8 +83,8 @@ export class QuestionEffects {
         .filter(() => false);
 
     constructor(
-            private actions$: Actions,
-            private questionActions: QuestionActions,
-            private svc: QuestionService
-        ) { }
+        private actions$: Actions,
+        private questionActions: QuestionActions,
+        private svc: QuestionService
+    ) { }
 }
