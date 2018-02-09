@@ -17,12 +17,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   user: User;
   sub: Subscription;
   
-  categoriesObs: Observable<Category[]>;
-  categoryDictObs: Observable<{[key: number] :Category}>;
-  tagsObs: Observable<string[]>;
-  questionsSearchResultsObs: Observable<SearchResults>;
-  questionOfTheDayObs: Observable<Question>;
-  activeGamesObs: Observable<Game[]>;
+  questionOfTheDay$: Observable<Question>;
+  activeGames$: Observable<Game[]>;
   gameInvites: number[];  //change this to game invites
 
   now: Date;
@@ -32,15 +28,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppStore>,
               private questionActions: QuestionActions,
               private gameActions: GameActions) {
-    this.categoriesObs = store.select(s => s.categories);
-    this.categoryDictObs = store.select(categoryDictionary);
-    this.tagsObs = store.select(s => s.tags);
-    this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
-    this.questionOfTheDayObs = store.select(s => s.questionOfTheDay);
-    this.activeGamesObs = store.select(s => s.activeGames);
+    this.questionOfTheDay$ = store.select(s => s.questionOfTheDay);
+    this.activeGames$ = store.select(s => s.activeGames);
     this.gameInvites = [1,2,3];
 
-    this.categoryDictObs.subscribe(c => console.log(c));
     this.sub = store.select(s => s.user).subscribe(user => {
       this.user = user
       if (user) {
