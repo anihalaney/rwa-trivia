@@ -9,7 +9,8 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { Question, QuestionStatus, Category, SearchResults, SearchCriteria } from '../../../model';
+import { Question, QuestionStatus, Category, SearchResults, SearchCriteria, User } from '../../../model';
+import { QuestionActions } from '../../../core/store/actions';
 
 @Component({
   selector: 'question-table',
@@ -18,6 +19,7 @@ import { Question, QuestionStatus, Category, SearchResults, SearchCriteria } fro
   changeDetection: ChangeDetectionStrategy.Default
 })
 export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
+
   @Input() showSort: boolean;
   @Input() showPaginator: boolean;
   @Input() questions: Question[];
@@ -33,7 +35,14 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   questionsSubject: BehaviorSubject<Question[]>;
   questionsDS: QuestionsDataSource;
 
+  requestToChangeQuestionStatus = false;
+  requestToRejectQuestionStatus = false;
+
+  requestToChangeQuestion: Question;
+  requestToRejectQuestion: Question;
+
   constructor(private store: Store<AppStore>,
+    private questionActions: QuestionActions,
     private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
@@ -53,6 +62,34 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];
   }
+
+  // approveQuestions
+  approveQuestion(question: Question) {
+    console.log(question);
+    let user: User;
+    this.store.take(1).subscribe(s => user = s.user);
+    question.approved_uid = user.userId;
+    this.store.dispatch(this.questionActions.approveQuestion(question));
+  }
+
+
+  displayRequestToChange(question: Question) {
+    this.requestToChangeQuestionStatus = true;
+    this.requestToRejectQuestionStatus = false;
+    this.requestToChangeQuestion = question;
+  }
+
+  displayRejectToChange(question: Question) {
+    this.requestToRejectQuestionStatus = true;
+    this.requestToChangeQuestionStatus = false;
+    this.requestToRejectQuestion = question;
+  }
+
+  // deleteQuestion
+  deleteQuestion(question: Question) {
+    this.store.dispatch(this.questionActions.deleteUnpublishedQuestion(question));
+  }
+
   approveButtonClicked(question: Question) {
     this.onApproveClicked.emit(question)
   }
