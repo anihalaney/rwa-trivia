@@ -58,43 +58,14 @@
       <div>
         <br />
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="State" aria-label="State" formControlName="tagControl" [matAutocomplete]="tagAuto">
+          <input matInput placeholder="Primary Tag" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto">
           <mat-autocomplete #tagAuto="matAutocomplete">
             <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
               {{tag}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
-      </div>
-      <!-- <div class="pcategories">
-        <h2>
-          <span>Select Your Prefered Category for the Question:</span>
-        </h2>
-        <div class="row">
-          <div class="formfield">
-
-            <select placeholder="Select Category" class="required" formControlName="category">
-              <option value="">
-                Select a Category
-              </option>
-              <option *ngFor="let category of categories" [value]="category.id">
-                {{category.categoryName}}
-              </option>
-            </select>
-            <p *ngIf="uploadFormGroup.controls.category.errors && !uploadFormGroup.controls.category.pristine" class="error">
-              Select a category
-            </p>
-          </div>
-        </div>
-      </div> -->
-      <!-- <mat-form-field>
-        <input type="text" placeholder="Primary Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto">
-        <mat-autocomplete #tagAuto="matAutocomplete">
-          <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
-            {{ tag }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field> -->
+      </div> 
       <div>
         <br />
         <input type="file" placeholder="Upload csv file" accept=".csv" (change)="onFileChange($event)" #fileInput>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, OnChanges, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { DataSource } from '@angular/cdk/table';
 import { Observable } from 'rxjs/Observable';
@@ -13,14 +13,16 @@ import {
   userBulkUploadFileInfos, bulkUploadFileInfos
 } from 'app/core/store/reducers';
 import { Subscription } from 'rxjs/Subscription';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
+
 
 
 @Component({
-  selector: 'bulk-summary-child',
-  templateUrl: './bulk-summary-child.component.html',
-  styleUrls: ['./bulk-summary-child.component.scss']
+  selector: 'bulk-summary-table',
+  templateUrl: './bulk-summary-table.component.html',
+  styleUrls: ['./bulk-summary-table.component.scss']
 })
-export class BulkSummaryChildComponent implements OnInit, OnDestroy, OnChanges {
+export class BulkSummaryTableComponent implements OnInit, OnDestroy, OnChanges {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   userBulkUploadFileInfo: BulkUploadFileInfo[];
@@ -34,8 +36,13 @@ export class BulkSummaryChildComponent implements OnInit, OnDestroy, OnChanges {
 
   bulkUploadObs: Observable<BulkUploadFileInfo[]>;
   subs: Subscription[] = [];
+  dataSource: any;
+  SHOW_SUMMARY_TABLE = true;
+  _bulkUploadFileInfo: BulkUploadFileInfo;
+  isAdminUrl = false;
 
   @Input() bulkSummaryDetailPath: String;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private store: Store<AppStore>,
     private bulkUploadActions: BulkUploadActions,
@@ -49,27 +56,40 @@ export class BulkSummaryChildComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
   }
 
+
   ngOnChanges() {
     if (this.bulkSummaryDetailPath) {
 
       this.bulkUploadObs = this.store.select((this.bulkSummaryDetailPath.includes('admin'))
         ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos);
 
-      this.store.dispatch((this.bulkSummaryDetailPath.includes('admin')) ? this.bulkUploadActions.loadBulkUpload()
+      this.isAdminUrl = (this.bulkSummaryDetailPath.includes('admin') ? true: false;
+      this.store.dispatch((this.isAdminUrl) ? this.bulkUploadActions.loadBulkUpload()
         : this.bulkUploadActions.loadUserBulkUpload(this.user));
-      this.subs.push(this.bulkUploadObs.subscribe(userBulkUploadFileInfo => this.uploadsSubject.next(userBulkUploadFileInfo)));
+      this.subs.push(this.bulkUploadObs.subscribe((userBulkUploadFileInfo) => {
+        this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(userBulkUploadFileInfo);
+        this.dataSource.paginator = this.paginator;
+      }));
       this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
       this.uploadsSubject.next(this.userBulkUploadFileInfo);
     }
   }
 
   // get Questions by bulk upload Id
-  getBulkUploadQuestions(id) {
-    this.router.navigate([this.bulkSummaryDetailPath + 'bulk/details', id]);
+  getBulkUploadQuestions(row: BulkUploadFileInfo) {
+    // this.router.navigate([this.bulkSummaryDetailPath + 'bulk/details', id]);
+    this._bulkUploadFileInfo = row;
+    this.SHOW_SUMMARY_TABLE = false;
+
   }
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
+  }
+
+  backToSummary() {
+    // this._location.back();
+    this.SHOW_SUMMARY_TABLE = true;
   }
 }
 

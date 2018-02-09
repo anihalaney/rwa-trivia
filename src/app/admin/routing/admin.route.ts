@@ -1,7 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent, CategoriesComponent, TagsComponent,
          AdminQuestionsComponent, AdminComponent, BulkComponent } from '../components/index';
-import { BulkSummaryQuestionListComponent } from '../../shared/components/index';
 import { AuthGuard } from '../../core/services';
 
 export const adminRoutes: Routes = [
@@ -31,12 +30,7 @@ export const adminRoutes: Routes = [
       {
         path: 'bulk',
         component: BulkComponent
-      },
-      {
-        path: 'bulk/details/:id',
-        component: BulkSummaryQuestionListComponent,
-        canActivate: [AuthGuard]
-      },
+      }
     ]
   }
 ];
