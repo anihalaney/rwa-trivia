@@ -32,7 +32,7 @@
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
     <mat-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
       <div class="row">
-        <div class="col-sm-9 col-xs-12">
+        <div class="col-sm-12 col-xs-12">
           <div class="date">13 May 2017</div>
           <p>{{row.questionText}}</p>
           <ul class="currentans">
@@ -70,12 +70,50 @@
             </li>
           </ul>
         </div>
-        <div class="col-sm-3 col-xs-12 textrigth">
-          <!-- <a href="#" class="btn">{{getDisplayStatus(row.status)}}</a> -->
-          <mat-chip-list>
+        <div class="col-sm-12 col-xs-12 textrigth">
+          <div class="button-row">
+            <button mat-raised-button (click)="approveQuestion(row)">Approve</button>
+            <button mat-raised-button (click)="displayRequestToChange(row)" color="primary">Request to change</button>
+            <button mat-raised-button (click)="displayRejectToChange(row)" color="accent">Reject</button>
+            <button mat-raised-button (click)="deleteQuestion(row)" color="warn">Delete</button>
+          </div>
+          <!-- <div>
+              <a href="#" class="btn">{{getDisplayStatus(row.status)}}</a>
+          </div>
+          <div>
+              <a href="#" class="btn">{{getDisplayStatus(row.status)}}</a>
+          </div>
+          <div>
+              <a href="#" class="btn">{{getDisplayStatus(row.status)}}</a>
+          </div> -->
+          <!-- <mat-chip-list>
             <mat-chip color="primary" >{{getDisplayStatus(row.status)}}</mat-chip>
-          </mat-chip-list>
+          </mat-chip-list> -->
         </div>
+        <div class="row" *ngIf="row==requestToChangeQuestion && requestToChangeQuestionStatus">
+          <div class="col-sm-10">
+            <div class="example-container">
+              <mat-form-field>
+                <textarea matInput placeholder="Reason for request to change"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-2"><br />
+            <button mat-raised-button color="primary">Request</button>
+          </div>
+        </div>
+        <div class="row" *ngIf="row==requestToRejectQuestion && requestToRejectQuestionStatus">
+            <div class="col-sm-10">
+              <div class="example-container">
+                <mat-form-field>
+                  <textarea matInput placeholder="Reason for Rejection"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-2"><br />
+              <button mat-raised-button color="primary">Reject</button>
+            </div>
+          </div>
       </div>
 
     </mat-cell>

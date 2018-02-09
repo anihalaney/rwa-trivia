@@ -14,6 +14,9 @@ import { query } from '@angular/core/src/render3/instructions';
 
 @Injectable()
 export class QuestionService {
+
+
+
   constructor(private db: AngularFirestore,
     private storage: AngularFireStorage,
     private store: Store<AppStore>,
@@ -133,5 +136,11 @@ export class QuestionService {
         transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
       );
     });
+  }
+
+  // delete Unpublished Question
+  deleteUnpublishedQuestion(question: Question): void {
+    const dbQuestion = Object.assign({}, question); // object to be saved
+    this.db.doc('/unpublished_questions/' + dbQuestion.id).delete();
   }
 }
