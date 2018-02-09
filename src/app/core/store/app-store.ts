@@ -4,15 +4,15 @@ import { user, authInitialized, categories, getCategoryDictionary, tags, //categ
          questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus, 
          userPublishedQuestions, userUnpublishedQuestions,
          loginRedirectUrl, 
-         currentGame, newGameId, currentGameQuestion, activeGames } from './reducers';
+         activeGames } from './reducers';
 
-import { ActionReducerMap, createSelector } from '@ngrx/store';
+import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
+import { GamePlayState } from '../../game-play/store';
 
 export interface AppStore {
   user: User;
   authInitialized: boolean;
   categories: Category[];
-  //categoryDictionary: {[key: number]: Category};
   tags: string[];
   questionsSearchResults: SearchResults;
   unpublishedQuestions: Question[];
@@ -21,9 +21,6 @@ export interface AppStore {
   questionOfTheDay: Question;
   questionSaveStatus: string;
   loginRedirectUrl: string;
-  currentGame: Game;
-  newGameId: string;
-  currentGameQuestion: Question;
   activeGames: Game[];
 }
 
@@ -40,13 +37,13 @@ export const reducer: ActionReducerMap<AppStore> = {
   questionOfTheDay: questionOfTheDay,
   questionSaveStatus: questionSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
-  currentGame: currentGame,
-  newGameId: newGameId,
-  currentGameQuestion: currentGameQuestion,
   activeGames: activeGames
 };
 
 export const getState = (state: AppStore) => state;
+
+//Features
+export const gameplayState = createFeatureSelector<GamePlayState>('gameplay');
 
 //Categories selector
 export const getCategories = createSelector(getState, (state: AppStore) => state.categories);
