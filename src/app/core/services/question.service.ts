@@ -65,11 +65,17 @@ export class QuestionService {
   saveQuestion(question: Question) {
     const dbQuestion = Object.assign({}, question); // object to be saved
 
-    const questionId = this.db.createId();
-    dbQuestion.id = questionId;
+    if (dbQuestion.id === undefined || dbQuestion.id === '') {
+      const questionId = this.db.createId();
+      dbQuestion.id = questionId;
+    }
+
+    console.log(dbQuestion);
+
+
     // console.log('dbQuestion--->', JSON.stringify(dbQuestion));
     // Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
-    this.db.doc('/unpublished_questions/' + questionId).set(dbQuestion).then(ref => {
+    this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
       this.store.dispatch(this.questionActions.addQuestionSuccess());
     });
   }
@@ -138,9 +144,4 @@ export class QuestionService {
     });
   }
 
-  // delete Unpublished Question
-  deleteUnpublishedQuestion(question: Question): void {
-    const dbQuestion = Object.assign({}, question); // object to be saved
-    this.db.doc('/unpublished_questions/' + dbQuestion.id).delete();
-  }
 }
