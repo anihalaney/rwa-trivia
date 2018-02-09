@@ -7,14 +7,13 @@ import { Store } from '@ngrx/store';
 import { AppStore } from '../../../core/store/app-store';
 import { BulkUploadFileInfo, Category, User } from '../../../model';
 import { Utils } from '../../../core/services';
-import { BulkUploadActions, QuestionActions } from '../../../core/store/actions';
+import { BulkUploadActions } from '../../../core/store/actions';
 import {
   bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions,
   userBulkUploadFileInfos, bulkUploadFileInfos
 } from 'app/core/store/reducers';
-import { concat } from 'rxjs/operator/concat';
 import { Subscription } from 'rxjs/Subscription';
-import { PageEvent } from '@angular/material';
+
 
 @Component({
   selector: 'bulk-summary-child',
@@ -39,7 +38,6 @@ export class BulkSummaryChildComponent implements OnInit, OnDestroy, OnChanges {
   @Input() bulkSummaryDetailPath: String;
 
   constructor(private store: Store<AppStore>,
-    private questionActions: QuestionActions,
     private bulkUploadActions: BulkUploadActions,
     private router: Router) {
     this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
