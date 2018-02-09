@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 
 import {
   QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-  BulkSummaryChildComponent, BulkSummaryQuestionListComponent
+  BulkSummaryTableComponent, BulkSummaryQuestionComponent
 } from './components';
 
 @NgModule({
@@ -19,8 +19,8 @@ import {
     QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
-    BulkSummaryChildComponent,
-    BulkSummaryQuestionListComponent
+    BulkSummaryTableComponent,
+    BulkSummaryQuestionComponent
   ],
   imports: [
     CommonModule,
@@ -46,7 +46,7 @@ import {
   providers: [
   ],
   exports: [QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-    BulkSummaryChildComponent, BulkSummaryQuestionListComponent, CommonModule, HttpClientModule, ReactiveFormsModule,
+    BulkSummaryTableComponent, BulkSummaryQuestionComponent, CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule,
     SharedMaterialModule, CdkTableModule]
 })

@@ -27,9 +27,11 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   @Input() categoryDictionary: { [key: number]: Category };
 
   @Input() showApproveButton: boolean;
+  @Input() showButtons: boolean;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
+
 
 
   requestFormGroup: FormGroup;

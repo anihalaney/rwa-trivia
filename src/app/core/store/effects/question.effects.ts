@@ -49,13 +49,7 @@ export class QuestionEffects {
         .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getQuestionsForBulkUpload(action.payload, true))
         .map((questions: Question[]) => this.questionActions.loadBulkUploadPublishedQuestionsSuccess(questions));
 
-
-    // delete Unpublished Questions
-    @Effect()
-    deleteUnpublishedQuestions$ = this.actions$
-        .ofType(QuestionActions.DELETE_UNPUBLISHED_QUESTION)
-        .do((action: ActionWithPayload<Question>) => this.svc.deleteUnpublishedQuestion(action.payload))
-        .filter(() => false);
+  
 
 
     @Effect()
