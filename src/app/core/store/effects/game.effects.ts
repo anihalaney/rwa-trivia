@@ -14,43 +14,6 @@ export class GameEffects {
         private gameActions: GameActions,
         private svc: GameService
     ) {}
-
-    @Effect() 
-    startNewGame$ = this.actions$
-        .ofType(GameActions.CREATE_NEW_GAME)
-        .map((action: ActionWithPayload<{gameOptions: GameOptions, user: User}>) => action.payload)
-        .switchMap((payload: {gameOptions: GameOptions, user: User}) => this.svc.createNewGame(payload.gameOptions, payload.user))
-        .map((gameId: string) => this.gameActions.createNewGameSuccess(gameId));
-        //.filter(() => false);
-
-    @Effect() 
-    loadGame$ = this.actions$
-        .ofType(GameActions.LOAD_GAME)
-        .map((action: ActionWithPayload<{gameId: string, user: User}>) => action.payload)
-        .switchMap((payload: {gameId: string, user: User}) => this.svc.getGame(payload.gameId, payload.user))
-        .map((game: Game) => this.gameActions.loadGameSuccess(game));
-
-    @Effect() 
-    loadNextQuestion$ = this.actions$
-        .ofType(GameActions.GET_NEXT_QUESTION)
-        .map((action: ActionWithPayload<{game: Game, user: User}>) => action.payload)
-        .switchMap((payload: {game: Game}) => this.svc.getNextQuestion(payload.game))
-        .map((question: Question) => this.gameActions.getNextQuestionSuccess(question));
-
-    @Effect() 
-    addPlayerQnA$ = this.actions$
-        .ofType(GameActions.ADD_PLAYER_QNA)
-        .map((action: ActionWithPayload<{game: Game, playerQnA: PlayerQnA}>) => action.payload)
-        .do((payload: {game: Game, playerQnA: PlayerQnA}) => this.svc.addPlayerQnAToGame(payload.game, payload.playerQnA))
-        .filter(() => false);
-
-    @Effect() 
-    setGameOver$ = this.actions$
-        .ofType(GameActions.SET_GAME_OVER)
-        .map((action: ActionWithPayload<{game: Game, user: User}>) => action.payload)
-        .do((payload: {game: Game, user: User}) => this.svc.setGameOver(payload.game, payload.user))
-        .filter(() => false);
-
     @Effect() 
     getActiveGames$ = this.actions$
         .ofType(GameActions.GET_ACTIVE_GAMES)
