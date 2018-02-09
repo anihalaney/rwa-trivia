@@ -103,15 +103,6 @@ export class QuestionActions {
     };
   }
 
-  // delete Unpublished Questions
-  static DELETE_UNPUBLISHED_QUESTION = 'DELETE_UNPUBLISHED_QUESTION';
-  deleteUnpublishedQuestion(question: Question): ActionWithPayload<Question> {
-    return {
-      type: QuestionActions.DELETE_UNPUBLISHED_QUESTION,
-      payload: question
-    };
-  }
-
   static LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS = 'LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS';
   loadUserUnpublishedQuestionsSuccess(questions: Question[]): ActionWithPayload<Question[]> {
     return {
