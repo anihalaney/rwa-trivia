@@ -31,15 +31,23 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
 
+
+  requestFormGroup: FormGroup;
+  rejectFormGroup: FormGroup;
+
   sortOrder: string;
   questionsSubject: BehaviorSubject<Question[]>;
   questionsDS: QuestionsDataSource;
 
-  requestToChangeQuestionStatus = false;
-  requestToRejectQuestionStatus = false;
+  requestQuestionStatus = false;
+  rejectQuestionStatus = false;
+  emptyReason = false;
 
-  requestToChangeQuestion: Question;
-  requestToRejectQuestion: Question;
+
+  reason: String = '';
+
+  requestQuestion: Question;
+  rejectQuestion: Question;
 
   constructor(private store: Store<AppStore>,
     private questionActions: QuestionActions,
@@ -50,6 +58,12 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+    this.requestFormGroup = this.fb.group({
+      reason: ['', Validators.required]
+    });
+    this.rejectFormGroup = this.fb.group({
+      reason: ['', Validators.required]
+    });
   }
 
   ngOnChanges() {
@@ -74,20 +88,32 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
 
 
   displayRequestToChange(question: Question) {
-    this.requestToChangeQuestionStatus = true;
-    this.requestToRejectQuestionStatus = false;
-    this.requestToChangeQuestion = question;
+    this.requestQuestionStatus = true;
+    this.rejectQuestionStatus = false;
+    this.requestQuestion = question;
   }
 
   displayRejectToChange(question: Question) {
-    this.requestToRejectQuestionStatus = true;
-    this.requestToChangeQuestionStatus = false;
-    this.requestToRejectQuestion = question;
+    this.rejectQuestionStatus = true;
+    this.requestQuestionStatus = false;
+    this.rejectQuestion = question;
   }
 
-  // deleteQuestion
-  deleteQuestion(question: Question) {
-    this.store.dispatch(this.questionActions.deleteUnpublishedQuestion(question));
+  saveRequestToChangeQuestion() {
+    if (!this.requestFormGroup.valid) {
+      return;
+    }
+    this.requestQuestion.status = QuestionStatus.REQUEST_TO_CHANGE;
+    this.requestQuestion.reason = this.requestFormGroup.get('reason').value;
+    this.store.dispatch(this.questionActions.addQuestion(this.requestQuestion));
+  }
+  saveRejectToChangeQuestion() {
+    if (!this.rejectFormGroup.valid) {
+      return;
+    }
+    this.rejectQuestion.status = QuestionStatus.REJECTED;
+    this.rejectQuestion.reason = this.rejectFormGroup.get('reason').value;
+    this.store.dispatch(this.questionActions.addQuestion(this.rejectQuestion));
   }
 
   approveButtonClicked(question: Question) {

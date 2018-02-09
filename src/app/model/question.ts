@@ -18,6 +18,7 @@ export class Question {
   approved_uid?: string;
   approvedOn?: Date;
   bulkUploadId?: string;
+  reason?: String;
 
   static getViewModelFromDb(db: any): Question {
     const question: Question = new Question();
@@ -29,6 +30,7 @@ export class Question {
     question.status = db.status;
     question.tags = db.tags;
     question.bulkUploadId = db.bulkUploadId;
+    question.reason = db.reason;
     return question;
   }
 
@@ -70,5 +72,7 @@ export enum QuestionStatus {
   SUBMITTED,
   APPROVED,
   INACTIVE,
-  PENDING
+  PENDING,
+  REJECTED,
+  REQUEST_TO_CHANGE
 }

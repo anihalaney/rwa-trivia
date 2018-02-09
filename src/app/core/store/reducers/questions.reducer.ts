@@ -80,12 +80,3 @@ export function questionSaveStatus(state: any = "NONE", action: ActionWithPayloa
       return state;
   }
 };
-
-export function deleteUnpublishedQuestion(state: any = "NONE", action: ActionWithPayload<string>): string {
-  switch (action.type) {
-    case QuestionActions.DELETE_UNPUBLISHED_QUESTION:
-      return "IN PROGRESS";
-    default:
-      return state;
-  }
-};
