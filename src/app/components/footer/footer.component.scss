@@ -1,0 +1,17 @@
+.footer{ font-size: 13px; line-height: 45px; padding:15px 0}
+.footer a{ display: inline-block; margin-right: 27px; letter-spacing: 0.5px }
+.socialicon-f a{height: 32px; width: 30px; margin:0 7px;}
+.socialicon-f a:hover{ opacity: 0.8 }
+.facebookicon-f{ background-position:0 -293px; }
+.twiticon-f{ background-position:-31px -293px;}
+.linkdenicon-f{ background-position:-62px -293px;}
+.signup, .logout, .login {
+  cursor: pointer;
+}
+
+@media screen and ( min-width:768px){      
+  .textright{text-align: right;}
+}
+@media screen and ( max-width:768px){      
+  .footer{ text-align: center; line-height: 2 }
+}

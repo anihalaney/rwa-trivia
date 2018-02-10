@@ -23,7 +23,7 @@
       </mat-chip-list>
 
       <div>
-        <button *ngIf="showApproveButton && (question.status == 0 || question.status == 1)" 
+        <button *ngIf="showApproveButton && (question.status == 0 || question.status == 1 || question.status == 4)" 
                 (click)="approveButtonClicked(question)" class="approve-button"
                 mat-button color="primary">APPROVE</button>
         <span class="question-status" *ngIf="question.status != 2">{{getDisplayStatus(question.status)}}</span>

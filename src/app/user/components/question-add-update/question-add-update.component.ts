@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
 import { QuestionActions } from '../../../core/store/actions';
+import { Utils } from '../../../core/services';
 import { User, Category, Question, QuestionStatus, Answer }     from '../../../model';
 
 @Component({
@@ -16,12 +18,11 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
 
+  subs: Subscription[] = [];
+
   //Properties
   categories: Category[];
-  sub: any;
-
   tags: string[];
-  sub2: any;
 
   questionForm: FormGroup;
   question: Question;
@@ -56,16 +57,13 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     questionControl.valueChanges.debounceTime(500).subscribe(v => this.computeAutoTags());
     this.answers.valueChanges.debounceTime(500).subscribe(v => this.computeAutoTags());
 
-    this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
-    this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
+    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
   }
 
   ngOnDestroy() {
-    if (this.sub)
-      this.sub.unsubscribe();
-    if (this.sub2)
-      this.sub2.unsubscribe();
+    Utils.unsubscribe(this.subs);
   }
 
   //Event Handlers
@@ -117,6 +115,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   }
 
   saveQuestion(question: Question) {
+    console.log('question--->', JSON.stringify(question));
     this.store.dispatch(this.questionActions.addQuestion(question));
   }
 
