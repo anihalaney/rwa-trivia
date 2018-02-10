@@ -1,5 +1,5 @@
-import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatCheckboxChange, MatSelectChange } from '@angular/material';
 import { Store } from '@ngrx/store';
@@ -9,16 +9,15 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { Question, QuestionStatus, Category, SearchResults, SearchCriteria, User } from '../../../model';
+import { Question, QuestionStatus, Category, User } from '../../../model';
 import { QuestionActions } from '../../../core/store/actions';
 
 @Component({
   selector: 'question-table',
   templateUrl: './questions-table.component.html',
-  styleUrls: ['./questions-table.component.scss'],
-  changeDetection: ChangeDetectionStrategy.Default
+  styleUrls: ['./questions-table.component.scss']
 })
-export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
+export class QuestionsTableComponent implements OnInit, OnChanges {
 
   @Input() showSort: boolean;
   @Input() showPaginator: boolean;
@@ -56,7 +55,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
     private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
-    this.sortOrder = "Category";
+    this.sortOrder = 'Category';
   }
 
   ngOnInit() {
@@ -72,9 +71,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
     this.questionsSubject.next(this.questions);
   }
 
-  ngOnDestroy() {
-  }
-
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];
   }
@@ -87,8 +83,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
     question.approved_uid = user.userId;
     this.store.dispatch(this.questionActions.approveQuestion(question));
   }
-
-
   displayRequestToChange(question: Question) {
     this.requestQuestionStatus = true;
     this.rejectQuestionStatus = false;
