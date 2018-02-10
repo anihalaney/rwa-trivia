@@ -22,7 +22,7 @@ export function userBulkUploadFileInfos(state: any = [], action: ActionWithPaylo
   }
 }
 
-  export function bulkUploadFileInfosById(state: any, action: ActionWithPayload<BulkUploadFileInfo>): BulkUploadFileInfo {
+  export function bulkUploadFileInfosById(state: any = {}, action: ActionWithPayload<BulkUploadFileInfo>): BulkUploadFileInfo {
     switch (action.type) {
       case BulkUploadActions.LOAD_BULK_UPLOAD_BY_ID_SUCCESS:
         return action.payload;

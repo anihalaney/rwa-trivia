@@ -15,8 +15,6 @@ import { query } from '@angular/core/src/render3/instructions';
 @Injectable()
 export class QuestionService {
 
-
-
   constructor(private db: AngularFirestore,
     private storage: AngularFireStorage,
     private store: Store<AppStore>,
@@ -64,17 +62,10 @@ export class QuestionService {
 
   saveQuestion(question: Question) {
     const dbQuestion = Object.assign({}, question); // object to be saved
-
     if (dbQuestion.id === undefined || dbQuestion.id === '') {
       const questionId = this.db.createId();
       dbQuestion.id = questionId;
     }
-
-    console.log(dbQuestion);
-
-
-    // console.log('dbQuestion--->', JSON.stringify(dbQuestion));
-    // Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
     this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
       this.store.dispatch(this.questionActions.addQuestionSuccess());
     });
@@ -82,7 +73,6 @@ export class QuestionService {
 
   saveBulkQuestions(bulkUpload: BulkUpload) {
     const dbQuestions: Array<any> = [];
-
     const bulkUploadFileInfo = bulkUpload.bulkUploadFileInfo;
     const questions = bulkUpload.questions;
 
@@ -132,10 +122,8 @@ export class QuestionService {
 
   approveQuestion(question: Question) {
     const dbQuestion = Object.assign({}, question); // object to be saved
-
     const questionId = dbQuestion.id;
     dbQuestion.status = QuestionStatus.APPROVED;
-
     // Transaction to remove from unpublished and add to published questions collection
     this.db.firestore.runTransaction(transaction => {
       return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
