@@ -56,7 +56,7 @@
       </mat-paginator>
     </div>
     <div *ngIf="!SHOW_SUMMARY_TABLE">
-      <app-bulk-summary-questions [bulkUploadFileInfo]="_bulkUploadFileInfo" [isAdminUrl]="isAdminUrl"></app-bulk-summary-questions>
+      <app-bulk-summary-questions [bulkUploadFileInfo]="bulkUploadFileInfo" [isAdminUrl]="isAdminUrl"></app-bulk-summary-questions>
     </div>
 
   </mat-card-content>

@@ -18,7 +18,7 @@ export class Question {
   approved_uid?: string;
   approvedOn?: Date;
   bulkUploadId?: string;
-  reason?: String;
+  reason?: string;
 
   static getViewModelFromDb(db: any): Question {
     const question: Question = new Question();
@@ -29,8 +29,8 @@ export class Question {
     question.questionText = db.questionText;
     question.status = db.status;
     question.tags = db.tags;
-    question.bulkUploadId = db.bulkUploadId;
-    question.reason = db.reason;
+    question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
+    question.reason = db.reason ? db.reason : '';
     return question;
   }
 

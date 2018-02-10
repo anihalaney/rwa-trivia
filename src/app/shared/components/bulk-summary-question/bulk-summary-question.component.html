@@ -1,6 +1,5 @@
-<mat-card-title>
-  File Details</mat-card-title>
-<mat-table #table [dataSource]="uploadsDS">
+<mat-card-title>File Details</mat-card-title>     
+<mat-table #table [dataSource]="fileInfoDS">
   <ng-container cdkColumnDef="fileName">
     <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
     <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
