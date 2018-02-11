@@ -13,12 +13,12 @@ import { Category, Question, SearchResults } from '../../../model';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
-  categoryDictObs: Observable<{[key: number] :Category}>;
+  categoryDictObs: Observable<{ [key: number]: Category }>;
   tagsObs: Observable<string[]>;
   questionsSearchResultsObs: Observable<SearchResults>;
 
   constructor(private store: Store<AppStore>,
-              private questionActions: QuestionActions) {
+    private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.tagsObs = store.select(s => s.tags);

@@ -16,7 +16,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   sub: any;
 
   constructor(private store: Store<AppStore>,
-              private router: Router) {
+    private router: Router) {
     this.sub = store.select(s => s.user).subscribe(user => {
       if (!user || !user.roles["admin"])
         this.router.navigate(['/']);

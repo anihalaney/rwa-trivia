@@ -84,6 +84,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
           this.generateQuestions(reader.result);
         };
       } else {
+        this.bulkUploadFileInfo = undefined;
         this.parseError = true;
       }
     }
@@ -118,7 +119,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
             return question;
           });
 
-          this.bulkUploadFileInfo.uploaded = this.questions.length;
+        this.bulkUploadFileInfo.uploaded = this.questions.length;
       });
   }
 
@@ -132,29 +133,32 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   onUploadSubmit() {
     // validate
-    if (!this.uploadFormGroup.valid) {
+    if (!this.uploadFormGroup.valid || this.bulkUploadFileInfo === undefined) {
       return;
 
-    }
-    const formModel = this.prepareUpload();
+    } else {
+      const formModel = this.prepareUpload();
 
-    const dbQuestions: Array<Question> = [];
+      const dbQuestions: Array<Question> = [];
 
-    for (const question of this.questions) {
-      this.bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
-      this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
-      question.categoryIds = [this.uploadFormGroup.get('category').value];
-      dbQuestions.push(question);
+      for (const question of this.questions) {
+        this.bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
+        this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
+        question.categoryIds = [this.uploadFormGroup.get('category').value];
+        dbQuestions.push(question);
+      }
+      this.bulkUploadFileInfo.created_uid = this.user.userId;
+      this.bulkUploadFileInfo.date = new Date().getTime().toString();
+      this.parsedQuestions = dbQuestions;
     }
-    this.bulkUploadFileInfo.created_uid = this.user.userId;
-    this.bulkUploadFileInfo.date = new Date().getTime().toString();
-    this.parsedQuestions = dbQuestions;
   }
 
   onReviewSubmit(): void {
     this.store.dispatch(this.questionActions
-      .addBulkQuestions({bulkUploadFileInfo: this.bulkUploadFileInfo,
-        questions: this.parsedQuestions, file: this.file}));
+      .addBulkQuestions({
+        bulkUploadFileInfo: this.bulkUploadFileInfo,
+        questions: this.parsedQuestions, file: this.file
+      }));
   }
 
   ngOnDestroy() {

@@ -8,7 +8,10 @@ import { Question, User, SearchResults, SearchCriteria, BulkUpload, BulkUploadFi
 export class QuestionActions {
 
   static LOAD_QUESTIONS = 'LOAD_QUESTIONS';
-  loadQuestions(payload: { startRow: number, pageSize: number, criteria: SearchCriteria }): ActionWithPayload<{ startRow: number, pageSize: number, criteria: SearchCriteria }> {
+  loadQuestions(payload: { startRow: number, pageSize: number, criteria: SearchCriteria }): ActionWithPayload<{
+    startRow: number,
+    pageSize: number, criteria: SearchCriteria
+  }> {
     return {
       type: QuestionActions.LOAD_QUESTIONS,
       payload: payload
