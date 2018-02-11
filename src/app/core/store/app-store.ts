@@ -1,11 +1,13 @@
 import { User, Category, Question, Game, SearchResults, BulkUploadFileInfo } from '../../model';
 
-import { user, authInitialized, categories, categoryDictionary, tags,
-         questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus,
-         userPublishedQuestions, userUnpublishedQuestions,
-         loginRedirectUrl,
-         currentGame, newGameId, currentGameQuestion, activeGames, users,
-         bulkUploadFileInfos, userBulkUploadFileInfos, bulkUploadUnpublishedQuestions, bulkUploadPublishedQuestions } from './reducers';
+import {
+  user, authInitialized, categories, categoryDictionary, tags,
+  questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus,
+  userPublishedQuestions, userUnpublishedQuestions,
+  loginRedirectUrl,
+  currentGame, newGameId, currentGameQuestion, activeGames, users, bulkUploadFileInfosById,
+  bulkUploadFileInfos, userBulkUploadFileInfos, bulkUploadUnpublishedQuestions, bulkUploadPublishedQuestions
+} from './reducers';
 
 import { compose, ActionReducerMap } from '@ngrx/store';
 
@@ -31,6 +33,7 @@ export interface AppStore {
   userBulkUploadFileInfos: BulkUploadFileInfo[];
   bulkUploadUnpublishedQuestions: Question[];
   bulkUploadPublishedQuestions: Question[];
+  bulkUploadFileInfosById: BulkUploadFileInfo;
 }
 
 export const reducer: ActionReducerMap<AppStore> = {
@@ -54,5 +57,6 @@ export const reducer: ActionReducerMap<AppStore> = {
   bulkUploadFileInfos: bulkUploadFileInfos,
   userBulkUploadFileInfos: userBulkUploadFileInfos,
   bulkUploadUnpublishedQuestions: bulkUploadUnpublishedQuestions,
-  bulkUploadPublishedQuestions: bulkUploadPublishedQuestions
+  bulkUploadPublishedQuestions: bulkUploadPublishedQuestions,
+  bulkUploadFileInfosById: bulkUploadFileInfosById
 };
