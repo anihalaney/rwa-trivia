@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { RouterModule  } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
-import { bulkRoutes }   from './bulk.route';
+import { bulkRoutes } from './bulk.route';
 
 @NgModule({
   imports: [
