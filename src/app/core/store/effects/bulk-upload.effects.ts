@@ -20,6 +20,13 @@ export class BulkUploadEffects {
         .switchMap((action: ActionWithPayload<User>) => this.svc.getUserBulkUpload(action.payload))
         .map((bulkUploadFileInfos: BulkUploadFileInfo[]) => this.bulkUploadAction.loadUserBulkUploadSuccess(bulkUploadFileInfos));
 
+
+    @Effect()
+    loadBulkUploadById$ = this.actions$
+        .ofType(BulkUploadActions.LOAD_BULK_UPLOAD_BY_ID)
+        .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getBulkUploadById(action.payload))
+        .map((bulkUploadFileInfos: BulkUploadFileInfo) => this.bulkUploadAction.loadBulkUploadByIdSuccess(bulkUploadFileInfos));
+
     constructor(
         private actions$: Actions,
         private bulkUploadAction: BulkUploadActions,
