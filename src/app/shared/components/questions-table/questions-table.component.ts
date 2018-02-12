@@ -176,11 +176,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
   editQuestions(row: Question) {
     this.editQuestion = row;
-    this.questionForm.controls['category'].setValue(row.categoryIds);
-    this.questionForm.controls['questionText'].setValue(row.questionText);
-    // this.questionForm.controls['answers']['control'].setValue(row.answers);
-    this.enteredTags = row.tags;
-    console.log(this.enteredTags);
+    this.createForm(row);
   }
 
 
@@ -210,13 +206,21 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     // console.log(this.questionForm.value);
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
-    question.status = QuestionStatus.SUBMITTED;
     this.store.take(1).subscribe(s => this.user = s.user);
-    // console.log(question);
+    question.id = this.editQuestion.id;
+    question.status = this.editQuestion.status ? this.editQuestion.status : 3;
+    question.bulkUploadId = this.editQuestion.bulkUploadId ? this.editQuestion.bulkUploadId : '';
+    question.categoryIds[0] = question.categoryIds[0];
+    question.reason = this.editQuestion.reason ? this.editQuestion.reason : '';
+    question.published = this.editQuestion.published ? this.editQuestion.published : false;
+    question.created_uid = this.editQuestion.created_uid ? this.editQuestion.created_uid : 'l7eNzSA0agZIHAUGtUtlHYDBRQt1';
+    question.approved_uid = this.editQuestion.approved_uid ? this.editQuestion.approved_uid : '';
+    question.explanation = this.editQuestion.explanation ? this.editQuestion.explanation : '';
 
-    question.created_uid = this.user.userId;
+    console.log();
+
     // call saveQuestion
-    this.saveQuestion(question);
+    this.updateQuestion(question);
   }
 
   // Helper functions
@@ -234,9 +238,10 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     return question;
   }
 
-  saveQuestion(question: Question) {
+  updateQuestion(question: Question) {
     console.log('question--->', JSON.stringify(question));
-    this.store.dispatch(this.questionActions.addQuestion(question));
+    this.store.dispatch(this.questionActions.updateQuestion(question));
+    this.editQuestion = null;
   }
 
   computeAutoTags() {
@@ -290,6 +295,10 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       explanation: [question.explanation]
     }, { validator: questionFormValidator }
     );
+
+    this.questionForm.controls['category'].setValue(question.categoryIds);
+    this.enteredTags = question.tags;
+
   }
 
   approveButtonClicked(question: Question) {
