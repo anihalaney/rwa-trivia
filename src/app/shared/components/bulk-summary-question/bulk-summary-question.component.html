@@ -1,0 +1,43 @@
+<mat-card-title>File Details</mat-card-title>     
+<mat-table #table [dataSource]="fileInfoDS">
+  <ng-container cdkColumnDef="fileName">
+    <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
+    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="category">
+    <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
+    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="primaryTag">
+    <mat-header-cell *cdkHeaderCellDef>Primary Tag</mat-header-cell>
+    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="status">
+    <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+    <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
+  </ng-container>
+
+  <mat-header-row *cdkHeaderRowDef="['fileName', 'category', 'primaryTag', 'status']">
+  </mat-header-row>
+  <mat-row class="row-question" *cdkRowDef="let row; columns: ['fileName', 'category', 'primaryTag', 'status'];">
+  </mat-row>
+</mat-table>
+
+<br />
+<br />
+<mat-card-title>Questions</mat-card-title>
+<mat-tab-group>
+  <mat-tab label="Published">
+    <question-table *ngIf="publishedCount != 0" [showSort]="false" [showPaginator]="true" [showButtons]="PUBLISHED_SHOW_BUTTON_STATE" [questions]="publishedQuestions" [totalCount]="publishedCount"
+      [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
+    </question-table>
+  </mat-tab>
+  <mat-tab label="Unpublished">
+    <question-table *ngIf="unPublishedCount != 0" [showSort]="false" [showPaginator]="true" [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions"
+      [totalCount]="unPublishedCount" [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
+    </question-table>
+  </mat-tab>
+</mat-tab-group>
