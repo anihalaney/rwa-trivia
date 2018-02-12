@@ -31,8 +31,8 @@
   <ng-container cdkColumnDef="questionText">
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
     <mat-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
-      <div class="row" *ngIf="row !== editQuestion">
-        <div *ngIf="showButtons" class="col-xs-12 textrigth">
+      <div class="row" *ngIf="row !== editQuestion">        
+        <div *ngIf="getDisplayStatus(row.status)==='REQUEST_TO_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div>
         <br />
@@ -94,7 +94,7 @@
             </li>
           </ul>
         </div>
-        <div *ngIf="showButtons">
+        <div *ngIf="showButtons ">
           <div class="col-sm-12 col-xs-12 textrigth">
             <div class="button-row">
               <button mat-raised-button (click)="approveQuestion(row)">Approve</button>
@@ -209,8 +209,9 @@
                       </div>
                     </div>
                   </div>
-                  <div class="btnbox">
-                    <button class="btn startg" type="submit" [disabled]="!questionForm.valid">Update</button>
+                  <div class="savebox">
+                    <button class="btn startg" type="submit" [disabled]="!questionForm.valid">Update</button>                
+                                      
                   </div>
                 </div>
               </div>
