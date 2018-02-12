@@ -13,13 +13,16 @@ import { SocialModule } from  './social/social.module';
 import { UserModule } from  './user/user.module';
 import { StatsModule } from  './stats/stats.module';
 
-import { AppComponent, DashboardComponent, SideNavComponent } from './components';
+import { AppComponent, DashboardComponent, 
+         SideNavComponent, HeaderComponent, FooterComponent } from './components';
 
 @NgModule({
   declarations: [
     AppComponent, 
     DashboardComponent, 
-    SideNavComponent
+    SideNavComponent, 
+    HeaderComponent, 
+    FooterComponent
   ],
   imports: [
     BrowserModule,

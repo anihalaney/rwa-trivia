@@ -40,6 +40,27 @@ export function userUnpublishedQuestions(state: any = [], action: ActionWithPayl
   }
 };
 
+
+// file Unpublished Questions
+export function bulkUploadUnpublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
+  switch (action.type) {
+    case QuestionActions.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
+// file Published Questions
+export function bulkUploadPublishedQuestions(state: any = [], action: ActionWithPayload<Question[]>): Question[] {
+  switch (action.type) {
+    case QuestionActions.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 export function questionOfTheDay(state: any = [], action: ActionWithPayload<Question>): Question {
   switch (action.type) {
     case QuestionActions.GET_QUESTION_OF_THE_DAY_SUCCESS:

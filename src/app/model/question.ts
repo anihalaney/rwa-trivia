@@ -17,22 +17,11 @@ export class Question {
   lastUpdatedOn?: Date;
   approved_uid?: string;
   approvedOn?: Date;
-  
-  constructor() {
-    this.id = "";
-    this.answers = [new Answer(), new Answer(), new Answer(), new Answer()];
-    this.ordered = false;
-    this.tags = [];
-    this.categories = [];
-    this.categoryIds = [];
-    this.published = false;
-    this.status = QuestionStatus.SAVED;
-  }
+  bulkUploadId?: string;
 
-  static getViewModelFromDb(db: any): Question 
-  {
-    //console.log(db);
-    let question: Question = new Question();
+  static getViewModelFromDb(db: any): Question {
+    // console.log(db);
+    const question: Question = new Question();
 
     question.id = db.id;
     question.answers = db.answers;
@@ -41,17 +30,14 @@ export class Question {
     question.questionText = db.questionText;
     question.status = db.status;
     question.tags = db.tags;
-    
+    question.bulkUploadId = db.bulkUploadId;
     return question;
   }
 
-  static getViewModelFromES(hit: any): Question 
-  {
-    //console.log(hit);
-    let question: Question = new Question();
-
-    question.id = hit["_id"];
-    let source = hit["_source"];
+  static getViewModelFromES(hit: any): Question {
+    const question: Question = new Question();
+    question.id = hit['_id'];
+    const source = hit['_source'];
 
     question.answers = source.answers;
     question.categoryIds = source.categoryIds;
@@ -59,10 +45,20 @@ export class Question {
     question.questionText = source.questionText;
     question.status = source.status;
     question.tags = source.tags;
-    
+
     return question;
   }
 
+  constructor() {
+    this.id = '';
+    this.answers = [new Answer(), new Answer(), new Answer(), new Answer()];
+    this.ordered = false;
+    this.tags = [];
+    this.categories = [];
+    this.categoryIds = [];
+    this.published = false;
+    this.status = QuestionStatus.SAVED;
+  }
 }
 
 export class Answer {
@@ -75,5 +71,6 @@ export enum QuestionStatus {
   SAVED,
   SUBMITTED,
   APPROVED,
-  INACTIVE
+  INACTIVE,
+  PENDING
 }

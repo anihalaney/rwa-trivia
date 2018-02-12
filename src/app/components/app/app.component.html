@@ -1,29 +1,7 @@
 <!--Header Start Here-->
 <div>
-<header>        
-  <section class="headermain" id="stickyheader">      
-    <div class="container">
-      <div class="row">
-        <div class="logo col-xs-6 col-md-3">
-          <a [routerLink]="['/']" title="trivia.com"><img src="/assets/images/logo.png">
-          under development</a>
-        </div>
-        <div class="col-xs-6 pull-right align-right">
-          <div class="headerdrop">
-            <a (click)="toggleTheme()"><mat-icon mat-list-icon>flip</mat-icon></a>
-          </div>
-          <div class="headerdrop">
-            <a [routerLink]="['/my']"><span class="sprite settingicon"></span><span class="hidden-xs">Profile Setting</span></a>
-          </div>
-          <div class="headerdrop">
-            <a *ngIf="user" class="logout" (click)="logout()"><span class="sprite logouticon"></span><span class="hidden-xs">Logout</span></a>
-            <a *ngIf="!user" class="login" (click)="login()"><span class="sprite logouticon"></span><span class="hidden-xs">Sign in</span></a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <div class="clear"></div>
+<header>
+  <app-header [user]="user" (logoutClicked)="logout()" (loginClicked)="login()" (toggleThemeClicked)="toggleTheme()"></app-header>
 </header>
 <!--Header End-->
 
@@ -46,29 +24,7 @@
 
 <!-- Footer -->
 <footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-8 col-xs-12">
-        <a [routerLink]="['/']" title="Home">Home</a>
-        <a *ngIf="user" [routerLink]="['/my/questions']" title="My Questions">My Questions</a>
-        <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
-        <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
-        <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
-        <ng-container *ngIf="!user">
-          <!--<a class="signup" href="#" title="Sign Up">Sign Up</a>-->
-          <a class="logout" (click)="login()" title="Sign in">Sign in</a>
-        </ng-container>
-        <a *ngIf="user" class="login" (click)="logout()" title="Logout">Logout</a>
-
-        <span *ngIf="!user" class="socialicon-f">
-          <a href="#" class="sprite facebookicon-f"></a>
-          <a href="#" class="sprite twiticon-f"></a>
-          <a href="#" class="sprite linkdenicon-f"></a>
-        </span>
-        </div>
-      <div class="col-sm-4 col-xs-12 copyright textright">bitWiser © 2017. All rights reserved.</div>
-    </div>
-  </div>
+  <app-footer [user]="user" (logoutClicked)="logout()" (loginClicked)="login()"></app-footer>
 </footer>
 <!-- Footer end -->
 </div>

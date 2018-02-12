@@ -4,6 +4,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -13,12 +14,12 @@ import { CONFIG } from '../../environments/environment';
 
 import { Utils, AuthenticationService, AuthInterceptor,
          CategoryService, TagService, QuestionService,
-         GameService } from './services';
+         GameService, BulkService } from './services';
 
-import { AuthGuard, CategoriesResolver, TagsResolver } from './services';
+import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './services';
 
- import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
-import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects } from './store/effects';
+ import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions, BulkUploadActions } from './store/actions';
+import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects, BulkUploadEffects } from './store/effects';
 import { reducer } from './store/app-store';
 
 import { LoginComponent } from './components';
@@ -40,6 +41,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
     
     //store
     StoreModule.forRoot(reducer),
@@ -53,7 +55,8 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
       CategoryEffects,
       TagEffects,
       QuestionEffects,
-      GameEffects
+      GameEffects,
+      BulkUploadEffects
     ]),
 
     //rwa module
@@ -63,14 +66,14 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     //Services
     Utils, AuthenticationService, 
     CategoryService, TagService, QuestionService,
-    GameService,
+    GameService,BulkService,
     
     //route guards
-    AuthGuard, CategoriesResolver, TagsResolver,
+    AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions, 
-    UIStateActions, GameActions,
+    UIStateActions, GameActions,BulkUploadActions,
 
     {
       provide: HTTP_INTERCEPTORS,
