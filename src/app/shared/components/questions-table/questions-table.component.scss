@@ -31,7 +31,10 @@
   //display: flex;
   > div {
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 10px;    
+  }
+  > div:hover{
+    background-color: #f4f5f7;
   }
 }
 .answer {
