@@ -1,7 +1,7 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { DashboardComponent } 
   from '../components/index';
-import { AuthGuard, CategoriesResolver, TagsResolver } from '../core/services';
+import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from '../core/services';
 
 export const routes: Routes = [
   {
@@ -19,11 +19,6 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
-  /*{
-    path: 'my-questions',
-    loadChildren: 'app/myQuestions/my-questions.module#MyQuestionsModule',
-    canActivate: [AuthGuard]
-  },*/
   {
     path: 'game-play',
     loadChildren: 'app/game-play/game-play.module#GamePlayModule',
@@ -34,6 +29,12 @@ export const routes: Routes = [
     path: 'admin',
     loadChildren: 'app/admin/admin.module#AdminModule',
     canActivate: [AuthGuard],
-    canLoad: [AuthGuard]
+    canLoad: [AdminLoadGuard]
+  },
+  {
+    path: 'bulk',
+    loadChildren: 'app/bulk/bulk.module#BulkModule',
+    canActivate: [AuthGuard],
+    canLoad: [BulkLoadGuard]
   }
 ];

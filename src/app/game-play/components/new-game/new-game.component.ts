@@ -31,7 +31,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   showUncheckedCategories: boolean = false;
   allCategoriesSelected: boolean = true;
 
-  filteredTags: Observable<string[]>;
+  filteredTags$: Observable<string[]>;
 
   get categoriesFA(): FormArray { 
     //console.log(this.newGameForm.get('categoriesFA'));
@@ -86,7 +86,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     });
     */
 
-    this.filteredTags = this.newGameForm.get('tagControl').valueChanges
+    this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
          .map(val => val.length > 0 ? this.filter(val) : []);
   }
 

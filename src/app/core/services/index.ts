@@ -7,8 +7,10 @@ import {QuestionService} from './question.service';
 import {GameService} from './game.service';
 
 import {AuthGuard} from './auth-guard';
+import {AdminLoadGuard, BulkLoadGuard} from './load-guard';
 import {CategoriesResolver} from './route-guards/categories-resolver';
 import {TagsResolver} from './route-guards/tags-resolver';
+import { BulkService } from './bulk.service';
 
 export {
     Utils,
@@ -19,8 +21,11 @@ export {
     QuestionService,
     GameService,
     AuthGuard,
+    AdminLoadGuard,
+    BulkLoadGuard,
     CategoriesResolver,
-    TagsResolver
+    TagsResolver,
+    BulkService
 };
 
 export default [
@@ -32,6 +37,9 @@ export default [
     QuestionService,
     GameService,
     AuthGuard,
+    AdminLoadGuard,
+    BulkLoadGuard,
     CategoriesResolver,
-    TagsResolver
+    TagsResolver,
+    BulkService
 ];
