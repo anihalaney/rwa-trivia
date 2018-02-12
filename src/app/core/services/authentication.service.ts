@@ -43,7 +43,6 @@ export class AuthenticationService {
     });
   }
 
-
   getUserRoles(user: User): Observable<User> {
     //return this.db2.collection("/users", ref => ref.where()).doc<any>('/users/' + user.userId).valueChanges();
     return this.db.doc<any>('/users/' + user.userId).snapshotChanges()
