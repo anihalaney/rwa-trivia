@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-import {Action} from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
 import { ActionWithPayload, QuestionActions } from '../actions';
 import { Question, SearchResults } from '../../../model';
@@ -74,6 +74,8 @@ export function questionSaveStatus(state: any = "NONE", action: ActionWithPayloa
   switch (action.type) {
     case QuestionActions.ADD_QUESTION:
       return "IN PROGRESS";
+    case QuestionActions.UPDATE_QUESTION:
+      return "UPDATE";
     case QuestionActions.ADD_QUESTION_SUCCESS:
       return "SUCCESS";
     default:
