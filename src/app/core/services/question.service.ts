@@ -62,12 +62,14 @@ export class QuestionService {
 
   saveQuestion(question: Question) {
     const dbQuestion = Object.assign({}, question); // object to be saved
+    const questionId = this.db.createId();
     if (dbQuestion.id === undefined || dbQuestion.id === '') {
-      const questionId = this.db.createId();
       dbQuestion.id = questionId;
     }
     this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
-      this.store.dispatch(this.questionActions.addQuestionSuccess());
+      if (questionId === dbQuestion.id) {
+        this.store.dispatch(this.questionActions.addQuestionSuccess());
+      }
     });
   }
 

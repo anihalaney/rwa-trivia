@@ -64,6 +64,14 @@ export class QuestionEffects {
         .do((action: ActionWithPayload<Question>) => this.svc.saveQuestion(action.payload))
         .filter(() => false);
 
+
+    // update Question
+    @Effect()
+    updateQuestion$ = this.actions$
+        .ofType(QuestionActions.UPDATE_QUESTION)
+        .do((action: ActionWithPayload<Question>) => this.svc.saveQuestion(action.payload))
+        .filter(() => false);
+
     @Effect()
     addBulkQuestions$ = this.actions$
         .ofType(QuestionActions.ADD_BULK_QUESTIONS)
