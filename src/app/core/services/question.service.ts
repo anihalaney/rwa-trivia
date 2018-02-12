@@ -61,6 +61,7 @@ export class QuestionService {
   }
 
   saveQuestion(question: Question) {
+    console.log(question);
     const dbQuestion = Object.assign({}, question); // object to be saved
     const questionId = this.db.createId();
     if (dbQuestion.id === undefined || dbQuestion.id === '') {
