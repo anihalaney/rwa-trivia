@@ -32,14 +32,14 @@ export class Question {
     question.created_uid = db.created_uid;
     question.ordered = db.ordered;
     question.categories = db.categories;
-    question.createdOn = db.createdOn;
-    question.lastUpdated_uid = db.lastUpdated_uid;
-    question.lastUpdatedOn = db.lastUpdatedOn;
     question.approved_uid = db.approved_uid;
-    question.approvedOn = db.approvedOn;
     question.explanation = db.explanation;
     question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
     question.reason = db.reason ? db.reason : '';
+    // question.createdOn = db.createdOn;
+    // question.lastUpdated_uid = db.lastUpdated_uid;
+    // question.lastUpdatedOn = db.lastUpdatedOn;
+    // question.approvedOn = db.approvedOn;
     return question;
   }
 
