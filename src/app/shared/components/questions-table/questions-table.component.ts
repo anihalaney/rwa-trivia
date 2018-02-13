@@ -131,6 +131,13 @@ export class QuestionsTableComponent implements OnInit, OnDestroy, OnChanges {
     this.store.take(1).subscribe(s => user = s.user);
     question.approved_uid = user.userId;
 
+
+    if (question.status === 5) {
+      this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+      this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
+    }
+
+
     this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
 
     this.store.dispatch(this.questionActions.approveQuestion(question));
@@ -153,7 +160,13 @@ export class QuestionsTableComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.requestFormGroup.valid) {
       return;
     }
-    this.requestQuestion.status = QuestionStatus.REQUEST_TO_CHANGE;
+
+    if (this.requestQuestion.status === 5) {
+      this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+      this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
+    }
+
+    this.requestQuestion.status = QuestionStatus.PENDING;
     this.requestQuestion.reason = this.requestFormGroup.get('reason').value;
     this.requestQuestionStatus = false;
 
@@ -166,17 +179,18 @@ export class QuestionsTableComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.rejectFormGroup.valid) {
       return;
     }
+
+    if (this.rejectQuestion.status !== 5) {
+      this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
+      this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
+    }
+
     this.rejectQuestion.status = QuestionStatus.REJECTED;
     this.rejectQuestion.reason = this.rejectFormGroup.get('reason').value;
     this.rejectQuestionStatus = false;
-
     this.rejectQuestion.approved_uid = this.rejectQuestion.approved_uid ? this.rejectQuestion.approved_uid : '';
 
-
-    this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
-
     this.store.dispatch(this.questionActions.updateQuestion(this.rejectQuestion));
-    this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
     this.rejectFormGroup.get('reason').setValue('');
   }
 
@@ -228,7 +242,7 @@ export class QuestionsTableComponent implements OnInit, OnDestroy, OnChanges {
 
     question.reason = this.editQuestion.reason ? this.editQuestion.reason : '';
     question.published = this.editQuestion.published ? this.editQuestion.published : false;
-    question.created_uid = this.editQuestion.created_uid ? this.editQuestion.created_uid : 'l7eNzSA0agZIHAUGtUtlHYDBRQt1';
+    question.created_uid = this.editQuestion.created_uid ? this.editQuestion.created_uid : this.user.userId;
     question.approved_uid = this.editQuestion.approved_uid ? this.editQuestion.approved_uid : '';
     question.explanation = this.editQuestion.explanation ? this.editQuestion.explanation : '';
 
