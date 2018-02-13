@@ -1,16 +1,16 @@
-import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatCheckboxChange, MatSelectChange } from '@angular/material';
 import { Store } from '@ngrx/store';
-
+import { Utils } from '../../../core/services';
 import { AppStore } from '../../../core/store/app-store';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { Question, QuestionStatus, Category, User, Answer } from '../../../model';
-import { QuestionActions } from '../../../core/store/actions';
+import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../model';
+import { QuestionActions, BulkUploadActions } from '../../../core/store/actions';
 
 import { Subscription } from 'rxjs/Subscription';
 
@@ -19,21 +19,19 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
-export class QuestionsTableComponent implements OnInit, OnChanges {
+export class QuestionsTableComponent implements OnInit, OnDestroy, OnChanges {
 
   @Input() showSort: boolean;
   @Input() showPaginator: boolean;
   @Input() questions: Question[];
   @Input() totalCount: number;
   @Input() categoryDictionary: { [key: number]: Category };
-
+  @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() showApproveButton: boolean;
   @Input() showButtons: boolean;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
-
-
 
   requestFormGroup: FormGroup;
   rejectFormGroup: FormGroup;
@@ -45,23 +43,16 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   requestQuestionStatus = false;
   rejectQuestionStatus = false;
   editQuestionStatus = false;
-  emptyReason = false;
-
 
   reason: String = '';
 
   requestQuestion: Question;
   rejectQuestion: Question;
   editQuestion: Question;
-  // question: Question;
-
-
 
   // for edit
-
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
-
   subs: Subscription[] = [];
 
   // Properties
@@ -73,7 +64,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
   autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
-
   user: User;
 
   get answers(): FormArray {
@@ -85,6 +75,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
   constructor(private store: Store<AppStore>,
     private questionActions: QuestionActions,
+    private bulkUploadActions: BulkUploadActions,
     private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
@@ -139,7 +130,11 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     let user: User;
     this.store.take(1).subscribe(s => user = s.user);
     question.approved_uid = user.userId;
+
+    this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
+
     this.store.dispatch(this.questionActions.approveQuestion(question));
+    this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
   }
 
   displayRequestToChange(question: Question) {
@@ -161,7 +156,11 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.requestQuestion.status = QuestionStatus.REQUEST_TO_CHANGE;
     this.requestQuestion.reason = this.requestFormGroup.get('reason').value;
     this.requestQuestionStatus = false;
+
+    this.requestQuestion.approved_uid = this.requestQuestion.approved_uid ? this.requestQuestion.approved_uid : '';
+
     this.store.dispatch(this.questionActions.updateQuestion(this.requestQuestion));
+    this.requestFormGroup.get('reason').setValue('');
   }
   saveRejectToChangeQuestion() {
     if (!this.rejectFormGroup.valid) {
@@ -170,7 +169,15 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.rejectQuestion.status = QuestionStatus.REJECTED;
     this.rejectQuestion.reason = this.rejectFormGroup.get('reason').value;
     this.rejectQuestionStatus = false;
+
+    this.rejectQuestion.approved_uid = this.rejectQuestion.approved_uid ? this.rejectQuestion.approved_uid : '';
+
+
+    this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
+
     this.store.dispatch(this.questionActions.updateQuestion(this.rejectQuestion));
+    this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
+    this.rejectFormGroup.get('reason').setValue('');
   }
 
 
@@ -203,21 +210,27 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       return;
 
     // get question object from the forms
-    // console.log(this.questionForm.value);
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
     this.store.take(1).subscribe(s => this.user = s.user);
     question.id = this.editQuestion.id;
-    question.status = this.editQuestion.status ? this.editQuestion.status : 3;
+    question.status = this.editQuestion.status ? this.editQuestion.status : 4;
     question.bulkUploadId = this.editQuestion.bulkUploadId ? this.editQuestion.bulkUploadId : '';
-    question.categoryIds[0] = question.categoryIds[0];
+    question.categoryIds = [];
+
+    if (Array.isArray(this.questionForm.get('category').value)) {
+      question.categoryIds = this.questionForm.get('category').value;
+    }
+    else {
+      question.categoryIds.push(this.questionForm.get('category').value);
+    }
+
+
     question.reason = this.editQuestion.reason ? this.editQuestion.reason : '';
     question.published = this.editQuestion.published ? this.editQuestion.published : false;
     question.created_uid = this.editQuestion.created_uid ? this.editQuestion.created_uid : 'l7eNzSA0agZIHAUGtUtlHYDBRQt1';
     question.approved_uid = this.editQuestion.approved_uid ? this.editQuestion.approved_uid : '';
     question.explanation = this.editQuestion.explanation ? this.editQuestion.explanation : '';
-
-    console.log();
 
     // call saveQuestion
     this.updateQuestion(question);
@@ -230,7 +243,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     question = new Question();
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
-    question.categoryIds = [formValue.category];
+    question.categoryIds = this.questionForm.get('category').value;
     question.tags = [...this.autoTags, ...this.enteredTags]
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
@@ -310,6 +323,11 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   sortOrderChanged(event: MatSelectChange) {
     this.onSortOrderChanged.emit(event.value);
   }
+
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
+  }
+
 }
 
 export class QuestionsDataSource extends DataSource<Question> {

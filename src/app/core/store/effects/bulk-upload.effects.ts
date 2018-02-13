@@ -27,6 +27,14 @@ export class BulkUploadEffects {
         .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getBulkUploadById(action.payload))
         .map((bulkUploadFileInfos: BulkUploadFileInfo) => this.bulkUploadAction.loadBulkUploadByIdSuccess(bulkUploadFileInfos));
 
+
+        // update Question
+    @Effect()
+    updateBulkUpload$ = this.actions$
+        .ofType(BulkUploadActions.UPDATE_BULK_UPLOAD)
+        .do((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.updateBulkUpload(action.payload))
+        .filter(() => false);
+
     constructor(
         private actions$: Actions,
         private bulkUploadAction: BulkUploadActions,
