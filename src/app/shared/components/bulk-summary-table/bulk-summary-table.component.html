@@ -47,9 +47,14 @@
           <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
         </ng-container>
 
-        <mat-header-row *cdkHeaderRowDef="['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status']">
+        <ng-container cdkColumnDef="createdBy">
+          <mat-header-cell *cdkHeaderCellDef> Created By </mat-header-cell>
+          <mat-cell class="col-status" *cdkCellDef="let row">{{row.created_uid}}</mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'createdBy']">
         </mat-header-row>
-        <mat-row class="row-question" *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];">
+        <mat-row class="row-question" *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'createdBy'];">
         </mat-row>
       </mat-table>
       <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
