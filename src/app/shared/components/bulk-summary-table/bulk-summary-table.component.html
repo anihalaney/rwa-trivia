@@ -1,14 +1,14 @@
 <mat-card>
   <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle>
   <mat-card-content>
-    <div *ngIf="SHOW_SUMMARY_TABLE">
-      <mat-table #table [dataSource]="dataSource">
+    <div *ngIf="SHOW_SUMMARY_TABLE" class="mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort>
 
         <!--- Note that these columns can be defined in any order.
                     The actual rendered columns are set as a property on the row definition" -->
 
         <ng-container cdkColumnDef="uploadDate">
-          <mat-header-cell *cdkHeaderCellDef>Date Uploaded</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Date Uploaded</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>
         </ng-container>
 
@@ -18,12 +18,12 @@
         </ng-container>
 
         <ng-container cdkColumnDef="category">
-          <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Category</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
         </ng-container>
 
         <ng-container cdkColumnDef="primaryTag">
-          <mat-header-cell *cdkHeaderCellDef>Primary Tag</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Primary Tag</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
         </ng-container>
 
@@ -48,7 +48,7 @@
         </ng-container>
 
         <ng-container cdkColumnDef="createdBy">
-          <mat-header-cell *cdkHeaderCellDef> Created By </mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header> Created By </mat-header-cell>
           <mat-cell class="col-status" *cdkCellDef="let row">{{row.created_uid}}</mat-cell>
         </ng-container>
 
