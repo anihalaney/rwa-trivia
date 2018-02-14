@@ -138,7 +138,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                 this.parseErrorMessage = 'Missing Answer';
               } else if (question.tags.length < 3) {
                 this.parseError = true;
-                this.parseErrorMessage = 'Not enough tags';
+                this.parseErrorMessage = 'Atleast 3 tags required';
               }
 
               return question;
