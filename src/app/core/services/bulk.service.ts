@@ -43,4 +43,11 @@ export class BulkService {
         return Observable.of(null);
       });
   }
+  
+  // update Bulk Upload
+  updateBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo) {
+    const dbBulkUploadFileInfo = Object.assign({}, bulkUploadFileInfo); // object to be saved
+    this.db.doc('/bulk_uploads/' + dbBulkUploadFileInfo.id).set(dbBulkUploadFileInfo).then(ref => {
+    });
+  }
 }
