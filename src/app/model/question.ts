@@ -29,6 +29,11 @@ export class Question {
     question.questionText = db.questionText;
     question.status = db.status;
     question.tags = db.tags;
+    question.created_uid = db.created_uid;
+    question.ordered = db.ordered;
+    question.categories = db.categories;
+    question.approved_uid = db.approved_uid;
+    question.explanation = db.explanation;
     question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
     question.reason = db.reason ? db.reason : '';
     return question;
