@@ -82,5 +82,6 @@ export enum QuestionStatus {
   APPROVED,
   INACTIVE,
   PENDING,
-  REJECTED
+  REJECTED,
+  REQUEST_TO_CHANGE
 }
