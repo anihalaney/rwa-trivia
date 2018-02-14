@@ -36,10 +36,6 @@ export class Question {
     question.explanation = db.explanation;
     question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
     question.reason = db.reason ? db.reason : '';
-    // question.createdOn = db.createdOn;
-    // question.lastUpdated_uid = db.lastUpdated_uid;
-    // question.lastUpdatedOn = db.lastUpdatedOn;
-    // question.approvedOn = db.approvedOn;
     return question;
   }
 
@@ -82,5 +78,6 @@ export enum QuestionStatus {
   APPROVED,
   INACTIVE,
   PENDING,
-  REJECTED
+  REJECTED,
+  REQUEST_TO_CHANGE
 }
