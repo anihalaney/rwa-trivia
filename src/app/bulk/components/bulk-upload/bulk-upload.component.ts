@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -7,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { QuestionActions, BulkUploadActions } from '../../../core/store/actions';
 import { AppStore } from '../../../core/store/app-store';
 import { Utils } from '../../../core/services';
-import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, SearchResults } from '../../../model';
+import { Category, User, Question, QuestionStatus, BulkUploadFileInfo } from '../../../model';
 import { parse } from 'csv';
 
 @Component({
@@ -48,7 +47,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.tagsObs = store.select(s => s.tags);
-    // this._SearchResults = new SearchResults();
     this.store.take(1).subscribe(s => this.user = s.user);
   }
 
@@ -76,7 +74,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     if (event.target.files && event.target.files.length > 0) {
       const file = this.file = event.target.files[0];
       // on windows with liber office type is not set to text/csv
-      if (file.type === 'text/csv' || file.type === '') {
+
+      if (file.type === 'text/csv') {
         this.uploadFormGroup.get('csvFile').setValue(file);
         reader.readAsText(file);
         reader.onload = () => {
@@ -87,6 +86,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       } else {
         this.bulkUploadFileInfo = undefined;
         this.parseError = true;
+        this.parseErrorMessage = 'Please Select only .csv file';
       }
     }
   }
@@ -97,8 +97,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
         if (output !== undefined && output !== '') {
           this.questions =
             output.map(element => {
-
-              console.log(element);
 
               const question: Question = new Question();
               question.questionText = element['Question'];
