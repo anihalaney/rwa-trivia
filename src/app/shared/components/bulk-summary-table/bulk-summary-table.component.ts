@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../../../core/store/app-store';
@@ -6,7 +6,7 @@ import { BulkUploadFileInfo, Category, User } from '../../../model';
 import { Utils } from '../../../core/services';
 import { BulkUploadActions } from '../../../core/store/actions';
 import { Subscription } from 'rxjs/Subscription';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 
 
 
@@ -15,7 +15,7 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
   templateUrl: './bulk-summary-table.component.html',
   styleUrls: ['./bulk-summary-table.component.scss']
 })
-export class BulkSummaryTableComponent implements OnInit, OnDestroy {
+export class BulkSummaryTableComponent implements OnInit, OnDestroy, AfterViewInit {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   userBulkUploadFileInfo: BulkUploadFileInfo[];
@@ -34,10 +34,11 @@ export class BulkSummaryTableComponent implements OnInit, OnDestroy {
 
   @Input() bulkSummaryDetailPath: String;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private store: Store<AppStore>,
     private bulkUploadActions: BulkUploadActions
-    ) {
+  ) {
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.store.take(1).subscribe(s => this.user = s.user);
   }
@@ -50,18 +51,24 @@ export class BulkSummaryTableComponent implements OnInit, OnDestroy {
       this.store.dispatch((this.isAdminUrl) ? this.bulkUploadActions.loadBulkUpload()
         : this.bulkUploadActions.loadUserBulkUpload(this.user));
       this.subs.push(this.bulkUploadObs.subscribe((userBulkUploadFileInfo) => {
-        this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(userBulkUploadFileInfo);
-        this.dataSource.paginator = this.paginator;
+          this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(userBulkUploadFileInfo);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
       }));
       this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-     }
+    }
   }
+
   // get Questions by bulk upload Id
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
     this.bulkUploadFileInfo = row;
     this.SHOW_SUMMARY_TABLE = false;
-
   }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+  }
+
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);

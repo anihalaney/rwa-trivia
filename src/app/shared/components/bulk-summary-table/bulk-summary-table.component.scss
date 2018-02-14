@@ -1,3 +1,17 @@
 .cursor{
   cursor: pointer
 }
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.mat-table {
+  overflow: auto;
+}
+
+.mat-header-cell.mat-sort-header-sorted {
+  color: black;
+}
