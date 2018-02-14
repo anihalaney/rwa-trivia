@@ -135,6 +135,15 @@ export class QuestionActions {
     };
   }
 
+  // update Questions
+  static UPDATE_QUESTION = 'UPDATE_QUESTION';
+  updateQuestion(question: Question): ActionWithPayload<Question> {
+    return {
+      type: QuestionActions.UPDATE_QUESTION,
+      payload: question
+    };
+  }
+
   static ADD_BULK_QUESTIONS = 'ADD_BULK_QUESTIONS';
   addBulkQuestions(bulkUpload: BulkUpload):
     ActionWithPayload<BulkUpload> {
@@ -150,7 +159,6 @@ export class QuestionActions {
       payload: null
     };
   }
-
   static APPROVE_QUESTION = 'APPROVE_QUESTION';
   approveQuestion(question: Question): ActionWithPayload<Question> {
     return {
