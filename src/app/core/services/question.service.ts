@@ -61,7 +61,6 @@ export class QuestionService {
   }
 
   saveQuestion(question: Question) {
-    console.log(question);
     const dbQuestion = Object.assign({}, question); // object to be saved
     const questionId = this.db.createId();
     if (dbQuestion.id === undefined || dbQuestion.id === '') {
@@ -109,7 +108,6 @@ export class QuestionService {
 
   storeQuestion(index: number, questions: Array<Question>): void {
     const question = questions[index];
-    console.log('question--->', JSON.stringify(question));
     this.db.doc(`/unpublished_questions/${question.id}`)
       .set(question)
       .then(ref => {
@@ -118,7 +116,6 @@ export class QuestionService {
         } else {
           index++;
           this.storeQuestion(index, questions);
-          console.log(questions);
         }
       });
   }
