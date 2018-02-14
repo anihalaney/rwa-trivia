@@ -70,14 +70,14 @@
         <br />
         <input type="file" placeholder="Upload csv file" accept=".csv" (change)="onFileChange($event)" #fileInput>
         <p *ngIf="parseError" class="error">
-          Only .csv file is supported
+          {{parseErrorMessage}} 
         </p>
       </div>
       <div>
         <br />
         <br />
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined" (click)="onUploadSubmit()">Next</button>
+        <button mat-button matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined || parseError" (click)="onUploadSubmit()">Next</button>
       </div>
     </form>
   </mat-step>

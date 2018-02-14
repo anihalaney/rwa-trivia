@@ -4,14 +4,15 @@ import { QuestionsSearchComponent } from './questions-search/questions-search.co
 import { QuestionsTableComponent } from './questions-table/questions-table.component';
 import { BulkSummaryTableComponent } from './bulk-summary-table/bulk-summary-table.component';
 import { BulkSummaryQuestionComponent } from './bulk-summary-question/bulk-summary-question.component';
-
+import { QuestionFormComponent } from './question-form/question-form.component';
 export {
     QuestionComponent,
     QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
     BulkSummaryTableComponent,
-    BulkSummaryQuestionComponent
+    BulkSummaryQuestionComponent,
+    QuestionFormComponent
 };
 
 export default [
@@ -20,5 +21,6 @@ export default [
     QuestionsSearchComponent,
     QuestionsTableComponent,
     BulkSummaryTableComponent,
-    BulkSummaryQuestionComponent
+    BulkSummaryQuestionComponent,
+    QuestionFormComponent
 ];
