@@ -76,24 +76,64 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       const file = this.file = event.target.files[0];
       // on windows with liber office type is not set to text/csv
 
-   //   if (file.type === 'text/csv') {
-        this.uploadFormGroup.get('csvFile').setValue(file);
-        reader.readAsText(file);
-        reader.onload = () => {
-          this.bulkUploadFileInfo = new BulkUploadFileInfo;
-          this.bulkUploadFileInfo.fileName = file['name'];
+      //   if (file.type === 'text/csv') {
+      this.uploadFormGroup.get('csvFile').setValue(file);
+      reader.readAsText(file);
+      reader.onload = () => {
+        this.bulkUploadFileInfo = new BulkUploadFileInfo;
+        this.bulkUploadFileInfo.fileName = file['name'];
+
+        this.csvFileColumnValidation(reader.result);
+
+        if (!this.fileParseError) {
           this.generateQuestions(reader.result);
-        };
-    //   } else {
-    //     this.bulkUploadFileInfo = undefined;
-    //     this.parseError = true;
-    //     this.parseErrorMessage = 'Please Select only .csv file';
-    //   }
+        }
+      };
+      //   } else {
+      //     this.bulkUploadFileInfo = undefined;
+      //     this.parseError = true;
+      //     this.parseErrorMessage = 'Please Select only .csv file';
+      //   }
     }
   }
 
+
+  csvFileColumnValidation(csvString: String) {
+
+    const fileHeaderValue = csvString.split("\n")[0].split(",");
+    if (fileHeaderValue[0].trim() !== 'Question') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Question Column is not present in uploaded csv file';
+    } else if (fileHeaderValue[1].trim() !== 'Option 1') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Option 1 Column is not present in uploaded csv file';
+    } else if (fileHeaderValue[2].trim() !== 'Option 2') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Option 2 Column is not present in uploaded csv file';
+    } else if (fileHeaderValue[3].trim() !== 'Option 3') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Option 3 Column is not present in uploaded csv file';
+    } else if (fileHeaderValue[4].trim() !== 'Option 4') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Option 4 Column is not present in uploaded csv file';
+    } else if (fileHeaderValue[5].trim() !== 'Answer Index') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Answer Index Column is not present in uploaded csv file';
+    } else if (fileHeaderValue[6].trim() !== 'Tag 1') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Tag 1 Column is not present in uploaded csv file';
+    } else if (fileHeaderValue[7].trim() !== 'Tag 2') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Tag 2 Column is not present in uploaded csv file';
+    } else if (fileHeaderValue[8].trim() !== 'Tag 3') {
+      this.fileParseError = true;
+      this.fileParseErrorMessage = 'Tag 3 Column is not present in uploaded csv file';
+    }
+
+  }
+
   generateQuestions(csvString: string): void {
-    parse(csvString, { 'columns': true, 'skip_empty_lines': true },
+    parse(csvString, { 'columns': true, 'skip_empty_lines': false },
       (err, output) => {
         if (output !== undefined && output !== '') {
           this.questions =
@@ -174,6 +214,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
         this.bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
         this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.categoryIds = [this.uploadFormGroup.get('category').value];
+
+        question.createdOn = new Date();
+
         dbQuestions.push(question);
       }
       this.bulkUploadFileInfo.created_uid = this.user.userId;
