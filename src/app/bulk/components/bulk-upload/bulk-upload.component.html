@@ -69,15 +69,15 @@
       <div>
         <br />
         <input type="file" placeholder="Upload csv file" accept=".csv" (change)="onFileChange($event)" #fileInput>
-        <p *ngIf="parseError" class="error">
-          {{parseErrorMessage}} 
+        <p *ngIf="fileParseError" class="error">
+          {{fileParseErrorMessage}} 
         </p>
       </div>
       <div>
         <br />
         <br />
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined || parseError" (click)="onUploadSubmit()">Next</button>
+        <button mat-button matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined || fileParseError" (click)="onUploadSubmit()">Next</button>
       </div>
     </form>
   </mat-step>
@@ -86,7 +86,7 @@
     <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext type="button" (click)="onReviewSubmit()">Submit</button>
+      <button mat-button matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined || questionValidationError" (click)="onReviewSubmit()">Submit</button>
     </div>
   </mat-step>
   <mat-step>

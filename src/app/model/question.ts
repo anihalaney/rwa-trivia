@@ -19,6 +19,7 @@ export class Question {
   approvedOn?: Date;
   bulkUploadId?: string;
   reason?: string;
+  validationErrorMessages?: string[];
 
   static getViewModelFromDb(db: any): Question {
     const question: Question = new Question();
@@ -63,6 +64,7 @@ export class Question {
     this.categoryIds = [];
     this.published = false;
     this.status = QuestionStatus.SAVED;
+    this.validationErrorMessages = [];
   }
 }
 
