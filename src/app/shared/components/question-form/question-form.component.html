@@ -2,7 +2,7 @@
 
   <div class="mainpage submitpage">
     <div class="row hidden-xs">
-      <div class="pageheading col-sm-6 col-xs-12">Update Question</div>
+      <div class="pageheading col-sm-6 col-xs-12 color-black">Update Question</div>
     </div>
     <section id="curentactive" class="card">
       <div class="optionbox">
@@ -64,8 +64,8 @@
                   <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
                 </mat-basic-chip>
               </mat-chip-list>
-              <input class="type-zone" contenteditable="true" formControlName="tags">
-              <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+              <input class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags">
+              <button mat-button class="add-tag-button matHeader" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
               <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
                 Must have atleast 3 tags
               </div>
