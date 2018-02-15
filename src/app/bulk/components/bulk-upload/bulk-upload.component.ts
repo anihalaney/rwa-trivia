@@ -21,8 +21,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
-  parseError = false;
-  parseErrorMessage: String;
+  fileParseError = false;
+  fileParseErrorMessage: String;
+  questionValidationError = false;
   bulkUploadFileInfo: BulkUploadFileInfo;
   file: File;
 
@@ -70,12 +71,12 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   onFileChange(event) {
     const reader = new FileReader();
-    this.parseError = false;
+    this.fileParseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = this.file = event.target.files[0];
       // on windows with liber office type is not set to text/csv
 
-      if (file.type === 'text/csv') {
+   //   if (file.type === 'text/csv') {
         this.uploadFormGroup.get('csvFile').setValue(file);
         reader.readAsText(file);
         reader.onload = () => {
@@ -83,11 +84,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
           this.bulkUploadFileInfo.fileName = file['name'];
           this.generateQuestions(reader.result);
         };
-      } else {
-        this.bulkUploadFileInfo = undefined;
-        this.parseError = true;
-        this.parseErrorMessage = 'Please Select only .csv file';
-      }
+    //   } else {
+    //     this.bulkUploadFileInfo = undefined;
+    //     this.parseError = true;
+    //     this.parseErrorMessage = 'Please Select only .csv file';
+    //   }
     }
   }
 
@@ -124,29 +125,29 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
               question.created_uid = this.user.userId;
 
               if (!question.questionText || question.questionText.trim() === '') {
-                this.parseError = true;
-                this.parseErrorMessage = 'Missing Question';
+                this.questionValidationError = true;
+                question.validationErrorMessages.push('Missing Question');
               } else if (question.answers[0].answerText.trim() === '' || question.answers[1].answerText.trim() === '' ||
                 question.answers[2].answerText.trim() === '' || question.answers[3].answerText.trim() === '') {
-                this.parseError = true;
-                this.parseErrorMessage = 'Missing Question Answer Options';
+                this.questionValidationError = true;
+                question.validationErrorMessages.push('Missing Question Answer Options');
               } else if (question.answers.filter(a => a.correct).length !== 1) {
-                this.parseError = true;
-                this.parseErrorMessage = 'Must have exactly one correct answer';
+                this.questionValidationError = true;
+                question.validationErrorMessages.push('Must have exactly one correct answer');
               } else if (question.answers.filter(a => !a.answerText || a.answerText.trim() === '').length > 0) {
-                this.parseError = true;
-                this.parseErrorMessage = 'Missing Answer';
+                this.questionValidationError = true;
+                question.validationErrorMessages.push('Missing Answer');
               } else if (question.tags.length < 3) {
-                this.parseError = true;
-                this.parseErrorMessage = 'Atleast 3 tags required';
+                this.questionValidationError = true;
+                question.validationErrorMessages.push('Atleast 3 tags required');
               }
 
               return question;
             });
           this.bulkUploadFileInfo.uploaded = this.questions.length;
         } else {
-          this.parseError = true;
-          this.parseErrorMessage = 'File format is not correct';
+          this.fileParseError = true;
+          this.fileParseErrorMessage = 'File format is not correct, file must be a valid CSV format';
         }
       });
   }
