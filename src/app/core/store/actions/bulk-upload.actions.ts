@@ -13,7 +13,7 @@ export class BulkUploadActions {
     static LOAD_USER_BULK_UPLOAD_SUCCESS = 'LOAD_USER_BULK_UPLOAD_SUCCESS';
     static LOAD_BULK_UPLOAD_BY_ID = 'LOAD_BULK_UPLOAD_BY_ID';
     static LOAD_BULK_UPLOAD_BY_ID_SUCCESS = 'LOAD_BULK_UPLOAD_BY_ID_SUCCESS';
-
+    static UPDATE_BULK_UPLOAD = 'UPDATE_BULK_UPLOAD';
     loadBulkUpload(): ActionWithPayload<null> {
         return {
             type: BulkUploadActions.LOAD_BULK_UPLOAD,
@@ -55,6 +55,14 @@ export class BulkUploadActions {
     loadBulkUploadByIdSuccess(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
         return {
             type: BulkUploadActions.LOAD_BULK_UPLOAD_BY_ID_SUCCESS,
+            payload: bulkUploadFileInfo
+        };
+    }
+
+    // update Questions
+    updateBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo): ActionWithPayload<BulkUploadFileInfo> {
+        return {
+            type: BulkUploadActions.UPDATE_BULK_UPLOAD,
             payload: bulkUploadFileInfo
         };
     }
