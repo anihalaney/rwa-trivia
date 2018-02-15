@@ -86,6 +86,14 @@
                 </span>
               </div>
             </li>
+            <li *ngIf="row.validationErrorMessages?.length > 0">
+              <div class="error">Errors :</div>
+              <div class="error">
+                <span *ngFor="let error of row.validationErrorMessages">
+                  {{error}},
+                </span>
+              </div>
+            </li>
             <li *ngIf="row.reason">
               <div class="dark">Reason :</div>
               <div class="light">
