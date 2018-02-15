@@ -8,7 +8,7 @@
                     The actual rendered columns are set as a property on the row definition" -->
 
         <ng-container cdkColumnDef="uploadDate">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Date Uploaded</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader">Date Uploaded</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>
         </ng-container>
 
@@ -18,12 +18,12 @@
         </ng-container>
 
         <ng-container cdkColumnDef="category">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Category</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader">Category</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
         </ng-container>
 
         <ng-container cdkColumnDef="primaryTag">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header>Primary Tag</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader">Primary Tag</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
         </ng-container>
 
@@ -48,7 +48,7 @@
         </ng-container>
 
         <ng-container cdkColumnDef="createdBy">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header> Created By </mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader"> Created By </mat-header-cell>
           <mat-cell class="col-status" *cdkCellDef="let row">{{row.created_uid}}</mat-cell>
         </ng-container>
 
@@ -57,7 +57,7 @@
         <mat-row class="row-question" *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'createdBy'];">
         </mat-row>
       </mat-table>
-      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      <mat-paginator #paginator class="matHeader" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
       </mat-paginator>
     </div>
     <div *ngIf="!SHOW_SUMMARY_TABLE">

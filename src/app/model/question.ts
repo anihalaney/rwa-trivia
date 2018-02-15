@@ -37,6 +37,7 @@ export class Question {
     question.explanation = db.explanation;
     question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
     question.reason = db.reason ? db.reason : '';
+    question.createdOn = db.createdOn ? db.createdOn : new Date();
     return question;
   }
 
