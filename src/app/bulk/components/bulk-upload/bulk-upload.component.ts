@@ -74,25 +74,19 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.fileParseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = this.file = event.target.files[0];
-      // on windows with liber office type is not set to text/csv
-
-   //   if (file.type === 'text/csv') {
-        this.uploadFormGroup.get('csvFile').setValue(file);
-        reader.readAsText(file);
-        reader.onload = () => {
-          this.bulkUploadFileInfo = new BulkUploadFileInfo;
-          this.bulkUploadFileInfo.fileName = file['name'];
-          this.generateQuestions(reader.result);
-        };
-    //   } else {
-    //     this.bulkUploadFileInfo = undefined;
-    //     this.parseError = true;
-    //     this.parseErrorMessage = 'Please Select only .csv file';
-    //   }
+      this.uploadFormGroup.get('csvFile').setValue(file);
+      reader.readAsText(file);
+      reader.onload = () => {
+        this.bulkUploadFileInfo = new BulkUploadFileInfo;
+        this.bulkUploadFileInfo.fileName = file['name'];
+        this.generateQuestions(reader.result);
+      };
     }
   }
 
   generateQuestions(csvString: string): void {
+    this.questionValidationError = false;
+    this.fileParseError = false;
     parse(csvString, { 'columns': true, 'skip_empty_lines': true },
       (err, output) => {
         if (output !== undefined && output !== '') {
