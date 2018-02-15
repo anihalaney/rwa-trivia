@@ -87,12 +87,28 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   generateQuestions(csvString: string): void {
     this.questionValidationError = false;
     this.fileParseError = false;
-    parse(csvString, { 'columns': true, 'skip_empty_lines': true },
+    this.fileParseErrorMessage = '';
+
+    const parseOptions = {
+      'columns': columns => {
+        const validColumns = ['Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Answer Index', 'Tag 1', 'Tag 2', 'Tag 3',
+          'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9'];
+        if (validColumns.join(',') === columns.join(',')) {
+          return columns;
+        } else {
+          this.fileParseError = true;
+          this.fileParseErrorMessage = 'File format is not correct, must be in CSV format, must not have missing or wrong column order';
+          return '';
+        }
+      },
+      'skip_empty_lines': true
+    };
+
+    parse(csvString, parseOptions,
       (err, output) => {
         if (output !== undefined && output !== '') {
           this.questions =
             output.map(element => {
-
               const question: Question = new Question();
               question.questionText = element['Question'];
               question.answers = [
@@ -139,9 +155,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
               return question;
             });
           this.bulkUploadFileInfo.uploaded = this.questions.length;
-        } else {
-          this.fileParseError = true;
-          this.fileParseErrorMessage = 'File format is not correct, file must be a valid CSV format';
         }
       });
   }
