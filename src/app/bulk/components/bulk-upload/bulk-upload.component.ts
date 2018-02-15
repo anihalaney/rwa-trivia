@@ -74,71 +74,42 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.fileParseError = false;
     if (event.target.files && event.target.files.length > 0) {
       const file = this.file = event.target.files[0];
-      // on windows with liber office type is not set to text/csv
-
-      //   if (file.type === 'text/csv') {
       this.uploadFormGroup.get('csvFile').setValue(file);
       reader.readAsText(file);
       reader.onload = () => {
         this.bulkUploadFileInfo = new BulkUploadFileInfo;
         this.bulkUploadFileInfo.fileName = file['name'];
-
-        this.csvFileColumnValidation(reader.result);
-
-        if (!this.fileParseError) {
-          this.generateQuestions(reader.result);
-        }
+        this.generateQuestions(reader.result);
       };
-      //   } else {
-      //     this.bulkUploadFileInfo = undefined;
-      //     this.parseError = true;
-      //     this.parseErrorMessage = 'Please Select only .csv file';
-      //   }
-    }
-  }
-
-
-  csvFileColumnValidation(csvString: String) {
-
-    const fileHeaderValue = csvString.split("\n")[0].split(",");
-    if (fileHeaderValue[0].trim() !== 'Question') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Question Column is not present in uploaded csv file';
-    } else if (fileHeaderValue[1].trim() !== 'Option 1') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Option 1 Column is not present in uploaded csv file';
-    } else if (fileHeaderValue[2].trim() !== 'Option 2') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Option 2 Column is not present in uploaded csv file';
-    } else if (fileHeaderValue[3].trim() !== 'Option 3') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Option 3 Column is not present in uploaded csv file';
-    } else if (fileHeaderValue[4].trim() !== 'Option 4') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Option 4 Column is not present in uploaded csv file';
-    } else if (fileHeaderValue[5].trim() !== 'Answer Index') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Answer Index Column is not present in uploaded csv file';
-    } else if (fileHeaderValue[6].trim() !== 'Tag 1') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Tag 1 Column is not present in uploaded csv file';
-    } else if (fileHeaderValue[7].trim() !== 'Tag 2') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Tag 2 Column is not present in uploaded csv file';
-    } else if (fileHeaderValue[8].trim() !== 'Tag 3') {
-      this.fileParseError = true;
-      this.fileParseErrorMessage = 'Tag 3 Column is not present in uploaded csv file';
     }
 
   }
 
   generateQuestions(csvString: string): void {
-    parse(csvString, { 'columns': true, 'skip_empty_lines': false },
+    this.questionValidationError = false;
+    this.fileParseError = false;
+    this.fileParseErrorMessage = '';
+
+    const parseOptions = {
+      'columns': columns => {
+        const validColumns = ['Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Answer Index', 'Tag 1', 'Tag 2', 'Tag 3',
+          'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9'];
+        if (validColumns.join(',') === columns.join(',')) {
+          return columns;
+        } else {
+          this.fileParseError = true;
+          this.fileParseErrorMessage = 'File format is not correct, must be in CSV format, must not have missing or wrong column order';
+          return '';
+        }
+      },
+      'skip_empty_lines': true
+    };
+
+    parse(csvString, parseOptions,
       (err, output) => {
         if (output !== undefined && output !== '') {
           this.questions =
             output.map(element => {
-
               const question: Question = new Question();
               question.questionText = element['Question'];
               question.answers = [
@@ -185,9 +156,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
               return question;
             });
           this.bulkUploadFileInfo.uploaded = this.questions.length;
-        } else {
-          this.fileParseError = true;
-          this.fileParseErrorMessage = 'File format is not correct, file must be a valid CSV format';
         }
       });
   }
