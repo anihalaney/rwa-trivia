@@ -82,14 +82,11 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy, 
     this.dataSource.sort = this.sort;
   }
 
-
   // get Questions by bulk upload Id
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
     this.bulkUploadFileInfo = row;
     this.SHOW_SUMMARY_TABLE = false;
   }
-
-
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
