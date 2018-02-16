@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild, AfterViewInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../../../core/store/app-store';
@@ -16,7 +16,7 @@ import { Sort } from '@angular/material';
   templateUrl: './bulk-summary-table.component.html',
   styleUrls: ['./bulk-summary-table.component.scss']
 })
-export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   userBulkUploadFileInfo: BulkUploadFileInfo[];
