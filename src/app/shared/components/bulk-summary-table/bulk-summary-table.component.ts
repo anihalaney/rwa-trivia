@@ -42,9 +42,10 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy, 
   ) {
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.store.take(1).subscribe(s => this.user = s.user);
+    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
   }
   ngOnInit() {
-    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+
   }
 
   ngOnChanges() {
@@ -52,11 +53,6 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy, 
       this.loadBulkSummaryData();
     }
   }
-
-  ngAfterViewInit() {
-
-  }
-
 
   loadBulkSummaryData() {
     this.bulkUploadObs = this.store.select((this.bulkSummaryDetailPath.includes('admin'))
@@ -74,7 +70,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy, 
       this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(userBulkUploadFileInfo);
       this.setPaginatorAndSort();
     }));
-   
+
   }
 
   setPaginatorAndSort() {
