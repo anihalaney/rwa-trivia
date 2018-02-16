@@ -1,8 +1,9 @@
 export class BulkUploadFileInfo {
     id: String;
-    date: String;
+    date: number;
     fileName: String;
     categoryId: number;
+    category?: string;
     primaryTag: String;
     uploaded: number;
     approved: number;
