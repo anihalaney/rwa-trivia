@@ -188,7 +188,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
         dbQuestions.push(question);
       }
       this.bulkUploadFileInfo.created_uid = this.user.userId;
-      this.bulkUploadFileInfo.date = new Date().getTime().toString();
+      this.bulkUploadFileInfo.date = new Date().getTime();
       this.parsedQuestions = dbQuestions;
     }
   }
