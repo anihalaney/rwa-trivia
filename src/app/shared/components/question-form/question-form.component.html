@@ -56,9 +56,9 @@
             <p>Tags associated categories</p>
             <div data-tags-input-name="tag" id="tagBox" class="tagging">
               <mat-chip-list>
-                <!-- <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
+                <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
                   {{tag}}
-                </mat-basic-chip> -->
+                </mat-basic-chip>
                 <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
                   {{tag}}
                   <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>

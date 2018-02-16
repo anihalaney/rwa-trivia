@@ -32,7 +32,7 @@
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
     <mat-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
       <div class="row" *ngIf="row !== editQuestion">        
-        <div *ngIf="getDisplayStatus(row.status)==='REQUEST_TO_CHANGE' || getDisplayStatus(row.status)==='PENDING' || showButtons" class="col-xs-12 textrigth">
+        <div *ngIf="getDisplayStatus(row.status)==='REQUEST_TO_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div>
         <br />
