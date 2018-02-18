@@ -14,7 +14,7 @@ import { CONFIG } from '../../environments/environment';
 
 import { Utils, AuthenticationService, AuthInterceptor,
          CategoryService, TagService, QuestionService,
-         GameService, BulkService } from './services';
+         GameService, BulkService, UserService } from './services';
 
 import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './services';
 
@@ -25,14 +25,13 @@ import { reducer } from './store/app-store';
 import { LoginComponent } from './components';
 
 import { SharedModule } from  '../shared/shared.module';
- 
+
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 @NgModule({
   declarations: [
     LoginComponent
   ],
-
   entryComponents: [
     LoginComponent
   ],
@@ -42,7 +41,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
-    
+
     //store
     StoreModule.forRoot(reducer),
     StoreDevtoolsModule.instrument({
@@ -62,18 +61,18 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     //rwa module
     SharedModule
   ],
-  providers: [ 
+  providers: [
     //Services
-    Utils, AuthenticationService, 
+    Utils, AuthenticationService,
     CategoryService, TagService, QuestionService,
-    GameService,BulkService,
-    
+    GameService, UserService, BulkService,
+
     //route guards
     AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
 
     //Actions
-    UserActions, CategoryActions, TagActions, QuestionActions, 
-    UIStateActions, GameActions,BulkUploadActions,
+    UserActions, CategoryActions, TagActions, QuestionActions,
+    UIStateActions, GameActions, BulkUploadActions,
 
     {
       provide: HTTP_INTERCEPTORS,

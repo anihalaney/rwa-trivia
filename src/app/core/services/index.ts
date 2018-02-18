@@ -4,6 +4,7 @@ import {AuthInterceptor} from './auth-interceptor';
 import {CategoryService} from './category.service';
 import {TagService} from './tag.service';
 import {QuestionService} from './question.service';
+import {UserService} from './user.service';
 import {GameService} from './game.service';
 
 import {AuthGuard} from './auth-guard';
@@ -25,6 +26,7 @@ export {
     BulkLoadGuard,
     CategoriesResolver,
     TagsResolver,
+    UserService,
     BulkService
 };
 
@@ -41,5 +43,6 @@ export default [
     BulkLoadGuard,
     CategoriesResolver,
     TagsResolver,
+    UserService,
     BulkService
 ];

@@ -7,8 +7,11 @@ export class User {
   idToken?: string;
   authState: firebase.User;
   roles: any;
+  name?: string;
+  location?: string;
+  social?: any;
 
-  constructor(authState: firebase.User) 
+  constructor(authState: firebase.User)
   {
     if (authState) {
       this.authState = authState;
