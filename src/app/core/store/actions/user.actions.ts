@@ -31,4 +31,20 @@ export class UserActions {
     };
   }
 
+  static ADD_USER_PROFILE_DATA= 'ADD_USER_PROFILE_DATA';
+  addUserProfileData(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.ADD_USER_PROFILE_DATA,
+      payload: user
+    };
+  }
+
+  static ADD_USER_PROFILE_DATA_SUCCESS = 'ADD_USER_PROFILE_DATA_SUCCESS';
+  addUserProfileDataSuccess(): ActionWithPayload<null> {
+    return {
+      type: UserActions.ADD_USER_PROFILE_DATA_SUCCESS,
+      payload: null
+    };
+  }
+
 }
