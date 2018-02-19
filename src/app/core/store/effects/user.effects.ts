@@ -8,16 +8,24 @@ import { AuthenticationService } from '../../services'
 
 @Injectable()
 export class UserEffects {
-    constructor (
+    constructor(
         private actions$: Actions,
         private userActions: UserActions,
         private svc: AuthenticationService
-    ) {}
+    ) { }
 
-    @Effect() 
+    @Effect()
     loadUserRoles$ = this.actions$
         .ofType(UserActions.LOGIN_SUCCESS)
         .map((action: ActionWithPayload<User>) => action.payload)
         .switchMap((user: User) => this.svc.getUserRoles(user))
         .map((user: User) => this.userActions.addUserWithRoles(user));
+
+    @Effect()
+    addUserProfileData$ = this.actions$
+        .ofType(UserActions.ADD_USER_PROFILE_DATA)
+        .do((action: ActionWithPayload<User>) => this.userActions.addUserWithRoles(action.payload))
+        .filter(() => false);
+
+
 }

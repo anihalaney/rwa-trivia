@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs/Observable';
-import {Action} from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
-import {ActionWithPayload, UserActions} from '../actions';
-import {User} from '../../../model';
+import { ActionWithPayload, UserActions } from '../actions';
+import { User } from '../../../model';
 
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
@@ -24,3 +24,14 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
       return state;
   }
 }
+
+
+export function userSaveStatus(state: any = 'NONE', action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case UserActions.ADD_USER_PROFILE_DATA:
+      return 'SUCCESS';
+
+    default:
+      return state;
+  }
+};
