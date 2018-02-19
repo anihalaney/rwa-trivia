@@ -113,7 +113,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
   // Helper functions
-  getUserFromFormValue(formValue: any): Question {
+  getUserFromFormValue(formValue: any): void {
     this.user.name = formValue.name;
     this.user.displayName = formValue.displayName;
     this.user.location = formValue.location;
