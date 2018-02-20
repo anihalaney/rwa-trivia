@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Action} from '@ngrx/store';
-import {ActionWithPayload} from './action-with-payload';
+import { Injectable } from '@angular/core';
+import { Action } from '@ngrx/store';
+import { ActionWithPayload } from './action-with-payload';
 
-import {User} from '../../../model';
+import { User } from '../../../model';
 
 @Injectable()
 export class UserActions {
@@ -31,7 +31,7 @@ export class UserActions {
     };
   }
 
-  static ADD_USER_PROFILE_DATA= 'ADD_USER_PROFILE_DATA';
+  static ADD_USER_PROFILE_DATA = 'ADD_USER_PROFILE_DATA';
   addUserProfileData(user: User): ActionWithPayload<User> {
     return {
       type: UserActions.ADD_USER_PROFILE_DATA,
@@ -47,4 +47,20 @@ export class UserActions {
     };
   }
 
+
+  static LOAD_USER_BY_ID = 'LOAD_USER_BY_ID';
+  loadUserById(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.LOAD_USER_BY_ID,
+      payload: user
+    };
+  }
+
+  static LOAD_USER_BY_ID_SUCCESS = 'LOAD_USER_BY_ID_SUCCESS';
+  loadUserByIdSuccess(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.LOAD_USER_BY_ID_SUCCESS,
+      payload: user
+    };
+  }
 }
