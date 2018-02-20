@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { Category }     from '../../../model';
 
 @Component({
@@ -15,8 +15,8 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   categories: Category[];
   sub: any;
 
-  constructor(private store: Store<AppStore>) {
-    this.categoriesObs = store.select(s => s.categories);
+  constructor(private store: Store<AppState>) {
+    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
   }
 
   ngOnInit() {

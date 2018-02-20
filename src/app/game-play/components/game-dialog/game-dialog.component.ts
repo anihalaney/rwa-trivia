@@ -6,7 +6,8 @@ import { Store } from '@ngrx/store';
 import '../../../rxjs-extensions';
 
 import * as gameplayactions from '../../store/actions';
-import { AppStore, categoryDictionary, gameplayState } from '../../../core/store/app-store';
+import { categoryDictionary } from '../../../store';
+import { gameplayState, GamePlayState } from '../../store';
 
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
@@ -42,7 +43,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
 
-  constructor(private store: Store<AppStore>, private gameActions: GameActions,
+  constructor(private store: Store<GamePlayState>, private gameActions: GameActions,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     
     this._gameId = data.gameId;
@@ -55,7 +56,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //this.store.take(1).subscribe(s => this.user = s.user); //logged in user
+    //this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user); //logged in user
 
     this.store.dispatch(new gameplayactions.LoadGame({"gameId": this._gameId, "user": this.user}));
 

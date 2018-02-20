@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { User } from '../../../model';
 
 @Component({
@@ -13,7 +13,7 @@ import { User } from '../../../model';
 })
 export class BulkDetailsComponent implements OnInit, OnDestroy {
 
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private router: Router) {
   }
 

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
-import { AppStore, categoryDictionary } from '../../core/store/app-store';
+import { AppState, appState, categoryDictionary } from '../../store';
 import { Utils } from '../../core/services';
 import { QuestionActions, GameActions } from '../../core/store/actions';
 import { User, Category, Question, SearchResults, Game } from '../../model';
@@ -25,14 +25,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   greeting: string;
   message: string;
   
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private questionActions: QuestionActions,
               private gameActions: GameActions) {
-    this.questionOfTheDay$ = store.select(s => s.questionOfTheDay);
-    this.activeGames$ = store.select(s => s.activeGames);
+    this.questionOfTheDay$ = store.select(appState.coreState).select(s => s.questionOfTheDay);
+    this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
     this.gameInvites = [1,2,3];
 
-    this.sub = store.select(s => s.user).subscribe(user => {
+    this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
       this.user = user
       if (user) {
         //Load active Games
