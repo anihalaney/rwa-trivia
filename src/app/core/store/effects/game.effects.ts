@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Effect, Actions} from '@ngrx/effects';
 import {Action} from '@ngrx/store';
 
-import {AppStore} from '../app-store';
 import {Game, PlayerQnA, GameOptions, User, Question} from '../../../model';
 import {ActionWithPayload, GameActions} from '../actions';
 import {GameService} from '../../services'

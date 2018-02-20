@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { Utils } from '../../../core/services';
 import { Category, User } from '../../../model';
 
@@ -31,9 +31,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   filteredTags$: Observable<string[]>;
   
   constructor(private fb: FormBuilder,
-              private store: Store<AppStore>) {
-    this.categoriesObs = store.select(s => s.categories);
-    this.tagsObs = store.select(s => s.tags);
+              private store: Store<AppState>) {
+    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
+    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
   }
 
   ngOnInit() {

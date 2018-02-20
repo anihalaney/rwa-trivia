@@ -8,7 +8,6 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { CONFIG } from '../../environments/environment';
 
@@ -20,7 +19,7 @@ import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResol
 
 import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store';
 import { effects } from './store/effects';
-import { reducer } from './store/app-store';
+import { reducer } from './store';
 
 import { LoginComponent } from './components';
 
@@ -44,10 +43,8 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AngularFireStorageModule,
     
     //store
-    StoreModule.forRoot(reducer),
-    StoreDevtoolsModule.instrument({
-      maxAge: 20
-    }),
+    StoreModule.forFeature('core', reducer),
+    //StoreModule.forRoot(reducer),
 
     //ngrx effects
     EffectsModule.forFeature(effects),

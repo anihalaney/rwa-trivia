@@ -7,13 +7,13 @@ import '../../rxjs-extensions';
 import { CONFIG } from '../../../environments/environment';
 import { User, Question, QuestionStatus, SearchResults, SearchCriteria }     from '../../model';
 import { Store } from '@ngrx/store';
-import { AppStore } from '../store/app-store';
+import { AppState } from '../../store/app-store';
 import { QuestionActions } from '../store/actions';
 
 @Injectable()
 export class QuestionService {
   constructor(private db: AngularFirestore,
-              private store: Store<AppStore>,
+              private store: Store<AppState>,
               private questionActions: QuestionActions,
               private http: HttpClient) { 
   }
@@ -54,6 +54,7 @@ export class QuestionService {
     let questionId = this.db.createId();
     dbQuestion.id = questionId;
 
+    //TODO: why is dispatch here. should be from effect, right??
     //Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
     this.db.doc('/unpublished_questions/' + questionId).set(dbQuestion).then(ref => {
       this.store.dispatch(this.questionActions.addQuestionSuccess());

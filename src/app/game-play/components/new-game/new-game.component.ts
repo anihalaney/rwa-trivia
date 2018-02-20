@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
-import { AppStore, gameplayState } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
@@ -40,11 +40,11 @@ export class NewGameComponent implements OnInit, OnDestroy {
     return this.newGameForm.get('categoriesFA') as FormArray; 
   }
   constructor(private fb: FormBuilder,
-              private store: Store<AppStore>,
+              private store: Store<AppState>,
               private gameActions: GameActions,
               private router: Router) {
-    this.categoriesObs = store.select(s => s.categories);
-    this.tagsObs = store.select(s => s.tags);
+    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
+    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
     this.selectedTags = [];
   }
 
@@ -53,7 +53,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
-    this.sub3 = this.store.select(gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
+    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
       console.log("Navigating to game: " + gameId);
       this.router.navigate(['/game-play', gameId]);
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
@@ -185,7 +185,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   
   startNewGame(gameOptions: GameOptions) {
     let user: User;
-    this.store.take(1).subscribe(s => user = s.user); //logged in user
+    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user); //logged in user
 
     this.store.dispatch(new gameplayactions.CreateNewGame({gameOptions: gameOptions, user: user}));
   }

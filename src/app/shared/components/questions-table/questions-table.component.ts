@@ -4,7 +4,7 @@ import {DataSource} from '@angular/cdk/table';
 import {PageEvent, MatCheckboxChange, MatSelectChange} from '@angular/material';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
@@ -33,7 +33,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, OnDestroy {
   questionsSubject: BehaviorSubject<Question[]>;
   questionsDS: QuestionsDataSource;
 
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);

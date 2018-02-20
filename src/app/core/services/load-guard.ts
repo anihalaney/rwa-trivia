@@ -5,33 +5,33 @@ import { AuthenticationService }    from './authentication.service';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../store/app-store';
+import { AppState, appState } from '../../store';
 import { User } from '../../model';
 
 @Injectable()
 export class AdminLoadGuard implements CanLoad {
-  constructor(private store: Store<AppStore>, private authService: AuthenticationService) {
+  constructor(private store: Store<AppState>, private authService: AuthenticationService) {
 
   }
   canLoad(route: Route): Observable<boolean>  {
     console.log("admin canLoad");
-    return this.store.select(s => s.authInitialized).filter(i => i).take(1).switchMap(i => {
+    return this.store.select(appState.coreState).select(s => s.authInitialized).filter(i => i).take(1).switchMap(i => {
      this.authService.ensureLogin();
-     return this.store.select(s => s.user).filter(u => (u != null && u.userId != "")).take(1).map(u => u.roles && u.roles["admin"])
+     return this.store.select(appState.coreState).select(s => s.user).filter(u => (u != null && u.userId != "")).take(1).map(u => u.roles && u.roles["admin"])
     });
   }
 }
 
 @Injectable()
 export class BulkLoadGuard implements CanLoad {
-  constructor(private store: Store<AppStore>, private authService: AuthenticationService) {
+  constructor(private store: Store<AppState>, private authService: AuthenticationService) {
 
   }
   canLoad(route: Route): Observable<boolean>  {
     console.log("bulk canLoad");
-    return this.store.select(s => s.authInitialized).filter(i => i).take(1).switchMap(i => {
+    return this.store.select(appState.coreState).select(s => s.authInitialized).filter(i => i).take(1).switchMap(i => {
      this.authService.ensureLogin();
-     return this.store.select(s => s.user).filter(u => (u != null && u.userId != "")).take(1).map(u => u.roles && u.roles["admin"])
+     return this.store.select(appState.coreState).select(s => s.user).filter(u => (u != null && u.userId != "")).take(1).map(u => u.roles && u.roles["admin"])
     });
   }
 }

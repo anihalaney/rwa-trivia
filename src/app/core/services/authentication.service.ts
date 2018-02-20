@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
-import { AppStore } from '../store/app-store';
+import { AppState, appState } from '../../store';
 import { LoginComponent } from '../components';
 import { UserActions, UIStateActions } from '../store/actions';
 import { User } from '../../model';
@@ -15,7 +15,7 @@ import { User } from '../../model';
 export class AuthenticationService {
   dialogRef: MatDialogRef<LoginComponent>;
 
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private userActions: UserActions,
               private uiStateActions: UIStateActions,
               public afAuth: AngularFireAuth,
@@ -77,7 +77,7 @@ export class AuthenticationService {
 
   get isAuthenticated () : boolean {
     let user: User;
-    this.store.take(1).subscribe(s => user = s.user)
+    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user)
     if (user)
       return true;
 
@@ -86,7 +86,7 @@ export class AuthenticationService {
 
   get user () : User {
     let user: User;
-    this.store.take(1).subscribe(s => user = s.user)
+    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user)
     return user;
   };
 

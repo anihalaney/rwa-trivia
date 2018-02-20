@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState } from '../../../store';
 import { BulkUploadFileInfo } from '../../../model';
 
 @Component({
@@ -19,7 +19,7 @@ export class BulkSummaryComponent implements OnInit, OnDestroy {
   uploadsDS: FileUploadsDataSource;
   uploadsSubject: BehaviorSubject<BulkUploadFileInfo[]>;
 
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private router: Router) {
     this.uploadsSubject = new BehaviorSubject<BulkUploadFileInfo[]>([]);
     this.uploadsDS = new FileUploadsDataSource(this.uploadsSubject);

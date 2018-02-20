@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Effect, Actions} from '@ngrx/effects';
 
-import {AppStore} from '../app-store';
 import {Question, User, SearchResults, SearchCriteria} from '../../../model';
 import {ActionWithPayload, QuestionActions} from '../actions';
 import {QuestionService} from '../../services'

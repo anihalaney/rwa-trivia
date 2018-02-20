@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import {PageEvent} from '@angular/material';
-import { AppStore, categoryDictionary } from '../../../core/store/app-store';
+import { AppState, appState, categoryDictionary } from '../../../store/app-store';
 import { QuestionActions } from '../../../core/store/actions';
 import { User, Question, Category, SearchResults, SearchCriteria }     from '../../../model';
 
@@ -18,10 +18,10 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
   categoryDictObs: Observable<{[key: number]: Category}>;
   criteria: SearchCriteria;
 
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private questionActions: QuestionActions) {
-    this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
-    this.unpublishedQuestionsObs = store.select(s => s.unpublishedQuestions);
+    this.questionsSearchResultsObs = store.select(appState.coreState).select(s => s.questionsSearchResults);
+    this.unpublishedQuestionsObs = store.select(appState.coreState).select(s => s.unpublishedQuestions);
     this.categoryDictObs = store.select(categoryDictionary);
     this.criteria = new SearchCriteria();
   }
@@ -37,7 +37,7 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
   approveQuestion(question: Question) {
     let user: User;
 
-    this.store.take(1).subscribe(s => user = s.user);
+    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user);
     question.approved_uid = user.userId;
 
     this.store.dispatch(this.questionActions.approveQuestion(question));

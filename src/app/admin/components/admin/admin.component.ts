@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { User } from '../../../model';
 
 @Component({
@@ -15,9 +15,9 @@ export class AdminComponent implements OnInit, OnDestroy {
   user: User;
   sub: any;
 
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private router: Router) {
-    this.sub = store.select(s => s.user).subscribe(user => {
+    this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
       if (!user || !user.roles["admin"])
         this.router.navigate(['/']);
 

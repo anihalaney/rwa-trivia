@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 
 @Component({
   selector: 'tag-list',
@@ -15,8 +15,8 @@ export class TagsComponent implements OnInit, OnDestroy {
   tags: string[];
   sub: any;
 
-  constructor(private store: Store<AppStore>) {
-    this.tagsObs = store.select(s => s.tags);
+  constructor(private store: Store<AppState>) {
+    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
   }
 
   ngOnInit() {

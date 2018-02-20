@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { User } from '../../../model';
 
 @Component({
@@ -14,9 +14,9 @@ export class ProfileSettingsComponent {
   @Input() user: User;
   sub: Subscription;
   
-  constructor(private store: Store<AppStore>) {
+  constructor(private store: Store<AppState>) {
 
-  this.sub = store.select(s => s.user).subscribe(user => {
+  this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
     this.user = user;
     });
   }
