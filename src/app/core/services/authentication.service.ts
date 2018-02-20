@@ -43,21 +43,21 @@ export class AuthenticationService {
     });
   }
 
-  getUserRoles(user: User): Observable<User> {
-    //return this.db2.collection("/users", ref => ref.where()).doc<any>('/users/' + user.userId).valueChanges();
-    return this.db.doc<any>('/users/' + user.userId).snapshotChanges()
-      .take(1)
-      .map(u => {
-        if (u.payload.exists && u.payload.data().roles) {
-          user.roles = u.payload.data().roles;
-        }
-        return user;
-      })
-      .catch(error => {
-        console.log(error);
-        return Observable.of(user);
-      });
-  }
+  // getUserRoles(user: User): Observable<User> {
+  //   //return this.db2.collection("/users", ref => ref.where()).doc<any>('/users/' + user.userId).valueChanges();
+  //   return this.db.doc<any>('/users/' + user.userId).snapshotChanges()
+  //     .take(1)
+  //     .map(u => {
+  //       if (u.payload.exists && u.payload.data().roles) {
+  //         user.roles = u.payload.data().roles;
+  //       }
+  //       return user;
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //       return Observable.of(user);
+  //     });
+  // }
 
   ensureLogin = function (url?: string) {
     if (!this.isAuthenticated)
@@ -94,12 +94,14 @@ export class AuthenticationService {
     return (this.user) ? 'Bearer ' + this.user.idToken : null;
   }
 
-  saveUserProfileData(user: User) {
-    const dbUser = Object.assign({}, user); // object to be saved
+  // saveUserProfileData(user: User) {
+  //   const dbUser = Object.assign({}, user); // object to be saved
 
-    this.db.doc('/users/' + dbUser.userId).set(dbUser).then(ref => {
-      this.store.dispatch(this.userActions.addUserProfileDataSuccess());
-    });
-  }
+  //   delete dbUser['authState'];
+
+  //   this.db.doc('/users/' + dbUser.userId).set(dbUser).then(ref => {
+  //     this.store.dispatch(this.userActions.addUserProfileDataSuccess());
+  //   });
+  // }
 
 }

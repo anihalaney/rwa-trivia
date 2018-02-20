@@ -34,4 +34,13 @@ export function userSaveStatus(state: any = 'NONE', action: ActionWithPayload<st
     default:
       return state;
   }
-};
+}
+
+export function userInfosById(state: any = {}, action: ActionWithPayload<User>): User {
+  switch (action.type) {
+    case UserActions.LOAD_USER_BY_ID_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
