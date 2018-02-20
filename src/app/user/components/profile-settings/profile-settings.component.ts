@@ -25,6 +25,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   userForm: FormGroup;
   profileOptions: string[] = ['Only with friends', 'General', 'Programming', 'Architecture'];
 
+  userObs: Observable<User>;
+  userObject: User;
 
   get categoryList(): FormArray {
     return this.userForm.get('categoryList') as FormArray;
@@ -42,18 +44,30 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     }));
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+
+    this.userObs = this.store.select(s => s.userInfosById);
   }
 
   // Lifecycle hooks
   ngOnInit() {
     this.subs.push(this.store.select(s => s.user).subscribe(user => {
       this.user = user;
+      console.log(this.user);
       this.createForm(this.user);
+
+      this.store.dispatch(this.userActions.loadUserById(this.user));
+      this.subs.push(this.userObs.subscribe((users) => {
+        this.userObject = users[0];
+        if (this.userObject !== undefined) {
+          this.createForm(this.userObject);
+        }
+      }));
+
     }));
   }
 
   createForm(user: User) {
-    // console.log('user', user);
+    console.log('user', user);
     const categoryIds: FormGroup[] = this.categories.map(category => {
       const status = (user.categoryIds && user.categoryIds.indexOf(category.id) !== -1) ? true : false
       const fg = new FormGroup({

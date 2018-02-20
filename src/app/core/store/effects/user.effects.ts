@@ -4,15 +4,11 @@ import { Effect, Actions } from '@ngrx/effects';
 import { AppStore } from '../app-store';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User } from '../../../model';
-import { AuthenticationService } from '../../services'
+import { UserService } from '../../services'
 
 @Injectable()
 export class UserEffects {
-    constructor(
-        private actions$: Actions,
-        private userActions: UserActions,
-        private svc: AuthenticationService
-    ) { }
+
 
     @Effect()
     loadUserRoles$ = this.actions$
@@ -24,8 +20,18 @@ export class UserEffects {
     @Effect()
     addUserProfileData$ = this.actions$
         .ofType(UserActions.ADD_USER_PROFILE_DATA)
-        .do((action: ActionWithPayload<User>) => this.userActions.addUserWithRoles(action.payload))
+        .do((action: ActionWithPayload<User>) => this.svc.saveUserProfileData(action.payload))
         .filter(() => false);
 
+    @Effect()
+    loadUserById$ = this.actions$
+        .ofType(UserActions.LOAD_USER_BY_ID)
+        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserById(action.payload))
+        .map((user: User) => this.userActions.loadUserByIdSuccess(user));
 
+    constructor(
+        private actions$: Actions,
+        private userActions: UserActions,
+        private svc: UserService
+    ) { }
 }
