@@ -19,6 +19,7 @@ export class Question {
   approvedOn?: Date;
   bulkUploadId?: string;
   reason?: string;
+  primaryTag?: String;
   validationErrorMessages?: string[];
 
   static getViewModelFromDb(db: any): Question {
@@ -38,6 +39,7 @@ export class Question {
     question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
     question.reason = db.reason ? db.reason : '';
     question.createdOn = db.createdOn ? db.createdOn : new Date();
+    question.primaryTag = db.primaryTag ? db.primaryTag : '';
     return question;
   }
 

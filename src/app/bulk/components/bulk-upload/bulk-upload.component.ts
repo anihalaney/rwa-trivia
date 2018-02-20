@@ -126,7 +126,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
               for (let i = 1; i < 10; i++) {
                 if (element['Tag ' + i] && element['Tag ' + i] !== '') {
-                  question.tags.push(element['Tag ' + i]);
+                  if (question.tags.indexOf(element['Tag ' + i].trim()) === -1) {
+                    question.tags.push(element['Tag ' + i].trim());
+                  }
                 }
               }
 
@@ -182,7 +184,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
         this.bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
         this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.categoryIds = [this.uploadFormGroup.get('category').value];
-
+        question.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.createdOn = new Date();
 
         dbQuestions.push(question);
