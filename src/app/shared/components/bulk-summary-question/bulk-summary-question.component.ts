@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../../../core/store/app-store';
-import { BulkUploadFileInfo, Question, Category, User } from '../../../model';
+import { BulkUploadFileInfo, Question, Category} from '../../../model';
 import { QuestionActions } from '../../../core/store/actions';
 import { Subscription } from 'rxjs/Subscription';
 import { MatTableDataSource } from '@angular/material';
@@ -25,8 +25,6 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
   unPublishedQuestionObs: Observable<Question[]>;
   publishedQuestionObs: Observable<Question[]>;
 
-  user: User;
-
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
 
@@ -44,7 +42,6 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
   constructor(private store: Store<AppStore>,
     private storage: AngularFireStorage,
     private questionActions: QuestionActions) {
-    this.store.take(1).subscribe(s => this.user = s.user);
   }
 
   ngOnInit() {
