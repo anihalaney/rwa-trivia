@@ -34,8 +34,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
   name: string;
-  data1: any;
-  cropperSettings1: CropperSettings;
+  data: any;
+  cropperSettings: CropperSettings;
   croppedWidth: number;
   croppedHeight: number;
 
@@ -64,29 +64,29 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
     this.name = 'Angular2'
-    this.cropperSettings1 = new CropperSettings();
-    this.cropperSettings1.noFileInput = false;
+    this.cropperSettings = new CropperSettings();
+    this.cropperSettings.noFileInput = true;
 
-    this.cropperSettings1.width = 200;
-    this.cropperSettings1.height = 200;
+    this.cropperSettings.width = 200;
+    this.cropperSettings.height = 200;
 
-    this.cropperSettings1.croppedWidth = 200;
-    this.cropperSettings1.croppedHeight = 200;
+    this.cropperSettings.croppedWidth = 200;
+    this.cropperSettings.croppedHeight = 200;
 
-    this.cropperSettings1.canvasWidth = 500;
-    this.cropperSettings1.canvasHeight = 300;
+    this.cropperSettings.canvasWidth = 500;
+    this.cropperSettings.canvasHeight = 300;
 
-    this.cropperSettings1.minWidth = 10;
-    this.cropperSettings1.minHeight = 10;
+    this.cropperSettings.minWidth = 10;
+    this.cropperSettings.minHeight = 10;
 
-    this.cropperSettings1.rounded = false;
-    this.cropperSettings1.keepAspect = false;
+    this.cropperSettings.rounded = false;
+    this.cropperSettings.keepAspect = false;
 
-    this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
-    this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
+    this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+    this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
 
-    this.data1 = {};
-    this.data1.image = '/assets/images/avatarimg.jpg';
+    this.data = {};
+    this.data.image = '/assets/images/avatarimg.jpg';
   }
 
   // Lifecycle hooks
@@ -126,37 +126,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
   saveProfileImage() {
-    console.log('save profile images');
     console.log(this.file);
   }
-  // changeImage(event) {
-
-  //   const file: File = event.target.files[0];
-  //   const reader = new FileReader();
-
-  //   reader.addEventListener('load', () => {
-  //     this.data1.image = reader.result;
-
-  //     const myReader: FileReader = new FileReader();
-  //     const that = this;
-  //     const image: any = new Image();
-
-  //     image.onloadend = function (loadEvent: any) {
-  //       image.src = loadEvent.target.result;
-  //       that.cropper.setImage(image);
-  //       this.cropper.setImage(image);
-  //       myReader.readAsDataURL(file);
-  //     };
-
-  //     console.log(this.data1);
-
-  //   }, false);
-
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //   }
-
-  // }
 
   createForm(user: User) {
     const categoryIds: FormGroup[] = this.categories.map(category => {
