@@ -47,8 +47,8 @@
                 <input id="file-upload" name='upload_cont_img' type="file" (change)="fileChangeListener($event)" style="display:none;">
                 <!-- <label id="file-name">add tags</label> -->
               </div>
-              <!--- <p>Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg,
-                gif and png</p> -->
+              <p *ngIf="!file">Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg,
+                gif and png</p>
               <div>
                 <div class="file-upload">
                   <!-- <span class="text">upload</span> -->
