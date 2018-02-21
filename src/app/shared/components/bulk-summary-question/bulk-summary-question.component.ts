@@ -36,7 +36,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
   PUBLISHED_SHOW_BUTTON_STATE = false;
   UNPUBLISHED_SHOW_BUTTON_STATE = true;
 
-  downloadUrl: String;
+  downloadUrl: Observable<string | null>;
 
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() isAdminUrl: boolean;
@@ -73,11 +73,13 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
       }));
 
       // get the download file url
+      // tslint:disable-next-line:max-line-length
       const filePath = `bulk_upload/${this.bulkUploadFileInfo.created_uid}/${this.bulkUploadFileInfo.id}-${this.bulkUploadFileInfo.fileName}`;
       const ref = this.storage.ref(filePath);
-      ref.getDownloadURL().subscribe(res => {
-        this.downloadUrl = res;
-      });
+      this.downloadUrl = ref.getDownloadURL();
+      // ref.getDownloadURL().subscribe(res => {
+      //   this.downloadUrl = res;
+      // });
     }
   }
 
