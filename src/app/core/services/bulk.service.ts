@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-// AngularFireStorageModule
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 

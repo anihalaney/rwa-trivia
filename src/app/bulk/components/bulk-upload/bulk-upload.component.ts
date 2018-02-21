@@ -122,10 +122,13 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
               if (question.answers[element['Answer Index'] - 1] !== undefined) {
                 question.answers[element['Answer Index'] - 1].correct = true;
               }
-              question.tags = [];
+
+              // add primary tag to question tag list
+              question.tags = [this.uploadFormGroup.get('tagControl').value];
 
               for (let i = 1; i < 10; i++) {
                 if (element['Tag ' + i] && element['Tag ' + i] !== '') {
+                  // check for duplicate tags
                   if (question.tags.indexOf(element['Tag ' + i].trim()) === -1) {
                     question.tags.push(element['Tag ' + i].trim());
                   }
@@ -184,9 +187,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
         this.bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
         this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.categoryIds = [this.uploadFormGroup.get('category').value];
-        question.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.createdOn = new Date();
-
         dbQuestions.push(question);
       }
       this.bulkUploadFileInfo.created_uid = this.user.userId;
