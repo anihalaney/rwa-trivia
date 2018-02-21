@@ -8,6 +8,8 @@ import { AppStore } from '../../../core/store/app-store';
 import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { AngularFireStorage } from 'angularfire2/storage';
+import * as firebase from 'firebase';
 
 
 @Component({
@@ -42,7 +44,13 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   file: File;
 
+  myFile: Blob;
+
   @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
+
+
+  basePath = '/profile_picture';
+
 
   get categoryList(): FormArray {
     return this.userForm.get('categoryList') as FormArray;
@@ -52,7 +60,10 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     return this.userForm.get('socialAccountList') as FormArray;
   }
 
-  constructor(private fb: FormBuilder, private store: Store<AppStore>, private userActions: UserActions) {
+  constructor(private fb: FormBuilder,
+    private store: Store<AppStore>,
+    private storage: AngularFireStorage,
+    private userActions: UserActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.subs.push(this.categoriesObs.subscribe(categories => {
       this.categories = categories;
@@ -87,6 +98,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
     this.data = {};
     this.data.image = '/assets/images/avatarimg.jpg';
+
   }
 
   // Lifecycle hooks
@@ -126,7 +138,67 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
   saveProfileImage() {
+    const storageRef = firebase.storage().ref();
+
     console.log(this.file);
+
+    const file = this.file
+
+    const reader = new FileReader();
+
+    // reader.addEventListener('load', () => {
+    //   console.log(reader.result);
+    //   this.myFile = this.dataURItoBlob(reader.result);
+    //   console.log(this.myFile);
+    // }, false);
+
+    // if (file) {
+    //   reader.readAsDataURL(file);
+    // }
+
+    // if (this.myFile) {
+    //   reader.readAsDataURL(this.myFile);
+    //   reader.onloadend = function () {
+    //     const base64data = reader.result;
+    //     console.log(base64data);
+    //   }
+    // }    
+
+    const storageRefs = firebase.storage().ref();
+    storageRefs.child(`${this.basePath}/${this.userObject.userId}/${this.userObject.userId}-a`).delete();
+
+    // const uploadTask = storageRef.child(`${this.basePath}/${this.userObject.userId}/${this.userObject.userId}-a`).put(this.file);
+
+    // uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+    //   (snapshot) => {
+    //     // upload in progress
+    //     // upload.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+    //   },
+    //   (error) => {
+    //     // upload failed
+    //     console.log(error)
+    //   },
+    //   () => {
+    //     // upload success
+    //     // upload.url = uploadTask.snapshot.downloadURL
+    //     // upload.name = upload.file.name
+    //     console.log(uploadTask.snapshot.downloadURL);
+    //     this.data.image = uploadTask.snapshot.downloadURL ? uploadTask.snapshot.downloadURL : '/assets/images/avatarimg.jpg';
+    //     this.file = undefined;
+    //   }
+    // );
+  }
+
+
+  dataURItoBlob(dataURI) {
+    const binary = atob(dataURI.split(',')[1]);
+    const array = [];
+    for (let i = 0; i < binary.length; i++) {
+      array.push(binary.charCodeAt(i));
+    }
+    return new Blob([new Uint8Array(array)], {
+      type: 'image/jpg'
+    });
   }
 
   createForm(user: User) {
