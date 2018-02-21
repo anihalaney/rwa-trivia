@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/Observable';
+
 export class BulkUploadFileInfo {
     id: String;
     date: number;
@@ -10,4 +12,5 @@ export class BulkUploadFileInfo {
     rejected: number;
     status: String;
     created_uid?: string;
+    downloadUrl?: Observable<String>;
 }
