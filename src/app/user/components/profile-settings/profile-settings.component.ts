@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { UserActions } from '../../../core/store/actions';
 import { Store } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { AppStore } from '../../../core/store/app-store';
 import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
 
 
 @Component({
@@ -28,6 +29,21 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   userObs: Observable<User>;
   userObject: User;
 
+
+  profileImage: String;
+
+
+  name: string;
+  data1: any;
+  cropperSettings1: CropperSettings;
+  croppedWidth: number;
+  croppedHeight: number;
+
+
+  file: File;
+
+  @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
+
   get categoryList(): FormArray {
     return this.userForm.get('categoryList') as FormArray;
   }
@@ -35,7 +51,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   get socialAccountList(): FormArray {
     return this.userForm.get('socialAccountList') as FormArray;
   }
-
 
   constructor(private fb: FormBuilder, private store: Store<AppStore>, private userActions: UserActions) {
     this.categoriesObs = store.select(s => s.categories);
@@ -46,6 +61,32 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
 
     this.userObs = this.store.select(s => s.userInfosById);
+
+
+    this.name = 'Angular2'
+    this.cropperSettings1 = new CropperSettings();
+    this.cropperSettings1.noFileInput = false;
+
+    this.cropperSettings1.width = 200;
+    this.cropperSettings1.height = 200;
+
+    this.cropperSettings1.croppedWidth = 200;
+    this.cropperSettings1.croppedHeight = 200;
+
+    this.cropperSettings1.canvasWidth = 500;
+    this.cropperSettings1.canvasHeight = 300;
+
+    this.cropperSettings1.minWidth = 10;
+    this.cropperSettings1.minHeight = 10;
+
+    this.cropperSettings1.rounded = false;
+    this.cropperSettings1.keepAspect = false;
+
+    this.cropperSettings1.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
+    this.cropperSettings1.cropperDrawSettings.strokeWidth = 2;
+
+    this.data1 = {};
+    this.data1.image = '/assets/images/avatarimg.jpg';
   }
 
   // Lifecycle hooks
@@ -64,6 +105,58 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
     }));
   }
+
+  cropped(bounds: Bounds) {
+    this.croppedHeight = bounds.bottom - bounds.top;
+    this.croppedWidth = bounds.right - bounds.left;
+  }
+
+  fileChangeListener($event) {
+    const image: any = new Image();
+    this.file = $event.target.files[0];
+    const myReader: FileReader = new FileReader();
+    const that = this;
+    myReader.onloadend = function (loadEvent: any) {
+      image.src = loadEvent.target.result;
+      that.cropper.setImage(image);
+
+    };
+    console.log(this.file);
+    myReader.readAsDataURL(this.file);
+  }
+
+  saveProfileImage() {
+    console.log('save profile images');
+    console.log(this.file);
+  }
+  // changeImage(event) {
+
+  //   const file: File = event.target.files[0];
+  //   const reader = new FileReader();
+
+  //   reader.addEventListener('load', () => {
+  //     this.data1.image = reader.result;
+
+  //     const myReader: FileReader = new FileReader();
+  //     const that = this;
+  //     const image: any = new Image();
+
+  //     image.onloadend = function (loadEvent: any) {
+  //       image.src = loadEvent.target.result;
+  //       that.cropper.setImage(image);
+  //       this.cropper.setImage(image);
+  //       myReader.readAsDataURL(file);
+  //     };
+
+  //     console.log(this.data1);
+
+  //   }, false);
+
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //   }
+
+  // }
 
   createForm(user: User) {
     const categoryIds: FormGroup[] = this.categories.map(category => {
@@ -98,8 +191,59 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
         (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
       privateProfileSetting: [user.privateProfileSetting]
+    });
+  }
+
+
+  onFileChange(event) {
+    const fileList: FileList = event.target.files;
+
+    if (fileList.length === 0) {
+      console.log('Please select Logo');
+    } else {
+      const file: File = fileList[0];
+      const fname = file.name;
+      const fsize = file.size;
+      const ftype = file.type;
+      if (fsize > 1048576) {
+        console.log('Your uploaded logo is not larger than 1 MB.');
+      } else {
+        if (ftype === 'image/jpeg' || ftype === 'image/jpg' || ftype === 'image/png') {
+
+
+          // this.layoutService.showLoading();
+          // this.formData = new FormData();
+          // this.formData.append('uploadFile', file, file.name);
+          // const formData: FormData = new FormData();
+          // formData.append('uploadFile', file, file.name);
+
+          const reader = new FileReader();
+
+          reader.addEventListener('load', () => {
+            this.profileImage = reader.result;
+          }, false);
+
+          if (file) {
+            reader.readAsDataURL(file);
+          }
+          // this._spService.uploadLogo(formData, this.service_provider.id.toString()).subscribe(response => {
+          // this.layoutService.hideLoading();
+          // this.service_provider.logo = response.original.data.logo;
+          // this.serviceProvider.emit(this.service_provider);
+          // if (this.service_provider.logo != null && !this.isUserAdmin) {
+          //   this.layoutService.setCompanyLogo(environment.apiUrl + 'serviceprovider/logo/' + this.service_provider.logo);
+          // }
+          // swal('Success', response.original.msg.toString(), 'success');
+          // }, (err) => {
+          // this.layoutService.hideLoading();
+          // SharedUtilities.handleError(err);
+          // console.log('erroor');
+          // });
+        } else {
+          console.log('Only PNG, JPG and JPEG Type Allow.');
+        }
+      }
     }
-    );
   }
 
   onSubmit() {
