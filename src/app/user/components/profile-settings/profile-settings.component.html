@@ -36,18 +36,24 @@
               </div> -->
             <div class="col-sm-3 col-xs-12">
               <label for="file-upload" class="custom-file-upload">
-                <img src="/assets/images/avatarimg.jpg" alt="Avatar" />
+                <img [src]="data1.image" [width]="croppedWidth" [height]="croppedHeight" style="width:150px;height:140px" alt="Avatar" />
               </label>
+              <div><button class="btn" (click)="saveProfileImage()">Save</button></div>
             </div>
             <div class="col-sm-9 col-xs-12 avatarinput">
               <div>
-                <input id="file-upload" name='upload_cont_img' type="file" style="display:none;">
-                <label id="file-name">add tags</label>
+                <!-- <input id="file-upload" name='upload_cont_img' type="file" (change)="changeImage($event)" style="display:none;"> -->
+                <!-- <label id="file-name">add tags</label> -->
               </div>
-              <p>Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg,
-                gif and png</p>
+              <!--- <p>Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg,
+                gif and png</p> -->
+              <div>
+                <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper>
+                <!-- <span class="result" *ngIf="data1.image"> -->
+                  <!-- <img [src]="data1.image" [width]="croppedWidth" [height]="croppedHeight" style="width:150px;height:140px"> {{data1.image.length}} -->
+                <!-- </span> -->
+              </div>
             </div>
-
           </div>
           <div class="clearfix namefield">
             <!-- 

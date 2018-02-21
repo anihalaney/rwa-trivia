@@ -7,7 +7,7 @@ import { CdkTableModule } from '@angular/cdk/table';
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
-
+import { ImageCropperComponent } from 'ng2-img-cropper';
 import {
   QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
   BulkSummaryTableComponent, BulkSummaryQuestionComponent, QuestionFormComponent
@@ -21,7 +21,8 @@ import {
     QuestionsTableComponent,
     BulkSummaryTableComponent,
     BulkSummaryQuestionComponent,
-    QuestionFormComponent
+    QuestionFormComponent,
+    ImageCropperComponent
   ],
   imports: [
     CommonModule,
@@ -48,7 +49,7 @@ import {
   ],
   exports: [QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
     BulkSummaryTableComponent, BulkSummaryQuestionComponent, CommonModule, HttpClientModule, ReactiveFormsModule,
-    FlexLayoutModule, QuestionFormComponent,
+    FlexLayoutModule, QuestionFormComponent, ImageCropperComponent,
     SharedMaterialModule, CdkTableModule]
 })
 export class SharedModule { }
