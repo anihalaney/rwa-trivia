@@ -36,7 +36,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
   PUBLISHED_SHOW_BUTTON_STATE = false;
   UNPUBLISHED_SHOW_BUTTON_STATE = true;
 
-  downloadUrl: Observable<string | null>;
+  downloadUrl: String;
 
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() isAdminUrl: boolean;
@@ -72,9 +72,12 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
         this.unPublishedQuestions = questions;
       }));
 
-      const filePath = 'bulk_upload/' + this.user.userId + '/' + this.bulkUploadFileInfo.id + '-' + this.bulkUploadFileInfo.fileName;
+      // get the download file url
+      const filePath = `bulk_upload/${this.bulkUploadFileInfo.created_uid}/${this.bulkUploadFileInfo.id}-${this.bulkUploadFileInfo.fileName}`;
       const ref = this.storage.ref(filePath);
-      this.downloadUrl = ref.getDownloadURL();
+      ref.getDownloadURL().subscribe(res => {
+        this.downloadUrl = res;
+      });
     }
   }
 

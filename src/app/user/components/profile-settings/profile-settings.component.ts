@@ -52,7 +52,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.push(this.store.select(s => s.user).subscribe(user => {
       this.user = user;
-      console.log(this.user);
       this.createForm(this.user);
 
       this.store.dispatch(this.userActions.loadUserById(this.user));
@@ -67,7 +66,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
   createForm(user: User) {
-    console.log('user', user);
     const categoryIds: FormGroup[] = this.categories.map(category => {
       const status = (user.categoryIds && user.categoryIds.indexOf(category.id) !== -1) ? true : false
       const fg = new FormGroup({
@@ -112,7 +110,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     }
 
     // get user object from the forms
-    console.log(this.userForm.value);
     this.getUserFromFormValue(this.userForm.value);
 
 
