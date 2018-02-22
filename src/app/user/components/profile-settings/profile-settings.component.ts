@@ -33,24 +33,22 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
   profileImage: String;
-
-
   name: string;
   data: any;
   cropperSettings: CropperSettings;
   croppedWidth: number;
   croppedHeight: number;
-
+  imageValidation: String;
 
   file: File;
-
   myFile: Blob;
 
   @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
 
-
+  getImageUrl = false;
   basePath = '/profile_picture';
-
+  croppedPicPath = 'croppedPic';
+  originalPicPath = 'originalPic';
 
   get categoryList(): FormArray {
     return this.userForm.get('categoryList') as FormArray;
@@ -110,11 +108,18 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.userActions.loadUserById(this.user));
       this.subs.push(this.userObs.subscribe((users) => {
         this.userObject = users[0];
-        if (this.userObject !== undefined) {
+        if (this.userObject) {
           this.createForm(this.userObject);
+          if (!this.getImageUrl) {
+            const filePath = `${this.basePath}/${this.userObject.userId}/${this.croppedPicPath}/${this.userObject.profilePicture}`;
+            const ref = this.storage.ref(filePath);
+            ref.getDownloadURL().subscribe(res => {
+              this.data.image = res;
+              this.getImageUrl = true;
+            });
+          }
         }
       }));
-
     }));
   }
 
@@ -124,72 +129,78 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
   fileChangeListener($event) {
-    const image: any = new Image();
-    this.file = $event.target.files[0];
-    const myReader: FileReader = new FileReader();
-    const that = this;
-    myReader.onloadend = function (loadEvent: any) {
-      image.src = loadEvent.target.result;
-      that.cropper.setImage(image);
+    this.onFileChange($event);
+    if (!this.imageValidation) {
+      const image: any = new Image();
+      this.file = $event.target.files[0];
+      const myReader: FileReader = new FileReader();
+      const that = this;
+      myReader.onloadend = function (loadEvent: any) {
+        image.src = loadEvent.target.result;
+        that.cropper.setImage(image);
 
-    };
-    console.log(this.file);
-    myReader.readAsDataURL(this.file);
+      };
+      myReader.readAsDataURL(this.file);
+    }
   }
 
   saveProfileImage() {
-    const storageRef = firebase.storage().ref();
+    if (!this.imageValidation) {
+      const storageRef = firebase.storage().ref();
+      const file = this.file
+      const reader = new FileReader();
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+      const fileName = `${new Date().getTime()}-${this.file.name}`;
 
-    console.log(this.file);
+      const originalImageUploadTask = storageRef.child(`${this.basePath}/${this.userObject.userId}/${this.originalPicPath}/${fileName}`).put(this.file);
 
-    const file = this.file
+      originalImageUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+        (snapshot) => {
+          // upload in progress
+          console.log("original image upload in progress");
+        },
+        (error) => {
+          // upload failed
+          console.log(error)
+        },
+        () => {
+          // upload success
+          console.log(originalImageUploadTask.snapshot.downloadURL);
+          this.file = undefined;
+        });
 
-    const reader = new FileReader();
 
-    // reader.addEventListener('load', () => {
-    //   console.log(reader.result);
-    //   this.myFile = this.dataURItoBlob(reader.result);
-    //   console.log(this.myFile);
-    // }, false);
+      reader.addEventListener('load', () => {
+        this.myFile = this.dataURItoBlob(this.data.image);
 
-    // if (file) {
-    //   reader.readAsDataURL(file);
-    // }
-
-    // if (this.myFile) {
-    //   reader.readAsDataURL(this.myFile);
-    //   reader.onloadend = function () {
-    //     const base64data = reader.result;
-    //     console.log(base64data);
-    //   }
-    // }    
-
-    const storageRefs = firebase.storage().ref();
-    storageRefs.child(`${this.basePath}/${this.userObject.userId}/${this.userObject.userId}-a`).delete();
-
-    // const uploadTask = storageRef.child(`${this.basePath}/${this.userObject.userId}/${this.userObject.userId}-a`).put(this.file);
-
-    // uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-    //   (snapshot) => {
-    //     // upload in progress
-    //     // upload.progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-    //   },
-    //   (error) => {
-    //     // upload failed
-    //     console.log(error)
-    //   },
-    //   () => {
-    //     // upload success
-    //     // upload.url = uploadTask.snapshot.downloadURL
-    //     // upload.name = upload.file.name
-    //     console.log(uploadTask.snapshot.downloadURL);
-    //     this.data.image = uploadTask.snapshot.downloadURL ? uploadTask.snapshot.downloadURL : '/assets/images/avatarimg.jpg';
-    //     this.file = undefined;
-    //   }
-    // );
+        if (this.myFile) {
+          const cropperImageUploadTask = storageRef.child(`${this.basePath}/${this.userObject.userId}/${this.croppedPicPath}/${fileName}`).put(this.myFile);
+          cropperImageUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
+            (snapshot) => {
+              // upload in progress
+              console.log("cropped image upload in progress");
+            },
+            (error) => {
+              // upload failed
+              console.log(error)
+            },
+            () => {
+              // upload success
+              console.log(cropperImageUploadTask.snapshot.downloadURL);
+              this.data.image = cropperImageUploadTask.snapshot.downloadURL ? cropperImageUploadTask.snapshot.downloadURL : '/assets/images/avatarimg.jpg';
+              this.user.profilePicture = fileName;
+              this.userObject = this.user;
+              this.file = undefined;
+              this.saveUser(this.user);
+            });
+        }
+      }, false);
+    }
   }
 
-
+  // cropped image convert to blob object
   dataURItoBlob(dataURI) {
     const binary = atob(dataURI.split(',')[1]);
     const array = [];
@@ -211,16 +222,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       return fg;
     });
     const categoryFA = new FormArray(categoryIds);
-
-
-    // let fcs: FormControl[] = question.tags.map(tag => {
-    //   let fc = new FormControl(tag);
-    //   return fc;
-    // });
-    // if (fcs.length == 0)
-    //   fcs = [new FormControl('')];
-    // let tagsFA = new FormArray(fcs);
-
     this.userForm = this.fb.group({
       name: [user.name, Validators.required],
       displayName: [user.displayName, Validators.required],
@@ -233,7 +234,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
         (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
       profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
         (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
-      privateProfileSetting: [user.privateProfileSetting]
+      privateProfileSetting: [user.privateProfileSetting],
+      profilePicture: [user.profilePicture]
     });
   }
 
@@ -242,48 +244,20 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     const fileList: FileList = event.target.files;
 
     if (fileList.length === 0) {
-      console.log('Please select Logo');
+      this.imageValidation = 'Please select Logo';
     } else {
       const file: File = fileList[0];
       const fname = file.name;
       const fsize = file.size;
       const ftype = file.type;
+
       if (fsize > 1048576) {
-        console.log('Your uploaded logo is not larger than 1 MB.');
+        this.imageValidation = 'Your uploaded logo is not larger than 1 MB.';
       } else {
-        if (ftype === 'image/jpeg' || ftype === 'image/jpg' || ftype === 'image/png') {
-
-
-          // this.layoutService.showLoading();
-          // this.formData = new FormData();
-          // this.formData.append('uploadFile', file, file.name);
-          // const formData: FormData = new FormData();
-          // formData.append('uploadFile', file, file.name);
-
-          const reader = new FileReader();
-
-          reader.addEventListener('load', () => {
-            this.profileImage = reader.result;
-          }, false);
-
-          if (file) {
-            reader.readAsDataURL(file);
-          }
-          // this._spService.uploadLogo(formData, this.service_provider.id.toString()).subscribe(response => {
-          // this.layoutService.hideLoading();
-          // this.service_provider.logo = response.original.data.logo;
-          // this.serviceProvider.emit(this.service_provider);
-          // if (this.service_provider.logo != null && !this.isUserAdmin) {
-          //   this.layoutService.setCompanyLogo(environment.apiUrl + 'serviceprovider/logo/' + this.service_provider.logo);
-          // }
-          // swal('Success', response.original.msg.toString(), 'success');
-          // }, (err) => {
-          // this.layoutService.hideLoading();
-          // SharedUtilities.handleError(err);
-          // console.log('erroor');
-          // });
+        if (ftype === 'image/jpeg' || ftype === 'image/jpg' || ftype === 'image/png' || ftype === 'image/gif') {
+          this.imageValidation = undefined;
         } else {
-          console.log('Only PNG, JPG and JPEG Type Allow.');
+          this.imageValidation = 'Only PNG, GIF, JPG and JPEG Type Allow.';
         }
       }
     }
@@ -295,13 +269,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     if (this.userForm.invalid) {
       return;
     }
-
     // get user object from the forms
     this.getUserFromFormValue(this.userForm.value);
-
-
-    // console.log(JSON.stringify(this.user));
-
     // call saveUser
     this.saveUser(this.user);
   }
@@ -327,10 +296,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.user.profileSetting = formValue.profileSetting;
     this.user.profileLocationSetting = formValue.profileLocationSetting;
     this.user.privateProfileSetting = formValue.privateProfileSetting;
-
+    this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
   }
-
-
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);

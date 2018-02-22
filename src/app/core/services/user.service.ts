@@ -40,14 +40,11 @@ export class UserService {
 
     saveUserProfileData(user: User) {
         const dbUser = Object.assign({}, user); // object to be saved
-
         delete dbUser['authState'];
-
         this.db.doc('/users/' + dbUser.userId).set(dbUser).then(ref => {
             this.store.dispatch(this.userActions.addUserProfileDataSuccess());
         });
     }
-
 
     // get user by Id
     getUserById(user: User): Observable<User> {
