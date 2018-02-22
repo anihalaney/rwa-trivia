@@ -13,6 +13,7 @@ export class User {
   profileSetting: string;
   profileLocationSetting: string;
   privateProfileSetting: boolean;
+  profilePicture?: String;
   email: string;
   idToken?: string;
   authState: firebase.User;
