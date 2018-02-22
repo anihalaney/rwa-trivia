@@ -29,50 +29,32 @@
           <h3>Upload Avatar :-</h3>
           <!-- Upload avatar -->
           <div class="row">
-            <!--  <div class="col-sm-3 col-xs-12">
-                <div class="avatarimg">
-                  <img src="images/avatarimg.jpg"  alt="Avatar" />
-                </div>
-              </div> -->
             <div class="col-sm-3 col-xs-12">
               <label for="file-upload" class="custom-file-upload">
                 <img [src]="data.image" [width]="croppedWidth" [height]="croppedHeight" style="width:150px;height:140px" alt="Avatar" />
               </label>
               <div>
-                <button class="btn" (click)="saveProfileImage()">Save</button>
+                <button *ngIf="file && !imageValidation" class="btn" (click)="saveProfileImage()">Save</button>
               </div>
             </div>
             <div class="col-sm-9 col-xs-12 avatarinput">
               <div>
                 <input id="file-upload" name='upload_cont_img' type="file" (change)="fileChangeListener($event)" style="display:none;">
-                <!-- <label id="file-name">add tags</label> -->
               </div>
-              <p *ngIf="!file">Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg,
+              <P *ngIf="imageValidation" class="error">
+                {{imageValidation}}
+              </P>
+              <p *ngIf="!file || imageValidation">Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg,
                 gif and png</p>
               <div>
                 <div class="file-upload">
-                  <!-- <span class="text">upload</span> -->
-                  <!-- <input id="custom-input" type="file" (change)="fileChangeListener($event)"> -->
                 </div>
-                <img-cropper *ngIf="file" #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+                <img-cropper *ngIf="file && !imageValidation" #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
                 <br>
-                <!-- <span class="result rounded" *ngIf="data.image">
-                  <img [src]="data.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight">
-                </span> -->
-                <!-- <img-cropper [image]="data1" [settings]="cropperSettings1" (onCrop)="cropped($event)"></img-cropper> -->
-                <!-- <span class="result" *ngIf="data1.image"> -->
-                <!-- <img [src]="data1.image" [width]="croppedWidth" [height]="croppedHeight" style="width:150px;height:140px"> {{data1.image.length}} -->
-                <!-- </span> -->
               </div>
             </div>
           </div>
           <div class="clearfix namefield">
-            <!-- 
-            <div class="formfield">
-              <label>Name</label>
-              <input matInput formControlName="questionText" placeholder="Enter Name" type="text" value="" required="">
-              <p>Enter your real name, so people you know and recogize you</p>
-            </div> -->
 
             <div class="formfield">
               <label>Name</label>
@@ -80,8 +62,6 @@
               <p>Enter your real name, so people you know and recogize you</p>
               <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine">Name is required!</p>
             </div>
-
-
 
             <div class="formfield">
               <label>Display Name</label>
@@ -176,15 +156,12 @@
                     </label>
                     <p>This means no one can invite you or can see you profile.</p>
                   </div>
-
                   <!-- Security Setting end -->
                 </div>
               </div>
             </div>
-
           </div>
           <!-- Social Accounts end -->
-
         </div>
       </div>
       <!-- Profile pik end -->
@@ -193,12 +170,6 @@
         <button class="btn">Cancel</button>
       </div>
     </form>
-
-
-
-
   </section>
-
-
 </div>
 <!-- My setting end -->
