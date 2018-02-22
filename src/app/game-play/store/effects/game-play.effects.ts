@@ -28,6 +28,8 @@ export class GamePlayEffects {
         )
       );
 
+  //load from router
+  
   @Effect() 
   loadGame$ = this.actions$
     .ofType(GamePlayActionTypes.LOAD)

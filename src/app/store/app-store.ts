@@ -6,6 +6,7 @@ import * as rootStoreReducers from './reducers';
 import * as gamePlayStore from '../game-play/store';
 import * as coreStore from '../core/store';
 
+//do we even need this?
 export interface AppState {
   gameplayState: gamePlayStore.GamePlayState,
   coreState: coreStore.CoreState,
@@ -18,6 +19,8 @@ export const appState = {
   rootState: rootStoreReducers.rootState
 };
 
-//Categories selector
+
+//Selectors from coreStore
+//TODO: a good way to slice this when there are multiple feature stores??
 export const getCategories = coreStore.getCategories
 export const categoryDictionary = coreStore.categoryDictionary;
