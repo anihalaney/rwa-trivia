@@ -9,6 +9,7 @@ import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
 import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
+import { MatSnackBar } from '@angular/material';
 import * as firebase from 'firebase';
 
 
@@ -19,6 +20,7 @@ import * as firebase from 'firebase';
 })
 export class ProfileSettingsComponent implements OnInit, OnDestroy {
   @Input() user: User;
+
   // Properties
   categories: Category[];
   categoryDict: { [key: number]: Category };
@@ -33,7 +35,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
   profileImage: String;
-  name: string;
   data: any;
   cropperSettings: CropperSettings;
   croppedWidth: number;
@@ -41,7 +42,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   imageValidation: String;
 
   file: File;
-  myFile: Blob;
+  croppedFileBlobObject: Blob;
 
   @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
 
@@ -61,6 +62,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     private store: Store<AppStore>,
     private storage: AngularFireStorage,
+    public snackBar: MatSnackBar,
     private userActions: UserActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.subs.push(this.categoriesObs.subscribe(categories => {
@@ -71,8 +73,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
     this.userObs = this.store.select(s => s.userInfosById);
 
-
-    this.name = 'Angular2'
+    // For cropping image
     this.cropperSettings = new CropperSettings();
     this.cropperSettings.noFileInput = true;
 
@@ -144,6 +145,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // upload original and cropped image on fire storage
   saveProfileImage() {
     if (!this.imageValidation) {
       const storageRef = firebase.storage().ref();
@@ -154,64 +156,37 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       }
       const fileName = `${new Date().getTime()}-${this.file.name}`;
 
-      const originalImageUploadTask = storageRef.child(`${this.basePath}/${this.userObject.userId}/${this.originalPicPath}/${fileName}`).put(this.file);
-
-      originalImageUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-        (snapshot) => {
-          // upload in progress
-          console.log("original image upload in progress");
-        },
-        (error) => {
-          // upload failed
-          console.log(error)
-        },
-        () => {
-          // upload success
-          console.log(originalImageUploadTask.snapshot.downloadURL);
-          this.file = undefined;
-        });
-
+      // original image upload on fire storage
+      this.storage.upload(`${this.basePath}/${this.userObject.userId}/${this.originalPicPath}/${fileName}`, this.file);
 
       reader.addEventListener('load', () => {
-        this.myFile = this.dataURItoBlob(this.data.image);
+        this.croppedFileBlobObject = this.dataURItoBlob(this.data.image);
 
-        if (this.myFile) {
-          const cropperImageUploadTask = storageRef.child(`${this.basePath}/${this.userObject.userId}/${this.croppedPicPath}/${fileName}`).put(this.myFile);
-          cropperImageUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-            (snapshot) => {
-              // upload in progress
-              console.log("cropped image upload in progress");
-            },
-            (error) => {
-              // upload failed
-              console.log(error)
-            },
-            () => {
-              // upload success
-              console.log(cropperImageUploadTask.snapshot.downloadURL);
-              this.data.image = cropperImageUploadTask.snapshot.downloadURL ? cropperImageUploadTask.snapshot.downloadURL : '/assets/images/avatarimg.jpg';
-              this.user.profilePicture = fileName;
-              this.userObject = this.user;
-              this.file = undefined;
-              this.saveUser(this.user);
-            });
+        if (this.croppedFileBlobObject) {
+          // cropped image upload on fire storage
+          this.storage.upload(`${this.basePath}/${this.userObject.userId}/${this.croppedPicPath}/${fileName}`, this.croppedFileBlobObject);
+          this.user.profilePicture = fileName;
+          this.userObject = this.user;
+          this.file = undefined;
+          this.saveUser(this.user);
         }
       }, false);
     }
   }
 
   // cropped image convert to blob object
-  dataURItoBlob(dataURI) {
+  dataURItoBlob(dataURI: any) {
     const binary = atob(dataURI.split(',')[1]);
     const array = [];
     for (let i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
     return new Blob([new Uint8Array(array)], {
-      type: 'image/jpg'
+      type: this.file.type
     });
   }
 
+  // create the form based on user object
   createForm(user: User) {
     const categoryIds: FormGroup[] = this.categories.map(category => {
       const status = (user.categoryIds && user.categoryIds.indexOf(category.id) !== -1) ? true : false
@@ -240,6 +215,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
 
+  // user profile validation
   onFileChange(event) {
     const fileList: FileList = event.target.files;
 
@@ -251,8 +227,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       const fsize = file.size;
       const ftype = file.type;
 
-      if (fsize > 1048576) {
-        this.imageValidation = 'Your uploaded logo is not larger than 1 MB.';
+      if (fsize > 2097152) {
+        this.imageValidation = 'Your uploaded logo is not larger than 2 MB.';
       } else {
         if (ftype === 'image/jpeg' || ftype === 'image/jpg' || ftype === 'image/png' || ftype === 'image/gif') {
           this.imageValidation = undefined;
@@ -275,8 +251,10 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.saveUser(this.user);
   }
 
+  // store the user object
   saveUser(user: User) {
     this.store.dispatch(this.userActions.addUserProfileData(user));
+    this.snackBar.open('Profile Updated Successfuly', '', { duration: 3000 });
   }
 
   // Helper functions
