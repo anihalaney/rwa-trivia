@@ -62,6 +62,7 @@ export class BulkSummaryTableComponent implements OnChanges, OnDestroy {
       for (const key in userBulkUploadFileInfo) {
         if (userBulkUploadFileInfo[key]) {
           userBulkUploadFileInfo[key].category = this.categoryDict[userBulkUploadFileInfo[key].categoryId].categoryName;
+          // tslint:disable-next-line:max-line-length
           const filePath = `bulk_upload/${userBulkUploadFileInfo[key].created_uid}/${userBulkUploadFileInfo[key].id}-${userBulkUploadFileInfo[key].fileName}`;
           const ref = this.storage.ref(filePath);
           userBulkUploadFileInfo[key].downloadUrl = ref.getDownloadURL();
