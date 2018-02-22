@@ -19,6 +19,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 })
 export class ProfileSettingsComponent implements OnInit, OnDestroy {
   @Input() user: User;
+
   // Properties
   categories: Category[];
   categoryDict: { [key: number]: Category };
@@ -124,7 +125,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       this.profileImageValidation = 'Please select Profile picture';
     } else {
       const file: File = fileList[0];
-      const fimeName = file.name;
+      const fileName = file.name;
       const fileSize = file.size;
       const fileType = file.type;
 
@@ -160,7 +161,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
   // cropped image convert to blob object
-  dataURItoBlob(dataURI) {
+  dataURItoBlob(dataURI: any) {
     const binary = atob(dataURI.split(',')[1]);
     const array = [];
     for (let i = 0; i < binary.length; i++) {
@@ -171,6 +172,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
+  // create the form based on user object
   createForm(user: User) {
     const categoryIds: FormGroup[] = this.categories.map(category => {
       const status = (user.categoryIds && user.categoryIds.indexOf(category.id) !== -1) ? true : false
@@ -230,6 +232,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.saveUser(this.user);
   }
 
+  // store the user object
   saveUser(user: User) {
     this.store.dispatch(this.userActions.addUserProfile(user));
   }
