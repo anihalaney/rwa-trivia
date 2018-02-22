@@ -1,3 +1,7 @@
+.error{
+  color: red;
+}
+
 .submitpage .card{ padding: 25px 0 0 }
 .pcategories > .col-sm-9{ border-top: 1px solid; padding:46px 15px 0; }
 #curentactive { text-align: center; }
@@ -79,6 +83,3 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
 }
 
 
-.error{
-  color: red;
-}
