@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../../../core/store/app-store';
-import { BulkUploadFileInfo, Question, Category} from '../../../model';
+import { BulkUploadFileInfo, Question, Category } from '../../../model';
 import { QuestionActions } from '../../../core/store/actions';
 import { Subscription } from 'rxjs/Subscription';
 import { MatTableDataSource } from '@angular/material';
@@ -77,6 +77,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
       // ref.getDownloadURL().subscribe(res => {
       //   this.downloadUrl = res;
       // });
+
     }
   }
 
