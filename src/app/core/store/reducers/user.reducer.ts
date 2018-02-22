@@ -10,6 +10,8 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
       return null;
     case UserActions.ADD_USER_WITH_ROLES:
       return action.payload;
+    case UserActions.LOAD_USER_PROFILE_SUCCESS:
+      return action.payload;
     default:
       return state;
   }
@@ -25,21 +27,12 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
   }
 }
 
-
-export function userSaveStatus(state: any = 'NONE', action: ActionWithPayload<string>): string {
+export function userProfileSaveStatus(state: any = 'NONE', action: ActionWithPayload<null>): string {
   switch (action.type) {
-    case UserActions.ADD_USER_PROFILE_DATA:
+    case UserActions.ADD_USER_PROFILE:
+    return 'IN PROCESS'
+    case UserActions.ADD_USER_PROFILE_SUCCESS:
       return 'SUCCESS';
-
-    default:
-      return state;
-  }
-}
-
-export function userInfosById(state: any = {}, action: ActionWithPayload<User>): User {
-  switch (action.type) {
-    case UserActions.LOAD_USER_BY_ID_SUCCESS:
-      return action.payload;
     default:
       return state;
   }

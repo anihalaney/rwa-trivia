@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 import { UserActions } from '../../../core/store/actions';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
@@ -7,9 +8,8 @@ import { Observable } from 'rxjs/Observable';
 import { AppStore } from '../../../core/store/app-store';
 import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
-import { ImageCropperComponent, CropperSettings, Bounds } from 'ng2-img-cropper';
+import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
-import * as firebase from 'firebase';
 
 
 @Component({
@@ -29,26 +29,17 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   profileOptions: string[] = ['Only with friends', 'General', 'Programming', 'Architecture'];
 
   userObs: Observable<User>;
-  userObject: User;
 
+  profileImage: { image: any } = { image: '/assets/images/avatarimg.jpg' };
+  basePath = '/profile';
+  profileImagePath = 'avatar';
+  originalImagePath = 'original';
+  profileImageValidation: String;
+  profileImageFile: File;
 
-  profileImage: String;
-  name: string;
-  data: any;
   cropperSettings: CropperSettings;
-  croppedWidth: number;
-  croppedHeight: number;
-  imageValidation: String;
 
-  file: File;
-  myFile: Blob;
-
-  @ViewChild('cropper', undefined) cropper: ImageCropperComponent;
-
-  getImageUrl = false;
-  basePath = '/profile_picture';
-  croppedPicPath = 'croppedPic';
-  originalPicPath = 'originalPic';
+  @ViewChild('cropper') cropper: ImageCropperComponent;
 
   get categoryList(): FormArray {
     return this.userForm.get('categoryList') as FormArray;
@@ -61,142 +52,110 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     private store: Store<AppStore>,
     private storage: AngularFireStorage,
-    private userActions: UserActions) {
+    private userActions: UserActions,
+    private snackBar: MatSnackBar) {
+    this.subs.push(this.store.take(1).subscribe(s => this.user = s.user));
     this.categoriesObs = store.select(s => s.categories);
-    this.subs.push(this.categoriesObs.subscribe(categories => {
-      this.categories = categories;
-    }));
+    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.setCropperSettings();
+  }
 
-    this.userObs = this.store.select(s => s.userInfosById);
-
-
-    this.name = 'Angular2'
+  private setCropperSettings() {
     this.cropperSettings = new CropperSettings();
     this.cropperSettings.noFileInput = true;
-
-    this.cropperSettings.width = 200;
-    this.cropperSettings.height = 200;
-
-    this.cropperSettings.croppedWidth = 200;
-    this.cropperSettings.croppedHeight = 200;
-
-    this.cropperSettings.canvasWidth = 500;
-    this.cropperSettings.canvasHeight = 300;
-
+    this.cropperSettings.width = 150;
+    this.cropperSettings.height = 140;
+    this.cropperSettings.croppedWidth = 150;
+    this.cropperSettings.croppedHeight = 140;
+    this.cropperSettings.canvasWidth = 300;
+    this.cropperSettings.canvasHeight = 280;
     this.cropperSettings.minWidth = 10;
     this.cropperSettings.minHeight = 10;
-
     this.cropperSettings.rounded = false;
     this.cropperSettings.keepAspect = false;
-
     this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
     this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
-
-    this.data = {};
-    this.data.image = '/assets/images/avatarimg.jpg';
-
   }
 
   // Lifecycle hooks
   ngOnInit() {
-    this.subs.push(this.store.select(s => s.user).subscribe(user => {
+    this.store.dispatch(this.userActions.loadUserProfile(this.user));
+    this.userObs = this.store.select(s => s.user);
+    this.subs.push(this.userObs.subscribe(user => {
       this.user = user;
-      this.createForm(this.user);
+      if (this.user) {
+        this.createForm(this.user);
+        if (this.user.profilePicture) {
+          const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
+          const ref = this.storage.ref(filePath);
+          ref.getDownloadURL().subscribe(res => {
+            this.profileImage.image = res;
+          });
+        }
+      }
+    }));
 
-      this.store.dispatch(this.userActions.loadUserById(this.user));
-      this.subs.push(this.userObs.subscribe((users) => {
-        this.userObject = users[0];
-        if (this.userObject) {
-          this.createForm(this.userObject);
-          if (!this.getImageUrl) {
-            const filePath = `${this.basePath}/${this.userObject.userId}/${this.croppedPicPath}/${this.userObject.profilePicture}`;
-            const ref = this.storage.ref(filePath);
-            ref.getDownloadURL().subscribe(res => {
-              this.data.image = res;
-              this.getImageUrl = true;
-            });
-          }
+    this.subs.push(this.store.select(s => s.userProfileSaveStatus)
+      .subscribe(status => {
+        if (status === 'SUCCESS') {
+          this.snackBar.open('Profile saved!', '', { duration: 2000 });
         }
       }));
-    }));
   }
 
-  cropped(bounds: Bounds) {
-    this.croppedHeight = bounds.bottom - bounds.top;
-    this.croppedWidth = bounds.right - bounds.left;
-  }
-
-  fileChangeListener($event) {
-    this.onFileChange($event);
-    if (!this.imageValidation) {
-      const image: any = new Image();
-      this.file = $event.target.files[0];
-      const myReader: FileReader = new FileReader();
-      const that = this;
-      myReader.onloadend = function (loadEvent: any) {
+  onFileChange($event) {
+    this.validateImage($event.target.files);
+    if (!this.profileImageValidation) {
+      const image = new Image();
+      this.profileImageFile = $event.target.files[0];
+      const reader: FileReader = new FileReader();
+      reader.readAsDataURL(this.profileImageFile);
+      reader.onloadend = (loadEvent: any) => {
         image.src = loadEvent.target.result;
-        that.cropper.setImage(image);
-
+        this.cropper.setImage(image);
       };
-      myReader.readAsDataURL(this.file);
+    }
+  }
+
+  validateImage(fileList: FileList) {
+    if (fileList.length === 0) {
+      this.profileImageValidation = 'Please select Profile picture';
+    } else {
+      const file: File = fileList[0];
+      const fimeName = file.name;
+      const fileSize = file.size;
+      const fileType = file.type;
+
+      if (fileSize > 2097152) {
+        this.profileImageValidation = 'Your uploaded logo is not larger than 2 MB.';
+      } else {
+        if (fileType === 'image/jpeg' || fileType === 'image/jpg' || fileType === 'image/png' || fileType === 'image/gif') {
+          this.profileImageValidation = undefined;
+        } else {
+          this.profileImageValidation = 'Only PNG, GIF, JPG and JPEG Type Allow.';
+        }
+      }
     }
   }
 
   saveProfileImage() {
-    if (!this.imageValidation) {
-      const storageRef = firebase.storage().ref();
-      const file = this.file
-      const reader = new FileReader();
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-      const fileName = `${new Date().getTime()}-${this.file.name}`;
-
-      const originalImageUploadTask = storageRef.child(`${this.basePath}/${this.userObject.userId}/${this.originalPicPath}/${fileName}`).put(this.file);
-
-      originalImageUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-        (snapshot) => {
-          // upload in progress
-          console.log("original image upload in progress");
-        },
-        (error) => {
-          // upload failed
-          console.log(error)
-        },
-        () => {
-          // upload success
-          console.log(originalImageUploadTask.snapshot.downloadURL);
-          this.file = undefined;
+    if (!this.profileImageValidation) {
+      const file = this.profileImageFile
+      const imageBlob = this.dataURItoBlob(this.profileImage.image);
+      const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
+      this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile);
+      if (imageBlob) {
+        // tslint:disable-next-line:max-line-length
+        const cropperImageUploadTask = this.storage.upload(`${this.basePath}/${this.user.userId}/${this.profileImagePath}/${fileName}`, imageBlob);
+        cropperImageUploadTask.downloadURL().subscribe(url => {
+          this.profileImage.image = url ? url : '/assets/images/avatarimg.jpg';
+          this.user.profilePicture = fileName;
+          this.profileImageFile = undefined;
+          this.saveUser(this.user);
         });
-
-
-      reader.addEventListener('load', () => {
-        this.myFile = this.dataURItoBlob(this.data.image);
-
-        if (this.myFile) {
-          const cropperImageUploadTask = storageRef.child(`${this.basePath}/${this.userObject.userId}/${this.croppedPicPath}/${fileName}`).put(this.myFile);
-          cropperImageUploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,
-            (snapshot) => {
-              // upload in progress
-              console.log("cropped image upload in progress");
-            },
-            (error) => {
-              // upload failed
-              console.log(error)
-            },
-            () => {
-              // upload success
-              console.log(cropperImageUploadTask.snapshot.downloadURL);
-              this.data.image = cropperImageUploadTask.snapshot.downloadURL ? cropperImageUploadTask.snapshot.downloadURL : '/assets/images/avatarimg.jpg';
-              this.user.profilePicture = fileName;
-              this.userObject = this.user;
-              this.file = undefined;
-              this.saveUser(this.user);
-            });
-        }
-      }, false);
+      }
     }
   }
 
@@ -208,7 +167,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       array.push(binary.charCodeAt(i));
     }
     return new Blob([new Uint8Array(array)], {
-      type: 'image/jpg'
+      type: this.profileImageFile.type
     });
   }
 
@@ -239,29 +198,25 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  onFileChange(event) {
-    const fileList: FileList = event.target.files;
-
-    if (fileList.length === 0) {
-      this.imageValidation = 'Please select Logo';
-    } else {
-      const file: File = fileList[0];
-      const fname = file.name;
-      const fsize = file.size;
-      const ftype = file.type;
-
-      if (fsize > 1048576) {
-        this.imageValidation = 'Your uploaded logo is not larger than 1 MB.';
-      } else {
-        if (ftype === 'image/jpeg' || ftype === 'image/jpg' || ftype === 'image/png' || ftype === 'image/gif') {
-          this.imageValidation = undefined;
-        } else {
-          this.imageValidation = 'Only PNG, GIF, JPG and JPEG Type Allow.';
-        }
+  getUserFromFormValue(formValue: any): void {
+    this.user.name = formValue.name;
+    this.user.displayName = formValue.displayName;
+    this.user.location = formValue.location;
+    this.user.categoryIds = [];
+    for (const obj of formValue.categoryList) {
+      if (obj['isSelected']) {
+        this.user.categoryIds.push(obj['category']);
       }
     }
+    this.user.facebookUrl = formValue.facebookUrl;
+    this.user.linkedInUrl = formValue.linkedInUrl;
+    this.user.twitterUrl = formValue.twitterUrl;
+    this.user.profileSetting = formValue.profileSetting;
+    this.user.profileLocationSetting = formValue.profileLocationSetting;
+    this.user.privateProfileSetting = formValue.privateProfileSetting;
+    this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
   }
+
 
   onSubmit() {
     // validations
@@ -276,27 +231,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   }
 
   saveUser(user: User) {
-    this.store.dispatch(this.userActions.addUserProfileData(user));
-  }
-
-  // Helper functions
-  getUserFromFormValue(formValue: any): void {
-    this.user.name = formValue.name;
-    this.user.displayName = formValue.displayName;
-    this.user.location = formValue.location;
-    this.user.categoryIds = (this.user.categoryIds) ? this.user.categoryIds : [];
-    for (const obj of formValue.categoryList) {
-      if (obj['isSelected']) {
-        this.user.categoryIds.push(obj['category']);
-      }
-    }
-    this.user.facebookUrl = formValue.facebookUrl;
-    this.user.linkedInUrl = formValue.linkedInUrl;
-    this.user.twitterUrl = formValue.twitterUrl;
-    this.user.profileSetting = formValue.profileSetting;
-    this.user.profileLocationSetting = formValue.profileLocationSetting;
-    this.user.privateProfileSetting = formValue.privateProfileSetting;
-    this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
+    this.store.dispatch(this.userActions.addUserProfile(user));
   }
 
   ngOnDestroy() {

@@ -25,43 +25,26 @@ export class AuthenticationService {
 
     this.afAuth.authState.subscribe(afUser => {
       if (afUser) {
-        // user logged in
-        //console.log(afUser);
-        let user = new User(afUser);
+        const user = new User(afUser);
         afUser.getIdToken(false).then((token) => {
-          //console.log(token);
+
           user.idToken = token;
           this.store.dispatch(this.userActions.loginSuccess(user));
         });
-        if (this.dialogRef)
+        if (this.dialogRef) {
           this.dialogRef.close();
-      }
-      else {
+        }
+      } else {
         // user not logged in
         this.store.dispatch(this.userActions.logoff());
       }
     });
   }
 
-  // getUserRoles(user: User): Observable<User> {
-  //   //return this.db2.collection("/users", ref => ref.where()).doc<any>('/users/' + user.userId).valueChanges();
-  //   return this.db.doc<any>('/users/' + user.userId).snapshotChanges()
-  //     .take(1)
-  //     .map(u => {
-  //       if (u.payload.exists && u.payload.data().roles) {
-  //         user.roles = u.payload.data().roles;
-  //       }
-  //       return user;
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //       return Observable.of(user);
-  //     });
-  // }
-
   ensureLogin = function (url?: string) {
-    if (!this.isAuthenticated)
+    if (!this.isAuthenticated) {
       this.showLogin(url);
+    }
   };
 
   showLogin = function (url?: string) {
@@ -78,9 +61,9 @@ export class AuthenticationService {
   get isAuthenticated(): boolean {
     let user: User;
     this.store.take(1).subscribe(s => user = s.user)
-    if (user)
+    if (user) {
       return true;
-
+    }
     return false;
   };
 
@@ -93,15 +76,4 @@ export class AuthenticationService {
   get authorizationHeader(): string {
     return (this.user) ? 'Bearer ' + this.user.idToken : null;
   }
-
-  // saveUserProfileData(user: User) {
-  //   const dbUser = Object.assign({}, user); // object to be saved
-
-  //   delete dbUser['authState'];
-
-  //   this.db.doc('/users/' + dbUser.userId).set(dbUser).then(ref => {
-  //     this.store.dispatch(this.userActions.addUserProfileDataSuccess());
-  //   });
-  // }
-
 }

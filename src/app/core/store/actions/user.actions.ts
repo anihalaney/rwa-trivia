@@ -31,35 +31,35 @@ export class UserActions {
     };
   }
 
-  static ADD_USER_PROFILE_DATA = 'ADD_USER_PROFILE_DATA';
-  addUserProfileData(user: User): ActionWithPayload<User> {
+  static ADD_USER_PROFILE = 'ADD_USER_PROFILE';
+  addUserProfile(user: User): ActionWithPayload<User> {
     return {
-      type: UserActions.ADD_USER_PROFILE_DATA,
+      type: UserActions.ADD_USER_PROFILE,
       payload: user
     };
   }
 
-  static ADD_USER_PROFILE_DATA_SUCCESS = 'ADD_USER_PROFILE_DATA_SUCCESS';
-  addUserProfileDataSuccess(): ActionWithPayload<null> {
+  static ADD_USER_PROFILE_SUCCESS = 'ADD_USER_PROFILE_SUCCESS';
+  addUserProfileSuccess(): ActionWithPayload<null> {
     return {
-      type: UserActions.ADD_USER_PROFILE_DATA_SUCCESS,
+      type: UserActions.ADD_USER_PROFILE_SUCCESS,
       payload: null
     };
   }
 
 
-  static LOAD_USER_BY_ID = 'LOAD_USER_BY_ID';
-  loadUserById(user: User): ActionWithPayload<User> {
+  static LOAD_USER_PROFILE = 'LOAD_USER_PROFILE';
+  loadUserProfile(user: User): ActionWithPayload<User> {
     return {
-      type: UserActions.LOAD_USER_BY_ID,
+      type: UserActions.LOAD_USER_PROFILE,
       payload: user
     };
   }
 
-  static LOAD_USER_BY_ID_SUCCESS = 'LOAD_USER_BY_ID_SUCCESS';
-  loadUserByIdSuccess(user: User): ActionWithPayload<User> {
+  static LOAD_USER_PROFILE_SUCCESS = 'LOAD_USER_PROFILE_SUCCESS';
+  loadUserProfileSuccess(user: User): ActionWithPayload<User> {
     return {
-      type: UserActions.LOAD_USER_BY_ID_SUCCESS,
+      type: UserActions.LOAD_USER_PROFILE_SUCCESS,
       payload: user
     };
   }

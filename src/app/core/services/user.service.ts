@@ -23,7 +23,6 @@ export class UserService {
 
 
     getUserRoles(user: User): Observable<User> {
-        //return this.db2.collection("/users", ref => ref.where()).doc<any>('/users/' + user.userId).valueChanges();
         return this.db.doc<any>('/users/' + user.userId).snapshotChanges()
             .take(1)
             .map(u => {
@@ -38,17 +37,17 @@ export class UserService {
             });
     }
 
-    saveUserProfileData(user: User) {
+    saveUserProfile(user: User) {
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser['authState'];
-        this.db.doc('/users/' + dbUser.userId).set(dbUser).then(ref => {
-            this.store.dispatch(this.userActions.addUserProfileDataSuccess());
+        this.db.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => {
+            this.store.dispatch(this.userActions.addUserProfileSuccess());
         });
     }
 
     // get user by Id
-    getUserById(user: User): Observable<User> {
-        return this.db.collection('/users', ref => ref.where('userId', '==', user.userId))
+    getUserProfile(user: User): Observable<User> {
+        return this.db.doc(`/users/${user.userId}`)
             .valueChanges()
             .catch(error => {
                 console.log(error);

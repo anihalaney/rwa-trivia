@@ -9,7 +9,6 @@ import { UserService } from '../../services'
 @Injectable()
 export class UserEffects {
 
-
     @Effect()
     loadUserRoles$ = this.actions$
         .ofType(UserActions.LOGIN_SUCCESS)
@@ -18,16 +17,16 @@ export class UserEffects {
         .map((user: User) => this.userActions.addUserWithRoles(user));
 
     @Effect()
-    addUserProfileData$ = this.actions$
-        .ofType(UserActions.ADD_USER_PROFILE_DATA)
-        .do((action: ActionWithPayload<User>) => this.svc.saveUserProfileData(action.payload))
+    addUserProfile$ = this.actions$
+        .ofType(UserActions.ADD_USER_PROFILE)
+        .do((action: ActionWithPayload<User>) => this.svc.saveUserProfile(action.payload))
         .filter(() => false);
 
     @Effect()
-    loadUserById$ = this.actions$
-        .ofType(UserActions.LOAD_USER_BY_ID)
-        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserById(action.payload))
-        .map((user: User) => this.userActions.loadUserByIdSuccess(user));
+    loadUserProfile$ = this.actions$
+        .ofType(UserActions.LOAD_USER_PROFILE)
+        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserProfile(action.payload))
+        .map((user: User) => this.userActions.loadUserProfileSuccess(user));
 
     constructor(
         private actions$: Actions,
