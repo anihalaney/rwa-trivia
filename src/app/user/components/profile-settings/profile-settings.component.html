@@ -31,25 +31,25 @@
           <div class="row">
             <div class="col-sm-3 col-xs-12">
               <label for="file-upload" class="custom-file-upload">
-                <img [src]="data.image" [width]="croppedWidth" [height]="croppedHeight" style="width:150px;height:140px" alt="Avatar" />
+                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight" alt="Avatar" />
               </label>
               <div>
-                <button *ngIf="file && !imageValidation" class="btn" (click)="saveProfileImage()">Save</button>
+                <button *ngIf="profileImageFile && !profileImageValidation" class="btn" (click)="saveProfileImage()">Save</button>
               </div>
             </div>
             <div class="col-sm-9 col-xs-12 avatarinput">
               <div>
-                <input id="file-upload" name='upload_cont_img' type="file" (change)="fileChangeListener($event)" style="display:none;">
+                <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" style="display:none;">
               </div>
-              <P *ngIf="imageValidation" class="error">
-                {{imageValidation}}
+              <P *ngIf="profileImageValidation" class="error">
+                {{profileImageValidation}}
               </P>
-              <p *ngIf="!file || imageValidation">Once Uploaded, You can adjust the cropped image Recommed an image 263 px or larger. Allowed formats: jpeg,
+              <p *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can adjust the cropped image Recommend an image 263 px or larger. Allowed formats: jpeg,
                 gif and png</p>
               <div>
                 <div class="file-upload">
                 </div>
-                <img-cropper *ngIf="file && !imageValidation" #cropper [image]="data" [settings]="cropperSettings"></img-cropper>
+                <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage" [settings]="cropperSettings"></img-cropper>
                 <br>
               </div>
             </div>
@@ -59,7 +59,7 @@
             <div class="formfield">
               <label>Name</label>
               <input formControlName="name" type="text" placeholder="Enter Name" class="required">
-              <p>Enter your real name, so people you know and recogize you</p>
+              <p>Enter your real name, so people you know and recognize you</p>
               <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine">Name is required!</p>
             </div>
 

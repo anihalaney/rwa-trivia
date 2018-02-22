@@ -49,7 +49,7 @@
 
         <ng-container cdkColumnDef="download">
           <mat-header-cell *cdkHeaderCellDef> Download File</mat-header-cell>
-          <mat-cell class="col-status" *cdkCellDef="let row"><a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Downloads</a></mat-cell>
+          <mat-cell class="col-status" *cdkCellDef="let row"><a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a></mat-cell>
         </ng-container>
 
         <mat-header-row *cdkHeaderRowDef="['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
