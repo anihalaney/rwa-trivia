@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { UserActions } from '../../../core/store/actions';
 import { Store } from '@ngrx/store';
@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { AppStore } from '../../../core/store/app-store';
 import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
-import { ImageCropperComponent, CropperSettings, Bounds } from 'ngx-img-cropper';
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
 
 
@@ -46,12 +46,13 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   tags: string[];
   tagsAutoComplete: string[];
-  autoTags: string[] = []; // auto computed based on match within Q/A
+  autoTags: string[] = [];
   enteredTags: string[] = [];
-
   filteredTags$: Observable<string[]>;
+  tagsArrays: String[];
 
-  linkValidation = "^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
+
+  linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
   get tagsArray(): FormArray {
     return this.userForm.get('tagsArray') as FormArray;
@@ -78,7 +79,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-    this.tagsObs = store.select(s => s.tags);
+    this.tagsObs = this.store.select(s => s.tags);
     this.setCropperSettings();
   }
 
@@ -101,13 +102,18 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   // Lifecycle hooks
   ngOnInit() {
+    this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.store.dispatch(this.userActions.loadUserProfile(this.user));
     this.userObs = this.store.select(s => s.user);
     this.subs.push(this.userObs.subscribe(user => {
       this.user = user;
       if (this.user) {
-        this.originalUserObject = this.user;
+        this.originalUserObject = JSON.parse(JSON.stringify(this.user));
         this.createForm(this.user);
+
+        this.filteredTags$ = this.userForm.get('tags').valueChanges
+          .map(val => val.length > 0 ? this.filter(val) : []);
+
         if (this.user.profilePicture) {
           const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
           const ref = this.storage.ref(filePath);
@@ -117,20 +123,12 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
         }
       }
     }));
-
-    this.subs.push(this.tagsObs.subscribe(tags => this.tagsAutoComplete = tags));
-
     this.subs.push(this.store.select(s => s.userProfileSaveStatus)
       .subscribe(status => {
         if (status === 'SUCCESS') {
           this.snackBar.open('Profile saved!', '', { duration: 2000 });
         }
       }));
-
-
-    this.filteredTags$ = this.userForm.get('tagsModel').valueChanges
-      .map(val => val.length > 0 ? this.filter(val) : []);
-
   }
 
   filter(val: string): string[] {
@@ -228,18 +226,17 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     }
     const tagsFA = new FormArray(fcs);
 
-
     const categoryFA = new FormArray(categoryIds);
     this.userForm = this.fb.group({
       name: [user.name],
       displayName: [user.displayName, Validators.required],
       location: [user.location],
       categoryList: categoryFA,
-      tagsModel: '',
+      tags: '',
       tagsArray: tagsFA,
-      facebookUrl: [user.facebookUrl],
-      twitterUrl: [user.twitterUrl],
-      linkedInUrl: [user.linkedInUrl],
+      facebookUrl: [user.facebookUrl, Validators.pattern(this.linkValidation)],
+      twitterUrl: [user.twitterUrl, Validators.pattern(this.linkValidation)],
+      linkedInUrl: [user.linkedInUrl, Validators.pattern(this.linkValidation)],
       profileSetting: [(user.profileSetting) ? user.profileSetting :
         (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
       profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
@@ -254,12 +251,12 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   // tags start
   // Event Handlers
   addTag() {
-    const tag = this.userForm.get('tagsModel').value;
+    const tag = this.userForm.get('tags').value;
     if (tag) {
       if (this.enteredTags.indexOf(tag) < 0) {
         this.enteredTags.push(tag);
       }
-      this.userForm.get('tagsModel').setValue('');
+      this.userForm.get('tags').setValue('');
     }
     this.setTagsArray();
   }
@@ -313,8 +310,10 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
   resetUserProfile() {
-    this.user = this.originalUserObject;
+    this.user = JSON.parse(JSON.stringify(this.originalUserObject));
     this.createForm(this.user);
+    this.filteredTags$ = this.userForm.get('tags').valueChanges
+      .map(val => val.length > 0 ? this.filter(val) : []);
   }
 
   onSubmit() {
