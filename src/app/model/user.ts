@@ -18,6 +18,7 @@ export class User {
   idToken?: string;
   authState: firebase.User;
   roles: any;
+  tags?: string[];
 
   constructor(authState: firebase.User) {
     if (authState) {

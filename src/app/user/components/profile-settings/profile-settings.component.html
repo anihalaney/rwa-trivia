@@ -16,9 +16,6 @@
             <span>{{user.displayName}}</span>
           </h2>
         </div>
-        <div class=" col-sm-6 col-xs-12 textrigth ">
-          <a href="#" class="viewbublic">view my public profile</a>
-        </div>
       </div>
       <!-- Prefered Categories end -->
     </div>
@@ -31,7 +28,8 @@
           <div class="row">
             <div class="col-sm-3 col-xs-12">
               <label for="file-upload" class="custom-file-upload">
-                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight" alt="Avatar" />
+                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight" alt="Avatar"
+                />
               </label>
               <div>
                 <button *ngIf="profileImageFile && !profileImageValidation" class="btn" (click)="saveProfileImage()">Save</button>
@@ -60,7 +58,6 @@
               <label>Name</label>
               <input formControlName="name" type="text" placeholder="Enter Name" class="required">
               <p>Enter your real name, so people you know and recognize you</p>
-              <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine">Name is required!</p>
             </div>
 
             <div class="formfield">
@@ -75,14 +72,13 @@
               <label>Location</label>
               <input formControlName="location" placeholder="Enter Location" type="text" class="required">
               <p>Where in the world you are</p>
-              <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">Location is required!</p>
             </div>
 
           </div>
           <!-- Upload avatar end -->
 
           <!-- Categories -->
-          <div class="row pcategories">
+          <!-- <div class="row pcategories">
             <div class="col-sm-3">
               <h3>Categories</h3>
             </div>
@@ -99,6 +95,54 @@
                 </div>
               </div>
             </div>
+          </div> -->
+          <!-- Categories end -->
+
+          <!-- Categories -->
+          <div class="row pcategories">
+            <div class="col-sm-3">
+              <h3>Categories</h3>
+            </div>
+            <div class="col-sm-9" formArrayName="categoryList">
+              <div class="formfield" *ngFor="let category of categoryList.controls; let i=index" [formGroupName]="i">
+                <label>
+                  <input formControlName="isSelected" type="checkbox" name="">{{categoryDict[category.value['category']].categoryName}}
+                </label>
+              </div>
+            </div>
+          </div>
+          <!-- Categories end -->
+
+          <!-- Tags -->
+          <div class="row pcategories">
+            <div class="col-sm-3">
+              <h3>Tags</h3>
+            </div>
+            <div class="col-sm-9">
+              <div class="tags">
+                <p>Tags associated categories</p>
+                <div data-tags-input-name="tag" id="tagBox" class="tagging">
+                  <mat-chip-list>
+                    <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
+                      {{tag}}
+                    </mat-basic-chip>
+                    <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
+                      {{tag}}
+                      <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+                    </mat-basic-chip>
+                  </mat-chip-list>
+
+                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tagsModel" [matAutocomplete]="tagAuto">
+                  <mat-autocomplete #tagAuto="matAutocomplete">
+                    <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+                      {{tag}}
+                    </mat-option>
+                  </mat-autocomplete>
+                  <button mat-button class="add-tag-button matHeader margin-top-10" color="primary" [disabled]="userForm.controls.tagsModel.value==''"
+                    (click)="addTag()">ADD</button>
+                </div>
+              </div>
+            </div>
           </div>
           <!-- Categories end -->
 
@@ -110,15 +154,18 @@
             </div>
             <div class="col-md-6 col-sm-9">
               <div class="formfield">
-                <input formControlName="facebookUrl" placeholder="Facebook">
+                <input type="url" formControlName="facebookUrl" placeholder="Facebook"  pattern="^((ftp|http|https):\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$">
+                <p *ngIf="userForm.controls.facebookUrl.errors && !userForm.controls.facebookUrl.pristine" class="error">Invalid facebook url</p>
               </div>
 
               <div class="formfield">
-                <input formControlName="twitterUrl" placeholder="Twitter">
+                <input formControlName="twitterUrl" placeholder="Twitter"  pattern="^((ftp|http|https):\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$">
+                <p *ngIf="userForm.controls.twitterUrl.errors && !userForm.controls.twitterUrl.pristine" class="error">Invalid twitter url</p>
               </div>
 
               <div class="formfield">
-                <input formControlName="linkedInUrl" placeholder="Linkedin">
+                <input formControlName="linkedInUrl" placeholder="Linkedin"  pattern="^((ftp|http|https):\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$">
+                <p *ngIf="userForm.controls.linkedInUrl.errors && !userForm.controls.linkedInUrl.pristine" class="error">Invalid linkedin url</p>
               </div>
 
             </div>
@@ -167,7 +214,7 @@
       <!-- Profile pik end -->
       <div class="savebox">
         <button type="submit" [disabled]="!userForm.valid" class="btn startg">Save</button>
-        <button class="btn">Cancel</button>
+        <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button>
       </div>
     </form>
   </section>

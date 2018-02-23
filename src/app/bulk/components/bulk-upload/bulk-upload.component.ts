@@ -63,6 +63,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
       .map(val => val.length > 0 ? this.filter(val) : []);
+
+      this.filteredTags$.subscribe(res => {
+        console.log(res);
+      })
+
   }
 
   filter(val: string): string[] {
