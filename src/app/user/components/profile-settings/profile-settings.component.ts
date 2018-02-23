@@ -301,7 +301,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.user.facebookUrl = formValue.facebookUrl;
     this.user.linkedInUrl = formValue.linkedInUrl;
     this.user.twitterUrl = formValue.twitterUrl;
-    this.user.tags = this.enteredTags;
+    this.user.tags = [...this.autoTags, ...this.enteredTags];
     this.user.profileSetting = formValue.profileSetting;
     this.user.profileLocationSetting = formValue.profileLocationSetting;
     this.user.privateProfileSetting = formValue.privateProfileSetting;
