@@ -53,50 +53,23 @@
             </div>
           </div>
           <div class="clearfix namefield">
-
             <div class="formfield">
               <label>Name</label>
               <input formControlName="name" type="text" placeholder="Enter Name" class="required">
               <p>Enter your real name, so people you know and recognize you</p>
             </div>
-
             <div class="formfield">
               <label>Display Name</label>
               <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required">
               <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">Display Name is required!</p>
             </div>
-
-
-
             <div class="formfield">
               <label>Location</label>
               <input formControlName="location" placeholder="Enter Location" type="text" class="required">
               <p>Where in the world you are</p>
             </div>
-
           </div>
           <!-- Upload avatar end -->
-
-          <!-- Categories -->
-          <!-- <div class="row pcategories">
-            <div class="col-sm-3">
-              <h3>Categories</h3>
-            </div>
-            <div class="col-sm-9" formArrayName="categoryList">
-              <div class="formfield" *ngFor="let category of categoryList.controls; let i=index" [formGroupName]="i">
-                <label>
-                  <input formControlName="isSelected" type="checkbox" name="">{{categoryDict[category.value['category']].categoryName}}
-                </label>
-              </div>
-              <div class="tags">
-                <p>Tags associated categories</p>
-                <div data-tags-input-name="tag" id="tagBox">
-                  Social, Unity
-                </div>
-              </div>
-            </div>
-          </div> -->
-          <!-- Categories end -->
 
           <!-- Categories -->
           <div class="row pcategories">
@@ -132,13 +105,13 @@
                     </mat-basic-chip>
                   </mat-chip-list>
 
-                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tagsModel" [matAutocomplete]="tagAuto">
+                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags" [matAutocomplete]="tagAuto">
                   <mat-autocomplete #tagAuto="matAutocomplete">
                     <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                       {{tag}}
                     </mat-option>
                   </mat-autocomplete>
-                  <button mat-button class="add-tag-button matHeader margin-top-10" color="primary" [disabled]="userForm.controls.tagsModel.value==''"
+                  <button mat-button class="add-tag-button matHeader margin-top-10" color="primary" [disabled]="userForm.controls.tags.value==''"
                     (click)="addTag()">ADD</button>
                 </div>
               </div>
@@ -154,17 +127,17 @@
             </div>
             <div class="col-md-6 col-sm-9">
               <div class="formfield">
-                <input type="url" formControlName="facebookUrl" placeholder="Facebook"  pattern="^((ftp|http|https):\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$">
+                <input type="url" formControlName="facebookUrl" placeholder="Facebook">
                 <p *ngIf="userForm.controls.facebookUrl.errors && !userForm.controls.facebookUrl.pristine" class="error">Invalid facebook url</p>
               </div>
 
               <div class="formfield">
-                <input formControlName="twitterUrl" placeholder="Twitter"  pattern="^((ftp|http|https):\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$">
+                <input formControlName="twitterUrl" placeholder="Twitter">
                 <p *ngIf="userForm.controls.twitterUrl.errors && !userForm.controls.twitterUrl.pristine" class="error">Invalid twitter url</p>
               </div>
 
               <div class="formfield">
-                <input formControlName="linkedInUrl" placeholder="Linkedin"  pattern="^((ftp|http|https):\/\/)?([a-zA-Z0-9]+(\.[a-zA-Z0-9]+)+.*)$">
+                <input formControlName="linkedInUrl" placeholder="Linkedin">
                 <p *ngIf="userForm.controls.linkedInUrl.errors && !userForm.controls.linkedInUrl.pristine" class="error">Invalid linkedin url</p>
               </div>
 
