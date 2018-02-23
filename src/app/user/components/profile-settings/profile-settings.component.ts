@@ -38,7 +38,25 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   profileImageValidation: String;
   profileImageFile: File;
 
+  originalUserObject: User;
+
   cropperSettings: CropperSettings;
+
+
+  tagsObs: Observable<string[]>;
+  tags: string[];
+  tagsAutoComplete: string[];
+  autoTags: string[] = []; // auto computed based on match within Q/A
+  enteredTags: string[] = [];
+
+  filteredTags$: Observable<string[]>;
+
+  linkValidation = "^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
+
+  get tagsArray(): FormArray {
+    return this.userForm.get('tagsArray') as FormArray;
+  }
+
 
   @ViewChild('cropper') cropper: ImageCropperComponent;
 
@@ -60,6 +78,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.tagsObs = store.select(s => s.tags);
     this.setCropperSettings();
   }
 
@@ -87,6 +106,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.subs.push(this.userObs.subscribe(user => {
       this.user = user;
       if (this.user) {
+        this.originalUserObject = this.user;
         this.createForm(this.user);
         if (this.user.profilePicture) {
           const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
@@ -98,12 +118,23 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       }
     }));
 
+    this.subs.push(this.tagsObs.subscribe(tags => this.tagsAutoComplete = tags));
+
     this.subs.push(this.store.select(s => s.userProfileSaveStatus)
       .subscribe(status => {
         if (status === 'SUCCESS') {
           this.snackBar.open('Profile saved!', '', { duration: 2000 });
         }
       }));
+
+
+    this.filteredTags$ = this.userForm.get('tagsModel').valueChanges
+      .map(val => val.length > 0 ? this.filter(val) : []);
+
+  }
+
+  filter(val: string): string[] {
+    return this.tagsAutoComplete.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
   }
 
   onFileChange($event) {
@@ -130,7 +161,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       const fileType = file.type;
 
       if (fileSize > 2097152) {
-        this.profileImageValidation = 'Your uploaded logo is not larger than 2 MB.';
+        this.profileImageValidation = 'Your uploaded Profile is not larger than 2 MB.';
       } else {
         if (fileType === 'image/jpeg' || fileType === 'image/jpg' || fileType === 'image/png' || fileType === 'image/gif') {
           this.profileImageValidation = undefined;
@@ -182,12 +213,30 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       });
       return fg;
     });
+
+    if (user.tags === undefined) {
+      const a = [];
+      user.tags = a;
+    }
+
+    let fcs: FormControl[] = user.tags.map(tag => {
+      const fc = new FormControl(tag);
+      return fc;
+    });
+    if (fcs.length === 0) {
+      fcs = [new FormControl('')];
+    }
+    const tagsFA = new FormArray(fcs);
+
+
     const categoryFA = new FormArray(categoryIds);
     this.userForm = this.fb.group({
-      name: [user.name, Validators.required],
+      name: [user.name],
       displayName: [user.displayName, Validators.required],
-      location: [user.location, Validators.required],
+      location: [user.location],
       categoryList: categoryFA,
+      tagsModel: '',
+      tagsArray: tagsFA,
       facebookUrl: [user.facebookUrl],
       twitterUrl: [user.twitterUrl],
       linkedInUrl: [user.linkedInUrl],
@@ -198,7 +247,49 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       privateProfileSetting: [user.privateProfileSetting],
       profilePicture: [user.profilePicture]
     });
+
+    this.enteredTags = user.tags;
   }
+
+  // tags start
+  // Event Handlers
+  addTag() {
+    const tag = this.userForm.get('tagsModel').value;
+    if (tag) {
+      if (this.enteredTags.indexOf(tag) < 0) {
+        this.enteredTags.push(tag);
+      }
+      this.userForm.get('tagsModel').setValue('');
+    }
+    this.setTagsArray();
+  }
+
+  removeEnteredTag(tag) {
+    this.enteredTags = this.enteredTags.filter(t => t !== tag);
+    this.setTagsArray();
+  }
+
+  computeAutoTags() {
+    const formValue = this.userForm.value;
+    const allTextValues: string[] = [formValue.questionText];
+    formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
+    const wordString: string = allTextValues.join(' ');
+    const matchingTags: string[] = [];
+    this.tags.forEach(tag => {
+      const part = new RegExp('\\b(' + tag.replace('+', '\\+') + ')\\b', 'ig');
+      if (wordString.match(part)) {
+        matchingTags.push(tag);
+      }
+    });
+    this.autoTags = matchingTags;
+    this.setTagsArray();
+  }
+
+  setTagsArray() {
+    this.tagsArray.controls = [];
+    [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
+  }
+  // tags end
 
   getUserFromFormValue(formValue: any): void {
     this.user.name = formValue.name;
@@ -213,12 +304,18 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.user.facebookUrl = formValue.facebookUrl;
     this.user.linkedInUrl = formValue.linkedInUrl;
     this.user.twitterUrl = formValue.twitterUrl;
+    this.user.tags = this.enteredTags;
     this.user.profileSetting = formValue.profileSetting;
     this.user.profileLocationSetting = formValue.profileLocationSetting;
     this.user.privateProfileSetting = formValue.privateProfileSetting;
     this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
   }
 
+
+  resetUserProfile() {
+    this.user = this.originalUserObject;
+    this.createForm(this.user);
+  }
 
   onSubmit() {
     // validations
