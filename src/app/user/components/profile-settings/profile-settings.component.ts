@@ -10,6 +10,7 @@ import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
+import * as cloneDeep from 'lodash/cloneDeep';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 })
 export class ProfileSettingsComponent implements OnInit, OnDestroy {
   @Input() user: User;
-
+  @ViewChild('cropper') cropper: ImageCropperComponent;
   // Properties
   categories: Category[];
   categoryDict: { [key: number]: Category };
@@ -38,7 +39,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   profileImageValidation: String;
   profileImageFile: File;
 
-  originalUserObject: User;
+  userCopyForReset: User;
 
   cropperSettings: CropperSettings;
 
@@ -46,28 +47,12 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   tags: string[];
   tagsAutoComplete: string[];
-  autoTags: string[] = [];
   enteredTags: string[] = [];
   filteredTags$: Observable<string[]>;
   tagsArrays: String[];
 
-
+  // tslint:disable-next-line:quotemark
   linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
-
-  get tagsArray(): FormArray {
-    return this.userForm.get('tagsArray') as FormArray;
-  }
-
-
-  @ViewChild('cropper') cropper: ImageCropperComponent;
-
-  get categoryList(): FormArray {
-    return this.userForm.get('categoryList') as FormArray;
-  }
-
-  get socialAccountList(): FormArray {
-    return this.userForm.get('socialAccountList') as FormArray;
-  }
 
   constructor(private fb: FormBuilder,
     private store: Store<AppStore>,
@@ -82,6 +67,20 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.tagsObs = this.store.select(s => s.tags);
     this.setCropperSettings();
   }
+
+  get tagsArray(): FormArray {
+    return this.userForm.get('tagsArray') as FormArray;
+  }
+
+  get categoryList(): FormArray {
+    return this.userForm.get('categoryList') as FormArray;
+  }
+
+  get socialAccountList(): FormArray {
+    return this.userForm.get('socialAccountList') as FormArray;
+  }
+
+ 
 
   private setCropperSettings() {
     this.cropperSettings = new CropperSettings();
@@ -108,7 +107,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.subs.push(this.userObs.subscribe(user => {
       this.user = user;
       if (this.user) {
-        this.originalUserObject = JSON.parse(JSON.stringify(this.user));
+        this.userCopyForReset = cloneDeep(this.user);
         this.createForm(this.user);
 
         this.filteredTags$ = this.userForm.get('tags').valueChanges
@@ -266,25 +265,9 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.setTagsArray();
   }
 
-  computeAutoTags() {
-    const formValue = this.userForm.value;
-    const allTextValues: string[] = [formValue.questionText];
-    formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
-    const wordString: string = allTextValues.join(' ');
-    const matchingTags: string[] = [];
-    this.tags.forEach(tag => {
-      const part = new RegExp('\\b(' + tag.replace('+', '\\+') + ')\\b', 'ig');
-      if (wordString.match(part)) {
-        matchingTags.push(tag);
-      }
-    });
-    this.autoTags = matchingTags;
-    this.setTagsArray();
-  }
-
   setTagsArray() {
     this.tagsArray.controls = [];
-    [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
+    this.enteredTags.forEach(tag => this.tagsArray.push(new FormControl(tag)));
   }
   // tags end
 
@@ -301,7 +284,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.user.facebookUrl = formValue.facebookUrl;
     this.user.linkedInUrl = formValue.linkedInUrl;
     this.user.twitterUrl = formValue.twitterUrl;
-    this.user.tags = [...this.autoTags, ...this.enteredTags];
+    this.user.tags = [...this.enteredTags];
     this.user.profileSetting = formValue.profileSetting;
     this.user.profileLocationSetting = formValue.profileLocationSetting;
     this.user.privateProfileSetting = formValue.privateProfileSetting;
@@ -310,7 +293,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
   resetUserProfile() {
-    this.user = JSON.parse(JSON.stringify(this.originalUserObject));
+    this.user = cloneDeep(this.userCopyForReset);
     this.createForm(this.user);
     this.filteredTags$ = this.userForm.get('tags').valueChanges
       .map(val => val.length > 0 ? this.filter(val) : []);
