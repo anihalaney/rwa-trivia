@@ -8,6 +8,7 @@ import { QuestionActions } from '../../../core/store/actions';
 import { Subscription } from 'rxjs/Subscription';
 import { MatTableDataSource } from '@angular/material';
 import { Utils } from '../../../core/services';
+import { AngularFireStorage } from 'angularfire2/storage';
 
 
 @Component({
@@ -33,12 +34,14 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
   PUBLISHED_SHOW_BUTTON_STATE = false;
   UNPUBLISHED_SHOW_BUTTON_STATE = true;
 
+  downloadUrl: Observable<string | null>;
+
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() isAdminUrl: boolean;
 
   constructor(private store: Store<AppStore>,
-    private questionActions: QuestionActions
-  ) {
+    private storage: AngularFireStorage,
+    private questionActions: QuestionActions) {
   }
 
   ngOnInit() {
@@ -65,6 +68,15 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
         this.unPublishedCount = questions.length;
         this.unPublishedQuestions = questions;
       }));
+
+      // get the download file url
+      // tslint:disable-next-line:max-line-length
+      const filePath = `bulk_upload/${this.bulkUploadFileInfo.created_uid}/${this.bulkUploadFileInfo.id}-${this.bulkUploadFileInfo.fileName}`;
+      const ref = this.storage.ref(filePath);
+      this.downloadUrl = ref.getDownloadURL();
+      // ref.getDownloadURL().subscribe(res => {
+      //   this.downloadUrl = res;
+      // });
 
     }
   }

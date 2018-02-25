@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-// AngularFireStorageModule
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
@@ -43,7 +42,7 @@ export class BulkService {
         return Observable.of(null);
       });
   }
-  
+
   // update Bulk Upload
   updateBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo) {
     const dbBulkUploadFileInfo = Object.assign({}, bulkUploadFileInfo); // object to be saved
