@@ -4,10 +4,10 @@ import {Action} from '@ngrx/store';
 import {switchMap, map, catchError, filter} from 'rxjs/operators';
 import {empty} from 'rxjs/observable/empty';
 
-import {Game, PlayerQnA, GameOptions, User, Question} from '../../../model';
-import {GamePlayActions, GamePlayActionTypes} from '../actions';
+import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from '../../../model';
+import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
-import {GameService} from '../../../core/services'
+import { GameService } from '../../../core/services';
 
 @Injectable()
 export class GamePlayEffects {
@@ -29,13 +29,18 @@ export class GamePlayEffects {
       );
 
   //load from router
-  
-  @Effect() 
-  loadGame$ = this.actions$
-    .ofType(GamePlayActionTypes.LOAD)
+  @Effect()
+  // handle location update
+  loadGame2$ = this.actions$
+    .ofType('ROUTER_NAVIGATION')
+    .map((action: any): RouterStateUrl => action.payload.routerState)
+    .filter((routerState: RouterStateUrl) => 
+      routerState.url.toLowerCase().startsWith('/game-play/') && 
+      routerState.params.gameid
+    )
     .pipe(
-      switchMap((action: gameplayactions.LoadGame) => 
-        this.svc.getGame(action.payload.gameId, action.payload.user).pipe(
+      switchMap((routerState: RouterStateUrl) =>
+        this.svc.getGame(routerState.params.gameid).pipe(
           map((game: Game) => new gameplayactions.LoadGameSuccess(game))
         )
       )
