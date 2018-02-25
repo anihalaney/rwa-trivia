@@ -41,7 +41,7 @@ export class GameService {
               .map(gs => gs.map(g => Game.getViewModel(g)));
   }
 
-  getGame(gameId: string, user: User): Observable<Game> {
+  getGame(gameId: string): Observable<Game> {
     return this.db.doc('/games/' + gameId)
     .valueChanges()
     .map(g => Game.getViewModel(g));

@@ -56,10 +56,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    //this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user); //logged in user
-
-    this.store.dispatch(new gameplayactions.LoadGame({"gameId": this._gameId, "user": this.user}));
-
     this.store.select(categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
     this.sub.push(
       this.gameObs.subscribe(game => {

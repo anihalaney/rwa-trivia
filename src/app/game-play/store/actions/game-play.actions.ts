@@ -7,7 +7,6 @@ export enum GamePlayActionTypes {
   RESET_NEW = '[GamePlay] ResetNew',
   CREATE_NEW = '[GamePlay] CreateNew',
   CREATE_NEW_SUCCESS = '[GamePlay] CreateNewSuccess',
-  LOAD = '[GamePlay] Load',
   LOAD_SUCCESS = '[GamePlay] LoadSuccess',
   RESET_CURRENT = '[GamePlay] ResetCurrent',
   GET_NEXT_QUESTION = '[GamePlay] GetNextQuestion',
@@ -31,11 +30,6 @@ export class CreateNewGame implements Action {
 export class CreateNewGameSuccess implements Action {
   readonly type = GamePlayActionTypes.CREATE_NEW_SUCCESS;
   constructor(public payload: string) {} //gameId
-}
-
-export class LoadGame implements Action {
-  readonly type = GamePlayActionTypes.LOAD;
-  constructor(public payload: {gameId: string, user: User}) {}
 }
 
 export class LoadGameSuccess implements Action {
@@ -82,7 +76,6 @@ export type GamePlayActions
   = ResetNewGame
   | CreateNewGame
   | CreateNewGameSuccess
-  | LoadGame
   | LoadGameSuccess
   | ResetCurrentGame
   | GetNextQuestion
