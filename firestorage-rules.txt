@@ -3,14 +3,11 @@ service firebase.storage {
 function isAuthenticated() {
     return request.auth != null;
   }
-
+ // Add uid of admin user 
+ // This is temp solution for time being till fetching role from user document does not work
   function isAdmin() {
   	return isAuthenticated() && 
-    			(request.auth.uid == 'hLFC49UphaZZ90Nva9rn7xu4TU72' || 
-    			 request.auth.uid == 'NQZO1FQlTkhD7uWjyPxtSPqTHtX2' || 
-           request.auth.uid == 'ekpjKcWeXEfr7rMG4Yy8JJrjueC2' ||
-           request.auth.uid == '0HC31PEkIJg5CcEpsVyWT4VH5NZ2' ||
-           request.auth.uid == 'l7eNzSA0agZIHAUGtUtlHYDBRQt1');
+    			(request.auth.uid == '');
   }
 
   function isUserAuthenticated(userId) {
