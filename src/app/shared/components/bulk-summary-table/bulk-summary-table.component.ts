@@ -8,7 +8,7 @@ import { BulkUploadActions } from '../../../core/store/actions';
 import { Subscription } from 'rxjs/Subscription';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
-
+import { AngularFireStorage } from 'angularfire2/storage';
 
 
 @Component({
@@ -38,8 +38,8 @@ export class BulkSummaryTableComponent implements OnChanges, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
   constructor(private store: Store<AppStore>,
-    private bulkUploadActions: BulkUploadActions
-  ) {
+    private storage: AngularFireStorage,
+    private bulkUploadActions: BulkUploadActions) {
     this.categoryDictObs = store.select(s => s.categoryDictionary);
     this.store.take(1).subscribe(s => this.user = s.user);
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
@@ -62,6 +62,10 @@ export class BulkSummaryTableComponent implements OnChanges, OnDestroy {
       for (const key in userBulkUploadFileInfo) {
         if (userBulkUploadFileInfo[key]) {
           userBulkUploadFileInfo[key].category = this.categoryDict[userBulkUploadFileInfo[key].categoryId].categoryName;
+          // tslint:disable-next-line:max-line-length
+          const filePath = `bulk_upload/${userBulkUploadFileInfo[key].created_uid}/${userBulkUploadFileInfo[key].id}-${userBulkUploadFileInfo[key].fileName}`;
+          const ref = this.storage.ref(filePath);
+          userBulkUploadFileInfo[key].downloadUrl = ref.getDownloadURL();
         }
       }
       this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(userBulkUploadFileInfo);

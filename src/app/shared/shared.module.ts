@@ -26,21 +26,16 @@ import {
   imports: [
     CommonModule,
 
-    //http client
+    // http client
     HttpClientModule,
-
     // Forms
     ReactiveFormsModule,
-
-    //cdk
+    // cdk
     CdkTableModule,
-
-    //Material
+    // Material
     SharedMaterialModule,
-
-    //Flex
+    // Flex
     FlexLayoutModule,
-
     RouterModule
 
   ],

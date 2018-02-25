@@ -6,13 +6,16 @@ import {
   userPublishedQuestions, userUnpublishedQuestions,
   loginRedirectUrl,
   currentGame, newGameId, currentGameQuestion, activeGames, bulkUploadFileInfosById,
-  bulkUploadFileInfos, userBulkUploadFileInfos, bulkUploadUnpublishedQuestions, bulkUploadPublishedQuestions
+  bulkUploadFileInfos, userBulkUploadFileInfos,
+  bulkUploadUnpublishedQuestions, bulkUploadPublishedQuestions,
+  userProfileSaveStatus
 } from './reducers';
 
 import { compose, ActionReducerMap } from '@ngrx/store';
 
 export interface AppStore {
   user: User;
+  userProfileSaveStatus: string,
   authInitialized: boolean;
   categories: Category[];
   categoryDictionary: { [key: number]: Category };
@@ -37,6 +40,7 @@ export interface AppStore {
 
 export const reducer: ActionReducerMap<AppStore> = {
   user: user,
+  userProfileSaveStatus: userProfileSaveStatus,
   authInitialized: authInitialized,
   categories: categories,
   categoryDictionary: categoryDictionary,
@@ -56,5 +60,5 @@ export const reducer: ActionReducerMap<AppStore> = {
   userBulkUploadFileInfos: userBulkUploadFileInfos,
   bulkUploadUnpublishedQuestions: bulkUploadUnpublishedQuestions,
   bulkUploadPublishedQuestions: bulkUploadPublishedQuestions,
-  bulkUploadFileInfosById: bulkUploadFileInfosById
+  bulkUploadFileInfosById: bulkUploadFileInfosById,
 };
