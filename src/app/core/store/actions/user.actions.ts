@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
-
 import { User } from '../../../model';
+
 
 @Injectable()
 export class UserActions {
@@ -61,6 +61,14 @@ export class UserActions {
     return {
       type: UserActions.LOAD_USER_PROFILE_SUCCESS,
       payload: user
+    };
+  }
+
+  static LOAD_USER_PROFILE_ERROR = 'LOAD_USER_PROFILE_ERROR';
+  loadUserProfileError(user: User): ActionWithPayload<null> {
+    return {
+      type: UserActions.LOAD_USER_PROFILE_ERROR,
+      payload: null
     };
   }
 }
