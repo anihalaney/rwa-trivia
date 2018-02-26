@@ -11,7 +11,8 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
     case UserActions.ADD_USER_WITH_ROLES:
       return action.payload;
     case UserActions.LOAD_USER_PROFILE_SUCCESS:
-      return action.payload;
+      return { ...state, ...action.payload};
+       ;
     default:
       return state;
   }
