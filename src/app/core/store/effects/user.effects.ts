@@ -26,7 +26,7 @@ export class UserEffects {
     loadUserProfile$ = this.actions$
         .ofType(UserActions.LOAD_USER_PROFILE)
         .switchMap((action: ActionWithPayload<User>) => this.svc.getUserProfile(action.payload))
-        .map((user: User) => this.userActions.loadUserProfileSuccess(user));
+        .map((user: User) => user ? this.userActions.loadUserProfileSuccess(user) : this.userActions.loadUserProfileError(null));
 
     constructor(
         private actions$: Actions,
