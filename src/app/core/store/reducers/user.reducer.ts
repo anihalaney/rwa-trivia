@@ -12,7 +12,6 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
       return action.payload;
     case UserActions.LOAD_USER_PROFILE_SUCCESS:
       return { ...state, ...action.payload};
-       ;
     default:
       return state;
   }
