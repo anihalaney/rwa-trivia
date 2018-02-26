@@ -30,9 +30,11 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
 export function userProfileSaveStatus(state: any = 'NONE', action: ActionWithPayload<null>): string {
   switch (action.type) {
     case UserActions.ADD_USER_PROFILE:
-    return 'IN PROCESS'
+      return 'IN PROCESS'
     case UserActions.ADD_USER_PROFILE_SUCCESS:
       return 'SUCCESS';
+    case UserActions.LOAD_USER_PROFILE:
+      return 'NONE';
     default:
       return state;
   }
