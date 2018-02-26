@@ -41,6 +41,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   // bulk upload object
   parsedQuestions: Array<Question> = [];
 
+  //Show Instruction Card
+  showInstructions: Boolean = true;
+
 
   constructor(private fb: FormBuilder,
     private store: Store<AppStore>,
@@ -206,5 +209,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
+  }
+
+  showUploadSteps() {
+    this.showInstructions = false;
   }
 }
