@@ -50,7 +50,6 @@ export class UserService {
         return this.db.doc(`/users/${user.userId}`)
             .valueChanges()
             .catch(error => {
-                console.log(error);
                 return Observable.of(null);
             });
     }
