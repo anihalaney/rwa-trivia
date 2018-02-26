@@ -46,6 +46,8 @@ export class BulkService {
   // update Bulk Upload
   updateBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo) {
     const dbBulkUploadFileInfo = Object.assign({}, bulkUploadFileInfo); // object to be saved
+    // remove download URL it is observable
+    delete dbBulkUploadFileInfo.downloadUrl
     this.db.doc('/bulk_uploads/' + dbBulkUploadFileInfo.id).set(dbBulkUploadFileInfo).then(ref => {
     });
   }
