@@ -80,7 +80,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     return this.userForm.get('socialAccountList') as FormArray;
   }
 
- 
+
 
   private setCropperSettings() {
     this.cropperSettings = new CropperSettings();
@@ -105,8 +105,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.userActions.loadUserProfile(this.user));
     this.userObs = this.store.select(s => s.user);
     this.subs.push(this.userObs.subscribe(user => {
-      this.user = user;
-      if (this.user) {
+      if (user) {
+        this.user = user;
         this.userCopyForReset = cloneDeep(this.user);
         this.createForm(this.user);
 
