@@ -7,7 +7,8 @@ import { MatInputModule, MatButtonModule, MatButtonToggleModule,
          MatMenuModule, MatSidenavModule, MatToolbarModule,
          MatIconModule, MatChipsModule,
          MatDialogModule, MatSnackBarModule, 
-         MatTableModule, MatPaginatorModule, MatSortModule } from '@angular/material';
+         MatTableModule, MatPaginatorModule, MatSortModule,
+         MatStepperModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { MatInputModule, MatButtonModule, MatButtonToggleModule,
     MatMenuModule, MatSidenavModule, MatToolbarModule,
     MatIconModule, MatChipsModule,
     MatDialogModule, MatSnackBarModule, 
-    MatTableModule, MatPaginatorModule, MatSortModule
+    MatTableModule, MatPaginatorModule, MatSortModule,
+    MatStepperModule
   ],
   exports:  [ MatInputModule, MatButtonModule, MatButtonToggleModule, 
               MatCheckboxModule, MatRadioModule, 
@@ -28,6 +30,7 @@ import { MatInputModule, MatButtonModule, MatButtonToggleModule,
               MatMenuModule, MatSidenavModule, MatToolbarModule,
               MatIconModule, MatChipsModule,
               MatDialogModule, MatSnackBarModule, 
-              MatTableModule, MatPaginatorModule, MatSortModule ]
+              MatTableModule, MatPaginatorModule, MatSortModule,
+              MatStepperModule ]
 })
 export class SharedMaterialModule { }

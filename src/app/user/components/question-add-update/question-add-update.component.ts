@@ -1,11 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
 import { AppStore } from '../../../core/store/app-store';
 import { QuestionActions } from '../../../core/store/actions';
-import { User, Category, Question, QuestionStatus, Answer }     from '../../../model';
+import { Utils } from '../../../core/services';
+import { User, Category, Question, QuestionStatus, Answer } from '../../../model';
 
 @Component({
   templateUrl: './question-add-update.component.html',
@@ -16,37 +18,36 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
 
-  //Properties
-  categories: Category[];
-  sub: any;
+  subs: Subscription[] = [];
 
+  // Properties
+  categories: Category[];
   tags: string[];
-  sub2: any;
 
   questionForm: FormGroup;
   question: Question;
-  
-  autoTags: string[] = []; //auto computed based on match within Q/A
+
+  autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
 
   user: User;
 
-  get answers(): FormArray { 
-    return this.questionForm.get('answers') as FormArray; 
+  get answers(): FormArray {
+    return this.questionForm.get('answers') as FormArray;
   }
-  get tagsArray(): FormArray { 
-    return this.questionForm.get('tagsArray') as FormArray; 
+  get tagsArray(): FormArray {
+    return this.questionForm.get('tagsArray') as FormArray;
   }
 
-  //Constructor
+  // Constructor
   constructor(private fb: FormBuilder,
-              private store: Store<AppStore>,
-              private questionActions: QuestionActions) {
+    private store: Store<AppStore>,
+    private questionActions: QuestionActions) {
     this.categoriesObs = store.select(s => s.categories);
     this.tagsObs = store.select(s => s.tags);
   }
 
-  //Lifecycle hooks
+  // Lifecycle hooks
   ngOnInit() {
     this.question = new Question();
     this.createForm(this.question);
@@ -56,19 +57,16 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     questionControl.valueChanges.debounceTime(500).subscribe(v => this.computeAutoTags());
     this.answers.valueChanges.debounceTime(500).subscribe(v => this.computeAutoTags());
 
-    this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
-    this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
+    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
   }
 
   ngOnDestroy() {
-    if (this.sub)
-      this.sub.unsubscribe();
-    if (this.sub2)
-      this.sub2.unsubscribe();
+    Utils.unsubscribe(this.subs);
   }
 
-  //Event Handlers
+  // Event Handlers
   addTag() {
     let tag = this.questionForm.get('tags').value;
     if (tag) {
@@ -79,29 +77,29 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     this.setTagsArray();
   }
   removeEnteredTag(tag) {
-    this.enteredTags = this.enteredTags.filter(t => t !== tag); 
+    this.enteredTags = this.enteredTags.filter(t => t !== tag);
     this.setTagsArray();
   }
   onSubmit() {
-    //validations
+    // validations
     this.questionForm.updateValueAndValidity();
     if (this.questionForm.invalid)
       return;
 
-    //get question object from the forms
-    //console.log(this.questionForm.value);
+    // get question object from the forms
+    // console.log(this.questionForm.value);
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
     question.status = QuestionStatus.SUBMITTED;
     this.store.take(1).subscribe(s => this.user = s.user);
-    //console.log(question);
+    // console.log(question);
 
     question.created_uid = this.user.userId;
-    //call saveQuestion
+    // call saveQuestion
     this.saveQuestion(question);
   }
-  
-  //Helper functions
+
+  // Helper functions
   getQuestionFromFormValue(formValue: any): Question {
     let question: Question;
 
@@ -117,6 +115,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   }
 
   saveQuestion(question: Question) {
+    console.log('question--->', JSON.stringify(question));
     this.store.dispatch(this.questionActions.addQuestion(question));
   }
 
@@ -144,7 +143,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   }
   createForm(question: Question) {
 
-    let fgs:FormGroup[] = question.answers.map(answer => {
+    let fgs: FormGroup[] = question.answers.map(answer => {
       let fg = new FormGroup({
         answerText: new FormControl(answer.answerText, Validators.required),
         correct: new FormControl(answer.correct),
@@ -153,7 +152,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     });
     let answersFA = new FormArray(fgs);
 
-    let fcs:FormControl[] = question.tags.map(tag => {
+    let fcs: FormControl[] = question.tags.map(tag => {
       let fc = new FormControl(tag);
       return fc;
     });
@@ -162,29 +161,29 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     let tagsFA = new FormArray(fcs);
 
     this.questionForm = this.fb.group({
-      category: [(question.categories.length>0? question.categories[0] : ''), Validators.required],
+      category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: [question.questionText, Validators.required],
       tags: '',
       tagsArray: tagsFA,
       answers: answersFA,
       ordered: [question.ordered],
       explanation: [question.explanation]
-      }, {validator: questionFormValidator}
+    }, { validator: questionFormValidator }
     );
   }
 
 }
 
-//Custom Validators
-function questionFormValidator(fg: FormGroup): {[key: string]: boolean} {
+// Custom Validators
+function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
   let answers: Answer[] = fg.get('answers').value;
   if (answers.filter(answer => answer.correct).length !== 1) {
-    return {'correctAnswerCountInvalid': true}
+    return { 'correctAnswerCountInvalid': true }
   }
 
   let tags: string[] = fg.get('tagsArray').value;
-  if (tags.length  < 3)
-    return {'tagCountInvalid': true}
+  if (tags.length < 3)
+    return { 'tagCountInvalid': true }
 
   return null;
 }

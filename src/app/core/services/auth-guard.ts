@@ -1,5 +1,5 @@
 import { Injectable }    from '@angular/core';
-import { CanActivate, CanActivateChild, CanLoad, 
+import { CanActivate, CanActivateChild, 
          Route, ActivatedRouteSnapshot, RouterStateSnapshot }    from '@angular/router';
 import { AuthenticationService }    from './authentication.service';
 import { Observable } from 'rxjs/Observable';
@@ -9,7 +9,7 @@ import { AppStore } from '../store/app-store';
 import { User } from '../../model';
 
 @Injectable()
-export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
+export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private store: Store<AppStore>, private authService: AuthenticationService) {
 
   }
@@ -23,12 +23,5 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.canActivate(route, state);
-  }
-
-  canLoad(route: Route): boolean  {
-    if (this.authService.isAuthenticated && this.authService.user.roles["admin"])
-      return true;
-
-    return false;
   }
 }
