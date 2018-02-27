@@ -12,7 +12,7 @@ import { User, Category } from '../../../model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as cloneDeep from 'lodash/_copyObject';
-
+import * as useractions from '../../store/actions';
 
 @Component({
   selector: 'profile-settings',
@@ -45,6 +45,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   cropperSettings: CropperSettings;
 
 
+  sub: Subscription;
+
   tagsObs: Observable<string[]>;
   tags: string[];
   tagsAutoComplete: string[];
@@ -67,7 +69,16 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.categoryDictObs = store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
     this.tagsObs = this.store.select(getTags);
+    this.store.dispatch(new useractions.LoadUserProfile({ user: this.user }));
     this.setCropperSettings();
+
+    // this.store.dispatch(new useractions.LoadUserProfile({ user: this.user }));
+
+    // this.sub = store.select(appState.userState).select(s => s.user).subscribe((data) => {
+    //   if (data) {
+    //     console.log(data);
+    //   }
+    // });
   }
 
   get tagsArray(): FormArray {
@@ -104,12 +115,23 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   // Lifecycle hooks
   ngOnInit() {
     this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
-    this.oldStore.dispatch(this.userActions.loadUserProfile(this.user));
-    this.userObs = this.oldStore.select(s => s.user);
-    this.subs.push(this.userObs.subscribe(user => {
+
+    // this.oldStore.dispatch(this.userActions.loadUserProfile(this.user));
+    // this.userObs = this.oldStore.select(s => s.user);
+    // this.subs.push(this.userObs.subscribe(user => {
+    // this.store.dispatch(new useractions.LoadUserProfile({ user: this.user }));
+    // this.userObs = this.store.select(appState.userState).select(s => s.user);
+
+
+    this.userObs = this.store.select(appState.userState).select(s => s.user);
+
+    this.userObs.subscribe(user => {
+
       if (user) {
+        console.log(user);
+
         this.user = user;
-        this.userCopyForReset = cloneDeep(this.user);
+        // this.userCopyForReset = cloneDeep(this.user);
         this.createForm(this.user);
 
         this.filteredTags$ = this.userForm.get('tags').valueChanges
@@ -123,7 +145,29 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
           });
         }
       }
-    }));
+    });
+    // if (user) {
+
+    // }
+    // if (user) {
+    //   this.user = user;
+    //   this.userCopyForReset = cloneDeep(this.user);
+    //   this.createForm(this.user);
+    //   console.log(user);
+
+    //   this.filteredTags$ = this.userForm.get('tags').valueChanges
+    //     .map(val => val.length > 0 ? this.filter(val) : []);
+
+    //   if (this.user.profilePicture) {
+    //     const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
+    //     const ref = this.storage.ref(filePath);
+    //     ref.getDownloadURL().subscribe(res => {
+    //       this.profileImage.image = res;
+    //     });
+    //   }
+    // }
+    // });
+
     this.subs.push(this.oldStore.select(s => s.userProfileSaveStatus)
       .subscribe(status => {
         if (status === 'SUCCESS') {
@@ -246,6 +290,11 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       profilePicture: [user.profilePicture]
     });
 
+    this.userForm.patchValue({
+      name : "Jamod",
+      displayName: "adsf"
+    });
+
     this.enteredTags = user.tags;
   }
 
@@ -295,7 +344,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
   resetUserProfile() {
-    this.user = cloneDeep(this.userCopyForReset);
+    // this.user = cloneDeep(this.userCopyForReset);
     this.createForm(this.user);
     this.filteredTags$ = this.userForm.get('tags').valueChanges
       .map(val => val.length > 0 ? this.filter(val) : []);
@@ -315,7 +364,9 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   // store the user object
   saveUser(user: User) {
-    this.store.dispatch(this.userActions.addUserProfile(user));
+    console.log(user);
+    // this.store.dispatch(this.userActions.addUserProfile(user));
+    this.store.dispatch(new useractions.AddUserProfile({ user: user }));
   }
 
   ngOnDestroy() {
