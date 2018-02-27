@@ -126,10 +126,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.userObs = this.store.select(appState.userState).select(s => s.user);
 
     this.userObs.subscribe(user => {
-
+      console.log(user);
       if (user) {
-        console.log(user);
-
         this.user = user;
         // this.userCopyForReset = cloneDeep(this.user);
         this.createForm(this.user);
@@ -168,12 +166,12 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     // }
     // });
 
-    this.subs.push(this.oldStore.select(s => s.userProfileSaveStatus)
-      .subscribe(status => {
-        if (status === 'SUCCESS') {
-          this.snackBar.open('Profile saved!', '', { duration: 2000 });
-        }
-      }));
+    this.store.select(appState.userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+      if (status === 'SUCCESS') {
+        this.snackBar.open('Profile saved!', '', { duration: 2000 });
+      }
+    });
+
   }
 
   filter(val: string): string[] {
@@ -289,12 +287,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       privateProfileSetting: [user.privateProfileSetting],
       profilePicture: [user.profilePicture]
     });
-
-    this.userForm.patchValue({
-      name : "Jamod",
-      displayName: "adsf"
-    });
-
     this.enteredTags = user.tags;
   }
 
@@ -364,8 +356,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   // store the user object
   saveUser(user: User) {
-    console.log(user);
-    // this.store.dispatch(this.userActions.addUserProfile(user));
     this.store.dispatch(new useractions.AddUserProfile({ user: user }));
   }
 

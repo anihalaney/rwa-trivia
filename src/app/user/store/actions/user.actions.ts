@@ -5,6 +5,7 @@ import { User } from '../../../model';
 
 export enum UserActionTypes {
     ADD_USER_PROFILE = '[User] AddUserProfile',
+    ADD_USER_PROFILE_SUCCESS = '[User] AddUserProfileSuccess',
     LOAD_USER_PROFILE = '[User] LoadUserProfile',
     LOAD_USER_PROFILE_SUCCESS = '[User] LoadUserProfileSuccess'
 }
@@ -12,6 +13,11 @@ export enum UserActionTypes {
 export class AddUserProfile implements Action {
     readonly type = UserActionTypes.ADD_USER_PROFILE;
     constructor(public payload: { user: User }) { }
+}
+
+export class AddUserProfileSuccess implements Action {
+    readonly type = UserActionTypes.ADD_USER_PROFILE_SUCCESS;
+    payload = null;
 }
 
 export class LoadUserProfile implements Action {
@@ -27,5 +33,6 @@ export class LoadUserProfileSuccess implements Action {
 
 export type UserActions
     = AddUserProfile
+    | AddUserProfileSuccess
     | LoadUserProfile
     | LoadUserProfileSuccess

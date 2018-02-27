@@ -15,7 +15,7 @@ export class LoadBulkUpload implements Action {
 
 export class LoadBulkUploadSuccess implements Action {
     readonly type = BulkActionTypes.LOAD_BULK_UPLOAD_SUCCESS;
-    constructor(public payload: { bulkUploadFileInfo: BulkUploadFileInfo[] }) { }
+    constructor(public payload: BulkUploadFileInfo[]) { }
 }
 
 

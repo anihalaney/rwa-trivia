@@ -10,6 +10,8 @@ import { Store } from '@ngrx/store';
 import { AppStore } from '../store/app-store';
 import { UserActions } from '../store/actions';
 import { User } from '../../model';
+import * as useractions from '../../user/store/actions';
+
 
 @Injectable()
 export class UserService {
@@ -41,7 +43,8 @@ export class UserService {
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser['authState'];
         this.db.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => {
-            this.store.dispatch(this.userActions.addUserProfileSuccess());
+            // this.store.dispatch(this.userActions.addUserProfileSuccess());
+            this.store.dispatch(new useractions.AddUserProfileSuccess());
         });
     }
 

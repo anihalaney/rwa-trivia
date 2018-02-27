@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { User, Category, Question } from '../../../model';
 
+
 @Component({
   selector: 'bulk-details',
   templateUrl: './bulk-details.component.html',
@@ -18,16 +19,15 @@ export class BulkDetailsComponent implements OnChanges {
   questions: Question[];
   totalCount: number;
 
-
   constructor(private store: Store<AppState>,
-              private router: Router) {
+    private router: Router) {
+
   }
 
   ngOnChanges() {
     if (this.parsedQuestions) {
       this.totalCount = this.parsedQuestions.length;
     }
-
   }
 }
 
