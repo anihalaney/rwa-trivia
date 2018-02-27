@@ -10,7 +10,7 @@ import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
-import * as cloneDeep from 'lodash/cloneDeep';
+import * as cloneDeep from 'lodash/_copyObject';
 
 
 @Component({

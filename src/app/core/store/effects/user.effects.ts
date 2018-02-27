@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 
-import { AppStore } from '../app-store';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User } from '../../../model';
 import { UserService } from '../../services'

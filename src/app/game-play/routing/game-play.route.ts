@@ -12,7 +12,7 @@ export const gamePlayRoutes: Routes = [
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
-    path: ':id',
+    path: ':gameid',
     component: GameComponent,
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }

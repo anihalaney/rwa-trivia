@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { QuestionActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
 import { User, Category, Question, QuestionStatus, Answer } from '../../../model';
@@ -41,10 +41,10 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
   // Constructor
   constructor(private fb: FormBuilder,
-    private store: Store<AppStore>,
-    private questionActions: QuestionActions) {
-    this.categoriesObs = store.select(s => s.categories);
-    this.tagsObs = store.select(s => s.tags);
+              private store: Store<AppState>,
+              private questionActions: QuestionActions) {
+    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
+    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
   }
 
   // Lifecycle hooks
@@ -91,8 +91,8 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
     question.status = QuestionStatus.SUBMITTED;
-    this.store.take(1).subscribe(s => this.user = s.user);
-    // console.log(question);
+    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
+    //console.log(question);
 
     question.created_uid = this.user.userId;
     // call saveQuestion

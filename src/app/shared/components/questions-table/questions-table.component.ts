@@ -4,12 +4,11 @@ import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Utils } from '../../../core/services';
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
-
 import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../model';
 import { QuestionActions, BulkUploadActions } from '../../../core/store/actions';
 
@@ -49,7 +48,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   editQuestion: Question;
   user: User;
 
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
     private bulkUploadActions: BulkUploadActions,
     private fb: FormBuilder) {
@@ -60,7 +59,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
   ngOnInit() {
 
-    this.store.take(1).subscribe(s => this.user = s.user);
+    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
     this.requestFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../core/store/app-store';
+import { AppState, appState, categoryDictionary } from '../../store';
 import { Utils } from '../../core/services';
 import { QuestionActions, GameActions } from '../../core/store/actions';
 import { User, Category, Question, SearchResults, Game } from '../../model';
@@ -17,30 +17,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
   user: User;
   sub: Subscription;
   
-  categoriesObs: Observable<Category[]>;
-  categoryDictObs: Observable<{[key: number] :Category}>;
-  tagsObs: Observable<string[]>;
-  questionsSearchResultsObs: Observable<SearchResults>;
-  questionOfTheDayObs: Observable<Question>;
-  activeGamesObs: Observable<Game[]>;
+  questionOfTheDay$: Observable<Question>;
+  activeGames$: Observable<Game[]>;
   gameInvites: number[];  //change this to game invites
 
   now: Date;
   greeting: string;
   message: string;
   
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private questionActions: QuestionActions,
               private gameActions: GameActions) {
-    this.categoriesObs = store.select(s => s.categories);
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
-    this.tagsObs = store.select(s => s.tags);
-    this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
-    this.questionOfTheDayObs = store.select(s => s.questionOfTheDay);
-    this.activeGamesObs = store.select(s => s.activeGames);
+    this.questionOfTheDay$ = store.select(appState.coreState).select(s => s.questionOfTheDay);
+    this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
     this.gameInvites = [1,2,3];
 
-    this.sub = store.select(s => s.user).subscribe(user => {
+    this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
       this.user = user
       if (user) {
         //Load active Games

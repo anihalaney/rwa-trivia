@@ -8,7 +8,7 @@ import '../../rxjs-extensions';
 import { CONFIG } from '../../../environments/environment';
 import { User, Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../model';
 import { Store } from '@ngrx/store';
-import { AppStore } from '../store/app-store';
+import { AppState } from '../../store/app-store';
 import { QuestionActions } from '../store/actions';
 import { query } from '@angular/core/src/render3/instructions';
 
@@ -17,7 +17,7 @@ export class QuestionService {
 
   constructor(private db: AngularFirestore,
     private storage: AngularFireStorage,
-    private store: Store<AppStore>,
+    private store: Store<AppState>,
     private questionActions: QuestionActions,
     private http: HttpClient) {
   }
