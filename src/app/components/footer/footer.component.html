@@ -1,0 +1,24 @@
+<div class="container footer">
+    <div class="row">
+      <div class="col-sm-8 col-xs-12">
+        <a [routerLink]="['/']" title="Home">Home</a>
+        <a *ngIf="user" [routerLink]="['/my/questions']" title="My Questions">My Questions</a>
+        <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
+        <a *ngIf="user?.roles?.admin" [routerLink]="['/bulk']">Bulk</a>
+        <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
+        <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
+        <ng-container *ngIf="!user">
+          <!--<a class="signup" href="#" title="Sign Up">Sign Up</a>-->
+          <a class="login" (click)="loginClicked.emit($event)" title="Sign in">Sign in</a>
+        </ng-container>
+        <a *ngIf="user" class="logout" (click)="logoutClicked.emit($event)" title="Logout">Logout</a>
+
+        <span *ngIf="!user" class="socialicon-f">
+          <a href="#" class="sprite facebookicon-f"></a>
+          <a href="#" class="sprite twiticon-f"></a>
+          <a href="#" class="sprite linkdenicon-f"></a>
+        </span>
+        </div>
+      <div class="col-sm-4 col-xs-12 copyright textright">bitWiser © 2017. All rights reserved.</div>
+    </div>
+  </div>
