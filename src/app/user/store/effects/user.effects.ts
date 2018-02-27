@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { switchMap, map, } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
 import { User } from '../../../model';

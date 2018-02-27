@@ -5,12 +5,14 @@ import { getCategoryDictionary } from '../core/store';
 import * as rootStoreReducers from './reducers';
 import * as gamePlayStore from '../game-play/store';
 import * as userStore from '../user/store';
+import * as bulkStore from '../bulk/store';
 import * as coreStore from '../core/store';
 
 //do we even need this?
 export interface AppState {
   gameplayState: gamePlayStore.GamePlayState,
   userState: userStore.UserState,
+  bulkState: bulkStore.BulkState,
   coreState: coreStore.CoreState,
   rootState: rootStoreReducers.State
 }
@@ -18,6 +20,7 @@ export interface AppState {
 export const appState = {
   gameplayState: gamePlayStore.gameplayState,
   userState: userStore.userState,
+  bulkState: bulkStore.bulkState,
   coreState: coreStore.coreState,
   rootState: rootStoreReducers.rootState
 };

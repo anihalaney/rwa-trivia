@@ -18,6 +18,8 @@ export function userProfileSaveStatus(state: any = 'NONE', action: UserActions):
     switch (action.type) {
         case UserActionTypes.ADD_USER_PROFILE:
             return 'IN PROCESS';
+        case UserActionTypes.ADD_USER_PROFILE_SUCCESS:
+            return 'SUCCESS';
         case UserActionTypes.LOAD_USER_PROFILE:
             return 'NONE';
         default:
