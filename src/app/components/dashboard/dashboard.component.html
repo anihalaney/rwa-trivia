@@ -15,7 +15,7 @@
         <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
       </div>            
       <ul class="row">
-          <li *ngFor="let game of activeGamesObs | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+          <li *ngFor="let game of activeGames$ | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
             <game-card [game]="game"></game-card>
           </li>
         <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
@@ -50,7 +50,7 @@
   <div class="row">
     <!-- Question of the day -->
     <div class="col-lg-7 col-md-12 col-sm-12 ">
-      <question [question]="questionOfTheDayObs | async"></question>
+      <question [question]="questionOfTheDay$ | async"></question>
     </div>
     <!-- Question of the day end -->
 

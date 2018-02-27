@@ -2,8 +2,8 @@ import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@a
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
-import { QuestionActions } from '../../../core/store/actions';
+import { AppState, appState, categoryDictionary } from '../../../store';
+import { QuestionActions } from '../../../core/store';
 import { User, Question, QuestionStatus, Category }     from '../../../model';
 
 @Component({
@@ -20,15 +20,15 @@ export class MyQuestionsComponent implements OnInit, OnDestroy {
   publishedQuestions: Question[];
   unpublishedQuestions: Question[];
   
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               private questionActions: QuestionActions) {
-    this.publishedQuestions$ = store.select(s => s.userPublishedQuestions);
-    this.unpublishedQuestions$ = store.select(s => s.userUnpublishedQuestions);
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
+    this.publishedQuestions$ = store.select(appState.coreState).select(s => s.userPublishedQuestions);
+    this.unpublishedQuestions$ = store.select(appState.coreState).select(s => s.userUnpublishedQuestions);
+    this.categoryDictObs = store.select(categoryDictionary);
   }
 
   ngOnInit() {
-    this.store.take(1).subscribe(s => this.user = s.user);
+    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
     this.store.dispatch(this.questionActions.loadUserPublishedQuestions(this.user));
     this.store.dispatch(this.questionActions.loadUserUnpublishedQuestions(this.user));
   }
