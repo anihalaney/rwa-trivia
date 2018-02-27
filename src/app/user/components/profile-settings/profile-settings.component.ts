@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
@@ -55,16 +56,17 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
   constructor(private fb: FormBuilder,
-    private store: Store<AppStore>,
+    private store: Store<AppState>,
+    private oldStore: Store<AppStore>,
     private storage: AngularFireStorage,
     private userActions: UserActions,
     private snackBar: MatSnackBar) {
-    this.subs.push(this.store.take(1).subscribe(s => this.user = s.user));
-    this.categoriesObs = store.select(s => s.categories);
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
-    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-    this.tagsObs = this.store.select(s => s.tags);
+    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
+    this.categoriesObs = store.select(getCategories);
+    this.categoriesObs.subscribe(categories => this.categories = categories);
+    this.categoryDictObs = store.select(categoryDictionary);
+    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+    this.tagsObs = this.store.select(getTags);
     this.setCropperSettings();
   }
 
@@ -102,8 +104,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   // Lifecycle hooks
   ngOnInit() {
     this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
-    this.store.dispatch(this.userActions.loadUserProfile(this.user));
-    this.userObs = this.store.select(s => s.user);
+    this.oldStore.dispatch(this.userActions.loadUserProfile(this.user));
+    this.userObs = this.oldStore.select(s => s.user);
     this.subs.push(this.userObs.subscribe(user => {
       if (user) {
         this.user = user;
@@ -122,7 +124,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
         }
       }
     }));
-    this.subs.push(this.store.select(s => s.userProfileSaveStatus)
+    this.subs.push(this.oldStore.select(s => s.userProfileSaveStatus)
       .subscribe(status => {
         if (status === 'SUCCESS') {
           this.snackBar.open('Profile saved!', '', { duration: 2000 });

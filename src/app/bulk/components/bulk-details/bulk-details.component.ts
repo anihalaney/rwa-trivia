@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
-import { User } from '../../../model';
+import { User, Category, Question } from '../../../model';
 
 @Component({
   selector: 'bulk-details',

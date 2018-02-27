@@ -22,22 +22,25 @@ export class AppComponent implements OnInit, OnDestroy {
 
   theme = '';
   constructor(private renderer: Renderer2,
-              private authService: AuthenticationService,
-              private categoryActions: CategoryActions,
-              private tagActions: TagActions,
-              private questionActions: QuestionActions,
-              private gameActions: GameActions,
-              private store: Store<AppState>,
-              public router: Router,
-              public snackBar: MatSnackBar) {
-    
+    private authService: AuthenticationService,
+    private categoryActions: CategoryActions,
+    private tagActions: TagActions,
+    private questionActions: QuestionActions,
+    private gameActions: GameActions,
+    private store: Store<AppState>,
+    public router: Router,
+    public snackBar: MatSnackBar) {
+
     this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
-      if (status === "SUCCESS")
-        this.snackBar.open("Question saved!", "", {duration: 2000});
-      if (status === "IN PROGRESS")
+      if (status === "SUCCESS") {
+        this.snackBar.open("Question saved!", "", { duration: 2000 });
+      }
+
+      if (status === "IN PROGRESS") {
         this.router.navigate(['/my/questions']);
       }
-    })
+
+    });
 
     this.sub2 = store.select(appState.coreState).select(s => s.user).skip(1).subscribe(user => {
       this.user = user
@@ -46,8 +49,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.store.select(appState.coreState).take(1).subscribe(s => url = s.loginRedirectUrl);
         if (url)
           this.router.navigate([url]);
-        }
-      } else {
+      }else {
         // if user logs out then redirect to home page
         console.log('logout');
         this.router.navigate(['/']);
