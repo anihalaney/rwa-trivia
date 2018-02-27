@@ -23,7 +23,8 @@
         <div class="sprite downloadicon col-md-offset-3"></div>
         <div>
           <a target="new" href="/assets/Sample Questions.csv">Download
-            <br/>Sample File</a>
+            <label>Sample File</label>
+          </a>
         </div>
       </div>
 
@@ -58,22 +59,22 @@
     <!-- <div>
       <button mat-button [routerLink]="['/bulk']">Back To Summary</button>
     </div> -->
-    <div class="col-xs-12 col-md-offset-5">
-      <a class="btn instruction-nextBtn" (click)="showUploadSteps()"> Next </a>
+    <div class="col-xs-12 col-md-offset-4">
+      <button class="btn instruction-nextBtn" (click)="showUploadSteps()"> Next </button>
     </div>
   </div>
 
-  <div class="card" *ngIf="!showInstructions">
+  <!-- <div class="card" *ngIf="!showInstructions">
     <mat-tab-group>
-      <mat-tab label="UPLOAD QUESTIONS">
+      <mat-tab label="UPLOAD QUESTIONS" md-selected="myTabIndex" (click)="myTabIndex = myTabIndex+1">
         <form [formGroup]="uploadFormGroup" class="upload-questions">
-          <h4 class="md-title">Upload Questions</h4>
-          <div>
-            <br />
-            <p>Select Your Prefered Category for the Question:</p>
-            <br />
+          <h2>
+            <b>Upload Questions</b>
+          </h2>
+          <p>Select Your Prefered Category for the Question:</p>
+          <div class="control-spacing">
             <mat-form-field>
-              <mat-select placeholder="Select Category" formControlName="category">
+              <mat-select placeholder="Select Category" class="matHeader" formControlName="category">
                 <mat-option *ngFor="let category of categories" [value]="category.id">
                   {{category.categoryName}}
                 </mat-option>
@@ -81,7 +82,6 @@
             </mat-form-field>
           </div>
           <div>
-            <br />
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Primary Tag" class="matHeader" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto">
               <mat-autocomplete #tagAuto="matAutocomplete">
@@ -92,24 +92,119 @@
             </mat-form-field>
           </div>
           <div>
-            <br />
-            <input type="file" class="matHeader" placeholder="Upload csv file" accept=".csv" (change)="onFileChange($event)" #fileInput>
+          
+            <label for="file-upload" class="custom-file-upload">
+              CHOOSE FILE
+            </label>
+            <label *ngIf="bulkUploadFileInfo!==undefined">{{bulkUploadFileInfo.fileName}}</label>
+            <input id="file-upload" type="file" accept=".csv" (change)="onFileChange($event)" #fileInput/>
             <p *ngIf="fileParseError" class="error">
               {{fileParseErrorMessage}}
             </p>
           </div>
-          <div>
-            <br />
-            <br />
-            <button>Back</button>
+          <div class="control-spacing">
+            <button class="btn-back" type="button" (click)="showUploadInstuctions()">Back</button>
             <button class="btn" type="button" [disabled]="bulkUploadFileInfo === undefined || fileParseError" (click)="onUploadSubmit()">Next</button>
           </div>
         </form>
       </mat-tab>
-      <mat-tab label="REVIEW">Content 2</mat-tab>
-      <mat-tab label="SUBMIT">Content 2</mat-tab>
+      <mat-tab label="REVIEW" (click)="myTabIndex = myTabIndex-1">
+        <form [formGroup]="uploadFormGroup" class="review-questions">
+          <h2 class="md-title">
+            <b>Review</b>
+          </h2>
+          <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
+          <div>
+            <button class="btn-back" type="button" (click)="showUpload()">Back</button>
+            <button type="button" class="btn" [disabled]="bulkUploadFileInfo === undefined || questionValidationError" (click)="onReviewSubmit()">Submit</button>
+          </div>
+        </form>
+      </mat-tab>
+      <mat-tab label="SUBMIT">
+        <form [formGroup]="uploadFormGroup" class="review-questions">
+          <h2 class="md-title">
+            <b>Submit</b>
+          </h2>
+          <h4>Thank you for uploaded questions</h4>
+          <div>
+            <button class="btn-back" type="button" [routerLink]="['/bulk']">Back To Summary</button>
+          </div>
+        </form>
+      </mat-tab>
     </mat-tab-group>
+  </div> -->
 
+  <div class="card" *ngIf="!showInstructions">
+    <mat-horizontal-stepper [linear]="isLinear" class="bulk-upload-summary">
+      <mat-step [stepControl]="uploadFormGroup">
+        <form [formGroup]="uploadFormGroup" class="upload-questions">
+          <ng-template matStepLabel>UPLOAD QUESTIONS</ng-template>
+          <h2>
+            <b>Upload Questions</b>
+          </h2>
+          <p>Select Your Prefered Category for the Question:</p>
+          <div class="control-spacing">
+            <mat-form-field>
+              <mat-select placeholder="Select Category" class="matHeader" formControlName="category">
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{category.categoryName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Primary Tag" class="matHeader" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto">
+              <mat-autocomplete #tagAuto="matAutocomplete">
+                <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+                  {{tag}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div>
+            <!-- <input type="file" class="matHeader" placeholder="Upload csv file" accept=".csv" (change)="onFileChange($event)" #fileInput> -->
+            <label for="file-upload" class="custom-file-upload">
+              CHOOSE FILE
+            </label>
+            <label *ngIf="bulkUploadFileInfo!==undefined">{{bulkUploadFileInfo.fileName}}</label>
+            <input id="file-upload" type="file" accept=".csv" (change)="onFileChange($event)" #fileInput/>
+            <p *ngIf="fileParseError" class="error">
+              {{fileParseErrorMessage}}
+            </p>
+          </div>
+          <div class="control-spacing">
+            <button class="btn-back" type="button" (click)="showUploadSteps()">Back</button>
+            <button class="btn" matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined || fileParseError" (click)="onUploadSubmit()">Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <div class="review-questions">
+          <ng-template matStepLabel>REVIEW</ng-template>
+          <h2 class="md-title">
+            <b>Review</b>
+          </h2>
+          <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
+          <div>
+            <button class="btn-back" type="button" matStepperPrevious>Back</button>
+            <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError">Submit</button>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step>
+        <div class="review-questions">
+          <ng-template matStepLabel>SUBMIT</ng-template>
+          <h2 class="md-title">
+            <b>Submit</b>
+          </h2>
+          <h4>Thank you for uploaded questions</h4>
+          <div>
+            <button class="btn-back" type="button" [routerLink]="['/bulk']">Back To Summary</button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
   </div>
 
 

@@ -344,6 +344,8 @@ input[type="text"], input[type="email"], select{ border:1px solid; border-radius
 .tags p{ font-size: 16px; margin-bottom: 15px}
 .tagging input{ line-height: 24px; padding: 4px 10px; border-radius: 3px; display: block; width: 250px}
 .tag{ border:1px solid; background: transparent; padding:4px 12px 4px 12px; line-height: 19px; margin:0 8px 12px 0; }
+.downloadFile{ border:1px solid;}
+.custom-file-upload{border:1px solid;}
 //.tag > span{ display: none; }
 .tag > span{ margin-left: 10px; cursor: pointer } 
 .tag .tag-i{ height: 19px; width: 19px; border-radius: 2px; line-height: 19px; top: auto;}

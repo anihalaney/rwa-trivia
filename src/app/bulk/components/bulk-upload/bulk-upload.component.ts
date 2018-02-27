@@ -43,6 +43,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   //Show Instruction Card
   showInstructions: Boolean = true;
+  myTabIndex: Number = 0;
 
 
   constructor(private fb: FormBuilder,
@@ -212,6 +213,10 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   showUploadSteps() {
-    this.showInstructions = false;
+    if (this.showInstructions) {
+      this.showInstructions = false;
+    } else {
+      this.showInstructions = true;
+    }
   }
 }

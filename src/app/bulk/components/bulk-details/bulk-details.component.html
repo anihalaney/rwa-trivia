@@ -1,13 +1,7 @@
 <div>
-  Upload Questions
+  Following are the uploaded questions
 </div>
-  
-<question-table
-[showSort]="false"
-[showPaginator]="true"
-[questions]="parsedQuestions"
-[totalCount]="totalCount"
-[categoryDictionary]="categoryDictObs| async"
-[showApproveButton]="false"
->
+
+<question-table [showSort]="false" [showPaginator]="true" [questions]="parsedQuestions" [totalCount]="totalCount" [categoryDictionary]="categoryDictObs| async"
+  [showApproveButton]="false">
 </question-table>
