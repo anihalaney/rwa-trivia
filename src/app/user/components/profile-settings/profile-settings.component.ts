@@ -63,22 +63,50 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     private storage: AngularFireStorage,
     private userActions: UserActions,
     private snackBar: MatSnackBar) {
-    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
+
+    this.store.select(appState.coreState).take(1).subscribe((s) => {
+      this.user = s.user
+      this.store.dispatch(new useractions.LoadUserProfile({ user: this.user }))
+    });
     this.categoriesObs = store.select(getCategories);
     this.categoriesObs.subscribe(categories => this.categories = categories);
     this.categoryDictObs = store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
     this.tagsObs = this.store.select(getTags);
-    this.store.dispatch(new useractions.LoadUserProfile({ user: this.user }));
+    this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.setCropperSettings();
 
-    // this.store.dispatch(new useractions.LoadUserProfile({ user: this.user }));
+    this.userObs = this.store.select(appState.userState).select(s => s.user);
 
-    // this.sub = store.select(appState.userState).select(s => s.user).subscribe((data) => {
-    //   if (data) {
-    //     console.log(data);
-    //   }
-    // });
+    this.userObs.subscribe(user => {
+
+      if (user) {
+        this.user = user;
+        console.log('user', user);
+        this.userCopyForReset = Object.assign({}, user);
+        this.createForm(this.user);
+
+        this.filteredTags$ = this.userForm.get('tags').valueChanges
+          .map(val => val.length > 0 ? this.filter(val) : []);
+
+        if (this.user.profilePicture) {
+          const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
+          const ref = this.storage.ref(filePath);
+          ref.getDownloadURL().subscribe(res => {
+            this.profileImage.image = res;
+          });
+        }
+      }
+    });
+
+
+    this.store.select(appState.userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+      if (status === 'SUCCESS') {
+        this.snackBar.open('Profile saved!', '', { duration: 2000 });
+      }
+    });
+
+
   }
 
   get tagsArray(): FormArray {
@@ -114,63 +142,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   // Lifecycle hooks
   ngOnInit() {
-    this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
-
-    // this.oldStore.dispatch(this.userActions.loadUserProfile(this.user));
-    // this.userObs = this.oldStore.select(s => s.user);
-    // this.subs.push(this.userObs.subscribe(user => {
-    // this.store.dispatch(new useractions.LoadUserProfile({ user: this.user }));
-    // this.userObs = this.store.select(appState.userState).select(s => s.user);
 
 
-    this.userObs = this.store.select(appState.userState).select(s => s.user);
-
-    this.userObs.subscribe(user => {
-      console.log(user);
-      if (user) {
-        this.user = user;
-        // this.userCopyForReset = cloneDeep(this.user);
-        this.createForm(this.user);
-
-        this.filteredTags$ = this.userForm.get('tags').valueChanges
-          .map(val => val.length > 0 ? this.filter(val) : []);
-
-        if (this.user.profilePicture) {
-          const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
-          const ref = this.storage.ref(filePath);
-          ref.getDownloadURL().subscribe(res => {
-            this.profileImage.image = res;
-          });
-        }
-      }
-    });
-    // if (user) {
-
-    // }
-    // if (user) {
-    //   this.user = user;
-    //   this.userCopyForReset = cloneDeep(this.user);
-    //   this.createForm(this.user);
-    //   console.log(user);
-
-    //   this.filteredTags$ = this.userForm.get('tags').valueChanges
-    //     .map(val => val.length > 0 ? this.filter(val) : []);
-
-    //   if (this.user.profilePicture) {
-    //     const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
-    //     const ref = this.storage.ref(filePath);
-    //     ref.getDownloadURL().subscribe(res => {
-    //       this.profileImage.image = res;
-    //     });
-    //   }
-    // }
-    // });
-
-    this.store.select(appState.userState).select(s => s.userProfileSaveStatus).subscribe(status => {
-      if (status === 'SUCCESS') {
-        this.snackBar.open('Profile saved!', '', { duration: 2000 });
-      }
-    });
 
   }
 
@@ -336,7 +309,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
   resetUserProfile() {
-    // this.user = cloneDeep(this.userCopyForReset);
+   // this.user = cloneDeep(this.userCopyForReset);
+    this.user = Object.assign({}, this.userCopyForReset);
     this.createForm(this.user);
     this.filteredTags$ = this.userForm.get('tags').valueChanges
       .map(val => val.length > 0 ? this.filter(val) : []);
