@@ -1,17 +1,18 @@
 import { User, Category, Question, Game, SearchResults, BulkUploadFileInfo } from '../../model';
 
 import {
-  user, authInitialized, categories, categoryDictionary, tags,
+  user, authInitialized, categories,  tags,
   questionsSearchResults, unpublishedQuestions, questionOfTheDay, questionSaveStatus,
   userPublishedQuestions, userUnpublishedQuestions,
   loginRedirectUrl,
-  currentGame, newGameId, currentGameQuestion, activeGames, bulkUploadFileInfosById,
+   activeGames, bulkUploadFileInfosById,
   bulkUploadFileInfos, userBulkUploadFileInfos,
   bulkUploadUnpublishedQuestions, bulkUploadPublishedQuestions,
   userProfileSaveStatus
 } from './reducers';
 
 import { compose, ActionReducerMap } from '@ngrx/store';
+import { AppState } from 'app/store';
 
 export interface AppStore {
   user: User;
@@ -38,12 +39,11 @@ export interface AppStore {
   bulkUploadFileInfosById: BulkUploadFileInfo;
 }
 
-export const reducer: ActionReducerMap<AppStore> = {
+export const reducer: any = {
   user: user,
   userProfileSaveStatus: userProfileSaveStatus,
   authInitialized: authInitialized,
   categories: categories,
-  categoryDictionary: categoryDictionary,
   tags: tags,
   questionsSearchResults: questionsSearchResults,
   unpublishedQuestions: unpublishedQuestions,
@@ -52,9 +52,6 @@ export const reducer: ActionReducerMap<AppStore> = {
   questionOfTheDay: questionOfTheDay,
   questionSaveStatus: questionSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
-  currentGame: currentGame,
-  newGameId: newGameId,
-  currentGameQuestion: currentGameQuestion,
   activeGames: activeGames,
   bulkUploadFileInfos: bulkUploadFileInfos,
   userBulkUploadFileInfos: userBulkUploadFileInfos,

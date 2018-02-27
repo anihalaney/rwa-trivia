@@ -4,7 +4,6 @@ import { CanActivate, CanActivateChild,
 import { AuthenticationService }    from './authentication.service';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-
 import { AppState, appState } from '../../store';
 import { User } from '../../model';
 
