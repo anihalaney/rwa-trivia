@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { BulkUploadFileInfo, User, Question } from '../../../model';
+import { BulkUploadFileInfo, User, Question, BulkUpload } from '../../../model';
 
 export enum BulkActionTypes {
     LOAD_BULK_UPLOAD = '[Bulk] LoadBulkUpload',
@@ -12,6 +12,10 @@ export enum BulkActionTypes {
     LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS = '[Bulk] LoadBulkUploadPublishedQuestionsSuccess',
     LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS = '[Bulk] LoadBulkUploadUnpublishedQuestions',
     LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS = '[Bulk] LoadBulkUploadUnpublishedQuestionsSuccess',
+    UPDATE_QUESTION = '[Bulk] UpdateQuestion',
+    UPDATE_BULK_UPLOAD = '[Bulk] UpdateBulkUpload',
+    APPROVE_QUESTION = '[Bulk] ApproveQuestion',
+    ADD_BULK_QUESTIONS = '[Bulk] AddBulkQuestion'
 }
 
 
@@ -65,6 +69,30 @@ export class LoadBulkUploadUnpublishedQuestionsSuccess implements Action {
     constructor(public payload: Question[]) { }
 }
 
+// update Questions
+export class UpdateQuestion implements Action {
+    readonly type = BulkActionTypes.UPDATE_QUESTION;
+    constructor(public payload: { question: Question }) { }
+}
+
+ // update Questions
+ export class UpdateBulkUpload implements Action {
+    readonly type = BulkActionTypes.UPDATE_BULK_UPLOAD;
+    constructor(public payload: { bulkUploadFileInfo: BulkUploadFileInfo }) { }
+}
+
+// approve  Questions
+export class ApproveQuestion implements Action {
+    readonly type = BulkActionTypes.APPROVE_QUESTION;
+    constructor(public payload: { question: Question }) { }
+}
+
+// add bulk Question
+export class AddBulkQuestions implements Action {
+    readonly type = BulkActionTypes.ADD_BULK_QUESTIONS;
+    constructor(public payload: { bulkUpload: BulkUpload }) { }
+}
+
 
 export type BulkActions
     = LoadBulkUpload
@@ -75,3 +103,7 @@ export type BulkActions
     | LoadBulkUploadPublishedQuestionsSuccess
     | LoadBulkUploadUnpublishedQuestions
     | LoadBulkUploadUnpublishedQuestionsSuccess
+    | UpdateQuestion
+    | UpdateBulkUpload
+    | ApproveQuestion
+    | AddBulkQuestions

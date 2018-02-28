@@ -1,17 +1,13 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
-
-
 import { BulkUploadFileInfo, Category, User } from '../../../../model';
 import { Subscription } from 'rxjs/Subscription';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
 import { AngularFireStorage } from 'angularfire2/storage';
-
 import * as bulkActions from '../../../store/actions';
 
 @Component({
@@ -19,7 +15,7 @@ import * as bulkActions from '../../../store/actions';
   templateUrl: './bulk-summary-table.component.html',
   styleUrls: ['./bulk-summary-table.component.scss']
 })
-export class BulkSummaryTableComponent implements OnInit {
+export class BulkSummaryTableComponent implements OnInit, OnChanges {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -39,13 +35,17 @@ export class BulkSummaryTableComponent implements OnInit {
     private storage: AngularFireStorage) {
     this.categoryDictObs = store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+
   }
 
   ngOnInit() {
+    this.store.select(appState.coreState).take(1).subscribe((s) => {
+      this.user = s.user
+    });
+  }
+
+  ngOnChanges() {
     if (this.bulkSummaryDetailPath) {
-      this.store.select(appState.coreState).take(1).subscribe((s) => {
-        this.user = s.user
-      });
       this.loadBulkSummaryData();
     }
   }

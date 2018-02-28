@@ -27,20 +27,29 @@ export function userBulkUploadFileInfos(state: any = [], action: BulkActions): B
 // for file PublishedQuestions by BulkUpload Id
 export function bulkUploadPublishedQuestions(state: any = [], action: BulkActions): Question[] {
     switch (action.type) {
-      case BulkActionTypes.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS:
-        return action.payload;
-      default:
-        return state;
+        case BulkActionTypes.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS:
+            return action.payload;
+        default:
+            return state;
     }
-  };
+};
 
 
-  // file UnpublishedQuestions by BulkUpload Id
+// file UnpublishedQuestions by BulkUpload Id
 export function bulkUploadUnpublishedQuestions(state: any = [], action: BulkActions): Question[] {
     switch (action.type) {
-      case BulkActionTypes.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS:
-        return action.payload;
-      default:
-        return state;
+        case BulkActionTypes.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS:
+            return action.payload;
+        default:
+            return state;
     }
-  };
+};
+
+export function questionSaveStatus(state: any = 'NONE', action: BulkActions): string {
+    switch (action.type) {
+        case BulkActionTypes.UPDATE_QUESTION:
+            return 'UPDATE';
+        default:
+            return state;
+    }
+};

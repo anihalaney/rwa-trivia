@@ -1,5 +1,6 @@
 import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
 import { Store } from '@ngrx/store';
@@ -10,7 +11,9 @@ import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../model';
-import { QuestionActions, BulkUploadActions } from '../../../core/store/actions';
+import { bulkState } from '../../../bulk/store';
+import * as bulkActions from '../../../bulk/store/actions';
+
 
 @Component({
   selector: 'question-table',
@@ -49,13 +52,12 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   user: User;
 
   constructor(private store: Store<AppState>,
-    private questionActions: QuestionActions,
-    private bulkUploadActions: BulkUploadActions,
+    private snackBar: MatSnackBar,
     private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
     this.sortOrder = 'Category';
-}
+  }
 
   ngOnInit() {
 
@@ -66,11 +68,17 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.rejectFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });
-
   }
 
   ngOnChanges() {
     this.questionsSubject.next(this.questions);
+    setTimeout(() => {
+      this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {
+        if (status === 'UPDATE') {
+          this.snackBar.open('Question Updated!', '', { duration: 1500 });
+        }
+      });
+    }, 100);
   }
 
   getDisplayStatus(status: number): string {
@@ -80,13 +88,13 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   // approveQuestions
   approveQuestion(question: Question) {
     question.approved_uid = this.user.userId;
-    this.store.dispatch(this.questionActions.approveQuestion(question));
+    this.store.dispatch(new bulkActions.ApproveQuestion({ question: question }));
     if (this.bulkUploadFileInfo) {
       if (question.status === QuestionStatus.REJECTED) {
         this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
       }
       this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
-      this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
+      this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
     }
   }
 
@@ -109,14 +117,14 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
     if (this.bulkUploadFileInfo && this.requestQuestion.status === QuestionStatus.REJECTED) {
       this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
-      this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
+      this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
     }
 
     this.requestQuestion.status = QuestionStatus.REQUEST_TO_CHANGE;
     this.requestQuestion.reason = this.requestFormGroup.get('reason').value;
     this.requestQuestionStatus = false;
     this.requestQuestion.approved_uid = this.user.userId;
-    this.store.dispatch(this.questionActions.updateQuestion(this.requestQuestion));
+    this.store.dispatch(new bulkActions.UpdateQuestion({ question: this.requestQuestion }));
     this.requestFormGroup.get('reason').setValue('');
   }
 
@@ -127,7 +135,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
     if (this.bulkUploadFileInfo && this.rejectQuestion.status !== QuestionStatus.REJECTED) {
       this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
-      this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
+      this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
     }
 
     this.rejectQuestion.status = QuestionStatus.REJECTED;
@@ -135,7 +143,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.rejectQuestionStatus = false;
     this.rejectQuestion.approved_uid = this.user.userId;
 
-    this.store.dispatch(this.questionActions.updateQuestion(this.rejectQuestion));
+    this.store.dispatch(new bulkActions.UpdateQuestion({ question: this.rejectQuestion }));
     this.rejectFormGroup.get('reason').setValue('');
   }
 
@@ -158,7 +166,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       this.editQuestion = null;
     }
   }
-
 }
 
 export class QuestionsDataSource extends DataSource<Question> {
