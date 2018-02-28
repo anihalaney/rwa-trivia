@@ -1,3 +1,28 @@
 .cursor{
   cursor: pointer
 }
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+}
+
+.mat-table {
+  overflow: auto;
+}
+
+body.dark input, body.dark textarea, body.dark select, body.dark button {
+  background: #FFF !important;
+  background-color: #FFF !important;
+}
+
+.mat-header-cell.mat-sort-header-sorted {
+  color: black;
+}
+
+.col-status{
+  padding-left: 8px;
+  padding-right: 2px;
+}
+

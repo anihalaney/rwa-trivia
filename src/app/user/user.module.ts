@@ -1,17 +1,18 @@
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from  '../shared/shared.module';
-import { UserRoutingModule } from  './routing/user-routing.module';
+import { SharedModule } from '../shared/shared.module';
+import { UserRoutingModule } from './routing/user-routing.module';
+import { ImageCropperComponent } from 'ngx-img-cropper';
 
-import { 
-  ProfileCardComponent, 
+import {
+  ProfileCardComponent,
   UserStatsCardComponent,
   GameCardComponent,
   GameInviteComponent,
   RecentGamesComponent,
   ProfileSettingsComponent,
   MyQuestionsComponent,
-  QuestionAddUpdateComponent} from  './components';
+  QuestionAddUpdateComponent} from './components';
 
 @NgModule({
   declarations: [
@@ -22,16 +23,16 @@ import {
     RecentGamesComponent,
     ProfileSettingsComponent,
     MyQuestionsComponent,
-    QuestionAddUpdateComponent
+    QuestionAddUpdateComponent,
+    ImageCropperComponent,
   ],
   imports: [
-    //rwa modules
+    // rwa modules
     SharedModule,
     UserRoutingModule
   ],
-  providers: [ 
-  ],                                                                      
-  exports:  [ 
+  providers: [ ],
+  exports:  [
     ProfileCardComponent,
     UserStatsCardComponent,
     GameCardComponent,

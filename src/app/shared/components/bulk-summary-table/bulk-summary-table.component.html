@@ -1,14 +1,14 @@
 <mat-card>
   <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle>
   <mat-card-content>
-    <div *ngIf="SHOW_SUMMARY_TABLE">
-      <mat-table #table [dataSource]="dataSource">
+    <div *ngIf="SHOW_SUMMARY_TABLE" class="mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort >
 
         <!--- Note that these columns can be defined in any order.
                     The actual rendered columns are set as a property on the row definition" -->
 
         <ng-container cdkColumnDef="uploadDate">
-          <mat-header-cell *cdkHeaderCellDef>Date Uploaded</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header="date" class="matHeader">Date Uploaded</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>
         </ng-container>
 
@@ -18,12 +18,12 @@
         </ng-container>
 
         <ng-container cdkColumnDef="category">
-          <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader">Category</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
         </ng-container>
 
         <ng-container cdkColumnDef="primaryTag">
-          <mat-header-cell *cdkHeaderCellDef>Primary Tag</mat-header-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader">Primary Tag</mat-header-cell>
           <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
         </ng-container>
 
@@ -47,12 +47,24 @@
           <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
         </ng-container>
 
-        <mat-header-row *cdkHeaderRowDef="['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status']">
+        <ng-container cdkColumnDef="created">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader"> Created By </mat-header-cell>
+          <mat-cell class="col-status" *cdkCellDef="let row">{{row.created_uid}}</mat-cell>
+        </ng-container>
+        
+        <ng-container cdkColumnDef="download">
+          <mat-header-cell *cdkHeaderCellDef> Download File</mat-header-cell>
+          <mat-cell class="col-status" *cdkCellDef="let row"><a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a></mat-cell>
+        </ng-container>
+
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns">
         </mat-header-row>
-        <mat-row class="row-question" *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];">
+        <mat-row class="row-question" *cdkRowDef="let row; columns: displayedColumns;">
+
         </mat-row>
       </mat-table>
-      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      <mat-paginator #paginator class="matHeader" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
       </mat-paginator>
     </div>
     <div *ngIf="!SHOW_SUMMARY_TABLE">
