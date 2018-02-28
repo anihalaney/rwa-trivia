@@ -33,6 +33,9 @@ export class BulkSummaryTableComponent implements OnChanges, OnDestroy {
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
 
+  displayedColumns = ['uploadDate', 'fileName', 'category',
+    'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];
+
   @Input() bulkSummaryDetailPath: String;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -72,6 +75,13 @@ export class BulkSummaryTableComponent implements OnChanges, OnDestroy {
       this.setPaginatorAndSort();
     }));
 
+    if (this.isAdminUrl) {
+      this.displayedColumns.push('created');
+      this.displayedColumns.push('download');
+    } else {
+      this.displayedColumns.push('download');
+    }
+
   }
 
   setPaginatorAndSort() {
@@ -90,7 +100,6 @@ export class BulkSummaryTableComponent implements OnChanges, OnDestroy {
   }
 
   backToSummary() {
-    // this._location.back();
     this.SHOW_SUMMARY_TABLE = true;
     this.loadBulkSummaryData();
   }
