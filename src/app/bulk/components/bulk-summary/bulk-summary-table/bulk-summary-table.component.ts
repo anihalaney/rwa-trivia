@@ -1,10 +1,10 @@
 import { Component, Input, OnDestroy, ViewChild, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { AppStore } from '../../../core/store/app-store';
-import { BulkUploadFileInfo, Category, User } from '../../../model';
-import { Utils } from '../../../core/services';
-import { BulkUploadActions } from '../../../core/store/actions';
+import { AppStore } from '../../../../core/store/app-store';
+import { BulkUploadFileInfo, Category, User } from '../../../../model';
+import { Utils } from '../../../../core/services';
+import { BulkUploadActions } from '../../../../core/store/actions';
 import { Subscription } from 'rxjs/Subscription';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
