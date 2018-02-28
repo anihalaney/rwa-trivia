@@ -32,12 +32,10 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
-
   fileInfoDS: MatTableDataSource<BulkUploadFileInfo>;
 
   PUBLISHED_SHOW_BUTTON_STATE = false;
   UNPUBLISHED_SHOW_BUTTON_STATE = true;
-
   downloadUrl: Observable<string | null>;
 
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;

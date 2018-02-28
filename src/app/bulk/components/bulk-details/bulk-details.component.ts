@@ -2,8 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-
-import { AppState, appState } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { User, Category, Question } from '../../../model';
 
 
@@ -20,7 +19,9 @@ export class BulkDetailsComponent implements OnChanges {
   totalCount: number;
 
   constructor(private store: Store<AppState>,
-    private router: Router) { }
+    private router: Router) {
+    this.categoryDictObs = store.select(categoryDictionary);
+  }
 
   ngOnChanges() {
     if (this.parsedQuestions) {

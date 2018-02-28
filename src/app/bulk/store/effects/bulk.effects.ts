@@ -48,7 +48,7 @@ export class BulkEffects {
         .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS)
         .pipe(
         switchMap((action: bulkactions.LoadBulkUploadPublishedQuestions) =>
-            this.questionService.getQuestionsForBulkUpload(action.payload.bulkUploadFileInfo,true).pipe(
+            this.questionService.getQuestionsForBulkUpload(action.payload.bulkUploadFileInfo, true).pipe(
                 map((questions: Question[]) => new bulkactions.LoadBulkUploadPublishedQuestionsSuccess(questions))
             )
         )
@@ -60,9 +60,52 @@ export class BulkEffects {
         .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS)
         .pipe(
         switchMap((action: bulkactions.LoadBulkUploadUnpublishedQuestions) =>
-            this.questionService.getQuestionsForBulkUpload(action.payload.bulkUploadFileInfo,false).pipe(
+            this.questionService.getQuestionsForBulkUpload(action.payload.bulkUploadFileInfo, false).pipe(
                 map((questions: Question[]) => new bulkactions.LoadBulkUploadUnpublishedQuestionsSuccess(questions))
             )
         )
+        );
+
+    // for update Question
+    @Effect()
+    updateQuestion$ = this.actions$
+        .ofType(BulkActionTypes.UPDATE_QUESTION)
+        .pipe(
+        switchMap((action: bulkactions.UpdateQuestion) => {
+            this.questionService.saveQuestion(action.payload.question);
+            return empty();
+        })
+        );
+    // for Update BulkUpload
+    @Effect()
+    updateBulkUpload$ = this.actions$
+        .ofType(BulkActionTypes.UPDATE_BULK_UPLOAD)
+        .pipe(
+        switchMap((action: bulkactions.UpdateBulkUpload) => {
+            this.bulkService.updateBulkUpload(action.payload.bulkUploadFileInfo);
+            return empty();
+        })
+        );
+
+    // for Approve Question
+    @Effect()
+    approveQuestion$ = this.actions$
+        .ofType(BulkActionTypes.APPROVE_QUESTION)
+        .pipe(
+        switchMap((action: bulkactions.ApproveQuestion) => {
+            this.questionService.approveQuestion(action.payload.question);
+            return empty();
+        })
+        );
+
+    // for add Bulk Questions
+    @Effect()
+    addBulkQuestions$ = this.actions$
+        .ofType(BulkActionTypes.ADD_BULK_QUESTIONS)
+        .pipe(
+        switchMap((action: bulkactions.AddBulkQuestions) => {
+            this.questionService.saveBulkQuestions(action.payload.bulkUpload);
+            return empty();
+        })
         );
 }
