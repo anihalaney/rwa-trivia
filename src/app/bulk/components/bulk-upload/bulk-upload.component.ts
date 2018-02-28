@@ -41,12 +41,10 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   // bulk upload object
   parsedQuestions: Array<Question> = [];
 
-
   constructor(private fb: FormBuilder,
     private store: Store<AppState>,
     private bulkUploadActions: BulkUploadActions,
     private questionActions: QuestionActions) {
-
     this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
     this.tagsObs = store.select(appState.coreState).select(s => s.tags);
     this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
@@ -55,7 +53,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
-
+    
     this.uploadFormGroup = this.fb.group({
       category: ['', Validators.required],
       tagControl: [''],
