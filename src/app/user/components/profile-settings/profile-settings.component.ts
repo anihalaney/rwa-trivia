@@ -1,7 +1,6 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { UserActions } from '../../../core/store/actions';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
@@ -11,15 +10,15 @@ import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
-import * as cloneDeep from 'lodash/_copyObject';
-import * as useractions from '../../store/actions';
+import * as cloneDeep from 'lodash.clonedeep';
+import * as userActions from '../../store/actions';
 
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
   styleUrls: ['./profile-settings.component.scss']
 })
-export class ProfileSettingsComponent implements OnInit, OnDestroy {
+export class ProfileSettingsComponent implements OnDestroy {
   @Input() user: User;
   @ViewChild('cropper') cropper: ImageCropperComponent;
   // Properties
@@ -59,14 +58,12 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
     private store: Store<AppState>,
-    private oldStore: Store<AppStore>,
     private storage: AngularFireStorage,
-    private userActions: UserActions,
     private snackBar: MatSnackBar) {
 
     this.store.select(appState.coreState).take(1).subscribe((s) => {
       this.user = s.user
-      this.store.dispatch(new useractions.LoadUserProfile({ user: this.user }))
+      this.store.dispatch(new userActions.LoadUserProfile({ user: this.user }))
     });
     this.categoriesObs = store.select(getCategories);
     this.categoriesObs.subscribe(categories => this.categories = categories);
@@ -82,8 +79,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
       if (user) {
         this.user = user;
-        console.log('user', user);
-        this.userCopyForReset = Object.assign({}, user);
+        this.userCopyForReset = cloneDeep(user);
         this.createForm(this.user);
 
         this.filteredTags$ = this.userForm.get('tags').valueChanges
@@ -99,14 +95,11 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       }
     });
 
-
     this.store.select(appState.userState).select(s => s.userProfileSaveStatus).subscribe(status => {
       if (status === 'SUCCESS') {
         this.snackBar.open('Profile saved!', '', { duration: 2000 });
       }
     });
-
-
   }
 
   get tagsArray(): FormArray {
@@ -138,13 +131,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.cropperSettings.keepAspect = false;
     this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
     this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
-  }
-
-  // Lifecycle hooks
-  ngOnInit() {
-
-
-
   }
 
   filter(val: string): string[] {
@@ -309,8 +295,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
 
   resetUserProfile() {
-   // this.user = cloneDeep(this.userCopyForReset);
-    this.user = Object.assign({}, this.userCopyForReset);
+    this.user = cloneDeep(this.userCopyForReset);
     this.createForm(this.user);
     this.filteredTags$ = this.userForm.get('tags').valueChanges
       .map(val => val.length > 0 ? this.filter(val) : []);
@@ -330,7 +315,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   // store the user object
   saveUser(user: User) {
-    this.store.dispatch(new useractions.AddUserProfile({ user: user }));
+    this.store.dispatch(new userActions.AddUserProfile({ user: user }));
   }
 
   ngOnDestroy() {
