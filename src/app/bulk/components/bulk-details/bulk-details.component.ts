@@ -20,9 +20,7 @@ export class BulkDetailsComponent implements OnChanges {
   totalCount: number;
 
   constructor(private store: Store<AppState>,
-    private router: Router) {
-
-  }
+    private router: Router) { }
 
   ngOnChanges() {
     if (this.parsedQuestions) {

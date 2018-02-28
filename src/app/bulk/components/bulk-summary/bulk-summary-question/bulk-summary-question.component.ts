@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
@@ -11,12 +11,17 @@ import { Utils } from '../../../../core/services';
 import { AngularFireStorage } from 'angularfire2/storage';
 
 
+
+import { AppState, appState, categoryDictionary } from '../../../../store';
+import { bulkState } from '../../../store';
+import * as bulkActions from '../../../store/actions';
+
 @Component({
   selector: 'app-bulk-summary-questions',
   templateUrl: './bulk-summary-question.component.html',
   styleUrls: ['./bulk-summary-question.component.scss']
 })
-export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestroy {
+export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
 
   unPublishedQuestions: Question[];
   publishedQuestions: Question[];
@@ -28,7 +33,6 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
 
-  subs: Subscription[] = [];
   fileInfoDS: MatTableDataSource<BulkUploadFileInfo>;
 
   PUBLISHED_SHOW_BUTTON_STATE = false;
@@ -39,50 +43,46 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() isAdminUrl: boolean;
 
-  constructor(private store: Store<AppStore>,
+  constructor(
+    private store: Store<AppState>,
     private storage: AngularFireStorage,
     private questionActions: QuestionActions) {
   }
 
   ngOnInit() {
-    this.categoryDictObs = this.store.select(s => s.categoryDictionary);
-    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.categoryDictObs = this.store.select(categoryDictionary);
+    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
   }
 
   ngOnChanges() {
     if (this.bulkUploadFileInfo) {
       this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([this.bulkUploadFileInfo]);
-      this.unPublishedQuestionObs = this.store.select(s => s.bulkUploadUnpublishedQuestions);
-      this.publishedQuestionObs = this.store.select(s => s.bulkUploadPublishedQuestions);
 
       // get published question by BulkUpload Id
-      this.store.dispatch(this.questionActions.loadBulkUploadPublishedQuestions(this.bulkUploadFileInfo));
-      this.subs.push(this.publishedQuestionObs.subscribe((questions) => {
+      this.publishedQuestionObs = this.store.select(bulkState).select(s => s.bulkUploadPublishedQuestions);
+      this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+      this.publishedQuestionObs.subscribe((questions) => {
         this.publishedCount = questions.length;
         this.publishedQuestions = questions;
-      }));
+      });
 
       // get unpublished question by BulkUpload Id
-      this.store.dispatch(this.questionActions.loadBulkUploadUnpublishedQuestions(this.bulkUploadFileInfo));
-      this.subs.push(this.unPublishedQuestionObs.subscribe((questions) => {
+      this.unPublishedQuestionObs = this.store.select(bulkState).select(s => s.bulkUploadUnpublishedQuestions);
+      this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+      this.unPublishedQuestionObs.subscribe((questions) => {
         this.unPublishedCount = questions.length;
         this.unPublishedQuestions = questions;
-      }));
+      });
 
       // get the download file url
       // tslint:disable-next-line:max-line-length
       const filePath = `bulk_upload/${this.bulkUploadFileInfo.created_uid}/${this.bulkUploadFileInfo.id}-${this.bulkUploadFileInfo.fileName}`;
       const ref = this.storage.ref(filePath);
       this.downloadUrl = ref.getDownloadURL();
-      // ref.getDownloadURL().subscribe(res => {
-      //   this.downloadUrl = res;
-      // });
-
+      ref.getDownloadURL().subscribe(res => {
+        this.downloadUrl = res;
+      });
     }
-  }
-
-  ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
   }
 }
 
