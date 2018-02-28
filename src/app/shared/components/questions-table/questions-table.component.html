@@ -7,11 +7,10 @@
     <mat-option [value]="'UpdatedTimeDesc'">Updated On (Latest)</mat-option>
     <mat-option [value]="'UpdatedTimeAsc'">Updated On (Earliest)</mat-option>
   </mat-select>
-
-  <mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
-    (page)="pageChanged($event)">
-  </mat-paginator>
 </div>
+<mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
+  (page)="pageChanged($event)">
+</mat-paginator>
 
 <mat-table #table [dataSource]="questionsDS">
 
@@ -31,25 +30,26 @@
   <ng-container cdkColumnDef="questionText">
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
     <mat-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
-      <div class="row" *ngIf="row !== editQuestion">        
+      <div class="row" *ngIf="row !== editQuestion">
         <div *ngIf="getDisplayStatus(row.status)==='REQUEST_TO_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div>
+        <!-- <br />
         <br />
         <br />
-        <br />
-        <br />
-        <div class="col-sm-12 col-xs-12">
+        <br /> -->
+        <!-- <div class="col-sm-12 col-xs-12">
           <div class="col-sm-9 col-xs-9"></div>
           <div class="col-sm-3 col-xs-3">
             <mat-chip-list>
-              <mat-chip color="primary">{{getDisplayStatus(row.status)}}</mat-chip>
+           
+              <label>{{getDisplayStatus(row.status) | titlecase}}</label>
             </mat-chip-list>
           </div>
-        </div>
+        </div> -->
         <div class="col-sm-12 col-xs-12">
           <div class="date">{{row.createdOn | date:'dd MMM yyyy' }}</div>
-          <p>{{row.questionText}}</p>
+          <p class="dark color-black">{{row.questionText}}</p>
           <ul class="currentans">
             <li>
               <div class="dark color-black">Correct answer :</div>
@@ -57,6 +57,14 @@
                 <span *ngFor="let answer of row.answers">
                   <span *ngIf="answer.correct">{{answer.answerText}}</span>
                 </span>
+              </div>
+              <div class="col-sm-3 col-xs-12 question-status">
+                <!-- <mat-chip-list> -->
+                <!-- <mat-chip color="primary">{{getDisplayStatus(row.status)}}</mat-chip> -->
+                <label>
+                  <b>{{getDisplayStatus(row.status) | titlecase}}</b>
+                </label>
+                <!-- </mat-chip-list> -->
               </div>
             </li>
             <li>
@@ -143,7 +151,7 @@
         </div>
       </div>
       <div class="row" *ngIf="row === editQuestion">
-          <app-question-form [editQuestion]="editQuestion" (updateStatus)=nullifyQuestion($event)></app-question-form>
+        <app-question-form [editQuestion]="editQuestion" (updateStatus)=nullifyQuestion($event)></app-question-form>
       </div>
 
     </mat-cell>
@@ -154,10 +162,10 @@
     <mat-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </mat-cell>
   </ng-container>
 
-  <mat-header-row *cdkHeaderRowDef="['questionText']"></mat-header-row>
+  <!-- <mat-header-row *cdkHeaderRowDef="['questionText']"></mat-header-row> -->
   <mat-row class="row-question" *cdkRowDef="let row; columns: ['questionText'];"></mat-row>
 </mat-table>
 
-<mat-paginator *ngIf="showPaginator" class="matHeader"  [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
-  (page)="pageChanged($event)">
+<mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
+  (page)="pageChanged($event)" class="col-sm-8 col-xs-12 paginator-position">
 </mat-paginator>

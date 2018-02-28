@@ -27,7 +27,6 @@
           </a>
         </div>
       </div>
-
     </div>
 
     <div class="row">
@@ -135,7 +134,7 @@
   </div> -->
 
   <div class="card" *ngIf="!showInstructions">
-    <mat-horizontal-stepper [linear]="isLinear" class="bulk-upload-summary">
+    <mat-horizontal-stepper [linear]="isLinear" class="bulk-upload-summary" alternativeLabel>
       <mat-step [stepControl]="uploadFormGroup">
         <form [formGroup]="uploadFormGroup" class="upload-questions">
           <ng-template matStepLabel>UPLOAD QUESTIONS</ng-template>
@@ -186,7 +185,7 @@
             <b>Review</b>
           </h2>
           <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
-          <div>
+          <div class="control-spacing">
             <button class="btn-back" type="button" matStepperPrevious>Back</button>
             <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError">Submit</button>
           </div>
@@ -199,7 +198,7 @@
             <b>Submit</b>
           </h2>
           <h4>Thank you for uploaded questions</h4>
-          <div>
+          <div class="control-spacing">
             <button class="btn-back" type="button" [routerLink]="['/bulk']">Back To Summary</button>
           </div>
         </div>

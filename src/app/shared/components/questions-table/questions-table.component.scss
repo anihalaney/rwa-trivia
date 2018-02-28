@@ -8,18 +8,20 @@
 .dark{ font-size: 16px; }
 .dark{ font-family: 'hindsemibold'; display: inline-block; }
 .light{ display: inline-block; }
-.currentans li:nth-child(3) {
+
+.currentans li:nth-child(1) {
   margin-top: 10px;
 }
 
 .mat-header-row, .mat-row { 
   border-bottom-style: none;
+  padding: 0px;
 }
 
-.sort-page-header {
-  margin-left: 30px;
-  margin-top: 30px;
-}
+// .sort-page-header {
+//   margin-left: 30px;
+//   margin-top: 30px;
+// }
 .row-question {
   height: auto;
 }
@@ -145,4 +147,13 @@ mat-card-actions {
 }
 ::ng-deep mat-hint.error, .error {
   color: red;
+}
+.question-status
+{
+  float: right;
+  text-align: right;
+}
+.paginator-position
+{
+  float: right;
 }
