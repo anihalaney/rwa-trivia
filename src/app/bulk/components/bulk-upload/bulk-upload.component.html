@@ -5,7 +5,7 @@
 <mat-horizontal-stepper [linear]="isLinear">
   <mat-step>
     <ng-template matStepLabel>Instructions</ng-template>
-    <div>
+    <div class="color-black">
       <p>
         The bulk upload feature allows you to submit your questions in a batch, instead of one at a time. Please read the instructions
         carefully before using this feature.
@@ -42,7 +42,7 @@
       <br />
       <br />
       <div>
-        <div>
+        <div class="color-black">
           <span>Select Your Prefered Category for the Question:</span>
         </div>
         <br />
@@ -58,7 +58,7 @@
       <div>
         <br />
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Primary Tag" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto">
+          <input matInput placeholder="Primary Tag" class="matHeader" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto">
           <mat-autocomplete #tagAuto="matAutocomplete">
             <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
               {{tag}}
@@ -68,16 +68,16 @@
       </div> 
       <div>
         <br />
-        <input type="file" placeholder="Upload csv file" accept=".csv" (change)="onFileChange($event)" #fileInput>
-        <p *ngIf="parseError" class="error">
-          Only .csv file is supported
+        <input type="file" class="matHeader" placeholder="Upload csv file" accept=".csv" (change)="onFileChange($event)" #fileInput>
+        <p *ngIf="fileParseError" class="error">
+          {{fileParseErrorMessage}} 
         </p>
       </div>
       <div>
         <br />
-        <br />
+        <br />  
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined" (click)="onUploadSubmit()">Next</button>
+        <button mat-button matStepperNext  type="button" [disabled]="bulkUploadFileInfo === undefined || fileParseError" (click)="onUploadSubmit()">Next</button>
       </div>
     </form>
   </mat-step>
@@ -86,13 +86,13 @@
     <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
     <div>
       <button mat-button matStepperPrevious>Back</button>
-      <button mat-button matStepperNext type="button" (click)="onReviewSubmit()">Submit</button>
+      <button mat-button matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined || questionValidationError" (click)="onReviewSubmit()">Submit</button>
     </div>
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Submit</ng-template>
     <br />
-    <div>
+    <div class="color-black">
       You have submitted questions.
     </div>
     <br /><br />

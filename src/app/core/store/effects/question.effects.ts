@@ -49,7 +49,7 @@ export class QuestionEffects {
         .switchMap((action: ActionWithPayload<BulkUploadFileInfo>) => this.svc.getQuestionsForBulkUpload(action.payload, true))
         .map((questions: Question[]) => this.questionActions.loadBulkUploadPublishedQuestionsSuccess(questions));
 
-  
+
 
 
     @Effect()
