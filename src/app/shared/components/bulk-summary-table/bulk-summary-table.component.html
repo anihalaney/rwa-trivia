@@ -44,7 +44,7 @@
 
         <ng-container cdkColumnDef="status">
           <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
-          <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}&nbsp;</mat-cell>
+          <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
         </ng-container>
 
         <ng-container cdkColumnDef="created">
@@ -54,7 +54,7 @@
 
         <ng-container cdkColumnDef="download">
           <mat-header-cell *cdkHeaderCellDef> Download File</mat-header-cell>
-          <mat-cell class="col-status" *cdkCellDef="let row"><a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">&nbsp;Download</a></mat-cell>
+          <mat-cell class="col-status" *cdkCellDef="let row"><a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a></mat-cell>
         </ng-container>
 
         <mat-header-row *cdkHeaderRowDef="displayedColumns">
