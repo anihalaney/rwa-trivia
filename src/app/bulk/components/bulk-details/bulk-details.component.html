@@ -1,6 +1,5 @@
-<div>
-  Following are the uploaded questions
-</div>
+<p class="row col-sm-5 col-xs-12 sub-header">
+  Following are the uploaded questions</p>
 
 <question-table [showSort]="false" [showPaginator]="true" [questions]="parsedQuestions" [totalCount]="totalCount" [categoryDictionary]="categoryDictObs| async"
   [showApproveButton]="false">
