@@ -40,10 +40,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     return this.questionForm.get('tagsArray') as FormArray;
   }
 
-  constructor(
-    private store: Store<AppState>,
-    private fb: FormBuilder
-  ) {
+  constructor(private store: Store<AppState>,
+    private fb: FormBuilder) {
     this.categoriesObs = store.select(getCategories);
     this.tagsObs = this.store.select(getTags);
 

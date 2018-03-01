@@ -4,14 +4,13 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
 import { AppStore } from '../../../../core/store/app-store';
 import { BulkUploadFileInfo, Question, Category } from '../../../../model';
-import { QuestionActions } from '../../../../core/store/actions';
 import { Subscription } from 'rxjs/Subscription';
 import { MatTableDataSource } from '@angular/material';
 import { Utils } from '../../../../core/services';
 import { AngularFireStorage } from 'angularfire2/storage';
 
 
-
+import { MatSnackBar } from '@angular/material';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
@@ -43,8 +42,16 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
 
   constructor(
     private store: Store<AppState>,
-    private storage: AngularFireStorage,
-    private questionActions: QuestionActions) {
+    private snackBar: MatSnackBar,
+    private storage: AngularFireStorage) {
+ 
+    this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {
+      console.log("Snackbar callded");
+      if (status === 'UPDATE') {
+        this.snackBar.open('Question Updated!', '', { duration: 1500 });
+      }
+    });
+
   }
 
   ngOnInit() {

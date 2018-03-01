@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public router: Router,
     public snackBar: MatSnackBar) {
 
-    this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
+    this.sub = store.select(appState.userState).select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === "SUCCESS") {
         this.snackBar.open("Question saved!", "", { duration: 2000 });
       }
