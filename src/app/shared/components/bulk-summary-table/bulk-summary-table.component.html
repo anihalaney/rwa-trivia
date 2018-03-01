@@ -1,68 +1,71 @@
-<mat-card>
-  <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle>
-  <mat-card-content>
+<!-- <mat-card> -->
+  <!-- <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle> -->
+  <!-- <mat-card-content> -->
     <div *ngIf="SHOW_SUMMARY_TABLE" class="mat-elevation-z8">
-      <mat-table #table [dataSource]="dataSource" matSort >
+      <mat-table #table [dataSource]="dataSource" matSort class="bulk-summary-table">
 
         <!--- Note that these columns can be defined in any order.
                     The actual rendered columns are set as a property on the row definition" -->
 
         <ng-container cdkColumnDef="uploadDate">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header="date" class="matHeader">Date Uploaded</mat-header-cell>
-          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header="date" class="cell-padding">Date Uploaded</mat-header-cell>
+          <mat-cell class="col-chkbox bulk-summary-table-cell cell-padding" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>
         </ng-container>
 
         <ng-container cdkColumnDef="fileName">
-          <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
-          <mat-cell (click)="getBulkUploadQuestions(row)" class="col-chkbox cursor" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
+          <mat-header-cell *cdkHeaderCellDef class="cell-padding">File Name</mat-header-cell>
+          <mat-cell (click)="getBulkUploadQuestions(row)" class="col-chkbox cursor bulk-summary-table-cell cell-padding" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
         </ng-container>
 
         <ng-container cdkColumnDef="category">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader">Category</mat-header-cell>
-          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="cell-padding">Category</mat-header-cell>
+          <mat-cell class="col-chkbox bulk-summary-table-cell cell-padding" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
         </ng-container>
 
-        <ng-container cdkColumnDef="primaryTag">
-          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader">Primary Tag</mat-header-cell>
-          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
+        <ng-container cdkColumnDef="primaryTag" class="cell-padding">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="cell-padding">Primary Tag</mat-header-cell>
+          <mat-cell class="col-chkbox bulk-summary-table-cell cell-padding" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
         </ng-container>
 
-        <ng-container cdkColumnDef="countQuestionsUploaded">
+        <ng-container cdkColumnDef="countQuestionsUploaded" class="cell-padding">
           <mat-header-cell *cdkHeaderCellDef>Uploaded #</mat-header-cell>
-          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.uploaded}}</mat-cell>
+          <mat-cell class="col-chkbox bulk-summary-table-cell cell-padding" *cdkCellDef="let row">{{row.uploaded}}</mat-cell>
         </ng-container>
 
-        <ng-container cdkColumnDef="countQuestionsApproved">
+        <ng-container cdkColumnDef="countQuestionsApproved" class="cell-padding">
           <mat-header-cell *cdkHeaderCellDef>Approved #</mat-header-cell>
-          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.approved}}</mat-cell>
+          <mat-cell class="col-chkbox bulk-summary-table-cell cell-padding" *cdkCellDef="let row">{{row.approved}}</mat-cell>
         </ng-container>
 
-        <ng-container cdkColumnDef="countQuestionsRejected">
+        <ng-container cdkColumnDef="countQuestionsRejected" class="cell-padding">
           <mat-header-cell *cdkHeaderCellDef>Rejected #</mat-header-cell>
-          <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.rejected}}</mat-cell>
+          <mat-cell class="col-chkbox bulk-summary-table-cell cell-padding" *cdkCellDef="let row">{{row.rejected}}</mat-cell>
         </ng-container>
 
-        <ng-container cdkColumnDef="status">
+        <ng-container cdkColumnDef="status" class="cell-padding">
           <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
-          <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
+          <mat-cell class="col-status bulk-summary-table-cell cell-padding" *cdkCellDef="let row">{{row.status}}</mat-cell>
         </ng-container>
 
-        <ng-container cdkColumnDef="download">
-          <mat-header-cell *cdkHeaderCellDef> Download File</mat-header-cell>
-          <mat-cell class="col-status" *cdkCellDef="let row"><a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a></mat-cell>
+        <ng-container cdkColumnDef="download" class="cell-padding">
+          <mat-header-cell *cdkHeaderCellDef class="cell-padding"> Download File</mat-header-cell>
+          <mat-cell class="col-status bulk-summary-table-cell" *cdkCellDef="let row">
+            <a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a>
+          </mat-cell>
         </ng-container>
 
-        <mat-header-row *cdkHeaderRowDef="['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
+        <mat-header-row class="bulk-summary-header" *cdkHeaderRowDef="['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
         </mat-header-row>
         <mat-row class="row-question" *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download'];">
         </mat-row>
       </mat-table>
-      <mat-paginator #paginator class="matHeader" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      <mat-paginator #paginator class="matHeader bulk-summary-table" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
       </mat-paginator>
     </div>
     <div *ngIf="!SHOW_SUMMARY_TABLE">
-      <app-bulk-summary-questions [bulkUploadFileInfo]="bulkUploadFileInfo" [isAdminUrl]="isAdminUrl"></app-bulk-summary-questions>
+      <app-bulk-summary-questions  [bulkUploadFileInfo]="bulkUploadFileInfo" [isAdminUrl]="isAdminUrl"></app-bulk-summary-questions>
     </div>
 
-  </mat-card-content>
-</mat-card>
+
+  <!-- </mat-card-content> -->
+<!-- </mat-card> -->

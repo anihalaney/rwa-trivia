@@ -49,6 +49,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   editQuestion: Question;
   user: User;
 
+  viewReasonArray = [];
+
   constructor(private store: Store<AppStore>,
     private questionActions: QuestionActions,
     private bulkUploadActions: BulkUploadActions,
@@ -56,7 +58,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
     this.sortOrder = 'Category';
-}
+  }
 
   ngOnInit() {
 
@@ -157,6 +159,16 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   nullifyQuestion(updateStatus: boolean) {
     if (updateStatus) {
       this.editQuestion = null;
+    }
+  }
+
+  showReason(row, index) {
+    if (!this.viewReasonArray[index]) {
+      this.viewReasonArray[index] = { val: true, reason: row.reason };
+    } else if (this.viewReasonArray[index]) {
+      this.viewReasonArray[index] = { val: false, reason: row.reason };
+    } else {
+      this.viewReasonArray[index] = { val: true, reason: row.reason };
     }
   }
 

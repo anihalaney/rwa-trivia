@@ -21,7 +21,7 @@
 	}
 
 	/*Header*/
-	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary { 
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary,.bulk-summary-table { 
 		background: map-get($theme, card);
 	}
 	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
@@ -48,7 +48,7 @@
 	.headermain{ 
 		background: map-get($theme, header);
 	}
-	.startgame{ 
+	.startgame,.view-reason-btn{ 
 		background: map-get($theme, button-important); 
 	}
 	.btn, .question-list li input:checked ~ label, .optionbox input:checked + label, .formfield input[type="checkbox"]:checked:before,.enterquestion .formfield input[type="radio"]:checked:before, .gameplay li.right,.questionstatus .tabbing li:after{ 
@@ -80,6 +80,9 @@
 	}
 	.subscrib-cont input[type="email"]{ 
 		background: map-get($theme, subscribe-email);
+	}
+	.bulk-summary-header{
+		background: map-get($theme, nav-sm);
 	}
 	
 

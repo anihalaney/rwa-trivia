@@ -151,9 +151,10 @@ mat-card-actions {
 .question-status
 {
   float: right;
-  text-align: right;
+  text-align: center;
 }
 .paginator-position
 {
   float: right;
 }
+.view-reason-btn{ font-family:'hindsemibold' ; text-transform: uppercase; box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 35px; border-radius: 4px; display: inline-block; text-align: center; letter-spacing: 1px;}

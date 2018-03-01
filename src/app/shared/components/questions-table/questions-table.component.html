@@ -29,24 +29,11 @@
   <!-- Question Column -->
   <ng-container cdkColumnDef="questionText">
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
-    <mat-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
+    <mat-cell *cdkCellDef="let row;let i = index" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
       <div class="row" *ngIf="row !== editQuestion">
         <div *ngIf="getDisplayStatus(row.status)==='REQUEST_TO_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div>
-        <!-- <br />
-        <br />
-        <br />
-        <br /> -->
-        <!-- <div class="col-sm-12 col-xs-12">
-          <div class="col-sm-9 col-xs-9"></div>
-          <div class="col-sm-3 col-xs-3">
-            <mat-chip-list>
-           
-              <label>{{getDisplayStatus(row.status) | titlecase}}</label>
-            </mat-chip-list>
-          </div>
-        </div> -->
         <div class="col-sm-12 col-xs-12">
           <div class="date">{{row.createdOn | date:'dd MMM yyyy' }}</div>
           <p class="dark color-black">{{row.questionText}}</p>
@@ -59,12 +46,12 @@
                 </span>
               </div>
               <div class="col-sm-3 col-xs-12 question-status">
-                <!-- <mat-chip-list> -->
-                <!-- <mat-chip color="primary">{{getDisplayStatus(row.status)}}</mat-chip> -->
                 <label>
-                  <b>{{getDisplayStatus(row.status) | titlecase}}</b>
+                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUEST_TO_CHANGE'?'status-change-request':''">{{getDisplayStatus(row.status) | titlecase}}</b>
                 </label>
-                <!-- </mat-chip-list> -->
+                <div *ngIf="getDisplayStatus(row.status)==='REJECTED'">
+                  <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
+                </div>
               </div>
             </li>
             <li>
@@ -102,10 +89,10 @@
                 </span>
               </div>
             </li>
-            <li *ngIf="row.reason color-black">
+            <li *ngIf="viewReasonArray.length>0 && viewReasonArray[i] && viewReasonArray[i].val">
               <div class="dark color-black">Reason :</div>
               <div class="light">
-                {{row.reason}}
+                {{viewReasonArray[i].reason}}
               </div>
             </li>
           </ul>

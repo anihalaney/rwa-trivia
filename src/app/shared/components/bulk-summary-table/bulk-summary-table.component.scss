@@ -12,11 +12,7 @@
   overflow: auto;
 }
 
-body.dark input, body.dark textarea, body.dark select, body.dark button {
-  background: #FFF !important;
-  background-color: #FFF !important;
-}
-
-.mat-header-cell.mat-sort-header-sorted {
-  color: black;
+.cell-padding
+{
+  padding-right: 15px;
 }
