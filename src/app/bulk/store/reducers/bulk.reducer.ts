@@ -45,6 +45,7 @@ export function bulkUploadUnpublishedQuestions(state: any = [], action: BulkActi
     }
 };
 
+// question save Status
 export function questionSaveStatus(state: any = 'NONE', action: BulkActions): string {
     switch (action.type) {
         case BulkActionTypes.UPDATE_QUESTION:

@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-import { QuestionActions, BulkUploadActions } from '../../../core/store/actions';
 import { AppState, appState } from '../../../store';
 import { Utils } from '../../../core/services';
 import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload } from '../../../model';
@@ -43,9 +42,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   parsedQuestions: Array<Question> = [];
 
   constructor(private fb: FormBuilder,
-    private store: Store<AppState>,
-    private bulkUploadActions: BulkUploadActions,
-    private questionActions: QuestionActions) {
+    private store: Store<AppState>) {
     this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
     this.tagsObs = store.select(appState.coreState).select(s => s.tags);
     this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);

@@ -12,6 +12,7 @@ import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
+import { userState } from '../../../user/store';
 
 @Component({
   selector: 'profile-settings',
@@ -73,7 +74,7 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.setCropperSettings();
 
-    this.userObs = this.store.select(appState.userState).select(s => s.user);
+    this.userObs = this.store.select(userState).select(s => s.user);
 
     this.userObs.subscribe(user => {
 
@@ -95,7 +96,7 @@ export class ProfileSettingsComponent implements OnDestroy {
       }
     });
 
-    this.store.select(appState.userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+    this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
       if (status === 'SUCCESS') {
         this.snackBar.open('Profile saved!', '', { duration: 2000 });
       }

@@ -6,7 +6,7 @@ import { empty } from 'rxjs/observable/empty';
 
 import { BulkUploadFileInfo, Question } from '../../../model';
 import { BulkActions, BulkActionTypes } from '../actions';
-import * as bulkactions from '../actions/bulk.actions';
+import * as bulkActions from '../actions/bulk.actions';
 import { BulkService, QuestionService } from '../../../core/services';
 
 @Injectable()
@@ -23,9 +23,9 @@ export class BulkEffects {
     loadBulkUpload$ = this.actions$
         .ofType(BulkActionTypes.LOAD_BULK_UPLOAD)
         .pipe(
-        switchMap((action: bulkactions.LoadBulkUpload) =>
+        switchMap((action: bulkActions.LoadBulkUpload) =>
             this.bulkService.getBulkUpload().pipe(
-                map((bulkUploadFileInfo: BulkUploadFileInfo[]) => new bulkactions.LoadBulkUploadSuccess(bulkUploadFileInfo))
+                map((bulkUploadFileInfo: BulkUploadFileInfo[]) => new bulkActions.LoadBulkUploadSuccess(bulkUploadFileInfo))
             )
         )
         );
@@ -35,9 +35,9 @@ export class BulkEffects {
     loadUserBulkUpload$ = this.actions$
         .ofType(BulkActionTypes.LOAD_USER_BULK_UPLOAD)
         .pipe(
-        switchMap((action: bulkactions.LoadUserBulkUpload) =>
+        switchMap((action: bulkActions.LoadUserBulkUpload) =>
             this.bulkService.getUserBulkUpload(action.payload.user).pipe(
-                map((bulkUploadFileInfo: BulkUploadFileInfo[]) => new bulkactions.LoadUserBulkUploadSuccess(bulkUploadFileInfo))
+                map((bulkUploadFileInfo: BulkUploadFileInfo[]) => new bulkActions.LoadUserBulkUploadSuccess(bulkUploadFileInfo))
             )
         )
         );
@@ -47,9 +47,9 @@ export class BulkEffects {
     loadBulkUploadPublishedQuestions$ = this.actions$
         .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS)
         .pipe(
-        switchMap((action: bulkactions.LoadBulkUploadPublishedQuestions) =>
+        switchMap((action: bulkActions.LoadBulkUploadPublishedQuestions) =>
             this.questionService.getQuestionsForBulkUpload(action.payload.bulkUploadFileInfo, true).pipe(
-                map((questions: Question[]) => new bulkactions.LoadBulkUploadPublishedQuestionsSuccess(questions))
+                map((questions: Question[]) => new bulkActions.LoadBulkUploadPublishedQuestionsSuccess(questions))
             )
         )
         );
@@ -59,9 +59,9 @@ export class BulkEffects {
     loadBulkUploadUnpublishedQuestions$ = this.actions$
         .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS)
         .pipe(
-        switchMap((action: bulkactions.LoadBulkUploadUnpublishedQuestions) =>
+        switchMap((action: bulkActions.LoadBulkUploadUnpublishedQuestions) =>
             this.questionService.getQuestionsForBulkUpload(action.payload.bulkUploadFileInfo, false).pipe(
-                map((questions: Question[]) => new bulkactions.LoadBulkUploadUnpublishedQuestionsSuccess(questions))
+                map((questions: Question[]) => new bulkActions.LoadBulkUploadUnpublishedQuestionsSuccess(questions))
             )
         )
         );
@@ -71,7 +71,7 @@ export class BulkEffects {
     updateQuestion$ = this.actions$
         .ofType(BulkActionTypes.UPDATE_QUESTION)
         .pipe(
-        switchMap((action: bulkactions.UpdateQuestion) => {
+        switchMap((action: bulkActions.UpdateQuestion) => {
             this.questionService.saveQuestion(action.payload.question);
             return empty();
         })
@@ -81,7 +81,7 @@ export class BulkEffects {
     updateBulkUpload$ = this.actions$
         .ofType(BulkActionTypes.UPDATE_BULK_UPLOAD)
         .pipe(
-        switchMap((action: bulkactions.UpdateBulkUpload) => {
+        switchMap((action: bulkActions.UpdateBulkUpload) => {
             this.bulkService.updateBulkUpload(action.payload.bulkUploadFileInfo);
             return empty();
         })
@@ -92,7 +92,7 @@ export class BulkEffects {
     approveQuestion$ = this.actions$
         .ofType(BulkActionTypes.APPROVE_QUESTION)
         .pipe(
-        switchMap((action: bulkactions.ApproveQuestion) => {
+        switchMap((action: bulkActions.ApproveQuestion) => {
             this.questionService.approveQuestion(action.payload.question);
             return empty();
         })
@@ -103,7 +103,7 @@ export class BulkEffects {
     addBulkQuestions$ = this.actions$
         .ofType(BulkActionTypes.ADD_BULK_QUESTIONS)
         .pipe(
-        switchMap((action: bulkactions.AddBulkQuestions) => {
+        switchMap((action: bulkActions.AddBulkQuestions) => {
             this.questionService.saveBulkQuestions(action.payload.bulkUpload);
             return empty();
         })

@@ -1,6 +1,5 @@
 import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
 import { Store } from '@ngrx/store';
@@ -52,7 +51,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   user: User;
 
   constructor(private store: Store<AppState>,
-    private snackBar: MatSnackBar,
     private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
@@ -72,13 +70,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.questionsSubject.next(this.questions);
-    setTimeout(() => {
-      this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {
-        if (status === 'UPDATE') {
-          this.snackBar.open('Question Updated!', '', { duration: 1500 });
-        }
-      });
-    }, 100);
   }
 
   getDisplayStatus(status: number): string {

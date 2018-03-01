@@ -5,9 +5,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
-import { QuestionActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
 import { User, Category, Question, QuestionStatus, Answer } from '../../../model';
+import * as userActions from '../../store/actions';
 
 @Component({
   templateUrl: './question-add-update.component.html',
@@ -41,8 +41,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
   // Constructor
   constructor(private fb: FormBuilder,
-              private store: Store<AppState>,
-              private questionActions: QuestionActions) {
+              private store: Store<AppState>) {
     this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
     this.tagsObs = store.select(appState.coreState).select(s => s.tags);
   }
@@ -87,12 +86,10 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
       return;
 
     // get question object from the forms
-    // console.log(this.questionForm.value);
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
     question.status = QuestionStatus.SUBMITTED;
     this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
-    //console.log(question);
 
     question.created_uid = this.user.userId;
     // call saveQuestion
@@ -116,7 +113,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
   saveQuestion(question: Question) {
     console.log('question--->', JSON.stringify(question));
-    this.store.dispatch(this.questionActions.addQuestion(question));
+    this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
   computeAutoTags() {
