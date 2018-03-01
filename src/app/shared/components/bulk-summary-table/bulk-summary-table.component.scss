@@ -9,10 +9,21 @@
 }
 
 .mat-table {
+  display: table;
+  width: 100%;
   overflow: auto;
-}
 
-.cell-padding
-{
-  padding-right: 15px;
+  > .mat-header-row, > .mat-row {
+      display: table-row;
+      padding: 0;
+      border: none;
+
+      > .mat-header-cell, > .mat-cell {
+          display: table-cell;
+          height: 48px;
+          vertical-align: middle;
+          padding: 0px 10px 0px 10px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+      }
+  }
 }

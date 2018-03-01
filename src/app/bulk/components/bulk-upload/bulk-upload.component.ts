@@ -41,7 +41,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   // bulk upload object
   parsedQuestions: Array<Question> = [];
 
-  //Show Instruction Card
+  // Show Instruction Card
   showInstructions: Boolean = true;
   myTabIndex: Number = 0;
 
