@@ -31,8 +31,7 @@ export class AdminQuestionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(new adminActions.LoadQuestions({ 'startRow': 0, 'pageSize': 25, criteria: this.criteria }));
-    this.store.dispatch(new adminActions.LoadUnpublishedQuestions());
+
   }
 
   approveQuestion(question: Question) {

@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { User, Question } from '../../../model';
+import { User, Question, RouterStateUrl } from '../../../model';
 import { UserActions, UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
 import { UserService, QuestionService } from '../../../core/services';
@@ -28,37 +28,58 @@ export class UserEffects {
         })
         );
 
-    // Load User Profile By Id
+
+    //load from router
     @Effect()
-    loadUserProfile$ = this.actions$
-        .ofType(UserActionTypes.LOAD_USER_PROFILE)
+    // handle location update
+    loadUserRouteProfile$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/my/profile') &&
+            routerState.params.userid
+        )
         .pipe(
-        switchMap((action: userActions.LoadUserProfile) =>
-            this.userService.getUserProfile(action.payload.user).pipe(
+        switchMap((routerState: RouterStateUrl) =>
+            this.userService.getUserProfile(routerState.params.userid)
+                .pipe(
                 map((user: User) => new userActions.LoadUserProfileSuccess(user))
-            )
+                )
         )
         );
 
-    // Load User Published Question by userId
+
+    // Load User Published Question by userId from router
     @Effect()
-    loadUserPublishedQuestions$ = this.actions$
-        .ofType(UserActionTypes.LOAD_USER_PUBLISHED_QUESTIONS)
+    // handle location update
+    loadUserPublishedRouteQuestions$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/my/questions') &&
+            routerState.params.userid
+        )
         .pipe(
-        switchMap((action: userActions.LoadUserPublishedQuestions) =>
-            this.questionService.getUserQuestions(action.payload.user, true).pipe(
+        switchMap((routerState: RouterStateUrl) =>
+            this.questionService.getUserQuestions(routerState.params.userid, true).pipe(
                 map((questions: Question[]) => new userActions.LoadUserPublishedQuestionsSuccess(questions))
             )
         )
         );
 
-    // Load User Unpublished Question by userId
+    // Load User Unpublished Question by userId from router
     @Effect()
-    loadUserUnpublishedQuestions$ = this.actions$
-        .ofType(UserActionTypes.LOAD_USER_UNPUBLISHED_QUESTIONS)
+    // handle location update
+    loadUserUnpublishedRouteQuestions$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/my/questions') &&
+            routerState.params.userid
+        )
         .pipe(
-        switchMap((action: userActions.LoadUserUnpublishedQuestions) =>
-            this.questionService.getUserQuestions(action.payload.user, false).pipe(
+        switchMap((routerState: RouterStateUrl) =>
+            this.questionService.getUserQuestions(routerState.params.userid, false).pipe(
                 map((questions: Question[]) => new userActions.LoadUserUnpublishedQuestionsSuccess(questions))
             )
         )

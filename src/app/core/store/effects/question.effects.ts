@@ -23,17 +23,7 @@ export class QuestionEffects {
         .switchMap(() => this.svc.getUnpublishedQuestions())
         .map((questions: Question[]) => this.questionActions.loadUnpublishedQuestionsSuccess(questions));
 
-    @Effect()
-    loadUserPublishedQuestions$ = this.actions$
-        .ofType(QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS)
-        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserQuestions(action.payload, true))
-        .map((questions: Question[]) => this.questionActions.loadUserPublishedQuestionsSuccess(questions));
 
-    @Effect()
-    loadUserUnpublishedQuestions$ = this.actions$
-        .ofType(QuestionActions.LOAD_USER_PUBLISHED_QUESTIONS)
-        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserQuestions(action.payload, false))
-        .map((questions: Question[]) => this.questionActions.loadUserUnpublishedQuestionsSuccess(questions));
 
 
     // get File Unpublished Questions

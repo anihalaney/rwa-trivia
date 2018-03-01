@@ -37,9 +37,9 @@ export class QuestionService {
   }
 
   // Firestore
-  getUserQuestions(user: User, published: boolean): Observable<Question[]> {
+  getUserQuestions(userId: Number, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
-    return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', user.userId))
+    return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', userId))
       .valueChanges()
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
   }

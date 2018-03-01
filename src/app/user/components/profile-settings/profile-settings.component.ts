@@ -64,7 +64,6 @@ export class ProfileSettingsComponent implements OnDestroy {
 
     this.store.select(appState.coreState).take(1).subscribe((s) => {
       this.user = s.user
-      this.store.dispatch(new userActions.LoadUserProfile({ user: this.user }))
     });
     this.categoriesObs = store.select(getCategories);
     this.categoriesObs.subscribe(categories => this.categories = categories);

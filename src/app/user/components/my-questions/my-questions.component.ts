@@ -32,8 +32,6 @@ export class MyQuestionsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.store.select(appState.coreState).take(1).subscribe((s) => {
       this.user = s.user;
-      this.store.dispatch(new userActions.LoadUserPublishedQuestions({ user: this.user }));
-      this.store.dispatch(new userActions.LoadUserUnpublishedQuestions({ user: this.user }));
     });
     this.publishedQuestions$ = this.store.select(userState).select(s => s.userPublishedQuestions);
     this.unpublishedQuestions$ = this.store.select(userState).select(s => s.userUnpublishedQuestions);
