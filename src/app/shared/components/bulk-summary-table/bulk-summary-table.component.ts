@@ -29,7 +29,7 @@ export class BulkSummaryTableComponent implements OnChanges, OnDestroy {
   bulkUploadObs: Observable<BulkUploadFileInfo[]>;
   subs: Subscription[] = [];
   dataSource: any;
-  SHOW_SUMMARY_TABLE = true;
+  showSummaryTable = true;
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
 
@@ -92,15 +92,14 @@ export class BulkSummaryTableComponent implements OnChanges, OnDestroy {
   // get Questions by bulk upload Id
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
     this.bulkUploadFileInfo = row;
-    this.SHOW_SUMMARY_TABLE = false;
+    this.showSummaryTable = false;
   }
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
   }
 
-  backToSummary() {
-    this.SHOW_SUMMARY_TABLE = true;
-    this.loadBulkSummaryData();
+  backToSummary(res: boolean) {
+    this.showSummaryTable = true;
   }
 }

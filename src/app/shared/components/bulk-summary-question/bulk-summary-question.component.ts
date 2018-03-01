@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
@@ -38,6 +38,8 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
 
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() isAdminUrl: boolean;
+  @Output() showSummaryTableReturn = new EventEmitter<boolean>();
+
 
   constructor(private store: Store<AppStore>,
     private storage: AngularFireStorage,
@@ -79,6 +81,11 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges, OnDestro
       // });
 
     }
+  }
+
+
+  backToSummary() {
+    this.showSummaryTableReturn.emit(true);
   }
 
   ngOnDestroy() {
