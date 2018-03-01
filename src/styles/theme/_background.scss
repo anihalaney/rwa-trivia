@@ -2,7 +2,7 @@
 	input, textarea, select, button { 
 		background: map-get($theme, input);
 	}
-	.matHeader > div > button , .matHeader > div > div > button, .matHeader {
+	.matHeader > div > button , .matHeader > div > div > button, .matHeader,.downloadFile {
 		@if $theme='dark' {
 			background: #FFF;
 			color:rgba(0, 0, 0, 0.54);
@@ -21,7 +21,7 @@
 	}
 
 	/*Header*/
-	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox { 
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary { 
 		background: map-get($theme, card);
 	}
 	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
@@ -36,7 +36,7 @@
 	.question-list li label{ 
 		background: map-get($theme, question-list-label);
 	}
-	.question-list li label:hover{ 
+	.question-list li label:hover,.btn-back{ 
 		background: map-get($theme, li-hover); 
 	}
 	#curentactive{ 
@@ -81,6 +81,7 @@
 	.subscrib-cont input[type="email"]{ 
 		background: map-get($theme, subscribe-email);
 	}
+	
 
 	@media screen and ( min-width:1000px){
 		.startgame:hover{ 
