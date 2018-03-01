@@ -163,9 +163,9 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   }
 
   showReason(row, index) {
-    if (!this.viewReasonArray[index]) {
+    if (this.viewReasonArray[index] && !this.viewReasonArray[index].val) {
       this.viewReasonArray[index] = { val: true, reason: row.reason };
-    } else if (this.viewReasonArray[index]) {
+    } else if (this.viewReasonArray[index] && this.viewReasonArray[index].val) {
       this.viewReasonArray[index] = { val: false, reason: row.reason };
     } else {
       this.viewReasonArray[index] = { val: true, reason: row.reason };
