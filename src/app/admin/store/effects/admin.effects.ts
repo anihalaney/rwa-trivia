@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { SearchResults, Question } from '../../../model';
+import { SearchResults, Question, RouterStateUrl, SearchCriteria } from '../../../model';
 import { AdminActions, AdminActionTypes } from '../actions';
 import * as adminActions from '../actions/admin.actions';
 import { QuestionService } from '../../../core/services';
@@ -16,6 +16,39 @@ export class AdminEffects {
         private svc: QuestionService,
     ) { }
 
+
+    // Load User Published Question by userId from router
+    @Effect()
+    // handle location update
+    loadRouteQuestions$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/admin/questions'))
+        .pipe(
+        switchMap((routerState: RouterStateUrl) =>
+            this.svc.getQuestions(0, 25, new SearchCriteria()).pipe(
+                map((results: SearchResults) => new adminActions.LoadQuestionsSuccess(results))
+            )
+        )
+        );
+
+    // Load User Published Question by userId from router
+    @Effect()
+    // handle location update
+    loadUnpublishedRouteQuestions$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/admin/questions')
+        )
+        .pipe(
+        switchMap((routerState: RouterStateUrl) =>
+            this.svc.getUnpublishedQuestions().pipe(
+                map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
+            )
+        )
+        );
 
     // Load Question As per Search critearea
     @Effect()

@@ -21,11 +21,11 @@ export class UserEffects {
         .do((action: ActionWithPayload<User>) => this.svc.saveUserProfile(action.payload))
         .filter(() => false);
 
-    @Effect()
-    loadUserProfile$ = this.actions$
-        .ofType(UserActions.LOAD_USER_PROFILE)
-        .switchMap((action: ActionWithPayload<User>) => this.svc.getUserProfile(action.payload))
-        .map((user: User) => user ? this.userActions.loadUserProfileSuccess(user) : this.userActions.loadUserProfileError(null));
+    // @Effect()
+    // loadUserProfile$ = this.actions$
+    //     .ofType(UserActions.LOAD_USER_PROFILE)
+    //     .switchMap((action: ActionWithPayload<User>) => this.svc.getUserProfile(action.payload))
+    //     .map((user: User) => user ? this.userActions.loadUserProfileSuccess(user) : this.userActions.loadUserProfileError(null));
 
     constructor(
         private actions$: Actions,
