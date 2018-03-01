@@ -45,7 +45,7 @@
 	.T-tagging{ 
 		color: map-get($theme, tags);
 	}
-	.viewall, .viewcount, a.dark:hover,.gameplay p a, .loginlink a.forgot{ 
+	.viewall, .viewcount, a.dark:hover,.gameplay p a, .loginlink a.forgot,.custom-file-upload{ 
 		color: map-get($theme, viewall);
 	}
 	.logininner .heading, .form-group .control-label, .logininner .formfield label, .logininner .withsocial h3{ 
