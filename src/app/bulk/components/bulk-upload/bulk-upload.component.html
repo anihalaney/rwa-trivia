@@ -115,7 +115,7 @@
           <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
           <div class="control-spacing">
             <button class="btn-back" type="button" matStepperPrevious>Back</button>
-            <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError">Submit</button>
+            <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError" (click) = "onReviewSubmit()" >Submit</button>
           </div>
         </div>
       </mat-step>
