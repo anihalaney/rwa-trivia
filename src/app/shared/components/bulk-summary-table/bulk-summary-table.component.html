@@ -47,14 +47,21 @@
           <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
         </ng-container>
 
+        <ng-container cdkColumnDef="created">
+          <mat-header-cell *cdkHeaderCellDef mat-sort-header class="matHeader"> Created By </mat-header-cell>
+          <mat-cell class="col-status" *cdkCellDef="let row">{{row.created_uid}}</mat-cell>
+        </ng-container>
+        
         <ng-container cdkColumnDef="download">
           <mat-header-cell *cdkHeaderCellDef> Download File</mat-header-cell>
           <mat-cell class="col-status" *cdkCellDef="let row"><a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a></mat-cell>
         </ng-container>
 
-        <mat-header-row *cdkHeaderRowDef="['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns">
         </mat-header-row>
-        <mat-row class="row-question" *cdkRowDef="let row; columns: ['uploadDate', 'fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download'];">
+        <mat-row class="row-question" *cdkRowDef="let row; columns: displayedColumns;">
+
         </mat-row>
       </mat-table>
       <mat-paginator #paginator class="matHeader" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
