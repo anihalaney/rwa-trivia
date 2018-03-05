@@ -6,16 +6,22 @@ import { TagService } from '../../services'
 
 @Injectable()
 export class TagEffects {
-    constructor (
+    constructor(
         private actions$: Actions,
         private tagActions: TagActions,
         private svc: TagService
-    ) {}
+    ) { }
 
-    @Effect() 
-    loadTags$ = this.actions$
-        .ofType(TagActions.LOAD_TAGS)
-        .switchMap(() => this.svc.getTags())
-        .map((tags: string[]) => this.tagActions.loadTagsSuccess(tags))
+    // Load tags based on url
+    @Effect()
+    // handle location update
+    loadRouteCategories$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/'))
+        .pipe(() => this.svc.getTags())
+        .map((tags: string[]) => this.tagActions.loadTagsSuccess(tags)
+        );
 
 }

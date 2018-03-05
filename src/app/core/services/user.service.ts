@@ -4,10 +4,9 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
-
 import { CONFIG } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
-import { AppStore } from '../store/app-store';
+import { AppState } from '../../store/app-store';
 import { UserActions } from '../store/actions';
 import { User } from '../../model';
 import * as useractions from '../../user/store/actions';
@@ -18,7 +17,7 @@ export class UserService {
 
     constructor(private db: AngularFirestore,
         private storage: AngularFireStorage,
-        private store: Store<AppStore>,
+        private store: Store<AppState>,
         private userActions: UserActions,
         private http: HttpClient) {
     }

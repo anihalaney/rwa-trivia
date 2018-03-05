@@ -2,7 +2,6 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
-import { AppStore } from '../../../../core/store/app-store';
 import { BulkUploadFileInfo, Question, Category } from '../../../../model';
 import { Subscription } from 'rxjs/Subscription';
 import { MatTableDataSource } from '@angular/material';

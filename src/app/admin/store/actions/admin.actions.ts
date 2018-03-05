@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-
 import { SearchCriteria, SearchResults, Question } from '../../../model';
 
 export enum AdminActionTypes {
@@ -11,13 +10,13 @@ export enum AdminActionTypes {
     APPROVE_QUESTION = '[Admin] ApproveQuestion'
 }
 
-// Load Question As per Search critearea
+// Load Question As per Search criteria
 export class LoadQuestions implements Action {
     readonly type = AdminActionTypes.LOAD_QUESTIONS;
     constructor(public payload: { startRow: number, pageSize: number, criteria: SearchCriteria }) { }
 }
 
-// Load Question As per Serach critearea Success
+// Load Question As per Search criteria Success
 export class LoadQuestionsSuccess implements Action {
     readonly type = AdminActionTypes.LOAD_QUESTIONS_SUCCESS;
     constructor(public payload: SearchResults) { }
