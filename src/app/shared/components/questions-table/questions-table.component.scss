@@ -5,9 +5,9 @@
   margin: 0;
   border-color: rgba(204,204,204,0.44);
 }
-.dark{ font-size: 16px; }
-.dark{ font-family: 'hindsemibold'; display: inline-block; }
-.light{ display: inline-block; }
+.dark{ font-family: 'hindsemibold'; display: inline-block;font-size: 18px; }
+.question-text{ display: inline-block; font-size: 16px;font-family: 'hindsemibold';};
+.answer-text{ display: inline-block; font-size: 16px;color: #282828}
 
 .currentans li:nth-child(1) {
   margin-top: 10px;

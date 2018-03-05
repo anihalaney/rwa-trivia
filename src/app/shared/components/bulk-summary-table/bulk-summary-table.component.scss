@@ -9,14 +9,16 @@
 }
 
 .mat-table {
-  display: table;
-  width: 100%;
-  overflow: auto;
+  // display: table;
+  // width: 100%;
+  // overflow: auto;
+  // font-family:'hindsemibold';
 
   > .mat-header-row, > .mat-row {
       display: table-row;
       padding: 0;
       border: none;
+    
 
       > .mat-header-cell, > .mat-cell {
           display: table-cell;
@@ -24,6 +26,11 @@
           vertical-align: middle;
           padding: 0px 10px 0px 10px;
           border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+          font-size: 14px;
+         
+      }
+      .mat-header-cell{
+        font-weight: bold;
       }
   }
 }

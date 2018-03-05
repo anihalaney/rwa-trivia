@@ -36,11 +36,11 @@
         </div>
         <div class="col-sm-12 col-xs-12">
           <div class="date">{{row.createdOn | date:'dd MMM yyyy' }}</div>
-          <p class="dark color-black">{{row.questionText}}</p>
+          <p class="dark">{{row.questionText}}</p>
           <ul class="currentans">
             <li>
-              <div class="dark color-black">Correct answer :</div>
-              <div class="light">
+              <div class="question-text ">Correct answer :</div>
+              <div class="answer-text">
                 <span *ngFor="let answer of row.answers">
                   <span *ngIf="answer.correct">{{answer.answerText}}</span>
                 </span>
@@ -55,17 +55,17 @@
               </div>
             </li>
             <li>
-              <div class="dark color-black">Other options :</div>
-              <div class="light">
+              <div class="question-text ">Other options :</div>
+              <div class="answer-text">
                 <span *ngFor="let answer of row.answers">
                   <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
                 </span>
               </div>
             </li>
             <li>
-              <div class="textleft color-black">
-                <div class="dark color-black">Category :</div>
-                <div class="light">
+              <div class="textleft ">
+                <div class="question-text ">Category :</div>
+                <div class="answer-text">
                   <span *ngFor="let id of row.categoryIds">
                     {{categoryDictionary[id].categoryName}}
                   </span>
@@ -74,15 +74,15 @@
 
             </li>
             <li>
-              <div class="dark color-black">Tags :</div>
-              <div class="light">
+              <div class="question-text ">Tags :</div>
+              <div class="answer-text">
                 <span *ngFor="let tag of row.tags">
                   {{tag}},
                 </span>
               </div>
             </li>
             <li *ngIf="row.validationErrorMessages?.length > 0">
-              <div class="error color-black">Errors :</div>
+              <div class="error ">Errors :</div>
               <div class="error">
                 <span *ngFor="let error of row.validationErrorMessages">
                   {{error}},
@@ -90,8 +90,8 @@
               </div>
             </li>
             <li *ngIf="viewReasonArray.length>0 && viewReasonArray[i] && viewReasonArray[i].val">
-              <div class="dark color-black">Reason :</div>
-              <div class="light">
+              <div class="question-text ">Reason :</div>
+              <div class="answer-text">
                 {{viewReasonArray[i].reason}}
               </div>
             </li>
