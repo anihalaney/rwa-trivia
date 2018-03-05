@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { AppStore } from '../../../core/store/app-store';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';

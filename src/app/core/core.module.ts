@@ -19,8 +19,8 @@ import {
 
 import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './services';
 
-import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions, BulkUploadActions } from './store/actions';
-import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects, BulkUploadEffects, effects } from './store/effects';
+import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
+import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects, effects } from './store/effects';
 import { reducer } from './store';
 
 import { LoginComponent } from './components';
@@ -65,7 +65,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
-    UIStateActions, GameActions, BulkUploadActions,
+    UIStateActions, GameActions
 
     {
       provide: HTTP_INTERCEPTORS,

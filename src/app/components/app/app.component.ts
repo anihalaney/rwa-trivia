@@ -58,8 +58,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(this.categoryActions.loadCategories());
-    this.store.dispatch(this.tagActions.loadTags());
+
   }
 
   ngOnDestroy() {

@@ -1,6 +1,5 @@
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
-
 import { ActionWithPayload, UserActions } from '../actions';
 import { User } from '../../../model';
 
@@ -10,8 +9,6 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
       return null;
     case UserActions.ADD_USER_WITH_ROLES:
       return action.payload;
-    case UserActions.LOAD_USER_PROFILE_SUCCESS:
-      return { ...state, ...action.payload};
     default:
       return state;
   }
@@ -27,15 +24,3 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
   }
 }
 
-export function userProfileSaveStatus(state: any = 'NONE', action: ActionWithPayload<null>): string {
-  switch (action.type) {
-    case UserActions.ADD_USER_PROFILE:
-      return 'IN PROCESS'
-    case UserActions.ADD_USER_PROFILE_SUCCESS:
-      return 'SUCCESS';
-    case UserActions.LOAD_USER_PROFILE:
-      return 'NONE';
-    default:
-      return state;
-  }
-}

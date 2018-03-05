@@ -42,7 +42,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.dispatch(this.questionActions.getQuestionOfTheDay());
     this.now = new Date();
     let hourOfDay = this.now.getHours();
     if (hourOfDay < 12) {
