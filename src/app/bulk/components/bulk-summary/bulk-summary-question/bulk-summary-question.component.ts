@@ -44,8 +44,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
     private snackBar: MatSnackBar,
     private storage: AngularFireStorage) {
  
-    this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {
-      console.log("Snackbar callded");
+    this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {      
       if (status === 'UPDATE') {
         this.snackBar.open('Question Updated!', '', { duration: 1500 });
       }

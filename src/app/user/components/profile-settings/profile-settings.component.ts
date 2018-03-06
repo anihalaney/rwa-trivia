@@ -75,9 +75,13 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.userObs = this.store.select(userState).select(s => s.user);
 
     this.userObs.subscribe(user => {
-
       if (user) {
-        this.user = user;
+        if (user.name) {
+          this.user = user;
+        } else {
+          this.user.roles = user.roles;
+        }
+
         this.userCopyForReset = cloneDeep(user);
         this.createForm(this.user);
 

@@ -65,7 +65,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
-    UIStateActions, GameActions
+    UIStateActions, GameActions,
 
     {
       provide: HTTP_INTERCEPTORS,

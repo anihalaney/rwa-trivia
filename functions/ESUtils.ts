@@ -17,8 +17,17 @@ export class ESUtils {
     return this.searchClient;
   };
 
+  static getIndex(index: string): string {
+    const prefix = 
+      this.searchClient['index_prefix'] 
+      ? (this.searchClient['index_prefix'].toString()).toLowerCase().trim()
+      : '';
+    return prefix + index;
+  }
+  
   static createOrUpdateIndex(index: string, type: string, data: any, key: string): Promise<any> {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
 
     return client.index({
       index: index,
@@ -37,6 +46,7 @@ export class ESUtils {
 
   static removeIndex(index, key): Promise<any> {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
 
     return client.search({"index": index,
         body: {
@@ -79,6 +89,7 @@ export class ESUtils {
 
   static deleteIndex(index) {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
 
     return client.indices.exists({"index": index})
     .then((response) => {
@@ -108,6 +119,7 @@ export class ESUtils {
 
   static rebuildIndex(index: string, data: {"id": string, "type": string, "source": any}[]): Promise<any> {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
 
     //delete entire index
     return this.deleteIndex(index)
@@ -175,6 +187,8 @@ export class ESUtils {
   static getSearchResults(index: string, start: number, size: number, criteria: SearchCriteria): Promise<any>
   {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
+
     let body = {
       "aggregations" : {
         "category_counts" : {
@@ -243,6 +257,7 @@ export class ESUtils {
   static getRandomItems(index: string, size: number, seed: string): Promise<any>
   {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
 
     return client.search({
       "index": index,
@@ -272,6 +287,7 @@ export class ESUtils {
                             categories: number[], tags: string[], excludeIds: string[]): Promise<any>
   {
     let client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
 
     let filter = null;
     let randomSeed = (seed === "") ? null : seed;

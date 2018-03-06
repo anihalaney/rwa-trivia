@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-
+import { RouterStateUrl } from '../../../model';
 import { TagActions } from '../actions';
 import { TagService } from '../../services'
 

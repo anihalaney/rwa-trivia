@@ -10,8 +10,7 @@ import { Category } from '../../../model';
 export class CategoriesResolver implements Resolve<Category[]> {
   constructor(private store: Store<AppState>, private router: Router) {}
  
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Category[]> {
-    //console.log("resolve");
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Category[]> {   
     return this.store.select(appState.coreState).select(s => s.categories).filter(c => c.length > 0).take(1);
   }
 }
