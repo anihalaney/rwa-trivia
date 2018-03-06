@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { CategoryActions } from '../actions';
-import { Category } from '../../../model';
+import { Category, RouterStateUrl } from '../../../model';
 import { CategoryService } from '../../services';
 
 @Injectable()

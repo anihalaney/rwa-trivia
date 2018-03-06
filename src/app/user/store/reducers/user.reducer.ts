@@ -52,11 +52,9 @@ export function userUnpublishedQuestions(state: any = [], action: UserActions): 
 
 export function questionSaveStatus(state: any = 'NONE', action: UserActions): string {
     switch (action.type) {
-      case UserActionTypes.ADD_QUESTION:
-        return 'IN PROGRESS';
-      case UserActionTypes.ADD_QUESTION_SUCCESS:
-        return 'SUCCESS';
-      default:
-        return state;
+        case UserActionTypes.ADD_QUESTION:
+            return 'IN PROGRESS';
+        default:
+            return state;
     }
-  };
+};

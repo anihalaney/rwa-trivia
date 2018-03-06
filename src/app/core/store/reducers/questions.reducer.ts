@@ -14,3 +14,13 @@ export function questionOfTheDay(state: any = [], action: ActionWithPayload<Ques
 };
 
 
+export function questionSaveStatus(state: any = 'NONE', action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case QuestionActions.ADD_QUESTION_SUCCESS:
+      return 'SUCCESS';
+    default:
+      return state;
+  }
+};
+
+

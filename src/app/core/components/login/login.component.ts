@@ -35,8 +35,7 @@ export class LoginComponent implements OnInit {
       }, {validator: loginFormValidator}
     );
 
-    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
-      //console.log(mode);
+    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {     
       switch (mode) {
         case 1:
           //Signup

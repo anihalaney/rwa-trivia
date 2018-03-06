@@ -12,8 +12,7 @@ export class AuthGuard implements CanActivate, CanActivateChild {
   constructor(private store: Store<AppState>, private authService: AuthenticationService) {
 
   }
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
-    console.log("canActivate");
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {  
     return this.store.select(appState.coreState).select(s => s.authInitialized).filter(i => i).take(1).switchMap(i => {
      this.authService.ensureLogin();
      return this.store.select(appState.coreState).select(s => s.user).filter(u => (u != null && u.userId != "")).take(1).map(u => true)

@@ -71,11 +71,7 @@ export class AddQuestion implements Action {
     constructor(public payload: { question: Question }) { }
 }
 
-// Add Questions Success
-export class AddQuestionSuccess implements Action {
-    readonly type = UserActionTypes.ADD_QUESTION_SUCCESS;
-    payload = null;
-}
+
 
 export type UserActions
     = AddUserProfile
@@ -87,4 +83,4 @@ export type UserActions
     | LoadUserUnpublishedQuestions
     | LoadUserUnpublishedQuestionsSuccess
     | AddQuestion
-    | AddQuestionSuccess
+

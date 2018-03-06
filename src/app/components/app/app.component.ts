@@ -31,15 +31,11 @@ export class AppComponent implements OnInit, OnDestroy {
     public router: Router,
     public snackBar: MatSnackBar) {
 
-    this.sub = store.select(appState.userState).select(s => s.questionSaveStatus).subscribe((status) => {
+    this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === "SUCCESS") {
         this.snackBar.open("Question saved!", "", { duration: 2000 });
+        this.router.navigate(['/my/questions', this.user.userId]);
       }
-
-      if (status === "IN PROGRESS") {
-        this.router.navigate(['/my/questions']);
-      }
-
     });
 
     this.sub2 = store.select(appState.coreState).select(s => s.user).skip(1).subscribe(user => {
@@ -49,9 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.store.select(appState.coreState).take(1).subscribe(s => url = s.loginRedirectUrl);
         if (url)
           this.router.navigate([url]);
-      }else {
-        // if user logs out then redirect to home page
-        console.log('logout');
+      } else {
+        // if user logs out then redirect to home page       
         this.router.navigate(['/']);
       }
     });

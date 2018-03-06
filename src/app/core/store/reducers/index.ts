@@ -3,7 +3,7 @@ import { User, Category, Question, Game } from '../../../model';
 import { user, authInitialized } from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
-import { questionOfTheDay } from './questions.reducer';
+import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
 import { loginRedirectUrl } from './ui-state.reducer';
 import { activeGames } from './game.reducer';
 
@@ -22,6 +22,7 @@ export interface CoreState {
   tags: string[];
   questionOfTheDay: Question;
   loginRedirectUrl: string;
+  questionSaveStatus: string;
   activeGames: Game[];
 }
 
@@ -31,6 +32,7 @@ export const reducer: ActionReducerMap<CoreState> = {
   categories: categories,
   tags: tags,
   questionOfTheDay: questionOfTheDay,
+  questionSaveStatus: questionSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
   activeGames: activeGames
 };

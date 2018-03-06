@@ -50,7 +50,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    console.log("openDialog");
+  //  console.log("openDialog");
     this.dialogRef = this.dialog.open(GameDialogComponent, {
       disableClose: false,
       data: { "gameId": this.gameId, "user": this.user }
