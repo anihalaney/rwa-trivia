@@ -11,7 +11,7 @@
 	footer a{ 
 		color: map-get($theme, footer);
 	}
-	.startgame, .btn, .question-list li input:checked ~ label, .optionbox .radiobtn input:checked + label, .optionbox input:checked + label .dark, .optionbox input:checked + label .light, .landinginner, .gameplay li.right, .gameplay li.wrong,.view-reason-btn{ 
+	.startgame, .btn, .question-list li input:checked ~ label, .optionbox .radiobtn input:checked + label, .optionbox input:checked + label .dark, .optionbox input:checked + label .light, .landinginner, .gameplay li.right, .gameplay li.wrong,.view-reason-btn,.edit-btn{ 
 		color: map-get($theme, btn-text);
 	}
 

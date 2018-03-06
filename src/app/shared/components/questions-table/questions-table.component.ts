@@ -115,7 +115,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       this.store.dispatch(this.bulkUploadActions.updateBulkUpload(this.bulkUploadFileInfo));
     }
 
-    this.requestQuestion.status = QuestionStatus.REQUEST_TO_CHANGE;
+    this.requestQuestion.status = QuestionStatus.REQUIRED_CHANGE;
     this.requestQuestion.reason = this.requestFormGroup.get('reason').value;
     this.requestQuestionStatus = false;
     this.requestQuestion.approved_uid = this.user.userId;
@@ -162,14 +162,36 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     }
   }
 
+  showQuestion(cancelStatus: string) {
+
+    this.viewReasonArray.forEach((val, key) => {
+      if (val && val.reason === cancelStatus) {
+        this.viewReasonArray[key] = undefined;
+      }
+    });
+
+    // const val = this.viewReasonArray.filter(
+    //   obj => obj.reason === cancelStatus.reason)[0];
+    // const index = this.viewReasonArray.indexOf(val.reason);
+    // alert(JSON.stringify(index));
+    // this.viewReasonArray[index] = undefined;
+    // console.log(JSON.stringify(val));
+
+  }
+
   showReason(row, index) {
-    if (this.viewReasonArray[index] && !this.viewReasonArray[index].val) {
-      this.viewReasonArray[index] = { val: true, reason: row.reason };
-    } else if (this.viewReasonArray[index] && this.viewReasonArray[index].val) {
-      this.viewReasonArray[index] = { val: false, reason: row.reason };
-    } else {
-      this.viewReasonArray[index] = { val: true, reason: row.reason };
+    // this.rejectQuestion = row;
+
+    if (this.viewReasonArray[index] === undefined) {
+      this.viewReasonArray[index] = row;
     }
+    // if (this.viewReasonArray[index] && !this.viewReasonArray[index].val) {
+    //   this.viewReasonArray[index] = { val: true, reason: row.reason };
+    // } else if (this.viewReasonArray[index] && this.viewReasonArray[index].val) {
+    //   this.viewReasonArray[index] = { val: false, reason: row.reason };
+    // } else {
+    //   this.viewReasonArray[index] = { val: true, reason: row.reason };
+    // }
   }
 
 }

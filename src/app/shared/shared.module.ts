@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 
 import {
   QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-  BulkSummaryTableComponent, BulkSummaryQuestionComponent, QuestionFormComponent
+  BulkSummaryTableComponent, BulkSummaryQuestionComponent, QuestionFormComponent, RejectedQuestionContentComponent
 } from './components';
 
 @NgModule({
@@ -21,7 +21,8 @@ import {
     QuestionsTableComponent,
     BulkSummaryTableComponent,
     BulkSummaryQuestionComponent,
-    QuestionFormComponent
+    QuestionFormComponent,
+    RejectedQuestionContentComponent
   ],
   imports: [
     CommonModule,
@@ -44,6 +45,6 @@ import {
   exports: [QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
     BulkSummaryTableComponent, BulkSummaryQuestionComponent, CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
-    SharedMaterialModule, CdkTableModule]
+    SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent]
 })
 export class SharedModule { }

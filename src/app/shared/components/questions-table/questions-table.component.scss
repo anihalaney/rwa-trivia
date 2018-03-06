@@ -31,10 +31,10 @@
 .col-question {
   flex: 10;
   //display: flex;
-  > div {
-    margin-top: 10px;
-    margin-bottom: 10px;    
-  }
+  // > div {
+  //   margin-top: 10px;
+  //   margin-bottom: 10px;    
+  // }
   > div:hover{
     background-color: #f4f5f7;
   }
@@ -157,4 +157,10 @@ mat-card-actions {
 {
   float: right;
 }
-.view-reason-btn{ font-family:'hindsemibold' ; text-transform: uppercase; box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 35px; border-radius: 4px; display: inline-block; text-align: center; letter-spacing: 1px;}
+.view-reason-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 35px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;}
+.edit-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 35px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;}
+
+.rejection-div,.edit-form-div
+{
+  background-color: #f4f5f7;
+}
