@@ -5,6 +5,7 @@ import { QuestionsTableComponent } from './questions-table/questions-table.compo
 import { BulkSummaryTableComponent } from './bulk-summary-table/bulk-summary-table.component';
 import { BulkSummaryQuestionComponent } from './bulk-summary-question/bulk-summary-question.component';
 import { QuestionFormComponent } from './question-form/question-form.component';
+import { RejectedQuestionContentComponent } from './rejected-question-content/rejected-question-content.component';
 export {
     QuestionComponent,
     QuestionsComponent,
@@ -12,7 +13,8 @@ export {
     QuestionsTableComponent,
     BulkSummaryTableComponent,
     BulkSummaryQuestionComponent,
-    QuestionFormComponent
+    QuestionFormComponent,
+    RejectedQuestionContentComponent
 };
 
 export default [
@@ -22,5 +24,6 @@ export default [
     QuestionsTableComponent,
     BulkSummaryTableComponent,
     BulkSummaryQuestionComponent,
-    QuestionFormComponent
+    QuestionFormComponent,
+    RejectedQuestionContentComponent
 ];

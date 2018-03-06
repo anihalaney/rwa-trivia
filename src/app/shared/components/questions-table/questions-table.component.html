@@ -30,10 +30,10 @@
   <ng-container cdkColumnDef="questionText">
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
     <mat-cell *cdkCellDef="let row;let i = index" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
-      <div class="row" *ngIf="row !== editQuestion">
-        <div *ngIf="getDisplayStatus(row.status)==='REQUEST_TO_CHANGE' || showButtons" class="col-xs-12 textrigth">
+      <div class="row" *ngIf="row !== editQuestion && row !== viewReasonArray[i]">
+        <!-- <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
-        </div>
+        </div> -->
         <div class="col-sm-12 col-xs-12">
           <div class="date">{{row.createdOn | date:'dd MMM yyyy' }}</div>
           <p class="dark">{{row.questionText}}</p>
@@ -47,10 +47,13 @@
               </div>
               <div class="col-sm-3 col-xs-12 question-status">
                 <label>
-                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUEST_TO_CHANGE'?'status-change-request':''">{{getDisplayStatus(row.status) | titlecase}}</b>
+                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':''">{{getDisplayStatus(row.status) | titlecase}}</b>
                 </label>
                 <div *ngIf="getDisplayStatus(row.status)==='REJECTED'">
                   <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
+                </div>
+                <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons">
+                  <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
                 </div>
               </div>
             </li>
@@ -137,8 +140,11 @@
           </div>
         </div>
       </div>
-      <div class="row" *ngIf="row === editQuestion">
+      <div class="row edit-form-div" *ngIf="row === editQuestion">
         <app-question-form [editQuestion]="editQuestion" (updateStatus)=nullifyQuestion($event)></app-question-form>
+      </div>
+      <div class="row rejection-div" *ngIf="row === viewReasonArray[i]">
+        <app-rejected-question-content [rejectQuestion]="viewReasonArray[i]" (cancelStatus)=showQuestion($event)></app-rejected-question-content>
       </div>
 
     </mat-cell>

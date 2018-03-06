@@ -21,7 +21,7 @@ img { max-width: 100%; }
 a { text-decoration: none; transition: all 0.3s ease-in-out 0s; -webkit-transition: all 0.3s ease-in-out 0s;}
 a:active, a:focus, input[type="image"], select:focus, input, input[type="button"]:focus, :focus { outline: 0; }
 /*Form Elements*/
-button, input, select, textarea { font-family: inherit; border:none;}
+button, input, select { font-family: inherit; border:none;} //textarea
 button, input { line-height: normal; text-transform: none; }
 button, html input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer; -webkit-appearance: button; }
 button[disabled], input[disabled] { cursor: default; }
@@ -472,4 +472,11 @@ nav .user.card{
 	border-width: 0 !important
 }
 .downloadicon{ background-position: -96px -295px; width: 31px; height: 33px;}
+.cancelicon{ background-position: -130px -293px; width: 30px; height: 30px;}
+.closeicon{ background-position: -154px -293px; width: 30px; height: 30px;}
+.div-border
+{
+  border-width: 1px;
+  border-bottom-style: solid;
+}
 

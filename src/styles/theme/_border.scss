@@ -29,7 +29,7 @@
 	.h1block:after{
 		border-color: map-get($theme, header-block-after);
 	}
-	.optionbox .radiobtn label, .withfriends,.friendsslider .owl-prev,.friendsslider .owl-next, .formfield select{ 
+	.optionbox .radiobtn label, .withfriends,.friendsslider .owl-prev,.friendsslider .owl-next, .formfield select,textarea{ 
 		border-color: map-get($theme, form-options);
 	}
 	.question-list li input:checked ~ label:before, .optionbox .radiobtn label:after, .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after, .gameplay li:after{ 
@@ -93,5 +93,9 @@
 		.withfriends .owl-prev:hover,.withfriends .owl-next:hover, .viewbublic:hover{ 
 			border-color: map-get($theme, hover-lg);
 		}
+	}
+	.div-border
+	{
+		border-bottom-color: map-get($theme,card);
 	}
 }	
