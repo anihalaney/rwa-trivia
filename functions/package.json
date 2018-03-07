@@ -8,8 +8,8 @@
     "csv": "1.1.1",
     "elasticsearch": "13.3.1",
     "express": "4.16.2",
-    "firebase-admin": "5.4.3",
-    "firebase-functions": "0.7.2",
+    "firebase-admin": "5.9.1",
+    "firebase-functions": "0.8.1",
     "google-cloud": "0.57.0"
   },
   "private": true,
