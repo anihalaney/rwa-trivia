@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
 
 import {
   QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-  QuestionFormComponent
+  QuestionFormComponent,RejectedQuestionContentComponent
 } from './components';
 
 @NgModule({
@@ -19,7 +19,8 @@ import {
     QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
-    QuestionFormComponent
+    QuestionFormComponent,
+    RejectedQuestionContentComponent
   ],
   imports: [
     CommonModule,
@@ -42,6 +43,6 @@ import {
   exports: [QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
-    SharedMaterialModule, CdkTableModule]
+    SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent]
 })
 export class SharedModule { }

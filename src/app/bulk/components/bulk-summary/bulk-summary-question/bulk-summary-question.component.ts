@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
@@ -38,13 +38,15 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
 
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() isAdminUrl: boolean;
+  @Output() showSummaryTableReturn = new EventEmitter<boolean>();
+
 
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
     private storage: AngularFireStorage) {
- 
-    this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {      
+
+    this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {
       if (status === 'UPDATE') {
         this.snackBar.open('Question Updated!', '', { duration: 1500 });
       }
@@ -87,6 +89,13 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
       });
     }
   }
+
+
+  backToSummary() {
+    this.showSummaryTableReturn.emit(true);
+  }
+
+
 }
 
 

@@ -22,9 +22,12 @@ export class BulkSummaryTableComponent implements OnChanges {
   user: User;
   bulkUploadObs: Observable<BulkUploadFileInfo[]>;
   dataSource: any;
-  SHOW_SUMMARY_TABLE = true;
+  showSummaryTable = true;
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
+
+  displayedColumns = ['uploadDate', 'fileName', 'category',
+    'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];
 
   @Input() bulkSummaryDetailPath: String;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -68,6 +71,11 @@ export class BulkSummaryTableComponent implements OnChanges {
       this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
       this.setPaginatorAndSort();
     });
+
+    if (this.isAdminUrl) {
+      (this.displayedColumns.indexOf('created') === -1) ? this.displayedColumns.push('created') : '';
+    }
+    (this.displayedColumns.indexOf('download') === -1) ? this.displayedColumns.push('download') : '';
   }
 
   setPaginatorAndSort() {
@@ -78,11 +86,11 @@ export class BulkSummaryTableComponent implements OnChanges {
   // get Questions by bulk upload Id
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
     this.bulkUploadFileInfo = row;
-    this.SHOW_SUMMARY_TABLE = false;
+    this.showSummaryTable = false;
   }
 
   backToSummary() {
-    this.SHOW_SUMMARY_TABLE = true;
+    this.showSummaryTable = true;
     this.loadBulkSummaryData();
   }
 }
