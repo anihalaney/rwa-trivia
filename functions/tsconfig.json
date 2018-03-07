@@ -6,7 +6,8 @@
     "target": "es6",
     "outDir": "./server",
     "lib": [
-      "es2016"
+      "es2016",
+      "dom"
     ],
     "typeRoots": [
       "node_modules/@types"

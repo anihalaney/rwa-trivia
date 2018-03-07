@@ -5,9 +5,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
-import { QuestionActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { User, Category, Question, QuestionStatus, Answer }     from '../../../model';
+import { User, Category, Question, QuestionStatus, Answer } from '../../../model';
+import * as userActions from '../../store/actions';
 
 @Component({
   templateUrl: './question-add-update.component.html',
@@ -20,34 +20,33 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
   subs: Subscription[] = [];
 
-  //Properties
+  // Properties
   categories: Category[];
   tags: string[];
 
   questionForm: FormGroup;
   question: Question;
-  
-  autoTags: string[] = []; //auto computed based on match within Q/A
+
+  autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
 
   user: User;
 
-  get answers(): FormArray { 
-    return this.questionForm.get('answers') as FormArray; 
+  get answers(): FormArray {
+    return this.questionForm.get('answers') as FormArray;
   }
-  get tagsArray(): FormArray { 
-    return this.questionForm.get('tagsArray') as FormArray; 
+  get tagsArray(): FormArray {
+    return this.questionForm.get('tagsArray') as FormArray;
   }
 
-  //Constructor
+  // Constructor
   constructor(private fb: FormBuilder,
-              private store: Store<AppState>,
-              private questionActions: QuestionActions) {
+              private store: Store<AppState>) {
     this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
     this.tagsObs = store.select(appState.coreState).select(s => s.tags);
   }
 
-  //Lifecycle hooks
+  // Lifecycle hooks
   ngOnInit() {
     this.question = new Question();
     this.createForm(this.question);
@@ -66,7 +65,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     Utils.unsubscribe(this.subs);
   }
 
-  //Event Handlers
+  // Event Handlers
   addTag() {
     let tag = this.questionForm.get('tags').value;
     if (tag) {
@@ -77,29 +76,27 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     this.setTagsArray();
   }
   removeEnteredTag(tag) {
-    this.enteredTags = this.enteredTags.filter(t => t !== tag); 
+    this.enteredTags = this.enteredTags.filter(t => t !== tag);
     this.setTagsArray();
   }
   onSubmit() {
-    //validations
+    // validations
     this.questionForm.updateValueAndValidity();
     if (this.questionForm.invalid)
       return;
 
-    //get question object from the forms
-    //console.log(this.questionForm.value);
+    // get question object from the forms
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
     question.status = QuestionStatus.SUBMITTED;
     this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
-    //console.log(question);
 
     question.created_uid = this.user.userId;
-    //call saveQuestion
+    // call saveQuestion
     this.saveQuestion(question);
   }
-  
-  //Helper functions
+
+  // Helper functions
   getQuestionFromFormValue(formValue: any): Question {
     let question: Question;
 
@@ -114,8 +111,8 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     return question;
   }
 
-  saveQuestion(question: Question) {
-    this.store.dispatch(this.questionActions.addQuestion(question));
+  saveQuestion(question: Question) {   
+    this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
   computeAutoTags() {
@@ -142,7 +139,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   }
   createForm(question: Question) {
 
-    let fgs:FormGroup[] = question.answers.map(answer => {
+    let fgs: FormGroup[] = question.answers.map(answer => {
       let fg = new FormGroup({
         answerText: new FormControl(answer.answerText, Validators.required),
         correct: new FormControl(answer.correct),
@@ -151,7 +148,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     });
     let answersFA = new FormArray(fgs);
 
-    let fcs:FormControl[] = question.tags.map(tag => {
+    let fcs: FormControl[] = question.tags.map(tag => {
       let fc = new FormControl(tag);
       return fc;
     });
@@ -160,29 +157,29 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     let tagsFA = new FormArray(fcs);
 
     this.questionForm = this.fb.group({
-      category: [(question.categories.length>0? question.categories[0] : ''), Validators.required],
+      category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: [question.questionText, Validators.required],
       tags: '',
       tagsArray: tagsFA,
       answers: answersFA,
       ordered: [question.ordered],
       explanation: [question.explanation]
-      }, {validator: questionFormValidator}
+    }, { validator: questionFormValidator }
     );
   }
 
 }
 
-//Custom Validators
-function questionFormValidator(fg: FormGroup): {[key: string]: boolean} {
+// Custom Validators
+function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
   let answers: Answer[] = fg.get('answers').value;
   if (answers.filter(answer => answer.correct).length !== 1) {
-    return {'correctAnswerCountInvalid': true}
+    return { 'correctAnswerCountInvalid': true }
   }
 
   let tags: string[] = fg.get('tagsArray').value;
-  if (tags.length  < 3)
-    return {'tagCountInvalid': true}
+  if (tags.length < 3)
+    return { 'tagCountInvalid': true }
 
   return null;
 }

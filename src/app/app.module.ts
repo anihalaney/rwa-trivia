@@ -10,29 +10,31 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers, CustomSerializer } from './store';
 
 import { CoreModule } from './core/core.module';
-import { SharedModule } from  './shared/shared.module';
-import { RoutingModule } from  './routing/routing.module';
+import { SharedModule } from './shared/shared.module';
+import { RoutingModule } from './routing/routing.module';
 //import { MyQuestionsModule } from  './myQuestions/my-questions.module';
-import { GamePlayModule } from  './game-play/game-play.module';
-import { SocialModule } from  './social/social.module';
-import { UserModule } from  './user/user.module';
-import { StatsModule } from  './stats/stats.module';
+import { GamePlayModule } from './game-play/game-play.module';
+import { SocialModule } from './social/social.module';
+import { UserModule } from './user/user.module';
+import { StatsModule } from './stats/stats.module';
 
-import { AppComponent, DashboardComponent, 
-         SideNavComponent, HeaderComponent, FooterComponent } from './components';
+import {
+  AppComponent, DashboardComponent,
+  SideNavComponent, HeaderComponent, FooterComponent
+} from './components';
 
 @NgModule({
   declarations: [
-    AppComponent, 
-    DashboardComponent, 
-    SideNavComponent, 
-    HeaderComponent, 
+    AppComponent,
+    DashboardComponent,
+    SideNavComponent,
+    HeaderComponent,
     FooterComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    
+
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers),
     StoreDevtoolsModule.instrument({
@@ -45,7 +47,7 @@ import { AppComponent, DashboardComponent,
     CoreModule,
     SharedModule,
     RoutingModule,
-   // MyQuestionsModule,
+    // MyQuestionsModule,
     GamePlayModule,
     SocialModule,
     UserModule,

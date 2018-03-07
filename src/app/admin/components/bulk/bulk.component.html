@@ -1,0 +1,6 @@
+<div *ngIf="!fileQuestionsStatus">
+  <div class="row">
+    <div class="pageheading col-md-6 col-xs-12 hidden-xs">Bulk Upload Summary</div>
+  </div>
+</div>
+<bulk-summary-table [bulkSummaryDetailPath]='bulkSummaryDetailPath'></bulk-summary-table>
