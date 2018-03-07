@@ -30,7 +30,7 @@ export class BulkLoadGuard implements CanLoad {
   } canLoad(route: Route): Observable<boolean> {
     return this.store.select(appState.coreState).select(s => s.authInitialized).filter(i => i).take(1).switchMap(i => {
       this.authService.ensureLogin();
-      return this.store.select(appState.coreState).select(s => s.user).filter(u => (u != null && u.userId != "")).take(1).map(u => u.roles && u.roles["admin"])
+      return this.store.select(appState.coreState).select(s => s.user).filter(u => (u != null && u.userId != "")).take(1).map(u => u.roles && u.roles["admin"] || u.roles["bulkuploader"])
     });
   }
 }
