@@ -19,14 +19,14 @@ export class ESUtils {
 
   static getIndex(index: string): string {
     const prefix = 
-      this.searchClient['index_prefix'] 
-      ? (this.searchClient['index_prefix'].toString()).toLowerCase().trim()
+      elasticsearchConfig['index_prefix'] 
+      ? (elasticsearchConfig['index_prefix'].toString()).toLowerCase().trim()
       : '';
     return prefix + index;
   }
   
   static createOrUpdateIndex(index: string, type: string, data: any, key: string): Promise<any> {
-    let client: Elasticsearch.Client = this.getElasticSearchClient();
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
     return client.index({
@@ -45,7 +45,7 @@ export class ESUtils {
   }
 
   static removeIndex(index, key): Promise<any> {
-    let client: Elasticsearch.Client = this.getElasticSearchClient();
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
     return client.search({"index": index,
@@ -88,7 +88,7 @@ export class ESUtils {
   }
 
   static deleteIndex(index) {
-    let client: Elasticsearch.Client = this.getElasticSearchClient();
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
     return client.indices.exists({"index": index})
@@ -118,9 +118,10 @@ export class ESUtils {
   }
 
   static rebuildIndex(index: string, data: {"id": string, "type": string, "source": any}[]): Promise<any> {
-    let client: Elasticsearch.Client = this.getElasticSearchClient();
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
+    console.log("reindexing ... " + index);
     //delete entire index
     return this.deleteIndex(index)
       .then((response) => {
@@ -186,7 +187,7 @@ export class ESUtils {
 
   static getSearchResults(index: string, start: number, size: number, criteria: SearchCriteria): Promise<any>
   {
-    let client: Elasticsearch.Client = this.getElasticSearchClient();
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
     let body = {
@@ -256,7 +257,7 @@ export class ESUtils {
 
   static getRandomItems(index: string, size: number, seed: string): Promise<any>
   {
-    let client: Elasticsearch.Client = this.getElasticSearchClient();
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
     return client.search({
@@ -286,7 +287,7 @@ export class ESUtils {
   static getRandomQuestionES(index: string, size: number, seed: string,
                             categories: number[], tags: string[], excludeIds: string[]): Promise<any>
   {
-    let client: Elasticsearch.Client = this.getElasticSearchClient();
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
     let filter = null;
