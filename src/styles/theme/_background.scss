@@ -2,6 +2,24 @@
 	input, textarea, select, button { 
 		background: map-get($theme, input);
 	}
+	.matHeader > div > button , .matHeader > div > div > button, .matHeader {
+		@if $theme='dark' {
+			background: #FFF;
+			color:rgba(0, 0, 0, 0.54);
+		}
+	}
+
+	.color-black{
+		@if $theme='dark' {
+			color:#282828;
+		}
+	}
+	.color-white > span, .color-white{
+		@if $theme='dark' {
+			color:#FFF;
+		}
+	}
+
 	/*Header*/
 	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox { 
 		background: map-get($theme, card);

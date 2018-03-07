@@ -1,29 +1,54 @@
-import { Injectable }    from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
-//AngularFireStorageModule
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
-import { HttpClient, HttpHeaders }    from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Category } from '../../model/category';
+import { BulkUploadFileInfo, User } from '../../model';
 
 @Injectable()
 export class BulkService {
 
   constructor(private db: AngularFirestore,
-              private storage: AngularFireStorage,
-              private http: HttpClient) { 
+    private http: HttpClient) {
   }
 
-  uploadQuestionsFile(data: any): Observable<any> {
-    this.storage.storage.ref();
-    const task = this.storage.upload("path", data); //, metadata);
-    
-    // observe percentage changes
-    //return task.percentageChanges();
-    // get notified when the download URL is available
-    return task.downloadURL();
+  // get All Bulk Upload
+  getBulkUpload(): Observable<BulkUploadFileInfo[]> {
+    return this.db.collection('/bulk_uploads').valueChanges()
+      .catch(error => {
+        console.log(error);
+        return Observable.of(null);
+      });
   }
-  
+
+  // get Bulk Upload by user Id
+  getUserBulkUpload(user: User): Observable<BulkUploadFileInfo[]> {
+    return this.db.collection('/bulk_uploads', ref => ref.where('created_uid', '==', user.userId))
+      .valueChanges()
+      .catch(error => {
+        console.log(error);
+        return Observable.of(null);
+      });
+  }
+
+  // get BulkUpload by Id
+  getBulkUploadById(bulkUploadFileInfo: BulkUploadFileInfo): Observable<BulkUploadFileInfo> {
+    return this.db.collection('/bulk_uploads', ref => ref.where('id', '==', bulkUploadFileInfo.id))
+      .valueChanges()
+      .catch(error => {
+        console.log(error);
+        return Observable.of(null);
+      });
+  }
+
+  // update Bulk Upload
+  updateBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo) {
+    const dbBulkUploadFileInfo = Object.assign({}, bulkUploadFileInfo); // object to be saved
+    // remove download URL it is observable
+    delete dbBulkUploadFileInfo.downloadUrl
+    this.db.doc('/bulk_uploads/' + dbBulkUploadFileInfo.id).set(dbBulkUploadFileInfo).then(ref => {
+    });
+  }
 }

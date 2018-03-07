@@ -84,7 +84,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           },
           null,
           () => {
-            console.log("Time Expired");
+           // console.log("Time Expired");
             //disable all buttons
             this.afterAnswer();
           });

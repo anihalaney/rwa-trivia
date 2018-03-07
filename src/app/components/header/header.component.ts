@@ -15,12 +15,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() logoutClicked = new EventEmitter();
   @Output() loginClicked = new EventEmitter();
   @Output() toggleThemeClicked = new EventEmitter();
-  
-  constructor() { }
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
+
+  navigateUrl() {
+    this.router.navigate(['my/profile', this.user.userId]);
+  }
+
   ngOnDestroy() {
   }
+
 }

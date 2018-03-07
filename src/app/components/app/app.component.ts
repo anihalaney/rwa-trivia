@@ -20,46 +20,40 @@ export class AppComponent implements OnInit, OnDestroy {
   sub: Subscription;
   sub2: Subscription;
 
-  theme: string = "";
+  theme = '';
   constructor(private renderer: Renderer2,
-              private authService: AuthenticationService,
-              private categoryActions: CategoryActions,
-              private tagActions: TagActions,
-              private questionActions: QuestionActions,
-              private gameActions: GameActions,
-              private store: Store<AppState>,
-              public router: Router,
-              public snackBar: MatSnackBar) {
-    
+    private authService: AuthenticationService,
+    private categoryActions: CategoryActions,
+    private tagActions: TagActions,
+    private questionActions: QuestionActions,
+    private gameActions: GameActions,
+    private store: Store<AppState>,
+    public router: Router,
+    public snackBar: MatSnackBar) {
+
     this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
-      if (status === "SUCCESS")
-        this.snackBar.open("Question saved!", "", {duration: 2000});
-      if (status === "IN PROGRESS")
-        this.router.navigate(['/my/questions']);
-    })
+      if (status === "SUCCESS") {
+        this.snackBar.open("Question saved!", "", { duration: 2000 });
+        this.router.navigate(['/my/questions', this.user.userId]);
+      }
+    });
 
     this.sub2 = store.select(appState.coreState).select(s => s.user).skip(1).subscribe(user => {
       this.user = user
-      if (user)
-      {
-        console.log(user);
+      if (user) {
         let url: string;
         this.store.select(appState.coreState).take(1).subscribe(s => url = s.loginRedirectUrl);
         if (url)
           this.router.navigate([url]);
-      }
-      else {
-        //if user logs out then redirect to home page
-        console.log("logout"); 
+      } else {
+        // if user logs out then redirect to home page       
         this.router.navigate(['/']);
       }
     });
   }
 
-  ngOnInit () {
-    console.log("dispatch");
-    this.store.dispatch(this.categoryActions.loadCategories());
-    this.store.dispatch(this.tagActions.loadTags());
+  ngOnInit() {
+
   }
 
   ngOnDestroy() {
@@ -75,12 +69,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   toggleTheme() {
-    if (this.theme === "") {
-      this.theme = "dark";
+    if (this.theme === '') {
+      this.theme = 'dark';
       this.renderer.addClass(document.body, this.theme)
     } else {
       this.renderer.removeClass(document.body, this.theme)
-      this.theme = "";
+      this.theme = '';
     }
   }
 }

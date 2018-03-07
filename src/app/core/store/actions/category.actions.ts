@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Action} from '@ngrx/store';
-import {ActionWithPayload} from './action-with-payload';
+import { Injectable } from '@angular/core';
+import { Action } from '@ngrx/store';
+import { ActionWithPayload } from './action-with-payload';
 
-import {Category} from '../../../model';
+import { Category } from '../../../model';
 
 @Injectable()
 export class CategoryActions {
