@@ -4,7 +4,7 @@
         <a [routerLink]="['/']" title="Home">Home</a>
         <a *ngIf="user" (click)="navigateUrl()" title="My Questions">My Questions</a>
         <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
-        <a *ngIf="user?.roles?.admin" [routerLink]="['/bulk']">Bulk</a>
+        <a *ngIf="user?.roles?.admin || user?.roles?.bulkuploader" [routerLink]="['/bulk']">Bulk</a>
         <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
         <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
         <ng-container *ngIf="!user">
