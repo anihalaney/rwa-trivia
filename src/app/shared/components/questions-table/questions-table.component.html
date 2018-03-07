@@ -46,8 +46,9 @@
                 </span>
               </div>
               <div class="col-sm-3 col-xs-12 question-status">
+                <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:''"></div>
                 <label>
-                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':''">{{getDisplayStatus(row.status) | titlecase}}</b>
+                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':''">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
                 </label>
                 <div *ngIf="getDisplayStatus(row.status)==='REJECTED'">
                   <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
