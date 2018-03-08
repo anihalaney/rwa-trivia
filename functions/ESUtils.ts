@@ -3,7 +3,9 @@ import { Game, Question, Category, SearchResults, SearchCriteria } from '../src/
 const fs = require('fs');
 const path = require('path');
 const elasticsearch = require('elasticsearch');
-
+const functions = require('firebase-functions');
+const DEV_PROJECT_ID = 'rwa-trivia-dev-e57fc';
+const PROD_PROJECT_ID = 'rwa-trivia';
 const elasticsearchConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../config/elasticsearch.config.json'), 'utf8'));
 
 export class ESUtils {
@@ -18,11 +20,16 @@ export class ESUtils {
   };
 
   static getIndex(index: string): string {
+    // const prefix =
+    //   this.searchClient['index_prefix']
+    //     ? (this.searchClient['index_prefix'].toString()).toLowerCase().trim()
+    //     : '';
+
     const prefix =
-      this.searchClient['index_prefix']
-        ? (this.searchClient['index_prefix'].toString()).toLowerCase().trim()
+      (functions.config().firebase.projectId === DEV_PROJECT_ID)
+        ? 'dev:'
         : '';
-    console.log('index', prefix + index);
+
     return prefix + index;
   }
 
