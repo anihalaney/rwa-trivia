@@ -7,7 +7,7 @@
     {
       "name": "trivia",
       "root": "src",
-      "outDir": "dist/trivia",
+      "outDir": "dist",
       "assets": [
         "assets",
         "favicon.ico"
@@ -36,7 +36,7 @@
     {
       "name": "trivia-dev",
       "root": "src",
-      "outDir": "dist/trivia-dev",
+      "outDir": "dist",
       "assets": [
         "assets",
         "favicon.ico"
