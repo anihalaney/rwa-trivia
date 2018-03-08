@@ -67,16 +67,20 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
       this.publishedQuestionObs = this.store.select(bulkState).select(s => s.bulkUploadPublishedQuestions);
       this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
       this.publishedQuestionObs.subscribe((questions) => {
-        this.publishedCount = questions.length;
-        this.publishedQuestions = questions;
+        if (questions) {
+          this.publishedCount = questions.length;
+          this.publishedQuestions = questions;
+        }
       });
 
       // get unpublished question by BulkUpload Id
       this.unPublishedQuestionObs = this.store.select(bulkState).select(s => s.bulkUploadUnpublishedQuestions);
       this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
       this.unPublishedQuestionObs.subscribe((questions) => {
+        if (questions) {
         this.unPublishedCount = questions.length;
         this.unPublishedQuestions = questions;
+        }
       });
 
       // get the download file url
