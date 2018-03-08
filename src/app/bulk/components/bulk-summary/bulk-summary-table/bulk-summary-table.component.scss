@@ -23,5 +23,22 @@
   width: 100%;
   overflow: auto;
 }
+@media(max-width: 600px) {
+   .mat-table {
+    width: 100%;
+    overflow: auto;
+    > .mat-header-row, > .mat-row {
+      display: table-row;
+        > .mat-header-cell, > .mat-cell {
+          display: table-cell;
+          height: 48px;
+          vertical-align: middle;
+           padding: 0px 0px 0px 10px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+           font-size: 14px;
+      }
+  }
+  }
+}
 
        
