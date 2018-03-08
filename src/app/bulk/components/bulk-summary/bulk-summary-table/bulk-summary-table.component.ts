@@ -57,7 +57,7 @@ export class BulkSummaryTableComponent implements OnChanges {
       ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos);
 
     this.bulkUploadObs.subscribe(bulkUploadFileInfos => {
-      if (bulkUploadFileInfos.length !== 0) {
+      if (bulkUploadFileInfos && bulkUploadFileInfos.length !== 0) {
         for (const key in bulkUploadFileInfos) {
           if (bulkUploadFileInfos[key]) {
             bulkUploadFileInfos[key].category = this.categoryDict[bulkUploadFileInfos[key].categoryId].categoryName;
@@ -67,15 +67,20 @@ export class BulkSummaryTableComponent implements OnChanges {
             bulkUploadFileInfos[key].downloadUrl = ref.getDownloadURL();
           }
         }
+        this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
+        this.setPaginatorAndSort();
       }
-      this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
-      this.setPaginatorAndSort();
     });
 
+    // add conditional columns in table
     if (this.isAdminUrl) {
-      (this.displayedColumns.indexOf('created') === -1) ? this.displayedColumns.push('created') : '';
+      if (this.displayedColumns.indexOf('created') === -1) {
+        this.displayedColumns.push('created')
+      }
     }
-    (this.displayedColumns.indexOf('download') === -1) ? this.displayedColumns.push('download') : '';
+    if (this.displayedColumns.indexOf('download') === -1) {
+      this.displayedColumns.push('download')
+    }
   }
 
   setPaginatorAndSort() {
