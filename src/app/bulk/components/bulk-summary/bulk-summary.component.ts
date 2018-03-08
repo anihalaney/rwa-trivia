@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 })
 export class BulkSummaryComponent {
 
-  private bulkSummaryDetailPath = '/';
+  public bulkSummaryDetailPath = '/';
 
   constructor() { }
 

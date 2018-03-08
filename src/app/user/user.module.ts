@@ -4,7 +4,7 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { SharedModule } from '../shared/shared.module';
 import { UserRoutingModule } from './routing/user-routing.module';
-import { ImageCropperComponent } from 'ngx-img-cropper';
+
 import { effects, reducer } from './store';
 
 import {
@@ -27,8 +27,7 @@ import {
     RecentGamesComponent,
     ProfileSettingsComponent,
     MyQuestionsComponent,
-    QuestionAddUpdateComponent,
-    ImageCropperComponent,
+    QuestionAddUpdateComponent
   ],
   imports: [
     // rwa modules

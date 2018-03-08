@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 })
 export class BulkComponent {
 
-  private bulkSummaryDetailPath = 'admin/';
+  public bulkSummaryDetailPath = 'admin/';
 
   constructor() { }
 
