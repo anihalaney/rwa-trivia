@@ -30,8 +30,8 @@ $light-theme-background : (
 	button-error-hover-lg: #af3424,
 	button-warning-lg: #d5aa00,
 	viewpublic-hover-lg: #71b02f,
-
 	nav-sm: #f1f2f2,
+	error-message:#FEE4E7
 );
 
 $light-theme-text-color : (
@@ -63,7 +63,8 @@ $light-theme-text-color : (
 	footer-hover-lg:#fff,
 	box-hover-lg: #1f7b2b,
 	warning: #FFD04E,
-	reject:#e50051
+	reject:#e50051,
+	error:#ff2d55
 );
 
 
