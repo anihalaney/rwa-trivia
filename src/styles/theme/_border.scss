@@ -98,4 +98,8 @@
 	{
 		border-bottom-color: map-get($theme,card);
 	}
+	.csv-error-msg
+	{
+		border-top-color: map-get($theme, red-before);
+	}
 }	
