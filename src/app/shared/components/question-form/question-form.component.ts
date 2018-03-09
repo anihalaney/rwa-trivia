@@ -155,7 +155,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     // get question object from the forms
     const question: Question = this.getQuestionFromFormValue(this.questionForm.value);
     question.id = this.editQuestion.id;
-    question.status = this.editQuestion.status === QuestionStatus.REQUEST_TO_CHANGE ? QuestionStatus.PENDING : this.editQuestion.status;
+    question.status = this.editQuestion.status === QuestionStatus.REQUIRED_CHANGE ? QuestionStatus.PENDING : this.editQuestion.status;
     question.bulkUploadId = this.editQuestion.bulkUploadId ? this.editQuestion.bulkUploadId : '';
     question.categoryIds = [];
 
@@ -207,5 +207,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
+  }
+  showQuestion() {
+    this.updateStatus.emit(true);
   }
 }

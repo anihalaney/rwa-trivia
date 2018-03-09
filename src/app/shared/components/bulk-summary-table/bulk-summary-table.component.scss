@@ -7,22 +7,19 @@
   flex-direction: column;
   min-width: 300px;
 }
-
+.mat-row .mat-cell {
+          
+  vertical-align: middle;
+  padding: 0px 5px 0px 10px;
+  font-size: 14px;
+  word-wrap: break-word;
+}
+.mat-header-row .mat-header-cell
+{
+    font-family:'hindsemibold';
+    font-size: 16px;
+}
 .mat-table {
-  overflow: auto;
+  width: 100%;
 }
-
-body.dark input, body.dark textarea, body.dark select, body.dark button {
-  background: #FFF !important;
-  background-color: #FFF !important;
-}
-
-.mat-header-cell.mat-sort-header-sorted {
-  color: black;
-}
-
-.col-status{
-  padding-left: 8px;
-  padding-right: 2px;
-}
-
+       

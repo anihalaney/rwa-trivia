@@ -5,21 +5,23 @@
   margin: 0;
   border-color: rgba(204,204,204,0.44);
 }
-.dark{ font-size: 16px; }
-.dark{ font-family: 'hindsemibold'; display: inline-block; }
-.light{ display: inline-block; }
-.currentans li:nth-child(3) {
+.dark{ font-family: 'hindsemibold'; display: inline-block;font-size: 18px; }
+.question-text{ display: inline-block; font-size: 16px;font-family: 'hindsemibold';};
+.answer-text{ display: inline-block; font-size: 16px;color: #282828}
+
+.currentans li:nth-child(1) {
   margin-top: 10px;
 }
 
 .mat-header-row, .mat-row { 
   border-bottom-style: none;
+  padding: 0px;
 }
 
-.sort-page-header {
-  margin-left: 30px;
-  margin-top: 30px;
-}
+// .sort-page-header {
+//   margin-left: 30px;
+//   margin-top: 30px;
+// }
 .row-question {
   height: auto;
 }
@@ -29,10 +31,10 @@
 .col-question {
   flex: 10;
   //display: flex;
-  > div {
-    margin-top: 10px;
-    margin-bottom: 10px;    
-  }
+  // > div {
+  //   margin-top: 10px;
+  //   margin-bottom: 10px;    
+  // }
   > div:hover{
     background-color: #f4f5f7;
   }
@@ -145,4 +147,20 @@ mat-card-actions {
 }
 ::ng-deep mat-hint.error, .error {
   color: red;
+}
+.question-status
+{
+  float: right;
+  text-align: center;
+}
+.paginator-position
+{
+  float: right;
+}
+.view-reason-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 35px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;}
+.edit-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 35px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;}
+
+.rejection-div,.edit-form-div
+{
+  background-color: #f4f5f7;
 }
