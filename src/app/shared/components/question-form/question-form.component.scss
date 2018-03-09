@@ -3,9 +3,9 @@
   margin-bottom: 8px;
 }
 
-#curentactive { text-align: center; }
+#curentactive { font-family: 'hindseminormal';}
 .submitpage .card{ padding: 25px 0 0 }
-.optionbox{ margin-top: 30px; text-align: left;}
+.optionbox{ margin-top: 15px; text-align: left;}
 .optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
 .optionbox h2 span{ font-size: 20px; text-transform: none; letter-spacing: .10px; padding-left: 0; font-family: 'hindmedium' }
 .submitpage .optionbox{ padding: 0 10px }
@@ -15,8 +15,8 @@
 .card .enterquestion h3:before{ display: none;  }
 
 .enterquestion .formfield{ padding: 0; margin-bottom: 32px; }
-.enterquestion .formfield > input{ border-width: 1px; border-style: solid; border-radius: 4px; padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px)}
-.formfield select {  border-width: 1px; border-style: solid; border-radius: 4px; font-size: 18px; display: inline-block; }
+.enterquestion .formfield > input{ border-width: 1px; border-style: solid; border-radius: 4px; padding: 10px 25px; font-size: 16px; display: inline-block; width: calc(100% - 34px)}
+.formfield select {  border-width: 1px; border-style: solid; border-radius: 4px; font-size: 15px; display: inline-block; }
 .enterquestion .formfield > label{ width: 30px; display: inline-block; vertical-align: -4px}
 .enterquestion .formfield input[type="radio"]{ display: block;}
 
@@ -78,4 +78,48 @@ mat-card-actions {
 }
 ::ng-deep mat-hint.error, .error {
   color: red;
+}
+
+.edit-form h4{ font-family: 'hindsemibold'; letter-spacing: 0.1px; margin-top: 13px;}
+.edit-form{padding-left: 15px;padding-right: 15px;font-size: 16px;font-family: 'hindseminormal';}
+.cancelicon{float: right;cursor: pointer}
+.message{max-width: 850px;}
+.sub-message{font-size: 18px;padding-bottom: 3%;}
+textarea
+{
+  // border: 1px;
+  border-radius: 3px;
+  font-family: 'hindseminormal';
+  font-size: 16px;
+  box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06);
+  padding: 12px 13px 10px;
+
+}
+.tag
+{
+  font-size: 16px;
+  margin-right: 2%;
+  padding: 1px 0px 1px 12px;
+  font-family: 'hindseminormal';
+}
+.resubmit-btn{margin-top: 10px;}
+.closeicon
+{
+  padding-top: 4px;
+}
+.x
+{
+  padding: 8px;
+  cursor: pointer;
+}
+.add-tag-btn{ 
+  font-size: 16px;
+  font-family: 'hindsemibold';
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px -2px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  padding: 8px 16px;
+  margin-left: 1%;
 }
