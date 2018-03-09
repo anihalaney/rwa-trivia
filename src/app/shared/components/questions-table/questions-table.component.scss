@@ -142,12 +142,12 @@ mat-card-actions {
 .remove-tag {
   cursor: pointer;
 }
-::ng-deep mat-input-container.ng-invalid.ng-touched .mat-input-underline {
-  border-color: red;
-}
-::ng-deep mat-hint.error, .error {
-  color: red;
-}
+// ::ng-deep mat-input-container.ng-invalid.ng-touched .mat-input-underline {
+//   border-color: red;
+// }
+// ::ng-deep mat-hint.error, .error {
+//   color: red;
+// }
 .question-status
 {
   float: right;
@@ -157,10 +157,15 @@ mat-card-actions {
 {
   float: right;
 }
-.view-reason-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 35px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;}
-.edit-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 35px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;}
+.view-reason-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 38px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;}
+.edit-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 38px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;width: 60%;}
 
 .rejection-div,.edit-form-div
 {
   background-color: #f4f5f7;
+}
+.csv-error-msg{padding: 10px;  margin-top: 15px;font-size: 14px;font-family:'hindsemibold';padding-left: 15px;}
+.error-que
+{
+  padding-bottom: 0px;
 }

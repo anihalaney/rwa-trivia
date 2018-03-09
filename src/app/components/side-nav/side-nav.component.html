@@ -1,13 +1,14 @@
 <profile-card [user]="user"></profile-card>
 <recent-games></recent-games>
+<div class="card playwith">
+    <a [routerLink]="['/my/questions']">
+      <span class="sprite myqestion"></span>
+      <span class="playtext">Submit<span>Questions</span></span>
+    </a>
+  </div>
 <user-stats-card></user-stats-card>
 
-<div class="card playwith">
-  <a [routerLink]="['/my/questions']">
-    <span class="sprite myqestion"></span>
-    <span class="playtext">My<span>Questions</span></span>
-  </a>
-</div>
+
 <div class="card playwith">
   <a href="#">
     <span class="sprite playwithicon"></span>

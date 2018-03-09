@@ -226,6 +226,36 @@ app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 
 });
 
+app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
+
+  // Initialize another app
+  const sourceApp = admin.initializeApp({
+    apiKey: 'AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y',
+    authDomain: 'rwa-trivia.firebaseapp.com',
+    databaseURL: 'https://rwa-trivia.firebaseio.com',
+    projectId: 'rwa-trivia',
+    storageBucket: 'rwa-trivia.appspot.com',
+    messagingSenderId: '479350787602'
+  }, 'sourceApp');
+  console.log(req.params.collection);
+  const sourceDB = sourceApp.firestore();
+  const targetDB = admin.firestore();
+  sourceDB.collection(req.params.collection).get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        console.log(doc.id, '=>', doc.data());
+        targetDB.collection(req.params.collection).doc(doc.id).set(doc.data());
+      });
+      res.send('loaded data');
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+
+});
+
+
+
 // rebuild questions index
 app.get('/rebuild_questions_index', adminOnly, (req, res) => {
 

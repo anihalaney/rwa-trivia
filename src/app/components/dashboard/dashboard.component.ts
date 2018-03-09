@@ -16,7 +16,7 @@ import { User, Category, Question, SearchResults, Game } from '../../model';
 export class DashboardComponent implements OnInit, OnDestroy {
   user: User;
   sub: Subscription;
-  
+
   questionOfTheDay$: Observable<Question>;
   activeGames$: Observable<Game[]>;
   gameInvites: number[];  //change this to game invites
@@ -24,13 +24,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   now: Date;
   greeting: string;
   message: string;
-  
+
   constructor(private store: Store<AppState>,
-              private questionActions: QuestionActions,
-              private gameActions: GameActions) {
+    private questionActions: QuestionActions,
+    private gameActions: GameActions) {
     this.questionOfTheDay$ = store.select(appState.coreState).select(s => s.questionOfTheDay);
     this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
-    this.gameInvites = [1,2,3];
+    this.gameInvites = [1, 2, 3];
 
     this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
       this.user = user
@@ -43,18 +43,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.now = new Date();
-    let hourOfDay = this.now.getHours();
+    const hourOfDay = this.now.getHours();
     if (hourOfDay < 12) {
-      this.greeting = "Morning";
-      this.message = "Glad to see you. Start your day with a new challenge!"
-    }
-    else if (hourOfDay < 17) {
-      this.greeting = "Afternoon";
-      this.message = "Caught you napping? Jog your mind with a new challenge!"
-    }
-    else {
-      this.greeting = "Evening";
-      this.message = "Relax your mind. Spice it up with a new game!"
+      this.greeting = 'Morning';
+      this.message = 'Nice to see you again,are you ready for a new challenge!';
+    } else if (hourOfDay < 17) {
+      this.greeting = 'Afternoon';
+      this.message = 'Caught you napping? Jog your mind with a new challenge!';
+    } else {
+      this.greeting = 'Evening';
+      this.message = 'Relax your mind. Spice it up with a new game!';
     }
   }
 

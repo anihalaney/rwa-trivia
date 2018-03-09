@@ -3,8 +3,37 @@
   "project": {
     "name": "trivia"
   },
-  "apps": [
+  "apps": [{
+      "name": "trivia-dev",
+      "root": "src",
+      "outDir": "dist",
+      "assets": [
+        "assets",
+        "favicon.ico"
+      ],
+      "index": "index.html",
+      "main": "main.ts",
+      "polyfills": "polyfills.ts",
+      "test": "test.ts",
+      "tsconfig": "tsconfig.app.json",
+      "testTsconfig": "tsconfig.spec.json",
+      "prefix": "dev-app",
+      "styles": [
+        "styles/rwa-trivia.theme.scss",
+        "styles/styles.scss",
+        "styles/global.scss",
+        "styles/light.theme.scss",
+        "styles/dark.theme.scss"
+      ],
+      "scripts": [],
+      "environmentSource": "environments/environment.ts",
+      "environments": {
+        "dev": "environments/environment.trivia-dev.dev.ts",
+        "prod": "environments/environment.trivia-dev.prod.ts"
+      }
+    },
     {
+      "name": "trivia",
       "root": "src",
       "outDir": "dist",
       "assets": [
@@ -28,8 +57,8 @@
       "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
-        "dev": "environments/environment.ts",
-        "prod": "environments/environment.prod.ts"
+        "dev": "environments/environment.trivia.dev.ts",
+        "prod": "environments/environment.trivia.prod.ts"
       }
     }
   ],

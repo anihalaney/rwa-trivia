@@ -90,6 +90,11 @@
 		color: map-get($theme, warning);
 		
 	}
+	.csv-error-msg
+	{
+		color: map-get($theme, error);
+		
+	}
 	
 
 	@media screen and ( min-width:1000px){

@@ -48,7 +48,7 @@
     <ng-container cdkColumnDef="download">
       <mat-header-cell *cdkHeaderCellDef> Download File </mat-header-cell>
       <mat-cell class="col-status cursor" *cdkCellDef="let row">
-        <a *ngIf="downloadUrl" [href]="downloadUrl | async" target="_blank">Download</a>
+        <a *ngIf="downloadUrl" [href]="downloadUrl" target="_blank">Download</a>
       </mat-cell>
     </ng-container>
 
