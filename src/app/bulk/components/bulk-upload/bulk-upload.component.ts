@@ -100,7 +100,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
           return columns;
         } else {
           this.fileParseError = true;
-          this.fileParseErrorMessage = 'File format is not correct, must be in CSV format, must not have missing or wrong column order';
+          this.fileParseErrorMessage = 'File format is not correct, must be in CSV format, must not have missing or wrong column order.';
           return '';
         }
       },

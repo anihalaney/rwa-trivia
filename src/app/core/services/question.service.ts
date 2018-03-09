@@ -41,15 +41,25 @@ export class QuestionService {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', userId))
       .valueChanges()
-      .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
+      .map(qs => qs.map(q => Question.getViewModelFromDb(q)))
+      .catch(error => {
+        console.log(error);
+        return Observable.of(null);
+      });
   }
 
   // get Questions by bulk upload id
   getQuestionsForBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
-    return this.db.collection(`/${collection}`, ref => ref.where('bulkUploadId', '==', bulkUploadFileInfo.id))
+    return this.db.collection(`/${collection}`, ref => {
+       return ref.where('created_uid', '==', bulkUploadFileInfo.created_uid)
+       .where('bulkUploadId', '==', bulkUploadFileInfo.id)})
       .valueChanges()
-      .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
+      .map(qs => qs.map(q => Question.getViewModelFromDb(q)))
+      .catch(error => {
+        console.log(error);
+        return Observable.of(null);
+      });
   }
 
   getUnpublishedQuestions(): Observable<Question[]> {

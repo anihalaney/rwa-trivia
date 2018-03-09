@@ -30,11 +30,11 @@
   <ng-container cdkColumnDef="questionText">
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
     <mat-cell *cdkCellDef="let row;let i = index" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
-      <div class="row" *ngIf="row !== editQuestion && row !== viewReasonArray[i]">
+      <div *ngIf="row !== editQuestion && row !== viewReasonArray[i]">
         <!-- <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div> -->
-        <div class="col-sm-12 col-xs-12">
+        <div class="row col-sm-12 col-xs-12" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
           <div class="date">{{row.createdOn | date:'dd MMM yyyy' }}</div>
           <p class="dark">{{row.questionText}}</p>
           <ul class="currentans">
@@ -86,11 +86,14 @@
               </div>
             </li>
             <li *ngIf="row.validationErrorMessages?.length > 0">
-              <div class="error ">Errors :</div>
-              <div class="error">
-                <span *ngFor="let error of row.validationErrorMessages">
-                  {{error}},
-                </span>
+              <div class="csv-error-msg">
+                <p>ERROR :</p>
+                <div>
+                  <span *ngFor="let error of row.validationErrorMessages;let last = last;">
+                    - {{error}}
+                    <label *ngIf="last!=error && $index > 0">,</label>
+                  </span>
+                </div>
               </div>
             </li>
             <li *ngIf="viewReasonArray.length>0 && viewReasonArray[i] && viewReasonArray[i].val">
@@ -161,5 +164,5 @@
 </mat-table>
 
 <mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
-  (page)="pageChanged($event)" class="col-sm-8 col-xs-12 paginator-position">
+  (page)="pageChanged($event)" class="paginator-position">
 </mat-paginator>
