@@ -8,7 +8,7 @@ import '../../rxjs-extensions';
 import { CONFIG } from '../../../environments/environment';
 import { User, Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../model';
 import { Store } from '@ngrx/store';
-import { AppStore } from '../store/app-store';
+import { AppState } from '../../store/app-store';
 import { QuestionActions } from '../store/actions';
 import { query } from '@angular/core/src/render3/instructions';
 
@@ -17,7 +17,7 @@ export class QuestionService {
 
   constructor(private db: AngularFirestore,
     private storage: AngularFireStorage,
-    private store: Store<AppStore>,
+    private store: Store<AppState>,
     private questionActions: QuestionActions,
     private http: HttpClient) {
   }
@@ -37,9 +37,9 @@ export class QuestionService {
   }
 
   // Firestore
-  getUserQuestions(user: User, published: boolean): Observable<Question[]> {
+  getUserQuestions(userId: Number, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
-    return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', user.userId))
+    return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', userId))
       .valueChanges()
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)));
   }

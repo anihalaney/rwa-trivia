@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { User, Game } from '../../../model';
 
 @Component({
@@ -18,10 +18,10 @@ export class GameCardComponent implements OnInit, OnChanges  {
   user: User;
   myTurn: boolean;
 
-  constructor(private store: Store<AppStore>) { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit() {
-    this.store.take(1).subscribe(s => {
+    this.store.select(appState.coreState).take(1).subscribe(s => {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
     }); //logged in user
