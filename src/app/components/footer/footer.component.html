@@ -2,7 +2,7 @@
     <div class="row">
       <div class="col-sm-8 col-xs-12">
         <a [routerLink]="['/']" title="Home">Home</a>
-        <a *ngIf="user" [routerLink]="['/my/questions']" title="My Questions">My Questions</a>
+        <a *ngIf="user" (click)="navigateUrl()" title="My Questions">My Questions</a>
         <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
         <a *ngIf="user?.roles?.admin" [routerLink]="['/bulk']">Bulk</a>
         <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>

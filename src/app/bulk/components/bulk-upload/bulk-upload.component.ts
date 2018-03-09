@@ -3,11 +3,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-import { QuestionActions, BulkUploadActions } from '../../../core/store/actions';
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 import { Utils } from '../../../core/services';
-import { Category, User, Question, QuestionStatus, BulkUploadFileInfo } from '../../../model';
+import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload } from '../../../model';
 import { parse } from 'csv';
+import * as bulkActions from '../../../bulk/store/actions';
 
 @Component({
   selector: 'bulk-upload',
@@ -47,12 +47,10 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
 
   constructor(private fb: FormBuilder,
-    private store: Store<AppStore>,
-    private bulkUploadActions: BulkUploadActions,
-    private questionActions: QuestionActions) {
-    this.categoriesObs = store.select(s => s.categories);
-    this.tagsObs = store.select(s => s.tags);
-    this.store.take(1).subscribe(s => this.user = s.user);
+    private store: Store<AppState>) {
+    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
+    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
+    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
   }
 
   ngOnInit() {
@@ -201,11 +199,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   onReviewSubmit(): void {
-    this.store.dispatch(this.questionActions
-      .addBulkQuestions({
-        bulkUploadFileInfo: this.bulkUploadFileInfo,
-        questions: this.parsedQuestions, file: this.file
-      }));
+    const bulkUpload = new BulkUpload();
+    bulkUpload.bulkUploadFileInfo = this.bulkUploadFileInfo;
+    bulkUpload.questions = this.parsedQuestions;
+    bulkUpload.file = this.file;
+    this.store.dispatch(new bulkActions.AddBulkQuestions({ bulkUpload: bulkUpload }));
   }
 
   ngOnDestroy() {

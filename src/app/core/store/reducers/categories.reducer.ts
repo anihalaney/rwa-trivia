@@ -13,16 +13,10 @@ export function categories(state: any = [], action: ActionWithPayload<Category[]
   }
 }
 
-export function categoryDictionary (state: any = {}, action: ActionWithPayload<Category[]>): {[key: number]: Category} {
-  switch (action.type) {
-    case CategoryActions.LOAD_CATEGORIES_SUCCESS:
-      let categories: Category[] = action.payload;
-      let categoryDict: {[key: number]: Category} = {};
-      categories.forEach(category => {
-        categoryDict[category.id] = category;
-      });
-      return categoryDict;
-    default:
-      return state;
-  }
-};
+//selectors
+export const getCategoryDictionary = (state: Category[]) => 
+  state.reduce((result, category) => {
+    result[category.id] = category;
+    return result;
+  }, {});
+

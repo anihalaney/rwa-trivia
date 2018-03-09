@@ -19,7 +19,7 @@
       </div>
       <!-- Prefered Categories end -->
     </div>
-    <form (ngSubmit)="onSubmit()" [formGroup]="userForm" novalidate>
+    <form *ngIf="userForm" (ngSubmit)="onSubmit()" [formGroup]="userForm" novalidate>
       <!-- Profile pik -->
       <div class="enterquestion secondbg">
         <div class="optionbox">
