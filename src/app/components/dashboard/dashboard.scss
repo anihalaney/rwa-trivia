@@ -11,7 +11,7 @@
 
 /*Main Content*/
 /*Heading*/
-.pageheading + .align-right{ margin-bottom: 10px; }
+.pageheading + .align-right{ margin-bottom: 10px;}
 .startgame{ font-family:'hindsemibold' ; text-transform: uppercase; box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 42px; border-radius: 4px; display: inline-block; text-align: center; letter-spacing: 1px; width: 100%} 
 .sunicon{  height: 35px; width:35px;  margin-right: 10px; animation-name: spin; animation-duration: 20000ms; animation-iteration-count: infinite; animation-timing-function: linear;}
 #curentactive { text-align: center; }
@@ -61,3 +61,13 @@ h2 span{ font-size: 14px; font-family: 'hindregular';}
 /*Real-time System Stats*/
 /*Real-time System Stats End*/
 /*--Dashboard End--*/
+
+.align-right
+{
+  text-align: right;
+}
+.view-all-btn
+{
+  text-align: center;
+  margin-top: 10px;
+}

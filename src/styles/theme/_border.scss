@@ -11,10 +11,10 @@
 	#currentgame li .innerli{ 
 		border-color: map-get($theme, currentgame-list);
 	}
-	.gameplay li, .questionstatus .tabbing li, .questionstatus .tabbing li.active,.viewbublic, .tag, .avatarimg, #file-name, .custom-file-upload, .expertise{ 
+	.gameplay li, .questionstatus .tabbing li, .questionstatus .tabbing li.active,.viewbublic, .tag, .avatarimg, #file-name, .custom-file-upload, .expertise,.downloadFile{ 
 		border-color: map-get($theme, primary);
 	}
-	input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .subscrib-cont input[type="email"]{ 
+	input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .subscrib-cont input[type="email"],.custom-file-upload{ 
 		border-color: map-get($theme, input);
 	}
 	.viewall:hover{ 
@@ -29,7 +29,7 @@
 	.h1block:after{
 		border-color: map-get($theme, header-block-after);
 	}
-	.optionbox .radiobtn label, .withfriends,.friendsslider .owl-prev,.friendsslider .owl-next, .formfield select{ 
+	.optionbox .radiobtn label, .withfriends,.friendsslider .owl-prev,.friendsslider .owl-next, .formfield select,textarea{ 
 		border-color: map-get($theme, form-options);
 	}
 	.question-list li input:checked ~ label:before, .optionbox .radiobtn label:after, .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after, .gameplay li:after{ 
@@ -93,5 +93,13 @@
 		.withfriends .owl-prev:hover,.withfriends .owl-next:hover, .viewbublic:hover{ 
 			border-color: map-get($theme, hover-lg);
 		}
+	}
+	.div-border
+	{
+		border-bottom-color: map-get($theme,card);
+	}
+	.csv-error-msg
+	{
+		border-top-color: map-get($theme, red-before);
 	}
 }	

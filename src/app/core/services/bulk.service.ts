@@ -35,7 +35,7 @@ export class BulkService {
 
   // get BulkUpload by Id
   getBulkUploadById(bulkUploadFileInfo: BulkUploadFileInfo): Observable<BulkUploadFileInfo> {
-    return this.db.collection('/bulk_uploads', ref => ref.where('id', '==', bulkUploadFileInfo.id))
+    return this.db.doc(`/bulk_uploads/${bulkUploadFileInfo.id}`)
       .valueChanges()
       .catch(error => {
         console.log(error);

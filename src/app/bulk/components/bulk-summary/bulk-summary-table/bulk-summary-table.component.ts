@@ -22,9 +22,12 @@ export class BulkSummaryTableComponent implements OnChanges {
   user: User;
   bulkUploadObs: Observable<BulkUploadFileInfo[]>;
   dataSource: any;
-  SHOW_SUMMARY_TABLE = true;
+  showSummaryTable = true;
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
+
+  displayedColumns = ['uploadDate', 'fileName', 'category',
+    'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];
 
   @Input() bulkSummaryDetailPath: String;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,7 +57,7 @@ export class BulkSummaryTableComponent implements OnChanges {
       ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos);
 
     this.bulkUploadObs.subscribe(bulkUploadFileInfos => {
-      if (bulkUploadFileInfos.length !== 0) {
+      if (bulkUploadFileInfos && bulkUploadFileInfos.length !== 0) {
         for (const key in bulkUploadFileInfos) {
           if (bulkUploadFileInfos[key]) {
             bulkUploadFileInfos[key].category = this.categoryDict[bulkUploadFileInfos[key].categoryId].categoryName;
@@ -64,10 +67,20 @@ export class BulkSummaryTableComponent implements OnChanges {
             bulkUploadFileInfos[key].downloadUrl = ref.getDownloadURL();
           }
         }
+        this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
+        this.setPaginatorAndSort();
       }
-      this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
-      this.setPaginatorAndSort();
     });
+
+    // add conditional columns in table
+    if (this.isAdminUrl) {
+      if (this.displayedColumns.indexOf('created') === -1) {
+        this.displayedColumns.push('created')
+      }
+    }
+    if (this.displayedColumns.indexOf('download') === -1) {
+      this.displayedColumns.push('download')
+    }
   }
 
   setPaginatorAndSort() {
@@ -78,11 +91,11 @@ export class BulkSummaryTableComponent implements OnChanges {
   // get Questions by bulk upload Id
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
     this.bulkUploadFileInfo = row;
-    this.SHOW_SUMMARY_TABLE = false;
+    this.showSummaryTable = false;
   }
 
   backToSummary() {
-    this.SHOW_SUMMARY_TABLE = true;
+    this.showSummaryTable = true;
     this.loadBulkSummaryData();
   }
 }

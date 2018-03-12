@@ -50,6 +50,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   editQuestion: Question;
   user: User;
 
+  viewReasonArray = [];
+
   constructor(private store: Store<AppState>,
     private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
@@ -111,7 +113,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
     }
 
-    this.requestQuestion.status = QuestionStatus.REQUEST_TO_CHANGE;
+    this.requestQuestion.status = QuestionStatus.REQUIRED_CHANGE;
     this.requestQuestion.reason = this.requestFormGroup.get('reason').value;
     this.requestQuestionStatus = false;
     this.requestQuestion.approved_uid = this.user.userId;
@@ -157,6 +159,23 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       this.editQuestion = null;
     }
   }
+
+  showQuestion(cancelStatus: string) {
+
+    this.viewReasonArray.forEach((val, key) => {
+      if (val && val.reason === cancelStatus) {
+        this.viewReasonArray[key] = undefined;
+      }
+    });
+
+  }
+
+  showReason(row, index) {
+    if (this.viewReasonArray[index] === undefined) {
+      this.viewReasonArray[index] = row;
+    }
+  }
+
 }
 
 export class QuestionsDataSource extends DataSource<Question> {
