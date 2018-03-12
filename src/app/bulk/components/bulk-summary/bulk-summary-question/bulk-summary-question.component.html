@@ -1,64 +1,77 @@
-<mat-card-title>File Details</mat-card-title>
-<br />
-<mat-table #table [dataSource]="fileInfoDS">
-  <ng-container cdkColumnDef="fileName">
-    <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
-    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
-  </ng-container>
+<!-- <mat-card-title>File Details</mat-card-title> -->
+<!-- <br /> -->
+<div class="card">
+  <div class="row">
+    <div class="pageheading col-md-9 col-xs-12 hidden-xs">File Details</div>
+    <div class="col-md-3 col-xs-12 align-right alignment">
+      <button class="btn" (click)="backToSummary()"> Back To Summary </button>
+      <!-- <a [routerLink]="['./upload']" class="pageheading startupload font-size-16">Start New Bulk Upload</a> -->
+    </div>
+    <!-- <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle> -->
+  </div>
 
-  <ng-container cdkColumnDef="category">
-    <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
-    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
-  </ng-container>
+  <mat-table #table [dataSource]="fileInfoDS">
+    <ng-container cdkColumnDef="fileName">
+      <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
+      <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
+    </ng-container>
 
-  <ng-container cdkColumnDef="primaryTag">
-    <mat-header-cell *cdkHeaderCellDef>Primary Tag</mat-header-cell>
-    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
-  </ng-container>
+    <ng-container cdkColumnDef="category">
+      <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
+      <mat-cell class="col-chkbox" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
+    </ng-container>
 
-  <ng-container cdkColumnDef="countQuestionsUploaded">
-    <mat-header-cell *cdkHeaderCellDef>Uploaded #</mat-header-cell>
-    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.uploaded}}</mat-cell>
-  </ng-container>
+    <ng-container cdkColumnDef="primaryTag">
+      <mat-header-cell *cdkHeaderCellDef>Primary Tag</mat-header-cell>
+      <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
+    </ng-container>
 
-  <ng-container cdkColumnDef="countQuestionsApproved">
-    <mat-header-cell *cdkHeaderCellDef>Approved #</mat-header-cell>
-    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.approved}}</mat-cell>
-  </ng-container>
+    <ng-container cdkColumnDef="countQuestionsUploaded">
+      <mat-header-cell *cdkHeaderCellDef>Uploaded #</mat-header-cell>
+      <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.uploaded}}</mat-cell>
+    </ng-container>
 
-  <ng-container cdkColumnDef="countQuestionsRejected">
-    <mat-header-cell *cdkHeaderCellDef>Rejected #</mat-header-cell>
-    <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.rejected}}</mat-cell>
-  </ng-container>
+    <ng-container cdkColumnDef="countQuestionsApproved">
+      <mat-header-cell *cdkHeaderCellDef>Approved #</mat-header-cell>
+      <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.approved}}</mat-cell>
+    </ng-container>
 
-  <ng-container cdkColumnDef="status">
-    <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
-    <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
-  </ng-container>
-  <ng-container cdkColumnDef="download">
-    <mat-header-cell *cdkHeaderCellDef> Download File </mat-header-cell>
-    <mat-cell class="col-status cursor" *cdkCellDef="let row"><a *ngIf="downloadUrl" [href]="downloadUrl" target="_blank">Download</a></mat-cell>
-  </ng-container>
+    <ng-container cdkColumnDef="countQuestionsRejected">
+      <mat-header-cell *cdkHeaderCellDef>Rejected #</mat-header-cell>
+      <mat-cell class="col-chkbox" *cdkCellDef="let row">{{row.rejected}}</mat-cell>
+    </ng-container>
 
-  <mat-header-row *cdkHeaderRowDef="['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
-  </mat-header-row>
-  <mat-row class="row-question" *cdkRowDef="let row; columns: ['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download'];">
-  </mat-row>
-</mat-table>
+    <ng-container cdkColumnDef="status">
+      <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+      <mat-cell class="col-status" *cdkCellDef="let row">{{row.status}}</mat-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="download">
+      <mat-header-cell *cdkHeaderCellDef> Download File </mat-header-cell>
+      <mat-cell class="col-status cursor" *cdkCellDef="let row">
+        <a *ngIf="downloadUrl" [href]="downloadUrl" target="_blank">Download</a>
+      </mat-cell>
+    </ng-container>
 
-<br />
-<br />
-<mat-card-title>Questions</mat-card-title>
-<mat-tab-group>
-  <mat-tab label="Published">
-    <question-table *ngIf="publishedCount != 0" [showSort]="false" [showPaginator]="true" [showButtons]="PUBLISHED_SHOW_BUTTON_STATE"
-      [questions]="publishedQuestions" [totalCount]="publishedCount" [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
-    </question-table>
-  </mat-tab>
-  <mat-tab label="Unpublished">
-    <question-table *ngIf="unPublishedCount != 0" [bulkUploadFileInfo]="bulkUploadFileInfo" [showSort]="false" [showPaginator]="true"
-      [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions" [totalCount]="unPublishedCount"
-      [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
-    </question-table>
-  </mat-tab>
-</mat-tab-group>
+    <mat-header-row *cdkHeaderRowDef="['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
+    </mat-header-row>
+    <mat-row class="row-question" *cdkRowDef="let row; columns: ['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download'];">
+    </mat-row>
+  </mat-table>
+
+  <br />
+  <br />
+  <mat-card-title>Questions</mat-card-title>
+  <mat-tab-group>
+    <mat-tab label="Published">
+      <question-table *ngIf="publishedCount != 0" [showSort]="false" [showPaginator]="true" [showButtons]="PUBLISHED_SHOW_BUTTON_STATE"
+        [questions]="publishedQuestions" [totalCount]="publishedCount" [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
+      </question-table>
+    </mat-tab>
+    <mat-tab label="Unpublished">
+      <question-table *ngIf="unPublishedCount != 0" [bulkUploadFileInfo]="bulkUploadFileInfo" [showSort]="false" [showPaginator]="true"
+        [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions" [totalCount]="unPublishedCount"
+        [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
+      </question-table>
+    </mat-tab>
+  </mat-tab-group>
+</div>

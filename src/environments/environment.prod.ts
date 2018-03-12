@@ -5,13 +5,13 @@ export const environment = {
 };
 
 export const CONFIG: IConfig = {
-  "firebaseConfig" : {
-      apiKey: "AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y",
-      authDomain: "rwa-trivia.firebaseapp.com",
-      databaseURL: "https://rwa-trivia.firebaseio.com",
+  'firebaseConfig' : {
+      apiKey: 'AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y',
+      authDomain: 'rwa-trivia.firebaseapp.com',
+      databaseURL: 'https://rwa-trivia.firebaseio.com',
       projectId: 'rwa-trivia',
-      storageBucket: "rwa-trivia.appspot.com",
-      messagingSenderId: "479350787602"
+      storageBucket: 'rwa-trivia.appspot.com',
+      messagingSenderId: '479350787602'
   },
-   "functionsUrl": "https://us-central1-rwa-trivia.cloudfunctions.net"
+   'functionsUrl': 'https://us-central1-rwa-trivia.cloudfunctions.net'
 };
