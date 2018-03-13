@@ -1,8 +1,10 @@
 <a href="#" class="user card">
-  <img src="/assets/images/avatar.png" alt="user" />
+  <!-- <img src="/assets/images/avatar.png" alt="user" /> -->
+  <img [src]="profileImage.image" alt="yourimg" />
   <span class="username">
     <span class="name">{{user.displayName}}</span>
     <span class="userstatus">Beginner</span>
-    <span class="userlocation"><span class="sprite mapicon"></span>Earth, Milky Way</span>
+    <span class="userlocation" *ngIf="user.location">
+      <span class="sprite mapicon"></span>{{user.location}}</span>
   </span>
 </a>
