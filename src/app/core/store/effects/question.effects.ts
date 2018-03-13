@@ -9,7 +9,7 @@ import { QuestionService } from '../../services'
 export class QuestionEffects {
 
 
-   // Load question of day based on url
+    // Load question of day based on url
     @Effect()
     // handle location update
     loadRouteQuestionOfDay$ = this.actions$
@@ -17,6 +17,14 @@ export class QuestionEffects {
         .map((action: any): RouterStateUrl => action.payload.routerState)
         .filter((routerState: RouterStateUrl) =>
             routerState.url.toLowerCase().startsWith('/dashboard'))
+        .pipe(() => this.svc.getQuestionOfTheDay())
+        .map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)
+        );
+
+    @Effect()
+    // handle location update
+    loadNextQuestionOfDay$ = this.actions$
+        .ofType(QuestionActions.GET_QUESTION_OF_THE_DAY)
         .pipe(() => this.svc.getQuestionOfTheDay())
         .map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)
         );

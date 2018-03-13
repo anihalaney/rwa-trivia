@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   user: User;
   sub: Subscription;
 
-  questionOfTheDay$: Observable<Question>;
+  questionOfTheDay: Question;
   activeGames$: Observable<Game[]>;
   gameInvites: number[];  //change this to game invites
 
@@ -28,7 +28,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
     private gameActions: GameActions) {
-    this.questionOfTheDay$ = store.select(appState.coreState).select(s => s.questionOfTheDay);
+    store.select(appState.coreState).select(s => s.questionOfTheDay).subscribe(questionOfTheDay => {
+      this.questionOfTheDay = questionOfTheDay;
+    });
     this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
     this.gameInvites = [1, 2, 3];
 
