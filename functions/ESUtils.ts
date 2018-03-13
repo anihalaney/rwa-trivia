@@ -1,5 +1,5 @@
 import { Game, Question, Category, SearchResults, SearchCriteria } from '../src/app/model';
-import { FirebaseConfig } from './config/firebase.config';
+import { FirebaseConfig } from './firebase.config';
 
 const fs = require('fs');
 const path = require('path');

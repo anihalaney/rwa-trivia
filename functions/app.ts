@@ -1,13 +1,14 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
-import { FirebaseConfig } from './config/firebase.config'
+import { FirebaseConfig } from './firebase.config'
 
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const firebaseConfig = new FirebaseConfig();
 const appConfig = firebaseConfig.identifyConfigApp(functions.config().firebase);
+
 admin.initializeApp(appConfig);
 
 const parse = require('csv').parse;
