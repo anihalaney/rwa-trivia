@@ -96,6 +96,7 @@ $light-theme-border : (
 
 	categorybox-lg: #ececec,
 	hover-lg: #71b02f,
+	download-btn:#131C2A
 );
 
 @include apply-theme("", $light-theme-background, $light-theme-text-color, $light-theme-border, 'sprite.png')

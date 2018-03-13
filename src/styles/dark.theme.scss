@@ -31,6 +31,7 @@ $dark-theme-background : (
 
 	nav-sm: #f1f2f2,
 	invitationlist-list-sm: #2d384a,
+	download-btn:#131C2A
 );
 
 $dark-theme-text-color : (
@@ -95,6 +96,7 @@ $dark-theme-border : (
 	
 	categorybox-lg: #354358,
 	hover-lg: #71b02f,
+	download-btn:#131C2A
 );
 
-@include apply-theme("dark", $dark-theme-background, $dark-theme-text-color, $dark-theme-border, 'sprite-dark.png')
+@include apply-theme("dark", $dark-theme-background, $dark-theme-text-color, $dark-theme-border, 'sprite-dark-test.png')

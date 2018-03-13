@@ -52,7 +52,7 @@ export class GameCardComponent implements OnInit, OnChanges {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
     });
-    this.store.dispatch(new userActions.LoadUserProfile({ user: this.user }));
+    // this.store.dispatch(new userActions.LoadUserProfile({ user: this.user }));
     //logged in user
 
   }

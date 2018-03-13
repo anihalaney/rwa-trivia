@@ -2,7 +2,7 @@
 	input, textarea, select, button { 
 		background: map-get($theme, input);
 	}
-	.matHeader > div > button , .matHeader > div > div > button, .matHeader,.downloadFile {
+	.matHeader > div > button , .matHeader > div > div > button, .matHeader {
 		@if $theme='dark' {
 			background: #FFF;
 			color:rgba(0, 0, 0, 0.54);
@@ -137,6 +137,9 @@
 	}
 	.csv-error-msg{ 
 		background: map-get($theme,error-message); 
+	}
+	.downloadFile{ 
+		background: map-get($theme, download-btn);
 	}
 	
 }
