@@ -48,7 +48,7 @@ export class UserService {
     }
 
     // get user by Id
-    getUserProfile(userId: Number): Observable<User> {
+    getUserProfile(userId: string): Observable<User> {
         return this.db.doc(`/users/${userId}`)
             .valueChanges()
             .catch(error => {

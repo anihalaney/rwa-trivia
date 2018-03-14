@@ -28,6 +28,21 @@ export class UserEffects {
         })
         );
 
+    //load from router
+    @Effect()
+    // handle location update
+    loadUserProfile$ = this.actions$
+        .ofType(UserActionTypes.LOAD_USER_PROFILE)
+        .pipe(
+        switchMap((action: userActions.LoadUserProfile) =>
+            this.userService.getUserProfile(action.payload.user.userId)
+                .pipe(
+                map((user: User) => new userActions.LoadUserProfileSuccess(user))
+                )
+        )
+        );
+
+
 
     //load from router
     @Effect()
