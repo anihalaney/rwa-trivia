@@ -1,16 +1,22 @@
-<div class="card">
+<div class="card gameplay">
   <div class="rocateicon sprite"></div>
   <div class="question-cont">
     <h2>Question of the day!</h2>
     <p>{{question.questionText}}</p>
-    <ul class="question-list clearfix">
-      <li *ngFor="let answer of question.answers">
-        <input type="radio" name="question">
-        <label>{{answer.answerText}}</label>
+    <ul class="question-list col-sm-12">
+      <!-- <li *ngFor="let answer of question.answers; let i=index" [formGroupName]="i">
+          <input type="radio" onchange="getValue()" formControlName="answerText">
+          <label>{{answer.answerText}}</label>
+        </li> -->
+      <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)" [class.players-answer]="answeredIndex === i"
+        [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]="answeredIndex >= 0 && correctAnswerIndex === i">
+        {{answer.answerText}}
       </li>
-      <div class="row col-sm-5 col-xs-12 submit-btn">
-        <button class="btn">Submit</button>
+      <div class="row col-sm-12 col-xs-12 submit-btn">
+        <button class="btn" (click)="getNextQuestion()" [disabled]="answeredIndex===-1">Play Again</button>
       </div>
     </ul>
+
   </div>
+
 </div>

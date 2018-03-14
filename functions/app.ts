@@ -1,7 +1,8 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
-import { FirebaseSourceApp } from './config/firebase.config'
+
+
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -230,13 +231,28 @@ app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
 
 
-//  console.log(req.params.collection);
-  const sourceDB = FirebaseSourceApp.firestore();
-  const targetDB = admin.firestore();
+  console.log(req.params.collection);
+  const sourceDB = admin.firestore();
+  // set required dev configuration parameters for different deployment environments(firebase project) using following command
+  // default project in firebase is development deployment
+  // firebase -P production functions:config:set devconfig.param1=value
+  // After setting config variable do not forget to deploy functions
+  // to see set environments firebase -P production functions:config:get
+  const targetAppConfig = functions.config().devconfig;
+  const config = {
+    'apiKey': targetAppConfig.apikey,
+    'authDomain': targetAppConfig.authdomain,
+    'databaseURL': targetAppConfig.databaseurl,
+    'projectId': targetAppConfig.projectid,
+    'storageBucket': targetAppConfig.storagebucket,
+    'messagingSenderId': targetAppConfig.messagingsenderid
+  }
+  // console.log('targetAppConfig', targetAppConfig);
+  const targetDB = admin.initializeApp(config, 'targetApp').firestore();
   sourceDB.collection(req.params.collection).get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-      //  console.log(doc.id, '=>', doc.data());
+        console.log(doc.id, '=>', doc.data());
         targetDB.collection(req.params.collection).doc(doc.id).set(doc.data());
       });
       res.send('loaded data');
