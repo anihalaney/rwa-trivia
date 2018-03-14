@@ -1,5 +1,5 @@
 import { Game, Question, Category, SearchResults, SearchCriteria } from '../src/app/model';
-import { FirebaseConfig } from './firebase.config';
+
 
 const fs = require('fs');
 const path = require('path');
@@ -9,7 +9,7 @@ const elasticsearchConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '
 
 export class ESUtils {
   static QUESTIONS_INDEX = 'questions';
-  static appConfig = new FirebaseConfig().identifyConfigApp(functions.config().firebase);
+
 
   static searchClient: Elasticsearch.Client;
 
@@ -29,11 +29,11 @@ export class ESUtils {
     // to see set environments firebase -P production functions:config:get
     let prefix = 'dev:';
 
-    if (this.appConfig.elasticsearch &&
-      this.appConfig.elasticsearch.index &&
-      this.appConfig.elasticsearch.index.production &&
+    if (functions.config().elasticsearch &&
+     functions.config().elasticsearch.index &&
+     functions.config().elasticsearch.index.production &&
       // tslint:disable-next-line:triple-equals
-      this.appConfig.elasticsearch.index.production == 'true') {
+     functions.config().elasticsearch.index.production == 'true') {
 
       prefix = '';
     }

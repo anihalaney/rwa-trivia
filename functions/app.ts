@@ -1,15 +1,12 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
-import { FirebaseConfig } from './firebase.config'
+
 
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const firebaseConfig = new FirebaseConfig();
-const appConfig = firebaseConfig.identifyConfigApp(functions.config().firebase);
-
-admin.initializeApp(appConfig);
+admin.initializeApp(functions.config().firebase);
 
 const parse = require('csv').parse;
 const fs = require('fs');
@@ -236,13 +233,22 @@ app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
 
   console.log(req.params.collection);
   const sourceDB = admin.firestore();
-  const targetAppConfig = (appConfig.elasticsearch &&
-    appConfig.elasticsearch.index &&
-    appConfig.elasticsearch.index.production &&
-    // tslint:disable-next-line:triple-equals
-    appConfig.elasticsearch.index.production == 'true') ? firebaseConfig.devConfig : firebaseConfig.productionConfig;
+  // set required dev configuration parameters for different deployment environments(firebase project) using following command
+  // default project in firebase is development deployment
+  // firebase -P production functions:config:set devconfig.param1=value
+  // After setting config variable do not forget to deploy functions
+  // to see set environments firebase -P production functions:config:get
+  const targetAppConfig = functions.config().devconfig;
+  const config = {
+    'apiKey': targetAppConfig.apikey,
+    'authDomain': targetAppConfig.authdomain,
+    'databaseURL': targetAppConfig.databaseurl,
+    'projectId': targetAppConfig.projectid,
+    'storageBucket': targetAppConfig.storagebucket,
+    'messagingSenderId': targetAppConfig.messagingsenderid
+  }
   // console.log('targetAppConfig', targetAppConfig);
-  const targetDB = admin.initializeApp(targetAppConfig, 'targetApp').firestore();
+  const targetDB = admin.initializeApp(config, 'targetApp').firestore();
   sourceDB.collection(req.params.collection).get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
