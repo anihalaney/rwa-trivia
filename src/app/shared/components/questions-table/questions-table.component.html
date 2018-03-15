@@ -9,7 +9,7 @@
   </mat-select>
 </div>
 <mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
-  (page)="pageChanged($event)">
+  (page)="pageChanged($event)" >
 </mat-paginator>
 
 <mat-table #table [dataSource]="questionsDS">
@@ -34,7 +34,7 @@
         <!-- <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div> -->
-        <div class="row col-sm-12 col-xs-12" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
+        <div class="row col-sm-12 col-xs-12 question-section" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
           <div class="date">{{row.createdOn | date:'dd MMM yyyy' }}</div>
           <p class="dark">{{row.questionText}}</p>
           <ul class="currentans">
@@ -48,7 +48,7 @@
               <div class="col-sm-3 col-xs-12 question-status">
                 <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:''"></div>
                 <label>
-                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':''">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
+                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
                 </label>
                 <div *ngIf="getDisplayStatus(row.status)==='REJECTED'">
                   <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>

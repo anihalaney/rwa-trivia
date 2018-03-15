@@ -6,18 +6,18 @@
 	@if $theme-class-name == "" {
 		//default theme
 		body {
-			@include color-themes($theme-background, $theme-text, $theme-border, $sprite);
+			@include color-themes($theme-class-name,$theme-background, $theme-text, $theme-border, $sprite);
 		}
 	}
 	@else {
 		body.#{$theme-class-name} {
-			@include color-themes($theme-background, $theme-text, $theme-border, $sprite);
+			@include color-themes($theme-class-name,$theme-background, $theme-text, $theme-border, $sprite);
 		}
 	}
 }
 
-@mixin color-themes($theme-background, $theme-text, $theme-border, $sprite) {
-	@include theme-text-color($theme-text);
-	@include theme-background-color($theme-background, $sprite);
+@mixin color-themes($theme-class-name,$theme-background, $theme-text, $theme-border, $sprite) {
+	@include theme-text-color($theme-class-name,$theme-text);
+	@include theme-background-color($theme-class-name,$theme-background, $sprite);
 	@include theme-border-color($theme-border);
 }
