@@ -1,6 +1,7 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
+import { FirebaseSourceApp } from './config/firebase.config'
 
 
 
@@ -229,8 +230,6 @@ app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 });
 
 app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
-
-
   console.log(req.params.collection);
   const sourceDB = admin.firestore();
   // set required dev configuration parameters for different deployment environments(firebase project) using following command
@@ -252,7 +251,7 @@ app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
   sourceDB.collection(req.params.collection).get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-        console.log(doc.id, '=>', doc.data());
+      //  console.log(doc.id, '=>', doc.data());
         targetDB.collection(req.params.collection).doc(doc.id).set(doc.data());
       });
       res.send('loaded data');
