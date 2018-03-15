@@ -2,7 +2,7 @@
 	.card{ 
 		border-color: map-get($theme, card);
 	}
-	.recentlygames li, .viewall, .navview #statis li, .navview #graph li, .blog-social, .time-stats, .pcategories > .col-sm-9, .tag, .btnbox, .form-group .bar, .questionstatus .tab-content > ul > li, nav .card{ 
+	.recentlygames li, .viewall, .navview #statis li, .navview #graph li, .blog-social, .time-stats, .pcategories > .col-sm-9, .tag, .btnbox, .form-group .bar, .questionstatus .tab-content > ul > li, nav .card,.question-section{ 
 		border-color: map-get($theme, default);
 	}
 	.viewall:after{ 
@@ -11,7 +11,7 @@
 	#currentgame li .innerli{ 
 		border-color: map-get($theme, currentgame-list);
 	}
-	.gameplay li, .questionstatus .tabbing li, .questionstatus .tabbing li.active,.viewbublic, .tag, .avatarimg, #file-name, .custom-file-upload, .expertise,.downloadFile{ 
+	.gameplay li, .questionstatus .tabbing li, .questionstatus .tabbing li.active,.viewbublic, .tag, .avatarimg, #file-name, .expertise{ 
 		border-color: map-get($theme, primary);
 	}
 	input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .subscrib-cont input[type="email"],.custom-file-upload{ 
@@ -102,4 +102,7 @@
 	{
 		border-top-color: map-get($theme, red-before);
 	}
-}	
+	.downloadFile,.custom-file-upload,.rejection-div{ 
+		border-color: map-get($theme, download-btn);
+	}
+} 

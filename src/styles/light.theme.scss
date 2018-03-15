@@ -64,7 +64,10 @@ $light-theme-text-color : (
 	box-hover-lg: #1f7b2b,
 	warning: #FFD04E,
 	reject:#e50051,
-	error:#ff2d55
+	error:#ff2d55,
+	link:#0b55f9,
+	label:#fe4f20,
+	pending:#263238
 );
 
 
@@ -93,9 +96,9 @@ $light-theme-border : (
 	form-checkbox-checked: #1f7b2b,
 	gameplay-wrong:#af3424, 
 	input-box-shadow: inset 5px 5px 5px rgba(0,0,0,0.06),
-
 	categorybox-lg: #ececec,
 	hover-lg: #71b02f,
+	download-btn:#b8b8b8,
 );
 
 @include apply-theme("", $light-theme-background, $light-theme-text-color, $light-theme-border, 'sprite.png')

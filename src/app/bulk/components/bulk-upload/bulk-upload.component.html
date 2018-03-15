@@ -12,7 +12,7 @@
 
     <div class="row">
       <div class="col-sm-9 col-xs-12">
-        <h4 class="T-tagging">CSV FILE FORMAT</h4>
+        <h4 class="label">CSV FILE FORMAT</h4>
       </div>
 
       <div class="col-sm-8 col-xs-12">
@@ -22,7 +22,7 @@
       <div class="col-md-1 col-xs-4 downloadFile">
         <div class="sprite downloadicon col-md-offset-3 col-xs-offset-3"></div>
         <div>
-          <a target="new" href="/assets/Sample Questions.csv">Download
+          <a target="new" href="/assets/Sample Questions.csv" >Download
             <p>Sample File</p>
           </a>
         </div>
@@ -31,7 +31,7 @@
 
     <div class="row">
       <div class="col-sm-9 col-xs-12">
-        <h4 class="T-tagging">QUESTIONS & CATEGORY</h4>
+        <h4 class="label">QUESTIONS & CATEGORY</h4>
       </div>
       <div class="col-sm-8 col-xs-12">
         <p> You can only submit questions of a single category in a single file. For questions spanning multiple categories,
@@ -40,7 +40,7 @@
     </div>
     <div class="row">
       <div class="col-sm-9 col-xs-12">
-        <h4 class="T-tagging">SINGLE TOPIC WITH SINGLE PRIMARY TAG</h4>
+        <h4 class="label">SINGLE TOPIC WITH SINGLE PRIMARY TAG</h4>
       </div>
       <div class="col-sm-8 col-xs-12">
         <p> It is recommended to keep all questions in a file related with a single topic and have a single primary tag.</p>
@@ -65,7 +65,7 @@
     <mat-horizontal-stepper [linear]="isLinear" class="bulk-upload-summary" alternativeLabel>
       <mat-step [stepControl]="uploadFormGroup">
         <form [formGroup]="uploadFormGroup" class="upload-questions">
-          <ng-template matStepLabel>UPLOAD QUESTIONS</ng-template>
+          <ng-template matStepLabel class>UPLOAD QUESTIONS</ng-template>
           <h2>
             <b>Upload Questions</b>
           </h2>
