@@ -8,7 +8,6 @@ import '../../rxjs-extensions';
 import { CONFIG } from '../../../environments/environment';
 import { User, GameOptions, Game, Question, PlayerQnA }     from '../../model';
 import { Store } from '@ngrx/store';
-import { AppStore } from '../store/app-store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
 
@@ -16,7 +15,6 @@ import { Utils } from '../services/utils';
 export class GameService {
   constructor(private db: AngularFirestore,
               private http: HttpClient,
-              private store: Store<AppStore>,
               private gameActions: GameActions) { 
   }
 
@@ -43,7 +41,7 @@ export class GameService {
               .map(gs => gs.map(g => Game.getViewModel(g)));
   }
 
-  getGame(gameId: string, user: User): Observable<Game> {
+  getGame(gameId: string): Observable<Game> {
     return this.db.doc('/games/' + gameId)
     .valueChanges()
     .map(g => Game.getViewModel(g));

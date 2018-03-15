@@ -3,8 +3,8 @@
   "project": {
     "name": "trivia"
   },
-  "apps": [
-    {
+  "apps": [{
+      "name": "trivia",
       "root": "src",
       "outDir": "dist",
       "assets": [
@@ -28,7 +28,7 @@
       "scripts": [],
       "environmentSource": "environments/environment.ts",
       "environments": {
-        "dev": "environments/environment.ts",
+        "dev": "environments/environment.dev.ts",
         "prod": "environments/environment.prod.ts"
       }
     }

@@ -1,5 +1,5 @@
 @mixin theme-text-color($theme) {
-	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic{ 
+	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell{ 
 		color: map-get($theme, primary);
 	}
 	.question-list li label{ 
@@ -11,7 +11,7 @@
 	footer a{ 
 		color: map-get($theme, footer);
 	}
-	.startgame, .btn, .question-list li input:checked ~ label, .optionbox .radiobtn input:checked + label, .optionbox input:checked + label .dark, .optionbox input:checked + label .light, .landinginner, .gameplay li.right, .gameplay li.wrong{ 
+	.startgame, .btn, .question-list li input:checked ~ label, .optionbox .radiobtn input:checked + label, .optionbox input:checked + label .dark, .optionbox input:checked + label .light, .landinginner, .gameplay li.right, .gameplay li.wrong,.view-reason-btn,.edit-btn{ 
 		color: map-get($theme, btn-text);
 	}
 
@@ -45,7 +45,7 @@
 	.T-tagging{ 
 		color: map-get($theme, tags);
 	}
-	.viewall, .viewcount, a.dark:hover,.gameplay p a, .loginlink a.forgot{ 
+	.viewall, .viewcount, a.dark:hover,.gameplay p a, .loginlink a.forgot,.custom-file-upload{ 
 		color: map-get($theme, viewall);
 	}
 	.logininner .heading, .form-group .control-label, .logininner .formfield label, .logininner .withsocial h3{ 
@@ -57,7 +57,7 @@
 	.loginlink a{ 
 		color: map-get($theme, login-link);
 	}
-	.resubmit{
+	.resubmit,.status-approved{
 		color: map-get($theme, resubmit);
 	}
 	.blog-social{ 
@@ -82,6 +82,20 @@
 	.mat-dialog-container {
 		color: map-get($theme, primary) !important;
 	}
+	.status-rejected{ 
+		color: map-get($theme, reject);
+	}
+	.status-change-request
+	{
+		color: map-get($theme, warning);
+		
+	}
+	.csv-error-msg
+	{
+		color: map-get($theme, error);
+		
+	}
+	
 
 	@media screen and ( min-width:1000px){
 		.playwith a:hover, .viewall:hover, .blog .card:hover h2 a, .breadcrumbs a:hover, .chancat:hover{ 

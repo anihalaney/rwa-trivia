@@ -3,14 +3,14 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CdkTableModule } from '@angular/cdk/table';
-
+import { ImageCropperModule } from 'ngx-img-cropper';
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 
 import {
   QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-  BulkSummaryTableComponent, BulkSummaryQuestionComponent
+  QuestionFormComponent,RejectedQuestionContentComponent
 } from './components';
 
 @NgModule({
@@ -19,35 +19,32 @@ import {
     QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
-    BulkSummaryTableComponent,
-    BulkSummaryQuestionComponent
+    QuestionFormComponent,
+    RejectedQuestionContentComponent
   ],
   imports: [
     CommonModule,
 
-    //http client
+    // http client
     HttpClientModule,
-
     // Forms
     ReactiveFormsModule,
-
-    //cdk
+    // cdk
     CdkTableModule,
-
-    //Material
+    // Material
     SharedMaterialModule,
-
-    //Flex
+    // Flex
     FlexLayoutModule,
-
-    RouterModule
+    RouterModule,
+    ImageCropperModule
 
   ],
   providers: [
   ],
   exports: [QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-    BulkSummaryTableComponent, BulkSummaryQuestionComponent, CommonModule, HttpClientModule, ReactiveFormsModule,
-    FlexLayoutModule,
-    SharedMaterialModule, CdkTableModule]
+    CommonModule, HttpClientModule, ReactiveFormsModule,
+    FlexLayoutModule, QuestionFormComponent,
+    SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
+    ImageCropperModule]
 })
 export class SharedModule { }

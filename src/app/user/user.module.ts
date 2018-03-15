@@ -1,17 +1,22 @@
 import { NgModule } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
-import { SharedModule } from  '../shared/shared.module';
-import { UserRoutingModule } from  './routing/user-routing.module';
+import { SharedModule } from '../shared/shared.module';
+import { UserRoutingModule } from './routing/user-routing.module';
 
-import { 
-  ProfileCardComponent, 
+import { effects, reducer } from './store';
+
+import {
+  ProfileCardComponent,
   UserStatsCardComponent,
   GameCardComponent,
   GameInviteComponent,
   RecentGamesComponent,
   ProfileSettingsComponent,
   MyQuestionsComponent,
-  QuestionAddUpdateComponent} from  './components';
+  QuestionAddUpdateComponent
+} from './components';
 
 @NgModule({
   declarations: [
@@ -25,13 +30,19 @@ import {
     QuestionAddUpdateComponent
   ],
   imports: [
-    //rwa modules
+    // rwa modules
     SharedModule,
-    UserRoutingModule
+    UserRoutingModule,
+
+    //ngrx feature store
+    StoreModule.forFeature('user', reducer),
+
+    //ngrx effects
+    EffectsModule.forFeature(effects),
+
   ],
-  providers: [ 
-  ],                                                                      
-  exports:  [ 
+  providers: [],
+  exports: [
     ProfileCardComponent,
     UserStatsCardComponent,
     GameCardComponent,

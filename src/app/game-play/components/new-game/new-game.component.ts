@@ -5,7 +5,9 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../../core/store/app-store';
+import * as gameplayactions from '../../store/actions';
+import { AppState, appState } from '../../../store';
+
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
 import { Category, GameOptions, GameMode, User }     from '../../../model';
@@ -38,23 +40,23 @@ export class NewGameComponent implements OnInit, OnDestroy {
     return this.newGameForm.get('categoriesFA') as FormArray; 
   }
   constructor(private fb: FormBuilder,
-              private store: Store<AppStore>,
+              private store: Store<AppState>,
               private gameActions: GameActions,
               private router: Router) {
-    this.categoriesObs = store.select(s => s.categories);
-    this.tagsObs = store.select(s => s.tags);
+    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
+    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
     this.selectedTags = [];
   }
 
   ngOnInit() {
-    this.store.dispatch(this.gameActions.resetNewGame());
+    this.store.dispatch(new gameplayactions.ResetNewGame());
 
     this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
-    this.sub3 = this.store.select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
+    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
       console.log("Navigating to game: " + gameId);
       this.router.navigate(['/game-play', gameId]);
-      this.store.dispatch(this.gameActions.resetCurrentQuestion());
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     })
 
     this.gameOptions = new GameOptions();
@@ -183,9 +185,9 @@ export class NewGameComponent implements OnInit, OnDestroy {
   
   startNewGame(gameOptions: GameOptions) {
     let user: User;
-    this.store.take(1).subscribe(s => user = s.user); //logged in user
+    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user); //logged in user
 
-    this.store.dispatch(this.gameActions.createNewGame({gameOptions: gameOptions, user: user}));
+    this.store.dispatch(new gameplayactions.CreateNewGame({gameOptions: gameOptions, user: user}));
   }
 
   getGameOptionsFromFormValue(formValue: any): GameOptions {

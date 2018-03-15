@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs/Observable';
-import {Action} from '@ngrx/store';
-
-import {ActionWithPayload, UserActions} from '../actions';
-import {User} from '../../../model';
+import { Action } from '@ngrx/store';
+import { ActionWithPayload, UserActions } from '../actions';
+import { User } from '../../../model';
 
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
@@ -24,3 +23,4 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
       return state;
   }
 }
+

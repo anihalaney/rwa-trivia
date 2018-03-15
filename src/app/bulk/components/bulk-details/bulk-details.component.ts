@@ -2,11 +2,9 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { PageEvent } from '@angular/material';
-import { AppStore } from '../../../core/store/app-store';
-import { User, Category, SearchResults, Question } from '../../../model';
-import { DataSource } from '@angular/cdk/table';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { AppState, appState, categoryDictionary } from '../../../store';
+import { User, Category, Question } from '../../../model';
+
 
 @Component({
   selector: 'bulk-details',
@@ -20,17 +18,15 @@ export class BulkDetailsComponent implements OnChanges {
   questions: Question[];
   totalCount: number;
 
-
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
     private router: Router) {
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
+    this.categoryDictObs = store.select(categoryDictionary);
   }
 
   ngOnChanges() {
     if (this.parsedQuestions) {
       this.totalCount = this.parsedQuestions.length;
     }
-
   }
 }
 
