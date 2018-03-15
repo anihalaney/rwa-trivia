@@ -109,7 +109,7 @@
 		background: map-get($theme, subscribe-email);
 	}
 	.bulk-summary-header{
-		background: map-get($theme, nav-sm);
+		background: map-get($theme, table-header);
 	}
 	
 
@@ -165,7 +165,7 @@
 	.csv-error-msg{ 
 		background: map-get($theme,error-message); 
 	}
-	.downloadFile,.rejection-div{ 
+	.downloadFile,.rejection-div,.edit-form-div{ 
 		background: map-get($theme, download-btn);
 	}
 	
