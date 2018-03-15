@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import '../../../rxjs-extensions';
 
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState } from '../../../store';
 
 import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { GameQuestionComponent } from '../game-question/game-question.component';
@@ -26,13 +26,13 @@ export class GameComponent implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<GameDialogComponent>;
 
-  constructor(private store: Store<AppStore>,
+  constructor(private store: Store<AppState>,
               public dialog: MatDialog, 
               private route: ActivatedRoute, 
               private router: Router) { }
 
   ngOnInit() {
-    this.store.take(1).subscribe(s => this.user = s.user); //logged in user
+    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user); //logged in user
 
     this.route.params.subscribe((params: Params) => { 
       this.gameId = params['id'] ;
@@ -50,7 +50,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    console.log("openDialog");
+  //  console.log("openDialog");
     this.dialogRef = this.dialog.open(GameDialogComponent, {
       disableClose: false,
       data: { "gameId": this.gameId, "user": this.user }

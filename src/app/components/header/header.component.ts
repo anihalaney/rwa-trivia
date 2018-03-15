@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { AppStore } from '../../core/store/app-store';
 import { User } from '../../model';
 
 @Component({
@@ -16,14 +15,18 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() logoutClicked = new EventEmitter();
   @Output() loginClicked = new EventEmitter();
   @Output() toggleThemeClicked = new EventEmitter();
-  
-  constructor(private store: Store<AppStore>,
-              private router: Router) {
-  }
+
+  constructor(private router: Router) { }
 
   ngOnInit() {
   }
 
+
+  navigateUrl() {
+    this.router.navigate(['my/profile', this.user.userId]);
+  }
+
   ngOnDestroy() {
   }
+
 }

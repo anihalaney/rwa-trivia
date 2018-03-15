@@ -2,8 +2,26 @@
 	input, textarea, select, button { 
 		background: map-get($theme, input);
 	}
+	.matHeader > div > button , .matHeader > div > div > button, .matHeader,.downloadFile {
+		@if $theme='dark' {
+			background: #FFF;
+			color:rgba(0, 0, 0, 0.54);
+		}
+	}
+
+	.color-black{
+		@if $theme='dark' {
+			color:#282828;
+		}
+	}
+	.color-white > span, .color-white{
+		@if $theme='dark' {
+			color:#FFF;
+		}
+	}
+
 	/*Header*/
-	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox { 
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit, .tag,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary,.bulk-summary-table,.add-tag-btn { 
 		background: map-get($theme, card);
 	}
 	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
@@ -18,19 +36,19 @@
 	.question-list li label{ 
 		background: map-get($theme, question-list-label);
 	}
-	.question-list li label:hover{ 
+	.question-list li label:hover,.btn-back{ 
 		background: map-get($theme, li-hover); 
 	}
-	#curentactive{ 
-		background: map-get($theme, current-active);
-	}
+	// #curentactive{ 
+	// 	background: map-get($theme, current-active);
+	// }
 	.playwith a:after{ 
 		background: map-get($theme, playwith-after);
 	}
 	.headermain{ 
 		background: map-get($theme, header);
 	}
-	.startgame{ 
+	.startgame,.view-reason-btn,.csv-error-msg{ 
 		background: map-get($theme, button-important); 
 	}
 	.btn, .question-list li input:checked ~ label, .optionbox input:checked + label, .formfield input[type="checkbox"]:checked:before,.enterquestion .formfield input[type="radio"]:checked:before, .gameplay li.right,.questionstatus .tabbing li:after{ 
@@ -48,7 +66,7 @@
 	.formfield input[type="checkbox"]:disabled:before { 
 		background: map-get($theme, form-checkbox-disabled);
 	}
-	.approval{ 
+	.approval,.edit-btn{ 
 		background: map-get($theme, button-warning); 
 	}
 	.reasons{ 
@@ -63,6 +81,10 @@
 	.subscrib-cont input[type="email"]{ 
 		background: map-get($theme, subscribe-email);
 	}
+	.bulk-summary-header{
+		background: map-get($theme, nav-sm);
+	}
+	
 
 	@media screen and ( min-width:1000px){
 		.startgame:hover{ 
@@ -112,6 +134,9 @@
 		background-color: #fff;
 		background-image: url(/assets/images/#{$sprite});
 		background-repeat: no-repeat;
+	}
+	.csv-error-msg{ 
+		background: map-get($theme,error-message); 
 	}
 	
 }

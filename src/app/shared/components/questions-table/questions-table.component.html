@@ -7,11 +7,10 @@
     <mat-option [value]="'UpdatedTimeDesc'">Updated On (Latest)</mat-option>
     <mat-option [value]="'UpdatedTimeAsc'">Updated On (Earliest)</mat-option>
   </mat-select>
-
-  <mat-paginator *ngIf="showPaginator" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
-    (page)="pageChanged($event)">
-  </mat-paginator>
 </div>
+<mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
+  (page)="pageChanged($event)">
+</mat-paginator>
 
 <mat-table #table [dataSource]="questionsDS">
 
@@ -30,47 +29,47 @@
   <!-- Question Column -->
   <ng-container cdkColumnDef="questionText">
     <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
-    <mat-cell *cdkCellDef="let row" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
-      <div class="row" *ngIf="row !== editQuestion">        
-        <div *ngIf="getDisplayStatus(row.status)==='REQUEST_TO_CHANGE' || showButtons" class="col-xs-12 textrigth">
+    <mat-cell *cdkCellDef="let row;let i = index" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
+      <div *ngIf="row !== editQuestion && row !== viewReasonArray[i]">
+        <!-- <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="col-xs-12 textrigth">
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
-        </div>
-        <br />
-        <br />
-        <br />
-        <br />
-        <div class="col-sm-12 col-xs-12">
-          <div class="col-sm-9 col-xs-9"></div>
-          <div class="col-sm-3 col-xs-3">
-            <mat-chip-list>
-              <mat-chip color="primary">{{getDisplayStatus(row.status)}}</mat-chip>
-            </mat-chip-list>
-          </div>
-        </div>
-        <div class="col-sm-12 col-xs-12">
-          <div class="date">13 May 2017</div>
-          <p>{{row.questionText}}</p>
+        </div> -->
+        <div class="row col-sm-12 col-xs-12" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
+          <div class="date">{{row.createdOn | date:'dd MMM yyyy' }}</div>
+          <p class="dark">{{row.questionText}}</p>
           <ul class="currentans">
             <li>
-              <div class="dark">Correct answer :</div>
-              <div class="light">
+              <div class="question-text ">Correct answer :</div>
+              <div class="answer-text">
                 <span *ngFor="let answer of row.answers">
                   <span *ngIf="answer.correct">{{answer.answerText}}</span>
                 </span>
               </div>
+              <div class="col-sm-3 col-xs-12 question-status">
+                <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:''"></div>
+                <label>
+                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':''">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
+                </label>
+                <div *ngIf="getDisplayStatus(row.status)==='REJECTED'">
+                  <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
+                </div>
+                <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons">
+                  <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
+                </div>
+              </div>
             </li>
             <li>
-              <div class="dark">Other options :</div>
-              <div class="light">
+              <div class="question-text ">Other options :</div>
+              <div class="answer-text">
                 <span *ngFor="let answer of row.answers">
                   <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
                 </span>
               </div>
             </li>
             <li>
-              <div class="textleft">
-                <div class="dark">Category :</div>
-                <div class="light">
+              <div class="textleft ">
+                <div class="question-text ">Category :</div>
+                <div class="answer-text">
                   <span *ngFor="let id of row.categoryIds">
                     {{categoryDictionary[id].categoryName}}
                   </span>
@@ -79,17 +78,28 @@
 
             </li>
             <li>
-              <div class="dark">Tags :</div>
-              <div class="light">
+              <div class="question-text ">Tags :</div>
+              <div class="answer-text">
                 <span *ngFor="let tag of row.tags">
                   {{tag}},
                 </span>
               </div>
             </li>
-            <li *ngIf="row.reason">
-              <div class="dark">Reason :</div>
-              <div class="light">
-                {{row.reason}}
+            <li *ngIf="row.validationErrorMessages?.length > 0">
+              <div class="csv-error-msg">
+                <p>ERROR :</p>
+                <div>
+                  <span *ngFor="let error of row.validationErrorMessages;let last = last;">
+                    - {{error}}
+                    <label *ngIf="last!=error && $index > 0">,</label>
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li *ngIf="viewReasonArray.length>0 && viewReasonArray[i] && viewReasonArray[i].val">
+              <div class="question-text ">Reason :</div>
+              <div class="answer-text">
+                {{viewReasonArray[i].reason}}
               </div>
             </li>
           </ul>
@@ -134,91 +144,11 @@
           </div>
         </div>
       </div>
-      <div class="row" *ngIf="row === editQuestion">
-
-        <form (ngSubmit)="onSubmit()" class="question-form" [formGroup]="questionForm" novalidate>
-
-          <div class="mainpage submitpage">
-            <div class="row hidden-xs">
-              <div class="pageheading col-sm-6 col-xs-12">Update Question</div>
-            </div>
-            <section id="curentactive" class="card">
-              <div class="optionbox">
-                <!-- Category -->
-                <div class="pcategories">
-                  <h2>
-                    <span>Select the category for bulk upload:</span>
-                  </h2>
-                  <div class="row">
-                    <div class="formfield">
-                      <select placeholder="Select Category" class="required" formControlName="category">
-                        <option *ngFor="let category of categories" [selected]="category.id == editQuestion.categoryIds" [value]="category.id">
-                          {{category.categoryName}}
-                        </option>
-                      </select>
-                      <p *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine" class="error">
-                        Select a category
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <!-- Category end -->
-              </div>
-
-              <!-- Enter Your Question -->
-              <div class="enterquestion secondbg">
-                <div class="optionbox">
-                  <h2>
-                    <span>Enter Your Question:</span>
-                  </h2>
-                  <textarea class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"></textarea>
-                  <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</p>
-
-                  <h3>Answers</h3>
-                  <ng-container formArrayName="answers">
-                    <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
-                      <label>
-                        <input type="checkbox" formControlName="correct">
-                      </label>
-                      <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required">
-                    </div>
-                  </ng-container>
-                  <div class="error" *ngIf="!answers.valid && !answers.pristine">
-                    All answers required
-                  </div>
-                  <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
-                    Pick one and only one correct answer
-                  </div>
-
-                  <div class="tags">
-                    <p>Tags associated categories</p>
-                    <div data-tags-input-name="tag" id="tagBox" class="tagging">
-                      <mat-chip-list>
-                        <!-- <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
-                          {{tag}}
-                        </mat-basic-chip> -->
-                        <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
-                          {{tag}}
-                          <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-                        </mat-basic-chip>
-                      </mat-chip-list>
-                      <input class="type-zone" contenteditable="true" formControlName="tags">
-                      <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
-                      <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
-                        Must have atleast 3 tags
-                      </div>
-                    </div>
-                  </div>
-                  <div class="savebox">
-                    <button class="btn startg" type="submit" [disabled]="!questionForm.valid">Update</button>                
-                                      
-                  </div>
-                </div>
-              </div>
-              <!-- Enter Your Question end -->
-            </section>
-          </div>
-        </form>
+      <div class="row edit-form-div" *ngIf="row === editQuestion">
+        <app-question-form [editQuestion]="editQuestion" (updateStatus)=nullifyQuestion($event)></app-question-form>
+      </div>
+      <div class="row rejection-div" *ngIf="row === viewReasonArray[i]">
+        <app-rejected-question-content [rejectQuestion]="viewReasonArray[i]" (cancelStatus)=showQuestion($event)></app-rejected-question-content>
       </div>
 
     </mat-cell>
@@ -229,10 +159,10 @@
     <mat-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </mat-cell>
   </ng-container>
 
-  <mat-header-row *cdkHeaderRowDef="['questionText']"></mat-header-row>
+  <!-- <mat-header-row *cdkHeaderRowDef="['questionText']"></mat-header-row> -->
   <mat-row class="row-question" *cdkRowDef="let row; columns: ['questionText'];"></mat-row>
 </mat-table>
 
-<mat-paginator *ngIf="showPaginator" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
-  (page)="pageChanged($event)">
+<mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
+  (page)="pageChanged($event)" class="paginator-position">
 </mat-paginator>

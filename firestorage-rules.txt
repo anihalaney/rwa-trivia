@@ -1,4 +1,19 @@
 service firebase.storage {
+
+function isAuthenticated() {
+    return request.auth != null;
+  }
+ // Add uid of admin user 
+ // This is temp solution for time being till fetching role from user document does not work
+  function isAdmin() {
+  	return isAuthenticated() && 
+    			(request.auth.uid == '');
+  }
+
+  function isUserAuthenticated(userId) {
+    return isAuthenticated() && request.auth.uid == userId;
+  }
+  
   match /b/{bucket}/o {
     match /templates {
       // Anyone can view any template file
@@ -18,11 +33,34 @@ service firebase.storage {
       // request.resource != null, ensure that delete operation is not allowed
       // resource == null, ensure that update/overwrite operation on file is not allowed
       match /{allFiles=**} {
-        allow write: if request.auth != null
-        							&& request.auth.uid == userId
+        allow write: if isUserAuthenticated(userId)
                       && request.resource != null
                       && resource == null;
+        allow read:  if isUserAuthenticated(userId)
+        							|| isAdmin();                      
       }
     }
+    
+    match /profile/{userId} {
+      // user profile, only authenticated user allowed to write
+      // only user is allowed to write user profile
+      // request.resource != null, ensure that delete operation is not allowed
+      // resource == null, ensure that update/overwrite operation on file is not allowed      
+      match /avatar {
+        match /{allFiles=**} {
+          allow write: if isUserAuthenticated(userId)
+                        && request.resource != null
+                        && resource == null;  
+          allow read:  if isAuthenticated(); 
+          }
+      }
+      match /original {
+        match /{allFiles=**} {
+          allow write: if isUserAuthenticated(userId)
+                        && request.resource != null
+                        && resource == null;           
+          }
+      }
+    }    
   }
 }
