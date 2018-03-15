@@ -1,7 +1,8 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
-import { FirebaseSourceApp } from './config/firebase.config'
+
+
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -230,13 +231,28 @@ app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
 
 
-//  console.log(req.params.collection);
-  const sourceDB = FirebaseSourceApp.firestore();
-  const targetDB = admin.firestore();
+  console.log(req.params.collection);
+  const sourceDB = admin.firestore();
+  // set required dev configuration parameters for different deployment environments(firebase project) using following command
+  // default project in firebase is development deployment
+  // firebase -P production functions:config:set devconfig.param1=value
+  // After setting config variable do not forget to deploy functions
+  // to see set environments firebase -P production functions:config:get
+  const targetAppConfig = functions.config().devconfig;
+  const config = {
+    'apiKey': targetAppConfig.apikey,
+    'authDomain': targetAppConfig.authdomain,
+    'databaseURL': targetAppConfig.databaseurl,
+    'projectId': targetAppConfig.projectid,
+    'storageBucket': targetAppConfig.storagebucket,
+    'messagingSenderId': targetAppConfig.messagingsenderid
+  }
+  // console.log('targetAppConfig', targetAppConfig);
+  const targetDB = admin.initializeApp(config, 'targetApp').firestore();
   sourceDB.collection(req.params.collection).get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-      //  console.log(doc.id, '=>', doc.data());
+        console.log(doc.id, '=>', doc.data());
         targetDB.collection(req.params.collection).doc(doc.id).set(doc.data());
       });
       res.send('loaded data');
@@ -337,87 +353,87 @@ exports.app = functions.https.onRequest(app);
 /*
 app.get('/parseCsv', adminOnly, (req, res, next) => {
 
-    let categories: Category[] = [];
-    let catRef = admin.database().ref("/categories");
-    catRef.once("value", function(cs) {
-      cs.forEach(c => {
-        //console.log(c.key);
-        //console.log(c.val());
-        let category: Category = { "id": c.key, "categoryName": c.val()["categoryName"]};
-        categories.push(category);
-        return;
-      })
+ let categories: Category[] = [];
+ let catRef = admin.database().ref("/categories");
+ catRef.once("value", function(cs) {
+ cs.forEach(c => {
+ //console.log(c.key);
+ //console.log(c.val());
+ let category: Category = { "id": c.key, "categoryName": c.val()["categoryName"]};
+ categories.push(category);
+ return;
+ })
 
-      console.log(categories);
+ console.log(categories);
 
-      let ouput = [];
-      let parser = parse({delimiter: ':'});
+ let ouput = [];
+ let parser = parse({delimiter: ':'});
 
-      fs.readFile('C:\\Users\\Akshay\\Dropbox\\Blog\\Real World Angular\\Question Data\\Question Format_batch - Akshay.csv', (err, data) => {
-        if (err) throw err;
+ fs.readFile('C:\\Users\\Akshay\\Dropbox\\Blog\\Real World Angular\\Question Data\\Question Format_batch - Akshay.csv', (err, data) => {
+ if (err) throw err;
 
-        parse(data, {"columns": true, "skip_empty_lines": true},
-          function(err, output){
-            let questions: Question [] =
-            output.map(element => {
-              let question: Question = new Question();
-              question.questionText = element["Question"];
-              question.answers = [
-                { "id": 1, "answerText": element["Option 1"], correct: false },
-                { "id": 2, "answerText": element["Option 2"], correct: false },
-                { "id": 3, "answerText": element["Option 3"], correct: false },
-                { "id": 4, "answerText": element["Option 4"], correct: false }
-              ]
-              question.answers[element["Answer Index"] - 1].correct = true;
-              question.id = "0";
+ parse(data, {"columns": true, "skip_empty_lines": true},
+ function(err, output){
+ let questions: Question [] =
+ output.map(element => {
+ let question: Question = new Question();
+ question.questionText = element["Question"];
+ question.answers = [
+ { "id": 1, "answerText": element["Option 1"], correct: false },
+ { "id": 2, "answerText": element["Option 2"], correct: false },
+ { "id": 3, "answerText": element["Option 3"], correct: false },
+ { "id": 4, "answerText": element["Option 4"], correct: false }
+ ]
+ question.answers[element["Answer Index"] - 1].correct = true;
+ question.id = "0";
 
-              question.tags = [];
-              for (let i = 1; i < 10; i++)
-              {
-                if (element["Tag " + i] && element["Tag " + i] != "")
-                  question.tags.push(element["Tag " + i]);
-              }
-              question.categoryIds = [];
-              let category = categories.find(c => c.categoryName == element["Category"]);
-              if (category)
-                question.categoryIds.push(category.id);
+ question.tags = [];
+ for (let i = 1; i < 10; i++)
+ {
+ if (element["Tag " + i] && element["Tag " + i] != "")
+ question.tags.push(element["Tag " + i]);
+ }
+ question.categoryIds = [];
+ let category = categories.find(c => c.categoryName == element["Category"]);
+ if (category)
+ question.categoryIds.push(category.id);
 
-              question.published = false;
-              //validations
-              if (element["Status"] != "Approved")
-                //status - not approved
-                question.explanation = "status - not approved";
-              else if (question.categoryIds.length == 0)
-                //No Category Found
-                question.explanation = "No Category Found";
-              else if (question.tags.length < 2)
-                //Not enough tags
-                question.explanation = "Not enough tags";
-              else if (question.answers.filter(a => a.correct).length !== 1)
-                //Must have exactly one correct answer
-                question.explanation = "Must have exactly one correct answer";
-              else if (question.answers.filter(a => !a.answerText || a.answerText.trim() === "").length > 0)
-                //Missing Answer
-                question.explanation = "Missing Answer";
-              else if (!question.questionText || question.questionText.trim() === "")
-                //Missing Question
-                question.explanation = "Missing Question";
-              else
-                question.published = true;
+ question.published = false;
+ //validations
+ if (element["Status"] != "Approved")
+ //status - not approved
+ question.explanation = "status - not approved";
+ else if (question.categoryIds.length == 0)
+ //No Category Found
+ question.explanation = "No Category Found";
+ else if (question.tags.length < 2)
+ //Not enough tags
+ question.explanation = "Not enough tags";
+ else if (question.answers.filter(a => a.correct).length !== 1)
+ //Must have exactly one correct answer
+ question.explanation = "Must have exactly one correct answer";
+ else if (question.answers.filter(a => !a.answerText || a.answerText.trim() === "").length > 0)
+ //Missing Answer
+ question.explanation = "Missing Answer";
+ else if (!question.questionText || question.questionText.trim() === "")
+ //Missing Question
+ question.explanation = "Missing Question";
+ else
+ question.published = true;
 
-              return question;
-            });
+ return question;
+ });
 
-            let ref = admin.database().ref("/testQ"); // /questions/published
-            questions.filter(q => q.published).forEach(q => {
-              ref.push(q);
-            });
-            //res.send(output);
-            res.send(questions);
-        });
-      });
+ let ref = admin.database().ref("/testQ"); // /questions/published
+ questions.filter(q => q.published).forEach(q => {
+ ref.push(q);
+ });
+ //res.send(output);
+ res.send(questions);
+ });
+ });
 
-    });
+ });
 
 });
 */
