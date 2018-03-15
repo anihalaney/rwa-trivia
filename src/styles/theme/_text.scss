@@ -1,5 +1,5 @@
 @mixin theme-text-color($selected-theme-name,$theme) {
-	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.matStepLabel{ 
+	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.bulk-summary-table-cell a,.matStepLabel{ 
 		color: map-get($theme, primary);
 	}
 	.question-list li label{ 
@@ -123,7 +123,7 @@
 		}
 	}
 
-	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label{
+	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label,.mat-tab-label,.mat-header-cell{
 		@if $selected-theme-name == 'dark' {
 			color:#fff;
 			
