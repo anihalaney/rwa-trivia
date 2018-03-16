@@ -2,19 +2,19 @@ import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } 
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Utils } from '../../../core/services';
-import { AppStore } from '../../../core/store/app-store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
 import { Question, QuestionStatus, Category, User, Answer } from '../../../model';
-import { QuestionActions } from '../../../core/store/actions';
+
+import { AppState, appState, getCategories, getTags } from '../../../store';
+import * as bulkActions from '../../../bulk/store/actions';
+
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
   styleUrls: ['./question-form.component.scss']
 })
 export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
-
 
   @Input() editQuestion: Question;
   @Output() updateStatus = new EventEmitter<boolean>();
@@ -40,13 +40,10 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     return this.questionForm.get('tagsArray') as FormArray;
   }
 
-  constructor(
-    private store: Store<AppStore>,
-    private questionActions: QuestionActions,
-    private fb: FormBuilder
-  ) {
-    this.categoriesObs = this.store.select(s => s.categories);
-    this.tagsObs = this.store.select(s => s.tags);
+  constructor(private store: Store<AppState>,
+    private fb: FormBuilder) {
+    this.categoriesObs = store.select(getCategories);
+    this.tagsObs = this.store.select(getTags);
 
   }
 
@@ -155,7 +152,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     // get question object from the forms
     const question: Question = this.getQuestionFromFormValue(this.questionForm.value);
     question.id = this.editQuestion.id;
-    question.status = this.editQuestion.status === QuestionStatus.REQUEST_TO_CHANGE ? QuestionStatus.PENDING : this.editQuestion.status;
+    question.status = this.editQuestion.status === QuestionStatus.REQUIRED_CHANGE ? QuestionStatus.PENDING : this.editQuestion.status;
     question.bulkUploadId = this.editQuestion.bulkUploadId ? this.editQuestion.bulkUploadId : '';
     question.categoryIds = [];
 
@@ -189,7 +186,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateQuestion(question: Question) {
-    this.store.dispatch(this.questionActions.updateQuestion(question));
+    // this.store.dispatch(this.questionActions.updateQuestion(question));
+    this.store.dispatch(new bulkActions.UpdateQuestion({ question: question }));
     this.updateStatus.emit(true);
   }
 
@@ -207,5 +205,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
+  }
+  showQuestion() {
+    this.updateStatus.emit(true);
   }
 }

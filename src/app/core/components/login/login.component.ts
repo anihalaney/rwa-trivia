@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
-import { AppStore } from '../../store/app-store';
+import { AppState } from '../../../store';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -35,8 +35,7 @@ export class LoginComponent implements OnInit {
       }, {validator: loginFormValidator}
     );
 
-    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
-      //console.log(mode);
+    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {     
       switch (mode) {
         case 1:
           //Signup

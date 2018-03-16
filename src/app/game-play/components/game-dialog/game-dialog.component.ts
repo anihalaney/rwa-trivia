@@ -5,7 +5,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 import '../../../rxjs-extensions';
 
-import { AppStore } from '../../../core/store/app-store';
+import * as gameplayactions from '../../store/actions';
+import { categoryDictionary } from '../../../store';
+import { gameplayState, GamePlayState } from '../../store';
 
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
@@ -41,7 +43,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
 
-  constructor(private store: Store<AppStore>, private gameActions: GameActions,
+  constructor(private store: Store<GamePlayState>, private gameActions: GameActions,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     
     this._gameId = data.gameId;
@@ -49,16 +51,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
-    this.gameObs = store.select(s => s.currentGame).filter(g => g != null);
-    this.gameQuestionObs = store.select(s => s.currentGameQuestion);
+    this.gameObs = store.select(gameplayState).select(s => s.currentGame).filter(g => g != null);
+    this.gameQuestionObs = store.select(gameplayState).select(s => s.currentGameQuestion);
   }
 
   ngOnInit() {
-    //this.store.take(1).subscribe(s => this.user = s.user); //logged in user
-
-    this.store.dispatch(this.gameActions.loadGame({"gameId": this._gameId, "user": this.user}));
-
-    this.store.select(s => s.categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
+    this.store.select(categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
@@ -86,7 +84,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           },
           null,
           () => {
-            console.log("Time Expired");
+           // console.log("Time Expired");
             //disable all buttons
             this.afterAnswer();
           });
@@ -97,7 +95,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   getNextQuestion()
   {
-    this.store.dispatch(this.gameActions.getNextQuestion({"game": this.game}));
+    this.store.dispatch(new gameplayactions.GetNextQuestion(this.game));
   }
 
   answerClicked($event: number) {
@@ -114,7 +112,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   continueClicked($event) {
-    this.store.dispatch(this.gameActions.resetCurrentQuestion());
+    this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     this.continueNext = false;
     if (this.questionIndex >= this.game.gameOptions.maxQuestions)
     {
@@ -154,12 +152,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     //console.log(playerQnA);
     
     //dispatch action to push player answer
-    this.store.dispatch(this.gameActions.addPlayerQnA({"game": this.game, "playerQnA": playerQnA}));
+    this.store.dispatch(new gameplayactions.AddPlayerQnA({"game": this.game, "playerQnA": playerQnA}));
     
     if (this.questionIndex >= this.game.gameOptions.maxQuestions)
     {
       //game over
-      this.store.dispatch(this.gameActions.setGameOver({"game": this.game, "user": this.user}));
+      this.store.dispatch(new gameplayactions.SetGameOver({"game": this.game, "user": this.user}));
     }
 
     this.questionComponent.disableQuestions(correctAnswerId);
@@ -171,6 +169,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     Utils.unsubscribe([this.timerSub]);
     Utils.unsubscribe(this.sub);
-    this.store.dispatch(this.gameActions.resetCurrentGame());
+    this.store.dispatch(new gameplayactions.ResetCurrentGame());
   }
 }

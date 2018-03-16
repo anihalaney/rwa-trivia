@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-
-import { AppStore } from '../app-store';
 import { CategoryActions } from '../actions';
-import { Category } from '../../../model';
+import { Category, RouterStateUrl } from '../../../model';
 import { CategoryService } from '../../services';
 
 @Injectable()
@@ -14,9 +12,15 @@ export class CategoryEffects {
         private svc: CategoryService
     ) { }
 
+    // Load categories based on url
     @Effect()
-    loadCategories$ = this.actions$
-        .ofType(CategoryActions.LOAD_CATEGORIES)
-        .switchMap(() => this.svc.getCategories())
-        .map((categories: Category[]) => this.categoryActions.loadCategoriesSuccess(categories))
+    // handle location update
+    loadRouteCategories$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/'))
+        .pipe(() => this.svc.getCategories())
+        .map((categories: Category[]) => this.categoryActions.loadCategoriesSuccess(categories)
+        );
 }

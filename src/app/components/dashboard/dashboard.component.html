@@ -1,23 +1,28 @@
 <div class="pageinner">
   <div class="row">
     <div class="pageheading col-md-6 col-xs-12 hidden-xs">Dashboard</div>
-    <div class="col-md-6 col-xs-12 align-right"><a [routerLink]="['/game-play']" class="startgame">Start New Game</a></div>
+    <div class="col-md-6 col-xs-12 align-right">
+      <a [routerLink]="['/game-play']" class="startgame">Start New Game</a>
+    </div>
   </div>
   <!-- Currently active games -->
   <section *ngIf="user" id="curentactive" class="card">
     <div class="h1block">
-      <h1><span class="sprite sunicon"></span>Good {{greeting}} {{user.displayName}}!</h1>
+      <h1>
+        <span class="sprite sunicon"></span>Good {{greeting}} {{user.displayName}}!</h1>
       <p>{{message}}</p>
     </div>
     <div id="currentgame">
       <div class="row">
-        <div class=" col-sm-9 col-xs-12"><h2>Currently active games</h2></div>
-        <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
-      </div>            
+        <div class=" col-sm-12 col-xs-12">
+          <h2>Currently active games</h2>
+        </div>
+
+      </div>
       <ul class="row">
-          <li *ngFor="let game of activeGamesObs | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-            <game-card [game]="game"></game-card>
-          </li>
+        <li *ngFor="let game of activeGames$ | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+          <game-card [game]="game"></game-card>
+        </li>
         <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
           <a href="#" class="innerli textcenter">
             <div class="viewallbtn">view all</div>
@@ -25,32 +30,68 @@
         </li>
       </ul>
     </div>
-  </section>  
+
+    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
+      <a href="#" class="viewall">view all</a>
+    </div>
+
+
+  </section>
   <!-- Currently active games end -->
 
   <!-- Invitation to play games -->
   <section *ngIf="user" class="card">
     <div class="row">
-      <div class="col-sm-9 col-xs-12"><h2>Invitation to play games <span>3 from friends & 1 from random player</span></h2></div>
-      <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
+      <div class="col-sm-12 col-xs-12">
+        <h2>Invitation to play games
+          <span>3 from friends & 1 from random player</span>
+        </h2>
+      </div>
+      <!-- <div class="col-sm-3 col-xs-12 textrigth hidden-xs">
+          <a href="#" class="viewall">view all</a>
+        </div> -->
     </div>
     <ul class="invitationlist">
       <li *ngFor="let game of gameInvites">
         <game-invite [game]="game"></game-invite>
       </li>
       <li class="visible-xs textcenter">
-        <a href="#" >
-            <div class="viewallbtn">view all</div>
+        <a href="#">
+          <div class="viewallbtn">view all</div>
         </a>
       </li>
-    </ul> 
-  </section>    
+    </ul>
+
+    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
+      <a href="#" class="viewall">view all</a>
+    </div>
+
+  </section>
   <!-- Invitation to play games end   -->
+
+  <!-- Category leaderboard -->
+  <section class="card">
+    <div class="row">
+      <div class="col-sm-12 col-xs-12">
+        <h2>Category leaderboard</h2>
+      </div>
+      <!-- <div class="col-sm-3 col-xs-12 textrigth hidden-xs">
+              <a href="#" class="viewall">view all</a>
+            </div> -->
+    </div>
+    <leaderboard></leaderboard>
+
+    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
+      <a href="#" class="viewall">view all</a>
+    </div>
+
+  </section>
+  <!-- Category leaderboard end-->
 
   <div class="row">
     <!-- Question of the day -->
     <div class="col-lg-7 col-md-12 col-sm-12 ">
-      <question [question]="questionOfTheDayObs | async"></question>
+      <question [question]="questionOfTheDay$ | async"></question>
     </div>
     <!-- Question of the day end -->
 
@@ -60,16 +101,8 @@
     </div>
     <!-- Subscribe end -->
   </div>
-  
-  <!-- Category leaderboard -->
-  <section class="card">
-    <div class="row">
-      <div class="col-sm-9 col-xs-12"><h2>Category leaderboard</h2></div>
-      <div class="col-sm-3 col-xs-12 textrigth hidden-xs"><a href="#" class="viewall">view all</a></div>
-    </div>
-    <leaderboard></leaderboard>
-  </section>
-  <!-- Category leaderboard end-->
+
+
 
   <!-- <blog -->
   <div class="row blog hidden-xs">
@@ -93,4 +126,4 @@
   </div>
   <!-- Real-time System Stats end -->
 
-</div>        
+</div>
