@@ -1,5 +1,5 @@
-import {GameOptions} from './game-options';
-import {Question} from './question';
+import { GameOptions } from './game-options';
+import { Question } from './question';
 
 export class PlayerQnA {
   playerId: string;
@@ -15,31 +15,45 @@ export class Game {
   public gameOver: boolean;
   public playerQnAs: PlayerQnA[];
   public nextTurnPlayerId: string;
+  public winnerPlayerId: string;
+  public GameStatus: string;
 
-  constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean, nextTurnPlayerId?: string) {
+  constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
+    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, GameStatus?: string) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
+    if (player2UUId) {
+      this._playerIds.push(player2UUId);
+    }
     this.nextTurnPlayerId = nextTurnPlayerId ? nextTurnPlayerId : player1UUId;
     this.gameOver = (gameOver) ? true : false;
     this.playerQnAs = [];
-    if (playerQnAs)
-    {
+    if (playerQnAs) {
       let key: string;
-      for (key of Object.keys(playerQnAs))
-      {
+      for (key of Object.keys(playerQnAs)) {
         let qna = playerQnAs[key];
         this.playerQnAs.push({
-          "playerId": qna.playerId,
-          "questionId": qna.questionId,
-          "playerAnswerId": qna.playerAnswerId,
-          "playerAnswerInSeconds": qna.playerAnswerInSeconds,
-          "answerCorrect": qna.answerCorrect
+          'playerId': qna.playerId,
+          'questionId': qna.questionId,
+          'playerAnswerId': qna.playerAnswerId,
+          'playerAnswerInSeconds': qna.playerAnswerInSeconds,
+          'answerCorrect': qna.answerCorrect
         });
       }
     }
-    if (gameId)
+    if (gameId) {
       this._gameId = gameId;
+    }
+
+    if (winnerPlayerId) {
+      this.winnerPlayerId = winnerPlayerId;
+    }
+
+    if (GameStatus) {
+      this.GameStatus = GameStatus;
+    }
+
   }
 
   addPlayer(playerUUId: string) {
@@ -56,19 +70,17 @@ export class Game {
     return this._gameId;
   }
 
-  addPlayerQnA(playerId: string, questionId: string): PlayerQnA 
-  {
+  addPlayerQnA(playerId: string, questionId: string): PlayerQnA {
     let playerQnA: PlayerQnA = {
-      "playerId": playerId,
-      "questionId": questionId
+      'playerId': playerId,
+      'questionId': questionId
     }
     this.playerQnAs.push(playerQnA);
     return playerQnA;
   }
 
-  updatePlayerQnA(playerId: string, questionId: string, 
-                  playerAnswerId: string, playerAnswerInSeconds: number, answerCorrect: boolean): PlayerQnA 
-  {
+  updatePlayerQnA(playerId: string, questionId: string,
+    playerAnswerId: string, playerAnswerInSeconds: number, answerCorrect: boolean): PlayerQnA {
     let playerQnA: PlayerQnA = this.playerQnAs.find(p => p.playerId === playerId && questionId === questionId);
     playerQnA.playerAnswerId = playerAnswerId;
     playerQnA.answerCorrect = answerCorrect;
@@ -76,27 +88,29 @@ export class Game {
     return playerQnA;
   }
 
-  getDbModel(): any 
-  {
+  getDbModel(): any {
     let dbModel = {
-      "gameOptions": Object.assign({}, this.gameOptions),
-      "playerIds": this.playerIds,
-      "gameOver": false,
-      "playerQnAs": this.playerQnAs
+      'gameOptions': Object.assign({}, this.gameOptions),
+      'playerIds': this.playerIds,
+      'gameOver': false,
+      'playerQnAs': this.playerQnAs,
+      'nextTurnPlayerId': this.nextTurnPlayerId,
+      'GameStatus': this.GameStatus
     }
-    for (let i = 0; i < this.playerIds.length; i ++) {
-      dbModel["playerId_" + i] = this.playerIds[i];
+    for (let i = 0; i < this.playerIds.length; i++) {
+      dbModel['playerId_' + i] = this.playerIds[i];
     }
     return dbModel;
   }
 
-  static getViewModel(dbModel: any): Game 
-  {
-    //console.log(dbModel);
-    let game: Game = new Game(dbModel["gameOptions"], dbModel["playerIds"][0], dbModel["id"], 
-                              dbModel["playerQnAs"], dbModel["gameOver"], dbModel["nextTurnPlayerId"]);
-    if (dbModel["playerIds"].length > 1) {
-      game.addPlayer(dbModel["playerIds"][1]);  //2 players
+  static getViewModel(dbModel: any): Game {
+    // console.log(dbModel);
+    let game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
+      dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
+      (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
+      dbModel['GameStatus']);
+    if (dbModel['playerIds'].length > 1) {
+      game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }
     //console.log(game);
     return game;
