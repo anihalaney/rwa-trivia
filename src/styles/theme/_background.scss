@@ -46,7 +46,7 @@
 			color:#FFF;
 		}
 	}
-	.mat-option:hover
+	.mat-option:hover,.mat-autocomplete-panel .mat-option.mat-selected:not(.mat-active):not(:hover)
 	{
 		@if $selected-theme-name == 'dark' {
 		background:#af3424;
@@ -117,9 +117,8 @@
 	.bulk-summary-header,.bulk-summary-question-header{
 		background: map-get($theme, table-header);
 	}
-	.mat-cell div:hover
+	.col-question:hover
 	{
-		// background-color: #f4f5f7;
 		background: map-get($theme, hover);
 	}
 	
