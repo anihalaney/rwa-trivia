@@ -102,7 +102,7 @@
 	{
 		border-top-color: map-get($theme, red-before);
 	}
-	.downloadFile,.custom-file-upload,.rejection-div{ 
+	.downloadFile,.custom-file-upload,.rejection-div,.add-tag-btn{ 
 		border-color: map-get($theme, download-btn);
 	}
 } 
