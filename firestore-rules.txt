@@ -3,8 +3,8 @@ service cloud.firestore {
     return request.auth != null;
   }
 
- // Add uid of admin user 
- // This is temp solution for time being till fetching role from user document does not work
+  // Add uid of admin user 
+  // This is temp solution for time being till fetching role from user document does not work
   function isAdmin() {
   	return isAuthenticated() && 
     			(request.auth.uid == '');
@@ -42,7 +42,14 @@ service cloud.firestore {
       }
     }
     
-    match /unpublished_questions {
+   match /unpublished_questions {
+      match /{document=**} {
+        allow read, update: if isUserAuthenticated(resource.data.created_uid);
+        allow create: if isUserAuthenticated(request.resource.data.created_uid);
+      }
+    }
+    
+    match /bulk_uploads {
       match /{document=**} {
         allow read, update: if isUserAuthenticated(resource.data.created_uid);
         allow create: if isUserAuthenticated(request.resource.data.created_uid);
@@ -58,3 +65,4 @@ service cloud.firestore {
     
   }
 }
+

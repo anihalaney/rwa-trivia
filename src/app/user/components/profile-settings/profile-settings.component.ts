@@ -1,24 +1,24 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { UserActions } from '../../../core/store/actions';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { AppStore } from '../../../core/store/app-store';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
-import * as cloneDeep from 'lodash/cloneDeep';
-
+import * as cloneDeep from 'lodash.clonedeep';
+import * as userActions from '../../store/actions';
+import { userState } from '../../../user/store';
 
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
   styleUrls: ['./profile-settings.component.scss']
 })
-export class ProfileSettingsComponent implements OnInit, OnDestroy {
+export class ProfileSettingsComponent implements OnDestroy {
   @Input() user: User;
   @ViewChild('cropper') cropper: ImageCropperComponent;
   // Properties
@@ -44,6 +44,8 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   cropperSettings: CropperSettings;
 
 
+  sub: Subscription;
+
   tagsObs: Observable<string[]>;
   tags: string[];
   tagsAutoComplete: string[];
@@ -55,17 +57,52 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
   constructor(private fb: FormBuilder,
-    private store: Store<AppStore>,
+    private store: Store<AppState>,
     private storage: AngularFireStorage,
-    private userActions: UserActions,
     private snackBar: MatSnackBar) {
-    this.subs.push(this.store.take(1).subscribe(s => this.user = s.user));
-    this.categoriesObs = store.select(s => s.categories);
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
-    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-    this.tagsObs = this.store.select(s => s.tags);
+
+    this.store.select(appState.coreState).take(1).subscribe((s) => {
+      this.user = s.user
+    });
+    this.categoriesObs = store.select(getCategories);
+    this.categoriesObs.subscribe(categories => this.categories = categories);
+    this.categoryDictObs = store.select(categoryDictionary);
+    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+    this.tagsObs = this.store.select(getTags);
+    this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.setCropperSettings();
+
+    this.userObs = this.store.select(userState).select(s => s.user);
+
+    this.userObs.subscribe(user => {
+      if (user) {
+        if (user.name) {
+          this.user = user;
+        } else {
+          this.user.roles = user.roles;
+        }
+
+        this.userCopyForReset = cloneDeep(user);
+        this.createForm(this.user);
+
+        this.filteredTags$ = this.userForm.get('tags').valueChanges
+          .map(val => val.length > 0 ? this.filter(val) : []);
+
+        if (this.user.profilePicture) {
+          const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
+          const ref = this.storage.ref(filePath);
+          ref.getDownloadURL().subscribe(res => {
+            this.profileImage.image = res;
+          });
+        }
+      }
+    });
+
+    this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+      if (status === 'SUCCESS') {
+        this.snackBar.open('Profile saved!', '', { duration: 2000 });
+      }
+    });
   }
 
   get tagsArray(): FormArray {
@@ -97,37 +134,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.cropperSettings.keepAspect = false;
     this.cropperSettings.cropperDrawSettings.strokeColor = 'rgba(255,255,255,1)';
     this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
-  }
-
-  // Lifecycle hooks
-  ngOnInit() {
-    this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
-    this.store.dispatch(this.userActions.loadUserProfile(this.user));
-    this.userObs = this.store.select(s => s.user);
-    this.subs.push(this.userObs.subscribe(user => {
-      if (user) {
-        this.user = user;
-        this.userCopyForReset = cloneDeep(this.user);
-        this.createForm(this.user);
-
-        this.filteredTags$ = this.userForm.get('tags').valueChanges
-          .map(val => val.length > 0 ? this.filter(val) : []);
-
-        if (this.user.profilePicture) {
-          const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
-          const ref = this.storage.ref(filePath);
-          ref.getDownloadURL().subscribe(res => {
-            this.profileImage.image = res;
-          });
-        }
-      }
-    }));
-    this.subs.push(this.store.select(s => s.userProfileSaveStatus)
-      .subscribe(status => {
-        if (status === 'SUCCESS') {
-          this.snackBar.open('Profile saved!', '', { duration: 2000 });
-        }
-      }));
   }
 
   filter(val: string): string[] {
@@ -243,7 +249,6 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       privateProfileSetting: [user.privateProfileSetting],
       profilePicture: [user.profilePicture]
     });
-
     this.enteredTags = user.tags;
   }
 
@@ -313,7 +318,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   // store the user object
   saveUser(user: User) {
-    this.store.dispatch(this.userActions.addUserProfile(user));
+    this.store.dispatch(new userActions.AddUserProfile({ user: user }));
   }
 
   ngOnDestroy() {

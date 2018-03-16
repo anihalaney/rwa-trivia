@@ -21,7 +21,7 @@ img { max-width: 100%; }
 a { text-decoration: none; transition: all 0.3s ease-in-out 0s; -webkit-transition: all 0.3s ease-in-out 0s;}
 a:active, a:focus, input[type="image"], select:focus, input, input[type="button"]:focus, :focus { outline: 0; }
 /*Form Elements*/
-button, input, select, textarea { font-family: inherit; border:none;}
+button, input, select { font-family: inherit; border:none;} //textarea
 button, input { line-height: normal; text-transform: none; }
 button, html input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer; -webkit-appearance: button; }
 button[disabled], input[disabled] { cursor: default; }
@@ -344,6 +344,8 @@ input[type="text"], input[type="email"], select{ border:1px solid; border-radius
 .tags p{ font-size: 16px; margin-bottom: 15px}
 .tagging input{ line-height: 24px; padding: 4px 10px; border-radius: 3px; display: block; width: 250px}
 .tag{ border:1px solid; background: transparent; padding:4px 12px 4px 12px; line-height: 19px; margin:0 8px 12px 0; }
+.downloadFile{ border:1px solid;box-shadow: 0 2px 5px rgba(0,0,0,0.3);}
+.custom-file-upload{border:1px solid;box-shadow: 0 2px 5px rgba(0,0,0,0.3);}
 //.tag > span{ display: none; }
 .tag > span{ margin-left: 10px; cursor: pointer } 
 .tag .tag-i{ height: 19px; width: 19px; border-radius: 2px; line-height: 19px; top: auto;}
@@ -468,5 +470,20 @@ body.dialog-open {
 nav .user.card{ 
 	//TODO: coming from dark-theme. should be with borders
 	border-width: 0 !important
+}
+.downloadicon{ background-position: -96px -295px; width: 31px; height: 33px;}
+.cancelicon{ background-position: -130px -293px; width: 30px; height: 30px;}
+.closeicon{ background-position: -154px -293px; width: 30px; height: 30px;}
+.pendingicon{ background-position: -178px -293px;  width: 19px;  height: 31px;}
+.approvedicon{ background-position: -196px -293px; width: 19px; height: 38px;}
+.div-border
+{
+  border-width: 1px;
+  border-bottom-style: solid;
+}
+.csv-error-msg
+{
+  border-width: 2px;
+	border-top-style: solid;
 }
 

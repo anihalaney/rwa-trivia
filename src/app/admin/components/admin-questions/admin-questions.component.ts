@@ -1,56 +1,57 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
 import { PageEvent } from '@angular/material';
-import { AppStore } from '../../../core/store/app-store';
-import { QuestionActions } from '../../../core/store/actions';
+import { AppState, appState, categoryDictionary } from '../../../store/app-store';
 import { User, Question, Category, SearchResults, SearchCriteria } from '../../../model';
+
+import { adminState } from '../../store';
+import * as adminActions from '../../store/actions';
 
 @Component({
   selector: 'admin-questions',
   templateUrl: './admin-questions.component.html',
   styleUrls: ['./admin-questions.component.scss']
 })
-export class AdminQuestionsComponent implements OnInit, OnDestroy {
+
+export class AdminQuestionsComponent implements OnInit {
   questionsSearchResultsObs: Observable<SearchResults>;
   unpublishedQuestionsObs: Observable<Question[]>;
   categoryDictObs: Observable<{ [key: number]: Category }>;
   criteria: SearchCriteria;
 
-  constructor(private store: Store<AppStore>,
-    private questionActions: QuestionActions) {
-    this.questionsSearchResultsObs = store.select(s => s.questionsSearchResults);
-    this.unpublishedQuestionsObs = store.select(s => s.unpublishedQuestions);
-    this.categoryDictObs = store.select(s => s.categoryDictionary);
+  constructor(private store: Store<AppState>) {
+
+    this.questionsSearchResultsObs = this.store.select(adminState).select(s => s.questionsSearchResults);
+    this.unpublishedQuestionsObs = store.select(adminState).select(s => s.unpublishedQuestions);
+
+    this.categoryDictObs = store.select(categoryDictionary);
     this.criteria = new SearchCriteria();
   }
 
   ngOnInit() {
-    this.store.dispatch(this.questionActions.loadQuestions({ 'startRow': 0, 'pageSize': 25, criteria: this.criteria }));
-    this.store.dispatch(this.questionActions.loadUnpublishedQuestions());
-    console.log(this.unpublishedQuestionsObs);
-  }
 
-  ngOnDestroy() {
   }
 
   approveQuestion(question: Question) {
     let user: User;
 
-    this.store.take(1).subscribe(s => user = s.user);
+    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user);
     question.approved_uid = user.userId;
-
-    this.store.dispatch(this.questionActions.approveQuestion(question));
+    this.store.dispatch(new adminActions.LoadUnpublishedQuestions());
+    this.store.dispatch(new adminActions.ApproveQuestion({ question: question }));
   }
 
   pageChanged(pageEvent: PageEvent) {
     const startRow = (pageEvent.pageIndex) * pageEvent.pageSize;
-    this.store.dispatch(this.questionActions.loadQuestions({
+
+    this.store.dispatch(new adminActions.LoadQuestions({
       'startRow': startRow,
       'pageSize': pageEvent.pageSize, criteria: this.criteria
     }));
   }
+
   categoryChanged(event: { categoryId: number, added: boolean }) {
     if (!this.criteria.categoryIds) {
       this.criteria.categoryIds = [];
@@ -82,6 +83,6 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
     this.searchCriteriaChange();
   }
   searchCriteriaChange() {
-    this.store.dispatch(this.questionActions.loadQuestions({ 'startRow': 0, 'pageSize': 25, criteria: this.criteria }));
+    this.store.dispatch(new adminActions.LoadQuestions({ 'startRow': 0, 'pageSize': 25, criteria: this.criteria }));
   }
 }

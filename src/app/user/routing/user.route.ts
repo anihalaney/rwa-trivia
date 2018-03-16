@@ -1,8 +1,9 @@
-import { Routes, RouterModule }  from '@angular/router';
-import { ProfileSettingsComponent,
+import { Routes, RouterModule } from '@angular/router';
+import {
+  ProfileSettingsComponent,
   MyQuestionsComponent,
-  QuestionAddUpdateComponent } 
-  from '../components';
+  QuestionAddUpdateComponent
+} from '../components';
 import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/services';
 
 export const userRoutes: Routes = [
@@ -12,18 +13,18 @@ export const userRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'settings',
+    path: 'profile/:userid',
     component: ProfileSettingsComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: 'questions',
+    path: 'questions/:userid',
     component: MyQuestionsComponent,
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
-    path: 'questions/add',
+    path: 'questions/:userid/add',
     component: QuestionAddUpdateComponent,
     canActivate: [AuthGuard]
   },
