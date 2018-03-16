@@ -37,10 +37,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   timer: number;
   categoryDictionary: { [key: number]: Category }
   categoryName: string;
-
   continueNext: boolean = false;
   gameOver: boolean = false;
-
+  turnStatus = false;
   MAX_TIME_IN_SECONDS: number = 16;
 
   @ViewChild(GameQuestionComponent)
@@ -52,13 +51,13 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this._gameId = data.gameId;
     this.user = data.user;
 
+
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
     this.gameObs = store.select(gameplayState).select(s => s.currentGame).filter(g => g != null);
     this.gameQuestionObs = store.select(gameplayState).select(s => s.currentGameQuestion);
-  }
 
-  ngOnInit() {
+
     this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
     this.sub.push(
       this.gameObs.subscribe(game => {
@@ -67,6 +66,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
         if (!this.currentQuestion)
           this.getNextQuestion();
+        this.setTurnStatusFlag();
       }));
 
     this.sub.push(
@@ -88,11 +88,33 @@ export class GameDialogComponent implements OnInit, OnDestroy {
             () => {
               // console.log("Time Expired");
               //disable all buttons
-              this.afterAnswer();
+              (!this.turnStatus) ?
+                this.afterAnswer() : '';
+
             });
 
       })
     );
+  }
+
+  ngOnInit() {
+
+  }
+
+  setTurnStatusFlag() {
+    const turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
+      (this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
+    if (!turnFlag) {
+      this.turnStatus = turnFlag;
+    } else {
+      Observable.timer(5000).take(1).subscribe(t => {
+        this.turnStatus = turnFlag;
+        this.store.dispatch(new gameplayactions.LoadGame(this.game);
+      });
+      Utils.unsubscribe([this.timerSub]);
+    }
+
+
   }
 
   getNextQuestion() {
@@ -150,13 +172,14 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     }
     //console.log(playerQnA);
 
-    if (this.game.gameOptions.playerMode === PlayerMode.Opponent && this.game.gameOptions.opponentType === OpponentType.Random) {
-      if (this.game.GameStatus === GameStatus.STARTED) {
+    if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
+      && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
+      if (this.game.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
         this.game.nextTurnPlayerId = '';
+        this.game.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
       } else {
         this.game.nextTurnPlayerId = this.user.userId;
       }
-      this.game.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
     }
 
     //dispatch action to push player answer
@@ -168,9 +191,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     }
 
     this.questionComponent.disableQuestions(correctAnswerId);
+
     Observable.timer(500).take(1).subscribe(t => {
       this.continueNext = true;
     });
+
+
   }
 
   ngOnDestroy() {

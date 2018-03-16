@@ -2,7 +2,8 @@
 <div *ngIf="!currentQuestion && !gameOver" class="cd-popup-container">
   Loading
 </div>
-<game-question *ngIf="currentQuestion" 
+
+<game-question *ngIf="currentQuestion && !turnStatus " 
   [categoryName]="categoryName"
   [question]="currentQuestion"
   [questionIndex]="questionIndex"
@@ -16,6 +17,9 @@
   (continueClicked)="continueClicked($event)"
   (viewQuestionClicked)="viewQuestionClicked($event)">
 </game-question>
+<div *ngIf="turnStatus">
+  <h2>Waiting for my turn</h2>
+</div>
 <game-question-continue *ngIf="false" class="overlay"
   [categoryName]="categoryName"
   [question]="currentQuestion"
