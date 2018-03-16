@@ -12,8 +12,11 @@ import { gameplayState, GamePlayState } from '../../store';
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Game, GameOptions, GameMode, PlayerQnA,
-         User, Question, Category } from '../../../model';
+import {
+  Game, GameOptions, GameMode, PlayerQnA,
+  User, Question, Category, GameStatus,
+  PlayerMode, OpponentType
+} from '../../../model';
 
 @Component({
   selector: 'game-dialog',
@@ -32,7 +35,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   sub: Subscription[] = [];
   timerSub: Subscription;
   timer: number;
-  categoryDictionary: {[key: number]: Category}
+  categoryDictionary: { [key: number]: Category }
   categoryName: string;
 
   continueNext: boolean = false;
@@ -45,7 +48,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<GamePlayState>, private gameActions: GameActions,
     @Inject(MAT_DIALOG_DATA) public data: any) {
-    
+
     this._gameId = data.gameId;
     this.user = data.user;
 
@@ -56,7 +59,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.select(categoryDictionary).take(1).subscribe(c => {this.categoryDictionary = c} );
+    this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
@@ -64,37 +67,35 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
         if (!this.currentQuestion)
           this.getNextQuestion();
-    }));
+      }));
 
     this.sub.push(
       this.gameQuestionObs.subscribe(question => {
-        if (!question)
-        {
+        if (!question) {
           this.currentQuestion = null;
           return;
         }
         this.currentQuestion = question;
-        this.questionIndex ++;
+        this.questionIndex++;
         this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
         this.timer = this.MAX_TIME_IN_SECONDS;
 
         this.timerSub =
           Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
-            this.timer --;
+            this.timer--;
           },
-          null,
-          () => {
-           // console.log("Time Expired");
-            //disable all buttons
-            this.afterAnswer();
-          });
-        
+            null,
+            () => {
+              // console.log("Time Expired");
+              //disable all buttons
+              this.afterAnswer();
+            });
+
       })
     );
   }
 
-  getNextQuestion()
-  {
+  getNextQuestion() {
     this.store.dispatch(new gameplayactions.GetNextQuestion(this.game));
   }
 
@@ -104,7 +105,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     //disable all buttons
     this.afterAnswer($event);
   }
-  okClick($event){
+  okClick($event) {
     if (this.questionIndex >= this.game.gameOptions.maxQuestions)
       this.gameOver = true;
     else
@@ -114,8 +115,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   continueClicked($event) {
     this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     this.continueNext = false;
-    if (this.questionIndex >= this.game.gameOptions.maxQuestions)
-    {
+    if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       //game over
       this.gameOver = true;
       return;
@@ -135,29 +135,36 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   gameOverContinueClicked() {
     //this.router.navigate(['/']);
   }
-  afterAnswer(userAnswerId?: number)
-  {
+  afterAnswer(userAnswerId?: number) {
     let correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
     //console.log(correctAnswerId);
     if (userAnswerId === correctAnswerId)
-      this.correctAnswerCount ++;
+      this.correctAnswerCount++;
     let seconds = this.MAX_TIME_IN_SECONDS - this.timer;
     let playerQnA: PlayerQnA = {
-            playerId: this.user.userId,
-            playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
-            playerAnswerInSeconds: seconds,
-            answerCorrect: (userAnswerId === correctAnswerId),
-            questionId: this.currentQuestion.id
-          }
+      playerId: this.user.userId,
+      playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
+      playerAnswerInSeconds: seconds,
+      answerCorrect: (userAnswerId === correctAnswerId),
+      questionId: this.currentQuestion.id
+    }
     //console.log(playerQnA);
-    
+
+    if (this.game.gameOptions.playerMode === PlayerMode.Opponent && this.game.gameOptions.opponentType === OpponentType.Random) {
+      if (this.game.GameStatus === GameStatus.STARTED) {
+        this.game.nextTurnPlayerId = '';
+      } else {
+        this.game.nextTurnPlayerId = this.user.userId;
+      }
+      this.game.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
+    }
+
     //dispatch action to push player answer
-    this.store.dispatch(new gameplayactions.AddPlayerQnA({"game": this.game, "playerQnA": playerQnA}));
-    
-    if (this.questionIndex >= this.game.gameOptions.maxQuestions)
-    {
+    this.store.dispatch(new gameplayactions.AddPlayerQnA({ "game": this.game, "playerQnA": playerQnA }));
+
+    if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       //game over
-      this.store.dispatch(new gameplayactions.SetGameOver({"game": this.game, "user": this.user}));
+      this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
     }
 
     this.questionComponent.disableQuestions(correctAnswerId);
