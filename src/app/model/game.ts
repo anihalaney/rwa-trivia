@@ -1,4 +1,4 @@
-import { GameOptions } from './game-options';
+import { GameOptions, GameStatus } from './game-options';
 import { Question } from './question';
 
 export class PlayerQnA {
@@ -19,14 +19,14 @@ export class Game {
   public GameStatus: string;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
-    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, GameStatus?: string) {
+    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
     if (player2UUId) {
       this._playerIds.push(player2UUId);
     }
-    this.nextTurnPlayerId = nextTurnPlayerId ? nextTurnPlayerId : player1UUId;
+    this.nextTurnPlayerId = nextTurnPlayerId ? nextTurnPlayerId : '';
     this.gameOver = (gameOver) ? true : false;
     this.playerQnAs = [];
     if (playerQnAs) {
@@ -50,8 +50,8 @@ export class Game {
       this.winnerPlayerId = winnerPlayerId;
     }
 
-    if (GameStatus) {
-      this.GameStatus = GameStatus;
+    if (gameStatus) {
+      this.GameStatus = gameStatus;
     }
 
   }
@@ -94,8 +94,8 @@ export class Game {
       'playerIds': this.playerIds,
       'gameOver': false,
       'playerQnAs': this.playerQnAs,
-      'nextTurnPlayerId': this.nextTurnPlayerId,
-      'GameStatus': this.GameStatus
+      'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
+      'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED
     }
     for (let i = 0; i < this.playerIds.length; i++) {
       dbModel['playerId_' + i] = this.playerIds[i];

@@ -20,9 +20,9 @@ export enum PlayerMode {
   Opponent
 }
 export enum OpponentType {
-  Computer,
   Random,
-  Friend
+  Friend,
+  Computer
 }
 export enum GameMode {
   Normal,
