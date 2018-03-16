@@ -10,7 +10,7 @@
       <div class="optionbox">
         <!-- Category -->
         <div class="pcategories">
-          <p>Select the category for bulk upload</p>
+          <p class="field-caption">Select the category for bulk upload</p>
           <div class="row">
             <div class="formfield">
               <select placeholder="Select Category" class="required" formControlName="category">
@@ -26,19 +26,19 @@
         </div>
         <!-- Category end -->
       </div>
-      <div class="optionbox row col-md-11">
-        <p>Enter Your Question</p>
+      <div class="optionbox row col-md-11 formfield">
+        <p class="field-caption">Enter Your Question</p>
         <textarea placeholder="Enter Your Question" formControlName="questionText" class="required col-md-12 col-xs-12"></textarea>
         <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</p>
       </div>
       <div class="optionbox row col-md-11 enterquestion">
-        <p>Answers</p>
+        <p class="field-caption">Answers</p>
         <ng-container formArrayName="answers">
-          <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield col-md-6">
+          <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield col-md-6 ">
             <label>
               <input type="checkbox" formControlName="correct">
             </label>
-            <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required">
+            <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required edit-form-input-field">
           </div>
         </ng-container>
         <div class="error" *ngIf="!answers.valid && !answers.pristine">
@@ -49,7 +49,7 @@
         </div>
       </div>
       <div class="optionbox row col-sm-11">
-        <p>Tags associated categories</p>
+        <p class="field-caption">Tags associated categories</p>
         <div data-tags-input-name="tag" id="tagBox" class="tagging">
           <mat-chip-list>
             <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
@@ -57,11 +57,13 @@
             </mat-basic-chip>
             <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
               {{tag}}
-               <span (click)="removeEnteredTag(tag)" class="sprite closeicon "><label class="x">X</label></span> 
+              <span (click)="removeEnteredTag(tag)" class="sprite closeicon ">
+                <label class="x">X</label>
+              </span>
               <!-- <div class="sprite cancelicon col-md-offset-3 col-xs-offset-3" (click)="showQuestion()"></div> -->
             </mat-basic-chip>
           </mat-chip-list>
-          <input type="text" class="type-zone margin-bottom-8 col-md-5 col-xs-3" contenteditable="true" formControlName="tags" placeholder="add tags">
+          <input type="text" class="type-zone margin-bottom-8 col-md-5 col-xs-3 edit-form-input-field" contenteditable="true" formControlName="tags" placeholder="add tags">
           <button type="button" class="add-tag-btn" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">Add</button>
           <div class="error row col-md-12" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
             Must have atleast 3 tags

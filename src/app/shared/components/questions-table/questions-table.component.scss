@@ -28,17 +28,12 @@
 .col-chkbox {
   flex: 1;
 }
-.col-question {
-  flex: 10;
-  //display: flex;
-  // > div {
-  //   margin-top: 10px;
-  //   margin-bottom: 10px;    
-  // }
-  > div:hover{
-    background-color: #f4f5f7;
-  }
-}
+// .col-question {
+//   flex: 10;
+//   > div:hover{
+//     background-color: #f4f5f7;
+//   }
+// }
 .answer {
   flex: 1 50%;
 }

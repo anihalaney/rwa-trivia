@@ -1,5 +1,5 @@
 @mixin theme-text-color($selected-theme-name,$theme) {
-	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .enterquestion .formfield > input, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.bulk-summary-table-cell a,.matStepLabel{ 
+	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.bulk-summary-question-table-cell,.matStepLabel,.message,.sub-message,.field-caption{ 
 		color: map-get($theme, primary);
 	}
 	.question-list li label{ 
@@ -18,7 +18,7 @@
 	.headerdrop a, .logo a, .ladding-copyr {
 		color: map-get($theme, header);
 	}
-	.light, .breadcrumbs span, .tag .tag-i{
+	.light, .breadcrumbs span, .tag-i{
 		color: map-get($theme, primary-light);
 	}
 	.dark, .viewtext, .playwith a, .clinton,.card h3, .breadcrumbs a, .optionbox .radiobtn label, .formfield label, .tags p, .questionstatus .tab-content > ul > li p, .questionstatus .light, .saccount select ~ label, .savebox a:nth-child(2),.question-text,.answer-text{ 
@@ -63,7 +63,7 @@
 	.blog-social{ 
 		color: map-get($theme, blog-social);
 	}
-	.formfield select{ 
+	.formfield select,.formfield textarea,.tag,.add-tag-btn,.edit-form-input-field{ 
 		color: map-get($theme, form-select); 
 	}
 	
@@ -123,7 +123,7 @@
 		}
 	}
 
-	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label,.mat-tab-label,.mat-header-cell{
+	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label,.mat-tab-label,.mat-header-cell,.bulk-summary-table-cell a,.bulk-summary-question-table-cell a{
 		@if $selected-theme-name == 'dark' {
 			color:#fff;
 			
