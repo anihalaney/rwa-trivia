@@ -30,10 +30,10 @@ export class ESUtils {
     let prefix = 'dev:';
 
     if (functions.config().elasticsearch &&
-      functions.config().elasticsearch.index &&
-      functions.config().elasticsearch.index.production &&
+     functions.config().elasticsearch.index &&
+     functions.config().elasticsearch.index.production &&
       // tslint:disable-next-line:triple-equals
-      functions.config().elasticsearch.index.production == 'true') {
+     functions.config().elasticsearch.index.production == 'true') {
 
       prefix = '';
     }

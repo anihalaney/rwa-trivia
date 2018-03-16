@@ -4,6 +4,8 @@ import { FirestoreMigration } from './firestore-migration';
 
 
 
+
+
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
@@ -229,8 +231,6 @@ app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 });
 
 app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
-
-
   console.log(req.params.collection);
   const sourceDB = admin.firestore();
   // set required dev configuration parameters for different deployment environments(firebase project) using following command
