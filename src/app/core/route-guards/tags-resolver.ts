@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Store } from '@ngrx/store';
   
-import { AppState, appState } from '../../../store';
+import { AppState, appState } from '../../store';
   
 @Injectable()
 export class TagsResolver implements Resolve<string[]> {
