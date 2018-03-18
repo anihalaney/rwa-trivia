@@ -12,12 +12,14 @@ import { EffectsModule } from '@ngrx/effects';
 import { CONFIG } from '../../environments/environment';
 
 import {
-  Utils, AuthenticationService, AuthInterceptor,
+  Utils,
   CategoryService, TagService, QuestionService,
   GameService, BulkService, UserService
 } from './services';
 
-import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './services';
+import { AuthenticationProvider, AuthInterceptor } from './auth';
+
+import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
 
 import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
 import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects, effects } from './store/effects';
@@ -56,7 +58,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
   ],
   providers: [
     //Services
-    Utils, AuthenticationService,
+    Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService,
 
