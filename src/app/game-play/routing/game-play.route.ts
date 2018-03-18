@@ -1,7 +1,7 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { NewGameComponent, GameComponent } 
   from '../components';
-import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/services';
+import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/route-guards';
 
 export const gamePlayRoutes: Routes = [
   {

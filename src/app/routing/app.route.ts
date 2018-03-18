@@ -1,7 +1,8 @@
 import { Routes, RouterModule }  from '@angular/router';
 import { DashboardComponent } 
   from '../components/index';
-import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from '../core/services';
+import { AuthGuard, AdminLoadGuard, BulkLoadGuard, 
+  CategoriesResolver, TagsResolver } from '../core/route-guards';
 
 export const routes: Routes = [
   {
