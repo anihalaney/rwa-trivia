@@ -1,9 +1,9 @@
 .row{ font-family: 'hindregular'; }
-.row {
+.question-section {
   padding: 20px 0;
-  border-bottom: 1px solid;
+  border-bottom:1px solid;
   margin: 0;
-  border-color: rgba(204,204,204,0.44);
+  // border-color: rgba(204,204,204,0.44);
 }
 .dark{ font-family: 'hindsemibold'; display: inline-block;font-size: 18px; }
 .question-text{ display: inline-block; font-size: 16px;font-family: 'hindsemibold';};
@@ -28,17 +28,12 @@
 .col-chkbox {
   flex: 1;
 }
-.col-question {
-  flex: 10;
-  //display: flex;
-  // > div {
-  //   margin-top: 10px;
-  //   margin-bottom: 10px;    
-  // }
-  > div:hover{
-    background-color: #f4f5f7;
-  }
-}
+// .col-question {
+//   flex: 10;
+//   > div:hover{
+//     background-color: #f4f5f7;
+//   }
+// }
 .answer {
   flex: 1 50%;
 }

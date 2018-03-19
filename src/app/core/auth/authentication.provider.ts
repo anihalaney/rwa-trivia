@@ -12,7 +12,7 @@ import { UserActions, UIStateActions } from '../store/actions';
 import { User } from '../../model';
 
 @Injectable()
-export class AuthenticationService {
+export class AuthenticationProvider {
   dialogRef: MatDialogRef<LoginComponent>;
 
   constructor(private store: Store<AppState>,
@@ -21,7 +21,6 @@ export class AuthenticationService {
     public afAuth: AngularFireAuth,
     private db: AngularFirestore,
     public dialog: MatDialog) {
-
 
     this.afAuth.authState.subscribe(afUser => {
       if (afUser) {
@@ -66,14 +65,4 @@ export class AuthenticationService {
     }
     return false;
   };
-
-  get user(): User {
-    let user: User;
-    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user)
-    return user;
-  };
-
-  get authorizationHeader(): string {
-    return (this.user) ? 'Bearer ' + this.user.idToken : null;
-  }
 }
