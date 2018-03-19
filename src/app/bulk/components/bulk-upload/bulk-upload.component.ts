@@ -59,7 +59,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
     this.uploadFormGroup = this.fb.group({
       category: ['', Validators.required],
-      tagControl: ['', Validators.required],
+      tagControl: [''],
       csvFile: [null, Validators.required]
     });
 
