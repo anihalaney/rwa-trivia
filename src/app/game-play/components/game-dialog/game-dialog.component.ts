@@ -64,8 +64,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.game = game;
         this.questionIndex = this.game.playerQnAs.length;
         this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
-        if (!this.currentQuestion)
-          this.getNextQuestion();
         this.setTurnStatusFlag();
       }));
 
@@ -106,10 +104,14 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       (this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
     if (!turnFlag) {
       this.turnStatus = turnFlag;
+      if (!this.currentQuestion) {
+        this.getNextQuestion();
+      }
     } else {
       Observable.timer(5000).take(1).subscribe(t => {
         this.turnStatus = turnFlag;
-        this.store.dispatch(new gameplayactions.LoadGame(this.game);
+        this.store.dispatch(new gameplayactions.LoadGame(this.game));
+        this.currentQuestion = undefined;
       });
       Utils.unsubscribe([this.timerSub]);
     }
@@ -158,6 +160,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     //this.router.navigate(['/']);
   }
   afterAnswer(userAnswerId?: number) {
+    debugger;
     let correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
     //console.log(correctAnswerId);
     if (userAnswerId === correctAnswerId)
@@ -177,6 +180,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       if (this.game.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
         this.game.nextTurnPlayerId = '';
         this.game.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
+      } else if (!playerQnA.answerCorrect) {
+        this.game.nextTurnPlayerId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
       } else {
         this.game.nextTurnPlayerId = this.user.userId;
       }
