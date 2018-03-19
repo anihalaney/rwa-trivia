@@ -6,7 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, GameOptions, Game, Question, PlayerQnA, GameStatus } from '../../model';
+import { User, GameOptions, Game, Question, PlayerQnA, GameStatus, PlayerMode, OpponentType } from '../../model';
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
@@ -19,19 +19,54 @@ export class GameService {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
-    let gameIdSubject = new Subject<string>();
-    let game: Game = new Game(gameOptions, user.userId, undefined, undefined, false, user.userId, undefined, undefined, GameStatus.STARTED);
 
-    let dbGame = game.getDbModel(); //object to be saved
+    const gameIdSubject = new Subject<string>();
+    if (Number(gameOptions.playerMode) === PlayerMode.Opponent
+      && Number(gameOptions.opponentType) === OpponentType.Random) {
+      this.joinGame(gameOptions, user, gameIdSubject);
+    } else {
+      const game = new Game(gameOptions, user.userId, undefined, undefined, false, user.userId, undefined, undefined, GameStatus.STARTED);
+      this.createGame(game, gameIdSubject);
+    }
+    return gameIdSubject;
+  }
 
-    let id = this.db.createId();
+  joinGame(gameOptions: GameOptions, user: User, gameIdSubject: Subject<string>) {
+
+    this.db.collection('/games', ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q)
+      .where('nextTurnPlayerId', '==', '').where('gameOver', '==', false))
+      .snapshotChanges().take(1).map(gs => gs.map(g => Game.getViewModel(g.payload.doc.data()))).subscribe(queriedItems => {
+        const totalGames = queriedItems.length;
+        if (totalGames > 0) {
+          const randomGameNo = Math.floor(Math.random() * totalGames);
+          const game = queriedItems[randomGameNo];
+          if (game.playerIds[0] !== user.userId) {
+            game.nextTurnPlayerId = user.userId;
+            game.addPlayer(user.userId);
+            const dbGame = game.getDbModel();
+            gameIdSubject.next(game.gameId);
+            this.db.doc('/games/' + game.gameId).update(dbGame);
+          }
+        } else {
+          const game = new Game(gameOptions, user.userId, undefined, undefined,
+            false, user.userId, undefined, undefined, GameStatus.STARTED);
+          this.createGame(game, gameIdSubject);
+        }
+      });
+
+  }
+
+  createGame(game: Game, gameIdSubject: Subject<string>) {
+    const dbGame = game.getDbModel(); // object to be saved
+
+    const id = this.db.createId();
     dbGame.id = id;
 
-    //Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
+    // Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
     this.db.doc('/games/' + id).set(dbGame).then(ref => {
       gameIdSubject.next(id);
     });
-    return gameIdSubject;
+
   }
 
   getActiveGames(user: User): Observable<Game[]> {

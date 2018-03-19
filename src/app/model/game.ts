@@ -104,7 +104,7 @@ export class Game {
   }
 
   static getViewModel(dbModel: any): Game {
-    // console.log(dbModel);
+
     let game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
