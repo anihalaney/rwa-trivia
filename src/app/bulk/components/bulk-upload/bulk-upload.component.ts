@@ -59,8 +59,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
     this.uploadFormGroup = this.fb.group({
       category: ['', Validators.required],
-      tagControl: [''],
-      csvFile: null
+      tagControl: ['', Validators.required],
+      csvFile: [null, Validators.required]
     });
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
@@ -177,7 +177,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   onUploadSubmit() {
     // validate
-    if (!this.uploadFormGroup.valid || this.bulkUploadFileInfo === undefined) {
+    if (!this.uploadFormGroup.valid) {
+      if (this.bulkUploadFileInfo === undefined) {
+        this.fileParseError = true;
+        this.fileParseErrorMessage = 'Please upload .CSV file';
+      }
       return;
 
     } else {
