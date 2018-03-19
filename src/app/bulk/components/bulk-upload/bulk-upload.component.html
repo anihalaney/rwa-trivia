@@ -107,7 +107,7 @@
           </div>
           <div class="control-spacing">
             <button class="btn-back" type="button" (click)="showUploadSteps()">Back</button>
-            <button class="btn" matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined || fileParseError" (click)="onUploadSubmit()">Next</button>
+            <button class="btn" matStepperNext type="button" [disabled]="fileParseError" (click)="onUploadSubmit()">Next</button>
           </div>
         </form>
       </mat-step>
