@@ -24,3 +24,4 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
   }
 }
 
+export const getAuthorizationHeader = (state: User) => (state) ? 'Bearer ' + state.idToken : null;

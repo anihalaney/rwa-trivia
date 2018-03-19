@@ -4,7 +4,7 @@ import {
   MyQuestionsComponent,
   QuestionAddUpdateComponent
 } from '../components';
-import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/services';
+import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/route-guards';
 
 export const userRoutes: Routes = [
   {
