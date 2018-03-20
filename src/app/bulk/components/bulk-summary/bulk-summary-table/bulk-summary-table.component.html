@@ -19,7 +19,9 @@
 
     <ng-container cdkColumnDef="category">
       <mat-header-cell *cdkHeaderCellDef mat-sort-header>Category</mat-header-cell>
-      <mat-cell class="col-chkbox bulk-summary-table-cell " *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
+      <mat-cell class="col-chkbox bulk-summary-table-cell " *cdkCellDef="let row">
+        <label *ngIf="categoryDict[row.categoryId]!==undefined">{{categoryDict[row.categoryId].categoryName}}</label>
+      </mat-cell>
     </ng-container>
 
     <ng-container cdkColumnDef="primaryTag">
