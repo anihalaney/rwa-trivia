@@ -37,10 +37,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   timer: number;
   categoryDictionary: { [key: number]: Category }
   categoryName: string;
-  continueNext: boolean = false;
-  gameOver: boolean = false;
+  continueNext = false;
+  gameOver = false;
   turnStatus = false;
-  MAX_TIME_IN_SECONDS: number = 16;
+  MAX_TIME_IN_SECONDS = 16;
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -62,8 +62,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
-        this.questionIndex = this.game.playerQnAs.length;
-        this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
+        this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
+        this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length;
         this.setTurnStatusFlag();
       }));
 
@@ -112,6 +112,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.turnStatus = turnFlag;
         this.store.dispatch(new gameplayactions.LoadGame(this.game));
         this.currentQuestion = undefined;
+        this.continueNext = false;
       });
       Utils.unsubscribe([this.timerSub]);
     }
@@ -139,7 +140,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   continueClicked($event) {
     this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     this.continueNext = false;
-    if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
+    if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
+      && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
+
+    } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       //game over
       this.gameOver = true;
       return;
@@ -160,7 +164,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     //this.router.navigate(['/']);
   }
   afterAnswer(userAnswerId?: number) {
-    debugger;
+
     let correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
     //console.log(correctAnswerId);
     if (userAnswerId === correctAnswerId)
@@ -190,7 +194,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     //dispatch action to push player answer
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ "game": this.game, "playerQnA": playerQnA }));
 
-    if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
+    if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
+      && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
+
+    } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       //game over
       this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
     }
