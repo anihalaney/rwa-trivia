@@ -25,38 +25,46 @@ export class GameService {
       && Number(gameOptions.opponentType) === OpponentType.Random) {
       this.joinGame(gameOptions, user, gameIdSubject);
     } else {
-      const game = new Game(gameOptions, user.userId, undefined, undefined, false, user.userId, undefined, undefined, GameStatus.STARTED);
-      this.createGame(game, gameIdSubject);
+      this.createGame(gameOptions, user, gameIdSubject);
     }
     return gameIdSubject;
   }
 
   joinGame(gameOptions: GameOptions, user: User, gameIdSubject: Subject<string>) {
-
+    const pickedGame = 0;
     this.db.collection('/games', ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q)
       .where('nextTurnPlayerId', '==', '').where('gameOver', '==', false))
       .snapshotChanges().take(1).map(gs => gs.map(g => Game.getViewModel(g.payload.doc.data()))).subscribe(queriedItems => {
         const totalGames = queriedItems.length;
         if (totalGames > 0) {
-          const randomGameNo = Math.floor(Math.random() * totalGames);
-          const game = queriedItems[randomGameNo];
-          if (game.playerIds[0] !== user.userId) {
-            game.nextTurnPlayerId = user.userId;
-            game.addPlayer(user.userId);
-            const dbGame = game.getDbModel();
-            gameIdSubject.next(game.gameId);
-            this.db.doc('/games/' + game.gameId).update(dbGame);
-          }
+          this.pickRandomGame(gameOptions, user, queriedItems, totalGames, pickedGame, gameIdSubject);
         } else {
-          const game = new Game(gameOptions, user.userId, undefined, undefined,
-            false, user.userId, undefined, undefined, GameStatus.STARTED);
-          this.createGame(game, gameIdSubject);
+          this.createGame(gameOptions, user, gameIdSubject);
         }
       });
 
   }
 
-  createGame(game: Game, gameIdSubject: Subject<string>) {
+  pickRandomGame(gameOptions: GameOptions, user: User, queriedItems: Array<Game>, totalGames: number,
+    pickedGame: number, gameIdSubject: Subject<string>) {
+    const randomGameNo = Math.floor(Math.random() * totalGames);
+    const game = queriedItems[randomGameNo];
+    if (game.playerIds[0] !== user.userId) {
+      game.nextTurnPlayerId = user.userId;
+      game.addPlayer(user.userId);
+      const dbGame = game.getDbModel();
+      gameIdSubject.next(game.gameId);
+      this.db.doc('/games/' + game.gameId).update(dbGame);
+    } else if (pickedGame < totalGames) {
+      pickedGame++;
+      this.pickRandomGame(gameOptions, user, queriedItems, totalGames, pickedGame, gameIdSubject);
+    } else {
+      this.createGame(gameOptions, user, gameIdSubject);
+    }
+  }
+
+  createGame(gameOptions: GameOptions, user: User, gameIdSubject: Subject<string>) {
+    const game = new Game(gameOptions, user.userId, undefined, undefined, false, user.userId, undefined, undefined, GameStatus.STARTED);
     const dbGame = game.getDbModel(); // object to be saved
 
     const id = this.db.createId();
