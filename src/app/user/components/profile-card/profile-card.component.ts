@@ -15,6 +15,7 @@ import { userState } from '../../store';
 export class ProfileCardComponent implements OnChanges {
   @Input() user: User;
   userObs: Observable<User>;
+  profileUser: string;
 
   constructor(private store: Store<AppState>) {
     this.userObs = this.store.select(userState).select(s => s.user);
@@ -22,8 +23,11 @@ export class ProfileCardComponent implements OnChanges {
     this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
+        this.user.profileUrl.subscribe(url => this.profileUser = url);
+
       }
     });
+
 
   }
 
