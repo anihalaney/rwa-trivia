@@ -28,6 +28,19 @@ export class UserEffects {
         })
         );
 
+    // load user by userId
+    @Effect()
+    loadUserProfile$ = this.actions$
+        .ofType(UserActionTypes.LOAD_USER_PROFILE)
+        .pipe(
+        switchMap((action: userActions.LoadUserProfile) =>
+            this.userService.getUserProfile(action.payload.user)
+                .pipe(
+                map((user: User) => new userActions.LoadUserProfileSuccess(user))
+                )
+        )
+        );
+
 
     //load from router
     @Effect()
