@@ -2,15 +2,20 @@ import {Injectable} from '@angular/core';
 import {HttpEvent, HttpInterceptor, HttpHandler, HttpRequest} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-import {AuthenticationService} from './authentication.service';
+import { Store } from '@ngrx/store';
+import '../../rxjs-extensions';
+
+import { AppState } from '../../store';
+import { authorizationHeader } from '../store';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthenticationService) {}
+  constructor(private store: Store<AppState>) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Get the auth header from the service.
-    const authHeader = this.authService.authorizationHeader;
+    let authHeader;
+    this.store.select(authorizationHeader).take(1).subscribe(ah => authHeader = ah);
 
     if (authHeader) {
       // Clone the request to add the new header.
