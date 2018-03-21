@@ -16,6 +16,8 @@ import * as bulkActions from '../../../bulk/store/actions';
 })
 export class BulkUploadComponent implements OnInit, OnDestroy {
 
+  primaryTag;
+  primaryTagOld;
   isLinear = true;
   uploadFormGroup: FormGroup;
 
@@ -82,6 +84,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
         this.bulkUploadFileInfo = new BulkUploadFileInfo();
         this.questions = [];
         this.parsedQuestions = [];
+        this.primaryTag = this.primaryTagOld = '';
         this.bulkUploadFileInfo.fileName = file['name'];
         this.generateQuestions(reader.result);
       };
@@ -129,11 +132,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
               if (question.answers[element['Answer Index'] - 1] !== undefined) {
                 question.answers[element['Answer Index'] - 1].correct = true;
-              }
-
-              // add primary tag to question tag list
-              if (this.uploadFormGroup.get('tagControl').value) {
-                question.tags = [this.uploadFormGroup.get('tagControl').value];
               }
 
               for (let i = 1; i < 10; i++) {
@@ -194,15 +192,23 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
     } else {
       const formModel = this.prepareUpload();
-
       const dbQuestions: Array<Question> = [];
-
+       // add primary tag to question tag list
+       this.primaryTag = this.uploadFormGroup.get('tagControl').value;
       for (const question of this.questions) {
         this.bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
         this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.categoryIds = [this.uploadFormGroup.get('category').value];
+          if (this.primaryTag && !question.tags.includes(this.primaryTag)) {
+                question.tags = [this.uploadFormGroup.get('tagControl').value, ...question.tags.filter(tag => tag !== this.primaryTagOld)];
+          } else if (this.primaryTag === '') {
+            question.tags = [...question.tags.filter(tag => tag !== this.primaryTagOld)]]
+          }
         question.createdOn = new Date();
         dbQuestions.push(question);
+      }
+      if ( this.primaryTag !==  this.primaryTagOld) {
+        this.primaryTagOld = this.primaryTag;
       }
       this.bulkUploadFileInfo.created_uid = this.user.userId;
       this.bulkUploadFileInfo.date = new Date().getTime();
