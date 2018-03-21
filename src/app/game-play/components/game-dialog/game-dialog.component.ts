@@ -1,4 +1,5 @@
 import { Component, Inject, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -45,7 +46,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
 
-  constructor(private store: Store<GamePlayState>, private gameActions: GameActions,
+  constructor(private store: Store<GamePlayState>, private gameActions: GameActions, private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this._gameId = data.gameId;
@@ -113,6 +114,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.store.dispatch(new gameplayactions.LoadGame(this.game));
         this.currentQuestion = undefined;
         this.continueNext = false;
+        this.router.navigate(['/dashboard']);
       });
       Utils.unsubscribe([this.timerSub]);
     }

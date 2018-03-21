@@ -53,8 +53,9 @@ export class GameService {
       game.nextTurnPlayerId = user.userId;
       game.addPlayer(user.userId);
       const dbGame = game.getDbModel();
-      gameIdSubject.next(game.gameId);
-      this.db.doc('/games/' + game.gameId).update(dbGame);
+      this.db.doc('/games/' + game.gameId).update(dbGame).then(ref => {
+        gameIdSubject.next(game.gameId);
+      });
     } else if (pickedGame < totalGames) {
       pickedGame++;
       this.pickRandomGame(gameOptions, user, queriedItems, totalGames, pickedGame, gameIdSubject);
@@ -78,10 +79,20 @@ export class GameService {
   }
 
   getActiveGames(user: User): Observable<Game[]> {
+    const gamesSubject = new Subject<Game[]>();
     //TODO: Limit to a max
-    return this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
+    this.db.collection('/games', ref => ref.where('gameOver', '==', false))
       .valueChanges()
-      .map(gs => gs.map(g => Game.getViewModel(g)));
+      .map(gs => gs.map(g => Game.getViewModel(g))).subscribe(GamesWithCurrentUser => {
+        const activeGames = [];
+        for (const game of GamesWithCurrentUser) {
+          if (game.playerIds.indexOf(user.userId) !== -1) {
+            activeGames.push(game);
+          }
+        }
+        gamesSubject.next(activeGames);
+      });
+    return gamesSubject;
   }
 
   getGame(gameId: string): Observable<Game> {
