@@ -57,7 +57,7 @@ export class Game {
   }
 
   addPlayer(playerUUId: string) {
-    (this._playerIds.indexOf(playerUUId)) ? this._playerIds.push(playerUUId) : '';
+    (this._playerIds.indexOf(playerUUId) === -1) ? this._playerIds.push(playerUUId) : '';
   }
 
   get gameOptions(): GameOptions {
