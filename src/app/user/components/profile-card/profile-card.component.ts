@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input} from '@angular/core';
 
 import { User } from '../../../model';
 import { Store } from '@ngrx/store';
@@ -12,10 +12,10 @@ import { userState } from '../../store';
   templateUrl: './profile-card.component.html',
   styleUrls: ['./profile-card.component.scss']
 })
-export class ProfileCardComponent implements OnChanges {
+export class ProfileCardComponent {
   @Input() user: User;
   userObs: Observable<User>;
-  profileUser: string;
+  userProfilePicUrl: string;
 
   constructor(private store: Store<AppState>) {
     this.userObs = this.store.select(userState).select(s => s.user);
@@ -23,18 +23,10 @@ export class ProfileCardComponent implements OnChanges {
     this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
-        this.user.profileUrl.subscribe(url => this.profileUser = url);
-
+        if (this.user.profileUrl) {
+        this.user.profileUrl.subscribe(url => this.userProfilePicUrl = url);
+        }
       }
     });
-
-
-  }
-
-  ngOnChanges() {
-    if (this.user) {
-      this.store.dispatch(new userActions.LoadUserProfile({ user: this.user }));
-
-    }
   }
 }
