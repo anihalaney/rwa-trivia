@@ -10,7 +10,7 @@ import { AppState } from '../../store/app-store';
 import { UserActions } from '../store/actions';
 import { User } from '../../model';
 import * as useractions from '../../user/store/actions';
-import { Subject } from 'rxjs/Subject';
+
 
 
 @Injectable()
@@ -51,7 +51,6 @@ export class UserService {
 
 
     getUserProfile(user: User): Observable<User> {
-        // const userSubject = new Subject<User>();
         return this.db.doc<any>('/users/' + user.userId)
             .snapshotChanges()
             .take(1)
