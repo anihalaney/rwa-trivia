@@ -3,7 +3,7 @@ import {
   CanLoad,
   Route, ActivatedRouteSnapshot, RouterStateSnapshot
 } from '@angular/router';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationProvider } from '../auth';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
@@ -12,7 +12,7 @@ import { User } from '../../model';
 
 @Injectable()
 export class AdminLoadGuard implements CanLoad {
-  constructor(private store: Store<AppState>, private authService: AuthenticationService) {
+  constructor(private store: Store<AppState>, private authService: AuthenticationProvider) {
 
   }
   canLoad(route: Route): Observable<boolean> {
@@ -25,7 +25,7 @@ export class AdminLoadGuard implements CanLoad {
 
 @Injectable()
 export class BulkLoadGuard implements CanLoad {
-  constructor(private store: Store<AppState>, private authService: AuthenticationService) {
+  constructor(private store: Store<AppState>, private authService: AuthenticationProvider) {
 
   } canLoad(route: Route): Observable<boolean> {
     return this.store.select(appState.coreState).select(s => s.authInitialized).filter(i => i).take(1).switchMap(i => {

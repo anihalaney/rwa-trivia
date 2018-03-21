@@ -60,7 +60,10 @@ export class BulkSummaryTableComponent implements OnChanges {
       if (bulkUploadFileInfos && bulkUploadFileInfos.length !== 0) {
         for (const key in bulkUploadFileInfos) {
           if (bulkUploadFileInfos[key]) {
-            bulkUploadFileInfos[key].category = this.categoryDict[bulkUploadFileInfos[key].categoryId].categoryName;
+            if (this.categoryDict[bulkUploadFileInfos[key].categoryId] !== undefined) {
+              bulkUploadFileInfos[key].category = this.categoryDict[bulkUploadFileInfos[key].categoryId].categoryName;
+            }
+
             // tslint:disable-next-line:max-line-length
             const filePath = `bulk_upload/${bulkUploadFileInfos[key].created_uid}/${bulkUploadFileInfos[key].id}-${bulkUploadFileInfos[key].fileName}`;
             const ref = this.storage.ref(filePath);

@@ -3,8 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Store } from '@ngrx/store';
   
-import { AppState, appState } from '../../../store';
-import { Category } from '../../../model';
+import { AppState, appState } from '../../store';
+import { Category } from '../../model';
   
 @Injectable()
 export class CategoriesResolver implements Resolve<Category[]> {

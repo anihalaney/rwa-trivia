@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { TEST_DATA } from '../../testing';
 import { AuthGuard } from './auth-guard';
-import { AuthenticationService } from './authentication.service';
+import { AuthenticationProvider } from '../providers';
 
 describe('Service: AuthGuard', () => {
   let authServiceMock = { "isAuthenticated": false,
@@ -16,13 +16,13 @@ describe('Service: AuthGuard', () => {
     imports: [ RouterTestingModule ],
     providers: [
       AuthGuard,
-      { "provide": AuthenticationService, "useValue": authServiceMock }
+      { "provide": AuthenticationProvider, "useValue": authServiceMock }
     ]
   }));
 
   it('canActivate', 
     inject([
-      AuthGuard, Router, AuthenticationService
+      AuthGuard, Router, AuthenticationProvider
     ],
     (service: AuthGuard, router: Router, authServiceMock) => {
 
@@ -39,7 +39,7 @@ describe('Service: AuthGuard', () => {
 
   it('canLoad', 
     inject([
-      AuthGuard, Router, AuthenticationService
+      AuthGuard, Router, AuthenticationProvider
     ],
     (service: AuthGuard, router: Router, authServiceMock) => {
 
