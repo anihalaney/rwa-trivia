@@ -23,8 +23,8 @@ export class ProfileCardComponent {
     this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
-        if (this.user.profileUrl) {
-        this.user.profileUrl.subscribe(url => this.userProfilePicUrl = url);
+        if (this.user.profilePictureUrl) {
+        this.user.profilePictureUrl.subscribe(url => this.userProfilePicUrl = url);
         }
       }
     });

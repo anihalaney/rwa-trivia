@@ -42,7 +42,7 @@ export class UserService {
     saveUserProfile(user: User) {
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
-        delete dbUser.profileUrl;
+        delete dbUser.profilePictureUrl;
         this.db.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => {
             // this.store.dispatch(this.userActions.addUserProfileSuccess());
             this.store.dispatch(new useractions.AddUserProfileSuccess());
@@ -60,7 +60,7 @@ export class UserService {
                     if (u.payload.data().profilePicture !== undefined) {
                         const filePath = `profile/${u.payload.data().userId }/avatar/${u.payload.data().profilePicture}`;
                         const ref = this.storage.ref(filePath);
-                        user.profileUrl = ref.getDownloadURL();
+                        user.profilePictureUrl = ref.getDownloadURL();
                     }
                     return user;
                 }
