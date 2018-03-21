@@ -79,7 +79,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       this.uploadFormGroup.get('csvFile').setValue(file);
       reader.readAsText(file);
       reader.onload = () => {
-        this.bulkUploadFileInfo = new BulkUploadFileInfo;
+        this.bulkUploadFileInfo = new BulkUploadFileInfo();
+        this.questions = [];
+        this.parsedQuestions = [];
         this.bulkUploadFileInfo.fileName = file['name'];
         this.generateQuestions(reader.result);
       };
@@ -108,7 +110,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     };
 
     parse(csvString, parseOptions,
-      (err, output) => {
+      (error, output) => {
+        if (error) {
+          this.fileParseError = true;
+          this.fileParseErrorMessage = `File Parsing ${error}`;
+        }
         if (output !== undefined && output !== '') {
           this.questions =
             output.map(element => {
@@ -126,7 +132,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
               }
 
               // add primary tag to question tag list
-              question.tags = [this.uploadFormGroup.get('tagControl').value];
+              if (this.uploadFormGroup.get('tagControl').value) {
+                question.tags = [this.uploadFormGroup.get('tagControl').value];
+              }
 
               for (let i = 1; i < 10; i++) {
                 if (element['Tag ' + i] && element['Tag ' + i] !== '') {
