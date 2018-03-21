@@ -30,12 +30,4 @@ export class User {
       this.displayName = (authState.providerData[0].displayName ? authState.providerData[0].displayName : this.email);
     }
   }
-
-  setUserDetail(user: any) {
-    this.name = user.name;
-    this.location = user.location;
-
-
-  }
-
 }

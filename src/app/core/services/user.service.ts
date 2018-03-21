@@ -41,51 +41,33 @@ export class UserService {
 
     saveUserProfile(user: User) {
         const dbUser = Object.assign({}, user); // object to be saved
-        delete dbUser['authState'];
+        delete dbUser.authState;
+        delete dbUser.profileUrl;
         this.db.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => {
             // this.store.dispatch(this.userActions.addUserProfileSuccess());
             this.store.dispatch(new useractions.AddUserProfileSuccess());
         });
     }
 
-    // // get user by Id
-    // getUserProfile(userId: Number): Observable<User> {
-    //     return this.db.doc(`/users/${userId}`)
-    //         .valueChanges()
-    //         .catch(error => {
-    //             return Observable.of(null);
-    //         });
-    // }
-    // get user by Id
+
     getUserProfile(user: User): Observable<User> {
         // const userSubject = new Subject<User>();
         return this.db.doc<any>('/users/' + user.userId)
             .snapshotChanges()
             .take(1)
-            .map(userDetail => {
-                if (userDetail.payload.exists && userDetail.payload.data()) {
-                    if (userDetail.payload.data().profilePicture !== undefined) {
-                        const filePath = 'profile/' + userDetail.payload.data().userId + '/avatar/'
-                            + userDetail.payload.data().profilePicture;
+            .map(u => {
+                if (u.payload.exists && u.payload.data()) {
+                    user = { ...user, ...u.payload.data()}
+                    if (u.payload.data().profilePicture !== undefined) {
+                        const filePath = `profile/${u.payload.data().userId }/avatar/${u.payload.data().profilePicture}`;
                         const ref = this.storage.ref(filePath);
-                        user.setUserDetail(userDetail.payload.data());
                         user.profileUrl = ref.getDownloadURL();
-                        return user;
-                        // ref.getDownloadURL().subscribe(url => {
-                        //     user.setUserDetail(userDetail.payload.data(), url);
-                        //     console.log("after user" + JSON.stringify(user));
-                        //     // userSubject.next(user);
-                        //     return user;
-                        // });
                     }
+                    return user;
                 }
-
             })
             .catch(error => {
                 return Observable.of(null);
             });
-        // return userSubject;
     }
-
-
 }
