@@ -202,7 +202,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
           if (this.primaryTag && !question.tags.includes(this.primaryTag)) {
                 question.tags = [this.uploadFormGroup.get('tagControl').value, ...question.tags.filter(tag => tag !== this.primaryTagOld)];
           } else if (this.primaryTag === '') {
-            question.tags = [...question.tags.filter(tag => tag !== this.primaryTagOld)]
+            question.tags = [...question.tags.filter(tag => tag !== this.primaryTagOld)];
           }
         question.createdOn = new Date();
         dbQuestions.push(question);
