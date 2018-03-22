@@ -80,9 +80,10 @@
             <li>
               <div class="question-text ">Tags :</div>
               <div class="answer-text">
-                <span *ngFor="let tag of row.tags">
+                {{row.tags?.toString()}}
+                <!-- <span *ngFor="let tag of row.tags">
                   {{tag}},
-                </span>
+                </span> -->
               </div>
             </li>
             <li *ngIf="row.validationErrorMessages?.length > 0">
