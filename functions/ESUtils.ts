@@ -186,7 +186,7 @@ export class ESUtils {
   static getRandomQuestionOfTheDay(): Promise<Question> {
     const date = new Date();
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
-    return this.getRandomItems(this.QUESTIONS_INDEX, 1, seed).then((hits) => {
+    return this.getRandomItems(this.QUESTIONS_INDEX, 1, '').then((hits) => {
       // convert hit to Question
       return Question.getViewModelFromES(hits[0]);
     });
