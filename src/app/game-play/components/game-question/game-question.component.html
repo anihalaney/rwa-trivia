@@ -5,6 +5,7 @@
 
         <!-- Timer -->
         <div *ngIf="continueNext" class="score">Score: {{correctCount}}/{{noOfQuestions}}</div>
+        <div *ngIf="continueNext" class="score">Badge: {{correctCount}}</div>
         <div *ngIf="continueNext" class="answer-status">
           <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
           <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
@@ -51,7 +52,7 @@
           <div fxFlexAlign="center">       
             <button mat-button >REPORT ISSUE</button> 
           </div>
-          <button mat-button (click)="continueClicked.emit($event)" class="startgame">CONTINUE</button>
+          <button mat-button *ngIf="showContinueBtn" (click)="continueClicked.emit($event)" class="startgame">CONTINUE</button>
         </div>
       </div>
 </div>
