@@ -19,6 +19,7 @@ export class GameCardComponent implements OnInit, OnChanges {
   userProfilePicUrl: string;
   user: User;
   myTurn: boolean;
+  location: string;
 
   constructor(private store: Store<AppState>) {
     this.userProfilePicUrl = '/assets/images/yourimg.png';
@@ -27,7 +28,9 @@ export class GameCardComponent implements OnInit, OnChanges {
     this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
+        console.log("user" + JSON.stringify(this.user.location));
         if (this.user.profilePictureUrl) {
+          this.location = this.user.location;
           this.user.profilePictureUrl.subscribe(url => this.userProfilePicUrl = url);
         }
       }
