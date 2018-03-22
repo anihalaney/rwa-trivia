@@ -24,6 +24,8 @@ export class QuestionComponent implements OnChanges {
   constructor(private fb: FormBuilder, private store: Store<AppState>, private questionAction: QuestionActions) {
     this.answeredIndex = -1;
     this.correctAnswerIndex = -1;
+    this.store.select(appState.coreState).select(s => s.questionOfTheDay).subscribe(questionOfTheDay => {
+    });
   }
 
   ngOnChanges() {
@@ -48,8 +50,7 @@ export class QuestionComponent implements OnChanges {
     this.answeredIndex = -1;
     this.correctAnswerIndex = -1;
     this.store.dispatch(this.questionAction.getQuestionOfTheDay());
-    this.store.select(appState.coreState).select(s => s.questionOfTheDay).subscribe(questionOfTheDay => {
-    });
+
   }
 
 }
