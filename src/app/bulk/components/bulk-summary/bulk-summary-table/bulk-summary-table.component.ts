@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, OnChanges } from '@angular/core';
+import { Component, Input, ViewChild, OnChanges, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../../store';
@@ -22,7 +22,7 @@ export class BulkSummaryTableComponent implements OnChanges {
   user: User;
   bulkUploadObs: Observable<BulkUploadFileInfo[]>;
   dataSource: any;
-  showSummaryTable = true;
+
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
 
@@ -30,8 +30,10 @@ export class BulkSummaryTableComponent implements OnChanges {
     'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];
 
   @Input() bulkSummaryDetailPath: String;
+  @Input() showSummaryTable: boolean;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @Output() showBulkUploadBtn = new EventEmitter<String>();
 
   constructor(
     private store: Store<AppState>,
@@ -45,7 +47,7 @@ export class BulkSummaryTableComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    if (this.bulkSummaryDetailPath) {
+    if (this.bulkSummaryDetailPath && this.showSummaryTable) {
       this.loadBulkSummaryData();
     }
   }
@@ -94,11 +96,8 @@ export class BulkSummaryTableComponent implements OnChanges {
   // get Questions by bulk upload Id
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
     this.bulkUploadFileInfo = row;
-    this.showSummaryTable = false;
+    this.showBulkUploadBtn.emit('Bulk Upload File Details');
   }
 
-  backToSummary() {
-    this.showSummaryTable = true;
-    this.loadBulkSummaryData();
-  }
+
 }
