@@ -1,10 +1,13 @@
 <div class="row">
-  <div class="pageheading col-md-6 col-xs-12 hidden-xs">Bulk Upload</div>
+  <div class="pageheading col-md-9 col-xs-12 hidden-xs">Bulk Upload</div>
+  <div class="col-md-3 col-xs-12 align-right alignment">
+    <button class="btn" [routerLink]="['/bulk']"> Back To Summary </button>
+  </div>
 </div>
 
 <section>
   <div class="card bulk-instuctions" *ngIf="showInstructions">
-    <h2>Instuctions</h2>
+    <h2>Instructions</h2>
     <div class=" row col-sm-8 col-xs-12">
       <p>The bulk upload feature allows you to submit your questions in a batch, instead of one at a time. Please read the instructions
         carefully before using this feature.</p>
@@ -19,14 +22,16 @@
         <p>The bulk upload allows you to upload a csv file with multiple questions. The format of the csv file must be similar
           to the sample file, else your upload will be rejected. </p>
       </div>
-      <div class="col-md-1 col-xs-4 downloadFile">
-        <div class="sprite downloadicon col-md-offset-3 col-xs-offset-3"></div>
-        <div>
-          <a target="new" href="/assets/Sample Questions.csv" >Download
-            <p>Sample File</p>
-          </a>
+      <a target="new" href="/assets/Sample Questions.csv">
+        <div class="col-md-1 col-xs-4 downloadFile">
+          <div class="sprite downloadicon col-md-offset-3 col-xs-offset-3"></div>
+          <div>
+            <a>Download
+              <p>Sample File</p>
+            </a>
+          </div>
         </div>
-      </div>
+      </a>
     </div>
 
     <div class="row">
@@ -102,7 +107,7 @@
           </div>
           <div class="control-spacing">
             <button class="btn-back" type="button" (click)="showUploadSteps()">Back</button>
-            <button class="btn" matStepperNext type="button" [disabled]="bulkUploadFileInfo === undefined || fileParseError" (click)="onUploadSubmit()">Next</button>
+            <button class="btn" matStepperNext type="button" [disabled]="fileParseError" (click)="onUploadSubmit()">Next</button>
           </div>
         </form>
       </mat-step>
@@ -115,7 +120,8 @@
           <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
           <div class="control-spacing">
             <button class="btn-back" type="button" matStepperPrevious>Back</button>
-            <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError" (click) = "onReviewSubmit()" >Submit</button>
+            <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError"
+              (click)="onReviewSubmit()">Submit</button>
           </div>
         </div>
       </mat-step>
