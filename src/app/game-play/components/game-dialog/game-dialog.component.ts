@@ -205,9 +205,11 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random
-      && this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length === 3) {
-      this.game.winnerPlayerId = this.user.userId;
-      this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
+    ) {
+      if (this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length === 3) {
+        this.game.winnerPlayerId = this.user.userId;
+        this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
+      }
     } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       //game over
       this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
