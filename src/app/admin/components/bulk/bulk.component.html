@@ -1,6 +1,14 @@
 <div >
   <div class="row">
-    <div class="pageheading col-md-6 col-xs-12 hidden-xs">Bulk Upload Summary</div>
+    <div class="pageheading col-md-9 col-xs-12 hidden-xs">Bulk Upload Summary</div>
+    <div class="col-md-3 col-xs-6 align-right">      
+      <button class="btn startupload" *ngIf="!showSummaryTable" (click)="backToSummary()"> Back to Summary </button>
+      <!-- <a [routerLink]="['./upload']" class="pageheading startupload font-size-16">Start New Bulk Upload</a> -->
+    </div>
   </div>
 </div>
-<bulk-summary-table [bulkSummaryDetailPath]='bulkSummaryDetailPath'></bulk-summary-table>
+<bulk-summary-table 
+[bulkSummaryDetailPath]="bulkSummaryDetailPath"
+[showSummaryTable]="showSummaryTable" 
+(showBulkUploadBtn)="changeTableHeading($event)">
+</bulk-summary-table>
