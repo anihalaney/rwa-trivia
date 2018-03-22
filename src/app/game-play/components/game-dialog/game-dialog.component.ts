@@ -42,6 +42,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   gameOver = false;
   turnStatus = false;
   MAX_TIME_IN_SECONDS = 16;
+  showContinueBtn = false;
+
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -108,7 +110,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       if (!this.currentQuestion) {
         this.getNextQuestion();
       }
+      this.showContinueBtn = true;
     } else {
+      this.showContinueBtn = false;
       Observable.timer(5000).take(1).subscribe(t => {
         this.turnStatus = turnFlag;
         this.store.dispatch(new gameplayactions.LoadGame(this.game));
@@ -144,13 +148,16 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
-
+      if (this.correctAnswerCount === 3) {
+        this.gameOver = true;
+      }
     } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       //game over
       this.gameOver = true;
       return;
     }
-    this.getNextQuestion();
+    (!this.gameOver) ?
+      this.getNextQuestion() : '';
   }
 
   /*
@@ -197,8 +204,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ "game": this.game, "playerQnA": playerQnA }));
 
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
-      && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
-
+      && Number(this.game.gameOptions.opponentType) === OpponentType.Random
+      && this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length === 3) {
+      this.game.winnerPlayerId = this.user.userId;
+      this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
     } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       //game over
       this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));

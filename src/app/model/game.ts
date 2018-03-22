@@ -97,6 +97,9 @@ export class Game {
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
       'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED
     }
+    if (this.winnerPlayerId) {
+      dbModel['winnerPlayerId'] = this.winnerPlayerId;
+    }
     for (let i = 0; i < this.playerIds.length; i++) {
       dbModel['playerId_' + i] = this.playerIds[i];
     }
