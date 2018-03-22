@@ -4,21 +4,35 @@ import { Store } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 import { User, Game } from '../../../model';
+import { userState } from '../../store';
 
 @Component({
   selector: 'game-card',
   templateUrl: './game-card.component.html',
   styleUrls: ['./game-card.component.scss']
 })
-export class GameCardComponent implements OnInit, OnChanges  {
+export class GameCardComponent implements OnInit, OnChanges {
   @Input() game: Game;
+  userObs: Observable<User>;
   correctAnswerCount: number;
   questionIndex: number;
-  
+  userProfilePicUrl: string;
   user: User;
   myTurn: boolean;
 
-  constructor(private store: Store<AppState>) { }
+  constructor(private store: Store<AppState>) {
+    this.userProfilePicUrl = '/assets/images/yourimg.png';
+    this.userObs = this.store.select(userState).select(s => s.user);
+
+    this.userObs.subscribe(user => {
+      if (user !== null) {
+        this.user = user;
+        if (this.user.profilePictureUrl) {
+          this.user.profilePictureUrl.subscribe(url => this.userProfilePicUrl = url);
+        }
+      }
+    });
+  }
 
   ngOnInit() {
     this.store.select(appState.coreState).take(1).subscribe(s => {

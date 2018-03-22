@@ -1,12 +1,12 @@
-import { Injectable }    from '@angular/core';
-import { HttpClient, HttpHeaders }    from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, GameOptions, Game, Question, PlayerQnA }     from '../../model';
+import { User, GameOptions, Game, Question, PlayerQnA } from '../../model';
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
@@ -14,8 +14,8 @@ import { Utils } from '../services/utils';
 @Injectable()
 export class GameService {
   constructor(private db: AngularFirestore,
-              private http: HttpClient,
-              private gameActions: GameActions) { 
+    private http: HttpClient,
+    private gameActions: GameActions) {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
@@ -35,16 +35,26 @@ export class GameService {
   }
 
   getActiveGames(user: User): Observable<Game[]> {
+    const gamesSubject = new Subject<Game[]>();
     //TODO: Limit to a max
-    return this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
-              .valueChanges()
-              .map(gs => gs.map(g => Game.getViewModel(g)));
+    this.db.collection('/games', ref => ref.where('gameOver', '==', false))
+      .valueChanges()
+      .map(gs => gs.map(g => Game.getViewModel(g))).subscribe(GamesWithCurrentUser => {
+        const activeGames = [];
+        for (const game of GamesWithCurrentUser) {
+          if (game.playerIds.indexOf(user.userId) !== -1) {
+            activeGames.push(game);
+          }
+        }
+        gamesSubject.next(activeGames);
+      });
+    return gamesSubject;
   }
 
   getGame(gameId: string): Observable<Game> {
     return this.db.doc('/games/' + gameId)
-    .valueChanges()
-    .map(g => Game.getViewModel(g));
+      .valueChanges()
+      .map(g => Game.getViewModel(g));
   }
 
   getNextQuestion(game: Game): Observable<Question> {
@@ -54,7 +64,7 @@ export class GameService {
   addPlayerQnAToGame(game: Game, playerQnA: PlayerQnA) {
     game.playerQnAs.push(playerQnA);
     let dbGame = game.getDbModel();
-    
+
     this.db.doc('/games/' + game.gameId).update(dbGame);
   }
 
