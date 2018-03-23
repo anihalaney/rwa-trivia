@@ -1,16 +1,29 @@
 <div class="card">
   <div class="subscrib-cion sprite"></div>
-  <div class="subscrib-cont">
+  <div class="subscrib">
     <h2>Sign up for our newsletter to stay connected </h2>
     <p>Subscribe to our bi-weekly email newsletter for useful tips and valuable resources.</p>
-      <div class="row">
-        <div class="col-sm-7 col-xs-12">
-          <input placeholder="enter your email ID" type="email" name="enter your email ID" value="" required="">
+    <div *ngIf="!isSubscribed">
+      <form (ngSubmit)="onSubscribe()" [formGroup]="subscriptionForm" class="upload-questions">
+        <div class="row">
+          <div class="col-sm-7 col-xs-12">
+            <input placeholder="enter your email ID" type="email" name="enter your email ID" formControlName="email" class="required">
+            <span *ngIf="subscriptionForm.controls.email.invalid && !subscriptionForm.controls.email.pristine && !subscriptionForm.controls.email.errors.required"
+              class="label">Invalid Email!</span>
+          </div>
+          <div class="col-sm-5 col-xs-12">
+            <button class="btn">Subscribe</button>
+          </div>
         </div>
-        <div class="col-sm-5 col-xs-12">
-          <button class="btn">Subscribe</button>
-        </div>
+      </form>
+    </div>
+    <div *ngIf="isSubscribed">
+      <div class="col-sm-12 col-xs-12">
+        <button class="btn">UnSubscribe</button>
       </div>
+    </div>
+  </div>
+  <div class="subs-bottom-spacing">
     <div class="subs-bottom">2145 Subscribers</div>
     <div class="subs-bottom">powered by Mailchimp</div>
   </div>

@@ -19,10 +19,10 @@ export class SocialService {
     }
 
     saveSubscription(subscription: Subscription) {
-        const dbSubscription = Object.assign({}, subscription); // object to be saved
-        this.db.doc(`/subscription/${dbSubscription.userId}`).set(dbSubscription).then(ref => {
-            // this.store.dispatch(this.userActions.addUserProfileSuccess());
-           // this.store.dispatch(new socialactions.AddSubscriberSuccess());
+        const dbSubscription = Object.assign({}, subscription);
+        dbSubscription.id = this.db.createId();
+        this.db.doc(`/subscription/${dbSubscription.id}`).set(dbSubscription).then(ref => {
+            this.store.dispatch(new socialactions.AddSubscriberSuccess());
         });
     }
 
