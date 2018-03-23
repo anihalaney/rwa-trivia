@@ -10,11 +10,11 @@ import { User, Game } from '../../../model';
   templateUrl: './game-card.component.html',
   styleUrls: ['./game-card.component.scss']
 })
-export class GameCardComponent implements OnInit, OnChanges  {
+export class GameCardComponent implements OnInit, OnChanges {
   @Input() game: Game;
   correctAnswerCount: number;
   questionIndex: number;
-  
+
   user: User;
   myTurn: boolean;
 
