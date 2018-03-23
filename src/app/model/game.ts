@@ -17,9 +17,11 @@ export class Game {
   public nextTurnPlayerId: string;
   public winnerPlayerId: string;
   public GameStatus: string;
+  public createdAt: number;
+  public turnAt: number;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
-    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string) {
+    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
@@ -52,6 +54,14 @@ export class Game {
 
     if (gameStatus) {
       this.GameStatus = gameStatus;
+    }
+
+    if (createdAt) {
+      this.createdAt = createdAt;
+    }
+
+    if (turnAt) {
+      this.turnAt = turnAt;
     }
 
   }
@@ -92,7 +102,7 @@ export class Game {
     let dbModel = {
       'gameOptions': Object.assign({}, this.gameOptions),
       'playerIds': this.playerIds,
-      'gameOver': false,
+      'gameOver': (this.gameOver) ? this.gameOver : false,
       'playerQnAs': this.playerQnAs,
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
       'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED
@@ -103,6 +113,15 @@ export class Game {
     for (let i = 0; i < this.playerIds.length; i++) {
       dbModel['playerId_' + i] = this.playerIds[i];
     }
+
+    if (this.createdAt) {
+      dbModel['createdAt'] = this.createdAt;
+    }
+
+    if (this.turnAt) {
+      dbModel['turnAt'] = this.turnAt;
+    }
+
     return dbModel;
   }
 
@@ -111,7 +130,7 @@ export class Game {
     let game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus']);
+      dbModel['GameStatus'],dbModel['createdAt'],dbModel['turnAt']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }

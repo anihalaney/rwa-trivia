@@ -148,7 +148,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
-      if (this.correctAnswerCount === 3) {
+      if (this.correctAnswerCount >= 3) {
         this.gameOver = true;
       }
     } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
@@ -200,13 +200,15 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       }
     }
 
+    this.game.turnAt = new Date().getTime();
+
     //dispatch action to push player answer
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ "game": this.game, "playerQnA": playerQnA }));
 
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random
     ) {
-      if (this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length === 3) {
+      if (this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length >= 3) {
         this.game.winnerPlayerId = this.user.userId;
         this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
       }

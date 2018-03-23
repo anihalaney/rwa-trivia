@@ -65,7 +65,8 @@ export class GameService {
   }
 
   createGame(gameOptions: GameOptions, user: User, gameIdSubject: Subject<string>) {
-    const game = new Game(gameOptions, user.userId, undefined, undefined, false, user.userId, undefined, undefined, GameStatus.STARTED);
+    const game = new Game(gameOptions, user.userId, undefined, undefined, false, user.userId, undefined, undefined,
+      GameStatus.STARTED, new Date().getTime(), new Date().getTime());
     const dbGame = game.getDbModel(); // object to be saved
 
     const id = this.db.createId();
@@ -84,10 +85,13 @@ export class GameService {
     this.db.collection('/games', ref => ref.where('gameOver', '==', false))
       .valueChanges()
       .map(gs => gs.map(g => Game.getViewModel(g))).subscribe(GamesWithCurrentUser => {
-        const activeGames = [];
+        let activeGames = [];
         for (const game of GamesWithCurrentUser) {
           if (game.playerIds.indexOf(user.userId) !== -1) {
             activeGames.push(game);
+            activeGames = activeGames.sort(function (a, b) {
+              return a.turnAt - b.turnAt;
+            });
           }
         }
         gamesSubject.next(activeGames);

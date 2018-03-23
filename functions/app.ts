@@ -1,7 +1,7 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
-
+import { GameScheduler } from './schedulers';
 
 
 
@@ -343,6 +343,9 @@ app.get('/testES', adminOnly, (req, res) => {
 
 // END - TEST FUNCTIONS
 ///////////////////////
+
+// const gameScheduler: GameScheduler = new GameScheduler(admin);
+// gameScheduler.startCron();
 
 exports.app = functions.https.onRequest(app);
 
