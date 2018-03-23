@@ -10,7 +10,8 @@
     "express": "4.16.2",
     "firebase-admin": "5.9.1",
     "firebase-functions": "0.8.1",
-    "google-cloud": "0.57.0"
+    "google-cloud": "0.57.0",
+    "node-cron": "^1.2.1"
   },
   "private": true,
   "devDependencies": {
