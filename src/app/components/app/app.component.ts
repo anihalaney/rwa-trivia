@@ -6,7 +6,8 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { AppState, appState } from '../../store';
 import { CategoryActions, TagActions, QuestionActions, GameActions } from '../../core/store';
-import { AuthenticationService, Utils } from '../../core/services';
+import { Utils } from '../../core/services';
+import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
 
 @Component({
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   theme = '';
   constructor(private renderer: Renderer2,
-    private authService: AuthenticationService,
+    private authService: AuthenticationProvider,
     private categoryActions: CategoryActions,
     private tagActions: TagActions,
     private questionActions: QuestionActions,
