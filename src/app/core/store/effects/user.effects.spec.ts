@@ -5,12 +5,10 @@ import { Observable } from 'rxjs/Observable';
 import { TEST_DATA } from '../../../testing/test.data';
 import { UserEffects } from './user.effects';
 import { UserActions } from '../actions';
-import { AuthenticationService } from '../../services';
 
 describe('Effects: UserEffects', () => {
   let _runner: EffectsRunner;
   let _effects: UserEffects;
-  let _service: AuthenticationService;
   let authMock = {"getUserRoles": () => Observable.of(TEST_DATA.userList[0]) };
 
   beforeEach(() => TestBed.configureTestingModule({
@@ -18,8 +16,7 @@ describe('Effects: UserEffects', () => {
       EffectsTestingModule
     ],
     providers: [
-      UserEffects, UserActions, 
-      {"provide": AuthenticationService, "useValue": authMock}
+      UserEffects, UserActions
     ]
   }));
 
