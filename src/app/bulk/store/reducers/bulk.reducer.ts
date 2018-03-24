@@ -51,6 +51,6 @@ export function questionSaveStatus(state: any = 'NONE', action: BulkActions): st
         case BulkActionTypes.UPDATE_QUESTION:
             return 'UPDATE';
         default:
-            return state;
+            return null;
     }
 };
