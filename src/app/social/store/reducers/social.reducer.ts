@@ -15,6 +15,7 @@ export function subscriptionSaveStatus(state: any = 'NONE', action: SocialAction
     }
 }
 
+//return total subscription count 
 export function getTotalSubscriptionStatus(state: any = [], action: SocialActions): Number {
     switch (action.type) {
         case SocialActionTypes.TOTAL_SUBSCRIBER_SUCCESS:
@@ -35,4 +36,14 @@ export function subscriptionRemoveStatus(state: any = 'NONE', action: SocialActi
             return state;
     }
 }
+
+//return boolean value to check for subscription
+export function checkEmailSubscriptionStatus(state: any = [], action: SocialActions): Boolean {
+    switch (action.type) {
+        case SocialActionTypes.CHECK_SUBSCRIPTION:
+            return action.payload;
+        default:
+            return state;
+    }
+};
 

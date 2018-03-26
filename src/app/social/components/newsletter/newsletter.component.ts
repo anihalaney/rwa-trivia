@@ -21,6 +21,7 @@ export class NewsletterComponent implements OnInit {
   user: User;
   isSubscribed: Boolean = false;
   totalCount: Number = 0;
+  message = '';
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, ) {
     this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
@@ -29,22 +30,24 @@ export class NewsletterComponent implements OnInit {
         this.user = user;
       }
     });
-    this.store.select(socialState).select(s => s.subscriptionSaveStatus).subscribe(status => {
-      if (status === 'SUCCESS') {
-        this.user.isSubscribed = true;
+    this.store.select(socialState).select(s => s.checkEmailSubscriptionStatus).subscribe(status => {
+      if (status === true) {
         this.isSubscribed = true;
+        this.message = 'This EmailId is already Subscribed!!';
+      } else if (status === false) {
+        this.isSubscribed = true;
+        this.message = 'Your EmailId is Successfully Subscribed!!';
       }
     });
     this.store.select(socialState).select(s => s.getTotalSubscriptionStatus).subscribe(val => {
-      console.log("count" + JSON.stringify(val));
       this.totalCount = val;
     });
-    this.store.select(socialState).select(s => s.subscriptionRemoveStatus).subscribe(status => {
-      if (status === 'SUCCESS') {
-        this.user.isSubscribed = false;
-        this.isSubscribed = false;
-      }
-    });
+    // this.store.select(socialState).select(s => s.subscriptionRemoveStatus).subscribe(status => {
+    //   if (status === 'SUCCESS') {
+    //     this.user.isSubscribed = false;
+    //     this.isSubscribed = false;
+    //   }
+    // });
   }
 
   ngOnInit() {
@@ -59,12 +62,20 @@ export class NewsletterComponent implements OnInit {
     if (!this.subscriptionForm.valid) {
       return;
     } else {
-      this.store.dispatch(new socialActions.AddSubscriber(
-        { subscription: new Subscription(this.subscriptionForm.get('email').value, this.user.userId) }));
+      const request = { email: this.subscriptionForm.get('email').value };
+      if (this.user) {
+        request['userId'] = this.user.userId;
+        this.store.dispatch(new socialActions.AddSubscriber(
+          { subscription: new Subscription(request) }));
+      } else {
+        this.store.dispatch(new socialActions.AddSubscriber(
+          { subscription: new Subscription(request) }));
+      }
     }
-  }
-  onUnSubscribe() {
-    this.store.dispatch(new socialActions.RemoveSubscriber({ created_uid: this.user.userId }));
 
   }
+  // onUnSubscribe() {
+  //   this.store.dispatch(new socialActions.RemoveSubscriber({ created_uid: this.user.userId }));
+
+  // }
 }
