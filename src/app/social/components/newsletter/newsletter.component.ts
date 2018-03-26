@@ -20,17 +20,29 @@ export class NewsletterComponent implements OnInit {
   subscriptionForm: FormGroup;
   user: User;
   isSubscribed: Boolean = false;
+  totalCount: Number = 0;
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, ) {
-    store.select(appState.coreState).select(s => s.user).subscribe(user => {
-      this.user = user
+    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+      this.user = user;
       if (user) {
         this.user = user;
       }
     });
     this.store.select(socialState).select(s => s.subscriptionSaveStatus).subscribe(status => {
       if (status === 'SUCCESS') {
+        this.user.isSubscribed = true;
         this.isSubscribed = true;
+      }
+    });
+    this.store.select(socialState).select(s => s.getTotalSubscriptionStatus).subscribe(val => {
+      console.log("count" + JSON.stringify(val));
+      this.totalCount = val;
+    });
+    this.store.select(socialState).select(s => s.subscriptionRemoveStatus).subscribe(status => {
+      if (status === 'SUCCESS') {
+        this.user.isSubscribed = false;
+        this.isSubscribed = false;
       }
     });
   }
@@ -38,8 +50,9 @@ export class NewsletterComponent implements OnInit {
   ngOnInit() {
     this.subscriptionForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
-    }
-    );
+    });
+
+    this.store.dispatch(new socialActions.GetTotalSubscriber());
   }
 
   onSubscribe() {
@@ -48,8 +61,10 @@ export class NewsletterComponent implements OnInit {
     } else {
       this.store.dispatch(new socialActions.AddSubscriber(
         { subscription: new Subscription(this.subscriptionForm.get('email').value, this.user.userId) }));
-
-
     }
+  }
+  onUnSubscribe() {
+    this.store.dispatch(new socialActions.RemoveSubscriber({ created_uid: this.user.userId }));
+
   }
 }
