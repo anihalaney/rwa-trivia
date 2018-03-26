@@ -25,7 +25,35 @@ export class AddSubscriberSuccess implements Action {
     payload = null;
 }
 
+// Get total subscriber
+export class GetTotalSubscriber implements Action {
+    readonly type = SocialActionTypes.TOTAL_SUBSCRIBER;
+    payload = null;
+}
+
+// Get total subscriber Success
+export class GetTotalSubscriberSuccess implements Action {
+    readonly type = SocialActionTypes.TOTAL_SUBSCRIBER_SUCCESS;
+    constructor(public payload: Number) { }
+}
+
+// Remove subscriber
+export class RemoveSubscriber implements Action {
+    readonly type = SocialActionTypes.REMOVE_SUBSCRIBER;
+    constructor(public payload: { created_uid: String }) { }
+}
+
+// Save subscriber Success
+export class RemoveSubscriberSuccess implements Action {
+    readonly type = SocialActionTypes.REMOVE_SUBSCRIBER_SUCCESS;
+    payload = null;
+}
+
 export type SocialActions
     = AddSubscriber
     | AddSubscriberSuccess
+    | GetTotalSubscriber
+    | GetTotalSubscriberSuccess
+    | RemoveSubscriber
+    | RemoveSubscriberSuccess
 

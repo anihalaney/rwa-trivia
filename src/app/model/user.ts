@@ -19,6 +19,7 @@ export class User {
   authState: firebase.User;
   roles: any;
   tags?: string[];
+  isSubscribed: boolean;
 
   constructor(authState: firebase.User) {
     if (authState) {
