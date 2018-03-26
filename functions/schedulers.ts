@@ -14,7 +14,7 @@ export class GameScheduler {
 
     checkGames(): any {
         return cron.schedule('* */1 * * *', function () {
-            const db = this.firebaseApp.firestore();
+            const db = this.firebaseApp;
             db.collection('/games').where('gameOver', '==', false)
                 .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q)
                 .get()
@@ -43,7 +43,7 @@ export class GameScheduler {
     }
 
     startCron(): void {
-        // this.task.start();
+        this.task.start();
 
     }
 
