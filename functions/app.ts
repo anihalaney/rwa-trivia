@@ -2,6 +2,7 @@ import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { GameScheduler } from './schedulers';
+import { GameMechanics } from './game-mechanics';
 
 
 
@@ -341,10 +342,42 @@ app.get('/testES', adminOnly, (req, res) => {
 
 });
 
+
+app.post('/createGame', adminOnly, (req, res) => {
+  // console.log('body---->', req.body);
+  const gameOptions = req.body.gameOptions;
+  const userId = req.body.userId;
+
+  if (!gameOptions) {
+    // Game Option is not added
+    res.status(403).send('Game Option is not added in request');
+    return;
+  }
+
+  if (!userId) {
+    // userId
+    res.status(403).send('userId is not added in request');
+    return;
+  }
+
+  const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId, admin.firestore());
+  gameMechanics.createNewGame().then((gameId) => {
+    console.log('gameId', gameId);
+
+    res.send({ gameId: gameId });
+  });
+
+
+});
+
+
+
+
 // END - TEST FUNCTIONS
 ///////////////////////
 
-// const gameScheduler: GameScheduler = new GameScheduler(admin);
+// start scheduler of game to check game over of users
+// const gameScheduler: GameScheduler = new GameScheduler(admin.firestore());
 // gameScheduler.startCron();
 
 exports.app = functions.https.onRequest(app);
