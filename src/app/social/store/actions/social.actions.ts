@@ -10,7 +10,8 @@ export enum SocialActionTypes {
     REMOVE_SUBSCRIBER = '[Social] RemoveSubscriber',
     REMOVE_SUBSCRIBER_SUCCESS = '[Social] RemoveSubscriberSuccess',
     TOTAL_SUBSCRIBER = '[Social] TotalSubscriber',
-    TOTAL_SUBSCRIBER_SUCCESS = '[Social] TotalSubscriberSuccess'
+    TOTAL_SUBSCRIBER_SUCCESS = '[Social] TotalSubscriberSuccess',
+    CHECK_SUBSCRIPTION = '[Social] CheckSubscriptionStatus'
 }
 
 // Save subscriber
@@ -49,6 +50,12 @@ export class RemoveSubscriberSuccess implements Action {
     payload = null;
 }
 
+// Get total subscriber Success
+export class CheckSubscriptionStatus implements Action {
+    readonly type = SocialActionTypes.CHECK_SUBSCRIPTION;
+    constructor(public payload: Boolean) { }
+}
+
 export type SocialActions
     = AddSubscriber
     | AddSubscriberSuccess
@@ -56,4 +63,5 @@ export type SocialActions
     | GetTotalSubscriberSuccess
     | RemoveSubscriber
     | RemoveSubscriberSuccess
+    | CheckSubscriptionStatus
 

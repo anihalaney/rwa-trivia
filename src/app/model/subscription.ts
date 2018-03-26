@@ -2,12 +2,12 @@ import * as firebase from 'firebase/app';
 
 export class Subscription {
     id?: string;
-    created_uid: string;
+    userId: string;
     email: string;
 
-    constructor(email: string, userId: string) {
-        this.created_uid = userId;
-        this.email = email;
+    constructor(obj: any) {
+        this.userId = obj.userId;
+        this.email = obj.email;
 
 
     }

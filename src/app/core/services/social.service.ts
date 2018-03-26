@@ -23,9 +23,19 @@ export class SocialService {
     saveSubscription(subscription: Subscription) {
         const dbSubscription = Object.assign({}, subscription);
         dbSubscription.id = this.db.createId();
-        this.db.doc(`/subscription/${dbSubscription.id}`).set(dbSubscription).then(ref => {
-            this.store.dispatch(new socialactions.AddSubscriberSuccess());
-        });
+        this.db.collection(`/subscription/`, ref => ref.where('email', '==', subscription.email)).valueChanges()
+            .take(1)
+            .map(qs => qs)
+            .subscribe(sub => {
+                if (sub.length === 0) {
+                    this.db.doc(`/subscription/${dbSubscription.id}`).set(dbSubscription).then(ref => {
+                        this.store.dispatch(new socialactions.CheckSubscriptionStatus(false));
+                    });
+                } else {
+                    this.store.dispatch(new socialactions.CheckSubscriptionStatus(true));
+                }
+            })
+
     }
 
     getTotalSubscription(): Observable<number> {
@@ -43,11 +53,13 @@ export class SocialService {
             .take(1)
             .map(qs => qs)
             .subscribe(sub => {
+                const id = sub[0]['id'];
+                this.db.doc('/subscription/' + id).delete().then(ref => {
+                    this.store.dispatch(new socialactions.RemoveSubscriberSuccess());
+                });
             })
 
-        // this.db.doc('/subscription/' + created_uid).delete().then(ref => {
-        //     this.store.dispatch(new socialactions.RemoveSubscriberSuccess());
-        // });
+
 
     }
 
