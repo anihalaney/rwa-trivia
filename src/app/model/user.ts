@@ -1,4 +1,5 @@
 import * as firebase from 'firebase/app';
+import { Observable } from 'rxjs/Observable';
 
 export class User {
   id?: string;
@@ -19,6 +20,7 @@ export class User {
   authState: firebase.User;
   roles: any;
   tags?: string[];
+  profilePictureUrl?: string;
 
   constructor(authState: firebase.User) {
     if (authState) {

@@ -4,6 +4,8 @@ import { Action } from '@ngrx/store';
 import { User, Question } from '../../../model';
 
 export enum UserActionTypes {
+    // This is redefinition of login success message to avoid importing core
+    LOGIN_SUCCESS  = "LOGIN_SUCCESS",
     ADD_USER_PROFILE = '[User] AddUserProfile',
     ADD_USER_PROFILE_SUCCESS = '[User] AddUserProfileSuccess',
     LOAD_USER_PROFILE = '[User] LoadUserProfile',
