@@ -39,8 +39,8 @@ export class NewsletterComponent implements OnInit {
         this.message = 'Your EmailId is Successfully Subscribed!!';
       }
     });
-    this.store.select(socialState).select(s => s.getTotalSubscriptionStatus).subscribe(val => {
-      this.totalCount = val;
+    this.store.select(socialState).select(s => s.getTotalSubscriptionStatus).subscribe(subscriptionInfo => {
+      this.totalCount = subscriptionInfo['total_subscription'];
     });
     // this.store.select(socialState).select(s => s.subscriptionRemoveStatus).subscribe(status => {
     //   if (status === 'SUCCESS') {
