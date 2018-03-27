@@ -28,6 +28,7 @@ export class NewsletterComponent implements OnInit {
       this.user = user;
       if (user) {
         this.user = user;
+        this.subscriptionForm.controls['email'].setValue(this.user.email);
       }
     });
     this.store.select(socialState).select(s => s.checkEmailSubscriptionStatus).subscribe(status => {
@@ -62,12 +63,14 @@ export class NewsletterComponent implements OnInit {
     if (!this.subscriptionForm.valid) {
       return;
     } else {
-      const request = { email: this.subscriptionForm.get('email').value };
+      const request = {};
       if (this.user) {
+
         request['userId'] = this.user.userId;
         this.store.dispatch(new socialActions.AddSubscriber(
           { subscription: new Subscription(request) }));
       } else {
+        request['email'] = this.subscriptionForm.get('email');
         this.store.dispatch(new socialActions.AddSubscriber(
           { subscription: new Subscription(request) }));
       }
