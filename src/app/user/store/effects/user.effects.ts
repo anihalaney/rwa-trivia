@@ -29,12 +29,8 @@ export class UserEffects {
         .pipe(
         switchMap((action: userActions.LoadUserProfile) =>
             this.userService.getUserProfile(action.payload.user).pipe(
-                switchMap((user: User) => this.userService.getUserProfileImage(user).pipe(
                     map((user: User) => new userActions.LoadUserProfileSuccess(user)))
-                )
             )
-
-        )
         );
 
       // listening for login success from root to load user profile

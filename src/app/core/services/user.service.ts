@@ -61,7 +61,8 @@ export class UserService {
                     user = { ...user, ...u.payload.data() }
                 }
                 return user;
-            });
+            })
+            .mergeMap(u => this.getUserProfileImage(u));
     }
 
     getUserProfileImage(user: User): Observable<User> {
