@@ -34,10 +34,12 @@ export class UserEffects {
         .ofType(UserActionTypes.LOAD_USER_PROFILE)
         .pipe(
         switchMap((action: userActions.LoadUserProfile) =>
-            this.userService.getUserProfile(action.payload.user)
-                .pipe(
-                map((user: User) => new userActions.LoadUserProfileSuccess(user))
+            this.userService.getUserProfile(action.payload.user).pipe(
+                switchMap((user: User) => this.userService.getUserProfileImage(user).pipe(
+                    map((user: User) => new userActions.LoadUserProfileSuccess(user)))
                 )
+            )
+
         )
         );
 
