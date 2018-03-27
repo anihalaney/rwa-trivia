@@ -20,7 +20,7 @@ export class User {
   authState: firebase.User;
   roles: any;
   tags?: string[];
-  profileUrl?: string;
+  profilePictureUrl?: string;
 
   constructor(authState: firebase.User) {
     if (authState) {
@@ -30,5 +30,4 @@ export class User {
       this.displayName = (authState.providerData[0].displayName ? authState.providerData[0].displayName : this.email);
     }
   }
-
 }
