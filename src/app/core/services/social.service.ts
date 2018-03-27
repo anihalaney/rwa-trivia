@@ -10,6 +10,7 @@ import { Subscription } from '../../model';
 import * as socialactions from '../../social/store/actions';
 import { Subject } from 'rxjs/Subject';
 import { Subscriber } from 'rxjs/Subscriber';
+import { SubscriptionInfo } from '../../model';
 
 
 @Injectable()
@@ -38,12 +39,9 @@ export class SocialService {
 
     }
 
-    getTotalSubscription(): Observable<number> {
-        const cntSubject = new Subject<number>();
-        this.db.collection('subscription').snapshotChanges().map(v => v).subscribe(values => {
-            cntSubject.next(values.length);
-        });
-        return cntSubject;
+    getTotalSubscription(): Observable<SubscriptionInfo> {
+        const url: string = CONFIG.functionsUrl + '/app/subscription/count';
+        return this.http.get<SubscriptionInfo>(url);
     }
 
     removeSubscription(created_uid: String) {
