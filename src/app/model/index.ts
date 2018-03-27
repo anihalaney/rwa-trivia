@@ -9,3 +9,4 @@ export * from './bulk-upload-file-info';
 export * from './bulk-upload';
 export * from './router-state-url';
 export * from './subscription';
+export * from './subscription-info';
