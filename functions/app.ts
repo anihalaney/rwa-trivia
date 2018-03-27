@@ -1,7 +1,8 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
-import { FirebaseSourceApp } from './config/firebase.config'
+// import { FirebaseSourceApp } from './config/firebase.config'
+import { Subscription } from './subscription';
 
 
 
@@ -251,7 +252,7 @@ app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
   sourceDB.collection(req.params.collection).get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-      //  console.log(doc.id, '=>', doc.data());
+        //  console.log(doc.id, '=>', doc.data());
         targetDB.collection(req.params.collection).doc(doc.id).set(doc.data());
       });
       res.send('loaded data');
@@ -338,6 +339,13 @@ app.get('/testES', adminOnly, (req, res) => {
     }
   });
 
+});
+
+app.get('/subscription/count', (req, res) => {
+  const subscription: Subscription = new Subscription(admin.firestore());
+  subscription.getTotalSubscription().then(subscriptionInfo => {
+    res.send(subscriptionInfo);
+  });
 });
 
 // END - TEST FUNCTIONS
