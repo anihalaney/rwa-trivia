@@ -59,32 +59,31 @@ export class UserService {
     // get user by Id
     getUserProfile(user: User): Observable<User> {
         // const userSubject = new Subject<User>();
+
         return this.db.doc<any>('/users/' + user.userId)
             .snapshotChanges()
             .take(1)
-            .map(userDetail => {
-                if (userDetail.payload.exists && userDetail.payload.data()) {
-                    if (userDetail.payload.data().profilePicture !== undefined) {
-                        const filePath = 'profile/' + userDetail.payload.data().userId + '/avatar/'
-                            + userDetail.payload.data().profilePicture;
-                        const ref = this.storage.ref(filePath);
-                        user.setUserDetail(userDetail.payload.data());
-                        user.profileUrl = ref.getDownloadURL();
-                        return user;
-                        // ref.getDownloadURL().subscribe(url => {
-                        //     user.setUserDetail(userDetail.payload.data(), url);
-                        //     console.log("after user" + JSON.stringify(user));
-                        //     // userSubject.next(user);
-                        //     return user;
-                        // });
-                    }
+            .map(u => {
+                if (u.payload.exists && u.payload.data()) {
+                    user = { ...user, ...u.payload.data() }
                 }
-
-            })
-            .catch(error => {
-                return Observable.of(null);
+                return user;
             });
-        // return userSubject;
+    }
+
+    getUserProfileImage(user: User): Observable<User> {
+        // const userSubject = new Subject<User>();
+        if (user.profilePicture !== undefined) {
+            const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
+            const ref = this.storage.ref(filePath);
+            return ref.getDownloadURL().map(url => {
+                user.profileUrl = (url) ? url : '/assets/images/yourimg.png';
+                return user;
+            });
+        } else {
+            user.profileUrl = '/assets/images/yourimg.png'
+            return Observable.of(user);
+        }
     }
 
 

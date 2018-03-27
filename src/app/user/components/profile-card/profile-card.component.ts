@@ -23,8 +23,7 @@ export class ProfileCardComponent implements OnChanges {
     this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
-        this.user.profileUrl.subscribe(url => this.profileUser = url);
-
+        this.profileUser = this.user.profileUrl;
       }
     });
 
