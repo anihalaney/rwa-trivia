@@ -10,7 +10,7 @@ import { AppState } from '../../store/app-store';
 import { UserActions } from '../store/actions';
 import { User } from '../../model';
 import * as useractions from '../../user/store/actions';
-import { Subject } from 'rxjs/Subject';
+
 
 
 @Injectable()
@@ -41,22 +41,15 @@ export class UserService {
 
     saveUserProfile(user: User) {
         const dbUser = Object.assign({}, user); // object to be saved
-        delete dbUser['authState'];
+        delete dbUser.authState;
+        delete dbUser.profilePictureUrl;
         this.db.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => {
             // this.store.dispatch(this.userActions.addUserProfileSuccess());
             this.store.dispatch(new useractions.AddUserProfileSuccess());
         });
     }
 
-    // // get user by Id
-    // getUserProfile(userId: Number): Observable<User> {
-    //     return this.db.doc(`/users/${userId}`)
-    //         .valueChanges()
-    //         .catch(error => {
-    //             return Observable.of(null);
-    //         });
-    // }
-    // get user by Id
+
     getUserProfile(user: User): Observable<User> {
         // const userSubject = new Subject<User>();
 
@@ -77,14 +70,12 @@ export class UserService {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.storage.ref(filePath);
             return ref.getDownloadURL().map(url => {
-                user.profileUrl = (url) ? url : '/assets/images/yourimg.png';
+                user.profilePictureUrl = (url) ? url : '/assets/images/yourimg.png';
                 return user;
             });
         } else {
-            user.profileUrl = '/assets/images/yourimg.png'
+            user.profilePictureUrl = '/assets/images/yourimg.png'
             return Observable.of(user);
         }
     }
-
-
 }

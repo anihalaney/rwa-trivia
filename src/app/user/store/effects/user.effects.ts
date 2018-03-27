@@ -11,12 +11,6 @@ import { UserService, QuestionService } from '../../../core/services';
 
 @Injectable()
 export class UserEffects {
-    constructor(
-        private actions$: Actions,
-        private userService: UserService,
-        private questionService: QuestionService
-    ) { }
-
     // Save user profile
     @Effect()
     addUser$ = this.actions$
@@ -43,25 +37,12 @@ export class UserEffects {
         )
         );
 
-
-    //load from router
-    @Effect()
-    // handle location update
-    loadUserRouteProfile$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/my/profile') &&
-            routerState.params.userid
-        )
-        .pipe(
-        switchMap((routerState: RouterStateUrl) =>
-            this.userService.getUserProfile(routerState.params.userid)
-                .pipe(
-                map((user: User) => new userActions.LoadUserProfileSuccess(user))
-                )
-        )
-        );
+      // listening for login success from root to load user profile
+      @Effect()
+      loginSuccess$ = this.actions$
+          .ofType(UserActionTypes.LOGIN_SUCCESS)
+          .map((action: any) => action.payload)
+          .map( user => new userActions.LoadUserProfile( { user }));
 
 
     // Load User Published Question by userId from router
@@ -111,5 +92,9 @@ export class UserEffects {
             return empty();
         })
         );
-
+    constructor(
+        private actions$: Actions,
+        private userService: UserService,
+        private questionService: QuestionService
+    ) { }
 }

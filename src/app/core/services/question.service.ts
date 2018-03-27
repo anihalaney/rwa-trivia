@@ -52,8 +52,9 @@ export class QuestionService {
   getQuestionsForBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => {
-       return ref.where('created_uid', '==', bulkUploadFileInfo.created_uid)
-       .where('bulkUploadId', '==', bulkUploadFileInfo.id)})
+      return ref.where('created_uid', '==', bulkUploadFileInfo.created_uid)
+        .where('bulkUploadId', '==', bulkUploadFileInfo.id)
+    })
       .valueChanges()
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)))
       .catch(error => {
@@ -91,18 +92,21 @@ export class QuestionService {
     const bulkUploadId = this.db.createId();
     // store file in file storage
     // Not written any code monitor progress or error
-    this.storage.upload(`bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadId}-${bulkUpload.file.name}`, bulkUpload.file);
-    for (const question of questions) {
-      if (question !== null) {
-        question.bulkUploadId = bulkUploadId;
-        const dbQuestion = Object.assign({}, question); // object to be saved
-        dbQuestion.id = this.db.createId();
-        // Do we really need to copy answer object as well?
-        dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
-        dbQuestions.push(dbQuestion);
-      }
-    }
-    this.addBulkUpload(bulkUploadFileInfo, dbQuestions, bulkUploadId);
+    this.storage.upload(`bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadId}-${bulkUpload.file.name}`, bulkUpload.file)
+      .then(ref => {
+        for (const question of questions) {
+          if (question !== null) {
+            question.bulkUploadId = bulkUploadId;
+            const dbQuestion = Object.assign({}, question); // object to be saved
+            dbQuestion.id = this.db.createId();
+            // Do we really need to copy answer object as well?
+            dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
+            dbQuestions.push(dbQuestion);
+          }
+        }
+        this.addBulkUpload(bulkUploadFileInfo, dbQuestions, bulkUploadId);
+      });
+
   }
   addBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, questions: Array<Question>, id: string) {
     // save question
