@@ -7,8 +7,9 @@ import { UserActions, UserActionTypes } from '../actions';
 // Load User Profile By Id
 export function user(state: any = null, action: UserActions): User {
     switch (action.type) {
-        case UserActionTypes.LOAD_USER_PROFILE_SUCCESS:
+        case UserActionTypes.LOAD_USER_PROFILE_SUCCESS || UserActionTypes.UPDATE_USER_SUCCESS:
             return { ...state, ...action.payload };
+
         default:
             return state;
     }

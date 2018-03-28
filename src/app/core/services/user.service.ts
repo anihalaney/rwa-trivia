@@ -10,6 +10,7 @@ import { AppState } from '../../store/app-store';
 import { UserActions } from '../store/actions';
 import { User } from '../../model';
 import * as useractions from '../../user/store/actions';
+import { useAnimation } from '@angular/core/src/animation/dsl';
 
 
 @Injectable()
@@ -54,5 +55,13 @@ export class UserService {
             .catch(error => {
                 return Observable.of(null);
             });
+    }
+
+    updateUser(user: User) {
+        const dbUser = Object.assign({}, user); // object to be saved
+        delete dbUser['authState'];
+        this.db.doc(`/users/${dbUser.userId}`).update(dbUser).then(ref => {
+            this.store.dispatch(new useractions.UpdateUserSuccess(user));
+        });
     }
 }

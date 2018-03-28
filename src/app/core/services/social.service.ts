@@ -6,10 +6,11 @@ import { Observable } from 'rxjs/Observable';
 import { CONFIG } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
-import { Subscription, Subscribers } from '../../model';
+import { Subscription, Subscribers, User } from '../../model';
 import * as socialactions from '../../social/store/actions';
 import { Subject } from 'rxjs/Subject';
 import { Subscriber } from 'rxjs/Subscriber';
+import { UserService } from '../../core/services';
 
 
 @Injectable()
@@ -17,10 +18,11 @@ export class SocialService {
     constructor(private db: AngularFirestore,
         private storage: AngularFireStorage,
         private store: Store<AppState>,
-        private http: HttpClient) {
+        private http: HttpClient,
+        private userService: UserService) {
     }
 
-    saveSubscription(subscription: Subscription) {
+    saveSubscription(subscription: Subscription, user: User) {
         const dbSubscription = Object.assign({}, subscription);
         dbSubscription.id = this.db.createId();
         this.db.collection(`/subscription/`, ref => ref.where('email', '==', subscription.email)).valueChanges()
@@ -29,6 +31,10 @@ export class SocialService {
             .subscribe(sub => {
                 if (sub.length === 0) {
                     this.db.doc(`/subscription/${dbSubscription.id}`).set(dbSubscription).then(ref => {
+                        if (user) {
+                            user.isSubscribed = true;
+                            this.userService.updateUser(user);
+                        }
                         this.store.dispatch(new socialactions.CheckSubscriptionStatus(false));
                     });
                 } else {
