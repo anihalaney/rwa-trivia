@@ -27,7 +27,7 @@ export function currentGameQuestion (state: any = null, action: GamePlayActions)
   }
 };
 
-export function newGameId (state: any = "", action: GamePlayActions): string {
+export function newGameId (state: any = "", action: GamePlayActions): string {  
   switch (action.type) {
     case GamePlayActionTypes.CREATE_NEW_SUCCESS:
       return action.payload;
