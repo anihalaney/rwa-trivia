@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
-import { Subscription } from '../../../model';
+import { Subscription, Subscribers } from '../../../model';
 import { SocialActions, SocialActionTypes } from '../actions';
 
 //add subscription Status
@@ -16,7 +16,7 @@ export function subscriptionSaveStatus(state: any = 'NONE', action: SocialAction
 }
 
 //return total subscription count 
-export function getTotalSubscriptionStatus(state: any = [], action: SocialActions): Number {
+export function getTotalSubscriptionStatus(state: any = [], action: SocialActions): Subscribers {
     switch (action.type) {
         case SocialActionTypes.TOTAL_SUBSCRIBER_SUCCESS:
             return action.payload;

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Subscription } from '../../../model';
+import { Subscription, Subscribers } from '../../../model';
 
 export enum SocialActionTypes {
 
@@ -35,7 +35,7 @@ export class GetTotalSubscriber implements Action {
 // Get total subscriber Success
 export class GetTotalSubscriberSuccess implements Action {
     readonly type = SocialActionTypes.TOTAL_SUBSCRIBER_SUCCESS;
-    constructor(public payload: Number) { }
+    constructor(public payload: Subscribers) { }
 }
 
 // Remove subscriber

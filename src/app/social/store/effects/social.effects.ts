@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { Subscription } from '../../../model';
+import { Subscription, Subscribers } from '../../../model';
 import { SocialActions, SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
 import { SocialService } from '../../../core/services';
@@ -37,7 +37,7 @@ export class SocialEffects {
         switchMap((action: socialActions.GetTotalSubscriber) =>
             this.socialService.getTotalSubscription()
                 .pipe(
-                map((totalCount: Number) => new socialActions.GetTotalSubscriberSuccess(totalCount))
+                map((totalCount: Subscribers) => new socialActions.GetTotalSubscriberSuccess(totalCount))
                 )
         )
         );

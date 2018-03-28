@@ -2,7 +2,7 @@ import * as firebase from 'firebase/app';
 
 export class Subscription {
     id?: string;
-    userId: string;
+    userId?: string;
     email: string;
 
     constructor(obj: any) {

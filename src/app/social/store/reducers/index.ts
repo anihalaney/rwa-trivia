@@ -1,6 +1,6 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { Subscription } from '../../../model';
+import { Subscription, Subscribers } from '../../../model';
 import {
     subscriptionSaveStatus, getTotalSubscriptionStatus,
     subscriptionRemoveStatus, checkEmailSubscriptionStatus
@@ -10,7 +10,7 @@ export * from './social.reducer';
 
 export interface SocialState {
     subscriptionSaveStatus: String;
-    getTotalSubscriptionStatus: Number;
+    getTotalSubscriptionStatus: Subscribers;
     subscriptionRemoveStatus: String;
     checkEmailSubscriptionStatus: Boolean;
 }
