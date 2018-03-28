@@ -6,11 +6,10 @@ import { Observable } from 'rxjs/Observable';
 import { CONFIG } from '../../../environments/environment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
-import { Subscription } from '../../model';
+import { Subscription, Subscribers } from '../../model';
 import * as socialactions from '../../social/store/actions';
 import { Subject } from 'rxjs/Subject';
 import { Subscriber } from 'rxjs/Subscriber';
-import { SubscriptionInfo } from '../../model';
 
 
 @Injectable()
@@ -39,9 +38,9 @@ export class SocialService {
 
     }
 
-    getTotalSubscription(): Observable<SubscriptionInfo> {
+    getTotalSubscription(): Observable<Subscribers> {
         const url: string = CONFIG.functionsUrl + '/app/subscription/count';
-        return this.http.get<SubscriptionInfo>(url);
+        return this.http.get<Subscribers>(url);
     }
 
     removeSubscription(created_uid: String) {

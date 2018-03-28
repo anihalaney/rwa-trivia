@@ -4,10 +4,11 @@
     <h2>Sign up for our newsletter to stay connected </h2>
     <p>Subscribe to our bi-weekly email newsletter for useful tips and valuable resources.</p>
     <div *ngIf="!isSubscribed">
-      <form (ngSubmit)="onSubscribe()" [formGroup]="subscriptionForm" class="upload-questions" #formDir="ngForm">
+      <form (ngSubmit)="onSubscribe()" [formGroup]="subscriptionForm" class="upload-questions">
         <div class="row subscrib-form">
           <div class="col-sm-7 col-xs-12">
-            <input placeholder="enter your email ID" type="email" name="enter your email ID" formControlName="email" class="required">
+            <input placeholder="enter your email ID" type="email" name="enter your email ID" formControlName="email" class="required"
+            [disabled]="user !== null">
             <!-- <span *ngIf="formDir.submitted" class="label">Email is Required!</span> -->
             <span *ngIf="subscriptionForm.controls.email.invalid && !subscriptionForm.controls.email.errors.required" class="label">Invalid Email!</span>
           </div>

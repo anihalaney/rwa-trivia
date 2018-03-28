@@ -1,24 +1,19 @@
-import { SubscriptionInfo } from '../src/app/model';
+import { Subscribers } from '../src/app/model';
 
 export class Subscription {
     private firestoreDb: any;
 
-    constructor(private fire_store_db) {
-        this.fire_store_db = fire_store_db;
+    constructor(private db) {
+        this.db = db;
     }
 
-    getTotalSubscription(): Promise<SubscriptionInfo> {
+    getTotalSubscription() {
 
-        return this.fire_store_db.collection('subscription').get()
+        return this.db.collection('subscription').get()
             .then(snapshot => {
-                let count = 0;
-                snapshot.forEach(doc => {
-                    count++;
-                });
-                console.log('count-->', count);
-                const subscriptionInfo: SubscriptionInfo = new SubscriptionInfo();
-                subscriptionInfo.total_subscription = count;
-                return Promise.resolve(subscriptionInfo);
+                const subscriptionInfo: Subscribers = new Subscribers();
+                subscriptionInfo.count = snapshot.size;
+                return subscriptionInfo;
             })
             .catch((err) => {
                 return Promise.resolve(err);
