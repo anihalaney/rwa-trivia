@@ -1,7 +1,7 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
-import { GameScheduler } from './schedulers';
+
 import { GameMechanics } from './game-mechanics';
 
 
@@ -343,7 +343,7 @@ app.get('/testES', adminOnly, (req, res) => {
 });
 
 
-app.post('/createGame', adminOnly, (req, res) => {
+app.post('/createGame', authorizedOnly, (req, res) => {
   // console.log('body---->', req.body);
   const gameOptions = req.body.gameOptions;
   const userId = req.body.userId;
@@ -376,9 +376,7 @@ app.post('/createGame', adminOnly, (req, res) => {
 // END - TEST FUNCTIONS
 ///////////////////////
 
-// start scheduler of game to check game over of users
-// const gameScheduler: GameScheduler = new GameScheduler(admin.firestore());
-// gameScheduler.startCron();
+
 
 exports.app = functions.https.onRequest(app);
 
