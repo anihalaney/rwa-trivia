@@ -8,7 +8,7 @@
         <div class="row subscrib-form">
           <div class="col-sm-7 col-xs-12">
             <input placeholder="enter your email ID" type="email" name="enter your email ID" formControlName="email" class="required"
-            [disabled]="user !== null">
+            />
             <!-- <span *ngIf="formDir.submitted" class="label">Email is Required!</span> -->
             <span *ngIf="subscriptionForm.controls.email.invalid && !subscriptionForm.controls.email.errors.required" class="label">Invalid Email!</span>
           </div>

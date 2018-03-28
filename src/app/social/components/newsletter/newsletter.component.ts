@@ -31,11 +31,9 @@ export class NewsletterComponent implements OnInit {
       if (user) {
         this.user = user;
         this.subscriptionForm = this.fb.group({
-          email: [user.email]
-
+          email: [this.user.email]
         });
       }
-      console.log(JSON.stringify(this.user));
     });
     this.store.select(socialState).select(s => s.checkEmailSubscriptionStatus).subscribe(status => {
       if (status === true) {
@@ -74,11 +72,11 @@ export class NewsletterComponent implements OnInit {
         request['userId'] = this.user.userId;
         request['email'] = this.subscriptionForm.get('email').value;
         this.store.dispatch(new socialActions.AddSubscriber(
-          { subscription: new Subscription(request) }));
+          { subscription: new Subscription(request), user: this.user }));
       } else {
         request['email'] = this.subscriptionForm.get('email').value;
         this.store.dispatch(new socialActions.AddSubscriber(
-          { subscription: new Subscription(request) }));
+          { subscription: new Subscription(request), user: this.user }));
       }
     }
 

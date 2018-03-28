@@ -13,7 +13,8 @@ export enum UserActionTypes {
     LOAD_USER_UNPUBLISHED_QUESTIONS = '[User] LoadUserUnpublishedQuestions',
     LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS = '[User] LoadUserUnpublishedQuestionsSuccess',
     ADD_QUESTION = '[User] AddQuestions',
-    ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess'
+    ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
+    UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess'
 }
 
 // Save user profile
@@ -71,6 +72,12 @@ export class AddQuestion implements Action {
     constructor(public payload: { question: Question }) { }
 }
 
+// Load User Profile By Id Success
+export class UpdateUserSuccess implements Action {
+    readonly type = UserActionTypes.UPDATE_USER_SUCCESS;
+    constructor(public payload: User) { }
+}
+
 
 
 export type UserActions
@@ -83,4 +90,5 @@ export type UserActions
     | LoadUserUnpublishedQuestions
     | LoadUserUnpublishedQuestionsSuccess
     | AddQuestion
+    | UpdateUserSuccess
 

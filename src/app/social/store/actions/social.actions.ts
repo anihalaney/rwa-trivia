@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Subscription, Subscribers } from '../../../model';
+import { Subscription, Subscribers, User } from '../../../model';
 
 export enum SocialActionTypes {
 
@@ -17,7 +17,7 @@ export enum SocialActionTypes {
 // Save subscriber
 export class AddSubscriber implements Action {
     readonly type = SocialActionTypes.ADD_SUBSCRIBER;
-    constructor(public payload: { subscription: Subscription }) { }
+    constructor(public payload: { subscription: Subscription, user: User }) { }
 }
 
 // Save subscriber Success

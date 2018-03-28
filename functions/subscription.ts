@@ -7,13 +7,13 @@ export class Subscription {
         this.db = db;
     }
 
-    getTotalSubscription() {
+    getTotalSubscription(): Promise<Subscribers> {
 
         return this.db.collection('subscription').get()
             .then(snapshot => {
                 const subscriptionInfo: Subscribers = new Subscribers();
                 subscriptionInfo.count = snapshot.size;
-                return subscriptionInfo;
+                return Promise.resolve(subscriptionInfo);
             })
             .catch((err) => {
                 return Promise.resolve(err);

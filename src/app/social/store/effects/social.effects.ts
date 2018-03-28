@@ -24,7 +24,7 @@ export class SocialEffects {
         .ofType(SocialActionTypes.ADD_SUBSCRIBER)
         .pipe(
         switchMap((action: socialActions.AddSubscriber) => {
-            this.socialService.saveSubscription(action.payload.subscription);
+            this.socialService.saveSubscription(action.payload.subscription, action.payload.user);
             return empty();
         })
         );
