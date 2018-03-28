@@ -26,7 +26,7 @@ export class Game {
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
     if (player2UUId) {
-      this._playerIds.push(player2UUId);
+      (this._playerIds.indexOf(player2UUId) === -1) ? this._playerIds.push(player2UUId) : '';
     }
     this.nextTurnPlayerId = nextTurnPlayerId ? nextTurnPlayerId : '';
     this.gameOver = (gameOver) ? true : false;
@@ -122,6 +122,10 @@ export class Game {
       dbModel['turnAt'] = this.turnAt;
     }
 
+    if (this.gameId) {
+      dbModel['id'] = this.gameId;
+    }
+
     return dbModel;
   }
 
@@ -130,7 +134,7 @@ export class Game {
     let game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus'],dbModel['createdAt'],dbModel['turnAt']);
+      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }

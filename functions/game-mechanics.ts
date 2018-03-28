@@ -7,20 +7,24 @@ export class GameMechanics {
     private userId: string;
     private db: any
 
-    constructor(private game_option, private user_id, private fire_store_db: any) {
+    constructor(private game_option, private user_id, private firebaseDB: any) {
         this.gameOptions = game_option;
         this.userId = user_id;
-        this.db = fire_store_db;
+        this.db = firebaseDB;
     }
 
 
     createNewGame(): Promise<string> {
+
         if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent
             && Number(this.gameOptions.opponentType) === OpponentType.Random) {
-            return this.joinGame();
+            // console.log('joinGame');
+            return this.joinGame().then((gameId) => { return gameId });
         } else {
-            return this.createGame();
+            // console.log('createGame');
+            return this.createGame().then((gameId) => { return gameId });
         }
+
     }
 
 
@@ -34,9 +38,11 @@ export class GameMechanics {
                 });
                 const totalGames = gameArr.length;
                 if (totalGames > 0) {
-                    return this.pickRandomGame(gameArr, totalGames);
+                    // console.log('pickRandomGame');
+                    return this.pickRandomGame(gameArr, totalGames).then((gameId) => { return gameId });
                 } else {
-                    return this.createGame();
+                    // console.log('joinGame-createGame');
+                    return this.createGame().then((gameId) => { return gameId });
                 }
             });
 
@@ -49,12 +55,11 @@ export class GameMechanics {
             game.nextTurnPlayerId = this.userId;
             game.addPlayer(this.userId);
             const dbGame = game.getDbModel();
-            return this.db.doc('/games/' + game.gameId).set(dbGame).then(ref => {
-                console.log('game.gameId', game.gameId);
-                return game.gameId;
-            });
+            // console.log('game.gameId', game.gameId);
+            return this.UpdateGame(dbGame).then((gameId) => { return gameId });
         } else if (totalGames === 1) {
-            return this.createGame();
+            // console.log('pickRandomGame-createGame');
+            return this.createGame().then((gameId) => { return gameId });
         } else {
             totalGames--;
             queriedItems.splice(randomGameNo, 1);
@@ -62,28 +67,28 @@ export class GameMechanics {
         }
     }
 
-    private UpdateGame(game: Game, dbGame: any): Promise<string> {
-        return this.db.doc('/games/' + game.gameId).set(dbGame).then(ref => {
-            console.log('game.gameId', game.gameId);
-            return game.gameId;
-        });
-    }
 
     private createGame(): Promise<string> {
         const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, undefined, undefined,
             GameStatus.STARTED, new Date().getTime(), new Date().getTime());
         const dbGame = game.getDbModel(); // object to be saved
-
-        const id = this.db.createId();
-        dbGame.id = id;
-
-        // Use the set method of the doc instead of the add method on the collection,
-        // so the id field of the data matches the id of the document
-        return this.db.doc('/games/' + id).set(dbGame).then(ref => {
-            console.log('id', id);
-            return id;
+        // console.log('this.db', JSON.stringify(this.db));
+        return this.db.collection('games').add(dbGame).then(ref => {
+            // console.log('Added document with ID: ', ref.id);
+            dbGame.id = ref.id;
+            return this.UpdateGame(dbGame).then((gameId) => { return gameId });
         });
 
+
+    }
+
+    private UpdateGame(dbGame: any): Promise<string> {
+        // Use the set method of the doc instead of the add method on the collection,
+        // so the id field of the data matches the id of the document
+        return this.db.doc('/games/' + dbGame.id).set(dbGame).then(ref => {
+
+            return dbGame.id;
+        });
     }
 
 
