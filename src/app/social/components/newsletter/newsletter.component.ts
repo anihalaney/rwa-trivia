@@ -36,11 +36,13 @@ export class NewsletterComponent implements OnInit {
       }
     });
     this.store.select(socialState).select(s => s.checkEmailSubscriptionStatus).subscribe(status => {
+
       if (status === true) {
         this.isSubscribed = true;
         this.message = 'This EmailId is already Subscribed!!';
       } else if (status === false) {
         this.isSubscribed = true;
+        this.store.dispatch(new socialActions.GetTotalSubscriber());
         this.message = 'Your EmailId is Successfully Subscribed!!';
       }
     });
@@ -59,7 +61,6 @@ export class NewsletterComponent implements OnInit {
     this.subscriptionForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
-
     this.store.dispatch(new socialActions.GetTotalSubscriber());
   }
 
