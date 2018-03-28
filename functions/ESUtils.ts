@@ -144,7 +144,7 @@ export class ESUtils {
         const body = [];
         // TODO: build bulk index in batches (maybe 1000 at a time)
         data.forEach(d => {
-          body.push({ index: { _index: index, _type: d.type, _id: d.id } });
+          body.push({ index: { index: index, type: d.type, _id: d.id } });
           body.push(d.source);
         });
         client.bulk({ 'body': body }).then(resp => {
@@ -181,7 +181,7 @@ export class ESUtils {
         searchResults.tagsCount.push({ 'tag': b.key, 'count': b.doc_count });
       });
       searchResults.questions = results.hits.hits.map(hit => Question.getViewModelFromES(hit));
-      searchResults.searchCriteria = criteria;  // send the originating criteria back with the results
+      searchResults.searchCriteria = criteria; // send the originating criteria back with the results
 
       return searchResults;
     });
