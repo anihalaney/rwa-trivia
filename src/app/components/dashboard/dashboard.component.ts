@@ -24,7 +24,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   now: Date;
   greeting: string;
   message: string;
-  showNewsLetterCard: Boolean = true;
 
 
   constructor(private store: Store<AppState>,
@@ -37,15 +36,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
       this.user = user
       if (user) {
-        console.log("dashboard" + this.user.isSubscribed);
-        if (this.user.isSubscribed) {
-          this.showNewsLetterCard = false;
-        }
         //Load active Games
 
         this.store.dispatch(this.gameActions.getActiveGames(user));
-      } else {
-        this.showNewsLetterCard = true;
       }
     });
   }

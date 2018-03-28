@@ -13,7 +13,7 @@ export class Subscription {
             .then(snapshot => {
                 const subscriptionInfo: Subscribers = new Subscribers();
                 subscriptionInfo.count = snapshot.size;
-                return Promise.resolve(subscriptionInfo);
+                return subscriptionInfo;
             })
             .catch((err) => {
                 return Promise.resolve(err);

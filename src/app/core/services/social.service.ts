@@ -10,7 +10,8 @@ import { Subscription, Subscribers, User } from '../../model';
 import * as socialactions from '../../social/store/actions';
 import { Subject } from 'rxjs/Subject';
 import { Subscriber } from 'rxjs/Subscriber';
-import { UserService } from '../../core/services';
+import { UserService } from './user.service';
+import { debuglog } from 'util';
 
 
 @Injectable()
@@ -23,6 +24,7 @@ export class SocialService {
     }
 
     saveSubscription(subscription: Subscription, user: User) {
+        (!user) ? delete subscription['userId'] : '';
         const dbSubscription = Object.assign({}, subscription);
         dbSubscription.id = this.db.createId();
         this.db.collection(`/subscription/`, ref => ref.where('email', '==', subscription.email)).valueChanges()
