@@ -20,11 +20,16 @@ export enum PlayerMode {
   Opponent
 }
 export enum OpponentType {
-  Computer,
   Random,
-  Friend
+  Friend,
+  Computer
 }
 export enum GameMode {
   Normal,
   Offline
+}
+
+export enum GameStatus {
+  STARTED = 'started',
+  WAITING_FOR_NEXT_Q = 'waiting for next question'
 }
