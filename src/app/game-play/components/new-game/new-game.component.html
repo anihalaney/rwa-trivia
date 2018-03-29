@@ -1,156 +1,199 @@
-
-<form (ngSubmit)="onSubmit()" class="new-game-form" [formGroup]="newGameForm" novalidate>
+<form *ngIf="newGameForm" (ngSubmit)="onSubmit()" class="new-game-form" [formGroup]="newGameForm" novalidate>
     <div class="mainpage">
-    <div class="row hidden-xs">
-        <div class="pageheading col-sm-6 col-xs-12">Game Options</div>          
-    </div>
-    <section id="curentactive" class="card textcenter">
-        <div class="h1block">
-            <h1>Game Options</h1>
-            <p>Please select a player mode to start a new game</p>
+        <div class="row hidden-xs">
+            <div class="pageheading col-sm-6 col-xs-12">Game Options</div>
         </div>
-        <div class="optionbox">
-            <div class="row">
-                <div class="col-sm-3">
-                    <h2>Select <span>Player Mode</span></h2>
-                </div>
-                <div class="col-sm-9 radiobtn">
-                    <input type="radio" id="p-radio1" name="Player" checked="true">
-                    <label for="p-radio1"><span class="sprite singlep-icon"></span> Single Player</label>
+        <section id="curentactive" class="card textcenter">
+            <div class="h1block">
+                <h1>Game Options</h1>
+                <p>Please select a player mode to start a new game</p>
+            </div>
+            <div class="optionbox">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h2>Select
+                            <span>Player Mode</span>
+                        </h2>
+                    </div>
+                    <div class="col-sm-9 radiobtn">
+                        <input type="radio" id="p-radio1" formControlName="playerMode" value="0"  checked="true">
+                        <label for="p-radio1">
+                            <span class="sprite singlep-icon"></span> Single Player</label>
 
-                    <input type="radio" id="p-radio2" name="Player">
-                    <label for="p-radio2"><span class="sprite twop-icon"></span> Two Player</label>
-                    <div class="twoplayer" style="display: none;">
-                        <input type="radio" id="tp-radio1" name="TwoPlayer">
-                        <label for="tp-radio1"><span class="sprite randomp-icon"></span>Random</label>
-                        <input type="radio" id="tp-radio2" name="TwoPlayer">
-                        <label for="tp-radio2"><span class="sprite friendsp-icon"></span>With Friends</label>
-                        <input type="radio" id="tp-radio3" name="TwoPlayer">
-                        <label for="tp-radio3"><span class="sprite computerp-icon"></span>With Computer</label>
-                        <div class="withfriends" style="display: none;">
-                            <ul class="friendsslider">
-                                <li>
-                                    <input type="radio" id="friends1" name="withfriends">
-                                    <label for="friends1"><span class="labelimg"><img src="/assets/images/frnd/john.jpg" alt="John"></span> <span class="dark">John</span> 
-                                    <span class="expertise">
-                                        <span class="light">Expertise</span>
-                                        <span class="dark">PHP</span>
-                                    </span>
-                                    <span class="light">Favorite</span>
-                                    <span class="dark">C++</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="friends2" name="withfriends">
-                                    <label for="friends2"><span class="labelimg"><img src="/assets/images/frnd/kaanishhk.jpg" alt="John"></span> <span class="dark">Kaanishhk</span> <span class="expertise">
-                                        <span class="light">Expertise</span>
-                                        <span class="dark">C++, Java</span>
-                                    </span>
-                                    <span class="light">Favorite</span>
-                                    <span class="dark">Dot Net</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="friends3" name="withfriends">
-                                    <label for="friends3"><span class="labelimg"><img src="/assets/images/frnd/user1.jpg" alt="John"></span> <span class="dark">Abram</span> <span class="expertise">
-                                        <span class="light">Expertise</span>
-                                        <span class="dark">PHP, Java</span>
-                                    </span>
-                                    <span class="light">Favorite</span>
-                                    <span class="dark">C++</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="friends4" name="withfriends">
-                                    <label for="friends4"><span class="labelimg"><img src="/assets/images/frnd/user2.jpg" alt="John"></span> <span class="dark">Rocky</span> <span class="expertise">
-                                        <span class="light">Expertise</span>
-                                        <span class="dark">C++, PHP</span>
-                                    </span>
-                                    <span class="light">Favorite</span>
-                                    <span class="dark">Java</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="friends5" name="withfriends">
-                                    <label for="friends5"><span class="labelimg"><img src="/assets/images/frnd/user3.jpg" alt="John"></span> <span class="dark">Miya</span> <span class="expertise">
-                                        <span class="light">Expertise</span>
-                                        <span class="dark">PHP, Java</span>
-                                    </span>
-                                    <span class="light">Favorite</span>
-                                    <span class="dark">C++</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="friends6" name="withfriends">
-                                    <label for="friends6"><span class="labelimg"><img src="/assets/images/frnd/john.jpg" alt="John"></span> <span class="dark">John</span> <span class="expertise">
-                                        <span class="light">Expertise</span>
-                                        <span class="dark">C++</span>
-                                    </span>
-                                    <span class="light">Favorite</span>
-                                    <span class="dark">Java</span>
-                                    </label>
-                                </li>
-                                <li>
-                                    <input type="radio" id="friends7" name="withfriends">
-                                    <label for="friends7">
-                                        <span class="labelimg"><img src="/assets/images/frnd/kaanishhk.jpg" alt="John"></span> 
-                                        <span class="dark">Kaanishhk</span> 
-                                        <span class="expertise">
-                                        <span class="light">Expertise</span>
-                                        <span class="dark">Java</span>
-                                    </span>
-                                    <span class="light">Favorite</span>
-                                    <span class="dark">C++</span>
-                                    </label>
+                        <input type="radio" id="p-radio2"  formControlName="playerMode" value="1">
+                        <label for="p-radio2">
+                            <span class="sprite twop-icon"></span> Two Player</label>
+                        <div class="twoplayer" style="display: none;">
+                            <input type="radio" id="tp-radio1" formControlName="opponentType" value="0">
+                            <label for="tp-radio1">
+                                <span class="sprite randomp-icon"></span>Random</label>
+                            <input type="radio" id="tp-radio2" formControlName="opponentType" value="1">
+                            <label for="tp-radio2">
+                                <span class="sprite friendsp-icon"></span>With Friends</label>
+                            <input type="radio" id="tp-radio3" formControlName="opponentType" value="2">
+                            <label for="tp-radio3">
+                                <span class="sprite computerp-icon"></span>With Computer</label>
+                            <div class="withfriends" style="display: none;">
+                                <ul class="friendsslider">
+                                    <li>
+                                        <input type="radio" id="friends1" name="withfriends">
+                                        <label for="friends1">
+                                            <span class="labelimg">
+                                                <img src="/assets/images/frnd/john.jpg" alt="John">
+                                            </span>
+                                            <span class="dark">John</span>
+                                            <span class="expertise">
+                                                <span class="light">Expertise</span>
+                                                <span class="dark">PHP</span>
+                                            </span>
+                                            <span class="light">Favorite</span>
+                                            <span class="dark">C++</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="friends2" name="withfriends">
+                                        <label for="friends2">
+                                            <span class="labelimg">
+                                                <img src="/assets/images/frnd/kaanishhk.jpg" alt="John">
+                                            </span>
+                                            <span class="dark">Kaanishhk</span>
+                                            <span class="expertise">
+                                                <span class="light">Expertise</span>
+                                                <span class="dark">C++, Java</span>
+                                            </span>
+                                            <span class="light">Favorite</span>
+                                            <span class="dark">Dot Net</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="friends3" name="withfriends">
+                                        <label for="friends3">
+                                            <span class="labelimg">
+                                                <img src="/assets/images/frnd/user1.jpg" alt="John">
+                                            </span>
+                                            <span class="dark">Abram</span>
+                                            <span class="expertise">
+                                                <span class="light">Expertise</span>
+                                                <span class="dark">PHP, Java</span>
+                                            </span>
+                                            <span class="light">Favorite</span>
+                                            <span class="dark">C++</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="friends4" name="withfriends">
+                                        <label for="friends4">
+                                            <span class="labelimg">
+                                                <img src="/assets/images/frnd/user2.jpg" alt="John">
+                                            </span>
+                                            <span class="dark">Rocky</span>
+                                            <span class="expertise">
+                                                <span class="light">Expertise</span>
+                                                <span class="dark">C++, PHP</span>
+                                            </span>
+                                            <span class="light">Favorite</span>
+                                            <span class="dark">Java</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="friends5" name="withfriends">
+                                        <label for="friends5">
+                                            <span class="labelimg">
+                                                <img src="/assets/images/frnd/user3.jpg" alt="John">
+                                            </span>
+                                            <span class="dark">Miya</span>
+                                            <span class="expertise">
+                                                <span class="light">Expertise</span>
+                                                <span class="dark">PHP, Java</span>
+                                            </span>
+                                            <span class="light">Favorite</span>
+                                            <span class="dark">C++</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="friends6" name="withfriends">
+                                        <label for="friends6">
+                                            <span class="labelimg">
+                                                <img src="/assets/images/frnd/john.jpg" alt="John">
+                                            </span>
+                                            <span class="dark">John</span>
+                                            <span class="expertise">
+                                                <span class="light">Expertise</span>
+                                                <span class="dark">C++</span>
+                                            </span>
+                                            <span class="light">Favorite</span>
+                                            <span class="dark">Java</span>
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" id="friends7" name="withfriends">
+                                        <label for="friends7">
+                                            <span class="labelimg">
+                                                <img src="/assets/images/frnd/kaanishhk.jpg" alt="John">
+                                            </span>
+                                            <span class="dark">Kaanishhk</span>
+                                            <span class="expertise">
+                                                <span class="light">Expertise</span>
+                                                <span class="dark">Java</span>
+                                            </span>
+                                            <span class="light">Favorite</span>
+                                            <span class="dark">C++</span>
+                                        </label>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                    </div>                
+                    </div>
                 </div>
                 <!-- Prefered Categories -->
                 <div class="row pcategories">
                     <div class="col-sm-3">
-                        <h2>Prefered <span>Categories</span></h2>
+                        <h2>Prefered
+                            <span>Categories</span>
+                        </h2>
                     </div>
-                    <div class="col-sm-9">                            
+                    <div class="col-sm-9">
                         <div class="row" formArrayName="categoriesFA">
                             <div class="col-md-8">
                                 <div class="row">
                                     <ng-container *ngFor="let category of categoriesFA.value; let i=index">
-                                    <div [formGroupName]="i" class="formfield"> <!-- [class.hide]="!(categoriesFA.value[i].requiredForGamePlay || categoriesFA.value[i].categorySelected || showUncheckedCategories)" -->
-                                        <label>
-                                            <input type="checkbox" formControlName="categorySelected"><span>{{categoriesFA.value[i].categoryName}}</span>
-                                        </label>                      
-                                    </div>
+                                        <div [formGroupName]="i" class="formfield">
+                                            <!-- [class.hide]="!(categoriesFA.value[i].requiredForGamePlay || categoriesFA.value[i].categorySelected || showUncheckedCategories)" -->
+                                            <label>
+                                                <input type="checkbox" formControlName="categorySelected">
+                                                <span>{{categoriesFA.value[i].categoryName}}</span>
+                                            </label>
+                                        </div>
                                     </ng-container>
                                 </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="chancat" (click)="toggleShowUncheckedCategories()" [class.hide]="true">
-                                  <span class="sprite chancaticon"></span><span class="chancat-text" [class.hide]="showUncheckedCategories">Change Category Preference</span>
-                                  <!--<span class="chancat-text" [class.hide]="!showUncheckedCategories">Close</span>-->
+                                    <span class="sprite chancaticon"></span>
+                                    <span class="chancat-text" [class.hide]="showUncheckedCategories">Change Category Preference</span>
+                                    <!--<span class="chancat-text" [class.hide]="!showUncheckedCategories">Close</span>-->
                                 </div>
                             </div>
                         </div>
                         <div class="tags">
                             <p>Tags associated categories</p>
                             <div data-tags-input-name="tag" id="tagBox" class="tagging-js">
-                                    <mat-chip-list>
-                                        <mat-basic-chip *ngIf="selectedTags.length === 0" class="tag">
-                                            None
-                                        </mat-basic-chip>
-                                        <mat-basic-chip *ngFor="let tag of selectedTags" class="tag">
-                                            {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-                                        </mat-basic-chip>
-                                    </mat-chip-list>
-                                                                  
+                                <mat-chip-list>
+                                    <mat-basic-chip *ngIf="selectedTags.length === 0" class="tag">
+                                        None
+                                    </mat-basic-chip>
+                                    <mat-basic-chip *ngFor="let tag of selectedTags" class="tag">
+                                        {{tag}}
+                                        <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+                                    </mat-basic-chip>
+                                </mat-chip-list>
+
                             </div>
-                            <input type="text" placeholder="Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto"  (change)="autoOptionClick($event)">
+                            <input type="text" placeholder="Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)">
                             <mat-autocomplete #tagAuto="matAutocomplete">
-                            <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
-                                {{ tag }}
-                            </mat-option>
+                                <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+                                    {{ tag }}
+                                </mat-option>
                             </mat-autocomplete>
                             <a mat-button class="add-tag-button" color="primary" (click)="addTag()">ADD</a>
                         </div>
@@ -163,62 +206,63 @@
                     <div id="sidebar" class="col-sm-9 btnbox">
                         <button mat-button class="btn startg">Start Game</button>
                     </div>
-                </div>               
-            </div> 
+                </div>
+            </div>
         </section>
-    </div>        
-
-
-
-
-<mat-card *ngIf="false">
-  <mat-card-title>Start New Game</mat-card-title>
-  <mat-card-content>
-
-    <div>
-      <h3 mat-subheader>Player Mode</h3>
-      <mat-button-toggle-group #group="matButtonToggleGroup" formControlName="playerMode" value="0">
-        <mat-button-toggle value="0">
-          Single Player
-        </mat-button-toggle>
-        <mat-button-toggle value="1">
-          Two Player
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-
     </div>
 
-    <div>
-      <mat-button-toggle-group #group="matButtonToggleGroup" formControlName="opponentType">
-        <mat-button-toggle value="0">
-          Against Computer
-        </mat-button-toggle>
-        <mat-button-toggle value="1">
-          Random Opponent
-        </mat-button-toggle>
-        <mat-button-toggle value="2">
-          Friend
-        </mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-    <mat-divider></mat-divider>
-    <mat-divider></mat-divider>
-    <div class="tag-container">
-      <h3 mat-subheader>Tag Preference</h3>
-      <p> 
-        <mat-chip *ngIf="selectedTags.length === 0">
-          None
-        </mat-chip>
-        <mat-chip-list>
-          <mat-chip *ngFor="let tag of selectedTags">
-            {{tag}}  <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-          </mat-chip>
-        </mat-chip-list>
-      </p> 
 
-    </div>
 
-    <button mat-button color="primary">START</button>
-  </mat-card-content>
-</mat-card>
+
+    <!-- <mat-card *ngIf="false">
+        <mat-card-title>Start New Game</mat-card-title>
+        <mat-card-content>
+
+            <div>
+                <h3 mat-subheader>Player Mode</h3>
+                <mat-button-toggle-group #group="matButtonToggleGroup" formControlName="playerMode" [value]="0">
+                    <mat-button-toggle [value]="0">
+                        Single Player
+                    </mat-button-toggle>
+                    <mat-button-toggle [value]="1">
+                        Two Player
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+
+            </div>
+
+            <div>
+                <mat-button-toggle-group #group="matButtonToggleGroup" formControlName="opponentType">
+                    <mat-button-toggle value="0">
+                        Against Computer
+                    </mat-button-toggle>
+                    <mat-button-toggle value="1">
+                        Random Opponent
+                    </mat-button-toggle>
+                    <mat-button-toggle value="2">
+                        Friend
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <mat-divider></mat-divider>
+            <mat-divider></mat-divider>
+            <div class="tag-container">
+                <h3 mat-subheader>Tag Preference</h3>
+                <p>
+                    <mat-chip *ngIf="selectedTags.length === 0">
+                        None
+                    </mat-chip>
+                    <mat-chip-list>
+                        <mat-chip *ngFor="let tag of selectedTags">
+                            {{tag}}
+                            <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+                        </mat-chip>
+                    </mat-chip-list>
+                </p>
+
+            </div>
+
+            <button mat-button color="primary">START</button>
+        </mat-card-content>
+    </mat-card> -->
 </form>

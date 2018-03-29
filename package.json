@@ -15,10 +15,12 @@
     "deploy-app-to-firebase": "ng build --dev --env=dev && firebase deploy -P default --only hosting",
     "prod:deploy-app-to-firebase": "ng build  --prod --env=prod && firebase deploy -P production --only hosting",
     "compile-functions": "rmdir /s/q functions\\server & tsc --project functions",
+    "compile-scheduler-functions": "rmdir /s/q scheduler\\server & tsc --project scheduler",
     "deploy-functions": "npm run compile-functions && firebase deploy -P default --only functions",
     "prod:deploy-functions": "npm run compile-functions && npm run prod:set-index && firebase deploy -P production --only functions",
     "prod:set-index": "firebase -P production functions:config:set elasticsearch.index.production=true",
-    "deploy-functions-local": "npm run compile-functions && firebase serve --only functions"
+    "deploy-functions-local": "npm run compile-functions && firebase serve --only functions",
+    "run-scheduler": "npm run compile-scheduler-functions && node scheduler/server/scheduler/run-scheduler.js"
   },
   "private": true,
   "dependencies": {
