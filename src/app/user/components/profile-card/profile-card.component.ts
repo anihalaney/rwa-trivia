@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { User } from '../../../model';
 import { Store } from '@ngrx/store';
@@ -15,7 +15,6 @@ import { userState } from '../../store';
 export class ProfileCardComponent {
   @Input() user: User;
   userObs: Observable<User>;
-  userProfilePicUrl: string;
 
   constructor(private store: Store<AppState>) {
     this.userObs = this.store.select(userState).select(s => s.user);
@@ -23,9 +22,6 @@ export class ProfileCardComponent {
     this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
-        if (this.user.profilePictureUrl) {
-        this.user.profilePictureUrl.subscribe(url => this.userProfilePicUrl = url);
-        }
       }
     });
   }
