@@ -90,13 +90,13 @@
 
   <div class="row">
     <!-- Question of the day -->
-    <div class="col-lg-7 col-md-12 col-sm-12 ">
+    <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
       <question [question]="questionOfTheDay$ | async"></question>
     </div>
     <!-- Question of the day end -->
 
     <!-- Subscribe -->
-    <div class="col-lg-5 col-md-12 col-sm-12 ">
+    <div class="col-lg-5 col-md-12 col-sm-12 " *ngIf="showNewsCard">
       <newsletter></newsletter>
     </div>
     <!-- Subscribe end -->

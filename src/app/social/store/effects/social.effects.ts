@@ -36,17 +36,6 @@ export class SocialEffects {
         )
         );
 
-    // Remove subscription
-    @Effect()
-    removeSubscription$ = this.actions$
-        .ofType(SocialActionTypes.REMOVE_SUBSCRIBER)
-        .pipe(
-        switchMap((action: socialActions.RemoveSubscriber) => {
-            this.socialService.removeSubscription(action.payload.created_uid);
-            return empty();
-        })
-        );
-
         constructor(
             private actions$: Actions,
             private socialService: SocialService,

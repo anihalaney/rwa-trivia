@@ -9,6 +9,7 @@ import { userState } from '../../../user/store';
 import { socialState } from '../../store';
 import * as userActions from '../../../user/store/actions';
 
+// tslint:disable-next-line:max-line-length
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 @Component({
@@ -49,12 +50,6 @@ export class NewsletterComponent implements OnInit {
     this.store.select(socialState).select(s => s.getTotalSubscriptionStatus).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
     });
-    // this.store.select(socialState).select(s => s.subscriptionRemoveStatus).subscribe(status => {
-    //   if (status === 'SUCCESS') {
-    //     this.user.isSubscribed = false;
-    //     this.isSubscribed = false;
-    //   }
-    // });
   }
 
   ngOnInit() {
@@ -68,7 +63,6 @@ export class NewsletterComponent implements OnInit {
     if (!this.subscriptionForm.valid) {
       return;
     } else {
-
       const subscription = new Subscription();
       subscription.email = this.subscriptionForm.get('email').value;
       if (this.user) {
@@ -77,8 +71,4 @@ export class NewsletterComponent implements OnInit {
       this.store.dispatch(new socialActions.AddSubscriber( { subscription }));
     }
   }
-  // onUnSubscribe() {
-  //   this.store.dispatch(new socialActions.RemoveSubscriber({ created_uid: this.user.userId }));
-
-  // }
 }

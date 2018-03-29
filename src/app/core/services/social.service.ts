@@ -24,9 +24,7 @@ export class SocialService {
     }
 
     saveSubscription(subscription: Subscription) {
-
         const dbSubscription = Object.assign({}, subscription);
-        dbSubscription.id = this.db.createId();
         this.db.doc(`/subscription/${dbSubscription.email}`).valueChanges()
             .take(1)
             .subscribe(sub => {
@@ -48,22 +46,4 @@ export class SocialService {
         const url: string = CONFIG.functionsUrl + '/app/subscription/count';
         return this.http.get<Subscribers>(url);
     }
-
-    removeSubscription(created_uid: String) {
-
-        this.db.collection(`/subscription/`, ref => ref.where('created_uid', '==', created_uid))
-            .valueChanges()
-            .take(1)
-            .map(qs => qs)
-            .subscribe(sub => {
-                const id = sub[0]['id'];
-                this.db.doc('/subscription/' + id).delete().then(ref => {
-                    this.store.dispatch(new socialactions.RemoveSubscriberSuccess());
-                });
-            })
-
-
-
-    }
-
 }
