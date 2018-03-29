@@ -3,6 +3,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User } from '../../../model';
 import { UserService } from '../../services'
+import { switchMap, map } from 'rxjs/operators';
 
 @Injectable()
 export class UserEffects {
