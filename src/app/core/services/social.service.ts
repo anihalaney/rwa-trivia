@@ -7,7 +7,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
 import { Subscription, Subscribers } from '../../model';
 import * as socialactions from '../../social/store/actions';
-import { Subscriber } from 'rxjs/Subscriber';
 import { UserService } from './user.service';
 
 
