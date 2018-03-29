@@ -1,14 +1,9 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
-<<<<<<< HEAD
-// import { FirebaseSourceApp } from './config/firebase.config'
 import { Subscription } from './subscription';
-=======
-
 import { GameMechanics } from './game-mechanics';
 
->>>>>>> 3cdc52e9908537a561c0f433607de22245b1071e
 
 
 
