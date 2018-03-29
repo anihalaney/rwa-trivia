@@ -6,11 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-<<<<<<< HEAD
 import { User, GameOptions, Game, Question, PlayerQnA } from '../../model';
-=======
-import { User, GameOptions, Game, Question, PlayerQnA, GameStatus, PlayerMode, OpponentType } from '../../model';
->>>>>>> 3cdc52e9908537a561c0f433607de22245b1071e
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
