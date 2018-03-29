@@ -25,7 +25,7 @@ export class NewsletterComponent implements OnInit {
   message = '';
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, ) {
-    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.store.select(appState.userState).select(s => s.user).subscribe(user => {
 
       this.user = user;
       if (user) {
