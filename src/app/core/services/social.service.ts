@@ -23,19 +23,17 @@ export class SocialService {
         private userService: UserService) {
     }
 
-    saveSubscription(subscription: Subscription, user: User) {
-        (!user) ? delete subscription['userId'] : '';
+    saveSubscription(subscription: Subscription) {
+
         const dbSubscription = Object.assign({}, subscription);
         dbSubscription.id = this.db.createId();
-        this.db.collection(`/subscription/`, ref => ref.where('email', '==', subscription.email)).valueChanges()
+        this.db.doc(`/subscription/${dbSubscription.email}`).valueChanges()
             .take(1)
-            .map(qs => qs)
             .subscribe(sub => {
-                if (sub.length === 0) {
-                    this.db.doc(`/subscription/${dbSubscription.id}`).set(dbSubscription).then(ref => {
-                        if (user) {
-                            user.isSubscribed = true;
-                            this.userService.updateUser(user);
+                if (!sub) {
+                    this.db.doc(`/subscription/${dbSubscription.email}`).set(dbSubscription).then(ref => {
+                        if (subscription.userId) {
+                            this.userService.setSubscriptionFlag(subscription.userId);
                         }
                         this.store.dispatch(new socialactions.CheckSubscriptionStatus(false));
                     });

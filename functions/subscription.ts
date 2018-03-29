@@ -1,8 +1,6 @@
 import { Subscribers } from '../src/app/model';
 
 export class Subscription {
-    private firestoreDb: any;
-
     constructor(private db) {
         this.db = db;
     }
@@ -11,13 +9,9 @@ export class Subscription {
 
         return this.db.collection('subscription').get()
             .then(snapshot => {
-                const subscriptionInfo: Subscribers = new Subscribers();
-                subscriptionInfo.count = snapshot.size;
-                return subscriptionInfo;
+                const subscribers: Subscribers = new Subscribers();
+                subscribers.count = snapshot.size;
+                return subscribers;
             })
-            .catch((err) => {
-                return Promise.resolve(err);
-            });
-
-    }
+        }
 }
