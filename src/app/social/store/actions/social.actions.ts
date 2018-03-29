@@ -17,7 +17,7 @@ export enum SocialActionTypes {
 // Save subscriber
 export class AddSubscriber implements Action {
     readonly type = SocialActionTypes.ADD_SUBSCRIBER;
-    constructor(public payload: { subscription: Subscription, user: User }) { }
+    constructor(public payload: { subscription: Subscription }) { }
 }
 
 // Save subscriber Success

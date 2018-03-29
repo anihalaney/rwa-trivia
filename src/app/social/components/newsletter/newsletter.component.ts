@@ -68,19 +68,14 @@ export class NewsletterComponent implements OnInit {
     if (!this.subscriptionForm.valid) {
       return;
     } else {
-      const request = {};
-      if (this.user) {
-        request['userId'] = this.user.userId;
-        request['email'] = this.subscriptionForm.get('email').value;
-        this.store.dispatch(new socialActions.AddSubscriber(
-          { subscription: new Subscription(request), user: this.user }));
-      } else {
-        request['email'] = this.subscriptionForm.get('email').value;
-        this.store.dispatch(new socialActions.AddSubscriber(
-          { subscription: new Subscription(request), user: this.user }));
-      }
-    }
 
+      const subscription = new Subscription();
+      subscription.email = this.subscriptionForm.get('email').value;
+      if (this.user) {
+        subscription.userId = this.user.userId;
+      }
+      this.store.dispatch(new socialActions.AddSubscriber( { subscription }));
+    }
   }
   // onUnSubscribe() {
   //   this.store.dispatch(new socialActions.RemoveSubscriber({ created_uid: this.user.userId }));
