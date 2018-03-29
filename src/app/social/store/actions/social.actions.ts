@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Subscription, Subscribers, User } from '../../../model';
+import { Subscription, Subscribers } from '../../../model';
 
 export enum SocialActionTypes {
 

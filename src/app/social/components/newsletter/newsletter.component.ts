@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import {  FormBuilder, FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+import { AppState, appState } from '../../../store';
 import { User, Subscription } from '../../../model';
 import * as socialActions from '../../../social/store/actions';
-import { Observable } from 'rxjs/Observable';
 import { userState } from '../../../user/store';
 import { socialState } from '../../store';
 import * as userActions from '../../../user/store/actions';
