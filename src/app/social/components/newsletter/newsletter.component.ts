@@ -34,6 +34,10 @@ export class NewsletterComponent implements OnInit {
         this.subscriptionForm = this.fb.group({
           email: [this.user.email]
         });
+        if (!this.user.isSubscribed) {
+          this.message = '';
+          this.isSubscribed = false;
+        }
       }
     });
     this.store.select(socialState).select(s => s.checkEmailSubscriptionStatus).subscribe(status => {
@@ -68,7 +72,7 @@ export class NewsletterComponent implements OnInit {
       if (this.user) {
         subscription.userId = this.user.userId;
       }
-      this.store.dispatch(new socialActions.AddSubscriber( { subscription }));
+      this.store.dispatch(new socialActions.AddSubscriber({ subscription }));
     }
   }
 }

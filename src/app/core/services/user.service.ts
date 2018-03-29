@@ -55,11 +55,10 @@ export class UserService {
         // const userSubject = new Subject<User>();
 
         return this.db.doc<any>('/users/' + user.userId)
-            .snapshotChanges()
-            .take(1)
+            .valueChanges()
             .map(u => {
-                if (u.payload.exists && u.payload.data()) {
-                    user = { ...user, ...u.payload.data() }
+                if (u) {
+                    user = { ...user, ...u }
                 }
                 return user;
             })
