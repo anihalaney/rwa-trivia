@@ -85,7 +85,7 @@ export class UserService {
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser['authState'];
         this.db.doc(`/users/${dbUser.userId}`).update(dbUser).then(ref => {
-            this.store.dispatch(new useractions.UpdateUserSuccess(user));
+            this.store.dispatch(new useractions.LoadUserProfileSuccess(user));
         });
     }
 }
