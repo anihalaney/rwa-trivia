@@ -31,28 +31,4 @@ export class UserActions {
     };
   }
 
-
-  static LOAD_USER_PROFILE_ERROR = 'LOAD_USER_PROFILE_ERROR';
-  loadUserProfileError(user: User): ActionWithPayload<null> {
-    return {
-      type: UserActions.LOAD_USER_PROFILE_ERROR,
-      payload: null
-    };
-  }
-
-  static LOAD_USER_PROFILE = 'LOAD_USER_PROFILE';
-  LoadUserProfile(user: User): ActionWithPayload<User> {
-    return {
-      type: UserActions.LOAD_USER_PROFILE,
-      payload: user
-    };
-  }
-
-  static LOAD_USER_PROFILE_SUCCESS = 'LOAD_USER_PROFILE_SUCCESS';
-  LoadUserProfileSuccess(user: User): ActionWithPayload<User> {
-    return {
-      type: UserActions.LOAD_USER_PROFILE_SUCCESS,
-      payload: user
-    };
-  }
 }
