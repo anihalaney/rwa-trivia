@@ -51,22 +51,32 @@ export class UserService {
 
 
     getUserProfile(user: User): Observable<User> {
+        // const userSubject = new Subject<User>();
+
         return this.db.doc<any>('/users/' + user.userId)
             .snapshotChanges()
             .take(1)
             .map(u => {
                 if (u.payload.exists && u.payload.data()) {
-                    user = { ...user, ...u.payload.data()}
-                    if (u.payload.data().profilePicture !== undefined) {
-                        const filePath = `profile/${u.payload.data().userId }/avatar/${u.payload.data().profilePicture}`;
-                        const ref = this.storage.ref(filePath);
-                        user.profilePictureUrl = ref.getDownloadURL();
-                    }
-                    return user;
+                    user = { ...user, ...u.payload.data() }
                 }
+                return user;
             })
-            .catch(error => {
-                return Observable.of(null);
+            .mergeMap(u => this.getUserProfileImage(u));
+    }
+
+    getUserProfileImage(user: User): Observable<User> {
+        // const userSubject = new Subject<User>();
+        if (user.profilePicture !== undefined) {
+            const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
+            const ref = this.storage.ref(filePath);
+            return ref.getDownloadURL().map(url => {
+                user.profilePictureUrl = (url) ? url : '/assets/images/yourimg.png';
+                return user;
             });
+        } else {
+            user.profilePictureUrl = '/assets/images/yourimg.png'
+            return Observable.of(user);
+        }
     }
 }

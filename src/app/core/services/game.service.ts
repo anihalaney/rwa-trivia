@@ -6,7 +6,11 @@ import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
+<<<<<<< HEAD
 import { User, GameOptions, Game, Question, PlayerQnA } from '../../model';
+=======
+import { User, GameOptions, Game, Question, PlayerQnA, GameStatus, PlayerMode, OpponentType } from '../../model';
+>>>>>>> 3cdc52e9908537a561c0f433607de22245b1071e
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
@@ -19,36 +23,27 @@ export class GameService {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
-    let gameIdSubject = new Subject<string>();
-    let game: Game = new Game(gameOptions, user.userId);
+    const url: string = CONFIG.functionsUrl + '/app/createGame';
+    const payload = { gameOptions: gameOptions, userId: user.userId };
+    return this.http.post<string>(url, payload);
 
-    let dbGame = game.getDbModel(); //object to be saved
-
-    let id = this.db.createId();
-    dbGame.id = id;
-
-    //Use the set method of the doc instead of the add method on the collection, so the id field of the data matches the id of the document
-    this.db.doc('/games/' + id).set(dbGame).then(ref => {
-      gameIdSubject.next(id);
-    });
-    return gameIdSubject;
   }
 
   getActiveGames(user: User): Observable<Game[]> {
-    const gamesSubject = new Subject<Game[]>();
-    //TODO: Limit to a max
-    this.db.collection('/games', ref => ref.where('gameOver', '==', false))
+
+
+    return this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
       .valueChanges()
-      .map(gs => gs.map(g => Game.getViewModel(g))).subscribe(GamesWithCurrentUser => {
-        const activeGames = [];
-        for (const game of GamesWithCurrentUser) {
-          if (game.playerIds.indexOf(user.userId) !== -1) {
-            activeGames.push(game);
-          }
-        }
-        gamesSubject.next(activeGames);
+      .map(gs => gs.map(g => Game.getViewModel(g)))
+      .mergeMap((userGames) => {
+        return this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false))
+          .valueChanges()
+          .map(gs => gs.map(g => Game.getViewModel(g)))
+          .map(otherUserGames => {
+            userGames = userGames.concat(otherUserGames);
+            return userGames.sort((a: any, b: any) => { return b - a; });
+          })
       });
-    return gamesSubject;
   }
 
   getGame(gameId: string): Observable<Game> {

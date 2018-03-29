@@ -1,14 +1,7 @@
 <!-- <mat-card-title>File Details</mat-card-title> -->
 <!-- <br /> -->
 <div class="card">
-  <div class="row">
-    <div class="pageheading col-md-9 col-xs-12 hidden-xs">File Details</div>
-    <div class="col-md-3 col-xs-12 align-right alignment">
-      <button class="btn" (click)="backToSummary()"> Back To Summary </button>
-      <!-- <a [routerLink]="['./upload']" class="pageheading startupload font-size-16">Start New Bulk Upload</a> -->
-    </div>
-    <!-- <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle> -->
-  </div>
+
 
   <mat-table #table [dataSource]="fileInfoDS" class="bulk-summary-question-table">
     <ng-container cdkColumnDef="fileName">

@@ -20,7 +20,7 @@ export class User {
   authState: firebase.User;
   roles: any;
   tags?: string[];
-  profilePictureUrl?: Observable<any>;
+  profilePictureUrl?: string;
 
   constructor(authState: firebase.User) {
     if (authState) {
