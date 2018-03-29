@@ -8,7 +8,7 @@
         </div>
         <div class="clear"></div>
         <a href="#" class="dark">You</a>
-        <div class="light">{{location}}</div>
+        <div class="light" *ngIf="user?.location" >{{user.location}}</div>
         <hr>
         <div class="light">Round {{questionIndex}}</div>
         <div class="dark">Score {{correctAnswerCount}}</div>

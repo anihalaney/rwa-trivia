@@ -12,7 +12,7 @@ import { userState } from '../../store';
 })
 export class GameCardComponent implements OnInit, OnChanges {
   @Input() game: Game;
-  userObs$: Observable<User>;
+  user$: Observable<User>;
   correctAnswerCount: number;
   questionIndex: number;
   user: User;
@@ -21,8 +21,9 @@ export class GameCardComponent implements OnInit, OnChanges {
 
   constructor(private store: Store<AppState>) {
 
-    this.userObs$ = this.store.select(userState).select(s => s.user);
-    this.userObs$.subscribe(user => {
+    this.user$ = this.store.select(userState).select(s => s.user);
+
+    this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
