@@ -4,7 +4,7 @@
     <ng-container *ngIf="game.gameOptions.playerMode == 0">
       <div class="col-xs-12 textcenter clearfix">
         <div class="yourimg">
-          <img *ngIf="userProfilePicUrl" [src]="userProfilePicUrl" alt="yourimg">
+          <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
         </div>
         <div class="clear"></div>
         <a href="#" class="dark">You</a>
@@ -18,11 +18,11 @@
       <div class="col-xs-6">
         <div class="yourimg vs">
           <a href="#">
-            <img *ngIf="userProfilePicUrl" [src]="userProfilePicUrl" alt="yourimg" />
+            <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
           </a>
         </div>
         <a href="#" class="dark">You</a>
-        <div class="light">{{location}}</div>
+        <div class="light" *ngIf="user?.location" >{{user.location}}</div>
         <hr>
         <div class="light">
           <span *ngIf="myTurn">Round 2</span>
