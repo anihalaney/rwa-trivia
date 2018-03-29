@@ -10,7 +10,7 @@ import { AppState, appState } from '../../../store';
 
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Category, GameOptions, GameMode, User }     from '../../../model';
+import { Category, GameOptions, GameMode, User } from '../../../model';
 
 @Component({
   selector: 'new-game',
@@ -35,14 +35,14 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   filteredTags$: Observable<string[]>;
 
-  get categoriesFA(): FormArray { 
+  get categoriesFA(): FormArray {
     //console.log(this.newGameForm.get('categoriesFA'));
-    return this.newGameForm.get('categoriesFA') as FormArray; 
+    return this.newGameForm.get('categoriesFA') as FormArray;
   }
   constructor(private fb: FormBuilder,
-              private store: Store<AppState>,
-              private gameActions: GameActions,
-              private router: Router) {
+    private store: Store<AppState>,
+    private gameActions: GameActions,
+    private router: Router) {
     this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
     this.tagsObs = store.select(appState.coreState).select(s => s.tags);
     this.selectedTags = [];
@@ -53,9 +53,10 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
-    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
-      console.log("Navigating to game: " + gameId);
-      this.router.navigate(['/game-play', gameId]);
+    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameObj => {
+
+      console.log("Navigating to game: " + gameObj['gameId']);
+      this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     })
 
@@ -63,15 +64,16 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.newGameForm = this.createForm(this.gameOptions);
 
     let playerModeControl = this.newGameForm.get('playerMode');
+    playerModeControl.setValue("0");
     let opponentTypeControl = this.newGameForm.get('opponentType');
 
     playerModeControl.valueChanges.subscribe(v => {
-      if (v == "1") {
+      if (v === "1") {
         opponentTypeControl.enable();
         opponentTypeControl.setValue("0");
       }
       else {
-        opponentTypeControl.disable ();
+        opponentTypeControl.disable();
         opponentTypeControl.reset();
       }
     });
@@ -89,58 +91,53 @@ export class NewGameComponent implements OnInit, OnDestroy {
     */
 
     this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-         .map(val => val.length > 0 ? this.filter(val) : []);
+      .map(val => val.length > 0 ? this.filter(val) : []);
   }
 
   filter(val: string): string[] {
-      return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option)); 
-   }
-   autoOptionClick(event) {
-     //Auto complete doesn't seem to have an event on selection of an entry
-     //tap into the change event of the input box and if the tag matches any entry in the tag list, then add to the selected tag list
-     //else wait for the user to click "Add" if they still want to add tags that are not on the list
+    return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
+  }
+  autoOptionClick(event) {
+    //Auto complete doesn't seem to have an event on selection of an entry
+    //tap into the change event of the input box and if the tag matches any entry in the tag list, then add to the selected tag list
+    //else wait for the user to click "Add" if they still want to add tags that are not on the list
 
     //console.log(event);
     //console.log(event.srcElement.value);
     let tag: string = event.srcElement.value;
     let found = this.tags.find(t => t.toLowerCase() === tag.toLowerCase());
     //console.log(found);
-    if (found)
-    {
+    if (found) {
       this.addTagToSelectedList(found);
       this.newGameForm.get('tagControl').setValue('');
     }
-   }
-   addTagToSelectedList(tag: string)
-   {
-     if (tag && tag !== "")
+  }
+  addTagToSelectedList(tag: string) {
+    if (tag && tag !== "")
       this.selectedTags.push(tag);
-   }
+  }
   ngOnDestroy() {
     Utils.unsubscribe([this.sub, this.sub2, this.sub3]);
   }
 
-  toggleShowUncheckedCategories()
-  {
+  toggleShowUncheckedCategories() {
     this.showUncheckedCategories = true;
   }
-  addTag() 
-  {
+  addTag() {
     let tagControl = this.newGameForm.get('tagControl');
     this.addTagToSelectedList(tagControl.value);
     //console.log(this.selectedTags);
     tagControl.setValue('');
   }
-  removeEnteredTag(tag) 
-  {
-    this.selectedTags = this.selectedTags.filter(t => t !== tag); 
+  removeEnteredTag(tag) {
+    this.selectedTags = this.selectedTags.filter(t => t !== tag);
   }
   createForm(gameOptions: GameOptions) {
 
     let sortedCategories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)]
-    let fgs:FormGroup[] = sortedCategories.map(category => {
+    let fgs: FormGroup[] = sortedCategories.map(category => {
       let fg = new FormGroup({
-        categorySelected: new FormControl({value: true, disabled: category.requiredForGamePlay}),
+        categorySelected: new FormControl({ value: true, disabled: category.requiredForGamePlay }),
         categoryId: new FormControl(category.id),
         categoryName: new FormControl(category.categoryName),
         requiredForGamePlay: new FormControl(category.requiredForGamePlay)
@@ -149,7 +146,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     });
     let categoriesFA = new FormArray(fgs);
 
-    let fcs:FormControl[] = gameOptions.tags.map(tag => {
+    let fcs: FormControl[] = gameOptions.tags.map(tag => {
       let fc = new FormControl(tag);
       return fc;
     });
@@ -159,12 +156,12 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     let form: FormGroup = this.fb.group({
       playerMode: [gameOptions.playerMode, Validators.required],
-      opponentType: [{value: gameOptions.opponentType, disabled: true} ],
+      opponentType: [{ value: gameOptions.opponentType, disabled: true }],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
       tagsArray: tagsFA,
       categoriesFA: categoriesFA
-      } //, {validator: questionFormValidator}
+    } //, {validator: questionFormValidator}
     );
     //console.log(form);
     return form;
@@ -182,12 +179,12 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     this.startNewGame(gameOptions);
   }
-  
+
   startNewGame(gameOptions: GameOptions) {
     let user: User;
     this.store.select(appState.coreState).take(1).subscribe(s => user = s.user); //logged in user
 
-    this.store.dispatch(new gameplayactions.CreateNewGame({gameOptions: gameOptions, user: user}));
+    this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }
 
   getGameOptionsFromFormValue(formValue: any): GameOptions {

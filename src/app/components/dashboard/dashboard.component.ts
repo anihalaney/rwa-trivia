@@ -25,6 +25,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   greeting: string;
   message: string;
 
+  showNewsCard = true;
+
 
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
@@ -33,12 +35,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
     this.gameInvites = [1, 2, 3];
 
-    this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.sub = store.select(appState.userState).select(s => s.user).subscribe(user => {
+
       this.user = user
       if (user) {
-        //Load active Games
 
+        this.user = user;
+        if (this.user.isSubscribed) {
+          this.showNewsCard = false;
+        }
+        //Load active Games
         this.store.dispatch(this.gameActions.getActiveGames(user));
+      } else {
+        this.showNewsCard = true;
       }
     });
   }

@@ -9,6 +9,7 @@ import { CategoryActions, TagActions, QuestionActions, GameActions } from '../..
 import { Utils } from '../../core/services';
 import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +31,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private gameActions: GameActions,
     private store: Store<AppState>,
     public router: Router,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar,
+    private location: Location) {
 
     this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === 'SUCCESS') {
@@ -72,6 +74,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
+    location.reload();
   }
 
   toggleTheme() {

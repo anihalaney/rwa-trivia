@@ -1,8 +1,14 @@
 import { Game, Question, Category, SearchCriteria } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
+<<<<<<< HEAD
 // import { FirebaseSourceApp } from './config/firebase.config'
 import { Subscription } from './subscription';
+=======
+
+import { GameMechanics } from './game-mechanics';
+
+>>>>>>> 3cdc52e9908537a561c0f433607de22245b1071e
 
 
 
@@ -262,7 +268,7 @@ app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
   sourceDB.collection(req.params.collection).get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-        //  console.log(doc.id, '=>', doc.data());
+        console.log(doc.id, '=>', doc.data());
         targetDB.collection(req.params.collection).doc(doc.id).set(doc.data());
       });
       res.send('loaded data');
@@ -352,5 +358,7 @@ app.get('/testES', adminOnly, (req, res) => {
 });
 // END - TEST FUNCTIONS
 ///////////////////////
+
+
 
 exports.app = functions.https.onRequest(app);
