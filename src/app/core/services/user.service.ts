@@ -24,7 +24,7 @@ export class UserService {
     }
 
 
-    getUserRoles(user: User): Observable<User> {
+    loadUserProfile(user: User): Observable<User> {
         return this.db.doc<any>('/users/' + user.userId).valueChanges()
             .map(u => {
                 if (u) {
