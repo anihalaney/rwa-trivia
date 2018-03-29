@@ -52,9 +52,7 @@ export class UserService {
 
 
     getUserProfile(user: User): Observable<User> {
-        // const userSubject = new Subject<User>();
-
-        return this.db.doc<any>('/users/' + user.userId)
+        return this.db.doc<any>(`/users/${user.userId}`)
             .valueChanges()
             .map(u => {
                 if (u) {
@@ -66,7 +64,6 @@ export class UserService {
     }
 
     getUserProfileImage(user: User): Observable<User> {
-        // const userSubject = new Subject<User>();
         if (user.profilePicture !== undefined) {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.storage.ref(filePath);
