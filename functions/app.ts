@@ -196,11 +196,38 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
 app.get('/subscription/count', (req, res) => {
   const subscription: Subscription = new Subscription(admin.firestore());
   subscription.getTotalSubscription()
-  .then(subscribers => res.send(subscribers))
-  .catch(error => {
-    console.log(error);
-    res.status(500).send('Internal Server error');
+    .then(subscribers => res.send(subscribers))
+    .catch(error => {
+      console.log(error);
+      res.status(500).send('Internal Server error');
+    });
+});
+
+app.post('/createGame', authorizedOnly, (req, res) => {
+  // console.log('body---->', req.body);
+  const gameOptions = req.body.gameOptions;
+  const userId = req.body.userId;
+
+  if (!gameOptions) {
+    // Game Option is not added
+    res.status(403).send('Game Option is not added in request');
+    return;
+  }
+
+  if (!userId) {
+    // userId
+    res.status(403).send('userId is not added in request');
+    return;
+  }
+
+  const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId, admin.firestore());
+  gameMechanics.createNewGame().then((gameId) => {
+    console.log('gameId', gameId);
+
+    res.send({ gameId: gameId });
   });
+
+
 });
 
 app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
