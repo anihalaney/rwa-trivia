@@ -11,7 +11,7 @@
         <div class="light">Earth, Milky way</div>
         <hr>
         <div class="light">Round {{questionIndex}}</div>
-        <div class="dark">Score {{correctAnswerCount}}</div>                    
+        <div class="dark">Score {{correctAnswerCount}}</div>
       </div>
     </ng-container>
     <ng-container *ngIf="game.gameOptions.playerMode == 1">
@@ -25,17 +25,22 @@
       <div class="light"><span *ngIf="myTurn">Round 2</span></div>
       <div class="dark">Score  10</div>                    
 
-    </div>
-    <div class="col-xs-6 clearfix">
-      <div class="yourimg floatright">
-        <a href="#"><img src="/assets/images/opponent.png" alt="Kaanishhk" /></a>
       </div>
-      <div class="clear"></div>
-      <a href="#" class="dark">Kaanishhk</a>
-      <div class="light">hristol</div><hr>
-      <div class="light"><span *ngIf="!myTurn">Round 2</span></div>
-      <div class="dark">Score  07</div>
-    </div>
+      <div class="col-xs-6 clearfix">
+        <div class="yourimg floatright">
+          <a href="#">
+            <img src="/assets/images/opponent.png" alt="Kaanishhk" />
+          </a>
+        </div>
+        <div class="clear"></div>
+        <a href="#" class="dark">Kaanishhk</a>
+        <div class="light">hristol</div>
+        <hr>
+        <div class="light">
+          <span *ngIf="!myTurn">Round 2</span>
+        </div>
+        <div class="dark">Score 07</div>
+      </div>
     </ng-container>
   </div>
   <a *ngIf="myTurn" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
