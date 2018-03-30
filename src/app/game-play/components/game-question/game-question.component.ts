@@ -15,7 +15,8 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   @Input() continueNext: boolean;
   @Input() correctCount: number;
   @Input() noOfQuestions: number;
-  
+  @Input() showContinueBtn: boolean;
+
   @Output() answerClicked = new EventEmitter<number>();
   @Output() okClick = new EventEmitter();
   @Output() continueClicked = new EventEmitter();
