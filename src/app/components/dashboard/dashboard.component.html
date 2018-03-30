@@ -20,7 +20,7 @@
 
       </div>
       <ul class="row">
-        <li *ngFor="let game of activeGames$ | async" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
           <game-card [game]="game"></game-card>
         </li>
         <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
@@ -32,7 +32,7 @@
     </div>
 
     <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
-      <a href="#" class="viewall">view all</a>
+      <a *ngIf="activeGames && activeGames.length > 0 && activeGames.length!=gameSliceLastIndex" class="viewall" (click)="displayMoreGames()">view all</a>
     </div>
 
 
