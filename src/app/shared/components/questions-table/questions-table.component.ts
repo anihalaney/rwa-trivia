@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
@@ -13,7 +13,7 @@ import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } 
 import { bulkState } from '../../../bulk/store';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import * as bulkActions from '../../../bulk/store/actions';
-import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
+
 
 
 @Component({
@@ -21,7 +21,7 @@ import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
-export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit {
+export class QuestionsTableComponent implements OnInit, AfterViewInit {
 
   @Input() showSort: boolean;
   @Input() showPaginator: boolean;
@@ -73,10 +73,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       reason: ['', Validators.required]
     });
     (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions)
-  }
-
-  ngOnChanges() {
-
   }
 
   ngAfterViewInit() {
