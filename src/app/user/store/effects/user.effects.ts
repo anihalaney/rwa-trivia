@@ -22,25 +22,6 @@ export class UserEffects {
         })
         );
 
-    // load user by userId
-    @Effect()
-    loadUserProfile$ = this.actions$
-        .ofType(UserActionTypes.LOAD_USER_PROFILE)
-        .pipe(
-        switchMap((action: userActions.LoadUserProfile) =>
-            this.userService.getUserProfile(action.payload.user).pipe(
-                    map((user: User) => new userActions.LoadUserProfileSuccess(user)))
-            )
-        );
-
-      // listening for login success from root to load user profile
-      @Effect()
-      loginSuccess$ = this.actions$
-          .ofType(UserActionTypes.LOGIN_SUCCESS)
-          .map((action: any) => action.payload)
-          .map( user => new userActions.LoadUserProfile( { user }));
-
-
     // Load User Published Question by userId from router
     @Effect()
     // handle location update

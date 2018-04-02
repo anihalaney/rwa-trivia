@@ -72,7 +72,7 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.setCropperSettings();
 
-    this.userObs = this.store.select(userState).select(s => s.user);
+    this.userObs = this.store.select(appState.coreState).select(s => s.user);
 
     this.userObs.subscribe(user => {
       if (user) {
@@ -88,12 +88,8 @@ export class ProfileSettingsComponent implements OnDestroy {
         this.filteredTags$ = this.userForm.get('tags').valueChanges
           .map(val => val.length > 0 ? this.filter(val) : []);
 
-        if (this.user.profilePicture) {
-          const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
-          const ref = this.storage.ref(filePath);
-          ref.getDownloadURL().subscribe(res => {
-            this.profileImage.image = res;
-          });
+        if (this.user.profilePictureUrl) {
+          this.profileImage.image = this.user.profilePictureUrl;
         }
       }
     });
