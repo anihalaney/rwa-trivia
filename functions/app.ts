@@ -290,7 +290,7 @@ app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
   sourceDB.collection(req.params.collection).get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-        console.log(doc.id, '=>', doc.data());
+        //  console.log(doc.id, '=>', doc.data());
         targetDB.collection(req.params.collection).doc(doc.id).set(doc.data());
       });
       res.send('loaded data');
