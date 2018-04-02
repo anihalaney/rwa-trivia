@@ -29,16 +29,16 @@ export class UserEffects {
         .pipe(
         switchMap((action: userActions.LoadUserProfile) =>
             this.userService.getUserProfile(action.payload.user).pipe(
-                    map((user: User) => new userActions.LoadUserProfileSuccess(user)))
-            )
+                map((user: User) => new userActions.LoadUserProfileSuccess(user)))
+        )
         );
 
-      // listening for login success from root to load user profile
-      @Effect()
-      loginSuccess$ = this.actions$
-          .ofType(UserActionTypes.LOGIN_SUCCESS)
-          .map((action: any) => action.payload)
-          .map( user => new userActions.LoadUserProfile( { user }));
+    // listening for login success from root to load user profile
+    @Effect()
+    loginSuccess$ = this.actions$
+        .ofType(UserActionTypes.LOGIN_SUCCESS)
+        .map((action: any) => action.payload)
+        .map(user => new userActions.LoadUserProfile({ user }));
 
 
     // Load User Published Question by userId from router
@@ -54,7 +54,9 @@ export class UserEffects {
         .pipe(
         switchMap((routerState: RouterStateUrl) =>
             this.questionService.getUserQuestions(routerState.params.userid, true).pipe(
-                map((questions: Question[]) => new userActions.LoadUserPublishedQuestionsSuccess(questions))
+                map((questions: Question[]) =>
+                    new userActions.LoadUserPublishedQuestionsSuccess(questions)
+                )
             )
         )
         );

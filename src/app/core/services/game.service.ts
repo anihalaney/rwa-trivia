@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
@@ -27,6 +28,22 @@ export class GameService {
 
   getActiveGames(user: User): Observable<Game[]> {
 
+
+    // const playerGames$ = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId)
+    //   .where('gameOver', '==', false)).valueChanges();
+    // const otherPlayerGames$ = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId)
+    //   .where('gameOver', '==', false)).valueChanges();
+
+    // Observable.forkJoin(Observable.of(playerGames$.map(gs => gs.map(g => Game.getViewModel(g)))),
+    //   Observable.of(otherPlayerGames$.map(gs => gs.map(g => Game.getViewModel(g))))).subscribe(
+    //   games => {
+    //     games.forEach(game => {
+    //       console.log(game);
+
+    //     })
+    //   }
+    //   );
+    // return Observable.of(null);
 
     return this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
       .valueChanges()

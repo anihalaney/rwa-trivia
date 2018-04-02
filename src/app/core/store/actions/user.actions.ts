@@ -31,6 +31,14 @@ export class UserActions {
     };
   }
 
+  static LOAD_USERS_SUCCESS = 'LOAD_USERS_SUCCESS';
+  loadUsersSuccess(users: User[]): ActionWithPayload<User[]> {
+    return {
+      type: UserActions.LOAD_USERS_SUCCESS,
+      payload: users
+    };
+  }
+
 
   static LOAD_USER_PROFILE_ERROR = 'LOAD_USER_PROFILE_ERROR';
   loadUserProfileError(user: User): ActionWithPayload<null> {
