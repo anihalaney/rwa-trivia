@@ -3,15 +3,16 @@ import { Effect, Actions } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User } from '../../../model';
 import { UserService } from '../../services'
+import { switchMap, map } from 'rxjs/operators';
 
 @Injectable()
 export class UserEffects {
 
     @Effect()
-    loadUserRoles$ = this.actions$
+    loadUserProfile$ = this.actions$
         .ofType(UserActions.LOGIN_SUCCESS)
         .map((action: ActionWithPayload<User>) => action.payload)
-        .switchMap((user: User) => this.svc.getUserRoles(user))
+        .switchMap((user: User) => this.svc.loadUserProfile(user))
         .map((user: User) => this.userActions.addUserWithRoles(user));
 
 
