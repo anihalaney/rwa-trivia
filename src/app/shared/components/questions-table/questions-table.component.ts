@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../model';
 import { bulkState } from '../../../bulk/store';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 import * as bulkActions from '../../../bulk/store/actions';
 
 
@@ -29,16 +30,18 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() showApproveButton: boolean;
   @Input() showButtons: boolean;
+  @Input() clientSidePagination: boolean;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   requestFormGroup: FormGroup;
   rejectFormGroup: FormGroup;
 
   sortOrder: string;
   questionsSubject: BehaviorSubject<Question[]>;
-  questionsDS: QuestionsDataSource;
+  questionsDS: any;
 
   requestQuestionStatus = false;
   rejectQuestionStatus = false;
@@ -71,7 +74,13 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    this.questionsSubject.next(this.questions);
+    (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+  }
+
+  setClientSidePaginationDataSource(questions: Question[]) {
+    this.questionsDS = new MatTableDataSource<Question>(questions);
+    Observable.timer(500).take(1).subscribe(t => { this.questionsDS.paginator = this.paginator })
+
   }
 
   getDisplayStatus(status: number): string {
