@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
@@ -13,6 +13,7 @@ import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } 
 import { bulkState } from '../../../bulk/store';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import * as bulkActions from '../../../bulk/store/actions';
+import { AfterViewInit } from '@angular/core/src/metadata/lifecycle_hooks';
 
 
 @Component({
@@ -20,7 +21,7 @@ import * as bulkActions from '../../../bulk/store/actions';
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
-export class QuestionsTableComponent implements OnInit, OnChanges {
+export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() showSort: boolean;
   @Input() showPaginator: boolean;
@@ -71,16 +72,19 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.rejectFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });
+    (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions)
   }
 
   ngOnChanges() {
-    (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+
+  }
+
+  ngAfterViewInit() {
+    (this.clientSidePagination) ? this.questionsDS.paginator = this.paginator : '';
   }
 
   setClientSidePaginationDataSource(questions: Question[]) {
     this.questionsDS = new MatTableDataSource<Question>(questions);
-    Observable.timer(500).take(1).subscribe(t => { this.questionsDS.paginator = this.paginator })
-
   }
 
   getDisplayStatus(status: number): string {
