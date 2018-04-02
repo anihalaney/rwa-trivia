@@ -6,7 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, GameOptions, Game, Question, PlayerQnA, GameStatus, PlayerMode, OpponentType } from '../../model';
+import { User, GameOptions, Game, Question, PlayerQnA } from '../../model';
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
