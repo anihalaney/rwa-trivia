@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../../store';
@@ -15,7 +15,7 @@ import * as bulkActions from '../../../store/actions';
   templateUrl: './bulk-summary-table.component.html',
   styleUrls: ['./bulk-summary-table.component.scss']
 })
-export class BulkSummaryTableComponent implements OnInit {
+export class BulkSummaryTableComponent implements OnChanges {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -46,9 +46,11 @@ export class BulkSummaryTableComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    if (this.bulkSummaryDetailPath && this.showSummaryTable) {
+  ngOnChanges(changes: SimpleChanges) {
+    if ((changes['bulkSummaryDetailPath'].currentValue !== changes['bulkSummaryDetailPath'].previousValue) && this.showSummaryTable) {
       this.loadBulkSummaryData();
+    } else {
+      this.setPaginatorAndSort();
     }
   }
 
@@ -67,9 +69,9 @@ export class BulkSummaryTableComponent implements OnInit {
             }
 
             // tslint:disable-next-line:max-line-length
-            // const filePath = `bulk_upload/${bulkUploadFileInfos[key].created_uid}/${bulkUploadFileInfos[key].id}-${bulkUploadFileInfos[key].fileName}`;
-            // const ref = this.storage.ref(filePath);
-            // bulkUploadFileInfos[key].downloadUrl = ref.getDownloadURL();
+            const filePath = `bulk_upload/${bulkUploadFileInfos[key].created_uid}/${bulkUploadFileInfos[key].id}-${bulkUploadFileInfos[key].fileName}`;
+            const ref = this.storage.ref(filePath);
+            bulkUploadFileInfos[key].downloadUrl = ref.getDownloadURL();
           }
         }
         this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
@@ -97,18 +99,6 @@ export class BulkSummaryTableComponent implements OnInit {
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
     this.bulkUploadFileInfo = row;
     this.showBulkUploadBtn.emit('Bulk Upload File Details');
-  }
-
-  downloadFile(bulkUploadFileInfo: BulkUploadFileInfo) {
-    const filePath = `bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadFileInfo.id}-${bulkUploadFileInfo.fileName}`;
-    const ref = this.storage.ref(filePath);
-    ref.getDownloadURL().subscribe(url => {
-      const link = document.createElement('a');
-      document.body.appendChild(link);
-      link.href = url;
-      link.click();
-    })
-
   }
 
 
