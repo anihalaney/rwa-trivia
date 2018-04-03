@@ -25,3 +25,11 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
 }
 
 export const getAuthorizationHeader = (state: User) => (state) ? 'Bearer ' + state.idToken : null;
+
+// user selectors
+export const getUserDictionary = (state: User[]) =>
+  state.reduce((result, sUser) => {
+    result[sUser.userId] = sUser;
+    return result;
+  }, {});
+

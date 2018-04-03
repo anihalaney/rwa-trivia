@@ -20,10 +20,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   questionOfTheDay$: Observable<Question>;
   activeGames$: Observable<Game[]>;
   gameInvites: number[];  //change this to game invites
-
+  gameSliceStartIndex: number;
+  gameSliceLastIndex: number;
   now: Date;
   greeting: string;
   message: string;
+  activeGames: Game[];
 
   showNewsCard = true;
 
@@ -50,6 +52,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.showNewsCard = true;
       }
     });
+    this.activeGames$.subscribe(games => this.activeGames = games);
+    this.gameSliceStartIndex = 0;
+    this.gameSliceLastIndex = 8;
   }
 
   ngOnInit() {
@@ -69,5 +74,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     Utils.unsubscribe([this.sub]);
+  }
+
+  displayMoreGames(): void {
+    this.gameSliceLastIndex = (this.activeGames.length > (this.gameSliceLastIndex + 8)) ?
+      this.gameSliceLastIndex + 8 : this.activeGames.length;
   }
 }

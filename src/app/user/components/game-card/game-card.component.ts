@@ -42,4 +42,5 @@ export class GameCardComponent implements OnInit, OnChanges {
     this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
   }
 
+  
 }

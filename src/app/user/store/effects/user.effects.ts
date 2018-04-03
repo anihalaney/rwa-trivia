@@ -35,7 +35,9 @@ export class UserEffects {
         .pipe(
         switchMap((routerState: RouterStateUrl) =>
             this.questionService.getUserQuestions(routerState.params.userid, true).pipe(
-                map((questions: Question[]) => new userActions.LoadUserPublishedQuestionsSuccess(questions))
+                map((questions: Question[]) =>
+                    new userActions.LoadUserPublishedQuestionsSuccess(questions)
+                )
             )
         )
         );
