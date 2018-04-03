@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter, ViewChild, AfterViewInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
@@ -21,7 +21,7 @@ import * as bulkActions from '../../../bulk/store/actions';
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
-export class QuestionsTableComponent implements OnInit, AfterViewInit {
+export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() showSort: boolean;
   @Input() showPaginator: boolean;
@@ -72,10 +72,22 @@ export class QuestionsTableComponent implements OnInit, AfterViewInit {
     this.rejectFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });
-    (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions)
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['questions'].currentValue !== changes['questions'].previousValue) {
+      (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+      (changes['questions'].previousValue) ? this.setPagination() : '';
+    }
   }
 
   ngAfterViewInit() {
+    this.setPagination();
+  }
+
+
+  setPagination() {
     (this.clientSidePagination) ? this.questionsDS.paginator = this.paginator : '';
   }
 
