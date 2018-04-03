@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormBuilder, FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { User, Subscription } from '../../../model';
@@ -40,7 +40,6 @@ export class NewsletterComponent implements OnInit {
       }
     });
     this.store.select(socialState).select(s => s.checkEmailSubscriptionStatus).subscribe(status => {
-
       if (status === true) {
         this.isSubscribed = true;
         this.message = 'This EmailId is already Subscribed!!';
