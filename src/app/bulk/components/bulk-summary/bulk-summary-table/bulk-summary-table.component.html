@@ -1,7 +1,7 @@
 <!-- <mat-card> -->
 <!-- <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle> -->
 <!-- <mat-card-content> -->
-<div *ngIf="showSummaryTable" class="mat-elevation-z8">
+<div [hidden]="!showSummaryTable" class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource" matSort class="bulk-summary-table">
 
     <!--- Note that these columns can be defined in any order.
