@@ -17,10 +17,10 @@ export class SocialEffects {
     addSubscription$ = this.actions$
         .ofType(SocialActionTypes.ADD_SUBSCRIBER)
         .pipe(
-        switchMap((action: socialActions.AddSubscriber) => {
-            this.socialService.saveSubscription(action.payload.subscription);
-            return empty();
-        })
+        switchMap((action: socialActions.AddSubscriber) =>
+            this.socialService.saveSubscription(action.payload.subscription).pipe(
+                map((flag: boolean) => new socialActions.CheckSubscriptionStatus(flag)))
+        )
         );
 
     // get total subscription
@@ -36,8 +36,8 @@ export class SocialEffects {
         )
         );
 
-        constructor(
-            private actions$: Actions,
-            private socialService: SocialService,
-        ) { }
+    constructor(
+        private actions$: Actions,
+        private socialService: SocialService,
+    ) { }
 }
