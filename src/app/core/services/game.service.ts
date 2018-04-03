@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
+
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
@@ -37,7 +38,7 @@ export class GameService {
           .map(gs => gs.map(g => Game.getViewModel(g)))
           .map(otherUserGames => {
             userGames = userGames.concat(otherUserGames);
-            return userGames.sort((a: any, b: any) => { return b - a; });
+            return userGames.sort((a: any, b: any) => { return b.turnAt - a.turnAt ; });
           })
       });
   }
