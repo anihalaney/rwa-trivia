@@ -65,23 +65,7 @@ export class UserService {
             .mergeMap(u => this.getUserProfileImage(u));
     }
 
-    getUsers(): Observable<User[]> {
-        return this.db.collection<any>('/users').valueChanges().map(users => users).mergeMap(users =>
-            this.generateUserProfiles(users, 0)
-        );
-    }
 
-    generateUserProfiles(users: User[], index: number): Observable<User[]> {
-        if (index < users.length) {
-            this.getUserProfileImage(users[index]).subscribe(user => {
-                users[index] = user;
-                index++;
-                this.generateUserProfiles(users, index);
-            });
-        } else {
-            return Observable.of(users);
-        }
-    }
 
     getUserProfileImage(user: User): Observable<User> {
         // const userSubject = new Subject<User>();
