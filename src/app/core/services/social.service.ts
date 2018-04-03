@@ -3,38 +3,40 @@ import { HttpClient } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { CONFIG } from '../../../environments/environment';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../store/app-store';
 import { Subscription, Subscribers } from '../../model';
-import * as socialactions from '../../social/store/actions';
 import { UserService } from './user.service';
+import { fromPromise } from 'rxjs/observable/fromPromise';
 
 
 @Injectable()
 export class SocialService {
     constructor(private db: AngularFirestore,
-        private store: Store<AppState>,
         private http: HttpClient,
         private userService: UserService) {
     }
 
+    checkSubscription(subscription: Subscription) {
+        return this.db.doc(`/subscription/${subscription.email}`)
+            .snapshotChanges()
+            .take(1)
+            .map(s => {
+                if (s.payload.exists && s.payload.data().email === subscription.email) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+
+    }
     saveSubscription(subscription: Subscription) {
         const dbSubscription = Object.assign({}, subscription);
-        this.db.doc(`/subscription/${dbSubscription.email}`).valueChanges()
-            .take(1)
-            .subscribe(sub => {
-                if (!sub) {
-                    this.db.doc(`/subscription/${dbSubscription.email}`).set(dbSubscription).then(ref => {
-                        if (subscription.userId) {
-                            this.userService.setSubscriptionFlag(subscription.userId);
-                        }
-                        this.store.dispatch(new socialactions.CheckSubscriptionStatus(false));
-                    });
-                } else {
-                    this.store.dispatch(new socialactions.CheckSubscriptionStatus(true));
+        return this.db.doc(`/subscription/${dbSubscription.email}`)
+            .set(dbSubscription)
+            .then(ref => {
+                if (subscription.userId) {
+                    this.userService.setSubscriptionFlag(subscription.userId);
                 }
-            })
-
+            });
     }
 
     getTotalSubscription(): Observable<Subscribers> {

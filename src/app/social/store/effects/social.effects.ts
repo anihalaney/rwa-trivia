@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { switchMap, map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/app-store';
+import { switchMap, map, mergeMap } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
 import { Subscription, Subscribers } from '../../../model';
@@ -17,11 +19,18 @@ export class SocialEffects {
     addSubscription$ = this.actions$
         .ofType(SocialActionTypes.ADD_SUBSCRIBER)
         .pipe(
-        switchMap((action: socialActions.AddSubscriber) => {
-            this.socialService.saveSubscription(action.payload.subscription);
-            return empty();
-        })
-        );
+        switchMap((action: socialActions.AddSubscriber) =>
+            this.socialService.checkSubscription(action.payload.subscription)
+            .pipe(
+            map(isSubscribed => {
+                if (isSubscribed) {
+                    return new socialActions.CheckSubscriptionStatus(true);
+                } else {
+                    this.socialService.saveSubscription(action.payload.subscription)
+                    return new socialActions.CheckSubscriptionStatus(false);
+                }
+            }))
+        ));
 
     // get total subscription
     @Effect()
@@ -38,6 +47,6 @@ export class SocialEffects {
 
         constructor(
             private actions$: Actions,
-            private socialService: SocialService,
+            private socialService: SocialService
         ) { }
 }
