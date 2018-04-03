@@ -16,19 +16,6 @@ export class UserEffects {
         .map((user: User) => this.userActions.addUserWithRoles(user));
 
 
-    // Load users based on url
-    @Effect()
-    // handle location update
-    loadRouteUsers$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/'))
-        .pipe(switchMap(() => this.svc.getUsers().pipe(
-            map((users: User[]) =>
-                this.userActions.loadUsersSuccess(users)
-            )))
-        );
 
 
     constructor(

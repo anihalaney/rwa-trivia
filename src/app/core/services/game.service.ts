@@ -29,22 +29,6 @@ export class GameService {
   getActiveGames(user: User): Observable<Game[]> {
 
 
-    // const playerGames$ = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId)
-    //   .where('gameOver', '==', false)).valueChanges();
-    // const otherPlayerGames$ = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId)
-    //   .where('gameOver', '==', false)).valueChanges();
-
-    // Observable.forkJoin(Observable.of(playerGames$.map(gs => gs.map(g => Game.getViewModel(g)))),
-    //   Observable.of(otherPlayerGames$.map(gs => gs.map(g => Game.getViewModel(g))))).subscribe(
-    //   games => {
-    //     games.forEach(game => {
-    //       console.log(game);
-
-    //     })
-    //   }
-    //   );
-    // return Observable.of(null);
-
     return this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
       .valueChanges()
       .map(gs => gs.map(g => Game.getViewModel(g)))
@@ -54,7 +38,7 @@ export class GameService {
           .map(gs => gs.map(g => Game.getViewModel(g)))
           .map(otherUserGames => {
             userGames = userGames.concat(otherUserGames);
-            return userGames.sort((a: any, b: any) => { return b - a; });
+            return userGames.sort((a: any, b: any) => { return b.turnAt - a.turnAt ; });
           })
       });
   }
