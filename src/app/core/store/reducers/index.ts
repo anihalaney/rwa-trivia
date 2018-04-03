@@ -6,6 +6,7 @@ import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
 import { loginRedirectUrl } from './ui-state.reducer';
 import { activeGames } from './game.reducer';
+import { Observable } from 'rxjs/Observable';
 
 export * from './user.reducer';
 export * from './categories.reducer';
@@ -23,7 +24,7 @@ export interface CoreState {
   questionOfTheDay: Question;
   loginRedirectUrl: string;
   questionSaveStatus: string;
-  activeGames: Game[];
+  activeGames: [Observable<Game[]>, Observable<Game[]>];
 }
 
 export const reducer: ActionReducerMap<CoreState> = {

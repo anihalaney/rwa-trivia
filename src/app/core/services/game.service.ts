@@ -26,21 +26,17 @@ export class GameService {
 
   }
 
-  getActiveGames(user: User): Observable<Game[]> {
+  getActiveGames(user: User): Observable<[Observable<Game[]>, Observable<Game[]>]> {
 
-
-    return this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
+    const userGames = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
       .valueChanges()
-      .map(gs => gs.map(g => Game.getViewModel(g)))
-      .mergeMap((userGames) => {
-        return this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false))
-          .valueChanges()
-          .map(gs => gs.map(g => Game.getViewModel(g)))
-          .map(otherUserGames => {
-            userGames = userGames.concat(otherUserGames);
-            return userGames.sort((a: any, b: any) => { return b.turnAt - a.turnAt ; });
-          })
-      });
+      .map(gs => gs.map(g => Game.getViewModel(g)));
+
+    const OtherGames = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false))
+      .valueChanges()
+      .map(gs => gs.map(g => Game.getViewModel(g)));
+
+    return Observable.forkJoin(Observable.of(userGames), Observable.of(OtherGames));
   }
 
   getGame(gameId: string): Observable<Game> {
