@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, ViewChild, OnChanges, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../../store';
@@ -46,11 +46,9 @@ export class BulkSummaryTableComponent implements OnChanges {
 
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if ((changes['bulkSummaryDetailPath'].currentValue !== changes['bulkSummaryDetailPath'].previousValue) && this.showSummaryTable) {
+  ngOnChanges() {
+    if (this.bulkSummaryDetailPath && this.showSummaryTable) {
       this.loadBulkSummaryData();
-    } else {
-      this.setPaginatorAndSort();
     }
   }
 
@@ -67,11 +65,6 @@ export class BulkSummaryTableComponent implements OnChanges {
             if (this.categoryDict[bulkUploadFileInfos[key].categoryId] !== undefined) {
               bulkUploadFileInfos[key].category = this.categoryDict[bulkUploadFileInfos[key].categoryId].categoryName;
             }
-
-            // tslint:disable-next-line:max-line-length
-            const filePath = `bulk_upload/${bulkUploadFileInfos[key].created_uid}/${bulkUploadFileInfos[key].id}-${bulkUploadFileInfos[key].fileName}`;
-            const ref = this.storage.ref(filePath);
-            bulkUploadFileInfos[key].downloadUrl = ref.getDownloadURL();
           }
         }
         this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
@@ -101,5 +94,16 @@ export class BulkSummaryTableComponent implements OnChanges {
     this.showBulkUploadBtn.emit('Bulk Upload File Details');
   }
 
+  downloadFile(bulkUploadFileInfo: BulkUploadFileInfo) {
+    const filePath = `bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadFileInfo.id}-${bulkUploadFileInfo.fileName}`;
+    const ref = this.storage.ref(filePath);
+    ref.getDownloadURL().subscribe(url => {
+      const link = document.createElement('a');
+      document.body.appendChild(link);
+      link.href = url;
+      link.click();
+    })
+
+  }
 
 }
