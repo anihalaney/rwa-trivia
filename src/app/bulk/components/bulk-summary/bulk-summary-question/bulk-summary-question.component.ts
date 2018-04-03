@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
+import { SimpleChange } from '@angular/core/src/change_detection/change_detection_util';
 
 @Component({
   selector: 'app-bulk-summary-questions',
@@ -59,8 +60,8 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
   }
 
-  ngOnChanges() {
-    if (this.bulkUploadFileInfo) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['bulkUploadFileInfo'].currentValue !== changes['bulkUploadFileInfo'].previousValue) {
       this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([this.bulkUploadFileInfo]);
 
       // get published question by BulkUpload Id
@@ -78,8 +79,8 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
       this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
       this.unPublishedQuestionObs.subscribe((questions) => {
         if (questions) {
-        this.unPublishedCount = questions.length;
-        this.unPublishedQuestions = questions;
+          this.unPublishedCount = questions.length;
+          this.unPublishedQuestions = questions;
         }
       });
 
