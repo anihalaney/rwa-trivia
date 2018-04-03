@@ -57,7 +57,7 @@
     <ng-container cdkColumnDef="download">
       <mat-header-cell *cdkHeaderCellDef> Download File</mat-header-cell>
       <mat-cell class="col-status bulk-summary-table-cell" *cdkCellDef="let row">
-        <a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a>
+        <a (click)="downloadFile(row)">Download</a>
       </mat-cell>
     </ng-container>
 
