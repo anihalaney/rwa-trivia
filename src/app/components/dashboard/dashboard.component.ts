@@ -35,7 +35,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
     this.gameInvites = [1, 2, 3];
 
-    this.sub = store.select(appState.userState).select(s => s.user).subscribe(user => {
+    this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
 
       this.user = user
       if (user) {

@@ -1,12 +1,11 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
 import { User, Question } from '../../../model';
-import { userProfileSaveStatus, user, userPublishedQuestions, userUnpublishedQuestions, questionSaveStatus } from './user.reducer';
+import { userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions, questionSaveStatus } from './user.reducer';
 
 export * from './user.reducer';
 
 export interface UserState {
-    user: User
     userProfileSaveStatus: String;
     userPublishedQuestions: Question[];
     userUnpublishedQuestions: Question[];
@@ -14,11 +13,10 @@ export interface UserState {
 }
 
 export const reducer: ActionReducerMap<UserState> = {
-    user: user,
     userProfileSaveStatus: userProfileSaveStatus,
     userPublishedQuestions: userPublishedQuestions,
-  userUnpublishedQuestions: userUnpublishedQuestions,
-  questionSaveStatus: questionSaveStatus
+    userUnpublishedQuestions: userUnpublishedQuestions,
+    questionSaveStatus: questionSaveStatus
 };
 
 export const userState = createFeatureSelector<UserState>('user');
