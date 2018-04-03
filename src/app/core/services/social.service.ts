@@ -5,7 +5,6 @@ import { Observable } from 'rxjs/Observable';
 import { CONFIG } from '../../../environments/environment';
 import { Subscription, Subscribers } from '../../model';
 import { UserService } from './user.service';
-import { fromPromise } from 'rxjs/observable/fromPromise';
 
 
 @Injectable()
