@@ -4,12 +4,9 @@ import { Action } from '@ngrx/store';
 import { User, Question } from '../../../model';
 
 export enum UserActionTypes {
-    // This is redefinition of login success message to avoid importing core
-    LOGIN_SUCCESS  = "LOGIN_SUCCESS",
+
     ADD_USER_PROFILE = '[User] AddUserProfile',
     ADD_USER_PROFILE_SUCCESS = '[User] AddUserProfileSuccess',
-    LOAD_USER_PROFILE = '[User] LoadUserProfile',
-    LOAD_USER_PROFILE_SUCCESS = '[User] LoadUserProfileSuccess',
     LOAD_USER_PUBLISHED_QUESTIONS = '[User] LoadUserPublishedQuestions',
     LOAD_USER_PUBLISHED_QUESTIONS_SUCCESS = '[User] LoadUserPublishedQuestionsSuccess',
     LOAD_USER_UNPUBLISHED_QUESTIONS = '[User] LoadUserUnpublishedQuestions',
@@ -29,18 +26,6 @@ export class AddUserProfile implements Action {
 export class AddUserProfileSuccess implements Action {
     readonly type = UserActionTypes.ADD_USER_PROFILE_SUCCESS;
     payload = null;
-}
-
-// Load User Profile By Id
-export class LoadUserProfile implements Action {
-    readonly type = UserActionTypes.LOAD_USER_PROFILE;
-    constructor(public payload: { user: User }) { }
-}
-
-// Load User Profile By Id Success
-export class LoadUserProfileSuccess implements Action {
-    readonly type = UserActionTypes.LOAD_USER_PROFILE_SUCCESS;
-    constructor(public payload: User) { }
 }
 
 // Load User Published Question by userId
@@ -85,8 +70,6 @@ export class UpdateUserSuccess implements Action {
 export type UserActions
     = AddUserProfile
     | AddUserProfileSuccess
-    | LoadUserProfile
-    | LoadUserProfileSuccess
     | LoadUserPublishedQuestions
     | LoadUserPublishedQuestionsSuccess
     | LoadUserUnpublishedQuestions
