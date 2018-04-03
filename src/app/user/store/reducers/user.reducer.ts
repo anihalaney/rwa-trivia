@@ -5,7 +5,6 @@ import { UserActions, UserActionTypes } from '../actions';
 
 
 
-
 // user Profile Status
 export function userProfileSaveStatus(state: any = 'NONE', action: UserActions): String {
     switch (action.type) {
