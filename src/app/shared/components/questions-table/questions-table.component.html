@@ -8,7 +8,7 @@
     <mat-option [value]="'UpdatedTimeAsc'">Updated On (Earliest)</mat-option>
   </mat-select>
 </div>
-<mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
+<mat-paginator *ngIf="showPaginator && !clientSidePagination" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
   (page)="pageChanged($event)">
 </mat-paginator>
 
@@ -164,6 +164,10 @@
   <mat-row class="row-question" *cdkRowDef="let row; columns: ['questionText'];"></mat-row>
 </mat-table>
 
-<mat-paginator *ngIf="showPaginator" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
+<mat-paginator *ngIf="showPaginator && clientSidePagination" #paginator class="matHeader" [pageSize]="25"
+  [pageSizeOptions]="[25, 50, 100, 200]">
+</mat-paginator>
+
+<mat-paginator *ngIf="showPaginator && !clientSidePagination" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]"
   (page)="pageChanged($event)" class="paginator-position">
 </mat-paginator>
