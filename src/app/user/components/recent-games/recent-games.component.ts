@@ -23,8 +23,6 @@ export class RecentGamesComponent {
     this.categoryDictObs = store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
 
-    console.log(JSON.stringify(this.categoryDict))
-
     this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
 
       this.user = user;
