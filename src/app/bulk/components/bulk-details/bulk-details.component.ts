@@ -15,6 +15,7 @@ export class BulkDetailsComponent implements OnChanges {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   @Input() parsedQuestions: Array<Question>;
+  @Input() showPaginator;
   questions: Question[];
   totalCount: number;
 

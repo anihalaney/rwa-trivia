@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Store } from '@ngrx/store';
@@ -59,8 +59,8 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
   }
 
-  ngOnChanges() {
-    if (this.bulkUploadFileInfo) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['bulkUploadFileInfo'].currentValue !== changes['bulkUploadFileInfo'].previousValue) {
       this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([this.bulkUploadFileInfo]);
 
       // get published question by BulkUpload Id
@@ -78,8 +78,8 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
       this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
       this.unPublishedQuestionObs.subscribe((questions) => {
         if (questions) {
-        this.unPublishedCount = questions.length;
-        this.unPublishedQuestions = questions;
+          this.unPublishedCount = questions.length;
+          this.unPublishedQuestions = questions;
         }
       });
 

@@ -57,13 +57,14 @@
   <mat-tab-group>
     <mat-tab label="Published">
       <question-table *ngIf="publishedCount != 0" [showSort]="false" [showPaginator]="true" [showButtons]="PUBLISHED_SHOW_BUTTON_STATE"
-        [questions]="publishedQuestions" [totalCount]="publishedCount" [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
+        [questions]="publishedQuestions" [totalCount]="publishedCount" [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false"
+        [clientSidePagination]="true">
       </question-table>
     </mat-tab>
     <mat-tab label="Unpublished">
       <question-table *ngIf="unPublishedCount != 0" [bulkUploadFileInfo]="bulkUploadFileInfo" [showSort]="false" [showPaginator]="true"
         [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions" [totalCount]="unPublishedCount"
-        [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false">
+        [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false" [clientSidePagination]="true">
       </question-table>
     </mat-tab>
   </mat-tab-group>
