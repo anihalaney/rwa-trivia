@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState, appState } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import * as userActions from '../../../user/store/actions';
-import { User, Subscription, Game } from '../../../model';
+import { User, Subscription, Game, Category } from '../../../model';
 import { userState } from '../../store';
 import { Observable } from 'rxjs/Observable';
 
@@ -15,8 +15,16 @@ export class RecentGamesComponent {
 
   user: User;
   finalResult = [];
+  categoryDictObs: Observable<{ [key: number]: Category }>;
+  categoryDict: { [key: number]: Category };
 
   constructor(private store: Store<AppState>, ) {
+
+    this.categoryDictObs = store.select(categoryDictionary);
+    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+
+    console.log(JSON.stringify(this.categoryDict))
+
     this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
 
       this.user = user;
@@ -36,7 +44,7 @@ export class RecentGamesComponent {
             Array.prototype.push.apply(totalResult, player1);
             totalResult.sort((a: any, b: any) => { return (b.turnAt - b.turnAt) });
             this.finalResult = totalResult;
-            });
+          });
         });
 
       }
