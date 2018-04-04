@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
-import { User, Question } from '../../../model';
+import { User, Question, Game } from '../../../model';
 import { UserActions, UserActionTypes } from '../actions';
 
 
@@ -43,6 +43,15 @@ export function questionSaveStatus(state: any = 'NONE', action: UserActions): st
     switch (action.type) {
         case UserActionTypes.ADD_QUESTION:
             return 'IN PROGRESS';
+        default:
+            return state;
+    }
+};
+export function getGameResult(state: any = [], action: UserActions):
+    [Observable<Game[]>, Observable<Game[]>] {
+    switch (action.type) {
+        case UserActionTypes.GET_GAME_RESULT_SUCCESS:
+            return action.payload;
         default:
             return state;
     }

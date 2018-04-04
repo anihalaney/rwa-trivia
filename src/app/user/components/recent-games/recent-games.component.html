@@ -1,7 +1,23 @@
 <div class="card recentlygames">
   <h2>Recently Completed Games</h2>
   <ul>
-    <li>
+    <li *ngFor="let result of finalResult| slice:0:4; let i=index">
+      <a href="#">
+        <div class="sprite architicon" *ngIf="result.winnerPlayerId === user.userId"></div>
+        <div class="sprite rogrammingicon" *ngIf="result.winnerPlayerId !== user.userId"></div>
+        <div class="datebox">
+          <div class="light">{{result.turnAt| date}}</div>
+          <!-- <div class="dark">In Architecture</div> -->
+        </div>
+        <div class="scorebox align-right">
+          <!-- <div class="light">Score 3</div> -->
+          <div class="dark" *ngIf="result.winnerPlayerId === user.userId">Won</div>
+          <div class="dark" *ngIf="result.winnerPlayerId !== user.userId">Lost</div>
+        </div>
+      </a>
+
+    </li>
+    <!-- <li>
       <a href="#">
         <div class="sprite architicon"></div>
         <div class="datebox">
@@ -52,8 +68,9 @@
           <div class="dark">Won</div>
         </div>
       </a>
-    </li>
+    </li> -->
   </ul>
-  <a class="viewall" href="#" title="view all">view all<span class="a-arrow"></span></a>
+  <a class="viewall" href="#" title="view all">view all
+    <span class="a-arrow"></span>
+  </a>
 </div>
-
