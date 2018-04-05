@@ -53,6 +53,16 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
       }
     });
 
+    this.store.select(bulkState).select(s => s.bulkUploadFileUrl).subscribe((url) => {
+      if (url) {
+        const link = document.createElement('a');
+        document.body.appendChild(link);
+        link.href = url;
+        link.click();
+      }
+    });
+
+
   }
 
   ngOnInit() {
@@ -84,20 +94,16 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
         }
       });
 
-      // get the download file url
-      // tslint:disable-next-line:max-line-length
-      const filePath = `bulk_upload/${this.bulkUploadFileInfo.created_uid}/${this.bulkUploadFileInfo.id}-${this.bulkUploadFileInfo.fileName}`;
-      const ref = this.storage.ref(filePath);
-      this.downloadUrl = ref.getDownloadURL();
-      ref.getDownloadURL().subscribe(res => {
-        this.downloadUrl = res;
-      });
     }
   }
 
 
   backToSummary() {
     this.showSummaryTableReturn.emit(true);
+  }
+
+  downloadFile() {
+    this.store.dispatch(new bulkActions.LoadBulkUploadFileUrl({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
   }
 
 
