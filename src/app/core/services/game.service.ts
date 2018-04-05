@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
+// import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/observable/forkJoin';
 import { Subject } from 'rxjs/Subject';
 
 import '../../rxjs-extensions';
@@ -26,17 +28,20 @@ export class GameService {
 
   }
 
-  getActiveGames(user: User): Observable<[Observable<Game[]>, Observable<Game[]>]> {
+  getActiveGames(user: User): Observable<Game[]> {
 
     const userGames = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
-      .valueChanges()
-      .map(gs => gs.map(g => Game.getViewModel(g)));
+      .valueChanges();
 
     const OtherGames = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false))
-      .valueChanges()
-      .map(gs => gs.map(g => Game.getViewModel(g)));
+      .valueChanges();
 
-    return Observable.forkJoin(Observable.of(userGames), Observable.of(OtherGames));
+
+    return Observable.forkJoin(userGames.take(1), OtherGames.take(1))
+      .map(games => games[0].concat(games[1]))
+      .map(gs => gs.map(g => Game.getViewModel(g))
+      .sort((a: any, b: any) => { return (b.turnAt - a.turnAt) }))
+
   }
 
   getGame(gameId: string): Observable<Game> {

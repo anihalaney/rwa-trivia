@@ -14,6 +14,17 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
   }
 }
 
+export function users(state: any = null, action: ActionWithPayload<User[]>): User[] {
+  switch (action.type) {
+    case UserActions.LOAD_USERS_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+
+
 export function authInitialized(state: any = false, action: ActionWithPayload<any>): boolean {
   switch (action.type) {
     case UserActions.LOGOFF:
@@ -26,10 +37,4 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
 
 export const getAuthorizationHeader = (state: User) => (state) ? 'Bearer ' + state.idToken : null;
 
-// user selectors
-export const getUserDictionary = (state: User[]) =>
-  state.reduce((result, sUser) => {
-    result[sUser.userId] = sUser;
-    return result;
-  }, {});
 

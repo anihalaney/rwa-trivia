@@ -16,9 +16,9 @@ import { User, Category, Question, SearchResults, Game } from '../../model';
 export class DashboardComponent implements OnInit, OnDestroy {
   user: User;
   sub: Subscription;
-
+  users: User[];
   questionOfTheDay$: Observable<Question>;
-  activeGames$: Observable<[Observable<Game[]>, Observable<Game[]>]>;
+  activeGames$: Observable<Game[]>;
   gameInvites: number[];  //change this to game invites
   gameSliceStartIndex: number;
   gameSliceLastIndex: number;
@@ -52,19 +52,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.showNewsCard = true;
       }
     });
-    this.activeGames$.subscribe(games => {
-      let totalActiveGames = [];
-      if (games.length > 0) {
-        games[0].subscribe((userGames) => {
-          totalActiveGames = userGames;
-          games[1].subscribe((otherGames) => {
-            Array.prototype.push.apply(totalActiveGames, otherGames);
-            totalActiveGames.sort((a: any, b: any) => { return (b.turnAt - b.turnAt) });
-            this.activeGames = totalActiveGames;
-          });
-        });
-      }
-    });
+    this.activeGames$.subscribe(games =>
+      this.activeGames = games
+    );
+
+    store.select(appState.coreState).select(s => s.users).subscribe(users => this.users = users);
     this.gameSliceStartIndex = 0;
     this.gameSliceLastIndex = 8;
   }

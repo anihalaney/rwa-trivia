@@ -8,7 +8,7 @@
         </div>
         <div class="clear"></div>
         <a href="#" class="dark">You</a>
-        <div class="light" *ngIf="user?.location" >{{user.location}}</div>
+        <div class="light" *ngIf="user?.location">{{user.location}}</div>
         <hr>
         <div class="light">Round {{questionIndex}}</div>
         <div class="dark">Score {{correctAnswerCount}}</div>
@@ -21,29 +21,29 @@
             <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
           </a>
         </div>
-        <a href="#" class="dark">You</a>
-        <div class="light" *ngIf="user?.location" >{{user.location}}</div>
+        <a class="dark">{{user.displayName}}</a>
+        <div class="light" *ngIf="user?.location">{{user.location}}</div>
         <hr>
         <div class="light">
-          <span *ngIf="myTurn">Round 2</span>
+          <span *ngIf="myTurn">Round {{getRound(user.userId)}}</span>
         </div>
-        <div class="dark">Score 10</div>
+        <div class="dark">Score {{getScore(user.userId)}}</div>
 
       </div>
       <div class="col-xs-6 clearfix">
         <div class="yourimg floatright">
           <a href="#">
-            <img src="/assets/images/opponent.png" alt="Kaanishhk" />
+            <img *ngIf='game.playerIds.length>0' [src]="getOtherUserProfileUrl(game)" />
           </a>
         </div>
         <div class="clear"></div>
-        <a href="#" class="dark">Kaanishhk</a>
-        <div class="light">hristol</div>
+        <a href="#" class="dark">{{getOtherUserName(game)}}</a>
+        <div class="light">{{getOtherUserLocation(game)}}</div>
         <hr>
         <div class="light">
-          <span *ngIf="!myTurn">Round 2</span>
+          <span *ngIf="!myTurn">Round {{getRound(game.playerIds[1])}}</span>
         </div>
-        <div class="dark">Score 07</div>
+        <div class="dark">Score {{getScore(game.playerIds[1])}}</div>
       </div>
     </ng-container>
   </div>
