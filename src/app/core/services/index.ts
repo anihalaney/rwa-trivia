@@ -6,6 +6,7 @@ import { GameService } from './game.service';
 import { UserService } from './user.service';
 import { BulkService } from './bulk.service';
 import { SocialService } from './social.service';
+import { StatsService } from './stats.service';
 
 export {
     Utils,
@@ -15,7 +16,8 @@ export {
     GameService,
     BulkService,
     UserService,
-    SocialService
+    SocialService,
+    StatsService
 };
 
 export default [
@@ -26,5 +28,6 @@ export default [
     GameService,
     BulkService,
     UserService,
-    SocialService
+    SocialService,
+    StatsService
 ];
