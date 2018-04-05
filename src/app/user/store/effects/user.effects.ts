@@ -80,7 +80,7 @@ export class UserEffects {
         .pipe(
         switchMap((action: userActions.GetGameResult) =>
             this.gameService.getGameResult(action.payload.userId)
-                .map((games: [Observable<Game[]>, Observable<Game[]>]) => new userActions.GetGameResultSuccess(games))
+                .map((games: Game[]) => new userActions.GetGameResultSuccess(games))
         )
         );
 

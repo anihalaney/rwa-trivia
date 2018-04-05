@@ -34,18 +34,7 @@ export class RecentGamesComponent {
 
 
     this.store.select(userState).select(s => s.getGameResult).subscribe(result => {
-      let totalResult = [];
-      if (result.length > 0) {
-        result[0].subscribe((player0) => {
-          totalResult = player0;
-          result[1].subscribe((player1) => {
-            Array.prototype.push.apply(totalResult, player1);
-            totalResult.sort((a: any, b: any) => { return (b.turnAt - b.turnAt) });
-            this.finalResult = totalResult;
-          });
-        });
-
-      }
+      this.finalResult = result;
     });
 
 

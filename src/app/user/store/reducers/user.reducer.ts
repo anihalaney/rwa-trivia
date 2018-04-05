@@ -48,7 +48,7 @@ export function questionSaveStatus(state: any = 'NONE', action: UserActions): st
     }
 };
 export function getGameResult(state: any = [], action: UserActions):
-    [Observable<Game[]>, Observable<Game[]>] {
+    Game[] {
     switch (action.type) {
         case UserActionTypes.GET_GAME_RESULT_SUCCESS:
             return action.payload;

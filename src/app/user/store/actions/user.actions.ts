@@ -77,7 +77,7 @@ export class GetGameResult implements Action {
 //// Get User's game result Success
 export class GetGameResultSuccess implements Action {
     readonly type = UserActionTypes.GET_GAME_RESULT_SUCCESS;
-    constructor(public payload: [Observable<Game[]>, Observable<Game[]>]) { }
+    constructor(public payload: Game[]) { }
 }
 
 

@@ -11,7 +11,7 @@ export interface UserState {
     userPublishedQuestions: Question[];
     userUnpublishedQuestions: Question[];
     questionSaveStatus: String;
-    getGameResult: [Observable<Game[]>, Observable<Game[]>];
+    getGameResult: Game[];
 }
 
 export const reducer: ActionReducerMap<UserState> = {
