@@ -4,6 +4,7 @@ import { User, Question, Game } from '../../../model';
 import { userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions, questionSaveStatus, getGameResult } from './user.reducer';
 import { Observable } from 'rxjs/Observable';
 
+
 export * from './user.reducer';
 
 export interface UserState {
