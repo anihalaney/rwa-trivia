@@ -52,6 +52,16 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
       }
     });
 
+    this.store.select(bulkState).select(s => s.bulkUploadFileUrl).subscribe((url) => {
+      if (url) {
+        const link = document.createElement('a');
+        document.body.appendChild(link);
+        link.href = url;
+        link.click();
+        this.store.dispatch(new bulkActions.LoadBulkUploadFileUrlSuccess(undefined));
+      }
+    });
+
   }
 
   ngOnInit() {
@@ -97,6 +107,10 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
 
   backToSummary() {
     this.showSummaryTableReturn.emit(true);
+  }
+
+  downloadFile() {
+    this.store.dispatch(new bulkActions.LoadBulkUploadFileUrl({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
   }
 
 

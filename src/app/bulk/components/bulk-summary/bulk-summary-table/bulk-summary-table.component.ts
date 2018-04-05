@@ -44,6 +44,16 @@ export class BulkSummaryTableComponent implements OnInit {
       this.user = s.user
     });
 
+    this.store.select(bulkState).select(s => s.bulkUploadFileUrl).subscribe((url) => {
+      if (url) {
+        const link = document.createElement('a');
+        document.body.appendChild(link);
+        link.href = url;
+        link.click();
+        this.store.dispatch(new bulkActions.LoadBulkUploadFileUrlSuccess(undefined));
+      }
+    });
+
   }
 
   ngOnInit() {
@@ -95,16 +105,10 @@ export class BulkSummaryTableComponent implements OnInit {
   }
 
   downloadFile(bulkUploadFileInfo: BulkUploadFileInfo) {
-    const filePath = `bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadFileInfo.id}-${bulkUploadFileInfo.fileName}`;
-    const ref = this.storage.ref(filePath);
-    ref.getDownloadURL().subscribe(url => {
-      const link = document.createElement('a');
-      document.body.appendChild(link);
-      link.href = url;
-      link.click();
-    })
+    this.store.dispatch(new bulkActions.LoadBulkUploadFileUrl({ bulkUploadFileInfo: bulkUploadFileInfo }));
 
   }
+
 
 
 }
