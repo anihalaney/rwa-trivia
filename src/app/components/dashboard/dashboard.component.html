@@ -19,9 +19,9 @@
         </div>
 
       </div>
-      <ul class="row">
+      <ul class="row" *ngIf="activeGames && users">
         <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
-          <game-card [game]="game"></game-card>
+          <game-card [game]="game" [users]="users"></game-card>
         </li>
         <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
           <a href="#" class="innerli textcenter">

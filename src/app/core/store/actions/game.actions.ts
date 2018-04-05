@@ -15,7 +15,7 @@ export class GameActions {
   }
 
   static GET_ACTIVE_GAMES_SUCCESS = 'GET_ACTIVE_GAMES_SUCCESS';
-  getActiveGamesSuccess(games: [Observable<Game[]>, Observable<Game[]>]): ActionWithPayload<[Observable<Game[]>, Observable<Game[]>]> {
+  getActiveGamesSuccess(games: Game[]): ActionWithPayload<Game[]> {
     return {
       type: GameActions.GET_ACTIVE_GAMES_SUCCESS,
       payload: games

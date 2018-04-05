@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
+import { UserActions } from '../../core/store/actions';
 import { User } from '../../model';
 import * as useractions from '../../user/store/actions';
 
@@ -15,15 +16,16 @@ export class UserService {
 
     constructor(private db: AngularFirestore,
         private storage: AngularFireStorage,
-        private store: Store<AppState>) {
+        private store: Store<AppState>, private userActions: UserActions) {
     }
 
 
     loadUserProfile(user: User): Observable<User> {
+
         return this.db.doc<any>('/users/' + user.userId).valueChanges()
             .map(u => {
                 if (u) {
-                    user = { ...user, ...u }
+                    user = { ...u, ...user, }
                 }
                 return user;
             })
@@ -38,6 +40,24 @@ export class UserService {
             // this.store.dispatch(this.userActions.addUserProfileSuccess());
             this.store.dispatch(new useractions.AddUserProfileSuccess());
         });
+    }
+
+    getUsers() {
+        this.db.collection<any>('/users').valueChanges().subscribe(users => {
+            this.generateUserProfiles(users, 0);
+        });
+    }
+
+    generateUserProfiles(users: User[], index: number) {
+        if (index < users.length) {
+            this.getUserProfileImage(users[index]).subscribe(user => {
+                users[index] = user;
+                index++;
+                this.generateUserProfiles(users, index);
+            });
+        } else {
+            this.store.dispatch(this.userActions.loadUsersSuccess(users));
+        }
     }
 
 
