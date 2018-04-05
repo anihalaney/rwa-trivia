@@ -59,6 +59,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
         document.body.appendChild(link);
         link.href = url;
         link.click();
+        this.store.dispatch(new bulkActions.LoadBulkUploadFileUrlSuccess(undefined));
       }
     });
 
