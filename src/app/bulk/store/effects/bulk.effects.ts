@@ -11,12 +11,6 @@ import { BulkService, QuestionService } from '../../../core/services';
 
 @Injectable()
 export class BulkEffects {
-    constructor(
-        private actions$: Actions,
-        private bulkService: BulkService,
-        private questionService: QuestionService,
-    ) { }
-
 
     // for get all BulkUploadFileInfo
     @Effect()
@@ -66,6 +60,18 @@ export class BulkEffects {
         )
         );
 
+    // for get all BulkUploadFileInfo
+    @Effect()
+    loadBulkUploadFileUrl$ = this.actions$
+        .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL)
+        .pipe(
+        switchMap((action: bulkActions.LoadBulkUploadFileUrl) =>
+            this.bulkService.getFileByBulkUploadFileUrl(action.payload.bulkUploadFileInfo).pipe(
+                map((url: string) => new bulkActions.LoadBulkUploadFileUrlSuccess(url))
+            )
+        )
+        );
+
     // for update Question
     @Effect()
     updateQuestion$ = this.actions$
@@ -108,4 +114,10 @@ export class BulkEffects {
             return empty();
         })
         );
+
+    constructor(
+        private actions$: Actions,
+        private bulkService: BulkService,
+        private questionService: QuestionService,
+    ) { }
 }
