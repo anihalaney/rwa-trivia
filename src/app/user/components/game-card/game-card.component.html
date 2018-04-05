@@ -10,8 +10,8 @@
         <a href="#" class="dark">You</a>
         <div class="light" *ngIf="user?.location">{{user.location}}</div>
         <hr>
-        <div class="light">Round {{questionIndex}}</div>
-        <div class="dark">Score {{correctAnswerCount}}</div>
+        <div class="light">Round {{getRound(user.userId)}}</div>
+        <div class="dark">Score {{getScore(user.userId)}}</div>
       </div>
     </ng-container>
     <ng-container *ngIf="game.gameOptions.playerMode == 1">
