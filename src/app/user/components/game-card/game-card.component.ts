@@ -18,7 +18,6 @@ export class GameCardComponent implements OnInit, OnChanges {
   user: User;
   myTurn: boolean;
 
-
   constructor(private store: Store<AppState>) {
 
     this.user$ = this.store.select(appState.coreState).select(s => s.user);
