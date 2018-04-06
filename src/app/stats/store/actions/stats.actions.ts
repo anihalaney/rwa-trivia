@@ -10,13 +10,13 @@ export enum StatsActionTypes {
 // Get Score
 export class GetLeaderBorad implements Action {
     readonly type = StatsActionTypes.GET_LEADERBOARD;
-    payload = null;
+    constructor(public payload: { categoryList: any }) { }
 }
 
 // Get Score
 export class GetLeaderBoradSuccess implements Action {
     readonly type = StatsActionTypes.GET_LEADERBOARD_SUCCESS;
-    constructor(public payload: Game[]) { }
+    constructor(public payload: any) { }
 }
 
 export type StatsActions

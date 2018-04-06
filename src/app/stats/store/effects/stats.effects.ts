@@ -17,9 +17,9 @@ export class StatsEffects {
         .ofType(StatsActionTypes.GET_LEADERBOARD)
         .pipe(
         switchMap((action: statsActions.GetLeaderBorad) =>
-            this.statsService.getScoreInfo().pipe(
-                map((game: Game[]) =>
-                    new statsActions.GetLeaderBoradSuccess(game)
+            this.statsService.getScoreInfo(action.payload.categoryList).pipe(
+                map((score: any) =>
+                    new statsActions.GetLeaderBoradSuccess(score)
                 )
             )));
 
