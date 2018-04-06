@@ -3,7 +3,7 @@ service cloud.firestore {
     return request.auth != null;
   }
 
-  // Add uid of admin user 
+   // Add uid of admin user 
   // This is temp solution for time being till fetching role from user document does not work
   function isAdmin() {
   	return isAuthenticated() && 
@@ -21,8 +21,8 @@ service cloud.firestore {
     }
     
 		match /{document=**} {
-      allow read, write: if isAdmin();
-    }
+		allow read, write: if isAdmin();
+		}
     
     match /categories {
       match /{document=**} {
@@ -63,6 +63,14 @@ service cloud.firestore {
       }
     }
     
+     match /subscription/{email} {
+     // create rule with data size ensure that there only two keys allowed
+     // keys().hasAny ensure that only email, and userId are allowed as field
+     // resource == null ensure when document does not exist it returns 
+     // does not throw permission denied error
+         allow create: if request.resource.data.size() < 3 && request.resource.data.keys().hasAny(['email', 'userId']);
+         allow get: if resource.data.email.lower() == email.lower() || resource == null;         
+      }  
+    
   }
 }
-
