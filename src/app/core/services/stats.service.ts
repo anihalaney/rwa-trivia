@@ -9,15 +9,45 @@ export class StatsService {
 
     constructor(private db: AngularFirestore) { }
 
-    getScoreInfo(): Observable<Game[]> {
-        return this.db.collection('/games', ref => ref.where('gameOver', '==', true).limit(3))
+    getScoreInfo(categoryList: any): any {
+        return this.db.collection('/games', ref => ref.where('gameOver', '==', true).where('winnerPlayerId', '>', '').limit(2))
             .valueChanges()
             .map(gs => gs.map(g => {
-                if (Game.getViewModel(g).winnerPlayerId !== undefined) {
-                    console.log(JSON.stringify(Game.getViewModel(g).gameId));
-                    return Game.getViewModel(g)
-                }
+                return Game.getViewModel(g);
 
-            }))
+            })).map(games => {
+                const gameList = [];
+                Object.keys(categoryList).forEach(function (key) {
+                    gameList[key] = [];
+                });
+
+                games.forEach(function (game) {
+                    game.gameOptions.categoryIds.forEach(function (catId) {
+                        gameList[catId].push(game);
+                    });
+                });
+
+                return gameList;
+
+            }).map(gameList => {
+
+                const finalResult = {};
+                Object.keys(gameList).forEach(function (key) {
+                    const winCount = {};
+                    gameList[key].forEach(element => {
+                        if (winCount[element.winnerPlayerId] === undefined) {
+                            winCount[element.winnerPlayerId] = new Array(element._gameId);
+                        } else {
+                            if (winCount[element.winnerPlayerId].indexOf(element._gameId) === -1) {
+                                winCount[element.winnerPlayerId].push(element._gameId);
+                            }
+                        }
+                        finalResult[key] = winCount;
+                    });
+
+                });
+                return finalResult;
+
+            });
     }
 }
