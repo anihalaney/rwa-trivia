@@ -20,6 +20,7 @@ export class User {
   authState: firebase.User;
   roles: any;
   tags?: string[];
+  isSubscribed: boolean;
   profilePictureUrl?: string;
 
   constructor(authState: firebase.User) {
