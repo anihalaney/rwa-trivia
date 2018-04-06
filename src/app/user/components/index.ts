@@ -7,6 +7,7 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
 
 import { QuestionAddUpdateComponent } from './question-add-update/question-add-update.component';
 import { MyQuestionsComponent } from './my-questions/my-questions.component';
+import { InviteFriendsComponent } from './invite-friends/invite-friends.component';
 
 export {
     ProfileCardComponent,
@@ -17,7 +18,8 @@ export {
     ProfileSettingsComponent,
 
     QuestionAddUpdateComponent,
-    MyQuestionsComponent
+    MyQuestionsComponent,
+    InviteFriendsComponent
 };
 
 export default [
@@ -29,5 +31,6 @@ export default [
     ProfileSettingsComponent,
 
     QuestionAddUpdateComponent,
-    MyQuestionsComponent
+    MyQuestionsComponent,
+    InviteFriendsComponent
 ];

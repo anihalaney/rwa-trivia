@@ -1,0 +1,17 @@
+<mat-card class="flex-container" fxLayoutWrap="wrap" fxLayout="row"  fxLayoutAlign.xs="start">
+  <mat-card-content class="question-container">
+    <div fxLayoutAlign="center">
+      <img class="mail-icon" src="assets/images/mail-icon.png">
+    </div>
+    <section fxLayoutAlign="left">
+      <form [formGroup]="invitationForm">
+        <div class="clearfix namefield">
+          <div class="formfield">           
+            <input type="text" formControlName="email" placeholder="Email address" class="required">
+          </div>
+        </div>
+      </form>
+    </section>
+
+  </mat-card-content>
+</mat-card>
