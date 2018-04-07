@@ -99,7 +99,7 @@
 		color: map-get($theme, error);
 		
 	}
-	.downloadFile a,.custom-file-upload,.rejection-div
+	.downloadFile a,.custom-file-upload,.rejection-div,.bulk-summary-table-cell a,.bulk-summary-question-table-cell a
 	{
 		color: map-get($theme, link);
 	}
