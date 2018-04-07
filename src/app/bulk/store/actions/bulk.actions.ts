@@ -12,6 +12,8 @@ export enum BulkActionTypes {
     LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS = '[Bulk] LoadBulkUploadPublishedQuestionsSuccess',
     LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS = '[Bulk] LoadBulkUploadUnpublishedQuestions',
     LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS = '[Bulk] LoadBulkUploadUnpublishedQuestionsSuccess',
+    LOAD_BULK_UPLOAD_FILE_URL = '[Bulk] LoadBulkUploadFileUrl',
+    LOAD_BULK_UPLOAD_FILE_URL_SUCCESS = '[Bulk] LoadBulkUploadFileUrlSuccess',
     UPDATE_QUESTION = '[Bulk] UpdateQuestion',
     UPDATE_BULK_UPLOAD = '[Bulk] UpdateBulkUpload',
     APPROVE_QUESTION = '[Bulk] ApproveQuestion',
@@ -69,14 +71,26 @@ export class LoadBulkUploadUnpublishedQuestionsSuccess implements Action {
     constructor(public payload: Question[]) { }
 }
 
+// add bulk Question
+export class LoadBulkUploadFileUrl implements Action {
+    readonly type = BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL;
+    constructor(public payload: { bulkUploadFileInfo: BulkUploadFileInfo }) { }
+}
+
+// add bulk Question
+export class LoadBulkUploadFileUrlSuccess implements Action {
+    readonly type = BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL_SUCCESS;
+    constructor(public payload: string) { }
+}
+
 // update Questions
 export class UpdateQuestion implements Action {
     readonly type = BulkActionTypes.UPDATE_QUESTION;
     constructor(public payload: { question: Question }) { }
 }
 
- // update Questions
- export class UpdateBulkUpload implements Action {
+// update Questions
+export class UpdateBulkUpload implements Action {
     readonly type = BulkActionTypes.UPDATE_BULK_UPLOAD;
     constructor(public payload: { bulkUploadFileInfo: BulkUploadFileInfo }) { }
 }
@@ -103,6 +117,8 @@ export type BulkActions
     | LoadBulkUploadPublishedQuestionsSuccess
     | LoadBulkUploadUnpublishedQuestions
     | LoadBulkUploadUnpublishedQuestionsSuccess
+    | LoadBulkUploadFileUrl
+    | LoadBulkUploadFileUrlSuccess
     | UpdateQuestion
     | UpdateBulkUpload
     | ApproveQuestion
