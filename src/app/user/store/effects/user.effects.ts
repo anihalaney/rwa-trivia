@@ -4,10 +4,11 @@ import { Action } from '@ngrx/store';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { User, Question, RouterStateUrl } from '../../../model';
+import { User, Question, RouterStateUrl, Game } from '../../../model';
 import { UserActions, UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
-import { UserService, QuestionService } from '../../../core/services';
+import { UserService, QuestionService, GameService } from '../../../core/services';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserEffects {
@@ -71,9 +72,22 @@ export class UserEffects {
             return empty();
         })
         );
+
+    //Get Game list
+    @Effect()
+    getGameResult$ = this.actions$
+        .ofType(UserActionTypes.GET_GAME_RESULT)
+        .pipe(
+        switchMap((action: userActions.GetGameResult) =>
+            this.gameService.getGameResult(action.payload.userId)
+                .map((games: Game[]) => new userActions.GetGameResultSuccess(games))
+        )
+        );
+
     constructor(
         private actions$: Actions,
         private userService: UserService,
-        private questionService: QuestionService
+        private questionService: QuestionService,
+        private gameService: GameService
     ) { }
 }

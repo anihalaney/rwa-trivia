@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
-import { User, Question } from '../../../model';
+import { User, Question, Game } from '../../../model';
 
 export enum UserActionTypes {
 
@@ -13,7 +14,9 @@ export enum UserActionTypes {
     LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS = '[User] LoadUserUnpublishedQuestionsSuccess',
     ADD_QUESTION = '[User] AddQuestions',
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
-    UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess'
+    UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
+    GET_GAME_RESULT = '[User] GetGameResult',
+    GET_GAME_RESULT_SUCCESS = '[User] GetGameResultSuccess'
 }
 
 // Save user profile
@@ -65,6 +68,18 @@ export class UpdateUserSuccess implements Action {
     constructor(public payload: User) { }
 }
 
+// Get User's game result
+export class GetGameResult implements Action {
+    readonly type = UserActionTypes.GET_GAME_RESULT;
+    constructor(public payload: { userId: String }) { }
+}
+
+//// Get User's game result Success
+export class GetGameResultSuccess implements Action {
+    readonly type = UserActionTypes.GET_GAME_RESULT_SUCCESS;
+    constructor(public payload: Game[]) { }
+}
+
 
 
 export type UserActions
@@ -76,4 +91,6 @@ export type UserActions
     | LoadUserUnpublishedQuestionsSuccess
     | AddQuestion
     | UpdateUserSuccess
+    | GetGameResult
+    | GetGameResultSuccess
 
