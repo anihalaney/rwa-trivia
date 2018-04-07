@@ -45,6 +45,17 @@ export function bulkUploadUnpublishedQuestions(state: any = [], action: BulkActi
     }
 };
 
+// for get BulkUploadFileUrl
+export function bulkUploadFileUrl(state: string, action: BulkActions): string {
+    switch (action.type) {
+        case BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL_SUCCESS:
+            return action.payload;
+        default:
+            return null;
+    }
+}
+
+
 // question save Status
 export function questionSaveStatus(state: any = 'NONE', action: BulkActions): string {
     switch (action.type) {
