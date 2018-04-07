@@ -38,7 +38,7 @@ export class GameService {
           .map(gs => gs.map(g => Game.getViewModel(g)))
           .map(otherUserGames => {
             userGames = userGames.concat(otherUserGames);
-            return userGames.sort((a: any, b: any) => { return b.turnAt - a.turnAt ; });
+            return userGames.sort((a: any, b: any) => { return b.turnAt - a.turnAt; });
           })
       });
   }
@@ -64,5 +64,21 @@ export class GameService {
     let dbGame = game.getDbModel();
     dbGame.gameOver = true;
     this.db.doc('/games/' + game.gameId).update(dbGame);
+  }
+
+  getGameResult(userId: String): Observable<Game[]> {
+    const query1 = this.db.collection('/games', ref => ref.where('playerId_0', '==', userId).where('gameOver', '==', true)
+      .orderBy('turnAt', 'desc').limit(4))
+      .valueChanges().take(1);
+
+    const query2 = this.db.collection('/games', ref => ref.where('playerId_1', '==', userId).where('gameOver', '==', true)
+      .orderBy('turnAt', 'desc').limit(4))
+      .valueChanges().take(1);
+
+    return Observable.forkJoin(query1, query2)
+      .map((data) => data[0].concat(data[1]))
+      .map(gs => gs.map(g => Game.getViewModel(g))
+      .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
+
   }
 }
