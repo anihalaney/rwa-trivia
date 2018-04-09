@@ -1,11 +1,11 @@
 <div class="row" *ngIf="scoreList.length>0">
-  <div *ngFor="let result of scoreList">
+  <div *ngFor="let result of scoreList | slice:0:3; let i=index">
     <div class="col-md-4 col-xs-12 categorybox skyblue">
-      <h3>{{categoryDict[result.catId].categoryName}}</h3>
+      <h3>{{categoryDict[result.catId].categoryName.charAt(0).toUpperCase() + categoryDict[result.catId].categoryName.slice(1)}}</h3>
       <ul>
         <li>
-          <div class="row" *ngFor="let user of result.users;let i=index;">
-            <div class="col-xs-2 has">#1</div>
+          <div class="row" *ngFor="let user of result.users | slice:0:3;let i=index;">
+            <!-- <div class="col-xs-2 has">#1</div> -->
             <div class="col-xs-3">
               <a href="#">
                 <img src="/assets/images/user1.jpg" alt="user1" />
@@ -16,8 +16,8 @@
               <div class="light">Springfield</div>
             </div>
             <div class="col-xs-3">
-              <div class="dark">25879</div>
-              <div class="light">{{result.count[i]}}</div>
+              <div class="dark">{{result.count[i]}}</div>
+              <div class="light">points</div>
             </div>
           </div>
         </li>
