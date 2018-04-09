@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, EventEmitter, ViewChild, AfterViewInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../model';
 import { bulkState } from '../../../bulk/store';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 import * as bulkActions from '../../../bulk/store/actions';
 
 
@@ -19,7 +20,7 @@ import * as bulkActions from '../../../bulk/store/actions';
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
-export class QuestionsTableComponent implements OnInit, OnChanges {
+export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() showSort: boolean;
   @Input() showPaginator: boolean;
@@ -29,16 +30,18 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() showApproveButton: boolean;
   @Input() showButtons: boolean;
+  @Input() clientSidePagination: boolean;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   requestFormGroup: FormGroup;
   rejectFormGroup: FormGroup;
 
   sortOrder: string;
   questionsSubject: BehaviorSubject<Question[]>;
-  questionsDS: QuestionsDataSource;
+  questionsDS: any;
 
   requestQuestionStatus = false;
   rejectQuestionStatus = false;
@@ -68,10 +71,26 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.rejectFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });
+
   }
 
-  ngOnChanges() {
-    this.questionsSubject.next(this.questions);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['questions'].currentValue !== changes['questions'].previousValue) {
+      (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+      (changes['questions'].previousValue) ? this.setPagination() : '';
+    }
+  }
+
+  ngAfterViewInit() {
+    this.setPagination();
+  }
+
+  setPagination() {
+    (this.clientSidePagination) ? this.questionsDS.paginator = this.paginator : '';
+  }
+
+  setClientSidePaginationDataSource(questions: Question[]) {
+    this.questionsDS = new MatTableDataSource<Question>(questions);
   }
 
   getDisplayStatus(status: number): string {
