@@ -14,16 +14,23 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
   }
 }
 
-export function users(state: any = null, action: ActionWithPayload<User[]>): User[] {
+export function userInfo(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
-    case UserActions.LOAD_USERS_SUCCESS:
+    case UserActions.LOAD_USER_INFO_SUCCESS:
+      return action.payload;
+    default:
+      return null;
+  }
+}
+
+export function userDict(state: any = null, action: ActionWithPayload<{ [key: string]: User }>): { [key: string]: User } {
+  switch (action.type) {
+    case UserActions.LOAD_USER_INFO_DICT_SUCCESS:
       return action.payload;
     default:
       return state;
   }
 }
-
-
 
 export function authInitialized(state: any = false, action: ActionWithPayload<any>): boolean {
   switch (action.type) {

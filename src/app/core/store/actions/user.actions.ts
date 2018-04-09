@@ -31,11 +31,28 @@ export class UserActions {
     };
   }
 
-  static LOAD_USERS_SUCCESS = 'LOAD_USERS_SUCCESS';
-  loadUsersSuccess(users: User[]): ActionWithPayload<User[]> {
+  static LOAD_USER_INFO = 'LOAD_USER_INFO';
+  loadUserInfo(userId: string): ActionWithPayload<string> {
     return {
-      type: UserActions.LOAD_USERS_SUCCESS,
-      payload: users
+      type: UserActions.LOAD_USER_INFO,
+      payload: userId
+    };
+  }
+
+
+  static LOAD_USER_INFO_SUCCESS = 'LOAD_USER_INFO_SUCCESS';
+  loadUserInfoSuccess(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.LOAD_USER_INFO_SUCCESS,
+      payload: user
+    };
+  }
+
+  static LOAD_USER_INFO_DICT_SUCCESS = 'LOAD_USER_INFO_DICT_SUCCESS';
+  loadUserInfoDictSuccess(userDict: { [key: string]: User }): ActionWithPayload<{ [key: string]: User }> {
+    return {
+      type: UserActions.LOAD_USER_INFO_DICT_SUCCESS,
+      payload: userDict
     };
   }
 

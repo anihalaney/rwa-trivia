@@ -12,9 +12,8 @@ import { userState } from '../../store';
 })
 export class GameCardComponent implements OnInit, OnChanges {
   @Input() game: Game;
-  @Input() users: User[];
+  @Input() userDict: { [key: string]: User };
   user$: Observable<User>;
-  userDict: { [key: string]: User };
   correctAnswerCount: number;
   questionIndex: number;
   user: User;
@@ -31,7 +30,6 @@ export class GameCardComponent implements OnInit, OnChanges {
         this.user = user;
       }
     });
-    this.userDict = {};
   }
 
   ngOnInit() {
@@ -54,62 +52,26 @@ export class GameCardComponent implements OnInit, OnChanges {
     return this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length
   }
 
-  getUserObj(otherUserId: string): User {
-    return (this.userDict[otherUserId]) ? this.userDict[otherUserId] : this.users.filter(user => user.userId = otherUserId)[0];
-  }
+  // getUserObj(otherUserId: string): User {
+  //   return (this.userDict[otherUserId]) ? this.userDict[otherUserId] : this.users.filter(user => user.userId = otherUserId)[0];
+  // }
 
   getOtherUserName(game: Game): string {
-    const defaultName = 'Kaanishhk';
-    if (this.users && game.playerIds.length > 1) {
-      {
-        const otherUserId = this.game.playerIds[1];
-        const userObj = this.getUserObj(otherUserId);
-        if (userObj.displayName) {
-          this.userDict[otherUserId] = userObj;
-          return userObj.displayName;
-        } else {
-          return defaultName;
-        }
-      }
-    } else {
-      return defaultName;
-    }
+    const otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0]
+    const userInfo = this.userDict[otherUserId];
+    return userInfo.displayName;
   }
 
   getOtherUserLocation(game: Game): string {
-    const defaultLocation = 'hristol';
-    if (this.users && game.playerIds.length > 1) {
-      {
-        const otherUserId = this.game.playerIds[1];
-        const userObj = this.getUserObj(otherUserId);
-        if (userObj.location) {
-          this.userDict[otherUserId] = userObj;
-          return userObj.location;
-        } else {
-          return defaultLocation;
-        }
-      }
-    } else {
-      return defaultLocation;
-    }
+    const otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0]
+    const userInfo = this.userDict[otherUserId];
+    return userInfo.location;
   }
 
   getOtherUserProfileUrl(game: Game): string {
-    const image = '/assets/images/opponent.png';
-    if (this.users && game.playerIds.length > 1) {
-      {
-        const otherUserId = this.game.playerIds[1];
-        const userObj = this.getUserObj(otherUserId);
-        if (userObj.profilePictureUrl) {
-          this.userDict[otherUserId] = userObj;
-          return userObj.profilePictureUrl;
-        } else {
-          return image;
-        }
-      }
-    } else {
-      return image;
-    }
+    const otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0]
+    const userInfo = this.userDict[otherUserId];
+    return userInfo.profilePictureUrl;
   }
 
 
