@@ -10,26 +10,34 @@ export class StatsService {
     constructor(private db: AngularFirestore) { }
 
     getScoreInfo(categoryList: any): any {
-        return this.db.collection('/games', ref => ref.where('gameOver', '==', true).where('winnerPlayerId', '>', '').limit(2))
+
+        //Get game with gameover=true and contains winnerId
+        return this.db.collection('/games', ref => ref.where('gameOver', '==', true))
             .valueChanges()
             .map(gs => gs.map(g => {
-                return Game.getViewModel(g);
+                if (Game.getViewModel(g).winnerPlayerId !== undefined) {
+                    return Game.getViewModel(g);
+                }
 
-            })).map(games => {
+
+            })).map(games => {  //Create categoty array and bing each game category with it
                 const gameList = [];
                 Object.keys(categoryList).forEach(function (key) {
                     gameList[key] = [];
                 });
 
                 games.forEach(function (game) {
-                    game.gameOptions.categoryIds.forEach(function (catId) {
-                        gameList[catId].push(game);
-                    });
+                    if (game !== undefined) {
+                        game.gameOptions.categoryIds.forEach(function (catId) {
+                            gameList[catId].push(game);
+                        });
+                    }
+
                 });
 
                 return gameList;
 
-            }).map(gameList => {
+            }).map(gameList => { //Combine category with user and its gameid
 
                 const finalResult = {};
                 Object.keys(gameList).forEach(function (key) {
