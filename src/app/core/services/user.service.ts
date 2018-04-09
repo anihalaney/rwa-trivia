@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
@@ -8,6 +9,7 @@ import { AppState } from '../../store/app-store';
 import { UserActions } from '../../core/store/actions';
 import { User } from '../../model';
 import * as useractions from '../../user/store/actions';
+import { CONFIG } from '../../../environments/environment';
 
 
 
@@ -16,6 +18,7 @@ export class UserService {
 
     constructor(private db: AngularFirestore,
         private storage: AngularFireStorage,
+        private http: HttpClient,
         private store: Store<AppState>, private userActions: UserActions) {
     }
 
@@ -42,27 +45,15 @@ export class UserService {
         });
     }
 
-    getUsers() {
-        this.db.collection<any>('/users').valueChanges().subscribe(users => {
-            this.generateUserProfiles(users, 0);
-        });
-    }
 
-    generateUserProfiles(users: User[], index: number) {
-        if (index < users.length) {
-            this.getUserProfileImage(users[index]).subscribe(user => {
-                users[index] = user;
-                index++;
-                this.generateUserProfiles(users, index);
-            });
-        } else {
-            this.store.dispatch(this.userActions.loadUsersSuccess(users));
-        }
+    loadUserInfo(userId: string): Observable<User> {
+        const url: string = CONFIG.functionsUrl + '/app/user/info/' + userId;
+        return this.http.get<User>(url).mergeMap(u => this.getUserProfileImage(u));
     }
 
 
     getUserProfileImage(user: User): Observable<User> {
-        if (user.profilePicture && user.profilePicture !== '') {
+        if (user.profilePicture && user.profilePicture !== '' ) {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.storage.ref(filePath);
             return ref.getDownloadURL().map(url => {

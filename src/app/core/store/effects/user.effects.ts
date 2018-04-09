@@ -20,15 +20,11 @@ export class UserEffects {
 
     @Effect()
     // handle location update
-    loadRouteUsers$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/'))
-        .pipe(switchMap(() => {
-            this.svc.getUsers();
-            return empty();
-        }));
+    loadUserInfo$ = this.actions$
+        .ofType(UserActions.LOAD_USER_INFO)
+        .map((action: ActionWithPayload<string>) => action.payload)
+        .switchMap((userId: string) => this.svc.loadUserInfo(userId))
+        .map((user: User) => this.userActions.loadUserInfoSuccess(user));
 
 
     constructor(

@@ -37,7 +37,7 @@ export class GameService {
       .valueChanges();
 
 
-    return Observable.forkJoin(userGames.take(1), OtherGames.take(1))
+    return Observable.combineLatest(userGames, OtherGames)
       .map(games => games[0].concat(games[1]))
       .map(gs => gs.map(g => Game.getViewModel(g))
       .sort((a: any, b: any) => { return (b.turnAt - a.turnAt) }))
@@ -70,13 +70,13 @@ export class GameService {
   getGameResult(userId: String): Observable<Game[]> {
     const query1 = this.db.collection('/games', ref => ref.where('playerId_0', '==', userId).where('gameOver', '==', true)
       .orderBy('turnAt', 'desc').limit(4))
-      .valueChanges().take(1);
+      .valueChanges();
 
     const query2 = this.db.collection('/games', ref => ref.where('playerId_1', '==', userId).where('gameOver', '==', true)
       .orderBy('turnAt', 'desc').limit(4))
-      .valueChanges().take(1);
+      .valueChanges();
 
-    return Observable.forkJoin(query1, query2)
+    return Observable.combineLatest(query1, query2)
       .map((data) => data[0].concat(data[1]))
       .map(gs => gs.map(g => Game.getViewModel(g))
       .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));

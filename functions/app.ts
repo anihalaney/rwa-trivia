@@ -3,6 +3,7 @@ import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
+import { UserInfoGenerator } from './user-info-generator';
 
 
 
@@ -380,6 +381,29 @@ app.get('/testES', adminOnly, (req, res) => {
 });
 // END - TEST FUNCTIONS
 ///////////////////////
+
+
+
+app.get('/user/info/:userId', authorizedOnly, (req, res) => {
+  // console.log('body---->', req.body);
+  const userId = req.params.userId;
+
+
+  if (!userId) {
+    // Game Option is not added
+    res.status(403).send('userId is not available');
+    return;
+  }
+
+  const userInfoGenerator: UserInfoGenerator = new UserInfoGenerator(userId, admin);
+  userInfoGenerator.getUserInfo().then((userInfo) => {
+    console.log('userInfo', userInfo);
+
+    res.send(userInfo);
+  });
+
+
+});
 
 
 
