@@ -7,7 +7,7 @@ export class GameMechanics {
     private userId: string;
     private db: any
 
-    constructor(private game_option, private user_id, private firebaseDB: any) {
+    constructor(private game_option?, private user_id?, private firebaseDB?: any) {
         this.gameOptions = game_option;
         this.userId = user_id;
         this.db = firebaseDB;
@@ -82,6 +82,11 @@ export class GameMechanics {
 
     }
 
+    public getGameById(gameId: string): Promise<Game> {
+        return this.db.doc(`games/${gameId}`)
+            .get().then(game => Game.getViewModel(game.data()));
+    }
+
     private UpdateGame(dbGame: any): Promise<string> {
         // Use the set method of the doc instead of the add method on the collection,
         // so the id field of the data matches the id of the document
@@ -91,10 +96,13 @@ export class GameMechanics {
         });
     }
 
-    public UpdateGameInfo(dbGame: any): void {
+    public UpdateGameCollection(dbGame: any): Promise<string> {
         // Use the set method of the doc instead of the add method on the collection,
         // so the id field of the data matches the id of the document
-        return this.db.doc('/games/' + dbGame.id).update(dbGame)
+        return this.db.doc('/games/' + dbGame.id).update(dbGame).then(ref => {
+
+            return dbGame.id;
+        });
     }
 
 

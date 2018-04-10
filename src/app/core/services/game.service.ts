@@ -9,7 +9,7 @@ import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, GameOptions, Game, Question, PlayerQnA } from '../../model';
+import { User, GameOptions, Game, Question, PlayerQnA, GameOperations } from '../../model';
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
@@ -28,6 +28,7 @@ export class GameService {
 
   }
 
+
   getActiveGames(user: User): Observable<Game[]> {
 
     const userGames = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
@@ -40,7 +41,7 @@ export class GameService {
     return Observable.combineLatest(userGames, OtherGames)
       .map(games => games[0].concat(games[1]))
       .map(gs => gs.map(g => Game.getViewModel(g))
-      .sort((a: any, b: any) => { return (b.turnAt - a.turnAt) }))
+        .sort((a: any, b: any) => { return (b.turnAt - a.turnAt) }))
 
   }
 
@@ -54,17 +55,23 @@ export class GameService {
     let url: string = CONFIG.functionsUrl + "/app/getNextQuestion/";
     return this.http.get<Question>(url + game.gameId);
   }
-  addPlayerQnAToGame(game: Game, playerQnA: PlayerQnA) {
-    game.playerQnAs.push(playerQnA);
-    let dbGame = game.getDbModel();
 
-    this.db.doc('/games/' + game.gameId).update(dbGame);
+
+  addPlayerQnAToGame(game: Game, playerQnA: PlayerQnA): Observable<any> {
+    const url = `${CONFIG.functionsUrl}/app/game/${game.gameId}`;
+    const payload = {
+      playerQnA: playerQnA,
+      nextTurnPlayerId: game.nextTurnPlayerId,
+      GameStatus: game.GameStatus,
+      turnAt: game.turnAt,
+      operation: GameOperations.CALCULATE_SCORE
+    };
+    return this.http.put<any>(url, payload);
   }
 
+
   setGameOver(game: Game, user: User) {
-    let dbGame = game.getDbModel();
-    dbGame.gameOver = true;
-    this.db.doc('/games/' + game.gameId).update(dbGame);
+    return this.http.put(`${CONFIG.functionsUrl}/app/game/${game.gameId}`, { part: {}, operation: GameOperations.GAME_OVER });
   }
 
   getGameResult(userId: String): Observable<Game[]> {
@@ -79,7 +86,7 @@ export class GameService {
     return Observable.combineLatest(query1, query2)
       .map((data) => data[0].concat(data[1]))
       .map(gs => gs.map(g => Game.getViewModel(g))
-      .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
+        .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
 
   }
 }
