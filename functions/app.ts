@@ -231,6 +231,10 @@ app.post('/createGame', authorizedOnly, (req, res) => {
 
 });
 
+app.put('/game/:gameId', authorizedOnly, (req, res) => {
+
+});
+
 app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 
   console.log(req.params.collection);
