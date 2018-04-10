@@ -1,24 +1,41 @@
-<mat-card>
-  <mat-card-content>
+<div>
+  <div fxLayoutAlign="center" class="mail-icon-div">
+    <img class="mail-icon" src="assets/images/mail-icon.png">
+  </div>
+  <div fxLayoutAlign="left">
+    <form (ngSubmit)="onSubscribe()" [formGroup]="invitationForm" class="row col-sm-12" #formDir="ngForm">
+      <!-- <div class="clearfix namefield">
+              <div class="formfield">
+                <input type="text" formControlName="email" placeholder="Email address" class="required">
+              </div>
+            </div> -->
+      <input type="text" formControlName="email" class="required" placeholder="Email address" class="required">
+      <button class="btn sent-invitation">Send Invite</button>
+      <span *ngIf="invitationForm.hasError('required', 'email') && formDir.submitted" class="label">
+        Email is required!
+      </span>
+      <span *ngIf="showErrorMsg" class="label row col-sm-12"> {{errorMsg}} </span>
+      <span *ngIf="showErrorMsg" class="label row col-sm-12">{{invalidEmailList}}</span>
+    </form>
+  </div>
+  <div fxLayoutAlign="left" class="mail-option-div">
+    <mat-list role="list">
+      <mat-list-item role="listitem">
+        <img class="icon-size" src="assets/images/gmail.png">
+        <span class="text-alignment">Gmail</span>
+        <button class="invite-btn">Find Contacts</button>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <img class="icon-size" src="assets/images/yahoo.png">
+        <span class="text-alignment">Yahoo</span>
+        <button class="invite-btn">Find Contacts</button>
+      </mat-list-item>
+      <mat-list-item role="listitem">
+        <img class="icon-size" src="assets/images/hotmail.png">
+        <span class="text-alignment">Hotmail</span>
+        <button class="invite-btn">Find Contacts</button>
+      </mat-list-item>
+    </mat-list>
 
-    <div fxLayoutAlign="center">
-      <img class="mail-icon" src="assets/images/mail-icon.png">
-    </div>
-    <div fxLayoutAlign="left">
-
-      <form [formGroup]="invitationForm" class="row col-sm-12">
-        <!-- <div class="clearfix namefield">
-          <div class="formfield">
-            <input type="text" formControlName="email" placeholder="Email address" class="required">
-          </div>
-        </div> -->
-        <div class="wrapper ">
-          <input type="text" formControlName="email" placeholder="Email address" class="required">
-          <button>Search</button>
-        </div>
-      </form>
-    </div>
-
-  </mat-card-content>
-
-</mat-card>
+  </div>
+</div>
