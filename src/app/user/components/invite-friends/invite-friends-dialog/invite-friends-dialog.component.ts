@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../../../model';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../../store';
+import { Location } from '@angular/common';
+
+
 
 @Component({
   selector: 'app-invite-friends-dialog',
@@ -13,12 +16,16 @@ export class InviteFriendsDialogComponent implements OnInit {
   user: User;
   navLinks = [];
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private location: Location) {
     this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
 
   }
 
   ngOnInit() {
+
   }
 
+  closeModel() {
+    this.location.back();
+  }
 }
