@@ -3,10 +3,7 @@ import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
-import { UserInfoGenerator } from './user-info-generator';
-
-
-
+import { UserCollection } from './user-collection';
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -395,14 +392,11 @@ app.get('/user/info/:userId', authorizedOnly, (req, res) => {
     return;
   }
 
-  const userInfoGenerator: UserInfoGenerator = new UserInfoGenerator(userId, admin);
-  userInfoGenerator.getUserInfo().then((userInfo) => {
+  const userCollection: UserCollection = new UserCollection(admin);
+  userCollection.getUserById(userId).then((userInfo) => {
     console.log('userInfo', userInfo);
-
     res.send(userInfo);
   });
-
-
 });
 
 
