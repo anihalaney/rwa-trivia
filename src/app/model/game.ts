@@ -8,12 +8,25 @@ export class PlayerQnA {
   playerAnswerInSeconds?: number;
   answerCorrect?: boolean;
 }
+
+export class PlayerScore {
+  playerId: string;
+  score: number;
+}
+
+export class PlayerRound {
+  playerId: string;
+  round: number;
+}
+
 export class Game {
   private _gameId?: string;
   private _gameOptions: GameOptions
   private _playerIds: string[];
   public gameOver: boolean;
   public playerQnAs: PlayerQnA[];
+  public playerScores: PlayerScore[];
+  public playerRounds: PlayerRound[];
   public nextTurnPlayerId: string;
   public winnerPlayerId: string;
   public GameStatus: string;
@@ -21,7 +34,8 @@ export class Game {
   public turnAt: number;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
-    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number) {
+    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number,
+    playerScores?: any, playerRounds?: any) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
@@ -64,6 +78,31 @@ export class Game {
       this.turnAt = turnAt;
     }
 
+    this.playerScores = [];
+    if (playerScores) {
+      let key: string;
+      for (key of Object.keys(playerScores)) {
+        const scoreObj = playerScores[key];
+        this.playerScores.push({
+          'playerId': scoreObj.playerId,
+          'score': scoreObj.score
+        });
+      }
+    }
+
+    this.playerRounds = [];
+    if (playerRounds) {
+      let key: string;
+      for (key of Object.keys(playerRounds)) {
+        const roundObj = playerRounds[key];
+        this.playerRounds.push({
+          'playerId': roundObj.playerId,
+          'round': roundObj.score
+        });
+      }
+    }
+
+
   }
 
   addPlayer(playerUUId: string) {
@@ -89,6 +128,27 @@ export class Game {
     return playerQnA;
   }
 
+  calculateScore(playerId: string) {
+    const scoreIndex = this.playerScores.findIndex((score) => score.playerId === playerId);
+    const playerScore: PlayerScore = (scoreIndex > -1) ? this.playerScores[scoreIndex] : {
+      'playerId': playerId,
+      'score': 0
+    }
+    playerScore.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
+    (scoreIndex > -1) ? this.playerScores[scoreIndex] = playerScore : this.playerScores.push(playerScore);
+  }
+
+
+  calculateRound(playerId: string) {
+    const roundIndex = this.playerRounds.findIndex((round) => round.playerId === playerId);
+    const playerRound: PlayerRound = (roundIndex > -1) ? this.playerRounds[roundIndex] : {
+      'playerId': playerId,
+      'round': 0
+    }
+    playerRound.round = this.playerQnAs.filter((p) => p.playerId === playerId).length;
+    (roundIndex > -1) ? this.playerRounds[roundIndex] = playerRound : this.playerRounds.push(playerRound);
+  }
+
   updatePlayerQnA(playerId: string, questionId: string,
     playerAnswerId: string, playerAnswerInSeconds: number, answerCorrect: boolean): PlayerQnA {
     let playerQnA: PlayerQnA = this.playerQnAs.find(p => p.playerId === playerId && questionId === questionId);
@@ -104,6 +164,8 @@ export class Game {
       'playerIds': this.playerIds,
       'gameOver': (this.gameOver) ? this.gameOver : false,
       'playerQnAs': this.playerQnAs,
+      'playerScores': this.playerScores,
+      'playerRounds': this.playerRounds,
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
       'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED
     }
@@ -134,7 +196,7 @@ export class Game {
     let game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt']);
+      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'], dbModel['playerScores'], dbModel['playerRounds']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }

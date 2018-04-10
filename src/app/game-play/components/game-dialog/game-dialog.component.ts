@@ -148,7 +148,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
-      if (this.correctAnswerCount >= 3) {
+      if (this.correctAnswerCount >= 5) {
         this.gameOver = true;
       }
     } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
@@ -195,6 +195,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.game.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
       } else if (!playerQnA.answerCorrect) {
         this.game.nextTurnPlayerId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+        this.showContinueBtn = false;
       } else {
         this.game.nextTurnPlayerId = this.user.userId;
       }
@@ -208,7 +209,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random
     ) {
-      if (this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length >= 3) {
+      if (this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length >= 5) {
         this.game.winnerPlayerId = this.user.userId;
         this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
       }

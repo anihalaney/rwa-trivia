@@ -1,9 +1,10 @@
-import { Game, Question, Category, SearchCriteria } from '../src/app/model';
+import { Game, Question, Category, SearchCriteria, PlayerQnA, GameOperations } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
 import { UserCollection } from './user-collection';
+
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
@@ -228,7 +229,48 @@ app.post('/createGame', authorizedOnly, (req, res) => {
 
 });
 
+
 app.put('/game/:gameId', authorizedOnly, (req, res) => {
+  const gameId = req.params.gameId;
+  let dbGame = '';
+  const operation = req.body.operation;
+
+  if (!gameId) {
+    // gameId
+    res.status(403).send('game is not available');
+    return;
+  }
+
+  if (!operation) {
+    // operation
+    res.status(403).send('operation is not added in request');
+    return;
+  }
+  // console.log('gameId', gameId);
+  // console.log('operation', operation);
+  const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined, admin.firestore());
+
+  gameMechanics.getGameById(gameId).then((game) => {
+
+    switch (operation) {
+      case GameOperations.CALCULATE_SCORE:
+        const playerQnAs: PlayerQnA = req.body.playerQnA;
+        game.playerQnAs.push(playerQnAs);
+        game.GameStatus = req.body.GameStatus;
+        game.turnAt = req.body.turnAt;
+        game.nextTurnPlayerId = req.body.nextTurnPlayerId;
+        game.calculateScore(playerQnAs.playerId);
+        game.calculateRound(playerQnAs.playerId);
+        // console.log('game', game);
+        break;
+      case GameOperations.GAME_OVER:
+        game.gameOver = true; break;
+    }
+    dbGame = game.getDbModel();
+    gameMechanics.UpdateGameCollection(dbGame).then((id) => {
+      res.send({});
+    });
+  })
 
 });
 
@@ -402,6 +444,9 @@ app.get('/user/:userId', authorizedOnly, (req, res) => {
     res.send(userInfo);
   });
 });
+
+
+
 
 
 

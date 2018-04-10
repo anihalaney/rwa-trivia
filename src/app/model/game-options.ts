@@ -33,3 +33,9 @@ export enum GameStatus {
   STARTED = 'started',
   WAITING_FOR_NEXT_Q = 'waiting for next question'
 }
+
+
+export enum GameOperations {
+  CALCULATE_SCORE = 'calculate_score',
+  GAME_OVER = 'game_over'
+}
