@@ -47,7 +47,7 @@ export class UserService {
 
 
     loadUserInfo(userId: string): Observable<User> {
-        const url: string = CONFIG.functionsUrl + '/app/user/info/' + userId;
+        const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
         return this.http.get<User>(url).mergeMap(u => this.getUserProfileImage(u));
     }
 

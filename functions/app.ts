@@ -381,7 +381,7 @@ app.get('/testES', adminOnly, (req, res) => {
 
 
 
-app.get('/user/info/:userId', authorizedOnly, (req, res) => {
+app.get('/user/:userId', authorizedOnly, (req, res) => {
   // console.log('body---->', req.body);
   const userId = req.params.userId;
 
