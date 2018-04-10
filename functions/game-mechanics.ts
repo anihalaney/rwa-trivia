@@ -91,5 +91,11 @@ export class GameMechanics {
         });
     }
 
+    public UpdateGameInfo(dbGame: any): void {
+        // Use the set method of the doc instead of the add method on the collection,
+        // so the id field of the data matches the id of the document
+        return this.db.doc('/games/' + dbGame.id).update(dbGame)
+    }
+
 
 }
