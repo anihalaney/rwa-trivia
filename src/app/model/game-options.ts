@@ -31,7 +31,8 @@ export enum GameMode {
 
 export enum GameStatus {
   STARTED = 'started',
-  WAITING_FOR_NEXT_Q = 'waiting for next question'
+  WAITING_FOR_NEXT_Q = 'waiting for next question',
+  COMPLETED = 'completed'
 }
 
 

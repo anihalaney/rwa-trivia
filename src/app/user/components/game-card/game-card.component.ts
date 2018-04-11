@@ -18,8 +18,8 @@ export class GameCardComponent implements OnInit, OnChanges {
   questionIndex: number;
   user: User;
   myTurn: boolean;
-
-
+  otherUserId: string;
+  otherUserInfo: User
 
   constructor(private store: Store<AppState>) {
 
@@ -42,37 +42,18 @@ export class GameCardComponent implements OnInit, OnChanges {
   ngOnChanges() {
     this.questionIndex = this.game.playerQnAs.length;
     this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
+    if (this.game) {
+      this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
+      this.otherUserInfo = this.userDict[this.otherUserId];
+    }
   }
 
   getRound(playerId: string) {
-    return this.game.playerQnAs.filter((p) => p.playerId === playerId).length
+    return this.game.playerRounds.filter((p) => p.playerId === playerId)[0].round;
   }
 
   getScore(playerId: string) {
-    return this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length
+    return this.game.playerScores.filter((p) => p.playerId === playerId)[0].score;
   }
-
-  // getUserObj(otherUserId: string): User {
-  //   return (this.userDict[otherUserId]) ? this.userDict[otherUserId] : this.users.filter(user => user.userId = otherUserId)[0];
-  // }
-
-  getOtherUserName(game: Game): string {
-    const otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0]
-    const userInfo = this.userDict[otherUserId];
-    return userInfo.displayName;
-  }
-
-  getOtherUserLocation(game: Game): string {
-    const otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0]
-    const userInfo = this.userDict[otherUserId];
-    return userInfo.location;
-  }
-
-  getOtherUserProfileUrl(game: Game): string {
-    const otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0]
-    const userInfo = this.userDict[otherUserId];
-    return userInfo.profilePictureUrl;
-  }
-
 
 }

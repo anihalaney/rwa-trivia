@@ -65,8 +65,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
-        this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
-        this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length;
+        this.questionIndex = this.game.playerRounds.filter((p) => p.playerId === this.user.userId)[0].round;
+        this.correctAnswerCount = this.game.playerScores.filter((p) => p.playerId === this.user.userId)[0].score;
         this.setTurnStatusFlag();
       }));
 
@@ -149,11 +149,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
       if (this.correctAnswerCount >= 5) {
-        this.gameOver = true;
+        this.gameOverContinueClicked();
+        return;
       }
     } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
+      this.gameOverContinueClicked();
       //game over
-      this.gameOver = true;
       return;
     }
     (!this.gameOver) ?
@@ -169,8 +170,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       this.gameOver = false;
   }
   */
-  gameOverContinueClicked() {
-    //this.router.navigate(['/']);
+  gameOverContinueClicked() {    
+    this.game.winnerPlayerId = this.user.userId;
+    this.gameOver = true;
+    this.game.gameOver = true;
+    this.game.GameStatus = GameStatus.COMPLETED
+    this.store.dispatch(new gameplayactions.SetGameOver({ 'game': this.game, 'user': this.user }));
   }
   afterAnswer(userAnswerId?: number) {
 
@@ -205,18 +210,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
     //dispatch action to push player answer
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ "game": this.game, "playerQnA": playerQnA }));
-
-    if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
-      && Number(this.game.gameOptions.opponentType) === OpponentType.Random
-    ) {
-      if (this.game.playerQnAs.filter((p) => p.answerCorrect && p.playerId === this.user.userId).length >= 5) {
-        this.game.winnerPlayerId = this.user.userId;
-        this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
-      }
-    } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
-      //game over
-      this.store.dispatch(new gameplayactions.SetGameOver({ "game": this.game, "user": this.user }));
-    }
 
     this.questionComponent.disableQuestions(correctAnswerId);
 

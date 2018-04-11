@@ -77,9 +77,18 @@ export class Game {
     if (turnAt) {
       this.turnAt = turnAt;
     }
-
     this.playerScores = [];
-    if (playerScores) {
+    this.playerRounds = [];
+
+  }
+
+  addPlayer(playerUUId: string) {
+    (this._playerIds.indexOf(playerUUId) === -1) ? this._playerIds.push(playerUUId) : '';
+  }
+
+  setScore(playerScores: PlayerScore[]) {
+
+    if (playerScores && playerScores.length > 0) {
       let key: string;
       for (key of Object.keys(playerScores)) {
         const scoreObj = playerScores[key];
@@ -88,25 +97,40 @@ export class Game {
           'score': scoreObj.score
         });
       }
+    } else {
+      this.generateDefaultScore();
     }
+  }
 
-    this.playerRounds = [];
-    if (playerRounds) {
+  generateDefaultScore() {
+    this.playerIds.forEach((playerId) => {
+      console.log('score playerId', playerId);
+      this.calculateScore(playerId);
+    });
+  }
+
+  setRound(playerRounds: PlayerRound[]) {
+
+    if (playerRounds && playerRounds.length > 0) {
       let key: string;
       for (key of Object.keys(playerRounds)) {
         const roundObj = playerRounds[key];
         this.playerRounds.push({
           'playerId': roundObj.playerId,
-          'round': roundObj.score
+          'round': roundObj.round
         });
       }
+    } else {
+      this.generateDefaultRound();
     }
-
-
   }
 
-  addPlayer(playerUUId: string) {
-    (this._playerIds.indexOf(playerUUId) === -1) ? this._playerIds.push(playerUUId) : '';
+  generateDefaultRound() {
+
+    this.playerIds.forEach((playerId) => {
+      console.log('Round playerId', playerId);
+      this.calculateRound(playerId);
+    });
   }
 
   get gameOptions(): GameOptions {
@@ -164,8 +188,6 @@ export class Game {
       'playerIds': this.playerIds,
       'gameOver': (this.gameOver) ? this.gameOver : false,
       'playerQnAs': this.playerQnAs,
-      'playerScores': this.playerScores,
-      'playerRounds': this.playerRounds,
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
       'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED
     }
@@ -188,6 +210,13 @@ export class Game {
       dbModel['id'] = this.gameId;
     }
 
+    this.generateDefaultScore();
+    this.generateDefaultRound();
+    
+
+    dbModel['playerScores'] = this.playerScores;
+    dbModel['playerRounds'] = this.playerRounds;
+
     return dbModel;
   }
 
@@ -200,7 +229,9 @@ export class Game {
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }
-    //console.log(game);
+    game.setScore(dbModel['playerScores']);
+    game.setRound(dbModel['playerRounds']);
+    // console.log(game);
     return game;
   }
 
