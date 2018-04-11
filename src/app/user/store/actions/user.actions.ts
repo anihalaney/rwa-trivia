@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { User, Question } from '../../../model';
+import { User, Question, Invitations } from '../../../model';
 
 export enum UserActionTypes {
 
@@ -13,7 +13,9 @@ export enum UserActionTypes {
     LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS = '[User] LoadUserUnpublishedQuestionsSuccess',
     ADD_QUESTION = '[User] AddQuestions',
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
-    UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess'
+    UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
+    ADD_USER_INVITATION = '[User] AddUserInvitation',
+    ADD_USER_INVITATION_SUCCESS = '[User] AddUserInvitationSuccess'
 }
 
 // Save user profile
@@ -65,6 +67,18 @@ export class UpdateUserSuccess implements Action {
     constructor(public payload: User) { }
 }
 
+// Save user invitations
+export class AddUserInvitation implements Action {
+    readonly type = UserActionTypes.ADD_USER_INVITATION;
+    constructor(public payload: { invitation: Invitations }) { }
+}
+
+// Save user invitations success
+export class AddUserInvitationSuccess implements Action {
+    readonly type = UserActionTypes.ADD_USER_INVITATION_SUCCESS;
+    payload = null;
+}
+
 
 
 export type UserActions
@@ -76,4 +90,6 @@ export type UserActions
     | LoadUserUnpublishedQuestionsSuccess
     | AddQuestion
     | UpdateUserSuccess
+    | AddUserInvitation
+    | AddUserInvitationSuccess
 
