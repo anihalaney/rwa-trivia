@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
-import { User } from '../../model';
+import { User, Invitations } from '../../model';
 import * as useractions from '../../user/store/actions';
 
 
@@ -57,6 +57,15 @@ export class UserService {
 
     setSubscriptionFlag(userId: string) {
         this.db.doc(`/users/${userId}`).update({ isSubscribed: true });
+    }
+
+    saveUserInvitations(invitation: Invitations) {
+        const dbInvitation = Object.assign({}, invitation); // object to be saved
+        const id = this.db.createId();
+        dbInvitation.id = id;
+        this.db.doc('/invitations/' + dbInvitation.id).set(dbInvitation).then(ref => {
+            this.store.dispatch(new useractions.AddUserInvitationSuccess());
+        });
     }
 
 }

@@ -71,6 +71,18 @@ export class UserEffects {
             return empty();
         })
         );
+
+    // Save user profile
+    @Effect()
+    saveInvitation$ = this.actions$
+        .ofType(UserActionTypes.ADD_USER_INVITATION)
+        .pipe(
+        switchMap((action: userActions.AddUserInvitation) => {
+            this.userService.saveUserInvitations(action.payload.invitation);
+            return empty();
+        })
+        );
+
     constructor(
         private actions$: Actions,
         private userService: UserService,

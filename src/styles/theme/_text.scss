@@ -106,6 +106,10 @@
 	.label{ 
 		color: map-get($theme, label);
 	}
+	.success
+	{
+		color: map-get($theme, box-hover-lg);
+	}
 	
 
 	@media screen and ( min-width:1000px){

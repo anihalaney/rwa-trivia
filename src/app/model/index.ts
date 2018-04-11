@@ -10,4 +10,5 @@ export * from './bulk-upload';
 export * from './router-state-url';
 export * from './subscription';
 export * from './subscribers';
+export * from './invitations';
 

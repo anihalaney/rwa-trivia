@@ -1,6 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { User } from '../../../../../model';
+import { User, Invitations } from '../../../../../model';
+import { Store } from '@ngrx/store';
+import { AppState, appState } from '../../../../../store';
+import * as userActions from '../../../../../user/store/actions';
+import { userState } from '../../../../../user/store';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -15,8 +19,23 @@ export class InviteMailFriendsComponent implements OnInit {
   showErrorMsg = false;
   invalidEmailList = [];
   errorMsg = '';
+  showSuccessMsg = undefined;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private store: Store<AppState>) {
+    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+      this.user = user;
+      if (user) {
+        this.user = user;
+      }
+    });
+
+    this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+
+      if (status === 'SUCCESS') {
+        this.showSuccessMsg = 'Your Invitations are send Successfully!!';
+      }
+    });
+
   }
 
   ngOnInit() {
@@ -38,6 +57,7 @@ export class InviteMailFriendsComponent implements OnInit {
       this.errorMsg = '';
       this.showErrorMsg = false;
       this.invalidEmailList = [];
+      this.showSuccessMsg = undefined;
 
       if (this.invitationForm.get('email').value.indexOf(',') > -1) {
         const emails = this.invitationForm.get('email').value.split(',');
@@ -59,6 +79,13 @@ export class InviteMailFriendsComponent implements OnInit {
           this.errorMsg = 'Following email is not valid address!';
           this.showErrorMsg = true;
         }
+      }
+      if (this.invalidEmailList.length === 0) {
+        const invitation = new Invitations();
+        invitation.created_uid = this.user.userId;
+        invitation.emails = this.invitationForm.get('email').value;
+        invitation.status = 'pending';
+        this.store.dispatch(new userActions.AddUserInvitation({ invitation }));
       }
     }
   }
