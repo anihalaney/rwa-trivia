@@ -20,6 +20,7 @@ export class InviteMailFriendsComponent implements OnInit {
   invalidEmailList = [];
   errorMsg = '';
   showSuccessMsg = undefined;
+  validEmail = [];
 
   constructor(private fb: FormBuilder, private store: Store<AppState>) {
     this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
@@ -65,6 +66,8 @@ export class InviteMailFriendsComponent implements OnInit {
           invalid = this.isValid(e);
           if (!invalid) {
             this.invalidEmailList.push(e);
+          } else {
+            this.validEmail.push(e);
           }
         }
         if (this.invalidEmailList.length > 0) {
@@ -78,14 +81,18 @@ export class InviteMailFriendsComponent implements OnInit {
           this.invalidEmailList.push(email);
           this.errorMsg = 'Following email is not valid address!';
           this.showErrorMsg = true;
+        } else {
+          this.validEmail.push(email);
         }
+
       }
       if (this.invalidEmailList.length === 0) {
-        const invitation = new Invitations();
-        invitation.created_uid = this.user.userId;
-        invitation.emails = this.invitationForm.get('email').value;
-        invitation.status = 'pending';
-        this.store.dispatch(new userActions.AddUserInvitation({ invitation }));
+        // const invitation = new Invitations();
+        // invitation.created_uid = this.user.userId;
+        // invitation.email = this.invitationForm.get('email').value;
+        // invitation.status = 'pending';
+        this.store.dispatch(new userActions.AddUserInvitation(
+          { created_uid: this.user.userId, emails: this.validEmail, status: 'pending' }));
       }
     }
   }
