@@ -70,7 +70,7 @@ export class UpdateUserSuccess implements Action {
 // Save user invitations
 export class AddUserInvitation implements Action {
     readonly type = UserActionTypes.ADD_USER_INVITATION;
-    constructor(public payload: { invitation: Invitations }) { }
+    constructor(public payload: any) { }
 }
 
 // Save user invitations success

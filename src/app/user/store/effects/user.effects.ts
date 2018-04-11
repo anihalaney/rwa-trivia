@@ -78,7 +78,7 @@ export class UserEffects {
         .ofType(UserActionTypes.ADD_USER_INVITATION)
         .pipe(
         switchMap((action: userActions.AddUserInvitation) => {
-            this.userService.saveUserInvitations(action.payload.invitation);
+            this.userService.saveUserInvitations(action.payload);
             return empty();
         })
         );

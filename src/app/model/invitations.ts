@@ -3,6 +3,6 @@
 export class Invitations {
     id: string;
     created_uid: string;
-    emails: string;
+    email: string;
     status: string;
 }

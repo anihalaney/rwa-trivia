@@ -59,13 +59,21 @@ export class UserService {
         this.db.doc(`/users/${userId}`).update({ isSubscribed: true });
     }
 
-    saveUserInvitations(invitation: Invitations) {
-        const dbInvitation = Object.assign({}, invitation); // object to be saved
-        const id = this.db.createId();
-        dbInvitation.id = id;
-        this.db.doc('/invitations/' + dbInvitation.id).set(dbInvitation).then(ref => {
-            this.store.dispatch(new useractions.AddUserInvitationSuccess());
+    saveUserInvitations(obj: any) {
+        const invitation = new Invitations();
+        invitation.created_uid = obj.created_uid;
+        invitation.status = obj.status;
+
+        obj.emails.forEach(element => {
+            invitation.email = element;
+            const dbInvitation = Object.assign({}, invitation); // object to be saved
+            const id = this.db.createId();
+            dbInvitation.id = id;
+            this.db.doc('/invitations/' + dbInvitation.id).set(dbInvitation).then(ref => {
+                this.store.dispatch(new useractions.AddUserInvitationSuccess());
+            });
         });
+
     }
 
 }
