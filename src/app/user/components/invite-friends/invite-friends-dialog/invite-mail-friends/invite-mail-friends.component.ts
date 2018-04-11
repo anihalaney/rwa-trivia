@@ -59,6 +59,7 @@ export class InviteMailFriendsComponent implements OnInit {
       this.showErrorMsg = false;
       this.invalidEmailList = [];
       this.showSuccessMsg = undefined;
+      this.validEmail = [];
 
       if (this.invitationForm.get('email').value.indexOf(',') > -1) {
         const emails = this.invitationForm.get('email').value.split(',');
