@@ -78,7 +78,7 @@ export class GamePlayEffects {
       this.svc.addPlayerQnAToGame(action.payload.game, action.payload.playerQnA).pipe(
         map((msg: any) => new gameplayactions.UpdateGameSuccess())
       )
-    );
+    ));
 
   @Effect()
   setGameOver$ = this.actions$
@@ -88,6 +88,6 @@ export class GamePlayEffects {
       this.svc.setGameOver(action.payload.game, action.payload.user).pipe(
         map((msg: any) => new gameplayactions.UpdateGameSuccess())
       )
-    );
+    ));
 
 }

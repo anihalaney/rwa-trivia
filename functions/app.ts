@@ -237,13 +237,13 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
 
   if (!gameId) {
     // gameId
-    res.status(403).send('game is not available');
+    res.status(400);
     return;
   }
 
   if (!operation) {
     // operation
-    res.status(403).send('operation is not added in request');
+    res.status(400);
     return;
   }
   // console.log('gameId', gameId);
@@ -251,6 +251,12 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
   const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined, admin.firestore());
 
   gameMechanics.getGameById(gameId).then((game) => {
+
+    if (game.playerIds.indexOf(req.user.uid) === -1) {
+      // operation
+      res.status(403).send('Unauthorized');
+      return;
+    }
 
     switch (operation) {
       case GameOperations.CALCULATE_SCORE:
@@ -264,14 +270,40 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
         // console.log('game', game);
         break;
       case GameOperations.GAME_OVER:
-        game.gameOver = true; break;
+        game.gameOver = req.body.gameOver;
+        game.winnerPlayerId = req.body.winnerPlayerId;
+        game.GameStatus = req.body.GameStatus;
+        break;
     }
     dbGame = game.getDbModel();
+
     gameMechanics.UpdateGameCollection(dbGame).then((id) => {
       res.send({});
     });
   })
 
+});
+
+app.get('/updateAllGames', authorizedOnly, (req, res, next) => {
+  admin.firestore().collection('/games/').get().then((snapshot) => {
+    snapshot.forEach((doc) => {
+      //  console.log(doc.id, '=>', doc.data());
+      const game = Game.getViewModel(doc.data());
+
+      game.playerIds.forEach((playerId) => {
+        game.calculateScore(playerId);
+        game.calculateRound(playerId);
+      });
+
+      const dbGame = game.getDbModel();
+      dbGame.id = doc.id;
+      admin.firestore().collection('games').doc(dbGame.id).set(dbGame).then((ref) => {
+        console.log('dbGame===>', dbGame);
+      });
+    });
+    res.send('loaded data');
+
+  });
 });
 
 app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {

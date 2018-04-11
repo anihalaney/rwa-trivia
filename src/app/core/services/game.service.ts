@@ -71,7 +71,13 @@ export class GameService {
 
 
   setGameOver(game: Game, user: User) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${game.gameId}`, { part: {}, operation: GameOperations.GAME_OVER });
+    return this.http.put(`${CONFIG.functionsUrl}/app/game/${game.gameId}`,
+      {
+        gameOver: game.gameOver,
+        winnerPlayerId: game.winnerPlayerId,
+        GameStatus: game.GameStatus,
+        operation: GameOperations.GAME_OVER
+      });
   }
 
   getGameResult(userId: String): Observable<Game[]> {

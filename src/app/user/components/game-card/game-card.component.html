@@ -34,17 +34,17 @@
       <div class="col-xs-6 clearfix" *ngIf="game.playerIds.length>1">
         <div class="yourimg floatright">
           <a href="#">
-            <img *ngIf='game.playerIds.length>0' [src]="getOtherUserProfileUrl(game)" />
+            <img *ngIf='game.playerIds.length>0' [src]="otherUserInfo.profilePictureUrl" />
           </a>
         </div>
         <div class="clear"></div>
-        <a href="#" class="dark">{{getOtherUserName(game)}}</a>
-        <div class="light">{{getOtherUserLocation(game)}}</div>
+        <a href="#" class="dark">{{otherUserInfo.displayName}}</a>
+        <div class="light">{{otherUserInfo.location}}</div>
         <hr>
         <div class="light">
-          <span *ngIf="!myTurn">Round {{getRound(game.playerIds[1])}}</span>
+          <span *ngIf="!myTurn">Round {{getRound(otherUserId)}}</span>
         </div>
-        <div class="dark">Score {{getScore(game.playerIds[1])}}</div>
+        <div class="dark">Score {{getScore(otherUserId)}}</div>
       </div>
     </ng-container>
   </div>

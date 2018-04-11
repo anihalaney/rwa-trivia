@@ -39,7 +39,10 @@ export class GameMechanics {
                 const totalGames = gameArr.length;
                 if (totalGames > 0) {
                     // console.log('pickRandomGame');
-                    return this.pickRandomGame(gameArr, totalGames).then((gameId) => { return gameId });
+                    console.log('pickRandomGame');
+                    const promise = this.pickRandomGame(gameArr, totalGames);
+                    console.log('pickRandomGame promise', promise);
+                    return promise.then((gameId) => { return gameId });
                 } else {
                     // console.log('joinGame-createGame');
                     return this.createGame().then((gameId) => { return gameId });
@@ -49,6 +52,7 @@ export class GameMechanics {
     }
 
     private pickRandomGame(queriedItems: Array<Game>, totalGames: number): Promise<string> {
+        //   return new Promise((resolve, reject) => {
         const randomGameNo = Math.floor(Math.random() * totalGames);
         const game = queriedItems[randomGameNo];
         if (game.playerIds[0] !== this.userId) {
@@ -63,8 +67,10 @@ export class GameMechanics {
         } else {
             totalGames--;
             queriedItems.splice(randomGameNo, 1);
-            this.pickRandomGame(queriedItems, totalGames);
+            return this.pickRandomGame(queriedItems, totalGames);
         }
+        //    });
+
     }
 
 
@@ -74,7 +80,7 @@ export class GameMechanics {
         const dbGame = game.getDbModel(); // object to be saved
         // console.log('this.db', JSON.stringify(this.db));
         return this.db.collection('games').add(dbGame).then(ref => {
-            // console.log('Added document with ID: ', ref.id);
+           // console.log('Added document with ID: ', ref.id);
             dbGame.id = ref.id;
             return this.UpdateGame(dbGame).then((gameId) => { return gameId });
         });
