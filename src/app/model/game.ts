@@ -139,7 +139,7 @@ export class Game {
 
   getDbModel(): any {
     let dbModel = {
-      'gameOptions': Object.assign({}, this.gameOptions),
+      'gameOptions': { ...this._gameOptions },
       'playerIds': this.playerIds,
       'gameOver': (this.gameOver) ? this.gameOver : false,
       'playerQnAs': this.playerQnAs,
@@ -166,7 +166,7 @@ export class Game {
     }
 
     for (const key of Object.keys(this.stats)) {
-      this.stats[key] = Object.assign({}, this.stats[key]);
+      this.stats[key] = { ...this.stats[key] };
     };
 
     dbModel['stats'] = this.stats;
