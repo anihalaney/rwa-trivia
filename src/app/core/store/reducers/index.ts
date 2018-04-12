@@ -1,6 +1,6 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 import { User, Category, Question, Game } from '../../../model';
-import { user, authInitialized } from './user.reducer';
+import { user, authInitialized, invitationToken } from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
@@ -24,6 +24,7 @@ export interface CoreState {
   loginRedirectUrl: string;
   questionSaveStatus: string;
   activeGames: Game[];
+  invitationToken: string;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -34,7 +35,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   questionOfTheDay: questionOfTheDay,
   questionSaveStatus: questionSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
-  activeGames: activeGames
+  activeGames: activeGames,
+  invitationToken: invitationToken
 };
 
 //Features

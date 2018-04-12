@@ -1,5 +1,9 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { userState } from '../../user/store';
+import { ActionWithPayload, UserActions } from ' ../../app/core/store/actions';
+import { Store } from '@ngrx/store';
+import { AppState, appState } from '../../store';
 
 @Component({
     selector: 'invitation-redirection',
@@ -8,14 +12,20 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class InvitationRedirectionComponent implements OnInit {
 
-    constructor(private activatedRoute: ActivatedRoute, private router: Router) {
-
+    constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
+        private userAction: UserActions) {
+        // this.store.select(userState).select(s => s.invitationToken).subscribe(status => {
+        //     if (status !== null) {
+        //         alert(JSON.stringify(status));
+        //     }
+        // });
     }
 
     ngOnInit() {
         // subscribe to router event
         this.activatedRoute.params.subscribe((params: Params) => {
             const token = params['token'];
+            this.store.dispatch(this.userAction.storeInvitationToken(token));
             setTimeout(() => {
                 this.router.navigate(['/dashboard']);
             }, 3000);

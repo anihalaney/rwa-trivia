@@ -1,7 +1,10 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
 import { User, Question } from '../../../model';
-import { userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions, questionSaveStatus } from './user.reducer';
+import {
+    userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions,
+    questionSaveStatus
+} from './user.reducer';
 
 export * from './user.reducer';
 

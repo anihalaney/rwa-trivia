@@ -33,3 +33,12 @@ export const getUserDictionary = (state: User[]) =>
     return result;
   }, {});
 
+export function invitationToken(state: any = 'NONE', action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case UserActions.STORE_INVITATION_TOKEN:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
