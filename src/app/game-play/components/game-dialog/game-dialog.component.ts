@@ -39,6 +39,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   categoryDictionary: { [key: number]: Category }
   categoryName: string;
   continueNext = false;
+  questionAnswered = false;
   gameOver = false;
   turnStatus = false;
   MAX_TIME_IN_SECONDS = 16;
@@ -65,8 +66,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
-        this.questionIndex = this.game.playerRounds.filter((p) => p.playerId === this.user.userId)[0].round;
-        this.correctAnswerCount = this.game.playerScores.filter((p) => p.playerId === this.user.userId)[0].score;
+        this.questionIndex = this.game.stats[this.user.userId].round;
+        this.correctAnswerCount = this.game.stats[this.user.userId].score;
         this.setTurnStatusFlag();
       }));
 
@@ -87,7 +88,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           },
             null,
             () => {
-              // console.log("Time Expired");
               //disable all buttons
               (!this.turnStatus) ?
                 this.afterAnswer() : '';
@@ -105,15 +105,15 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   setTurnStatusFlag() {
     const turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
       (this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
+    this.continueNext = (this.questionAnswered) ? true : false;
+    this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
     if (!turnFlag) {
       this.turnStatus = turnFlag;
       if (!this.currentQuestion) {
         this.getNextQuestion();
       }
-      this.showContinueBtn = true;
     } else {
-      this.showContinueBtn = false;
-      Observable.timer(5000).take(1).subscribe(t => {
+      Observable.timer(2000).take(1).subscribe(t => {
         this.turnStatus = turnFlag;
         this.store.dispatch(new gameplayactions.LoadGame(this.game));
         this.currentQuestion = undefined;
@@ -144,8 +144,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   continueClicked($event) {
-    this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+    this.questionAnswered = false;
+    this.showContinueBtn = false;
     this.continueNext = false;
+    this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
       if (this.correctAnswerCount >= 5) {
@@ -161,16 +163,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       this.getNextQuestion() : '';
   }
 
-  /*
-  viewQuestionClicked($event) 
-  {
-    if (this.continueNext)
-      this.continueNext = false;
-    if (this.gameOver)
-      this.gameOver = false;
-  }
-  */
-  gameOverContinueClicked() {    
+
+  gameOverContinueClicked() {
     this.game.winnerPlayerId = this.user.userId;
     this.gameOver = true;
     this.game.gameOver = true;
@@ -200,7 +194,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.game.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
       } else if (!playerQnA.answerCorrect) {
         this.game.nextTurnPlayerId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
-        this.showContinueBtn = false;
       } else {
         this.game.nextTurnPlayerId = this.user.userId;
       }
@@ -212,11 +205,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ "game": this.game, "playerQnA": playerQnA }));
 
     this.questionComponent.disableQuestions(correctAnswerId);
-
-    Observable.timer(500).take(1).subscribe(t => {
-      this.continueNext = true;
-    });
-
+    this.questionAnswered = true;
 
   }
 

@@ -9,14 +9,13 @@ export class PlayerQnA {
   answerCorrect?: boolean;
 }
 
-export class PlayerScore {
-  playerId: string;
+export class Stat {
   score: number;
-}
-
-export class PlayerRound {
-  playerId: string;
   round: number;
+  constructor() {
+    this.score = 0;
+    this.round = 0;
+  }
 }
 
 export class Game {
@@ -25,8 +24,7 @@ export class Game {
   private _playerIds: string[];
   public gameOver: boolean;
   public playerQnAs: PlayerQnA[];
-  public playerScores: PlayerScore[];
-  public playerRounds: PlayerRound[];
+  public stats: { [key: string]: Stat };
   public nextTurnPlayerId: string;
   public winnerPlayerId: string;
   public GameStatus: string;
@@ -34,8 +32,7 @@ export class Game {
   public turnAt: number;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
-    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number,
-    playerScores?: any, playerRounds?: any) {
+    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
@@ -77,59 +74,30 @@ export class Game {
     if (turnAt) {
       this.turnAt = turnAt;
     }
-    this.playerScores = [];
-    this.playerRounds = [];
 
+    this.stats = {};
   }
 
   addPlayer(playerUUId: string) {
     (this._playerIds.indexOf(playerUUId) === -1) ? this._playerIds.push(playerUUId) : '';
   }
 
-  setScore(playerScores: PlayerScore[]) {
+  setStat(gameStats: any) {
 
-    if (playerScores && playerScores.length > 0) {
-      let key: string;
-      for (key of Object.keys(playerScores)) {
-        const scoreObj = playerScores[key];
-        this.playerScores.push({
-          'playerId': scoreObj.playerId,
-          'score': scoreObj.score
-        });
+    if (gameStats) {
+      for (const key of Object.keys(gameStats)) {
+        const stat: Stat = gameStats[key];
+        this.stats[key] = stat;
       }
     } else {
-      this.generateDefaultScore();
+      this.generateDefaultStat();
     }
   }
 
-  generateDefaultScore() {
-    this.playerIds.forEach((playerId) => {
-      console.log('score playerId', playerId);
-      this.calculateScore(playerId);
-    });
-  }
-
-  setRound(playerRounds: PlayerRound[]) {
-
-    if (playerRounds && playerRounds.length > 0) {
-      let key: string;
-      for (key of Object.keys(playerRounds)) {
-        const roundObj = playerRounds[key];
-        this.playerRounds.push({
-          'playerId': roundObj.playerId,
-          'round': roundObj.round
-        });
-      }
-    } else {
-      this.generateDefaultRound();
-    }
-  }
-
-  generateDefaultRound() {
-
-    this.playerIds.forEach((playerId) => {
-      console.log('Round playerId', playerId);
-      this.calculateRound(playerId);
+  generateDefaultStat() {
+    this.playerIds.map((playerId) => {
+      const stat: Stat = new Stat()
+      this.stats[playerId] = stat;
     });
   }
 
@@ -152,26 +120,13 @@ export class Game {
     return playerQnA;
   }
 
-  calculateScore(playerId: string) {
-    const scoreIndex = this.playerScores.findIndex((score) => score.playerId === playerId);
-    const playerScore: PlayerScore = (scoreIndex > -1) ? this.playerScores[scoreIndex] : {
-      'playerId': playerId,
-      'score': 0
-    }
-    playerScore.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
-    (scoreIndex > -1) ? this.playerScores[scoreIndex] = playerScore : this.playerScores.push(playerScore);
+  calculateStat(playerId: string) {
+    const stat: Stat = new Stat();
+    stat.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
+    stat.round = this.playerQnAs.filter((p) => p.playerId === playerId).length;
+    this.stats[playerId] = stat;
   }
 
-
-  calculateRound(playerId: string) {
-    const roundIndex = this.playerRounds.findIndex((round) => round.playerId === playerId);
-    const playerRound: PlayerRound = (roundIndex > -1) ? this.playerRounds[roundIndex] : {
-      'playerId': playerId,
-      'round': 0
-    }
-    playerRound.round = this.playerQnAs.filter((p) => p.playerId === playerId).length;
-    (roundIndex > -1) ? this.playerRounds[roundIndex] = playerRound : this.playerRounds.push(playerRound);
-  }
 
   updatePlayerQnA(playerId: string, questionId: string,
     playerAnswerId: string, playerAnswerInSeconds: number, answerCorrect: boolean): PlayerQnA {
@@ -210,29 +165,28 @@ export class Game {
       dbModel['id'] = this.gameId;
     }
 
-    this.generateDefaultScore();
-    this.generateDefaultRound();
-    
+    for (const key of Object.keys(this.stats)) {
+      this.stats[key] = Object.assign({}, this.stats[key]);
+    };
 
-    dbModel['playerScores'] = this.playerScores;
-    dbModel['playerRounds'] = this.playerRounds;
+    dbModel['stats'] = this.stats;
 
     return dbModel;
   }
 
   static getViewModel(dbModel: any): Game {
 
-    let game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
+    const game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'], dbModel['playerScores'], dbModel['playerRounds']);
+      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }
-    game.setScore(dbModel['playerScores']);
-    game.setRound(dbModel['playerRounds']);
+    game.setStat(dbModel['stats']);
     // console.log(game);
     return game;
   }
+
 
 }

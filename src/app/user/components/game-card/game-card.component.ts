@@ -48,12 +48,5 @@ export class GameCardComponent implements OnInit, OnChanges {
     }
   }
 
-  getRound(playerId: string) {
-    return this.game.playerRounds.filter((p) => p.playerId === playerId)[0].round;
-  }
-
-  getScore(playerId: string) {
-    return this.game.playerScores.filter((p) => p.playerId === playerId)[0].score;
-  }
 
 }

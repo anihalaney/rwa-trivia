@@ -18,10 +18,8 @@ export class GameMechanics {
 
         if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent
             && Number(this.gameOptions.opponentType) === OpponentType.Random) {
-            // console.log('joinGame');
             return this.joinGame().then((gameId) => { return gameId });
         } else {
-            // console.log('createGame');
             return this.createGame().then((gameId) => { return gameId });
         }
 
@@ -38,13 +36,9 @@ export class GameMechanics {
                 });
                 const totalGames = gameArr.length;
                 if (totalGames > 0) {
-                    // console.log('pickRandomGame');
-                    console.log('pickRandomGame');
                     const promise = this.pickRandomGame(gameArr, totalGames);
-                    console.log('pickRandomGame promise', promise);
                     return promise.then((gameId) => { return gameId });
                 } else {
-                    // console.log('joinGame-createGame');
                     return this.createGame().then((gameId) => { return gameId });
                 }
             });
@@ -52,24 +46,23 @@ export class GameMechanics {
     }
 
     private pickRandomGame(queriedItems: Array<Game>, totalGames: number): Promise<string> {
-        //   return new Promise((resolve, reject) => {
+
         const randomGameNo = Math.floor(Math.random() * totalGames);
         const game = queriedItems[randomGameNo];
         if (game.playerIds[0] !== this.userId) {
             game.nextTurnPlayerId = this.userId;
             game.addPlayer(this.userId);
+            game.generateDefaultStat();
             const dbGame = game.getDbModel();
-            // console.log('game.gameId', game.gameId);
             return this.UpdateGame(dbGame).then((gameId) => { return gameId });
         } else if (totalGames === 1) {
-            // console.log('pickRandomGame-createGame');
             return this.createGame().then((gameId) => { return gameId });
         } else {
             totalGames--;
             queriedItems.splice(randomGameNo, 1);
             return this.pickRandomGame(queriedItems, totalGames);
         }
-        //    });
+
 
     }
 
@@ -77,10 +70,9 @@ export class GameMechanics {
     private createGame(): Promise<string> {
         const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, undefined, undefined,
             GameStatus.STARTED, new Date().getTime(), new Date().getTime());
+        game.generateDefaultStat();
         const dbGame = game.getDbModel(); // object to be saved
-        // console.log('this.db', JSON.stringify(this.db));
         return this.db.collection('games').add(dbGame).then(ref => {
-           // console.log('Added document with ID: ', ref.id);
             dbGame.id = ref.id;
             return this.UpdateGame(dbGame).then((gameId) => { return gameId });
         });
