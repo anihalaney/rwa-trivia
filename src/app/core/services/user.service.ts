@@ -5,8 +5,9 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
-import { User, Invitations } from '../../model';
+import { User, Invitations, Friends } from '../../model';
 import * as useractions from '../../user/store/actions';
+import { ObservableInput } from 'rxjs/Observable';
 
 
 
@@ -64,7 +65,7 @@ export class UserService {
         invitation.created_uid = obj.created_uid;
         invitation.status = obj.status;
 
-        obj.emails.forEach(element => {
+        obj.emails.map((element) => {
             invitation.email = element;
             const dbInvitation = Object.assign({}, invitation); // object to be saved
             const id = this.db.createId();
@@ -74,6 +75,35 @@ export class UserService {
             });
         });
 
+    }
+
+    checkInvitationToken(obj: any) {
+        return this.db.doc(`/invitations/${obj.token}`)
+            .snapshotChanges().take(1)
+            .map(invitation => {
+                if (invitation.payload.exists && invitation.payload.data().email === obj.email) {
+                    return this.db.doc(`/friends/${obj.userId}`)
+                        .snapshotChanges().take(1)
+                        .map(friend => {
+                            if (friend.payload.exists) {
+                            } else {
+                                const friends = new Friends();
+                                friends.myFriend.push(invitation.payload.data().created_uid);
+                                const dbUser = Object.assign({}, friends);
+                                this.db.doc(`/friends/${obj.userId}`).set(dbUser).then(ref => {
+                                });
+                            }
+
+                        })
+                } else {
+                    return null;
+                }
+            });
+    }
+
+    makeFriend(data: any): Observable<any> {
+
+        return null;
     }
 
 }

@@ -83,7 +83,7 @@ export class InviteMailFriendsComponent implements OnInit {
           this.errorMsg = 'Following email is not valid address!';
           this.showErrorMsg = true;
         } else {
-          this.validEmail.push(email);
+          this.validEmail.push(this.invitationForm.get('email').value);
         }
 
       }

@@ -14,11 +14,6 @@ export class InvitationRedirectionComponent implements OnInit {
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
         private userAction: UserActions) {
-        // this.store.select(userState).select(s => s.invitationToken).subscribe(status => {
-        //     if (status !== null) {
-        //         alert(JSON.stringify(status));
-        //     }
-        // });
     }
 
     ngOnInit() {
