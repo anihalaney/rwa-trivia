@@ -77,33 +77,42 @@ export class UserService {
 
     }
 
-    checkInvitationToken(obj: any) {
+    checkInvitationToken(obj: any): Observable<Invitations> {
         return this.db.doc(`/invitations/${obj.token}`)
-            .snapshotChanges().take(1)
+            .valueChanges().take(1)
             .map(invitation => {
-                if (invitation.payload.exists && invitation.payload.data().email === obj.email) {
-                    return this.db.doc(`/friends/${obj.userId}`)
-                        .snapshotChanges().take(1)
-                        .map(friend => {
-                            if (friend.payload.exists) {
-                            } else {
-                                const friends = new Friends();
-                                friends.myFriend.push(invitation.payload.data().created_uid);
-                                const dbUser = Object.assign({}, friends);
-                                this.db.doc(`/friends/${obj.userId}`).set(dbUser).then(ref => {
-                                });
-                            }
-
-                        })
-                } else {
-                    return null;
+                if (invitation['email'] === obj.email) {
+                    const invitations = new Invitations();
+                    invitations.created_uid = invitation['created_uid'];
+                    return invitations;
                 }
-            });
+                return null;
+
+            }).mergeMap(u => this.checkFiend(u, obj));
     }
 
-    makeFriend(data: any): Observable<any> {
+    checkFiend(invitation: Invitations, data: any): Observable<any> {
+        if (invitation !== null) {
+            return this.db.doc(`/friends/${data.userId}`)
+                .snapshotChanges().take(1)
+                .map(friend => friend).mergeMap(u => this.makeFiend(u, invitation, data));
+        }
 
-        return null;
     }
+
+    makeFiend(friend: any, invitation: Invitations, data: any): Observable<any> {
+        if (friend.payload.exists && friend.payload.data()) {
+            this.db.doc(`/friends/${data.userId}`).update(
+                { myFriend: friend.payload.data().makeFriend.push(invitation.created_uid) });
+        } else {
+            const friends = new Friends();
+            friends.myFriend = [];
+            friends.myFriend.push(invitation.created_uid);
+            const dbUser = Object.assign({}, friends);
+            this.db.doc(`/friends/${data.userId}`).set(dbUser);
+        }
+        return Observable.of(null);
+    }
+
 
 }
