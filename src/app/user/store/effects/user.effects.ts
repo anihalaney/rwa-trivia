@@ -83,6 +83,16 @@ export class UserEffects {
         })
         );
 
+    // Make friend
+    @Effect()
+    makeFriend$ = this.actions$
+        .ofType(UserActionTypes.MAKE_FRIEND)
+        .pipe(
+        switchMap((action: userActions.MakeFriend) =>
+            this.userService.checkInvitationToken(action.payload)
+        )
+        );
+
     constructor(
         private actions$: Actions,
         private userService: UserService,

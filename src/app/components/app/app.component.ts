@@ -11,6 +11,7 @@ import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
 import { Location } from '@angular/common';
 import { userState } from '../../user/store';
+import * as userActions from '../../user/store/actions';
 
 @Component({
   selector: 'app-root',
@@ -53,6 +54,7 @@ export class AppComponent implements OnInit, OnDestroy {
         let url: string;
         this.store.select(appState.coreState).select(s => s.invitationToken).subscribe(status => {
           if (status !== 'NONE') {
+            this.store.dispatch(new userActions.MakeFriend({ token: status, email: this.user.email, userId: this.user.userId }))
           }
         });
         this.store.select(appState.coreState).take(1).subscribe(s => url = s.loginRedirectUrl);
