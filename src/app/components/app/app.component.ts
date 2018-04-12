@@ -10,6 +10,7 @@ import { Utils } from '../../core/services';
 import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
 import { Location } from '@angular/common';
+import { userState } from '../../user/store';
 
 @Component({
   selector: 'app-root',
@@ -50,9 +51,15 @@ export class AppComponent implements OnInit, OnDestroy {
       this.user = user
       if (user) {
         let url: string;
+        this.store.select(appState.coreState).select(s => s.invitationToken).subscribe(status => {
+          if (status !== 'NONE') {
+          }
+        });
         this.store.select(appState.coreState).take(1).subscribe(s => url = s.loginRedirectUrl);
-        if (url)
+        if (url) {
           this.router.navigate([url]);
+        }
+
       } else {
         // if user logs out then redirect to home page       
         this.router.navigate(['/']);

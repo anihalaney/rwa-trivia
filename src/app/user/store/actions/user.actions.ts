@@ -15,7 +15,7 @@ export enum UserActionTypes {
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
     UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
     ADD_USER_INVITATION = '[User] AddUserInvitation',
-    ADD_USER_INVITATION_SUCCESS = '[User] AddUserInvitationSuccess'
+    ADD_USER_INVITATION_SUCCESS = '[User] AddUserInvitationSuccess',
 }
 
 // Save user profile
@@ -78,6 +78,8 @@ export class AddUserInvitationSuccess implements Action {
     readonly type = UserActionTypes.ADD_USER_INVITATION_SUCCESS;
     payload = null;
 }
+
+
 
 
 
