@@ -265,9 +265,8 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
         game.GameStatus = req.body.GameStatus;
         game.turnAt = req.body.turnAt;
         game.nextTurnPlayerId = req.body.nextTurnPlayerId;
-        game.calculateScore(playerQnAs.playerId);
-        game.calculateRound(playerQnAs.playerId);
-        // console.log('game', game);
+        game.calculateStat(playerQnAs.playerId);
+
         break;
       case GameOperations.GAME_OVER:
         game.gameOver = req.body.gameOver;
@@ -284,21 +283,21 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
 
 });
 
-app.get('/updateAllGames', authorizedOnly, (req, res, next) => {
+app.get('/updateAllGames', adminOnly, (req, res, next) => {
   admin.firestore().collection('/games/').get().then((snapshot) => {
     snapshot.forEach((doc) => {
-      //  console.log(doc.id, '=>', doc.data());
+
       const game = Game.getViewModel(doc.data());
 
       game.playerIds.forEach((playerId) => {
-        game.calculateScore(playerId);
-        game.calculateRound(playerId);
+        game.calculateStat(playerId);
       });
 
       const dbGame = game.getDbModel();
       dbGame.id = doc.id;
+
       admin.firestore().collection('games').doc(dbGame.id).set(dbGame).then((ref) => {
-        console.log('dbGame===>', dbGame);
+        // console.log('dbGame===>', dbGame);
       });
     });
     res.send('loaded data');
