@@ -60,7 +60,7 @@ export class UserService {
         this.db.doc(`/users/${userId}`).update({ isSubscribed: true });
     }
 
-    saveUserInvitations(obj: any) {
+    saveUserInvitations(obj: any): Observable<boolean> {
         const invitation = new Invitations();
         invitation.created_uid = obj.created_uid;
         invitation.status = obj.status;
@@ -70,10 +70,9 @@ export class UserService {
             const dbInvitation = Object.assign({}, invitation); // object to be saved
             const id = this.db.createId();
             dbInvitation.id = id;
-            this.db.doc('/invitations/' + dbInvitation.id).set(dbInvitation).then(ref => {
-                this.store.dispatch(new useractions.AddUserInvitationSuccess());
-            });
+            this.db.doc(`/invitations/${dbInvitation.id}`).set(dbInvitation);
         });
+        return Observable.of(true);
     }
 
     checkInvitationToken(obj: any): Observable<string> {

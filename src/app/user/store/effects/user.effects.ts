@@ -78,10 +78,11 @@ export class UserEffects {
     saveInvitation$ = this.actions$
         .ofType(UserActionTypes.ADD_USER_INVITATION)
         .pipe(
-        switchMap((action: userActions.AddUserInvitation) => {
-            this.userService.saveUserInvitations(action.payload);
-            return empty();
-        })
+        switchMap((action: userActions.AddUserInvitation) =>
+            this.userService.saveUserInvitations(action.payload).pipe(
+                map(() => new userActions.AddUserInvitationSuccess())
+            )
+        )
         );
 
     // Make friend
