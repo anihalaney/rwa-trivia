@@ -1,4 +1,11 @@
 export enum schedulerConstants {
-    cronExpression = '* */1 * * *', // every 1 hour
-    gamePlayDuration = 115200000   // 32 hours
+    cronExpression = '*/1 * * * *', // every 1 hour
+    extensionName = '.cloudfunctions.net',
+    domainZone = 'us-central1',
+    port = 443,
+    devFunctionsAppName = 'rwa-trivia-dev-e57fc',
+    prodFunctionsAppName = 'rwa-trivia',
+    apiPath = '/app/game/scheduler/check',
+    prod = 'prod',
+    authToken = '1234567'
 }
