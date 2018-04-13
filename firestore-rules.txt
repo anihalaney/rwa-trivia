@@ -71,6 +71,24 @@ service cloud.firestore {
          allow create: if request.resource.data.size() < 3 && request.resource.data.keys().hasAny(['email', 'userId']);
          allow get: if resource.data.email.lower() == email.lower() || resource == null;         
       }  
+
+      match /invitations {
+      	match /{document=**} {
+         allow create: if isUserAuthenticated(request.resource.data.created_uid);
+         }
+        match /{token} {
+        	allow read: if resource.data.id == token;   
+    		}      
+    }
+    
+     match /friends {
+      	match /{document=**} {
+         allow create,update:if request.resource.data.size() == 2 && request.resource.data.keys().hasAny(['created_uid', 'myFriend']);
+         }
+        match /{created_uid} {
+        	allow read: if resource.data.created_uid == created_uid || resource == null;   
+    		}      
+    }
     
   }
 }
