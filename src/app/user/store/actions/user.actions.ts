@@ -17,6 +17,7 @@ export enum UserActionTypes {
     ADD_USER_INVITATION = '[User] AddUserInvitation',
     ADD_USER_INVITATION_SUCCESS = '[User] AddUserInvitationSuccess',
     MAKE_FRIEND = '[User] MakeFriend',
+    MAKE_FRIEND_SUCCESS = '[User] MakeFriendSuccess',
 }
 
 // Save user profile
@@ -86,6 +87,12 @@ export class MakeFriend implements Action {
     constructor(public payload: any) { }
 }
 
+// Save user invitations success
+export class MakeFriendSuccess implements Action {
+    readonly type = UserActionTypes.MAKE_FRIEND_SUCCESS;
+    payload = null;
+}
+
 
 
 
@@ -102,4 +109,5 @@ export type UserActions
     | UpdateUserSuccess
     | AddUserInvitation
     | AddUserInvitationSuccess
+    | MakeFriendSuccess
 

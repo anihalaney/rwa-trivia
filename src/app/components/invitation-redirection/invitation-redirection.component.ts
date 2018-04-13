@@ -21,10 +21,7 @@ export class InvitationRedirectionComponent implements OnInit {
         this.activatedRoute.params.subscribe((params: Params) => {
             const token = params['token'];
             this.store.dispatch(this.userAction.storeInvitationToken(token));
-            setTimeout(() => {
-                this.router.navigate(['/dashboard']);
-            }, 3000);
-
+            this.router.navigate(['/dashboard']);
         });
     }
 
