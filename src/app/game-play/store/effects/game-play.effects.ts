@@ -3,7 +3,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { switchMap, map, catchError, filter } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
-
+import { Observable } from 'rxjs/Rx';
 import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from '../../../model';
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
@@ -74,20 +74,20 @@ export class GamePlayEffects {
   addPlayerQnA$ = this.actions$
     .ofType(GamePlayActionTypes.ADD_PLAYER_QNA)
     .pipe(
-    switchMap((action: gameplayactions.AddPlayerQnA) => {
-      this.svc.addPlayerQnAToGame(action.payload.game, action.payload.playerQnA);
-      return empty();
-    })
-    );
+    switchMap((action: gameplayactions.AddPlayerQnA) =>
+      this.svc.addPlayerQnAToGame(action.payload.game, action.payload.playerQnA).pipe(
+        map((msg: any) => new gameplayactions.UpdateGameSuccess())
+      )
+    ));
 
   @Effect()
   setGameOver$ = this.actions$
     .ofType(GamePlayActionTypes.SET_GAME_OVER)
     .pipe(
-    switchMap((action: gameplayactions.SetGameOver) => {
-      this.svc.setGameOver(action.payload.game, action.payload.user);
-      return empty();
-    })
-    );
+    switchMap((action: gameplayactions.SetGameOver) =>
+      this.svc.setGameOver(action.payload.game, action.payload.user).pipe(
+        map((msg: any) => new gameplayactions.UpdateGameSuccess())
+      )
+    ));
 
 }
