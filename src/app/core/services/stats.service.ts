@@ -11,7 +11,7 @@ export class StatsService {
 
     getScoreInfo(categoryList: any): any {
 
-        //Get game with gameover=true and contains winnerId
+        // Get game with gameover=true and contains winnerId
         return this.db.collection('/games', ref => ref.where('gameOver', '==', true))
             .valueChanges()
             .map(gs => gs.map(g => {
@@ -20,15 +20,15 @@ export class StatsService {
                 }
 
 
-            })).map(games => {  //Create categoty array and bing each game category with it
+            })).map(games => {  // Create category array and bring each game category with it
                 const gameList = [];
-                Object.keys(categoryList).forEach(function (key) {
+                Object.keys(categoryList).map((key) => {
                     gameList[key] = [];
                 });
 
-                games.forEach(function (game) {
+                games.map((game) => {
                     if (game !== undefined) {
-                        game.gameOptions.categoryIds.forEach(function (catId) {
+                        game.gameOptions.categoryIds.forEach((catId) => {
                             gameList[catId].push(game);
                         });
                     }
@@ -37,12 +37,12 @@ export class StatsService {
 
                 return gameList;
 
-            }).map(gameList => { //Combine category with user and its gameid
+            }).map(gameList => { // Combine category with user and its gameid
 
                 const finalResult = {};
-                Object.keys(gameList).forEach(function (key) {
+                Object.keys(gameList).map((key) => {
                     const winCount = {};
-                    gameList[key].forEach(element => {
+                    gameList[key].map(element => {
                         if (winCount[element.winnerPlayerId] === undefined) {
                             winCount[element.winnerPlayerId] = new Array(element._gameId);
                         } else {
