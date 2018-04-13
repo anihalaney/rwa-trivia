@@ -16,6 +16,7 @@ export enum GamePlayActionTypes {
   ADD_PLAYER_QNA_SUCCESS = '[GamePlay] AddPlayerQnASuccess',
   SET_GAME_OVER = '[GamePlay] SetGameOver',
   RESET_CURRENT_QUESTION = '[GamePlay] ResetCurrentQuestion',
+  UPDATE_GAME_SUCCESS = '[GamePlay] UpdateGameSuccess',
 }
 
 export class ResetNewGame implements Action {
@@ -79,6 +80,12 @@ export class ResetCurrentQuestion implements Action {
   payload = null;
 }
 
+export class UpdateGameSuccess implements Action {
+  readonly type = GamePlayActionTypes.UPDATE_GAME_SUCCESS;
+  payload = null;
+}
+
+
 export type GamePlayActions
   = ResetNewGame
   | CreateNewGame
@@ -90,4 +97,5 @@ export type GamePlayActions
   | AddPlayerQnA
   | AddPlayerQnASuccess
   | SetGameOver
-  | ResetCurrentQuestion;
+  | ResetCurrentQuestion
+  | UpdateGameSuccess;

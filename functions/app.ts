@@ -1,10 +1,9 @@
-import { Game, Question, Category, SearchCriteria } from '../src/app/model';
+import { Game, Question, Category, SearchCriteria, PlayerQnA, GameOperations } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
-
-
+import { UserCollection } from './user-collection';
 
 
 const functions = require('firebase-functions');
@@ -230,6 +229,82 @@ app.post('/createGame', authorizedOnly, (req, res) => {
 
 });
 
+
+app.put('/game/:gameId', authorizedOnly, (req, res) => {
+  const gameId = req.params.gameId;
+  let dbGame = '';
+  const operation = req.body.operation;
+
+  if (!gameId) {
+    // gameId
+    res.status(400);
+    return;
+  }
+
+  if (!operation) {
+    // operation
+    res.status(400);
+    return;
+  }
+  // console.log('gameId', gameId);
+  // console.log('operation', operation);
+  const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined, admin.firestore());
+
+  gameMechanics.getGameById(gameId).then((game) => {
+
+    if (game.playerIds.indexOf(req.user.uid) === -1) {
+      // operation
+      res.status(403).send('Unauthorized');
+      return;
+    }
+
+    switch (operation) {
+      case GameOperations.CALCULATE_SCORE:
+        const playerQnAs: PlayerQnA = req.body.playerQnA;
+        game.playerQnAs.push(playerQnAs);
+        game.GameStatus = req.body.GameStatus;
+        game.turnAt = req.body.turnAt;
+        game.nextTurnPlayerId = req.body.nextTurnPlayerId;
+        game.calculateStat(playerQnAs.playerId);
+
+        break;
+      case GameOperations.GAME_OVER:
+        game.gameOver = req.body.gameOver;
+        game.winnerPlayerId = req.body.winnerPlayerId;
+        game.GameStatus = req.body.GameStatus;
+        break;
+    }
+    dbGame = game.getDbModel();
+
+    gameMechanics.UpdateGameCollection(dbGame).then((id) => {
+      res.send({});
+    });
+  })
+
+});
+
+app.get('/updateAllGames', adminOnly, (req, res, next) => {
+  admin.firestore().collection('/games/').get().then((snapshot) => {
+    snapshot.forEach((doc) => {
+
+      const game = Game.getViewModel(doc.data());
+
+      game.playerIds.forEach((playerId) => {
+        game.calculateStat(playerId);
+      });
+
+      const dbGame = game.getDbModel();
+      dbGame.id = doc.id;
+
+      admin.firestore().collection('games').doc(dbGame.id).set(dbGame).then((ref) => {
+        // console.log('dbGame===>', dbGame);
+      });
+    });
+    res.send('loaded data');
+
+  });
+});
+
 app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
 
   console.log(req.params.collection);
@@ -380,6 +455,29 @@ app.get('/testES', adminOnly, (req, res) => {
 });
 // END - TEST FUNCTIONS
 ///////////////////////
+
+
+
+app.get('/user/:userId', authorizedOnly, (req, res) => {
+  // console.log('body---->', req.body);
+  const userId = req.params.userId;
+
+
+  if (!userId) {
+    // Game Option is not added
+    res.status(403).send('userId is not available');
+    return;
+  }
+
+  const userCollection: UserCollection = new UserCollection(admin);
+  userCollection.getUserById(userId).then((userInfo) => {
+    console.log('userInfo', userInfo);
+    res.send(userInfo);
+  });
+});
+
+
+
 
 
 

@@ -12,17 +12,18 @@ import { userState } from '../../store';
 })
 export class GameCardComponent implements OnInit, OnChanges {
   @Input() game: Game;
+  @Input() userDict: { [key: string]: User };
   user$: Observable<User>;
   correctAnswerCount: number;
   questionIndex: number;
   user: User;
   myTurn: boolean;
-
+  otherUserId: string;
+  otherUserInfo: User
 
   constructor(private store: Store<AppState>) {
 
     this.user$ = this.store.select(appState.coreState).select(s => s.user);
-
     this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
@@ -34,13 +35,17 @@ export class GameCardComponent implements OnInit, OnChanges {
     this.store.select(appState.coreState).take(1).subscribe(s => {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
-    }); //logged in user
+    }); // logged in user
   }
 
   ngOnChanges() {
     this.questionIndex = this.game.playerQnAs.length;
     this.correctAnswerCount = this.game.playerQnAs.filter((p) => p.answerCorrect).length;
+    if (this.game) {
+      this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
+      this.otherUserInfo = this.userDict[this.otherUserId];
+    }
   }
 
-  
+
 }
