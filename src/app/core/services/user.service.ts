@@ -94,7 +94,13 @@ export class UserService {
                     return Observable.of(null);
                 }
             })
-            .mergeMap(invitationUserId => this.checkMyFriend(obj.userId, invitationUserId));
+            .mergeMap(invitationUserId => {
+                if (invitationUserId != null) {
+                    return this.checkMyFriend(obj.userId, invitationUserId)
+                } else {
+                    return Observable.of(null);
+                }
+            });
 
 
     }
