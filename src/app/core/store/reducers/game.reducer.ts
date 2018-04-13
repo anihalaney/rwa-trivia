@@ -1,10 +1,10 @@
 import { Observable } from 'rxjs/Observable';
-import {Action} from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
 import { ActionWithPayload, GameActions, UserActions } from '../actions';
 import { Game } from '../../../model';
 
-export function activeGames (state: any = [], action: ActionWithPayload<Game[]>): Game[] {
+export function activeGames(state: any = [], action: ActionWithPayload<Game[]>): Game[] {
   switch (action.type) {
     case GameActions.GET_ACTIVE_GAMES_SUCCESS:
       return action.payload;

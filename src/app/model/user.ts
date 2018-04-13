@@ -23,7 +23,7 @@ export class User {
   isSubscribed: boolean;
   profilePictureUrl?: string;
 
-  constructor(authState: firebase.User) {
+  constructor(authState?: firebase.User) {
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;

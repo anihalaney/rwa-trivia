@@ -2,7 +2,7 @@ import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import { UserActions } from '../../../core/store';
 import { Game, Question } from '../../../model';
 
-export function currentGame (state: any = null, action: GamePlayActions): Game {
+export function currentGame(state: any = null, action: GamePlayActions): Game {
   switch (action.type) {
     case GamePlayActionTypes.LOAD_SUCCESS:
       return action.payload;
@@ -14,7 +14,7 @@ export function currentGame (state: any = null, action: GamePlayActions): Game {
   }
 };
 
-export function currentGameQuestion (state: any = null, action: GamePlayActions): Question {
+export function currentGameQuestion(state: any = null, action: GamePlayActions): Question {
   switch (action.type) {
     case GamePlayActionTypes.GET_NEXT_QUESTION_SUCCESS:
       return action.payload;
@@ -27,7 +27,7 @@ export function currentGameQuestion (state: any = null, action: GamePlayActions)
   }
 };
 
-export function newGameId (state: any = "", action: GamePlayActions): string {  
+export function newGameId(state: any = "", action: GamePlayActions): string {
   switch (action.type) {
     case GamePlayActionTypes.CREATE_NEW_SUCCESS:
       return action.payload;
@@ -39,3 +39,13 @@ export function newGameId (state: any = "", action: GamePlayActions): string {
       return state;
   }
 };
+
+export function updateGame(state: any = null, action: GamePlayActions): Game {
+  switch (action.type) {
+    case GamePlayActionTypes.UPDATE_GAME_SUCCESS:
+      return null;
+    default:
+      return null;
+  }
+};
+

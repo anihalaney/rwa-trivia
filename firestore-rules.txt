@@ -58,8 +58,8 @@ service cloud.firestore {
     
     match /games {
       match /{document=**} {
-        allow read, update: if isUserAuthenticated(resource.data.playerId_0) || isUserAuthenticated(resource.data.playerId_1);
-        allow create: if isUserAuthenticated(request.resource.data.playerId_0);
+        allow read: if isUserAuthenticated(resource.data.playerId_0) || isUserAuthenticated(resource.data.playerId_1);
+        
       }
     }
     
