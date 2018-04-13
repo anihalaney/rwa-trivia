@@ -74,10 +74,9 @@ export class UserService {
                 this.store.dispatch(new useractions.AddUserInvitationSuccess());
             });
         });
-
     }
 
-    checkInvitationToken(obj: any): Observable<Invitations> {
+    checkInvitationToken(obj: any): Observable<string> {
         return this.db.doc(`/invitations/${obj.token}`)
             .valueChanges().take(1)
             .map(invitation => {
@@ -88,30 +87,45 @@ export class UserService {
                 }
                 return null;
 
-            }).mergeMap(u => this.checkFiend(u, obj));
+            }).mergeMap(invitation => {
+                if (invitation !== null) {
+                    return this.checkMyFriend(invitation.created_uid, obj.userId);
+                } else {
+                    return Observable.of(null);
+                }
+            })
+            .mergeMap(invitationUserId => this.checkMyFriend(obj.userId, invitationUserId));
+
+
     }
 
-    checkFiend(invitation: Invitations, data: any): Observable<any> {
-        if (invitation !== null) {
-            return this.db.doc(`/friends/${data.userId}`)
-                .snapshotChanges().take(1)
-                .map(friend => friend).mergeMap(u => this.makeFiend(u, invitation, data));
-        }
+    checkMyFriend(invitedUserId: string, userId: string): Observable<string> {
+        return this.db.doc(`/friends/${userId}`)
+            .snapshotChanges().take(1)
+            .map(friend => friend).mergeMap(u => this.makeMyFriend(u, invitedUserId, userId));
+
 
     }
 
-    makeFiend(friend: any, invitation: Invitations, data: any): Observable<any> {
+    makeMyFriend(friend: any, invitationUserId: string, userId: string): Observable<string> {
         if (friend.payload.exists && friend.payload.data()) {
-            this.db.doc(`/friends/${data.userId}`).update(
-                { myFriend: friend.payload.data().makeFriend.push(invitation.created_uid) });
+            const array = friend.payload.data().myFriend;
+            if (array.indexOf(invitationUserId) === -1) {
+                array.push(invitationUserId);
+                this.db.doc(`/friends/${userId}`).update({ myFriend: array });
+            }
+            return Observable.of(invitationUserId);
+
         } else {
             const friends = new Friends();
             friends.myFriend = [];
-            friends.myFriend.push(invitation.created_uid);
+            friends.myFriend.push(invitationUserId);
+            friends.created_uid = userId;
             const dbUser = Object.assign({}, friends);
-            this.db.doc(`/friends/${data.userId}`).set(dbUser);
+            this.db.doc(`/friends/${userId}`).set(dbUser);
+            return Observable.of(invitationUserId);
         }
-        return Observable.of(null);
+
     }
 
 

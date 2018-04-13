@@ -4,10 +4,11 @@ import { Action } from '@ngrx/store';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { User, Question, RouterStateUrl } from '../../../model';
-import { UserActions, UserActionTypes } from '../actions';
+import { User, Question, RouterStateUrl, Friends } from '../../../model';
+import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
 import { UserService, QuestionService } from '../../../core/services';
+import { UserActions } from '../../../../app/core/store/actions';
 
 @Injectable()
 export class UserEffects {
@@ -89,13 +90,16 @@ export class UserEffects {
         .ofType(UserActionTypes.MAKE_FRIEND)
         .pipe(
         switchMap((action: userActions.MakeFriend) =>
-            this.userService.checkInvitationToken(action.payload)
+            this.userService.checkInvitationToken(action.payload).pipe(
+                map((friend: string) => this.userAction.storeInvitationToken(''))
+            ).map(() => new userActions.MakeFriendSuccess())
         )
         );
 
     constructor(
         private actions$: Actions,
         private userService: UserService,
-        private questionService: QuestionService
+        private questionService: QuestionService,
+        private userAction: UserActions
     ) { }
 }
