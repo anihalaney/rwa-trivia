@@ -31,4 +31,20 @@ export class UserActions {
     };
   }
 
+  static LOAD_OTHER_USER_PROFILE = 'LOAD_OTHER_USER_PROFILE';
+  loadOtherUserProfile(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_OTHER_USER_PROFILE,
+      payload: userId
+    };
+  }
+
+
+  static LOAD_OTHER_USER_PROFILE_SUCCESS = 'LOAD_OTHER_USER_PROFILE_SUCCESS';
+  loadOtherUserProfileSuccess(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.LOAD_OTHER_USER_PROFILE_SUCCESS,
+      payload: user
+    };
+  }
 }
