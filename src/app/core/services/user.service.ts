@@ -64,15 +64,15 @@ export class UserService {
         const invitation = new Invitations();
         invitation.created_uid = obj.created_uid;
         invitation.status = obj.status;
-        const batch = this.db.firestore.batch();
+        const email = this.db.firestore.batch();
         obj.emails.map((element) => {
             invitation.email = element;
             const dbInvitation = Object.assign({}, invitation); // object to be saved
             const id = this.db.createId();
             dbInvitation.id = id;
-            batch.set(this.db.firestore.collection('invitations').doc(dbInvitation.id), dbInvitation);
+            email.set(this.db.firestore.collection('invitations').doc(dbInvitation.id), dbInvitation);
         });
-        batch.commit();
+        email.commit();
         return Observable.of(true);
     }
 
