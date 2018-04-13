@@ -52,7 +52,7 @@ export class GameService {
   }
 
   getNextQuestion(game: Game): Observable<Question> {
-    let url: string = CONFIG.functionsUrl + "/app/getNextQuestion/";
+    const url: string = CONFIG.functionsUrl + '/app/getNextQuestion/';
     return this.http.get<Question>(url + game.gameId);
   }
 
