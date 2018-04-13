@@ -1,6 +1,6 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 import { User, Category, Question, Game } from '../../../model';
-import { user, authInitialized, userInfo, userDict } from './user.reducer';
+import { user, authInitialized, userDict } from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
@@ -18,7 +18,6 @@ export * from './game.reducer';
 
 export interface CoreState {
   user: User;
-  userInfo: User;
   userDict: { [key: string]: User };
   authInitialized: boolean;
   categories: Category[];
@@ -31,7 +30,6 @@ export interface CoreState {
 
 export const reducer: ActionReducerMap<CoreState> = {
   user: user,
-  userInfo: userInfo,
   userDict: userDict,
   authInitialized: authInitialized,
   categories: categories,
@@ -42,5 +40,5 @@ export const reducer: ActionReducerMap<CoreState> = {
   activeGames: activeGames
 };
 
-//Features
+// Features
 export const coreState = createFeatureSelector<CoreState>('core');

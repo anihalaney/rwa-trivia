@@ -14,19 +14,14 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
   }
 }
 
-export function userInfo(state: any = null, action: ActionWithPayload<User>): User {
+export function userDict(state: {[key: string]: User } = {}, action: ActionWithPayload<User>): { [key: string]: User } {
   switch (action.type) {
-    case UserActions.LOAD_USER_INFO_SUCCESS:
-      return action.payload;
-    default:
-      return null;
-  }
-}
-
-export function userDict(state: any = null, action: ActionWithPayload<{ [key: string]: User }>): { [key: string]: User } {
-  switch (action.type) {
-    case UserActions.LOAD_USER_INFO_DICT_SUCCESS:
-      return action.payload;
+    case UserActions.LOAD_OTHER_USER_PROFILE_SUCCESS:
+          const users = {...state };
+          if (action.payload) {
+            users[action.payload.userId] = { ...action.payload };
+          }
+          return users;
     default:
       return state;
   }

@@ -15,11 +15,12 @@ import { User, Category, Question, SearchResults, Game } from '../../model';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   user: User;
-  sub: Subscription;
+  subs: Subscription[] = [];
   users: User[];
   questionOfTheDay$: Observable<Question>;
   activeGames$: Observable<Game[]>;
-  gameInvites: number[];  //change this to game invites
+  userDict$: Observable<{ [key: string]: User }>;
+  gameInvites: number[];  // change this to game invites
   gameSliceStartIndex: number;
   gameSliceLastIndex: number;
   now: Date;
@@ -28,9 +29,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   activeGames: Game[];
   showGames: boolean;
   showNewsCard = true;
-  userDict: { [key: string]: User };
-
-
+  userDict: { [key: string]: User } = {};
 
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
@@ -38,42 +37,38 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private userActions: UserActions) {
     this.questionOfTheDay$ = store.select(appState.coreState).select(s => s.questionOfTheDay);
     this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
+    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
     this.gameInvites = [1, 2, 3];
-    this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
-
+    this.subs.push(store.select(appState.coreState).select(s => s.user).subscribe(user => {
       this.user = user
       if (user) {
-
         this.user = user;
         if (this.user.isSubscribed) {
           this.showNewsCard = false;
         }
-        //Load active Games
+        // Load active Games
         this.store.dispatch(this.gameActions.getActiveGames(user));
       } else {
         this.showNewsCard = true;
       }
-    });
-    this.activeGames$.subscribe(games => {
+    }));
+
+    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+
+    this.subs.push(this.activeGames$.subscribe(games => {
       if (games.length > 0) {
         this.activeGames = games;
-        store.select(appState.coreState).select(s => s.userDict).subscribe(userDict => {
-          this.userDict = (userDict) ? userDict : {};
-          const otherUsers = [];
-          this.activeGames.forEach((game) => {
+        this.activeGames.map(game => {
             const playerIds = game.playerIds;
-            if (playerIds.length > 1) {
-              playerIds.forEach((playerId) => {
-                (playerId !== this.user.userId && otherUsers.indexOf(playerId) === -1) ? otherUsers.push(playerId) : '';
+            playerIds.map(playerId => {
+                if (playerId !== this.user.userId) {
+                  this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
+                }
               });
-            }
           });
-          this.loadUserInfo(otherUsers, 0);
-        });
-
-      }
-    });
-
+          this.showGames = true;
+        }
+      }));
 
     this.gameSliceStartIndex = 0;
     this.gameSliceLastIndex = 8;
@@ -95,40 +90,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadUserInfo(userIds: string[], index): void {
-    const userId = userIds[index]
-    if (!this.userDict[userId]) {
-      this.store.dispatch(this.userActions.loadUserInfo(userId));
-      this.store.select(appState.coreState).select(s => s.userInfo)
-        .subscribe(userInfo => {
-          if (userInfo && !this.userDict[userInfo.userId]) {
-            this.userDict[userInfo.userId] = userInfo;
-            index++;
-            if (userIds.length > index) {
-              this.loadUserInfo(userIds, index);
-            } else {
-              this.store.dispatch(this.userActions.loadUserInfoDictSuccess(this.userDict));
-              this.showGames = true;
-            }
-          }
-        });
-    } else {
-      index++;
-      if (userIds.length > index) {
-        this.loadUserInfo(userIds, index);
-      } else {
-        this.store.dispatch(this.userActions.loadUserInfoDictSuccess(this.userDict));
-        this.showGames = true;
-      }
-    }
-  }
-
   displayMoreGames(): void {
     this.gameSliceLastIndex = (this.activeGames.length > (this.gameSliceLastIndex + 8)) ?
       this.gameSliceLastIndex + 8 : this.activeGames.length;
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub]);
+    Utils.unsubscribe(this.subs);
   }
 }

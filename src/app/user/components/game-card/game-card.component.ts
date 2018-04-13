@@ -24,7 +24,6 @@ export class GameCardComponent implements OnInit, OnChanges {
   constructor(private store: Store<AppState>) {
 
     this.user$ = this.store.select(appState.coreState).select(s => s.user);
-
     this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
@@ -36,7 +35,7 @@ export class GameCardComponent implements OnInit, OnChanges {
     this.store.select(appState.coreState).take(1).subscribe(s => {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
-    }); //logged in user
+    }); // logged in user
   }
 
   ngOnChanges() {

@@ -20,11 +20,12 @@ export class UserEffects {
 
     @Effect()
     // handle location update
-    loadUserInfo$ = this.actions$
-        .ofType(UserActions.LOAD_USER_INFO)
+    loadOtherUserProfile$ = this.actions$
+        .ofType(UserActions.LOAD_OTHER_USER_PROFILE)
         .map((action: ActionWithPayload<string>) => action.payload)
-        .switchMap((userId: string) => this.svc.loadUserInfo(userId))
-        .map((user: User) => this.userActions.loadUserInfoSuccess(user));
+        .distinct()
+        .mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId))
+        .map((user: User) => this.userActions.loadOtherUserProfileSuccess(user));
 
 
     constructor(
