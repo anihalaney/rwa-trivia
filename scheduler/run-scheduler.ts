@@ -1,13 +1,10 @@
 // start scheduler of game to check game over of users
 
 import { GameScheduler } from './schedulers';
-const admin = require('firebase-admin');
-const fs = require('fs');
-const path = require('path');
-const firebaseConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../config/firebase-config.json'), 'utf8'));
+import { schedulerConstants } from './constants';
 
-
-admin.initializeApp(firebaseConfig.config);
-
+const envCommand = process.argv[2];
+const envAppName = (envCommand === schedulerConstants.prod) ?
+    schedulerConstants.prodFunctionsAppName : schedulerConstants.devFunctionsAppName;
 const gameScheduler: GameScheduler = new GameScheduler();
-gameScheduler.checkGames(admin.firestore());
+gameScheduler.checkGames(schedulerConstants.authToken, envAppName);
