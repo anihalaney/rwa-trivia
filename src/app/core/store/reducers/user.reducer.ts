@@ -14,6 +14,19 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
   }
 }
 
+export function userDict(state: {[key: string]: User } = {}, action: ActionWithPayload<User>): { [key: string]: User } {
+  switch (action.type) {
+    case UserActions.LOAD_OTHER_USER_PROFILE_SUCCESS:
+          const users = {...state };
+          if (action.payload) {
+            users[action.payload.userId] = { ...action.payload };
+          }
+          return users;
+    default:
+      return state;
+  }
+}
+
 export function authInitialized(state: any = false, action: ActionWithPayload<any>): boolean {
   switch (action.type) {
     case UserActions.LOGOFF:
@@ -26,12 +39,6 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
 
 export const getAuthorizationHeader = (state: User) => (state) ? 'Bearer ' + state.idToken : null;
 
-// user selectors
-export const getUserDictionary = (state: User[]) =>
-  state.reduce((result, sUser) => {
-    result[sUser.userId] = sUser;
-    return result;
-  }, {});
 
 export function invitationToken(state: any = 'NONE', action: ActionWithPayload<string>): string {
   switch (action.type) {

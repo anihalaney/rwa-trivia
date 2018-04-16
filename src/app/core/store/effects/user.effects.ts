@@ -4,10 +4,12 @@ import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl } from '../../../model';
 import { UserService } from '../../services'
 import { switchMap, map } from 'rxjs/operators';
+import { empty } from 'rxjs/observable/empty';
 
 @Injectable()
 export class UserEffects {
 
+    // Load users based on url
     @Effect()
     loadUserProfile$ = this.actions$
         .ofType(UserActions.LOGIN_SUCCESS)
@@ -16,6 +18,14 @@ export class UserEffects {
         .map((user: User) => this.userActions.addUserWithRoles(user));
 
 
+    @Effect()
+    // handle location update
+    loadOtherUserProfile$ = this.actions$
+        .ofType(UserActions.LOAD_OTHER_USER_PROFILE)
+        .map((action: ActionWithPayload<string>) => action.payload)
+        .distinct()
+        .mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId))
+        .map((user: User) => this.userActions.loadOtherUserProfileSuccess(user));
 
 
     constructor(

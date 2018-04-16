@@ -1,11 +1,12 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 import { User, Category, Question, Game } from '../../../model';
-import { user, authInitialized, invitationToken } from './user.reducer';
+import { user, authInitialized, invitationToken, userDict } from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
 import { loginRedirectUrl } from './ui-state.reducer';
 import { activeGames } from './game.reducer';
+import { Observable } from 'rxjs/Observable';
 
 export * from './user.reducer';
 export * from './categories.reducer';
@@ -17,6 +18,7 @@ export * from './game.reducer';
 
 export interface CoreState {
   user: User;
+  userDict: { [key: string]: User };
   authInitialized: boolean;
   categories: Category[];
   tags: string[];
@@ -29,6 +31,7 @@ export interface CoreState {
 
 export const reducer: ActionReducerMap<CoreState> = {
   user: user,
+  userDict: userDict,
   authInitialized: authInitialized,
   categories: categories,
   tags: tags,
@@ -39,5 +42,5 @@ export const reducer: ActionReducerMap<CoreState> = {
   invitationToken: invitationToken
 };
 
-//Features
+// Features
 export const coreState = createFeatureSelector<CoreState>('core');

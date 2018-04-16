@@ -4,11 +4,12 @@ import { Action } from '@ngrx/store';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { User, Question, RouterStateUrl, Friends } from '../../../model';
+import { User, Question, RouterStateUrl, Friends, Game } from '../../../model';
 import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
-import { UserService, QuestionService } from '../../../core/services';
+import { UserService, QuestionService, GameService } from '../../../core/services';
 import { UserActions } from '../../../../app/core/store/actions';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserEffects {
@@ -94,6 +95,16 @@ export class UserEffects {
             this.userService.checkInvitationToken(action.payload).pipe(
                 map((friend: string) => this.userAction.storeInvitationToken(''))
             ).map(() => new userActions.MakeFriendSuccess())
+        ));
+
+    // Get Game list
+    @Effect()
+    getGameResult$ = this.actions$
+        .ofType(UserActionTypes.GET_GAME_RESULT)
+        .pipe(
+        switchMap((action: userActions.GetGameResult) =>
+            this.gameService.getGameResult(action.payload.userId)
+                .map((games: Game[]) => new userActions.GetGameResultSuccess(games))
         )
         );
 
@@ -101,6 +112,7 @@ export class UserEffects {
         private actions$: Actions,
         private userService: UserService,
         private questionService: QuestionService,
-        private userAction: UserActions
+        private userAction: UserActions,
+        private gameService: GameService
     ) { }
 }

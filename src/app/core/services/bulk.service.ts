@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 
@@ -11,6 +12,7 @@ import { BulkUploadFileInfo, User } from '../../model';
 export class BulkService {
 
   constructor(private db: AngularFirestore,
+    private storage: AngularFireStorage,
     private http: HttpClient) {
   }
 
@@ -50,5 +52,12 @@ export class BulkService {
     delete dbBulkUploadFileInfo.downloadUrl
     this.db.doc('/bulk_uploads/' + dbBulkUploadFileInfo.id).set(dbBulkUploadFileInfo).then(ref => {
     });
+  }
+
+  // get File By Bulk Upload File Name
+  getFileByBulkUploadFileUrl(bulkUploadFileInfo: BulkUploadFileInfo): Observable<string> {
+    const filePath = `bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadFileInfo.id}-${bulkUploadFileInfo.fileName}`;
+    const ref = this.storage.ref(filePath);
+    return ref.getDownloadURL().map(url => url);
   }
 }
