@@ -1,5 +1,5 @@
 import {
-  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants
+  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants, FriendsMetada
 } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
@@ -481,31 +481,47 @@ app.get('/testES', adminOnly, (req, res) => {
 });
 
 // rebuild questions index
-app.post('/makeFrieds', (req, res) => {
+app.post('/makeFrieds', authorizedOnly, (req, res) => {
 
   const info = req.body;
-
   const userId = req.body.invitationUserId;
 
-  console.log("infooooo--->" + JSON.stringify(info));
-  if (info.friend.length > 0) {
+  if (Object.keys(info.friend).length !== 0) {
+
     const array = info.friend.myFriends;
-    if (array[info.invitationUserId] !== undefined) {
+    array.map((element) => {
+      const obj = {};
+      const metaInfo = new FriendsMetada();
+      metaInfo.date = new Date().getMilliseconds();
+      obj[userId] = { ...metaInfo };
 
-      array.push({ date: new Date().getMilliseconds });
-      this.db.doc(`/friends/${info.userId}`).update({ myFriend: array });
-    }
-    res.send(info.invitationUserId);
+      const dbObj = { ...obj };
+      array.push(dbObj);
 
+      admin.firestore().doc(`/friends/${info.userId}`).update({ myFriends: array }).then(
+        res.send({ friendId: info.invitationUserId })
+      );
+
+    });
   } else {
     const friends = new Friends();
     friends.myFriends = [];
-    friends.myFriends.push({ userId: { date: new Date().getMilliseconds } });
+
+    const obj = {};
+
+    const metaInfo = new FriendsMetada();
+    metaInfo.date = new Date().getMilliseconds();
+    obj[userId] = { ...metaInfo };
+    const dbObj = { ...obj };
+    friends.myFriends.push(dbObj);
+
     friends.created_uid = info.userId;
-    const dbUser = Object.assign({}, friends);
-    console.log(JSON.stringify("Friends---->" + JSON.stringify(friends)));
-    admin.firestore().doc(`/friends/${info.userId}`).set(dbUser);
-    res.send(info.invitationUserId);
+
+    const dbUser = { ...friends };
+
+    admin.firestore().doc(`/friends/${info.userId}`).set(dbUser).then(
+      res.send({ friendId: info.invitationUserId })
+    );
   }
 });
 

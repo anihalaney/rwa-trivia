@@ -93,7 +93,7 @@ export class UserEffects {
         .pipe(
         switchMap((action: userActions.MakeFriend) =>
             this.userService.checkInvitationToken(action.payload).pipe(
-                map((friend: string) => this.userAction.storeInvitationToken(''))
+                map((friend: any) => this.userAction.storeInvitationToken(''))
             ).map(() => new userActions.MakeFriendSuccess())
         ));
 
