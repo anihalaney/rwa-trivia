@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { User, Invitations } from '../../../../../model';
+import { User, Invitation } from '../../../../../model';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../../../store';
 import * as userActions from '../../../../../user/store/actions';

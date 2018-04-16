@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
-import { User, Invitations, Friends } from '../../model';
+import { User, Invitation, Friends } from '../../model';
 import { ObservableInput } from 'rxjs/Observable';
 import { CONFIG } from '../../../environments/environment';
 import { UserActions } from '../../core/store/actions';
@@ -72,7 +72,7 @@ export class UserService {
     }
 
     saveUserInvitations(obj: any): Observable<boolean> {
-        const invitation = new Invitations();
+        const invitation = new Invitation();
         invitation.created_uid = obj.created_uid;
         invitation.status = obj.status;
         const email = this.db.firestore.batch();
@@ -81,63 +81,14 @@ export class UserService {
             const dbInvitation = Object.assign({}, invitation); // object to be saved
             const id = this.db.createId();
             dbInvitation.id = id;
-            email.set(this.db.firestore.collection('invitations').doc(dbInvitation.id), dbInvitation);
+            email.set(this.db.firestore.collection('invitation').doc(dbInvitation.id), dbInvitation);
         });
         email.commit();
         return Observable.of(true);
     }
 
     checkInvitationToken(obj: any): Observable<any> {
-        return this.db.doc(`/invitations/${obj.token}`)
-            .valueChanges().take(1)
-            .map(invitation => {
-                if (invitation['email'] === obj.email) {
-                    const invitations = new Invitations();
-                    invitations.created_uid = invitation['created_uid'];
-                    return invitations;
-                }
-                return null;
-
-            }).mergeMap(invitation => {
-                if (invitation !== null) {
-                    return this.checkMyFriend(invitation.created_uid, obj.userId);
-                } else {
-                    return Observable.of(null);
-                }
-            })
-            .mergeMap(invitationUserId => {
-                if (invitationUserId != null) {
-                    return this.checkMyFriend(obj.userId, invitationUserId['friendId'])
-                } else {
-                    return Observable.of(null);
-                }
-            });
-
-
+        const url: string = CONFIG.functionsUrl + '/app/makeFriends';
+        return this.http.post<any>(url, obj);
     }
-
-    checkMyFriend(invitedUserId: string, userId: string): Observable<any> {
-        return this.db.doc(`/friends/${userId}`)
-            .snapshotChanges().take(1)
-            .map(friend => friend).mergeMap(u => this.makeMyFriend(u, invitedUserId, userId));
-
-
-    }
-
-    makeMyFriend(friend: any, invitationUserId: string, userId: string): Observable<any> {
-
-        const url: string = CONFIG.functionsUrl + '/app/makeFrieds';
-        let payload = {};
-        if (friend.payload.exists && friend.payload.data()) {
-            payload = { friend: { ...friend.payload.data() }, invitationUserId: invitationUserId, userId: userId };
-        } else {
-            const friends = new Friends();
-
-            payload = { friend: friends, invitationUserId: invitationUserId, userId: userId };
-        }
-
-        return this.http.post<any>(url, payload);
-    }
-
-
 }
