@@ -20,7 +20,8 @@
     "prod:deploy-functions": "npm run compile-functions && npm run prod:set-index && firebase deploy -P production --only functions",
     "prod:set-index": "firebase -P production functions:config:set elasticsearch.index.production=true",
     "deploy-functions-local": "npm run compile-functions && firebase serve --only functions",
-    "run-scheduler": "npm run compile-scheduler-functions && node scheduler/server/scheduler/run-scheduler.js"
+    "run-scheduler-dev": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js dev",
+    "run-scheduler-prod": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js prod"
   },
   "private": true,
   "dependencies": {
