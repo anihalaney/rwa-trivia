@@ -1,6 +1,6 @@
 
 
-export class Invitations {
+export class Invitation {
     id: string;
     created_uid: string;
     email: string;

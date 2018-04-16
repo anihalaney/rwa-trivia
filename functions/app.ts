@@ -1,11 +1,12 @@
 import {
-  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants, FriendsMetada
+  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants
 } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
 import { UserCollection } from './user-collection';
+import { MakeFriends } from './make-friends';
 
 
 const functions = require('firebase-functions');
@@ -481,48 +482,18 @@ app.get('/testES', adminOnly, (req, res) => {
 });
 
 // rebuild questions index
-app.post('/makeFrieds', authorizedOnly, (req, res) => {
+app.post('/makeFriends', (req, res) => {
 
-  const info = req.body;
-  const userId = req.body.invitationUserId;
+  const token = req.body.token;
+  const userId = req.body.userId;
+  const email = req.body.email;
 
-  if (Object.keys(info.friend).length !== 0) {
-
-    const array = info.friend.myFriends;
-    array.map((element) => {
-      const obj = {};
-      const metaInfo = new FriendsMetada();
-      metaInfo.date = new Date().getMilliseconds();
-      obj[userId] = { ...metaInfo };
-
-      const dbObj = { ...obj };
-      array.push(dbObj);
-
-      admin.firestore().doc(`/friends/${info.userId}`).update({ myFriends: array }).then(
-        res.send({ friendId: info.invitationUserId })
-      );
-
-    });
-  } else {
-    const friends = new Friends();
-    friends.myFriends = [];
-
-    const obj = {};
-
-    const metaInfo = new FriendsMetada();
-    metaInfo.date = new Date().getMilliseconds();
-    obj[userId] = { ...metaInfo };
-    const dbObj = { ...obj };
-    friends.myFriends.push(dbObj);
-
-    friends.created_uid = info.userId;
-
-    const dbUser = { ...friends };
-
-    admin.firestore().doc(`/friends/${info.userId}`).set(dbUser).then(
-      res.send({ friendId: info.invitationUserId })
-    );
-  }
+  const makeFriends: MakeFriends = new MakeFriends(token, userId, email, admin.firestore());
+ 
+  makeFriends.validateToken().then((invitee) => {
+    console.log('invitee', invitee);
+    res.send({ created_uid: invitee });
+  });
 });
 
 // END - TEST FUNCTIONS
