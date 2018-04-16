@@ -1,6 +1,6 @@
 
 
 export class Friends {
-    myFriend: Array<String>;
+    myFriends: any;
     created_uid: string;
 }

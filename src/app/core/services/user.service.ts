@@ -8,6 +8,8 @@ import { AppState } from '../../store/app-store';
 import { User, Invitations, Friends } from '../../model';
 import * as useractions from '../../user/store/actions';
 import { ObservableInput } from 'rxjs/Observable';
+import { CONFIG } from '../../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 
@@ -16,7 +18,8 @@ export class UserService {
 
     constructor(private db: AngularFirestore,
         private storage: AngularFireStorage,
-        private store: Store<AppState>) {
+        private store: Store<AppState>,
+        private http: HttpClient) {
     }
 
 
@@ -114,23 +117,32 @@ export class UserService {
     }
 
     makeMyFriend(friend: any, invitationUserId: string, userId: string): Observable<string> {
-        if (friend.payload.exists && friend.payload.data()) {
-            const array = friend.payload.data().myFriend;
-            if (array.indexOf(invitationUserId) === -1) {
-                array.push(invitationUserId);
-                this.db.doc(`/friends/${userId}`).update({ myFriend: array });
-            }
-            return Observable.of(invitationUserId);
 
-        } else {
-            const friends = new Friends();
-            friends.myFriend = [];
-            friends.myFriend.push(invitationUserId);
-            friends.created_uid = userId;
-            const dbUser = Object.assign({}, friends);
-            this.db.doc(`/friends/${userId}`).set(dbUser);
-            return Observable.of(invitationUserId);
+        const url: string = CONFIG.functionsUrl + '/app/makeFrieds';
+        const friends = new Friends();
+        if (friend.payload.exists && friend.payload.data()) {
+            friends.myFriends = friend.payload.data().makeFrieds;
         }
+        const payload = { friend: friends, invitationUserId: invitationUserId, userId: userId };
+        return this.http.post<string>(url, payload);
+
+        // if (friend.payload.exists && friend.payload.data()) {
+        //     const array = friend.payload.data().myFriend;
+        //     if (array.indexOf(invitationUserId) === -1) {
+        //         array.push(invitationUserId);
+        //         this.db.doc(`/friends/${userId}`).update({ myFriend: array });
+        //     }
+        //     return Observable.of(invitationUserId);
+
+        // } else {
+        //     const friends = new Friends();
+        //     friends.myFriend = [];
+        //     friends.myFriend.push(invitationUserId);
+        //     friends.created_uid = userId;
+        //     const dbUser = Object.assign({}, friends);
+        //     this.db.doc(`/friends/${userId}`).set(dbUser);
+        //     return Observable.of(invitationUserId);
+        // }
 
     }
 
