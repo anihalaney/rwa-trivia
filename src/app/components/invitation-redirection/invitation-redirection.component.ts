@@ -4,6 +4,9 @@ import { userState } from '../../user/store';
 import { ActionWithPayload, UserActions } from ' ../../app/core/store/actions';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../store';
+import { AuthenticationProvider } from '../../core/auth';
+import { User } from '../../model';
+import * as userActions from '../../user/store/actions';
 
 @Component({
     selector: 'invitation-redirection',
@@ -11,9 +14,16 @@ import { AppState, appState } from '../../store';
     styleUrls: ['./invitation-redirection.component.scss', './invitation-redirection.component.scss']
 })
 export class InvitationRedirectionComponent implements OnInit {
+    @Input() user: User;
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
-        private userAction: UserActions) {
+        private userAction: UserActions, private authService: AuthenticationProvider) {
+        this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+            this.user = user;
+            if (user) {
+                this.user = user;
+            }
+        });
     }
 
     ngOnInit() {
@@ -21,7 +31,12 @@ export class InvitationRedirectionComponent implements OnInit {
         this.activatedRoute.params.subscribe((params: Params) => {
             const token = params['token'];
             this.store.dispatch(this.userAction.storeInvitationToken(token));
-            this.router.navigate(['/dashboard']);
+            if (this.user) {
+                this.store.dispatch(new userActions.MakeFriend({ token: token, email: this.user.email, userId: this.user.authState.uid }))
+            } else {
+                this.router.navigate(['/dashboard']);
+            }
+
         });
     }
 
