@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-
-import { User, Question, Invitations } from '../../../model';
+import { Observable } from 'rxjs/Observable';
+import { User, Question, Invitations, Game } from '../../../model';
 
 export enum UserActionTypes {
 
@@ -18,6 +18,8 @@ export enum UserActionTypes {
     ADD_USER_INVITATION_SUCCESS = '[User] AddUserInvitationSuccess',
     MAKE_FRIEND = '[User] MakeFriend',
     MAKE_FRIEND_SUCCESS = '[User] MakeFriendSuccess',
+    GET_GAME_RESULT = '[User] GetGameResult',
+    GET_GAME_RESULT_SUCCESS = '[User] GetGameResultSuccess'
 }
 
 // Save user profile
@@ -96,6 +98,18 @@ export class MakeFriendSuccess implements Action {
 
 
 
+// Get User's game result
+export class GetGameResult implements Action {
+    readonly type = UserActionTypes.GET_GAME_RESULT;
+    constructor(public payload: { userId: String }) { }
+}
+
+//// Get User's game result Success
+export class GetGameResultSuccess implements Action {
+    readonly type = UserActionTypes.GET_GAME_RESULT_SUCCESS;
+    constructor(public payload: Game[]) { }
+}
+
 
 
 export type UserActions
@@ -110,4 +124,6 @@ export type UserActions
     | AddUserInvitation
     | AddUserInvitationSuccess
     | MakeFriendSuccess
+    | GetGameResult
+    | GetGameResultSuccess
 

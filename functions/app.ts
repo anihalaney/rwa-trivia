@@ -1,10 +1,11 @@
-import { Game, Question, Category, SearchCriteria, Friends } from '../src/app/model';
+import {
+  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants
+} from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
-
-
+import { UserCollection } from './user-collection';
 
 
 const functions = require('firebase-functions');
@@ -42,7 +43,7 @@ const validateFirebaseIdToken = (req, res, next) => {
 
   // console.log('Check if request is authorized with Firebase ID token');
   if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
-    !req.cookies.__session) {
+    !req.cookies.__session && !req.headers.token) {
     console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
       'Make sure you authorize your request by providing the following HTTP header:',
       'Authorization: Bearer <Firebase ID Token>',
@@ -56,20 +57,27 @@ const validateFirebaseIdToken = (req, res, next) => {
     console.log('Found "Authorization" header');
     // Read the ID Token from the Authorization header.
     idToken = req.headers.authorization.split('Bearer ')[1];
+  } else if (req.headers.token) {
+    console.log('token', req.headers.token);
+    return next();
   } else {
     console.log('Found "__session" cookie');
     // Read the ID Token from cookie.
     idToken = req.cookies.__session;
   }
-  admin.auth().verifyIdToken(idToken).then(decodedIdToken => {
-    console.log('ID Token correctly decoded', decodedIdToken);
-    req.user = decodedIdToken;
-    return next();
-  }).catch(error => {
-    console.error('Error while verifying Firebase ID token:', error);
-    // res.status(403).send('Unauthorized');
-    return next();
-  });
+
+  if (idToken) {
+    admin.auth().verifyIdToken(idToken).then(decodedIdToken => {
+      console.log('ID Token correctly decoded', decodedIdToken);
+      req.user = decodedIdToken;
+      return next();
+    }).catch(error => {
+      console.error('Error while verifying Firebase ID token:', error);
+      // res.status(403).send('Unauthorized');
+      return next();
+    });
+  }
+
 };
 
 // middleware to check for authorized users
@@ -82,6 +90,23 @@ const authorizedOnly = (req, res, next) => {
   console.log(req.user.uid);
   next();
 };
+
+// middleware to check for authorized users
+const authTokenOnly = (req, res, next) => {
+  admin.firestore().collection('scheduler_auth_tokens').where('token', '==', req.headers.token)
+    .get()
+    .then(snapshot => {
+      if (snapshot.size > 0) {
+        return next();
+      } else {
+        res.status(401).send('Unauthorized');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
+
 
 // middleware to check for admins Only
 
@@ -228,6 +253,82 @@ app.post('/createGame', authorizedOnly, (req, res) => {
   });
 
 
+});
+
+
+app.put('/game/:gameId', authorizedOnly, (req, res) => {
+  const gameId = req.params.gameId;
+  let dbGame = '';
+  const operation = req.body.operation;
+
+  if (!gameId) {
+    // gameId
+    res.status(400);
+    return;
+  }
+
+  if (!operation) {
+    // operation
+    res.status(400);
+    return;
+  }
+  // console.log('gameId', gameId);
+  // console.log('operation', operation);
+  const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined, admin.firestore());
+
+  gameMechanics.getGameById(gameId).then((game) => {
+
+    if (game.playerIds.indexOf(req.user.uid) === -1) {
+      // operation
+      res.status(403).send('Unauthorized');
+      return;
+    }
+
+    switch (operation) {
+      case GameOperations.CALCULATE_SCORE:
+        const playerQnAs: PlayerQnA = req.body.playerQnA;
+        game.playerQnAs.push(playerQnAs);
+        game.GameStatus = req.body.GameStatus;
+        game.turnAt = req.body.turnAt;
+        game.nextTurnPlayerId = req.body.nextTurnPlayerId;
+        game.calculateStat(playerQnAs.playerId);
+
+        break;
+      case GameOperations.GAME_OVER:
+        game.gameOver = req.body.gameOver;
+        game.winnerPlayerId = req.body.winnerPlayerId;
+        game.GameStatus = req.body.GameStatus;
+        break;
+    }
+    dbGame = game.getDbModel();
+
+    gameMechanics.UpdateGameCollection(dbGame).then((id) => {
+      res.send({});
+    });
+  })
+
+});
+
+app.get('/updateAllGames', adminOnly, (req, res, next) => {
+  admin.firestore().collection('/games/').get().then((snapshot) => {
+    snapshot.forEach((doc) => {
+
+      const game = Game.getViewModel(doc.data());
+
+      game.playerIds.forEach((playerId) => {
+        game.calculateStat(playerId);
+      });
+
+      const dbGame = game.getDbModel();
+      dbGame.id = doc.id;
+
+      admin.firestore().collection('games').doc(dbGame.id).set(dbGame).then((ref) => {
+        // console.log('dbGame===>', dbGame);
+      });
+    });
+    res.send('loaded data');
+
+  });
 });
 
 app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
@@ -402,7 +503,7 @@ app.post('/makeFrieds', (req, res) => {
     friends.myFriends.push({ userId: { date: new Date().getMilliseconds } });
     friends.created_uid = info.userId;
     const dbUser = Object.assign({}, friends);
-    console.log(JSON.stringify("Friends---->"+JSON.stringify(friends)));
+    console.log(JSON.stringify("Friends---->" + JSON.stringify(friends)));
     admin.firestore().doc(`/friends/${info.userId}`).set(dbUser);
     res.send(info.invitationUserId);
   }
@@ -410,6 +511,55 @@ app.post('/makeFrieds', (req, res) => {
 
 // END - TEST FUNCTIONS
 ///////////////////////
+
+
+
+app.get('/user/:userId', authorizedOnly, (req, res) => {
+  // console.log('body---->', req.body);
+  const userId = req.params.userId;
+
+
+  if (!userId) {
+    // Game Option is not added
+    res.status(403).send('userId is not available');
+    return;
+  }
+
+  const userCollection: UserCollection = new UserCollection(admin);
+  userCollection.getUserById(userId).then((userInfo) => {
+    console.log('userInfo', userInfo);
+    res.send(userInfo);
+  });
+});
+
+app.post('/game/scheduler/check', authTokenOnly, (req, res) => {
+  const db = admin.firestore();
+  db.collection('/games').where('gameOver', '==', false)
+    .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        const game: Game = Game.getViewModel(doc.data());
+        if (game.playerIds.length > 1 && game.nextTurnPlayerId !== '') {
+          const noPlayTimeBound = new Date().getTime() - game.turnAt;
+          //  console.log('game--->', game.gameId);
+          // console.log('noPlayTimeBound--->', noPlayTimeBound);
+          if (noPlayTimeBound >= schedulerConstants.gamePlayDuration) {
+            game.gameOver = true;
+            game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
+            const dbGame = game.getDbModel();
+            db.doc('/games/' + game.gameId).update(dbGame);
+            //  console.log('updates=>', game.gameId);
+          }
+        }
+      });
+      res.send('scheduler check is completed')
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+});
+
 
 
 

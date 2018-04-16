@@ -55,7 +55,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
     this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameObj => {
 
-      console.log("Navigating to game: " + gameObj['gameId']);
+    //  console.log("Navigating to game: " + gameObj['gameId']);
       this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     })
