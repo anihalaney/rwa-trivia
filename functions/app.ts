@@ -1,4 +1,4 @@
-import { Game, Question, Category, SearchCriteria } from '../src/app/model';
+import { Game, Question, Category, SearchCriteria, Friends } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
@@ -378,6 +378,36 @@ app.get('/testES', adminOnly, (req, res) => {
   });
 
 });
+
+// rebuild questions index
+app.post('/makeFrieds', (req, res) => {
+
+  const info = req.body;
+
+  const userId = req.body.invitationUserId;
+
+  console.log("infooooo--->" + JSON.stringify(info));
+  if (info.friend.length > 0) {
+    const array = info.friend.myFriends;
+    if (array[info.invitationUserId] !== undefined) {
+
+      array.push({ date: new Date().getMilliseconds });
+      this.db.doc(`/friends/${info.userId}`).update({ myFriend: array });
+    }
+    res.send(info.invitationUserId);
+
+  } else {
+    const friends = new Friends();
+    friends.myFriends = [];
+    friends.myFriends.push({ userId: { date: new Date().getMilliseconds } });
+    friends.created_uid = info.userId;
+    const dbUser = Object.assign({}, friends);
+    console.log(JSON.stringify("Friends---->"+JSON.stringify(friends)));
+    admin.firestore().doc(`/friends/${info.userId}`).set(dbUser);
+    res.send(info.invitationUserId);
+  }
+});
+
 // END - TEST FUNCTIONS
 ///////////////////////
 
