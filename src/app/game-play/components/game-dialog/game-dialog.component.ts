@@ -44,7 +44,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   turnStatus = false;
   MAX_TIME_IN_SECONDS = 16;
   showContinueBtn = false;
-
+  userDict: { [key: string]: User } = {};
+  otherPlayer: User;
+  otherPlayerUserId: string;
+  RANDOM_PLAYER = 'Random Player';
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -54,7 +57,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
     this._gameId = data.gameId;
     this.user = data.user;
-
+    this.userDict = data.userDict;
 
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
@@ -65,10 +68,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
     this.sub.push(
       this.gameObs.subscribe(game => {
-        this.game = game;
-        this.questionIndex = this.game.stats[this.user.userId].round;
-        this.correctAnswerCount = this.game.stats[this.user.userId].score;
-        this.setTurnStatusFlag();
+        if (game !== null) {
+          this.game = game;
+          this.questionIndex = this.game.stats[this.user.userId].round;
+          this.correctAnswerCount = this.game.stats[this.user.userId].score;
+          this.setTurnStatusFlag();
+        }
       }));
 
     this.sub.push(
@@ -103,7 +108,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   setTurnStatusFlag() {
-    const turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
+    const turnFlag = (this.game.GameStatus === GameStatus.STARTED || this.game.GameStatus === GameStatus.JOINED_GAME ||
       (this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
     this.continueNext = (this.questionAnswered) ? true : false;
     this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
@@ -112,10 +117,19 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       if (!this.currentQuestion) {
         this.getNextQuestion();
       }
+      if (this.game.GameStatus !== GameStatus.STARTED && this.userDict) {
+        this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+        const otherPlayerObj = this.userDict[this.otherPlayerUserId];
+        (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
+        this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
+          this.otherPlayer.displayName : this.RANDOM_PLAYER
+      } else {
+        this.initializeOtherUser();
+      }
     } else {
       Observable.timer(2000).take(1).subscribe(t => {
         this.turnStatus = turnFlag;
-        this.store.dispatch(new gameplayactions.LoadGame(this.game));
+        this.store.dispatch(new gameplayactions.ResetCurrentGame());
         this.currentQuestion = undefined;
         this.continueNext = false;
         this.router.navigate(['/dashboard']);
@@ -124,6 +138,11 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     }
 
 
+  }
+
+  initializeOtherUser() {
+    this.otherPlayer = new User();
+    this.otherPlayer.displayName = this.RANDOM_PLAYER;
   }
 
   getNextQuestion() {
@@ -191,15 +210,18 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
       if (this.game.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
         this.game.nextTurnPlayerId = '';
+        this.game.GameStatus = GameStatus.AVAILABLE_FOR_OPPONENT;
+      } else if (this.game.GameStatus === GameStatus.JOINED_GAME && !playerQnA.answerCorrect) {
+        this.game.nextTurnPlayerId = this.otherPlayerUserId;
         this.game.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
       } else if (!playerQnA.answerCorrect) {
-        this.game.nextTurnPlayerId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+        this.game.nextTurnPlayerId = this.otherPlayerUserId;
       } else {
         this.game.nextTurnPlayerId = this.user.userId;
       }
     }
 
-    this.game.turnAt = new Date().getTime();
+    this.game.turnAt = new Date(new Date().toUTCString()).getTime();
 
     //dispatch action to push player answer
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ "game": this.game, "playerQnA": playerQnA }));
@@ -208,6 +230,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.questionAnswered = true;
 
   }
+
 
   ngOnDestroy() {
     Utils.unsubscribe([this.timerSub]);

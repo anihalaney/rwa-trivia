@@ -31,6 +31,8 @@ export enum GameMode {
 
 export enum GameStatus {
   STARTED = 'started',
+  AVAILABLE_FOR_OPPONENT = 'available for opponent',
+  JOINED_GAME = 'joined opponent',
   WAITING_FOR_NEXT_Q = 'waiting for next question',
   COMPLETED = 'completed'
 }

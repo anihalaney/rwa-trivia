@@ -12,8 +12,12 @@ import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Game, GameOptions, GameMode, PlayerQnA,
-         User, Question, Category } from '../../../model';
+import {
+  Game, GameOptions, GameMode, PlayerQnA,
+  User, Question, Category
+} from '../../../model';
+import * as gameplayactions from '../../store/actions';
+
 
 @Component({
   selector: 'game',
@@ -23,21 +27,29 @@ import { Game, GameOptions, GameMode, PlayerQnA,
 export class GameComponent implements OnInit, OnDestroy {
   gameId: string;
   user: User;
-
+  subs: Subscription[] = [];
   dialogRef: MatDialogRef<GameDialogComponent>;
+  userDict$: Observable<{ [key: string]: User }>;
+  userDict: { [key: string]: User } = {};
 
   constructor(private store: Store<AppState>,
-              public dialog: MatDialog, 
-              private route: ActivatedRoute, 
-              private router: Router) { }
+    public dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router) {
+
+    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+
+  }
 
   ngOnInit() {
     this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user); //logged in user
 
-    this.route.params.subscribe((params: Params) => { 
-      this.gameId = params['id'] ;
+    this.route.params.subscribe((params: Params) => {
+      this.gameId = params['id'];
+      this.store.dispatch(new gameplayactions.LoadGame(this.gameId));
       //this.openDialog();
-      
+
       //use the setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
       //The error happens as bindings change after change detection has run. using setTimeout runs another round of CD
       // REF: https://github.com/angular/angular/issues/6005
@@ -50,17 +62,18 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-  //  console.log("openDialog");
+    //  console.log("openDialog");
     this.dialogRef = this.dialog.open(GameDialogComponent, {
       disableClose: false,
-      data: { "gameId": this.gameId, "user": this.user }
+      data: { 'gameId': this.gameId, 'user': this.user, 'userDict': this.userDict }
     });
 
-    this.dialogRef.afterOpen().subscribe(x => {window.document.body.classList.add("dialog-open")});
-    this.dialogRef.afterClosed().subscribe(x => {window.document.body.classList.remove("dialog-open")});
+    this.dialogRef.afterOpen().subscribe(x => { window.document.body.classList.add("dialog-open") });
+    this.dialogRef.afterClosed().subscribe(x => { window.document.body.classList.remove("dialog-open") });
   }
   ngOnDestroy() {
     if (this.dialogRef)
       this.dialogRef.close();
+    Utils.unsubscribe(this.subs);
   }
 }
