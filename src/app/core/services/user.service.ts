@@ -54,7 +54,7 @@ export class UserService {
 
 
     getUserProfileImage(user: User): Observable<User> {
-        if (user.profilePicture && user.profilePicture !== '' ) {
+        if (user.profilePicture && user.profilePicture !== '') {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.storage.ref(filePath);
             return ref.getDownloadURL().map(url => {
@@ -87,7 +87,7 @@ export class UserService {
         return Observable.of(true);
     }
 
-    checkInvitationToken(obj: any): Observable<string> {
+    checkInvitationToken(obj: any): Observable<any> {
         return this.db.doc(`/invitations/${obj.token}`)
             .valueChanges().take(1)
             .map(invitation => {
@@ -107,7 +107,7 @@ export class UserService {
             })
             .mergeMap(invitationUserId => {
                 if (invitationUserId != null) {
-                    return this.checkMyFriend(obj.userId, invitationUserId)
+                    return this.checkMyFriend(obj.userId, invitationUserId['friendId'])
                 } else {
                     return Observable.of(null);
                 }
@@ -116,7 +116,7 @@ export class UserService {
 
     }
 
-    checkMyFriend(invitedUserId: string, userId: string): Observable<string> {
+    checkMyFriend(invitedUserId: string, userId: string): Observable<any> {
         return this.db.doc(`/friends/${userId}`)
             .snapshotChanges().take(1)
             .map(friend => friend).mergeMap(u => this.makeMyFriend(u, invitedUserId, userId));
@@ -124,34 +124,19 @@ export class UserService {
 
     }
 
-    makeMyFriend(friend: any, invitationUserId: string, userId: string): Observable<string> {
+    makeMyFriend(friend: any, invitationUserId: string, userId: string): Observable<any> {
 
         const url: string = CONFIG.functionsUrl + '/app/makeFrieds';
-        const friends = new Friends();
+        let payload = {};
         if (friend.payload.exists && friend.payload.data()) {
-            friends.myFriends = friend.payload.data().makeFrieds;
+            payload = { friend: { ...friend.payload.data() }, invitationUserId: invitationUserId, userId: userId };
+        } else {
+            const friends = new Friends();
+
+            payload = { friend: friends, invitationUserId: invitationUserId, userId: userId };
         }
-        const payload = { friend: friends, invitationUserId: invitationUserId, userId: userId };
-        return this.http.post<string>(url, payload);
 
-        // if (friend.payload.exists && friend.payload.data()) {
-        //     const array = friend.payload.data().myFriend;
-        //     if (array.indexOf(invitationUserId) === -1) {
-        //         array.push(invitationUserId);
-        //         this.db.doc(`/friends/${userId}`).update({ myFriend: array });
-        //     }
-        //     return Observable.of(invitationUserId);
-
-        // } else {
-        //     const friends = new Friends();
-        //     friends.myFriend = [];
-        //     friends.myFriend.push(invitationUserId);
-        //     friends.created_uid = userId;
-        //     const dbUser = Object.assign({}, friends);
-        //     this.db.doc(`/friends/${userId}`).set(dbUser);
-        //     return Observable.of(invitationUserId);
-        // }
-
+        return this.http.post<any>(url, payload);
     }
 
 
