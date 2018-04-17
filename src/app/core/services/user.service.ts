@@ -81,14 +81,14 @@ export class UserService {
             const dbInvitation = Object.assign({}, invitation); // object to be saved
             const id = this.db.createId();
             dbInvitation.id = id;
-            email.set(this.db.firestore.collection('invitation').doc(dbInvitation.id), dbInvitation);
+            email.set(this.db.firestore.collection('invitations').doc(dbInvitation.id), dbInvitation);
         });
         email.commit();
         return Observable.of(true);
     }
 
     checkInvitationToken(obj: any): Observable<any> {
-        const url: string = CONFIG.functionsUrl + '/app/makeFriends';
+        const url = `${CONFIG.functionsUrl}/app/makeFriends`;
         return this.http.post<any>(url, obj);
     }
 }
