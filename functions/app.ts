@@ -201,7 +201,10 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
       return;
     }
 
-    ESUtils.getRandomGameQuestion().then((question) => {
+    const questionIds = [];
+    game.playerQnAs.map((question) => questionIds.push(question.questionId));
+
+    ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
       res.send(question);
     })
       .catch(error => {
@@ -455,7 +458,7 @@ app.get('/getTestQuestion', authorizedOnly, (req, res, next) => {
 });
 
 app.get('/getGameQuestionTest', authorizedOnly, (req, res) => {
-  ESUtils.getRandomGameQuestion().then((question) => {
+  ESUtils.getRandomGameQuestion([2, 4, 5, 6], []).then((question) => {
     res.send(question);
   });
 })
@@ -510,14 +513,14 @@ app.post('/game/scheduler/check', authTokenOnly, (req, res) => {
         const game: Game = Game.getViewModel(doc.data());
         if (game.playerIds.length > 1 && game.nextTurnPlayerId !== '') {
           const noPlayTimeBound = new Date().getTime() - game.turnAt;
-        //  console.log('game--->', game.gameId);
-         // console.log('noPlayTimeBound--->', noPlayTimeBound);
+          //  console.log('game--->', game.gameId);
+          // console.log('noPlayTimeBound--->', noPlayTimeBound);
           if (noPlayTimeBound >= schedulerConstants.gamePlayDuration) {
             game.gameOver = true;
             game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
             const dbGame = game.getDbModel();
             db.doc('/games/' + game.gameId).update(dbGame);
-          //  console.log('updates=>', game.gameId);
+            //  console.log('updates=>', game.gameId);
           }
         }
       });

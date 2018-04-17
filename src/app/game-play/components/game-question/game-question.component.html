@@ -1,7 +1,7 @@
 <div class="cd-popup gameplay"  id="0" role="alert">
     <div class="cd-popup-container">
         <h1>{{categoryName}}</h1>
-        <p>Playing with <a>Random Player</a></p>
+        <p>Playing with <a>{{otherPlayer?.displayName}}</a></p>
 
         <!-- Timer -->
         <div *ngIf="continueNext" class="score">Score: {{correctCount}}/{{noOfQuestions}}</div>
