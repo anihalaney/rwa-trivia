@@ -6,7 +6,7 @@ export class MakeFriends {
     constructor(private token: string, private userId: string, private email: string, private db: any) {  }
 
     validateToken(): Promise<string> {
-        return this.db.doc(`/invitation/${this.token}`)
+        return this.db.doc(`/invitations/${this.token}`)
         .get()
         .then(invitation => {
             if (invitation.data().email === this.email) {
@@ -16,7 +16,6 @@ export class MakeFriends {
                 .then(ref => this.updateFriendsList(this.userId, invitations.created_uid))
                 .then(ref => this.userId);
             }
-            return null;
         });
     }
 
