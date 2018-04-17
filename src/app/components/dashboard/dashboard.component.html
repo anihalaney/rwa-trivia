@@ -20,7 +20,7 @@
 
       </div>
       <ul class="row" *ngIf="showGames">
-        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
           <game-card [game]="game" [userDict]="userDict"></game-card>
         </li>
         <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">

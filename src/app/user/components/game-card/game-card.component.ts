@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { User, Game } from '../../../model';
 import { userState } from '../../store';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'game-card',
@@ -19,7 +20,10 @@ export class GameCardComponent implements OnInit, OnChanges {
   user: User;
   myTurn: boolean;
   otherUserId: string;
-  otherUserInfo: User
+  otherUserInfo: User;
+  remainingHours: number;
+  remainingMinutes: number;
+  timerSub: Subscription;
 
   constructor(private store: Store<AppState>) {
 
@@ -29,12 +33,37 @@ export class GameCardComponent implements OnInit, OnChanges {
         this.user = user;
       }
     });
+
+    this.timerSub =
+      Observable.timer(1000, 1000).subscribe(t => {
+        if (this.game.nextTurnPlayerId === this.user.userId) {
+
+          const currentTime = new Date((new Date().toUTCString())).getTime();
+          const diff = currentTime - this.game.turnAt;
+          const hour = Math.floor(diff / (60 * 60 * 1000));
+          const minute = Math.floor(diff % (60 * 60 * 1000) / (60 * 1000));
+
+          if (minute > 0) {
+            this.remainingHours = 31 - hour;
+            this.remainingMinutes = 60 - minute;
+
+          } else {
+            this.remainingHours = 32 - hour;
+            this.remainingMinutes = 0;
+          }
+
+
+        }
+      })
   }
 
   ngOnInit() {
     this.store.select(appState.coreState).take(1).subscribe(s => {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
+
+
+
     }); // logged in user
   }
 
@@ -44,6 +73,8 @@ export class GameCardComponent implements OnInit, OnChanges {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
+
+
     }
   }
 
