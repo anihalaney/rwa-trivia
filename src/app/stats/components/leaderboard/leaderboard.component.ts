@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { Observable } from 'rxjs/Observable';
 import { Category, User } from '../../../model';
-import { statsState } from '../../store';
+import { leaderBoardState } from '../../store';
 import { concat } from 'rxjs/operator/concat';
 import { UserActions } from '../../../core/store/actions';
 
@@ -15,10 +15,8 @@ import { UserActions } from '../../../core/store/actions';
 })
 export class LeaderboardComponent {
   @Input() userDict: { [key: string]: User };
-  categoryDictObs: Observable<{ [key: number]: Category }>;
+  categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
-  categoriesObs: Observable<Category[]>;
-  categories: Category[];
   scoreList = [];
 
 
@@ -26,16 +24,16 @@ export class LeaderboardComponent {
     private userActions: UserActions) {
 
 
-    this.categoryDictObs = store.select(categoryDictionary);
+    this.categoryDict$ = store.select(categoryDictionary);
 
-    this.categoryDictObs.subscribe(categoryDict => {
+    this.categoryDict$.subscribe(categoryDict => {
 
       this.categoryDict = categoryDict;
 
-      this.store.dispatch(new statsActions.GetLeaderBorad({ categoryList: this.categoryDict }));
+      this.store.dispatch(new statsActions.GetLeaderBoard({ categoryList: this.categoryDict }));
     });
 
-    this.store.select(statsState).select(s => s.scoreBorad).subscribe(score => {
+    this.store.select(leaderBoardState).select(s => s.scoreBoard).subscribe(score => {
       if (score !== null) {
 
         Object.keys(score).forEach((key) => {

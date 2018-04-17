@@ -1,14 +1,14 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
-import { scoreBorad } from './stats.reducers';
+import { scoreBoard } from './stats.reducers';
 
-export interface StatsState {
-    scoreBorad: any
+export interface LeaderBoardState {
+    scoreBoard: any
 
 }
 
-export const reducer: ActionReducerMap<StatsState> = {
-    scoreBorad: scoreBorad
+export const reducer: ActionReducerMap<LeaderBoardState> = {
+    scoreBoard: scoreBoard
 
 };
 
-export const statsState = createFeatureSelector<StatsState>('stats');
+export const leaderBoardState = createFeatureSelector<LeaderBoardState>('stats');
