@@ -11,7 +11,7 @@ import { MakeFriends } from './make-friends';
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 const parse = require('csv').parse;
 const fs = require('fs');
