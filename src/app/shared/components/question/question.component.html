@@ -8,10 +8,21 @@
           <input type="radio" onchange="getValue()" formControlName="answerText">
           <label>{{answer.answerText}}</label>
         </li> -->
-      <li class="col-sm-5" *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)" [class.players-answer]="answeredIndex === i"
-        [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]="answeredIndex >= 0 && correctAnswerIndex === i">
-        {{answer.answerText}}
-      </li>
+      <div class="row col-sm-12">
+        <li class="col-sm-5" *ngFor="let answer of question.answers|slice:0:2; let i=index" (click)="answerButtonClicked(answer, i)"
+          [class.players-answer]="answeredIndex === answer.answerText" [class.wrong]="answeredIndex === answer.answerText && correctAnswerIndex !== answer.answerText"
+          [class.right]="answeredIndex !== '' && correctAnswerIndex === answer.answerText">
+          {{answer.answerText}}
+        </li>
+      </div>
+      <div class="row col-sm-12">
+        <li class="col-sm-5" *ngFor="let answer of question.answers|slice:2:4; let i=index" (click)="answerButtonClicked(answer, i)"
+          [class.players-answer]="answeredIndex === answer.answerText" [class.wrong]="answeredIndex === answer.answerText && correctAnswerIndex !== answer.answerText"
+          [class.right]="answeredIndex !== '' && correctAnswerIndex === answer.answerText">
+          {{answer.answerText}}
+        </li>
+      </div>
+
       <div class="row col-sm-12 col-xs-12 submit-btn">
         <button class="btn" (click)="getNextQuestion()" *ngIf="answeredIndex!==-1">Play Again</button>
       </div>
