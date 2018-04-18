@@ -3,15 +3,10 @@
     <img class="mail-icon" src="assets/images/mail-icon.png">
   </div>
   <div fxLayoutAlign="left">
-    <form (ngSubmit)="onSubscribe()" [formGroup]="invitationForm" class="row col-sm-12" #formDir="ngForm">
-      <!-- <div class="clearfix namefield">
-              <div class="formfield">
-                <input type="text" formControlName="email" placeholder="Email address" class="required">
-              </div>
-            </div> -->
-      <input type="text" formControlName="email" class="required" placeholder="Email address" class="required">
+    <form *ngIf="invitationForm" (ngSubmit)="onSubscribe()" [formGroup]="invitationForm" class="row col-sm-12" #formDir="ngForm">
+      <input type="text" formControlName="email" class="required" placeholder="Email address">
       <button class="btn sent-invitation">Send Invite</button>
-      <span *ngIf="invitationForm.hasError('required', 'email') && formDir.submitted" class="label">
+      <span *ngIf="invitationForm.controls.email.invalid && formDir.submitted" class="label">
         Email is required!
       </span>
       <span *ngIf="showErrorMsg" class="label row col-sm-12"> {{errorMsg}} </span>
