@@ -11,7 +11,7 @@ import { AppState, appState } from '../../../store';
 import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
-import { Utils } from '../../../core/services';
+import { Utils, WindowRef } from '../../../core/services';
 import {
   Game, GameOptions, GameMode, PlayerQnA,
   User, Question, Category
@@ -34,7 +34,8 @@ export class GameComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>,
     public dialog: MatDialog,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private windowRef: WindowRef) {
 
     this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -55,18 +56,19 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   openDialog() {
-    //  console.log("openDialog");
     this.dialogRef = this.dialog.open(GameDialogComponent, {
       disableClose: false,
       data: { 'user': this.user, 'userDict': this.userDict }
     });
 
-    this.dialogRef.afterOpen().subscribe(x => { window.document.body.classList.add("dialog-open") });
-    this.dialogRef.afterClosed().subscribe(x => { window.document.body.classList.remove("dialog-open") });
+    this.dialogRef.afterOpen().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.add('dialog-open') });
+    this.dialogRef.afterClosed().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.remove('dialog-open') });
   }
   ngOnDestroy() {
     if (this.dialogRef) {
       this.dialogRef.close();
+      this.store.dispatch(new gameplayactions.ResetCurrentGame());
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     }
     Utils.unsubscribe(this.subs);
   }

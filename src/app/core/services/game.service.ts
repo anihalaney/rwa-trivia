@@ -48,7 +48,12 @@ export class GameService {
   getGame(gameId: string): Observable<Game> {
     return this.db.doc('/games/' + gameId)
       .valueChanges()
-      .map(g => Game.getViewModel(g));
+      .map(
+      g => {
+        g['id'] = (g['id']) ? g['id'] : gameId;
+        return Game.getViewModel(g);
+      }
+      );
   }
 
   getNextQuestion(game: Game): Observable<Question> {
