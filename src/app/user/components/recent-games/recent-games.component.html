@@ -1,8 +1,8 @@
 <div class="card recentlygames">
   <h2>Recently Completed Games</h2>
   <ul>
-    <li *ngFor="let result of finalResult| slice:0:4; let i=index">
-      <a href="#">
+    <li *ngFor="let result of finalResult; let i=index">
+      <!-- <a href="#">
         <div class="sprite architicon" *ngIf="result.winnerPlayerId === user.userId"></div>
         <div class="sprite rogrammingicon" *ngIf="result.winnerPlayerId !== user.userId"></div>
         <div class="datebox">
@@ -10,10 +10,33 @@
           <div class="dark">{{categoryDict[result._gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() + categoryDict[result._gameOptions.categoryIds[0]].categoryName.slice(1)}}</div>
         </div>
         <div class="scorebox align-right">
-          <!-- <div class="light">Score 3</div> -->
+          <div class="light">Score 3</div>
           <div class="dark" *ngIf="result.winnerPlayerId === user.userId">Won</div>
           <div class="dark" *ngIf="result.winnerPlayerId !== user.userId">Lost</div>
         </div>
+      </a> -->
+      <a href="#">
+        <ng-container>
+          <div class="col-xs-12 textcenter clearfix">
+            <div>
+              <div class="success result" *ngIf="result.winnerPlayerId === user.userId">Won</div>
+              <div class="label result" *ngIf="result.winnerPlayerId !== user.userId">Lost</div>
+            </div>
+            <div class="dark">{{categoryDict[result._gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() + categoryDict[result._gameOptions.categoryIds[0]].categoryName.slice(1)}}</div>
+            <div >
+              {{result.gameOptions.playerMode}}
+              <div class="col-xs-6" *ngIf="result.winnerPlayerId === user.userId">
+                Your
+              </div>
+              <div class="col-xs-6" >
+                {{result.playerId_0}}
+              </div>
+              <div class="col-xs-6" >
+                {{result.playerId_1}}
+              </div>
+            </div>
+          </div>
+        </ng-container>
       </a>
     </li>
   </ul>
