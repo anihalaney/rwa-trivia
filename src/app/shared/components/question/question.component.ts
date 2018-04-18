@@ -43,7 +43,7 @@ export class QuestionComponent implements OnChanges {
     if (this.answeredText !== '')
       return;
     this.answeredText = answer.answerText;
-    const index = this.question.answers.findIndex(x => x === answer);
+    const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
     this.answerClicked.emit(index);
   }
 
