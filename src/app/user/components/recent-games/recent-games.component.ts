@@ -32,9 +32,9 @@ export class RecentGamesComponent {
     });
     this.store.dispatch(new userActions.GetGameResult({ userId: this.user.userId }));
 
-
     this.store.select(userState).select(s => s.getGameResult).subscribe(result => {
       this.finalResult = result;
+      console.log(JSON.stringify(this.finalResult));
     });
 
 
