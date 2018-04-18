@@ -37,7 +37,7 @@ export class CreateNewGameSuccess implements Action {
 
 export class LoadGame implements Action {
   readonly type = GamePlayActionTypes.LOAD_GAME;
-  constructor(public payload: Game) { } //game
+  constructor(public payload: string) { } //game
 }
 
 export class LoadGameSuccess implements Action {

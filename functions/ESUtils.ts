@@ -30,10 +30,10 @@ export class ESUtils {
     let prefix = 'dev:';
 
     if (functions.config().elasticsearch &&
-     functions.config().elasticsearch.index &&
-     functions.config().elasticsearch.index.production &&
+      functions.config().elasticsearch.index &&
+      functions.config().elasticsearch.index.production &&
       // tslint:disable-next-line:triple-equals
-     functions.config().elasticsearch.index.production == 'true') {
+      functions.config().elasticsearch.index.production == 'true') {
 
       prefix = '';
     }
@@ -196,8 +196,8 @@ export class ESUtils {
     });
   }
 
-  static getRandomGameQuestion(): Promise<Question> {
-    return this.getRandomQuestionES(this.QUESTIONS_INDEX, 1, '', [2, 5, 7, 8], [], []).then((hits) => {
+  static getRandomGameQuestion(gameCategories: Array<number>, excludedQId: Array<string>): Promise<Question> {
+    return this.getRandomQuestionES(this.QUESTIONS_INDEX, 1, '', gameCategories, [], excludedQId).then((hits) => {
       // convert hit to Question
       return Question.getViewModelFromES(hits[0]);
     });

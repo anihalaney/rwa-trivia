@@ -27,10 +27,11 @@ export class GameMechanics {
 
 
     private joinGame(): Promise<string> {
-        return this.db.collection('games').where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q)
-            .where('nextTurnPlayerId', '==', '').where('gameOver', '==', false)
+        return this.db.collection('games').where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT)
+            .where('gameOver', '==', false)
             .get().then(games => {
                 const gameArr = [];
+
                 games.forEach(game => {
                     gameArr.push(Game.getViewModel(game.data()))
                 });
@@ -49,10 +50,15 @@ export class GameMechanics {
 
         const randomGameNo = Math.floor(Math.random() * totalGames);
         const game = queriedItems[randomGameNo];
-        if (game.playerIds[0] !== this.userId) {
+
+        if (game.playerIds[0] !== this.userId && game.nextTurnPlayerId === '') {
             game.nextTurnPlayerId = this.userId;
+            game.GameStatus = GameStatus.JOINED_GAME;
             game.addPlayer(this.userId);
-            game.generateDefaultStat();
+            game.playerIds.map((playerId) => {
+                game.calculateStat(playerId);
+            })
+
             const dbGame = game.getDbModel();
             return this.UpdateGame(dbGame).then((gameId) => { return gameId });
         } else if (totalGames === 1) {
