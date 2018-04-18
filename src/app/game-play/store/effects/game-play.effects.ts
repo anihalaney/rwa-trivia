@@ -35,7 +35,7 @@ export class GamePlayEffects {
     .ofType(GamePlayActionTypes.LOAD_GAME)
     .pipe(
     switchMap((action: gameplayactions.LoadGame) =>
-      this.svc.getGame(action.payload.gameId).pipe(
+      this.svc.getGame(action.payload).pipe(
         map((game: Game) => new gameplayactions.LoadGameSuccess(game))
       )
     )

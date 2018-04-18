@@ -105,4 +105,8 @@
 	.downloadFile,.custom-file-upload,.rejection-div,.add-tag-btn{ 
 		border-color: map-get($theme, download-btn);
 	}
+	.mat-list .mat-list-item
+	{
+		border-top-color: map-get($theme, primary);
+	}
 } 
