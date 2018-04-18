@@ -3,7 +3,7 @@
   Loading
 </div>
 
-<game-question *ngIf="currentQuestion && !turnStatus " 
+<game-question *ngIf="currentQuestion" 
   [categoryName]="categoryName"
   [question]="currentQuestion"
   [questionIndex]="questionIndex"
@@ -18,9 +18,7 @@
   (continueClicked)="continueClicked($event)"
   (viewQuestionClicked)="viewQuestionClicked($event)">
 </game-question>
-<div *ngIf="turnStatus">
-  <h2>Waiting for my turn</h2>
-</div>
+
 <game-question-continue *ngIf="false" class="overlay"
   [categoryName]="categoryName"
   [question]="currentQuestion"
