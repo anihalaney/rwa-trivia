@@ -41,7 +41,7 @@ export class InviteMailFriendsComponent implements OnInit {
 
   ngOnInit() {
     this.invitationForm = this.fb.group({
-      email: ['', Validators.compose([Validators.required])]
+      email: ['', Validators.required]
     });
   }
 
@@ -88,10 +88,6 @@ export class InviteMailFriendsComponent implements OnInit {
 
       }
       if (this.invalidEmailList.length === 0) {
-        // const invitation = new Invitations();
-        // invitation.created_uid = this.user.userId;
-        // invitation.email = this.invitationForm.get('email').value;
-        // invitation.status = 'pending';
         this.store.dispatch(new userActions.AddUserInvitation(
           { created_uid: this.user.userId, emails: this.validEmail, status: 'pending' }));
       }
