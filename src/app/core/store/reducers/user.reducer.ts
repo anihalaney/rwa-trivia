@@ -40,3 +40,12 @@ export function authInitialized(state: any = false, action: ActionWithPayload<an
 export const getAuthorizationHeader = (state: User) => (state) ? 'Bearer ' + state.idToken : null;
 
 
+export function invitationToken(state: any = 'NONE', action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case UserActions.STORE_INVITATION_TOKEN:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+

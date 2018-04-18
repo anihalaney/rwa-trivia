@@ -1,9 +1,12 @@
-import { Game, Question, Category, SearchCriteria, PlayerQnA, GameOperations, GameStatus, schedulerConstants } from '../src/app/model';
+import {
+  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants
+} from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
 import { UserCollection } from './user-collection';
+import { MakeFriends } from './make-friends';
 
 
 const functions = require('firebase-functions');
@@ -480,6 +483,22 @@ app.get('/testES', adminOnly, (req, res) => {
   });
 
 });
+
+// rebuild questions index
+app.post('/makeFriends', (req, res) => {
+
+  const token = req.body.token;
+  const userId = req.body.userId;
+  const email = req.body.email;
+
+  const makeFriends: MakeFriends = new MakeFriends(token, userId, email, admin.firestore());
+ 
+  makeFriends.validateToken().then((invitee) => {
+    console.log('invitee', invitee);
+    res.send({ created_uid: invitee });
+  });
+});
+
 // END - TEST FUNCTIONS
 ///////////////////////
 

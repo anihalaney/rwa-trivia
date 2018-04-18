@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-
-import { User, Question, Game } from '../../../model';
+import { User, Question, Invitation, Game } from '../../../model';
 
 export enum UserActionTypes {
 
@@ -15,6 +14,10 @@ export enum UserActionTypes {
     ADD_QUESTION = '[User] AddQuestions',
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
     UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
+    ADD_USER_INVITATION = '[User] AddUserInvitation',
+    ADD_USER_INVITATION_SUCCESS = '[User] AddUserInvitationSuccess',
+    MAKE_FRIEND = '[User] MakeFriend',
+    MAKE_FRIEND_SUCCESS = '[User] MakeFriendSuccess',
     GET_GAME_RESULT = '[User] GetGameResult',
     GET_GAME_RESULT_SUCCESS = '[User] GetGameResultSuccess'
 }
@@ -68,6 +71,33 @@ export class UpdateUserSuccess implements Action {
     constructor(public payload: User) { }
 }
 
+// Save user invitations
+export class AddUserInvitation implements Action {
+    readonly type = UserActionTypes.ADD_USER_INVITATION;
+    constructor(public payload: any) { }
+}
+
+// Save user invitations success
+export class AddUserInvitationSuccess implements Action {
+    readonly type = UserActionTypes.ADD_USER_INVITATION_SUCCESS;
+    payload = null;
+}
+
+// Save user invitations success
+export class MakeFriend implements Action {
+    readonly type = UserActionTypes.MAKE_FRIEND;
+    constructor(public payload: any) { }
+}
+
+// Save user invitations success
+export class MakeFriendSuccess implements Action {
+    readonly type = UserActionTypes.MAKE_FRIEND_SUCCESS;
+    payload = null;
+}
+
+
+
+
 // Get User's game result
 export class GetGameResult implements Action {
     readonly type = UserActionTypes.GET_GAME_RESULT;
@@ -91,6 +121,9 @@ export type UserActions
     | LoadUserUnpublishedQuestionsSuccess
     | AddQuestion
     | UpdateUserSuccess
+    | AddUserInvitation
+    | AddUserInvitationSuccess
+    | MakeFriendSuccess
     | GetGameResult
     | GetGameResultSuccess
 
