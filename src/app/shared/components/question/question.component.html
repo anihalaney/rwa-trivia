@@ -5,14 +5,14 @@
     <p class="row col-sm-11 col-xs-12">{{question.questionText}}</p>
     <ul class="question-list col-sm-12">
       <div class="row col-sm-12">
-        <li class="col-sm-5" *ngFor="let answer of question.answers|slice:0:2; let i=index" (click)="answerButtonClicked(answer)"
+        <li class="col-sm-5" *ngFor="let answer of question.answers|slice:0:2;" (click)="answerButtonClicked(answer)"
           [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
           [class.right]="answeredText !== '' && correctAnswerText === answer.answerText">
           {{answer.answerText}}
         </li>
       </div>
       <div class="row col-sm-12">
-        <li class="col-sm-5" *ngFor="let answer of question.answers|slice:2:4; let i=index" (click)="answerButtonClicked(answer)"
+        <li class="col-sm-5" *ngFor="let answer of question.answers|slice:2:4;" (click)="answerButtonClicked(answer)"
           [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
           [class.right]="answeredText !== '' && correctAnswerText === answer.answerText">
           {{answer.answerText}}
