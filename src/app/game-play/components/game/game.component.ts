@@ -25,7 +25,6 @@ import * as gameplayactions from '../../store/actions';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit, OnDestroy {
-  gameId: string;
   user: User;
   subs: Subscription[] = [];
   dialogRef: MatDialogRef<GameDialogComponent>;
@@ -44,20 +43,14 @@ export class GameComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user); //logged in user
+    //use the setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+    //The error happens as bindings change after change detection has run. using setTimeout runs another round of CD
+    // REF: https://github.com/angular/angular/issues/6005
+    // REF: https://github.com/angular/angular/issues/17572
+    // REF: https://github.com/angular/angular/issues/10131
+    //TODO: se what's causing the error and fix.
+    setTimeout(() => this.openDialog(), 0);
 
-    this.route.params.subscribe((params: Params) => {
-      this.gameId = params['id'];
-      this.store.dispatch(new gameplayactions.LoadGame(this.gameId));
-      //this.openDialog();
-
-      //use the setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
-      //The error happens as bindings change after change detection has run. using setTimeout runs another round of CD
-      // REF: https://github.com/angular/angular/issues/6005
-      // REF: https://github.com/angular/angular/issues/17572
-      // REF: https://github.com/angular/angular/issues/10131
-      //TODO: se what's causing the error and fix.
-      setTimeout(() => this.openDialog(), 0);
-    });
 
   }
 
@@ -65,15 +58,16 @@ export class GameComponent implements OnInit, OnDestroy {
     //  console.log("openDialog");
     this.dialogRef = this.dialog.open(GameDialogComponent, {
       disableClose: false,
-      data: { 'gameId': this.gameId, 'user': this.user, 'userDict': this.userDict }
+      data: { 'user': this.user, 'userDict': this.userDict }
     });
 
     this.dialogRef.afterOpen().subscribe(x => { window.document.body.classList.add("dialog-open") });
     this.dialogRef.afterClosed().subscribe(x => { window.document.body.classList.remove("dialog-open") });
   }
   ngOnDestroy() {
-    if (this.dialogRef)
+    if (this.dialogRef) {
       this.dialogRef.close();
+    }
     Utils.unsubscribe(this.subs);
   }
 }

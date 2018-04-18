@@ -1,9 +1,12 @@
-import { Game, Question, Category, SearchCriteria, PlayerQnA, GameOperations, GameStatus, schedulerConstants } from '../src/app/model';
+import {
+  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants
+} from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
 import { UserCollection } from './user-collection';
+import { MakeFriends } from './make-friends';
 
 
 const functions = require('firebase-functions');
@@ -201,7 +204,10 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
       return;
     }
 
-    ESUtils.getRandomGameQuestion().then((question) => {
+    const questionIds = [];
+    game.playerQnAs.map((question) => questionIds.push(question.questionId));
+
+    ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
       res.send(question);
     })
       .catch(error => {
@@ -455,7 +461,7 @@ app.get('/getTestQuestion', authorizedOnly, (req, res, next) => {
 });
 
 app.get('/getGameQuestionTest', authorizedOnly, (req, res) => {
-  ESUtils.getRandomGameQuestion().then((question) => {
+  ESUtils.getRandomGameQuestion([2, 4, 5, 6], []).then((question) => {
     res.send(question);
   });
 })
@@ -477,6 +483,22 @@ app.get('/testES', adminOnly, (req, res) => {
   });
 
 });
+
+// rebuild questions index
+app.post('/makeFriends', (req, res) => {
+
+  const token = req.body.token;
+  const userId = req.body.userId;
+  const email = req.body.email;
+
+  const makeFriends: MakeFriends = new MakeFriends(token, userId, email, admin.firestore());
+ 
+  makeFriends.validateToken().then((invitee) => {
+    console.log('invitee', invitee);
+    res.send({ created_uid: invitee });
+  });
+});
+
 // END - TEST FUNCTIONS
 ///////////////////////
 
@@ -510,14 +532,14 @@ app.post('/game/scheduler/check', authTokenOnly, (req, res) => {
         const game: Game = Game.getViewModel(doc.data());
         if (game.playerIds.length > 1 && game.nextTurnPlayerId !== '') {
           const noPlayTimeBound = new Date().getTime() - game.turnAt;
-        //  console.log('game--->', game.gameId);
-         // console.log('noPlayTimeBound--->', noPlayTimeBound);
+          //  console.log('game--->', game.gameId);
+          // console.log('noPlayTimeBound--->', noPlayTimeBound);
           if (noPlayTimeBound >= schedulerConstants.gamePlayDuration) {
             game.gameOver = true;
             game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
             const dbGame = game.getDbModel();
             db.doc('/games/' + game.gameId).update(dbGame);
-          //  console.log('updates=>', game.gameId);
+            //  console.log('updates=>', game.gameId);
           }
         }
       });

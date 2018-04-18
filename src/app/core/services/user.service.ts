@@ -6,10 +6,11 @@ import { Observable } from 'rxjs/Observable';
 import '../../rxjs-extensions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
-import { UserActions } from '../../core/store/actions';
-import { User } from '../../model';
-import * as useractions from '../../user/store/actions';
+import { User, Invitation, Friends } from '../../model';
+import { ObservableInput } from 'rxjs/Observable';
 import { CONFIG } from '../../../environments/environment';
+import { UserActions } from '../../core/store/actions';
+import * as useractions from '../../user/store/actions';
 
 
 
@@ -53,7 +54,7 @@ export class UserService {
 
 
     getUserProfileImage(user: User): Observable<User> {
-        if (user.profilePicture && user.profilePicture !== '' ) {
+        if (user.profilePicture && user.profilePicture !== '') {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.storage.ref(filePath);
             return ref.getDownloadURL().map(url => {
@@ -70,4 +71,24 @@ export class UserService {
         this.db.doc(`/users/${userId}`).update({ isSubscribed: true });
     }
 
+    saveUserInvitations(obj: any): Observable<boolean> {
+        const invitation = new Invitation();
+        invitation.created_uid = obj.created_uid;
+        invitation.status = obj.status;
+        const email = this.db.firestore.batch();
+        obj.emails.map((element) => {
+            invitation.email = element;
+            const dbInvitation = Object.assign({}, invitation); // object to be saved
+            const id = this.db.createId();
+            dbInvitation.id = id;
+            email.set(this.db.firestore.collection('invitations').doc(dbInvitation.id), dbInvitation);
+        });
+        email.commit();
+        return Observable.of(true);
+    }
+
+    checkInvitationToken(obj: any): Observable<any> {
+        const url = `${CONFIG.functionsUrl}/app/makeFriends`;
+        return this.http.post<any>(url, obj);
+    }
 }
