@@ -25,7 +25,7 @@ import {
   styleUrls: ['./game-dialog.component.scss']
 })
 export class GameDialogComponent implements OnInit, OnDestroy {
-  private _gameId: string;
+ 
   user: User;
   gameObs: Observable<Game>;
   game: Game;
@@ -55,7 +55,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   constructor(private store: Store<GamePlayState>, private gameActions: GameActions, private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
-    this._gameId = data.gameId;
+    
     this.user = data.user;
     this.userDict = data.userDict;
 
@@ -130,6 +130,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       Observable.timer(2000).take(1).subscribe(t => {
         this.turnStatus = turnFlag;
         this.store.dispatch(new gameplayactions.ResetCurrentGame());
+        this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
         this.currentQuestion = undefined;
         this.continueNext = false;
         this.router.navigate(['/dashboard']);

@@ -1,7 +1,10 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
 import { User, Question, Game } from '../../../model';
-import { userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions, questionSaveStatus, getGameResult } from './user.reducer';
+import {
+    userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions,
+    questionSaveStatus, getGameResult
+} from './user.reducer';
 import { Observable } from 'rxjs/Observable';
 
 

@@ -17,6 +17,9 @@ import {
   MyQuestionsComponent,
   QuestionAddUpdateComponent
 } from './components';
+import { InviteFriendsComponent } from './components/invite-friends/invite-friends.component';
+import { InviteFriendsDialogComponent } from './components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
+import { InviteMailFriendsComponent } from './components/invite-friends/invite-friends-dialog/invite-mail-friends/invite-mail-friends.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,10 @@ import {
     RecentGamesComponent,
     ProfileSettingsComponent,
     MyQuestionsComponent,
-    QuestionAddUpdateComponent
+    QuestionAddUpdateComponent,
+    InviteFriendsComponent,
+    InviteFriendsDialogComponent,
+    InviteMailFriendsComponent
   ],
   imports: [
     // rwa modules
@@ -50,7 +56,12 @@ import {
     RecentGamesComponent,
     ProfileSettingsComponent,
     MyQuestionsComponent,
-    QuestionAddUpdateComponent
+    QuestionAddUpdateComponent,
+    InviteFriendsComponent,
+    InviteMailFriendsComponent
+  ],
+  entryComponents: [
+    InviteFriendsDialogComponent
   ]
 })
 export class UserModule { }
