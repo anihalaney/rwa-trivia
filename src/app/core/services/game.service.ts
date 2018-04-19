@@ -62,25 +62,19 @@ export class GameService {
   }
 
 
-  addPlayerQnAToGame(game: Game, playerQnA: PlayerQnA): Observable<any> {
-    const url = `${CONFIG.functionsUrl}/app/game/${game.gameId}`;
+  addPlayerQnAToGame(gameId: string, playerQnA: PlayerQnA): Observable<any> {
+    const url = `${CONFIG.functionsUrl}/app/game/${gameId}`;
     const payload = {
       playerQnA: playerQnA,
-      nextTurnPlayerId: game.nextTurnPlayerId,
-      GameStatus: game.GameStatus,
-      turnAt: game.turnAt,
       operation: GameOperations.CALCULATE_SCORE
     };
     return this.http.put<any>(url, payload);
   }
 
 
-  setGameOver(game: Game, user: User) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${game.gameId}`,
+  setGameOver(gameId: string) {
+    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
       {
-        gameOver: game.gameOver,
-        winnerPlayerId: game.winnerPlayerId,
-        GameStatus: game.GameStatus,
         operation: GameOperations.GAME_OVER
       });
   }
