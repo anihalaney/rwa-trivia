@@ -40,7 +40,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   continueNext = false;
   questionAnswered = false;
   gameOver = false;
-  // turnStatus = false;
+
   MAX_TIME_IN_SECONDS = 16;
   showContinueBtn = false;
   userDict: { [key: string]: User } = {};
@@ -70,7 +70,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         if (game !== null) {
           this.game = game;
           this.gameOver = game.gameOver;
-          this.questionIndex = this.game.stats[this.user.userId].round;
+          this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
           this.correctAnswerCount = this.game.stats[this.user.userId].score;
           this.setTurnStatusFlag();
         }
@@ -93,7 +93,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           },
             null,
             () => {
-              //disable all buttons
+              // disable all buttons
               (this.currentQuestion) ?
                 this.afterAnswer() : '';
 
@@ -114,7 +114,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
     this.checkGameOver();
     if (!turnFlag && !this.gameOver) {
-      // this.turnStatus = turnFlag;
+   
       if (!this.currentQuestion) {
         this.getNextQuestion();
       }
@@ -129,7 +129,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       }
     } else {
       Observable.timer(2000).take(1).subscribe(t => {
-        //   this.turnStatus = turnFlag;
+        
         this.store.dispatch(new gameplayactions.ResetCurrentGame());
         this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
         this.currentQuestion = undefined;
@@ -152,22 +152,23 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   answerClicked($event: number) {
-    //console.log($event);
     Utils.unsubscribe([this.timerSub]);
-    //disable all buttons
+    // disable all buttons
     this.afterAnswer($event);
   }
   okClick($event) {
-    if (this.questionIndex >= this.game.gameOptions.maxQuestions)
+    if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       this.gameOver = true;
-    else
+    } else {
       this.continueNext = true;
+    }
+
   }
 
   checkGameOver() {
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
-      if (this.correctAnswerCount >= 5) {
+      if (this.correctAnswerCount >= 5 || this.game.stats[this.user.userId].round >= 16) {
         this.gameOverContinueClicked();
       }
     } else if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
@@ -187,48 +188,29 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
 
   gameOverContinueClicked() {
-    this.game.winnerPlayerId = this.user.userId;
-    this.game.gameOver = this.gameOver = true;
-    this.game.GameStatus = GameStatus.COMPLETED;
-    // this.turnStatus = true;
+    this.gameOver = true;
     this.currentQuestion = undefined;
-    this.store.dispatch(new gameplayactions.SetGameOver({ 'game': this.game, 'user': this.user }));
+    this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
   afterAnswer(userAnswerId?: number) {
 
-    let correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
-    //console.log(correctAnswerId);
-    if (userAnswerId === correctAnswerId)
+    const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
+
+    if (userAnswerId === correctAnswerId) {
       this.correctAnswerCount++;
-    let seconds = this.MAX_TIME_IN_SECONDS - this.timer;
-    let playerQnA: PlayerQnA = {
+    }
+
+    const seconds = this.MAX_TIME_IN_SECONDS - this.timer;
+    const playerQnA: PlayerQnA = {
       playerId: this.user.userId,
       playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
       questionId: this.currentQuestion.id
     }
-    //console.log(playerQnA);
 
-    if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
-      && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
-      if (this.game.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
-        this.game.nextTurnPlayerId = '';
-        this.game.GameStatus = GameStatus.AVAILABLE_FOR_OPPONENT;
-      } else if (this.game.GameStatus === GameStatus.JOINED_GAME && !playerQnA.answerCorrect) {
-        this.game.nextTurnPlayerId = this.otherPlayerUserId;
-        this.game.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
-      } else if (!playerQnA.answerCorrect) {
-        this.game.nextTurnPlayerId = this.otherPlayerUserId;
-      } else {
-        this.game.nextTurnPlayerId = this.user.userId;
-      }
-    }
-
-    this.game.turnAt = new Date(new Date().toUTCString()).getTime();
-
-    //dispatch action to push player answer
-    this.store.dispatch(new gameplayactions.AddPlayerQnA({ "game": this.game, "playerQnA": playerQnA }));
+    // dispatch action to push player answer
+    this.store.dispatch(new gameplayactions.AddPlayerQnA({ 'gameId': this.game.gameId, 'playerQnA': playerQnA }));
 
     this.questionComponent.disableQuestions(correctAnswerId);
     this.questionAnswered = true;

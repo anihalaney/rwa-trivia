@@ -62,7 +62,7 @@ export class GetNextQuestionSuccess implements Action {
 
 export class AddPlayerQnA implements Action {
   readonly type = GamePlayActionTypes.ADD_PLAYER_QNA;
-  constructor(public payload: { game: Game, playerQnA: PlayerQnA }) { }
+  constructor(public payload: { gameId: string, playerQnA: PlayerQnA }) { }
 }
 
 export class AddPlayerQnASuccess implements Action {
@@ -72,7 +72,7 @@ export class AddPlayerQnASuccess implements Action {
 
 export class SetGameOver implements Action {
   readonly type = GamePlayActionTypes.SET_GAME_OVER;
-  constructor(public payload: { game: Game, user: User }) { }
+  constructor(public payload: string) { }
 }
 
 export class ResetCurrentQuestion implements Action {
