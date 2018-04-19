@@ -11,7 +11,7 @@ import { MakeFriends } from './make-friends';
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 const parse = require('csv').parse;
 const fs = require('fs');
@@ -292,16 +292,15 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
       case GameOperations.CALCULATE_SCORE:
         const playerQnAs: PlayerQnA = req.body.playerQnA;
         game.playerQnAs.push(playerQnAs);
-        game.GameStatus = req.body.GameStatus;
-        game.turnAt = req.body.turnAt;
-        game.nextTurnPlayerId = req.body.nextTurnPlayerId;
+        game.decideNextTurn(playerQnAs, req.user.uid);
+        game.turnAt = new Date(new Date().toUTCString()).getTime();
         game.calculateStat(playerQnAs.playerId);
 
         break;
       case GameOperations.GAME_OVER:
-        game.gameOver = req.body.gameOver;
-        game.winnerPlayerId = req.body.winnerPlayerId;
-        game.GameStatus = req.body.GameStatus;
+        game.gameOver = true;
+        game.decideWinner();
+        game.GameStatus = GameStatus.COMPLETED;
         break;
     }
     dbGame = game.getDbModel();
@@ -492,7 +491,7 @@ app.post('/makeFriends', (req, res) => {
   const email = req.body.email;
 
   const makeFriends: MakeFriends = new MakeFriends(token, userId, email, admin.firestore());
- 
+
   makeFriends.validateToken().then((invitee) => {
     console.log('invitee', invitee);
     res.send({ created_uid: invitee });

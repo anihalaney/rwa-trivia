@@ -18,12 +18,12 @@ export class QuestionComponent implements OnChanges {
   @Output() answerClicked = new EventEmitter<number>();
   @Output() continueClicked = new EventEmitter();
 
-  answeredIndex: number;
-  correctAnswerIndex: number;
+  answeredText: string;
+  correctAnswerText: string;
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, private questionAction: QuestionActions) {
-    this.answeredIndex = -1;
-    this.correctAnswerIndex = -1;
+    this.answeredText = '';
+    this.correctAnswerText = '';
     this.store.select(appState.coreState).select(s => s.questionOfTheDay).subscribe(questionOfTheDay => {
     });
   }
@@ -32,23 +32,24 @@ export class QuestionComponent implements OnChanges {
     if (this.question.questionText !== undefined) {
       this.question.answers.forEach((item, index) => {
         if (item.correct === true) {
-          this.correctAnswerIndex = index;
+          this.correctAnswerText = item.answerText;
         }
       });
 
     }
   }
 
-  answerButtonClicked(answer: Answer, index: number) {
-    if (this.answeredIndex >= 0)
+  answerButtonClicked(answer: Answer) {
+    if (this.answeredText !== '')
       return;
-    this.answeredIndex = index;
+    this.answeredText = answer.answerText;
+    const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
     this.answerClicked.emit(index);
   }
 
   getNextQuestion() {
-    this.answeredIndex = -1;
-    this.correctAnswerIndex = -1;
+    this.answeredText = '';
+    this.correctAnswerText = '';
     this.store.dispatch(this.questionAction.getQuestionOfTheDay());
 
   }
