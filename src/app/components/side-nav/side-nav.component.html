@@ -1,18 +1,22 @@
 <profile-card [user]="user"></profile-card>
-<recent-games></recent-games>
+<recent-games [userDict]="userDict"></recent-games>
 <div class="card playwith">
-    <a [routerLink]="['/my/questions']">
-      <span class="sprite myqestion"></span>
-      <span class="playtext">Submit<span>Questions</span></span>
-    </a>
-  </div>
+  <a [routerLink]="['/my/questions']">
+    <span class="sprite myqestion"></span>
+    <span class="playtext">Submit
+      <span>Questions</span>
+    </span>
+  </a>
+</div>
 <user-stats-card></user-stats-card>
 
 
 <div class="card playwith">
   <a [routerLink]="['/my/invite-friends']">
     <span class="sprite playwithicon"></span>
-    <span class="playtext">Invite your<span>Friends</span></span>
+    <span class="playtext">Invite your
+      <span>Friends</span>
+    </span>
   </a>
 </div>
 
@@ -22,8 +26,12 @@
   <a href="#" class="sprite linkdenicon"></a>
 </div>
 <div class="card playwith visible-xs">
-  <a class="playtext" href="#"><span>Blog</span></a>
+  <a class="playtext" href="#">
+    <span>Blog</span>
+  </a>
 </div>
 <div class="card playwith visible-xs">
-  <a class="playtext" href="#"><span>System Stats</span></a>
+  <a class="playtext" href="#">
+    <span>System Stats</span>
+  </a>
 </div>

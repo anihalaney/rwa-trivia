@@ -35,7 +35,7 @@ export class GameCardComponent implements OnInit, OnChanges {
     this.store.select(appState.coreState).take(1).subscribe(s => {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
-    }); // logged in user
+    });
   }
 
   ngOnChanges() {
