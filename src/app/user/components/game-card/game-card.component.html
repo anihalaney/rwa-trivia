@@ -1,6 +1,5 @@
 <div class="innerli">
-  <div class="T-tagging">{{categoryDict[game.gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[0]].categoryName.slice(1)}}</div>
-
+  <div class="T-tagging">{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}</div>
   <div class="row">
     <ng-container *ngIf="game.gameOptions.playerMode == 0">
       <div class="col-xs-12 textcenter clearfix">
@@ -148,7 +147,7 @@
   </div>
 
   <div *ngIf="!myTurn" class="opponent">Opponent’s Turn</div>
-  <div *ngIf="!myTurn  && game.playerIds.length <= 1" class="opponent">
+  <!-- <div *ngIf="!myTurn  && game.playerIds.length <= 1" class="opponent">
 
-  </div>
+  </div> -->
 </div>

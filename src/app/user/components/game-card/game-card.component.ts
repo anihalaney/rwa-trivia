@@ -26,6 +26,7 @@ export class GameCardComponent implements OnInit, OnChanges {
   timerSub: Subscription;
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
+  randomCategoryId = 0;
 
   constructor(private store: Store<AppState>) {
 
@@ -56,8 +57,6 @@ export class GameCardComponent implements OnInit, OnChanges {
             this.remainingHours = 32 - hour;
             this.remainingMinutes = 0;
           }
-
-
         }
       })
   }
@@ -66,9 +65,7 @@ export class GameCardComponent implements OnInit, OnChanges {
     this.store.select(appState.coreState).take(1).subscribe(s => {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
-
-
-
+      this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
     }); // logged in user
   }
 
@@ -78,8 +75,6 @@ export class GameCardComponent implements OnInit, OnChanges {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
-
-
     }
   }
 
