@@ -1,4 +1,4 @@
-import { GameOptions, GameStatus } from './game-options';
+import { GameOptions, GameStatus, PlayerMode, OpponentType } from './game-options';
 import { Question } from './question';
 
 export class PlayerQnA {
@@ -92,6 +92,7 @@ export class Game {
     } else {
       this.generateDefaultStat();
     }
+
   }
 
   generateDefaultStat() {
@@ -123,8 +124,45 @@ export class Game {
   calculateStat(playerId: string) {
     const stat: Stat = new Stat();
     stat.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
-    stat.round = this.playerQnAs.filter((p) => p.playerId === playerId).length;
+    let round = 0;
+    this.playerQnAs.map((playerQn) => {
+      if (playerQn.playerId === playerId && !playerQn.answerCorrect) {
+        round++;
+      }
+    });
+    stat.round = round
     this.stats[playerId] = stat;
+  }
+
+  decideWinner() {
+    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent
+      && Number(this.gameOptions.opponentType) === OpponentType.Random) {
+      const playerId_0 = this.playerIds[0];
+      const playerId_1 = this.playerIds[1];
+      this.winnerPlayerId = (this.stats[playerId_0].score > this.stats[playerId_1].score) ? playerId_0 : playerId_1;
+    } else {
+      this.winnerPlayerId = this.playerIds[0];
+    }
+  }
+
+  decideNextTurn(playerQnA: PlayerQnA, userId: string) {
+    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent
+      && Number(this.gameOptions.opponentType) === OpponentType.Random) {
+      const otherPlayerUserId = this.playerIds.filter(playerId => playerId !== userId)[0];
+      if (this.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
+        this.nextTurnPlayerId = '';
+        this.GameStatus = GameStatus.AVAILABLE_FOR_OPPONENT;
+      } else if (this.GameStatus === GameStatus.JOINED_GAME && !playerQnA.answerCorrect) {
+        this.nextTurnPlayerId = otherPlayerUserId;
+        this.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
+      } else if (!playerQnA.answerCorrect) {
+        this.nextTurnPlayerId = otherPlayerUserId;
+      } else {
+        this.nextTurnPlayerId = userId;
+      }
+    } else {
+      this.nextTurnPlayerId = userId;
+    }
   }
 
 

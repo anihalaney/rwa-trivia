@@ -75,7 +75,7 @@ export class GamePlayEffects {
     .ofType(GamePlayActionTypes.ADD_PLAYER_QNA)
     .pipe(
     switchMap((action: gameplayactions.AddPlayerQnA) =>
-      this.svc.addPlayerQnAToGame(action.payload.game, action.payload.playerQnA).pipe(
+      this.svc.addPlayerQnAToGame(action.payload.gameId, action.payload.playerQnA).pipe(
         map((msg: any) => new gameplayactions.UpdateGameSuccess())
       )
     ));
@@ -85,7 +85,7 @@ export class GamePlayEffects {
     .ofType(GamePlayActionTypes.SET_GAME_OVER)
     .pipe(
     switchMap((action: gameplayactions.SetGameOver) =>
-      this.svc.setGameOver(action.payload.game, action.payload.user).pipe(
+      this.svc.setGameOver(action.payload).pipe(
         map((msg: any) => new gameplayactions.UpdateGameSuccess())
       )
     ));
