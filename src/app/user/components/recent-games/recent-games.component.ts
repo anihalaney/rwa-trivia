@@ -18,6 +18,7 @@ export class RecentGamesComponent {
   @Input() userDict: { [key: string]: User };
   startIndex = 0;
   nextIndex = 4;
+  maxIndex = 10;
 
   constructor(private store: Store<AppState>, ) {
 
@@ -36,8 +37,8 @@ export class RecentGamesComponent {
   }
 
   getMoreCard() {
-    this.nextIndex = (this.finalResult.length > (this.nextIndex + 6)) ?
-      this.nextIndex + 6 : this.finalResult.length;
+    this.nextIndex = (this.finalResult.length > (this.maxIndex)) ?
+      this.maxIndex : this.finalResult.length;
 
   }
 
