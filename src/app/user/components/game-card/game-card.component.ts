@@ -24,7 +24,7 @@ export class GameCardComponent implements OnInit, OnChanges {
   remainingHours: number;
   remainingMinutes: number;
   timerSub: Subscription;
-  categoryDictObs: Observable<{ [key: number]: Category }>;
+  categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
   randomCategoryId = 0;
 
@@ -37,8 +37,8 @@ export class GameCardComponent implements OnInit, OnChanges {
       }
     });
 
-    this.categoryDictObs = store.select(categoryDictionary);
-    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+    this.categoryDict$ = store.select(categoryDictionary);
+    this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict);
 
     this.timerSub =
       Observable.timer(1000, 1000).subscribe(t => {
