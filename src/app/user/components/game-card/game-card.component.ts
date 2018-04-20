@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { AppState, appState } from '../../../store';
-import { User, Game } from '../../../model';
+import { AppState, appState, categoryDictionary } from '../../../store';
+import { User, Game, Category } from '../../../model';
 import { userState } from '../../store';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -24,6 +24,8 @@ export class GameCardComponent implements OnInit, OnChanges {
   remainingHours: number;
   remainingMinutes: number;
   timerSub: Subscription;
+  categoryDictObs: Observable<{ [key: number]: Category }>;
+  categoryDict: { [key: number]: Category };
 
   constructor(private store: Store<AppState>) {
 
@@ -33,6 +35,9 @@ export class GameCardComponent implements OnInit, OnChanges {
         this.user = user;
       }
     });
+
+    this.categoryDictObs = store.select(categoryDictionary);
+    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
 
     this.timerSub =
       Observable.timer(1000, 1000).subscribe(t => {
