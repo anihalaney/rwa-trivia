@@ -19,6 +19,12 @@
           <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
           <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
           <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+
+          <div *ngIf="game.stats[user.userId].score < 1" class="sprite score0"></div>
+          <div *ngIf="game.stats[user.userId].score < 2" class="sprite score0"></div>
+          <div *ngIf="game.stats[user.userId].score < 3" class="sprite score0"></div>
+          <div *ngIf="game.stats[user.userId].score < 4" class="sprite score0"></div>
+          <div *ngIf="game.stats[user.userId].score < 5" class="sprite score0"></div>
         </div>
       </div>
     </ng-container>
@@ -33,9 +39,8 @@
         <div class="light" *ngIf="user?.location">{{user.location}}</div>
         <hr>
         <div class="light">
-          <span *ngIf="myTurn">Round {{game.stats[user.userId].round}}</span>
+          <span>Round {{game.stats[user.userId].round}}</span>
         </div>
-        <hr>
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
         <div class="">
           <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
@@ -43,6 +48,12 @@
           <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
           <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
           <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+
+          <div *ngIf="game.stats[user.userId].score < 1" class="sprite score0"></div>
+          <div *ngIf="game.stats[user.userId].score < 2" class="sprite score0"></div>
+          <div *ngIf="game.stats[user.userId].score < 3" class="sprite score0"></div>
+          <div *ngIf="game.stats[user.userId].score < 4" class="sprite score0"></div>
+          <div *ngIf="game.stats[user.userId].score < 5" class="sprite score0"></div>
 
         </div>
       </div>
@@ -137,7 +148,7 @@
   </div>
 
   <div *ngIf="!myTurn" class="opponent">Opponent’s Turn</div>
-  <!-- <div *ngIf="!myTurn" class="opponent">
+  <div *ngIf="!myTurn  && game.playerIds.length <= 1" class="opponent">
 
-  </div> -->
+  </div>
 </div>
