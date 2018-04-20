@@ -1,7 +1,6 @@
 .textcenter.clearfix .yourimg { margin: 0 auto 16px; }
 .innerli{ border:1px solid; border-radius: 4px; padding: 15px; display: block;min-height: 379px;max-height: 379px; }
-.T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px}
-.T-tagging{ margin-bottom: 15px;}
+.T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px;overflow-wrap: break-word;}
 .innerli .yourimg{ width: 94%; max-width: 70px; border-radius: 50%; height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 16px; border:1px solid; padding: 2px}
 .yourimg img{ display: block; width: 70px; height: 60px; border-radius: 50% }
 .vs:after{ content: "Vs"; position: absolute; right: -10px; top: 25px; font-size: 18px; font-family: 'hindmedium';height:25px; }
@@ -9,7 +8,7 @@
 .owl-item .col-md-3{ width: 100% }
 .playnow{  margin-top: 3%; display: block !important; padding: 5px 0; line-height: 1.2}
 .playnow span{ display: block; font-size: 12px; font-family: 'hindregular'}
-.opponent{ line-height: 43px; margin-top: 3%;  text-align: center;}
+.opponent{ line-height: 43px; margin-top: 18px;  text-align: center;}
 hr{height:15px; visibility: hidden; margin: 0;}
 .div-right-border
 {
