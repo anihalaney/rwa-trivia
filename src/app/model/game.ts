@@ -12,9 +12,11 @@ export class PlayerQnA {
 export class Stat {
   score: number;
   round: number;
+  avgAnsTime: number;
   constructor() {
     this.score = 0;
     this.round = 0;
+    this.avgAnsTime = 0;
   }
 }
 
@@ -125,12 +127,17 @@ export class Game {
     const stat: Stat = new Stat();
     stat.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
     let round = 0;
+    let totalQTime = 0;
     this.playerQnAs.map((playerQn) => {
-      if (playerQn.playerId === playerId && !playerQn.answerCorrect) {
-        round++;
+      if (playerQn.playerId === playerId) {
+        if (!playerQn.answerCorrect) {
+          round++;
+        }
+        totalQTime = totalQTime + playerQn.playerAnswerInSeconds;
       }
     });
-    stat.round = round
+    stat.round = round;
+    stat.avgAnsTime = Math.floor((totalQTime) / this.playerQnAs.filter((p) => p.playerId === playerId).length)
     this.stats[playerId] = stat;
   }
 

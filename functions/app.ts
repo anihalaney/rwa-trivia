@@ -1,10 +1,11 @@
 import {
-  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants
+  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants, User
 } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
+import { GameLeaderBoardStats } from './game-leaderboard-stats';
 import { UserCollection } from './user-collection';
 import { MakeFriends } from './make-friends';
 
@@ -549,7 +550,19 @@ app.post('/game/scheduler/check', authTokenOnly, (req, res) => {
     });
 });
 
+app.get('/updateUserStat', (req, res) => {
+  const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
+  gameLeaderBoardStats.generateGameStats();
+  res.send('updated stats');
 
+});
+
+app.get('/updateLeaderBoardStat', (req, res) => {
+  const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
+  gameLeaderBoardStats.calculateGameLeaderBoardStat().then((stat) => {
+    res.send('updated stats');
+  });
+});
 
 
 exports.app = functions.https.onRequest(app);
