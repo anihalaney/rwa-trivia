@@ -1,8 +1,9 @@
 <div class="card recentlygames">
   <h2>Recently Completed Games</h2>
   <ul>
-    <li *ngFor="let result of finalResult| slice:0:4; let i=index">
-      <a href="#">
+    <li *ngFor="let game of finalResult|slice:startIndex:nextIndex" class="col-sm-12">
+      <recent-game-card [game]="game" [userDict]="userDict" [user]="user"></recent-game-card>
+      <!-- <a href="#">
         <div class="sprite architicon" *ngIf="result.winnerPlayerId === user.userId"></div>
         <div class="sprite rogrammingicon" *ngIf="result.winnerPlayerId !== user.userId"></div>
         <div class="datebox">
@@ -10,14 +11,14 @@
           <div class="dark">{{categoryDict[result._gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() + categoryDict[result._gameOptions.categoryIds[0]].categoryName.slice(1)}}</div>
         </div>
         <div class="scorebox align-right">
-          <!-- <div class="light">Score 3</div> -->
+          <div class="light">Score 3</div>
           <div class="dark" *ngIf="result.winnerPlayerId === user.userId">Won</div>
           <div class="dark" *ngIf="result.winnerPlayerId !== user.userId">Lost</div>
         </div>
-      </a>
+      </a> -->
     </li>
   </ul>
-  <a class="viewall" href="#" title="view all">view all
+  <a class="viewall" title="view more" (click)="getMoreCard()" *ngIf="finalResult.length!=nextIndex">view more
     <span class="a-arrow"></span>
   </a>
 </div>
