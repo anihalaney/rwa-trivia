@@ -8,6 +8,7 @@ import { ProfileSettingsComponent } from './profile-settings/profile-settings.co
 import { QuestionAddUpdateComponent } from './question-add-update/question-add-update.component';
 import { MyQuestionsComponent } from './my-questions/my-questions.component';
 import { InviteFriendsComponent } from './invite-friends/invite-friends.component';
+import { RecentGameCardComponent } from './recent-games/recent-game-card/recent-game-card.component';
 
 export {
     ProfileCardComponent,
@@ -19,7 +20,8 @@ export {
 
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent
+    InviteFriendsComponent,
+    RecentGameCardComponent
 };
 
 export default [
@@ -32,5 +34,6 @@ export default [
 
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent
+    InviteFriendsComponent,
+    RecentGameCardComponent
 ];
