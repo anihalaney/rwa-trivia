@@ -54,7 +54,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   constructor(private store: Store<GamePlayState>, private gameActions: GameActions, private router: Router,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
-
     this.user = data.user;
     this.userDict = data.userDict;
 

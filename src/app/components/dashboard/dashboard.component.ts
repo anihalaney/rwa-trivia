@@ -30,6 +30,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showGames: boolean;
   showNewsCard = true;
   userDict: { [key: string]: User } = {};
+  missingCardCount = 0;
+  numbers = [];
 
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
@@ -58,20 +60,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subs.push(this.activeGames$.subscribe(games => {
       if (games.length > 0) {
         this.activeGames = games;
+        this.checkCardCountPerRow();
         this.activeGames.map(game => {
-            const playerIds = game.playerIds;
-            playerIds.map(playerId => {
-                if (playerId !== this.user.userId) {
-                  this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
-                }
-              });
+          const playerIds = game.playerIds;
+          playerIds.map(playerId => {
+            if (playerId !== this.user.userId) {
+              this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
+            }
           });
-          this.showGames = true;
-        }
-      }));
+        });
+        this.showGames = true;
+      }
+    }));
 
     this.gameSliceStartIndex = 0;
     this.gameSliceLastIndex = 8;
+
   }
 
 
@@ -93,9 +97,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
   displayMoreGames(): void {
     this.gameSliceLastIndex = (this.activeGames.length > (this.gameSliceLastIndex + 8)) ?
       this.gameSliceLastIndex + 8 : this.activeGames.length;
+    this.checkCardCountPerRow();
   }
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
+  }
+
+  checkCardCountPerRow() {
+    if (this.activeGames.length > 0) {
+      if (this.activeGames.length < this.gameSliceLastIndex) {
+        this.missingCardCount = this.gameSliceLastIndex - this.activeGames.length;
+        this.numbers = Array(this.missingCardCount).fill(0).map((x, i) => i);
+      } else if (this.activeGames.length === this.gameSliceLastIndex) {
+        const diff = Math.trunc(this.activeGames.length / 4);
+        if (this.activeGames.length % 4 !== 0) {
+          this.missingCardCount = (diff + 1) * 4 - this.activeGames.length;
+          this.numbers = Array(this.missingCardCount).fill(0).map((x, i) => i);
+        }
+      }
+    }
   }
 }

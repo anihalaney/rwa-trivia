@@ -20,8 +20,11 @@
 
       </div>
       <ul class="row" *ngIf="showGames">
-        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12">
+        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
           <game-card [game]="game" [userDict]="userDict"></game-card>
+        </li>
+        <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
+          <img class="no-card" src="/assets/images/blank_card.png">
         </li>
         <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
           <a href="#" class="innerli textcenter">
@@ -32,7 +35,7 @@
     </div>
 
     <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
-      <a *ngIf="showGames && activeGames.length!=gameSliceLastIndex" class="viewall" (click)="displayMoreGames()">view more</a>
+      <a *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 " class="viewall" (click)="displayMoreGames()">view more</a>
     </div>
 
 
