@@ -1,4 +1,7 @@
-import { Game, GameStatus, GameOptions, PlayerMode, OpponentType, Stat, User, UserStats, LeaderBoardUser } from '../src/app/model';
+import {
+    Game, GameStatus, GameOptions, PlayerMode, OpponentType, Stat, User, UserStats,
+    LeaderBoardUser, UserStatConstants
+} from '../src/app/model';
 
 
 export class GameLeaderBoardStats {
@@ -15,42 +18,58 @@ export class GameLeaderBoardStats {
     generateGameStats() {
         this.db.collection('games')
             .where('gameOver', '==', true)
-            .get().then(games => {
-                const gameArr = [];
-                games.forEach(game => {
-                    gameArr.push(Game.getViewModel(game.data()))
+            .get()
+            .then(games => games.docs.map(game => Game.getViewModel(game.data())))
+            .then(games => {
+                const gamePromises = [];
+                games.map(game => {
+                    gamePromises.push(this.getGameUsers(game));
                 });
-                this.getGameUsers(gameArr, 0).then((str) => { console.log(str) });
+
+                Promise.all(gamePromises)
+                    .then((gameResults) => {
+                        console.log('All game stats are updates', gameResults);
+                    })
+                    .catch((e) => {
+                        console.log('game promise error', e);
+                    });
             });
+
+
     }
 
-
-    private getGameUsers(games: Game[], index): Promise<string> {
-        const game = games[index];
-        const userIds = Object.keys(game.stats);
-        return this.calculateUserStat(userIds, 0, game, game.gameOptions.categoryIds).then((status) => {
-            index++;
-            return (games.length > index) ? this.getGameUsers(games, index) : 'updated stats';
+    public getGameUsers(game: Game): Promise<any> {
+        const userPromises = [];
+        Object.keys(game.stats).map((userId) => {
+            userPromises.push(this.calculateUserStat(userId, game, game.gameOptions.categoryIds));
         });
 
+        return Promise.all(userPromises)
+            .then((userResults) => {
+                console.log('All Users stats are updated', userResults);
+                return userResults;
+            })
+            .catch((e) => {
+                console.log('game promise error', e);
+            });
+
     }
 
-    public calculateUserStat(userIds: string[], index, game: Game, categoryIds: number[]): Promise<string> {
-        const userId = userIds[index];
+    private calculateUserStat(userId: string, game: Game, categoryIds: number[]): Promise<string> {
         const score = game.stats[userId].score;
         const avgAnsTime = game.stats[userId].avgAnsTime;
         return this.db.doc(`users/${userId}`)
             .get().then(userData => {
                 const user: User = userData.data();
-                if (user) {
-                    categoryIds.forEach((id) => {
+                if (user && user.userId) {
+                    categoryIds.map((id) => {
                         user.stats = (user.stats) ? user.stats : new UserStats();
                         user.stats.leaderBoardStats[id] = (user.stats.leaderBoardStats[id]) ?
                             user.stats.leaderBoardStats[id] + score : score;
                     });
                     user.stats['leaderBoardStats'] = { ...user.stats.leaderBoardStats };
                     user.stats.gamePlayed = (user.stats.gamePlayed) ? user.stats.gamePlayed + 1 : 1;
-                    user.stats.topics = Object.keys(user.stats.leaderBoardStats).length;
+                    user.stats.categories = Object.keys(user.stats.leaderBoardStats).length;
                     (game.winnerPlayerId === userId) ?
                         user.stats.wins = (user.stats.wins) ? user.stats.wins + 1 : 1 :
                         user.stats.losses = (user.stats.losses) ? user.stats.losses + 1 : 1;
@@ -58,14 +77,11 @@ export class GameLeaderBoardStats {
                     user.stats.avgAnsTime = (user.stats.avgAnsTime) ? Math.floor((user.stats.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
                     user['stats'] = { ...user.stats };
                     return this.updateUser({ ...user }).then((id) => {
-                        index++;
-                        return (userIds.length > index) ? this.calculateUserStat(userIds, index, game, categoryIds) : 'User Stat updated';
+                        return `User ${userId} Stat updated`;
                     });
                 } else {
-                    index++;
-                    return (userIds.length > index) ? this.calculateUserStat(userIds, index, game, categoryIds) : 'User Stat updated';
+                    return `User ${userId} Stat updated`;
                 }
-
             });
     }
 
@@ -81,11 +97,11 @@ export class GameLeaderBoardStats {
         return this.db.collection('users')
             .get().then(users => {
                 this.getLeaderBoardStat().then((lbsStats) => {
-                    users.forEach(user => {
+                    users.docs.map(user => {
                         const userObj: User = user.data();
-                     //   console.log('userId', userObj.userId);
+                        //   console.log('userId', userObj.userId);
                         lbsStats = this.calculateLeaderBoardStat(userObj, lbsStats);
-                      //  console.log('lbsStats', lbsStats);
+                        //  console.log('lbsStats', lbsStats);
                     });
                     return this.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
                         return leaderBoardStat;
@@ -106,11 +122,11 @@ export class GameLeaderBoardStats {
             const leaderBoardStats = userObj.stats.leaderBoardStats;
 
             if (leaderBoardStats) {
-                Object.keys(leaderBoardStats).forEach((id) => {
+                Object.keys(leaderBoardStats).map((id) => {
                     const leaderBoardUsers: Array<LeaderBoardUser> = (lbsStats[id]) ? lbsStats[id] : [];
                     const filteredUsers: Array<LeaderBoardUser> =
                         leaderBoardUsers.filter((lbUser) => lbUser.userId === userObj.userId);
-                   // console.log('filteredUsers', filteredUsers);
+                    // console.log('filteredUsers', filteredUsers);
 
                     const leaderBoardUser: LeaderBoardUser = (filteredUsers.length > 0) ?
                         filteredUsers[0] : new LeaderBoardUser();
@@ -124,8 +140,8 @@ export class GameLeaderBoardStats {
                     leaderBoardUsers.sort((a, b) => {
                         return b.score - a.score;
                     });
-                   // console.log('leaderBoardUsers', leaderBoardUsers);
-                    (leaderBoardUsers.length > 100) ?
+                    // console.log('leaderBoardUsers', leaderBoardUsers);
+                    (leaderBoardUsers.length > UserStatConstants.maxUsers) ?
                         leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1) : '';
 
                     lbsStats[id] = leaderBoardUsers;

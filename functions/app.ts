@@ -6,6 +6,7 @@ import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
 import { GameLeaderBoardStats } from './game-leaderboard-stats';
+import { UserContributionStat } from './user- contibution-stat';
 import { UserCollection } from './user-collection';
 import { MakeFriends } from './make-friends';
 
@@ -550,17 +551,24 @@ app.post('/game/scheduler/check', authTokenOnly, (req, res) => {
     });
 });
 
-app.get('/updateUserStat', (req, res) => {
+app.get('/updateUserStat', adminOnly, (req, res) => {
   const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
   gameLeaderBoardStats.generateGameStats();
   res.send('updated stats');
 
 });
 
-app.get('/updateLeaderBoardStat', (req, res) => {
+app.get('/updateLeaderBoardStat', adminOnly, (req, res) => {
   const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
   gameLeaderBoardStats.calculateGameLeaderBoardStat().then((stat) => {
     res.send('updated stats');
+  });
+});
+
+app.get('/updateUserCategoryStat', adminOnly, (req, res) => {
+  const userContributionStat: UserContributionStat = new UserContributionStat(admin.firestore());
+  userContributionStat.generateGameStats().then((userDictResults) => {
+    res.send('updated user category stat');
   });
 });
 

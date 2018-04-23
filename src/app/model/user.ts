@@ -38,7 +38,7 @@ export class User {
 export class UserStats {
   leaderBoardStats?: { [key: number]: number }
   gamePlayed?: number;
-  topics?: number;
+  categories?: number;
   wins?: number;
   badges?: number;
   losses?: number;
