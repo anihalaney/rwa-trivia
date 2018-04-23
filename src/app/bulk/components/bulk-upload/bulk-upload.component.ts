@@ -205,8 +205,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
         this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.categoryIds = [this.uploadFormGroup.get('category').value];
         if (this.primaryTag.trim() !== '') {
-          if (this.isTagExist(this.primaryTag, question) !== -1) {
-            question.tags.splice(this.isTagExist(this.primaryTag, question), 1);
+          const duplicateTagIndex = this.isTagExist(this.primaryTag, question);
+          if (duplicateTagIndex !== -1) {
+            question.tags.splice(duplicateTagIndex, 1);
           }
           question.tags = [this.uploadFormGroup.get('tagControl').value, ...question.tags.filter(tag => tag !== this.primaryTagOld)];
         } else if (this.primaryTag === '') {
