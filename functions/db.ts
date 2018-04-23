@@ -41,9 +41,7 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
     const game: Game = afterEventData;
     const userIds = Object.keys(game.stats);
     const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
-    gameLeaderBoardStats.calculateUserStat(userIds, 0, game, game.gameOptions.categoryIds).then((status) => {
-      console.log('status--->', status);
-    });
+    gameLeaderBoardStats.getGameUsers(game);
   }
 
 });

@@ -20,3 +20,19 @@
   .categorybox .dark{ font-size: 13px }
   .categorybox .light{ font-size: 12px; }
 }
+
+
+.viewall{  font-size: 12px; padding: 6px 25px 6px 17px; position: relative; border:1px solid; border-radius: 14px; display: inline-block; margin-top: 5px;cursor: pointer;}
+.viewall:after{ content: ""; position: absolute; right: 15px; top: 0; bottom: 0; width: 7px; height: 7px; border-width: 1px 1px 0 0; border-style: solid; transform: rotate(45deg); margin: auto; transition: 0.3s ease-in-out}
+.viewall{border-color: rgba(204,204,204,0.44);}
+.viewall:hover{ border-color: #3b5998;cursor: pointer;}
+
+@media screen and ( min-width:1000px){
+  .viewall:hover:after{ right: 12px; }
+}
+
+.view-all-btn
+{
+  text-align: center;
+  margin-top: 10px;
+}
