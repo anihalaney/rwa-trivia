@@ -209,7 +209,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
           if (duplicateTagIndex !== -1) {
             question.tags.splice(duplicateTagIndex, 1);
           }
-          question.tags = [this.uploadFormGroup.get('tagControl').value, ...question.tags.filter(tag => tag !== this.primaryTagOld)];
+          question.tags = [this.primaryTag, ...question.tags.filter(tag => tag !== this.primaryTagOld)];
         } else if (this.primaryTag === '') {
           question.tags = [...question.tags.filter(tag => tag !== this.primaryTagOld)];
         }
