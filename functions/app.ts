@@ -504,7 +504,7 @@ app.post('/makeFriends', (req, res) => {
 
 
 
-app.get('/user/:userId', authorizedOnly, (req, res) => {
+app.get('/user/:userId', (req, res) => {
   // console.log('body---->', req.body);
   const userId = req.params.userId;
 
