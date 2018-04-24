@@ -15,7 +15,8 @@ import {
   RecentGamesComponent,
   ProfileSettingsComponent,
   MyQuestionsComponent,
-  QuestionAddUpdateComponent
+  QuestionAddUpdateComponent,
+  RecentGameCardComponent
 } from './components';
 import { InviteFriendsComponent } from './components/invite-friends/invite-friends.component';
 import { InviteFriendsDialogComponent } from './components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
@@ -33,7 +34,8 @@ import { InviteMailFriendsComponent } from './components/invite-friends/invite-f
     QuestionAddUpdateComponent,
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent
+    InviteMailFriendsComponent,
+    RecentGameCardComponent
   ],
   imports: [
     // rwa modules
@@ -58,7 +60,8 @@ import { InviteMailFriendsComponent } from './components/invite-friends/invite-f
     MyQuestionsComponent,
     QuestionAddUpdateComponent,
     InviteFriendsComponent,
-    InviteMailFriendsComponent
+    InviteMailFriendsComponent,
+    RecentGameCardComponent
   ],
   entryComponents: [
     InviteFriendsDialogComponent
