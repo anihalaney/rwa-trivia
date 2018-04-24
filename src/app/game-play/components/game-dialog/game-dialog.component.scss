@@ -126,3 +126,48 @@ mat-card {
   min-width: 450px;
   min-height: 300px;
 }
+
+.circle
+{
+  border-radius: 50%;
+  border-width: 1px;
+  border-color:  #b7b7b7;
+  border-style: solid;
+  background-color:  rgba(255, 255, 255, 0.3);
+  // opacity: 0.35;
+  width: 105px;
+  height: 105px;
+  margin: 0 auto;
+}
+.circle-image
+{
+  border-radius: 50%;
+  // background-color:  #f26651;
+  width: 62px;
+  height: 62px;
+  margin-top: 18%;
+}
+.main-div
+{
+  border-radius: 2px;
+  background-color:  #ffffff;
+  box-shadow: 4px 4px 14.08px 1.92px rgba(0, 0, 0, 0.37);
+  //  width: 381px;
+  // height: 231px;
+  min-width: 800px !important;
+  height: 540px !important;
+  
+}
+.text
+{
+  font-family: Hind;
+  color:  #283445;
+  font-size: 14px;/* Approximation due to font substitution */
+  font-weight: 400;
+  text-align: left;
+  padding-top: 4%;
+}
+.badge-icon
+{
+  padding-top: 20%;
+}

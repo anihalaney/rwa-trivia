@@ -47,6 +47,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   otherPlayer: User;
   otherPlayerUserId: string;
   RANDOM_PLAYER = 'Random Player';
+  showBadge = false;
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -113,7 +114,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
     this.checkGameOver();
     if (!turnFlag && !this.gameOver) {
-   
+
       if (!this.currentQuestion) {
         this.getNextQuestion();
       }
@@ -128,7 +129,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       }
     } else {
       Observable.timer(2000).take(1).subscribe(t => {
-        
+
         this.store.dispatch(new gameplayactions.ResetCurrentGame());
         this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
         this.currentQuestion = undefined;
@@ -181,8 +182,11 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     this.checkGameOver();
-    (!this.gameOver) ?
-      this.getNextQuestion() : '';
+    if (!this.gameOver) {
+      this.showBadge = true;
+      this.getNextQuestion();
+    }
+
   }
 
 
