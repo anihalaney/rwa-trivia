@@ -4,5 +4,6 @@ export enum schedulerConstants {
 
 
 export enum UserStatConstants {
-    maxUsers = 100
+    maxUsers = 100,
+    initialContribution = 1
 }

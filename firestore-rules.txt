@@ -77,6 +77,13 @@ service cloud.firestore {
       	allow create: if isUserAuthenticated(request.resource.data.created_uid);
       	}              
     }  
+
+    match /leader_board_stats/categories {
+      match /{document=**} {
+        allow read: if isUserAuthenticated(request.user.uid);
+        
+      }
+    }
     
   }
 }

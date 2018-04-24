@@ -2,11 +2,9 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-
 import { AppState, appState, categoryDictionary } from '../../store';
 import { Utils } from '../../core/services';
 import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
-import * as leaderBoardActions from '../../stats/store/actions';
 import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../model';
 
 @Component({
@@ -21,8 +19,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   questionOfTheDay$: Observable<Question>;
   activeGames$: Observable<Game[]>;
   userDict$: Observable<{ [key: string]: User }>;
-  leaderBoardStatDict: { [key: string]: Array<LeaderBoardUser> };
-  leaderBoardCat: Array<string>;
   gameInvites: number[];  // change this to game invites
   gameSliceStartIndex: number;
   gameSliceLastIndex: number;
@@ -33,7 +29,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   showGames: boolean;
   showNewsCard = true;
   userDict: { [key: string]: User } = {};
-  userList = [];
 
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
@@ -52,7 +47,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
         // Load active Games
         this.store.dispatch(this.gameActions.getActiveGames(user));
-        this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
+
       } else {
         this.showNewsCard = true;
       }
@@ -74,24 +69,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.showGames = true;
       }
 
-      this.store.select(appState.leaderBoardState).select(s => s.scoreBoard).subscribe(lbsStat => {
-
-        if (lbsStat !== null) {
-          this.leaderBoardStatDict = lbsStat;
-          this.leaderBoardCat = Object.keys(lbsStat);
-          this.leaderBoardCat.map((cat) => {
-            this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
-              const userId = user.userId;
-              if (!this.userDict[userId]) {
-                (this.userList.indexOf(userId) === -1) ? this.userList.push(userId) : '';
-              }
-            })
-          });
-          this.userList.map((userId) => {
-            this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
-          });
-        }
-      });
     }));
 
     this.gameSliceStartIndex = 0;
