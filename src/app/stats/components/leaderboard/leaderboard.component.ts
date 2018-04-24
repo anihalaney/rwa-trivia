@@ -32,11 +32,8 @@ export class LeaderboardComponent implements OnDestroy {
     this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
     });
-    this.subs.push(store.select(appState.coreState).select(s => s.user).subscribe(user => {
-      if (user) {
-        this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
-      }
-    }));
+
+    this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
 
     this.store.select(appState.leaderBoardState).select(s => s.scoreBoard).subscribe(lbsStat => {
 
