@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState, appState, categoryDictionary } from '../../../store';
+import { AppState, appState } from '../../../store';
 import * as userActions from '../../../user/store/actions';
 import { User, Subscription, Game, Category } from '../../../model';
 import { userState } from '../../store';
@@ -15,16 +15,14 @@ export class RecentGamesComponent {
 
   user: User;
   finalResult = [];
-  categoryDictObs: Observable<{ [key: number]: Category }>;
-  categoryDict: { [key: number]: Category };
+  @Input() userDict: { [key: string]: User };
+  startIndex = 0;
+  nextIndex = 4;
+  maxIndex = 10;
 
   constructor(private store: Store<AppState>, ) {
 
-    this.categoryDictObs = store.select(categoryDictionary);
-    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
-
     this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
-
       this.user = user;
       if (user) {
         this.user = user;
@@ -32,11 +30,16 @@ export class RecentGamesComponent {
     });
     this.store.dispatch(new userActions.GetGameResult({ userId: this.user.userId }));
 
-
     this.store.select(userState).select(s => s.getGameResult).subscribe(result => {
       this.finalResult = result;
     });
 
+  }
+
+  getMoreCard() {
+    this.nextIndex = (this.finalResult.length > (this.maxIndex)) ?
+      this.maxIndex : this.finalResult.length;
 
   }
+
 }

@@ -28,10 +28,10 @@ export class GameLeaderBoardStats {
 
                 Promise.all(gamePromises)
                     .then((gameResults) => {
-                        console.log('All game stats are updates', gameResults);
+                       // console.log('All game stats are updates', gameResults);
                     })
                     .catch((e) => {
-                        console.log('game promise error', e);
+                      //  console.log('game promise error', e);
                     });
             });
 
@@ -46,11 +46,11 @@ export class GameLeaderBoardStats {
 
         return Promise.all(userPromises)
             .then((userResults) => {
-                console.log('All Users stats are updated', userResults);
+              //  console.log('All Users stats are updated', userResults);
                 return userResults;
             })
             .catch((e) => {
-                console.log('game promise error', e);
+              //  console.log('game promise error', e);
             });
 
     }
@@ -99,9 +99,9 @@ export class GameLeaderBoardStats {
                 this.getLeaderBoardStat().then((lbsStats) => {
                     users.docs.map(user => {
                         const userObj: User = user.data();
-                        console.log('userId', userObj.userId);
+                      //  console.log('userId', userObj.userId);
                         lbsStats = this.calculateLeaderBoardStat(userObj, lbsStats);
-                        console.log('lbsStats', lbsStats);
+                      //  console.log('lbsStats', lbsStats);
                     });
                     return this.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
                         return leaderBoardStat;
@@ -126,7 +126,7 @@ export class GameLeaderBoardStats {
                     const leaderBoardUsers: Array<LeaderBoardUser> = (lbsStats[id]) ? lbsStats[id] : [];
                     const filteredUsers: Array<LeaderBoardUser> =
                         leaderBoardUsers.filter((lbUser) => lbUser.userId === userObj.userId);
-                    console.log('filteredUsers', filteredUsers);
+                  //  console.log('filteredUsers', filteredUsers);
 
                     const leaderBoardUser: LeaderBoardUser = (filteredUsers.length > 0) ?
                         filteredUsers[0] : new LeaderBoardUser();
@@ -140,7 +140,7 @@ export class GameLeaderBoardStats {
                     leaderBoardUsers.sort((a, b) => {
                         return b.score - a.score;
                     });
-                    console.log('leaderBoardUsers', leaderBoardUsers);
+                 //   console.log('leaderBoardUsers', leaderBoardUsers);
                     (leaderBoardUsers.length > UserStatConstants.maxUsers) ?
                         leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1) : '';
 

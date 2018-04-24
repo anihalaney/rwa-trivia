@@ -493,7 +493,6 @@ app.post('/makeFriends', (req, res) => {
   const email = req.body.email;
 
   const makeFriends: MakeFriends = new MakeFriends(token, userId, email, admin.firestore());
-
   makeFriends.validateToken().then((invitee) => {
     console.log('invitee', invitee);
     res.send({ created_uid: invitee });
