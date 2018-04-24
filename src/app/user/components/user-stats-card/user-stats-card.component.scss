@@ -10,7 +10,7 @@
 .statsview .sprite{ width: 25px; height: 26px; margin-right:10px }
 .sec{ font-size: 12px; margin-top: -2px}
 .tabbing{box-shadow: 0 2px 6px rgba(0,0,0,0.12) }
-.tabbing li{  font-family: 'hindsemibold';width: 50%; float: left; height: 57px; line-height: 57px; font-size: 16px; border-bottom: 3px solid transparent; text-align: center; transition: 0.3s ease-in-out; cursor: pointer;}
+.tabbing li{  font-family: 'hindsemibold';width: 100%; float: left; height: 57px; line-height: 57px; font-size: 16px; border-bottom: 3px solid transparent; text-align: center; transition: 0.3s ease-in-out; cursor: pointer;}
 .tab-content { display: none;}
 .tab-content.active { display: block;}
 .tabbing li.active{ border-color: #3b5998}

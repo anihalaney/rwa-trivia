@@ -1,6 +1,7 @@
-import { Game, Question, Category, User } from '../src/app/model';
+import { Game, Question, Category, User, UserStatConstants } from '../src/app/model';
 import { ESUtils } from './ESUtils';
-import { GameLeaderBoardStats } from './game-leaderboard-stats';
+import { GameLeaderBoardStats } from './game-leader-board-stats';
+import { UserContributionStat } from './user-contribution-stat';
 
 const admin = require('firebase-admin');
 admin.initializeApp(JSON.parse(process.env.FIREBASE_CONFIG), 'secondary');
@@ -23,6 +24,12 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
   if (data) {
     //add or update
     ESUtils.createOrUpdateIndex(ESUtils.QUESTIONS_INDEX, data.categoryIds["0"], data, context.params.questionId);
+
+    const question: Question = data;
+    const userContributionStat: UserContributionStat = new UserContributionStat(admin.firestore());
+    userContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution).then((userDictResults) => {
+      console.log('updated user category stat');
+    });
   }
   else {
     //delete
@@ -39,9 +46,11 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
   if (afterEventData !== beforeEventData) {
     console.log('data changed');
     const game: Game = afterEventData;
-    const userIds = Object.keys(game.stats);
-    const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
-    gameLeaderBoardStats.getGameUsers(game);
+    if (game.gameOver) {
+      const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
+      gameLeaderBoardStats.getGameUsers(game);
+    }
+
   }
 
 });

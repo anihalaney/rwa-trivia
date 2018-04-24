@@ -143,17 +143,7 @@ export class QuestionService {
       return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
         transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
       )
-    }).then(ref => {
-      this.db.doc<any>(`/users/${question.created_uid}`).valueChanges()
-      .take(1)
-      .subscribe(user => {
-        const qUser: User = user;
-        qUser.stats.contribution = (qUser.stats.contribution) ? qUser.stats.contribution + 1 : 1;
-        this.db.doc(`/users/${question.created_uid}`).set(qUser).then(qRef => {
-
-        });
-      });
-    });
+    })
 
   }
 }

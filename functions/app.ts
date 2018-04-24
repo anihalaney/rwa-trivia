@@ -5,8 +5,8 @@ import { ESUtils } from './ESUtils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
-import { GameLeaderBoardStats } from './game-leaderboard-stats';
-import { UserContributionStat } from './user- contibution-stat';
+import { GameLeaderBoardStats } from './game-leader-board-stats';
+import { UserContributionStat } from './user-contribution-stat';
 import { UserCollection } from './user-collection';
 import { MakeFriends } from './make-friends';
 
