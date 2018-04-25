@@ -2,11 +2,10 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-
 import { AppState, appState, categoryDictionary } from '../../store';
 import { Utils } from '../../core/services';
 import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
-import { User, Category, Question, SearchResults, Game } from '../../model';
+import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../model';
 
 @Component({
   selector: 'dashboard',
@@ -50,6 +49,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
         // Load active Games
         this.store.dispatch(this.gameActions.getActiveGames(user));
+
       } else {
         this.showNewsCard = true;
       }
