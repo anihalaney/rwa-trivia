@@ -126,3 +126,99 @@ mat-card {
   min-width: 450px;
   min-height: 300px;
 }
+
+.circle
+{
+  border-radius: 50%;
+  border-width: 1px;
+  border-color:  #b7b7b7;
+  border-style: solid;
+  background-color:  rgba(255, 255, 255, 0.3);
+  width: 105px;
+  height: 105px;
+  margin: 0 auto;
+
+}
+.circle-image
+{
+  border-radius: 50%;
+  // background-color:  #f26651;
+  width: 62px;
+  height: 62px;
+  margin-top: 18%;
+}
+.main-div
+{
+  border-radius: 2px;
+  background-color:  #ffffff;
+  box-shadow: 4px 4px 14.08px 1.92px rgba(0, 0, 0, 0.37);
+  //  width: 381px;
+  // height: 231px;
+  min-width: 800px !important;
+  height: 540px !important;
+  
+}
+.text
+{
+  font-family: 'hindregular';
+  color:  #283445;
+  font-size: 14px;
+  font-weight: 400;
+  padding-top: 4%;
+}
+.circle-loader
+{
+  border-radius: 50%;
+  border-width: 1px;
+  border-color:  #b7b7b7;
+  border-style: solid;
+  background-color:  rgba(255, 255, 255, 0.3);
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+
+}
+.badge-icon
+{
+  padding-top: 20%;
+}
+.badge1
+{
+  margin: -15% 0% 0% 0%;
+}
+.badge2
+{
+  float: left;
+  margin: 0% 0% 0% -12%;
+}
+.badge3
+{
+  float: left;
+}
+.badge4
+{
+  float: right;
+
+}
+.badge5
+{
+  float: right;
+ 
+}
+.first-row
+{
+  margin: 10% 0% 0% 6%;
+  padding: 0px;
+}
+.second-row
+{
+  margin: 28% 0% 0% 0%;
+  padding: 0px;
+}
+.text-loading
+{
+  font-family: 'hindbold';
+  color:  #283445;
+  font-size: 16px;
+  padding-top: 4%;
+}
