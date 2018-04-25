@@ -142,8 +142,8 @@ export class QuestionService {
     this.db.firestore.runTransaction(transaction => {
       return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
         transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
-      );
-    });
-  }
+      )
+    })
 
+  }
 }

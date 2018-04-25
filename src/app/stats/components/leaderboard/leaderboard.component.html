@@ -1,27 +1,30 @@
-<div class="row" *ngIf="scoreList.length>0 && userDict">
-  <div *ngFor="let result of scoreList | slice:0:3; let i=index">
+<div class="row" *ngIf="leaderBoardCat && leaderBoardCat.length>0 && userDict">
+  <div *ngFor="let cat of leaderBoardCat | slice:lbsSliceStartIndex:lbsSliceLastIndex; let i=index">
     <div class="col-md-4 col-xs-12 categorybox skyblue">
-      <h3>{{categoryDict[result.catId].categoryName.charAt(0).toUpperCase() + categoryDict[result.catId].categoryName.slice(1)}}</h3>
+      <h3>{{categoryDict[cat].categoryName.charAt(0).toUpperCase() + categoryDict[cat].categoryName.slice(1)}}</h3>
       <ul>
-        <li *ngFor="let user of result.users | slice:0:3;let i=index;">
-          <div class="row" >
+        <li *ngFor="let user of leaderBoardStatDict[cat] | slice:0:3;let i=index;">
+          <div class="row">
             <div class="col-xs-2 has">#{{index}}</div>
             <div class="col-xs-3">
               <a href="#">
-                <img *ngIf="userDict[user]?.profilePictureUrl" [src]="userDict[user]?.profilePictureUrl" alt="user1" />
+                <img *ngIf="userDict[user.userId]?.profilePictureUrl" [src]="userDict[user.userId]?.profilePictureUrl" />
               </a>
             </div>
             <div class="col-xs-4">
-              <a href="#" class="dark">{{userDict[user]?.displayName}}</a>
-              <div class="light">{{userDict[user]?.location}}</div>
+              <a href="#" class="dark">{{userDict[user.userId]?.displayName}}</a>
+              <div class="light">{{userDict[user.userId]?.location}}</div>
             </div>
             <div class="col-xs-3">
-              <div class="dark">{{result.count[i]}}</div>
+              <div class="dark">{{user.score}}</div>
               <div class="light">points</div>
             </div>
           </div>
-        </li>       
+        </li>
       </ul>
     </div>
-  </div> 
+  </div>
+</div>
+<div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
+  <a *ngIf="leaderBoardCat.length!=lbsSliceLastIndex" class="viewall" (click)="displayMore()">view more</a>
 </div>

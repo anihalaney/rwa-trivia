@@ -11,15 +11,15 @@ import { Game } from '../../../model';
 @Injectable()
 export class StatsEffects {
 
-    // Get Score
+    // Load Score
     @Effect()
-    getLeaderBoardInfo$ = this.actions$
-        .ofType(StatsActionTypes.GET_LEADERBOARD)
+    LoadLeaderBoardInfo$ = this.actions$
+        .ofType(StatsActionTypes.LOAD_LEADERBOARD)
         .pipe(
-        switchMap((action: statsActions.GetLeaderBoard) =>
-            this.statsService.getScoreInfo(action.payload.categoryList).pipe(
+        switchMap((action: statsActions.LoadLeaderBoard) =>
+            this.statsService.loadLeaderBoardStat().pipe(
                 map((score: any) =>
-                    new statsActions.GetLeaderBoardSuccess(score)
+                    new statsActions.LoadLeaderBoardSuccess(score)
                 )
             )));
 
