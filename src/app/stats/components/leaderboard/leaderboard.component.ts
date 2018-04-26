@@ -25,6 +25,8 @@ export class LeaderboardComponent implements OnDestroy {
   categoryDict: { [key: number]: Category };
   lbsSliceStartIndex: number;
   lbsSliceLastIndex: number;
+  lbsUsersSliceStartIndex: number;
+  lbsUsersSliceLastIndex: number;
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions) {
@@ -35,29 +37,32 @@ export class LeaderboardComponent implements OnDestroy {
 
     this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
 
-    this.store.select(appState.leaderBoardState).select(s => s.scoreBoard).subscribe(lbsStat => {
+    this.store.select(leaderBoardState).select(s => s.scoreBoard).subscribe(lbsStat => {
 
       if (lbsStat !== null) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
-        this.leaderBoardCat.map((cat) => {
-          this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
-            const userId = user.userId;
-            if (this.userDict && !this.userDict[userId]) {
-              this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
-            }
-          })
-        });
+        if (this.leaderBoardCat.length > 0) {
+          this.leaderBoardCat.map((cat) => {
+            this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
+              const userId = user.userId;
+              if (this.userDict && !this.userDict[userId]) {
+                this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
+              }
+            })
+          });
+          this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
+          this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
+          this.lbsUsersSliceStartIndex = 0;
+          this.lbsUsersSliceLastIndex = 3;
+        }
       }
-      this.lbsSliceStartIndex = 0;
-      this.lbsSliceLastIndex = 3;
     });
   }
 
 
   displayMore(): void {
-    this.lbsSliceLastIndex = (this.leaderBoardCat.length > (this.lbsSliceLastIndex + 3)) ?
-      this.lbsSliceLastIndex + 3 : this.leaderBoardCat.length;
+    this.lbsUsersSliceLastIndex = this.lbsUsersSliceLastIndex + 7;
   }
 
   ngOnDestroy() {
