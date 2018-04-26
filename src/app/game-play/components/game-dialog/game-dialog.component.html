@@ -1,34 +1,55 @@
 <mat-dialog-content>
-<div *ngIf="!currentQuestion && !gameOver" class="cd-popup-container">
-  Loading
-</div>
 
-<game-question *ngIf="currentQuestion" 
-  [categoryName]="categoryName"
-  [question]="currentQuestion"
-  [questionIndex]="questionIndex"
-  [timer]="timer"
-  [continueNext]="continueNext"
-  [correctCount]="correctAnswerCount"
-  [noOfQuestions]="questionIndex"
-  [showContinueBtn]="showContinueBtn"
-  [otherPlayer]="otherPlayer"
-  (answerClicked)="answerClicked($event)"
-  (okClick)="okClick($event)"
-  (continueClicked)="continueClicked($event)"
-  (viewQuestionClicked)="viewQuestionClicked($event)">
-</game-question>
+  <div class="" *ngIf="showLoader">
+    <div class=" main-div textcenter">
+      <div class="badge-icon">
+        <div class="circle-loader">
+          <div *ngIf="correctAnswerCount < 1" class="sprite score0 badge1"></div>
+          <div *ngIf="correctAnswerCount >= 1" class="sprite score1 badge1"></div>
+          <div class="col-xs-12 first-row">
+            <div *ngIf="correctAnswerCount < 5" class="sprite score0 col-xs-6 badge5"></div>
+            <div *ngIf="correctAnswerCount >= 5" class="sprite score5 col-xs-6 badge5"></div>
+            <div *ngIf="correctAnswerCount < 2" class="sprite score0 col-xs-6 badge2"></div>
+            <div *ngIf="correctAnswerCount >= 2" class="sprite score2 col-xs-6 badge2"></div>
+          </div>
+          <div class="col-xs-12 second-row">
+            <div *ngIf="correctAnswerCount < 4" class="sprite score0 col-xs-6 badge4"></div>
+            <div *ngIf="correctAnswerCount >= 4" class="sprite score4 col-xs-6 badge4"></div>
+            <div *ngIf="correctAnswerCount < 3" class="sprite score0 col-xs-6 badge3"></div>
+            <div *ngIf="correctAnswerCount >= 3" class="sprite score3 col-xs-6 badge3"></div>
+          </div>
+        </div>
+      </div>
+      <div class="text-loading textcenter">
+        <span> Loading </span>
+      </div>
+    </div>
+  </div>
 
-<game-question-continue *ngIf="false" class="overlay"
-  [categoryName]="categoryName"
-  [question]="currentQuestion"
-  (continueClicked)="continueClicked($event)"
-  (viewQuestionClicked)="viewQuestionClicked($event)">
-</game-question-continue>
-<game-over *ngIf="gameOver" class="overlay"
-  [correctCount]="correctAnswerCount"
-  [noOfQuestions]="questionIndex"
-  (gameOverContinueClicked)="gameOverContinueClicked($event)"
-  (viewQuestionClicked)="viewQuestionClicked($event)">
-</game-over>
+  <div class="" *ngIf="showBadge">
+    <div class=" main-div textcenter">
+      <div class="badge-icon">
+        <div class="circle">
+          <div class="sprite begde1 circle-image"></div>
+        </div>
+      </div>
+      <div class="text textcenter">
+        <span> Give the right answer & with this badge</span>
+      </div>
+    </div>
+  </div>
+
+  <game-question *ngIf="currentQuestion && !showLoader && !showBadge" [categoryName]="categoryName" [question]="currentQuestion"
+    [questionIndex]="questionIndex" [timer]="timer" [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+    [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)"
+    (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
+  </game-question>
+
+  <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion" (continueClicked)="continueClicked($event)"
+    (viewQuestionClicked)="viewQuestionClicked($event)">
+  </game-question-continue>
+
+  <game-over *ngIf="gameOver" class="overlay" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" (gameOverContinueClicked)="gameOverContinueClicked($event)"
+    (viewQuestionClicked)="viewQuestionClicked($event)">
+  </game-over>
 </mat-dialog-content>
