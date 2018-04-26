@@ -53,8 +53,6 @@
           <div *ngIf="game.stats[otherUserId].score >= 3" class="sprite score3"></div>
           <div *ngIf="game.stats[otherUserId].score >= 4" class="sprite score4"></div>
           <div *ngIf="game.stats[otherUserId].score >= 5" class="sprite score5"></div>
-
-
         </div>
       </div>
     </div>
@@ -72,7 +70,19 @@
       </div>
     </div>
     <div class="div-top-spacing">
-      <span class="text-style">View questions and answers</span>
+      <mat-accordion>
+        <mat-expansion-panel (opened)="bindQuestions()">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="textcenter">
+              View questions & answers
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-panel-description>
+            Currently I am {{panelOpenState ? 'open' : 'closed'}}
+          </mat-panel-description>
+        </mat-expansion-panel>
+      </mat-accordion>
     </div>
     <!-- <div>
       <a [routerLink]="['/game-play']" class="btn">PLAY AGAIN</a>

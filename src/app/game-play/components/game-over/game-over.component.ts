@@ -3,6 +3,8 @@ import { User, Game } from '../../../model';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
+import * as gameplayactions from '../../store/actions';
+
 
 @Component({
   selector: 'game-over',
@@ -22,6 +24,7 @@ export class GameOverComponent implements OnInit {
   otherUserId: string;
   otherUserInfo: User;
 
+
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
@@ -39,5 +42,9 @@ export class GameOverComponent implements OnInit {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
+  }
+  bindQuestions() {
+    alert("call");
+    this.store.dispatch(new gameplayactions.GetUsersAnsweredQuestion({ userId: this.user.userId, game: this.game }));
   }
 }

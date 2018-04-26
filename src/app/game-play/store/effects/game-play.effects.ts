@@ -11,10 +11,7 @@ import { GameService } from '../../../core/services';
 
 @Injectable()
 export class GamePlayEffects {
-  constructor(
-    private actions$: Actions,
-    private svc: GameService
-  ) { }
+
 
   @Effect()
   startNewGame$ = this.actions$
@@ -89,5 +86,20 @@ export class GamePlayEffects {
         map((msg: any) => new gameplayactions.UpdateGameSuccess())
       )
     ));
+
+  @Effect()
+  getUserAnsweredQuestions$ = this.actions$
+    .ofType(GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION)
+    .pipe(
+    switchMap((action: gameplayactions.GetUsersAnsweredQuestion) =>
+      this.svc.getUsersAnsweredQuestion(action.payload.userId, action.payload.game).pipe(
+        map((msg: any) => new gameplayactions.GetUsersAnsweredQuestionSuccess())
+      )
+    ));
+
+  constructor(
+    private actions$: Actions,
+    private svc: GameService
+  ) { }
 
 }

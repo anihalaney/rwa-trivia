@@ -9,7 +9,7 @@ import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, GameOptions, Game, Question, PlayerQnA, GameOperations } from '../../model';
+import { User, GameOptions, Game, Question, PlayerQnA, GameOperations, QuestionStatus } from '../../model';
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
@@ -92,6 +92,30 @@ export class GameService {
       .map((data) => data[0].concat(data[1]))
       .map(gs => gs.map(g => Game.getViewModel(g))
         .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
+
+  }
+
+  getUsersAnsweredQuestion(userId: String, game: Game): Observable<any> {
+
+    const questionArray = [];
+    game.playerQnAs.map((playerQuestion) => {
+      if (playerQuestion.playerAnswerId === userId) {
+        this.db.collection(`/questions/${playerQuestion.questionId}`)
+          .snapshotChanges()
+          .take(1)
+          .map(qs => qs.map(q => {
+            const question = Question.getViewModelFromDb(q);
+            question.answers.map((answer) => {
+              if (answer.id === Number(playerQuestion.playerAnswerId)) {
+                question.userGivenAnswer = answer.answerText;
+              }
+            })
+            questionArray.push(question);
+          }))
+      }
+
+    })
+    return Observable.of(questionArray);
 
   }
 }
