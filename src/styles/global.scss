@@ -419,6 +419,7 @@ h1 + p{ font-size: 18px; font-family: 'hindlight'; }
 }
 .mat-dialog-container {
   padding: 0px !important;
+  background:#26303c;
 }
 
 @media screen and ( min-width:1000px){      
@@ -494,11 +495,14 @@ nav .user.card{
   overflow: hidden !important;
 }
 
-.score1{ background-position: -26px -327px;; width: 27px; height: 33px;}
-.score2{ background-position: -55px -327px;; width: 27px; height: 33px;}
-.score3{ background-position: 0px -327px;; width: 27px; height: 33px;}
-.score4{ background-position: -82px -327px;; width: 27px; height: 33px;}
-.score5{ background-position: -82px -327px;; width: 27px; height: 33px;}
-.score0{ background-position: -82px -327px;; width: 27px; height: 33px;}
+.score1{ background-position: -26px -327px; width: 27px; height: 33px;}
+.score2{ background-position: -55px -327px; width: 27px; height: 33px;}
+.score3{ background-position: 1px -327px; width: 27px; height: 33px;}
+.score4{ background-position: -82px -327px; width: 27px; height: 33px;}
+.score5{ background-position: -82px -327px; width: 27px; height: 33px;}
+.score0{ background-position: -82px -327px; width: 27px; height: 33px;}
+
+
+.begde1{ background-position: -5px -359px; width: 27px; height: 33px;}
   
 
