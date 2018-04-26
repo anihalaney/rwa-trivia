@@ -3,7 +3,7 @@
     <div class="col-md-4 col-xs-12 categorybox skyblue">
       <h3>{{categoryDict[cat].categoryName.charAt(0).toUpperCase() + categoryDict[cat].categoryName.slice(1)}}</h3>
       <ul>
-        <li *ngFor="let user of leaderBoardStatDict[cat] | slice:0:3;let i=index;">
+        <li *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index;">
           <div class="row">
             <div class="col-xs-2 has">#{{index}}</div>
             <div class="col-xs-3">
@@ -26,5 +26,5 @@
   </div>
 </div>
 <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
-  <a *ngIf="leaderBoardCat.length!=lbsSliceLastIndex" class="viewall" (click)="displayMore()">view more</a>
+  <a *ngIf="lbsUsersSliceLastIndex!==10" class="viewall" (click)="displayMore()">view more</a>
 </div>
