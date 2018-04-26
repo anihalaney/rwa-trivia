@@ -112,31 +112,34 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = (this.questionAnswered) ? true : false;
     this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
     this.checkGameOver();
-    if (!turnFlag && !this.gameOver) {
-   
-      if (!this.currentQuestion) {
-        this.getNextQuestion();
-      }
-      if (this.game.GameStatus !== GameStatus.STARTED && this.userDict) {
-        this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
-        const otherPlayerObj = this.userDict[this.otherPlayerUserId];
-        (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
-        this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
-          this.otherPlayer.displayName : this.RANDOM_PLAYER
+    if (!this.gameOver) {
+      if (!turnFlag) {
+
+        if (!this.currentQuestion) {
+          this.getNextQuestion();
+        }
+        if (this.game.GameStatus !== GameStatus.STARTED && this.userDict) {
+          this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+          const otherPlayerObj = this.userDict[this.otherPlayerUserId];
+          (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
+          this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
+            this.otherPlayer.displayName : this.RANDOM_PLAYER
+        } else {
+          this.initializeOtherUser();
+        }
       } else {
-        this.initializeOtherUser();
+        Observable.timer(2000).take(1).subscribe(t => {
+
+          this.store.dispatch(new gameplayactions.ResetCurrentGame());
+          this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+          this.currentQuestion = undefined;
+          this.continueNext = false;
+          this.router.navigate(['/dashboard']);
+        });
+        Utils.unsubscribe([this.timerSub]);
       }
-    } else {
-      Observable.timer(2000).take(1).subscribe(t => {
-        
-        this.store.dispatch(new gameplayactions.ResetCurrentGame());
-        this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-        this.currentQuestion = undefined;
-        this.continueNext = false;
-        this.router.navigate(['/dashboard']);
-      });
-      Utils.unsubscribe([this.timerSub]);
     }
+
 
 
   }

@@ -8,13 +8,13 @@
 	.viewall:after{ 
 		border-color: map-get($theme, viewall-after);
 	}
-	#currentgame li .innerli{ 
+	#currentgame li .innerli,.btn-share{ 
 		border-color: map-get($theme, currentgame-list);
 	}
 	.gameplay li, .questionstatus .tabbing li, .questionstatus .tabbing li.active,.viewbublic, .tag, .avatarimg, #file-name, .expertise{ 
 		border-color: map-get($theme, primary);
 	}
-	input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .subscrib-cont input[type="email"],.custom-file-upload{ 
+	input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .gameOver .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .subscrib-cont input[type="email"],.custom-file-upload{ 
 		border-color: map-get($theme, input);
 	}
 	.viewall:hover{ 
