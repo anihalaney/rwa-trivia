@@ -95,27 +95,38 @@ export class GameService {
 
   }
 
-  getUsersAnsweredQuestion(userId: String, game: Game): Observable<any> {
-
+  getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
     const questionArray = [];
-    game.playerQnAs.map((playerQuestion) => {
-      if (playerQuestion.playerAnswerId === userId) {
-        this.db.collection(`/questions/${playerQuestion.questionId}`)
-          .snapshotChanges()
-          .take(1)
-          .map(qs => qs.map(q => {
-            const question = Question.getViewModelFromDb(q);
-            question.answers.map((answer) => {
-              if (answer.id === Number(playerQuestion.playerAnswerId)) {
-                question.userGivenAnswer = answer.answerText;
-              }
-            })
-            questionArray.push(question);
-          }))
+    let index = 0;
+    return this.checkUserQuestion(game.playerQnAs, userId, index, questionArray).expand((question) => {
+      questionArray.push(question);
+      if (questionArray.length !== game.playerQnAs.length) {
+        index++;
+        return this.checkUserQuestion(game.playerQnAs, userId, index, questionArray);
+      } else {
+        return Observable.empty();
       }
+    });
+  }
 
-    })
-    return Observable.of(questionArray);
-
+  checkUserQuestion(playerQnAs: any, userId: string, index: number, questionArray: any): Observable<any> {
+    const array = playerQnAs[index];
+    if (array.playerId === userId) {
+      return this.db.doc(`/questions/${array.questionId}`)
+        .snapshotChanges()
+        .take(1)
+        .map(qs => {
+          const question = Question.getViewModelFromDb(qs.payload.data());
+          if (array.playerAnswerId !== null) {
+            const answerObj = question.answers[array.playerAnswerId];
+            question.userGivenAnswer = answerObj.answerText;
+          } else {
+            question.userGivenAnswer = null;
+          }
+          return question;
+        })
+    }
   }
 }
+
+

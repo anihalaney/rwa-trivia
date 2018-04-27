@@ -93,7 +93,7 @@ export class GamePlayEffects {
     .pipe(
     switchMap((action: gameplayactions.GetUsersAnsweredQuestion) =>
       this.svc.getUsersAnsweredQuestion(action.payload.userId, action.payload.game).pipe(
-        map((msg: any) => new gameplayactions.GetUsersAnsweredQuestionSuccess())
+        map((questionArray: any) => new gameplayactions.GetUsersAnsweredQuestionSuccess(questionArray))
       )
     ));
 
