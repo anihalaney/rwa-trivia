@@ -76,8 +76,8 @@ const validateFirebaseIdToken = (req, res, next) => {
       return next();
     }).catch(error => {
       console.error('Error while verifying Firebase ID token:', error);
-      // res.status(403).send('Unauthorized');
-      return next();
+      res.status(419).send('Token Expired');
+      // return next();
     });
   }
 
