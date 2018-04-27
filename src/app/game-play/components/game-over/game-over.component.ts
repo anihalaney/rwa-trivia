@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
+import { gameplayState } from '../../store';
 
 
 @Component({
@@ -23,6 +24,7 @@ export class GameOverComponent implements OnInit {
   user: User;
   otherUserId: string;
   otherUserInfo: User;
+  questionsArray = [];
 
 
   continueButtonClicked(event: any) {
@@ -36,6 +38,12 @@ export class GameOverComponent implements OnInit {
         this.user = user;
       }
     });
+
+    this.store.select(gameplayState).select(s => s.userAnsweredQuestion).subscribe(stats => {
+      if (stats != null) {
+        this.questionsArray.push(stats);
+      }
+    });
   }
   ngOnInit() {
     if (this.game) {
@@ -44,7 +52,6 @@ export class GameOverComponent implements OnInit {
     }
   }
   bindQuestions() {
-    alert("call");
     this.store.dispatch(new gameplayactions.GetUsersAnsweredQuestion({ userId: this.user.userId, game: this.game }));
   }
 }

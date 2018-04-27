@@ -93,7 +93,7 @@ export class GetUsersAnsweredQuestion implements Action {
 }
 export class GetUsersAnsweredQuestionSuccess implements Action {
   readonly type = GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION_SUCCESS;
-  payload = null;
+  constructor(public payload: any) { }
 }
 
 
