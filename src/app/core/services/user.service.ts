@@ -26,7 +26,7 @@ export class UserService {
 
     loadUserProfile(user: User): Observable<User> {
 
-        return this.db.doc<any>('/users/' + user.userId).valueChanges()
+        return this.db.doc(`/users/${user.userId}`).valueChanges()
             .map(u => {
                 if (u) {
                     user = { ...u, ...user, };
