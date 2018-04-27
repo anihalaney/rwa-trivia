@@ -82,8 +82,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           return;
         }
         this.currentQuestion = question;
-        console.log("gameId" + this.game.gameId);
-        console.log("index" + JSON.stringify(this.currentQuestion));
         this.questionIndex++;
         this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
         this.timer = this.MAX_TIME_IN_SECONDS;
