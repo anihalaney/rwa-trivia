@@ -134,7 +134,7 @@ export class GameLeaderBoardStats {
                     leaderBoardUser.score = leaderBoardStats[id];
                     const leaderBoardUserObj = { ...leaderBoardUser };
                     (filteredUsers.length > 0) ?
-                        leaderBoardUsers[filteredUsers.findIndex((fUser) => fUser.userId === userObj.userId)] = leaderBoardUserObj
+                        leaderBoardUsers[leaderBoardUsers.findIndex((fUser) => fUser.userId === userObj.userId)] = leaderBoardUserObj
                         : leaderBoardUsers.push(leaderBoardUserObj);
 
                     leaderBoardUsers.sort((a, b) => {
