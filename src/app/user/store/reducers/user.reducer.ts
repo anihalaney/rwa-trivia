@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
-import { User, Question, Game } from '../../../model';
+import { User, Question, Game, Friends } from '../../../model';
 import { UserActions, UserActionTypes } from '../actions';
 
 
@@ -55,6 +55,16 @@ export function getGameResult(state: any = [], action: UserActions):
     Game[] {
     switch (action.type) {
         case UserActionTypes.GET_GAME_RESULT_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+// Load User Published Question by userId
+export function userFriends(state: any = null, action: UserActions): Friends {
+    switch (action.type) {
+        case UserActionTypes.LOAD_USER_FRIENDS_SUCCESS:
             return action.payload;
         default:
             return state;
