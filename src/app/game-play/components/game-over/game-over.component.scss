@@ -94,3 +94,38 @@ mat-card {
 .mat-expansion-panel:not([class*=mat-elevation-z]) {
    box-shadow:none;
 }
+ul
+{
+  text-align: left;
+  width: 100%;
+}
+.your-answer-label
+{
+  padding-left: 25px;
+}
+ul li
+{
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  padding-bottom: 2%;
+  padding-top: 2%;
+  display: flex;
+  padding-left: 2%;
+
+}
+ul li:last-child{ border-bottom: 0 }
+
+.li-section1
+{
+  width: 80%;
+  float: left;
+}
+.li-section2
+{
+  width: 20%;
+  float: right;
+}
+.mat-expansion-panel-header-description, .mat-expansion-panel-header-title {
+
+   margin-right: 0px; 
+}

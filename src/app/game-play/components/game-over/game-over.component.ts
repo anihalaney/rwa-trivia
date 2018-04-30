@@ -52,6 +52,9 @@ export class GameOverComponent implements OnInit {
     }
   }
   bindQuestions() {
-    this.store.dispatch(new gameplayactions.GetUsersAnsweredQuestion({ userId: this.user.userId, game: this.game }));
+    if (this.questionsArray.length === 0) {
+      this.store.dispatch(new gameplayactions.GetUsersAnsweredQuestion({ userId: this.user.userId, game: this.game }));
+    }
+
   }
 }

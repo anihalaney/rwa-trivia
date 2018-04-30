@@ -8,7 +8,7 @@
 	.viewall:after{ 
 		border-color: map-get($theme, viewall-after);
 	}
-	#currentgame li .innerli,.btn-share{ 
+	#currentgame li .innerli,.btn-share, .questions li{ 
 		border-color: map-get($theme, currentgame-list);
 	}
 	.gameplay li, .questionstatus .tabbing li, .questionstatus .tabbing li.active,.viewbublic, .tag, .avatarimg, #file-name, .expertise{ 
