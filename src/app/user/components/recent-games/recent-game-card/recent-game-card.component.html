@@ -5,7 +5,7 @@
             <div class="label result" *ngIf="game.winnerPlayerId !== user.userId">Lost</div>
         </div>
         <div class="dark">{{categoryDict[game.gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[0]].categoryName.slice(1)}}</div>
-        <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==='1'">
+        <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode===PlayerMode.Opponent">
             <div class="col-xs-6 no-padding card-center-position" *ngIf="game.winnerPlayerId === user.userId">
                 <p class="light">Your</p>
                 <p class="light">Score {{game.stats[game.winnerPlayerId]?.score}}</p>
@@ -23,7 +23,7 @@
                 <p class="light">Score {{game.stats[user.userId]?.score}}</p>
             </div>
         </div>
-        <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==='0'">
+        <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode===PlayerMode.Single">
             <p class="light">Your</p>
             <p class="light">Score {{game.stats[game.winnerPlayerId]?.score}}</p>
         </div>
