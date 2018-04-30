@@ -485,7 +485,7 @@ app.get('/testES', adminOnly, (req, res) => {
 
 });
 
-// rebuild questions index
+// make friends
 app.post('/makeFriends', (req, res) => {
 
   const token = req.body.token;
@@ -497,6 +497,17 @@ app.post('/makeFriends', (req, res) => {
     console.log('invitee', invitee);
     res.send({ created_uid: invitee });
   });
+});
+
+
+app.get('/user/friend', authorizedOnly, (req, res) => {
+
+  admin.firestore().doc(`/friends/${req.user.uid}`)
+    .get()
+    .then(u => {
+      res.send(u.data());
+    });
+
 });
 
 // END - TEST FUNCTIONS

@@ -16,11 +16,11 @@
                         </h2>
                     </div>
                     <div class="col-sm-9 radiobtn">
-                        <input type="radio" id="p-radio1" formControlName="playerMode" value="0"  checked="true">
+                        <input type="radio" id="p-radio1" formControlName="playerMode" value="0" checked="true">
                         <label for="p-radio1">
                             <span class="sprite singlep-icon"></span> Single Player</label>
 
-                        <input type="radio" id="p-radio2"  formControlName="playerMode" value="1">
+                        <input type="radio" id="p-radio2" formControlName="playerMode" value="1">
                         <label for="p-radio2">
                             <span class="sprite twop-icon"></span> Two Player</label>
                         <div class="twoplayer" style="display: none;">
@@ -34,14 +34,14 @@
                             <label for="tp-radio3">
                                 <span class="sprite computerp-icon"></span>With Computer</label>
                             <div class="withfriends" style="display: none;">
-                                <ul class="friendsslider">
-                                    <li>
-                                        <input type="radio" id="friends1" name="withfriends">
-                                        <label for="friends1">
+                                <ul class="friendsslider" *ngIf="uFriends && uFriends.myFriends.length>0">
+                                    <li *ngFor="let friend of uFriends.myFriends; let i=index">
+                                        <input type="radio" id="friends{{i}}" name="withfriends">
+                                        <label for="friends{{i}}">
                                             <span class="labelimg">
-                                                <img src="/assets/images/frnd/john.jpg" alt="John">
+                                                <img *ngIf="userDict[friend.userId]?.profilePictureUrl" [src]="userDict[friend.userId]?.profilePictureUrl">
                                             </span>
-                                            <span class="dark">John</span>
+                                            <span class="dark">{{userDict[friend.userId]?.displayName}}</span>
                                             <span class="expertise">
                                                 <span class="light">Expertise</span>
                                                 <span class="dark">PHP</span>
@@ -49,97 +49,7 @@
                                             <span class="light">Favorite</span>
                                             <span class="dark">C++</span>
                                         </label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="friends2" name="withfriends">
-                                        <label for="friends2">
-                                            <span class="labelimg">
-                                                <img src="/assets/images/frnd/kaanishhk.jpg" alt="John">
-                                            </span>
-                                            <span class="dark">Kaanishhk</span>
-                                            <span class="expertise">
-                                                <span class="light">Expertise</span>
-                                                <span class="dark">C++, Java</span>
-                                            </span>
-                                            <span class="light">Favorite</span>
-                                            <span class="dark">Dot Net</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="friends3" name="withfriends">
-                                        <label for="friends3">
-                                            <span class="labelimg">
-                                                <img src="/assets/images/frnd/user1.jpg" alt="John">
-                                            </span>
-                                            <span class="dark">Abram</span>
-                                            <span class="expertise">
-                                                <span class="light">Expertise</span>
-                                                <span class="dark">PHP, Java</span>
-                                            </span>
-                                            <span class="light">Favorite</span>
-                                            <span class="dark">C++</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="friends4" name="withfriends">
-                                        <label for="friends4">
-                                            <span class="labelimg">
-                                                <img src="/assets/images/frnd/user2.jpg" alt="John">
-                                            </span>
-                                            <span class="dark">Rocky</span>
-                                            <span class="expertise">
-                                                <span class="light">Expertise</span>
-                                                <span class="dark">C++, PHP</span>
-                                            </span>
-                                            <span class="light">Favorite</span>
-                                            <span class="dark">Java</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="friends5" name="withfriends">
-                                        <label for="friends5">
-                                            <span class="labelimg">
-                                                <img src="/assets/images/frnd/user3.jpg" alt="John">
-                                            </span>
-                                            <span class="dark">Miya</span>
-                                            <span class="expertise">
-                                                <span class="light">Expertise</span>
-                                                <span class="dark">PHP, Java</span>
-                                            </span>
-                                            <span class="light">Favorite</span>
-                                            <span class="dark">C++</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="friends6" name="withfriends">
-                                        <label for="friends6">
-                                            <span class="labelimg">
-                                                <img src="/assets/images/frnd/john.jpg" alt="John">
-                                            </span>
-                                            <span class="dark">John</span>
-                                            <span class="expertise">
-                                                <span class="light">Expertise</span>
-                                                <span class="dark">C++</span>
-                                            </span>
-                                            <span class="light">Favorite</span>
-                                            <span class="dark">Java</span>
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <input type="radio" id="friends7" name="withfriends">
-                                        <label for="friends7">
-                                            <span class="labelimg">
-                                                <img src="/assets/images/frnd/kaanishhk.jpg" alt="John">
-                                            </span>
-                                            <span class="dark">Kaanishhk</span>
-                                            <span class="expertise">
-                                                <span class="light">Expertise</span>
-                                                <span class="dark">Java</span>
-                                            </span>
-                                            <span class="light">Favorite</span>
-                                            <span class="dark">C++</span>
-                                        </label>
-                                    </li>
+                                    </li>                                   
                                 </ul>
                             </div>
                         </div>
