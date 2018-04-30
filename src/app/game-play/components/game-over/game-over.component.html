@@ -69,7 +69,7 @@
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
     </div>
-    <div class="div-top-spacing">
+    <div>
       <mat-accordion>
         <mat-expansion-panel (opened)="bindQuestions()">
           <mat-expansion-panel-header>
@@ -79,14 +79,34 @@
           </mat-expansion-panel-header>
 
           <mat-panel-description>
-            Currently I am {{panelOpenState ? 'open' : 'closed'}}
+
+            <ul class="questions">
+              <li class="question-section" *ngFor="let row  of questionsArray;let i=index;">
+                <div class="li-section1">
+                  <p class="dark text-style">Q{{i+1}}. {{row.questionText}}</p>
+                  <div class="answer-text">
+                    <span *ngFor="let answer of row.answers">
+                      <div class="dark text-style" *ngIf="answer.correct">A{{i+1}}.
+                        <label class="answer-label">Correct ans.</label>
+                        <span class="text-style">{{answer.answerText}}</span>
+                      </div>
+                    </span>
+                    <span *ngFor="let answer of row.answers;let j=index;">
+                      <p *ngIf="answer.answerText === row.userGivenAnswer">
+                        <label [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'" class="text-style your-answer-label">Your ans.</label>
+                        <span class="text-style" [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}} </span>
+                      </p>
+                    </span>
+                  </div>
+                </div>
+                <div class="li-section2">
+                  <button class="btn-share" type="button">Report</button>
+                </div>
+              </li>
+            </ul>
           </mat-panel-description>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-    <!-- <div>
-      <a [routerLink]="['/game-play']" class="btn">PLAY AGAIN</a>
-      <a [routerLink]="['/']" class="btn">HOME</a>
-    </div> -->
   </mat-card-content>
 </mat-card>

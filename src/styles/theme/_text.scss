@@ -110,6 +110,10 @@
 	{
 		color: map-get($theme, box-hover-lg);
 	}
+	.answer-label
+	{
+		color: map-get($theme, answer);
+	}
 	
 
 	@media screen and ( min-width:1000px){

@@ -502,3 +502,13 @@ nav .user.card{
 .score0{ background-position: -82px -327px; width: 27px; height: 33px;}
 
 .thumb{ background-position: -117px -324px; width: 44px; height: 33px;}
+.mat-expansion-panel-body
+{
+  padding: 0px !important;
+ 
+}
+.mat-expansion-panel-header-description
+{
+  overflow-x: auto;
+  max-height: 300px;
+}

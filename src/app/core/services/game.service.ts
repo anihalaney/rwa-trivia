@@ -98,11 +98,12 @@ export class GameService {
   getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
     const questionArray = [];
     let index = 0;
-    return this.checkUserQuestion(game.playerQnAs, userId, index, questionArray).expand((question) => {
+    const questionList = game.playerQnAs.filter((question) => question.playerId === userId);
+    return this.checkUserQuestion(questionList, userId, index, questionArray).expand((question) => {
       questionArray.push(question);
-      if (questionArray.length !== game.playerQnAs.length) {
+      if (questionArray.length !== questionList.length) {
         index++;
-        return this.checkUserQuestion(game.playerQnAs, userId, index, questionArray);
+        return this.checkUserQuestion(questionList, userId, index, questionArray);
       } else {
         return Observable.empty();
       }
