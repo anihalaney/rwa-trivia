@@ -11,7 +11,7 @@ import { AppState, appState } from '../../../store';
 
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Category, GameOptions, GameMode, User, Friends } from '../../../model';
+import { Category, GameOptions, GameMode, User, Friends, PlayerMode, OpponentType } from '../../../model';
 import { userFriends } from 'app/user/store';
 
 @Component({
@@ -35,10 +35,12 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   showUncheckedCategories: boolean = false;
   allCategoriesSelected: boolean = true;
-  uFriends: Friends;
+  uFriends: Array<string>;
   userDict: { [key: string]: User } = {};
 
   filteredTags$: Observable<string[]>;
+
+  friendUserId: string;
 
   get categoriesFA(): FormArray {
     //console.log(this.newGameForm.get('categoriesFA'));
@@ -64,7 +66,10 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     this.store.select(appState.userState).select(s => s.userFriends).subscribe(uFriends => {
       if (uFriends !== null) {
-        this.uFriends = uFriends;
+        this.uFriends = [];
+        uFriends.myFriends.forEach(friend => {
+          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
+        })
       }
     });
   }
@@ -192,24 +197,38 @@ export class NewGameComponent implements OnInit, OnDestroy {
     return form;
   }
 
+
+  selectFriendId(friendId: string) {
+    this.friendUserId = friendId;
+  }
+
+
   onSubmit() {
     //validations
     this.newGameForm.updateValueAndValidity();
     if (this.newGameForm.invalid)
       return;
 
+
+
     //console.log(this.newGameForm.value);
     let gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
     console.log(gameOptions);
 
+    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
+      && !this.friendUserId) {
+      return;
+    }
+
     this.startNewGame(gameOptions);
   }
+
 
   startNewGame(gameOptions: GameOptions) {
     let user: User;
     this.store.select(appState.coreState).take(1).subscribe(s => user = s.user); //logged in user
 
-    this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
+    this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user, friendId: this.friendUserId }));
   }
 
   getGameOptionsFromFormValue(formValue: any): GameOptions {

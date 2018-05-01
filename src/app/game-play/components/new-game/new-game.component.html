@@ -34,14 +34,14 @@
                             <label for="tp-radio3">
                                 <span class="sprite computerp-icon"></span>With Computer</label>
                             <div class="withfriends" style="display: none;">
-                                <ul class="friendsslider" *ngIf="uFriends && uFriends.myFriends.length>0">
-                                    <li *ngFor="let friend of uFriends.myFriends; let i=index">
-                                        <input type="radio" id="friends{{i}}" name="withfriends">
+                                <ul class="friendsslider" *ngIf="uFriends && uFriends.length>0">
+                                    <li *ngFor="let friendId of uFriends; let i=index">
+                                        <input type="radio" id="friends{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
                                         <label for="friends{{i}}">
                                             <span class="labelimg">
-                                                <img *ngIf="userDict[friend.userId]?.profilePictureUrl" [src]="userDict[friend.userId]?.profilePictureUrl">
+                                                <img *ngIf="userDict[friendId]?.profilePictureUrl" [src]="userDict[friendId]?.profilePictureUrl">
                                             </span>
-                                            <span class="dark">{{userDict[friend.userId]?.displayName}}</span>
+                                            <span class="dark">{{userDict[friendId]?.displayName}}</span>
                                             <span class="expertise">
                                                 <span class="light">Expertise</span>
                                                 <span class="dark">PHP</span>
@@ -49,7 +49,7 @@
                                             <span class="light">Favorite</span>
                                             <span class="dark">C++</span>
                                         </label>
-                                    </li>                                   
+                                    </li>
                                 </ul>
                             </div>
                         </div>

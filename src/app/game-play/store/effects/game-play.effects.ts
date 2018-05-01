@@ -11,17 +11,14 @@ import { GameService } from '../../../core/services';
 
 @Injectable()
 export class GamePlayEffects {
-  constructor(
-    private actions$: Actions,
-    private svc: GameService
-  ) { }
+
 
   @Effect()
   startNewGame$ = this.actions$
     .ofType(GamePlayActionTypes.CREATE_NEW)
     .pipe(
     switchMap((action: gameplayactions.CreateNewGame) =>
-      this.svc.createNewGame(action.payload.gameOptions, action.payload.user).pipe(
+      this.svc.createNewGame(action.payload.gameOptions, action.payload.user, action.payload.friendId).pipe(
         map((gameId: string) => new gameplayactions.CreateNewGameSuccess(gameId))
         //catchError(error => new)
       )
@@ -89,5 +86,10 @@ export class GamePlayEffects {
         map((msg: any) => new gameplayactions.UpdateGameSuccess())
       )
     ));
+
+  constructor(
+    private actions$: Actions,
+    private svc: GameService
+  ) { }
 
 }

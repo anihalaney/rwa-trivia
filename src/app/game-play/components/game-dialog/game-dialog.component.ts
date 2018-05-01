@@ -139,6 +139,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   setTurnStatusFlag() {
     const turnFlag = (this.game.GameStatus === GameStatus.STARTED || this.game.GameStatus === GameStatus.JOINED_GAME ||
+      (this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE && this.game.nextTurnPlayerId === this.user.userId) ||
       (this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
     this.continueNext = (this.questionAnswered) ? true : false;
     this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
@@ -197,7 +198,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   checkGameOver() {
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
-      && Number(this.game.gameOptions.opponentType) === OpponentType.Random) {
+      && (Number(this.game.gameOptions.opponentType) === OpponentType.Random ||
+        Number(this.game.gameOptions.opponentType) === OpponentType.Friend)) {
       if (this.correctAnswerCount >= 5 || this.game.stats[this.user.userId].round >= 16) {
         this.gameOverContinueClicked();
       }
