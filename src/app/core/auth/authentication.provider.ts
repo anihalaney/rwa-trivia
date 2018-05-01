@@ -32,10 +32,7 @@ export class AuthenticationProvider {
           this.user = new User(afUser)
           this.user.idToken = token;
           this.store.dispatch(this.userActions.loginSuccess(this.user));
-          // Observable.timer(1000).subscribe(() => {
-          //   this.user.idToken = '1234';
-          //   this.store.dispatch(this.userActions.loginSuccess(this.user));
-          // })
+
         });
       } else {
         // user not logged in
@@ -61,9 +58,6 @@ export class AuthenticationProvider {
 
   }
 
-  saveToken = function (user) {
-
-  }
 
   refreshToken = function () {
     return this.refreshTokenObserver.do((tokenResponse) => {
