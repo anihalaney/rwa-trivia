@@ -41,7 +41,7 @@ export class GameOverComponent implements OnInit {
 
     this.store.select(gameplayState).select(s => s.userAnsweredQuestion).subscribe(stats => {
       if (stats != null) {
-        this.questionsArray.push(stats);
+        this.questionsArray = stats;
       }
     });
   }

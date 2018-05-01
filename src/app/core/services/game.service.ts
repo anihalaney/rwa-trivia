@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
-// import { Observable } from 'rxjs/Observable';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/forkJoin';
 import { Subject } from 'rxjs/Subject';
@@ -95,39 +94,29 @@ export class GameService {
 
   }
 
-  getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
-    const questionArray = [];
-    let index = 0;
-    const questionList = game.playerQnAs.filter((question) => question.playerId === userId);
-    return this.checkUserQuestion(questionList, userId, index, questionArray).expand((question) => {
-      questionArray.push(question);
-      if (questionArray.length !== questionList.length) {
-        index++;
-        return this.checkUserQuestion(questionList, userId, index, questionArray);
-      } else {
-        return Observable.empty();
-      }
-    });
+  checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
+
+    return this.db.doc(`/questions/${playerQnA.questionId}`)
+      .snapshotChanges()
+      .take(1)
+      .map(qs => {
+        const question = Question.getViewModelFromDb(qs.payload.data());
+        if (playerQnA.playerAnswerId !== null) {
+          const answerObj = question.answers[playerQnA.playerAnswerId];
+          question.userGivenAnswer = answerObj.answerText;
+        } else {
+          question.userGivenAnswer = null;
+        }
+        return question;
+      })
   }
 
-  checkUserQuestion(playerQnAs: any, userId: string, index: number, questionArray: any): Observable<any> {
-    const array = playerQnAs[index];
-    if (array.playerId === userId) {
-      return this.db.doc(`/questions/${array.questionId}`)
-        .snapshotChanges()
-        .take(1)
-        .map(qs => {
-          const question = Question.getViewModelFromDb(qs.payload.data());
-          if (array.playerAnswerId !== null) {
-            const answerObj = question.answers[array.playerAnswerId];
-            question.userGivenAnswer = answerObj.answerText;
-          } else {
-            question.userGivenAnswer = null;
-          }
-          return question;
-        })
-    }
+  getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
+    const observables = [];
+
+    game.playerQnAs.map(playerQnA => {
+      observables.push(this.checkUserQuestion(playerQnA));
+    });
+    return Observable.forkJoin(observables);
   }
 }
-
-
