@@ -47,6 +47,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   otherPlayer: User;
   otherPlayerUserId: string;
   RANDOM_PLAYER = 'Random Player';
+  showBadge = false;
+  MAX_TIME_IN_SECONDS_LOADER = 2;
+  MAX_TIME_IN_SECONDS_BADGE = 1;
+  showLoader = false;
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -81,25 +85,52 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           this.currentQuestion = null;
           return;
         }
+        this.getLoader();
         this.currentQuestion = question;
         this.questionIndex++;
         this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
-        this.timer = this.MAX_TIME_IN_SECONDS;
 
-        this.timerSub =
-          Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
-            this.timer--;
-          },
-            null,
-            () => {
-              // disable all buttons
-              (this.currentQuestion) ?
-                this.afterAnswer() : '';
 
-            });
 
       })
     );
+  }
+
+  getLoader() {
+    // Show Loading screen
+    this.showLoader = true;
+    this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
+    this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+      this.timer--;
+    },
+      null,
+      () => {
+        // Show badge screen
+        Utils.unsubscribe([this.timerSub]);
+        this.showLoader = false;
+        this.showBadge = true;
+        this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
+        this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+          this.timer--;
+        },
+          null,
+          () => {
+            // load question screen timer
+            Utils.unsubscribe([this.timerSub]);
+            this.showBadge = false;
+            this.timer = this.MAX_TIME_IN_SECONDS;
+            this.timerSub =
+              Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+                this.timer--;
+              },
+                null,
+                () => {
+                  // disable all buttons
+                  (this.currentQuestion) ?
+                    this.afterAnswer() : '';
+                });
+          })
+      });
   }
 
   ngOnInit() {
@@ -139,9 +170,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         Utils.unsubscribe([this.timerSub]);
       }
     }
-
-
-
   }
 
   initializeOtherUser() {
@@ -184,8 +212,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     this.checkGameOver();
-    (!this.gameOver) ?
-      this.getNextQuestion() : '';
+    if (!this.gameOver) {
+
+      this.getLoader();
+      this.getNextQuestion();
+    }
+
   }
 
 
