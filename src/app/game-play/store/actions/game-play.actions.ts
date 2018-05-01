@@ -26,7 +26,7 @@ export class ResetNewGame implements Action {
 
 export class CreateNewGame implements Action {
   readonly type = GamePlayActionTypes.CREATE_NEW;
-  constructor(public payload: { gameOptions: GameOptions, user: User }) { }
+  constructor(public payload: { gameOptions: GameOptions, user: User, friendId: string }) { }
 }
 
 export class CreateNewGameSuccess implements Action {

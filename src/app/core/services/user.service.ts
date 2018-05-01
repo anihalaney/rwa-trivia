@@ -96,7 +96,6 @@ export class UserService {
     }
 
     loadUserFriends(userId: string): Observable<Friends> {
-        const url = `${CONFIG.functionsUrl}/app/user/friend`;
-        return this.http.get<Friends>(url);
+        return this.db.doc<Friends>(`/friends/${userId}`).valueChanges();
     }
 }

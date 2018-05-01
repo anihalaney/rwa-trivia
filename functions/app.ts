@@ -252,7 +252,7 @@ app.post('/createGame', authorizedOnly, (req, res) => {
   }
 
   const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId, admin.firestore());
-  gameMechanics.createNewGame().then((gameId) => {
+  gameMechanics.createNewGame(req.body.friendId).then((gameId) => {
     console.log('gameId', gameId);
 
     res.send({ gameId: gameId });
@@ -499,16 +499,6 @@ app.post('/makeFriends', (req, res) => {
   });
 });
 
-
-app.get('/user/friend', authorizedOnly, (req, res) => {
-
-  admin.firestore().doc(`/friends/${req.user.uid}`)
-    .get()
-    .then(u => {
-      res.send(u.data());
-    });
-
-});
 
 // END - TEST FUNCTIONS
 ///////////////////////

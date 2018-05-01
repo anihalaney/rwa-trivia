@@ -21,9 +21,9 @@ export class GameService {
     private gameActions: GameActions) {
   }
 
-  createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
+  createNewGame(gameOptions: GameOptions, user: User, friendId: string): Observable<string> {
     const url: string = CONFIG.functionsUrl + '/app/createGame';
-    const payload = { gameOptions: gameOptions, userId: user.userId };
+    const payload = { gameOptions: gameOptions, userId: user.userId, friendId: friendId };
     return this.http.post<string>(url, payload);
 
   }
