@@ -22,6 +22,7 @@ export class User {
   tags?: string[];
   isSubscribed: boolean;
   profilePictureUrl?: string;
+  stats?: UserStats;
 
   constructor(authState?: firebase.User) {
     if (authState) {
@@ -31,4 +32,24 @@ export class User {
       this.displayName = (authState.providerData[0].displayName ? authState.providerData[0].displayName : this.email);
     }
   }
+
+}
+
+export class UserStats {
+  leaderBoardStats?: { [key: number]: number }
+  gamePlayed?: number;
+  categories?: number;
+  wins?: number;
+  badges?: number;
+  losses?: number;
+  avgAnsTime?: number;
+  contribution?: number;
+  constructor() {
+    this.leaderBoardStats = {};
+  }
+}
+
+export class LeaderBoardUser {
+  userId: string;
+  score: number;
 }

@@ -3,24 +3,24 @@ import { Action } from '@ngrx/store';
 import { Game } from '../../../model';
 
 export enum StatsActionTypes {
-    GET_LEADERBOARD = '[Stats] GetLeaderBoard',
-    GET_LEADERBOARD_SUCCESS = '[Stats] GetLeaderBoardSuccess'
+    LOAD_LEADERBOARD = '[Stats] LoadLeaderBoard',
+    LOAD_LEADERBOARD_SUCCESS = '[Stats] LoadLeaderBoardSuccess'
 }
 
-// Get Score
-export class GetLeaderBoard implements Action {
-    readonly type = StatsActionTypes.GET_LEADERBOARD;
-    constructor(public payload: { categoryList: any }) { }
+// Load Score
+export class LoadLeaderBoard implements Action {
+    readonly type = StatsActionTypes.LOAD_LEADERBOARD;
+    constructor() { }
 }
 
-// Get Score
-export class GetLeaderBoardSuccess implements Action {
-    readonly type = StatsActionTypes.GET_LEADERBOARD_SUCCESS;
+// Load Score
+export class LoadLeaderBoardSuccess implements Action {
+    readonly type = StatsActionTypes.LOAD_LEADERBOARD_SUCCESS;
     constructor(public payload: any) { }
 }
 
 export type StatsActions
-    = GetLeaderBoard
-    | GetLeaderBoardSuccess
+    = LoadLeaderBoard
+    | LoadLeaderBoardSuccess
 
 
