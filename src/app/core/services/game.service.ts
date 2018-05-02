@@ -9,7 +9,7 @@ import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, GameOptions, Game, Question, PlayerQnA, GameOperations } from '../../model';
+import { User, GameOptions, Game, Question, PlayerQnA, GameOperations, GameStatus } from '../../model';
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
@@ -21,9 +21,9 @@ export class GameService {
     private gameActions: GameActions) {
   }
 
-  createNewGame(gameOptions: GameOptions, user: User, friendId: string): Observable<string> {
+  createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
     const url: string = CONFIG.functionsUrl + '/app/createGame';
-    const payload = { gameOptions: gameOptions, userId: user.userId, friendId: friendId };
+    const payload = { gameOptions: gameOptions, userId: user.userId };
     return this.http.post<string>(url, payload);
 
   }
@@ -94,4 +94,15 @@ export class GameService {
         .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
 
   }
+
+  getGameInvites(userId: String): Observable<Game[]> {
+    return this.db.collection('/games', ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE)
+      .where('playerId_1', '==', userId).where('gameOver', '==', false)
+      .orderBy('turnAt', 'desc'))
+      .valueChanges()
+      .map(gs => gs.map(g => Game.getViewModel(g))
+        .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
+
+  }
+
 }

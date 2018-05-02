@@ -5,6 +5,7 @@ export class GameOptions {
   categoryIds: number[];
   tags: string[];
   maxQuestions: number;
+  friendId?: string;
 
   constructor() {
     //defaults

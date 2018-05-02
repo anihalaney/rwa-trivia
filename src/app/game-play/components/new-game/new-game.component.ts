@@ -67,7 +67,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.store.select(appState.userState).select(s => s.userFriends).subscribe(uFriends => {
       if (uFriends !== null) {
         this.uFriends = [];
-        uFriends.myFriends.forEach(friend => {
+        uFriends.myFriends.map(friend => {
           this.uFriends = [...this.uFriends, ...Object.keys(friend)];
         })
       }
@@ -227,8 +227,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
   startNewGame(gameOptions: GameOptions) {
     let user: User;
     this.store.select(appState.coreState).take(1).subscribe(s => user = s.user); //logged in user
-
-    this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user, friendId: this.friendUserId }));
+    gameOptions.friendId = this.friendUserId;
+    this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }
 
   getGameOptionsFromFormValue(formValue: any): GameOptions {

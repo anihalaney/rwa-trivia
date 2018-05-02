@@ -34,8 +34,8 @@
       </ul>
     </div>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
-      <a *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 " class="viewall" (click)="displayMoreGames()">view more</a>
+    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
+      <a  class="viewall" (click)="displayMoreGames()">view more</a>
     </div>
 
 
@@ -54,19 +54,20 @@
           <a href="#" class="viewall">view all</a>
         </div> -->
     </div>
+
     <ul class="invitationlist">
-      <li *ngFor="let game of gameInvites">
-        <game-invite [game]="game"></game-invite>
+      <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
+        <game-invite [userDict]="userDict" [game]="game"></game-invite>
       </li>
       <li class="visible-xs textcenter">
         <a href="#">
-          <div class="viewallbtn">view all</div>
+          <div class="viewallbtn">view more</div>
         </a>
       </li>
     </ul>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
-      <a href="#" class="viewall">view all</a>
+    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
+      <a class="viewall" (click)="displayMoreGameInvites()">view more</a>
     </div>
 
   </section>
@@ -82,9 +83,9 @@
               <a href="#" class="viewall">view all</a>
             </div> -->
     </div>
-    <leaderboard *ngIf="userDict" [userDict]="userDict" ></leaderboard>
+    <leaderboard *ngIf="userDict" [userDict]="userDict"></leaderboard>
 
-   
+
 
   </section>
   <!-- Category leaderboard end-->

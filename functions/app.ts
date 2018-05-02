@@ -252,7 +252,7 @@ app.post('/createGame', authorizedOnly, (req, res) => {
   }
 
   const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId, admin.firestore());
-  gameMechanics.createNewGame(req.body.friendId).then((gameId) => {
+  gameMechanics.createNewGame().then((gameId) => {
     console.log('gameId', gameId);
 
     res.send({ gameId: gameId });
