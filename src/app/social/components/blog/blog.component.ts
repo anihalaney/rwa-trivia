@@ -7,4 +7,13 @@ import { Component, Input } from '@angular/core';
 })
 export class BlogComponent {
   @Input() blogId: number;
+  isSocial = false;
+
+  getSocial() {
+    this.isSocial = true;
+  }
+
+  onNotify(flag: boolean) {
+    this.isSocial = flag;
+  }
 }

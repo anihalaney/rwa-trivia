@@ -301,7 +301,8 @@ textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize:
 .subscrib-cion{ background-position:-45px -142px; height: 50px; width: 54px; float: left; margin-right: 16px; }
 .commenticon{background-position:0px -208px; height:20px; width: 20px; margin:0 10px 0 13px }
 .viewicon{background-position:-21px -208px; height:12px; width: 20px; margin-right: 10px; vertical-align:-2px}
-.shareicon{background-position:-42px -208px; height:20px; width: 20px; margin-right: 10px}
+// .shareicon{background-position:-42px -208px; height:20px; width: 20px; margin-right: 10px}
+.shareicon{background-position: -162px -333px;  height: 27px;  width: 32px;}
 .timestats-icon{ background-position: -102px -146px; height: 42px; width: 44px; float: left; margin-right: 20px;}
 .singlep-icon{ background-position: -88px -200px !important; height: 53px; width: 53px; margin-right: 10px; }
 .twop-icon{ background-position: -139px -200px !important; height: 53px; width: 53px; margin-right: 10px;}
@@ -450,9 +451,9 @@ body.dialog-open {
 //TODO: Check these ... Coming from theme file
 @media screen and ( min-width:1000px){
 	.playwith a:hover .playwithicon{ background-position: -125px -22px;}
-	.blog-social a:hover .shareicon {
-		background-position:-63px -208px;
-	}
+	// .blog-social a:hover .shareicon {
+	// 	background-position:-63px -208px;
+	// }
   nav .card{ 
     border-width: 1px;
     border-style: solid;
@@ -485,4 +486,8 @@ nav .user.card{
 {
   border-width: 2px;
 	border-top-style: solid;
-} 
+}
+.cross-icon
+{
+  background-position: -194px -321px;  width: 26px;  height: 40px;
+}

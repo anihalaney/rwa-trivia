@@ -15,3 +15,25 @@ h2 a{ font-family:'hindmedium'; font-size: 16px; transition: 0.3s ease-in-out;}
   font-size: 16px;
   letter-spacing: 1px;
 }
+
+.shareicon
+{
+  position: relative;
+  // z-index: -1;
+}
+
+.hide-bottom
+{
+  display: none;
+}
+.hide-top-border
+{
+  border-top: 0px;
+}
+.card-opacity
+{
+  opacity: 0.2;
+}
+
+
+
