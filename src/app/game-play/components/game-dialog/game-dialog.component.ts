@@ -93,7 +93,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
                 this.afterAnswer() : '';
 
             });
-
       })
     );
   }
