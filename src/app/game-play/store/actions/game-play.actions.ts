@@ -9,6 +9,8 @@ export enum GamePlayActionTypes {
   CREATE_NEW_SUCCESS = '[GamePlay] CreateNewSuccess',
   LOAD_GAME = '[GamePlay] LoadGame',
   LOAD_SUCCESS = '[GamePlay] LoadSuccess',
+  LOAD_GAME_INVITES = '[GamePlay] LoadGameInvites',
+  LOAD_GAME_INVITES_SUCCESS = '[GamePlay] LoadGameInvitesSuccess',
   RESET_CURRENT = '[GamePlay] ResetCurrent',
   GET_NEXT_QUESTION = '[GamePlay] GetNextQuestion',
   GET_NEXT_QUESTION_SUCCESS = '[GamePlay] GetNextQuestionSuccess',
@@ -26,7 +28,7 @@ export class ResetNewGame implements Action {
 
 export class CreateNewGame implements Action {
   readonly type = GamePlayActionTypes.CREATE_NEW;
-  constructor(public payload: { gameOptions: GameOptions, user: User, friendId: string }) { }
+  constructor(public payload: { gameOptions: GameOptions, user: User}) { }
 }
 
 export class CreateNewGameSuccess implements Action {
@@ -43,6 +45,16 @@ export class LoadGame implements Action {
 export class LoadGameSuccess implements Action {
   readonly type = GamePlayActionTypes.LOAD_SUCCESS;
   constructor(public payload: Game) { } //game
+}
+
+export class LoadGameInvites implements Action {
+  readonly type = GamePlayActionTypes.LOAD_GAME_INVITES;
+  constructor(public payload: string) { } //game
+}
+
+export class LoadGameInvitesSuccess implements Action {
+  readonly type = GamePlayActionTypes.LOAD_GAME_INVITES_SUCCESS;
+  constructor(public payload: Game[]) { } //game
 }
 
 export class ResetCurrentGame implements Action {
@@ -91,6 +103,8 @@ export type GamePlayActions
   | CreateNewGame
   | CreateNewGameSuccess
   | LoadGameSuccess
+  | LoadGameInvites
+  | LoadGameInvitesSuccess
   | ResetCurrentGame
   | GetNextQuestion
   | GetNextQuestionSuccess

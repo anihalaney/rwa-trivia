@@ -14,13 +14,13 @@ export class GameMechanics {
     }
 
 
-    createNewGame(friendId?: string): Promise<string> {
+    createNewGame(): Promise<string> {
 
         if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
             if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
                 return this.joinGame().then((gameId) => { return gameId });
             } else if (Number(this.gameOptions.opponentType) === OpponentType.Friend) {
-                return this.createFriendUserGame(friendId).then((gameId) => { return gameId });
+                return this.createFriendUserGame(this.gameOptions.friendId).then((gameId) => { return gameId });
             }
         } else {
             return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
