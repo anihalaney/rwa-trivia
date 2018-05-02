@@ -51,6 +51,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   MAX_TIME_IN_SECONDS_LOADER = 2;
   MAX_TIME_IN_SECONDS_BADGE = 1;
   showLoader = false;
+  showWinBadge = false;
+  isCorrectAnswer = false;
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -97,6 +99,27 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   getLoader() {
+    // Show Loading screen
+    if (this.isCorrectAnswer) {
+      this.showWinBadge = true;
+      this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
+      this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+        this.timer--;
+      },
+        null,
+        () => {
+          Utils.unsubscribe([this.timerSub]);
+          this.showWinBadge = false;
+          this.isCorrectAnswer = false;
+          this.showBadgeScreen();
+        });
+    } else {
+      this.showBadgeScreen();
+    }
+
+  }
+
+  showBadgeScreen() {
     // Show Loading screen
     this.showLoader = true;
     this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
@@ -231,6 +254,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
 
     if (userAnswerId === correctAnswerId) {
+      this.isCorrectAnswer = true;
       this.correctAnswerCount++;
     }
 
