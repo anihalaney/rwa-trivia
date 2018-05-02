@@ -17,6 +17,8 @@ export enum GamePlayActionTypes {
   SET_GAME_OVER = '[GamePlay] SetGameOver',
   RESET_CURRENT_QUESTION = '[GamePlay] ResetCurrentQuestion',
   UPDATE_GAME_SUCCESS = '[GamePlay] UpdateGameSuccess',
+  GET_USERS_ANSWERED_QUESTION = '[GamePlay] GetUsersAnsweredQuestion',
+  GET_USERS_ANSWERED_QUESTION_SUCCESS = '[GamePlay] GetUsersAnsweredQuestionSuccess'
 }
 
 export class ResetNewGame implements Action {
@@ -85,6 +87,16 @@ export class UpdateGameSuccess implements Action {
   payload = null;
 }
 
+export class GetUsersAnsweredQuestion implements Action {
+  readonly type = GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION;
+  constructor(public payload: { userId: string, game: Game }) { } //userId
+}
+export class GetUsersAnsweredQuestionSuccess implements Action {
+  readonly type = GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION_SUCCESS;
+  constructor(public payload: any) { }
+}
+
+
 
 export type GamePlayActions
   = ResetNewGame
@@ -98,4 +110,6 @@ export type GamePlayActions
   | AddPlayerQnASuccess
   | SetGameOver
   | ResetCurrentQuestion
-  | UpdateGameSuccess;
+  | UpdateGameSuccess
+  | GetUsersAnsweredQuestion
+  | GetUsersAnsweredQuestionSuccess;
