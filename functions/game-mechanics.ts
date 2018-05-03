@@ -77,7 +77,8 @@ export class GameMechanics {
 
 
     private createSingleAndRandomUserGame(): Promise<string> {
-        const timestamp = new Date(new Date().toUTCString()).getTime();
+        const timestamp = this.getUTCTimeStamp();
+       // console.log('timestamp', timestamp);
         const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, undefined, undefined,
             GameStatus.STARTED, timestamp, timestamp);
         return this.createGame(game);
@@ -85,11 +86,17 @@ export class GameMechanics {
     }
 
     private createFriendUserGame(friendId: string): Promise<string> {
-        const timestamp = new Date(new Date().toUTCString()).getTime();
+        const timestamp = this.getUTCTimeStamp();
         const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, friendId, undefined,
             GameStatus.STARTED, timestamp, timestamp);
         return this.createGame(game);
 
+    }
+
+    public getUTCTimeStamp() {
+        const date = new Date(new Date().toUTCString());
+        const millis = date.getTime() + (date.getTimezoneOffset() * 60000);
+        return millis;
     }
 
 

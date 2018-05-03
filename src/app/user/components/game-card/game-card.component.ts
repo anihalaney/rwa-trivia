@@ -44,8 +44,10 @@ export class GameCardComponent implements OnInit, OnChanges {
       Observable.timer(1000, 1000).subscribe(t => {
         if (this.game.nextTurnPlayerId === this.user.userId) {
 
-          const currentTime = new Date((new Date().toUTCString())).getTime();
-          const diff = currentTime - this.game.turnAt;
+          const utcDate = new Date(new Date().toUTCString());
+          const currentMillis = utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000);
+
+          const diff = currentMillis - this.game.turnAt;
           const hour = Math.floor(diff / (60 * 60 * 1000));
           const minute = Math.floor(diff % (60 * 60 * 1000) / (60 * 1000));
 

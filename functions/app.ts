@@ -295,7 +295,7 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
         const playerQnAs: PlayerQnA = req.body.playerQnA;
         game.playerQnAs.push(playerQnAs);
         game.decideNextTurn(playerQnAs, req.user.uid);
-        game.turnAt = new Date(new Date().toUTCString()).getTime();
+        game.turnAt = gameMechanics.getUTCTimeStamp();
         game.calculateStat(playerQnAs.playerId);
 
         break;
@@ -315,7 +315,7 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
 });
 
 app.get('/updateAllGames', adminOnly, (req, res, next) => {
-  admin.firestore().collection('/games/').get().then((snapshot) => {
+  admin.firestore().collection('/games/').where('gameOver', '==', false).get().then((snapshot) => {
     snapshot.forEach((doc) => {
 
       const game = Game.getViewModel(doc.data());
@@ -323,6 +323,10 @@ app.get('/updateAllGames', adminOnly, (req, res, next) => {
       game.playerIds.forEach((playerId) => {
         game.calculateStat(playerId);
       });
+
+      const date = new Date(new Date().toUTCString());
+      const millis = date.getTime() + (date.getTimezoneOffset() * 60000);
+      game.turnAt = millis;
 
       const dbGame = game.getDbModel();
       dbGame.id = doc.id;
@@ -532,10 +536,14 @@ app.post('/game/scheduler/check', authTokenOnly, (req, res) => {
       snapshot.forEach((doc) => {
         const game: Game = Game.getViewModel(doc.data());
         if (game.playerIds.length > 1 && game.nextTurnPlayerId !== '') {
-          const noPlayTimeBound = new Date().getTime() - game.turnAt;
+          const date = new Date(new Date().toUTCString());
+          const millis = date.getTime() + (date.getTimezoneOffset() * 60000);
+
+          const noPlayTimeBound = millis - game.turnAt;
+          const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
           //  console.log('game--->', game.gameId);
           // console.log('noPlayTimeBound--->', noPlayTimeBound);
-          if (noPlayTimeBound >= schedulerConstants.gamePlayDuration) {
+          if (playedHours >= schedulerConstants.gamePlayDuration) {
             game.gameOver = true;
             game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
             const dbGame = game.getDbModel();
