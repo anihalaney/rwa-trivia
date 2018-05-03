@@ -2,6 +2,7 @@ import {
   Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants, User
 } from '../src/app/model';
 import { ESUtils } from './ESUtils';
+import { Utils } from './Utils';
 import { FirestoreMigration } from './firestore-migration';
 import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
@@ -9,6 +10,7 @@ import { GameLeaderBoardStats } from './game-leader-board-stats';
 import { UserContributionStat } from './user-contribution-stat';
 import { UserCollection } from './user-collection';
 import { MakeFriends } from './make-friends';
+
 
 
 const functions = require('firebase-functions');
@@ -24,6 +26,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors')({ origin: true });
 const app = express();
 const elasticsearch = require('elasticsearch');
+const utils: Utils = new Utils();
 
 // Take the text parameter passed to this HTTP endpoint and insert it into the
 // Realtime Database under the path /messages/:pushId/original
@@ -295,7 +298,7 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
         const playerQnAs: PlayerQnA = req.body.playerQnA;
         game.playerQnAs.push(playerQnAs);
         game.decideNextTurn(playerQnAs, req.user.uid);
-        game.turnAt = gameMechanics.getUTCTimeStamp();
+        game.turnAt = utils.getUTCTimeStamp();
         game.calculateStat(playerQnAs.playerId);
 
         break;
@@ -536,8 +539,8 @@ app.post('/game/scheduler/check', authTokenOnly, (req, res) => {
       snapshot.forEach((doc) => {
         const game: Game = Game.getViewModel(doc.data());
         if (game.playerIds.length > 1 && game.nextTurnPlayerId !== '') {
-          const date = new Date(new Date().toUTCString());
-          const millis = date.getTime() + (date.getTimezoneOffset() * 60000);
+
+          const millis = utils.getUTCTimeStamp();
 
           const noPlayTimeBound = millis - game.turnAt;
           const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
