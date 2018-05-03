@@ -10,7 +10,7 @@ export class SocialPaletteComponent implements OnChanges {
   @Input() blogId: number;
   @Input() blogData: any;
   @Output() notify: EventEmitter<boolean> = new EventEmitter<boolean>();
-  fbUrl = undefined;
+  blogUrl = undefined;
 
   constructor(public share: ShareButtons) {
   }
@@ -20,7 +20,7 @@ export class SocialPaletteComponent implements OnChanges {
     this.notify.emit(this.blogData);
   }
   ngOnChanges() {
-    this.fbUrl = this.blogData.link;
+    this.blogUrl = this.blogData.link;
   }
 
 }
