@@ -8,7 +8,7 @@ import { Subject } from 'rxjs/Subject';
 import '../../rxjs-extensions';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, GameOptions, Game, Question, PlayerQnA, GameOperations, QuestionStatus } from '../../model';
+import { User, GameOptions, Game, Question, PlayerQnA, GameOperations, GameStatus } from '../../model';
 import { Store } from '@ngrx/store';
 import { GameActions } from '../store/actions';
 import { Utils } from '../services/utils';
@@ -89,6 +89,16 @@ export class GameService {
 
     return Observable.combineLatest(query1, query2)
       .map((data) => data[0].concat(data[1]))
+      .map(gs => gs.map(g => Game.getViewModel(g))
+        .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
+
+  }
+
+  getGameInvites(userId: String): Observable<Game[]> {
+    return this.db.collection('/games', ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE)
+      .where('playerId_1', '==', userId).where('gameOver', '==', false)
+      .orderBy('turnAt', 'desc'))
+      .valueChanges()
       .map(gs => gs.map(g => Game.getViewModel(g))
         .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
 

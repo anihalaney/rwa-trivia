@@ -108,6 +108,18 @@ export class UserEffects {
         )
         );
 
+    // Get Game list
+    @Effect()
+    LoadUserFriends$ = this.actions$
+        .ofType(UserActionTypes.LOAD_USER_FRIENDS)
+        .pipe(
+        switchMap((action: userActions.LoadUserFriends) =>
+            this.userService.loadUserFriends(action.payload.userId)
+                .map((friends: Friends) => new userActions.LoadUserFriendsSuccess(friends))
+        )
+        );
+
+
     constructor(
         private actions$: Actions,
         private userService: UserService,

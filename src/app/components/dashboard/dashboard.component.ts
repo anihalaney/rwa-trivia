@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../store';
 import { Utils } from '../../core/services';
 import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
+import * as gameplayactions from '../../game-play/store/actions';
 import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../model';
 
 @Component({
@@ -19,9 +20,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   questionOfTheDay$: Observable<Question>;
   activeGames$: Observable<Game[]>;
   userDict$: Observable<{ [key: string]: User }>;
-  gameInvites: number[];  // change this to game invites
   gameSliceStartIndex: number;
   gameSliceLastIndex: number;
+  gameInviteSliceStartIndex: number;
+  gameInviteSliceLastIndex: number;
   now: Date;
   greeting: string;
   message: string;
@@ -31,6 +33,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   userDict: { [key: string]: User } = {};
   missingCardCount = 0;
   numbers = [];
+  gameInvites: Game[];
 
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
@@ -39,7 +42,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.questionOfTheDay$ = store.select(appState.coreState).select(s => s.questionOfTheDay);
     this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
     this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
-    this.gameInvites = [1, 2, 3];
+
     this.subs.push(store.select(appState.coreState).select(s => s.user).subscribe(user => {
       this.user = user
       if (user) {
@@ -49,6 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
         // Load active Games
         this.store.dispatch(this.gameActions.getActiveGames(user));
+        this.store.dispatch(new gameplayactions.LoadGameInvites(user.userId));
 
       } else {
         this.showNewsCard = true;
@@ -73,8 +77,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }));
 
+
     this.gameSliceStartIndex = 0;
     this.gameSliceLastIndex = 8;
+
+    this.subs.push(this.store.select(appState.gameplayState).select(s => s.gameInvites).subscribe(iGames => {
+      this.gameInvites = iGames;
+      iGames.map(iGame => {
+        this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
+      });
+    }));
+
+
+    this.gameInviteSliceStartIndex = 0;
+    this.gameInviteSliceLastIndex = 3;
 
   }
 
@@ -98,6 +114,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.gameSliceLastIndex = (this.activeGames.length > (this.gameSliceLastIndex + 8)) ?
       this.gameSliceLastIndex + 8 : this.activeGames.length;
     this.checkCardCountPerRow();
+  }
+
+  displayMoreGameInvites(): void {
+    this.gameInviteSliceLastIndex = (this.gameInvites.length > (this.gameInviteSliceLastIndex + 3)) ?
+      this.gameInviteSliceLastIndex + 3 : this.gameInvites.length;
   }
 
   ngOnDestroy() {

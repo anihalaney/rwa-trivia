@@ -1,5 +1,7 @@
 import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../src/app/model';
 import { Observable } from 'rxjs/Observable';
+import { Utils } from './Utils';
+const utils: Utils = new Utils();
 
 export class GameMechanics {
 
@@ -16,11 +18,14 @@ export class GameMechanics {
 
     createNewGame(): Promise<string> {
 
-        if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent
-            && Number(this.gameOptions.opponentType) === OpponentType.Random) {
-            return this.joinGame().then((gameId) => { return gameId });
+        if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
+            if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
+                return this.joinGame().then((gameId) => { return gameId });
+            } else if (Number(this.gameOptions.opponentType) === OpponentType.Friend) {
+                return this.createFriendUserGame(this.gameOptions.friendId).then((gameId) => { return gameId });
+            }
         } else {
-            return this.createGame().then((gameId) => { return gameId });
+            return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
         }
 
     }
@@ -40,7 +45,7 @@ export class GameMechanics {
                     const promise = this.pickRandomGame(gameArr, totalGames);
                     return promise.then((gameId) => { return gameId });
                 } else {
-                    return this.createGame().then((gameId) => { return gameId });
+                    return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
                 }
             });
 
@@ -62,7 +67,7 @@ export class GameMechanics {
             const dbGame = game.getDbModel();
             return this.UpdateGame(dbGame).then((gameId) => { return gameId });
         } else if (totalGames === 1) {
-            return this.createGame().then((gameId) => { return gameId });
+            return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
         } else {
             totalGames--;
             queriedItems.splice(randomGameNo, 1);
@@ -73,16 +78,31 @@ export class GameMechanics {
     }
 
 
-    private createGame(): Promise<string> {
+    private createSingleAndRandomUserGame(): Promise<string> {
+        const timestamp = utils.getUTCTimeStamp();
+       // console.log('timestamp', timestamp);
         const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, undefined, undefined,
-            GameStatus.STARTED, new Date().getTime(), new Date().getTime());
+            GameStatus.STARTED, timestamp, timestamp);
+        return this.createGame(game);
+
+    }
+
+    private createFriendUserGame(friendId: string): Promise<string> {
+        const timestamp = utils.getUTCTimeStamp();
+        const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, friendId, undefined,
+            GameStatus.STARTED, timestamp, timestamp);
+        return this.createGame(game);
+
+    }
+
+
+    private createGame(game: Game): Promise<string> {
         game.generateDefaultStat();
         const dbGame = game.getDbModel(); // object to be saved
         return this.db.collection('games').add(dbGame).then(ref => {
             dbGame.id = ref.id;
             return this.UpdateGame(dbGame).then((gameId) => { return gameId });
         });
-
 
     }
 
