@@ -58,7 +58,7 @@ service cloud.firestore {
     
     match /games {
       match /{document=**} {
-        allow read: if isUserAuthenticated(resource.data.playerId_0) || isUserAuthenticated(resource.data.playerId_1);
+        allow read: if isUserAuthenticated(request.user.uid) || if isUserAuthenticated(resource.data.playerId_0) || isUserAuthenticated(resource.data.playerId_1);
         
       }
     }
@@ -81,6 +81,10 @@ service cloud.firestore {
     match /leader_board_stats/categories {     
         allow get: true;       
       
+    }
+
+      match /friends/{userId} {
+         allow get: if isUserAuthenticated(userId);          
     }
     
   }
