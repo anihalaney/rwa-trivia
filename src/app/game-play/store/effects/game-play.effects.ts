@@ -100,6 +100,16 @@ export class GamePlayEffects {
       )
     ));
 
+  @Effect()
+  getUserAnsweredQuestions$ = this.actions$
+    .ofType(GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION)
+    .pipe(
+    switchMap((action: gameplayactions.GetUsersAnsweredQuestion) =>
+      this.svc.getUsersAnsweredQuestion(action.payload.userId, action.payload.game).pipe(
+        map((questionArray: any) => new gameplayactions.GetUsersAnsweredQuestionSuccess(questionArray))
+      )
+    ));
+
   constructor(
     private actions$: Actions,
     private svc: GameService

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
-// import { Observable } from 'rxjs/Observable';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/forkJoin';
 import { Subject } from 'rxjs/Subject';
@@ -105,4 +104,29 @@ export class GameService {
 
   }
 
+  checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
+
+    return this.db.doc(`/questions/${playerQnA.questionId}`)
+      .snapshotChanges()
+      .take(1)
+      .map(qs => {
+        const question = Question.getViewModelFromDb(qs.payload.data());
+        if (playerQnA.playerAnswerId !== null) {
+          const answerObj = question.answers[playerQnA.playerAnswerId];
+          question.userGivenAnswer = answerObj.answerText;
+        } else {
+          question.userGivenAnswer = null;
+        }
+        return question;
+      })
+  }
+
+  getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
+    const observables = [];
+
+    game.playerQnAs.map(playerQnA => {
+      observables.push(this.checkUserQuestion(playerQnA));
+    });
+    return Observable.forkJoin(observables);
+  }
 }

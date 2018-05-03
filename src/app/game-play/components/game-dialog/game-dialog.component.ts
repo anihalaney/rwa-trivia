@@ -50,7 +50,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   showBadge = false;
   MAX_TIME_IN_SECONDS_LOADER = 2;
   MAX_TIME_IN_SECONDS_BADGE = 1;
-  showLoader = true;
+  showLoader = false;
+  showWinBadge = false;
+  isCorrectAnswer = false;
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -98,6 +100,27 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   getLoader() {
     // Show Loading screen
+    if (this.isCorrectAnswer) {
+      this.showWinBadge = true;
+      this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
+      this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+        this.timer--;
+      },
+        null,
+        () => {
+          Utils.unsubscribe([this.timerSub]);
+          this.showWinBadge = false;
+          this.isCorrectAnswer = false;
+          this.showBadgeScreen();
+        });
+    } else {
+      this.showBadgeScreen();
+    }
+
+  }
+
+  showBadgeScreen() {
+    // Show Loading screen
     this.showLoader = true;
     this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
     this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
@@ -144,33 +167,33 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = (this.questionAnswered) ? true : false;
     this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
     this.checkGameOver();
-    if (!turnFlag && !this.gameOver) {
+    if (!this.gameOver) {
+      if (!turnFlag) {
 
-      if (!this.currentQuestion) {
-        this.getNextQuestion();
-      }
-      if (this.game.GameStatus !== GameStatus.STARTED && this.userDict) {
-        this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
-        const otherPlayerObj = this.userDict[this.otherPlayerUserId];
-        (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
-        this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
-          this.otherPlayer.displayName : this.RANDOM_PLAYER
+        if (!this.currentQuestion) {
+          this.getNextQuestion();
+        }
+        if (this.game.GameStatus !== GameStatus.STARTED && this.userDict) {
+          this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+          const otherPlayerObj = this.userDict[this.otherPlayerUserId];
+          (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
+          this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
+            this.otherPlayer.displayName : this.RANDOM_PLAYER
+        } else {
+          this.initializeOtherUser();
+        }
       } else {
-        this.initializeOtherUser();
+        Observable.timer(2000).take(1).subscribe(t => {
+
+          this.store.dispatch(new gameplayactions.ResetCurrentGame());
+          this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+          this.currentQuestion = undefined;
+          this.continueNext = false;
+          this.router.navigate(['/dashboard']);
+        });
+        Utils.unsubscribe([this.timerSub]);
       }
-    } else {
-      Observable.timer(2000).take(1).subscribe(t => {
-
-        this.store.dispatch(new gameplayactions.ResetCurrentGame());
-        this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-        this.currentQuestion = undefined;
-        this.continueNext = false;
-        this.router.navigate(['/dashboard']);
-      });
-      Utils.unsubscribe([this.timerSub]);
     }
-
-
   }
 
   initializeOtherUser() {
@@ -233,6 +256,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
 
     if (userAnswerId === correctAnswerId) {
+      this.isCorrectAnswer = true;
       this.correctAnswerCount++;
     }
 

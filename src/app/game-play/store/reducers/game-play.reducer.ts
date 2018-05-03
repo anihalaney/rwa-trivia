@@ -55,5 +55,14 @@ export function gameInvites(state: any = [], action: GamePlayActions): Game[] {
     default:
       return state;
   }
+}
+
+export function userAnsweredQuestion(state: any = null, action: GamePlayActions): any {
+  switch (action.type) {
+    case GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION_SUCCESS:
+      return action.payload;
+    default:
+      return null;
+  }
 };
 
