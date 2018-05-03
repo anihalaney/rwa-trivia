@@ -1,78 +1,26 @@
-<div *ngIf="blogId === 1" class="card" [ngClass]="isSocial?'card-opacity':''">
-  <a class="blogimg" target="_blank" rel="noopener" href="https://blog.realworldfullstack.io/real-world-app-part-17-cloud-storage-with-firebase-and-angular-d3d2c9f5f27c">
-    <img src="https://cdn-images-1.medium.com/max/2000/1*a0Z6jsHuF8ASw089hSgnIw.jpeg" alt="Real World App: Cloud storage with Firebase and Angular"
-    />
-  </a>
-
-  <div class="blog-cont">
-    <div class="T-tagging">Angularfire2, Google Cloud Storage</div>
-    <h2>
-      <a href="#">Real World App: Cloud storage with Firebase and Angular</a>
-    </h2>
-    <p class="minimize">Adding features: Bulk upload and User profile settings using firebase cloud storage</p>
-  </div>
-  <div class="blog-social" [ngClass]="isSocial?'hide-top-border':''">
-    <div class="col-xs-4" [ngClass]="isSocial?'hide-bottom':''">
-      <div class="commenticon sprite"></div>12
+<div class="col-md-4 col-xs-12" *ngFor="let row of blogData;let i=index;">
+  <div class="card" [ngClass]="blogData[i].status?'card-opacity':''">
+    <a class="blogimg" target="_blank" rel="noopener" href='{{row.link}}'>
+      <img src="{{row.image}}" alt="{{row.imageAlt}}" />
+    </a>
+    <div class="blog-cont">
+      <div class="T-tagging">{{row.title}}</div>
+      <h2>
+        <a href="#">{{row.subTitle}}</a>
+      </h2>
+      <p class="minimize">{{row.description}}</p>
     </div>
-    <div class="col-xs-6" [ngClass]="isSocial?'hide-bottom':''">
-      <div class="viewicon sprite"></div>70
-    </div>
-    <div class="col-xs-2 align-right" (click)="getSocial()" [ngClass]="isSocial?'hide-bottom':''">
-      <span class="shareicon sprite"></span>
-    </div>
-  </div>
-</div>
-<social-palette *ngIf="isSocial" [isSocial]="isSocial" (notify)="onNotify()"></social-palette>
-
-<div *ngIf="blogId === 2" class="card">
-  <a class="blogimg" target="_blank" rel="noopener" href="https://blog.realworldfullstack.io/real-world-app-part-16-from-firebase-to-firestore-f6c494e80237">
-    <img src="https://cdn-images-1.medium.com/max/2000/1*6DrNpNpbrQt1v-NQjh9xow.jpeg" alt="Real World App - Part 16: From Firebase to Firestore"
-    />
-  </a>
-
-  <div class="blog-cont">
-    <div class="T-tagging">Firebase realtime database, Firestore</div>
-    <h2>
-      <a href="#">Real World App: From Firebase to Firestore</a>
-    </h2>
-    <p class="minimize">Migrating from Firebase realtime database to Cloud Firestore</p>
-  </div>
-  <div class="blog-social">
-    <div class="col-xs-4">
-      <div class="commenticon sprite"></div>236
-    </div>
-    <div class="col-xs-6">
-      <div class="viewicon sprite"></div>2,907
-    </div>
-    <div class="col-xs-2 align-right">
-      <span class="shareicon sprite"></span>
+    <div class="blog-social" [ngClass]="blogData[i].status?'hide-top-border':''">
+      <div class="col-xs-4" [ngClass]="blogData[i].status?'hide-bottom':''">
+        <div class="commenticon sprite"></div>{{row.commentCount}}
+      </div>
+      <div class="col-xs-6" [ngClass]="blogData[i].status?'hide-bottom':''">
+        <div class="viewicon sprite"></div>{{row.viewCount}}
+      </div>
+      <div class="col-xs-2 align-right" (click)="getSocial(i)">
+        <span class="shareicon sprite"></span>
+      </div>
     </div>
   </div>
-</div>
-
-<div *ngIf="blogId === 3" class="card">
-  <a class="blogimg" target="_blank" rel="noopener" href="https://blog.realworldfullstack.io/real-world-app-part-15-ui-design-with-angular-material-1a5c597c679e">
-    <img src="https://cdn-images-1.medium.com/max/1600/1*piXzTMJL11cdzaaYLDziCA.png" alt="Real World App - Part 15: UI design with Angular Material"
-    />
-  </a>
-
-  <div class="blog-cont">
-    <div class="T-tagging">Angular Material</div>
-    <h2>
-      <a href="#">Real World App: UI design with Angular Material</a>
-    </h2>
-    <p class="minimize">Incorporate Material UI design into the app.</p>
-  </div>
-  <div class="blog-social">
-    <div class="col-xs-4">
-      <div class="commenticon sprite"></div>237
-    </div>
-    <div class="col-xs-6">
-      <div class="viewicon sprite"></div>1,029
-    </div>
-    <div class="col-xs-2 align-right">
-      <span class="shareicon sprite"></span>
-    </div>
-  </div>
+  <social-palette *ngIf="blogData[i].status" [blogData]="blogData[i]" (notify)="onNotify($event)"></social-palette>
 </div>

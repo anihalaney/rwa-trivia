@@ -1,12 +1,15 @@
+@import '~@ngx-share/button/styles/share-buttons';
+@import '~@ngx-share/button/styles/themes/default/default-theme';
+
 .social-icons{ 
-    position: absolute;
-    top: 245px;
-    left: 255px;
-    border-style: solid;
-    border-width: 1px;
-    width: 18%;
-    z-index: 1;
-    border-radius: 5px;
+  position: absolute;
+  top: 265px;
+  left: 245px;
+  border-style: solid;
+  border-width: 1px;
+  width: 18%;
+  z-index: 1;
+  border-radius: 5px;
   }
   .facebookicon,.twiticon,.linkdenicon
   {

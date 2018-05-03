@@ -1,17 +1,26 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { ShareButtons } from '@ngx-share/core';
 
 @Component({
   selector: 'social-palette',
   templateUrl: './social-palette.component.html',
   styleUrls: ['./social-palette.component.scss']
 })
-export class SocialPaletteComponent {
+export class SocialPaletteComponent implements OnChanges {
   @Input() blogId: number;
-  @Input() isSocial: boolean;
+  @Input() blogData: any;
   @Output() notify: EventEmitter<boolean> = new EventEmitter<boolean>();
+  fbUrl = undefined;
+
+  constructor(public share: ShareButtons) {
+  }
 
   closeSocial() {
-    this.notify.emit(false);
+    this.blogData.status = false;
+    this.notify.emit(this.blogData);
+  }
+  ngOnChanges() {
+    this.fbUrl = this.blogData.link;
   }
 
 }
