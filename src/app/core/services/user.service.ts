@@ -94,4 +94,8 @@ export class UserService {
         const url = `${CONFIG.functionsUrl}/app/makeFriends`;
         return this.http.post<any>(url, obj);
     }
+
+    loadUserFriends(userId: string): Observable<Friends> {
+        return this.db.doc<Friends>(`/friends/${userId}`).valueChanges();
+    }
 }

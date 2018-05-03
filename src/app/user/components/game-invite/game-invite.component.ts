@@ -1,27 +1,34 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 
-import { User, Game } from '../../../model';
+
+import { User, Game, Category } from '../../../model';
+import { gameInvites } from 'app/game-play/store';
 
 @Component({
   selector: 'game-invite',
   templateUrl: './game-invite.component.html',
   styleUrls: ['./game-invite.component.scss']
 })
-export class GameInviteComponent { // implements OnInit  {
-  @Input() game: number;  //change this to game
-/*  
-  user: User;
-  myTurn: boolean;
+export class GameInviteComponent implements OnChanges {
 
-  constructor(private store: Store<AppStore>) { }
+  @Input() userDict: { [key: string]: User } = {};
+  @Input() game: Game;
+  categoryDict$: Observable<{ [key: number]: Category }>;
+  categoryDict: { [key: number]: Category };
+  randomCategoryId = 0;
 
-  ngOnInit() {
-    this.store.select(appState.coreState).take(1).subscribe(s => {
-      this.user = s.user
-      this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
-    }); //logged in user
+
+  constructor(private store: Store<AppState>) {
+    this.categoryDict$ = store.select(categoryDictionary);
+    this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict);
   }
-*/
+
+  ngOnChanges() {
+    this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
+  }
+
+
 }

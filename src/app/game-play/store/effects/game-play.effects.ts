@@ -25,7 +25,7 @@ export class GamePlayEffects {
     )
     );
 
-  //load from router
+
   @Effect()
   // handle location update
   loadGame$ = this.actions$
@@ -34,6 +34,19 @@ export class GamePlayEffects {
     switchMap((action: gameplayactions.LoadGame) =>
       this.svc.getGame(action.payload).pipe(
         map((game: Game) => new gameplayactions.LoadGameSuccess(game))
+      )
+    )
+    );
+
+  //load invited games
+  @Effect()
+  // handle location update
+  loadGameInvites$ = this.actions$
+    .ofType(GamePlayActionTypes.LOAD_GAME_INVITES)
+    .pipe(
+    switchMap((action: gameplayactions.LoadGameInvites) =>
+      this.svc.getGameInvites(action.payload).pipe(
+        map((games: Game[]) => new gameplayactions.LoadGameInvitesSuccess(games))
       )
     )
     );

@@ -153,20 +153,35 @@ export class Game {
   }
 
   decideNextTurn(playerQnA: PlayerQnA, userId: string) {
-    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent
-      && Number(this.gameOptions.opponentType) === OpponentType.Random) {
+    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
       const otherPlayerUserId = this.playerIds.filter(playerId => playerId !== userId)[0];
-      if (this.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
-        this.nextTurnPlayerId = '';
-        this.GameStatus = GameStatus.AVAILABLE_FOR_OPPONENT;
-      } else if (this.GameStatus === GameStatus.JOINED_GAME && !playerQnA.answerCorrect) {
-        this.nextTurnPlayerId = otherPlayerUserId;
-        this.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
-      } else if (!playerQnA.answerCorrect) {
-        this.nextTurnPlayerId = otherPlayerUserId;
-      } else {
-        this.nextTurnPlayerId = userId;
+
+      if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
+        if (this.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
+          this.nextTurnPlayerId = '';
+          this.GameStatus = GameStatus.AVAILABLE_FOR_OPPONENT;
+        } else if (this.GameStatus === GameStatus.JOINED_GAME && !playerQnA.answerCorrect) {
+          this.nextTurnPlayerId = otherPlayerUserId;
+          this.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
+        } else if (!playerQnA.answerCorrect) {
+          this.nextTurnPlayerId = otherPlayerUserId;
+        } else {
+          this.nextTurnPlayerId = userId;
+        }
+      } else if (Number(this.gameOptions.opponentType) === OpponentType.Friend) {
+        if (this.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
+          this.nextTurnPlayerId = otherPlayerUserId;
+          this.GameStatus = GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE;
+        } else if (this.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE && !playerQnA.answerCorrect) {
+          this.nextTurnPlayerId = otherPlayerUserId;
+          this.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
+        } else if (!playerQnA.answerCorrect) {
+          this.nextTurnPlayerId = otherPlayerUserId;
+        } else {
+          this.nextTurnPlayerId = userId;
+        }
       }
+
     } else {
       this.nextTurnPlayerId = userId;
     }
