@@ -1,7 +1,13 @@
-import { Game, Question, Category, User, UserStatConstants } from '../src/app/model';
+
+import { Game, Question, Category, User, UserStatConstants, Invitation, TriggerConstants } from '../src/app/model';
 import { ESUtils } from './ESUtils';
 import { GameLeaderBoardStats } from './game-leader-board-stats';
 import { UserContributionStat } from './user-contribution-stat';
+import { MailClient } from './mail-client';
+const TinyURL = require('tinyurl');
+const fs = require('fs');
+const path = require('path');
+const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../config/mail.config.json'), 'utf8'));
 
 const admin = require('firebase-admin');
 admin.initializeApp(JSON.parse(process.env.FIREBASE_CONFIG), 'secondary');
@@ -70,6 +76,24 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate(
       gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
         // console.log('leaderBoardStat', leaderBoardStat);
       });
+    });
+  }
+
+});
+
+
+exports.onInvitationWrite = functions.firestore.document('/invitations/{invitationId}').onWrite((change, context) => {
+
+  const beforeEventData = change.after.data();
+  const afterEventData = change.after.data();
+
+  if (afterEventData !== beforeEventData) {
+    const invitation: Invitation = afterEventData;
+    TinyURL.shorten(`${TriggerConstants.hostURL}${invitation.id}`, (shortURL) => {
+      const htmlContent = `<a href="${shortURL}">Accept Invitation</a>`;
+      const mail: MailClient = new MailClient(invitation.email, TriggerConstants.invitationMailSubject,
+        TriggerConstants.invitationTxt, htmlContent);
+      mail.sendMail();
     });
   }
 
