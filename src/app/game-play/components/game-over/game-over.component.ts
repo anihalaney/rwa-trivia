@@ -5,6 +5,9 @@ import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import { gameplayState } from '../../store';
+import { ReportGameComponent } from '../report-game/report-game.component';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { Utils, WindowRef } from '../../../core/services';
 
 
 @Component({
@@ -25,13 +28,14 @@ export class GameOverComponent implements OnInit {
   otherUserId: string;
   otherUserInfo: User;
   questionsArray = [];
+  dialogRef: MatDialogRef<ReportGameComponent>;
 
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, public dialog: MatDialog, private windowRef: WindowRef) {
     this.user$ = this.store.select(appState.coreState).select(s => s.user);
     this.user$.subscribe(user => {
       if (user !== null) {
@@ -55,6 +59,18 @@ export class GameOverComponent implements OnInit {
     if (this.questionsArray.length === 0) {
       this.store.dispatch(new gameplayactions.GetUsersAnsweredQuestion({ userId: this.user.userId, game: this.game }));
     }
+  }
 
+  reportQuestion(question) {
+    setTimeout(() => this.openDialog(question), 0);
+  }
+  openDialog(question) {
+    this.dialogRef = this.dialog.open(ReportGameComponent, {
+      disableClose: false,
+      data: { 'question': question }
+    });
+
+    this.dialogRef.afterOpen().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.add('dialog-open') });
+    this.dialogRef.afterClosed().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.remove('dialog-open') });
   }
 }
