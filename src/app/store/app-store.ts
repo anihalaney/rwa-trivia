@@ -7,6 +7,7 @@ import * as gamePlayStore from '../game-play/store';
 import * as userStore from '../user/store';
 import * as bulkStore from '../bulk/store';
 import * as adminStore from '../admin/store';
+import * as leaderBoardStore from '../stats/store';
 import * as coreStore from '../core/store';
 
 //do we even need this?
@@ -16,7 +17,8 @@ export interface AppState {
   bulkState: bulkStore.BulkState,
   adminState: adminStore.AdminState,
   coreState: coreStore.CoreState,
-  rootState: rootStoreReducers.State
+  rootState: rootStoreReducers.State,
+  leaderBoardState: leaderBoardStore.LeaderBoardState
 }
 
 export const appState = {
@@ -25,7 +27,8 @@ export const appState = {
   bulkState: bulkStore.bulkState,
   adminState: adminStore.adminState,
   coreState: coreStore.coreState,
-  rootState: rootStoreReducers.rootState
+  rootState: rootStoreReducers.rootState,
+  leaderBoardState: leaderBoardStore.leaderBoardState
 };
 
 
@@ -34,3 +37,4 @@ export const appState = {
 export const getCategories = coreStore.getCategories
 export const categoryDictionary = coreStore.categoryDictionary;
 export const getTags = coreStore.getTags;
+

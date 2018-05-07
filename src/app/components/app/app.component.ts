@@ -9,6 +9,9 @@ import { CategoryActions, TagActions, QuestionActions, GameActions } from '../..
 import { Utils } from '../../core/services';
 import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
+import { Location } from '@angular/common';
+import { userState } from '../../user/store';
+import * as userActions from '../../user/store/actions';
 
 @Component({
   selector: 'app-root',
@@ -30,7 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private gameActions: GameActions,
     private store: Store<AppState>,
     public router: Router,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar,
+    private location: Location) {
 
     this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === 'SUCCESS') {
@@ -48,11 +52,18 @@ export class AppComponent implements OnInit, OnDestroy {
       this.user = user
       if (user) {
         let url: string;
+        this.store.select(appState.coreState).select(s => s.invitationToken).subscribe(status => {
+          if (status !== 'NONE') {
+            this.store.dispatch(new userActions.MakeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }))
+          }
+        });
         this.store.select(appState.coreState).take(1).subscribe(s => url = s.loginRedirectUrl);
-        if (url)
+        if (url) {
           this.router.navigate([url]);
+        }
+
       } else {
-        // if user logs out then redirect to home page       
+        // if user logs out then redirect to home page
         this.router.navigate(['/']);
       }
     });
@@ -72,6 +83,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
+    location.reload();
   }
 
   toggleTheme() {

@@ -9,6 +9,8 @@ export enum GamePlayActionTypes {
   CREATE_NEW_SUCCESS = '[GamePlay] CreateNewSuccess',
   LOAD_GAME = '[GamePlay] LoadGame',
   LOAD_SUCCESS = '[GamePlay] LoadSuccess',
+  LOAD_GAME_INVITES = '[GamePlay] LoadGameInvites',
+  LOAD_GAME_INVITES_SUCCESS = '[GamePlay] LoadGameInvitesSuccess',
   RESET_CURRENT = '[GamePlay] ResetCurrent',
   GET_NEXT_QUESTION = '[GamePlay] GetNextQuestion',
   GET_NEXT_QUESTION_SUCCESS = '[GamePlay] GetNextQuestionSuccess',
@@ -16,6 +18,9 @@ export enum GamePlayActionTypes {
   ADD_PLAYER_QNA_SUCCESS = '[GamePlay] AddPlayerQnASuccess',
   SET_GAME_OVER = '[GamePlay] SetGameOver',
   RESET_CURRENT_QUESTION = '[GamePlay] ResetCurrentQuestion',
+  UPDATE_GAME_SUCCESS = '[GamePlay] UpdateGameSuccess',
+  GET_USERS_ANSWERED_QUESTION = '[GamePlay] GetUsersAnsweredQuestion',
+  GET_USERS_ANSWERED_QUESTION_SUCCESS = '[GamePlay] GetUsersAnsweredQuestionSuccess'
 }
 
 export class ResetNewGame implements Action {
@@ -25,7 +30,7 @@ export class ResetNewGame implements Action {
 
 export class CreateNewGame implements Action {
   readonly type = GamePlayActionTypes.CREATE_NEW;
-  constructor(public payload: { gameOptions: GameOptions, user: User }) { }
+  constructor(public payload: { gameOptions: GameOptions, user: User}) { }
 }
 
 export class CreateNewGameSuccess implements Action {
@@ -36,12 +41,22 @@ export class CreateNewGameSuccess implements Action {
 
 export class LoadGame implements Action {
   readonly type = GamePlayActionTypes.LOAD_GAME;
-  constructor(public payload: Game) { } //game
+  constructor(public payload: string) { } //game
 }
 
 export class LoadGameSuccess implements Action {
   readonly type = GamePlayActionTypes.LOAD_SUCCESS;
   constructor(public payload: Game) { } //game
+}
+
+export class LoadGameInvites implements Action {
+  readonly type = GamePlayActionTypes.LOAD_GAME_INVITES;
+  constructor(public payload: string) { } //game
+}
+
+export class LoadGameInvitesSuccess implements Action {
+  readonly type = GamePlayActionTypes.LOAD_GAME_INVITES_SUCCESS;
+  constructor(public payload: Game[]) { } //game
 }
 
 export class ResetCurrentGame implements Action {
@@ -61,7 +76,7 @@ export class GetNextQuestionSuccess implements Action {
 
 export class AddPlayerQnA implements Action {
   readonly type = GamePlayActionTypes.ADD_PLAYER_QNA;
-  constructor(public payload: { game: Game, playerQnA: PlayerQnA }) { }
+  constructor(public payload: { gameId: string, playerQnA: PlayerQnA }) { }
 }
 
 export class AddPlayerQnASuccess implements Action {
@@ -71,7 +86,7 @@ export class AddPlayerQnASuccess implements Action {
 
 export class SetGameOver implements Action {
   readonly type = GamePlayActionTypes.SET_GAME_OVER;
-  constructor(public payload: { game: Game, user: User }) { }
+  constructor(public payload: string) { }
 }
 
 export class ResetCurrentQuestion implements Action {
@@ -79,15 +94,36 @@ export class ResetCurrentQuestion implements Action {
   payload = null;
 }
 
+export class UpdateGameSuccess implements Action {
+  readonly type = GamePlayActionTypes.UPDATE_GAME_SUCCESS;
+  payload = null;
+}
+
+export class GetUsersAnsweredQuestion implements Action {
+  readonly type = GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION;
+  constructor(public payload: { userId: string, game: Game }) { } //userId
+}
+export class GetUsersAnsweredQuestionSuccess implements Action {
+  readonly type = GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION_SUCCESS;
+  constructor(public payload: any) { }
+}
+
+
+
 export type GamePlayActions
   = ResetNewGame
   | CreateNewGame
   | CreateNewGameSuccess
   | LoadGameSuccess
+  | LoadGameInvites
+  | LoadGameInvitesSuccess
   | ResetCurrentGame
   | GetNextQuestion
   | GetNextQuestionSuccess
   | AddPlayerQnA
   | AddPlayerQnASuccess
   | SetGameOver
-  | ResetCurrentQuestion;
+  | ResetCurrentQuestion
+  | UpdateGameSuccess
+  | GetUsersAnsweredQuestion
+  | GetUsersAnsweredQuestionSuccess;

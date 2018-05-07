@@ -1,22 +1,21 @@
 <div class="card statsview">
   <ul class="tabbing clearfix">
-    <li class="active" data-tab="stats">Stats View</li>
-    <li data-tab="graph">Graph View</li>
+    <li class="active" data-tab="stats">Stats View</li>   
   </ul>
   <ul id="stats" class="tab-content active">
     <li>
       <a href="#">
         <div class="sprite playedicon"></div>
         <div class="viewtext">Game Played</div>
-        <div class="viewcount align-right">18</div>
+        <div class="viewcount align-right">{{user?.stats?.gamePlayed}}</div>
       </a>
     </li>
 
     <li>
       <a href="#">
         <div class="sprite topicsicon"></div>
-        <div class="viewtext">Topics</div>
-        <div class="viewcount align-right">10</div>
+        <div class="viewtext">Categories</div>
+        <div class="viewcount align-right">{{user?.stats?.categories}}</div>
       </a>
     </li>
 
@@ -24,7 +23,7 @@
       <a href="#">
         <div class="sprite winsicon"></div>
         <div class="viewtext">Wins</div>
-        <div class="viewcount align-right">15</div>
+        <div class="viewcount align-right">{{user?.stats?.wins}}</div>
       </a>
     </li>
 
@@ -32,7 +31,7 @@
       <a href="#">
         <div class="sprite badgesicon"></div>
         <div class="viewtext">Badges</div>
-        <div class="viewcount align-right">02</div>
+        <div class="viewcount align-right">{{user?.stats?.badges}}</div>
       </a>
     </li>
 
@@ -40,7 +39,7 @@
       <a href="#">
         <div class="sprite losessicon"></div>
         <div class="viewtext">Losess</div>
-        <div class="viewcount align-right">01</div>
+        <div class="viewcount align-right">{{user?.stats?.losses}}</div>
       </a>
     </li>
 
@@ -48,7 +47,7 @@
       <a href="#">
         <div class="sprite avgicon"></div>
         <div class="viewtext">Avg. answer time</div>
-        <div class="viewcount align-right">09
+        <div class="viewcount align-right">{{user?.stats?.avgAnsTime}}
           <div class="sec">sec</div>
         </div>
       </a>
@@ -58,7 +57,7 @@
       <a href="#">
         <div class="sprite contributicon"></div>
         <div class="viewtext">Contribution</div>
-        <div class="viewcount align-right">05</div>
+        <div class="viewcount align-right">{{user?.stats?.contribution}}</div>
       </a>
     </li>
   </ul>          

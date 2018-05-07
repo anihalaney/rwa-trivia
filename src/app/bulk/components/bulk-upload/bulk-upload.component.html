@@ -117,7 +117,7 @@
           <h2 class="md-title">
             <b>Review</b>
           </h2>
-          <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"></bulk-details>
+          <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions" [showPaginator]="false"></bulk-details>
           <div class="control-spacing">
             <button class="btn-back" type="button" matStepperPrevious>Back</button>
             <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError"

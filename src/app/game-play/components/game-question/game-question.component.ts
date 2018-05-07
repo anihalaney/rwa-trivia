@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
-import { Question, Answer }     from '../../../model';
+import { Question, Answer, User }     from '../../../model';
 
 @Component({
   selector: 'game-question',
@@ -16,7 +16,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   @Input() correctCount: number;
   @Input() noOfQuestions: number;
   @Input() showContinueBtn: boolean;
-
+  @Input() otherPlayer: User;
   @Output() answerClicked = new EventEmitter<number>();
   @Output() okClick = new EventEmitter();
   @Output() continueClicked = new EventEmitter();

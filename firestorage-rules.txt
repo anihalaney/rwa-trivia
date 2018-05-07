@@ -51,7 +51,7 @@ function isAuthenticated() {
           allow write: if isUserAuthenticated(userId)
                         && request.resource != null
                         && resource == null;  
-          allow read:  if isAuthenticated(); 
+          allow read:  if true; 
           }
       }
       match /original {
