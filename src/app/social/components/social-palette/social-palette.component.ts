@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { ShareButtons } from '@ngx-share/core';
+import { faPinterest, faTwitterSquare, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 
 @Component({
   selector: 'social-palette',
