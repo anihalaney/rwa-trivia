@@ -1,0 +1,108 @@
+<mat-dialog-content>
+    <mat-card-content>
+        <div class="cd-popup gameplay" id="0" role="alert">
+            <div class="cd-popup-container">
+                <div class="report-question-section">
+                    <div class="header">
+                        <div>
+                            <label class="light">Question</label>
+                        </div>
+                    </div>
+
+                    <label class="dark question-text question">{{question.questionText}}</label>
+                    <div>
+                        <div class="question-text">Correct answer :</div>
+                        <div class="answer-text">
+                            <span *ngFor="let answer of question.answers">
+                                <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="question-text">Other options :</div>
+                        <div class="answer-text">
+                            <span *ngFor="let answer of question.answers">
+                                <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="question-text">Category :</div>
+                        <div class="answer-text">
+                            <!-- <span *ngFor="let id of question.categoryIds">
+                                {{categoryDictionary[id].categoryName}}
+                            </span> -->
+                        </div>
+                    </div>
+                    <div>
+                        <div class="question-text">Tags :</div>
+                        <div class="answer-text">
+                            {{question.tags?.toString()}}
+                        </div>
+                    </div>
+
+                </div>
+                <div class="report-reason-section">
+                    <label class="question-text">If you're having trouble with above question, please use this from to tell us about the issue you're
+                        experiencing.
+                    </label>
+
+                    <div class="report-reasons">
+                        <label class="question-text">Issues:</label>
+                        <ul class="dark">
+                            <li>
+                                <label class="container">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque landantium.
+                                    <input type="radio" checked="checked" name="radio">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+                            <!-- <li>
+                                <label>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque landantium.</label>
+                            </li> -->
+                            <li>
+                                <label class="container">Utenim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
+                                    nisi ut aliquid ex ea commodi consequatur?
+                                    <input type="radio" checked="checked" name="radio">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="container">Ercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
+                                    <input type="radio" checked="checked" name="radio">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="container">Ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
+                                    <input type="radio" checked="checked" name="radio">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </li>
+                            <li>
+                                <label class="container">Other
+                                    <input type="radio" checked="checked" name="radio">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <div>
+                                    <textarea rows="2" cols="80">
+                                    </textarea>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+                <div class="report-footer">
+                    <label class="report-text">
+                        Thanks for taking the time to submit a issue. We will be in touch with you for more details as we investigate.
+                    </label>
+                    <div class="report-footer">
+                        <button class="btn"> Send</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </mat-card-content>
+</mat-dialog-content>
