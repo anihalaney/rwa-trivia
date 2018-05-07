@@ -54,7 +54,7 @@
 	}
 
 	/*Header*/
-	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary,.bulk-summary-table,bulk-summary-question-table,.add-tag-btn,.mat-table,.mat-paginator,.social-icons { 
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary,.bulk-summary-table,bulk-summary-question-table,.add-tag-btn,.mat-table,.mat-paginator,.vs:after,.btn-share,.social-icons { 
 		background: map-get($theme, card);
 	}
 	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
@@ -121,6 +121,14 @@
 	{
 		background: map-get($theme, hover);
 	}
+	.win-icon-div
+	{
+		background: map-get($theme, thumb);
+	}
+	.button-div
+	{
+		background: map-get($theme, button-row);
+	}
 	
 	
 
@@ -161,9 +169,9 @@
 	.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
 		opacity: 1;
 	}
-	.mat-dialog-container {
-		background-color: map-get($theme, primary) !important;
-	}
+	// .mat-dialog-container {
+	// 	background-color: map-get($theme, primary) !important;
+	// }
 	.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { 
 		background-image: url(/assets/images/#{$sprite});
 		background-repeat: no-repeat;

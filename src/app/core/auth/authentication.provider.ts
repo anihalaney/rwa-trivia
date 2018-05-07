@@ -10,10 +10,13 @@ import { AppState, appState } from '../../store';
 import { LoginComponent } from '../components';
 import { UserActions, UIStateActions } from '../store/actions';
 import { User } from '../../model';
+import * as firebase from 'firebase/app';
 
 @Injectable()
 export class AuthenticationProvider {
   dialogRef: MatDialogRef<LoginComponent>;
+  refreshTokenObserver: Observable<any>;
+  user: User;
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
@@ -22,22 +25,24 @@ export class AuthenticationProvider {
     private db: AngularFirestore,
     public dialog: MatDialog) {
 
+
     this.afAuth.authState.subscribe(afUser => {
       if (afUser) {
-        const user = new User(afUser);
         afUser.getIdToken(false).then((token) => {
+          this.user = new User(afUser)
+          this.user.idToken = token;
+          this.store.dispatch(this.userActions.loginSuccess(this.user));
 
-          user.idToken = token;
-          this.store.dispatch(this.userActions.loginSuccess(user));
         });
-        if (this.dialogRef) {
-          this.dialogRef.close();
-        }
       } else {
         // user not logged in
         this.store.dispatch(this.userActions.logoff());
       }
     });
+
+    this.refreshTokenObserver = Observable.defer(() => {
+      return Observable.fromPromise(this.generateToken(true));
+    }).share();
   }
 
   ensureLogin = function (url?: string) {
@@ -45,6 +50,26 @@ export class AuthenticationProvider {
       this.showLogin(url);
     }
   };
+
+  generateToken = function (flag) {
+    return firebase.auth().currentUser.getIdToken(flag).then((token) => {
+      return token;
+    });
+
+  }
+
+
+  refreshToken = function () {
+    return this.refreshTokenObserver.do((tokenResponse) => {
+      this.user.idToken = tokenResponse;
+      this.store.dispatch(this.userActions.loginSuccess(this.user));
+      return tokenResponse;
+    },
+      (err) => {
+        return Observable.throw(err);
+      });
+  }
+
 
   showLogin = function (url?: string) {
     this.store.dispatch(this.uiStateActions.setLoginRedirectUrl(url));

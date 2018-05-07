@@ -420,6 +420,7 @@ h1 + p{ font-size: 18px; font-family: 'hindlight'; }
 }
 .mat-dialog-container {
   padding: 0px !important;
+  background:#26303c;
 }
 
 @media screen and ( min-width:1000px){      
@@ -473,7 +474,7 @@ nav .user.card{
 	border-width: 0 !important
 }
 .downloadicon{ background-position: -96px -295px; width: 31px; height: 33px;}
-.cancelicon{ background-position: -130px -293px; width: 25px; height: 30px;}
+.cancelicon{ background-position: -129px -293px; width: 25px; height: 30px;}
 .closeicon{ background-position: -154px -293px; width: 27px; height: 30px;}
 .pendingicon{ background-position: -178px -293px;  width: 19px;  height: 33px;}
 .approvedicon{ background-position: -196px -293px; width: 19px; height: 38px;}
@@ -497,4 +498,34 @@ nav .user.card{
 }
 .sb-button {
   padding-bottom: 5px;
+} 
+.mat-tab-label
+{
+    font-family: 'hindsemibold' !important; letter-spacing: 0.1px;font-size: 18px !important;width: 50%;
+}
+.mat-tab-body-content {
+  overflow: hidden !important;
+}
+
+.score1{ background-position: -26px -327px; width: 27px; height: 33px;}
+.score2{ background-position: -55px -327px; width: 27px; height: 33px;}
+.score3{ background-position: 1px -327px; width: 27px; height: 33px;}
+.score4{ background-position: -82px -327px; width: 27px; height: 33px;}
+.score5{ background-position: -82px -327px; width: 27px; height: 33px;}
+.score0{ background-position: -82px -327px; width: 27px; height: 33px;}
+
+
+.begde1{ background-position: -5px -359px; width: 27px; height: 33px;}
+  
+
+.thumb{ background-position: -117px -324px; width: 44px; height: 33px;}
+.mat-expansion-panel-body
+{
+  padding: 0px !important;
+ 
+}
+.mat-expansion-panel-header-description
+{
+  overflow-x: auto;
+  max-height: 300px;
 }

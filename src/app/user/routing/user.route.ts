@@ -2,7 +2,8 @@ import { Routes, RouterModule } from '@angular/router';
 import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
-  QuestionAddUpdateComponent
+  QuestionAddUpdateComponent,
+  InviteFriendsComponent
 } from '../components';
 import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/route-guards';
 
@@ -26,6 +27,11 @@ export const userRoutes: Routes = [
   {
     path: 'questions/:userid/add',
     component: QuestionAddUpdateComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'invite-friends',
+    component: InviteFriendsComponent,
     canActivate: [AuthGuard]
   },
 ];

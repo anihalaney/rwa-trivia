@@ -1,15 +1,21 @@
-import { Game, Question, Category, SearchCriteria } from '../src/app/model';
+import {
+  Game, Question, Category, SearchCriteria, Friends, PlayerQnA, GameOperations, GameStatus, schedulerConstants, User
+} from '../src/app/model';
 import { ESUtils } from './ESUtils';
+import { Utils } from './Utils';
 import { FirestoreMigration } from './firestore-migration';
-
+import { Subscription } from './subscription';
 import { GameMechanics } from './game-mechanics';
-
+import { GameLeaderBoardStats } from './game-leader-board-stats';
+import { UserContributionStat } from './user-contribution-stat';
+import { UserCollection } from './user-collection';
+import { MakeFriends } from './make-friends';
 
 
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-admin.initializeApp(functions.config().firebase);
+admin.initializeApp();
 
 const parse = require('csv').parse;
 const fs = require('fs');
@@ -20,6 +26,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors')({ origin: true });
 const app = express();
 const elasticsearch = require('elasticsearch');
+const utils: Utils = new Utils();
 
 // Take the text parameter passed to this HTTP endpoint and insert it into the
 // Realtime Database under the path /messages/:pushId/original
@@ -42,7 +49,7 @@ const validateFirebaseIdToken = (req, res, next) => {
 
   // console.log('Check if request is authorized with Firebase ID token');
   if ((!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) &&
-    !req.cookies.__session) {
+    !req.cookies.__session && !req.headers.token) {
     console.error('No Firebase ID token was passed as a Bearer token in the Authorization header.',
       'Make sure you authorize your request by providing the following HTTP header:',
       'Authorization: Bearer <Firebase ID Token>',
@@ -56,20 +63,27 @@ const validateFirebaseIdToken = (req, res, next) => {
     console.log('Found "Authorization" header');
     // Read the ID Token from the Authorization header.
     idToken = req.headers.authorization.split('Bearer ')[1];
+  } else if (req.headers.token) {
+    console.log('token', req.headers.token);
+    return next();
   } else {
     console.log('Found "__session" cookie');
     // Read the ID Token from cookie.
     idToken = req.cookies.__session;
   }
-  admin.auth().verifyIdToken(idToken).then(decodedIdToken => {
-    console.log('ID Token correctly decoded', decodedIdToken);
-    req.user = decodedIdToken;
-    return next();
-  }).catch(error => {
-    console.error('Error while verifying Firebase ID token:', error);
-    // res.status(403).send('Unauthorized');
-    return next();
-  });
+
+  if (idToken) {
+    admin.auth().verifyIdToken(idToken).then(decodedIdToken => {
+      console.log('ID Token correctly decoded', decodedIdToken);
+      req.user = decodedIdToken;
+      return next();
+    }).catch(error => {
+      console.error('Error while verifying Firebase ID token:', error);
+      res.status(419).send('Token Expired');
+      // return next();
+    });
+  }
+
 };
 
 // middleware to check for authorized users
@@ -82,6 +96,23 @@ const authorizedOnly = (req, res, next) => {
   console.log(req.user.uid);
   next();
 };
+
+// middleware to check for authorized users
+const authTokenOnly = (req, res, next) => {
+  admin.firestore().collection('scheduler_auth_tokens').where('token', '==', req.headers.token)
+    .get()
+    .then(snapshot => {
+      if (snapshot.size > 0) {
+        return next();
+      } else {
+        res.status(401).send('Unauthorized');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+};
+
 
 // middleware to check for admins Only
 
@@ -178,7 +209,10 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
       return;
     }
 
-    ESUtils.getRandomGameQuestion().then((question) => {
+    const questionIds = [];
+    game.playerQnAs.map((question) => questionIds.push(question.questionId));
+
+    ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
       res.send(question);
     })
       .catch(error => {
@@ -191,6 +225,122 @@ app.get('/getNextQuestion/:gameId', authorizedOnly, (req, res, next) => {
       return;
     });
 
+});
+
+app.get('/subscription/count', (req, res) => {
+  const subscription: Subscription = new Subscription(admin.firestore());
+  subscription.getTotalSubscription()
+    .then(subscribers => res.send(subscribers))
+    .catch(error => {
+      console.log(error);
+      res.status(500).send('Internal Server error');
+    });
+});
+
+app.post('/createGame', authorizedOnly, (req, res) => {
+  // console.log('body---->', req.body);
+  const gameOptions = req.body.gameOptions;
+  const userId = req.body.userId;
+
+  if (!gameOptions) {
+    // Game Option is not added
+    res.status(403).send('Game Option is not added in request');
+    return;
+  }
+
+  if (!userId) {
+    // userId
+    res.status(403).send('userId is not added in request');
+    return;
+  }
+
+  const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId, admin.firestore());
+  gameMechanics.createNewGame().then((gameId) => {
+    console.log('gameId', gameId);
+
+    res.send({ gameId: gameId });
+  });
+
+
+});
+
+
+app.put('/game/:gameId', authorizedOnly, (req, res) => {
+  const gameId = req.params.gameId;
+  let dbGame = '';
+  const operation = req.body.operation;
+
+  if (!gameId) {
+    // gameId
+    res.status(400);
+    return;
+  }
+
+  if (!operation) {
+    // operation
+    res.status(400);
+    return;
+  }
+  // console.log('gameId', gameId);
+  // console.log('operation', operation);
+  const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined, admin.firestore());
+
+  gameMechanics.getGameById(gameId).then((game) => {
+
+    if (game.playerIds.indexOf(req.user.uid) === -1) {
+      // operation
+      res.status(403).send('Unauthorized');
+      return;
+    }
+
+    switch (operation) {
+      case GameOperations.CALCULATE_SCORE:
+        const playerQnAs: PlayerQnA = req.body.playerQnA;
+        game.playerQnAs.push(playerQnAs);
+        game.decideNextTurn(playerQnAs, req.user.uid);
+        game.turnAt = utils.getUTCTimeStamp();
+        game.calculateStat(playerQnAs.playerId);
+
+        break;
+      case GameOperations.GAME_OVER:
+        game.gameOver = true;
+        game.decideWinner();
+        game.GameStatus = GameStatus.COMPLETED;
+        break;
+    }
+    dbGame = game.getDbModel();
+
+    gameMechanics.UpdateGameCollection(dbGame).then((id) => {
+      res.send({});
+    });
+  })
+
+});
+
+app.get('/updateAllGames', adminOnly, (req, res, next) => {
+  admin.firestore().collection('/games/').where('gameOver', '==', false).get().then((snapshot) => {
+    snapshot.forEach((doc) => {
+
+      const game = Game.getViewModel(doc.data());
+
+      game.playerIds.forEach((playerId) => {
+        game.calculateStat(playerId);
+      });
+
+      const date = new Date(new Date().toUTCString());
+      const millis = date.getTime() + (date.getTimezoneOffset() * 60000);
+      game.turnAt = millis;
+
+      const dbGame = game.getDbModel();
+      dbGame.id = doc.id;
+
+      admin.firestore().collection('games').doc(dbGame.id).set(dbGame).then((ref) => {
+        // console.log('dbGame===>', dbGame);
+      });
+    });
+    res.send('loaded data');
+
+  });
 });
 
 app.get('/migrate_to_firestore/:collection', adminOnly, (req, res) => {
@@ -253,7 +403,7 @@ app.get('/migrate_data_from_prod_dev/:collection', adminOnly, (req, res) => {
   sourceDB.collection(req.params.collection).get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-        console.log(doc.id, '=>', doc.data());
+        //  console.log(doc.id, '=>', doc.data());
         targetDB.collection(req.params.collection).doc(doc.id).set(doc.data());
       });
       res.send('loaded data');
@@ -319,7 +469,7 @@ app.get('/getTestQuestion', authorizedOnly, (req, res, next) => {
 });
 
 app.get('/getGameQuestionTest', authorizedOnly, (req, res) => {
-  ESUtils.getRandomGameQuestion().then((question) => {
+  ESUtils.getRandomGameQuestion([2, 4, 5, 6], []).then((question) => {
     res.send(question);
   });
 })
@@ -342,35 +492,19 @@ app.get('/testES', adminOnly, (req, res) => {
 
 });
 
+// make friends
+app.post('/makeFriends', (req, res) => {
 
-app.post('/createGame', authorizedOnly, (req, res) => {
-  // console.log('body---->', req.body);
-  const gameOptions = req.body.gameOptions;
+  const token = req.body.token;
   const userId = req.body.userId;
+  const email = req.body.email;
 
-  if (!gameOptions) {
-    // Game Option is not added
-    res.status(403).send('Game Option is not added in request');
-    return;
-  }
-
-  if (!userId) {
-    // userId
-    res.status(403).send('userId is not added in request');
-    return;
-  }
-
-  const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId, admin.firestore());
-  gameMechanics.createNewGame().then((gameId) => {
-    console.log('gameId', gameId);
-
-    res.send({ gameId: gameId });
+  const makeFriends: MakeFriends = new MakeFriends(token, userId, email, admin.firestore());
+  makeFriends.validateToken().then((invitee) => {
+    console.log('invitee', invitee);
+    res.send({ created_uid: invitee });
   });
-
-
 });
-
-
 
 
 // END - TEST FUNCTIONS
@@ -378,97 +512,76 @@ app.post('/createGame', authorizedOnly, (req, res) => {
 
 
 
-exports.app = functions.https.onRequest(app);
+app.get('/user/:userId', (req, res) => {
+  // console.log('body---->', req.body);
+  const userId = req.params.userId;
 
 
+  if (!userId) {
+    // Game Option is not added
+    res.status(403).send('userId is not available');
+    return;
+  }
 
+  const userCollection: UserCollection = new UserCollection(admin);
+  userCollection.getUserById(userId).then((userInfo) => {
+    console.log('userInfo', userInfo);
+    res.send(userInfo);
+  });
+});
 
+app.post('/game/scheduler/check', authTokenOnly, (req, res) => {
+  const db = admin.firestore();
+  db.collection('/games').where('gameOver', '==', false)
+    .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q)
+    .get()
+    .then((snapshot) => {
+      snapshot.forEach((doc) => {
+        const game: Game = Game.getViewModel(doc.data());
+        if (game.playerIds.length > 1 && game.nextTurnPlayerId !== '') {
 
-/*
-app.get('/parseCsv', adminOnly, (req, res, next) => {
+          const millis = utils.getUTCTimeStamp();
 
- let categories: Category[] = [];
- let catRef = admin.database().ref("/categories");
- catRef.once("value", function(cs) {
- cs.forEach(c => {
- //console.log(c.key);
- //console.log(c.val());
- let category: Category = { "id": c.key, "categoryName": c.val()["categoryName"]};
- categories.push(category);
- return;
- })
+          const noPlayTimeBound = millis - game.turnAt;
+          const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
+          //  console.log('game--->', game.gameId);
+          // console.log('noPlayTimeBound--->', noPlayTimeBound);
+          if (playedHours >= schedulerConstants.gamePlayDuration) {
+            game.gameOver = true;
+            game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
+            const dbGame = game.getDbModel();
+            db.doc('/games/' + game.gameId).update(dbGame);
+            //  console.log('updates=>', game.gameId);
+          }
+        }
+      });
+      res.send('scheduler check is completed')
+    })
+    .catch((err) => {
+      console.log('Error getting documents', err);
+    });
+});
 
- console.log(categories);
-
- let ouput = [];
- let parser = parse({delimiter: ':'});
-
- fs.readFile('C:\\Users\\Akshay\\Dropbox\\Blog\\Real World Angular\\Question Data\\Question Format_batch - Akshay.csv', (err, data) => {
- if (err) throw err;
-
- parse(data, {"columns": true, "skip_empty_lines": true},
- function(err, output){
- let questions: Question [] =
- output.map(element => {
- let question: Question = new Question();
- question.questionText = element["Question"];
- question.answers = [
- { "id": 1, "answerText": element["Option 1"], correct: false },
- { "id": 2, "answerText": element["Option 2"], correct: false },
- { "id": 3, "answerText": element["Option 3"], correct: false },
- { "id": 4, "answerText": element["Option 4"], correct: false }
- ]
- question.answers[element["Answer Index"] - 1].correct = true;
- question.id = "0";
-
- question.tags = [];
- for (let i = 1; i < 10; i++)
- {
- if (element["Tag " + i] && element["Tag " + i] != "")
- question.tags.push(element["Tag " + i]);
- }
- question.categoryIds = [];
- let category = categories.find(c => c.categoryName == element["Category"]);
- if (category)
- question.categoryIds.push(category.id);
-
- question.published = false;
- //validations
- if (element["Status"] != "Approved")
- //status - not approved
- question.explanation = "status - not approved";
- else if (question.categoryIds.length == 0)
- //No Category Found
- question.explanation = "No Category Found";
- else if (question.tags.length < 2)
- //Not enough tags
- question.explanation = "Not enough tags";
- else if (question.answers.filter(a => a.correct).length !== 1)
- //Must have exactly one correct answer
- question.explanation = "Must have exactly one correct answer";
- else if (question.answers.filter(a => !a.answerText || a.answerText.trim() === "").length > 0)
- //Missing Answer
- question.explanation = "Missing Answer";
- else if (!question.questionText || question.questionText.trim() === "")
- //Missing Question
- question.explanation = "Missing Question";
- else
- question.published = true;
-
- return question;
- });
-
- let ref = admin.database().ref("/testQ"); // /questions/published
- questions.filter(q => q.published).forEach(q => {
- ref.push(q);
- });
- //res.send(output);
- res.send(questions);
- });
- });
-
- });
+app.get('/updateUserStat', adminOnly, (req, res) => {
+  const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
+  gameLeaderBoardStats.generateGameStats();
+  res.send('updated stats');
 
 });
-*/
 
+app.get('/updateLeaderBoardStat', adminOnly, (req, res) => {
+  const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats(admin.firestore());
+  gameLeaderBoardStats.calculateGameLeaderBoardStat().then((stat) => {
+    res.send('updated stats');
+  });
+});
+
+app.get('/updateUserCategoryStat', adminOnly, (req, res) => {
+  const userContributionStat: UserContributionStat = new UserContributionStat(admin.firestore());
+  userContributionStat.generateGameStats().then((userDictResults) => {
+    res.send('updated user category stat');
+  });
+});
+
+
+exports.app = functions.https.onRequest(app);

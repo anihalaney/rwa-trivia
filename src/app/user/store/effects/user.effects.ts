@@ -4,10 +4,12 @@ import { Action } from '@ngrx/store';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { User, Question, RouterStateUrl } from '../../../model';
-import { UserActions, UserActionTypes } from '../actions';
+import { User, Question, RouterStateUrl, Friends, Game } from '../../../model';
+import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
-import { UserService, QuestionService } from '../../../core/services';
+import { UserService, QuestionService, GameService } from '../../../core/services';
+import { UserActions } from '../../../../app/core/store/actions';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class UserEffects {
@@ -22,25 +24,6 @@ export class UserEffects {
         })
         );
 
-    // load user by userId
-    @Effect()
-    loadUserProfile$ = this.actions$
-        .ofType(UserActionTypes.LOAD_USER_PROFILE)
-        .pipe(
-        switchMap((action: userActions.LoadUserProfile) =>
-            this.userService.getUserProfile(action.payload.user).pipe(
-                    map((user: User) => new userActions.LoadUserProfileSuccess(user)))
-            )
-        );
-
-      // listening for login success from root to load user profile
-      @Effect()
-      loginSuccess$ = this.actions$
-          .ofType(UserActionTypes.LOGIN_SUCCESS)
-          .map((action: any) => action.payload)
-          .map( user => new userActions.LoadUserProfile( { user }));
-
-
     // Load User Published Question by userId from router
     @Effect()
     // handle location update
@@ -54,7 +37,9 @@ export class UserEffects {
         .pipe(
         switchMap((routerState: RouterStateUrl) =>
             this.questionService.getUserQuestions(routerState.params.userid, true).pipe(
-                map((questions: Question[]) => new userActions.LoadUserPublishedQuestionsSuccess(questions))
+                map((questions: Question[]) =>
+                    new userActions.LoadUserPublishedQuestionsSuccess(questions)
+                )
             )
         )
         );
@@ -88,9 +73,58 @@ export class UserEffects {
             return empty();
         })
         );
+
+    // Save user profile
+    @Effect()
+    saveInvitation$ = this.actions$
+        .ofType(UserActionTypes.ADD_USER_INVITATION)
+        .pipe(
+        switchMap((action: userActions.AddUserInvitation) =>
+            this.userService.saveUserInvitations(action.payload).pipe(
+                map(() => new userActions.AddUserInvitationSuccess())
+            )
+        )
+        );
+
+    // Make friend
+    @Effect()
+    makeFriend$ = this.actions$
+        .ofType(UserActionTypes.MAKE_FRIEND)
+        .pipe(
+        switchMap((action: userActions.MakeFriend) =>
+            this.userService.checkInvitationToken(action.payload).pipe(
+                map((friend: any) => this.userAction.storeInvitationToken(''))
+            ).map(() => new userActions.MakeFriendSuccess())
+        ));
+
+    // Get Game list
+    @Effect()
+    getGameResult$ = this.actions$
+        .ofType(UserActionTypes.GET_GAME_RESULT)
+        .pipe(
+        switchMap((action: userActions.GetGameResult) =>
+            this.gameService.getGameResult(action.payload.userId)
+                .map((games: Game[]) => new userActions.GetGameResultSuccess(games))
+        )
+        );
+
+    // Get Game list
+    @Effect()
+    LoadUserFriends$ = this.actions$
+        .ofType(UserActionTypes.LOAD_USER_FRIENDS)
+        .pipe(
+        switchMap((action: userActions.LoadUserFriends) =>
+            this.userService.loadUserFriends(action.payload.userId)
+                .map((friends: Friends) => new userActions.LoadUserFriendsSuccess(friends))
+        )
+        );
+
+
     constructor(
         private actions$: Actions,
         private userService: UserService,
-        private questionService: QuestionService
+        private questionService: QuestionService,
+        private userAction: UserActions,
+        private gameService: GameService
     ) { }
 }

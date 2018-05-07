@@ -5,6 +5,7 @@ export class GameOptions {
   categoryIds: number[];
   tags: string[];
   maxQuestions: number;
+  friendId?: string;
 
   constructor() {
     //defaults
@@ -31,5 +32,15 @@ export enum GameMode {
 
 export enum GameStatus {
   STARTED = 'started',
-  WAITING_FOR_NEXT_Q = 'waiting for next question'
+  AVAILABLE_FOR_OPPONENT = 'available for opponent',
+  WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE = 'waiting for friend invitation acceptance',
+  JOINED_GAME = 'joined opponent',
+  WAITING_FOR_NEXT_Q = 'waiting for next question',
+  COMPLETED = 'completed'
+}
+
+
+export enum GameOperations {
+  CALCULATE_SCORE = 'calculate_score',
+  GAME_OVER = 'game_over'
 }

@@ -99,12 +99,20 @@
 		color: map-get($theme, error);
 		
 	}
-	.downloadFile a,.custom-file-upload,.rejection-div
+	.downloadFile a,.custom-file-upload,.rejection-div,.bulk-summary-table-cell a
 	{
 		color: map-get($theme, link);
 	}
 	.label{ 
 		color: map-get($theme, label);
+	}
+	.success
+	{
+		color: map-get($theme, box-hover-lg);
+	}
+	.answer-label
+	{
+		color: map-get($theme, answer);
 	}
 	
 
