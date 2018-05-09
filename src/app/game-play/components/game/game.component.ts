@@ -61,8 +61,6 @@ export class GameComponent implements OnInit, OnDestroy {
       data: { 'user': this.user, 'userDict': this.userDict }
     });
 
-    // this.dialogRef.afterOpen().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.add('dialog-open') });
-    // this.dialogRef.afterClosed().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.remove('dialog-open') });
     this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
     });
