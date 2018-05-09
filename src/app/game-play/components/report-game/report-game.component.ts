@@ -2,10 +2,11 @@ import { Component, Input, Inject, OnInit } from '@angular/core';
 import { Question } from 'app/model';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { ReportQuestion, User, Game, QuestionMetadata } from '../../../model';
+import { ReportQuestion, User, Game, QuestionMetadata, Category } from '../../../model';
 import * as gameplayactions from '../../store/actions';
 import { AppState, appState } from '../../../store';
 import { Store } from '@ngrx/store';
+import { categoryDictionary } from '../../../store';
 
 @Component({
     selector: 'report-game',
@@ -19,6 +20,7 @@ export class ReportGameComponent implements OnInit {
     reportQuestion: ReportQuestion;
     user: User;
     game: Game;
+    categoryDictionary: { [key: number]: Category }
 
     constructor(private fb: FormBuilder, private store: Store<AppState>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -26,7 +28,9 @@ export class ReportGameComponent implements OnInit {
         this.user = data.user;
         this.game = data.game;
 
+        this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
     }
+
 
     ngOnInit() {
         this.reportQuestion = new ReportQuestion();

@@ -29,9 +29,9 @@
                     <div>
                         <div class="question-text">Category :</div>
                         <div class="answer-text">
-                            <!-- <span *ngFor="let id of question.categoryIds">
+                            <span *ngFor="let id of question.categoryIds">
                                 {{categoryDictionary[id].categoryName}}
-                            </span> -->
+                            </span>
                         </div>
                     </div>
                     <div>
@@ -107,7 +107,8 @@
                         Thanks for taking the time to submit a issue. We will be in touch with you for more details as we investigate.
                     </label>
                     <div class="report-footer">
-                        <button class="btn" (click)="saveReportQuestion()"> Send</button>
+                        <button class="btn" (click)="saveReportQuestion()" [disabled]="reportQuestionForm.get('reason').value==='other' && reportQuestionForm.get('otherReason').value===''">
+                        Send</button>
                     </div>
 
                 </div>
