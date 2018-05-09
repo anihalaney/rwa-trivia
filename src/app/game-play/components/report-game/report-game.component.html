@@ -49,46 +49,56 @@
 
                     <div class="report-reasons">
                         <label class="question-text">Issues:</label>
-                        <ul class="dark">
-                            <li>
-                                <label class="container">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque landantium.
-                                    <input type="radio" checked="checked" name="radio">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </li>
-                            <!-- <li>
+                        <form [formGroup]="reportQuestionForm" #formDir="ngForm" novalidate>
+                            <ul class="dark">
+                                <li>
+                                    <label class="container">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque
+                                        landantium.
+                                        <input type="radio" [checked]="true" name="reason" formControlName="reason" value="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque
+                                        landantium.">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <!-- <li>
                                 <label>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque landantium.</label>
                             </li> -->
-                            <li>
-                                <label class="container">Utenim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
-                                    nisi ut aliquid ex ea commodi consequatur?
-                                    <input type="radio" checked="checked" name="radio">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="container">Ercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
-                                    <input type="radio" checked="checked" name="radio">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="container">Ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
-                                    <input type="radio" checked="checked" name="radio">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </li>
-                            <li>
-                                <label class="container">Other
-                                    <input type="radio" checked="checked" name="radio">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <div>
-                                    <textarea rows="2" cols="80">
-                                    </textarea>
-                                </div>
-                            </li>
-                        </ul>
+                                <li>
+                                    <label class="container">Utenim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
+                                        nisi ut aliquid ex ea commodi consequatur?
+                                        <input type="radio" name="reason" formControlName="reason" value="Utenim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
+                                        nisi ut aliquid ex ea commodi consequatur?">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Ercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
+                                        <input type="radio" name="reason" formControlName="reason" value="Ercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
+                                        <input type="radio" name="reason" formControlName="reason" value="Ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Other
+                                        <input type="radio" name="reason" formControlName="reason" value="other">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div>
+                                        <textarea rows="2" cols="80" formControlName="otherReason">
+                                        </textarea>
+                                        <div *ngIf="reportQuestionForm.get('reason').value==='other' && reportQuestionForm.get('otherReason').value===''">
+                                            <span class="label">
+                                                Reason is required!
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
                     </div>
 
                 </div>
@@ -97,7 +107,7 @@
                         Thanks for taking the time to submit a issue. We will be in touch with you for more details as we investigate.
                     </label>
                     <div class="report-footer">
-                        <button class="btn"> Send</button>
+                        <button class="btn" (click)="saveReportQuestion()"> Send</button>
                     </div>
 
                 </div>

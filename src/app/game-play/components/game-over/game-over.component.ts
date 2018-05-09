@@ -48,6 +48,12 @@ export class GameOverComponent implements OnInit {
         this.questionsArray = stats;
       }
     });
+
+    this.store.select(gameplayState).select(s => s.saveReportQuestion).subscribe(state => {
+      if (state === 'SUCCESS') {
+        (this.dialogRef) ? this.dialogRef.close() : '';
+      }
+    });
   }
   ngOnInit() {
     if (this.game) {
@@ -67,7 +73,7 @@ export class GameOverComponent implements OnInit {
   openDialog(question) {
     this.dialogRef = this.dialog.open(ReportGameComponent, {
       disableClose: false,
-      data: { 'question': question }
+      data: { 'question': question, 'user': this.user, 'game': this.game }
     });
 
     this.dialogRef.afterOpen().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.add('dialog-open') });

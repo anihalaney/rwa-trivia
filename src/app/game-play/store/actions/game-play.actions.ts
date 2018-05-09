@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { User, GameOptions, Game, PlayerQnA, Question } from '../../../model';
+import { User, GameOptions, Game, PlayerQnA, Question, ReportQuestion } from '../../../model';
 
 export enum GamePlayActionTypes {
   RESET_NEW = '[GamePlay] ResetNew',
@@ -20,7 +20,9 @@ export enum GamePlayActionTypes {
   RESET_CURRENT_QUESTION = '[GamePlay] ResetCurrentQuestion',
   UPDATE_GAME_SUCCESS = '[GamePlay] UpdateGameSuccess',
   GET_USERS_ANSWERED_QUESTION = '[GamePlay] GetUsersAnsweredQuestion',
-  GET_USERS_ANSWERED_QUESTION_SUCCESS = '[GamePlay] GetUsersAnsweredQuestionSuccess'
+  GET_USERS_ANSWERED_QUESTION_SUCCESS = '[GamePlay] GetUsersAnsweredQuestionSuccess',
+  SAVE_REPORT_QUESTION = '[GamePlay] SaveReportQuestion',
+  SAVE_REPORT_QUESTION_SUCCESS = '[GamePlay] SaveReportQuestionSuccess'
 }
 
 export class ResetNewGame implements Action {
@@ -30,7 +32,7 @@ export class ResetNewGame implements Action {
 
 export class CreateNewGame implements Action {
   readonly type = GamePlayActionTypes.CREATE_NEW;
-  constructor(public payload: { gameOptions: GameOptions, user: User}) { }
+  constructor(public payload: { gameOptions: GameOptions, user: User }) { }
 }
 
 export class CreateNewGameSuccess implements Action {
@@ -107,6 +109,14 @@ export class GetUsersAnsweredQuestionSuccess implements Action {
   readonly type = GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION_SUCCESS;
   constructor(public payload: any) { }
 }
+export class SaveReportQuestion implements Action {
+  readonly type = GamePlayActionTypes.SAVE_REPORT_QUESTION;
+  constructor(public payload: { reportQuestion: ReportQuestion, game: Game }) { }
+}
+export class SaveReportQuestionSuccess implements Action {
+  readonly type = GamePlayActionTypes.SAVE_REPORT_QUESTION_SUCCESS;
+  payload = null;
+}
 
 
 
@@ -126,4 +136,6 @@ export type GamePlayActions
   | ResetCurrentQuestion
   | UpdateGameSuccess
   | GetUsersAnsweredQuestion
-  | GetUsersAnsweredQuestionSuccess;
+  | GetUsersAnsweredQuestionSuccess
+  | SaveReportQuestion
+  | SaveReportQuestionSuccess;
