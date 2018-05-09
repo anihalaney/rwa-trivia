@@ -98,6 +98,9 @@
                       </p>
                     </span>
                   </div>
+                  <div *ngIf="game.playerQnAs[i].isReported">
+                    <label class="success text-style your-answer-label">Report has been submitted!</label>
+                  </div>
                 </div>
                 <div class="li-section2">
                   <button class="btn-share" type="button" (click)="reportQuestion(row)" [disabled]="game.playerQnAs[i].isReported">Report</button>
