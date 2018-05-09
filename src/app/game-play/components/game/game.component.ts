@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ViewChild, Renderer2 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -11,7 +11,7 @@ import { AppState, appState } from '../../../store';
 import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions } from '../../../core/store/actions';
-import { Utils, WindowRef } from '../../../core/services';
+import { Utils } from '../../../core/services';
 import {
   Game, GameOptions, GameMode, PlayerQnA,
   User, Question, Category
@@ -35,7 +35,7 @@ export class GameComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private windowRef: WindowRef) {
+    private renderer: Renderer2) {
 
     this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -61,8 +61,14 @@ export class GameComponent implements OnInit, OnDestroy {
       data: { 'user': this.user, 'userDict': this.userDict }
     });
 
-    this.dialogRef.afterOpen().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.add('dialog-open') });
-    this.dialogRef.afterClosed().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.remove('dialog-open') });
+    // this.dialogRef.afterOpen().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.add('dialog-open') });
+    // this.dialogRef.afterClosed().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.remove('dialog-open') });
+    this.dialogRef.afterOpen().subscribe(x => {
+      this.renderer.addClass(document.body, 'dialog-open');
+    });
+    this.dialogRef.afterClosed().subscribe(x => {
+      this.renderer.removeClass(document.body, 'dialog-open');
+    });
   }
   ngOnDestroy() {
     if (this.dialogRef) {

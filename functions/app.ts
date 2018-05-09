@@ -595,7 +595,7 @@ app.post('/questions/:questionId', (req, res) => {
   const playerQnA = req.body.playerQnA;
   const db = admin.firestore();
   if (!questionId) {
-    res.status(403).send('questionId is not available');
+    res.status(404).send('questionId is not available');
     return;
   }
   db.doc(`/questions/${questionId}`).get().then((qs) => {
