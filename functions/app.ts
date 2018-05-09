@@ -590,5 +590,24 @@ app.get('/updateUserCategoryStat', adminOnly, (req, res) => {
   });
 });
 
+app.post('/questions/:questionId', (req, res) => {
+  const questionId = req.params.questionId;
+  const playerQnA = req.body.playerQnA;
+  const db = admin.firestore();
+  if (!questionId) {
+    res.status(403).send('questionId is not available');
+    return;
+  }
+  db.doc(`/questions/${questionId}`).get().then((qs) => {
+    const question = Question.getViewModelFromDb(qs.data());
+    if (playerQnA.playerAnswerId !== null) {
+      const answerObj = question.answers[playerQnA.playerAnswerId];
+      question.userGivenAnswer = answerObj.answerText;
+    } else {
+      question.userGivenAnswer = null;
+    }
+    res.send(question);
+  })
+});
 
 exports.app = functions.https.onRequest(app);
