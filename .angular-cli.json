@@ -24,11 +24,7 @@
         "styles/styles.scss",
         "styles/global.scss",
         "styles/light.theme.scss",
-        "styles/dark.theme.scss",
-        "styles/social-button/variables.scss",
-        "styles/social-button/share-buttons.scss",
-        "styles/social-button/theme/circle/circles-light-theme.scss",
-        "styles/social-button/theme/circle/circles-dark-theme.scss"
+        "styles/dark.theme.scss"
       ],
       "scripts": [],
       "environmentSource": "environments/environment.ts",
