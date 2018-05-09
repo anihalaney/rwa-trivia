@@ -42,5 +42,6 @@ export enum GameStatus {
 
 export enum GameOperations {
   CALCULATE_SCORE = 'calculate_score',
-  GAME_OVER = 'game_over'
+  GAME_OVER = 'game_over',
+  REPORT_STATUS = 'report_status'
 }

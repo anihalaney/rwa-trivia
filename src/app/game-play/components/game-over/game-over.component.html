@@ -100,7 +100,7 @@
                   </div>
                 </div>
                 <div class="li-section2">
-                  <button class="btn-share" type="button" (click)="reportQuestion(row)">Report</button>
+                  <button class="btn-share" type="button" (click)="reportQuestion(row)" [disabled]="game.playerQnAs[i].isReported">Report</button>
                 </div>
               </li>
             </ul>

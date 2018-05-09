@@ -7,6 +7,7 @@ export class PlayerQnA {
   playerAnswerId?: string;
   playerAnswerInSeconds?: number;
   answerCorrect?: boolean;
+  isReported?: boolean;
 }
 
 export class Stat {
@@ -53,7 +54,8 @@ export class Game {
           'questionId': qna.questionId,
           'playerAnswerId': qna.playerAnswerId,
           'playerAnswerInSeconds': qna.playerAnswerInSeconds,
-          'answerCorrect': qna.answerCorrect
+          'answerCorrect': qna.answerCorrect,
+          'isReported': (qna.isReported) ? true : false
         });
       }
     }
