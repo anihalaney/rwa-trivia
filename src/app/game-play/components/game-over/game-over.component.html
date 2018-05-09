@@ -98,12 +98,10 @@
                       </p>
                     </span>
                   </div>
-                  <div *ngIf="game.playerQnAs[i].isReported">
-                    <label class="success text-style your-answer-label">Report has been submitted!</label>
-                  </div>
                 </div>
-                <div class="li-section2">
-                  <button class="btn-share" type="button" (click)="reportQuestion(row)" [disabled]="game.playerQnAs[i].isReported">Report</button>
+                <div class="li-section2 textcenter">
+                  <button class="btn-share" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
+                  <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
                 </div>
               </li>
             </ul>

@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { User, Game } from '../../../model';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -7,7 +7,7 @@ import * as gameplayactions from '../../store/actions';
 import { gameplayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Utils, WindowRef } from '../../../core/services';
+import { Utils } from '../../../core/services';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class GameOverComponent implements OnInit {
     this.gameOverContinueClicked.emit();
   }
 
-  constructor(private store: Store<AppState>, public dialog: MatDialog, private windowRef: WindowRef) {
+  constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2) {
     this.user$ = this.store.select(appState.coreState).select(s => s.user);
     this.user$.subscribe(user => {
       if (user !== null) {
@@ -76,7 +76,11 @@ export class GameOverComponent implements OnInit {
       data: { 'question': question, 'user': this.user, 'game': this.game }
     });
 
-    this.dialogRef.afterOpen().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.add('dialog-open') });
-    this.dialogRef.afterClosed().subscribe(x => { this.windowRef.nativeWindow.document.body.classList.remove('dialog-open') });
+    this.dialogRef.afterOpen().subscribe(x => {
+      this.renderer.addClass(document.body, 'dialog-open');
+    });
+    this.dialogRef.afterClosed().subscribe(x => {
+      this.renderer.removeClass(document.body, 'dialog-open');
+    });
   }
 }
