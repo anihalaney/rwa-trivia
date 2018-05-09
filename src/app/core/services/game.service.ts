@@ -106,19 +106,10 @@ export class GameService {
 
   checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
 
-    return this.db.doc(`/questions/${playerQnA.questionId}`)
-      .snapshotChanges()
-      .take(1)
-      .map(qs => {
-        const question = Question.getViewModelFromDb(qs.payload.data());
-        if (playerQnA.playerAnswerId !== null) {
-          const answerObj = question.answers[playerQnA.playerAnswerId];
-          question.userGivenAnswer = answerObj.answerText;
-        } else {
-          question.userGivenAnswer = null;
-        }
-        return question;
-      })
+    return this.http.post(`${CONFIG.functionsUrl}/app/questions/${playerQnA.questionId}`,
+      {
+        playerQnA: playerQnA
+      });
   }
 
   getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
@@ -132,11 +123,13 @@ export class GameService {
 
   saveReportQuestion(report: ReportQuestion, game: Game): Observable<any> {
     const dbReport = Object.assign({}, report);
-    return this.db.doc<any>(`/report_questions/${dbReport.gameId}`).valueChanges().take(1)
+    return this.db.collection(`/report_questions`, ref => ref.where('created_uid', '==', report.created_uid).
+      where('gameId', '==', report.gameId))
+      .valueChanges().take(1)
       .map(question => {
-        if (question) {
+        if (question.length > 0) {
           const reportQuestion = new ReportQuestion();
-          reportQuestion.questions = question.questions;
+          reportQuestion.questions = question[0]['questions'];
           const key = Object.keys(report.questions)[0];
           reportQuestion.questions[key] = report.questions[key];
           return Observable.of(this.db.doc(`/report_questions/${dbReport.gameId}`).update({ questions: reportQuestion.questions }));
@@ -144,7 +137,7 @@ export class GameService {
         } else {
           return Observable.of(this.db.doc(`/report_questions/${dbReport.gameId}`).set(dbReport));
         }
-      })
+      });
   }
 
   updateGame(report: ReportQuestion, game: Game): Observable<any> {
