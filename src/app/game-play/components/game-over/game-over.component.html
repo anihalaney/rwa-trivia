@@ -1,18 +1,18 @@
 <mat-card class="flex-item" class="game-question">
-  <mat-card-title class="textcenter">
-    <div>
-      <span class="title">GAME OVER</span>
-    </div>
-    <div class="category-div">
-      <span class="label category-name">{{categoryName}} </span>
-    </div>
-    <div fxFlex></div>
-    <div></div>
-  </mat-card-title>
-  <mat-card-content class="textcenter">
+  <mat-card-content class="textcenter share-content">
+    <mat-card-title class="textcenter">
+      <div>
+        <span class="title">GAME OVER</span>
+      </div>
+      <div class="category-div">
+        <span class="label category-name">{{categoryName}} </span>
+      </div>
+      <div fxFlex></div>
+      <div></div>
+    </mat-card-title>
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == '0'">
-      <div class="yourimg">
-        <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
+      <div class="yourimg" id="image-div">
+        <img id="yourImage" *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
       </div>
       <a href="#" class="dark text-style">You</a>
       <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
@@ -62,9 +62,11 @@
         <span class="win-text">You Win</span>
       </div>
     </div>
+  </mat-card-content>
+  <mat-card-content class="textcenter">
     <div class="button-div">
       <div class="win-icon">
-        <button class="btn-share" type="button">Share</button>
+        <button class="btn-share" type="button" (click)="shareScore()">Share</button>
         <button class="btn-share" type="button">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
