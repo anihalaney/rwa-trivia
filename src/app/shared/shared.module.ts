@@ -7,10 +7,12 @@ import { ImageCropperModule } from 'ngx-img-cropper';
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
+import { ShareButtonModule } from '@ngx-share/button';
+
 
 import {
   QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-  QuestionFormComponent,RejectedQuestionContentComponent
+  QuestionFormComponent, RejectedQuestionContentComponent
 } from './components';
 
 @NgModule({
@@ -36,7 +38,10 @@ import {
     // Flex
     FlexLayoutModule,
     RouterModule,
-    ImageCropperModule
+    ImageCropperModule,
+
+    HttpClientModule,       // for share counts
+    ShareButtonModule.forRoot()
 
   ],
   providers: [
@@ -45,6 +50,6 @@ import {
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
-    ImageCropperModule]
+    ImageCropperModule, HttpClientModule, ShareButtonModule]
 })
 export class SharedModule { }

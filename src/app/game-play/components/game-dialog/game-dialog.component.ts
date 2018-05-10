@@ -91,9 +91,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.currentQuestion = question;
         this.questionIndex++;
         this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
-
-
-
       })
     );
   }
