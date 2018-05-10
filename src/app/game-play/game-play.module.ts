@@ -7,7 +7,7 @@ import { GamePlayRoutingModule } from './routing/game-play-routing.module';
 import {
   NewGameComponent, GameComponent,
   GameQuestionComponent, GameQuestionContinueComponent,
-  GameOverComponent, GameDialogComponent
+  GameOverComponent, GameDialogComponent, ReportGameComponent
 } from './components';
 import { effects, reducer } from './store';
 
@@ -18,10 +18,12 @@ import { effects, reducer } from './store';
     GameQuestionComponent,
     GameQuestionContinueComponent,
     GameOverComponent,
-    GameDialogComponent
+    GameDialogComponent,
+    ReportGameComponent
   ],
   entryComponents: [
-    GameDialogComponent
+    GameDialogComponent,
+    ReportGameComponent
   ],
   imports: [
     //rwa modules
