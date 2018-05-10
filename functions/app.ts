@@ -307,9 +307,16 @@ app.put('/game/:gameId', authorizedOnly, (req, res) => {
         game.decideWinner();
         game.GameStatus = GameStatus.COMPLETED;
         break;
+
+      case GameOperations.REPORT_STATUS:
+        const playerQnA: PlayerQnA = req.body.playerQnA;
+        const index = game.playerQnAs.findIndex(
+          playerInfo => playerInfo.questionId === playerQnA.questionId
+        );
+        game.playerQnAs[index] = playerQnA;
+        break;
     }
     dbGame = game.getDbModel();
-
     gameMechanics.UpdateGameCollection(dbGame).then((id) => {
       res.send({});
     });
@@ -583,5 +590,24 @@ app.get('/updateUserCategoryStat', adminOnly, (req, res) => {
   });
 });
 
+app.post('/questions/:questionId', (req, res) => {
+  const questionId = req.params.questionId;
+  const playerQnA = req.body.playerQnA;
+  const db = admin.firestore();
+  if (!questionId) {
+    res.status(404).send('questionId is not available');
+    return;
+  }
+  db.doc(`/questions/${questionId}`).get().then((qs) => {
+    const question = Question.getViewModelFromDb(qs.data());
+    if (playerQnA.playerAnswerId !== null) {
+      const answerObj = question.answers[playerQnA.playerAnswerId];
+      question.userGivenAnswer = answerObj.answerText;
+    } else {
+      question.userGivenAnswer = null;
+    }
+    res.send(question);
+  })
+});
 
 exports.app = functions.https.onRequest(app);

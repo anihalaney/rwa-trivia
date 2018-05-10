@@ -82,7 +82,7 @@
 	.mat-dialog-container {
 		color: map-get($theme, primary) !important;
 	}
-	.status-rejected{ 
+	.status-rejected,.status-reported{ 
 		color: map-get($theme, reject);
 	}
 	.status-change-request

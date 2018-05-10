@@ -86,6 +86,12 @@ service cloud.firestore {
       match /friends/{userId} {
          allow get: if isUserAuthenticated(userId);          
     }
+    match /report_questions {
+      match /{document=**} {
+        allow read, update: if isUserAuthenticated(resource.data.created_uid);
+        allow create: if isUserAuthenticated(request.resource.data.created_uid);        
+    }
+    }
     
   }
 }
