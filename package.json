@@ -42,6 +42,7 @@
     "@ngrx/router-store": "^5.0.1",
     "@ngrx/store": "5.0.0",
     "@ngrx/store-devtools": "5.0.1",
+    "@types/html2canvas": "0.0.33",
     "angularfire2": "^5.0.0-rc.6",
     "core-js": "2.5.3",
     "csv": "^2.0.0",
