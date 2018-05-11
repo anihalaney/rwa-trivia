@@ -11,3 +11,15 @@ exports.getAllQuestions = (): Promise<any> => {
         .get()
         .then(questions => { return questions });
 };
+
+
+/**
+ * getQuestionById
+ * return question
+ */
+exports.getQuestionById = (questionId): Promise<any> => {
+    return questionFireStoreClient.doc(`/questions/${questionId}`)
+        .get()
+        .then((qs) => { return qs });
+};
+

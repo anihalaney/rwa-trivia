@@ -12,6 +12,7 @@ router.get('/day', questionController.getQuestionOfDay);
 router.get('/next/:gameId', questionAuth.authorizedOnly, questionController.getNextQuestion);
 router.get('/game/:gameId', questionAuth.authorizedOnly, questionController.getQuestions);
 router.post('/:start/:size', questionAuth.adminOnly, questionController.getQuestions);
+router.post('/:questionId', questionAuth.authorizedOnly, questionController.getUpdatedQuestion);
 
 
 module.exports = router;

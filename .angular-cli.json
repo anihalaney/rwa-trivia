@@ -3,7 +3,8 @@
   "project": {
     "name": "trivia"
   },
-  "apps": [{
+  "apps": [
+    {
       "name": "trivia",
       "root": "src",
       "outDir": "dist",
@@ -57,8 +58,8 @@
   "defaults": {
     "styleExt": "scss",
     "component": {
-        "inlineTemplate": false,
-        "spec": true
-      }
+      "inlineTemplate": false,
+      "spec": true
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { ESUtils } from '../utils/ESUtils';
-import { SearchCriteria, Game } from '../../src/app/model';
+import { SearchCriteria, Game, Question } from '../../src/app/model';
 const questionControllerGameService = require('../services/game.service');
+const questionControllerQuestionService = require('../services/question.service');
 
 /**
  * getQuestionOfDay
@@ -85,3 +86,28 @@ exports.getNextQuestion = (req, res) => {
     });
 
 };
+
+
+/**
+ * getUpdatedQuestion
+ * return question
+ */
+exports.getUpdatedQuestion = (req, res) => {
+    const questionId = req.params.questionId;
+    const playerQnA = req.body.playerQnA;
+
+    if (!questionId) {
+        res.status(404).send('questionId is not available');
+        return;
+    }
+    questionControllerQuestionService.getQuestionById(questionId).then((qs) => {
+        const question = Question.getViewModelFromDb(qs.data());
+        if (playerQnA.playerAnswerId !== null) {
+            const answerObj = question.answers[playerQnA.playerAnswerId];
+            question.userGivenAnswer = answerObj.answerText;
+        } else {
+            question.userGivenAnswer = null;
+        }
+        res.send(question);
+    })
+}

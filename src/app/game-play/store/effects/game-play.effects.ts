@@ -109,6 +109,15 @@ export class GamePlayEffects {
         map((questionArray: any) => new gameplayactions.GetUsersAnsweredQuestionSuccess(questionArray))
       )
     ));
+  @Effect()
+  reportQuestion$ = this.actions$
+    .ofType(GamePlayActionTypes.SAVE_REPORT_QUESTION)
+    .pipe(
+    switchMap((action: gameplayactions.SaveReportQuestion) =>
+      this.svc.saveReportQuestion(action.payload.reportQuestion, action.payload.game)
+        .mergeMap((status: any) => this.svc.updateGame(action.payload.reportQuestion, action.payload.game))
+        .pipe(map((report: any) => new gameplayactions.SaveReportQuestionSuccess())))
+    );
 
   constructor(
     private actions$: Actions,
