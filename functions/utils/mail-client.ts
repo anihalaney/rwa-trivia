@@ -1,8 +1,8 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
-const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../config/mail.config.json'), 'utf8'));
-import { TriggerConstants } from '../src/app/model';
+const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+import { TriggerConstants } from '../../src/app/model';
 
 export class MailClient {
 

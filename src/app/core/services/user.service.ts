@@ -91,7 +91,7 @@ export class UserService {
     }
 
     checkInvitationToken(obj: any): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/makeFriends`;
+        const url = `${CONFIG.functionsUrl}/app/friend`;
         return this.http.post<any>(url, obj);
     }
 

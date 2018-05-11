@@ -21,7 +21,7 @@ export class GameService {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
-    const url: string = CONFIG.functionsUrl + '/app/createGame';
+    const url: string = CONFIG.functionsUrl + '/app/game';
     const payload = { gameOptions: gameOptions, userId: user.userId };
     return this.http.post<string>(url, payload);
 
@@ -56,7 +56,7 @@ export class GameService {
   }
 
   getNextQuestion(game: Game): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/getNextQuestion/';
+    const url: string = CONFIG.functionsUrl + '/app/question/next/';
     return this.http.get<Question>(url + game.gameId);
   }
 
