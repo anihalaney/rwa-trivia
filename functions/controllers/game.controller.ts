@@ -78,6 +78,13 @@ exports.updateGame = (req, res) => {
                 game.decideWinner();
                 game.GameStatus = GameStatus.COMPLETED;
                 break;
+            case GameOperations.REPORT_STATUS:
+                const playerQnA: PlayerQnA = req.body.playerQnA;
+                const index = game.playerQnAs.findIndex(
+                    playerInfo => playerInfo.questionId === playerQnA.questionId
+                );
+                game.playerQnAs[index] = playerQnA;
+                break;
         }
         dbGame = game.getDbModel();
 
