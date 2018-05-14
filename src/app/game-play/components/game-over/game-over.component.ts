@@ -61,31 +61,14 @@ export class GameOverComponent implements OnInit {
   shareScore() {
 
     html2canvas(document.querySelector('.share-content')).then((canvas) => {
-      canvas.id = 'share-score';
-      document.body.appendChild(canvas);
       const context = canvas.getContext('2d');
-      context.fillRect(0, 10, 0, 0);
-      const img = new Image();
-      img.crossOrigin = "anonymous";
-      img.src = document.getElementById('yourImage').getAttribute('src');
+      const img = document.getElementById('yourImage');
       roundedImage(365, 58, 70, 60, 40);
       context.clip();
-      // img.setAttribute('crossOrigin', 'Anonymous');
       context.drawImage(img, 365, 58, 70, 60);
-      const dataURL = canvas.toDataURL("image/png");
-      // context.restore();
-
-      // const can = document.getElementById("share-score");
-      // console.log(canvas.toDataURL("image/png"));
-      // const saveImg = new Image();
-      // saveImg.src = canvas.toDataURL('image/png');
-      // saveImg.setAttribute('crossOrigin', 'Anonymous');
-      // const link = document.createElement('a');
-      // link.href = saveImg.src;
-      // link.download = 'Download.png';
-      // document.body.appendChild(link);
-      // link.click();
-
+      document.body.appendChild(canvas);
+      const image = canvas.toDataURL('image/jpg');
+      console.log(JSON.stringify(image));
 
       function roundedImage(x, y, width, height, radius) {
         context.beginPath();
