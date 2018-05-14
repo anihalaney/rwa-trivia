@@ -1,6 +1,6 @@
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import { UserActions } from '../../../core/store';
-import { Game, Question } from '../../../model';
+import { Game, Question, ReportQuestion } from '../../../model';
 
 export function currentGame(state: any = null, action: GamePlayActions): Game {
   switch (action.type) {
@@ -63,6 +63,13 @@ export function userAnsweredQuestion(state: any = null, action: GamePlayActions)
       return action.payload;
     default:
       return null;
+  }
+};
+
+export function saveReportQuestion(state: any = null, action: GamePlayActions): string {
+  switch (action.type) {
+    case GamePlayActionTypes.SAVE_REPORT_QUESTION_SUCCESS:
+      return 'SUCCESS';
   }
 };
 
