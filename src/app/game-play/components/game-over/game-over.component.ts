@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { User, Game } from '../../../model';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -6,6 +6,9 @@ import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import { gameplayState } from '../../store';
 import * as html2canvas from 'html2canvas';
+import { ReportGameComponent } from '../report-game/report-game.component';
+import { MatDialog, MatDialogRef } from '@angular/material';
+import { Utils } from '../../../core/services';
 
 
 @Component({
@@ -26,13 +29,14 @@ export class GameOverComponent implements OnInit {
   otherUserId: string;
   otherUserInfo: User;
   questionsArray = [];
+  dialogRef: MatDialogRef<ReportGameComponent>;
 
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2) {
     this.user$ = this.store.select(appState.coreState).select(s => s.user);
     this.user$.subscribe(user => {
       if (user !== null) {
@@ -43,6 +47,12 @@ export class GameOverComponent implements OnInit {
     this.store.select(gameplayState).select(s => s.userAnsweredQuestion).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
+      }
+    });
+
+    this.store.select(gameplayState).select(s => s.saveReportQuestion).subscribe(state => {
+      if (state === 'SUCCESS') {
+        (this.dialogRef) ? this.dialogRef.close() : '';
       }
     });
   }
@@ -56,7 +66,23 @@ export class GameOverComponent implements OnInit {
     if (this.questionsArray.length === 0) {
       this.store.dispatch(new gameplayactions.GetUsersAnsweredQuestion({ userId: this.user.userId, game: this.game }));
     }
+  }
 
+  reportQuestion(question) {
+    setTimeout(() => this.openDialog(question), 0);
+  }
+  openDialog(question) {
+    this.dialogRef = this.dialog.open(ReportGameComponent, {
+      disableClose: false,
+      data: { 'question': question, 'user': this.user, 'game': this.game }
+    });
+
+    this.dialogRef.afterOpen().subscribe(x => {
+      this.renderer.addClass(document.body, 'dialog-open');
+    });
+    this.dialogRef.afterClosed().subscribe(x => {
+      this.renderer.removeClass(document.body, 'dialog-open');
+    });
   }
   shareScore() {
 
