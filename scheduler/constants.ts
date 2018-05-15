@@ -5,7 +5,7 @@ export enum schedulerConstants {
     port = 443,
     devFunctionsAppName = 'rwa-trivia-dev-e57fc',
     prodFunctionsAppName = 'rwa-trivia',
-    apiPath = '/app/game/scheduler/check',
+    apiPath = '/app/game/scheduler',
     prod = 'prod',
     authToken = '1234567'
 }

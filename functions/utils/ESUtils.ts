@@ -1,11 +1,11 @@
-import { Game, Question, Category, SearchResults, SearchCriteria } from '../src/app/model';
+import { Game, Question, Category, SearchResults, SearchCriteria } from '../../src/app/model';
 
 
 const fs = require('fs');
 const path = require('path');
 const elasticsearch = require('elasticsearch');
 const functions = require('firebase-functions');
-const elasticsearchConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../config/elasticsearch.config.json'), 'utf8'));
+const elasticsearchConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
 export class ESUtils {
   static QUESTIONS_INDEX = 'questions';

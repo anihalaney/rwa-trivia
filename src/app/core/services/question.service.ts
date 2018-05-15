@@ -24,14 +24,14 @@ export class QuestionService {
 
   // Elasticsearch
   getQuestionOfTheDay(): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/getQuestionOfTheDay';
+    const url: string = CONFIG.functionsUrl + '/app/question/day';
 
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    const url: string = CONFIG.functionsUrl + '/app/getQuestions/';
-    // let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";
+    const url: string = CONFIG.functionsUrl + '/app/question/';
+    // let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/day/";
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }
