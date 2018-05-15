@@ -1,18 +1,22 @@
-import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../src/app/model';
+import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../src/app/model';
 import { Observable } from 'rxjs/Observable';
-import { Utils } from './Utils';
+import { Utils } from './utils';
 const utils: Utils = new Utils();
+const gameService = require('../services/game.service');
 
 export class GameMechanics {
 
     private gameOptions: GameOptions;
     private userId: string;
-    private db: any
 
-    constructor(private game_option?, private user_id?, private firebaseDB?: any) {
-        this.gameOptions = game_option;
-        this.userId = user_id;
-        this.db = firebaseDB;
+
+    constructor(private game_option?, private user_id?) {
+        if (game_option) {
+            this.gameOptions = game_option;
+        }
+        if (user_id) {
+            this.userId = user_id;
+        }
     }
 
 
@@ -32,22 +36,21 @@ export class GameMechanics {
 
 
     private joinGame(): Promise<string> {
-        return this.db.collection('games').where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT)
-            .where('gameOver', '==', false)
-            .get().then(games => {
-                const gameArr = [];
-
-                games.forEach(game => {
-                    gameArr.push(Game.getViewModel(game.data()))
-                });
-                const totalGames = gameArr.length;
-                if (totalGames > 0) {
-                    const promise = this.pickRandomGame(gameArr, totalGames);
-                    return promise.then((gameId) => { return gameId });
-                } else {
-                    return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
-                }
+        console.log('joinGame');
+        return gameService.getAvailableGames().then(games => {
+            const gameArr = [];
+            console.log('games', games);
+            games.forEach(game => {
+                gameArr.push(Game.getViewModel(game.data()))
             });
+            const totalGames = gameArr.length;
+            if (totalGames > 0) {
+                const promise = this.pickRandomGame(gameArr, totalGames);
+                return promise.then((gameId) => { return gameId });
+            } else {
+                return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
+            }
+        });
 
     }
 
@@ -65,7 +68,7 @@ export class GameMechanics {
             })
 
             const dbGame = game.getDbModel();
-            return this.UpdateGame(dbGame).then((gameId) => { return gameId });
+            return this.setGame(dbGame).then((gameId) => { return gameId });
         } else if (totalGames === 1) {
             return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
         } else {
@@ -80,7 +83,7 @@ export class GameMechanics {
 
     private createSingleAndRandomUserGame(): Promise<string> {
         const timestamp = utils.getUTCTimeStamp();
-       // console.log('timestamp', timestamp);
+        // console.log('timestamp', timestamp);
         const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, undefined, undefined,
             GameStatus.STARTED, timestamp, timestamp);
         return this.createGame(game);
@@ -99,31 +102,29 @@ export class GameMechanics {
     private createGame(game: Game): Promise<string> {
         game.generateDefaultStat();
         const dbGame = game.getDbModel(); // object to be saved
-        return this.db.collection('games').add(dbGame).then(ref => {
+        return gameService.createGame(dbGame).then(ref => {
             dbGame.id = ref.id;
-            return this.UpdateGame(dbGame).then((gameId) => { return gameId });
+            return this.setGame(dbGame).then((gameId) => { return gameId });
         });
 
     }
 
     public getGameById(gameId: string): Promise<Game> {
-        return this.db.doc(`games/${gameId}`)
-            .get().then(game => Game.getViewModel(game.data()));
+        return gameService.getGameById(gameId).then(game => { return Game.getViewModel(game.data()) });
     }
 
-    private UpdateGame(dbGame: any): Promise<string> {
+    public setGame(dbGame: any): Promise<string> {
         // Use the set method of the doc instead of the add method on the collection,
         // so the id field of the data matches the id of the document
-        return this.db.doc('/games/' + dbGame.id).set(dbGame).then(ref => {
-
+        return gameService.setGame(dbGame).then(ref => {
             return dbGame.id;
         });
     }
 
-    public UpdateGameCollection(dbGame: any): Promise<string> {
+    public UpdateGame(dbGame: any): Promise<string> {
         // Use the set method of the doc instead of the add method on the collection,
         // so the id field of the data matches the id of the document
-        return this.db.doc('/games/' + dbGame.id).update(dbGame).then(ref => {
+        return gameService.updateGame(dbGame).then(ref => {
 
             return dbGame.id;
         });
