@@ -162,7 +162,11 @@ export class Game {
         if (this.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
           this.nextTurnPlayerId = '';
           this.GameStatus = GameStatus.AVAILABLE_FOR_OPPONENT;
-        } else if (this.GameStatus === GameStatus.JOINED_GAME && !playerQnA.answerCorrect) {
+        } else if (this.GameStatus === GameStatus.RESTARTED && !playerQnA.answerCorrect) {
+          this.nextTurnPlayerId = otherPlayerUserId;
+          this.GameStatus = GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
+        } else if ((this.GameStatus === GameStatus.JOINED_GAME ||
+          this.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) && !playerQnA.answerCorrect) {
           this.nextTurnPlayerId = otherPlayerUserId;
           this.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
         } else if (!playerQnA.answerCorrect) {
@@ -174,7 +178,8 @@ export class Game {
         if (this.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
           this.nextTurnPlayerId = otherPlayerUserId;
           this.GameStatus = GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE;
-        } else if (this.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE && !playerQnA.answerCorrect) {
+        } else if ((this.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+          this.GameStatus === GameStatus.RESTARTED) && !playerQnA.answerCorrect) {
           this.nextTurnPlayerId = otherPlayerUserId;
           this.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
         } else if (!playerQnA.answerCorrect) {

@@ -65,7 +65,7 @@
     <div class="button-div">
       <div class="win-icon">
         <button class="btn-share" type="button">Share</button>
-        <button class="btn-share" type="button">Rematch</button>
+        <button class="btn-share" type="button" (click)="reMatch()" [disabled]="disableRematchBtn">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
     </div>
