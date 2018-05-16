@@ -183,7 +183,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     let form: FormGroup = this.fb.group({
       playerMode: [gameOptions.playerMode, Validators.required],
-      opponentType: [{ value: gameOptions.opponentType, disabled: true }],
+      opponentType: [gameOptions.opponentType],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
       tagsArray: tagsFA,
