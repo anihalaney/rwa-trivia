@@ -12,6 +12,7 @@ import { User } from '../../model';
 import { Location } from '@angular/common';
 import { userState } from '../../user/store';
 import * as userActions from '../../user/store/actions';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +35,16 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public router: Router,
     public snackBar: MatSnackBar,
-    private location: Location) {
+    private location: Location,
+    private meta: Meta) {
+
+    this.meta.addTag({ property: 'og:title', content: 'Share Score' });
+    this.meta.addTag({
+      property: 'og:image',
+      content: 'http://files.softicons.com/download/application-icons/free-large-torrent-icons-by-aha-soft/png/128x128/Linux.png'
+    });
+    this.meta.addTag({ property: 'og:description', content: 'Sharing my game score' });
+
 
     this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === 'SUCCESS') {

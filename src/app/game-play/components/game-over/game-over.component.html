@@ -1,5 +1,5 @@
 <mat-card class="flex-item" class="game-question">
-  <mat-card-content class="textcenter share-content">
+  <mat-card-content class="textcenter share-content" id="share-content">
     <mat-card-title class="textcenter">
       <div>
         <span class="title">GAME OVER</span>
@@ -10,8 +10,9 @@
       <div fxFlex></div>
       <div></div>
     </mat-card-title>
+
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == '0'">
-      <div class="yourimg" id="image-div">
+      <div class="yourimg">
         <!-- <img id="yourImage" *ngIf="user?.profilePictureUrl" src="http://localhost:5000/rwa-trivia-dev-e57fc/us-central1/app/images/avatar.jpg"
           crossOrigin="Anonymous" alt="yourimg"> -->
         <img id="yourImage" *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
@@ -29,7 +30,9 @@
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == '1'">
       <div class="col-sm-3 col-sm-offset-3">
         <div class="yourimg" [ngClass]="{'vs': game.playerIds.length>1 }">
-          <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
+          <img id="yourImage" *ngIf="user?.profilePictureUrl" src="http://localhost:5000/rwa-trivia-dev-e57fc/us-central1/app/images/avatar.jpg"
+            crossOrigin="Anonymous" alt="yourimg">
+          <!-- <img id="yourImage" *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg"> -->
         </div>
         <a href="#" class="dark text-style">You</a>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
@@ -44,7 +47,9 @@
       </div>
       <div class="col-sm-3">
         <div class="yourimg">
-          <img *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" alt="yourimg">
+          <img id="otherUserImage" *ngIf="user?.profilePictureUrl" src="http://localhost:5000/rwa-trivia-dev-e57fc/us-central1/app/images/avatar.png"
+            crossOrigin="Anonymous" alt="yourimg">
+          <!-- <img id="otherUserImage" *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" alt="yourimg"> -->
         </div>
         <a href="#" class="dark text-style">{{otherUserInfo?.displayName}}</a>
         <div class="dark div-top-spacing text-style">Score {{game.stats[otherUserId].score}}</div>
@@ -66,10 +71,13 @@
   </mat-card-content>
   <mat-card-content class="textcenter">
     <div class="button-div">
-      <div class="win-icon">
-        <button class="btn-share" type="button" (click)="shareScore()">Share</button>
+      <div class=" win-icon">
+        <social-palette *ngIf="blogData[0].status" class="spacing" [blogData]="blogData[0]" (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
+
+        <button class="btn-share" type="button" (click)="shareScore()" *ngIf="!blogData[0].status">Share</button>
         <button class="btn-share" type="button">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
+
       </div>
     </div>
     <div>
@@ -112,5 +120,6 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
+
   </mat-card-content>
 </mat-card>

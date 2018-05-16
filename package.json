@@ -51,6 +51,7 @@
     "angularfire2": "^5.0.0-rc.6",
     "core-js": "2.5.3",
     "csv": "^2.0.0",
+    "dom-to-image": "^2.6.0",
     "firebase": "4.10.1",
     "hammerjs": "2.0.8",
     "html2canvas": "^1.0.0-alpha.12",
