@@ -1,20 +1,20 @@
 import {
     User, Question, UserStatConstants
-} from '../src/app/model';
+} from '../../src/app/model';
+const userContributionQuestionService = require('../services/question.service');
+const userContributionUserService = require('../services/user.service');
 
 export class UserContributionStat {
 
-    private db: any
+
     private userDict: { [key: string]: number };
 
-    constructor(private firebaseDB?: any) {
-        this.db = firebaseDB;
+    constructor() {
         this.userDict = {};
     }
 
     generateGameStats(): Promise<any> {
-        return this.db.collection('questions')
-            .get()
+        return userContributionQuestionService.getAllQuestions()
             .then(questions =>
                 questions.docs.map(question =>
                     this.userDict[question.data().created_uid] = (this.userDict[question.data().created_uid]) ?
@@ -38,7 +38,7 @@ export class UserContributionStat {
     }
 
     public getUser(userId: string, count: number): Promise<string> {
-        return this.db.doc(`/users/${userId}`).get().then((user) => {
+        return userContributionUserService.getUserById(userId).then((user) => {
             const dbUser = user.data();
             dbUser.stats.contribution = (dbUser.stats.contribution) ? dbUser.stats.contribution + count : count;
             return this.updateUser({ ...dbUser }).then((id) => { return id });
@@ -46,7 +46,7 @@ export class UserContributionStat {
     }
 
     private updateUser(dbUser: any): Promise<string> {
-        return this.db.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => { return dbUser.userId });
+        return userContributionUserService.setUser(dbUser).then(ref => { return dbUser.userId });
     }
 
 }
