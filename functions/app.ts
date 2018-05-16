@@ -144,7 +144,8 @@ app.use(cors);
 app.use(cookieParser);
 app.use(validateFirebaseIdToken);
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+app.use('/images', express.static(__dirname + '/../../images'));
 
 // Routes
 

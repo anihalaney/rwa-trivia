@@ -1,15 +1,12 @@
 import { BlogComponent } from './blog/blog.component';
 import { NewsletterComponent } from './newsletter/newsletter.component';
-import { SocialPaletteComponent } from './social-palette/social-palette.component';
 
 export {
   BlogComponent,
-  NewsletterComponent,
-  SocialPaletteComponent
+  NewsletterComponent
 };
 
 export default [
   BlogComponent,
-  NewsletterComponent,
-  SocialPaletteComponent
+  NewsletterComponent
 ];

@@ -9,6 +9,7 @@ import * as html2canvas from 'html2canvas';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Utils } from '../../../core/services';
+import * as domtoimage from 'dom-to-image';
 
 
 @Component({
@@ -30,6 +31,8 @@ export class GameOverComponent implements OnInit {
   otherUserInfo: User;
   questionsArray = [];
   dialogRef: MatDialogRef<ReportGameComponent>;
+  blogData = [];
+  imageUrl = '';
 
 
   continueButtonClicked(event: any) {
@@ -61,6 +64,11 @@ export class GameOverComponent implements OnInit {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
+    this.blogData = [{
+      blogNo: 0,
+      status: false,
+      link: this.imageUrl
+    }];
   }
   bindQuestions() {
     if (this.questionsArray.length === 0) {
@@ -85,30 +93,121 @@ export class GameOverComponent implements OnInit {
     });
   }
   shareScore() {
+    this.blogData[0].status = true;
+    // this.blogData[0].link="https://rwa-trivia-dev-e57fc.firebaseapp.com/dashboard";
 
-    html2canvas(document.querySelector('.share-content')).then((canvas) => {
-      const context = canvas.getContext('2d');
-      const img = document.getElementById('yourImage');
-      roundedImage(365, 58, 70, 60, 40);
-      context.clip();
-      context.drawImage(img, 365, 58, 70, 60);
-      document.body.appendChild(canvas);
-      const image = canvas.toDataURL('image/jpg');
-      console.log(JSON.stringify(image));
+    const node = document.getElementById('share-content');
 
-      function roundedImage(x, y, width, height, radius) {
-        context.beginPath();
-        context.moveTo(x + radius, y);
-        context.lineTo(x + width - radius, y);
-        context.quadraticCurveTo(x + width, y, x + width, y + radius);
-        context.lineTo(x + width, y + height - radius);
-        context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-        context.lineTo(x + radius, y + height);
-        context.quadraticCurveTo(x, y + height, x, y + height - radius);
-        context.lineTo(x, y + radius);
-        context.quadraticCurveTo(x, y, x + radius, y);
-        context.closePath();
+    domtoimage.toPng(node)
+      .then((dataUrl) => {
+        const img = new Image();
+        img.src = dataUrl;
+        console.log("url---->" + JSON.stringify(img.src));
+
+        // var a = document.createElement('a');
+        // a.href = img.src;
+        // a.download = "score.png";
+        // document.body.appendChild(a);
+        // a.click();
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      });
+    // html2canvas(document.querySelector('.share-content')).then((canvas) => {
+    //   const context = canvas.getContext('2d');
+    //   if (Number(this.game.gameOptions.playerMode) === 0) {
+    //     const img = document.getElementById('yourImage');
+    //     this.roundedImage(365, 58, 70, 60, 40, context);
+    //     context.clip();
+    //     context.drawImage(img, 365, 58, 70, 60);
+    //   }
+
+    //   if (Number(this.game.gameOptions.playerMode) === 1) {
+
+    //     const sources = {
+    //       your: 'http://localhost:4200/assets/images/avatar.jpg',
+    //       other: 'http://localhost:4200/assets/images/avatar.png'
+    //     };
+
+
+    //     this.loadImages(sources, function (images, index) {
+    //       context.drawImage(images.your, 265, 58, 70, 60);
+    //       context.drawImage(images.other, 465, 58, 70, 60);
+    //       document.body.appendChild(canvas);
+    //       const imageUrl = canvas.toDataURL();
+    //       console.log("url--->" + JSON.stringify(imageUrl));
+    //     });
+
+
+    //     //   let isRoundedFirst = false;
+    //     //   let isRoundedSecond = false;
+
+    //     //   const img = document.getElementById('yourImage');
+    //     //   isRoundedFirst = this.roundedImage(265, 58, 70, 60, 40, context);
+    //     //   context.clip();
+    //     //   context.drawImage(img, 265, 58, 70, 60);
+
+    //     //   if (isRoundedFirst) {
+    //     //     const otherImg = document.getElementById('otherUserImage');
+    //     //     isRoundedSecond = this.roundedImage(465, 58, 70, 60, 40, context);
+    //     //     context.clip();
+    //     //     context.drawImage(otherImg, 465, 58, 70, 60);
+    //     //   }
+
+    //     //   if (isRoundedFirst && isRoundedSecond) {
+    //     //     document.body.appendChild(canvas);
+    //     //     this.imageUrl = canvas.toDataURL('image/jpg');
+    //     //     this.blogData[0].link = this.imageUrl;
+    //     //     this.blogData[0].stats = true;
+    //     //     console.log(JSON.stringify(this.imageUrl));
+    //     //   }
+    //     // }
+    //   }
+    // });
+  }
+
+  loadImages(sources, callback) {
+    const images = {};
+    let loadedImages = 0;
+    let numImages = 0;
+    // get num of sources
+    for (const key in sources) {
+      if (sources.hasOwnProperty(key)) {
+        numImages++;
       }
-    });
+    }
+
+    for (let src in sources) {
+      if (sources.hasOwnProperty(src)) {
+        images[src] = new Image();
+        images[src].onload = () => {
+          if (++loadedImages >= numImages) {
+            callback(images);
+          }
+        };
+        images[src].src = sources[src];
+
+
+      }
+    }
+  }
+
+  roundedImage(x, y, width, height, radius, context) {
+    context.beginPath();
+    context.moveTo(x + radius, y);
+    context.lineTo(x + width - radius, y);
+    context.quadraticCurveTo(x + width, y, x + width, y + radius);
+    context.lineTo(x + width, y + height - radius);
+    context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    context.lineTo(x + radius, y + height);
+    context.quadraticCurveTo(x, y + height, x, y + height - radius);
+    context.lineTo(x, y + radius);
+    context.quadraticCurveTo(x, y, x + radius, y);
+    context.closePath();
+    return true;
+  }
+
+  onNotify(info: any) {
+    this.blogData[0].status = info.status;
   }
 }
