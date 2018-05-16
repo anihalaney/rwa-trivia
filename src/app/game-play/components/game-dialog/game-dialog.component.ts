@@ -160,10 +160,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   setTurnStatusFlag() {
     const turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
       this.game.GameStatus === GameStatus.RESTARTED ||
-      this.game.GameStatus === GameStatus.JOINED_GAME ||
       ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
         this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
-        this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)
+        this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
+        this.game.GameStatus === GameStatus.JOINED_GAME)
         && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
     this.continueNext = (this.questionAnswered) ? true : false;
     this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
