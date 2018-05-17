@@ -14,6 +14,10 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
   constructor(public dialog: MatDialog, private renderer: Renderer2) { }
 
   ngOnInit() {
+
+  }
+
+  inviteMoreFriend() {
     setTimeout(() => this.openDialog(), 0);
   }
 
@@ -21,6 +25,7 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
     this.dialogRef = this.dialog.open(InviteFriendsDialogComponent, {
       disableClose: false
     });
+    this.dialogRef.componentInstance.ref = this.dialogRef;
 
     // this.dialogRef.afterOpen().subscribe(x => { window.document.body.classList.add('dialog-open') });
     // this.dialogRef.afterClosed().subscribe(x => { window.document.body.classList.remove('dialog-open') });
