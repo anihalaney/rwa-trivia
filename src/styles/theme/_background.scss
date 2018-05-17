@@ -54,7 +54,7 @@
 	}
 
 	/*Header*/
-	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary,.bulk-summary-table,bulk-summary-question-table,.add-tag-btn,.mat-table,.mat-paginator,.vs:after,.btn-share,.social-icons { 
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary,.bulk-summary-table,.bulk-summary-question-table,.add-tag-btn,.mat-table,.mat-paginator,.vs:after,.btn-share,.social-icons,.friend-list-table { 
 		background: map-get($theme, card);
 	}
 	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
@@ -114,7 +114,7 @@
 	.subscrib-cont input[type="email"]{ 
 		background: map-get($theme, subscribe-email);
 	}
-	.bulk-summary-header,.bulk-summary-question-header{
+	.bulk-summary-header,.bulk-summary-question-header,.friend-list-header{
 		background: map-get($theme, table-header);
 	}
 	.col-question:hover
