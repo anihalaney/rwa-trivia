@@ -29,6 +29,7 @@ export class GameOverComponent implements OnInit {
   otherUserInfo: User;
   questionsArray = [];
   dialogRef: MatDialogRef<ReportGameComponent>;
+  disableRematchBtn = false;
 
 
   continueButtonClicked(event: any) {
@@ -65,6 +66,15 @@ export class GameOverComponent implements OnInit {
     if (this.questionsArray.length === 0) {
       this.store.dispatch(new gameplayactions.GetUsersAnsweredQuestion({ userId: this.user.userId, game: this.game }));
     }
+  }
+
+  reMatch() {
+    this.disableRematchBtn = true;
+    this.game.gameOptions.rematch = true;
+    if (this.game.playerIds.length > 0) {
+      this.game.gameOptions.friendId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+    }
+    this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: this.game.gameOptions, user: this.user }));
   }
 
   reportQuestion(question) {

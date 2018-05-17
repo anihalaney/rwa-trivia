@@ -17,7 +17,7 @@ exports.getAvailableGames = (): Promise<any> => {
  * getLiveGames
  * return games
  */
-exports.getAvailableGames = (): Promise<any> => {
+exports.getLiveGames = (): Promise<any> => {
     return gameFireStoreClient.collection('games')
         .where('gameOver', '==', false)
         .get().then(games => { return games });

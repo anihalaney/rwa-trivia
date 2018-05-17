@@ -100,7 +100,7 @@ exports.updateGame = (req, res) => {
  * return status
  */
 exports.updateAllGame = (req, res) => {
-    gameControllerService.getAvailableGames().then((snapshot) => {
+    gameControllerService.getLiveGames().then((snapshot) => {
         snapshot.forEach((doc) => {
 
             const game = Game.getViewModel(doc.data());
