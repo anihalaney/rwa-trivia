@@ -34,6 +34,7 @@ export class UserService {
                         user.stats = u.stats;
                     }
                 }
+                this.saveUserProfile(user);
                 return user;
             })
             .mergeMap(u => this.getUserProfileImage(u));
