@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { User } from '../../../../model';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../../store';
@@ -15,8 +15,9 @@ export class InviteFriendsDialogComponent implements OnInit {
 
   user: User;
   navLinks = [];
+  ref: any;
 
-  constructor(private store: Store<AppState>, private location: Location) {
+  constructor(private store: Store<AppState>, private location: Location, private renderer: Renderer2) {
     this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
 
   }
@@ -26,6 +27,7 @@ export class InviteFriendsDialogComponent implements OnInit {
   }
 
   closeModel() {
-    this.location.back();
+    // this.location.back();
+    this.ref.close();
   }
 }
