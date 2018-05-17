@@ -10,6 +10,8 @@ import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-fri
 export class InviteFriendsComponent implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<InviteFriendsDialogComponent>;
+  displayedColumns = ['friends', 'game_played', 'categories',
+    'won', 'lost'];
 
   constructor(public dialog: MatDialog, private renderer: Renderer2) { }
 
@@ -27,8 +29,6 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
     });
     this.dialogRef.componentInstance.ref = this.dialogRef;
 
-    // this.dialogRef.afterOpen().subscribe(x => { window.document.body.classList.add('dialog-open') });
-    // this.dialogRef.afterClosed().subscribe(x => { window.document.body.classList.remove('dialog-open') });
     this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
     });

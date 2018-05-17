@@ -11,10 +11,46 @@
     <div class="pageheading col-md-9 col-xs-12 hidden-xs">FRIEND LIST</div>
     <div class="col-md-3 col-xs-6 align-right">
       <button class="btn startupload" (click)="inviteMoreFriend()"> Invite More Friends </button>
-      <!-- <a [routerLink]="['./upload']" class="pageheading startupload font-size-16">Start New Bulk Upload</a> -->
     </div>
   </div>
-  <section class="card">
-    Invite Friends Component
+  <section>
+    <div class="mat-elevation-z8">
+      <mat-table #table [dataSource]="dataSource" matSort class="friend-list-table">
+        <ng-container cdkColumnDef="friends">
+          <mat-header-cell *cdkHeaderCellDef>Friends</mat-header-cell>
+          <mat-cell class="col-chkbox friend-list-table-cell" *cdkCellDef="let row">Saloni</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="game_played">
+          <mat-header-cell *cdkHeaderCellDef>Game Played</mat-header-cell>
+          <mat-cell class="col-chkbox cursor friend-list-table-cell " *cdkCellDef="let row">10</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="categories">
+          <mat-header-cell *cdkHeaderCellDef>Categories</mat-header-cell>
+          <mat-cell class="col-chkbox friend-list-table-cell " *cdkCellDef="let row">
+            <label >Test</label>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="won">
+          <mat-header-cell *cdkHeaderCellDef>Won</mat-header-cell>
+          <mat-cell class="col-chkbox friend-list-table-cell " *cdkCellDef="let row">6</mat-cell>
+        </ng-container>
+
+        <ng-container cdkColumnDef="lost">
+          <mat-header-cell *cdkHeaderCellDef>Lost</mat-header-cell>
+          <mat-cell class="col-chkbox friend-list-table-cell " *cdkCellDef="let row">4</mat-cell>
+        </ng-container>
+
+        <mat-header-row *cdkHeaderRowDef="displayedColumns" class="friend-list-header">
+        </mat-header-row>
+
+        <mat-row class="row-question " *cdkRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+      </mat-table>
+      <mat-paginator #paginator class="matHeader friend-list-table" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+      </mat-paginator>
+    </div>
   </section>
 </div>
