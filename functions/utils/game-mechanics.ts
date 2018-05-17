@@ -23,13 +23,19 @@ export class GameMechanics {
     createNewGame(): Promise<string> {
 
         if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
-            if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
-                return this.joinGame().then((gameId) => { return gameId });
-            } else if (Number(this.gameOptions.opponentType) === OpponentType.Friend) {
-                return this.createFriendUserGame(this.gameOptions.friendId).then((gameId) => { return gameId });
+            if (this.gameOptions.rematch) {
+                return this.createFriendUserGame(this.gameOptions.friendId, GameStatus.RESTARTED).then((gameId) => { return gameId });
+            } else {
+                if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
+                    return this.joinGame().then((gameId) => { return gameId });
+                } else if (Number(this.gameOptions.opponentType) === OpponentType.Friend) {
+                    return this.createFriendUserGame(this.gameOptions.friendId, GameStatus.STARTED).then((gameId) => { return gameId });
+                }
             }
         } else {
-            return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
+            return (this.gameOptions.rematch) ?
+                this.createSingleAndRandomUserGame(GameStatus.RESTARTED).then((gameId) => { return gameId }) :
+                this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
         }
 
     }
@@ -48,7 +54,7 @@ export class GameMechanics {
                 const promise = this.pickRandomGame(gameArr, totalGames);
                 return promise.then((gameId) => { return gameId });
             } else {
-                return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
+                return this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
             }
         });
 
@@ -70,7 +76,7 @@ export class GameMechanics {
             const dbGame = game.getDbModel();
             return this.setGame(dbGame).then((gameId) => { return gameId });
         } else if (totalGames === 1) {
-            return this.createSingleAndRandomUserGame().then((gameId) => { return gameId });
+            return this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
         } else {
             totalGames--;
             queriedItems.splice(randomGameNo, 1);
@@ -81,19 +87,19 @@ export class GameMechanics {
     }
 
 
-    private createSingleAndRandomUserGame(): Promise<string> {
+    private createSingleAndRandomUserGame(gameStatus): Promise<string> {
         const timestamp = utils.getUTCTimeStamp();
         // console.log('timestamp', timestamp);
         const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, undefined, undefined,
-            GameStatus.STARTED, timestamp, timestamp);
+            gameStatus, timestamp, timestamp);
         return this.createGame(game);
 
     }
 
-    private createFriendUserGame(friendId: string): Promise<string> {
+    private createFriendUserGame(friendId: string, gameStatus): Promise<string> {
         const timestamp = utils.getUTCTimeStamp();
         const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, friendId, undefined,
-            GameStatus.STARTED, timestamp, timestamp);
+            gameStatus, timestamp, timestamp);
         return this.createGame(game);
 
     }
