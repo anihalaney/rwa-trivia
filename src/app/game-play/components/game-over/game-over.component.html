@@ -57,15 +57,19 @@
       </div>
     </div>
     <div class="div-top-spacing win-icon-div">
-      <div class="win-icon">
-        <div class="sprite thumb"></div>
+      <div class="win-icon" *ngIf="game.gameOptions.playerMode == '0' || game.stats[user.userId].score > game.stats[otherUserId].score">
+        <div class="sprite thumb-up"></div>
         <span class="win-text">You Win</span>
+      </div>
+      <div class="win-icon" *ngIf="game.gameOptions.playerMode != '0' && game.stats[user.userId].score < game.stats[otherUserId].score">
+        <div class="sprite thumb-down"></div>
+        <span class="win-text">You Lose</span>
       </div>
     </div>
     <div class="button-div">
       <div class="win-icon">
         <button class="btn-share" type="button">Share</button>
-        <button class="btn-share" type="button">Rematch</button>
+        <button class="btn-share" type="button" (click)="reMatch()" [disabled]="disableRematchBtn">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
     </div>
