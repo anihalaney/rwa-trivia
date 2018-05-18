@@ -144,8 +144,7 @@ export class Game {
   }
 
   decideWinner() {
-    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent
-      && Number(this.gameOptions.opponentType) === OpponentType.Random) {
+    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && this.playerIds.length > 1) {
       const playerId_0 = this.playerIds[0];
       const playerId_1 = this.playerIds[1];
       this.winnerPlayerId = (this.stats[playerId_0].score > this.stats[playerId_1].score) ? playerId_0 : playerId_1;
