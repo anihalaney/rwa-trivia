@@ -1,5 +1,5 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { User, Game } from '../../../model';
+import { User, Game, PlayerMode } from '../../../model';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
@@ -30,7 +30,7 @@ export class GameOverComponent implements OnInit {
   questionsArray = [];
   dialogRef: MatDialogRef<ReportGameComponent>;
   disableRematchBtn = false;
-
+  PlayerMode = PlayerMode;
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
