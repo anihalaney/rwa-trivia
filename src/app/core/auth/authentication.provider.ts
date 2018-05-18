@@ -32,7 +32,7 @@ export class AuthenticationProvider {
           this.user = new User(afUser)
           this.user.idToken = token;
           this.store.dispatch(this.userActions.loginSuccess(this.user));
-
+          (this.dialogRef) ? this.dialogRef.close() : '';
         });
       } else {
         // user not logged in
