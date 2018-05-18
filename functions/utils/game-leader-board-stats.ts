@@ -53,7 +53,7 @@ export class GameLeaderBoardStats {
     private calculateUserStat(userId: string, game: Game, categoryIds: number[]): Promise<string> {
         const score = game.stats[userId].score;
         const avgAnsTime = game.stats[userId].avgAnsTime;
-        return leaderBoardUserService.getUserById().then(userData => {
+        return leaderBoardUserService.getUserById(userId).then(userData => {
             const user: User = userData.data();
             if (user && user.userId) {
                 categoryIds.map((id) => {
