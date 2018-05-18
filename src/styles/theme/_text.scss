@@ -131,7 +131,7 @@
 		}
 	}
 
-	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label,.mat-tab-label,.mat-header-cell,.bulk-summary-table-cell a,.bulk-summary-question-table-cell a{
+	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label,.mat-tab-label,.mat-header-cell,.bulk-summary-table-cell a,.bulk-summary-question-table-cell a,.friend-list-table-cell{
 		@if $selected-theme-name == 'dark' {
 			color:#fff;
 			
