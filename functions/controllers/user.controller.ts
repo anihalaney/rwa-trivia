@@ -1,6 +1,6 @@
 
 const userService = require('../services/user.service');
-import { User } from '../../src/app/model';
+import { User, UserStats } from '../../src/app/model';
 
 /**
  * getUserById
@@ -25,7 +25,7 @@ exports.getUserById = (req, res) => {
         user.location = (dbUser && dbUser.location) ? dbUser.location : '';
         user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
         user.userId = userId;
-        user.stats = (dbUser.stats) ? dbUser.stats : '';
+        user.stats = (dbUser.stats) ? dbUser.stats : new UserStats();
         console.log('userinfo--->', user);
         res.send(user);
     });
