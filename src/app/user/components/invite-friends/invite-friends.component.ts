@@ -26,23 +26,22 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
   constructor(public dialog: MatDialog, private renderer: Renderer2, private store: Store<AppState>, ) {
     this.userDict$ = this.store.select(appState.coreState).select(s => s.userDict);
     this.userDict$.subscribe(userDict => this.userDict = userDict);
-
     this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
       if (user) {
         this.store.dispatch(new useractions.LoadUserFriends({ 'userId': user.userId }));
       }
     });
-
     this.store.select(appState.userState).select(s => s.userFriends).subscribe(uFriends => {
       if (uFriends !== null) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
           this.uFriends = [...this.uFriends, ...Object.keys(friend)];
-        })
-        this.dataSource = new MatTableDataSource<any>(this.uFriends);
 
+        });
+        // console.log(JSON.stringify(this.uFriends));
+        this.dataSource = new MatTableDataSource<any>(this.uFriends);
       }
-      console.log(JSON.stringify(this.uFriends));
+      // console.log(JSON.stringify(this.uFriends));
     });
 
   }
