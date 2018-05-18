@@ -30,14 +30,7 @@
       <mat-header-cell *cdkHeaderCellDef>Game Played</mat-header-cell>
       <mat-cell class="col-chkbox cursor friend-list-table-cell " *cdkCellDef="let row">
         <label *ngIf="userDict[row]?.stats">{{userDict[row]?.stats.gamePlayed}}</label>
-        <label *ngIf="!userDict[row]?.stats">0</label>
-      </mat-cell>
-    </ng-container>
 
-    <ng-container cdkColumnDef="categories">
-      <mat-header-cell *cdkHeaderCellDef>Categories</mat-header-cell>
-      <mat-cell class="col-chkbox friend-list-table-cell " *cdkCellDef="let row">
-        <label>Test</label>
       </mat-cell>
     </ng-container>
 
@@ -45,7 +38,7 @@
       <mat-header-cell *cdkHeaderCellDef>Won</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell success" *cdkCellDef="let row">
         <label *ngIf="userDict[row]?.stats">{{userDict[row]?.stats.wins}} </label>
-        <label *ngIf="!userDict[row]?.stats">0</label>
+
       </mat-cell>
     </ng-container>
 
@@ -53,7 +46,7 @@
       <mat-header-cell *cdkHeaderCellDef>Lost</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell label" *cdkCellDef="let row">
         <label *ngIf="userDict[row]?.stats">{{userDict[row]?.stats.losses}}</label>
-        <label *ngIf="!userDict[row]?.stats">0</label>
+
       </mat-cell>
     </ng-container>
 
