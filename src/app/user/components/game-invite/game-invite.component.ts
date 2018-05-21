@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
 
 
-import { User, Game, Category } from '../../../model';
+import { User, Game, Category, GameStatus } from '../../../model';
 import { gameInvites } from 'app/game-play/store';
 
 @Component({
@@ -19,6 +19,7 @@ export class GameInviteComponent implements OnChanges {
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
   randomCategoryId = 0;
+  gameStatus;
 
 
   constructor(private store: Store<AppState>) {
@@ -28,6 +29,7 @@ export class GameInviteComponent implements OnChanges {
 
   ngOnChanges() {
     this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
+    this.gameStatus = (this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) ? 'Random' : 'Friend'
   }
 
 

@@ -7,7 +7,7 @@
   </div>
   <div class="col-md-2 col-xs-12">
     <a href="#" class="dark">{{userDict[game.playerIds[0]]?.displayName}}</a>
-    <div class="light">Friend</div>
+    <div class="light">{{gameStatus}}</div>
   </div>
   <div class="row col-md-4 col-xs-12">
     <div class="col-lg-6 col-md-12 col-xs-8 T-tagging">{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}</div>
