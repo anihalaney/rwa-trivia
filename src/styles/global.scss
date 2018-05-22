@@ -302,7 +302,7 @@ textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize:
 .commenticon{background-position:0px -208px; height:20px; width: 20px; margin:0 10px 0 13px }
 .viewicon{background-position:-21px -208px; height:12px; width: 20px; margin-right: 10px; vertical-align:-2px}
 // .shareicon{background-position:-42px -208px; height:20px; width: 20px; margin-right: 10px}
-.shareicon{background-position: -162px -333px;  height: 27px;  width: 32px;}
+.shareicon{background-position: -162px -333px;  height: 27px;  width: 31px;}
 .timestats-icon{ background-position: -102px -146px; height: 42px; width: 44px; float: left; margin-right: 20px;}
 .singlep-icon{ background-position: -88px -200px !important; height: 53px; width: 53px; margin-right: 10px; }
 .twop-icon{ background-position: -139px -200px !important; height: 53px; width: 53px; margin-right: 10px;}
@@ -533,4 +533,10 @@ nav .user.card{
 {
   overflow-x: auto;
   max-height: 300px;
+}
+.no-opponent
+{
+  background-position: -137px -519px;
+  width: 50px;
+  height: 50px;
 }
