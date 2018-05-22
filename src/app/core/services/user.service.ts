@@ -33,8 +33,10 @@ export class UserService {
                     if (u.stats) {
                         user.stats = u.stats;
                     }
+                } else {
+                    this.saveUserProfile(user);
                 }
-                this.saveUserProfile(user);
+
                 return user;
             })
             .mergeMap(u => this.getUserProfileImage(u));
