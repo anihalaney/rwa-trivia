@@ -107,4 +107,4 @@ $dark-theme-border : (
 
 );
 
-@include apply-theme('dark', $dark-theme-background, $dark-theme-text-color, $dark-theme-border, 'test1.png')
+@include apply-theme('dark', $dark-theme-background, $dark-theme-text-color, $dark-theme-border, 'sprite-dark.png')
