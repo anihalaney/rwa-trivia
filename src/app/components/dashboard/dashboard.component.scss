@@ -18,5 +18,19 @@ mat-card>:first-child{
 .no-card
 {
   height: 415px;
+  border-style: dashed;
+  border-width: 2px;
+  display: table;
+  width: 100%;
+  border-radius: 4px;
+}
+.no-card p
+{
+  font-family: 'hindmedium';
+  font-size: 14px;
+  text-align:center; 
+  vertical-align: middle;
+  display: table-cell;  
+   
 }
 
