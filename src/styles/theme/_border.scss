@@ -17,7 +17,7 @@
 	input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .gameOver .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .subscrib-cont input[type="email"],.custom-file-upload{ 
 		border-color: map-get($theme, input);
 	}
-	.viewall:hover,.btn-share:hover{ 
+	.viewall:hover,.btn-share:hover,#currentgame li .innerli:hover{ 
 		border-color: map-get($theme, hover);
 	}
 	.tabbing li.active{ 

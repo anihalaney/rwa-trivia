@@ -176,16 +176,20 @@
 		background-image: url(/assets/images/#{$sprite});
 		background-repeat: no-repeat;
 	}
-	.optionbox input:checked + label .sprite{ 
-		background-color: #fff;
-		background-image: url(/assets/images/#{$sprite});
-		background-repeat: no-repeat;
-	}
+	// .optionbox input:checked + label .sprite{ 
+	// 	background-color: #fff;
+	// 	background-image: url(/assets/images/#{$sprite});
+	// 	background-repeat: no-repeat;
+	// }
 	.csv-error-msg{ 
 		background: map-get($theme,error-message); 
 	}
 	.downloadFile,.rejection-div,.edit-form-div,.add-tag-btn{ 
 		background: map-get($theme, download-btn);
+	}
+	.radiobtn span
+	{
+		background-color: #fff;
 	}
 	
 }
