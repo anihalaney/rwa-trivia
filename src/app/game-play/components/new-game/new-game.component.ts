@@ -37,7 +37,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   allCategoriesSelected: boolean = true;
   uFriends: Array<string>;
   userDict: { [key: string]: User } = {};
-
+  noFriendsStatus: boolean;
   filteredTags$: Observable<string[]>;
 
   friendUserId: string;
@@ -70,6 +70,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
         uFriends.myFriends.map(friend => {
           this.uFriends = [...this.uFriends, ...Object.keys(friend)];
         })
+      } else {
+        this.noFriendsStatus = true;
       }
     });
 
