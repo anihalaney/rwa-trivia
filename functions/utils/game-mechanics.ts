@@ -45,11 +45,12 @@ export class GameMechanics {
         console.log('joinGame');
         return gameService.getAvailableGames().then(games => {
             const gameArr = [];
-            console.log('games', games);
+
             games.forEach(game => {
                 gameArr.push(Game.getViewModel(game.data()))
             });
             const totalGames = gameArr.length;
+            //  console.log('games', gameArr);
             if (totalGames > 0) {
                 const promise = this.pickRandomGame(gameArr, totalGames);
                 return promise.then((gameId) => { return gameId });
@@ -64,7 +65,9 @@ export class GameMechanics {
 
         const randomGameNo = Math.floor(Math.random() * totalGames);
         const game = queriedItems[randomGameNo];
-
+        // console.log('randomGameNo', randomGameNo);
+        // console.log('game', game);
+        // console.log('condition', game.playerIds[0] !== this.userId && game.nextTurnPlayerId === '')
         if (game.playerIds[0] !== this.userId && game.nextTurnPlayerId === '') {
             game.nextTurnPlayerId = this.userId;
             game.GameStatus = GameStatus.JOINED_GAME;
