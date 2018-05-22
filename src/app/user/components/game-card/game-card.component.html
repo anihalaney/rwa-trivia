@@ -7,8 +7,8 @@
           <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
         </div>
         <div class="clear"></div>
-        <a href="#" class="dark">{{user.displayName}}</a>
-        <div class="light" *ngIf="user?.location">{{user.location}}</div>
+        <a href="#" class="dark word-wrap">{{user.displayName}}</a>
+        <div class="light word-wrap" *ngIf="user?.location">{{user.location}}</div>
         <hr>
         <div class="light">Round {{game.stats[user.userId].round}}</div>
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
@@ -40,7 +40,7 @@
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark">{{user.displayName}}</span>
+          <span class="dark word-wrap">{{user.displayName}}</span>
         </div>
         <div class="col-xs-6 " [ngClass]="!user.displayName?'':'div-left-border'">
           <span class="light">No Opponent</span>
@@ -48,7 +48,7 @@
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light" *ngIf="user?.location">{{user.location}}</span>
+          <span class="light word-wrap" *ngIf="user?.location">{{user.location}}</span>
         </div>
         <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
           <span class="light">till now</span>
@@ -108,18 +108,18 @@
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark">{{user.displayName}}</span>
+          <span class="dark word-wrap">{{user.displayName}}</span>
         </div>
         <div class="col-xs-6 " [ngClass]="!user.displayName?'':'div-left-border'">
-          <span class="dark">{{otherUserInfo?.displayName}}</span>
+          <span class="dark word-wrap">{{otherUserInfo?.displayName}}</span>
         </div>
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light" *ngIf="user?.location">{{user.location}}</span>
+          <span class="light word-wrap" *ngIf="user?.location">{{user.location}}</span>
         </div>
         <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
-          <span class="light">{{otherUserInfo?.location}}</span>
+          <span class="light word-wrap">{{otherUserInfo?.location}}</span>
         </div>
       </div>
       <div class="textcenter clearfix ">
@@ -166,7 +166,10 @@
   </div>
 
   <!-- <div *ngIf="!myTurn" class="opponent">Waiting for Opponent</div> -->
-  <div *ngIf="!myTurn" class="opponent playnow">
+  <div *ngIf="!myTurn && game.playerIds.length == 1" class="opponent playnow">
     <button class="btn-share" type="button">Waiting for Opponent</button>
+  </div>
+  <div *ngIf="!myTurn && game.playerIds.length > 1" class="opponent playnow">
+    <button class="btn-share" type="button">Opponent's Turn</button>
   </div>
 </div>
