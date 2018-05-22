@@ -10,7 +10,7 @@
     <div></div>
   </mat-card-title>
   <mat-card-content class="textcenter">
-    <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode === 0">
+    <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode === PlayerMode.Single">
       <div class="yourimg">
         <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
       </div>
