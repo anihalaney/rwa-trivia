@@ -31,9 +31,9 @@
                             <label for="tp-radio2">
                                 <span class="sprite friendsp-icon"></span>With Friends</label>
                             <input type="radio" id="tp-radio3" formControlName="opponentType" value="2">
-                            <label for="tp-radio3">
-                                <span class="sprite computerp-icon"></span>With Computer</label>
-                            <div class="withfriends" style="display: none;">
+                            <!-- <label for="tp-radio3">
+                                <span class="sprite computerp-icon"></span>With Computer</label> -->
+                            <div class="withfriends">
                                 <ul class="friendsslider" *ngIf="uFriends && uFriends.length>0">
                                     <li *ngFor="let friendId of uFriends; let i=index">
                                         <input type="radio" id="friends{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
@@ -51,6 +51,10 @@
                                         </label>
                                     </li>
                                 </ul>
+                                <span *ngIf="noFriendsStatus">I do not have any friends, invite your friends using link
+                                    <a [routerLink]="['/my/invite-friends']">
+                                        Invite Friends</a>
+                                </span>
                             </div>
                         </div>
                     </div>
