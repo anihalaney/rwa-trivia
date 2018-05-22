@@ -29,11 +29,14 @@ export class UserService {
         return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
             .map(u => {
                 if (u) {
-                    user = { ...u, ...user, };
+                    user = { ...u, ...user };
                     if (u.stats) {
                         user.stats = u.stats;
                     }
+                } else {
+                    this.saveUserProfile(user);
                 }
+
                 return user;
             })
             .mergeMap(u => this.getUserProfileImage(u));
