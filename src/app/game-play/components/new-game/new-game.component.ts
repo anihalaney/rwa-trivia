@@ -69,7 +69,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
           this.uFriends = [...this.uFriends, ...Object.keys(friend)];
-        })
+        });
+        this.noFriendsStatus = false;
       } else {
         this.noFriendsStatus = true;
       }
