@@ -40,7 +40,7 @@
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark word-wrap">{{user.displayName}}</span>
+          <span class="dark " [ngClass]="user?.displayName.length>9?'word-wrap':''">{{user.displayName}}</span>
         </div>
         <div class="col-xs-6 " [ngClass]="!user.displayName?'':'div-left-border'">
           <span class="light">No Opponent</span>
@@ -48,7 +48,7 @@
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light word-wrap" *ngIf="user?.location">{{user.location}}</span>
+          <span class="light" [ngClass]="user?.location.length>9?'word-wrap':''" *ngIf="user?.location">{{user.location}}</span>
         </div>
         <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
           <span class="light">till now</span>
@@ -107,19 +107,19 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark word-wrap">{{user.displayName}}</span>
+        <div class="col-xs-6" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
+          <span class="dark" [ngClass]="user?.displayName.length>9?'word-wrap':''">{{user.displayName}}</span>
         </div>
-        <div class="col-xs-6 " [ngClass]="!user.displayName?'':'div-left-border'">
-          <span class="dark word-wrap">{{otherUserInfo?.displayName}}</span>
+        <div class="col-xs-6 " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
+          <span class="dark" [ngClass]="otherUserInfo?.displayName.length>9?'word-wrap':''">{{otherUserInfo?.displayName}}</span>
         </div>
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light word-wrap" *ngIf="user?.location">{{user.location}}</span>
+          <span class="light" [ngClass]="user?.location.length>9?'word-wrap':''" *ngIf="user?.location">{{user.location}}</span>
         </div>
         <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
-          <span class="light word-wrap">{{otherUserInfo?.location}}</span>
+          <span class="light " [ngClass]="otherUserInfo?.location.length>9?'word-wrap':''">{{otherUserInfo?.location}}</span>
         </div>
       </div>
       <div class="textcenter clearfix ">
