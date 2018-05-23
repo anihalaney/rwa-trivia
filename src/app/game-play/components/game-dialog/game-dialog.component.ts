@@ -53,6 +53,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   showLoader = false;
   showWinBadge = false;
   isCorrectAnswer = false;
+  turnFlag: boolean;
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -158,7 +159,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   setTurnStatusFlag() {
-    const turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
+    this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
       this.game.GameStatus === GameStatus.RESTARTED ||
       ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
         this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
@@ -166,10 +167,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.game.GameStatus === GameStatus.JOINED_GAME)
         && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
     this.continueNext = (this.questionAnswered) ? true : false;
-    this.showContinueBtn = (this.questionAnswered && !turnFlag) ? true : false;
+    this.showContinueBtn = (this.questionAnswered && !this.turnFlag) ? true : false;
     this.checkGameOver();
     if (!this.gameOver) {
-      if (!turnFlag) {
+      if (!this.turnFlag) {
 
         if (!this.currentQuestion) {
           this.getNextQuestion();
@@ -184,15 +185,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           this.initializeOtherUser();
         }
       } else {
-        Observable.timer(2000).take(1).subscribe(t => {
-
-          this.store.dispatch(new gameplayactions.ResetCurrentGame());
-          this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-          this.currentQuestion = undefined;
-          this.continueNext = false;
-          this.router.navigate(['/dashboard']);
-        });
-        Utils.unsubscribe([this.timerSub]);
+        this.showContinueBtn = true;
       }
     }
   }
@@ -233,16 +226,26 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   continueClicked($event) {
-    this.questionAnswered = false;
-    this.showContinueBtn = false;
-    this.continueNext = false;
-    this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-    this.checkGameOver();
-    if (!this.gameOver) {
+    if (this.turnFlag) {
+      this.store.dispatch(new gameplayactions.ResetCurrentGame());
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.currentQuestion = undefined;
+      this.continueNext = false;
+      this.router.navigate(['/dashboard']);
 
-      this.getLoader();
-      this.getNextQuestion();
+    } else {
+      this.questionAnswered = false;
+      this.showContinueBtn = false;
+      this.continueNext = false;
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.checkGameOver();
+      if (!this.gameOver) {
+
+        this.getLoader();
+        this.getNextQuestion();
+      }
     }
+
 
   }
 
