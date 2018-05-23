@@ -6,7 +6,12 @@
 
     <!--- Note that these columns can be defined in any order.
                     The actual rendered columns are set as a property on the row definition" -->
-
+    <ng-container cdkColumnDef="archive">
+      <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
+      <mat-cell *cdkCellDef="let row" class="formfield" (change)="checkedRow(row.id)" >
+        <input type="checkbox" [checked]="archivedArray[row.id]">
+      </mat-cell>
+    </ng-container>
     <ng-container cdkColumnDef="uploadDate">
       <mat-header-cell *cdkHeaderCellDef mat-sort-header="date">Date Uploaded</mat-header-cell>
       <mat-cell class="col-chkbox bulk-summary-table-cell" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>

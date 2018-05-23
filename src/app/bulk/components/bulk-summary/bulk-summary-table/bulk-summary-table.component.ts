@@ -26,7 +26,7 @@ export class BulkSummaryTableComponent implements OnInit {
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
 
-  displayedColumns = ['uploadDate', 'fileName', 'category',
+  displayedColumns = ['archive', 'uploadDate', 'fileName', 'category',
     'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];
 
   @Input() bulkSummaryDetailPath: String;
@@ -34,6 +34,7 @@ export class BulkSummaryTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @Output() showBulkUploadBtn = new EventEmitter<String>();
+  archivedArray = [];
 
   constructor(
     private store: Store<AppState>,
@@ -107,6 +108,16 @@ export class BulkSummaryTableComponent implements OnInit {
   downloadFile(bulkUploadFileInfo: BulkUploadFileInfo) {
     this.store.dispatch(new bulkActions.LoadBulkUploadFileUrl({ bulkUploadFileInfo: bulkUploadFileInfo }));
 
+  }
+  checkedRow(bulkId) {
+    const isCheck = this.archivedArray.filter(item => item === bulkId)[0];
+    if (isCheck !== undefined) {
+      this.archivedArray.splice(this.archivedArray.indexOf(bulkId), 1);
+    } else {
+      this.archivedArray.push(bulkId);
+    }
+
+    console.log(JSON.stringify(this.archivedArray));
   }
 
 
