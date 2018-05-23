@@ -61,7 +61,7 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
 
     if (afterEventData !== beforeEventData) {
         console.log('data changed');
-        const game: Game = afterEventData;
+        const game: Game = Game.getViewModel(afterEventData);
         if (game.gameOver) {
             const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
             gameLeaderBoardStats.getGameUsers(game);

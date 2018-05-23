@@ -24,7 +24,9 @@
           <game-card [game]="game" [userDict]="userDict"></game-card>
         </li>
         <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
-          <img class="no-card" src="/assets/images/blank_card.png">
+          <div class="no-card">
+            <p class="light">No active game</p>
+          </div>
         </li>
         <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
           <a href="#" class="innerli textcenter">
@@ -35,7 +37,7 @@
     </div>
 
     <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
-      <a  class="viewall" (click)="displayMoreGames()">view more</a>
+      <a class="viewall" (click)="displayMoreGames()">view more</a>
     </div>
 
 

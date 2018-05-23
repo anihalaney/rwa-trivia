@@ -1,5 +1,5 @@
 @mixin theme-text-color($selected-theme-name,$theme) {
-	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.bulk-summary-question-table-cell,.matStepLabel,.message,.sub-message,.field-caption,.social-name{ 
+	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.bulk-summary-question-table-cell,.matStepLabel,.message,.sub-message,.field-caption,.btn-share,.text,.text-loading,.mat-expansion-panel-header-title, .social-nam{ 
 		color: map-get($theme, primary);
 	}
 	.question-list li label{ 
@@ -36,7 +36,7 @@
 	h1 + p{ 
 		color: map-get($theme, heading-alt);
 	}
-	.gameplay p{ 
+	.gameplay p,.win-text{ 
 		color: map-get($theme, heading-secondary);
 	}
 	.tabbing li.active, .form-group input:focus,.form-group input:valid{ 

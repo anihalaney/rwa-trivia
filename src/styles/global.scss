@@ -282,7 +282,7 @@ textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize:
 //.optionbox input:checked + label .sprite{ background:#fff url(/assets/images/sprite.png) no-repeat;}
 .settingicon{ background-position: -1px -1px; height: 15px; width: 15px; transition: 0.3s ease-in}
 .logouticon{ background-position: -18px 0px; height: 16px; width: 11px;}
-.mapicon{ background-position: -31px 0; width: 11px; height: 15px; margin-right: 12px; vertical-align: -3px }
+.mapicon{ background-position: -31px 0; width: 12px; height: 15px; margin-right: 12px; vertical-align: -3px }
 .architicon{ background-position: 0 -22px; width: 29px; height: 33px; margin-right: 12px; }
 .rogrammingicon{ background-position: -35px -22px; width: 29px; height: 33px; margin-right: 12px; }
 .playedicon{ background-position: 0 -63px; }
@@ -302,7 +302,7 @@ textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize:
 .commenticon{background-position:0px -208px; height:20px; width: 20px; margin:0 10px 0 13px }
 .viewicon{background-position:-21px -208px; height:12px; width: 20px; margin-right: 10px; vertical-align:-2px}
 // .shareicon{background-position:-42px -208px; height:20px; width: 20px; margin-right: 10px}
-.shareicon{background-position: -162px -333px;  height: 27px;  width: 32px;}
+.shareicon{background-position: -162px -333px;  height: 27px;  width: 31px;}
 .timestats-icon{ background-position: -102px -146px; height: 42px; width: 44px; float: left; margin-right: 20px;}
 .singlep-icon{ background-position: -88px -200px !important; height: 53px; width: 53px; margin-right: 10px; }
 .twop-icon{ background-position: -139px -200px !important; height: 53px; width: 53px; margin-right: 10px;}
@@ -507,15 +507,19 @@ nav .user.card{
   overflow: hidden !important;
 }
 
-.score1{ background-position: -26px -327px; width: 27px; height: 33px;}
-.score2{ background-position: -55px -327px; width: 27px; height: 33px;}
-.score3{ background-position: 1px -327px; width: 27px; height: 33px;}
-.score4{ background-position: -82px -327px; width: 27px; height: 33px;}
-.score5{ background-position: -82px -327px; width: 27px; height: 33px;}
+.score1{ background-position: -75px -362px; width: 27px; height: 33px;}
+.score2{ background-position: -102px -362px; width: 27px; height: 33px;}
+.score3{ background-position: -132px -362px; width: 27px; height: 33px;}
+.score4{ background-position: -75px -391px; width: 27px; height: 33px;}
+.score5{ background-position: -103px -391px; width: 27px; height: 33px;}
 .score0{ background-position: -82px -327px; width: 27px; height: 33px;}
 
 
-.begde1{ background-position: -5px -359px; width: 27px; height: 33px;}
+.score1-L{ background-position: -4px -456px; width: 27px; height: 33px;}
+.score2-L{ background-position: -6px -360px; width: 27px; height: 33px;}
+.score3-L{ background-position: -70px -455px; width: 27px; height: 33px;}
+.score4-L{ background-position: -4px -521px; width: 27px; height: 33px;}
+.score5-L{ background-position: -69px -520px; width: 27px; height: 33px;}
   
 
 .thumb-up{ background-position: -117px -324px; width: 44px; height: 33px;}
@@ -529,4 +533,10 @@ nav .user.card{
 {
   overflow-x: auto;
   max-height: 300px;
+}
+.no-opponent
+{
+  background-position: -138px -519px;
+  width: 50px;
+  height: 50px;
 }
