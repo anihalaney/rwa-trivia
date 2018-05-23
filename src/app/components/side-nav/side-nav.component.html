@@ -1,7 +1,7 @@
 <profile-card [user]="user"></profile-card>
 <recent-games [userDict]="userDict"></recent-games>
 <div class="card playwith">
-  <a [routerLink]="['/my/questions']">
+  <a (click)="navigateUrl()">
     <span class="sprite myqestion"></span>
     <span class="playtext">Submit
       <span>Questions</span>
