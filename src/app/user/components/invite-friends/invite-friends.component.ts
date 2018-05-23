@@ -19,7 +19,7 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
   dialogRef: MatDialogRef<InviteFriendsDialogComponent>;
   displayedColumns = ['friends', 'game_played',
     'won', 'lost'];
-  uFriends: Array<string>;
+  uFriends: Array<any>;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   dataSource: any;
@@ -37,9 +37,10 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
     this.store.select(appState.userState).select(s => s.userFriends).subscribe(uFriends => {
       if (uFriends !== null) {
         this.uFriends = [];
-        uFriends.myFriends.map(friend => {
+        uFriends.myFriends.map((friend, index) => {
           this.store.dispatch(this.userActions.loadOtherUserProfile(Object.keys(friend)[0]));
-          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
+          this.uFriends.push(friend[Object.keys(friend)[0]]);
+          this.uFriends[index].userId = Object.keys(friend)[0];
         });
         this.dataSource = new MatTableDataSource<any>(this.uFriends);
         this.setPaginatorAndSort();
