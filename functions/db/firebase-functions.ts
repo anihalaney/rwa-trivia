@@ -1,7 +1,6 @@
 const functionFireBaseClient = require('../db/firebase-client');
 const functionFireStoreClient = functionFireBaseClient.firestore();
 const functions = require('firebase-functions');
-const TinyURL = require('tinyurl');
 const fs = require('fs');
 const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
@@ -106,12 +105,12 @@ exports.onInvitationWrite = functions.firestore.document('/invitations/{invitati
 
     if (afterEventData !== beforeEventData) {
         const invitation: Invitation = afterEventData;
-        TinyURL.shorten(`${TriggerConstants.hostURL}${invitation.id}`, (shortURL) => {
-            const htmlContent = `<a href="${shortURL}">Accept Invitation</a>`;
-            const mail: MailClient = new MailClient(invitation.email, TriggerConstants.invitationMailSubject,
-                TriggerConstants.invitationTxt, htmlContent);
-            mail.sendMail();
-        });
+        const url = `${TriggerConstants.hostURL}${invitation.id}`;
+        const htmlContent = `<a href="${url}">Accept Invitation</a>`;
+        const mail: MailClient = new MailClient(invitation.email, TriggerConstants.invitationMailSubject,
+            TriggerConstants.invitationTxt, htmlContent);
+        mail.sendMail();
+
     }
 
 });
