@@ -80,6 +80,11 @@ export class LoginComponent implements OnInit {
         ).then((user: any) => {
           //success
           this.dialogRef.close();
+          if(user && !user.emailVerified){
+            user.sendEmailVerification().then(function(){
+              console.log("email verification sent to user");
+            });
+          }
         }, (error: Error) => {
           //error
           console.log(error);
