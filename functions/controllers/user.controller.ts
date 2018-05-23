@@ -25,7 +25,7 @@ exports.getUserById = (req, res) => {
         user.location = (dbUser && dbUser.location) ? dbUser.location : '';
         user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
         user.userId = userId;
-        user.stats = (dbUser.stats) ? dbUser.stats : new UserStats();
+
         console.log('userinfo--->', user);
         res.send(user);
     });

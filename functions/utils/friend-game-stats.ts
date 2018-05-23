@@ -34,6 +34,9 @@ export class FriendGameStats {
                 let index = 0;
                 let matchedIndex: number;
                 let friendsMetadataMap: { [key: string]: FriendsMetadata };
+                //  console.log('found friends', friends);
+                //  console.log('userId', userId);
+                //  console.log('otherUserId', otherUserId);
                 friends.myFriends.map((friendMetaDataMap) => {
                     Object.keys(friendMetaDataMap).map((friendUserId) => {
                         if (friendUserId === otherUserId) {
@@ -44,6 +47,7 @@ export class FriendGameStats {
                     index++;
                 });
                 const friendsMetadata: FriendsMetadata = friendsMetadataMap[otherUserId];
+                //   console.log('friendsMetadata', friendsMetadata);
                 friendsMetadata.gamePlayed = (friendsMetadata.gamePlayed) ? friendsMetadata.gamePlayed + 1 : 1;
                 friendsMetadata.wins = (friendsMetadata.wins) ? friendsMetadata.wins : 0;
                 friendsMetadata.losses = (friendsMetadata.losses) ? friendsMetadata.losses : 0;
@@ -51,6 +55,7 @@ export class FriendGameStats {
                 friendsMetadata.losses = (game.winnerPlayerId !== otherUserId) ? friendsMetadata.losses + 1 : friendsMetadata.losses;
                 friendsMetadataMap[otherUserId] = { ...friendsMetadata };
                 friends.myFriends[matchedIndex] = friendsMetadataMap;
+                //  console.log('friends', friends);
                 return friendGameStatService.setFriend({ ...friends }, userId).then((id) => {
                     return `Friend ${userId} Stat updated`;
                 });
