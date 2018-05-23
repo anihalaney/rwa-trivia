@@ -7,10 +7,14 @@ const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 
-import { Game, Question, Category, User, UserStatConstants, Invitation, TriggerConstants } from '../../src/app/model';
+import {
+    Game, Question, Category, User, UserStatConstants, Invitation,
+    TriggerConstants, PlayerMode, OpponentType
+} from '../../src/app/model';
 import { ESUtils } from '../utils/ESUtils';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
+import { FriendGameStats } from '../utils/friend-game-stats';
 import { MailClient } from '../utils/mail-client';
 
 // Take the text parameter passed to this HTTP endpoint and insert it into the
@@ -52,7 +56,7 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
 
 exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate((change, context) => {
 
-    const beforeEventData = change.after.data();
+    const beforeEventData = change.before.data();
     const afterEventData = change.after.data();
 
     if (afterEventData !== beforeEventData) {
@@ -61,15 +65,22 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
         if (game.gameOver) {
             const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
             gameLeaderBoardStats.getGameUsers(game);
+            if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
+                Number(game.gameOptions.opponentType) === OpponentType.Friend) {
+                const friendGameStats: FriendGameStats = new FriendGameStats();
+                friendGameStats.calculateFriendsGameState(game).then((status) => {
+                    console.log('status', status);
+                });
+            }
+
         }
 
     }
-
 });
 
 exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate((change, context) => {
 
-    const beforeEventData = change.after.data();
+    const beforeEventData = change.before.data();
     const afterEventData = change.after.data();
 
     if (afterEventData !== beforeEventData) {
@@ -90,7 +101,7 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate(
 
 exports.onInvitationWrite = functions.firestore.document('/invitations/{invitationId}').onWrite((change, context) => {
 
-    const beforeEventData = change.after.data();
+    const beforeEventData = change.before.data();
     const afterEventData = change.after.data();
 
     if (afterEventData !== beforeEventData) {
