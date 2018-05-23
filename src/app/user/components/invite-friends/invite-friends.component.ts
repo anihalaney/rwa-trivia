@@ -46,7 +46,6 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
         this.setPaginatorAndSort();
       }
     });
-
   }
 
   ngOnInit() {
