@@ -17,11 +17,11 @@
     <ng-container cdkColumnDef="friends">
       <mat-header-cell *cdkHeaderCellDef>Friends</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell" *cdkCellDef="let row">
-        <div class="profile" *ngIf="userDict[row]?.profilePictureUrl">
-          <img [src]="userDict[row]?.profilePictureUrl">
+        <div class="profile" *ngIf="userDict[row.userId]?.profilePictureUrl">
+          <img [src]="userDict[row.userId]?.profilePictureUrl">
         </div>
         <div class="display-name">
-          <label *ngIf="userDict[row]?.displayName">{{userDict[row]?.displayName}}</label>
+          <label *ngIf="userDict[row.userId]?.displayName">{{userDict[row.userId]?.displayName}}</label>
         </div>
       </mat-cell>
     </ng-container>
@@ -29,7 +29,8 @@
     <ng-container cdkColumnDef="game_played">
       <mat-header-cell *cdkHeaderCellDef>Game Played</mat-header-cell>
       <mat-cell class="col-chkbox cursor friend-list-table-cell " *cdkCellDef="let row">
-        <label *ngIf="userDict[row]?.stats">{{userDict[row]?.stats.gamePlayed}}</label>
+        <label *ngIf="row?.gamePlayed">{{row?.gamePlayed}}</label>
+        <label *ngIf="!row?.gamePlayed">0</label>
 
       </mat-cell>
     </ng-container>
@@ -37,7 +38,8 @@
     <ng-container cdkColumnDef="won">
       <mat-header-cell *cdkHeaderCellDef>Won</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell success" *cdkCellDef="let row">
-        <label *ngIf="userDict[row]?.stats">{{userDict[row]?.stats.wins}} </label>
+        <label *ngIf="row?.wins">{{row?.wins}} </label>
+        <label *ngIf="!row?.wins">0 </label>
 
       </mat-cell>
     </ng-container>
@@ -45,7 +47,8 @@
     <ng-container cdkColumnDef="lost">
       <mat-header-cell *cdkHeaderCellDef>Lost</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell label" *cdkCellDef="let row">
-        <label *ngIf="userDict[row]?.stats">{{userDict[row]?.stats.losses}}</label>
+        <label *ngIf="row?.losses">{{row?.losses}}</label>
+        <label *ngIf="!row?.losses">0</label>
 
       </mat-cell>
     </ng-container>
