@@ -17,7 +17,9 @@ export enum BulkActionTypes {
     UPDATE_QUESTION = '[Bulk] UpdateQuestion',
     UPDATE_BULK_UPLOAD = '[Bulk] UpdateBulkUpload',
     APPROVE_QUESTION = '[Bulk] ApproveQuestion',
-    ADD_BULK_QUESTIONS = '[Bulk] AddBulkQuestion'
+    ADD_BULK_QUESTIONS = '[Bulk] AddBulkQuestion',
+    ARCHIVE_BULK_UPLOAD = '[Bulk] ArchiveBulkUpload',
+    ARCHIVE_BULK_UPLOAD_SUCCESS = '[Bulk] ArchiveBulkUploadSuccess'
 }
 
 
@@ -108,6 +110,18 @@ export class AddBulkQuestions implements Action {
     constructor(public payload: { bulkUpload: BulkUpload }) { }
 }
 
+// archive bulk upload
+export class ArchiveBulkUpload implements Action {
+    readonly type = BulkActionTypes.ARCHIVE_BULK_UPLOAD;
+    constructor(public payload: { archiveArray: BulkUploadFileInfo[], user: User }) { }
+}
+
+// archive bulk upload Success
+export class ArchiveBulkUploadSuccess implements Action {
+    readonly type = BulkActionTypes.ARCHIVE_BULK_UPLOAD_SUCCESS;
+    payload = null;
+}
+
 
 export type BulkActions
     = LoadBulkUpload
@@ -124,3 +138,5 @@ export type BulkActions
     | UpdateBulkUpload
     | ApproveQuestion
     | AddBulkQuestions
+    | ArchiveBulkUpload
+    | ArchiveBulkUploadSuccess

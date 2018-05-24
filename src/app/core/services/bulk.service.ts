@@ -6,7 +6,7 @@ import '../../rxjs-extensions';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Category } from '../../model/category';
-import { BulkUploadFileInfo, User } from '../../model';
+import { BulkUploadFileInfo, User, BulkUpload } from '../../model';
 
 @Injectable()
 export class BulkService {
@@ -33,6 +33,8 @@ export class BulkService {
         console.log(error);
         return Observable.of(null);
       });
+
+
   }
 
   // get BulkUpload by Id
@@ -59,5 +61,22 @@ export class BulkService {
     const filePath = `bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadFileInfo.id}-${bulkUploadFileInfo.fileName}`;
     const ref = this.storage.ref(filePath);
     return ref.getDownloadURL().map(url => url);
+  }
+
+  archiveBulkUpload(archiveArray: BulkUploadFileInfo[], user: User): Observable<boolean> {
+    const isAdmin = user.roles.admin;
+    let obj = {};
+    if (!isAdmin) {
+      obj = { 'isUserArchived': true };
+    } else {
+      obj = { 'isAdminArchived': true };
+    }
+    const upload = this.db.firestore.batch();
+    archiveArray.map((bulkInfo) => {
+      const itemDoc = this.db.firestore.collection('bulk_uploads').doc(bulkInfo.id);
+      upload.update(itemDoc, obj);
+    })
+    upload.commit();
+    return Observable.of(true);
   }
 }

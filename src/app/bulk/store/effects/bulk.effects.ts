@@ -116,6 +116,16 @@ export class BulkEffects {
             return empty();
         })
         );
+    // for add Bulk Questions
+    @Effect()
+    archiveUserBulkUpload$ = this.actions$
+        .ofType(BulkActionTypes.ARCHIVE_BULK_UPLOAD)
+        .pipe(
+        switchMap((action: bulkActions.ArchiveBulkUpload) =>
+            this.bulkService.archiveBulkUpload(action.payload.archiveArray, action.payload.user).pipe(
+                map((flag: boolean) => new bulkActions.ArchiveBulkUploadSuccess())
+            )
+        ));
 
     constructor(
         private actions$: Actions,

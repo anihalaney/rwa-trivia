@@ -8,7 +8,7 @@
                     The actual rendered columns are set as a property on the row definition" -->
     <ng-container cdkColumnDef="archive">
       <mat-header-cell *cdkHeaderCellDef></mat-header-cell>
-      <mat-cell *cdkCellDef="let row" class="formfield" (change)="checkedRow(row.id)" >
+      <mat-cell *cdkCellDef="let row" class="formfield" (change)="checkedRow(row)">
         <input type="checkbox" [checked]="archivedArray[row.id]">
       </mat-cell>
     </ng-container>
