@@ -26,6 +26,6 @@ export class SideNavComponent implements OnDestroy {
     Utils.unsubscribe(this.subs);
   }
   navigateUrl() {
-    this.router.navigate(['my/questions', this.user.userId]);
+    this.router.navigate(['my/questions']);
   }
 }
