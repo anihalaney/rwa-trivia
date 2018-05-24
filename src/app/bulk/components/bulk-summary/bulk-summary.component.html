@@ -1,15 +1,17 @@
 <div>
   <div class="row">
-    <div class="pageheading col-md-9 col-xs-12 hidden-xs">{{bulkSummaryTitle}}</div>
+    <div class="pageheading col-md-5 col-xs-12 hidden-xs">{{bulkSummaryTitle}}</div>
+    <div class="pageheading col-md-4 col-xs-6 hidden-xs align-right">
+      <button class="btn-share" type="button" *ngIf="isArchive" (click)="archiveData()"> Archive </button>
+      <!-- <button class="btn startupload"> Show Archived </button> -->
+    </div>
     <div class="col-md-3 col-xs-6 align-right">
       <button class="btn startupload" *ngIf="showSummaryTable" [routerLink]="['./upload']"> Start New Bulk Upload </button>
       <button class="btn startupload" *ngIf="!showSummaryTable" (click)="backToSummary()"> Back to Summary </button>
       <!-- <a [routerLink]="['./upload']" class="pageheading startupload font-size-16">Start New Bulk Upload</a> -->
     </div>
   </div>
-  <bulk-summary-table 
-  [bulkSummaryDetailPath]="bulkSummaryDetailPath"
-  [showSummaryTable]="showSummaryTable" 
-  (showBulkUploadBtn)="changeTableHeading($event)">
+  <bulk-summary-table [bulkSummaryDetailPath]="bulkSummaryDetailPath" [showSummaryTable]="showSummaryTable" (showBulkUploadBtn)="changeTableHeading($event)"
+    (showArchive)="showArchiveBtn($event)" [isArchiveBtnClicked]="isArchiveBtnClicked">
   </bulk-summary-table>
 </div>

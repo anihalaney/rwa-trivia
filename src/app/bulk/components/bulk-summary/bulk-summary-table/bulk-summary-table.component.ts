@@ -15,7 +15,7 @@ import * as bulkActions from '../../../store/actions';
   templateUrl: './bulk-summary-table.component.html',
   styleUrls: ['./bulk-summary-table.component.scss']
 })
-export class BulkSummaryTableComponent implements OnInit {
+export class BulkSummaryTableComponent implements OnInit, OnChanges {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -26,6 +26,7 @@ export class BulkSummaryTableComponent implements OnInit {
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
 
+
   displayedColumns = ['archive', 'uploadDate', 'fileName', 'category',
     'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];
 
@@ -34,6 +35,8 @@ export class BulkSummaryTableComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @Output() showBulkUploadBtn = new EventEmitter<String>();
+  @Output() showArchive = new EventEmitter<Boolean>();
+  @Input() isArchiveBtnClicked: boolean;
   archivedArray = [];
 
   constructor(
@@ -55,11 +58,22 @@ export class BulkSummaryTableComponent implements OnInit {
       }
     });
 
+    this.store.select(bulkState).select(s => s.bulkUploadArchiveStatus).subscribe((state) => {
+      if (state === 'ARCHIVED') {
+        this.archivedArray = [];
+      }
+    });
+
   }
 
   ngOnInit() {
     if (this.bulkSummaryDetailPath && this.showSummaryTable) {
       this.loadBulkSummaryData();
+    }
+  }
+  ngOnChanges() {
+    if (this.isArchiveBtnClicked) {
+      this.store.dispatch(new bulkActions.ArchiveBulkUpload({ archiveArray: this.archivedArray, user: this.user }));
     }
   }
 
@@ -109,12 +123,17 @@ export class BulkSummaryTableComponent implements OnInit {
     this.store.dispatch(new bulkActions.LoadBulkUploadFileUrl({ bulkUploadFileInfo: bulkUploadFileInfo }));
 
   }
-  checkedRow(bulkId) {
-    const isCheck = this.archivedArray.filter(item => item === bulkId)[0];
+  checkedRow(bulkObj) {
+    const isCheck = this.archivedArray.filter(item => item === bulkObj)[0];
     if (isCheck !== undefined) {
-      this.archivedArray.splice(this.archivedArray.indexOf(bulkId), 1);
+      this.archivedArray.splice(this.archivedArray.indexOf(bulkObj), 1);
     } else {
-      this.archivedArray.push(bulkId);
+      this.archivedArray.push(bulkObj);
+    }
+    if (this.archivedArray.length > 0) {
+      this.showArchive.emit(true);
+    } else {
+      this.showArchive.emit(false);
     }
 
     console.log(JSON.stringify(this.archivedArray));
