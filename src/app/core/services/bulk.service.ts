@@ -27,7 +27,13 @@ export class BulkService {
 
   // get Bulk Upload by user Id
   getUserBulkUpload(user: User): Observable<BulkUploadFileInfo[]> {
-    return this.db.collection('/bulk_uploads', ref => ref.where('created_uid', '==', user.userId))
+    let key = '';
+    if (user.roles.admin) {
+      key = 'isAdminArchived';
+    } else {
+      key = 'isUserArchived';
+    }
+    return this.db.collection('/bulk_uploads', ref => ref.where('created_uid', '==', user.userId).where(key, '==', false))
       .valueChanges()
       .catch(error => {
         console.log(error);

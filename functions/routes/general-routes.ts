@@ -18,6 +18,7 @@ router.get('/es/check', generalAuth.adminOnly, generalController.testES);
 router.get('/user/stat', generalAuth.adminOnly, generalController.generateUsersStat);
 router.get('/leaderboard/stat', generalAuth.adminOnly, generalController.generateLeaderBoardStat);
 router.get('/user/contribution/stat', generalAuth.adminOnly, generalController.generateUserContributionStat);
+router.get('/bulkupload/update', generalController.updateBulkUploadCollection);
 
 
 module.exports = router;
