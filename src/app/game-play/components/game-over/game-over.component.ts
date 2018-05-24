@@ -32,7 +32,6 @@ export class GameOverComponent implements OnInit {
   disableRematchBtn = false;
   PlayerMode = PlayerMode;
 
-  
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }

@@ -10,8 +10,7 @@
     "express": "4.16.2",
     "firebase-admin": "^5.12.0",
     "firebase-functions": "^1.0.1",
-    "nodemailer": "^4.6.4",
-    "tinyurl": "^1.1.2"
+    "nodemailer": "^4.6.4"
   },
   "private": true,
   "devDependencies": {
