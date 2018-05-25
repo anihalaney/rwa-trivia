@@ -29,11 +29,14 @@ export class UserService {
         return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
             .map(u => {
                 if (u) {
-                    user = { ...u, ...user, };
+                    user = { ...u, ...user };
                     if (u.stats) {
                         user.stats = u.stats;
                     }
+                } else {
+                    this.saveUserProfile(user);
                 }
+
                 return user;
             })
             .mergeMap(u => this.getUserProfileImage(u));
@@ -91,7 +94,7 @@ export class UserService {
     }
 
     checkInvitationToken(obj: any): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/makeFriends`;
+        const url = `${CONFIG.functionsUrl}/app/friend`;
         return this.http.post<any>(url, obj);
     }
 

@@ -2,12 +2,14 @@ mat-card {
   padding-left: 0px;
   padding-right: 0px;
 }
-// mat-card-content {
-//   margin-top: 100px;
-// }
+mat-card-content {
+  // margin-top: 5%;
+  margin-bottom: 0px;
+}
 .mat-card-title
 {
   display: block !important;
+  margin-top: 5%;
 }
 .title
 {
@@ -129,16 +131,7 @@ ul li:last-child{ border-bottom: 0 }
 
    margin-right: 0px; 
 }
-.mat-card-content {
-  display: block;
-  margin-bottom: 0px; 
-}
-.share-content
-{
-  padding-top: 3%;
-}
-.spacing
-{
-  padding-right: 13%;
-  display: initial;
-}
+// .mat-card-actions, .mat-card-content, .mat-card-subtitle, .mat-card-title {
+//   display: block;
+//   /* margin-bottom: 16px; */
+// }

@@ -37,7 +37,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   allCategoriesSelected: boolean = true;
   uFriends: Array<string>;
   userDict: { [key: string]: User } = {};
-
+  noFriendsStatus: boolean;
   filteredTags$: Observable<string[]>;
 
   friendUserId: string;
@@ -69,9 +69,15 @@ export class NewGameComponent implements OnInit, OnDestroy {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
           this.uFriends = [...this.uFriends, ...Object.keys(friend)];
-        })
+        });
+        this.noFriendsStatus = false;
+      } else {
+        this.noFriendsStatus = true;
       }
     });
+
+
+
   }
 
   ngOnInit() {
@@ -80,12 +86,6 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
-    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameObj => {
-
-      //  console.log("Navigating to game: " + gameObj['gameId']);
-      this.router.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-    });
 
 
 
@@ -186,7 +186,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     let form: FormGroup = this.fb.group({
       playerMode: [gameOptions.playerMode, Validators.required],
-      opponentType: [{ value: gameOptions.opponentType, disabled: true }],
+      opponentType: [gameOptions.opponentType],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
       tagsArray: tagsFA,

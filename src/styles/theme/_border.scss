@@ -2,7 +2,7 @@
 	.card{ 
 		border-color: map-get($theme, card);
 	}
-	.recentlygames li, .viewall, .navview #statis li, .navview #graph li, .blog-social, .time-stats, .pcategories > .col-sm-9, .tag, .btnbox, .form-group .bar, .questionstatus .tab-content > ul > li, nav .card,.question-section,.report-question-section,.social-icons-gameOver,.social-icons-blog,.close-div{ 
+	.recentlygames li, .viewall, .navview #statis li, .navview #graph li, .blog-social, .time-stats, .pcategories > .col-sm-9, .tag, .btnbox, .form-group .bar, .questionstatus .tab-content > ul > li, nav .card,.question-section,.report-question-section,.social-icons,.close-div,.no-card,.social-icons-gameOver,.social-icons-blog,.close-div{ 
 		border-color: map-get($theme, default);
 	}
 	.viewall:after{ 
@@ -17,7 +17,7 @@
 	input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .gameOver .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .subscrib-cont input[type="email"],.custom-file-upload{ 
 		border-color: map-get($theme, input);
 	}
-	.viewall:hover{ 
+	.viewall:hover,.btn-share:hover,#currentgame li .innerli:hover{ 
 		border-color: map-get($theme, hover);
 	}
 	.tabbing li.active{ 

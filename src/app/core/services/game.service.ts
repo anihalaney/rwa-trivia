@@ -21,7 +21,7 @@ export class GameService {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
-    const url: string = CONFIG.functionsUrl + '/app/createGame';
+    const url: string = CONFIG.functionsUrl + '/app/game';
     const payload = { gameOptions: gameOptions, userId: user.userId };
     return this.http.post<string>(url, payload);
 
@@ -33,12 +33,18 @@ export class GameService {
     const userGames = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
       .valueChanges();
 
-    const OtherGames = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false))
+
+    const OtherGames1 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
+      .where('GameStatus', '==', GameStatus.RESTARTED))
+      .valueChanges();
+
+    const OtherGames2 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
+      .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q))
       .valueChanges();
 
 
-    return Observable.combineLatest(userGames, OtherGames)
-      .map(games => games[0].concat(games[1]))
+    return Observable.combineLatest(userGames, OtherGames1, OtherGames2)
+      .map(games => [].concat.apply([], games))
       .map(gs => gs.map(g => Game.getViewModel(g))
         .sort((a: any, b: any) => { return (b.turnAt - a.turnAt) }))
 
@@ -56,7 +62,7 @@ export class GameService {
   }
 
   getNextQuestion(game: Game): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/getNextQuestion/';
+    const url: string = CONFIG.functionsUrl + '/app/question/next/';
     return this.http.get<Question>(url + game.gameId);
   }
 
@@ -95,10 +101,21 @@ export class GameService {
   }
 
   getGameInvites(userId: String): Observable<Game[]> {
-    return this.db.collection('/games', ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE)
-      .where('playerId_1', '==', userId).where('gameOver', '==', false)
-      .orderBy('turnAt', 'desc'))
-      .valueChanges()
+
+    const query1 = this.db.collection('/games',
+      ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE)
+        .where('playerId_1', '==', userId).where('gameOver', '==', false)
+        .orderBy('turnAt', 'desc'))
+      .valueChanges();
+
+    const query2 = this.db.collection('/games',
+      ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)
+        .where('playerId_1', '==', userId).where('gameOver', '==', false)
+        .orderBy('turnAt', 'desc'))
+      .valueChanges();
+
+    return Observable.combineLatest(query1, query2)
+      .map((data) => data[0].concat(data[1]))
       .map(gs => gs.map(g => Game.getViewModel(g))
         .sort((a: any, b: any) => { return b.turnAt - a.turnAt; }));
 
@@ -106,7 +123,7 @@ export class GameService {
 
   checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
 
-    return this.http.post(`${CONFIG.functionsUrl}/app/questions/${playerQnA.questionId}`,
+    return this.http.post(`${CONFIG.functionsUrl}/app/question/${playerQnA.questionId}`,
       {
         playerQnA: playerQnA
       });

@@ -1,0 +1,42 @@
+.mat-row .mat-cell {
+vertical-align: middle;
+padding: 0px 5px 0px 10px;
+font-size: 14px;
+word-wrap: break-word;
+}
+.mat-header-row .mat-header-cell
+{
+font-family:'hindsemibold';
+font-size: 16px;
+}
+.mat-table {
+width: 100%;
+overflow: auto;
+}
+@media(max-width: 600px) {
+.mat-table {
+width: 100%;
+overflow: auto;
+> .mat-header-row, > .mat-row {
+display: table-row;
+  > .mat-header-cell, > .mat-cell {
+    display: table-cell;
+    height: 48px;
+    vertical-align: middle;
+    padding: 0px 0px 0px 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    font-size: 14px;
+}
+}
+}
+}
+.profile{ width: 94%; max-width: 50px; border-radius: 50%; height: auto;margin-bottom: 5px; border:1px solid; padding: 2px;float: left;margin-right: 10%;margin-top: 5px;}
+.profile img{ display: block; width: 50px; height: 40px; border-radius: 50% }
+.display-name
+{
+  padding-top: 10%;
+}
+.success,.label
+{
+  font-family:'hindsemibold';
+}
