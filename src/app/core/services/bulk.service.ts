@@ -28,17 +28,47 @@ export class BulkService {
   // get Bulk Upload by user Id
   getUserBulkUpload(user: User, archive: boolean): Observable<BulkUploadFileInfo[]> {
     let key = '';
-    if (user.roles.admin) {
-      key = 'isAdminArchived';
+
+    const adminArchive = 'isAdminArchived';
+    const userArchive = 'isUserArchived';
+
+    let whereCondition;
+    if (!archive) {
+      whereCondition = ref => ref.where('created_uid', '==', user.userId).
+        where(userArchive, '==', archive);
     } else {
-      key = 'isUserArchived';
+      whereCondition = ref => ref.where('created_uid', '==', user.userId)
     }
-    return this.db.collection('/bulk_uploads', ref => ref.where('created_uid', '==', user.userId).where(key, '==', archive))
-      .valueChanges()
-      .catch(error => {
-        console.log(error);
-        return Observable.of(null);
-      });
+
+    if (user.roles.length > 2) {
+      const adminArchived = this.db.collection('/bulk_uploads', whereCondition)
+        .valueChanges()
+        .catch(error => {
+          console.log(error);
+          return Observable.of(null);
+        });
+
+      const userArchived = this.db.collection('/bulk_uploads', whereCondition)
+        .valueChanges()
+        .catch(error => {
+          console.log(error);
+          return Observable.of(null);
+        });
+      return Observable.combineLatest(adminArchived, userArchived);
+    } else {
+      if (user.roles.admin) {
+        key = adminArchive;
+      } else {
+        key = userArchive;
+      }
+      return this.db.collection('/bulk_uploads', whereCondition)
+        .valueChanges()
+        .catch(error => {
+          console.log(error);
+          return Observable.of(null);
+        });
+    }
+
 
 
   }
