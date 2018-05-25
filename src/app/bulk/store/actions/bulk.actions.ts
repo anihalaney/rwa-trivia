@@ -38,7 +38,7 @@ export class LoadBulkUploadSuccess implements Action {
 // for get BulkUploadFileInfo by User
 export class LoadUserBulkUpload implements Action {
     readonly type = BulkActionTypes.LOAD_USER_BULK_UPLOAD;
-    constructor(public payload: { user: User }) { }
+    constructor(public payload: { user: User, archive: boolean }) { }
 }
 
 // for get BulkUploadFileInfo by User Success

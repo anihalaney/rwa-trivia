@@ -3,7 +3,7 @@
     <div class="pageheading col-md-5 col-xs-12 hidden-xs">{{bulkSummaryTitle}}</div>
     <div class="pageheading col-md-4 col-xs-6 hidden-xs align-right">
       <button class="btn-share" type="button" *ngIf="isArchive" (click)="archiveData()"> Archive </button>
-      <button class="btn-share" type="button" (click)="showArchivedData()"> Show Archived </button>
+      <button class="btn-share" type="button" *ngIf="!isArchive" (click)="showArchivedData()"> Show Archived </button>
     </div>
     <div class="col-md-3 col-xs-6 align-right">
       <button class="btn startupload" *ngIf="showSummaryTable" [routerLink]="['./upload']"> Start New Bulk Upload </button>

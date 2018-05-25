@@ -62,7 +62,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     this.store.select(bulkState).select(s => s.bulkUploadArchiveStatus).subscribe((state) => {
       if (state === 'ARCHIVED') {
         this.archivedArray = [];
-        this.loadBulkSummaryData();
+        this.showArchive.emit(false);
+        // this.loadBulkSummaryData();
       }
     });
 
@@ -77,11 +78,15 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     if (this.isArchiveBtnClicked) {
       this.store.dispatch(new bulkActions.ArchiveBulkUpload({ archiveArray: this.archivedArray, user: this.user }));
     }
+    if (this.isShowArchiveBtnClicked) {
+      this.store.dispatch(new bulkActions.LoadUserBulkUpload({ user: this.user, archive: this.isShowArchiveBtnClicked }));
+    }
   }
 
   loadBulkSummaryData() {
     this.isAdminUrl = this.bulkSummaryDetailPath.includes('admin') ? true : false;
-    this.store.dispatch((this.isAdminUrl) ? new bulkActions.LoadBulkUpload() : new bulkActions.LoadUserBulkUpload({ user: this.user }));
+    this.store.dispatch((this.isAdminUrl) ? new bulkActions.LoadBulkUpload() : new bulkActions.LoadUserBulkUpload(
+      { user: this.user, archive: this.isArchiveBtnClicked ? false : this.isShowArchiveBtnClicked ? true : false }));
     this.bulkUploadObs = this.store.select(bulkState).select((this.bulkSummaryDetailPath.includes('admin'))
       ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos);
 

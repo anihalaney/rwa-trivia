@@ -43,6 +43,9 @@ export class BulkSummaryComponent implements OnInit {
   }
   showArchiveBtn(value: boolean) {
     this.isArchive = value;
+    if (this.isArchive) {
+      this.isShowArchiveBtnClicked = false;
+    }
   }
   archiveData() {
     this.isArchiveBtnClicked = true;
