@@ -18,8 +18,6 @@ import { coreState } from '../../../core/store';
 @Injectable()
 export class UserEffects {
 
-    user: User;
-
     // Save user profile
     @Effect()
     addUser$ = this.actions$
