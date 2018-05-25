@@ -192,7 +192,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   initializeOtherUser() {
     this.otherPlayer = new User();
-    // this.otherPlayer.displayName = this.RANDOM_PLAYER;
   }
 
   getNextQuestion() {
