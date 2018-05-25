@@ -122,9 +122,9 @@ export class BulkEffects {
         .ofType(BulkActionTypes.ARCHIVE_BULK_UPLOAD)
         .pipe(
         switchMap((action: bulkActions.ArchiveBulkUpload) =>
-            this.bulkService.archiveBulkUpload(action.payload.archiveArray, action.payload.user).pipe(
-                map((flag: boolean) => new bulkActions.ArchiveBulkUploadSuccess())
-            )
+            this.bulkService.archiveBulkUpload(action.payload.archiveArray, action.payload.user).then(ref => {
+                return new bulkActions.ArchiveBulkUploadSuccess();
+            })
         ));
 
     constructor(

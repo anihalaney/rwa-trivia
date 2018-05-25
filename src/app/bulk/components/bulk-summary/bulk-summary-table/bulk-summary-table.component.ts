@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, OnInit, SimpleChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../../store';
@@ -37,7 +37,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
   @Output() showBulkUploadBtn = new EventEmitter<String>();
   @Output() showArchive = new EventEmitter<Boolean>();
   @Input() isArchiveBtnClicked: boolean;
-  @Input() isShowArchiveBtnClicked: boolean;
+  @Input() toggleValue: boolean;
   archivedArray = [];
 
   constructor(
@@ -63,7 +63,6 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       if (state === 'ARCHIVED') {
         this.archivedArray = [];
         this.showArchive.emit(false);
-        // this.loadBulkSummaryData();
       }
     });
 
@@ -74,19 +73,21 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       this.loadBulkSummaryData();
     }
   }
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     if (this.isArchiveBtnClicked) {
       this.store.dispatch(new bulkActions.ArchiveBulkUpload({ archiveArray: this.archivedArray, user: this.user }));
     }
-    if (this.isShowArchiveBtnClicked) {
-      this.store.dispatch(new bulkActions.LoadUserBulkUpload({ user: this.user, archive: this.isShowArchiveBtnClicked }));
+
+    if (changes['toggleValue'] && changes['toggleValue'].currentValue !== undefined
+      && changes['toggleValue'].currentValue !== changes['toggleValue'].previousValue) {
+      this.store.dispatch(new bulkActions.LoadUserBulkUpload({ user: this.user, archive: this.toggleValue }));
     }
   }
 
   loadBulkSummaryData() {
     this.isAdminUrl = this.bulkSummaryDetailPath.includes('admin') ? true : false;
     this.store.dispatch((this.isAdminUrl) ? new bulkActions.LoadBulkUpload() : new bulkActions.LoadUserBulkUpload(
-      { user: this.user, archive: this.isArchiveBtnClicked ? false : this.isShowArchiveBtnClicked ? true : false }));
+      { user: this.user, archive: this.isArchiveBtnClicked ? false : this.toggleValue ? true : false }));
     this.bulkUploadObs = this.store.select(bulkState).select((this.bulkSummaryDetailPath.includes('admin'))
       ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos);
 
@@ -142,8 +143,6 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     } else {
       this.showArchive.emit(false);
     }
-
-    console.log(JSON.stringify(this.archivedArray));
   }
 
 

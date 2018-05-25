@@ -9,14 +9,14 @@ import { Input } from '@angular/core/src/metadata/directives';
   templateUrl: './bulk-summary.component.html',
   styleUrls: ['./bulk-summary.component.scss']
 })
-export class BulkSummaryComponent implements OnInit {
+export class BulkSummaryComponent implements OnInit, OnChanges {
 
   public bulkSummaryDetailPath = '/';
   public bulkSummaryTitle: string;
   public showSummaryTable = true;
   isArchive: boolean;
   isArchiveBtnClicked: boolean;
-  isShowArchiveBtnClicked: boolean;
+  toggleValue: boolean;
 
 
   constructor() { }
@@ -25,6 +25,13 @@ export class BulkSummaryComponent implements OnInit {
     this.setDefaultTitle();
   }
 
+  ngOnChanges() {
+
+  }
+
+  tapped(value) {
+    this.toggleValue = value;
+  }
 
   changeTableHeading(heading: string): void {
     if (heading) {
@@ -43,16 +50,9 @@ export class BulkSummaryComponent implements OnInit {
   }
   showArchiveBtn(value: boolean) {
     this.isArchive = value;
-    if (this.isArchive) {
-      this.isShowArchiveBtnClicked = false;
-    }
   }
   archiveData() {
     this.isArchiveBtnClicked = true;
-  }
-  showArchivedData() {
-    this.isShowArchiveBtnClicked = true;
-
   }
 
 

@@ -1,9 +1,22 @@
 <div>
   <div class="row">
-    <div class="pageheading col-md-5 col-xs-12 hidden-xs">{{bulkSummaryTitle}}</div>
-    <div class="pageheading col-md-4 col-xs-6 hidden-xs align-right">
+    <div class="pageheading col-md-4 col-xs-12 hidden-xs">{{bulkSummaryTitle}}</div>
+    <div class="pageheading col-md-5 col-xs-6 hidden-xs align-right">
       <button class="btn-share" type="button" *ngIf="isArchive" (click)="archiveData()"> Archive </button>
-      <button class="btn-share" type="button" *ngIf="!isArchive" (click)="showArchivedData()"> Show Archived </button>
+      <!-- <div> -->
+        <label>Show Archived</label>
+        <mat-button-toggle-group #group="matButtonToggleGroup" value=false>
+          <mat-button-toggle value=true (click)="tapped(true)">
+            On
+          </mat-button-toggle>
+          <mat-button-toggle value=false (click)="tapped(false)" selected>
+            Off
+          </mat-button-toggle>
+
+        </mat-button-toggle-group>
+      <!-- </div> -->
+      <!-- <button class="btn-share" type="button" *ngIf="!isArchive"> Show Archived </button> -->
+
     </div>
     <div class="col-md-3 col-xs-6 align-right">
       <button class="btn startupload" *ngIf="showSummaryTable" [routerLink]="['./upload']"> Start New Bulk Upload </button>
@@ -12,6 +25,6 @@
     </div>
   </div>
   <bulk-summary-table [bulkSummaryDetailPath]="bulkSummaryDetailPath" [showSummaryTable]="showSummaryTable" (showBulkUploadBtn)="changeTableHeading($event)"
-    (showArchive)="showArchiveBtn($event)" [isArchiveBtnClicked]="isArchiveBtnClicked" [isShowArchiveBtnClicked]="isShowArchiveBtnClicked">
+    (showArchive)="showArchiveBtn($event)" [isArchiveBtnClicked]="isArchiveBtnClicked" [toggleValue]="toggleValue">
   </bulk-summary-table>
 </div>
