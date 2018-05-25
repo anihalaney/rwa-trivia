@@ -37,6 +37,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
   @Output() showBulkUploadBtn = new EventEmitter<String>();
   @Output() showArchive = new EventEmitter<Boolean>();
   @Input() isArchiveBtnClicked: boolean;
+  @Input() isShowArchiveBtnClicked: boolean;
   archivedArray = [];
 
   constructor(
@@ -61,6 +62,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     this.store.select(bulkState).select(s => s.bulkUploadArchiveStatus).subscribe((state) => {
       if (state === 'ARCHIVED') {
         this.archivedArray = [];
+        this.loadBulkSummaryData();
       }
     });
 

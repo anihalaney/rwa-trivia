@@ -16,6 +16,7 @@ export class BulkSummaryComponent implements OnInit {
   public showSummaryTable = true;
   isArchive: boolean;
   isArchiveBtnClicked: boolean;
+  isShowArchiveBtnClicked: boolean;
 
 
   constructor() { }
@@ -45,6 +46,10 @@ export class BulkSummaryComponent implements OnInit {
   }
   archiveData() {
     this.isArchiveBtnClicked = true;
+  }
+  showArchivedData() {
+    this.isShowArchiveBtnClicked = true;
+
   }
 
 
