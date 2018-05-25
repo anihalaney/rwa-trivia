@@ -11,7 +11,9 @@ export enum SocialActionTypes {
     REMOVE_SUBSCRIBER_SUCCESS = '[Social] RemoveSubscriberSuccess',
     TOTAL_SUBSCRIBER = '[Social] TotalSubscriber',
     TOTAL_SUBSCRIBER_SUCCESS = '[Social] TotalSubscriberSuccess',
-    CHECK_SUBSCRIPTION = '[Social] CheckSubscriptionStatus'
+    CHECK_SUBSCRIPTION = '[Social] CheckSubscriptionStatus',
+    LOAD_SOCIAL_SCORE_SHARE_URL = '[Social] LoadSocialScoreShareUrl',
+    LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS = '[Social] LoadSocialScoreShareUrlSuccess',
 }
 
 // Save subscriber
@@ -38,6 +40,18 @@ export class GetTotalSubscriberSuccess implements Action {
     constructor(public payload: Subscribers) { }
 }
 
+// Load Social Score share Url
+export class LoadSocialScoreShareUrl implements Action {
+    readonly type = SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL;
+    constructor(public payload: { imageBlob: any, userId: string }) { }
+}
+
+// Load Social Score share Url Success
+export class LoadSocialScoreShareUrlSuccess implements Action {
+    readonly type = SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS;
+    constructor(public payload: string) { }
+}
+
 // Remove subscriber
 export class RemoveSubscriber implements Action {
     readonly type = SocialActionTypes.REMOVE_SUBSCRIBER;
@@ -61,6 +75,8 @@ export type SocialActions
     | AddSubscriberSuccess
     | GetTotalSubscriber
     | GetTotalSubscriberSuccess
+    | LoadSocialScoreShareUrl
+    | LoadSocialScoreShareUrlSuccess
     | RemoveSubscriber
     | RemoveSubscriberSuccess
     | CheckSubscriptionStatus

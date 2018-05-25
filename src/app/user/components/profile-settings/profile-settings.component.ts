@@ -13,6 +13,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { userState } from '../../../user/store';
 
+
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
@@ -174,7 +175,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   saveProfileImage() {
     if (!this.profileImageValidation) {
       const file = this.profileImageFile
-      const imageBlob = this.dataURItoBlob(this.profileImage.image);
+      const imageBlob = Utils.dataURItoBlob(this.profileImage.image, this.profileImageFile.type);
       const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
       this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile);
       if (imageBlob) {
@@ -190,17 +191,17 @@ export class ProfileSettingsComponent implements OnDestroy {
     }
   }
 
-  // cropped image convert to blob object
-  dataURItoBlob(dataURI: any) {
-    const binary = atob(dataURI.split(',')[1]);
-    const array = [];
-    for (let i = 0; i < binary.length; i++) {
-      array.push(binary.charCodeAt(i));
-    }
-    return new Blob([new Uint8Array(array)], {
-      type: this.profileImageFile.type
-    });
-  }
+  // // cropped image convert to blob object
+  // dataURItoBlob(dataURI: any) {
+  //   const binary = atob(dataURI.split(',')[1]);
+  //   const array = [];
+  //   for (let i = 0; i < binary.length; i++) {
+  //     array.push(binary.charCodeAt(i));
+  //   }
+  //   return new Blob([new Uint8Array(array)], {
+  //     type: this.profileImageFile.type
+  //   });
+  // }
 
   // create the form based on user object
   createForm(user: User) {

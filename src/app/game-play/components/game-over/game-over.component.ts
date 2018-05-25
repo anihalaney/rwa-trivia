@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
+import * as socialactions from '../../../social/store/actions';
 import { gameplayState } from '../../store';
-import * as html2canvas from 'html2canvas';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Utils } from '../../../core/services';
@@ -59,6 +59,13 @@ export class GameOverComponent implements OnInit {
         (this.dialogRef) ? this.dialogRef.close() : '';
       }
     });
+
+    this.store.select(appState.socialState).select(s => s.socialShareImageUrl).subscribe(imageUrl => {
+      if (imageUrl !== 'NONE') {
+        this.blogData[0].status = true;
+        this.blogData[0].link = imageUrl;
+      }
+    });
   }
   ngOnInit() {
     if (this.game) {
@@ -103,77 +110,20 @@ export class GameOverComponent implements OnInit {
     });
   }
   shareScore() {
-    this.blogData[0].status = true;
-    // this.blogData[0].link="https://rwa-trivia-dev-e57fc.firebaseapp.com/dashboard";
 
     const node = document.getElementById('share-content');
 
     domtoimage.toPng(node)
       .then((dataUrl) => {
-        const img = new Image();
-        img.src = dataUrl;
-        console.log("url---->" + JSON.stringify(img.src));
-
-        // var a = document.createElement('a');
-        // a.href = img.src;
-        // a.download = "score.png";
-        // document.body.appendChild(a);
-        // a.click();
+        this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
+          imageBlob: Utils.dataURItoBlob(dataUrl, 'png'),
+          userId: this.user.userId
+        }));
       })
       .catch((error) => {
         console.error('oops, something went wrong!', error);
       });
-    // html2canvas(document.querySelector('.share-content')).then((canvas) => {
-    //   const context = canvas.getContext('2d');
-    //   if (Number(this.game.gameOptions.playerMode) === 0) {
-    //     const img = document.getElementById('yourImage');
-    //     this.roundedImage(365, 58, 70, 60, 40, context);
-    //     context.clip();
-    //     context.drawImage(img, 365, 58, 70, 60);
-    //   }
 
-    //   if (Number(this.game.gameOptions.playerMode) === 1) {
-
-    //     const sources = {
-    //       your: 'http://localhost:4200/assets/images/avatar.jpg',
-    //       other: 'http://localhost:4200/assets/images/avatar.png'
-    //     };
-
-
-    //     this.loadImages(sources, function (images, index) {
-    //       context.drawImage(images.your, 265, 58, 70, 60);
-    //       context.drawImage(images.other, 465, 58, 70, 60);
-    //       document.body.appendChild(canvas);
-    //       const imageUrl = canvas.toDataURL();
-    //       console.log("url--->" + JSON.stringify(imageUrl));
-    //     });
-
-
-    //     //   let isRoundedFirst = false;
-    //     //   let isRoundedSecond = false;
-
-    //     //   const img = document.getElementById('yourImage');
-    //     //   isRoundedFirst = this.roundedImage(265, 58, 70, 60, 40, context);
-    //     //   context.clip();
-    //     //   context.drawImage(img, 265, 58, 70, 60);
-
-    //     //   if (isRoundedFirst) {
-    //     //     const otherImg = document.getElementById('otherUserImage');
-    //     //     isRoundedSecond = this.roundedImage(465, 58, 70, 60, 40, context);
-    //     //     context.clip();
-    //     //     context.drawImage(otherImg, 465, 58, 70, 60);
-    //     //   }
-
-    //     //   if (isRoundedFirst && isRoundedSecond) {
-    //     //     document.body.appendChild(canvas);
-    //     //     this.imageUrl = canvas.toDataURL('image/jpg');
-    //     //     this.blogData[0].link = this.imageUrl;
-    //     //     this.blogData[0].stats = true;
-    //     //     console.log(JSON.stringify(this.imageUrl));
-    //     //   }
-    //     // }
-    //   }
-    // });
   }
 
   loadImages(sources, callback) {
