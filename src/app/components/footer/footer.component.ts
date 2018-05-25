@@ -21,7 +21,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   navigateUrl() {
-    this.router.navigate(['my/questions', this.user.userId]);
+    this.router.navigate(['my/questions']);
   }
 
   ngOnDestroy() {
