@@ -18,6 +18,7 @@ import { coreState } from '../../../core/store';
 @Injectable()
 export class UserEffects {
 
+    user: User;
 
     // Save user profile
     @Effect()
@@ -30,32 +31,44 @@ export class UserEffects {
         })
         );
 
-    // Load User Published Question by userId
+    // Load User Published Question by userId from router
     @Effect()
-    // handle location update
-    loadUserPublishedQuestions$ = this.actions$
-        .ofType(UserActionTypes.LOAD_USER_PUBLISHED_QUESTIONS)
-        .pipe(
-        switchMap((action: userActions.LoadUserPublishedQuestions) =>
-            this.questionService.getUserQuestions(action.payload.user.userId, true).pipe(
-                map((questions: Question[]) =>
-                    new userActions.LoadUserPublishedQuestionsSuccess(questions)
-                )
-            )
-        )
+    loadUserPublishedRouteQuestions$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/my/questions')
+        ).pipe(
+        switchMap((routerState: RouterStateUrl) => {
+            this.store.select(coreState).select(s => s.user).take(1).subscribe(user => {
+                if (user) {
+                    this.user = user;
+                }
+            });
+            return this.questionService.getUserQuestions(this.user.userId, true).pipe(map((questions: Question[]) =>
+                new userActions.LoadUserPublishedQuestionsSuccess(questions)
+            ));
+        })
         );
 
-    // Load User Unpublished Question by userId
+    // Load User UnPublished Question by userId from router
     @Effect()
-    // handle location update
     loadUserUnpublishedQuestions$ = this.actions$
-        .ofType(UserActionTypes.LOAD_USER_PUBLISHED_QUESTIONS)
-        .pipe(
-        switchMap((action: userActions.LoadUserUnpublishedQuestions) =>
-            this.questionService.getUserQuestions(action.payload.user.userId, false).pipe(
-                map((questions: Question[]) => new userActions.LoadUserUnpublishedQuestionsSuccess(questions))
-            )
-        )
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/my/questions')
+        ).pipe(
+        switchMap((routerState: RouterStateUrl) => {
+            this.store.select(coreState).select(s => s.user).take(1).subscribe(user => {
+                if (user) {
+                    this.user = user;
+                }
+            });
+            return this.questionService.getUserQuestions(this.user.userId, false).pipe(map((questions: Question[]) =>
+                new userActions.LoadUserUnpublishedQuestionsSuccess(questions)
+            ));
+        })
         );
 
 
@@ -124,11 +137,6 @@ export class UserEffects {
         private gameService: GameService,
         private store: Store<AppState>,
     ) {
-        store.select(coreState).select(s => s.user).skip(1).subscribe(user => {
-            if (user) {
-                this.store.dispatch(new userActions.LoadUserPublishedQuestions({ 'user': user }))
-                this.store.dispatch(new userActions.LoadUserUnpublishedQuestions({ 'user': user }))
-            }
-        });
+
     }
 }
