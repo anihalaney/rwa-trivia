@@ -11,6 +11,7 @@ import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
 import { Location } from '@angular/common';
 import { userState } from '../../user/store';
+import * as gameplayactions from '../../game-play/store/actions';
 import * as userActions from '../../user/store/actions';
 import { Meta } from '@angular/platform-browser';
 
@@ -24,6 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
   user: User;
   sub: Subscription;
   sub2: Subscription;
+  sub3: Subscription;
 
   theme = '';
   constructor(private renderer: Renderer2,
@@ -77,6 +79,13 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate(['/']);
       }
     });
+
+    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g !== '').subscribe(gameObj => {
+
+      //  console.log("Navigating to game: " + gameObj['gameId']);
+      this.router.navigate(['/game-play', gameObj['gameId']]);
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+    });
   }
 
   ngOnInit() {
@@ -84,7 +93,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub, this.sub2]);
+    Utils.unsubscribe([this.sub, this.sub2, this.sub3]);
   }
 
   login() {

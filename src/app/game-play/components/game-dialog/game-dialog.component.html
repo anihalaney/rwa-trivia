@@ -1,6 +1,6 @@
 <mat-dialog-content>
   <div class="" *ngIf="showLoader">
-    <div class=" main-div textcenter">
+    <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle-loader">
           <div [ngClass]="correctAnswerCount < 1?'score0':'score1'" class="sprite  badge1"></div>
@@ -21,10 +21,15 @@
   </div>
 
   <div class="" *ngIf="showBadge">
-    <div class=" main-div textcenter">
+    <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
-          <div class="sprite begde1 circle-image"></div>
+          <div [ngClass]="correctAnswerCount === 0
+            ?'score1-L':correctAnswerCount === 1
+            ?'score2-L':correctAnswerCount === 2
+            ?'score3-L':correctAnswerCount === 3
+            ?'score4-L':correctAnswerCount === 4
+            ?'score5-L':''" class="sprite circle-image"></div>
         </div>
       </div>
       <div class="text textcenter">
@@ -34,10 +39,16 @@
   </div>
 
   <div class="" *ngIf="showWinBadge">
-    <div class=" main-div textcenter">
+    <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
-          <div class="sprite begde1 circle-image"></div>
+          <div [ngClass]="correctAnswerCount === 1
+          ?'score1-L':correctAnswerCount === 2
+          ?'score2-L':correctAnswerCount === 3
+          ?'score3-L':correctAnswerCount === 4
+          ?'score4-L':correctAnswerCount === 5
+          ?'score5-L':''" class="sprite circle-image">
+          </div>
         </div>
       </div>
       <div class="text textcenter">

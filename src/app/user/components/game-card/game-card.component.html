@@ -7,53 +7,84 @@
           <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
         </div>
         <div class="clear"></div>
-        <a href="#" class="dark">{{user.displayName}}</a>
-        <div class="light" *ngIf="user?.location">{{user.location}}</div>
+        <a href="#" class="dark word-wrap">{{user.displayName}}</a>
+        <div class="light word-wrap" *ngIf="user?.location">{{user.location}}</div>
         <hr>
         <div class="light">Round {{game.stats[user.userId].round}}</div>
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
         <div class="">
-          <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
-          <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
-          <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
-          <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
-          <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
-
-          <div *ngIf="game.stats[user.userId].score < 1" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 2" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 3" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 4" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 5" class="sprite score0"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
       </div>
     </ng-container>
     <ng-container *ngIf="game.gameOptions.playerMode == 1 && game.playerIds.length == 1">
-      <div [ngClass]="{'col-xs-12 textcenter clearfix ': game.playerIds.length===1,'col-xs-6': game.playerIds.length>1 }" class="game-card">
-        <div class="yourimg" [ngClass]="{'vs': game.playerIds.length>1 }">
-          <a href="#">
-            <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
-          </a>
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 div-right-border">
+          <div class="yourimg vs">
+            <a href="#">
+              <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
+            </a>
+          </div>
         </div>
-        <span class="dark">{{user.displayName}}</span>
-        <div class="light" *ngIf="user?.location">{{user.location}}</div>
-        <hr>
-        <div class="light">
-          <span>Round {{game.stats[user.userId].round}}</span>
+        <div class="col-xs-6">
+          <div class="yourimg ">
+            <a href="#">
+              <div class="sprite no-opponent"></div>
+            </a>
+          </div>
         </div>
-        <div class="dark">Score {{game.stats[user.userId].score}}</div>
-        <div class="">
-          <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
-          <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
-          <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
-          <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
-          <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+      </div>
+      <div class="textcenter clearfix">
+        <div class="col-xs-6" [ngClass]="user.displayName?'div-right-border':''">
+          <span class="dark " [ngClass]="user?.displayName.length>9?'word-wrap':''">{{user.displayName}}</span>
+        </div>
+        <div class="col-xs-6 " [ngClass]="!user.displayName?'':'div-left-border'">
+          <span class="light">No Opponent</span>
+        </div>
+      </div>
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
+          <span class="light" [ngClass]="user?.location.length>9?'word-wrap':''" *ngIf="user?.location">{{user.location}}</span>
+        </div>
+        <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
+          <span class="light">till now</span>
+        </div>
+      </div>
+      <div class="textcenter clearfix ">
+        <div class="col-xs-6 div-spacing" [ngClass]="myTurn?'div-right-border':''">
+          <span class="light" *ngIf="myTurn">Round {{game.stats[user.userId].round}}</span>
+        </div>
+        <div class="col-xs-6  div-spacing" [ngClass]="myTurn?'':'div-left-border'">
+          <span class="light" *ngIf="!myTurn"></span>
+        </div>
+      </div>
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 div-right-border">
+          <div class="dark">Score {{game.stats[user.userId].score}}</div>
+        </div>
+        <div class="col-xs-6">
+          <div class="dark"></div>
+        </div>
+      </div>
+      <div class="textcenter clearfix">
+        <div class="div-width div-right-border" style="float:left">
+          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+        </div>
 
-          <div *ngIf="game.stats[user.userId].score < 1" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 2" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 3" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 4" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 5" class="sprite score0"></div>
-
+        <div class="div-width text-align" style="float:right">
+          <div class="sprite score0"></div>
+          <div class="sprite score0"></div>
+          <div class="sprite score0"></div>
+          <div class="sprite score0"></div>
+          <div class="sprite score0"></div>
         </div>
       </div>
     </ng-container>
@@ -76,19 +107,19 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark">{{user.displayName}}</span>
+        <div class="col-xs-6" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
+          <span class="dark" [ngClass]="user?.displayName.length>9?'word-wrap':''">{{user.displayName}}</span>
         </div>
-        <div class="col-xs-6 " [ngClass]="!user.displayName?'':'div-left-border'">
-          <span class="dark">{{otherUserInfo?.displayName}}</span>
+        <div class="col-xs-6 " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
+          <span class="dark" [ngClass]="otherUserInfo?.displayName.length>9?'word-wrap':''">{{otherUserInfo?.displayName}}</span>
         </div>
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light" *ngIf="user?.location">{{user.location}}</span>
+          <span class="light" [ngClass]="user?.location.length>9?'word-wrap':''" *ngIf="user?.location">{{user.location}}</span>
         </div>
         <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
-          <span class="light">{{otherUserInfo?.location}}</span>
+          <span class="light " [ngClass]="otherUserInfo?.location.length>9?'word-wrap':''">{{otherUserInfo?.location}}</span>
         </div>
       </div>
       <div class="textcenter clearfix ">
@@ -109,31 +140,19 @@
       </div>
       <div class="textcenter clearfix">
         <div class="div-width div-right-border" style="float:left">
-          <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
-          <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
-          <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
-          <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
-          <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
-
-          <div *ngIf="game.stats[user.userId].score < 1" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 2" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 3" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 4" class="sprite score0"></div>
-          <div *ngIf="game.stats[user.userId].score < 5" class="sprite score0"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
 
-        <div class="div-width div-right-border" style="float:right">
-          <div *ngIf="game.stats[otherUserId].score >= 1" class="sprite score1"></div>
-          <div *ngIf="game.stats[otherUserId].score >= 2" class="sprite score2"></div>
-          <div *ngIf="game.stats[otherUserId].score >= 3" class="sprite score3"></div>
-          <div *ngIf="game.stats[otherUserId].score >= 4" class="sprite score4"></div>
-          <div *ngIf="game.stats[otherUserId].score >= 5" class="sprite score5"></div>
-
-          <div *ngIf="game.stats[otherUserId].score < 1" class="sprite score0"></div>
-          <div *ngIf="game.stats[otherUserId].score < 2" class="sprite score0"></div>
-          <div *ngIf="game.stats[otherUserId].score < 3" class="sprite score0"></div>
-          <div *ngIf="game.stats[otherUserId].score < 4" class="sprite score0"></div>
-          <div *ngIf="game.stats[otherUserId].score < 5" class="sprite score0"></div>
+        <div class="div-width text-align" style="float:right">
+          <div [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[otherUserId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[otherUserId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
       </div>
     </ng-container>
@@ -146,8 +165,11 @@
     <p>remaining to play your turn</p>
   </div>
 
-  <div *ngIf="!myTurn" class="opponent">Opponent’s Turn</div>
-  <!-- <div *ngIf="!myTurn  && game.playerIds.length <= 1" class="opponent">
-
-  </div> -->
+  <!-- <div *ngIf="!myTurn" class="opponent">Waiting for Opponent</div> -->
+  <div *ngIf="!myTurn && game.playerIds.length == 1" class="opponent playnow">
+    <button class="btn-share" type="button">Waiting for Opponent</button>
+  </div>
+  <div *ngIf="!myTurn && game.playerIds.length > 1" class="opponent playnow">
+    <button class="btn-share" type="button">Opponent's Turn</button>
+  </div>
 </div>

@@ -14,10 +14,12 @@ export class Stat {
   score: number;
   round: number;
   avgAnsTime: number;
+  consecutiveCorrectAnswers: number;
   constructor() {
     this.score = 0;
     this.round = 0;
     this.avgAnsTime = 0;
+    this.consecutiveCorrectAnswers = 0;
   }
 }
 
@@ -126,6 +128,8 @@ export class Game {
   }
 
   calculateStat(playerId: string) {
+    const consecutiveCorrectAnswers = (this.stats && this.stats[playerId] && this.stats[playerId].consecutiveCorrectAnswers) ?
+      this.stats[playerId].consecutiveCorrectAnswers : 0;
     const stat: Stat = new Stat();
     stat.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
     let round = 0;
@@ -139,13 +143,14 @@ export class Game {
       }
     });
     stat.round = round;
-    stat.avgAnsTime = Math.floor((totalQTime) / this.playerQnAs.filter((p) => p.playerId === playerId).length)
+    stat.avgAnsTime = Math.floor((totalQTime) / this.playerQnAs.filter((p) => p.playerId === playerId).length);
+    stat.consecutiveCorrectAnswers = (consecutiveCorrectAnswers === 3) ? 0 : consecutiveCorrectAnswers;
     this.stats[playerId] = stat;
+
   }
 
   decideWinner() {
-    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent
-      && Number(this.gameOptions.opponentType) === OpponentType.Random) {
+    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && this.playerIds.length > 1) {
       const playerId_0 = this.playerIds[0];
       const playerId_1 = this.playerIds[1];
       this.winnerPlayerId = (this.stats[playerId_0].score > this.stats[playerId_1].score) ? playerId_0 : playerId_1;
@@ -157,12 +162,21 @@ export class Game {
   decideNextTurn(playerQnA: PlayerQnA, userId: string) {
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
       const otherPlayerUserId = this.playerIds.filter(playerId => playerId !== userId)[0];
+      let consecutiveCorrectAnswers = (this.stats[userId].consecutiveCorrectAnswers) ? this.stats[userId].consecutiveCorrectAnswers : 0;
+      consecutiveCorrectAnswers = (!playerQnA.answerCorrect) ? 0 : consecutiveCorrectAnswers + 1;
 
       if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
-        if (this.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
+        if (this.GameStatus === GameStatus.STARTED && (!playerQnA.answerCorrect || consecutiveCorrectAnswers === 3)) {
           this.nextTurnPlayerId = '';
           this.GameStatus = GameStatus.AVAILABLE_FOR_OPPONENT;
-        } else if (this.GameStatus === GameStatus.JOINED_GAME && !playerQnA.answerCorrect) {
+        } else if (this.GameStatus === GameStatus.RESTARTED && (!playerQnA.answerCorrect || consecutiveCorrectAnswers === 3)) {
+          this.nextTurnPlayerId = otherPlayerUserId;
+          this.GameStatus = GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
+        } else if (
+          (this.GameStatus === GameStatus.JOINED_GAME ||
+            this.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
+            this.GameStatus === GameStatus.WAITING_FOR_NEXT_Q)
+          && !playerQnA.answerCorrect) {
           this.nextTurnPlayerId = otherPlayerUserId;
           this.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
         } else if (!playerQnA.answerCorrect) {
@@ -171,10 +185,14 @@ export class Game {
           this.nextTurnPlayerId = userId;
         }
       } else if (Number(this.gameOptions.opponentType) === OpponentType.Friend) {
-        if (this.GameStatus === GameStatus.STARTED && !playerQnA.answerCorrect) {
+        if (this.GameStatus === GameStatus.STARTED && (!playerQnA.answerCorrect || consecutiveCorrectAnswers === 3)) {
           this.nextTurnPlayerId = otherPlayerUserId;
           this.GameStatus = GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE;
-        } else if (this.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE && !playerQnA.answerCorrect) {
+        } else if (
+          (this.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+            this.GameStatus === GameStatus.RESTARTED ||
+            this.GameStatus === GameStatus.WAITING_FOR_NEXT_Q)
+          && !playerQnA.answerCorrect) {
           this.nextTurnPlayerId = otherPlayerUserId;
           this.GameStatus = GameStatus.WAITING_FOR_NEXT_Q;
         } else if (!playerQnA.answerCorrect) {
@@ -183,10 +201,12 @@ export class Game {
           this.nextTurnPlayerId = userId;
         }
       }
+      this.stats[userId].consecutiveCorrectAnswers = consecutiveCorrectAnswers;
 
     } else {
       this.nextTurnPlayerId = userId;
     }
+
   }
 
 
