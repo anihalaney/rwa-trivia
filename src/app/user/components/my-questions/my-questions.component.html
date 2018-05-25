@@ -1,30 +1,24 @@
 <div class="row">
   <div class="pageheading col-md-6 col-xs-12 hidden-xs">My Questions</div>
-  <div class="col-md-6 col-xs-12 align-right"><a [routerLink]="['add']" class="startgame">Create New Question</a></div>
+  <div class="col-md-6 col-xs-12 align-right">
+    <a [routerLink]="['add']" class="startgame">Create New Question</a>
+  </div>
 </div>
-<mat-card>
-  <mat-card-content>  
+<!-- <mat-card> -->
+<div class="card">
+  <mat-card-content>
     <mat-tab-group>
       <mat-tab label="Published">
-        <question-table
-          [showSort]="false"
-          [showPaginator]="false"
-          [questions]="publishedQuestions$ | async"
-          [totalCount]="10"
-          [categoryDictionary]="categoryDictObs | async"
+        <question-table [showSort]="false" [showPaginator]="false" [questions]="publishedQuestions$ | async" [totalCount]="10" [categoryDictionary]="categoryDictObs | async"
           [showApproveButton]="false">
         </question-table>
       </mat-tab>
       <mat-tab label="Pending">
-        <question-table
-          [showSort]="false"
-          [showPaginator]="false"
-          [questions]="unpublishedQuestions$ | async"
-          [totalCount]="10"
-          [categoryDictionary]="categoryDictObs | async"
-          [showApproveButton]="false">
+        <question-table [showSort]="false" [showPaginator]="false" [questions]="unpublishedQuestions$ | async" [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async" [showApproveButton]="false">
         </question-table>
       </mat-tab>
     </mat-tab-group>
-  </mat-card-content>    
-</mat-card>
+  </mat-card-content>
+</div>
+<!-- </mat-card> -->

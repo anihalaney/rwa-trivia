@@ -80,14 +80,14 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           this.setTurnStatusFlag();
         }
       }));
-
+    this.getLoader();
     this.sub.push(
       this.gameQuestionObs.subscribe(question => {
         if (!question) {
           this.currentQuestion = null;
           return;
         }
-        this.getLoader();
+        // this.getLoader();
         this.currentQuestion = question;
         this.questionIndex++;
         this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
