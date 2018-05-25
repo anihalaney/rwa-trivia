@@ -17,7 +17,6 @@ import { coreState } from '../../../core/store';
 
 @Injectable()
 export class UserEffects {
-
     // Save user profile
     @Effect()
     addUser$ = this.actions$
@@ -39,7 +38,7 @@ export class UserEffects {
         ).pipe(
         switchMap((routerState: RouterStateUrl) => {
             let userId: string;
-            this.store.select(coreState).select(s => s.user).take(1).subscribe(user => userId = user.userId);
+            this.store.select(coreState).select(s => s.user).skip(1).take(1).subscribe(user => userId = user.userId);
             return this.questionService.getUserQuestions(userId, true).pipe(map((questions: Question[]) =>
                 new userActions.LoadUserPublishedQuestionsSuccess(questions)
             ));
@@ -56,7 +55,7 @@ export class UserEffects {
         ).pipe(
         switchMap((routerState: RouterStateUrl) => {
             let userId: string;
-            this.store.select(coreState).select(s => s.user).take(1).subscribe(user => userId = user.userId);
+            this.store.select(coreState).select(s => s.user).skip(1).take(1).subscribe(user => userId = user.userId);
             return this.questionService.getUserQuestions(userId, false).pipe(map((questions: Question[]) =>
                 new userActions.LoadUserUnpublishedQuestionsSuccess(questions)
             ));
