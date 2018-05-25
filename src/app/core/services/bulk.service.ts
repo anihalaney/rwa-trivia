@@ -99,7 +99,7 @@ export class BulkService {
     return ref.getDownloadURL().map(url => url);
   }
 
-  archiveBulkUpload(archiveArray: BulkUploadFileInfo[], user: User): Observable<boolean> {
+  archiveBulkUpload(archiveArray: BulkUploadFileInfo[], user: User) {
     const isAdmin = user.roles.admin;
     let obj = {};
     if (!isAdmin) {
@@ -112,7 +112,7 @@ export class BulkService {
       const itemDoc = this.db.firestore.collection('bulk_uploads').doc(bulkInfo.id);
       upload.update(itemDoc, obj);
     })
-    upload.commit();
-    return Observable.of(true);
+    return upload.commit();
+    // return Observable.of(true);
   }
 }
