@@ -1,6 +1,3 @@
-<!-- <mat-card> -->
-<!-- <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle> -->
-<!-- <mat-card-content> -->
 <div [hidden]="!showSummaryTable" class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource" matSort class="bulk-summary-table">
 
@@ -77,10 +74,3 @@
   <mat-paginator #paginator class="matHeader bulk-summary-table" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
   </mat-paginator>
 </div>
-<!-- <div *ngIf="!showSummaryTable">
-  <app-bulk-summary-questions [bulkUploadFileInfo]="bulkUploadFileInfo" (showSummaryTableReturn)='backToSummary(event$)' [isAdminUrl]="isAdminUrl"></app-bulk-summary-questions>
-</div> -->
-
-
-<!-- </mat-card-content> -->
-<!-- </mat-card> -->
