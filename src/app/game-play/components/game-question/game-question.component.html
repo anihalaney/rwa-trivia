@@ -11,7 +11,7 @@
       </div>
       <div class="col-sm-6">
         <h1>{{categoryName}}</h1>
-        <p>Playing with
+        <p *ngIf="otherPlayer?.displayName">Playing with
           <a>{{otherPlayer?.displayName}}</a>
         </p>
         <div *ngIf="continueNext" class="answer-status">

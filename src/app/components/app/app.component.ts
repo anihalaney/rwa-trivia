@@ -56,7 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.sub = store.select(appState.userState).select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === 'IN PROGRESS') {
-        this.router.navigate(['/my/questions', this.user.userId]);
+        this.router.navigate(['/my/questions']);
       }
     });
 
