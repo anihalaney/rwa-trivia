@@ -22,7 +22,6 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
   user: User;
   bulkUploadObs: Observable<BulkUploadFileInfo[]>;
   dataSource: any;
-
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
 
@@ -82,7 +81,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       && changes['toggleValue'].currentValue !== changes['toggleValue'].previousValue) {
 
       this.store.dispatch((this.isAdminUrl) ?
-        new bulkActions.LoadBulkUpload({ archive: this.toggleValue }) :
+        new bulkActions.LoadBulkUpload({ user: this.user, archive: this.toggleValue }) :
         new bulkActions.LoadUserBulkUpload({ user: this.user, archive: this.toggleValue }));
     }
   }
@@ -90,7 +89,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
   loadBulkSummaryData() {
     this.isAdminUrl = this.bulkSummaryDetailPath.includes('admin') ? true : false;
     this.store.dispatch((this.isAdminUrl) ?
-      new bulkActions.LoadBulkUpload({ archive: this.isArchiveBtnClicked ? false : this.toggleValue ? true : false })
+      new bulkActions.LoadBulkUpload({ user: this.user, archive: this.isArchiveBtnClicked ? false : this.toggleValue ? true : false })
       : new bulkActions.LoadUserBulkUpload(
         { user: this.user, archive: this.isArchiveBtnClicked ? false : this.toggleValue ? true : false }));
     this.bulkUploadObs = this.store.select(bulkState).select((this.bulkSummaryDetailPath.includes('admin'))
