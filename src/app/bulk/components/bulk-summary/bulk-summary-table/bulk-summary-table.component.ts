@@ -128,7 +128,10 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
 
   // get Questions by bulk upload Id
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
-    this.router.navigate(['/bulk/detail', row.id]);
+
+    (!this.isAdminUrl) ? this.router.navigate(['/bulk/detail', row.id]) : this.router.navigate(['/admin/bulk/detail', row.id]);
+
+
     // this.bulkUploadFileInfo = row;
     // this.showBulkUploadBtn.emit('Bulk Upload File Details');
   }

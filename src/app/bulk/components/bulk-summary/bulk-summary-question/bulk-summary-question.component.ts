@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 
 @Component({
   selector: 'app-bulk-summary-questions',
@@ -42,12 +42,13 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
   // @Output() showSummaryTableReturn = new EventEmitter<boolean>();
 
   bulkUploadFileInfo: BulkUploadFileInfo;
+  isAdminUrl: boolean;
 
 
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
-    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute) {
+    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router) {
 
     this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {
       if (status === 'UPDATE') {
@@ -104,6 +105,12 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    const url = this.router.routerState.snapshot.url.toString();
+    if (url.includes('admin')) {
+      this.isAdminUrl = true;
+    } else {
+      this.isAdminUrl = false;
+    }
     this.categoryDictObs = this.store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
     // subscribe to router event
@@ -156,6 +163,11 @@ export class BulkSummaryQuestionComponent implements OnInit, OnChanges {
 
   downloadFile() {
     this.store.dispatch(new bulkActions.LoadBulkUploadFileUrl({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+  }
+
+  navigation() {
+    // ['/bulk']
+    (!this.isAdminUrl) ? this.router.navigate(['/bulk']) : this.router.navigate(['/admin/bulk']);
   }
 
 
