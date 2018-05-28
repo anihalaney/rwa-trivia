@@ -1,6 +1,6 @@
 .textcenter.clearfix .yourimg { margin: 0 auto 16px; }
 .innerli{ border:1px solid; border-radius: 4px; padding: 15px; display: block;min-height: 415px;max-height: 415px; }
-.T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0px;overflow-wrap: break-word;}
+.T-tagging{ font-size: 14px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0px;overflow-wrap: break-word;height: 40px;}
 .innerli .yourimg{ width: 94%; max-width: 70px; border-radius: 50%; height: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 16px; border:1px solid; padding: 2px}
 .yourimg img{ display: block; width: 70px; height: 60px; border-radius: 50% }
 .vs:after{ content: "Vs"; position: absolute; right: -10px; top: 25px; font-size: 18px; font-family: 'hindmedium';height:25px; }
@@ -43,11 +43,17 @@ hr{height:15px; visibility: hidden; margin: 0;}
     border-style: solid;
 }
 .no-opponent{ display: block; width: 64px; height: 60px; border-radius: 50% } 
-.word-wrap
-{
-    overflow-wrap: break-word;
-}
+// .word-wrap
+// {
+//     overflow-wrap: break-word;
+// }
 .text-align
 {
     text-align: left;
+}
+.ellipsis
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
