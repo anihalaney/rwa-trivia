@@ -37,7 +37,7 @@ export class QuestionService {
   }
 
   // Firestore
-  getUserQuestions(userId: Number, published: boolean): Observable<Question[]> {
+  getUserQuestions(userId: string, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', userId))
       .valueChanges()
