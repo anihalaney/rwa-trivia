@@ -7,10 +7,10 @@
           <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
         </div>
         <div class="clear"></div>
-        <a href="#" class="dark word-wrap">{{user.displayName}}</a>
-        <div class="light word-wrap" *ngIf="user?.location">{{user.location}}</div>
+        <span class="dark ellipsis" title="{{user.displayName}}">{{user.displayName}}</span>
+        <div class="light ellipsis" *ngIf="user?.location">{{user.location}}</div>
         <hr>
-        <div class="light">Round {{game.stats[user.userId].round}}</div>
+        <!-- <div class="light">Round {{game.stats[user.userId].round}}</div> -->
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
         <div class="">
           <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
@@ -39,18 +39,18 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark " [ngClass]="user?.displayName.length>9?'word-wrap':''">{{user.displayName}}</span>
+        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?'div-right-border':''">
+          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
         </div>
-        <div class="col-xs-6 " [ngClass]="!user.displayName?'':'div-left-border'">
+        <div class="col-xs-6 ellipsis" [ngClass]="!user.displayName?'':'div-left-border'">
           <span class="light">No Opponent</span>
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light" [ngClass]="user?.location.length>9?'word-wrap':''" *ngIf="user?.location">{{user.location}}</span>
+        <div class="col-xs-6 ellipsis" [ngClass]="user?.location?'div-right-border':''">
+          <span class="light" *ngIf="user?.location">{{user.location}}</span>
         </div>
-        <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
+        <div class="col-xs-6 ellipsis" [ngClass]="!user?.location?'div-left-border':''">
           <span class="light">till now</span>
         </div>
       </div>
@@ -107,19 +107,19 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
-          <span class="dark" [ngClass]="user?.displayName.length>9?'word-wrap':''">{{user.displayName}}</span>
+        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
+          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
         </div>
-        <div class="col-xs-6 " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
-          <span class="dark" [ngClass]="otherUserInfo?.displayName.length>9?'word-wrap':''">{{otherUserInfo?.displayName}}</span>
+        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
+          <span class="dark">{{otherUserInfo?.displayName}}</span>
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light" [ngClass]="user?.location.length>9?'word-wrap':''" *ngIf="user?.location">{{user.location}}</span>
+        <div class="col-xs-6 ellipsis" [ngClass]="user?.location?'div-right-border':''">
+          <span class="light" *ngIf="user?.location">{{user.location}}</span>
         </div>
-        <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
-          <span class="light " [ngClass]="otherUserInfo?.location.length>9?'word-wrap':''">{{otherUserInfo?.location}}</span>
+        <div class="col-xs-6 ellipsis" [ngClass]="!user?.location?'div-left-border':''">
+          <span class="light ">{{otherUserInfo?.location}}</span>
         </div>
       </div>
       <div class="textcenter clearfix ">
