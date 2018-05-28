@@ -127,6 +127,16 @@ export class BulkEffects {
             })
         ));
 
+    // for get bulk object based on Id
+    @Effect()
+    getBulkUpload$ = this.actions$
+        .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE)
+        .pipe(
+        switchMap((action: bulkActions.LoadBulkUploadFile) =>
+            this.bulkService.getBulkUploadFile(action.payload.bulkId).pipe(
+                map((bulkUploadFileInfo: BulkUploadFileInfo) => new bulkActions.LoadBulkUploadFileSuccess(bulkUploadFileInfo)))
+        ));
+
     constructor(
         private actions$: Actions,
         private bulkService: BulkService,
