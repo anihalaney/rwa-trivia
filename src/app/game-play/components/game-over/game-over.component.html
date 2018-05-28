@@ -58,11 +58,11 @@
       </div>
     </div>
     <div class="div-top-spacing win-icon-div">
-      <div class="win-icon" *ngIf="game.gameOptions.playerMode == PlayerMode.Single || game.stats[user.userId].score > game.stats[otherUserId].score">
+      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score > game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score !== 3)">
         <div class="sprite thumb-up"></div>
         <span class="win-text">You Win</span>
       </div>
-      <div class="win-icon" *ngIf="game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score < game.stats[otherUserId].score">
+      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score < game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score === 3)">
         <div class="sprite thumb-down"></div>
         <span class="win-text">You Lose</span>
       </div>
@@ -72,52 +72,52 @@
   <mat-card-content class="textcenter">
     <div class="button-div">
       <div class=" win-icon">
-        <social-palette *ngIf="blogData[0].status" class="spacing" [blogData]="blogData[0]" (notify)="onNotify($event)" [isFromBlog]=false ></social-palette>
+        <social-palette *ngIf="blogData[0].status" class="spacing" [blogData]="blogData[0]" (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
 
         <button class="btn-share" type="button" (click)="shareScore()" *ngIf="!blogData[0].status">Share</button>
         <button class="btn-share" type="button">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
 
       </div>
-      <div>
-        <mat-accordion>
-          <mat-expansion-panel (opened)="bindQuestions()">
-            <mat-expansion-panel-header>
-              <mat-panel-title class="textcenter">
-                View questions & answers
-              </mat-panel-title>
-            </mat-expansion-panel-header>
+    </div>
+    <div>
+      <mat-accordion>
+        <mat-expansion-panel (opened)="bindQuestions()">
+          <mat-expansion-panel-header>
+            <mat-panel-title class="textcenter">
+              View questions & answers
+            </mat-panel-title>
+          </mat-expansion-panel-header>
 
-            <mat-panel-description>
+          <mat-panel-description>
 
-              <ul class="questions">
-                <li class="question-section" *ngFor="let row  of questionsArray;let i=index;">
-                  <div class="li-section1">
-                    <p class="dark text-style">Q{{i+1}}. {{row.questionText}}</p>
-                    <div class="answer-text">
-                      <span *ngFor="let answer of row.answers">
-                        <div class="dark text-style" *ngIf="answer.correct">A{{i+1}}.
-                          <label class="answer-label">Correct ans.</label>
-                          <span class="text-style">{{answer.answerText}}</span>
-                        </div>
-                      </span>
-                      <span *ngFor="let answer of row.answers;let j=index;">
-                        <p *ngIf="answer.answerText === row.userGivenAnswer">
-                          <label [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'" class="text-style your-answer-label">Your ans.</label>
-                          <span class="text-style" [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}} </span>
-                        </p>
-                      </span>
-                    </div>
+            <ul class="questions">
+              <li class="question-section" *ngFor="let row  of questionsArray;let i=index;">
+                <div class="li-section1">
+                  <p class="dark text-style">Q{{i+1}}. {{row.questionText}}</p>
+                  <div class="answer-text">
+                    <span *ngFor="let answer of row.answers">
+                      <div class="dark text-style" *ngIf="answer.correct">A{{i+1}}.
+                        <label class="answer-label">Correct ans.</label>
+                        <span class="text-style">{{answer.answerText}}</span>
+                      </div>
+                    </span>
+                    <span *ngFor="let answer of row.answers;let j=index;">
+                      <p *ngIf="answer.answerText === row.userGivenAnswer">
+                        <label [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'" class="text-style your-answer-label">Your ans.</label>
+                        <span class="text-style" [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}} </span>
+                      </p>
+                    </span>
                   </div>
                   <div class="li-section2 textcenter">
                     <button class="btn-share" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
                     <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
                   </div>
-                </li>
-              </ul>
-            </mat-panel-description>
-          </mat-expansion-panel>
-        </mat-accordion>
+              </li>
+            </ul>
+          </mat-panel-description>
+        </mat-expansion-panel>
+      </mat-accordion>
       </div>
     </div>
   </mat-card-content>

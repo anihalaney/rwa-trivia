@@ -14,7 +14,7 @@ export class GameOptions {
     this.gameMode = GameMode.Normal;
     this.categoryIds = [];
     this.tags = [];
-    this.maxQuestions = 4;
+    this.maxQuestions = 8;
   }
 }
 export enum PlayerMode {
