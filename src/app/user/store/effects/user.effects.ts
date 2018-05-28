@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
+import { Subscription } from 'rxjs/Subscription';
+
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
@@ -10,6 +12,8 @@ import * as userActions from '../actions/user.actions';
 import { UserService, QuestionService, GameService } from '../../../core/services';
 import { UserActions } from '../../../../app/core/store/actions';
 import { Observable } from 'rxjs/Observable';
+import { AppState } from '../../../store/app-store';
+import { coreState } from '../../../core/store';
 
 @Injectable()
 export class UserEffects {
@@ -26,40 +30,36 @@ export class UserEffects {
 
     // Load User Published Question by userId from router
     @Effect()
-    // handle location update
     loadUserPublishedRouteQuestions$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
         .map((action: any): RouterStateUrl => action.payload.routerState)
         .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/my/questions') &&
-            routerState.params.userid
-        )
-        .pipe(
-        switchMap((routerState: RouterStateUrl) =>
-            this.questionService.getUserQuestions(routerState.params.userid, true).pipe(
-                map((questions: Question[]) =>
-                    new userActions.LoadUserPublishedQuestionsSuccess(questions)
-                )
-            )
-        )
+            routerState.url.toLowerCase().startsWith('/my/questions')
+        ).pipe(
+        switchMap((routerState: RouterStateUrl) => {
+            let userId: string;
+            this.store.select(coreState).select(s => s.user).skip(1).take(1).subscribe(user => userId = user.userId);
+            return this.questionService.getUserQuestions(userId, true).pipe(map((questions: Question[]) =>
+                new userActions.LoadUserPublishedQuestionsSuccess(questions)
+            ));
+        })
         );
 
-    // Load User Unpublished Question by userId from router
+    // Load User UnPublished Question by userId from router
     @Effect()
-    // handle location update
-    loadUserUnpublishedRouteQuestions$ = this.actions$
+    loadUserUnpublishedQuestions$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
         .map((action: any): RouterStateUrl => action.payload.routerState)
         .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/my/questions') &&
-            routerState.params.userid
-        )
-        .pipe(
-        switchMap((routerState: RouterStateUrl) =>
-            this.questionService.getUserQuestions(routerState.params.userid, false).pipe(
-                map((questions: Question[]) => new userActions.LoadUserUnpublishedQuestionsSuccess(questions))
-            )
-        )
+            routerState.url.toLowerCase().startsWith('/my/questions')
+        ).pipe(
+        switchMap((routerState: RouterStateUrl) => {
+            let userId: string;
+            this.store.select(coreState).select(s => s.user).skip(1).take(1).subscribe(user => userId = user.userId);
+            return this.questionService.getUserQuestions(userId, false).pipe(map((questions: Question[]) =>
+                new userActions.LoadUserUnpublishedQuestionsSuccess(questions)
+            ));
+        })
         );
 
 
@@ -125,6 +125,9 @@ export class UserEffects {
         private userService: UserService,
         private questionService: QuestionService,
         private userAction: UserActions,
-        private gameService: GameService
-    ) { }
+        private gameService: GameService,
+        private store: Store<AppState>,
+    ) {
+
+    }
 }

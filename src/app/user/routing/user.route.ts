@@ -19,7 +19,7 @@ export const userRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'questions/:userid',
+    path: 'questions',
     component: MyQuestionsComponent,
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
