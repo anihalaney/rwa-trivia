@@ -18,7 +18,7 @@ export class ProfileCardComponent {
   userObs: Observable<User>;
   location = 'unknown';
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private router: Router) {
     this.userObs = this.store.select(appState.coreState).select(s => s.user);
 
     this.userObs.subscribe(user => {
