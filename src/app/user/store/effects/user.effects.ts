@@ -17,9 +17,6 @@ import { coreState } from '../../../core/store';
 
 @Injectable()
 export class UserEffects {
-
-    user: User;
-
     // Save user profile
     @Effect()
     addUser$ = this.actions$
@@ -40,12 +37,9 @@ export class UserEffects {
             routerState.url.toLowerCase().startsWith('/my/questions')
         ).pipe(
         switchMap((routerState: RouterStateUrl) => {
-            this.store.select(coreState).select(s => s.user).take(1).subscribe(user => {
-                if (user) {
-                    this.user = user;
-                }
-            });
-            return this.questionService.getUserQuestions(this.user.userId, true).pipe(map((questions: Question[]) =>
+            let userId: string;
+            this.store.select(coreState).select(s => s.user).skip(1).take(1).subscribe(user => userId = user.userId);
+            return this.questionService.getUserQuestions(userId, true).pipe(map((questions: Question[]) =>
                 new userActions.LoadUserPublishedQuestionsSuccess(questions)
             ));
         })
@@ -60,12 +54,9 @@ export class UserEffects {
             routerState.url.toLowerCase().startsWith('/my/questions')
         ).pipe(
         switchMap((routerState: RouterStateUrl) => {
-            this.store.select(coreState).select(s => s.user).take(1).subscribe(user => {
-                if (user) {
-                    this.user = user;
-                }
-            });
-            return this.questionService.getUserQuestions(this.user.userId, false).pipe(map((questions: Question[]) =>
+            let userId: string;
+            this.store.select(coreState).select(s => s.user).skip(1).take(1).subscribe(user => userId = user.userId);
+            return this.questionService.getUserQuestions(userId, false).pipe(map((questions: Question[]) =>
                 new userActions.LoadUserUnpublishedQuestionsSuccess(questions)
             ));
         })
