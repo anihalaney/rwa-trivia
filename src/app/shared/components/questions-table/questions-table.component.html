@@ -50,7 +50,7 @@
                 <label>
                   <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
                 </label>
-                <div *ngIf="getDisplayStatus(row.status)==='REJECTED'" class="status-btn">
+                <div *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'" class="status-btn">
                   <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
                 </div>
                 <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="status-btn">
