@@ -1,7 +1,7 @@
 <!-- <mat-card> -->
 <!-- <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle> -->
 <!-- <mat-card-content> -->
-<div *ngIf="showSummaryTable" class="mat-elevation-z8">
+<div [hidden]="!showSummaryTable" class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource" matSort class="bulk-summary-table">
 
     <!--- Note that these columns can be defined in any order.
@@ -57,7 +57,7 @@
     <ng-container cdkColumnDef="download">
       <mat-header-cell *cdkHeaderCellDef> Download File</mat-header-cell>
       <mat-cell class="col-status bulk-summary-table-cell" *cdkCellDef="let row">
-        <a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a>
+        <a (click)="downloadFile(row)">Download</a>
       </mat-cell>
     </ng-container>
 

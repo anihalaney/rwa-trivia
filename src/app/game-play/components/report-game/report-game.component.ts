@@ -1,0 +1,68 @@
+import { Component, Input, Inject, OnInit } from '@angular/core';
+import { Question } from 'app/model';
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { ReportQuestion, User, Game, QuestionMetadata, Category } from '../../../model';
+import * as gameplayactions from '../../store/actions';
+import { AppState, appState } from '../../../store';
+import { Store } from '@ngrx/store';
+import { categoryDictionary } from '../../../store';
+
+@Component({
+    selector: 'report-game',
+    templateUrl: './report-game.component.html',
+    styleUrls: ['./report-game.component.scss']
+})
+export class ReportGameComponent implements OnInit {
+
+    question: Question;
+    reportQuestionForm: FormGroup;
+    reportQuestion: ReportQuestion;
+    user: User;
+    game: Game;
+    categoryDictionary: { [key: number]: Category }
+
+    constructor(private fb: FormBuilder, private store: Store<AppState>,
+        @Inject(MAT_DIALOG_DATA) public data: any) {
+        this.question = data.question;
+        this.user = data.user;
+        this.game = data.game;
+
+        this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
+    }
+
+
+    ngOnInit() {
+        this.reportQuestion = new ReportQuestion();
+        this.reportQuestionForm = this.createForm(this.reportQuestion);
+    }
+    createForm(reportQuestion: ReportQuestion) {
+        const form: FormGroup = this.fb.group({
+            reason: new FormControl('Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque landantium.'),
+            otherReason: ''
+        });
+        return form;
+    }
+
+    saveReportQuestion() {
+        this.reportQuestion.gameId = this.game.gameId;
+        let reason = '';
+
+        this.reportQuestion.created_uid = this.user.userId;
+        if (this.reportQuestionForm.get('reason').value === 'other') {
+            reason = this.reportQuestionForm.get('otherReason').value;
+        } else {
+            reason = this.reportQuestionForm.get('reason').value;
+        }
+        const info: { [key: string]: QuestionMetadata } = {};
+        const questionMetadata = new QuestionMetadata();
+        questionMetadata.reason = reason;
+
+        info[this.question.id] = { ...questionMetadata };
+        this.reportQuestion.questions = info;
+        this.store.dispatch(new gameplayactions.SaveReportQuestion({ reportQuestion: this.reportQuestion, game: this.game }));
+
+    }
+
+}
+

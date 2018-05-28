@@ -6,11 +6,13 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
+import * as useractions from '../../../user/store/actions';
 import { AppState, appState } from '../../../store';
 
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Category, GameOptions, GameMode, User } from '../../../model';
+import { Category, GameOptions, GameMode, User, Friends, PlayerMode, OpponentType } from '../../../model';
+import { userFriends } from 'app/user/store';
 
 @Component({
   selector: 'new-game',
@@ -22,6 +24,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   categories: Category[];
   tagsObs: Observable<string[]>;
   tags: string[];
+  userDict$: Observable<{ [key: string]: User }>;
   selectedTags: string[];
   sub: Subscription;
   sub2: Subscription;
@@ -32,8 +35,12 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   showUncheckedCategories: boolean = false;
   allCategoriesSelected: boolean = true;
-
+  uFriends: Array<string>;
+  userDict: { [key: string]: User } = {};
+  noFriendsStatus: boolean;
   filteredTags$: Observable<string[]>;
+
+  friendUserId: string;
 
   get categoriesFA(): FormArray {
     //console.log(this.newGameForm.get('categoriesFA'));
@@ -46,19 +53,42 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
     this.tagsObs = store.select(appState.coreState).select(s => s.tags);
     this.selectedTags = [];
+    this.userDict$ = this.store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$.subscribe(userDict => this.userDict = userDict);
+
+
+    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+      if (user) {
+        this.store.dispatch(new useractions.LoadUserFriends({ 'userId': user.userId }));
+      }
+    });
+
+
+    this.store.select(appState.userState).select(s => s.userFriends).subscribe(uFriends => {
+      if (uFriends !== null) {
+        this.uFriends = [];
+        uFriends.myFriends.map(friend => {
+          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
+        });
+        this.noFriendsStatus = false;
+      } else {
+        this.noFriendsStatus = true;
+      }
+    });
+
+
+
   }
 
   ngOnInit() {
     this.store.dispatch(new gameplayactions.ResetNewGame());
 
+
     this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
-    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameObj => {
 
-      console.log("Navigating to game: " + gameObj['gameId']);
-      this.router.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-    })
+
+
 
     this.gameOptions = new GameOptions();
     this.newGameForm = this.createForm(this.gameOptions);
@@ -156,7 +186,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     let form: FormGroup = this.fb.group({
       playerMode: [gameOptions.playerMode, Validators.required],
-      opponentType: [{ value: gameOptions.opponentType, disabled: true }],
+      opponentType: [gameOptions.opponentType],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
       tagsArray: tagsFA,
@@ -167,23 +197,37 @@ export class NewGameComponent implements OnInit, OnDestroy {
     return form;
   }
 
+
+  selectFriendId(friendId: string) {
+    this.friendUserId = friendId;
+  }
+
+
   onSubmit() {
     //validations
     this.newGameForm.updateValueAndValidity();
     if (this.newGameForm.invalid)
       return;
 
+
+
     //console.log(this.newGameForm.value);
     let gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
     console.log(gameOptions);
 
+    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
+      && !this.friendUserId) {
+      return;
+    }
+
     this.startNewGame(gameOptions);
   }
+
 
   startNewGame(gameOptions: GameOptions) {
     let user: User;
     this.store.select(appState.coreState).take(1).subscribe(s => user = s.user); //logged in user
-
+    gameOptions.friendId = this.friendUserId;
     this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }
 

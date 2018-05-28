@@ -20,6 +20,7 @@ export class Question {
   bulkUploadId?: string;
   reason?: string;
   validationErrorMessages?: string[];
+  userGivenAnswer?: string;
 
   static getViewModelFromDb(db: any): Question {
     const question: Question = new Question();
