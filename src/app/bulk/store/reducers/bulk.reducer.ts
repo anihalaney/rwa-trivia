@@ -75,3 +75,14 @@ export function bulkUploadArchiveStatus(state: any = 'NONE', action: BulkActions
             return null;
     }
 };
+
+// for get single BulkUploadFileInfo Object
+export function bulkUploadFileInfo(state: any, action: BulkActions): BulkUploadFileInfo {
+    switch (action.type) {
+        case BulkActionTypes.LOAD_BULK_UPLOAD_FILE_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+

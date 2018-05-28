@@ -9,6 +9,7 @@ import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as bulkActions from '../../../store/actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'bulk-summary-table',
@@ -41,7 +42,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
 
   constructor(
     private store: Store<AppState>,
-    private storage: AngularFireStorage) {
+    private storage: AngularFireStorage, private router: Router) {
     this.categoryDictObs = store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
     this.store.select(appState.coreState).take(1).subscribe((s) => {
@@ -127,8 +128,9 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
 
   // get Questions by bulk upload Id
   getBulkUploadQuestions(row: BulkUploadFileInfo) {
-    this.bulkUploadFileInfo = row;
-    this.showBulkUploadBtn.emit('Bulk Upload File Details');
+    this.router.navigate(['/bulk/detail', row.id]);
+    // this.bulkUploadFileInfo = row;
+    // this.showBulkUploadBtn.emit('Bulk Upload File Details');
   }
 
   downloadFile(bulkUploadFileInfo: BulkUploadFileInfo) {
