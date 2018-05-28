@@ -26,7 +26,7 @@ export enum BulkActionTypes {
 // for get all BulkUploadFileInfo
 export class LoadBulkUpload implements Action {
     readonly type = BulkActionTypes.LOAD_BULK_UPLOAD;
-    constructor(public payload: {archive: boolean }) { }
+    constructor(public payload: { user: User, archive: boolean }) { }
 }
 
 // for get all BulkUploadFileInfo Success

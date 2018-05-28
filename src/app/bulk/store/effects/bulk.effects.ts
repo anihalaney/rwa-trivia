@@ -20,7 +20,7 @@ export class BulkEffects {
         .ofType(BulkActionTypes.LOAD_BULK_UPLOAD)
         .pipe(
         switchMap((action: bulkActions.LoadBulkUpload) =>
-            this.bulkService.getBulkUpload(action.payload.archive).pipe(
+            this.bulkService.getBulkUpload(action.payload.user, action.payload.archive).pipe(
                 map((bulkUploadFileInfo: BulkUploadFileInfo[]) => new bulkActions.LoadBulkUploadSuccess(bulkUploadFileInfo))
             )
         )
