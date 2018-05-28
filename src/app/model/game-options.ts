@@ -5,6 +5,8 @@ export class GameOptions {
   categoryIds: number[];
   tags: string[];
   maxQuestions: number;
+  friendId?: string;
+  rematch?: boolean;
 
   constructor() {
     //defaults
@@ -12,7 +14,7 @@ export class GameOptions {
     this.gameMode = GameMode.Normal;
     this.categoryIds = [];
     this.tags = [];
-    this.maxQuestions = 4;
+    this.maxQuestions = 8;
   }
 }
 export enum PlayerMode {
@@ -31,5 +33,18 @@ export enum GameMode {
 
 export enum GameStatus {
   STARTED = 'started',
-  WAITING_FOR_NEXT_Q = 'waiting for next question'
+  RESTARTED = 'restarted',
+  AVAILABLE_FOR_OPPONENT = 'available for opponent',
+  WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE = 'waiting for friend invitation acceptance',
+  WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE = 'waiting for random player invitation acceptance',
+  JOINED_GAME = 'joined opponent',
+  WAITING_FOR_NEXT_Q = 'waiting for next question',
+  COMPLETED = 'completed'
+}
+
+
+export enum GameOperations {
+  CALCULATE_SCORE = 'calculate_score',
+  GAME_OVER = 'game_over',
+  REPORT_STATUS = 'report_status'
 }

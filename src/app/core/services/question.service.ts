@@ -24,20 +24,20 @@ export class QuestionService {
 
   // Elasticsearch
   getQuestionOfTheDay(): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/getQuestionOfTheDay';
+    const url: string = CONFIG.functionsUrl + '/app/question/day';
 
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    const url: string = CONFIG.functionsUrl + '/app/getQuestions/';
-    // let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";
+    const url: string = CONFIG.functionsUrl + '/app/question/';
+    // let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/day/";
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }
 
   // Firestore
-  getUserQuestions(userId: Number, published: boolean): Observable<Question[]> {
+  getUserQuestions(userId: string, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', userId))
       .valueChanges()
@@ -142,8 +142,8 @@ export class QuestionService {
     this.db.firestore.runTransaction(transaction => {
       return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
         transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
-      );
-    });
-  }
+      )
+    })
 
+  }
 }

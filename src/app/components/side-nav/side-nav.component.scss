@@ -1,6 +1,6 @@
 .card{ border-bottom: 1px solid }
 .card {border-color: rgba(204, 204, 204, 0.44); }
-.playwith a{ display: block; padding:20px 25px; position: relative; }
+.playwith a{ display: block; padding:20px 25px; position: relative;cursor: pointer }
 .playwith a:after{ content: ""; position: absolute; right: 35px; height: 26px; width: 26px; border-radius: 23px;margin: auto; top: 0; bottom: 0;z-index: 99; transition: 0.3s ease-in-out}
 .playwith a:before{ content: ""; position: absolute; right: 45px; height:8px; width:8px; border-width: 1px 1px 0 0; border-style: solid; transform: rotate(45deg); z-index: 999; margin: auto; top: 0; bottom: 0; transition: .3s ease-in-out;}
 .playtext{ display: inline-block;vertical-align: -9px; font-family: 'hindmedium';}
