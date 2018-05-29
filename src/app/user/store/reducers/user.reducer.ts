@@ -13,9 +13,9 @@ export function userProfileSaveStatus(state: any = 'NONE', action: UserActions):
         case UserActionTypes.ADD_USER_PROFILE_SUCCESS:
             return 'SUCCESS';
         case UserActionTypes.ADD_USER_INVITATION_SUCCESS:
-            return 'SUCCESS';
+            return 'INVITATION SUCCESS';
         case UserActionTypes.MAKE_FRIEND_SUCCESS:
-            return 'SUCCESS';
+            return 'MAKE FRIEND SUCCESS';
         default:
             return null;
     }
