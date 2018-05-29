@@ -28,6 +28,7 @@ export class GameCardComponent implements OnInit, OnChanges {
   categoryDict: { [key: number]: Category };
   randomCategoryId = 0;
   PlayerMode = PlayerMode;
+  totalRound = 16;
 
   constructor(private store: Store<AppState>) {
 
