@@ -25,6 +25,8 @@ export class AppComponent implements OnInit, OnDestroy {
   sub: Subscription;
   sub2: Subscription;
   sub3: Subscription;
+  sub4: Subscription;
+  sub5: Subscription;
 
   theme = '';
   constructor(private renderer: Renderer2,
@@ -44,11 +46,6 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.sub = store.select(appState.userState).select(s => s.questionSaveStatus).subscribe((status) => {
-      if (status === 'IN PROGRESS') {
-        this.router.navigate(['/my/questions']);
-      }
-    });
 
     this.sub2 = store.select(appState.coreState).select(s => s.user).skip(1).subscribe(user => {
       this.user = user
@@ -76,6 +73,18 @@ export class AppComponent implements OnInit, OnDestroy {
       this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     });
+
+    this.sub4 = this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+      if (status === 'MAKE FRIEND SUCCESS') {
+        this.router.navigate(['my/invite-friends']);
+      }
+    });
+
+    this.sub5 = store.select(appState.userState).select(s => s.questionSaveStatus).subscribe((status) => {
+      if (status === 'IN PROGRESS') {
+        this.router.navigate(['/my/questions']);
+      }
+    });
   }
 
   ngOnInit() {
@@ -83,7 +92,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub, this.sub2, this.sub3]);
+    Utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4, this.sub5]);
   }
 
   login() {

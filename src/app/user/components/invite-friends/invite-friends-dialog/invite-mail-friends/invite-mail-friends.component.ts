@@ -32,7 +32,7 @@ export class InviteMailFriendsComponent implements OnInit {
 
     this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
 
-      if (status === 'SUCCESS') {
+      if (status === 'INVITATION SUCCESS') {
         this.showSuccessMsg = 'Your Invitations are send Successfully!!';
       }
     });
