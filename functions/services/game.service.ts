@@ -67,7 +67,7 @@ exports.updateGame = (dbGame: any): Promise<any> => {
 exports.checkGameOver = (): Promise<any> => {
 
     return gameFireStoreClient.collection('/games').where('gameOver', '==', false)
-        .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q)
+      //  .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q)
         .get()
         .then((snapshot) => { return snapshot })
         .catch((err) => {
