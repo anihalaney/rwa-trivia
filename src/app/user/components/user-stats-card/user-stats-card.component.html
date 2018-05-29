@@ -17,8 +17,8 @@
 
     <li>
       <div class="sprite winsicon"></div>
-      <div class="viewtext">Wins</div>
-      <div class="viewcount align-right">{{user?.stats?.wins}}</div>
+      <div class="viewtext">Win-Loss</div>
+      <div class="viewcount align-right">{{user?.stats?.wins}}-{{user?.stats?.losses}}</div>
     </li>
 
     <li>
@@ -27,11 +27,11 @@
       <div class="viewcount align-right">{{user?.stats?.badges}}</div>
     </li>
 
-    <li>
+    <!-- <li>
       <div class="sprite losessicon"></div>
       <div class="viewtext">Losess</div>
       <div class="viewcount align-right">{{user?.stats?.losses}}</div>
-    </li>
+    </li> -->
 
     <li>
       <div class="sprite avgicon"></div>
@@ -42,11 +42,9 @@
     </li>
 
     <li>
-      <a href="#">
-        <div class="sprite contributicon"></div>
-        <div class="viewtext">Contribution</div>
-        <div class="viewcount align-right">{{user?.stats?.contribution}}</div>
-      </a>
+      <div class="sprite contributicon"></div>
+      <div class="viewtext">Contribution</div>
+      <div class="viewcount align-right">{{user?.stats?.contribution}}</div>
     </li>
   </ul>
 
