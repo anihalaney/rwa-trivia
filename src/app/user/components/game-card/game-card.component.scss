@@ -43,10 +43,6 @@ hr{height:15px; visibility: hidden; margin: 0;}
     border-style: solid;
 }
 .no-opponent{ display: block; width: 64px; height: 60px; border-radius: 50% } 
-// .word-wrap
-// {
-//     overflow-wrap: break-word;
-// }
 .text-align
 {
     text-align: left;
@@ -56,4 +52,12 @@ hr{height:15px; visibility: hidden; margin: 0;}
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+.div-score
+{
+    padding-top: 7%;
+}
+.div-badge
+{
+    height: 100px;
 }
