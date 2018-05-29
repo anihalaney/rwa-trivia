@@ -69,7 +69,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           const playerIds = game.playerIds;
           playerIds.map(playerId => {
             if (playerId !== this.user.userId) {
-              this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
+              if (this.userDict[playerId] === undefined) {
+                this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
+              }
+
             }
           });
         });
