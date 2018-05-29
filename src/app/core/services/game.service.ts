@@ -47,6 +47,12 @@ export class GameService {
       .where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT))
       .valueChanges();
 
+    const userGames5 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
+      .where('GameStatus', '==', GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE))
+      .valueChanges();
+
+
+
 
     const OtherGames1 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
       .where('GameStatus', '==', GameStatus.RESTARTED))
@@ -61,7 +67,7 @@ export class GameService {
       .valueChanges();
 
 
-    return Observable.combineLatest(userGames1, userGames2, userGames3, userGames4, OtherGames1, OtherGames2, OtherGames3)
+    return Observable.combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, OtherGames1, OtherGames2, OtherGames3)
       .map(games => [].concat.apply([], games))
       .map(gs => gs.map(g => Game.getViewModel(g)))
       .map(games => {

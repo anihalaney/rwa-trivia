@@ -8,7 +8,7 @@
         </div>
         <div class="clear"></div>
         <span class="dark ellipsis" title="{{user.displayName}}">{{user.displayName}}</span>
-        <div class="light ellipsis" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</div>
+        <div class="light ellipsis div-location" title="{{user?.location}}">{{user?.location}}</div>
         <hr>
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
         <div class="div-badge">
@@ -46,8 +46,8 @@
           <span class="light">No Opponent</span>
         </div> -->
       </div>
-      <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis" [ngClass]="user?.location?'div-right-border':''">
+      <div class="textcenter clearfix ">
+        <div class="col-xs-6 ellipsis div-right-border div-location">
           <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
         </div>
         <!-- <div class="col-xs-6 ellipsis" [ngClass]="!user?.location?'div-left-border':''">
@@ -96,7 +96,7 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
+        <div class="col-xs-6 ellipsis " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
           <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
         </div>
         <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
@@ -104,10 +104,10 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis" [ngClass]="user?.location?'div-right-border':''">
+        <div class="col-xs-6 ellipsis div-location div-right-border">
           <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
         </div>
-        <div class="col-xs-6 ellipsis" [ngClass]="!user?.location?'div-left-border':''">
+        <div class="col-xs-6 ellipsis div-location">
           <span class="light" *ngIf="otherUserInfo?.displayName" title="{{otherUserInfo?.location}}">{{otherUserInfo?.location}}</span>
         </div>
       </div>
