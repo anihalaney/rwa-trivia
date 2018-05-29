@@ -135,24 +135,26 @@ exports.checkGameOver = (req, res) => {
     gameControllerService.checkGameOver().then((snapshot) => {
         snapshot.forEach((doc) => {
             const game: Game = Game.getViewModel(doc.data());
-            if (game.playerIds.length > 1 && game.nextTurnPlayerId !== '') {
+            //   console.log('game.nextTurnPlayerId--->', game.nextTurnPlayerId);
+            //  console.log('game.playerIds--->', game.playerIds);
+            //  if (game.playerIds.length > 1 && game.nextTurnPlayerId !== '') {
 
-                const millis = utils.getUTCTimeStamp();
+            const millis = utils.getUTCTimeStamp();
 
-                const noPlayTimeBound = millis - game.turnAt;
-                const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
-                //  console.log('game--->', game.gameId);
-                // console.log('noPlayTimeBound--->', noPlayTimeBound);
-                if (playedHours >= schedulerConstants.gamePlayDuration) {
-                    game.gameOver = true;
-                    game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
-                    const dbGame = game.getDbModel();
-                    gameControllerService.updateGame(dbGame).then((ref) => {
-                        console.log('updated game', dbGame.id);
-                    });
-                    //  console.log('updates=>', game.gameId);
-                }
+            const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
+            const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
+            //  console.log('game--->', game.gameId);
+            //  console.log('noPlayTimeBound--->', noPlayTimeBound);
+            if (playedHours >= schedulerConstants.gamePlayDuration) {
+                game.gameOver = true;
+                game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
+                const dbGame = game.getDbModel();
+                gameControllerService.updateGame(dbGame).then((ref) => {
+                    console.log('updated game', dbGame.id);
+                });
+                //  console.log('updates=>', game.gameId);
             }
+            //  }
         });
         res.send('scheduler check is completed');
     });

@@ -47,7 +47,7 @@ export class GameCardComponent implements OnInit, OnChanges {
         if (this.game.nextTurnPlayerId === this.user.userId) {
 
           const utcDate = new Date(new Date().toUTCString());
-          const currentMillis = utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000);
+          const currentMillis = utcDate.getTime();
 
           const diff = currentMillis - this.game.turnAt;
           const hour = Math.floor(diff / (60 * 60 * 1000));

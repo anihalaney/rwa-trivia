@@ -30,7 +30,17 @@ export class GameService {
 
   getActiveGames(user: User): Observable<Game[]> {
 
-    const userGames = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false))
+    const userGames1 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
+      .where('GameStatus', '==', GameStatus.STARTED))
+      .valueChanges();
+
+    const userGames2 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
+      .where('GameStatus', '==', GameStatus.RESTARTED))
+      .valueChanges();
+
+
+    const userGames3 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
+      .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q))
       .valueChanges();
 
 
@@ -39,11 +49,15 @@ export class GameService {
       .valueChanges();
 
     const OtherGames2 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
+      .where('GameStatus', '==', GameStatus.JOINED_GAME))
+      .valueChanges();
+
+    const OtherGames3 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
       .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q))
       .valueChanges();
 
 
-    return Observable.combineLatest(userGames, OtherGames1, OtherGames2)
+    return Observable.combineLatest(userGames1, userGames2, userGames3, OtherGames1, OtherGames2, OtherGames3)
       .map(games => [].concat.apply([], games))
       .map(gs => gs.map(g => Game.getViewModel(g))
         .sort((a: any, b: any) => { return (b.turnAt - a.turnAt) }))
