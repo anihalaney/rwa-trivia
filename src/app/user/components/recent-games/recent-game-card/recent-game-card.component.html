@@ -14,6 +14,7 @@
                 <div class="yourimg">
                     <img *ngIf="userDict[getOpponentId(game)]?.profilePictureUrl" [src]="userDict[getOpponentId(game)]?.profilePictureUrl" alt="user1"
                     />
+                    <img *ngIf="!userDict[getOpponentId(game)]?.profilePictureUrl" src="assets/images/imgupload.png" alt="user1" />
                 </div>
                 <p class="light">{{userDict[getOpponentId(game)]?.displayName}}</p>
                 <p class="light">Score {{game.stats[getOpponentId(game)]?.score}}</p>
