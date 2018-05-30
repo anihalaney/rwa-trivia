@@ -191,18 +191,6 @@ export class ProfileSettingsComponent implements OnDestroy {
     }
   }
 
-  // // cropped image convert to blob object
-  // dataURItoBlob(dataURI: any) {
-  //   const binary = atob(dataURI.split(',')[1]);
-  //   const array = [];
-  //   for (let i = 0; i < binary.length; i++) {
-  //     array.push(binary.charCodeAt(i));
-  //   }
-  //   return new Blob([new Uint8Array(array)], {
-  //     type: this.profileImageFile.type
-  //   });
-  // }
-
   // create the form based on user object
   createForm(user: User) {
     const categoryIds: FormGroup[] = this.categories.map(category => {
