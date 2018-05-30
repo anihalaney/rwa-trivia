@@ -492,7 +492,7 @@ nav .user.card{
 {
   background-position: -194px -321px;  width: 26px;  height: 40px;
 }
-.sb-circles-dark .sb-wrapper
+.blog-social-icon .sb-circles-dark .sb-wrapper
 {
   font-size: 11px !important;
 }
@@ -539,4 +539,12 @@ nav .user.card{
   background-position: -138px -519px;
   width: 50px;
   height: 50px;
+}
+.socialicon .sb-circles-dark .sb-wrapper {
+  font-size: 12px !important;
+  padding-right: 15%;
+}
+.footer-social-icon .sb-circles-dark .sb-wrapper
+{
+  font-size: 10px !important;
 }
