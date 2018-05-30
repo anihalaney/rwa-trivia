@@ -42,17 +42,11 @@
         <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?'div-right-border':''">
           <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
         </div>
-        <!-- <div class="col-xs-6 ellipsis" [ngClass]="!user.displayName?'':'div-left-border'">
-          <span class="light">No Opponent</span>
-        </div> -->
       </div>
       <div class="textcenter clearfix ">
         <div class="col-xs-6 ellipsis div-right-border div-location">
           <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
         </div>
-        <!-- <div class="col-xs-6 ellipsis" [ngClass]="!user?.location?'div-left-border':''">
-          <span class="light">till now</span>
-        </div> -->
       </div>
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border div-score">
