@@ -5,9 +5,10 @@
       <div class="col-xs-12 textcenter clearfix">
         <div class="yourimg">
           <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
+          <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
         </div>
         <div class="clear"></div>
-        <a href="#" class="dark word-wrap">{{user.displayName}}</a>
+        <label href="#" class="dark word-wrap">{{user.displayName}}</label>
         <div class="light word-wrap" *ngIf="user?.location">{{user.location}}</div>
         <hr>
         <div class="light">Round {{game.stats[user.userId].round}}</div>
@@ -25,16 +26,15 @@
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg vs">
-            <a href="#">
-              <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
-            </a>
+            <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
+            <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
           </div>
         </div>
         <div class="col-xs-6">
           <div class="yourimg ">
-            <a href="#">
-              <div class="sprite no-opponent"></div>
-            </a>
+
+            <div class="sprite no-opponent"></div>
+
           </div>
         </div>
       </div>
@@ -93,16 +93,14 @@
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
-            <a href="#">
-              <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
-            </a>
+            <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
+            <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
           </div>
         </div>
         <div class="col-xs-6">
           <div class="yourimg ">
-            <a href="#">
-              <img *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" />
-            </a>
+            <img *ngIf="!otherUserInfo?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
+            <img *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" />
           </div>
         </div>
       </div>
@@ -165,7 +163,6 @@
     <p>remaining to play your turn</p>
   </div>
 
-  <!-- <div *ngIf="!myTurn" class="opponent">Waiting for Opponent</div> -->
   <div *ngIf="!myTurn && game.playerIds.length == 1" class="opponent playnow">
     <button class="btn-share" type="button">Waiting for Opponent</button>
   </div>

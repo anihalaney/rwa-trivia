@@ -1,11 +1,3 @@
-<!-- <mat-card class="flex-container" 
-          fxLayoutWrap="wrap"
-          fxLayout="row"
-          fxLayoutAlign="center" fxLayoutAlign.xs="start">
-  <mat-card-content >
-    Invite Friends Component
-  </mat-card-content>
-</mat-card> -->
 <div class="row">
   <div class="pageheading col-md-9 col-xs-12 hidden-xs">FRIEND LIST</div>
   <div class="col-md-3 col-xs-6 align-right">
@@ -18,7 +10,8 @@
       <mat-header-cell *cdkHeaderCellDef>Friends</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell" *cdkCellDef="let row">
         <div class="profile" *ngIf="userDict[row.userId]?.profilePictureUrl">
-          <img [src]="userDict[row.userId]?.profilePictureUrl">
+          <img *ngIf="!userDict[row.userId]?.profilePictureUrl" src="assets/images/default-avatar.png" alt="user" />
+          <img *ngIf="userDict[row.userId]?.profilePictureUrl" [src]="userDict[row.userId]?.profilePictureUrl">
         </div>
         <div class="display-name">
           <label *ngIf="userDict[row.userId]?.displayName">{{userDict[row.userId]?.displayName}}</label>
