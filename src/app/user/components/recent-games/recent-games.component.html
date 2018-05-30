@@ -5,7 +5,7 @@
       <recent-game-card [game]="game" [userDict]="userDict" [user]="user"></recent-game-card>
     </li>
   </ul>
-  <a class="viewall" title="view more" (click)="getMoreCard()" *ngIf="finalResult.length!=nextIndex">view more
+  <a class="viewall" title="view more" (click)="getMoreCard()" *ngIf="finalResult.length!=nextIndex && finalResult.length > 4">view more
     <span class="a-arrow"></span>
   </a>
 </div>
