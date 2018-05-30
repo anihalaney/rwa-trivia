@@ -1,4 +1,4 @@
-import { Component , OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 
 @Component({
@@ -11,6 +11,9 @@ export class BulkComponent implements OnInit {
   public bulkSummaryDetailPath = 'admin/';
   public bulkSummaryTitle: string;
   public showSummaryTable = true;
+  isArchive: boolean;
+  isArchiveBtnClicked: boolean;
+  toggleValue: boolean;
 
 
   constructor() { }
@@ -33,5 +36,16 @@ export class BulkComponent implements OnInit {
   backToSummary(): void {
     this.showSummaryTable = true;
     this.setDefaultTitle();
+  }
+
+  tapped(value) {
+    this.toggleValue = value;
+  }
+
+  showArchiveBtn(value: boolean) {
+    this.isArchive = value;
+  }
+  archiveData() {
+    this.isArchiveBtnClicked = true;
   }
 }

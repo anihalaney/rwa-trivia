@@ -65,3 +65,24 @@ export function questionSaveStatus(state: any = 'NONE', action: BulkActions): st
             return null;
     }
 };
+
+// archive bulk upload Status
+export function bulkUploadArchiveStatus(state: any = 'NONE', action: BulkActions): string {
+    switch (action.type) {
+        case BulkActionTypes.ARCHIVE_BULK_UPLOAD_SUCCESS:
+            return 'ARCHIVED';
+        default:
+            return null;
+    }
+};
+
+// for get single BulkUploadFileInfo Object
+export function bulkUploadFileInfo(state: any, action: BulkActions): BulkUploadFileInfo {
+    switch (action.type) {
+        case BulkActionTypes.LOAD_BULK_UPLOAD_FILE_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
