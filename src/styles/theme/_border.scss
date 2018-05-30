@@ -2,7 +2,7 @@
 	.card{ 
 		border-color: map-get($theme, card);
 	}
-	.recentlygames li, .viewall, .navview #statis li, .navview #graph li, .blog-social, .time-stats, .pcategories > .col-sm-9, .tag, .btnbox, .form-group .bar, .questionstatus .tab-content > ul > li, nav .card,.question-section,.report-question-section,.social-icons,.close-div,.no-card{ 
+	.recentlygames li, .viewall, .navview #statis li, .navview #graph li, .blog-social, .time-stats, .pcategories > .col-sm-9, .tag, .btnbox, .form-group .bar, .questionstatus .tab-content > ul > li, nav .card,.question-section,.report-question-section,.social-icons,.close-div,.no-card,.social-icons-gameOver,.social-icons-blog,.close-div{ 
 		border-color: map-get($theme, default);
 	}
 	.viewall:after{ 

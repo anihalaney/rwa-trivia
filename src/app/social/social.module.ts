@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '../shared/shared.module';
-import { BlogComponent, NewsletterComponent, SocialPaletteComponent } from './components';
+import { BlogComponent, NewsletterComponent } from './components';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { effects, reducer } from './store';
@@ -9,8 +9,7 @@ import { effects, reducer } from './store';
 @NgModule({
   declarations: [
     BlogComponent,
-    NewsletterComponent,
-    SocialPaletteComponent
+    NewsletterComponent
   ],
   imports: [
     //rwa modules
@@ -25,8 +24,7 @@ import { effects, reducer } from './store';
   ],
   exports: [
     BlogComponent,
-    NewsletterComponent,
-    SocialPaletteComponent
+    NewsletterComponent
   ]
 })
 export class SocialModule { }
