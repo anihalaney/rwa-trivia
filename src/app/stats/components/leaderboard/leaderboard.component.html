@@ -5,7 +5,7 @@
       <ul>
         <li *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index;">
           <div class="row">
-            <div class="col-xs-2 has">#{{index}}</div>
+            <div class="col-xs-2 has">#{{j+1}}</div>
             <div class="col-xs-3">
               <a href="#">
                 <img *ngIf="userDict[user.userId]?.profilePictureUrl" [src]="userDict[user.userId]?.profilePictureUrl" />
