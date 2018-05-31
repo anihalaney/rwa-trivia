@@ -14,6 +14,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   @Input() user: User;
   @Output() logoutClicked = new EventEmitter();
   @Output() loginClicked = new EventEmitter();
+  blogUrl = 'https://bitwiser.io';
 
   constructor(private router: Router) { }
 
