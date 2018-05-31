@@ -3,6 +3,7 @@ const generalService = require('../services/general.service');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
+import { BulkUploadUpdate } from '../utils/bulk-upload-update';
 
 /**
  * migrateCollections
@@ -142,3 +143,15 @@ exports.generateUserContributionStat = (req, res) => {
         res.send('updated user category stat');
     });
 };
+
+/**
+ * update bulk upload collection by adding isUserArchived or isAdminArchived based on user role
+ * return status
+ */
+exports.updateBulkUploadCollection = (req, res) => {
+    const bulkUploadUpdate: BulkUploadUpdate = new BulkUploadUpdate();
+    bulkUploadUpdate.getUserList().then((bulkUploadResults) => {
+        res.send('updated bulk upload collection');
+    });
+
+}

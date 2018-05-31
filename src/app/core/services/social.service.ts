@@ -1,16 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
 import { CONFIG } from '../../../environments/environment';
-import { Subscription, Subscribers } from '../../model';
+import { Subscription, Subscribers, SocialGameScoreShare } from '../../model';
 import { UserService } from './user.service';
 
 
 @Injectable()
 export class SocialService {
+    basePath = '/social_share';
+    folderPath = '/score_images';
+
     constructor(private db: AngularFirestore,
         private http: HttpClient,
+        private storage: AngularFireStorage,
         private userService: UserService) {
     }
 
@@ -41,5 +46,15 @@ export class SocialService {
     getTotalSubscription(): Observable<Subscribers> {
         const url: string = CONFIG.functionsUrl + '/app/subscription/count';
         return this.http.get<Subscribers>(url);
+    }
+
+    generateScoreShareImage(imageBlob: any, userId: string) {
+        const fileName = new Date().getTime();
+        const socialGameScoreShare: SocialGameScoreShare = new SocialGameScoreShare();
+        socialGameScoreShare.filename = fileName;
+        socialGameScoreShare.created_uid = userId;
+        this.db.doc(`/social_share/${socialGameScoreShare.filename}`).set({ ...socialGameScoreShare });
+        const socialShareImageObj = this.storage.upload(`${this.basePath}/${userId}/${this.folderPath}/${new Date().getTime()}`, imageBlob);
+        return socialShareImageObj.downloadURL().map(url => url);
     }
 }
