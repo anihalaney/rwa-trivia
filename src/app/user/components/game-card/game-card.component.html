@@ -1,18 +1,17 @@
 <div class="innerli">
   <div class="T-tagging">{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}</div>
   <div class="row">
-    <ng-container *ngIf="game.gameOptions.playerMode == 0">
+    <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="col-xs-12 textcenter clearfix">
         <div class="yourimg">
           <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
         </div>
         <div class="clear"></div>
-        <a href="#" class="dark word-wrap">{{user.displayName}}</a>
-        <div class="light word-wrap" *ngIf="user?.location">{{user.location}}</div>
+        <span class="dark ellipsis" title="{{user.displayName}}">{{user.displayName}}</span>
+        <div class="light ellipsis div-location" title="{{user?.location}}">{{user?.location}}</div>
         <hr>
-        <div class="light">Round {{game.stats[user.userId].round}}</div>
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
-        <div class="">
+        <div class="div-badge">
           <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
@@ -21,7 +20,8 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="game.gameOptions.playerMode == 1 && game.playerIds.length == 1">
+
+    <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length == 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg vs">
@@ -39,35 +39,18 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark " [ngClass]="user?.displayName.length>9?'word-wrap':''">{{user.displayName}}</span>
-        </div>
-        <div class="col-xs-6 " [ngClass]="!user.displayName?'':'div-left-border'">
-          <span class="light">No Opponent</span>
-        </div>
-      </div>
-      <div class="textcenter clearfix">
-        <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light" [ngClass]="user?.location.length>9?'word-wrap':''" *ngIf="user?.location">{{user.location}}</span>
-        </div>
-        <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
-          <span class="light">till now</span>
+        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?'div-right-border':''">
+          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
         </div>
       </div>
       <div class="textcenter clearfix ">
-        <div class="col-xs-6 div-spacing" [ngClass]="myTurn?'div-right-border':''">
-          <span class="light" *ngIf="myTurn">Round {{game.stats[user.userId].round}}</span>
-        </div>
-        <div class="col-xs-6  div-spacing" [ngClass]="myTurn?'':'div-left-border'">
-          <span class="light" *ngIf="!myTurn"></span>
+        <div class="col-xs-6 ellipsis div-right-border div-location">
+          <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6 div-right-border">
+        <div class="col-xs-6 div-right-border div-score">
           <div class="dark">Score {{game.stats[user.userId].score}}</div>
-        </div>
-        <div class="col-xs-6">
-          <div class="dark"></div>
         </div>
       </div>
       <div class="textcenter clearfix">
@@ -89,7 +72,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="game.gameOptions.playerMode == 1 && game.playerIds.length > 1">
+    <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
@@ -107,34 +90,26 @@
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
-          <span class="dark" [ngClass]="user?.displayName.length>9?'word-wrap':''">{{user.displayName}}</span>
+        <div class="col-xs-6 ellipsis " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
+          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
         </div>
-        <div class="col-xs-6 " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
-          <span class="dark" [ngClass]="otherUserInfo?.displayName.length>9?'word-wrap':''">{{otherUserInfo?.displayName}}</span>
-        </div>
-      </div>
-      <div class="textcenter clearfix">
-        <div class="col-xs-6 " [ngClass]="user?.location?'div-right-border':''">
-          <span class="light" [ngClass]="user?.location.length>9?'word-wrap':''" *ngIf="user?.location">{{user.location}}</span>
-        </div>
-        <div class="col-xs-6 " [ngClass]="!user?.location?'div-left-border':''">
-          <span class="light " [ngClass]="otherUserInfo?.location.length>9?'word-wrap':''">{{otherUserInfo?.location}}</span>
-        </div>
-      </div>
-      <div class="textcenter clearfix ">
-        <div class="col-xs-6 div-spacing" [ngClass]="myTurn?'div-right-border':''">
-          <span class="light" *ngIf="myTurn">Round {{game.stats[user.userId].round}}</span>
-        </div>
-        <div class="col-xs-6  div-spacing" [ngClass]="myTurn?'':'div-left-border'">
-          <span class="light" *ngIf="!myTurn">Round {{game.stats[otherUserId].round}}</span>
+        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
+          <span class="dark" title="{{otherUserInfo?.displayName}}">{{otherUserInfo?.displayName}}</span>
         </div>
       </div>
       <div class="textcenter clearfix">
-        <div class="col-xs-6 div-right-border">
+        <div class="col-xs-6 ellipsis div-location div-right-border">
+          <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
+        </div>
+        <div class="col-xs-6 ellipsis div-location">
+          <span class="light" *ngIf="otherUserInfo?.displayName" title="{{otherUserInfo?.location}}">{{otherUserInfo?.location}}</span>
+        </div>
+      </div>
+      <div class=" clearfix">
+        <div class="col-xs-6 div-right-border div-score">
           <div class="dark">Score {{game.stats[user.userId].score}}</div>
         </div>
-        <div class="col-xs-6">
+        <div class="col-xs-6 div-score">
           <div class="dark">Score {{game.stats[otherUserId].score}}</div>
         </div>
       </div>
@@ -156,19 +131,24 @@
         </div>
       </div>
     </ng-container>
+    <div class="col-xs-12 div-spacing textcenter" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">
+      <span class="light">Round {{game.stats[user.userId].round}} / {{totalRound}}</span>
+    </div>
   </div>
+
   <a *ngIf="myTurn" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
     <span>Your Turn</span>Play Now
   </a>
+
   <div *ngIf="myTurn" class="opponent">
     <p class="dark">{{remainingHours}}:{{remainingMinutes}} hrs</p>
     <p>remaining to play your turn</p>
   </div>
 
-  <!-- <div *ngIf="!myTurn" class="opponent">Waiting for Opponent</div> -->
   <div *ngIf="!myTurn && game.playerIds.length == 1" class="opponent playnow">
     <button class="btn-share" type="button">Waiting for Opponent</button>
   </div>
+
   <div *ngIf="!myTurn && game.playerIds.length > 1" class="opponent playnow">
     <button class="btn-share" type="button">Opponent's Turn</button>
   </div>

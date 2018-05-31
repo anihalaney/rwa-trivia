@@ -75,7 +75,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['questions'].currentValue !== changes['questions'].previousValue) {
+    if (changes['questions'] && changes['questions'].currentValue !== changes['questions'].previousValue) {
       (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
       (changes['questions'].previousValue) ? this.setPagination() : '';
     }

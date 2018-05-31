@@ -20,7 +20,6 @@ export class BlogComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.blogData = [{
       blogNo: 0,
       status: false,

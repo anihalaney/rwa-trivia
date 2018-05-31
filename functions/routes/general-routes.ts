@@ -19,6 +19,7 @@ router.get('/user/stat', generalAuth.adminOnly, generalController.generateUsersS
 router.get('/leaderboard/stat', generalAuth.adminOnly, generalController.generateLeaderBoardStat);
 router.get('/user/contribution/stat', generalAuth.adminOnly, generalController.generateUserContributionStat);
 router.post('/stat/system', generalAuth.adminOnly, generalController.generateSystemStat);
+router.get('/bulkupload/update', generalAuth.adminOnly, generalController.updateBulkUploadCollection);
 
 
 module.exports = router;
