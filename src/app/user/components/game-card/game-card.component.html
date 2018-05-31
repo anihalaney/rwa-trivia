@@ -21,7 +21,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="game.gameOptions.playerMode == 1 && game.playerIds.length == PlayerMode.Opponent">
+    <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length == 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg vs">
@@ -72,7 +72,7 @@
       </div>
     </ng-container>
 
-    <ng-container *ngIf="game.gameOptions.playerMode == 1 && game.playerIds.length > PlayerMode.Opponent">
+    <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
