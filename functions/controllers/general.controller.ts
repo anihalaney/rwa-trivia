@@ -3,6 +3,8 @@ const generalService = require('../services/general.service');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
+import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+
 
 /**
  * migrateCollections
@@ -140,5 +142,17 @@ exports.generateUserContributionStat = (req, res) => {
     const userContributionStat: UserContributionStat = new UserContributionStat();
     userContributionStat.generateGameStats().then((userDictResults) => {
         res.send('updated user category stat');
+    });
+};
+
+
+/**
+ * generateSystemStat
+ * return status
+ */
+exports.generateSystemStat = (req, res) => {
+    const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
+    systemStatsCalculations.generateSystemStats().then((stats) => {
+        res.send('updated system stat');
     });
 };

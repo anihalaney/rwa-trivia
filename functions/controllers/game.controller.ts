@@ -1,6 +1,7 @@
 import { SearchCriteria, Game, GameOperations, PlayerQnA, GameStatus, schedulerConstants } from '../../src/app/model';
 import { Utils } from '../utils/utils';
 import { GameMechanics } from '../utils/game-mechanics';
+import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 const gameControllerService = require('../services/game.service');
 const utils: Utils = new Utils();
 
@@ -77,6 +78,10 @@ exports.updateGame = (req, res) => {
                 game.gameOver = true;
                 game.decideWinner();
                 game.GameStatus = GameStatus.COMPLETED;
+                const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
+                systemStatsCalculations.updateSystemStats('game_played').then((stats) => {
+                    console.log(stats);
+                });
                 break;
             case GameOperations.REPORT_STATUS:
                 const playerQnA: PlayerQnA = req.body.playerQnA;
