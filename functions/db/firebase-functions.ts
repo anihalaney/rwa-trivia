@@ -15,6 +15,7 @@ import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { FriendGameStats } from '../utils/friend-game-stats';
 import { MailClient } from '../utils/mail-client';
+import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 
 // Take the text parameter passed to this HTTP endpoint and insert it into the
 // Realtime Database under the path /messages/:pushId/original
@@ -46,12 +47,52 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
         userContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution).then((userDictResults) => {
             console.log('updated user category stat');
         });
+        const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
+        systemStatsCalculations.updateSystemStats('total_questions').then((stats) => {
+            console.log(stats);
+        });
     } else {
         // delete
         ESUtils.removeIndex(ESUtils.QUESTIONS_INDEX, context.params.questionId);
     }
 
 });
+
+
+
+exports.onInvitationWrite = functions.firestore.document('/invitations/{invitationId}').onWrite((change, context) => {
+
+    const beforeEventData = change.before.data();
+    const afterEventData = change.after.data();
+
+    if (afterEventData !== beforeEventData) {
+        const invitation: Invitation = afterEventData;
+        const url = `${TriggerConstants.hostURL}${invitation.id}`;
+        const htmlContent = `<a href="${url}">Accept Invitation</a>`;
+        const mail: MailClient = new MailClient(invitation.email, TriggerConstants.invitationMailSubject,
+            TriggerConstants.invitationTxt, htmlContent);
+        mail.sendMail();
+
+    }
+
+});
+
+
+// update stats based on gamr creation
+exports.onGameCreate = functions.firestore.document('/games/{gameId}').onCreate((snap, context) => {
+
+    const data = snap.data();
+
+    if (data) {
+        console.log('game data created');
+        const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
+        systemStatsCalculations.updateSystemStats('active_games').then((stats) => {
+            console.log(stats);
+        });
+    }
+
+});
+
 
 exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate((change, context) => {
 
@@ -62,19 +103,39 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
         console.log('data changed');
         const game: Game = Game.getViewModel(afterEventData);
         if (game.gameOver) {
+
             const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-            gameLeaderBoardStats.getGameUsers(game);
+            gameLeaderBoardStats.getGameUsers(game).then((status) => {
+                console.log('status', status);
+            });
+
             if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                 Number(game.gameOptions.opponentType) === OpponentType.Friend) {
                 const friendGameStats: FriendGameStats = new FriendGameStats();
-                friendGameStats.calculateFriendsGameState(game).then((status) => {
-                    console.log('status', status);
+                friendGameStats.calculateFriendsGameState(game).then((status1) => {
+                    console.log('friend stat status', status1);
                 });
             }
 
         }
-
     }
+});
+
+
+
+// update stats based on user creation
+exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate((snap, context) => {
+
+    const data = snap.data();
+
+    if (data) {
+        console.log('user data created');
+        const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
+        systemStatsCalculations.updateSystemStats('total_users').then((stats) => {
+            console.log(stats);
+        });
+    }
+
 });
 
 exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate((change, context) => {
@@ -93,24 +154,6 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate(
                 // console.log('leaderBoardStat', leaderBoardStat);
             });
         });
-    }
-
-});
-
-
-exports.onInvitationWrite = functions.firestore.document('/invitations/{invitationId}').onWrite((change, context) => {
-
-    const beforeEventData = change.before.data();
-    const afterEventData = change.after.data();
-
-    if (afterEventData !== beforeEventData) {
-        const invitation: Invitation = afterEventData;
-        const url = `${TriggerConstants.hostURL}${invitation.id}`;
-        const htmlContent = `<a href="${url}">Accept Invitation</a>`;
-        const mail: MailClient = new MailClient(invitation.email, TriggerConstants.invitationMailSubject,
-            TriggerConstants.invitationTxt, htmlContent);
-        mail.sendMail();
-
     }
 
 });

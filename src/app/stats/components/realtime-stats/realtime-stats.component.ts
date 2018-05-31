@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState, appState } from '../../../store';
+import { leaderBoardState } from '../../store';
+import * as StatActions from '../../store/actions';
+import { SystemStats } from '../../../model';
 
 @Component({
   selector: 'realtime-stats',
@@ -6,4 +11,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./realtime-stats.component.scss']
 })
 export class RealtimeStatsComponent {
+
+  systemStats: SystemStats;
+
+  constructor(private store: Store<AppState>) {
+
+    this.store.dispatch(new StatActions.LoadSystemStat());
+
+    this.store.select(leaderBoardState).select(s => s.systemStat).subscribe(systemStats => {
+      if (systemStats !== null) {
+        this.systemStats = systemStats;
+      }
+    });
+  }
 }
