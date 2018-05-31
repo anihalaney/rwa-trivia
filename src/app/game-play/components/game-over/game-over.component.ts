@@ -4,10 +4,12 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
+import * as socialactions from '../../../social/store/actions';
 import { gameplayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Utils } from '../../../core/services';
+import * as domtoimage from 'dom-to-image';
 
 
 @Component({
@@ -29,6 +31,8 @@ export class GameOverComponent implements OnInit {
   otherUserInfo: User;
   questionsArray = [];
   dialogRef: MatDialogRef<ReportGameComponent>;
+  blogData = [];
+  imageUrl = '';
   disableRematchBtn = false;
   PlayerMode = PlayerMode;
 
@@ -55,12 +59,24 @@ export class GameOverComponent implements OnInit {
         (this.dialogRef) ? this.dialogRef.close() : '';
       }
     });
+
+    this.store.select(appState.socialState).select(s => s.socialShareImageUrl).subscribe(imageUrl => {
+      if (imageUrl !== 'NONE') {
+        this.blogData[0].status = true;
+        this.blogData[0].link = imageUrl;
+      }
+    });
   }
   ngOnInit() {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
+    this.blogData = [{
+      blogNo: 0,
+      status: false,
+      link: this.imageUrl
+    }];
   }
   bindQuestions() {
     if (this.questionsArray.length === 0) {
@@ -92,5 +108,66 @@ export class GameOverComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(x => {
       this.renderer.removeClass(document.body, 'dialog-open');
     });
+  }
+  shareScore() {
+
+    const node = document.getElementById('share-content');
+
+    domtoimage.toPng(node)
+      .then((dataUrl) => {
+        this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
+          imageBlob: Utils.dataURItoBlob(dataUrl, 'png'),
+          userId: this.user.userId
+        }));
+      })
+      .catch((error) => {
+        console.error('oops, something went wrong!', error);
+      });
+
+  }
+
+  loadImages(sources, callback) {
+    const images = {};
+    let loadedImages = 0;
+    let numImages = 0;
+    // get num of sources
+    for (const key in sources) {
+      if (sources.hasOwnProperty(key)) {
+        numImages++;
+      }
+    }
+
+    for (let src in sources) {
+      if (sources.hasOwnProperty(src)) {
+        images[src] = new Image();
+        images[src].onload = () => {
+          if (++loadedImages >= numImages) {
+            callback(images);
+          }
+        };
+        images[src].src = sources[src];
+
+
+      }
+    }
+  }
+
+  roundedImage(x, y, width, height, radius, context) {
+    context.beginPath();
+    context.moveTo(x + radius, y);
+    context.lineTo(x + width - radius, y);
+    context.quadraticCurveTo(x + width, y, x + width, y + radius);
+    context.lineTo(x + width, y + height - radius);
+    context.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+    context.lineTo(x + radius, y + height);
+    context.quadraticCurveTo(x, y + height, x, y + height - radius);
+    context.lineTo(x, y + radius);
+    context.quadraticCurveTo(x, y, x + radius, y);
+    context.closePath();
+    return true;
+  }
+
+  onNotify(info: any) {
+    this.blogData[0].status = info.status;
   }
 }

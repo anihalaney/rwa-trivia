@@ -11,7 +11,7 @@
             <mat-icon mat-list-icon>flip</mat-icon>
           </a>
         </div>
-        <div class="headerdrop">
+        <div class="headerdrop" *ngIf="user">
           <a (click)="navigateUrl()">
             <span class="sprite settingicon"></span>
             <span class="hidden-xs">Profile Setting</span>
