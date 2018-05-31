@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
-import { User, Game, Category } from '../../../model';
+import { User, Game, Category, PlayerMode } from '../../../model';
 import { userState } from '../../store';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -27,6 +27,8 @@ export class GameCardComponent implements OnInit, OnChanges {
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
   randomCategoryId = 0;
+  PlayerMode = PlayerMode;
+  totalRound = 16;
 
   constructor(private store: Store<AppState>) {
 
@@ -45,7 +47,7 @@ export class GameCardComponent implements OnInit, OnChanges {
         if (this.game.nextTurnPlayerId === this.user.userId) {
 
           const utcDate = new Date(new Date().toUTCString());
-          const currentMillis = utcDate.getTime() + (utcDate.getTimezoneOffset() * 60000);
+          const currentMillis = utcDate.getTime();
 
           const diff = currentMillis - this.game.turnAt;
           const hour = Math.floor(diff / (60 * 60 * 1000));

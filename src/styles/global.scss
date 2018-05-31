@@ -477,7 +477,7 @@ nav .user.card{
 .cancelicon{ background-position: -127px -293px; width: 25px; height: 30px;}
 .closeicon{ background-position: -154px -293px; width: 27px; height: 30px;}
 .pendingicon{ background-position: -178px -293px;  width: 19px;  height: 33px;}
-.approvedicon{ background-position: -196px -293px; width: 19px; height: 38px;}
+.approvedicon{ background-position: -196px -293px; width: 19px; height: 37px;}
 .div-border
 {
   border-width: 1px;
@@ -492,7 +492,7 @@ nav .user.card{
 {
   background-position: -194px -321px;  width: 26px;  height: 40px;
 }
-.sb-circles-dark .sb-wrapper
+.blog-social-icon .sb-circles-dark .sb-wrapper
 {
   font-size: 11px !important;
 }
@@ -539,4 +539,12 @@ nav .user.card{
   background-position: -138px -519px;
   width: 50px;
   height: 50px;
+}
+.socialicon .sb-circles-dark .sb-wrapper {
+  font-size: 12px !important;
+  padding-right: 15%;
+}
+.footer-social-icon .sb-circles-dark .sb-wrapper
+{
+  font-size: 10px !important;
 }

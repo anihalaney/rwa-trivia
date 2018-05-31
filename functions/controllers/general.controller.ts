@@ -4,7 +4,7 @@ import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
-
+import { BulkUploadUpdate } from '../utils/bulk-upload-update';
 
 /**
  * migrateCollections
@@ -156,3 +156,14 @@ exports.generateSystemStat = (req, res) => {
         res.send('updated system stat');
     });
 };
+/**
+ * update bulk upload collection by adding isUserArchived or isAdminArchived based on user role
+ * return status
+ */
+exports.updateBulkUploadCollection = (req, res) => {
+    const bulkUploadUpdate: BulkUploadUpdate = new BulkUploadUpdate();
+    bulkUploadUpdate.getUserList().then((bulkUploadResults) => {
+        res.send('updated bulk upload collection');
+    });
+
+}
