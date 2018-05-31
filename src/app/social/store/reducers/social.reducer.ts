@@ -47,3 +47,13 @@ export function checkEmailSubscriptionStatus(state: any = [], action: SocialActi
     }
 };
 
+//return string value of social share image url
+export function socialShareImageUrl(state: any = 'NONE', action: SocialActions): string {
+    switch (action.type) {
+        case SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+};
+

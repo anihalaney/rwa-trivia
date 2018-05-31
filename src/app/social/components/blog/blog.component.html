@@ -22,5 +22,5 @@
       </div>
     </div>
   </div>
-  <social-palette *ngIf="blogData[i].status" [blogData]="blogData[i]" (notify)="onNotify($event)"></social-palette>
+  <social-palette *ngIf="blogData[i].status" [blogData]="blogData[i]" (notify)="onNotify($event)" [isFromBlog]=true class="spacing"></social-palette>
 </div>

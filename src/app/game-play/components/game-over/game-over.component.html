@@ -10,7 +10,7 @@
     <div fxFlex></div>
     <div></div>
   </mat-card-title>
-  <mat-card-content class="textcenter">
+  <mat-card-content class="textcenter" id="share-content">
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="yourimg">
         <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
@@ -67,11 +67,17 @@
         <span class="win-text">You Lose</span>
       </div>
     </div>
+
+  </mat-card-content>
+  <mat-card-content class="textcenter">
     <div class="button-div">
-      <div class="win-icon">
-        <button class="btn-share" type="button">Share</button>
-        <button class="btn-share" type="button" (click)="reMatch()" [disabled]="disableRematchBtn">Rematch</button>
+      <div class=" win-icon">
+        <social-palette *ngIf="blogData[0].status" class="spacing" [blogData]="blogData[0]" (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
+
+        <button class="btn-share" type="button" (click)="shareScore()" *ngIf="!blogData[0].status">Share</button>
+        <button class="btn-share" type="button">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
+
       </div>
     </div>
     <div>
@@ -103,10 +109,10 @@
                       </p>
                     </span>
                   </div>
-                </div>
-                <div class="li-section2 textcenter">
-                  <button class="btn-share" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
-                  <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
+                  <div class="li-section2 textcenter">
+                    <button class="btn-share" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
+                    <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
+                  </div>
                 </div>
               </li>
             </ul>
@@ -114,6 +120,7 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
+
   </mat-card-content>
-  <!-- </mat-card> -->
 </div>
+<!-- </mat-card> -->

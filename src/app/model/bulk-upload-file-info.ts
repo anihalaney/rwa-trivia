@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 
 export class BulkUploadFileInfo {
-    id: String;
+    id: string;
     date: number;
     fileName: String;
     categoryId: number;

@@ -11,6 +11,7 @@ export class SocialPaletteComponent implements OnChanges {
   @Input() blogId: number;
   @Input() blogData: any;
   @Output() notify: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Input() isFromBlog: boolean;
   blogUrl = undefined;
 
   constructor(public share: ShareButtons) {

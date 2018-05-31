@@ -21,15 +21,15 @@ export class SocialEffects {
         .pipe(
         switchMap((action: socialActions.AddSubscriber) =>
             this.socialService.checkSubscription(action.payload.subscription)
-            .pipe(
-            map(isSubscribed => {
-                if (isSubscribed) {
-                    return new socialActions.CheckSubscriptionStatus(true);
-                } else {
-                    this.socialService.saveSubscription(action.payload.subscription)
-                    return new socialActions.CheckSubscriptionStatus(false);
-                }
-            }))
+                .pipe(
+                map(isSubscribed => {
+                    if (isSubscribed) {
+                        return new socialActions.CheckSubscriptionStatus(true);
+                    } else {
+                        this.socialService.saveSubscription(action.payload.subscription)
+                        return new socialActions.CheckSubscriptionStatus(false);
+                    }
+                }))
         ));
 
     // get total subscription
@@ -45,8 +45,19 @@ export class SocialEffects {
         )
         );
 
-        constructor(
-            private actions$: Actions,
-            private socialService: SocialService
-        ) { }
+    // Load Social Score share url
+    @Effect()
+    loadSocialScoreShareUrl$ = this.actions$
+        .ofType(SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL)
+        .pipe(
+        switchMap((action: socialActions.LoadSocialScoreShareUrl) =>
+            this.socialService.generateScoreShareImage(action.payload.imageBlob, action.payload.userId)
+                .pipe(
+                map((imageUrl: string) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
+        ));
+
+    constructor(
+        private actions$: Actions,
+        private socialService: SocialService
+    ) { }
 }

@@ -231,6 +231,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     bulkUpload.bulkUploadFileInfo = this.bulkUploadFileInfo;
     bulkUpload.questions = this.parsedQuestions;
     bulkUpload.file = this.file;
+    if (this.user.roles.admin) {
+      bulkUpload.bulkUploadFileInfo['isAdminArchived'] = false;
+    } else {
+      bulkUpload.bulkUploadFileInfo['isUserArchived'] = false;
+    }
     this.store.dispatch(new bulkActions.AddBulkQuestions({ bulkUpload: bulkUpload }));
   }
 
