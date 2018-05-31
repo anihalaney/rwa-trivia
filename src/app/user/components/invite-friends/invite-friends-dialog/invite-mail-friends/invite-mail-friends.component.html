@@ -5,7 +5,7 @@
   <div fxLayoutAlign="left">
     <form *ngIf="invitationForm" (ngSubmit)="onSubscribe()" [formGroup]="invitationForm" class="row col-sm-12" #formDir="ngForm">
       <input type="text" formControlName="email" class="required" placeholder="Email address">
-      <button class="btn sent-invitation">Send Invite</button>
+      <button class="btn send-btn">Send Invite</button>
       <span *ngIf="invitationForm.controls.email.invalid && formDir.submitted" class="label">
         Email is required!
       </span>
@@ -14,24 +14,32 @@
       <span *ngIf="showSuccessMsg!=undefined" class="success row col-sm-12">{{showSuccessMsg}}</span>
     </form>
   </div>
-  <div fxLayoutAlign="left" class="mail-option-div">
-    <mat-list role="list">
+  <div class="mail-option-div">
+    <!-- <mat-list role="list">
       <mat-list-item role="listitem">
+
         <img class="icon-size" src="assets/images/gmail.png">
         <span class="text-alignment social-name">Gmail</span>
-        <button class="invite-btn">Find Contacts</button>
+
+        <div class="col-xs-12 div-btn">
+          <button class="invite-btn">Find Contacts</button>
+        </div>
       </mat-list-item>
       <mat-list-item role="listitem">
         <img class="icon-size" src="assets/images/yahoo.png">
         <span class="text-alignment social-name">Yahoo</span>
-        <button class="invite-btn">Find Contacts</button>
+        <div class="col-xs-12 div-btn">
+          <button class="invite-btn">Find Contacts</button>
+        </div>
       </mat-list-item>
       <mat-list-item role="listitem">
         <img class="icon-size" src="assets/images/hotmail.png">
         <span class="text-alignment social-name">Hotmail</span>
-        <button class="invite-btn">Find Contacts</button>
+        <div class="col-xs-12 div-btn">
+          <button class="invite-btn">Find Contacts</button>
+        </div>
       </mat-list-item>
-    </mat-list>
+    </mat-list> -->
 
   </div>
 </div>

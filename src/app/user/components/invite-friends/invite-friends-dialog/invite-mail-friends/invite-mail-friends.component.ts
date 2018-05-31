@@ -40,6 +40,7 @@ export class InviteMailFriendsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showSuccessMsg = undefined;
     this.invitationForm = this.fb.group({
       email: ['', Validators.required]
     });
