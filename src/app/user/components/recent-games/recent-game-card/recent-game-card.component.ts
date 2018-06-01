@@ -31,14 +31,19 @@ export class RecentGameCardComponent implements OnChanges {
     }
 
     getOpponentId(game) {
-        return this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
+        return game.playerIds.filter(userId => userId !== this.user.userId)[0];
     }
 
     ngOnChanges() {
         if (this.game) {
-            if (this.userDict[this.getOpponentId(this.game)] === undefined) {
-                this.store.dispatch(this.userActions.loadOtherUserProfile(this.getOpponentId(this.game)));
+            const userId = this.getOpponentId(this.game);
+            if (userId !== undefined) {
+                if (this.userDict[userId] === undefined) {
+                    this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
+
+                }
             }
+
 
         }
     }
