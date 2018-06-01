@@ -20,13 +20,16 @@ export class ReportGameComponent implements OnInit {
     reportQuestion: ReportQuestion;
     user: User;
     game: Game;
-    categoryDictionary: { [key: number]: Category }
+    categoryDictionary: { [key: number]: Category };
+    ref: any;
+    userDict: { [key: string]: User };
 
     constructor(private fb: FormBuilder, private store: Store<AppState>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
         this.question = data.question;
         this.user = data.user;
         this.game = data.game;
+        this.userDict = data.userDict;
 
         this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
     }
@@ -62,6 +65,9 @@ export class ReportGameComponent implements OnInit {
         this.reportQuestion.questions = info;
         this.store.dispatch(new gameplayactions.SaveReportQuestion({ reportQuestion: this.reportQuestion, game: this.game }));
 
+    }
+    closeModel() {
+        this.ref.close();
     }
 
 }

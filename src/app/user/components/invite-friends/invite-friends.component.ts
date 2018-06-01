@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
 import { User } from '../../../model';
@@ -26,7 +26,7 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(public dialog: MatDialog, private renderer: Renderer2, private store: Store<AppState>, private userActions: UserActions) {
+  constructor(public dialog: MatDialog, private store: Store<AppState>, private userActions: UserActions) {
     this.userDict$ = this.store.select(appState.coreState).select(s => s.userDict);
     this.userDict$.subscribe(userDict => this.userDict = userDict);
     this.store.select(appState.coreState).select(s => s.user).subscribe(user => {

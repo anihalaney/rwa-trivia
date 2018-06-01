@@ -99,8 +99,10 @@ export class GameOverComponent implements OnInit {
   openDialog(question) {
     this.dialogRef = this.dialog.open(ReportGameComponent, {
       disableClose: false,
-      data: { 'question': question, 'user': this.user, 'game': this.game }
+      data: { 'question': question, 'user': this.user, 'game': this.game, 'userDict': this.userDict }
     });
+
+    this.dialogRef.componentInstance.ref = this.dialogRef;
 
     this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
