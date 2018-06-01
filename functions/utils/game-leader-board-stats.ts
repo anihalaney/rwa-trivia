@@ -64,9 +64,11 @@ export class GameLeaderBoardStats {
                 user.stats['leaderBoardStats'] = { ...user.stats.leaderBoardStats };
                 user.stats.gamePlayed = (user.stats.gamePlayed) ? user.stats.gamePlayed + 1 : 1;
                 user.stats.categories = Object.keys(user.stats.leaderBoardStats).length;
-                (game.winnerPlayerId === userId) ?
-                    user.stats.wins = (user.stats.wins) ? user.stats.wins + 1 : 1 :
-                    user.stats.losses = (user.stats.losses) ? user.stats.losses + 1 : 1;
+                if (game.winnerPlayerId) {
+                    (game.winnerPlayerId === userId) ?
+                        user.stats.wins = (user.stats.wins) ? user.stats.wins + 1 : 1 :
+                        user.stats.losses = (user.stats.losses) ? user.stats.losses + 1 : 1;
+                }
                 user.stats.badges = (user.stats.badges) ? user.stats.badges + score : score;
                 user.stats.avgAnsTime = (user.stats.avgAnsTime) ? Math.floor((user.stats.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
                 user['stats'] = { ...user.stats };

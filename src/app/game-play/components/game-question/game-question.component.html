@@ -48,8 +48,7 @@
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)" [class.question-answered]="answeredIndex >= 0 || continueNext"
             [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]=" correctAnswerIndex === i">
-            {{answer.answerText}}
-            {{correctAnswerIndex}}
+            {{answer.answerText}}        
           </li>
         </ul>
       </div>

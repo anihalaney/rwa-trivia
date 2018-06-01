@@ -216,7 +216,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
       && (Number(this.game.gameOptions.opponentType) === OpponentType.Random ||
         Number(this.game.gameOptions.opponentType) === OpponentType.Friend)) {
-      if (this.correctAnswerCount >= 5 || this.game.stats[this.user.userId].round >= 16) {
+      this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+      if (this.correctAnswerCount >= 5 ||
+        (this.game.stats[this.user.userId].round >= 16 && this.game.stats[this.otherPlayerUserId].round >= 16)) {
         this.gameOverContinueClicked();
       }
     } else if (((this.questionIndex - this.correctAnswerCount) === 3) ||

@@ -1,8 +1,9 @@
 <ng-container>
     <div class="col-xs-12 textcenter clearfix">
         <div>
-            <div class="success result" *ngIf="game.winnerPlayerId === user.userId">Won</div>
-            <div class="label result" *ngIf="game.winnerPlayerId !== user.userId">Lost</div>
+            <div class="success result" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">Won</div>
+            <div class="label result" *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId">Lost</div>
+            <div class="success result" *ngIf="!game.winnerPlayerId">Tie</div>
         </div>
         <div class="dark">{{categoryDict[game.gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[0]].categoryName.slice(1)}}</div>
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Opponent">

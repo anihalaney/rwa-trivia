@@ -157,8 +157,6 @@ export class Game {
         this.winnerPlayerId = playerId_0;
       } else if ((this.stats[playerId_0].score < this.stats[playerId_1].score)) {
         this.winnerPlayerId = playerId_1;
-      } else {
-        this.winnerPlayerId = 'tie';
       }
     } else {
       if (this.stats[playerId_0].score >= 5) {
