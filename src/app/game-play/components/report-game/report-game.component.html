@@ -1,11 +1,13 @@
 <mat-dialog-content>
     <mat-card-content>
+
         <div class="cd-popup" id="0" role="alert">
             <div class="cd-popup-container">
                 <div class="report-question-section">
                     <div class="header">
                         <div>
                             <label class="light">Question</label>
+                            <div class="sprite cancelicon col-sm-1" (click)="closeModel()"></div>
                         </div>
                     </div>
 
@@ -40,6 +42,11 @@
                             {{question.tags?.toString()}}
                         </div>
                     </div>
+                    <div *ngIf="userDict[question.created_uid]">
+                        <div class=" col-sm-12 col-xs-12 alignment">
+                            <author [userDict]="userDict" [userId]="question.created_uid"></author>
+                        </div>
+                    </div>
 
                 </div>
                 <div class="report-reason-section">
@@ -52,33 +59,41 @@
                         <form [formGroup]="reportQuestionForm" #formDir="ngForm" novalidate>
                             <ul class="dark">
                                 <li>
-                                    <label class="container">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque
-                                        landantium.
-                                        <input type="radio" [checked]="true" name="reason" formControlName="reason" value="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque
-                                        landantium.">
+                                    <label class="container">Offensive content
+                                        <input type="radio" [checked]="true" name="reason" formControlName="reason" value="Offensive content">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
                                 <!-- <li>
-                                <label>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque landantium.</label>
-                            </li> -->
+                                    <label>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque landantium.</label>
+                                </li> -->
                                 <li>
-                                    <label class="container">Utenim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
-                                        nisi ut aliquid ex ea commodi consequatur?
-                                        <input type="radio" name="reason" formControlName="reason" value="Utenim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam,
-                                        nisi ut aliquid ex ea commodi consequatur?">
+                                    <label class="container">Spelling or grammar error
+                                        <input type="radio" name="reason" formControlName="reason" value="Spelling or grammar error">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
                                 <li>
-                                    <label class="container">Ercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
-                                        <input type="radio" name="reason" formControlName="reason" value="Ercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?">
+                                    <label class="container">Wrong answer
+                                        <input type="radio" name="reason" formControlName="reason" value="Wrong answer">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
                                 <li>
-                                    <label class="container">Ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?
-                                        <input type="radio" name="reason" formControlName="reason" value="Ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur?">
+                                    <label class="container">Incorrect category or tags
+                                        <input type="radio" name="reason" formControlName="reason" value="Incorrect category or tags">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Question is not clear
+                                        <input type="radio" name="reason" formControlName="reason" value="Question is not clear">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Spam
+                                        <input type="radio" name="reason" formControlName="reason" value="Spam">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
@@ -89,7 +104,7 @@
                                     </label>
                                     <div>
                                         <textarea rows="2" cols="80" formControlName="otherReason">
-                                        </textarea>
+                                            </textarea>
                                         <div *ngIf="reportQuestionForm.get('reason').value==='other' && reportQuestionForm.get('otherReason').value===''">
                                             <span class="label">
                                                 Reason is required!
@@ -108,7 +123,7 @@
                     </label>
                     <div class="report-footer">
                         <button class="btn" (click)="saveReportQuestion()" [disabled]="reportQuestionForm.get('reason').value==='other' && reportQuestionForm.get('otherReason').value===''">
-                        Send</button>
+                            Send</button>
                     </div>
 
                 </div>
