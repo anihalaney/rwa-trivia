@@ -115,10 +115,10 @@
                       <author [userDict]="userDict" [userId]="row.created_uid"></author>
                     </div>
                   </div>
-                  <div class="li-section2 textcenter">
-                    <button class="btn-share" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
-                    <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
-                  </div>
+                </div>
+                <div class="li-section2 textcenter">
+                  <button class="btn-share" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
+                  <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
                 </div>
               </li>
             </ul>
