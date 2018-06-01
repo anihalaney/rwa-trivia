@@ -6,7 +6,6 @@ import { ReportQuestion, User, Game, QuestionMetadata, Category } from '../../..
 import * as gameplayactions from '../../store/actions';
 import { AppState, appState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { categoryDictionary } from '../../../store';
 
 @Component({
     selector: 'report-game',
@@ -20,7 +19,6 @@ export class ReportGameComponent implements OnInit {
     reportQuestion: ReportQuestion;
     user: User;
     game: Game;
-    categoryDictionary: { [key: number]: Category };
     ref: any;
     userDict: { [key: string]: User };
 
@@ -30,8 +28,6 @@ export class ReportGameComponent implements OnInit {
         this.user = data.user;
         this.game = data.game;
         this.userDict = data.userDict;
-
-        this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
     }
 
 
