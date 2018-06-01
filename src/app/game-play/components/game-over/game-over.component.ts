@@ -10,6 +10,7 @@ import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Utils } from '../../../core/services';
 import * as domtoimage from 'dom-to-image';
+import { UserActions } from '../../../core/store/actions';
 
 
 @Component({
@@ -35,12 +36,13 @@ export class GameOverComponent implements OnInit {
   imageUrl = '';
   disableRematchBtn = false;
   PlayerMode = PlayerMode;
+  userDict$: Observable<{ [key: string]: User }>;
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
 
-  constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2) {
+  constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2, private userActions: UserActions) {
     this.user$ = this.store.select(appState.coreState).select(s => s.user);
     this.user$.subscribe(user => {
       if (user !== null) {
@@ -48,9 +50,19 @@ export class GameOverComponent implements OnInit {
       }
     });
 
+    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$.subscribe(userDict => {
+      this.userDict = userDict
+    });
+
     this.store.select(gameplayState).select(s => s.userAnsweredQuestion).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
+        this.questionsArray.map((question) => {
+          if (!this.userDict[question.created_uid]) {
+            this.store.dispatch(this.userActions.loadOtherUserProfile(question.created_uid));
+          }
+        })
       }
     });
 
