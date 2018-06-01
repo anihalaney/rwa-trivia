@@ -53,6 +53,7 @@ export class Question {
     question.questionText = source.questionText;
     question.status = source.status;
     question.tags = source.tags;
+    question.created_uid = source.created_uid;
 
     return question;
   }
