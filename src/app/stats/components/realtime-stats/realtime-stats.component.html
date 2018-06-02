@@ -6,19 +6,19 @@
   <div class=" col-sm-9 col-xs-12">
     <div class="time-stats">
       Total No of Users
-      <div class="time-count unavailable">Too soon</div>
+      <div class="time-count unavailable">{{systemStats?.total_users}}</div>
     </div>
     <div class="time-stats">
       Total No Of Questions
-      <div class="time-count">570</div>
+      <div class="time-count">{{systemStats?.total_questions}}</div>
     </div>
     <div class="time-stats">
-      Users Currently playing
-      <div class="time-count unavailable">Probably just me</div>
+      Currently Active Games
+      <div class="time-count unavailable">{{systemStats?.active_games}}</div>
     </div>
     <div class="time-stats">
-      Current Server Load
-      <div class="time-count unavailable">Still on free tier</div>
+      Total Games Played
+      <div class="time-count unavailable">{{systemStats?.game_played}}</div>
     </div>
   </div>
 </div>

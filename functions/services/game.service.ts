@@ -81,9 +81,15 @@ exports.checkGameOver = (): Promise<any> => {
  * return games
  */
 exports.getCompletedGames = (): Promise<any> => {
-    return gameFireStoreClient.collection('games')
+    // console.log('completed games');
+    return gameFireStoreClient.collection('/games')
         .where('gameOver', '==', true)
-        .get().then(games => { return games });
+        .get()
+        .then((games) => { return games })
+        .catch((err) => {
+            console.log('Error getting documents', err);
+            return err
+        });
 };
 
 
