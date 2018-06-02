@@ -5,6 +5,7 @@ import { QuestionsTableComponent } from './questions-table/questions-table.compo
 import { QuestionFormComponent } from './question-form/question-form.component';
 import { RejectedQuestionContentComponent } from './rejected-question-content/rejected-question-content.component';
 import { SocialPaletteComponent } from './social-palette/social-palette.component';
+import { AuthorComponent } from './author/author.component';
 export {
     QuestionComponent,
     QuestionsComponent,
@@ -12,7 +13,8 @@ export {
     QuestionsTableComponent,
     QuestionFormComponent,
     RejectedQuestionContentComponent,
-    SocialPaletteComponent
+    SocialPaletteComponent,
+    AuthorComponent
 };
 
 export default [
@@ -22,5 +24,6 @@ export default [
     QuestionsTableComponent,
     QuestionFormComponent,
     RejectedQuestionContentComponent,
-    SocialPaletteComponent
+    SocialPaletteComponent,
+    AuthorComponent
 ];

@@ -11,13 +11,14 @@ import { categoryDictionary } from '../../../store';
 import { gameplayState, GamePlayState } from '../../store';
 
 import { GameQuestionComponent } from '../game-question/game-question.component';
-import { GameActions } from '../../../core/store/actions';
+import { GameActions, UserActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
 import {
   Game, GameOptions, GameMode, PlayerQnA,
   User, Question, Category, GameStatus,
   PlayerMode, OpponentType
 } from '../../../model';
+import { AppState, appState } from '../../../store';
 
 @Component({
   selector: 'game-dialog',
@@ -54,15 +55,22 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   showWinBadge = false;
   isCorrectAnswer = false;
   turnFlag: boolean;
+  userDict$: Observable<{ [key: string]: User }>;
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
 
   constructor(private store: Store<GamePlayState>, private gameActions: GameActions, private router: Router,
+    private appStore: Store<AppState>, private userActions: UserActions,
     @Inject(MAT_DIALOG_DATA) public data: any) {
 
     this.user = data.user;
     this.userDict = data.userDict;
+
+    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$.subscribe(userDict => {
+      this.userDict = userDict
+    });
 
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
@@ -91,7 +99,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         // this.getLoader();
         this.currentQuestion = question;
         this.questionIndex++;
-        this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName
+        this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName;
+        if (!this.userDict[this.currentQuestion.created_uid]) {
+          this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
+        }
       })
     );
   }

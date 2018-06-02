@@ -52,31 +52,21 @@
 
           </li>
         </ul>
+        <div class=" col-sm-12 col-xs-12">
+          <div class=" col-sm-12 col-xs-12 alignment" *ngIf="userDict[question.created_uid]">
+            <author [userDict]="userDict" [userId]="question.created_uid"></author>
+          </div>
+        </div>
       </div>
       <div class="popupbottom">
         <div class="col-sm-10 question-tag">
-          Tags associated categories : {{question.tags?.toString()}}
+          Tags : {{question.tags?.toString()}}
         </div>
         <div class="col-sm-2">
           <button mat-button *ngIf="showContinueBtn" (click)="continueClicked.emit($event)" class="startgame continue-btn">Continue</button>
         </div>
-
-
-        <!-- <span *ngFor="let tag of question.tags;let last = last;">
-          {{tag}}
-          <label *ngIf="last!=tag && $index > 0">,</label>
-        </span> -->
-
       </div>
     </ng-container>
-
-    <!-- <div *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" class="row">
-      <button mat-button>SHARE</button>
-      <div fxFlexAlign="center">
-        <button mat-button>REPORT ISSUE</button>
-      </div>
-
-    </div> -->
   </div>
 </div>
 
