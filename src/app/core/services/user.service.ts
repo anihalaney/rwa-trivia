@@ -64,11 +64,11 @@ export class UserService {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.storage.ref(filePath);
             return ref.getDownloadURL().map(url => {
-                user.profilePictureUrl = (url) ? url : '/assets/images/yourimg.png';
+                user.profilePictureUrl = (url) ? url : '/assets/images/default-avatar.png';
                 return user;
             });
         } else {
-            user.profilePictureUrl = '/assets/images/yourimg.png'
+            user.profilePictureUrl = '/assets/images/default-avatar.png'
             return Observable.of(user);
         }
     }
