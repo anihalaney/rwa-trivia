@@ -92,6 +92,11 @@ service cloud.firestore {
         allow create: if isUserAuthenticated(request.resource.data.created_uid);        
     }
     }
+
+     match /stats/system {     
+        allow get: true;       
+      
+    }
     
   }
 }

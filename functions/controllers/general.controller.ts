@@ -3,6 +3,7 @@ const generalService = require('../services/general.service');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
+import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
 
 /**
@@ -144,6 +145,17 @@ exports.generateUserContributionStat = (req, res) => {
     });
 };
 
+
+/**
+ * generateSystemStat
+ * return status
+ */
+exports.generateSystemStat = (req, res) => {
+    const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
+    systemStatsCalculations.generateSystemStats().then((stats) => {
+        res.send('updated system stat');
+    });
+};
 /**
  * update bulk upload collection by adding isUserArchived or isAdminArchived based on user role
  * return status
