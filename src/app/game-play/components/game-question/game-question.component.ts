@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
-import { Question, Answer, User }     from '../../../model';
+import { Question, Answer, User } from '../../../model';
 
 @Component({
   selector: 'game-question',
@@ -25,6 +25,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   answeredIndex: number;
   correctAnswerIndex: number;
   @ViewChild('overlay') overlay: ElementRef;
+  @Input() userDict: { [key: string]: User };
 
   constructor() {
   }
@@ -35,7 +36,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  answerButtonClicked(answer: Answer, index: number ) {
+  answerButtonClicked(answer: Answer, index: number) {
     if (this.answeredIndex >= 0 || this.continueNext)
       return;
     this.answeredIndex = index;

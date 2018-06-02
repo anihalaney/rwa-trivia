@@ -26,7 +26,7 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(public dialog: MatDialog, private renderer: Renderer2, private store: Store<AppState>, private userActions: UserActions) {
+  constructor(public dialog: MatDialog, private store: Store<AppState>, private renderer: Renderer2, private userActions: UserActions) {
     this.userDict$ = this.store.select(appState.coreState).select(s => s.userDict);
     this.userDict$.subscribe(userDict => this.userDict = userDict);
     this.store.select(appState.coreState).select(s => s.user).subscribe(user => {

@@ -12,7 +12,7 @@ import { ShareButtonModule } from '@ngx-share/button';
 
 import {
   QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-  QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent
+  QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent
 } from './components';
 
 @NgModule({
@@ -23,7 +23,8 @@ import {
     QuestionsTableComponent,
     QuestionFormComponent,
     RejectedQuestionContentComponent,
-    SocialPaletteComponent
+    SocialPaletteComponent,
+    AuthorComponent
   ],
   imports: [
     CommonModule,
@@ -51,6 +52,6 @@ import {
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
-    ImageCropperModule, HttpClientModule, ShareButtonModule, SocialPaletteComponent]
+    ImageCropperModule, HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent]
 })
 export class SharedModule { }

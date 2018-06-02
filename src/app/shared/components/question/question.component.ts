@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 
-import { Question, Answer } from '../../../model';
+import { Question, Answer, User } from '../../../model';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
@@ -13,6 +13,7 @@ import { QuestionActions } from '../../../../app/core/store/actions';
 })
 export class QuestionComponent implements OnChanges {
   @Input() question: Question;
+  @Input() userDict: { [key: string]: User };
 
   questionForm: FormGroup;
   @Output() answerClicked = new EventEmitter<number>();

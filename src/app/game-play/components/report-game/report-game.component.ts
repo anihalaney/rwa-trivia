@@ -6,7 +6,6 @@ import { ReportQuestion, User, Game, QuestionMetadata, Category } from '../../..
 import * as gameplayactions from '../../store/actions';
 import { AppState, appState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { categoryDictionary } from '../../../store';
 
 @Component({
     selector: 'report-game',
@@ -20,15 +19,15 @@ export class ReportGameComponent implements OnInit {
     reportQuestion: ReportQuestion;
     user: User;
     game: Game;
-    categoryDictionary: { [key: number]: Category }
+    ref: any;
+    userDict: { [key: string]: User };
 
     constructor(private fb: FormBuilder, private store: Store<AppState>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
         this.question = data.question;
         this.user = data.user;
         this.game = data.game;
-
-        this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
+        this.userDict = data.userDict;
     }
 
 
@@ -62,6 +61,9 @@ export class ReportGameComponent implements OnInit {
         this.reportQuestion.questions = info;
         this.store.dispatch(new gameplayactions.SaveReportQuestion({ reportQuestion: this.reportQuestion, game: this.game }));
 
+    }
+    closeModel() {
+        this.ref.close();
     }
 
 }

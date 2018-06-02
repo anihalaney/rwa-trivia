@@ -23,7 +23,7 @@
 }
 .report-question-section
 {
-    padding-bottom: 3%;
+    padding-bottom: 5%;
     border-bottom-style: solid;
     border-bottom-width: 2px;
 }
@@ -113,3 +113,12 @@ textarea
     border-radius: 50%;
     background: #3b5998;
 }
+.cancelicon
+{
+    float: right;
+    cursor: pointer;
+}
+.alignment
+{
+    text-align: right;
+} 

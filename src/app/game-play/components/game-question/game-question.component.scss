@@ -82,7 +82,7 @@
   .submitpage .optionbox h2{ margin-bottom: 7px }
   .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
   .submitpage .optionbox{ margin-top: 0; padding: 0 }
-  .secondbg{ padding-top: 35px }
+  .secondbg{ padding-top: 35px;padding-bottom: 5%;}
   .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
 }
 /*--Game-Option End--*/
@@ -177,5 +177,9 @@ mat-card {
 .badge-heading
 {
   text-align: left;
+}
+.alignment
+{
+  text-align: right;
 }
 
