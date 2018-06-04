@@ -147,17 +147,17 @@ mat-card {
   height: 62px;
   margin-top: 18%;
 }
-.main-div
-{
-  border-radius: 2px;
-  background-color:  #ffffff;
-  box-shadow: 4px 4px 14.08px 1.92px rgba(0, 0, 0, 0.37);
-  //  width: 381px;
-  // height: 231px;
-  min-width: 800px !important;
-  height: 475px !important;
+// .main-div
+// {
+//   border-radius: 2px;
+//   background-color:  #ffffff;
+//   box-shadow: 4px 4px 14.08px 1.92px rgba(0, 0, 0, 0.37);
+//   //  width: 381px;
+//   // height: 231px;
+//   min-width: 800px !important;
+//   height: 475px !important;
   
-}
+// }
 .text
 {
   font-family: 'hindregular';
@@ -178,9 +178,14 @@ mat-card {
   margin: 0 auto;
 
 }
+// .badge-icon
+// {
+//   padding-top: 17%;
+// }
 .badge-icon
 {
-  padding-top: 17%;
+  position: sticky;
+  top: 30%;
 }
 .badge1
 {
