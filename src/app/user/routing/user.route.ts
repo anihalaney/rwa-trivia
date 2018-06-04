@@ -25,7 +25,7 @@ export const userRoutes: Routes = [
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
-    path: 'questions/:userid/add',
+    path: 'questions/add',
     component: QuestionAddUpdateComponent,
     canActivate: [AuthGuard]
   },
