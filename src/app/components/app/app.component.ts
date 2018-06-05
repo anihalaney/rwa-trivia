@@ -78,6 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sub4 = this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.router.navigate(['my/invite-friends']);
+        this.snackBar.open('You become the friend!', '', { duration: 2000 });
       }
     });
 
