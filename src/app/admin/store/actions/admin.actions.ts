@@ -25,7 +25,7 @@ export class LoadQuestionsSuccess implements Action {
 // Load All Unpublished Question
 export class LoadUnpublishedQuestions implements Action {
     readonly type = AdminActionTypes.LOAD_UNPUBLISHED_QUESTIONS;
-    constructor() { }
+    constructor(public payload: { question_flag: boolean }) { }
 }
 
 // Load All Unpublished Question Success
