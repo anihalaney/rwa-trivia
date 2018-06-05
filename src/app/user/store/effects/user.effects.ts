@@ -35,11 +35,13 @@ export class UserEffects {
         .map((action: any): RouterStateUrl => action.payload.routerState)
         .filter((routerState: RouterStateUrl) =>
             routerState.url.toLowerCase().startsWith('/my/questions')
-        ).pipe(
-        switchMap((routerState: RouterStateUrl) => {
-            let userId: string;
-            this.store.select(coreState).select(s => s.user).skip(1).take(1).subscribe(user => userId = user.userId);
-            return this.questionService.getUserQuestions(userId, true).pipe(map((questions: Question[]) =>
+        )
+        .mergeMap((routerState: RouterStateUrl) =>
+            this.store.select(coreState).select(s => s.user).skip(1).take(1).map(user => user.userId)
+        )
+        .pipe(
+        switchMap((id: string) => {
+            return this.questionService.getUserQuestions(id, true).pipe(map((questions: Question[]) =>
                 new userActions.LoadUserPublishedQuestionsSuccess(questions)
             ));
         })
@@ -52,11 +54,16 @@ export class UserEffects {
         .map((action: any): RouterStateUrl => action.payload.routerState)
         .filter((routerState: RouterStateUrl) =>
             routerState.url.toLowerCase().startsWith('/my/questions')
-        ).pipe(
-        switchMap((routerState: RouterStateUrl) => {
-            let userId: string;
-            this.store.select(coreState).select(s => s.user).skip(1).take(1).subscribe(user => userId = user.userId);
-            return this.questionService.getUserQuestions(userId, false).pipe(map((questions: Question[]) =>
+        )
+        .mergeMap((routerState: RouterStateUrl) =>
+            this.store.select(coreState).select(s => s.user).skip(1).map(
+                user => {
+                return user.userId;
+            })
+        )
+        .pipe(
+        switchMap((id: string) => {
+            return this.questionService.getUserQuestions(id, false).pipe(map((questions: Question[]) =>
                 new userActions.LoadUserUnpublishedQuestionsSuccess(questions)
             ));
         })
