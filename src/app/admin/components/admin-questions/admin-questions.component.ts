@@ -8,6 +8,7 @@ import { User, Question, Category, SearchResults, SearchCriteria } from '../../.
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'admin-questions',
@@ -20,15 +21,18 @@ export class AdminQuestionsComponent implements OnInit {
   unpublishedQuestionsObs: Observable<Question[]>;
   categoryDictObs: Observable<{ [key: number]: Category }>;
   criteria: SearchCriteria;
-  toggleValue: boolean;
+  toggleValue = false;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private router: Router) {
 
     this.questionsSearchResultsObs = this.store.select(adminState).select(s => s.questionsSearchResults);
     this.unpublishedQuestionsObs = store.select(adminState).select(s => s.unpublishedQuestions);
 
     this.categoryDictObs = store.select(categoryDictionary);
     this.criteria = new SearchCriteria();
+
+    const url = this.router.url;
+    this.toggleValue = url.includes('bulk') ? true : false;
   }
 
   ngOnInit() {
@@ -89,5 +93,6 @@ export class AdminQuestionsComponent implements OnInit {
 
   tapped(value) {
     this.toggleValue = value;
+    (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
   }
 }

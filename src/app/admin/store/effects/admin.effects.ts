@@ -39,7 +39,7 @@ export class AdminEffects {
         )
         .pipe(
         switchMap((routerState: RouterStateUrl) =>
-            this.svc.getUnpublishedQuestions(routerState.url.toLowerCase().includes('bulk-question')).pipe(
+            this.svc.getUnpublishedQuestions(routerState.url.toLowerCase().includes('bulk')).pipe(
                 map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
             )
         )

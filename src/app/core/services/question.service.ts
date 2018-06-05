@@ -64,7 +64,7 @@ export class QuestionService {
   }
 
   getUnpublishedQuestions(flag: boolean): Observable<Question[]> {
-    const question_source = (flag) ? 'question' : 'bulk-question';
+    const question_source = (!flag) ? 'question' : 'bulk-question';
     return this.db.collection('/unpublished_questions', ref => ref.where('source', '==', question_source)).valueChanges()
       .catch(error => {
         console.log(error);
