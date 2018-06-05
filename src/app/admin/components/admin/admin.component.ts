@@ -16,10 +16,12 @@ export class AdminComponent implements OnInit, OnDestroy {
   sub: any;
 
   constructor(private store: Store<AppState>,
-              private router: Router) {
+    private router: Router) {
     this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
-      if (!user || !user.roles["admin"])
+      if (!user || !user.roles['admin']) {
         this.router.navigate(['/']);
+
+      }
 
       this.user = user
     });
@@ -29,7 +31,9 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub)
+    if (this.sub) {
       this.sub.unsubscribe();
+    }
+
   }
 }

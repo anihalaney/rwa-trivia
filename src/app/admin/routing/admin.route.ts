@@ -31,11 +31,7 @@ export const adminRoutes: Routes = [
         component: AdminQuestionsComponent
       },
       {
-        path: 'questions/bulk-question',
-        component: AdminQuestionsComponent
-      },
-      {
-        path: 'questions/added-question',
+        path: 'questions/bulk-questions',
         component: AdminQuestionsComponent
       },
       {
