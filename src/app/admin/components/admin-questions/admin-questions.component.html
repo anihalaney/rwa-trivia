@@ -1,33 +1,37 @@
 <mat-card>
-  <mat-card-title>Questions</mat-card-title>
-  <mat-card-content>    
+  <mat-card-title>
+    Questions
+    <!-- <div class="archive-div col-md-5 col-xs-6 hidden-xs align-right">
+      <label>Show Archived</label>
+      <mat-button-toggle-group #group="matButtonToggleGroup" value=false>
+        <mat-button-toggle value=true (click)="tapped(true)">
+          On
+        </mat-button-toggle>
+        <mat-button-toggle value=false (click)="tapped(false)" selected>
+          Off
+        </mat-button-toggle>
 
-  <mat-tab-group>
-    <mat-tab label="Published">
-      <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" 
-                    [categoryDictionary]="categoryDictObs | async"
-                    (onPageChanged)="pageChanged($event)"
-                    (onCategoryChanged)="categoryChanged($event)"
-                    (onTagChanged)="tagChanged($event)"
-                    (onSortOrderChanged)="sortOrderChanged($event)"
-                    class="flex-container" 
-                    fxLayoutWrap="wrap"
-                    fxLayout="row"
-                    fxLayoutAlign="center" fxLayoutAlign.xs="start">
-      </question-search>
-    </mat-tab>
-    <mat-tab label="Unpublished">
-      <question-list [questions]="unpublishedQuestionsObs | async" 
-                    [categoryDictionary]="categoryDictObs | async"
-                    [showApproveButton]="true"
-                    (approveClicked)="approveQuestion($event)"
-                    class="flex-container" 
-                    fxLayoutWrap="wrap"
-                    fxLayout="row"
-                    fxLayoutAlign="center" fxLayoutAlign.xs="start">
-      </question-list>
-    </mat-tab>
-  </mat-tab-group>
+      </mat-button-toggle-group>
+    </div> -->
 
-  </mat-card-content>    
+  </mat-card-title>
+  <mat-card-content>
+
+    <mat-tab-group>
+      <mat-tab label="Published">
+        <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" [categoryDictionary]="categoryDictObs | async"
+          (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)" (onTagChanged)="tagChanged($event)"
+          (onSortOrderChanged)="sortOrderChanged($event)" class="flex-container" fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center"
+          fxLayoutAlign.xs="start">
+        </question-search>
+      </mat-tab>
+      <mat-tab label="Unpublished">
+        <question-list [questions]="unpublishedQuestionsObs | async" [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true"
+          (approveClicked)="approveQuestion($event)" class="flex-container" fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center"
+          fxLayoutAlign.xs="start">
+        </question-list>
+      </mat-tab>
+    </mat-tab-group>
+
+  </mat-card-content>
 </mat-card>

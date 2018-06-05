@@ -10,10 +10,6 @@ import { QuestionService } from '../../../core/services';
 
 @Injectable()
 export class AdminEffects {
-    constructor(
-        private actions$: Actions,
-        private svc: QuestionService,
-    ) { }
 
 
     // Load User Published Question by userId from router
@@ -43,7 +39,7 @@ export class AdminEffects {
         )
         .pipe(
         switchMap((routerState: RouterStateUrl) =>
-            this.svc.getUnpublishedQuestions().pipe(
+            this.svc.getUnpublishedQuestions(routerState.url.toLowerCase().includes('bulk-question')).pipe(
                 map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
             )
         )
@@ -66,8 +62,8 @@ export class AdminEffects {
     loadUnpublishedQuestions$ = this.actions$
         .ofType(AdminActionTypes.LOAD_UNPUBLISHED_QUESTIONS)
         .pipe(
-        switchMap((action: adminActions.LoadQuestions) =>
-            this.svc.getUnpublishedQuestions().pipe(
+        switchMap((action: adminActions.LoadUnpublishedQuestions) =>
+            this.svc.getUnpublishedQuestions(action.payload.question_flag).pipe(
                 map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
             )
         )
@@ -83,4 +79,10 @@ export class AdminEffects {
             return empty();
         })
         );
+
+    constructor(
+        private actions$: Actions,
+        private svc: QuestionService,
+    ) { }
+
 }

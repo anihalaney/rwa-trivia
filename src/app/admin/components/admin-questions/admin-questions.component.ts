@@ -20,6 +20,7 @@ export class AdminQuestionsComponent implements OnInit {
   unpublishedQuestionsObs: Observable<Question[]>;
   categoryDictObs: Observable<{ [key: number]: Category }>;
   criteria: SearchCriteria;
+  toggleValue: boolean;
 
   constructor(private store: Store<AppState>) {
 
@@ -39,7 +40,7 @@ export class AdminQuestionsComponent implements OnInit {
 
     this.store.select(appState.coreState).take(1).subscribe(s => user = s.user);
     question.approved_uid = user.userId;
-    this.store.dispatch(new adminActions.LoadUnpublishedQuestions());
+    this.store.dispatch(new adminActions.LoadUnpublishedQuestions({ 'question_flag': this.toggleValue }));
     this.store.dispatch(new adminActions.ApproveQuestion({ question: question }));
   }
 
@@ -84,5 +85,9 @@ export class AdminQuestionsComponent implements OnInit {
   }
   searchCriteriaChange() {
     this.store.dispatch(new adminActions.LoadQuestions({ 'startRow': 0, 'pageSize': 25, criteria: this.criteria }));
+  }
+
+  tapped(value) {
+    this.toggleValue = value;
   }
 }
