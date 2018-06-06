@@ -86,6 +86,12 @@
                 </span> -->
               </div>
             </li>
+            <li *ngIf="userDict">
+              <div class="question-text ">Created By :</div>
+              <div class="answer-text">
+                {{userDict[row.created_uid]?.displayName}}
+              </div>
+            </li>
             <li *ngIf="row.validationErrorMessages?.length > 0">
               <div class="csv-error-msg">
                 <p>ERROR :</p>

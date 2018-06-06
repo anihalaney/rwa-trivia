@@ -33,4 +33,9 @@ export class QuestionsComponent implements OnInit, OnDestroy, OnChanges {
   approveButtonClicked(question: Question) {
     this.approveClicked.emit(question)
   }
+  showReason(row, index) {
+    if (this.viewReasonArray[index] === undefined) {
+      this.viewReasonArray[index] = row;
+    }
+  }
 }

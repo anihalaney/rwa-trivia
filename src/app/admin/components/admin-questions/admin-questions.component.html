@@ -25,10 +25,10 @@
         </question-search>
       </mat-tab>
       <mat-tab label="Unpublished">
-        <question-list [questions]="unpublishedQuestionsObs | async" [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true"
-          (approveClicked)="approveQuestion($event)" [userDict]="userDict" class="flex-container" fxLayoutWrap="wrap" fxLayout="row"
-          fxLayoutAlign="center" fxLayoutAlign.xs="start">
-        </question-list>
+        <question-table [showSort]="false" [showPaginator]="false" [questions]="unpublishedQuestionsObs | async" [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true" [showButtons]="true" [userDict]="userDict">
+        </question-table>
+
       </mat-tab>
     </mat-tab-group>
 
