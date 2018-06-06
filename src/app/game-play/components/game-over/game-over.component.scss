@@ -3,13 +3,12 @@ mat-card {
   padding-right: 0px;
 }
 mat-card-content {
-  // margin-top: 5%;
   margin-bottom: 0px;
 }
 .mat-card-title
 {
   display: block !important;
-  margin-top: 5%;
+  margin-top: 7%;
 }
 .title
 {
@@ -135,19 +134,15 @@ ul li:last-child{ border-bottom: 0 }
     display: block;
     margin-bottom: 0px; 
   }
-  .share-content
+  #share-content
   {
-    padding-top: 3%;
+    padding-top: 6%;
   }
   .spacing
   {
     padding-right: 13%;
     display: initial;
   }
-// .mat-card-actions, .mat-card-content, .mat-card-subtitle, .mat-card-title {
-//   display: block;
-//   /* margin-bottom: 16px; */
-// }
 .alignment
 {
   margin-top: 1%;

@@ -413,7 +413,7 @@ h1 + p{ font-size: 18px; font-family: 'hindlight'; }
     transform:rotate(360deg);
   }
 }
-.mat-dialog-content {
+.mat-dialog-content,.main-div {
   padding: 0 !important;
   margin: 0 !important;
   max-height: none !important;
@@ -424,20 +424,22 @@ h1 + p{ font-size: 18px; font-family: 'hindlight'; }
 }
 
 @media screen and ( min-width:1000px){      
-  .mat-dialog-container {
+  .mat-dialog-container,.main-div {
     height: auto !important;
     min-width: 800px !important;
     max-width: 960px !important;
+    min-height:450px !important;
+    max-height: 610px !important;
   }
 }
 @media screen and ( max-width:1000px){      
-  .mat-dialog-container {
+  .mat-dialog-container,.main-div {
     width: 96vw !important;
     max-width: 96vw !important;
   }
 }
 @media screen and ( max-width:767px){      
-  .mat-dialog-container {
+  .mat-dialog-container,.main-div {
     height: 90vh !important;
   }
 }
@@ -540,11 +542,19 @@ nav .user.card{
   width: 50px;
   height: 50px;
 }
-.socialicon .sb-circles-dark .sb-wrapper {
+.social-icons-blog .sb-circles-dark .sb-wrapper,.social-icons-gameOver .sb-circles-dark .sb-wrapper{
   font-size: 12px !important;
-  padding-right: 15%;
 }
 .footer-social-icon .sb-circles-dark .sb-wrapper
 {
   font-size: 10px !important;
 }
+.cdk-overlay-container
+{
+  position: initial;
+}
+.cdk-overlay-pane
+{
+  max-width: initial !important;
+}
+
