@@ -51,8 +51,10 @@ export class FriendGameStats {
                 friendsMetadata.gamePlayed = (friendsMetadata.gamePlayed) ? friendsMetadata.gamePlayed + 1 : 1;
                 friendsMetadata.wins = (friendsMetadata.wins) ? friendsMetadata.wins : 0;
                 friendsMetadata.losses = (friendsMetadata.losses) ? friendsMetadata.losses : 0;
-                friendsMetadata.wins = (game.winnerPlayerId === otherUserId) ? friendsMetadata.wins + 1 : friendsMetadata.wins;
-                friendsMetadata.losses = (game.winnerPlayerId !== otherUserId) ? friendsMetadata.losses + 1 : friendsMetadata.losses;
+                if (game.winnerPlayerId) {
+                    friendsMetadata.wins = (game.winnerPlayerId === otherUserId) ? friendsMetadata.wins + 1 : friendsMetadata.wins;
+                    friendsMetadata.losses = (game.winnerPlayerId !== otherUserId) ? friendsMetadata.losses + 1 : friendsMetadata.losses;
+                }
                 friendsMetadataMap[otherUserId] = { ...friendsMetadata };
                 friends.myFriends[matchedIndex] = friendsMetadataMap;
                 //  console.log('friends', friends);
