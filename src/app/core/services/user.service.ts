@@ -43,6 +43,7 @@ export class UserService {
     }
 
     saveUserProfile(user: User) {
+        user.roles = (!user.roles) ? {} : user.roles;
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
         delete dbUser.profilePictureUrl;
