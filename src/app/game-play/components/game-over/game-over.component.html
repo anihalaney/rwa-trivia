@@ -1,15 +1,16 @@
-<div class="card">
-  <mat-card-title class="textcenter">
+<div class="card main-div">
+  <!-- <mat-card-title class="textcenter">
+   
+    <div fxFlex></div>
+    <div></div>
+  </mat-card-title> -->
+  <mat-card-content class="textcenter" id="share-content">
     <div>
       <span class="title">GAME OVER</span>
     </div>
     <div class="category-div">
       <span class="label category-name">{{categoryName}} </span>
     </div>
-    <div fxFlex></div>
-    <div></div>
-  </mat-card-title>
-  <mat-card-content class="textcenter" id="share-content">
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="yourimg">
         <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
@@ -82,7 +83,6 @@
         <button class="btn-share" type="button" (click)="shareScore()" *ngIf="!blogData[0].status">Share</button>
         <button class="btn-share" type="button" (click)="reMatch()">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
-
       </div>
     </div>
     <div>
