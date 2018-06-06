@@ -9,6 +9,7 @@ import { User, Question, Category, SearchResults, SearchCriteria } from '../../.
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
 import { Router } from '@angular/router';
+import { UserActions } from '../../../core/store/actions';
 
 @Component({
   selector: 'admin-questions',
@@ -22,11 +23,25 @@ export class AdminQuestionsComponent implements OnInit {
   categoryDictObs: Observable<{ [key: number]: Category }>;
   criteria: SearchCriteria;
   toggleValue = false;
+  userDict$: Observable<{ [key: string]: User }>;
+  userDict: { [key: string]: User } = {};
 
-  constructor(private store: Store<AppState>, private router: Router) {
+  constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
 
     this.questionsSearchResultsObs = this.store.select(adminState).select(s => s.questionsSearchResults);
-    this.unpublishedQuestionsObs = store.select(adminState).select(s => s.unpublishedQuestions);
+    this.unpublishedQuestionsObs = this.store.select(adminState).select(s => s.unpublishedQuestions).map((question) => {
+      const questionList = question;
+      questionList.map((q) => {
+        if (this.userDict[q.created_uid] === undefined) {
+          this.store.dispatch(this.userActions.loadOtherUserProfile(q.created_uid));
+        }
+      });
+      return questionList;
+    });
+
+    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$.subscribe(userDict => this.userDict = userDict);
+
 
     this.categoryDictObs = store.select(categoryDictionary);
     this.criteria = new SearchCriteria();
