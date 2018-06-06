@@ -56,10 +56,7 @@ export class UserEffects {
             routerState.url.toLowerCase().startsWith('/my/questions')
         )
         .mergeMap((routerState: RouterStateUrl) =>
-            this.store.select(coreState).select(s => s.user).skip(1).map(
-                user => {
-                return user.userId;
-            })
+            this.store.select(coreState).select(s => s.user).skip(1).take(1).map(user => user.userId)
         )
         .pipe(
         switchMap((id: string) => {

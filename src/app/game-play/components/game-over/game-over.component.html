@@ -1,15 +1,16 @@
-<div class="card">
-  <mat-card-title class="textcenter">
+<div class="card main-div">
+  <!-- <mat-card-title class="textcenter">
+   
+    <div fxFlex></div>
+    <div></div>
+  </mat-card-title> -->
+  <mat-card-content class="textcenter" id="share-content">
     <div>
       <span class="title">GAME OVER</span>
     </div>
     <div class="category-div">
       <span class="label category-name">{{categoryName}} </span>
     </div>
-    <div fxFlex></div>
-    <div></div>
-  </mat-card-title>
-  <mat-card-content class="textcenter" id="share-content">
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="yourimg">
         <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
@@ -67,6 +68,10 @@
         <div class="sprite thumb-down"></div>
         <span class="win-text">You Lose</span>
       </div>
+      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score == game.stats[otherUserId].score)">
+        <div class="sprite thumb-up"></div>
+        <span class="win-text">It's a Tie</span>
+      </div>
     </div>
 
   </mat-card-content>
@@ -76,9 +81,8 @@
         <social-palette *ngIf="blogData[0].status" class="spacing" [blogData]="blogData[0]" (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
 
         <button class="btn-share" type="button" (click)="shareScore()" *ngIf="!blogData[0].status">Share</button>
-        <button class="btn-share" type="button">Rematch</button>
+        <button class="btn-share" type="button" (click)="reMatch()">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
-
       </div>
     </div>
     <div>
