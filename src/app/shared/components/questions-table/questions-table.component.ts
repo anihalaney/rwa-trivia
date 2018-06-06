@@ -35,6 +35,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @Input() userDict: { [key: string]: User };
 
   requestFormGroup: FormGroup;
   rejectFormGroup: FormGroup;
@@ -188,13 +189,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
     });
 
   }
-
-  showReason(row, index) {
-    if (this.viewReasonArray[index] === undefined) {
-      this.viewReasonArray[index] = row;
-    }
-  }
-
 }
 
 export class QuestionsDataSource extends DataSource<Question> {

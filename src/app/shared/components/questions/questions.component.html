@@ -30,7 +30,7 @@
       </div>
     </mat-card-content>
   </mat-card> -->
-<div *ngFor="let question of questions" class="col-sm-12 col-xs-12 question-section">
+<div *ngFor="let question of questions;let i = index" class="col-sm-12 col-xs-12 question-section">
   <div class="date">{{question.createdOn | date:'dd MMM yyyy' }}</div>
   <p class="dark">{{question.questionText}}</p>
   <ul class="currentans">
@@ -93,7 +93,7 @@
       </div>
     </li>
   </ul>
-  <div *ngIf="showButtons ">
+  <div *ngIf="question.status != 2">
     <div class="col-sm-12 col-xs-12 textrigth">
       <div class="button-row">
         <button mat-raised-button (click)="approveQuestion(question)">Approve</button>
