@@ -22,7 +22,6 @@ export class QuestionsComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
   }
   ngOnChanges() {
-    console.log("changes");
   }
 
   ngOnDestroy() {
