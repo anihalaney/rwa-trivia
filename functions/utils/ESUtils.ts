@@ -187,10 +187,10 @@ export class ESUtils {
     });
   }
 
-  static getRandomQuestionOfTheDay(): Promise<Question> {
+  static getRandomQuestionOfTheDay(isNextQuestion: boolean): Promise<Question> {
     const date = new Date();
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
-    return this.getRandomItems(this.QUESTIONS_INDEX, 1, '').then((hits) => {
+    return this.getRandomItems(this.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed).then((hits) => {
       // convert hit to Question
       return Question.getViewModelFromES(hits[0]);
     });

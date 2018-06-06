@@ -23,9 +23,9 @@ export class QuestionService {
   }
 
   // Elasticsearch
-  getQuestionOfTheDay(): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/question/day';
-
+  getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
+    let url: string = CONFIG.functionsUrl + '/app/question/day';
+    url = (isNextQuestion) ? `${url}/next` : `${url}/current`
     return this.http.get<Question>(url);
   }
 
