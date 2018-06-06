@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <mat-tab-group>
+    <mat-tab-group (selectedTabChange)="tabChanged($event)" [(selectedIndex)]="selectedTab">
       <mat-tab label="Published">
         <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" [categoryDictionary]="categoryDictObs | async"
           (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)" (onTagChanged)="tagChanged($event)"

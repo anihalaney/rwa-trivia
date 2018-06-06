@@ -10,6 +10,7 @@ import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
 import { Router } from '@angular/router';
 import { UserActions } from '../../../core/store/actions';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'admin-questions',
@@ -22,9 +23,10 @@ export class AdminQuestionsComponent implements OnInit {
   unpublishedQuestionsObs: Observable<Question[]>;
   categoryDictObs: Observable<{ [key: number]: Category }>;
   criteria: SearchCriteria;
-  toggleValue = false;
+  toggleValue: boolean;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
+  selectedTab = 0;
 
   constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
 
@@ -48,6 +50,12 @@ export class AdminQuestionsComponent implements OnInit {
 
     const url = this.router.url;
     this.toggleValue = url.includes('bulk') ? true : false;
+
+    this.store.select(adminState).select(s => s.getQuestionToggleStat).subscribe((stat) => {
+      if (stat != null) {
+        this.selectedTab = stat === 'Published' ? 0 : 1
+      }
+    });
   }
 
   ngOnInit() {
@@ -61,6 +69,7 @@ export class AdminQuestionsComponent implements OnInit {
     question.approved_uid = user.userId;
     this.store.dispatch(new adminActions.LoadUnpublishedQuestions({ 'question_flag': this.toggleValue }));
     this.store.dispatch(new adminActions.ApproveQuestion({ question: question }));
+
   }
 
   pageChanged(pageEvent: PageEvent) {
@@ -109,5 +118,9 @@ export class AdminQuestionsComponent implements OnInit {
   tapped(value) {
     this.toggleValue = value;
     (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
+  }
+  tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
+    console.log('index => ', tabChangeEvent.index);
+    this.store.dispatch(new adminActions.SaveQuestionToggleStat({ toggle_stat: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
   }
 }
