@@ -26,8 +26,8 @@
       </mat-tab>
       <mat-tab label="Unpublished">
         <question-list [questions]="unpublishedQuestionsObs | async" [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true"
-          (approveClicked)="approveQuestion($event)" class="flex-container" fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center"
-          fxLayoutAlign.xs="start">
+          (approveClicked)="approveQuestion($event)" [userDict]="userDict" class="flex-container" fxLayoutWrap="wrap" fxLayout="row"
+          fxLayoutAlign="center" fxLayoutAlign.xs="start">
         </question-list>
       </mat-tab>
     </mat-tab-group>

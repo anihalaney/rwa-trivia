@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 
-import { Question, QuestionStatus, Category } from '../../../model';
+import { Question, QuestionStatus, Category, User } from '../../../model';
 
 @Component({
   selector: 'question-list',
@@ -12,6 +12,9 @@ export class QuestionsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() categoryDictionary: { [key: number]: Category };
   @Input() showApproveButton: boolean;
   @Output() approveClicked = new EventEmitter<Question>();
+  @Input() userDict: { [key: string]: User };
+
+  viewReasonArray = [];
 
   constructor() {
   }
@@ -19,7 +22,7 @@ export class QuestionsComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
   }
   ngOnChanges() {
-   // console.log(this.questions);
+    console.log(this.questions);
   }
 
   ngOnDestroy() {
