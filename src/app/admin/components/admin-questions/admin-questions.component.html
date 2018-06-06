@@ -2,7 +2,7 @@
   <mat-card-content>
     <div class="row">
       <div class="pageheading col-xs-12 hidden-xs col-md-4">Questions</div>
-      <div class="archive-div col-md-5 col-xs-6 hidden-xs align-right">
+      <div class="archive-div col-md-5 col-xs-6 hidden-xs align-right" *ngIf="selectedTab==1">
         <label>Show Bulk Questions</label>
         <mat-button-toggle-group #group="matButtonToggleGroup" value="{{toggleValue}}">
           <mat-button-toggle value=true (click)="tapped(true)">
