@@ -47,9 +47,8 @@
         <h2>{{questionIndex}}. {{question.questionText}}</h2>
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)" [class.question-answered]="answeredIndex >= 0 || continueNext"
-            [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]="answeredIndex >= 0 && correctAnswerIndex === i">
-            {{answer.answerText}}
-
+            [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]=" correctAnswerIndex === i">
+            {{answer.answerText}}        
           </li>
         </ul>
         <div class=" col-sm-12 col-xs-12">
@@ -89,10 +88,11 @@
       <mat-list-item *ngFor="let answer of question.answers; let i=index">
         <button mat-button color="primary" (click)="answerButtonClicked(answer, i)" class="answer-button" [disabled]="answeredIndex >= 0"
           [ngClass]="{answered: answeredIndex === i, correct: correctAnswerIndex === i}">{{answer.answerText}}</button>
+         
       </mat-list-item>
     </mat-list>
   </mat-card-content>
-
+  {{correctAnswerIndex}}
   <mat-card-footer *ngIf="!(correctAnswerIndex === null || correctAnswerIndex === undefined)" fxLayout="row" fxLayoutAlign="space-between center">
     <button mat-button>SHARE</button>
     <div fxFlexAlign="center">
