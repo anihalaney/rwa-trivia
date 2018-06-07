@@ -20,6 +20,7 @@ router.get('/leaderboard/stat', generalAuth.adminOnly, generalController.generat
 router.get('/user/contribution/stat', generalAuth.adminOnly, generalController.generateUserContributionStat);
 router.post('/stat/system', generalAuth.adminOnly, generalController.generateSystemStat);
 router.get('/bulkupload/update', generalAuth.adminOnly, generalController.updateBulkUploadCollection);
+router.post('/blog', generalAuth.adminOnly, generalController.generateBlogsData);
 
 
 module.exports = router;

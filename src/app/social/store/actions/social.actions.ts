@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Subscription, Subscribers } from '../../../model';
+import { Subscription, Subscribers, Blog } from '../../../model';
 
 export enum SocialActionTypes {
 
@@ -14,6 +14,8 @@ export enum SocialActionTypes {
     CHECK_SUBSCRIPTION = '[Social] CheckSubscriptionStatus',
     LOAD_SOCIAL_SCORE_SHARE_URL = '[Social] LoadSocialScoreShareUrl',
     LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS = '[Social] LoadSocialScoreShareUrlSuccess',
+    LOAD_BLOGS = '[Social] LoadBlogs',
+    LOAD_BLOGS_SUCCESS = '[Social] LoadBlogsSuccess',
 }
 
 // Save subscriber
@@ -38,6 +40,18 @@ export class GetTotalSubscriber implements Action {
 export class GetTotalSubscriberSuccess implements Action {
     readonly type = SocialActionTypes.TOTAL_SUBSCRIBER_SUCCESS;
     constructor(public payload: Subscribers) { }
+}
+
+// Load Blogs
+export class LoadBlogs implements Action {
+    readonly type = SocialActionTypes.LOAD_BLOGS;
+    payload = null;
+}
+
+// Load Blogs Success
+export class LoadBlogsSuccess implements Action {
+    readonly type = SocialActionTypes.LOAD_BLOGS_SUCCESS;
+    constructor(public payload: Blog[]) { }
 }
 
 // Load Social Score share Url
@@ -70,6 +84,7 @@ export class CheckSubscriptionStatus implements Action {
     constructor(public payload: Boolean) { }
 }
 
+
 export type SocialActions
     = AddSubscriber
     | AddSubscriberSuccess
@@ -77,6 +92,8 @@ export type SocialActions
     | GetTotalSubscriberSuccess
     | LoadSocialScoreShareUrl
     | LoadSocialScoreShareUrlSuccess
+    | LoadBlogs
+    | LoadBlogsSuccess
     | RemoveSubscriber
     | RemoveSubscriberSuccess
     | CheckSubscriptionStatus
