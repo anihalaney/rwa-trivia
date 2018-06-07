@@ -18,7 +18,7 @@ export class SocialPaletteComponent implements OnChanges {
   }
 
   closeSocial() {
-    this.blogData.status = false;
+    this.blogData.share_status = false;
     this.notify.emit(this.blogData);
   }
   ngOnChanges() {

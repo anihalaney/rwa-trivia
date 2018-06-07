@@ -1,10 +1,14 @@
 
 const generalService = require('../services/general.service');
+const blogService = require('../services/blog.service');
+const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
+import { RSSFeedConstants, Blog } from '../../src/app/model';
+
 
 /**
  * migrateCollections
@@ -156,6 +160,7 @@ exports.generateSystemStat = (req, res) => {
         res.send('updated system stat');
     });
 };
+
 /**
  * update bulk upload collection by adding isUserArchived or isAdminArchived based on user role
  * return status
@@ -167,3 +172,29 @@ exports.updateBulkUploadCollection = (req, res) => {
     });
 
 }
+
+/**
+ * generateBlogsData
+ * return status
+ */
+exports.generateBlogsData = (req, res) => {
+    const blogs: Array<Blog> = []; Feed.load(RSSFeedConstants.feedURL, function (err, rss) {
+
+        let index = 0;
+        rss.items.map((item) => {
+            const blog: Blog = item;
+            blog.blogNo = index;
+            blog.commentCount = 0;
+            blog.viewCount = 0;
+            blog.created_uuid = req.user.uid;
+            blog.share_status = false;
+            delete blog['description'];
+            blogs.push({ ...blog });
+            index++;
+        });
+        console.log('blogs', blogs);
+        blogService.setBlog(blogs).then((ref) => {
+            res.send('created feed blogs');
+        });
+    });
+};

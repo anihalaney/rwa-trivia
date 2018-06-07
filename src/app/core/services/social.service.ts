@@ -4,7 +4,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
 import { CONFIG } from '../../../environments/environment';
-import { Subscription, Subscribers, SocialGameScoreShare } from '../../model';
+import { Subscription, Subscribers, SocialGameScoreShare, Blog } from '../../model';
 import { UserService } from './user.service';
 
 
@@ -56,5 +56,15 @@ export class SocialService {
         this.db.doc(`/social_share/${socialGameScoreShare.filename}`).set({ ...socialGameScoreShare });
         const socialShareImageObj = this.storage.upload(`${this.basePath}/${userId}/${this.folderPath}/${new Date().getTime()}`, imageBlob);
         return socialShareImageObj.downloadURL().map(url => url);
+    }
+
+
+    loadBlogs(): Observable<Blog[]> {
+        return this.db.collection('blogs')
+            .valueChanges()
+            .catch(error => {
+                console.log(error);
+                return Observable.of(null);
+            });
     }
 }
