@@ -77,6 +77,7 @@ export class QuestionService {
     const questionId = this.db.createId();
     if (dbQuestion.id === undefined || dbQuestion.id === '') {
       dbQuestion.id = questionId;
+      dbQuestion['source'] = 'question';
     }
     this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
       if (questionId === dbQuestion.id) {
