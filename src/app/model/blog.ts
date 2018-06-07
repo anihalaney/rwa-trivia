@@ -4,6 +4,7 @@ export class Blog {
     link: string;
     thumbnail: string;
     title: string;
+    subtitle: string;
     content: string;
     commentCount: number;
     viewCount: number;
@@ -11,4 +12,5 @@ export class Blog {
     pubDate: string;
     guid: string;
     author: string;
+    categories: string[];
 }
