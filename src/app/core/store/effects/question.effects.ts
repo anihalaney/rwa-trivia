@@ -17,7 +17,7 @@ export class QuestionEffects {
         .map((action: any): RouterStateUrl => action.payload.routerState)
         .filter((routerState: RouterStateUrl) =>
             routerState.url.toLowerCase().startsWith('/dashboard'))
-        .pipe(() => this.svc.getQuestionOfTheDay())
+        .pipe(() => this.svc.getQuestionOfTheDay(false))
         .map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)
         );
 
@@ -28,7 +28,7 @@ export class QuestionEffects {
         .ofType(QuestionActions.GET_QUESTION_OF_THE_DAY)
         .pipe(
         switchMap((action) =>
-            this.svc.getQuestionOfTheDay()
+            this.svc.getQuestionOfTheDay(true)
                 .pipe(
                 map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question))
                 )
