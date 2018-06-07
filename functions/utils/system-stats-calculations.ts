@@ -20,7 +20,6 @@ export class SystemStatsCalculations {
 
                 return Promise.all(systemStatPromises)
                     .then((statResults) => {
-                        //  console.log('All Users stats are updated', userResults);
                         systemStatObj.total_users = statResults[0].size;
                         systemStatObj.total_questions = statResults[1].size;
                         systemStatObj.active_games = statResults[2].size;
@@ -36,8 +35,6 @@ export class SystemStatsCalculations {
         return statService.getSystemStats('system')
             .then((systemStat) => {
                 const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
-                //  console.log('systemStatObj', systemStatObj);
-                //  console.log('entity', entity);
                 if (entity === 'total_users') {
                     systemStatObj.total_users = (systemStatObj.total_users) ? systemStatObj.total_users + 1 : 1;
                     return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
@@ -58,10 +55,8 @@ export class SystemStatsCalculations {
                             });
                         });
                 } else if (entity === 'game_played') {
-                    // console.log('game_played');
                     return statGameService.getCompletedGames()
                         .then((total_games) => {
-                            // console.log('total_games', total_games);
                             systemStatObj.game_played = total_games.size;
                             return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
                                 return status;
