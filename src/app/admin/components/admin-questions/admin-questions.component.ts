@@ -33,11 +33,14 @@ export class AdminQuestionsComponent implements OnInit {
     this.questionsSearchResultsObs = this.store.select(adminState).select(s => s.questionsSearchResults);
     this.unpublishedQuestionsObs = this.store.select(adminState).select(s => s.unpublishedQuestions).map((question) => {
       const questionList = question;
-      questionList.map((q) => {
-        if (this.userDict[q.created_uid] === undefined) {
-          this.store.dispatch(this.userActions.loadOtherUserProfile(q.created_uid));
-        }
-      });
+      if (questionList) {
+        questionList.map((q) => {
+          if (this.userDict[q.created_uid] === undefined) {
+            this.store.dispatch(this.userActions.loadOtherUserProfile(q.created_uid));
+          }
+        });
+      }
+
       return questionList;
     });
 
