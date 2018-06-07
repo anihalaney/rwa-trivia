@@ -124,6 +124,7 @@ export class QuestionService {
 
   storeQuestion(index: number, questions: Array<Question>): void {
     const question = questions[index];
+    question['source'] = 'bulk-question';
     this.db.doc(`/unpublished_questions/${question.id}`)
       .set(question)
       .then(ref => {
