@@ -31,6 +31,10 @@ export const adminRoutes: Routes = [
         component: AdminQuestionsComponent
       },
       {
+        path: 'questions/bulk-questions',
+        component: AdminQuestionsComponent
+      },
+      {
         path: 'bulk',
         component: BulkComponent
       },
