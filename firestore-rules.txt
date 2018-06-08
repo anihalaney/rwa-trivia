@@ -78,10 +78,12 @@ service cloud.firestore {
       	}              
     }  
 
-    match /leader_board_stats/categories {     
-        allow get: true;       
+    match /leader_board_stats/categories { 
+      match /{document=**} {
+        allow get: if true;      
+        }
       
-    }
+    } 
 
       match /friends/{userId} {
          allow get: if isUserAuthenticated(userId);          
@@ -95,6 +97,20 @@ service cloud.firestore {
 
      match /stats/system {     
         allow get: true;       
+      
+    }
+
+       match /social_share {
+      match /{document=**} {
+        allow read,update : if isUserAuthenticated(request.resource.data.created_uid);
+        allow create: if isUserAuthenticated(request.resource.data.created_uid); 
+    }
+    }
+    
+     match /blogs {    
+     match /{document=**} {
+        allow read: if true;  
+      }
       
     }
     
