@@ -4,8 +4,9 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { ReportQuestion, User, Game, QuestionMetadata, Category } from '../../../model';
 import * as gameplayactions from '../../store/actions';
-import { AppState, appState } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'report-game',
@@ -21,6 +22,8 @@ export class ReportGameComponent implements OnInit {
     game: Game;
     ref: any;
     userDict: { [key: string]: User };
+    categoryDict$: Observable<{ [key: number]: Category }>;
+    categoryDict: { [key: number]: Category };
 
     constructor(private fb: FormBuilder, private store: Store<AppState>,
         @Inject(MAT_DIALOG_DATA) public data: any) {
@@ -28,6 +31,12 @@ export class ReportGameComponent implements OnInit {
         this.user = data.user;
         this.game = data.game;
         this.userDict = data.userDict;
+
+        this.categoryDict$ = store.select(categoryDictionary);
+        this.categoryDict$.subscribe(categoryDict => {
+            this.categoryDict = categoryDict;
+        });
+
     }
 
 
