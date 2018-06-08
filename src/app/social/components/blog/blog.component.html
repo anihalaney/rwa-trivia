@@ -5,10 +5,10 @@
     </a>
     <div class="blog-cont">
       <div class="T-tagging">{{blog.title}}</div>
-      <h2>
-        <a href="#">{{blog.subtitle}}</a>
+      <h2 class="subtitle">
+        <p class="block-with-text">{{blog.subtitle}}</p>
       </h2>
-      <p class="minimize">{{blog.categories}}</p>
+      <p class="minimize">{{blog.categories }}</p>
     </div>
     <div class="blog-social" [ngClass]="blog.share_status?'hide-top-border':''">
       <div class="col-xs-4" [ngClass]="blog.share_status?'hide-bottom':''">
