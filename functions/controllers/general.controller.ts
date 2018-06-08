@@ -178,7 +178,9 @@ exports.updateBulkUploadCollection = (req, res) => {
  * return status
  */
 exports.generateBlogsData = (req, res) => {
-    const blogs: Array<Blog> = []; Feed.load(RSSFeedConstants.feedURL, function (err, rss) {
+    const blogs: Array<Blog> = [];
+
+    Feed.load(RSSFeedConstants.feedURL, function (err, rss) {
 
         let index = 0;
         let viewCount = 100;
