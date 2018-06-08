@@ -13,3 +13,7 @@ export enum TriggerConstants {
     invitationMailSubject = 'Friend Invitation',
     fromUser = 'support@trivia.com'
 }
+
+export enum RSSFeedConstants {
+    feedURL = 'https://blog.realworldfullstack.io/feed'
+}
