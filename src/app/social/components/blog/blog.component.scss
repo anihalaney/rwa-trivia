@@ -53,7 +53,22 @@ h2 a{ font-family:'hindmedium'; font-size: 16px; transition: 0.3s ease-in-out;}
 {
   height: 50px;
 }
+.title-line-height
+{
+/* max-height = line-height (1.2) * lines max number (3) */
+  max-height: 2.5em; 
+}
+.category-line-height
+{
+  /* max-height = line-height (1.2) * lines max number (3) */
+  max-height: 2em; 
+}
 
+.subtitle-line-height
+{
+/* max-height = line-height (1.2) * lines max number (3) */
+  max-height: 3.6em; 
+}
 /* styles for '...' */ 
 .block-with-text {
   /* hide text if it more than N lines  */
@@ -62,13 +77,10 @@ h2 a{ font-family:'hindmedium'; font-size: 16px; transition: 0.3s ease-in-out;}
   position: relative; 
   /* use this value to count block height */
   line-height: 1.2em;
-  /* max-height = line-height (1.2) * lines max number (3) */
-  max-height: 3.6em; 
+  
   /* fix problem when last visible word doesn't adjoin right side  */
   text-align: justify;
   
-  /* */
-  margin-right: -1em;
   padding-right: 1em;
 }
 .block-with-text:before {
