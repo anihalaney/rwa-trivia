@@ -7,8 +7,6 @@
 .playtext span{ display: block; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px;}
 .myqestion{ background-position: -179px -22px; width: 30px; height: 30px; margin-right: 16px; }
 
-.socialicon{ text-align: center; padding: 13px 0 }
-
 @media screen and ( min-width:1000px){
   .playwith a:hover:after{ right: 30px; }
   .playwith a:hover:before{ right: 40px; }
@@ -19,5 +17,9 @@
 @media screen and ( max-width:1024px){
   ul li { margin-left: -200px; }
   ul li { margin-left: 0; }
+}
+.social-icon
+{
+  padding: 10px 0;
 }
 

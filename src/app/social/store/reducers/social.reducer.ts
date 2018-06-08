@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
-import { Subscription, Subscribers } from '../../../model';
+import { Subscription, Subscribers, Blog } from '../../../model';
 import { SocialActions, SocialActionTypes } from '../actions';
 
-//add subscription Status
+// add subscription Status
 export function subscriptionSaveStatus(state: any = 'NONE', action: SocialActions): String {
     switch (action.type) {
         case SocialActionTypes.ADD_SUBSCRIBER:
@@ -15,7 +15,7 @@ export function subscriptionSaveStatus(state: any = 'NONE', action: SocialAction
     }
 }
 
-//return total subscription count 
+// return total subscription count 
 export function getTotalSubscriptionStatus(state: any = [], action: SocialActions): Subscribers {
     switch (action.type) {
         case SocialActionTypes.TOTAL_SUBSCRIBER_SUCCESS:
@@ -25,7 +25,7 @@ export function getTotalSubscriptionStatus(state: any = [], action: SocialAction
     }
 };
 
-//remove subscription Status
+// remove subscription Status
 export function subscriptionRemoveStatus(state: any = 'NONE', action: SocialActions): String {
     switch (action.type) {
         case SocialActionTypes.REMOVE_SUBSCRIBER:
@@ -37,7 +37,7 @@ export function subscriptionRemoveStatus(state: any = 'NONE', action: SocialActi
     }
 }
 
-//return boolean value to check for subscription
+// return boolean value to check for subscription
 export function checkEmailSubscriptionStatus(state: any = [], action: SocialActions): Boolean {
     switch (action.type) {
         case SocialActionTypes.CHECK_SUBSCRIPTION:
@@ -47,10 +47,20 @@ export function checkEmailSubscriptionStatus(state: any = [], action: SocialActi
     }
 };
 
-//return string value of social share image url
+// return string value of social share image url
 export function socialShareImageUrl(state: any = 'NONE', action: SocialActions): string {
     switch (action.type) {
         case SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+// return blogs array
+export function blogs(state: any = [], action: SocialActions): Blog[] {
+    switch (action.type) {
+        case SocialActionTypes.LOAD_BLOGS_SUCCESS:
             return action.payload;
         default:
             return state;
