@@ -1,4 +1,4 @@
 <label>Author :</label>
 <img *ngIf="!userDict[userId]?.profilePictureUrl" src="assets/images/default-avatar.png">
 <img *ngIf="userDict[userId]?.profilePictureUrl" [src]="userDict[userId]?.profilePictureUrl" />
-<label class="alignment-left">{{userDict[userId]?.displayName}}</label>
+<label class="alignment-left" title="{{userDict[userId]?.displayName}}">{{userDict[userId]?.displayName}}</label>

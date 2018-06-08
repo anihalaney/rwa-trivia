@@ -561,4 +561,9 @@ nav .user.card{
 {
   max-width: initial !important;
 }
-
+.ellipsis
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
