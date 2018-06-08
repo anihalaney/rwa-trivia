@@ -202,18 +202,22 @@ exports.updateQuestionCollection = (req, res) => {
  * return status
  */
 exports.generateBlogsData = (req, res) => {
-    const blogs: Array<Blog> = []; Feed.load(RSSFeedConstants.feedURL, function (err, rss) {
+    const blogs: Array<Blog> = [];
+
+    Feed.load(RSSFeedConstants.feedURL, function (err, rss) {
 
         let index = 0;
         let viewCount = 100;
         let commentCount = 5;
-        const items = rss.items.slice(rss.items.length - 3, rss.items.length);
+        let items = rss.items.sort((itemA: Blog, itemB: Blog) => {
+            return new Date(itemB.pubDate).getTime() - new Date(itemA.pubDate).getTime()
+        });
+        items = items.slice(0, 3);
         items.map((item) => {
             const blog: Blog = item;
             blog.blogNo = index;
             blog.commentCount = commentCount;
             blog.viewCount = viewCount;
-            blog.created_uuid = req.user.uid;
             blog.share_status = false;
             delete blog['description'];
             const result = blog.content.match(/<em>(.*?)<\/em>/g).map(function (val) {

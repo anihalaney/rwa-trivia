@@ -78,10 +78,12 @@ service cloud.firestore {
       	}              
     }  
 
-    match /leader_board_stats/categories {     
-        allow get: true;       
+    match /leader_board_stats/categories { 
+      match /{document=**} {
+        allow get: if true;      
+        }
       
-    }
+    } 
 
     match /friends/{userId} {
          allow get: if isUserAuthenticated(userId);          
