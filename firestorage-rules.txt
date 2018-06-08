@@ -78,10 +78,6 @@ function isAuthenticated() {
           }
       }      
     }   
-
-     match /blogs {    
-        allow get: if true;       
-    }
     
   }
 }
