@@ -8,7 +8,8 @@ const questionControllerQuestionService = require('../services/question.service'
  * return question of the day
  */
 exports.getQuestionOfDay = (req, res) => {
-    ESUtils.getRandomQuestionOfTheDay().then((question) => {
+    const isNextQuestion = (req.params.nextQ && req.params.nextQ === 'next') ? true : false
+    ESUtils.getRandomQuestionOfTheDay(isNextQuestion).then((question) => {
         res.send(question);
     });
 };

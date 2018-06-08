@@ -12,24 +12,21 @@ export class SystemStatsCalculations {
         return statService.getSystemStats('system')
             .then((systemStat) => {
                 const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
-                return statUserService.getUsers()
-                    .then((users) => {
-                        systemStatObj.total_users = users.size;
-                        return statQuestionService.getAllQuestions()
-                            .then((questions) => {
-                                systemStatObj.total_questions = questions.size;
-                                return statGameService.getLiveGames()
-                                    .then((active_games) => {
-                                        systemStatObj.active_games = active_games.size;
-                                        return statGameService.getCompletedGames()
-                                            .then((total_games) => {
-                                                systemStatObj.game_played = total_games.size;
-                                                return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
-                                                    return status;
-                                                });
-                                            });
-                                    });
-                            });
+                const systemStatPromises = [];
+                systemStatPromises.push(statUserService.getUsers());
+                systemStatPromises.push(statQuestionService.getAllQuestions());
+                systemStatPromises.push(statGameService.getLiveGames());
+                systemStatPromises.push(statGameService.getCompletedGames());
+
+                return Promise.all(systemStatPromises)
+                    .then((statResults) => {
+                        systemStatObj.total_users = statResults[0].size;
+                        systemStatObj.total_questions = statResults[1].size;
+                        systemStatObj.active_games = statResults[2].size;
+                        systemStatObj.game_played = statResults[3].size;
+                        return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
+                            return status;
+                        });
                     });
             });
     }
@@ -38,8 +35,6 @@ export class SystemStatsCalculations {
         return statService.getSystemStats('system')
             .then((systemStat) => {
                 const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
-              //  console.log('systemStatObj', systemStatObj);
-              //  console.log('entity', entity);
                 if (entity === 'total_users') {
                     systemStatObj.total_users = (systemStatObj.total_users) ? systemStatObj.total_users + 1 : 1;
                     return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
@@ -60,10 +55,8 @@ export class SystemStatsCalculations {
                             });
                         });
                 } else if (entity === 'game_played') {
-                   // console.log('game_played');
                     return statGameService.getCompletedGames()
                         .then((total_games) => {
-                           // console.log('total_games', total_games);
                             systemStatObj.game_played = total_games.size;
                             return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
                                 return status;
