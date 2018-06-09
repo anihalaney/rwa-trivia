@@ -549,12 +549,21 @@ nav .user.card{
 {
   font-size: 10px !important;
 }
-// .cdk-overlay-container
-// {
-//   position: initial;
-// }
+.social-icon .sb-circles-dark .sb-wrapper
+{
+  font-size: 14px !important;
+}
+.cdk-overlay-container
+{
+  position: initial;
+}
 .cdk-overlay-pane
 {
   max-width: initial !important;
 }
-
+.ellipsis
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

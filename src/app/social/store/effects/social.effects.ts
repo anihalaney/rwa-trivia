@@ -6,7 +6,7 @@ import { AppState } from '../../../store/app-store';
 import { switchMap, map, mergeMap } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { Subscription, Subscribers } from '../../../model';
+import { Subscription, Subscribers, Blog, RouterStateUrl } from '../../../model';
 import { SocialActions, SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
 import { SocialService } from '../../../core/services';
@@ -55,6 +55,23 @@ export class SocialEffects {
                 .pipe(
                 map((imageUrl: string) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
         ));
+
+
+    // load blogs
+    @Effect()
+    getBlogs$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .map((action: any): RouterStateUrl => action.payload.routerState)
+        .filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/'))
+        .pipe(
+        switchMap(() =>
+            this.socialService.loadBlogs()
+                .pipe(
+                map((blogs: Blog[]) => new socialActions.LoadBlogsSuccess(blogs))
+                )
+        )
+        );
 
     constructor(
         private actions$: Actions,

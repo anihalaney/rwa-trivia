@@ -1,10 +1,13 @@
 
 const generalService = require('../services/general.service');
+const blogService = require('../services/blog.service');
+const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
+import { RSSFeedConstants, Blog } from '../../src/app/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 
 /**
@@ -157,6 +160,7 @@ exports.generateSystemStat = (req, res) => {
         res.send('updated system stat');
     });
 };
+
 /**
  * update bulk upload collection by adding isUserArchived or isAdminArchived based on user role
  * return status
@@ -168,6 +172,46 @@ exports.updateBulkUploadCollection = (req, res) => {
     });
 
 }
+
+/**
+ * generateBlogsData
+ * return status
+ */
+exports.generateBlogsData = (req, res) => {
+    const blogs: Array<Blog> = [];
+
+    Feed.load(RSSFeedConstants.feedURL, function (err, rss) {
+
+        let index = 0;
+        let viewCount = 100;
+        let commentCount = 5;
+        let items = rss.items.sort((itemA: Blog, itemB: Blog) => {
+            return new Date(itemB.pubDate).getTime() - new Date(itemA.pubDate).getTime()
+        });
+        items = items.slice(0, 3);
+        items.map((item) => {
+            const blog: Blog = item;
+            blog.blogNo = index;
+            blog.commentCount = commentCount;
+            blog.viewCount = viewCount;
+            blog.share_status = false;
+            delete blog['description'];
+            const result = blog.content.match(/<em>(.*?)<\/em>/g).map(function (val) {
+                return val.replace(/<\/?em>/g, '');
+            });
+            blog.subtitle = result[0];
+            blogs.push({ ...blog });
+            index++;
+            viewCount = viewCount + Math.floor((Math.random() * 100) + 1);
+            commentCount = commentCount + Math.floor((Math.random() * 5) + 1);
+        });
+        console.log('blogs', blogs);
+        blogService.setBlog(blogs).then((ref) => {
+            res.send('created feed blogs');
+        });
+    });
+};
+
 /**
  * update bulk upload collection by adding isUserArchived or isAdminArchived based on user role
  * return status
