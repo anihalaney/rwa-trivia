@@ -63,8 +63,9 @@ export class QuestionService {
       });
   }
 
-  getUnpublishedQuestions(): Observable<Question[]> {
-    return this.db.collection('/unpublished_questions').valueChanges()
+  getUnpublishedQuestions(flag: boolean): Observable<Question[]> {
+    const question_source = (!flag) ? 'question' : 'bulk-question';
+    return this.db.collection('/unpublished_questions', ref => ref.where('source', '==', question_source)).valueChanges()
       .catch(error => {
         console.log(error);
         return Observable.of(null);
@@ -76,6 +77,7 @@ export class QuestionService {
     const questionId = this.db.createId();
     if (dbQuestion.id === undefined || dbQuestion.id === '') {
       dbQuestion.id = questionId;
+      dbQuestion['source'] = 'question';
     }
     this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
       if (questionId === dbQuestion.id) {
@@ -122,6 +124,7 @@ export class QuestionService {
 
   storeQuestion(index: number, questions: Array<Question>): void {
     const question = questions[index];
+    question['source'] = 'bulk-question';
     this.db.doc(`/unpublished_questions/${question.id}`)
       .set(question)
       .then(ref => {

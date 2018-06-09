@@ -5,6 +5,7 @@ import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
+import { QuestionBifurcation } from '../utils/question-bifurcation';
 
 /**
  * migrateCollections
@@ -165,5 +166,28 @@ exports.updateBulkUploadCollection = (req, res) => {
     bulkUploadUpdate.getUserList().then((bulkUploadResults) => {
         res.send('updated bulk upload collection');
     });
+
+}
+/**
+ * update bulk upload collection by adding isUserArchived or isAdminArchived based on user role
+ * return status
+ */
+exports.updateQuestionCollection = (req, res) => {
+    console.log(req.params.collectionName);
+    const questionBifurcation: QuestionBifurcation = new QuestionBifurcation();
+    switch (req.params.collectionName) {
+        case 'questions':
+            console.log('Updating questions ...');
+            questionBifurcation.getQuestionList(req.params.collectionName).then((bulkUploadResults) => {
+                res.send('updated question collection');
+            });
+            break;
+        case 'unpublished_questions':
+            console.log('Updating unpublished questions ...');
+            questionBifurcation.getQuestionList(req.params.collectionName).then((bulkUploadResults) => {
+                res.send('updated unpublished question collection');
+            });
+            break;
+    }
 
 }
