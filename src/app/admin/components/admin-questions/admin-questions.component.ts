@@ -8,6 +8,9 @@ import { User, Question, Category, SearchResults, SearchCriteria } from '../../.
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
+import { Router } from '@angular/router';
+import { UserActions } from '../../../core/store/actions';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'admin-questions',
@@ -20,14 +23,42 @@ export class AdminQuestionsComponent implements OnInit {
   unpublishedQuestionsObs: Observable<Question[]>;
   categoryDictObs: Observable<{ [key: number]: Category }>;
   criteria: SearchCriteria;
+  toggleValue: boolean;
+  userDict$: Observable<{ [key: string]: User }>;
+  userDict: { [key: string]: User } = {};
+  selectedTab = 0;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
 
     this.questionsSearchResultsObs = this.store.select(adminState).select(s => s.questionsSearchResults);
-    this.unpublishedQuestionsObs = store.select(adminState).select(s => s.unpublishedQuestions);
+    this.unpublishedQuestionsObs = this.store.select(adminState).select(s => s.unpublishedQuestions).map((question) => {
+      const questionList = question;
+      if (questionList) {
+        questionList.map((q) => {
+          if (this.userDict[q.created_uid] === undefined) {
+            this.store.dispatch(this.userActions.loadOtherUserProfile(q.created_uid));
+          }
+        });
+      }
+
+      return questionList;
+    });
+
+    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$.subscribe(userDict => this.userDict = userDict);
+
 
     this.categoryDictObs = store.select(categoryDictionary);
     this.criteria = new SearchCriteria();
+
+    const url = this.router.url;
+    this.toggleValue = url.includes('bulk') ? true : false;
+
+    this.store.select(adminState).select(s => s.getQuestionToggleStat).subscribe((stat) => {
+      if (stat != null) {
+        this.selectedTab = stat === 'Published' ? 0 : 1
+      }
+    });
   }
 
   ngOnInit() {
@@ -39,8 +70,9 @@ export class AdminQuestionsComponent implements OnInit {
 
     this.store.select(appState.coreState).take(1).subscribe(s => user = s.user);
     question.approved_uid = user.userId;
-    this.store.dispatch(new adminActions.LoadUnpublishedQuestions());
+    this.store.dispatch(new adminActions.LoadUnpublishedQuestions({ 'question_flag': this.toggleValue }));
     this.store.dispatch(new adminActions.ApproveQuestion({ question: question }));
+
   }
 
   pageChanged(pageEvent: PageEvent) {
@@ -84,5 +116,13 @@ export class AdminQuestionsComponent implements OnInit {
   }
   searchCriteriaChange() {
     this.store.dispatch(new adminActions.LoadQuestions({ 'startRow': 0, 'pageSize': 25, criteria: this.criteria }));
+  }
+
+  tapped(value) {
+    this.toggleValue = value;
+    (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
+  }
+  tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
+    this.store.dispatch(new adminActions.SaveQuestionToggleStat({ toggle_stat: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
   }
 }
