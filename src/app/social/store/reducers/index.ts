@@ -1,10 +1,10 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { Subscription, Subscribers } from '../../../model';
+import { Subscription, Subscribers, Blog } from '../../../model';
 import {
     subscriptionSaveStatus, getTotalSubscriptionStatus,
     subscriptionRemoveStatus, checkEmailSubscriptionStatus,
-    socialShareImageUrl
+    socialShareImageUrl, blogs
 } from './social.reducer';
 
 export * from './social.reducer';
@@ -15,6 +15,7 @@ export interface SocialState {
     subscriptionRemoveStatus: String;
     checkEmailSubscriptionStatus: Boolean;
     socialShareImageUrl: String;
+    blogs: Blog[];
 }
 
 export const reducer: ActionReducerMap<SocialState> = {
@@ -22,7 +23,8 @@ export const reducer: ActionReducerMap<SocialState> = {
     getTotalSubscriptionStatus: getTotalSubscriptionStatus,
     subscriptionRemoveStatus: subscriptionRemoveStatus,
     checkEmailSubscriptionStatus: checkEmailSubscriptionStatus,
-    socialShareImageUrl: socialShareImageUrl
+    socialShareImageUrl: socialShareImageUrl,
+    blogs: blogs
 };
 
 export const socialState = createFeatureSelector<SocialState>('social');
