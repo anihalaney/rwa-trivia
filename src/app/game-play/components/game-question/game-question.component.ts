@@ -18,6 +18,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   @Input() noOfQuestions: number;
   @Input() showContinueBtn: boolean;
   @Input() otherPlayer: User;
+  @Input() totalRound: number;
   @Output() answerClicked = new EventEmitter<number>();
   @Output() okClick = new EventEmitter();
   @Output() continueClicked = new EventEmitter();
@@ -28,7 +29,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   @ViewChild('overlay') overlay: ElementRef;
   @Input() userDict: { [key: string]: User };
 
-  totalRound = 16;
+
 
   constructor() {
   }

@@ -44,6 +44,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   gameOver = false;
 
   MAX_TIME_IN_SECONDS = 16;
+  totalRound = 16;
   showContinueBtn = false;
   userDict: { [key: string]: User } = {};
   otherPlayer: User;
@@ -89,6 +90,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           this.correctAnswerCount = this.game.stats[this.user.userId].score;
           this.questionRound = (!this.questionRound) ?
             this.game.stats[this.user.userId].round + 1 : this.questionRound;
+          this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
           this.setTurnStatusFlag();
         }
       }));
