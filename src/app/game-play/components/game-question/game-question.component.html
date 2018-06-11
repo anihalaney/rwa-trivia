@@ -14,6 +14,9 @@
         <p *ngIf="otherPlayer?.displayName">Playing with
           <a>{{otherPlayer?.displayName}}</a>
         </p>
+        <div class="col-xs-12 div-spacing textcenter padding-top-bottom-8">
+          <span class="light">Round {{questionRound}} / {{totalRound}}</span>
+        </div>
         <div *ngIf="continueNext" class="answer-status">
           <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
           <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>

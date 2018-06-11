@@ -32,6 +32,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   gameQuestionObs: Observable<Question>;
   currentQuestion: Question;
   correctAnswerCount: number;
+  questionRound: number;
   questionIndex: number;
   sub: Subscription[] = [];
   timerSub: Subscription;
@@ -86,6 +87,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           this.gameOver = game.gameOver;
           this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
           this.correctAnswerCount = this.game.stats[this.user.userId].score;
+          this.questionRound = (!this.questionRound) ?
+            this.game.stats[this.user.userId].round + 1 : this.questionRound;
           this.setTurnStatusFlag();
         }
       }));
@@ -186,7 +189,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         if (!this.currentQuestion) {
           this.getNextQuestion();
         }
-        if (this.game.GameStatus !== GameStatus.STARTED && this.game.gameOptions.playerMode !== PlayerMode.Single && this.userDict) {
+        if (this.userDict && Number(this.game.gameOptions.playerMode) !== PlayerMode.Single) {
           this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
           const otherPlayerObj = this.userDict[this.otherPlayerUserId];
           (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
@@ -211,7 +214,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   answerClicked($event: number) {
     Utils.unsubscribe([this.timerSub]);
-    // disable all buttons
+    // disable all buttons  
     this.afterAnswer($event);
   }
   okClick($event) {
@@ -257,6 +260,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
         this.getLoader();
         this.getNextQuestion();
+        if (!this.isCorrectAnswer) {
+          this.questionRound++;
+        }
       }
     }
 
@@ -265,6 +271,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
 
   gameOverContinueClicked() {
+    this.questionRound = undefined;
     this.gameOver = true;
     this.currentQuestion = undefined;
     this.questionAnswered = false;
