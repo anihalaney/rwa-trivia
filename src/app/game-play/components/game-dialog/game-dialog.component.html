@@ -69,6 +69,7 @@
   </game-question-continue>
 
   <game-over *ngIf="gameOver" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName" [correctCount]="correctAnswerCount"
-    [noOfQuestions]="questionIndex" (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
+    [noOfQuestions]="questionIndex" [questionRound]="gameOverQuestionRound" [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked($event)"
+    (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-over>
 </mat-dialog-content>

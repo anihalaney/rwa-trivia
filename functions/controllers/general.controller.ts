@@ -235,8 +235,6 @@ exports.generateBlogsData = (req, res) => {
         });
     });
 };
-<<<<<<< HEAD
-=======
 
 /**
  * update bulk upload collection by adding isUserArchived or isAdminArchived based on user role
@@ -261,4 +259,3 @@ exports.updateQuestionCollection = (req, res) => {
     }
 
 }
->>>>>>> a17aeec30c03c51a1aae9a15fccc51e432a3bd7b
