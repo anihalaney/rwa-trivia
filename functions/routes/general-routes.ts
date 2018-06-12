@@ -23,5 +23,4 @@ router.get('/bulkupload/update', generalAuth.adminOnly, generalController.update
 router.post('/question/update/:collectionName', generalAuth.adminOnly, generalController.updateQuestionCollection);
 router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsData);
 
-
 module.exports = router;
