@@ -78,9 +78,9 @@
   <mat-card-content class="textcenter">
     <div class="button-div">
       <div class=" win-icon">
-        <social-palette *ngIf="blogData[0].status" class="spacing" [blogData]="blogData[0]" (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
+        <social-palette *ngIf="blogData[0].share_status" class="spacing" [blogData]="blogData[0]" (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
 
-        <button class="btn-share" type="button" (click)="shareScore()" *ngIf="!blogData[0].status">Share</button>
+        <button class="btn-share" type="button" (click)="shareScore()" *ngIf="!blogData[0].share_status">Share</button>
         <button class="btn-share" type="button" (click)="reMatch()">Rematch</button>
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
