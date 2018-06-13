@@ -54,7 +54,7 @@ export class AdminQuestionsComponent implements OnInit {
     const url = this.router.url;
     this.toggleValue = url.includes('bulk') ? true : false;
 
-    this.store.select(adminState).select(s => s.getQuestionToggleStat).subscribe((stat) => {
+    this.store.select(adminState).select(s => s.getQuestionToggleState).subscribe((stat) => {
       if (stat != null) {
         this.selectedTab = stat === 'Published' ? 0 : 1
       }
