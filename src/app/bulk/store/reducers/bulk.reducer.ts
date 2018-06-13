@@ -86,3 +86,24 @@ export function bulkUploadFileInfo(state: any, action: BulkActions): BulkUploadF
     }
 }
 
+// Get Archive Toggle stat
+export function getArchiveToggleState(state: any = null, action: BulkActions): boolean {
+    switch (action.type) {
+        case BulkActionTypes.SAVE_ARCHIVE_TOGGLE_STATE:
+            return action.payload.toggle_state;
+        default:
+            return state;
+    }
+};
+
+// Get Archive Toggle stat
+export function getArchiveList(state = [], action: BulkActions): BulkUploadFileInfo[] {
+    switch (action.type) {
+        case BulkActionTypes.SAVE_ARCHIVE_LIST:
+            return [...action.payload];
+        default:
+            return state;
+    }
+};
+
+

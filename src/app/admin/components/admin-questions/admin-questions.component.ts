@@ -123,6 +123,7 @@ export class AdminQuestionsComponent implements OnInit {
     (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
   }
   tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
-    this.store.dispatch(new adminActions.SaveQuestionToggleStat({ toggle_stat: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
+    this.store.dispatch(new adminActions.SaveQuestionToggleState
+      ({ toggle_state: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
   }
 }

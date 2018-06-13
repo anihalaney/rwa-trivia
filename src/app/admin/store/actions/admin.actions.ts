@@ -8,7 +8,7 @@ export enum AdminActionTypes {
     LOAD_UNPUBLISHED_QUESTIONS = '[Admin] LoadUnpublishedQuestions',
     LOAD_UNPUBLISHED_QUESTIONS_SUCCESS = '[Admin] LoadUnpublishedQuestionsSuccess',
     APPROVE_QUESTION = '[Admin] ApproveQuestion',
-    SAVE_QUESTION_TOGGLE_STAT = '[Admin] SaveQuestionToggleStat'
+    SAVE_QUESTION_TOGGLE_STATE = '[Admin] SaveQuestionToggleState'
 }
 
 // Load Question As per Search criteria
@@ -41,10 +41,10 @@ export class ApproveQuestion implements Action {
     constructor(public payload: { question: Question }) { }
 }
 
-// Approve Question
-export class SaveQuestionToggleStat implements Action {
-    readonly type = AdminActionTypes.SAVE_QUESTION_TOGGLE_STAT;
-    constructor(public payload: { toggle_stat: string }) { }
+// Save Archive State
+export class SaveQuestionToggleState implements Action {
+    readonly type = AdminActionTypes.SAVE_QUESTION_TOGGLE_STATE;
+    constructor(public payload: { toggle_state: string }) { }
 }
 
 
@@ -54,5 +54,5 @@ export type AdminActions
     | LoadUnpublishedQuestions
     | LoadUnpublishedQuestionsSuccess
     | ApproveQuestion
-    | SaveQuestionToggleStat
+    | SaveQuestionToggleState
 
