@@ -32,3 +32,13 @@ export function getQuestionToggleStat(state: any = null, action: AdminActions): 
             return state;
     }
 };
+
+// Get Question Toggle stat
+export function getArchiveToggleState(state: any = null, action: AdminActions): boolean {
+    switch (action.type) {
+        case AdminActionTypes.SAVE_ARCHIVE_TOGGLE_STATE:
+            return action.payload.toggle_state;
+        default:
+            return state;
+    }
+};
