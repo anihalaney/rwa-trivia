@@ -76,27 +76,31 @@ exports.getNextQuestion = (req, res) => {
             return;
         }
 
+        console.log('game---->', game);
+
+        const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
+        let dbGame;
+
         if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
-            const playerQuestion = game.playerQnAs.filter(({ playerId }) => userId.includes(playerId));
+            console.log('playerQuestions---->', game.playerQnAs);
 
-            const lastAddedQuestionIndex = game.playerQnAs.findIndex((pastPlayerQnA) =>
-                pastPlayerQnA.addedOn === Math.max.apply(Math, playerQuestion.map((o) => { return (o.addedOn) ? o.addedOn : 0 })));
-            const lastAddedQuestion = game.playerQnAs[lastAddedQuestionIndex + 1];
+            if (game.playerQnAs.length > 0) {
+                const index = game.playerQnAs.length - 1;
+                const lastAddedQuestion = game.playerQnAs[index];
 
-            if (!lastAddedQuestion.playerAnswerId) {
-                lastAddedQuestion.playerAnswerId = null;
-                lastAddedQuestion.answerCorrect = false;
-                lastAddedQuestion.playerAnswerInSeconds = 16;
-                game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== userId)[0];
-
-                game.playerQnAs[lastAddedQuestionIndex + 1] = lastAddedQuestion;
-                const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
-                let dbGame = '';
-                dbGame = game.getDbModel();
-                myTurnStatus = false;
-                gameMechanics.UpdateGame(dbGame).then((id) => {
-                    res.send(undefined);
-                });
+                if (!lastAddedQuestion.playerAnswerInSeconds) {
+                    lastAddedQuestion.playerAnswerId = null;
+                    lastAddedQuestion.answerCorrect = false;
+                    lastAddedQuestion.playerAnswerInSeconds = 16;
+                    game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== userId)[0];
+                    game.playerQnAs[index] = lastAddedQuestion;
+                    dbGame = game.getDbModel();
+                    myTurnStatus = false;
+                    console.log('change the turn ---->', dbGame);
+                    gameMechanics.UpdateGame(dbGame).then((id) => {
+                        res.send(undefined);
+                    });
+                }
             }
         }
 
@@ -104,9 +108,6 @@ exports.getNextQuestion = (req, res) => {
             const questionIds = [];
             game.playerQnAs.map((question) => questionIds.push(question.questionId));
             ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
-
-                const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
-                let dbGame = '';
                 const createdOn = utils.getUTCTimeStamp();
                 const playerQnA: PlayerQnA = {
                     playerId: userId,
@@ -116,6 +117,7 @@ exports.getNextQuestion = (req, res) => {
                 question.addedOn = createdOn;
                 game.playerQnAs.push(playerQnA);
                 dbGame = game.getDbModel();
+                console.log('update the question ---->', question);
                 gameMechanics.UpdateGame(dbGame).then((id) => {
                     res.send(question);
                 });

@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  <div class="" *ngIf="showLoader && !gameOver">
+  <div class="" *ngIf="showLoader && !gameOver && isQuestionAvailable">
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle-loader">
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <div class="" *ngIf="showBadge && !gameOver">
+  <div class="" *ngIf="showBadge && !gameOver && isQuestionAvailable">
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="" *ngIf="showWinBadge && !gameOver">
+  <div class="" *ngIf="showWinBadge && !gameOver && isQuestionAvailable">
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
@@ -64,6 +64,12 @@
     [totalRound]="totalRound">
   </game-question>
 
+  <div *ngIf="!isQuestionAvailable">
+    <div class="card main-div textcenter">
+      <p>Your Turn has been changed !!!!!</p>
+    </div>
+  </div>
+
   <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion" (continueClicked)="continueClicked($event)"
     (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-question-continue>
@@ -72,4 +78,6 @@
     [noOfQuestions]="questionIndex" [questionRound]="gameOverQuestionRound" [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked($event)"
     (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-over>
+
+
 </mat-dialog-content>
