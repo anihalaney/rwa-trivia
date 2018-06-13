@@ -64,11 +64,12 @@ exports.updateGame = (req, res) => {
 
         switch (operation) {
             case GameOperations.CALCULATE_SCORE:
-                const playerQnAs: PlayerQnA = req.body.playerQnA;
-                game.playerQnAs.push(playerQnAs);
-                game.decideNextTurn(playerQnAs, req.user.uid);
+                const currentPlayerQnAs: PlayerQnA = req.body.playerQnA;
+                const qIndex = game.playerQnAs.findIndex((pastPlayerQnA) => pastPlayerQnA.questionId === currentPlayerQnAs.questionId);
+                game.playerQnAs[qIndex] = currentPlayerQnAs;
+                game.decideNextTurn(currentPlayerQnAs, req.user.uid);
                 game.turnAt = utils.getUTCTimeStamp();
-                game.calculateStat(playerQnAs.playerId);
+                game.calculateStat(currentPlayerQnAs.playerId);
 
                 break;
             case GameOperations.GAME_OVER:

@@ -1,5 +1,8 @@
 import { ESUtils } from '../utils/ESUtils';
-import { SearchCriteria, Game, Question } from '../../src/app/model';
+import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode } from '../../src/app/model';
+import { GameMechanics } from '../utils/game-mechanics';
+import { Utils } from '../utils/utils';
+const utils: Utils = new Utils();
 const questionControllerGameService = require('../services/game.service');
 const questionControllerQuestionService = require('../services/question.service');
 
@@ -43,6 +46,7 @@ exports.getNextQuestion = (req, res) => {
 
     const userId = req.user.uid;
     const gameId = req.params.gameId;
+    let myTurnStatus = true;
 
     questionControllerGameService.getGameById(gameId).then((g) => {
         if (!g.exists) {
@@ -72,15 +76,56 @@ exports.getNextQuestion = (req, res) => {
             return;
         }
 
-        const questionIds = [];
-        game.playerQnAs.map((question) => questionIds.push(question.questionId));
+        if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
+            const playerQuestion = game.playerQnAs.filter(({ playerId }) => userId.includes(playerId));
 
-        ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
-            res.send(question);
-        }).catch(error => {
-            res.status(500).send('Failed to get Q');
-            return;
-        });
+            const lastAddedQuestionIndex = game.playerQnAs.findIndex((pastPlayerQnA) =>
+                pastPlayerQnA.addedOn === Math.max.apply(Math, playerQuestion.map((o) => { return (o.addedOn) ? o.addedOn : 0 })));
+            const lastAddedQuestion = game.playerQnAs[lastAddedQuestionIndex + 1];
+
+            if (!lastAddedQuestion.playerAnswerId) {
+                lastAddedQuestion.playerAnswerId = null;
+                lastAddedQuestion.answerCorrect = false;
+                lastAddedQuestion.playerAnswerInSeconds = 16;
+                game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== userId)[0];
+
+                game.playerQnAs[lastAddedQuestionIndex + 1] = lastAddedQuestion;
+                const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
+                let dbGame = '';
+                dbGame = game.getDbModel();
+                myTurnStatus = false;
+                gameMechanics.UpdateGame(dbGame).then((id) => {
+                    res.send(undefined);
+                });
+            }
+        }
+
+        if (myTurnStatus) {
+            const questionIds = [];
+            game.playerQnAs.map((question) => questionIds.push(question.questionId));
+            ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
+
+                const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
+                let dbGame = '';
+                const createdOn = utils.getUTCTimeStamp();
+                const playerQnA: PlayerQnA = {
+                    playerId: userId,
+                    questionId: question.id,
+                    addedOn: createdOn
+                }
+                question.addedOn = createdOn;
+                game.playerQnAs.push(playerQnA);
+                dbGame = game.getDbModel();
+                gameMechanics.UpdateGame(dbGame).then((id) => {
+                    res.send(question);
+                });
+            }).catch(error => {
+                console.log('error', error);
+                res.status(500).send('Failed to get Q');
+                return;
+            });
+        }
+
     }).catch(error => {
         res.status(500).send('Uncaught Error');
         return;

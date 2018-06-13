@@ -301,7 +301,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
-      questionId: this.currentQuestion.id
+      questionId: this.currentQuestion.id,
+      addedOn: this.currentQuestion.addedOn
     }
 
     // dispatch action to push player answer
