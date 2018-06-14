@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 import { Question, Answer, User } from '../../../model';
 
@@ -7,7 +7,7 @@ import { Question, Answer, User } from '../../../model';
   templateUrl: './game-question.component.html',
   styleUrls: ['./game-question.component.scss']
 })
-export class GameQuestionComponent implements OnInit, OnDestroy {
+export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() questionIndex: number;
   @Input() question: Question;
   @Input() categoryName: string;
@@ -26,6 +26,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
   correctAnswerIndex: number;
   @ViewChild('overlay') overlay: ElementRef;
   @Input() userDict: { [key: string]: User };
+  doPlay = true;
 
   constructor() {
   }
@@ -35,15 +36,44 @@ export class GameQuestionComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
   }
+  ngAfterViewInit() {
+    const seconds = 30;
+    const loader = document.getElementById('loader'), α = 0;
+
+    this.draw(α, this.doPlay, loader);
+  }
+
+  draw(α, doPlay, loader) {
+    α++;
+    α %= 360;
+    let r = (α * Math.PI / 179)
+      , x = Math.sin(r) * 125
+      , y = Math.cos(r) * -125
+      , mid = (α > 180) ? 1 : 0
+      , anim = 'M 0 0 v -125 A 125 125 1 '
+        + mid + ' 1 '
+        + x + ' '
+        + y + ' z';
+    loader.setAttribute('d', anim);
+
+    if (this.doPlay) {
+      setTimeout(() => {
+        this.draw(α, this.doPlay, loader)
+      }, 45); // Redraw
+    }
+  }
 
   answerButtonClicked(answer: Answer, index: number) {
-    if (this.answeredIndex >= 0 || this.continueNext)
+    if (this.answeredIndex >= 0 || this.continueNext) {
       return;
+    }
+    this.doPlay = false;
     this.answeredIndex = index;
     this.answerClicked.emit(index)
   }
 
   disableQuestions(correctAnswerIndex: number) {
+    this.doPlay = false;
     this.correctAnswerIndex = correctAnswerIndex;
   }
 }
