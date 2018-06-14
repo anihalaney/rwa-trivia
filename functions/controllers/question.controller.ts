@@ -46,7 +46,7 @@ exports.getNextQuestion = (req, res) => {
 
     const userId = req.user.uid;
     const gameId = req.params.gameId;
-    let myTurnStatus = true;
+
 
     questionControllerGameService.getGameById(gameId).then((g) => {
         if (!g.exists) {
@@ -79,54 +79,34 @@ exports.getNextQuestion = (req, res) => {
         console.log('game---->', game);
 
         const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
-        let dbGame;
 
-        if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
-            console.log('playerQuestions---->', game.playerQnAs);
-
-            if (game.playerQnAs.length > 0) {
-                const index = game.playerQnAs.length - 1;
-                const lastAddedQuestion = game.playerQnAs[index];
-
-                if (!lastAddedQuestion.playerAnswerInSeconds) {
-                    lastAddedQuestion.playerAnswerId = null;
-                    lastAddedQuestion.answerCorrect = false;
-                    lastAddedQuestion.playerAnswerInSeconds = 16;
-                    game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== userId)[0];
-                    game.playerQnAs[index] = lastAddedQuestion;
-                    dbGame = game.getDbModel();
-                    myTurnStatus = false;
-                    console.log('change the turn ---->', dbGame);
+        gameMechanics.changeTheTurn(game).then((status) => {
+            if (status) {
+                const questionIds = [];
+                game.playerQnAs.map((question) => questionIds.push(question.questionId));
+                ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
+                    const createdOn = utils.getUTCTimeStamp();
+                    const playerQnA: PlayerQnA = {
+                        playerId: userId,
+                        questionId: question.id,
+                        addedOn: createdOn
+                    }
+                    question.addedOn = createdOn;
+                    game.playerQnAs.push(playerQnA);
+                    const dbGame = game.getDbModel();
+                    console.log('update the question ---->', question);
                     gameMechanics.UpdateGame(dbGame).then((id) => {
-                        res.send(undefined);
+                        res.send(question);
                     });
-                }
-            }
-        }
-
-        if (myTurnStatus) {
-            const questionIds = [];
-            game.playerQnAs.map((question) => questionIds.push(question.questionId));
-            ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
-                const createdOn = utils.getUTCTimeStamp();
-                const playerQnA: PlayerQnA = {
-                    playerId: userId,
-                    questionId: question.id,
-                    addedOn: createdOn
-                }
-                question.addedOn = createdOn;
-                game.playerQnAs.push(playerQnA);
-                dbGame = game.getDbModel();
-                console.log('update the question ---->', question);
-                gameMechanics.UpdateGame(dbGame).then((id) => {
-                    res.send(question);
+                }).catch(error => {
+                    console.log('error', error);
+                    res.status(500).send('Failed to get Q');
+                    return;
                 });
-            }).catch(error => {
-                console.log('error', error);
-                res.status(500).send('Failed to get Q');
-                return;
-            });
-        }
+            } else {
+                res.send(undefined);
+            }
+        });
 
     }).catch(error => {
         res.status(500).send('Uncaught Error');
