@@ -45,6 +45,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   continueNext = false;
   questionAnswered = false;
   gameOver = false;
+  PlayerMode = PlayerMode;
 
   MAX_TIME_IN_SECONDS = 16;
   showContinueBtn = false;
@@ -131,7 +132,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           this.initializeOtherUser();
         }
 
-        this.isQuestionAvailable = (!this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds) ? false : true;
+        if (this.game.playerQnAs.length > 0 && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+          this.isQuestionAvailable = (!this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds) ? false : true;
+        }
 
         if (!this.currentQuestion) {
           this.getLoader();
