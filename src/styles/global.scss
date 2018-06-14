@@ -357,7 +357,8 @@ form .tags{ padding-top: 20px }
 
 @media screen and ( min-width:767px){
   .breadcrumbs{ padding-left: 0 }
-  .btn{display: inline-block; padding: 10px 25px} 
+  // .btn{display: inline-block; padding: 10px 25px} 
+ .btn{display: inline-block; padding: 5% 5%;font-size: 12px;} 
   .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }
   h2{ font-size: 22px; }
   .textrigth {text-align: right !important;} 
