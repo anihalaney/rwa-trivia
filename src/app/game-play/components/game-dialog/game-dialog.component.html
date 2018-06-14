@@ -65,9 +65,20 @@
   </game-question>
 
   <div *ngIf="!isQuestionAvailable">
-    <div class="card main-div textcenter">
-      <p>Your Turn has been changed !!!!!</p>
-    </div>
+    <mat-card-content class="textcenter" id="share-content">
+      <div class="card main-div textcenter">
+        <div class="badge-icon">
+          <div class="text textcenter">
+            <h2>Your Turn has been changed !!!!!</h2>
+          </div>
+          <div class="button-div button-div-padding margin-top-110">
+              <div class=" win-icon">
+                <button class="btn-share btn-home" type="button" [routerLink]="['/']">Home</button>
+              </div>
+            </div>
+        </div>
+      </div>
+    </mat-card-content>
   </div>
 
   <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion" (continueClicked)="continueClicked($event)"
