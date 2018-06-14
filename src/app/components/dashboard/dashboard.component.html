@@ -52,23 +52,15 @@
           <span>3 from friends & 1 from random player</span>
         </h2>
       </div>
-      <!-- <div class="col-sm-3 col-xs-12 textrigth hidden-xs">
-          <a href="#" class="viewall">view all</a>
-        </div> -->
     </div>
 
     <ul class="invitationlist">
       <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
         <game-invite [userDict]="userDict" [game]="game"></game-invite>
       </li>
-      <li class="visible-xs textcenter">
-        <a href="#">
-          <div class="viewallbtn">view more</div>
-        </a>
-      </li>
     </ul>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
+    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
       <a class="viewall" (click)="displayMoreGameInvites()">view more</a>
     </div>
 
