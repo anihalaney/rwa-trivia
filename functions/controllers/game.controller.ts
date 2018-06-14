@@ -153,3 +153,21 @@ exports.checkGameOver = (req, res) => {
     });
 };
 
+/**
+ * checkGameTurn
+ * return status
+ */
+exports.changeGameTurn = (req, res) => {
+    const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
+
+    gameControllerService.checkGameOver().then((snapshot) => {
+        snapshot.forEach((doc) => {
+            const game: Game = Game.getViewModel(doc.data());
+            gameMechanics.changeTheTurn(game).then((status) => {
+                console.log('game update status', status, game.gameId);
+            })
+        });
+        res.send('scheduler check is completed');
+    });
+};
+
