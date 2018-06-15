@@ -1,6 +1,6 @@
 const userFireBaseClient = require('../db/firebase-client');
 const userFireStoreClient = userFireBaseClient.firestore();
-
+import { User } from '../../src/app/model';
 /**
  * getUserById
  * return user
@@ -40,4 +40,17 @@ exports.getUsers = (): Promise<any> => {
             console.error(error);
             return error;
         });
+};
+
+/**
+ * Add/Update Authenticated Users
+ * return ref
+ */
+exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
+    const batch = userFireStoreClient.batch();
+    users.map((user) => {
+        const userInstance = userFireStoreClient.collection('users').doc(user.userId);
+        batch.set(userInstance, { ...user }, { merge: true });
+    })
+    return batch.commit().then((ref) => { return ref });
 };
