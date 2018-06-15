@@ -95,7 +95,7 @@
 .gameplay li{ margin:30px 20px 0; padding: 15px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer; overflow: hidden; position: relative;}
 
 .timer{width:61px;height:61px;margin:0 auto; position: relative;}
-.timer .rotate{width:51px;height:51px;display:block;position:absolute;z-index:16; margin: 5px 0 0 5px}
+.timer .rotate{width:51px;height:51px;display:block;position:absolute; margin: 5px 0 0 5px;border-radius: 50%;}
 .timer .rotate #loader{fill:#ffae0b;}
 .timer .dots{width:100%;height:100%;position:absolute;z-index:15;top:0;left:0; border:3px solid; border-radius: 50%; box-sizing: border-box; box-shadow:2px 3px 5px rgba(0,0,0,0.16)}
 .timer .dots .time{height:50px;width:5%;display:block;background-image:-moz-linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);background-image:-webkit-linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);background-image:linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);margin-left:-3%;left:50%;position:absolute; top: 2px}
@@ -163,7 +163,7 @@ mat-card {
 }
 .header
 {
-  margin-bottom: 12%;
+  margin-bottom: 14%;
 }
 .continue-btn
 {
@@ -183,3 +183,6 @@ mat-card {
   text-align: right;
 }
 
+.padding-top-bottom-8{
+  padding:4px 0 8px 0;
+}

@@ -35,7 +35,6 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @Output() showBulkUploadBtn = new EventEmitter<String>();
-  @Output() showArchive = new EventEmitter<Boolean>();
   @Input() isArchiveBtnClicked: boolean;
   @Input() toggleValue: boolean;
   archivedArray = [];
@@ -62,17 +61,23 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     this.store.select(bulkState).select(s => s.bulkUploadArchiveStatus).subscribe((state) => {
       if (state === 'ARCHIVED') {
         this.archivedArray = [];
-        this.showArchive.emit(false);
+        this.store.dispatch(new bulkActions.SaveArchiveList(this.archivedArray));
       }
     });
 
     this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
       if (list.length > 0) {
         this.archivedArray = list;
-        this.showArchive.emit(true);
       } else {
         this.archivedArray = [];
-        this.showArchive.emit(false);
+      }
+    });
+
+    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+      if (list.length > 0) {
+        this.archivedArray = list;
+      } else {
+        this.archivedArray = [];
       }
     });
 
@@ -116,9 +121,9 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
             }
           }
         }
-        this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
-        this.setPaginatorAndSort();
       }
+      this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
+      this.setPaginatorAndSort();
     });
 
     // add conditional columns in table
