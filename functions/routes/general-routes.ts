@@ -22,5 +22,4 @@ router.post('/stat/system', generalAuth.adminOnly, generalController.generateSys
 router.get('/bulkupload/update', generalAuth.adminOnly, generalController.updateBulkUploadCollection);
 router.post('/question/update/:collectionName', generalAuth.adminOnly, generalController.updateQuestionCollection);
 router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsData);
-
 module.exports = router;

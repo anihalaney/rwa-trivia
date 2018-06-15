@@ -17,21 +17,10 @@ export class BulkService {
   }
 
   // get All Bulk Upload
+  // get All Bulk Upload
   getBulkUpload(user: User, archive: boolean): Observable<BulkUploadFileInfo[]> {
-    let whereCondition;
-
-    const adminArchive = 'isAdminArchived';
-    const userArchive = 'isUserArchived';
     if (!archive) {
-      if (user.roles.admin && user.roles.bulkuploader) {
-        whereCondition = ref => ref.where('created_uid', '==', user.userId).
-          where(userArchive, '==', archive);
-      } else if (user.roles.admin) {
-        whereCondition = ref => ref.where('created_uid', '==', user.userId).
-          where(adminArchive, '==', archive);
-      }
-
-      return this.db.collection('/bulk_uploads', whereCondition)
+      return this.db.collection('/bulk_uploads', ref => ref.where('isAdminArchived', '==', archive))
         .valueChanges()
         .catch(error => {
           console.log(error);
@@ -55,12 +44,15 @@ export class BulkService {
 
     let whereCondition;
     if (!archive) {
-      if (user.roles.admin && user.roles.bulkuploader || user.roles.bulkuploader) {
+      if (user.roles.admin && user.roles.bulkuploader) {
         whereCondition = ref => ref.where('created_uid', '==', user.userId).
-          where(userArchive, '==', archive);
+          where(userArchive, '==', archive).where(adminArchive, '==', archive);
       } else if (user.roles.admin) {
         whereCondition = ref => ref.where('created_uid', '==', user.userId).
           where(adminArchive, '==', archive);
+      } else {
+        whereCondition = ref => ref.where('created_uid', '==', user.userId).
+          where(userArchive, '==', archive);
       }
 
     } else {
@@ -104,10 +96,12 @@ export class BulkService {
   archiveBulkUpload(archiveArray: BulkUploadFileInfo[], user: User) {
     const isAdmin = user.roles.admin;
     let obj = {};
-    if (!isAdmin) {
-      obj = { 'isUserArchived': true };
-    } else {
+    if (user.roles.admin && user.roles.bulkuploader) {
+      obj = { 'isUserArchived': true, 'isAdminArchived': true };
+    } else if (user.roles.admin) {
       obj = { 'isAdminArchived': true };
+    } else {
+      obj = { 'isUserArchived': true };
     }
     const upload = this.db.firestore.batch();
     archiveArray.map((bulkInfo) => {
@@ -117,7 +111,6 @@ export class BulkService {
     return upload.commit();
     // return Observable.of(true);
   }
-
   // get single Bulk Upload
   getBulkUploadFile(bulkId: string): Observable<BulkUploadFileInfo> {
     return this.db.doc(`/bulk_uploads/${bulkId}`)

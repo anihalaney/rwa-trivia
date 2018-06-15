@@ -30,7 +30,17 @@ export class BulkSummaryComponent implements OnInit, OnChanges {
         this.toggleValue = false;
       }
     });
+    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+      if (list.length > 0) {
+        this.isArchive = true;
+      } else {
+        this.isArchive = false;
+        this.isArchiveBtnClicked = false;
+
+      }
+    });
   }
+
 
   ngOnInit() {
     this.setDefaultTitle();
@@ -42,8 +52,7 @@ export class BulkSummaryComponent implements OnInit, OnChanges {
 
   tapped(value) {
     this.toggleValue = value;
-    this.store.dispatch(new bulkActions.SaveArchiveToggleState
-      ({ toggle_state: this.toggleValue }));
+    this.store.dispatch(new bulkActions.SaveArchiveToggleState({ toggle_state: this.toggleValue }));
   }
 
   changeTableHeading(heading: string): void {
@@ -60,9 +69,6 @@ export class BulkSummaryComponent implements OnInit, OnChanges {
   backToSummary(): void {
     this.showSummaryTable = true;
     this.setDefaultTitle();
-  }
-  showArchiveBtn(value: boolean) {
-    this.isArchive = value;
   }
   archiveData() {
     this.isArchiveBtnClicked = true;
