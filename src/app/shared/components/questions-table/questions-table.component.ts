@@ -149,15 +149,20 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       return;
     }
 
-    if (this.bulkUploadFileInfo && this.requestQuestion.status === QuestionStatus.REJECTED) {
-      this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+    if (this.bulkUploadFileInfo && this.requestQuestion.status !== QuestionStatus.REQUIRED_CHANGE) {
+      if (this.bulkUploadFileInfo.rejected > 0) {
+        this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+      }
       this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-    } else if (!this.bulkUploadFileInfo && this.requestQuestion.bulkUploadId && this.requestQuestion.status === QuestionStatus.REJECTED) {
+
+    } else if (!this.bulkUploadFileInfo && this.requestQuestion.bulkUploadId && this.requestQuestion.status !== QuestionStatus.REJECTED) {
       this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: this.requestQuestion.bulkUploadId }));
       this.sub = this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
         if (obj) {
           this.bulkUploadFileInfo = obj;
-          this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+          if (this.bulkUploadFileInfo.rejected > 0) {
+            this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+          }
           this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
           this.bulkUploadFileInfo = undefined;
           Utils.unsubscribe([this.sub]);
@@ -178,10 +183,10 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       return;
     }
 
-    if (this.bulkUploadFileInfo && this.rejectQuestion.status === QuestionStatus.REJECTED) {
+    if (this.bulkUploadFileInfo && this.rejectQuestion.status !== QuestionStatus.REJECTED) {
       this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
       this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-    } else if (!this.bulkUploadFileInfo && this.rejectQuestion.bulkUploadId && this.rejectQuestion.status === QuestionStatus.REJECTED) {
+    } else if (!this.bulkUploadFileInfo && this.rejectQuestion.bulkUploadId && this.rejectQuestion.status !== QuestionStatus.REJECTED) {
       this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: this.rejectQuestion.bulkUploadId }));
       this.sub = this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
         if (obj) {
