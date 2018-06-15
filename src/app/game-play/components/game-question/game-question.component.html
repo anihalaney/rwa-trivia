@@ -14,6 +14,9 @@
         <p *ngIf="otherPlayer?.displayName">Playing with
           <a>{{otherPlayer?.displayName}}</a>
         </p>
+        <div class="col-xs-12 div-spacing textcenter padding-top-bottom-8">
+          <span class="light">Round {{questionRound}} / {{totalRound}}</span>
+        </div>
         <div *ngIf="continueNext" class="answer-status">
           <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
           <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
@@ -21,16 +24,13 @@
         </div>
       </div>
       <div class="col-sm-3">
-        <div [ngClass]="{abouttoexpire: timer <= 5}">{{timer}}</div>
         <div class="timer">
-          <svg class="rotate" viewbox="0 0 250 250">
-            <path id="loader" transform="translate(125, 125)" />
+          <svg class="rotate" viewbox="10 10 55 55">
+            <path id="loader" transform="translate(25, 25)" />
           </svg>
           <div class="dots">
             <span class="time deg0"></span>
-            <!-- <span class="time deg45"></span> -->
             <span class="time deg90"></span>
-            <!-- <span class="time deg135"></span> -->
           </div>
         </div>
       </div>

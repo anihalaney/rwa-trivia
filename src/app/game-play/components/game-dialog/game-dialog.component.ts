@@ -32,15 +32,20 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   gameQuestionObs: Observable<Question>;
   currentQuestion: Question;
   correctAnswerCount: number;
+  totalRound: number;
+  questionRound: number;
+  gameOverQuestionRound: number;
   questionIndex: number;
   sub: Subscription[] = [];
   timerSub: Subscription;
+  questionSub: Subscription;
   timer: number;
   categoryDictionary: { [key: number]: Category }
   categoryName: string;
   continueNext = false;
   questionAnswered = false;
   gameOver = false;
+  PlayerMode = PlayerMode;
 
   MAX_TIME_IN_SECONDS = 16;
   showContinueBtn = false;
@@ -56,6 +61,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   isCorrectAnswer = false;
   turnFlag: boolean;
   userDict$: Observable<{ [key: string]: User }>;
+  isQuestionAvailable = true;
+  isGameLoaded: boolean;
 
   @ViewChild(GameQuestionComponent)
   private questionComponent: GameQuestionComponent;
@@ -81,30 +88,68 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
     this.sub.push(
       this.gameObs.subscribe(game => {
-        if (game !== null) {
+        if (game !== null && !this.isGameLoaded) {
+          this.isGameLoaded = true;
           this.game = game;
           this.gameOver = game.gameOver;
           this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
           this.correctAnswerCount = this.game.stats[this.user.userId].score;
+          this.questionRound = (!this.questionRound) ?
+            this.game.stats[this.user.userId].round + 1 : this.questionRound;
+          if (this.questionRound === 1) {
+            this.gameOverQuestionRound = this.questionRound;
+          }
+          this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
+
           this.setTurnStatusFlag();
         }
       }));
-    this.getLoader();
-    this.sub.push(
-      this.gameQuestionObs.subscribe(question => {
-        if (!question) {
-          this.currentQuestion = null;
-          return;
+
+  }
+
+
+  setTurnStatusFlag() {
+    this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
+      this.game.GameStatus === GameStatus.RESTARTED ||
+      ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+        this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
+        this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
+        this.game.GameStatus === GameStatus.JOINED_GAME)
+        && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
+    this.continueNext = (this.questionAnswered) ? true : false;
+    this.showContinueBtn = (this.questionAnswered && !this.turnFlag) ? true : false;
+    this.checkGameOver();
+    if (!this.gameOver) {
+      if (!this.turnFlag) {
+
+        if (this.userDict && Number(this.game.gameOptions.playerMode) !== PlayerMode.Single) {
+          this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+          const otherPlayerObj = this.userDict[this.otherPlayerUserId];
+          (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
+          this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
+            this.otherPlayer.displayName : this.RANDOM_PLAYER
+        } else {
+          this.initializeOtherUser();
         }
-        // this.getLoader();
-        this.currentQuestion = question;
-        this.questionIndex++;
-        this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName;
-        if (!this.userDict[this.currentQuestion.created_uid]) {
-          this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
+
+        if (this.game.playerQnAs.length > 0 && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
+          this.isQuestionAvailable = (!this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds) ? false : true;
         }
-      })
-    );
+
+        if (!this.currentQuestion) {
+          this.getLoader();
+          this.getNextQuestion();
+        }
+
+      } else {
+        this.showContinueBtn = true;
+
+      }
+    }
+  }
+
+  initializeOtherUser() {
+    this.otherPlayer = new User();
   }
 
   getLoader() {
@@ -151,16 +196,30 @@ export class GameDialogComponent implements OnInit, OnDestroy {
             Utils.unsubscribe([this.timerSub]);
             this.showBadge = false;
             this.timer = this.MAX_TIME_IN_SECONDS;
-            this.timerSub =
-              Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
-                this.timer--;
-              },
-                null,
-                () => {
-                  // disable all buttons
-                  (this.currentQuestion) ?
-                    this.afterAnswer() : '';
-                });
+            this.questionSub = this.gameQuestionObs.subscribe(question => {
+              if (!question) {
+                this.currentQuestion = undefined;
+                return;
+              }
+
+              this.isQuestionAvailable = true;
+              this.currentQuestion = question;
+              this.questionIndex++;
+              this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName;
+              if (!this.userDict[this.currentQuestion.created_uid]) {
+                this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
+              }
+              this.timerSub =
+                Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+                  this.timer--;
+                },
+                  null,
+                  () => {
+                    // disable all buttons
+                    (this.currentQuestion) ?
+                      this.afterAnswer() : '';
+                  });
+            });
           })
       });
   }
@@ -169,51 +228,16 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   }
 
-  setTurnStatusFlag() {
-    this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
-      this.game.GameStatus === GameStatus.RESTARTED ||
-      ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-        this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
-        this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
-        this.game.GameStatus === GameStatus.JOINED_GAME)
-        && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
-    this.continueNext = (this.questionAnswered) ? true : false;
-    this.showContinueBtn = (this.questionAnswered && !this.turnFlag) ? true : false;
-    this.checkGameOver();
-    if (!this.gameOver) {
-      if (!this.turnFlag) {
-
-        if (!this.currentQuestion) {
-          this.getNextQuestion();
-        }
-        if (this.game.GameStatus !== GameStatus.STARTED && this.game.gameOptions.playerMode !== PlayerMode.Single && this.userDict) {
-          this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
-          const otherPlayerObj = this.userDict[this.otherPlayerUserId];
-          (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
-          this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
-            this.otherPlayer.displayName : this.RANDOM_PLAYER
-        } else {
-          this.initializeOtherUser();
-        }
-      } else {
-        this.showContinueBtn = true;
-      }
-    }
-  }
-
-  initializeOtherUser() {
-    this.otherPlayer = new User();
-  }
 
   getNextQuestion() {
     this.store.dispatch(new gameplayactions.GetNextQuestion(this.game));
   }
 
   answerClicked($event: number) {
-    Utils.unsubscribe([this.timerSub]);
-    // disable all buttons
+    // disable all buttons  
     this.afterAnswer($event);
   }
+
   okClick($event) {
     if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
       this.gameOver = true;
@@ -221,6 +245,30 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       this.continueNext = true;
     }
 
+  }
+
+  continueClicked($event) {
+    this.currentQuestion = undefined;
+    if (this.turnFlag) {
+      this.continueNext = false;
+      this.store.dispatch(new gameplayactions.ResetCurrentGame());
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.router.navigate(['/dashboard'])
+    } else {
+      this.questionAnswered = false;
+      this.showContinueBtn = false;
+      this.continueNext = false;
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.checkGameOver();
+      if (!this.gameOver) {
+        this.getLoader();
+        this.getNextQuestion();
+        if (!this.isCorrectAnswer) {
+          this.questionRound++;
+          this.gameOverQuestionRound = this.questionRound;
+        }
+      }
+    }
   }
 
   checkGameOver() {
@@ -239,41 +287,19 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     }
   }
 
-  continueClicked($event) {
-    if (this.turnFlag) {
-      this.store.dispatch(new gameplayactions.ResetCurrentGame());
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-      this.currentQuestion = undefined;
-      this.continueNext = false;
-      this.router.navigate(['/dashboard']);
-
-    } else {
-      this.questionAnswered = false;
-      this.showContinueBtn = false;
-      this.continueNext = false;
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-      this.checkGameOver();
-      if (!this.gameOver) {
-
-        this.getLoader();
-        this.getNextQuestion();
-      }
-    }
-
-
-  }
-
 
   gameOverContinueClicked() {
     this.gameOver = true;
+    this.questionRound = undefined;
     this.currentQuestion = undefined;
     this.questionAnswered = false;
     this.showContinueBtn = false;
     this.continueNext = false;
     this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
-  afterAnswer(userAnswerId?: number) {
 
+  afterAnswer(userAnswerId?: number) {
+    Utils.unsubscribe([this.timerSub, this.questionSub]);
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
 
     if (userAnswerId === correctAnswerId) {
@@ -287,14 +313,15 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
-      questionId: this.currentQuestion.id
+      questionId: this.currentQuestion.id,
+      addedOn: this.currentQuestion.addedOn
     }
-
+    this.questionAnswered = true;
+    this.isGameLoaded = false;
     // dispatch action to push player answer
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ 'gameId': this.game.gameId, 'playerQnA': playerQnA }));
 
     this.questionComponent.disableQuestions(correctAnswerId);
-    this.questionAnswered = true;
 
   }
 

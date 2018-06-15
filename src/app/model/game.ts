@@ -8,6 +8,7 @@ export class PlayerQnA {
   playerAnswerInSeconds?: number;
   answerCorrect?: boolean;
   isReported?: boolean;
+  addedOn?: number;
 }
 
 export class Stat {
@@ -50,15 +51,16 @@ export class Game {
     if (playerQnAs) {
       let key: string;
       for (key of Object.keys(playerQnAs)) {
-        let qna = playerQnAs[key];
-        this.playerQnAs.push({
-          'playerId': qna.playerId,
-          'questionId': qna.questionId,
-          'playerAnswerId': qna.playerAnswerId,
-          'playerAnswerInSeconds': qna.playerAnswerInSeconds,
-          'answerCorrect': qna.answerCorrect,
-          'isReported': (qna.isReported) ? true : false
-        });
+        const qna = playerQnAs[key];
+        const playerOnA: PlayerQnA = new PlayerQnA();
+        playerOnA.playerId = qna.playerId;
+        playerOnA.questionId = qna.questionId;
+        (qna.addedOn) ? playerOnA.addedOn = qna.addedOn : '';
+        (qna.playerAnswerId) ? playerOnA.playerAnswerId = qna.playerAnswerId : '';
+        (qna.playerAnswerInSeconds) ? playerOnA.playerAnswerInSeconds = qna.playerAnswerInSeconds : '';
+        (qna.answerCorrect) ? playerOnA.answerCorrect = qna.answerCorrect : '';
+        playerOnA.isReported = (qna.isReported) ? true : false;
+        this.playerQnAs.push({ ...playerOnA });
       }
     }
     if (gameId) {
@@ -119,7 +121,7 @@ export class Game {
   }
 
   addPlayerQnA(playerId: string, questionId: string): PlayerQnA {
-    let playerQnA: PlayerQnA = {
+    const playerQnA: PlayerQnA = {
       'playerId': playerId,
       'questionId': questionId
     }
@@ -218,7 +220,7 @@ export class Game {
 
   updatePlayerQnA(playerId: string, questionId: string,
     playerAnswerId: string, playerAnswerInSeconds: number, answerCorrect: boolean): PlayerQnA {
-    let playerQnA: PlayerQnA = this.playerQnAs.find(p => p.playerId === playerId && questionId === questionId);
+    const playerQnA: PlayerQnA = this.playerQnAs.find(p => p.playerId === playerId && questionId === questionId);
     playerQnA.playerAnswerId = playerAnswerId;
     playerQnA.answerCorrect = answerCorrect;
     playerQnA.playerAnswerInSeconds = playerAnswerInSeconds;
