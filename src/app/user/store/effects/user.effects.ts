@@ -22,10 +22,10 @@ export class UserEffects {
     addUser$ = this.actions$
         .ofType(UserActionTypes.ADD_USER_PROFILE)
         .pipe(
-        switchMap((action: userActions.AddUserProfile) => {
-            this.userService.saveUserProfile(action.payload.user);
-            return empty();
-        })
+            switchMap((action: userActions.AddUserProfile) => {
+                this.userService.saveUserProfile(action.payload.user);
+                return empty();
+            })
         );
 
     // Load User Published Question by userId from router
@@ -37,14 +37,14 @@ export class UserEffects {
             routerState.url.toLowerCase().startsWith('/my/questions')
         )
         .mergeMap((routerState: RouterStateUrl) =>
-            this.store.select(coreState).select(s => s.user).take(1).map(user => user.userId)
+            this.store.select(coreState).select(s => s.user).filter(u => !!u).take(1).map(user => user.userId)
         )
         .pipe(
-        switchMap((id: string) => {
-            return this.questionService.getUserQuestions(id, true).pipe(map((questions: Question[]) =>
-                new userActions.LoadUserPublishedQuestionsSuccess(questions)
-            ));
-        })
+            switchMap((id: string) => {
+                return this.questionService.getUserQuestions(id, true).pipe(map((questions: Question[]) =>
+                    new userActions.LoadUserPublishedQuestionsSuccess(questions)
+                ));
+            })
         );
 
     // Load User UnPublished Question by userId from router
@@ -56,14 +56,14 @@ export class UserEffects {
             routerState.url.toLowerCase().startsWith('/my/questions')
         )
         .mergeMap((routerState: RouterStateUrl) =>
-            this.store.select(coreState).select(s => s.user).take(1).map(user => user.userId)
+            this.store.select(coreState).select(s => s.user).filter(u => !!u).take(1).map(user => user.userId)
         )
         .pipe(
-        switchMap((id: string) => {
-            return this.questionService.getUserQuestions(id, false).pipe(map((questions: Question[]) =>
-                new userActions.LoadUserUnpublishedQuestionsSuccess(questions)
-            ));
-        })
+            switchMap((id: string) => {
+                return this.questionService.getUserQuestions(id, false).pipe(map((questions: Question[]) =>
+                    new userActions.LoadUserUnpublishedQuestionsSuccess(questions)
+                ));
+            })
         );
 
 
@@ -72,10 +72,10 @@ export class UserEffects {
     addQuestion$ = this.actions$
         .ofType(UserActionTypes.ADD_QUESTION)
         .pipe(
-        switchMap((action: userActions.AddQuestion) => {
-            this.questionService.saveQuestion(action.payload.question);
-            return empty();
-        })
+            switchMap((action: userActions.AddQuestion) => {
+                this.questionService.saveQuestion(action.payload.question);
+                return empty();
+            })
         );
 
     // Save user profile
@@ -83,11 +83,11 @@ export class UserEffects {
     saveInvitation$ = this.actions$
         .ofType(UserActionTypes.ADD_USER_INVITATION)
         .pipe(
-        switchMap((action: userActions.AddUserInvitation) =>
-            this.userService.saveUserInvitations(action.payload).pipe(
-                map(() => new userActions.AddUserInvitationSuccess())
+            switchMap((action: userActions.AddUserInvitation) =>
+                this.userService.saveUserInvitations(action.payload).pipe(
+                    map(() => new userActions.AddUserInvitationSuccess())
+                )
             )
-        )
         );
 
     // Make friend
@@ -95,21 +95,21 @@ export class UserEffects {
     makeFriend$ = this.actions$
         .ofType(UserActionTypes.MAKE_FRIEND)
         .pipe(
-        switchMap((action: userActions.MakeFriend) =>
-            this.userService.checkInvitationToken(action.payload).pipe(
-                map((friend: any) => this.userAction.storeInvitationToken(''))
-            ).map(() => new userActions.MakeFriendSuccess())
-        ));
+            switchMap((action: userActions.MakeFriend) =>
+                this.userService.checkInvitationToken(action.payload).pipe(
+                    map((friend: any) => this.userAction.storeInvitationToken(''))
+                ).map(() => new userActions.MakeFriendSuccess())
+            ));
 
     // Get Game list
     @Effect()
     getGameResult$ = this.actions$
         .ofType(UserActionTypes.GET_GAME_RESULT)
         .pipe(
-        switchMap((action: userActions.GetGameResult) =>
-            this.gameService.getGameResult(action.payload.userId)
-                .map((games: Game[]) => new userActions.GetGameResultSuccess(games))
-        )
+            switchMap((action: userActions.GetGameResult) =>
+                this.gameService.getGameResult(action.payload.userId)
+                    .map((games: Game[]) => new userActions.GetGameResultSuccess(games))
+            )
         );
 
     // Get Game list
@@ -117,10 +117,10 @@ export class UserEffects {
     LoadUserFriends$ = this.actions$
         .ofType(UserActionTypes.LOAD_USER_FRIENDS)
         .pipe(
-        switchMap((action: userActions.LoadUserFriends) =>
-            this.userService.loadUserFriends(action.payload.userId)
-                .map((friends: Friends) => new userActions.LoadUserFriendsSuccess(friends))
-        )
+            switchMap((action: userActions.LoadUserFriends) =>
+                this.userService.loadUserFriends(action.payload.userId)
+                    .map((friends: Friends) => new userActions.LoadUserFriendsSuccess(friends))
+            )
         );
 
 

@@ -39,22 +39,24 @@
           <p class="dark">{{row.questionText}}</p>
           <ul class="currentans">
             <li>
-              <div class="question-text ">Correct answer :</div>
-              <div class="answer-text">
-                <span *ngFor="let answer of row.answers">
-                  <span *ngIf="answer.correct">{{answer.answerText}}</span>
-                </span>
-              </div>
-              <div class="row col-sm-3 col-xs-12 question-status">
-                <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
-                <label>
-                  <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
-                </label>
-                <div *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'" class="status-btn">
-                  <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
+              <div class="button-web-css">
+                <div class="question-text ">Correct answer :</div>
+                <div class="answer-text">
+                  <span *ngFor="let answer of row.answers">
+                    <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                  </span>
                 </div>
-                <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="status-btn">
-                  <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
+                <div class="row col-sm-3 col-xs-12 question-status">
+                  <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
+                  <label>
+                    <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
+                  </label>
+                  <div *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'" class="status-btn">
+                    <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
+                  </div>
+                  <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="status-btn">
+                    <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
+                  </div>
                 </div>
               </div>
             </li>
@@ -92,6 +94,40 @@
                 {{userDict[row.created_uid]?.displayName}}
               </div>
             </li>
+            <li>
+              <div class="button-mobile-css">
+                <div class="question-text">Correct answer :</div>
+                <div class="answer-text">
+                  <span *ngFor="let answer of row.answers">
+                    <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="button-mobile-css">
+                <div class="row">
+                  <div class="col-md-12 question-status">
+                    <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
+                    <label>
+                      <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="button-mobile-css">
+                <div class="row">
+                  <div class="status-btn col-xs-6" *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'">
+                    <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
+                  </div>
+                  <div class="status-btn col-xs-6" *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons">
+                    <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
+                  </div>
+                </div>
+              </div>
+            </li>
             <li *ngIf="row.validationErrorMessages?.length > 0">
               <div class="csv-error-msg">
                 <p>ERROR :</p>
@@ -110,7 +146,7 @@
               </div>
             </li>
           </ul>
-          <div *ngIf="showButtons ">
+          <div *ngIf="showButtons">
             <div class="col-sm-12 col-xs-12 textrigth">
               <div class="button-row">
                 <button mat-raised-button (click)="approveQuestion(row)">Approve</button>
