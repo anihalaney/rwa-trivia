@@ -1,35 +1,3 @@
-<!-- <mat-card *ngFor="let question of questions" class="flex-item question-card">
-    <mat-card-header>
-      <mat-card-title>
-        <span *ngFor="let id of question.categoryIds">
-          {{categoryDictionary[id].categoryName}}
-        </span>
-      </mat-card-title>
-      <mat-card-subtitle>
-        {{question.questionText}}
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <mat-list dense> 
-        <mat-list-item *ngFor="let answer of question.answers">
-          {{answer.answerText}}<mat-icon *ngIf="answer.correct" mat-list-icon>check</mat-icon>
-        </mat-list-item>
-      </mat-list>
-
-      <mat-chip-list>
-        <mat-chip *ngFor="let tag of question.tags">
-          {{tag}}
-        </mat-chip>
-      </mat-chip-list>
-
-      <div>
-        <button *ngIf="showApproveButton && (question.status == 0 || question.status == 1 || question.status == 4)" 
-                (click)="approveButtonClicked(question)" class="approve-button"
-                mat-button color="primary">APPROVE</button>
-        <span class="question-status" *ngIf="question.status != 2">{{getDisplayStatus(question.status)}}</span>
-      </div>
-    </mat-card-content>
-  </mat-card> -->
 <div *ngFor="let question of questions;let i = index" class="col-sm-12 col-xs-12 question-section">
   <div class="date">{{question.createdOn | date:'dd MMM yyyy' }}</div>
   <p class="dark">{{question.questionText}}</p>

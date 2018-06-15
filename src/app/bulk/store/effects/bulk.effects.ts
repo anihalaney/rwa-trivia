@@ -8,6 +8,8 @@ import { BulkUploadFileInfo, Question } from '../../../model';
 import { BulkActions, BulkActionTypes } from '../actions';
 import * as bulkActions from '../actions/bulk.actions';
 import { BulkService, QuestionService } from '../../../core/services';
+import { Observable } from 'rxjs/Observable';
+import { pipe } from 'rxjs/util/pipe';
 
 @Injectable()
 export class BulkEffects {
