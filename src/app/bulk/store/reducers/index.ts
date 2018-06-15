@@ -4,7 +4,7 @@ import { BulkUploadFileInfo, Question } from '../../../model';
 import {
     bulkUploadFileInfos, userBulkUploadFileInfos,
     bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions, questionSaveStatus,
-    bulkUploadFileUrl, bulkUploadArchiveStatus, bulkUploadFileInfo
+    bulkUploadFileUrl, bulkUploadArchiveStatus, bulkUploadFileInfo, getArchiveToggleState, getArchiveList
 } from './bulk.reducer';
 
 export * from './bulk.reducer';
@@ -18,6 +18,8 @@ export interface BulkState {
     bulkUploadFileUrl: string;
     bulkUploadArchiveStatus: string;
     bulkUploadFileInfo: BulkUploadFileInfo;
+    getArchiveToggleState: boolean;
+    getArchiveList: BulkUploadFileInfo[];
 }
 
 export const reducer: ActionReducerMap<BulkState> = {
@@ -28,7 +30,9 @@ export const reducer: ActionReducerMap<BulkState> = {
     questionSaveStatus: questionSaveStatus,
     bulkUploadFileUrl: bulkUploadFileUrl,
     bulkUploadArchiveStatus: bulkUploadArchiveStatus,
-    bulkUploadFileInfo: bulkUploadFileInfo
+    bulkUploadFileInfo: bulkUploadFileInfo,
+    getArchiveToggleState: getArchiveToggleState,
+    getArchiveList: getArchiveList
 };
 
 export const bulkState = createFeatureSelector<BulkState>('bulk');
