@@ -97,7 +97,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
             ? game.stats[this.user.userId].round + 1
             : game.stats[this.user.userId].round;
           this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
-
           this.setTurnStatusFlag();
         }
       }));
@@ -235,7 +234,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   answerClicked($event: number) {
-    // disable all buttons  
+    // disable all buttons
     this.afterAnswer($event);
   }
 
