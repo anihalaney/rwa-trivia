@@ -149,7 +149,6 @@ export class SaveArchiveList implements Action {
     constructor(public payload: BulkUploadFileInfo[]) { }
 }
 
-
 export type BulkActions
     = LoadBulkUpload
     | LoadBulkUploadSuccess
