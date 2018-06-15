@@ -72,10 +72,10 @@
             <h2>Your Turn has been changed !!!!!</h2>
           </div>
           <div class="button-div button-div-padding margin-top-110">
-              <div class=" win-icon">
-                <button class="btn-share btn-home" type="button" [routerLink]="['/']">Home</button>
-              </div>
+            <div class=" win-icon">
+              <button class="btn-share btn-home" type="button" [routerLink]="['/']">Home</button>
             </div>
+          </div>
         </div>
       </div>
     </mat-card-content>
@@ -86,8 +86,7 @@
   </game-question-continue>
 
   <game-over *ngIf="gameOver" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName" [correctCount]="correctAnswerCount"
-    [noOfQuestions]="questionIndex" [questionRound]="gameOverQuestionRound" [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked($event)"
-    (viewQuestionClicked)="viewQuestionClicked($event)">
+    [noOfQuestions]="questionIndex" [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-over>
 
 

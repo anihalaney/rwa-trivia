@@ -34,7 +34,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   correctAnswerCount: number;
   totalRound: number;
   questionRound: number;
-  gameOverQuestionRound: number;
   questionIndex: number;
   sub: Subscription[] = [];
   timerSub: Subscription;
@@ -94,11 +93,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           this.gameOver = game.gameOver;
           this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
           this.correctAnswerCount = this.game.stats[this.user.userId].score;
-          this.questionRound = (!this.questionRound) ?
-            this.game.stats[this.user.userId].round + 1 : this.questionRound;
-          if (this.questionRound === 1) {
-            this.gameOverQuestionRound = this.questionRound;
-          }
+          this.questionRound = (game.stats[this.user.userId].round === 0 || !this.questionRound)
+            ? game.stats[this.user.userId].round + 1
+            : game.stats[this.user.userId].round;
           this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
           this.setTurnStatusFlag();
         }
@@ -131,8 +128,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           this.initializeOtherUser();
         }
 
-        if (this.game.playerQnAs.length > 0 && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) {
-          this.isQuestionAvailable = (!this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds) ? false : true;
+        if (this.game.playerQnAs.length > 0) {
+          const timeoutFlag = this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds;
+          if (!timeoutFlag) {
+            this.questionRound = this.questionRound + 1;
+          }
+          this.isQuestionAvailable = (!timeoutFlag && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) ? false : true;
         }
 
         if (!this.currentQuestion) {
@@ -264,7 +265,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.getNextQuestion();
         if (!this.isCorrectAnswer) {
           this.questionRound++;
-          this.gameOverQuestionRound = this.questionRound;
         }
       }
     }
@@ -294,6 +294,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.questionAnswered = false;
     this.showContinueBtn = false;
     this.continueNext = false;
+    this.isGameLoaded = false;
+    this.questionRound = this.questionRound + 1;
     this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
 
@@ -321,7 +323,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ 'gameId': this.game.gameId, 'playerQnA': playerQnA }));
 
     this.questionComponent.disableQuestions(correctAnswerId);
-
   }
 
 
