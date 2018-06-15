@@ -26,7 +26,6 @@ export class GameOverComponent implements OnInit {
   @Input() categoryName: string;
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
-  @Input() questionRound: number;
   @Input() totalRound: number;
   user$: Observable<User>;
   user: User;
