@@ -22,6 +22,8 @@ export enum BulkActionTypes {
     ARCHIVE_BULK_UPLOAD_SUCCESS = '[Bulk] ArchiveBulkUploadSuccess',
     LOAD_BULK_UPLOAD_FILE = '[Bulk] LoadBulkUploadFile',
     LOAD_BULK_UPLOAD_FILE_SUCCESS = '[Bulk] LoadBulkUploadFileSuccess',
+    SAVE_ARCHIVE_TOGGLE_STATE = '[Bulk] SaveArchiveToggleState',
+    SAVE_ARCHIVE_LIST = '[Bulk] SaveArchiveList',
 }
 
 
@@ -135,7 +137,17 @@ export class LoadBulkUploadFileSuccess implements Action {
     readonly type = BulkActionTypes.LOAD_BULK_UPLOAD_FILE_SUCCESS;
     constructor(public payload: BulkUploadFileInfo) { }
 }
+// Save Archive State
+export class SaveArchiveToggleState implements Action {
+    readonly type = BulkActionTypes.SAVE_ARCHIVE_TOGGLE_STATE;
+    constructor(public payload: { toggle_state: boolean }) { }
+}
 
+// Save Archive Files Array
+export class SaveArchiveList implements Action {
+    readonly type = BulkActionTypes.SAVE_ARCHIVE_LIST;
+    constructor(public payload: BulkUploadFileInfo[]) { }
+}
 
 export type BulkActions
     = LoadBulkUpload
@@ -156,3 +168,5 @@ export type BulkActions
     | ArchiveBulkUploadSuccess
     | LoadBulkUploadFile
     | LoadBulkUploadFileSuccess
+    | SaveArchiveToggleState
+    | SaveArchiveList

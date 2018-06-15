@@ -428,8 +428,6 @@ h1 + p{ font-size: 18px; font-family: 'hindlight'; }
     height: auto !important;
     min-width: 800px !important;
     max-width: 960px !important;
-    min-height:450px !important;
-    max-height: 610px !important;
   }
 }
 @media screen and ( max-width:1000px){      
@@ -549,22 +547,12 @@ nav .user.card{
 {
   font-size: 10px !important;
 }
-// .cdk-overlay-container
-// {
-//   position: initial;
-// }
+
 .social-icon .sb-circles-dark .sb-wrapper
 {
   font-size: 14px !important;
 }
-// .cdk-overlay-container
-// {
-//   position: initial;
-// }
-// .cdk-overlay-pane
-// {
-//   max-width: initial !important;
-// }
+
 .ellipsis
 {
     white-space: nowrap;

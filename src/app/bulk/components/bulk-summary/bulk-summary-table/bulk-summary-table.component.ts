@@ -66,6 +66,17 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       }
     });
 
+    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+      if (list.length > 0) {
+        this.archivedArray = list;
+        this.showArchive.emit(true);
+      } else {
+        this.archivedArray = [];
+        this.showArchive.emit(false);
+      }
+    });
+
+
   }
 
   ngOnInit() {
@@ -136,19 +147,19 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
 
   }
   checkedRow(bulkObj) {
-    const isCheck = this.archivedArray.filter(item => item === bulkObj)[0];
+    const isCheck = this.archivedArray.filter(item => item.id === bulkObj.id)[0];
     if (isCheck !== undefined) {
-      this.archivedArray.splice(this.archivedArray.indexOf(bulkObj), 1);
+      this.archivedArray.splice(this.archivedArray.indexOf(bulkObj.id), 1);
+
     } else {
       this.archivedArray.push(bulkObj);
     }
-    if (this.archivedArray.length > 0) {
-      this.showArchive.emit(true);
-    } else {
-      this.showArchive.emit(false);
-    }
+    this.store.dispatch(new bulkActions.SaveArchiveList(this.archivedArray));
   }
 
+  checkArchieved(id: any) {
+    return this.archivedArray.findIndex((row) => row.id === id) === -1 ? false : true;
+  }
 
 
 }
