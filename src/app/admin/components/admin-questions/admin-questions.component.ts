@@ -71,7 +71,8 @@ export class AdminQuestionsComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    // this.store.dispatch(new adminActions.SaveQuestionToggleState
+    //   ({ toggle_state: 'Published' }));
   }
 
   approveQuestion(question: Question) {
@@ -134,6 +135,6 @@ export class AdminQuestionsComponent implements OnInit {
   }
   tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
     this.store.dispatch(new adminActions.SaveQuestionToggleState
-      ({ toggle_stat: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
+      ({ toggle_state: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
   }
 }

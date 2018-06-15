@@ -27,7 +27,7 @@ export function unpublishedQuestions(state: any = [], action: AdminActions): Que
 export function getQuestionToggleState(state: any = null, action: AdminActions): string {
     switch (action.type) {
         case AdminActionTypes.SAVE_QUESTION_TOGGLE_STATE:
-            return action.payload.toggle_stat;
+            return action.payload.toggle_state;
         default:
             return state;
     }

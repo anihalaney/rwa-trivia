@@ -73,6 +73,15 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       }
     });
 
+    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+      if (list.length > 0) {
+        this.archivedArray = list;
+      } else {
+        this.archivedArray = [];
+      }
+    });
+
+
   }
 
   ngOnInit() {
@@ -156,7 +165,6 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
   checkArchieved(id: any) {
     return this.archivedArray.findIndex((row) => row.id === id) === -1 ? false : true;
   }
-
 
 
 }
