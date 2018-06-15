@@ -54,15 +54,25 @@ export class AdminQuestionsComponent implements OnInit {
     const url = this.router.url;
     this.toggleValue = url.includes('bulk') ? true : false;
 
-    this.store.select(adminState).select(s => s.getQuestionToggleStat).subscribe((stat) => {
+    this.store.select(adminState).select(s => s.getQuestionToggleState).subscribe((stat) => {
       if (stat != null) {
         this.selectedTab = stat === 'Published' ? 0 : 1
+      }
+    });
+    this.store.select(adminState).select(s => s.getArchiveToggleState).subscribe((state) => {
+      if (state != null) {
+        this.toggleValue = state;
+        (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
+      } else {
+        this.toggleValue = false;
+        this.router.navigate(['/admin/questions']);
       }
     });
   }
 
   ngOnInit() {
-
+    // this.store.dispatch(new adminActions.SaveQuestionToggleState
+    //   ({ toggle_state: 'Published' }));
   }
 
   approveQuestion(question: Question) {
@@ -119,10 +129,12 @@ export class AdminQuestionsComponent implements OnInit {
   }
 
   tapped(value) {
+    this.store.dispatch(new adminActions.SaveArchiveToggleState({ toggle_state: value }));
     this.toggleValue = value;
     (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
   }
   tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
-    this.store.dispatch(new adminActions.SaveQuestionToggleStat({ toggle_stat: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
+    this.store.dispatch(new adminActions.SaveQuestionToggleState
+      ({ toggle_state: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
   }
 }
