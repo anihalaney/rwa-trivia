@@ -140,4 +140,37 @@ export class GameMechanics {
     }
 
 
+    public changeTheTurn(game: Game): Promise<boolean> {
+
+        if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
+            console.log('playerQuestions---->', game.playerQnAs);
+
+            if (game.playerQnAs.length > 0) {
+                const index = game.playerQnAs.length - 1;
+                const lastAddedQuestion = game.playerQnAs[index];
+
+                if (!lastAddedQuestion.playerAnswerInSeconds) {
+                    lastAddedQuestion.playerAnswerId = null;
+                    lastAddedQuestion.answerCorrect = false;
+                    lastAddedQuestion.playerAnswerInSeconds = 16;
+                    game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0];
+                    game.playerQnAs[index] = lastAddedQuestion;
+                    const dbGame = game.getDbModel();
+                    console.log('change the turn ---->', dbGame);
+                    return this.UpdateGame(dbGame).then((id) => {
+                        return false;
+                    });
+                } else {
+                    return Promise.resolve(true);
+                }
+            } else {
+                return Promise.resolve(true);
+            }
+        } else {
+            return Promise.resolve(true);
+        }
+    }
+
+
+
 }
