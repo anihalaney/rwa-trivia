@@ -21,6 +21,7 @@ export class Question {
   reason?: string;
   validationErrorMessages?: string[];
   userGivenAnswer?: string;
+  addedOn?: number;
 
   static getViewModelFromDb(db: any): Question {
     const question: Question = new Question();

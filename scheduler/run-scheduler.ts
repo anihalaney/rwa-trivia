@@ -8,3 +8,4 @@ const envAppName = (envCommand === schedulerConstants.prod) ?
     schedulerConstants.prodFunctionsAppName : schedulerConstants.devFunctionsAppName;
 const gameScheduler: GameScheduler = new GameScheduler();
 gameScheduler.checkGames(schedulerConstants.authToken, envAppName);
+gameScheduler.changeTheTurn(schedulerConstants.authToken, envAppName);
