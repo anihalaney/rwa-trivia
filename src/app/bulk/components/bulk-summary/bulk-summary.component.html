@@ -4,7 +4,7 @@
     <div class="archive-div col-md-5 col-xs-6 hidden-xs align-right" *ngIf="showSummaryTable">
       <button class="btn-share" type="button" *ngIf="isArchive" (click)="archiveData()"> Archive </button>
       <label>Show Archived</label>
-      <mat-button-toggle-group #group="matButtonToggleGroup" value=false>
+      <mat-button-toggle-group #group="matButtonToggleGroup" value="{{toggleValue}}">
         <mat-button-toggle value=true (click)="tapped(true)">
           On
         </mat-button-toggle>
