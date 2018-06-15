@@ -17,7 +17,7 @@
         <img *ngIf="user?.profilePictureUrl " [src]="user.profilePictureUrl " alt="yourimg">
       </div>
       <label href="# " class="dark text-style ">You</label>
-      <div class="dark div-top-spacing text-style ">Round {{questionRound}} / {{totalRound}}</div>
+      <div class="dark div-top-spacing text-style ">Round {{game.stats[user.userId].round}} / {{totalRound}}</div>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}}</div>
       <div class="div-top-spacing score-div-height">
         <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>

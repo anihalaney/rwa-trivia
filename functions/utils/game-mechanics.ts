@@ -154,6 +154,7 @@ export class GameMechanics {
                 lastAddedQuestion.answerCorrect = false;
                 lastAddedQuestion.playerAnswerInSeconds = 16;
                 game.playerQnAs[index] = lastAddedQuestion;
+                game.stats[game.nextTurnPlayerId].round = game.stats[game.nextTurnPlayerId].round + 1;
                 if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
                     game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0];
                 }
