@@ -295,6 +295,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.questionAnswered = false;
     this.showContinueBtn = false;
     this.continueNext = false;
+    this.isGameLoaded = false;
     this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
 

@@ -81,7 +81,7 @@ exports.getNextQuestion = (req, res) => {
         const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
 
         gameMechanics.changeTheTurn(game).then((status) => {
-            if (status) {
+            if (Number(game.gameOptions.playerMode) === PlayerMode.Single || status) {
                 const questionIds = [];
                 game.playerQnAs.map((question) => questionIds.push(question.questionId));
                 ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
