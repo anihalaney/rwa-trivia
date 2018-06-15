@@ -120,7 +120,7 @@ export class BulkService {
 
   // get single Bulk Upload
   getBulkUploadFile(bulkId: string): Observable<BulkUploadFileInfo> {
-    return  this.db.doc(`/bulk_uploads/${bulkId}`)
+    return this.db.doc(`/bulk_uploads/${bulkId}`)
       .valueChanges()
       .catch(error => {
         console.log(error);
