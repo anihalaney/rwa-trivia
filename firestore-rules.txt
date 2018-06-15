@@ -85,7 +85,7 @@ service cloud.firestore {
       
     } 
 
-      match /friends/{userId} {
+    match /friends/{userId} {
          allow get: if isUserAuthenticated(userId);          
     }
     match /report_questions {
@@ -95,12 +95,12 @@ service cloud.firestore {
     }
     }
 
-     match /stats/system {     
+    match /stats/system {     
         allow get: true;       
       
     }
 
-       match /social_share {
+    match /social_share {
       match /{document=**} {
         allow read,update : if isUserAuthenticated(request.resource.data.created_uid);
         allow create: if isUserAuthenticated(request.resource.data.created_uid); 
