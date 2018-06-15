@@ -105,5 +105,3 @@ export function getArchiveList(state = [], action: BulkActions): BulkUploadFileI
             return state;
     }
 };
-
-
