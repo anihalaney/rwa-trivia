@@ -26,6 +26,7 @@ export class GameOverComponent implements OnInit {
   @Input() categoryName: string;
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
+  @Input() totalRound: number;
   user$: Observable<User>;
   user: User;
   otherUserId: string;
@@ -49,6 +50,11 @@ export class GameOverComponent implements OnInit {
         this.user = user;
       }
     });
+    this.blogData = [{
+      blogNo: 0,
+      share_status: false,
+      link: this.imageUrl
+    }];
 
     this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
     this.userDict$.subscribe(userDict => {
@@ -74,8 +80,14 @@ export class GameOverComponent implements OnInit {
 
     this.store.select(appState.socialState).select(s => s.socialShareImageUrl).subscribe(imageUrl => {
       if (imageUrl !== 'NONE') {
-        this.blogData[0].status = true;
-        this.blogData[0].link = imageUrl;
+        if (imageUrl != null) {
+          this.blogData[0].share_status = true;
+          this.blogData[0].link = imageUrl;
+          this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
+        }
+
+      } else {
+        this.blogData[0].share_status = false;
       }
     });
   }
@@ -84,11 +96,7 @@ export class GameOverComponent implements OnInit {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
-    this.blogData = [{
-      blogNo: 0,
-      status: false,
-      link: this.imageUrl
-    }];
+
   }
   bindQuestions() {
     if (this.questionsArray.length === 0) {
@@ -182,6 +190,6 @@ export class GameOverComponent implements OnInit {
   }
 
   onNotify(info: any) {
-    this.blogData[0].status = info.status;
+    this.blogData[0].share_status = info.status;
   }
 }

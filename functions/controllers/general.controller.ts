@@ -1,15 +1,16 @@
 
 const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
+const generalUserService = require('../services/user.service');
 const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
+import { RSSFeedConstants, Blog, User } from '../../src/app/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
-import { RSSFeedConstants, Blog } from '../../src/app/model';
-
+import { AuthUser } from '../utils/auth-user';
 
 /**
  * migrateCollections
@@ -236,3 +237,21 @@ exports.updateQuestionCollection = (req, res) => {
     }
 
 }
+
+
+/**
+ * dumpAuthUsersInFirestore
+ * return status
+ */
+exports.dumpAuthUsersInFirestore = (req, res) => {
+    const authUsers: User[] = [];
+    const authUser: AuthUser = new AuthUser()
+    authUser.getUsers(authUsers).then((users) => {
+        console.log('users', users);
+        generalUserService.addUpdateAuthUsersToFireStore(users).then((ref) => {
+            res.send('dumped all the users');
+        });
+    })
+};
+
+

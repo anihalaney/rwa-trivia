@@ -1,12 +1,12 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
 import { AppState, appState } from '../../store';
 import { CategoryActions, TagActions, QuestionActions, GameActions } from '../../core/store';
-import { Utils } from '../../core/services';
+import { Utils, WindowRef } from '../../core/services';
 import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
 import { Location } from '@angular/common';
@@ -39,7 +39,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public router: Router,
     public snackBar: MatSnackBar,
-    private location: Location) {
+    private location: Location,
+    private windowRef: WindowRef) {
 
     this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
       if (status === 'SUCCESS') {
@@ -90,7 +91,12 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      this.windowRef.nativeWindow.scrollTo(0, 0);
+    });
   }
 
   ngOnDestroy() {

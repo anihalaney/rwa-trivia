@@ -1,5 +1,8 @@
 import { ESUtils } from '../utils/ESUtils';
-import { SearchCriteria, Game, Question } from '../../src/app/model';
+import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode } from '../../src/app/model';
+import { GameMechanics } from '../utils/game-mechanics';
+import { Utils } from '../utils/utils';
+const utils: Utils = new Utils();
 const questionControllerGameService = require('../services/game.service');
 const questionControllerQuestionService = require('../services/question.service');
 
@@ -44,6 +47,7 @@ exports.getNextQuestion = (req, res) => {
     const userId = req.user.uid;
     const gameId = req.params.gameId;
 
+
     questionControllerGameService.getGameById(gameId).then((g) => {
         if (!g.exists) {
             // game not found
@@ -72,15 +76,38 @@ exports.getNextQuestion = (req, res) => {
             return;
         }
 
-        const questionIds = [];
-        game.playerQnAs.map((question) => questionIds.push(question.questionId));
+        console.log('game---->', game);
 
-        ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
-            res.send(question);
-        }).catch(error => {
-            res.status(500).send('Failed to get Q');
-            return;
+        const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
+
+        gameMechanics.changeTheTurn(game).then((status) => {
+            if (Number(game.gameOptions.playerMode) === PlayerMode.Single || status) {
+                const questionIds = [];
+                game.playerQnAs.map((question) => questionIds.push(question.questionId));
+                ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
+                    const createdOn = utils.getUTCTimeStamp();
+                    const playerQnA: PlayerQnA = {
+                        playerId: userId,
+                        questionId: question.id,
+                        addedOn: createdOn
+                    }
+                    question.addedOn = createdOn;
+                    game.playerQnAs.push(playerQnA);
+                    const dbGame = game.getDbModel();
+                    console.log('update the question ---->', question);
+                    gameMechanics.UpdateGame(dbGame).then((id) => {
+                        res.send(question);
+                    });
+                }).catch(error => {
+                    console.log('error', error);
+                    res.status(500).send('Failed to get Q');
+                    return;
+                });
+            } else {
+                res.send(undefined);
+            }
         });
+
     }).catch(error => {
         res.status(500).send('Uncaught Error');
         return;
