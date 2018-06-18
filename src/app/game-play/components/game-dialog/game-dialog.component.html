@@ -1,5 +1,5 @@
 <mat-dialog-content>
-  <div class="" *ngIf="showLoader && !gameOver">
+  <div class="" *ngIf="showLoader && !gameOver && isQuestionAvailable">
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle-loader">
@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <div class="" *ngIf="showBadge && !gameOver">
+  <div class="" *ngIf="showBadge && !gameOver && isQuestionAvailable">
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
@@ -38,7 +38,7 @@
     </div>
   </div>
 
-  <div class="" *ngIf="showWinBadge && !gameOver">
+  <div class="" *ngIf="showWinBadge && !gameOver && isQuestionAvailable">
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
@@ -60,14 +60,34 @@
   <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName" [question]="currentQuestion"
     [questionIndex]="questionIndex" [timer]="timer" [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
     [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)"
-    (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict">
+    (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [questionRound]="questionRound"
+    [totalRound]="totalRound">
   </game-question>
+
+  <div *ngIf="!isQuestionAvailable">
+    <mat-card-content class="textcenter" id="share-content">
+      <div class="card main-div textcenter">
+        <div class="badge-icon">
+          <div class="text textcenter">
+            <h2>Your Turn has been changed !!!!!</h2>
+          </div>
+          <div class="button-div button-div-padding margin-top-110">
+            <div class=" win-icon">
+              <button class="btn-share btn-home" type="button" [routerLink]="['/']">Home</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </div>
 
   <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion" (continueClicked)="continueClicked($event)"
     (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-question-continue>
 
   <game-over *ngIf="gameOver" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName" [correctCount]="correctAnswerCount"
-    [noOfQuestions]="questionIndex" (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
+    [noOfQuestions]="questionIndex" [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-over>
+
+
 </mat-dialog-content>

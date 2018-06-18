@@ -18,6 +18,7 @@ mat-card-content {
 .category-div
 {
   margin-top: 2%;
+  margin-bottom: 2%;
 }
 .category-name
 {
@@ -150,3 +151,16 @@ ul li:last-child{ border-bottom: 0 }
 .loaderimage{
     width: 50px;
 }
+.main-div
+{
+    min-height:480px !important;
+   // max-height: 610px !important;
+}
+.score-div-height
+{
+  min-height: 30px;
+}
+.category-div-height
+{
+  min-height: 15px;
+}                             
