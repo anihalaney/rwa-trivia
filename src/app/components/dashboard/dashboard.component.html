@@ -23,20 +23,20 @@
         <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
           <game-card [game]="game" [userDict]="userDict"></game-card>
         </li>
-        <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
+        <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">
           <div class="no-card">
             <p class="light">No active game</p>
           </div>
         </li>
-        <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
+        <!-- <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
           <a href="#" class="innerli textcenter">
             <div class="viewallbtn">view all</div>
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
+    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
       <a class="viewall" (click)="displayMoreGames()">view more</a>
     </div>
 
@@ -45,9 +45,9 @@
   <!-- Currently active games end -->
 
   <!-- Invitation to play games -->
-  <section *ngIf="user" class="card" >
+  <section *ngIf="user && gameInvites.length>0" class="card">
     <div class="row">
-      <div class="col-sm-12 col-xs-12" >
+      <div class="col-sm-12 col-xs-12">
         <h2>Invitation to play games
           <span>3 from friends & 1 from random player</span>
         </h2>
