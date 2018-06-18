@@ -130,7 +130,7 @@ exports.getUpdatedQuestion = (req, res) => {
     }
     questionControllerQuestionService.getQuestionById(questionId).then((qs) => {
         const question = Question.getViewModelFromDb(qs.data());
-        if (playerQnA.playerAnswerId !== null) {
+        if (playerQnA.playerAnswerId && playerQnA.playerAnswerId !== null) {
             const answerObj = question.answers[playerQnA.playerAnswerId];
             question.userGivenAnswer = answerObj.answerText;
         } else {
