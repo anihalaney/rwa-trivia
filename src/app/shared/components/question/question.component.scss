@@ -1,32 +1,17 @@
-.question-list{ float: left;margin: 0% 0% 0% 9% }//margin: 0% 0% 0% 11%;
+.question-list{ float: left;margin: 0% 0% 0% 4% }
 .question-list li{ margin-bottom: 12px; text-align: center; }
-.question-list li input[type="radio"], .optionbox input[type="radio"]{ display: none; }
-.question-list li label{ cursor: pointer; font-family: 'hindmedium'; font-size: 16px; padding: 6px 13px; border-radius: 17px; transition: 0.3s ease-in-out; position: relative; display: inline-block; width: 100%}
-.question-list li label:before{ content: "";position: absolute; height: 17px; width: 8px; border-width:0 2px 2px 0; border-style: solid; transform: rotate(45deg); left: 22px; display: none;}
-.question-list li input:checked ~ label{ padding-left: 40px; }
-.question-list li input:checked ~ label:before{ display: block; }
 .question-list li{ width: 45%; margin-right: 4%; float: left; }
 @media screen and ( max-width:767px){
   .rocateicon{margin:0 16px 0 0; }
-  .question-list{ margin: 0% 0% 0% 4%;}
-  // .question-cont{ float: left; width: calc(100% - 65px) ;}
-  .question-list li{ width: 100%; margin-right: 4%; float: left; }
+  .question-list li{ width: 100%; }
   .question-list li:nth-child(2n +2){ margin-right: 0 }
   .question-cont .btn{ margin-top: 15px; width: 100% }
+  .alignment{margin-top: 3%;}
+  p{margin-top: 3%}
 }
-.gameplay h1{ font-size: 24px; font-family: 'hindmedium'; padding: 0}
-.gameplay h2{ font-size: 20px; font-family: 'hindregular'; margin: 0 auto; }
-.popupbottom{ font-size: 14px; padding: 15px 0; }
-.gameplay p a{font-family: 'hindmedium'}
+
 .gameplay li{ padding: 10px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer;  position: relative;}
-
-//overflow-y:auto; overflow-x:hidden;min-height:50px; max-height:50px;
-
-//.gameplay li.right:before, .gameplay li.wrong:before{ content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent;}
-//.gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right: 2px solid; border-bottom: 2px solid; transition: 0.3s ease-in-out}
 .gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
-//.gameplay li.wrong:after{content: "+"; border: 0; height: auto;width: auto;font-size: 24px; top: 2px; line-height: 1; right: 6px;}
-
 
 .gameplay li.question-answered {cursor: not-allowed;}
 .gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right-width: 2px; border-right-style: solid; border-bottom-width: 2px; border-bottom-style: solid; transition: 0.3s ease-in-out; opacity: 0;}
@@ -64,4 +49,9 @@
 .alignment
 {
   text-align: right;
- } 
+}
+.btn
+{
+  font-size: 14px;
+  padding: 10px 25px;
+} 
