@@ -93,6 +93,7 @@ hr{height:15px; visibility: hidden; margin: 0;}
         height: 70px;
     }
     
+    
 }
 @media screen and ( max-width:767px){
     .btn-share
@@ -101,3 +102,11 @@ hr{height:15px; visibility: hidden; margin: 0;}
     }
     
 }
+@media screen and ( max-width:1025px){
+    .div-spacing
+    {
+        padding-top: 2%
+    }
+    
+}
+
