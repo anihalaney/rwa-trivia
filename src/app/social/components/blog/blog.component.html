@@ -3,15 +3,19 @@
     <a class="blogimg" target="_blank" rel="noopener" [href]="blog.link">
       <img src="{{blog.thumbnail}}" alt="{{blog.title}}" />
     </a>
-    <div class="blog-cont">
-      <div class="T-tagging">
-        <p class="block-with-text title-line-height">{{blog.title}}</p>
+    <a target="_blank" [href]="blog.link">
+      <div class="blog-cont">
+        <div class="T-tagging">
+          <p class="block-with-text title-line-height">{{blog.title}}</p>
+        </div>
+        <h2 class="subtitle">
+          <p class="block-with-text subtitle-line-height">{{blog.subtitle}}</p>
+        </h2>
+        <h1 class="subtitle">
+          <p class="minimize block-with-text category-line-height">{{blog.categories }}</p>
+        </h1>
       </div>
-      <h2 class="subtitle">
-        <p class="block-with-text subtitle-line-height">{{blog.subtitle}}</p>
-      </h2>
-      <p class="minimize block-with-text category-line-height">{{blog.categories }}</p>
-    </div>
+    </a>
     <div class="blog-social" [ngClass]="blog.share_status?'hide-top-border':''">
       <div class="col-xs-4" [ngClass]="blog.share_status?'hide-bottom':''">
         <div class="commenticon sprite "></div>{{blog.commentCount}}
