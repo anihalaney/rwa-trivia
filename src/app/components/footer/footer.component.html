@@ -1,6 +1,6 @@
 <div class="container footer">
   <div class="col-md-8 col-sm-8 col-xs-12">
-    <div class="col-md-4 col-sm-7 col-xs-12 menu">
+    <div class="col-xs-12 menu" [ngClass]="!user?'col-md-4 col-sm-7 ':'col-md-12 col-sm-12'">
       <a [routerLink]="['/']" title="Home">Home</a>
       <a *ngIf="user" (click)="navigateUrl()" title="My Questions" class="myQuestion">My Questions</a>
       <a *ngIf="user?.roles?.admin" [routerLink]="['/admin']">Admin</a>
