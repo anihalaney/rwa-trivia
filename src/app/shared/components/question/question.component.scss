@@ -18,7 +18,7 @@
 .gameplay h2{ font-size: 20px; font-family: 'hindregular'; margin: 0 auto; }
 .popupbottom{ font-size: 14px; padding: 15px 0; }
 .gameplay p a{font-family: 'hindmedium'}
-.gameplay li{ padding: 10px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer;  position: relative;}
+.gameplay li{ padding: 10px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer;  position: relative;overflow-wrap: break-word;}
 
 //overflow-y:auto; overflow-x:hidden;min-height:50px; max-height:50px;
 
