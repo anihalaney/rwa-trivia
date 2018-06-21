@@ -78,3 +78,19 @@ input[type="file"] {
 {
     text-align: right;
 }
+@media(max-width: 600px) {
+  .btn
+  {
+    width: 100%;
+    margin-bottom: 3%;
+  }
+  .btn-back
+  {
+    width: 100%;
+    margin-bottom: 5%; 
+  }
+}
+.next-btn-alignment
+{
+  text-align: center;
+}
