@@ -196,9 +196,11 @@ export class Game {
         if (this.GameStatus === GameStatus.STARTED && (!playerQnA.answerCorrect || consecutiveCorrectAnswers === 3)) {
           this.nextTurnPlayerId = otherPlayerUserId;
           this.GameStatus = GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE;
+        } else if (this.GameStatus === GameStatus.RESTARTED && (!playerQnA.answerCorrect || consecutiveCorrectAnswers === 3)) {
+          this.nextTurnPlayerId = otherPlayerUserId;
+          this.GameStatus = GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE;
         } else if (
           (this.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-            this.GameStatus === GameStatus.RESTARTED ||
             this.GameStatus === GameStatus.WAITING_FOR_NEXT_Q)
           && !playerQnA.answerCorrect) {
           this.nextTurnPlayerId = otherPlayerUserId;
