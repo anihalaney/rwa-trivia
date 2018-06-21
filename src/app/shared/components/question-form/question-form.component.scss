@@ -121,9 +121,15 @@ textarea
   display: inline-block;
   text-align: center;
   padding: 8px 16px;
-  margin-left: 1%;
 }
 .mat-basic-chip
 {
   border-radius: 5px;
 }
+@media(max-width: 600px) {
+  .resubmit-btn,.add-tag-btn
+  {
+    width: 100%;
+  }
+}
+.btn{font-size: 16px;padding: 10px 25px;}
