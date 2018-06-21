@@ -144,47 +144,14 @@ mat-card-actions {
   }
 }
 
-@media screen and (min-width : 768px) and (max-width : 1024px)  { 
-  .button-web-css{
-    display: block;
-  }
-  .button-mobile-css{
-    display: none;
-  }
-  .view-reason-btn[_ngcontent-c12]{
-    margin: 4px 0 8px 0;
-    width: 80%;
-  }
-  .edit-btn[_ngcontent-c12]{
-    width:80%;
-  }
 
-}
-
-@media (max-width:768px){
-
+@media(max-width: 600px) {
   .button-web-css{
     display: none;
   }
   .button-mobile-css{
     display: block;
   }
-
-  .edit-btn[_ngcontent-c12]{
-    width:100%;
-    float:right;
-    margin:6px 0; 
-  }
-  .question-status[_ngcontent-c12]{
-    float:left;
-    text-align: left;
-  }
-
-  .view-reason-btn {
-    margin:6px 0; 
-    width:100%;
-  }
-
 }
 
 @media (max-width:320px){
@@ -194,7 +161,7 @@ mat-card-actions {
 }
 
 @media(max-width: 600px) {
-  .edit-btn,.mat-raised-button
+  .edit-btn,.mat-raised-button,.view-reason-btn
   {
     width: 100%;
     margin-bottom: 3%;

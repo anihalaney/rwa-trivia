@@ -500,10 +500,13 @@ nav .user.card{
 .sb-button {
   padding-bottom: 5px;
 } 
-.mat-tab-label
-{
-    font-family: 'hindsemibold' !important; letter-spacing: 0.1px;font-size: 18px !important;width: 50%;
+@media screen and ( min-width:600px){
+  .mat-tab-label
+  {
+      font-family: 'hindsemibold' !important; letter-spacing: 0.1px;font-size: 18px !important;width: 50%;
+  }
 }
+
 .mat-tab-body-content {
   overflow: hidden !important;
 }
