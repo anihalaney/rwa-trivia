@@ -7,6 +7,7 @@ import { Utils } from '../../core/services';
 import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
 import * as gameplayactions from '../../game-play/store/actions';
 import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../model';
+import { OpponentType } from '../../model/game-options';
 
 @Component({
   selector: 'dashboard',
@@ -34,6 +35,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   missingCardCount = 0;
   numbers = [];
   gameInvites: Game[];
+  friendCount = 0;
+  randomPlayerCount = 0;
 
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
@@ -86,10 +89,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.subs.push(this.store.select(appState.gameplayState).select(s => s.gameInvites).subscribe(iGames => {
       this.gameInvites = iGames;
+      this.friendCount = 0;
+      this.randomPlayerCount = 0;
       iGames.map(iGame => {
+        if (Number(iGame.gameOptions.opponentType) === OpponentType.Friend) {
+          this.friendCount++;
+        } else if (Number(iGame.gameOptions.opponentType) === OpponentType.Random) {
+          this.randomPlayerCount++;
+        }
+
         this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
       });
-    }));
+    }))
 
 
     this.gameInviteSliceStartIndex = 0;

@@ -45,11 +45,11 @@
   <!-- Currently active games end -->
 
   <!-- Invitation to play games -->
-  <section *ngIf="user" class="card" >
+  <section *ngIf="user" class="card">
     <div class="row">
-      <div class="col-sm-12 col-xs-12" >
+      <div class="col-sm-12 col-xs-12">
         <h2>Invitation to play games
-          <span>3 from friends & 1 from random player</span>
+          <span>{{friendCount}} from friends & {{randomPlayerCount}} from random player</span>
         </h2>
       </div>
       <!-- <div class="col-sm-3 col-xs-12 textrigth hidden-xs">
