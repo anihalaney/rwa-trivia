@@ -148,11 +148,9 @@
           </ul>
           <div *ngIf="showButtons">
             <div class="textrigth">
-              <div>
-                <button mat-raised-button (click)="approveQuestion(row)">Approve</button>
-                <button mat-raised-button (click)="displayRequestToChange(row)" color="primary">Request a change</button>
-                <button mat-raised-button (click)="displayRejectToChange(row)" color="accent">Reject</button>
-              </div>
+              <button mat-raised-button (click)="approveQuestion(row)">Approve</button>
+              <button mat-raised-button (click)="displayRequestToChange(row)" color="primary">Request a change</button>
+              <button mat-raised-button (click)="displayRejectToChange(row)" color="accent">Reject</button>
             </div>
             <div *ngIf="row==requestQuestion && requestQuestionStatus">
               <form [formGroup]="requestFormGroup">
