@@ -109,4 +109,18 @@ hr{height:15px; visibility: hidden; margin: 0;}
     }
     
 }
+@media screen and ( max-width:1025px){
+    .div-spacing
+    {
+        padding-top: 2%
+    }
+}
+@media (min-width: 1025px) and (max-width: 1280px) {
+    .playnow,.opponent-turn,.waiting-for-opponent
+    {
+        font-size: 14px;
+        padding: 0 30%;
+    }
+    
+  }
 
