@@ -13,7 +13,7 @@
           <img *ngIf="!userDict[row.userId]?.profilePictureUrl" src="assets/images/default-avatar.png" alt="user" />
           <img *ngIf="userDict[row.userId]?.profilePictureUrl" [src]="userDict[row.userId]?.profilePictureUrl">
         </div>
-        <div class="display-name">
+        <div class="display-name ellipsis">
           <label *ngIf="userDict[row.userId]?.displayName">{{userDict[row.userId]?.displayName}}</label>
         </div>
       </mat-cell>
