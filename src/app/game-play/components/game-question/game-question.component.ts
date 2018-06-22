@@ -66,8 +66,6 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       setTimeout(() => {
         this.draw(α, this.doPlay, loader)
       }, 44); // Redraw
-    } else {
-      console.log('anim', anim);
     }
   }
 
