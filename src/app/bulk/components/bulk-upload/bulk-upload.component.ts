@@ -16,6 +16,8 @@ import * as bulkActions from '../../../bulk/store/actions';
 })
 export class BulkUploadComponent implements OnInit, OnDestroy {
 
+  primaryTag;
+  primaryTagOld;
   isLinear = true;
   uploadFormGroup: FormGroup;
 
@@ -60,7 +62,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.uploadFormGroup = this.fb.group({
       category: ['', Validators.required],
       tagControl: [''],
-      csvFile: null
+      csvFile: [null, Validators.required]
     });
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
@@ -79,7 +81,10 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       this.uploadFormGroup.get('csvFile').setValue(file);
       reader.readAsText(file);
       reader.onload = () => {
-        this.bulkUploadFileInfo = new BulkUploadFileInfo;
+        this.bulkUploadFileInfo = new BulkUploadFileInfo();
+        this.questions = [];
+        this.parsedQuestions = [];
+        this.primaryTag = this.primaryTagOld = '';
         this.bulkUploadFileInfo.fileName = file['name'];
         this.generateQuestions(reader.result);
       };
@@ -108,7 +113,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     };
 
     parse(csvString, parseOptions,
-      (err, output) => {
+      (error, output) => {
+        if (error) {
+          this.fileParseError = true;
+          this.fileParseErrorMessage = `File Parsing ${error}`;
+        }
         if (output !== undefined && output !== '') {
           this.questions =
             output.map(element => {
@@ -125,13 +134,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                 question.answers[element['Answer Index'] - 1].correct = true;
               }
 
-              // add primary tag to question tag list
-              question.tags = [this.uploadFormGroup.get('tagControl').value];
-
               for (let i = 1; i < 10; i++) {
                 if (element['Tag ' + i] && element['Tag ' + i] !== '') {
-                  // check for duplicate tags
-                  if (question.tags.indexOf(element['Tag ' + i].trim()) === -1) {
+                  if (this.isTagExist(element['Tag ' + i], question) === -1) {
                     question.tags.push(element['Tag ' + i].trim());
                   }
                 }
@@ -167,6 +172,12 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       });
   }
 
+  isTagExist(tag, question) {
+    const index = question.tags.findIndex(x => x.toLowerCase().trim() === tag.toLowerCase().trim());
+    return index;
+
+  }
+
   private prepareUpload(): any {
     const input = new FormData();
     input.append('category', this.uploadFormGroup.get('category').value);
@@ -177,20 +188,37 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   onUploadSubmit() {
     // validate
-    if (!this.uploadFormGroup.valid || this.bulkUploadFileInfo === undefined) {
+    if (!this.uploadFormGroup.valid) {
+      if (this.bulkUploadFileInfo === undefined) {
+        this.fileParseError = true;
+        this.fileParseErrorMessage = 'Please upload .CSV file';
+      }
       return;
 
     } else {
       const formModel = this.prepareUpload();
-
       const dbQuestions: Array<Question> = [];
-
+      // add primary tag to question tag list
+      this.primaryTag = this.uploadFormGroup.get('tagControl').value;
       for (const question of this.questions) {
         this.bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
         this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.categoryIds = [this.uploadFormGroup.get('category').value];
+        if (this.primaryTag.trim() !== '') {
+          const duplicateTagIndex = this.isTagExist(this.primaryTag, question);
+          if (duplicateTagIndex !== -1) {
+            question.tags.splice(duplicateTagIndex, 1);
+          }
+          question.tags = [this.primaryTag, ...question.tags.filter(tag => tag !== this.primaryTagOld)];
+        } else if (this.primaryTag === '') {
+          question.tags = [...question.tags.filter(tag => tag !== this.primaryTagOld)];
+        }
+
         question.createdOn = new Date();
         dbQuestions.push(question);
+      }
+      if (this.primaryTag !== this.primaryTagOld) {
+        this.primaryTagOld = this.primaryTag;
       }
       this.bulkUploadFileInfo.created_uid = this.user.userId;
       this.bulkUploadFileInfo.date = new Date().getTime();
@@ -203,6 +231,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     bulkUpload.bulkUploadFileInfo = this.bulkUploadFileInfo;
     bulkUpload.questions = this.parsedQuestions;
     bulkUpload.file = this.file;
+    bulkUpload.bulkUploadFileInfo['isAdminArchived'] = false;
+    bulkUpload.bulkUploadFileInfo['isUserArchived'] = false;
     this.store.dispatch(new bulkActions.AddBulkQuestions({ bulkUpload: bulkUpload }));
   }
 

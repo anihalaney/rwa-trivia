@@ -47,3 +47,5 @@ firebase-debug.log
 
 scheduler/node_modules/
 scheduler/server/
+scheduler/config/
+scheduler/package-lock.json

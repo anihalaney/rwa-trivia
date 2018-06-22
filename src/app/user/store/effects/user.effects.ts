@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
+import { Subscription } from 'rxjs/Subscription';
+
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs/observable/empty';
 
-import { User, Question, RouterStateUrl } from '../../../model';
-import { UserActions, UserActionTypes } from '../actions';
+import { User, Question, RouterStateUrl, Friends, Game } from '../../../model';
+import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
-import { UserService, QuestionService } from '../../../core/services';
+import { UserService, QuestionService, GameService } from '../../../core/services';
+import { UserActions } from '../../../../app/core/store/actions';
+import { Observable } from 'rxjs/Observable';
+import { AppState } from '../../../store/app-store';
+import { coreState } from '../../../core/store';
 
 @Injectable()
 export class UserEffects {
-    constructor(
-        private actions$: Actions,
-        private userService: UserService,
-        private questionService: QuestionService
-    ) { }
-
     // Save user profile
     @Effect()
     addUser$ = this.actions$
@@ -28,61 +28,42 @@ export class UserEffects {
         })
         );
 
-
-    //load from router
-    @Effect()
-    // handle location update
-    loadUserRouteProfile$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/my/profile') &&
-            routerState.params.userid
-        )
-        .pipe(
-        switchMap((routerState: RouterStateUrl) =>
-            this.userService.getUserProfile(routerState.params.userid)
-                .pipe(
-                map((user: User) => new userActions.LoadUserProfileSuccess(user))
-                )
-        )
-        );
-
-
     // Load User Published Question by userId from router
     @Effect()
-    // handle location update
     loadUserPublishedRouteQuestions$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
         .map((action: any): RouterStateUrl => action.payload.routerState)
         .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/my/questions') &&
-            routerState.params.userid
+            routerState.url.toLowerCase().startsWith('/my/questions')
+        )
+        .mergeMap((routerState: RouterStateUrl) =>
+            this.store.select(coreState).select(s => s.user).filter(u => !!u).take(1).map(user => user.userId)
         )
         .pipe(
-        switchMap((routerState: RouterStateUrl) =>
-            this.questionService.getUserQuestions(routerState.params.userid, true).pipe(
-                map((questions: Question[]) => new userActions.LoadUserPublishedQuestionsSuccess(questions))
-            )
-        )
+        switchMap((id: string) => {
+            return this.questionService.getUserQuestions(id, true).pipe(map((questions: Question[]) =>
+                new userActions.LoadUserPublishedQuestionsSuccess(questions)
+            ));
+        })
         );
 
-    // Load User Unpublished Question by userId from router
+    // Load User UnPublished Question by userId from router
     @Effect()
-    // handle location update
-    loadUserUnpublishedRouteQuestions$ = this.actions$
+    loadUserUnpublishedQuestions$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
         .map((action: any): RouterStateUrl => action.payload.routerState)
         .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/my/questions') &&
-            routerState.params.userid
+            routerState.url.toLowerCase().startsWith('/my/questions')
+        )
+        .mergeMap((routerState: RouterStateUrl) =>
+            this.store.select(coreState).select(s => s.user).filter(u => !!u).take(1).map(user => user.userId)
         )
         .pipe(
-        switchMap((routerState: RouterStateUrl) =>
-            this.questionService.getUserQuestions(routerState.params.userid, false).pipe(
-                map((questions: Question[]) => new userActions.LoadUserUnpublishedQuestionsSuccess(questions))
-            )
-        )
+        switchMap((id: string) => {
+            return this.questionService.getUserQuestions(id, false).pipe(map((questions: Question[]) =>
+                new userActions.LoadUserUnpublishedQuestionsSuccess(questions)
+            ));
+        })
         );
 
 
@@ -97,4 +78,60 @@ export class UserEffects {
         })
         );
 
+    // Save user profile
+    @Effect()
+    saveInvitation$ = this.actions$
+        .ofType(UserActionTypes.ADD_USER_INVITATION)
+        .pipe(
+        switchMap((action: userActions.AddUserInvitation) =>
+            this.userService.saveUserInvitations(action.payload).pipe(
+                map(() => new userActions.AddUserInvitationSuccess())
+            )
+        )
+        );
+
+    // Make friend
+    @Effect()
+    makeFriend$ = this.actions$
+        .ofType(UserActionTypes.MAKE_FRIEND)
+        .pipe(
+        switchMap((action: userActions.MakeFriend) =>
+            this.userService.checkInvitationToken(action.payload).pipe(
+                map((friend: any) => this.userAction.storeInvitationToken(''))
+            ).map(() => new userActions.MakeFriendSuccess())
+        ));
+
+    // Get Game list
+    @Effect()
+    getGameResult$ = this.actions$
+        .ofType(UserActionTypes.GET_GAME_RESULT)
+        .pipe(
+        switchMap((action: userActions.GetGameResult) =>
+            this.gameService.getGameResult(action.payload.userId)
+                .map((games: Game[]) => new userActions.GetGameResultSuccess(games))
+        )
+        );
+
+    // Get Game list
+    @Effect()
+    LoadUserFriends$ = this.actions$
+        .ofType(UserActionTypes.LOAD_USER_FRIENDS)
+        .pipe(
+        switchMap((action: userActions.LoadUserFriends) =>
+            this.userService.loadUserFriends(action.payload.userId)
+                .map((friends: Friends) => new userActions.LoadUserFriendsSuccess(friends))
+        )
+        );
+
+
+    constructor(
+        private actions$: Actions,
+        private userService: UserService,
+        private questionService: QuestionService,
+        private userAction: UserActions,
+        private gameService: GameService,
+        private store: Store<AppState>,
+    ) {
+
+    }
 }

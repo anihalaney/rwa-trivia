@@ -1,4 +1,7 @@
-import { Component, Input, Output, OnInit, OnChanges, EventEmitter } from '@angular/core';
+import {
+  Component, Input, Output, OnInit, OnChanges, EventEmitter,
+  ViewChild, AfterViewInit, SimpleChanges
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
@@ -11,6 +14,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subscription } from 'rxjs/Subscription';
 import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../model';
 import { bulkState } from '../../../bulk/store';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
 import * as bulkActions from '../../../bulk/store/actions';
 
 
@@ -19,7 +23,7 @@ import * as bulkActions from '../../../bulk/store/actions';
   templateUrl: './questions-table.component.html',
   styleUrls: ['./questions-table.component.scss']
 })
-export class QuestionsTableComponent implements OnInit, OnChanges {
+export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input() showSort: boolean;
   @Input() showPaginator: boolean;
@@ -29,16 +33,19 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   @Input() bulkUploadFileInfo: BulkUploadFileInfo;
   @Input() showApproveButton: boolean;
   @Input() showButtons: boolean;
+  @Input() clientSidePagination: boolean;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @Input() userDict: { [key: string]: User };
 
   requestFormGroup: FormGroup;
   rejectFormGroup: FormGroup;
 
   sortOrder: string;
   questionsSubject: BehaviorSubject<Question[]>;
-  questionsDS: QuestionsDataSource;
+  questionsDS: any;
 
   requestQuestionStatus = false;
   rejectQuestionStatus = false;
@@ -51,6 +58,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
   user: User;
 
   viewReasonArray = [];
+  sub: Subscription;
 
   constructor(private store: Store<AppState>,
     private fb: FormBuilder) {
@@ -68,10 +76,27 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.rejectFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });
+
   }
 
-  ngOnChanges() {
-    this.questionsSubject.next(this.questions);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['questions'] && changes['questions'].currentValue !== changes['questions'].previousValue) {
+      (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
+      (changes['questions'].previousValue) ? this.setPagination() : '';
+    }
+
+  }
+
+  ngAfterViewInit() {
+    this.setPagination();
+  }
+
+  setPagination() {
+    (this.clientSidePagination) ? this.questionsDS.paginator = this.paginator : '';
+  }
+
+  setClientSidePaginationDataSource(questions: Question[]) {
+    this.questionsDS = new MatTableDataSource<Question>(questions);
   }
 
   getDisplayStatus(status: number): string {
@@ -84,10 +109,26 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     this.store.dispatch(new bulkActions.ApproveQuestion({ question: question }));
     if (this.bulkUploadFileInfo) {
       if (question.status === QuestionStatus.REJECTED) {
-        this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+        if (this.bulkUploadFileInfo.rejected !== 0) {
+          this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+        }
       }
       this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
       this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+    } else if (!this.bulkUploadFileInfo && question.bulkUploadId) {
+      this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: question.bulkUploadId }));
+      this.sub = this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
+        if (obj) {
+          this.bulkUploadFileInfo = obj;
+          if (question.status === QuestionStatus.REJECTED) {
+            this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+          }
+          this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
+          this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+          this.bulkUploadFileInfo = undefined;
+          Utils.unsubscribe([this.sub]);
+        }
+      });
     }
   }
 
@@ -108,11 +149,27 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       return;
     }
 
-    if (this.bulkUploadFileInfo && this.requestQuestion.status === QuestionStatus.REJECTED) {
-      this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+    if (this.bulkUploadFileInfo && this.requestQuestion.status !== QuestionStatus.REQUIRED_CHANGE) {
+      if (this.bulkUploadFileInfo.rejected > 0) {
+        this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+      }
       this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-    }
 
+    } else if (!this.bulkUploadFileInfo && this.requestQuestion.bulkUploadId && this.requestQuestion.status !== QuestionStatus.REJECTED) {
+      this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: this.requestQuestion.bulkUploadId }));
+      this.sub = this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
+        if (obj) {
+          this.bulkUploadFileInfo = obj;
+          if (this.bulkUploadFileInfo.rejected > 0) {
+            this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+          }
+          this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+          this.bulkUploadFileInfo = undefined;
+          Utils.unsubscribe([this.sub]);
+        }
+      });
+
+    }
     this.requestQuestion.status = QuestionStatus.REQUIRED_CHANGE;
     this.requestQuestion.reason = this.requestFormGroup.get('reason').value;
     this.requestQuestionStatus = false;
@@ -129,6 +186,17 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
     if (this.bulkUploadFileInfo && this.rejectQuestion.status !== QuestionStatus.REJECTED) {
       this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
       this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+    } else if (!this.bulkUploadFileInfo && this.rejectQuestion.bulkUploadId && this.rejectQuestion.status !== QuestionStatus.REJECTED) {
+      this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: this.rejectQuestion.bulkUploadId }));
+      this.sub = this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
+        if (obj) {
+          this.bulkUploadFileInfo = obj;
+          this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
+          this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+          this.bulkUploadFileInfo = undefined;
+          Utils.unsubscribe([this.sub]);
+        }
+      });
     }
 
     this.rejectQuestion.status = QuestionStatus.REJECTED;
@@ -175,7 +243,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges {
       this.viewReasonArray[index] = row;
     }
   }
-
 }
 
 export class QuestionsDataSource extends DataSource<Question> {

@@ -2,11 +2,12 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
-
 import { AppState, appState, categoryDictionary } from '../../store';
 import { Utils } from '../../core/services';
-import { QuestionActions, GameActions } from '../../core/store/actions';
-import { User, Category, Question, SearchResults, Game } from '../../model';
+import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
+import * as gameplayactions from '../../game-play/store/actions';
+import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../model';
+import { OpponentType } from '../../model/game-options';
 
 @Component({
   selector: 'dashboard',
@@ -15,31 +16,98 @@ import { User, Category, Question, SearchResults, Game } from '../../model';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   user: User;
-  sub: Subscription;
-
+  subs: Subscription[] = [];
+  users: User[];
   questionOfTheDay$: Observable<Question>;
   activeGames$: Observable<Game[]>;
-  gameInvites: number[];  //change this to game invites
-
+  userDict$: Observable<{ [key: string]: User }>;
+  gameSliceStartIndex: number;
+  gameSliceLastIndex: number;
+  gameInviteSliceStartIndex: number;
+  gameInviteSliceLastIndex: number;
   now: Date;
   greeting: string;
   message: string;
+  activeGames: Game[];
+  showGames: boolean;
+  showNewsCard = true;
+  userDict: { [key: string]: User } = {};
+  missingCardCount = 0;
+  numbers = [];
+  gameInvites: Game[];
+  friendCount = 0;
+  randomPlayerCount = 0;
 
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
-    private gameActions: GameActions) {
+    private gameActions: GameActions,
+    private userActions: UserActions) {
     this.questionOfTheDay$ = store.select(appState.coreState).select(s => s.questionOfTheDay);
     this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
-    this.gameInvites = [1, 2, 3];
+    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
 
-    this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.subs.push(store.select(appState.coreState).select(s => s.user).subscribe(user => {
       this.user = user
       if (user) {
-        //Load active Games
+        this.user = user;
+        if (this.user.isSubscribed) {
+          this.showNewsCard = false;
+        }
+        // Load active Games
         this.store.dispatch(this.gameActions.getActiveGames(user));
+        this.store.dispatch(new gameplayactions.LoadGameInvites(user.userId));
+
+      } else {
+        this.showNewsCard = true;
       }
-    });
+    }));
+
+    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+
+    this.subs.push(this.activeGames$.subscribe(games => {
+      if (games.length > 0) {
+        this.activeGames = games;
+        this.checkCardCountPerRow();
+        this.activeGames.map(game => {
+          const playerIds = game.playerIds;
+          playerIds.map(playerId => {
+            if (playerId !== this.user.userId) {
+              if (this.userDict[playerId] === undefined) {
+                this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
+              }
+
+            }
+          });
+        });
+        this.showGames = true;
+      }
+    }));
+
+
+    this.gameSliceStartIndex = 0;
+    this.gameSliceLastIndex = 8;
+
+    this.subs.push(this.store.select(appState.gameplayState).select(s => s.gameInvites).subscribe(iGames => {
+      this.gameInvites = iGames;
+      this.friendCount = 0;
+      this.randomPlayerCount = 0;
+      iGames.map(iGame => {
+        if (Number(iGame.gameOptions.opponentType) === OpponentType.Friend) {
+          this.friendCount++;
+        } else if (Number(iGame.gameOptions.opponentType) === OpponentType.Random) {
+          this.randomPlayerCount++;
+        }
+
+        this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
+      });
+    }))
+
+
+    this.gameInviteSliceStartIndex = 0;
+    this.gameInviteSliceLastIndex = 3;
+
   }
+
 
   ngOnInit() {
     this.now = new Date();
@@ -56,7 +124,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
+  displayMoreGames(): void {
+    this.gameSliceLastIndex = (this.activeGames.length > (this.gameSliceLastIndex + 8)) ?
+      this.gameSliceLastIndex + 8 : this.activeGames.length;
+    this.checkCardCountPerRow();
+  }
+
+  displayMoreGameInvites(): void {
+    this.gameInviteSliceLastIndex = (this.gameInvites.length > (this.gameInviteSliceLastIndex + 3)) ?
+      this.gameInviteSliceLastIndex + 3 : this.gameInvites.length;
+  }
+
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub]);
+    Utils.unsubscribe(this.subs);
+  }
+
+  checkCardCountPerRow() {
+    if (this.activeGames.length > 0) {
+      if (this.activeGames.length < this.gameSliceLastIndex) {
+        this.missingCardCount = this.gameSliceLastIndex - this.activeGames.length;
+        this.numbers = Array(this.missingCardCount).fill(0).map((x, i) => i);
+      } else if (this.activeGames.length === this.gameSliceLastIndex) {
+        const diff = Math.trunc(this.activeGames.length / 4);
+        if (this.activeGames.length % 4 !== 0) {
+          this.missingCardCount = (diff + 1) * 4 - this.activeGames.length;
+          this.numbers = Array(this.missingCardCount).fill(0).map((x, i) => i);
+        }
+      }
+    }
   }
 }

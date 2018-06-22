@@ -1,8 +1,9 @@
-<a href="#" class="user card">
-  <img src="/assets/images/avatar.png" alt="user" />
+<a class="user card" *ngIf="user && user!=null" (click)="navigateToProfile()">
+  <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
+  <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg" />
   <span class="username">
     <span class="name">{{user.displayName}}</span>
-    <span class="userstatus">Beginner</span>
-    <span class="userlocation"><span class="sprite mapicon"></span>Earth, Milky Way</span>
+    <span class="userlocation">
+      <span class="sprite mapicon"></span>{{location}}</span>
   </span>
 </a>

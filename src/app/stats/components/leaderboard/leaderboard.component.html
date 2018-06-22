@@ -1,143 +1,29 @@
-<div class="row">
-  <div class="col-md-4 col-xs-12 categorybox skyblue">
-    <h3>Programming</h3>
-    <ul>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#1</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user1.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">William</a>
-            <div class="light">Springfield</div>
+<div class="row" *ngIf="leaderBoardCat && leaderBoardCat.length>0 && userDict">
+  <div *ngFor="let cat of leaderBoardCat | slice:lbsSliceStartIndex:lbsSliceLastIndex; let i=index">
+    <div class="col-md-4 col-xs-12 categorybox skyblue">
+      <h3>{{categoryDict[cat].categoryName.charAt(0).toUpperCase() + categoryDict[cat].categoryName.slice(1)}}</h3>
+      <ul>
+        <li *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index;">
+          <div class="row">
+            <div class="col-xs-2 has">#{{j+1}}</div>
+            <div class="col-xs-3 yourimg">
+              <img *ngIf="!userDict[user.userId]?.profilePictureUrl" src="assets/images/default-avatar.png">
+              <img *ngIf="userDict[user.userId]?.profilePictureUrl" [src]="userDict[user.userId]?.profilePictureUrl" />
+            </div>
+            <div class="col-xs-4 ellipsis">
+              <label href="#" class="dark" title="{{userDict[user.userId]?.displayName}}">{{userDict[user.userId]?.displayName}}</label>
+              <div class="light"  title="{{userDict[user.userId]?.location}}">{{userDict[user.userId]?.location}}</div>
+            </div>
+            <div class="col-xs-3">
+              <div class="dark">{{user.score}}</div>
+              <div class="light">points</div>
+            </div>
           </div>
-          <div class="col-xs-3">
-            <div class="dark">25879</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#2</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user2.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">Michael</a>
-            <div class="light">Franklin</div>
-          </div>
-          <div class="col-xs-3">
-            <div class="dark">24781</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#3</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user3.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">Elizabeth</a>
-            <div class="light">Greenville</div>
-          </div>
-          <div class="col-xs-3">
-            <div class="dark">23547</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+    </div>
   </div>
-  <div class="col-md-4 col-xs-12 categorybox red">
-    <h3>DataBase</h3>
-    <ul>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#1</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user1.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">William</a>
-            <div class="light">Springfield</div>
-          </div>
-          <div class="col-xs-3">
-            <div class="dark">25879</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#2</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user2.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">Michael</a>
-            <div class="light">Franklin</div>
-          </div>
-          <div class="col-xs-3">
-            <div class="dark">24781</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#3</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user3.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">Elizabeth</a>
-            <div class="light">Greenville</div>
-          </div>
-          <div class="col-xs-3">
-            <div class="dark">23547</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-  <div class="col-md-4 col-xs-12 categorybox green">
-    <h3>UI & UX</h3>
-    <ul>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#1</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user1.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">William</a>
-            <div class="light">Springfield</div>
-          </div>
-          <div class="col-xs-3">
-            <div class="dark">25879</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#2</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user2.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">Michael</a>
-            <div class="light">Franklin</div>
-          </div>
-          <div class="col-xs-3">
-            <div class="dark">24781</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-      <li>
-        <div class="row">
-          <div class="col-xs-2 has">#3</div>
-          <div class="col-xs-3"><a href="#"><img src="/assets/images/user3.jpg" alt="user1" /></a></div>
-          <div class="col-xs-4">
-            <a href="#" class="dark">Elizabeth</a>
-            <div class="light">Greenville</div>
-          </div>
-          <div class="col-xs-3">
-            <div class="dark">23547</div>
-            <div class="light">points</div>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div> 
+</div>
+<div class="col-sm-12 col-xs-12 view-all-btn hidden-xs">
+  <a *ngIf="lbsUsersSliceLastIndex!==10" class="viewall" (click)="displayMore()">view more</a>
+</div>
