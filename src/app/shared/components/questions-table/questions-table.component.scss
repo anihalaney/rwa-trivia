@@ -145,7 +145,7 @@ mat-card-actions {
 }
 
 
-@media(max-width: 600px) {
+@media(max-width: 750px) {
   .button-web-css{
     display: none;
   }
@@ -160,7 +160,7 @@ mat-card-actions {
   }
 }
 
-@media(max-width: 600px) {
+@media(max-width: 700px) {
   .edit-btn,.mat-raised-button,.view-reason-btn
   {
     width: 100%;
