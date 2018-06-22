@@ -104,7 +104,9 @@ exports.getNextQuestion = (req, res) => {
                     return;
                 });
             } else {
-                res.send(undefined);
+                ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId).then((question) => {
+                    res.send(question);
+                });
             }
         });
 
