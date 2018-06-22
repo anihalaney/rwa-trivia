@@ -47,10 +47,20 @@
   <!-- Invitation to play games -->
   <section *ngIf="user && gameInvites.length>0" class="card">
     <div class="row">
-      <div class="col-sm-12 col-xs-12">
+      <div class="col-md-12 col-xs-12 invitation-title">
         <h2>Invitation to play games
-          <span>{{friendCount}} from friends & {{randomPlayerCount}} from random player</span>
+          <span> from </span>
+          <span *ngIf="friendCount != 0">{{friendCount}}</span>
+          <span *ngIf="friendCount == 1">friend</span>
+          <span *ngIf="friendCount > 1 ">friends</span>
+          <span *nfI>&</span>
+          <span *ngIf="randomPlayerCount != 0"> {{randomPlayerCount}}</span>
+          <span *ngIf="randomPlayerCount == 1">random player</span>
+          <span *ngIf="randomPlayerCount > 1">random players</span>
         </h2>
+      </div>
+      <div class="col-md-8 col-xs-12 subtext">
+
       </div>
     </div>
 

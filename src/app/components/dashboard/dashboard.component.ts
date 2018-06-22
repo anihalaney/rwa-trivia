@@ -97,7 +97,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         } else if (Number(iGame.gameOptions.opponentType) === OpponentType.Random) {
           this.randomPlayerCount++;
         }
-
         this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
       });
     }))
