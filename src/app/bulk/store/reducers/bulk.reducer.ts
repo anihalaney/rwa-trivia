@@ -45,11 +45,62 @@ export function bulkUploadUnpublishedQuestions(state: any = [], action: BulkActi
     }
 };
 
+// for get BulkUploadFileUrl
+export function bulkUploadFileUrl(state: string, action: BulkActions): string {
+    switch (action.type) {
+        case BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL_SUCCESS:
+            return action.payload;
+        default:
+            return null;
+    }
+}
+
+
 // question save Status
 export function questionSaveStatus(state: any = 'NONE', action: BulkActions): string {
     switch (action.type) {
         case BulkActionTypes.UPDATE_QUESTION:
             return 'UPDATE';
+        default:
+            return null;
+    }
+};
+
+// archive bulk upload Status
+export function bulkUploadArchiveStatus(state: any = 'NONE', action: BulkActions): string {
+    switch (action.type) {
+        case BulkActionTypes.ARCHIVE_BULK_UPLOAD_SUCCESS:
+            return 'ARCHIVED';
+        default:
+            return null;
+    }
+};
+
+// for get single BulkUploadFileInfo Object
+export function bulkUploadFileInfo(state: any, action: BulkActions): BulkUploadFileInfo {
+    switch (action.type) {
+        case BulkActionTypes.LOAD_BULK_UPLOAD_FILE_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
+// Get Archive Toggle stat
+export function getArchiveToggleState(state: any = null, action: BulkActions): boolean {
+    switch (action.type) {
+        case BulkActionTypes.SAVE_ARCHIVE_TOGGLE_STATE:
+            return action.payload.toggle_state;
+        default:
+            return state;
+    }
+};
+
+// Get Archive Toggle stat
+export function getArchiveList(state = [], action: BulkActions): BulkUploadFileInfo[] {
+    switch (action.type) {
+        case BulkActionTypes.SAVE_ARCHIVE_LIST:
+            return [...action.payload];
         default:
             return state;
     }

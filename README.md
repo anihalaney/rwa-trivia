@@ -44,6 +44,10 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 16: Migrating from Firebase to Firestore](https://blog.realworldfullstack.io/real-world-app-part-16-from-firebase-to-firestore-f6c494e80237)
 
+[Part 17: Bulk upload and User profile settings using firebase cloud storage](https://blog.realworldfullstack.io/real-world-app-part-17-cloud-storage-with-firebase-and-angular-d3d2c9f5f27c)
+
+[Part 18: Revisiting ngrx - Splitting store into feature modules, using action classes, selectors & router-store](https://blog.realworldfullstack.io/real-world-app-part-18-revisiting-ngrx-e20feed6312c)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)

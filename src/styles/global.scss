@@ -282,7 +282,7 @@ textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize:
 //.optionbox input:checked + label .sprite{ background:#fff url(/assets/images/sprite.png) no-repeat;}
 .settingicon{ background-position: -1px -1px; height: 15px; width: 15px; transition: 0.3s ease-in}
 .logouticon{ background-position: -18px 0px; height: 16px; width: 11px;}
-.mapicon{ background-position: -31px 0; width: 11px; height: 15px; margin-right: 12px; vertical-align: -3px }
+.mapicon{ background-position: -31px 0; width: 12px; height: 15px; margin-right: 12px; vertical-align: -3px }
 .architicon{ background-position: 0 -22px; width: 29px; height: 33px; margin-right: 12px; }
 .rogrammingicon{ background-position: -35px -22px; width: 29px; height: 33px; margin-right: 12px; }
 .playedicon{ background-position: 0 -63px; }
@@ -301,7 +301,8 @@ textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize:
 .subscrib-cion{ background-position:-45px -142px; height: 50px; width: 54px; float: left; margin-right: 16px; }
 .commenticon{background-position:0px -208px; height:20px; width: 20px; margin:0 10px 0 13px }
 .viewicon{background-position:-21px -208px; height:12px; width: 20px; margin-right: 10px; vertical-align:-2px}
-.shareicon{background-position:-42px -208px; height:20px; width: 20px; margin-right: 10px}
+// .shareicon{background-position:-42px -208px; height:20px; width: 20px; margin-right: 10px}
+.shareicon{background-position: -162px -333px;  height: 27px;  width: 31px;}
 .timestats-icon{ background-position: -102px -146px; height: 42px; width: 44px; float: left; margin-right: 20px;}
 .singlep-icon{ background-position: -88px -200px !important; height: 53px; width: 53px; margin-right: 10px; }
 .twop-icon{ background-position: -139px -200px !important; height: 53px; width: 53px; margin-right: 10px;}
@@ -412,30 +413,31 @@ h1 + p{ font-size: 18px; font-family: 'hindlight'; }
     transform:rotate(360deg);
   }
 }
-.mat-dialog-content {
+.mat-dialog-content,.main-div {
   padding: 0 !important;
   margin: 0 !important;
   max-height: none !important;
 }
 .mat-dialog-container {
   padding: 0px !important;
+  background:#26303c;
 }
 
 @media screen and ( min-width:1000px){      
-  .mat-dialog-container {
+  .mat-dialog-container,.main-div {
     height: auto !important;
     min-width: 800px !important;
     max-width: 960px !important;
   }
 }
 @media screen and ( max-width:1000px){      
-  .mat-dialog-container {
+  .mat-dialog-container,.main-div {
     width: 96vw !important;
     max-width: 96vw !important;
   }
 }
 @media screen and ( max-width:767px){      
-  .mat-dialog-container {
+  .mat-dialog-container,.main-div {
     height: 90vh !important;
   }
 }
@@ -450,9 +452,9 @@ body.dialog-open {
 //TODO: Check these ... Coming from theme file
 @media screen and ( min-width:1000px){
 	.playwith a:hover .playwithicon{ background-position: -125px -22px;}
-	.blog-social a:hover .shareicon {
-		background-position:-63px -208px;
-	}
+	// .blog-social a:hover .shareicon {
+	// 	background-position:-63px -208px;
+	// }
   nav .card{ 
     border-width: 1px;
     border-style: solid;
@@ -472,10 +474,10 @@ nav .user.card{
 	border-width: 0 !important
 }
 .downloadicon{ background-position: -96px -295px; width: 31px; height: 33px;}
-.cancelicon{ background-position: -130px -293px; width: 30px; height: 30px;}
-.closeicon{ background-position: -154px -293px; width: 30px; height: 30px;}
-.pendingicon{ background-position: -178px -293px;  width: 19px;  height: 31px;}
-.approvedicon{ background-position: -196px -293px; width: 19px; height: 38px;}
+.cancelicon{ background-position: -127px -293px; width: 25px; height: 30px;}
+.closeicon{ background-position: -154px -293px; width: 27px; height: 30px;}
+.pendingicon{ background-position: -178px -293px;  width: 19px;  height: 33px;}
+.approvedicon{ background-position: -196px -293px; width: 19px; height: 37px;}
 .div-border
 {
   border-width: 1px;
@@ -486,4 +488,72 @@ nav .user.card{
   border-width: 2px;
 	border-top-style: solid;
 }
+.cross-icon
+{
+  background-position: -194px -321px;  width: 26px;  height: 40px;
+}
+.blog-social-icon .sb-circles-dark .sb-wrapper
+{
+  font-size: 11px !important;
+}
+.sb-button {
+  padding-bottom: 5px;
+} 
+.mat-tab-label
+{
+    font-family: 'hindsemibold' !important; letter-spacing: 0.1px;font-size: 18px !important;width: 50%;
+}
+.mat-tab-body-content {
+  overflow: hidden !important;
+}
 
+.score1{ background-position: -75px -362px; width: 27px; height: 33px;}
+.score2{ background-position: -102px -362px; width: 27px; height: 33px;}
+.score3{ background-position: -132px -362px; width: 27px; height: 33px;}
+.score4{ background-position: -75px -391px; width: 27px; height: 33px;}
+.score5{ background-position: -103px -391px; width: 27px; height: 33px;}
+.score0{ background-position: -82px -327px; width: 27px; height: 33px;}
+
+
+.score1-L{ background-position: -4px -456px; width: 27px; height: 33px;}
+.score2-L{ background-position: -6px -360px; width: 27px; height: 33px;}
+.score3-L{ background-position: -70px -455px; width: 27px; height: 33px;}
+.score4-L{ background-position: -4px -521px; width: 27px; height: 33px;}
+.score5-L{ background-position: -69px -520px; width: 27px; height: 33px;}
+  
+
+.thumb-up{ background-position: -117px -324px; width: 44px; height: 33px;}
+.thumb-down{ background-position: -5px -423px; width: 44px; height: 33px;}
+.mat-expansion-panel-body
+{
+  padding: 0px !important;
+ 
+}
+.mat-expansion-panel-header-description
+{
+  overflow-x: auto;
+  max-height: 300px;
+}
+.no-opponent
+{
+  background-position: -138px -519px;
+  width: 50px;
+  height: 50px;
+}
+.social-icons-blog .sb-circles-dark .sb-wrapper,.social-icons-gameOver .sb-circles-dark .sb-wrapper{
+  font-size: 12px !important;
+}
+.footer-social-icon .sb-circles-dark .sb-wrapper
+{
+  font-size: 10px !important;
+}
+.social-icon .sb-circles-dark .sb-wrapper
+{
+  font-size: 14px !important;
+}
+.ellipsis
+{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

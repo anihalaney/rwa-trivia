@@ -1,4 +1,6 @@
 @import '~@angular/material/theming';
+@import '~@ngx-share/button/styles/share-buttons';
+@import '~@ngx-share/button/styles/themes/circles/circles-dark-theme';
 
 // Include the base styles for Angular Material core. 
 @include mat-core();

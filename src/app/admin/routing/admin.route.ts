@@ -1,7 +1,10 @@
 import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent, CategoriesComponent, TagsComponent,
-         AdminQuestionsComponent, AdminComponent, BulkComponent } from '../components/index';
-import { AuthGuard } from '../../core/services';
+import {
+  DashboardComponent, CategoriesComponent, TagsComponent,
+  AdminQuestionsComponent, AdminComponent, BulkComponent
+} from '../components/index';
+import { BulkSummaryQuestionComponent } from '../../bulk/components/index';
+import { AuthGuard } from '../../core/route-guards';
 
 export const adminRoutes: Routes = [
   {
@@ -28,8 +31,16 @@ export const adminRoutes: Routes = [
         component: AdminQuestionsComponent
       },
       {
+        path: 'questions/bulk-questions',
+        component: AdminQuestionsComponent
+      },
+      {
         path: 'bulk',
         component: BulkComponent
+      },
+      {
+        path: 'bulk/detail/:bulkid',
+        component: BulkSummaryQuestionComponent
       }
     ]
   }

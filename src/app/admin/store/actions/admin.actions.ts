@@ -7,7 +7,9 @@ export enum AdminActionTypes {
     LOAD_QUESTIONS_SUCCESS = '[Admin] LoadQuestionsSuccess',
     LOAD_UNPUBLISHED_QUESTIONS = '[Admin] LoadUnpublishedQuestions',
     LOAD_UNPUBLISHED_QUESTIONS_SUCCESS = '[Admin] LoadUnpublishedQuestionsSuccess',
-    APPROVE_QUESTION = '[Admin] ApproveQuestion'
+    APPROVE_QUESTION = '[Admin] ApproveQuestion',
+    SAVE_QUESTION_TOGGLE_STATE = '[Admin] SaveQuestionToggleState',
+    SAVE_ARCHIVE_TOGGLE_STATE = '[Admin] SaveArchiveToggleState'
 }
 
 // Load Question As per Search criteria
@@ -25,7 +27,7 @@ export class LoadQuestionsSuccess implements Action {
 // Load All Unpublished Question
 export class LoadUnpublishedQuestions implements Action {
     readonly type = AdminActionTypes.LOAD_UNPUBLISHED_QUESTIONS;
-    constructor() { }
+    constructor(public payload: { question_flag: boolean }) { }
 }
 
 // Load All Unpublished Question Success
@@ -40,6 +42,18 @@ export class ApproveQuestion implements Action {
     constructor(public payload: { question: Question }) { }
 }
 
+// Save Question State
+export class SaveQuestionToggleState implements Action {
+    readonly type = AdminActionTypes.SAVE_QUESTION_TOGGLE_STATE;
+    constructor(public payload: { toggle_state: string }) { }
+}
+
+// Save Question State
+export class SaveArchiveToggleState implements Action {
+    readonly type = AdminActionTypes.SAVE_ARCHIVE_TOGGLE_STATE;
+    constructor(public payload: { toggle_state: boolean }) { }
+}
+
 
 export type AdminActions
     = LoadQuestions
@@ -47,4 +61,6 @@ export type AdminActions
     | LoadUnpublishedQuestions
     | LoadUnpublishedQuestionsSuccess
     | ApproveQuestion
+    | SaveQuestionToggleState
+    | SaveArchiveToggleState
 

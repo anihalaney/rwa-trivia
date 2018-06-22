@@ -23,21 +23,21 @@ export class QuestionService {
   }
 
   // Elasticsearch
-  getQuestionOfTheDay(): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/getQuestionOfTheDay';
-
+  getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
+    let url: string = CONFIG.functionsUrl + '/app/question/day';
+    url = (isNextQuestion) ? `${url}/next` : `${url}/current`
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    const url: string = CONFIG.functionsUrl + '/app/getQuestions/';
-    // let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/getQuestions/";
+    const url: string = CONFIG.functionsUrl + '/app/question/';
+    // let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/day/";
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }
 
   // Firestore
-  getUserQuestions(userId: Number, published: boolean): Observable<Question[]> {
+  getUserQuestions(userId: string, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', userId))
       .valueChanges()
@@ -52,8 +52,9 @@ export class QuestionService {
   getQuestionsForBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => {
-       return ref.where('created_uid', '==', bulkUploadFileInfo.created_uid)
-       .where('bulkUploadId', '==', bulkUploadFileInfo.id)})
+      return ref.where('created_uid', '==', bulkUploadFileInfo.created_uid)
+        .where('bulkUploadId', '==', bulkUploadFileInfo.id)
+    })
       .valueChanges()
       .map(qs => qs.map(q => Question.getViewModelFromDb(q)))
       .catch(error => {
@@ -62,8 +63,9 @@ export class QuestionService {
       });
   }
 
-  getUnpublishedQuestions(): Observable<Question[]> {
-    return this.db.collection('/unpublished_questions').valueChanges()
+  getUnpublishedQuestions(flag: boolean): Observable<Question[]> {
+    const question_source = (!flag) ? 'question' : 'bulk-question';
+    return this.db.collection('/unpublished_questions', ref => ref.where('source', '==', question_source)).valueChanges()
       .catch(error => {
         console.log(error);
         return Observable.of(null);
@@ -75,6 +77,7 @@ export class QuestionService {
     const questionId = this.db.createId();
     if (dbQuestion.id === undefined || dbQuestion.id === '') {
       dbQuestion.id = questionId;
+      dbQuestion['source'] = 'question';
     }
     this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
       if (questionId === dbQuestion.id) {
@@ -91,18 +94,21 @@ export class QuestionService {
     const bulkUploadId = this.db.createId();
     // store file in file storage
     // Not written any code monitor progress or error
-    this.storage.upload(`bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadId}-${bulkUpload.file.name}`, bulkUpload.file);
-    for (const question of questions) {
-      if (question !== null) {
-        question.bulkUploadId = bulkUploadId;
-        const dbQuestion = Object.assign({}, question); // object to be saved
-        dbQuestion.id = this.db.createId();
-        // Do we really need to copy answer object as well?
-        dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
-        dbQuestions.push(dbQuestion);
-      }
-    }
-    this.addBulkUpload(bulkUploadFileInfo, dbQuestions, bulkUploadId);
+    this.storage.upload(`bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadId}-${bulkUpload.file.name}`, bulkUpload.file)
+      .then(ref => {
+        for (const question of questions) {
+          if (question !== null) {
+            question.bulkUploadId = bulkUploadId;
+            const dbQuestion = Object.assign({}, question); // object to be saved
+            dbQuestion.id = this.db.createId();
+            // Do we really need to copy answer object as well?
+            dbQuestion.answers = dbQuestion.answers.map((obj) => { return Object.assign({}, obj) });
+            dbQuestions.push(dbQuestion);
+          }
+        }
+        this.addBulkUpload(bulkUploadFileInfo, dbQuestions, bulkUploadId);
+      });
+
   }
   addBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, questions: Array<Question>, id: string) {
     // save question
@@ -118,6 +124,7 @@ export class QuestionService {
 
   storeQuestion(index: number, questions: Array<Question>): void {
     const question = questions[index];
+    question['source'] = 'bulk-question';
     this.db.doc(`/unpublished_questions/${question.id}`)
       .set(question)
       .then(ref => {
@@ -138,8 +145,8 @@ export class QuestionService {
     this.db.firestore.runTransaction(transaction => {
       return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
         transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
-      );
-    });
-  }
+      )
+    })
 
+  }
 }

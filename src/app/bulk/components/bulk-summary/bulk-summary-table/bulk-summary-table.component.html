@@ -1,12 +1,15 @@
-<!-- <mat-card> -->
-<!-- <mat-button-toggle *ngIf="!SHOW_SUMMARY_TABLE" (click)="backToSummary()" class="cursor" style="float:right">Back To Summary</mat-button-toggle> -->
-<!-- <mat-card-content> -->
-<div *ngIf="showSummaryTable" class="mat-elevation-z8">
+<div [hidden]="!showSummaryTable" class="mat-elevation-z8">
   <mat-table #table [dataSource]="dataSource" matSort class="bulk-summary-table">
 
     <!--- Note that these columns can be defined in any order.
                     The actual rendered columns are set as a property on the row definition" -->
-
+    <ng-container cdkColumnDef="archive">
+      <mat-header-cell *cdkHeaderCellDef>Archive</mat-header-cell>
+      <mat-cell *cdkCellDef="let row" class="formfield">
+        <div *ngIf="user.roles.admin?row.isAdminArchived:row.isUserArchived" class="sprite approvedicon"></div>
+        <input type="checkbox" *ngIf="user.roles.admin?!row.isAdminArchived:!row.isUserArchived" (change)="checkedRow(row)" [checked]="checkArchieved(row.id)">
+      </mat-cell>
+    </ng-container>
     <ng-container cdkColumnDef="uploadDate">
       <mat-header-cell *cdkHeaderCellDef mat-sort-header="date">Date Uploaded</mat-header-cell>
       <mat-cell class="col-chkbox bulk-summary-table-cell" *cdkCellDef="let row">{{row.date | date:'MM/dd/yyyy' }}</mat-cell>
@@ -19,7 +22,9 @@
 
     <ng-container cdkColumnDef="category">
       <mat-header-cell *cdkHeaderCellDef mat-sort-header>Category</mat-header-cell>
-      <mat-cell class="col-chkbox bulk-summary-table-cell " *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
+      <mat-cell class="col-chkbox bulk-summary-table-cell " *cdkCellDef="let row">
+        <label *ngIf="categoryDict[row.categoryId]!==undefined">{{categoryDict[row.categoryId].categoryName}}</label>
+      </mat-cell>
     </ng-container>
 
     <ng-container cdkColumnDef="primaryTag">
@@ -55,7 +60,7 @@
     <ng-container cdkColumnDef="download">
       <mat-header-cell *cdkHeaderCellDef> Download File</mat-header-cell>
       <mat-cell class="col-status bulk-summary-table-cell" *cdkCellDef="let row">
-        <a *ngIf="row.downloadUrl" [href]="row.downloadUrl | async" target="_blank">Download</a>
+        <a (click)="downloadFile(row)">Download</a>
       </mat-cell>
     </ng-container>
 
@@ -69,10 +74,3 @@
   <mat-paginator #paginator class="matHeader bulk-summary-table" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
   </mat-paginator>
 </div>
-<div *ngIf="!showSummaryTable">
-  <app-bulk-summary-questions [bulkUploadFileInfo]="bulkUploadFileInfo" (showSummaryTableReturn)='backToSummary(event$)' [isAdminUrl]="isAdminUrl"></app-bulk-summary-questions>
-</div>
-
-
-<!-- </mat-card-content> -->
-<!-- </mat-card> -->

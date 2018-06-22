@@ -20,7 +20,7 @@ import { StatsModule } from './stats/stats.module';
 
 import {
   AppComponent, DashboardComponent,
-  SideNavComponent, HeaderComponent, FooterComponent
+  SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent
 } from './components';
 
 @NgModule({
@@ -29,7 +29,8 @@ import {
     DashboardComponent,
     SideNavComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    InvitationRedirectionComponent
   ],
   imports: [
     BrowserModule,
@@ -53,9 +54,9 @@ import {
     UserModule,
     StatsModule
   ],
-  providers: [ 
+  providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer }
-  ],                                                                      
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
