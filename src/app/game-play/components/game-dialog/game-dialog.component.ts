@@ -345,6 +345,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   afterAnswer(userAnswerId?: number) {
     Utils.unsubscribe([this.timerSub, this.questionSub]);
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
+    let index;
+    if (userAnswerId === undefined) {
+      index = null;
+    } else {
+      index = userAnswerId.toString();
+    }
 
     if (userAnswerId === correctAnswerId) {
       this.isCorrectAnswer = true;
@@ -354,7 +360,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     const seconds = this.MAX_TIME_IN_SECONDS - this.timer;
     const playerQnA: PlayerQnA = {
       playerId: this.user.userId,
-      playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
+      // playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
+      playerAnswerId: index,
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
       questionId: this.currentQuestion.id,

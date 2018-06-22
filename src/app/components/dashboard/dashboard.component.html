@@ -23,20 +23,20 @@
         <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
           <game-card [game]="game" [userDict]="userDict"></game-card>
         </li>
-        <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
+        <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">
           <div class="no-card">
             <p class="light">No active game</p>
           </div>
         </li>
-        <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
+        <!-- <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
           <a href="#" class="innerli textcenter">
             <div class="viewallbtn">view all</div>
           </a>
-        </li>
+        </li> -->
       </ul>
     </div>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
+    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
       <a class="viewall" (click)="displayMoreGames()">view more</a>
     </div>
 
@@ -45,30 +45,32 @@
   <!-- Currently active games end -->
 
   <!-- Invitation to play games -->
-  <section *ngIf="user" class="card">
+  <section *ngIf="user && gameInvites.length>0" class="card">
     <div class="row">
-      <div class="col-sm-12 col-xs-12">
+      <div class="col-md-12 col-xs-12 invitation-title">
         <h2>Invitation to play games
-          <span>{{friendCount}} from friends & {{randomPlayerCount}} from random player</span>
+          <span> from </span>
+          <span *ngIf="friendCount != 0">{{friendCount}}</span>
+          <span *ngIf="friendCount == 1">friend</span>
+          <span *ngIf="friendCount > 1 ">friends</span>
+          <span *nfI>&</span>
+          <span *ngIf="randomPlayerCount != 0"> {{randomPlayerCount}}</span>
+          <span *ngIf="randomPlayerCount == 1">random player</span>
+          <span *ngIf="randomPlayerCount > 1">random players</span>
         </h2>
       </div>
-      <!-- <div class="col-sm-3 col-xs-12 textrigth hidden-xs">
-          <a href="#" class="viewall">view all</a>
-        </div> -->
+      <div class="col-md-8 col-xs-12 subtext">
+
+      </div>
     </div>
 
     <ul class="invitationlist">
       <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
         <game-invite [userDict]="userDict" [game]="game"></game-invite>
       </li>
-      <li class="visible-xs textcenter">
-        <a href="#">
-          <div class="viewallbtn">view more</div>
-        </a>
-      </li>
     </ul>
 
-    <div class="col-sm-12 col-xs-12 view-all-btn hidden-xs" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
+    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
       <a class="viewall" (click)="displayMoreGameInvites()">view more</a>
     </div>
 
