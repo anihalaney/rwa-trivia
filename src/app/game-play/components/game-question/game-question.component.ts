@@ -65,6 +65,8 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
       setTimeout(() => {
         this.draw(α, this.doPlay, loader)
       }, 44); // Redraw
+    } else {
+      console.log('anim', anim);
     }
   }
 
@@ -80,5 +82,6 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   disableQuestions(correctAnswerIndex: number) {
     this.doPlay = false;
     this.correctAnswerIndex = correctAnswerIndex;
+    document.getElementById('loader').setAttribute('d', 'M 1 1 v -125 A 125 125 1 1 1 0 -125 z');
   }
 }

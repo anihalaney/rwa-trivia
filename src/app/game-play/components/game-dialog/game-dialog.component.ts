@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
@@ -25,7 +25,7 @@ import { AppState, appState } from '../../../store';
   templateUrl: './game-dialog.component.html',
   styleUrls: ['./game-dialog.component.scss']
 })
-export class GameDialogComponent implements OnInit, OnDestroy {
+export class GameDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   user: User;
   gameObs: Observable<Game>;
   game: Game;
@@ -63,8 +63,11 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   isQuestionAvailable = true;
   isGameLoaded: boolean;
 
-  @ViewChild(GameQuestionComponent)
-  private questionComponent: GameQuestionComponent;
+  private genQuestionComponent: GameQuestionComponent;
+
+  @ViewChild(GameQuestionComponent) set questionComponent(questionComponent: GameQuestionComponent) {
+    this.genQuestionComponent = questionComponent;
+  };
 
   constructor(private store: Store<GamePlayState>, private gameActions: GameActions, private router: Router,
     private appStore: Store<AppState>, private userActions: UserActions,
@@ -153,15 +156,28 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
         if (this.game.playerQnAs.length > 0) {
           const timeoutFlag = this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds;
-          if (!timeoutFlag) {
+          if (timeoutFlag === undefined) {
             this.questionRound = this.questionRound + 1;
           }
-          this.isQuestionAvailable = (!timeoutFlag && Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) ? false : true;
+          this.isQuestionAvailable = (timeoutFlag === undefined &&
+            Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) ? false : true;
         }
 
         if (!this.currentQuestion) {
-          this.getLoader();
+          (this.isQuestionAvailable) ? this.getLoader() : '';
           this.getNextQuestion();
+          if (!this.isQuestionAvailable) {
+            this.showLoader = true;
+            this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
+            this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+              this.timer--;
+            },
+              null,
+              () => {
+                this.showLoader = false;
+                this.subscribeQuestion();
+              });
+          }
         }
 
       } else {
@@ -218,37 +234,48 @@ export class GameDialogComponent implements OnInit, OnDestroy {
             // load question screen timer
             Utils.unsubscribe([this.timerSub]);
             this.showBadge = false;
-            this.timer = this.MAX_TIME_IN_SECONDS;
-            this.questionSub = this.gameQuestionObs.subscribe(question => {
-              if (!question) {
-                this.currentQuestion = undefined;
-                return;
-              }
-
-              this.isQuestionAvailable = true;
-              this.currentQuestion = question;
-              this.questionIndex++;
-              this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName;
-              if (!this.userDict[this.currentQuestion.created_uid]) {
-                this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
-              }
-              this.timerSub =
-                Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
-                  this.timer--;
-                },
-                  null,
-                  () => {
-                    // disable all buttons
-                    (this.currentQuestion) ?
-                      this.afterAnswer() : '';
-                  });
-            });
+            this.subscribeQuestion();
           })
       });
   }
 
+  subscribeQuestion() {
+    this.timer = this.MAX_TIME_IN_SECONDS;
+    this.questionSub = this.gameQuestionObs.subscribe(question => {
+      if (!question) {
+        this.currentQuestion = undefined;
+        return;
+      }
+
+      this.currentQuestion = question;
+      this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName;
+      if (!this.userDict[this.currentQuestion.created_uid]) {
+        this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
+      }
+      if (this.isQuestionAvailable) {
+        this.questionIndex++;
+        this.timerSub =
+          Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+            this.timer--;
+          },
+            null,
+            () => {
+              // disable all buttons
+              (this.currentQuestion) ?
+                this.afterAnswer() : '';
+            });
+      } else {
+        setTimeout(() => this.afterAnswer(), 1000);
+      }
+    });
+  }
+
   ngOnInit() {
 
+  }
+
+  ngAfterViewInit() {
+    //  (!this.isQuestionAvailable) ? this.afterAnswer() : '';
   }
 
 
@@ -343,7 +370,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     // dispatch action to push player answer
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ 'gameId': this.game.gameId, 'playerQnA': playerQnA }));
 
-    this.questionComponent.disableQuestions(correctAnswerId);
+    this.genQuestionComponent.disableQuestions(correctAnswerId);
   }
 
 
