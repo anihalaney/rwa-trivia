@@ -45,7 +45,7 @@
 
         </div>
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-3 yourimg-spacing">
         <div class="yourimg">
           <img *ngIf="!otherUserInfo?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
           <img *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" alt="yourimg">
@@ -103,29 +103,31 @@
             </div>
             <ul class="questions" *ngIf="questionsArray.length != 0">
               <li class="question-section" *ngFor="let row  of questionsArray;let i=index;">
-                <div class="li-section1">
-                  <p class="dark text-style">Q{{i+1}}. {{row.questionText}}</p>
-                  <div class="answer-text">
-                    <span *ngFor="let answer of row.answers">
-                      <div class="dark text-style" *ngIf="answer.correct">A{{i+1}}.
-                        <label class="answer-label">Correct ans.</label>
-                        <span class="text-style">{{answer.answerText}}</span>
+                <div class="row fullWidth">
+                  <div class="li-section1">
+                    <p class="dark text-style">Q{{i+1}}. {{row.questionText}}</p>
+                    <div class="answer-text">
+                      <span *ngFor="let answer of row.answers">
+                        <div class="dark text-style" *ngIf="answer.correct">A{{i+1}}.
+                          <label class="answer-label">Correct ans.</label>
+                          <span class="text-style">{{answer.answerText}}</span>
+                        </div>
+                      </span>
+                      <span *ngFor="let answer of row.answers;let j=index;">
+                        <p *ngIf="answer.answerText === row.userGivenAnswer">
+                          <label [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'" class="text-style your-answer-label">Your ans.</label>
+                          <span class="text-style" [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}} </span>
+                        </p>
+                      </span>
+                      <div class="row col-sm-12 col-xs-12 alignment" *ngIf="userDict[row.created_uid]">
+                        <author [userDict]="userDict" [userId]="row.created_uid"></author>
                       </div>
-                    </span>
-                    <span *ngFor="let answer of row.answers;let j=index;">
-                      <p *ngIf="answer.answerText === row.userGivenAnswer">
-                        <label [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'" class="text-style your-answer-label">Your ans.</label>
-                        <span class="text-style" [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}} </span>
-                      </p>
-                    </span>
-                    <div class="row col-sm-4 col-xs-12 alignment ellipsis" *ngIf="userDict[row.created_uid]">
-                      <author [userDict]="userDict" [userId]="row.created_uid"></author>
                     </div>
                   </div>
-                </div>
-                <div class="li-section2 textcenter">
-                  <button class="btn-share" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
-                  <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
+                  <div class="li-section2 textcenter reportMargin">
+                    <button class="btn-share reportButton" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
+                    <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
+                  </div>
                 </div>
               </li>
             </ul>
