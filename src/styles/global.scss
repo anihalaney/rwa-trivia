@@ -561,3 +561,6 @@ nav .user.card{
     overflow: hidden;
     text-overflow: ellipsis;
 }
+.cdk-overlay-pane{
+  max-width: 100vw !important;
+}

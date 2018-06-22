@@ -82,7 +82,7 @@
   .submitpage .optionbox h2{ margin-bottom: 7px }
   .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
   .submitpage .optionbox{ margin-top: 0; padding: 0 }
-  .secondbg{ padding-top: 35px;padding-bottom: 5%;}
+  .secondbg{ padding-top: 35px;padding-bottom: 6%;}
   .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
 }
 /*--Game-Option End--*/
@@ -151,6 +151,7 @@ mat-card {
 .answer-status {
   margin-top: 10px;
   font-size: 1.5em;
+  margin-bottom: -15px !important;
 }
 .correct-text {
   color: green;
@@ -186,3 +187,27 @@ mat-card {
 .padding-top-bottom-8{
   padding:4px 0 8px 0;
 }
+
+.category-div-spacing{
+  margin-bottom: 24px;
+ }
+ 
+ .margin-top-6{
+  margin-top: 6px;
+ }
+ @media(max-width: 1000px) {
+  .secondbg {
+  padding: 50px 0;
+  }
+  .authorPadding{
+  padding-top:6px;
+  }
+ }
+ @media(max-width: 768px) { 
+ 
+ }
+ @media(max-width: 600px) {
+  .startgame, .continue-btn-div { width: 100%; margin-top:6px; }
+  .question-tag-space{ width: 100%; }
+  .popupbottom{ display: inline-block; width:100%; padding:1% 1%}
+ }
