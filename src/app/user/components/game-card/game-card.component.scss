@@ -76,8 +76,8 @@ hr{height:15px; visibility: hidden; margin: 0;}
     text-align: left;
 }
 
-@media screen and ( width:768px){
-    .text-align
+@media screen and ( max-width:990px){
+    .text-align,.div-score
     {
         text-align: center;
     }
