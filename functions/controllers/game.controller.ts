@@ -62,12 +62,15 @@ exports.updateGame = (req, res) => {
             return;
         }
 
+        const userId = req.user.uid;
+        const otherPlayerUserId = game.playerIds.filter(playerId => playerId !== userId)[0];
+
         switch (operation) {
             case GameOperations.CALCULATE_SCORE:
                 const currentPlayerQnAs: PlayerQnA = req.body.playerQnA;
                 const qIndex = game.playerQnAs.findIndex((pastPlayerQnA) => pastPlayerQnA.questionId === currentPlayerQnAs.questionId);
                 game.playerQnAs[qIndex] = currentPlayerQnAs;
-                game.decideNextTurn(currentPlayerQnAs, req.user.uid);
+                game.decideNextTurn(currentPlayerQnAs, userId);
                 game.turnAt = utils.getUTCTimeStamp();
                 game.calculateStat(currentPlayerQnAs.playerId);
 
@@ -75,6 +78,9 @@ exports.updateGame = (req, res) => {
             case GameOperations.GAME_OVER:
                 game.gameOver = true;
                 game.decideWinner();
+                game.calculateStat(game.nextTurnPlayerId);
+                const userRound = game.stats[userId].round;
+                game.stats[userId].round = (userRound === 0) ? userRound + 1 : userRound;
                 game.GameStatus = GameStatus.COMPLETED;
                 const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
                 systemStatsCalculations.updateSystemStats('game_played').then((stats) => {

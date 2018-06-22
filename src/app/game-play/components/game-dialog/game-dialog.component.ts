@@ -78,8 +78,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       this.userDict = userDict
     });
 
-    this.questionIndex = 0;
-    this.correctAnswerCount = 0;
+    this.resetValues();
     this.gameObs = store.select(gameplayState).select(s => s.currentGame).filter(g => g != null);
     this.gameQuestionObs = store.select(gameplayState).select(s => s.currentGameQuestion);
 
@@ -88,30 +87,54 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.sub.push(
       this.gameObs.subscribe(game => {
         if (game !== null && !this.isGameLoaded) {
-          this.isGameLoaded = true;
           this.game = game;
+          this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
+            this.game.GameStatus === GameStatus.RESTARTED ||
+            ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+              this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
+              this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
+              this.game.GameStatus === GameStatus.JOINED_GAME)
+              && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
           this.gameOver = game.gameOver;
-          this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
-          this.correctAnswerCount = this.game.stats[this.user.userId].score;
-          this.questionRound = (game.stats[this.user.userId].round === 0 || !this.questionRound)
-            ? game.stats[this.user.userId].round + 1
-            : game.stats[this.user.userId].round;
+
+          if (!this.turnFlag) {
+            this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
+
+            this.correctAnswerCount = this.game.stats[this.user.userId].score;
+
+            this.questionRound = (game.stats[this.user.userId].round === 0)
+              ? game.stats[this.user.userId].round + 1
+              : ((this.questionRound > game.stats[this.user.userId].round) ?
+                this.questionRound :
+                game.stats[this.user.userId].round);
+
+            this.questionRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? this.questionRound :
+              (this.isCorrectAnswer || game.stats[this.user.userId].round === 0) ? this.questionRound : this.questionRound + 1;
+
+          }
+
           this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
-          this.setTurnStatusFlag();
+
+          if (!game.gameOver) {
+            this.setTurnStatusFlag();
+          } else {
+            this.resetValues();
+          }
         }
+
       }));
 
   }
 
+  resetValues() {
+    this.questionIndex = 0;
+    this.correctAnswerCount = 0;
+    this.questionRound = 0;
+  }
+
 
   setTurnStatusFlag() {
-    this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
-      this.game.GameStatus === GameStatus.RESTARTED ||
-      ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-        this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
-        this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
-        this.game.GameStatus === GameStatus.JOINED_GAME)
-        && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
+    this.isGameLoaded = true;
     this.continueNext = (this.questionAnswered) ? true : false;
     this.showContinueBtn = (this.questionAnswered && !this.turnFlag) ? true : false;
     this.checkGameOver();
@@ -264,7 +287,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.getLoader();
         this.getNextQuestion();
         if (!this.isCorrectAnswer) {
-          this.questionRound++;
+          this.questionRound = this.questionRound + 1;
         }
       }
     }
@@ -288,14 +311,12 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
 
   gameOverContinueClicked() {
-    this.gameOver = true;
-    this.questionRound = undefined;
     this.currentQuestion = undefined;
     this.questionAnswered = false;
     this.showContinueBtn = false;
     this.continueNext = false;
     this.isGameLoaded = false;
-    this.questionRound = this.questionRound + 1;
+    this.gameOver = true;
     this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
 
