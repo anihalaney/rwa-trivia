@@ -16,3 +16,12 @@ img {
     vertical-align: middle;
     line-height: 30px;
 }
+.truncate
+{
+     display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    max-width: 50%;
+}
