@@ -162,4 +162,27 @@ ul li:last-child{ border-bottom: 0 }
 .category-div-height
 {
   min-height: 15px;
-}                             
+}  
+@media (max-width: 768px){
+  .yourimg-spacing{
+    margin-top:   44px;
+  }
+  .vs:after {
+    margin-top: 190px;
+    width: 103%;
+  }
+}
+
+@media (max-width: 568px){
+.vs:after {
+  margin-top: 176px;
+  width: 103%;
+}
+}
+
+@media (max-width: 380px){
+.vs:after {
+  margin-top: 170px;
+  width: 103%;
+}
+}                           

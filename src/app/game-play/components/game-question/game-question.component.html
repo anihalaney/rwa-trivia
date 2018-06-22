@@ -9,7 +9,7 @@
         <div [ngClass]="correctCount < 4?'score0':'score4'" class="sprite"></div>
         <div [ngClass]="correctCount < 5?'score0':'score5'" class="sprite"></div>
       </div>
-      <div class="col-sm-6">
+      <div class="col-sm-6 category-div-spacing">
         <h1>{{categoryName}}</h1>
         <p *ngIf="otherPlayer?.displayName">Playing with
           <a>{{otherPlayer?.displayName}}</a>
@@ -48,20 +48,20 @@
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)" [class.question-answered]="answeredIndex >= 0 || continueNext"
             [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]=" correctAnswerIndex === i">
-            {{answer.answerText}}        
+            {{answer.answerText}}
           </li>
         </ul>
         <div class=" col-sm-12 col-xs-12">
-          <div class=" col-sm-12 col-xs-12 alignment ellipsis" *ngIf="userDict[question.created_uid]">
+          <div class=" col-sm-12 col-xs-12 alignment ellipsis authorPadding" *ngIf="userDict[question.created_uid]">
             <author [userDict]="userDict" [userId]="question.created_uid"></author>
           </div>
         </div>
       </div>
       <div class="popupbottom">
-        <div class="col-sm-10 question-tag">
+        <div class="col-md-10 col-xs-10 question-tag question-tag-space">
           Tags : {{question.tags?.toString()}}
         </div>
-        <div class="col-sm-2">
+        <div class="col-md-2 col-xs-2 continue-btn-div">
           <button mat-button *ngIf="showContinueBtn" (click)="continueClicked.emit($event)" class="startgame continue-btn">Continue</button>
         </div>
       </div>
@@ -88,7 +88,7 @@
       <mat-list-item *ngFor="let answer of question.answers; let i=index">
         <button mat-button color="primary" (click)="answerButtonClicked(answer, i)" class="answer-button" [disabled]="answeredIndex >= 0"
           [ngClass]="{answered: answeredIndex === i, correct: correctAnswerIndex === i}">{{answer.answerText}}</button>
-         
+
       </mat-list-item>
     </mat-list>
   </mat-card-content>
