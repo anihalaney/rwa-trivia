@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, Inject, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
@@ -25,7 +25,7 @@ import { AppState, appState } from '../../../store';
   templateUrl: './game-dialog.component.html',
   styleUrls: ['./game-dialog.component.scss']
 })
-export class GameDialogComponent implements OnInit, OnDestroy, AfterViewInit {
+export class GameDialogComponent implements OnInit, OnDestroy {
   user: User;
   gameObs: Observable<Game>;
   game: Game;
@@ -273,11 +273,6 @@ export class GameDialogComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
 
   }
-
-  ngAfterViewInit() {
-    //  (!this.isQuestionAvailable) ? this.afterAnswer() : '';
-  }
-
 
   getNextQuestion() {
     this.store.dispatch(new gameplayactions.GetNextQuestion(this.game));
