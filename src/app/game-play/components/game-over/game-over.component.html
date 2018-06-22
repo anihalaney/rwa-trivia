@@ -118,7 +118,7 @@
                         <span class="text-style" [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}} </span>
                       </p>
                     </span>
-                    <div class="row col-sm-12 col-xs-12 alignment ellipsis" *ngIf="userDict[row.created_uid]">
+                    <div class="row col-sm-12 col-xs-12 alignment" *ngIf="userDict[row.created_uid]">
                       <author [userDict]="userDict" [userId]="row.created_uid"></author>
                     </div>
                   </div>

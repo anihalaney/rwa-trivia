@@ -22,7 +22,7 @@
         <div class="col-sm-6 col-xs-12">
           <a class="btn" (click)="getNextQuestion()" *ngIf="answeredText!==''">Try Another</a>
         </div>
-        <div class="col-sm-6 col-xs-12 alignment ellipsis" *ngIf="userDict[question.created_uid]">
+        <div class="col-sm-6 col-xs-12 alignment" *ngIf="userDict[question.created_uid]">
           <author [userDict]="userDict" [userId]="question.created_uid"></author>
         </div>
       </div>
