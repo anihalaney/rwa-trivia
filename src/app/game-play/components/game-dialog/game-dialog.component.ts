@@ -261,11 +261,17 @@ export class GameDialogComponent implements OnInit, OnDestroy {
             null,
             () => {
               // disable all buttons
-              (this.currentQuestion) ?
-                this.afterAnswer() : '';
+              if (this.currentQuestion) {
+                this.afterAnswer();
+                this.genQuestionComponent.fillTimer();
+              }
+
             });
       } else {
-        setTimeout(() => this.afterAnswer(), 1000);
+        setTimeout(() => {
+          this.afterAnswer();
+          this.genQuestionComponent.fillTimer();
+        }, 1000);
       }
     });
   }
