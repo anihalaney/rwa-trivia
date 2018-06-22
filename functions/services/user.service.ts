@@ -47,10 +47,27 @@ exports.getUsers = (): Promise<any> => {
  * return ref
  */
 exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
-    const batch = userFireStoreClient.batch();
-    users.map((user) => {
-        const userInstance = userFireStoreClient.collection('users').doc(user.userId);
-        batch.set(userInstance, { ...user }, { merge: true });
-    })
-    return batch.commit().then((ref) => { return ref });
+    const BATCH_SIZE = 500;
+    const chunks: User[][] = [];
+
+    for (var i = 0; i < users.length; i += BATCH_SIZE) {
+        chunks.push(users.slice(i, i + BATCH_SIZE));
+    }    
+
+    let promises: Promise<any>[];
+    chunks.map((chunk) => {
+        console.log(chunk);
+        promises = chunk.map((user) => {
+            let batch = userFireStoreClient.batch();
+            Object.keys(user).forEach(key => user[key] === undefined && delete user[key]);
+            const userInstance = userFireStoreClient.collection('users').doc(user.userId);
+            batch.set(userInstance, { ...user }, { merge: true });
+            return batch.commit().then((ref) => { 
+                console.log("saved user chunk");
+                return ref;
+            });
+        });
+    });
+    
+    return Promise.all(promises);
 };
