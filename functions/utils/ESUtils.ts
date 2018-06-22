@@ -339,4 +339,33 @@ export class ESUtils {
       throw (error);
     });
   }
+
+  static getQuestionById(questionId: string): Promise<Question> {
+    return this.getQuestionES(this.QUESTIONS_INDEX, questionId).then((hits) => {
+      // convert hit to Question
+      return Question.getViewModelFromES(hits[0]);
+    });
+  }
+
+  static getQuestionES(index: string, questionId: string): Promise<any> {
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
+
+    return client.search({
+      'index': index,
+      'size': 1,
+      'body': {
+        'query': {
+          'bool': {
+            'must': { 'match': { '_id': questionId } }
+          }
+        }
+      }
+    }).then(function (body) {
+      return (body.hits.hits);
+    }, function (error) {
+      console.trace(error.message);
+      throw (error);
+    });
+  }
 }
