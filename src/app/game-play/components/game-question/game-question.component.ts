@@ -27,6 +27,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   answeredIndex: number;
   correctAnswerIndex: number;
   @ViewChild('overlay') overlay: ElementRef;
+  @ViewChild('loader') loader: ElementRef;
   @Input() userDict: { [key: string]: User };
   doPlay = true;
 
@@ -42,7 +43,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   ngAfterViewInit() {
     const seconds = 30;
-    const loader = document.getElementById('loader'), α = 0;
+    const loader = this.loader.nativeElement, α = 0;
 
     this.draw(α, this.doPlay, loader);
   }
@@ -80,5 +81,9 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   disableQuestions(correctAnswerIndex: number) {
     this.doPlay = false;
     this.correctAnswerIndex = correctAnswerIndex;
+  }
+
+  fillTheTimer() {
+    this.loader.nativeElement.setAttribute('d', 'M 1 1 v -125 A 125 125 1 1 1 0 -125 z');
   }
 }

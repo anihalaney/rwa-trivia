@@ -55,10 +55,10 @@ export class Game {
         const playerOnA: PlayerQnA = new PlayerQnA();
         playerOnA.playerId = qna.playerId;
         playerOnA.questionId = qna.questionId;
-        (qna.addedOn) ? playerOnA.addedOn = qna.addedOn : '';
-        (qna.playerAnswerId) ? playerOnA.playerAnswerId = qna.playerAnswerId : '';
-        (qna.playerAnswerInSeconds) ? playerOnA.playerAnswerInSeconds = qna.playerAnswerInSeconds : '';
-        (qna.answerCorrect) ? playerOnA.answerCorrect = qna.answerCorrect : '';
+        (qna['addedOn'] !== undefined) ? playerOnA.addedOn = qna.addedOn : '';
+        (qna['playerAnswerId'] !== undefined) ? playerOnA.playerAnswerId = qna.playerAnswerId : '';
+        (qna['playerAnswerInSeconds'] !== undefined) ? playerOnA.playerAnswerInSeconds = qna.playerAnswerInSeconds : '';
+        (qna['answerCorrect'] !== undefined) ? playerOnA.answerCorrect = qna.answerCorrect : '';
         playerOnA.isReported = (qna.isReported) ? true : false;
         this.playerQnAs.push({ ...playerOnA });
       }
