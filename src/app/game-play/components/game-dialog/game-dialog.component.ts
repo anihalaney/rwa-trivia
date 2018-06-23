@@ -265,7 +265,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
                 this.afterAnswer();
                 this.genQuestionComponent.fillTimer();
               }
-
             });
       } else {
         setTimeout(() => {
