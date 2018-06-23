@@ -8,19 +8,19 @@
   cursor: pointer;
 }
 
-.startupload{ width: 100%} 
+.startupload{ width: 100%;float: right;} 
 .btn-share{ 
   font-size: 14px;
   font-family: 'hindsemibold';
    border-radius: 4px;
   display: inline-block;
   text-align: center;
-  padding: 8px 23px;
+  padding: 11px 23px;
   margin-right: 2%;
   border-width: 1px;
-	border-style: solid;
+  border-style: solid;
 } 
-.align-right
+.text-alignment
 {
   text-align: right;
 }
@@ -32,4 +32,39 @@
 label
 {
   margin-right: 2%;
+}
+.btn{font-size: 16px;}
+.div-alignment
+{
+  float: right;
+}
+@media(max-width: 768px) {
+  .btn
+  { 
+    margin-bottom: 10px;
+  }
+  .archive-div,.archive-btn-div
+  {
+    margin-bottom:10px;
+  }
+}
+@media(width: 768px) {
+  .archive-div
+  {
+    width: 33%;
+  }
+  .archive-btn-div
+  {
+    width: 15%;
+  }
+}
+@media(max-width: 600px) {
+  .div-alignment,.btn-share
+  {
+    width: 100%;
+  }
+  .text-alignment
+  {
+    text-align: center;
+  }
 }

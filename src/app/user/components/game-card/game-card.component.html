@@ -53,7 +53,7 @@
           <div class="dark">Score {{game.stats[user.userId].score}}</div>
         </div>
       </div>
-      <div class="textcenter clearfix">
+      <div class="text-align clearfix">
         <div class="div-width div-right-border" style="float:left">
           <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
@@ -62,7 +62,7 @@
           <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
 
-        <div class="div-width text-align" style="float:right">
+        <div class="div-width text-align padding-right" style="float:right">
           <div class="sprite score0"></div>
           <div class="sprite score0"></div>
           <div class="sprite score0"></div>
@@ -103,15 +103,15 @@
           <span class="light" *ngIf="otherUserInfo?.displayName" title="{{otherUserInfo?.location}}">{{otherUserInfo?.location}}</span>
         </div>
       </div>
-      <div class=" clearfix">
-        <div class="col-xs-6 div-right-border div-score">
+      <div class="clearfix">
+        <div class="col-xs-6 div-right-border div-score score-text-align">
           <div class="dark">Score {{game.stats[user.userId].score}}</div>
         </div>
-        <div class="col-xs-6 div-score">
+        <div class="col-xs-6 div-score score-text-align">
           <div class="dark">Score {{game.stats[otherUserId].score}}</div>
         </div>
       </div>
-      <div class="textcenter clearfix">
+      <div class="text-align clearfix">
         <div class="div-width div-right-border" style="float:left">
           <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
@@ -120,7 +120,7 @@
           <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
 
-        <div class="div-width text-align" style="float:right">
+        <div class="div-width text-align padding-right" style="float:right">
           <div [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'" class="sprite"></div>
@@ -134,20 +134,25 @@
     </div>
   </div>
 
-  <a *ngIf="myTurn" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
-    <span>Your Turn</span>Play Now
-  </a>
+  <div class="textcenter">
+    <a *ngIf="myTurn" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
+      <span>Your Turn</span>
+      <p>Play Now</p>
+    </a>
+  </div>
 
   <div *ngIf="myTurn" class="opponent">
     <p class="dark">{{remainingHours}}:{{remainingMinutes}} hrs</p>
-    <p>remaining to play your turn</p>
+    <p class="ellipsis">remaining to play your turn</p>
   </div>
 
-  <div *ngIf="!myTurn && game.playerIds.length == 1" class="opponent playnow">
-    <button class="btn-share" type="button">Waiting for Opponent</button>
+  <div *ngIf="!myTurn && game.playerIds.length == 1" class="opponent">
+    <a class="btn-share waiting-for-opponent">Waiting for
+      <p>Opponent</p>
+    </a>
   </div>
 
-  <div *ngIf="!myTurn && game.playerIds.length > 1" class="opponent playnow">
-    <button class="btn-share" type="button">Opponent's Turn</button>
+  <div *ngIf="!myTurn && game.playerIds.length > 1" class="opponent">
+    <a class="btn-share opponent-turn">Opponent's Turn</a>
   </div>
 </div>

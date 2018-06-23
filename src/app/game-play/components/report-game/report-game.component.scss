@@ -122,3 +122,18 @@ textarea
 {
     text-align: right;
 } 
+.btn
+{
+    font-size: 16px;
+    padding: 10px 25px;
+}
+@media(max-width: 600px) {
+    .btn
+    {
+        width: 100%;
+    }
+    .author-div-spacing
+    {
+        margin-bottom: 5%;
+    }
+}

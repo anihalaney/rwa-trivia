@@ -8,7 +8,21 @@ input[type="text"], input[type="email"]{ border:1px solid; border-radius: 3px; p
 }
 @media screen and ( min-width:1000px){
   .subscrib-cont{ min-height: 200px } 
+  
 }
-@media screen and ( max-width:768px){
+@media screen and ( max-width:767px){
   .subscrib-cont .btn{ margin-top: 15px; width: 100% }
+  .div-spacing
+  {
+    margin: 2% 0% 2% 0%;
+  }
+  .btn
+  {
+    width: 100%;
+  }
 }
+.btn
+{
+  font-size: 14px;
+  padding: 10px 25px;
+} 
