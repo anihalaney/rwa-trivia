@@ -6,14 +6,15 @@
 .vs:after{ content: "Vs"; position: absolute; right: -10px; top: 25px; font-size: 18px; font-family: 'hindmedium';height:25px; }
 .light{font-family: 'hindmedium';}
 .owl-item .col-md-3{ width: 100% }
-.playnow{  margin-top: 3%; display: block !important; padding: 5px 0; line-height: 1.2}
+
+.playnow{ padding: 3px 54px;font-size: 16px}
 .playnow span{ display: block; font-size: 12px; font-family: 'hindregular'}
-.opponent{ line-height: 43px; margin-top: 3px;  text-align: center;}
+.opponent{  margin-top: 3px;  text-align: center;}
 hr{height:15px; visibility: hidden; margin: 0;}
 .div-right-border
 {
     border-right: 1px solid transparent; 
-    text-align: left;
+    // text-align: left;
     border-color: rgba(204,204,204,0.44);
 }
 .div-left-border
@@ -35,12 +36,18 @@ hr{height:15px; visibility: hidden; margin: 0;}
     font-size: 14px;
     font-family: 'hindregular';
     border-radius: 4px;
-    display: inline-block;
+    display:inline-block;
     text-align: center;
-    padding: 15px;
-    margin-right: 2%;
     border-width: 1px;
     border-style: solid;
+}
+.opponent-turn
+{
+    padding: 12px 38px;
+}
+.waiting-for-opponent
+{
+    padding: 3px 54px;
 }
 .no-opponent{ display: block; width: 64px; height: 60px; border-radius: 50% } 
 .text-align
@@ -60,3 +67,59 @@ hr{height:15px; visibility: hidden; margin: 0;}
 {
    height: 25px;
 }
+.padding-right
+{
+    padding-right: 1px;
+}
+.score-text-align
+{
+    text-align: left;
+}
+
+@media screen and ( max-width:990px){
+    .text-align,.div-score
+    {
+        text-align: center;
+    }
+    
+}
+@media screen and ( max-width:768px){
+    .score-text-align
+    {
+        text-align: center;
+    }
+    .div-badge
+    {
+        height: 70px;
+    }
+    
+    
+}
+@media screen and ( max-width:767px){
+    .btn-share
+    {
+       width: 100%;
+    }
+    
+}
+@media screen and ( max-width:1025px){
+    .div-spacing
+    {
+        padding-top: 2%
+    }
+    
+}
+@media screen and ( max-width:1025px){
+    .div-spacing
+    {
+        padding-top: 2%
+    }
+}
+@media (min-width: 1025px) and (max-width: 1282px) {
+    .playnow,.opponent-turn,.waiting-for-opponent
+    {
+        font-size: 14px;
+        padding: 0 30%;
+    }
+  }
+

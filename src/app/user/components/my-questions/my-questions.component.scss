@@ -21,3 +21,16 @@ mat-card {
 {
   text-align: right;
 }
+
+@media (max-width:768px){
+  .startgame[_ngcontent-c10]{
+    margin-bottom: 20px !important; 
+  }
+}
+
+@media screen and (min-width : 768px) and (max-width : 1024px)  { 
+  .startgame[_ngcontent-c10]{
+    margin-bottom: 20px;
+  }
+}
+  

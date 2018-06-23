@@ -1,6 +1,6 @@
 <div class="row">
   <div class="pageheading col-md-9 col-xs-12 hidden-xs">Friends</div>
-  <div class="col-md-3 col-xs-6">
+  <div class="col-md-3 col-xs-12 div-alignment">
     <button class="btn startupload" (click)="inviteMoreFriend()"> Invite Friends </button>
   </div>
 </div>
@@ -13,7 +13,7 @@
           <img *ngIf="!userDict[row.userId]?.profilePictureUrl" src="assets/images/default-avatar.png" alt="user" />
           <img *ngIf="userDict[row.userId]?.profilePictureUrl" [src]="userDict[row.userId]?.profilePictureUrl">
         </div>
-        <div class="display-name">
+        <div class="display-name ellipsis">
           <label *ngIf="userDict[row.userId]?.displayName">{{userDict[row.userId]?.displayName}}</label>
         </div>
       </mat-cell>

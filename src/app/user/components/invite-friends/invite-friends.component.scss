@@ -29,9 +29,13 @@ display: table-row;
 }
 }
 }
+.div-alignment
+{ 
+  margin-bottom: 10px;
 }
-.profile{ width: 94%; max-width: 50px; border-radius: 50%; height: auto;margin-bottom: 5px; border:1px solid; padding: 2px;float: left;margin-right: 10%;margin-top: 5px;}
-.profile img{ display: block; width: 50px; height: 40px; border-radius: 50% }
+}
+.profile{width: 23%; border-radius: 50%; height: auto;margin-bottom: 5px; border:1px solid; padding: 2px;float: left;margin-right: 10%;margin-top: 5px;}
+img{ border-radius: 50%;vertical-align: middle; }
 .display-name
 {
   padding-top: 10%;
@@ -41,3 +45,8 @@ display: table-row;
   font-family:'hindsemibold';
 }
 .startupload{ width: 100%}
+.btn{font-size: 16px; }
+.div-alignment
+{
+  float:right;
+}

@@ -4,7 +4,8 @@ img {
     margin-left: 2%;
     border: 1px solid;
     padding: 2px;
-    float: right
+    // float: right
+    vertical-align: middle;
    } 
 .alignment-left
   {
@@ -14,4 +15,13 @@ img {
 {
     vertical-align: middle;
     line-height: 30px;
+}
+.truncate
+{
+     display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    max-width: 50%;
 }

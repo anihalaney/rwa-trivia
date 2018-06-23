@@ -83,7 +83,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
     this.correctAnswerIndex = correctAnswerIndex;
   }
 
-  fillTheTimer() {
+  fillTimer() {
     this.loader.nativeElement.setAttribute('d', 'M 1 1 v -125 A 125 125 1 1 1 0 -125 z');
   }
 }

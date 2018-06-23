@@ -19,14 +19,14 @@
                 <p class="light">Your</p>
                 <p class="light">Score {{game.stats[game.winnerPlayerId]?.score}}</p>
             </div>
-            <div class="col-xs-6 no-padding" [ngClass]="game.winnerPlayerId !== user.userId?'card-border-right':'card-border-left'">
+            <div class="col-xs-6 no-padding " [ngClass]="game.winnerPlayerId !== user.userId?'card-border-right':'card-border-left'">
                 <div class="yourimg">
                     <img *ngIf="!userDict[getOpponentId(game)]?.profilePictureUrl" src="assets/images/default-avatar.png" alt="user1" />
                     <img *ngIf="userDict[getOpponentId(game)]?.profilePictureUrl" [src]="userDict[getOpponentId(game)]?.profilePictureUrl" alt="user1"
                     />
 
                 </div>
-                <p class="light">{{userDict[getOpponentId(game)]?.displayName}}</p>
+                <p class="light ellipsis">{{userDict[getOpponentId(game)]?.displayName}}</p>
                 <p class="light">Score {{game.stats[getOpponentId(game)]?.score}}</p>
             </div>
             <div class="col-xs-6 card-left-border no-padding card-center-position" *ngIf="game.winnerPlayerId !== user.userId">
@@ -41,7 +41,7 @@
 
             </div>
             <p class="light">{{user?.displayName}}</p>
-            <p class="light">Score {{game.stats[game.winnerPlayerId]?.score}}</p>
+            <p class="light">Score {{game.stats[user.userId]?.score}}</p>
         </div>
     </div>
 </ng-container>
