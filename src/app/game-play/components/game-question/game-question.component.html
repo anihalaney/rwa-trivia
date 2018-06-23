@@ -26,7 +26,7 @@
       <div class="col-sm-3">
         <div class="timer">
           <svg class="rotate" viewbox="10 10 55 55">
-            <path id="loader" transform="translate(25, 25)" />
+            <path id="loader" #loader transform="translate(25, 25)" />
           </svg>
           <div class="dots">
             <span class="time deg0"></span>
@@ -37,18 +37,13 @@
 
     </div>
 
-
-    <!-- Timer -->
-    <!-- <div *ngIf="continueNext" class="score">Score: {{correctCount}}/{{noOfQuestions}}</div>
-    <div *ngIf="continueNext" class="score">Badge: {{correctCount}}</div> -->
-
     <ng-container>
       <div class="secondbg ">
         <h2>{{questionIndex}}. {{question.questionText}}</h2>
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)" [class.question-answered]="answeredIndex >= 0 || continueNext"
             [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]=" correctAnswerIndex === i">
-            {{answer.answerText}}        
+            {{answer.answerText}}
           </li>
         </ul>
         <div class=" col-sm-12 col-xs-12">
@@ -88,7 +83,7 @@
       <mat-list-item *ngFor="let answer of question.answers; let i=index">
         <button mat-button color="primary" (click)="answerButtonClicked(answer, i)" class="answer-button" [disabled]="answeredIndex >= 0"
           [ngClass]="{answered: answeredIndex === i, correct: correctAnswerIndex === i}">{{answer.answerText}}</button>
-         
+
       </mat-list-item>
     </mat-list>
   </mat-card-content>
