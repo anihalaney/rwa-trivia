@@ -90,5 +90,16 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   width: 20%;
   margin: 0 auto;
 }
+.btn
+{
+  padding: 10px 25px;
+  font-size: 16px;
+}
+@media(max-width: 600px) {
+  .btn
+  {
+    width: 100%;
+  }
+}
 
 
