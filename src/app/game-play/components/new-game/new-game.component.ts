@@ -6,11 +6,13 @@ import { Subscription } from 'rxjs/Subscription';
 import { Store } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
+import * as useractions from '../../../user/store/actions';
 import { AppState, appState } from '../../../store';
 
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Category, GameOptions, GameMode, User }     from '../../../model';
+import { Category, GameOptions, GameMode, User, Friends, PlayerMode, OpponentType } from '../../../model';
+import { userFriends } from 'app/user/store';
 
 @Component({
   selector: 'new-game',
@@ -22,6 +24,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   categories: Category[];
   tagsObs: Observable<string[]>;
   tags: string[];
+  userDict$: Observable<{ [key: string]: User }>;
   selectedTags: string[];
   sub: Subscription;
   sub2: Subscription;
@@ -32,46 +35,75 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   showUncheckedCategories: boolean = false;
   allCategoriesSelected: boolean = true;
-
+  uFriends: Array<string>;
+  userDict: { [key: string]: User } = {};
+  noFriendsStatus: boolean;
   filteredTags$: Observable<string[]>;
 
-  get categoriesFA(): FormArray { 
+  friendUserId: string;
+
+  get categoriesFA(): FormArray {
     //console.log(this.newGameForm.get('categoriesFA'));
-    return this.newGameForm.get('categoriesFA') as FormArray; 
+    return this.newGameForm.get('categoriesFA') as FormArray;
   }
   constructor(private fb: FormBuilder,
-              private store: Store<AppState>,
-              private gameActions: GameActions,
-              private router: Router) {
+    private store: Store<AppState>,
+    private gameActions: GameActions,
+    private router: Router) {
     this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
     this.tagsObs = store.select(appState.coreState).select(s => s.tags);
     this.selectedTags = [];
+    this.userDict$ = this.store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$.subscribe(userDict => this.userDict = userDict);
+
+
+    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+      if (user) {
+        this.store.dispatch(new useractions.LoadUserFriends({ 'userId': user.userId }));
+      }
+    });
+
+
+    this.store.select(appState.userState).select(s => s.userFriends).subscribe(uFriends => {
+      if (uFriends !== null) {
+        this.uFriends = [];
+        uFriends.myFriends.map(friend => {
+          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
+        });
+        this.noFriendsStatus = false;
+      } else {
+        this.noFriendsStatus = true;
+      }
+    });
+
+
+
   }
 
   ngOnInit() {
     this.store.dispatch(new gameplayactions.ResetNewGame());
 
+
     this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
     this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
-    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g != "").subscribe(gameId => {
-      console.log("Navigating to game: " + gameId);
-      this.router.navigate(['/game-play', gameId]);
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-    })
+
+
+
 
     this.gameOptions = new GameOptions();
     this.newGameForm = this.createForm(this.gameOptions);
 
     let playerModeControl = this.newGameForm.get('playerMode');
+    playerModeControl.setValue("0");
     let opponentTypeControl = this.newGameForm.get('opponentType');
 
     playerModeControl.valueChanges.subscribe(v => {
-      if (v == "1") {
+      if (v === "1") {
         opponentTypeControl.enable();
         opponentTypeControl.setValue("0");
       }
       else {
-        opponentTypeControl.disable ();
+        opponentTypeControl.disable();
         opponentTypeControl.reset();
       }
     });
@@ -89,58 +121,53 @@ export class NewGameComponent implements OnInit, OnDestroy {
     */
 
     this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-         .map(val => val.length > 0 ? this.filter(val) : []);
+      .map(val => val.length > 0 ? this.filter(val) : []);
   }
 
   filter(val: string): string[] {
-      return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option)); 
-   }
-   autoOptionClick(event) {
-     //Auto complete doesn't seem to have an event on selection of an entry
-     //tap into the change event of the input box and if the tag matches any entry in the tag list, then add to the selected tag list
-     //else wait for the user to click "Add" if they still want to add tags that are not on the list
+    return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
+  }
+  autoOptionClick(event) {
+    //Auto complete doesn't seem to have an event on selection of an entry
+    //tap into the change event of the input box and if the tag matches any entry in the tag list, then add to the selected tag list
+    //else wait for the user to click "Add" if they still want to add tags that are not on the list
 
     //console.log(event);
     //console.log(event.srcElement.value);
     let tag: string = event.srcElement.value;
     let found = this.tags.find(t => t.toLowerCase() === tag.toLowerCase());
     //console.log(found);
-    if (found)
-    {
+    if (found) {
       this.addTagToSelectedList(found);
       this.newGameForm.get('tagControl').setValue('');
     }
-   }
-   addTagToSelectedList(tag: string)
-   {
-     if (tag && tag !== "")
+  }
+  addTagToSelectedList(tag: string) {
+    if (tag && tag !== "")
       this.selectedTags.push(tag);
-   }
+  }
   ngOnDestroy() {
     Utils.unsubscribe([this.sub, this.sub2, this.sub3]);
   }
 
-  toggleShowUncheckedCategories()
-  {
+  toggleShowUncheckedCategories() {
     this.showUncheckedCategories = true;
   }
-  addTag() 
-  {
+  addTag() {
     let tagControl = this.newGameForm.get('tagControl');
     this.addTagToSelectedList(tagControl.value);
     //console.log(this.selectedTags);
     tagControl.setValue('');
   }
-  removeEnteredTag(tag) 
-  {
-    this.selectedTags = this.selectedTags.filter(t => t !== tag); 
+  removeEnteredTag(tag) {
+    this.selectedTags = this.selectedTags.filter(t => t !== tag);
   }
   createForm(gameOptions: GameOptions) {
 
     let sortedCategories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)]
-    let fgs:FormGroup[] = sortedCategories.map(category => {
+    let fgs: FormGroup[] = sortedCategories.map(category => {
       let fg = new FormGroup({
-        categorySelected: new FormControl({value: true, disabled: category.requiredForGamePlay}),
+        categorySelected: new FormControl({ value: true, disabled: category.requiredForGamePlay }),
         categoryId: new FormControl(category.id),
         categoryName: new FormControl(category.categoryName),
         requiredForGamePlay: new FormControl(category.requiredForGamePlay)
@@ -149,7 +176,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     });
     let categoriesFA = new FormArray(fgs);
 
-    let fcs:FormControl[] = gameOptions.tags.map(tag => {
+    let fcs: FormControl[] = gameOptions.tags.map(tag => {
       let fc = new FormControl(tag);
       return fc;
     });
@@ -159,16 +186,22 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     let form: FormGroup = this.fb.group({
       playerMode: [gameOptions.playerMode, Validators.required],
-      opponentType: [{value: gameOptions.opponentType, disabled: true} ],
+      opponentType: [gameOptions.opponentType],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
       tagsArray: tagsFA,
       categoriesFA: categoriesFA
-      } //, {validator: questionFormValidator}
+    } //, {validator: questionFormValidator}
     );
     //console.log(form);
     return form;
   }
+
+
+  selectFriendId(friendId: string) {
+    this.friendUserId = friendId;
+  }
+
 
   onSubmit() {
     //validations
@@ -176,18 +209,26 @@ export class NewGameComponent implements OnInit, OnDestroy {
     if (this.newGameForm.invalid)
       return;
 
+
+
     //console.log(this.newGameForm.value);
     let gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
     console.log(gameOptions);
 
+    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
+      && !this.friendUserId) {
+      return;
+    }
+
     this.startNewGame(gameOptions);
   }
-  
+
+
   startNewGame(gameOptions: GameOptions) {
     let user: User;
     this.store.select(appState.coreState).take(1).subscribe(s => user = s.user); //logged in user
-
-    this.store.dispatch(new gameplayactions.CreateNewGame({gameOptions: gameOptions, user: user}));
+    gameOptions.friendId = this.friendUserId;
+    this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }
 
   getGameOptionsFromFormValue(formValue: any): GameOptions {

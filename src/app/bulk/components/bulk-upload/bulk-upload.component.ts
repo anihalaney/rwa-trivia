@@ -136,8 +136,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
               for (let i = 1; i < 10; i++) {
                 if (element['Tag ' + i] && element['Tag ' + i] !== '') {
-                  // check for duplicate tags
-                  if (question.tags.indexOf(element['Tag ' + i].trim()) === -1) {
+                  if (this.isTagExist(element['Tag ' + i], question) === -1) {
                     question.tags.push(element['Tag ' + i].trim());
                   }
                 }
@@ -173,6 +172,12 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       });
   }
 
+  isTagExist(tag, question) {
+    const index = question.tags.findIndex(x => x.toLowerCase().trim() === tag.toLowerCase().trim());
+    return index;
+
+  }
+
   private prepareUpload(): any {
     const input = new FormData();
     input.append('category', this.uploadFormGroup.get('category').value);
@@ -193,21 +198,26 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     } else {
       const formModel = this.prepareUpload();
       const dbQuestions: Array<Question> = [];
-       // add primary tag to question tag list
-       this.primaryTag = this.uploadFormGroup.get('tagControl').value;
+      // add primary tag to question tag list
+      this.primaryTag = this.uploadFormGroup.get('tagControl').value;
       for (const question of this.questions) {
         this.bulkUploadFileInfo.categoryId = this.uploadFormGroup.get('category').value;
         this.bulkUploadFileInfo.primaryTag = this.uploadFormGroup.get('tagControl').value;
         question.categoryIds = [this.uploadFormGroup.get('category').value];
-          if (this.primaryTag && !question.tags.includes(this.primaryTag)) {
-                question.tags = [this.uploadFormGroup.get('tagControl').value, ...question.tags.filter(tag => tag !== this.primaryTagOld)];
-          } else if (this.primaryTag === '') {
-            question.tags = [...question.tags.filter(tag => tag !== this.primaryTagOld)];
+        if (this.primaryTag.trim() !== '') {
+          const duplicateTagIndex = this.isTagExist(this.primaryTag, question);
+          if (duplicateTagIndex !== -1) {
+            question.tags.splice(duplicateTagIndex, 1);
           }
+          question.tags = [this.primaryTag, ...question.tags.filter(tag => tag !== this.primaryTagOld)];
+        } else if (this.primaryTag === '') {
+          question.tags = [...question.tags.filter(tag => tag !== this.primaryTagOld)];
+        }
+
         question.createdOn = new Date();
         dbQuestions.push(question);
       }
-      if ( this.primaryTag !==  this.primaryTagOld) {
+      if (this.primaryTag !== this.primaryTagOld) {
         this.primaryTagOld = this.primaryTag;
       }
       this.bulkUploadFileInfo.created_uid = this.user.userId;
@@ -221,6 +231,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     bulkUpload.bulkUploadFileInfo = this.bulkUploadFileInfo;
     bulkUpload.questions = this.parsedQuestions;
     bulkUpload.file = this.file;
+    bulkUpload.bulkUploadFileInfo['isAdminArchived'] = false;
+    bulkUpload.bulkUploadFileInfo['isUserArchived'] = false;
     this.store.dispatch(new bulkActions.AddBulkQuestions({ bulkUpload: bulkUpload }));
   }
 

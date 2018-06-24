@@ -1,24 +1,31 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { User, Question } from '../../../model';
-import { userProfileSaveStatus, user, userPublishedQuestions, userUnpublishedQuestions, questionSaveStatus } from './user.reducer';
+import { User, Question, Game, Friends } from '../../../model';
+import {
+    userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions,
+    questionSaveStatus, getGameResult, userFriends
+} from './user.reducer';
+import { Observable } from 'rxjs/Observable';
+
 
 export * from './user.reducer';
 
 export interface UserState {
-    user: User
     userProfileSaveStatus: String;
     userPublishedQuestions: Question[];
     userUnpublishedQuestions: Question[];
     questionSaveStatus: String;
+    getGameResult: Game[];
+    userFriends: Friends
 }
 
 export const reducer: ActionReducerMap<UserState> = {
-    user: user,
     userProfileSaveStatus: userProfileSaveStatus,
     userPublishedQuestions: userPublishedQuestions,
-  userUnpublishedQuestions: userUnpublishedQuestions,
-  questionSaveStatus: questionSaveStatus
+    userUnpublishedQuestions: userUnpublishedQuestions,
+    questionSaveStatus: questionSaveStatus,
+    getGameResult: getGameResult,
+    userFriends: userFriends
 };
 
 export const userState = createFeatureSelector<UserState>('user');

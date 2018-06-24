@@ -39,6 +39,20 @@
       }
 }
 
-a{
-  cursor: pointer;
+a
+{
+    cursor: pointer;
+}
+.align-right
+{
+  text-align: right;
+  float: right;
+}
+.btn{ padding:10px 25px;font-size: 16px;float: right }
+
+@media(max-width: 600px) {
+  .btn
+  {
+    width: 100%;
+  }
 }

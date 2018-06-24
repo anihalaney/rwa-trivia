@@ -51,7 +51,7 @@ function isAuthenticated() {
           allow write: if isUserAuthenticated(userId)
                         && request.resource != null
                         && resource == null;  
-          allow read:  if isAuthenticated(); 
+          allow read:  if true; 
           }
       }
       match /original {
@@ -61,6 +61,23 @@ function isAuthenticated() {
                         && resource == null;           
           }
       }
-    }    
+    }  
+
+
+     match /social_share/{userId} {
+      // social share, only authenticated user allowed to write
+      // only user is allowed to write user profile
+      // request.resource != null, ensure that delete operation is not allowed
+      // resource == null, ensure that update/overwrite operation on file is not allowed      
+      match /score_images {
+        match /{allFiles=**} {
+          allow write: if isUserAuthenticated(userId)
+                        && request.resource != null
+                        && resource == null;  
+          allow read:  if true; 
+          }
+      }      
+    }   
+    
   }
 }

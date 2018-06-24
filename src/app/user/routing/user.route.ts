@@ -2,7 +2,8 @@ import { Routes, RouterModule } from '@angular/router';
 import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
-  QuestionAddUpdateComponent
+  QuestionAddUpdateComponent,
+  InviteFriendsComponent
 } from '../components';
 import { AuthGuard, CategoriesResolver, TagsResolver } from '../../core/route-guards';
 
@@ -18,14 +19,19 @@ export const userRoutes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'questions/:userid',
+    path: 'questions',
     component: MyQuestionsComponent,
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
-    path: 'questions/:userid/add',
+    path: 'questions/add',
     component: QuestionAddUpdateComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'invite-friends',
+    component: InviteFriendsComponent,
     canActivate: [AuthGuard]
   },
 ];

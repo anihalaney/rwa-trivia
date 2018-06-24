@@ -1,18 +1,9 @@
 import { Observable } from 'rxjs/Observable';
 import { Action } from '@ngrx/store';
-import { User, Question } from '../../../model';
+import { User, Question, Game, Friends } from '../../../model';
 import { UserActions, UserActionTypes } from '../actions';
 
 
-// Load User Profile By Id
-export function user(state: any = null, action: UserActions): User {
-    switch (action.type) {
-        case UserActionTypes.LOAD_USER_PROFILE_SUCCESS:
-            return { ...state, ...action.payload };
-        default:
-            return state;
-    }
-}
 
 // user Profile Status
 export function userProfileSaveStatus(state: any = 'NONE', action: UserActions): String {
@@ -21,10 +12,12 @@ export function userProfileSaveStatus(state: any = 'NONE', action: UserActions):
             return 'IN PROCESS';
         case UserActionTypes.ADD_USER_PROFILE_SUCCESS:
             return 'SUCCESS';
-        case UserActionTypes.LOAD_USER_PROFILE:
-            return 'NONE';
+        case UserActionTypes.ADD_USER_INVITATION_SUCCESS:
+            return 'INVITATION SUCCESS';
+        case UserActionTypes.MAKE_FRIEND_SUCCESS:
+            return 'MAKE FRIEND SUCCESS';
         default:
-            return state;
+            return null;
     }
 }
 
@@ -54,6 +47,25 @@ export function questionSaveStatus(state: any = 'NONE', action: UserActions): st
     switch (action.type) {
         case UserActionTypes.ADD_QUESTION:
             return 'IN PROGRESS';
+        default:
+            return state;
+    }
+};
+export function getGameResult(state: any = [], action: UserActions):
+    Game[] {
+    switch (action.type) {
+        case UserActionTypes.GET_GAME_RESULT_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+// Load User Published Question by userId
+export function userFriends(state: any = null, action: UserActions): Friends {
+    switch (action.type) {
+        case UserActionTypes.LOAD_USER_FRIENDS_SUCCESS:
+            return action.payload;
         default:
             return state;
     }

@@ -1,0 +1,25 @@
+<mat-dialog-content class="cd-popup">
+  <mat-card class="cd-popup-container">
+    <mat-card-content>
+      <div class="sprite cancelicon col-sm-1" (click)="closeModel()"></div>
+      <mat-card-title>
+        <span>Invite your friends</span>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <P class="cd-popup-container"> Ask your friends to join you on bitwiser</P>
+      </mat-card-subtitle>
+      <!-- <mat-tab-group>
+        <mat-tab label="Facebook friends">
+          <mat-card-title>
+            <b>Facebook friends</b>
+          </mat-card-title>
+        </mat-tab>
+        <mat-tab label="Email contacts">
+          <app-invite-mail-friends [user]="user"></app-invite-mail-friends>
+        </mat-tab>
+      </mat-tab-group> -->
+      <app-invite-mail-friends [user]="user"></app-invite-mail-friends>
+    </mat-card-content>
+  </mat-card>
+
+</mat-dialog-content>

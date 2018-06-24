@@ -3,7 +3,7 @@ service cloud.firestore {
     return request.auth != null;
   }
 
-  // Add uid of admin user 
+   // Add uid of admin user 
   // This is temp solution for time being till fetching role from user document does not work
   function isAdmin() {
   	return isAuthenticated() && 
@@ -21,8 +21,8 @@ service cloud.firestore {
     }
     
 		match /{document=**} {
-      allow read, write: if isAdmin();
-    }
+		allow read, write: if isAdmin();
+		}
     
     match /categories {
       match /{document=**} {
@@ -58,11 +58,61 @@ service cloud.firestore {
     
     match /games {
       match /{document=**} {
-        allow read, update: if isUserAuthenticated(resource.data.playerId_0) || isUserAuthenticated(resource.data.playerId_1);
-        allow create: if isUserAuthenticated(request.resource.data.playerId_0);
+        allow read: if isUserAuthenticated(request.user.uid) || if isUserAuthenticated(resource.data.playerId_0) || isUserAuthenticated(resource.data.playerId_1);
+        
       }
+    }
+    
+     match /subscription/{email} {
+     // create rule with data size ensure that there only two keys allowed
+     // keys().hasAny ensure that only email, and userId are allowed as field
+     // resource == null ensure when document does not exist it returns 
+     // does not throw permission denied error
+         allow create: if request.resource.data.size() < 3 && request.resource.data.keys().hasAny(['email', 'userId']);
+         allow get: if resource.data.email.lower() == email.lower() || resource == null;         
+      }  
+
+      match /invitations {
+      	match /{document=**} {
+      	allow create: if isUserAuthenticated(request.resource.data.created_uid);
+      	}              
+    }  
+
+    match /leader_board_stats/categories { 
+      match /{document=**} {
+        allow get: if true;      
+        }
+      
+    } 
+
+    match /friends/{userId} {
+         allow get: if isUserAuthenticated(userId);          
+    }
+    match /report_questions {
+      match /{document=**} {
+        allow read, update: if isUserAuthenticated(resource.data.created_uid);
+        allow create: if isUserAuthenticated(request.resource.data.created_uid);        
+    }
+    }
+
+    match /stats/system {     
+        allow get: true;       
+      
+    }
+
+    match /social_share {
+      match /{document=**} {
+        allow read,update : if isUserAuthenticated(request.resource.data.created_uid);
+        allow create: if isUserAuthenticated(request.resource.data.created_uid); 
+    }
+    }
+    
+     match /blogs {    
+     match /{document=**} {
+        allow read: if true;  
+      }
+      
     }
     
   }
 }
-
