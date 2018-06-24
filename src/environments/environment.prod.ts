@@ -7,7 +7,7 @@ export const environment = {
 export const CONFIG: IConfig = {
   'firebaseConfig' : {
       apiKey: 'AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y',
-      authDomain: 'rwa-trivia.firebaseapp.com',
+      authDomain: 'bitwiser.io',
       databaseURL: 'https://rwa-trivia.firebaseio.com',
       projectId: 'rwa-trivia',
       storageBucket: 'rwa-trivia.appspot.com',

@@ -1,8 +1,10 @@
-import { Routes, RouterModule }  from '@angular/router';
-import { DashboardComponent } 
-  from '../components/index';
-import { AuthGuard, AdminLoadGuard, BulkLoadGuard, 
-  CategoriesResolver, TagsResolver } from '../core/route-guards';
+import { Routes, RouterModule } from '@angular/router';
+import { DashboardComponent } from '../components/index';
+import { InvitationRedirectionComponent } from '../components/index';
+import {
+  AuthGuard, AdminLoadGuard, BulkLoadGuard,
+  CategoriesResolver, TagsResolver
+} from '../core/route-guards';
 
 export const routes: Routes = [
   {
@@ -37,5 +39,9 @@ export const routes: Routes = [
     loadChildren: 'app/bulk/bulk.module#BulkModule',
     canActivate: [AuthGuard],
     canLoad: [BulkLoadGuard]
+  },
+  {
+    path: 'invitation-redirection/:token',
+    component: InvitationRedirectionComponent
   }
 ];

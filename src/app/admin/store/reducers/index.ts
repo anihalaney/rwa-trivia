@@ -1,16 +1,20 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 import { SearchResults, Question } from '../../../model';
-import { questionsSearchResults, unpublishedQuestions } from './admin.reducer';
+import { questionsSearchResults, unpublishedQuestions, getQuestionToggleState, getArchiveToggleState } from './admin.reducer';
 export * from './admin.reducer';
 
 export interface AdminState {
     questionsSearchResults: SearchResults;
     unpublishedQuestions: Question[];
+    getQuestionToggleState: string;
+    getArchiveToggleState: boolean;
 }
 
 export const reducer: ActionReducerMap<AdminState> = {
     questionsSearchResults: questionsSearchResults,
-    unpublishedQuestions: unpublishedQuestions
+    unpublishedQuestions: unpublishedQuestions,
+    getQuestionToggleState: getQuestionToggleState,
+    getArchiveToggleState: getArchiveToggleState
 };
 
 export const adminState = createFeatureSelector<AdminState>('admin');

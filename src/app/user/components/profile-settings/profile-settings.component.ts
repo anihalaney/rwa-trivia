@@ -13,6 +13,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { userState } from '../../../user/store';
 
+
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
@@ -72,7 +73,7 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.setCropperSettings();
 
-    this.userObs = this.store.select(userState).select(s => s.user);
+    this.userObs = this.store.select(appState.coreState).select(s => s.user);
 
     this.userObs.subscribe(user => {
       if (user) {
@@ -88,12 +89,8 @@ export class ProfileSettingsComponent implements OnDestroy {
         this.filteredTags$ = this.userForm.get('tags').valueChanges
           .map(val => val.length > 0 ? this.filter(val) : []);
 
-        if (this.user.profilePicture) {
-          const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${this.user.profilePicture}`;
-          const ref = this.storage.ref(filePath);
-          ref.getDownloadURL().subscribe(res => {
-            this.profileImage.image = res;
-          });
+        if (this.user.profilePictureUrl) {
+          this.profileImage.image = this.user.profilePictureUrl;
         }
       }
     });
@@ -178,7 +175,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   saveProfileImage() {
     if (!this.profileImageValidation) {
       const file = this.profileImageFile
-      const imageBlob = this.dataURItoBlob(this.profileImage.image);
+      const imageBlob = Utils.dataURItoBlob(this.profileImage.image, this.profileImageFile.type);
       const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
       this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile);
       if (imageBlob) {
@@ -192,18 +189,6 @@ export class ProfileSettingsComponent implements OnDestroy {
         });
       }
     }
-  }
-
-  // cropped image convert to blob object
-  dataURItoBlob(dataURI: any) {
-    const binary = atob(dataURI.split(',')[1]);
-    const array = [];
-    for (let i = 0; i < binary.length; i++) {
-      array.push(binary.charCodeAt(i));
-    }
-    return new Blob([new Uint8Array(array)], {
-      type: this.profileImageFile.type
-    });
   }
 
   // create the form based on user object

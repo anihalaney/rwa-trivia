@@ -1,4 +1,8 @@
-import { Component , OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import * as bulkActions from '../../../../app/bulk/store/actions';
+import { bulkState } from '../../../../app/bulk/store';
+import { AppState, appState, categoryDictionary } from '../../../store/app-store';
+import { Store } from '@ngrx/store';
 
 
 @Component({
@@ -11,9 +15,30 @@ export class BulkComponent implements OnInit {
   public bulkSummaryDetailPath = 'admin/';
   public bulkSummaryTitle: string;
   public showSummaryTable = true;
+  isArchive: boolean;
+  isArchiveBtnClicked: boolean;
+  toggleValue: boolean;
 
 
-  constructor() { }
+  constructor(private store: Store<AppState>) {
+    this.store.select(bulkState).select(s => s.getArchiveToggleState).subscribe((state) => {
+      if (state != null) {
+        this.toggleValue = state;
+      } else {
+        this.toggleValue = false;
+      }
+    });
+
+    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+      if (list.length > 0) {
+        this.isArchive = true;
+      } else {
+        this.isArchive = false;
+        this.isArchiveBtnClicked = false;
+
+      }
+    });
+  }
 
   ngOnInit() {
     this.setDefaultTitle();
@@ -33,5 +58,13 @@ export class BulkComponent implements OnInit {
   backToSummary(): void {
     this.showSummaryTable = true;
     this.setDefaultTitle();
+  }
+
+  tapped(value) {
+    this.toggleValue = value;
+    this.store.dispatch(new bulkActions.SaveArchiveToggleState({ toggle_state: this.toggleValue }));
+  }
+  archiveData() {
+    this.isArchiveBtnClicked = true;
   }
 }

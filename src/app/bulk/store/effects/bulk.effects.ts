@@ -8,9 +8,13 @@ import { BulkUploadFileInfo, Question } from '../../../model';
 import { BulkActions, BulkActionTypes } from '../actions';
 import * as bulkActions from '../actions/bulk.actions';
 import { BulkService, QuestionService } from '../../../core/services';
+import { Observable } from 'rxjs/Observable';
+import { pipe } from 'rxjs/util/pipe';
 
 @Injectable()
 export class BulkEffects {
+
+
 
     // for get all BulkUploadFileInfo
     @Effect()
@@ -18,7 +22,7 @@ export class BulkEffects {
         .ofType(BulkActionTypes.LOAD_BULK_UPLOAD)
         .pipe(
         switchMap((action: bulkActions.LoadBulkUpload) =>
-            this.bulkService.getBulkUpload().pipe(
+            this.bulkService.getBulkUpload(action.payload.user, action.payload.archive).pipe(
                 map((bulkUploadFileInfo: BulkUploadFileInfo[]) => new bulkActions.LoadBulkUploadSuccess(bulkUploadFileInfo))
             )
         )
@@ -30,7 +34,7 @@ export class BulkEffects {
         .ofType(BulkActionTypes.LOAD_USER_BULK_UPLOAD)
         .pipe(
         switchMap((action: bulkActions.LoadUserBulkUpload) =>
-            this.bulkService.getUserBulkUpload(action.payload.user).pipe(
+            this.bulkService.getUserBulkUpload(action.payload.user, action.payload.archive).pipe(
                 map((bulkUploadFileInfo: BulkUploadFileInfo[]) => new bulkActions.LoadUserBulkUploadSuccess(bulkUploadFileInfo))
             )
         )
@@ -60,7 +64,17 @@ export class BulkEffects {
         )
         );
 
-    // for get all BulkUploadFileInfo
+    // for update Question
+    @Effect()
+    updateQuestion$ = this.actions$
+        .ofType(BulkActionTypes.UPDATE_QUESTION)
+        .pipe(
+        switchMap((action: bulkActions.UpdateQuestion) => {
+            this.questionService.saveQuestion(action.payload.question);
+            return empty();
+        })
+        );
+
     @Effect()
     loadBulkUploadFileUrl$ = this.actions$
         .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL)
@@ -72,16 +86,6 @@ export class BulkEffects {
         )
         );
 
-    // for update Question
-    @Effect()
-    updateQuestion$ = this.actions$
-        .ofType(BulkActionTypes.UPDATE_QUESTION)
-        .pipe(
-        switchMap((action: bulkActions.UpdateQuestion) => {
-            this.questionService.saveQuestion(action.payload.question);
-            return empty();
-        })
-        );
     // for Update BulkUpload
     @Effect()
     updateBulkUpload$ = this.actions$
@@ -114,6 +118,26 @@ export class BulkEffects {
             return empty();
         })
         );
+    // for add Bulk Questions
+    @Effect()
+    archiveUserBulkUpload$ = this.actions$
+        .ofType(BulkActionTypes.ARCHIVE_BULK_UPLOAD)
+        .pipe(
+        switchMap((action: bulkActions.ArchiveBulkUpload) =>
+            this.bulkService.archiveBulkUpload(action.payload.archiveArray, action.payload.user).then(ref => {
+                return new bulkActions.ArchiveBulkUploadSuccess();
+            })
+        ));
+
+    // for get bulk object based on Id
+    @Effect()
+    getBulkUpload$ = this.actions$
+        .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE)
+        .pipe(
+        switchMap((action: bulkActions.LoadBulkUploadFile) =>
+            this.bulkService.getBulkUploadFile(action.payload.bulkId).pipe(
+                map((bulkUploadFileInfo: BulkUploadFileInfo) => new bulkActions.LoadBulkUploadFileSuccess(bulkUploadFileInfo)))
+        ));
 
     constructor(
         private actions$: Actions,

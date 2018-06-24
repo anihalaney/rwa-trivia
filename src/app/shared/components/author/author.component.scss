@@ -1,0 +1,27 @@
+img {
+    border-radius: 50%;
+    max-width: 30px;
+    margin-left: 2%;
+    border: 1px solid;
+    padding: 2px;
+    // float: right
+    vertical-align: middle;
+   } 
+.alignment-left
+  {
+    margin-left: 1%;
+}
+.text-alignment
+{
+    vertical-align: middle;
+    line-height: 30px;
+}
+.truncate
+{
+     display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -o-text-overflow: ellipsis;
+    max-width: 50%;
+}

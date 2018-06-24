@@ -1,7 +1,7 @@
 /* Popup */
 
 .cd-popup-container{border-radius:3px;text-align:center;box-shadow:0 0 20px rgba(0, 0, 0, 0.2);
-  padding-top: 35px}
+  padding: 4% 0% 5% 0%;}
  
  @media screen and ( min-width:1000px){
   //.cd-popup-container{width:960px;}
@@ -82,7 +82,7 @@
   .submitpage .optionbox h2{ margin-bottom: 7px }
   .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
   .submitpage .optionbox{ margin-top: 0; padding: 0 }
-  .secondbg{ padding-top: 35px }
+  .secondbg{ padding-top: 35px;padding-bottom: 6%;}
   .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
 }
 /*--Game-Option End--*/
@@ -90,12 +90,12 @@
 /*Game Play*/
 .gameplay h1{ font-size: 24px; font-family: 'hindmedium'; padding: 0}
 .gameplay h2{ font-size: 20px; font-family: 'hindregular'; margin: 0 auto; }
-.popupbottom{ font-size: 14px; padding: 15px 0; }
+.popupbottom{ font-size: 16px; padding: 1% 4%;text-align: left;font-family: 'hindregular';}
 .gameplay p a{font-family: 'hindmedium'}
-.gameplay li{ margin:30px 20px 0; padding: 15px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer; overflow: hidden; position: relative;}
+.gameplay li{ margin:30px 20px 0; padding: 15px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer; overflow: hidden; position: relative;word-wrap: break-word;}
 
 .timer{width:61px;height:61px;margin:0 auto; position: relative;}
-.timer .rotate{width:51px;height:51px;display:block;position:absolute;z-index:16; margin: 5px 0 0 5px}
+.timer .rotate{width:51px;height:51px;display:block;position:absolute; margin: 5px 0 0 5px;border-radius: 50%;}
 .timer .rotate #loader{fill:#ffae0b;}
 .timer .dots{width:100%;height:100%;position:absolute;z-index:15;top:0;left:0; border:3px solid; border-radius: 50%; box-sizing: border-box; box-shadow:2px 3px 5px rgba(0,0,0,0.16)}
 .timer .dots .time{height:50px;width:5%;display:block;background-image:-moz-linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);background-image:-webkit-linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);background-image:linear-gradient(#10383d, #10383d 12%, rgba(0, 0, 0, 0) 12%, rgba(0, 0, 0, 0) 88%, #10383d 88%, #10383d);margin-left:-3%;left:50%;position:absolute; top: 2px}
@@ -151,6 +151,7 @@ mat-card {
 .answer-status {
   margin-top: 10px;
   font-size: 1.5em;
+  margin-bottom: -15px !important;
 }
 .correct-text {
   color: green;
@@ -161,3 +162,52 @@ mat-card {
 .abouttoexpire {
   color: red;
 }
+.header
+{
+  margin-bottom: 14%;
+}
+.continue-btn
+{
+  font-family: 'hindbold';
+  font-size: 16px;
+}
+.question-tag
+{
+  padding-top: 1%;
+}
+.badge-heading
+{
+  text-align: left;
+}
+.alignment
+{
+  text-align: right;
+}
+
+.padding-top-bottom-8{
+  padding:4px 0 8px 0;
+}
+
+.category-div-spacing{
+  margin-bottom: 24px;
+ }
+ 
+ .margin-top-6{
+  margin-top: 6px;
+ }
+ @media(max-width: 1000px) {
+  .secondbg {
+  padding: 50px 0;
+  }
+  .authorPadding{
+  padding-top:6px;
+  }
+ }
+ @media(max-width: 768px) { 
+ 
+ }
+ @media(max-width: 600px) {
+  .startgame, .continue-btn-div { width: 100%; margin-top:6px; }
+  .question-tag-space{ width: 100%; }
+  .popupbottom{ display: inline-block; width:100%; padding:1% 1%}
+ }

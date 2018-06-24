@@ -1,11 +1,11 @@
-import { Game, Question, Category, SearchResults, SearchCriteria } from '../src/app/model';
+import { Game, Question, Category, SearchResults, SearchCriteria } from '../../src/app/model';
 
 
 const fs = require('fs');
 const path = require('path');
 const elasticsearch = require('elasticsearch');
 const functions = require('firebase-functions');
-const elasticsearchConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../config/elasticsearch.config.json'), 'utf8'));
+const elasticsearchConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
 export class ESUtils {
   static QUESTIONS_INDEX = 'questions';
@@ -30,10 +30,10 @@ export class ESUtils {
     let prefix = 'dev:';
 
     if (functions.config().elasticsearch &&
-     functions.config().elasticsearch.index &&
-     functions.config().elasticsearch.index.production &&
+      functions.config().elasticsearch.index &&
+      functions.config().elasticsearch.index.production &&
       // tslint:disable-next-line:triple-equals
-     functions.config().elasticsearch.index.production == 'true') {
+      functions.config().elasticsearch.index.production == 'true') {
 
       prefix = '';
     }
@@ -144,7 +144,7 @@ export class ESUtils {
         const body = [];
         // TODO: build bulk index in batches (maybe 1000 at a time)
         data.forEach(d => {
-          body.push({ index: { _index: index, _type: d.type, _id: d.id } });
+          body.push({ index: { index: index, type: d.type, _id: d.id } });
           body.push(d.source);
         });
         client.bulk({ 'body': body }).then(resp => {
@@ -181,23 +181,23 @@ export class ESUtils {
         searchResults.tagsCount.push({ 'tag': b.key, 'count': b.doc_count });
       });
       searchResults.questions = results.hits.hits.map(hit => Question.getViewModelFromES(hit));
-      searchResults.searchCriteria = criteria;  // send the originating criteria back with the results
+      searchResults.searchCriteria = criteria; // send the originating criteria back with the results
 
       return searchResults;
     });
   }
 
-  static getRandomQuestionOfTheDay(): Promise<Question> {
+  static getRandomQuestionOfTheDay(isNextQuestion: boolean): Promise<Question> {
     const date = new Date();
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
-    return this.getRandomItems(this.QUESTIONS_INDEX, 1, seed).then((hits) => {
+    return this.getRandomItems(this.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed).then((hits) => {
       // convert hit to Question
       return Question.getViewModelFromES(hits[0]);
     });
   }
 
-  static getRandomGameQuestion(): Promise<Question> {
-    return this.getRandomQuestionES(this.QUESTIONS_INDEX, 1, '', [2, 5, 7, 8], [], []).then((hits) => {
+  static getRandomGameQuestion(gameCategories: Array<number>, excludedQId: Array<string>): Promise<Question> {
+    return this.getRandomQuestionES(this.QUESTIONS_INDEX, 1, '', gameCategories, [], excludedQId).then((hits) => {
       // convert hit to Question
       return Question.getViewModelFromES(hits[0]);
     });
@@ -329,6 +329,35 @@ export class ESUtils {
                 'random_score': { 'seed': randomSeed }
               }
             ]
+          }
+        }
+      }
+    }).then(function (body) {
+      return (body.hits.hits);
+    }, function (error) {
+      console.trace(error.message);
+      throw (error);
+    });
+  }
+
+  static getQuestionById(questionId: string): Promise<Question> {
+    return this.getQuestionES(this.QUESTIONS_INDEX, questionId).then((hits) => {
+      // convert hit to Question
+      return Question.getViewModelFromES(hits[0]);
+    });
+  }
+
+  static getQuestionES(index: string, questionId: string): Promise<any> {
+    const client: Elasticsearch.Client = this.getElasticSearchClient();
+    index = this.getIndex(index);
+
+    return client.search({
+      'index': index,
+      'size': 1,
+      'body': {
+        'query': {
+          'bool': {
+            'must': { 'match': { '_id': questionId } }
           }
         }
       }

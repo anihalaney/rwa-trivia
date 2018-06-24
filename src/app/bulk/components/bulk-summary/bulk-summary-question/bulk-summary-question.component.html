@@ -1,8 +1,10 @@
-<!-- <mat-card-title>File Details</mat-card-title> -->
-<!-- <br /> -->
+<div class="row">
+  <div class="pageheading col-md-9 col-xs-12 hidden-xs">BULK UPLOAD FILE DETAILS</div>
+  <div class="col-md-3 col-xs-12 align-right">
+    <button class="btn " (click)="navigation()"> Back to Summary </button>
+  </div>
+</div>
 <div class="card">
-
-
   <mat-table #table [dataSource]="fileInfoDS" class="bulk-summary-question-table">
     <ng-container cdkColumnDef="fileName">
       <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>

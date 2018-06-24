@@ -1,5 +1,5 @@
 @mixin theme-text-color($selected-theme-name,$theme) {
-	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.bulk-summary-question-table-cell,.matStepLabel,.message,.sub-message,.field-caption{ 
+	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.bulk-summary-question-table-cell,.matStepLabel,.message,.sub-message,.field-caption,.btn-share,.text,.text-loading,.mat-expansion-panel-header-title, .social-nam,.mat-list .mat-list-item,.mat-tab-link{ 
 		color: map-get($theme, primary);
 	}
 	.question-list li label{ 
@@ -36,7 +36,7 @@
 	h1 + p{ 
 		color: map-get($theme, heading-alt);
 	}
-	.gameplay p{ 
+	.gameplay p,.win-text{ 
 		color: map-get($theme, heading-secondary);
 	}
 	.tabbing li.active, .form-group input:focus,.form-group input:valid{ 
@@ -82,7 +82,7 @@
 	.mat-dialog-container {
 		color: map-get($theme, primary) !important;
 	}
-	.status-rejected{ 
+	.status-rejected,.status-reported{ 
 		color: map-get($theme, reject);
 	}
 	.status-change-request
@@ -99,12 +99,20 @@
 		color: map-get($theme, error);
 		
 	}
-	.downloadFile a,.custom-file-upload,.rejection-div,.bulk-summary-table-cell a,.bulk-summary-question-table-cell a
+	.downloadFile a,.custom-file-upload,.rejection-div,.bulk-summary-table-cell a
 	{
 		color: map-get($theme, link);
 	}
 	.label{ 
 		color: map-get($theme, label);
+	}
+	.success
+	{
+		color: map-get($theme, box-hover-lg);
+	}
+	.answer-label
+	{
+		color: map-get($theme, answer);
 	}
 	
 
@@ -123,7 +131,7 @@
 		}
 	}
 
-	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label,.mat-tab-label,.mat-header-cell,.bulk-summary-table-cell a,.bulk-summary-question-table-cell a{
+	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label,.mat-tab-label,.mat-header-cell,.bulk-summary-table-cell a,.bulk-summary-question-table-cell a,.friend-list-table-cell{
 		@if $selected-theme-name == 'dark' {
 			color:#fff;
 			
