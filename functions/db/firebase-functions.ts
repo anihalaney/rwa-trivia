@@ -68,7 +68,7 @@ exports.onInvitationWrite = functions.firestore.document('/invitations/{invitati
     if (afterEventData !== beforeEventData && mailConfig.enableMail) {
         const invitation: Invitation = afterEventData;
         const url = `${mailConfig.hosturl}${invitation.id}`;
-        const htmlContent = `<a href="${url}">Accept Invitation</a>`;
+        const htmlContent = `You have a new invitation request. Click <a href="${url}">Accept Invitation</a> to accept the invitation.`;
         const mail: MailClient = new MailClient(invitation.email, TriggerConstants.invitationMailSubject,
             TriggerConstants.invitationTxt, htmlContent);
         mail.sendMail();
