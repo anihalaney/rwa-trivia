@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 import { Category } from '../../../model';
@@ -16,7 +18,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   sub: any;
 
   constructor(private store: Store<AppState>) {
-    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
   }
 
   ngOnInit() {

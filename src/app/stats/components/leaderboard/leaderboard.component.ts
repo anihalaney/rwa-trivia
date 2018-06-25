@@ -1,12 +1,10 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import * as statsActions from '../../../stats/store/actions';
-import { Store } from '@ngrx/store';
-import { AppState, appState, categoryDictionary } from '../../../store';
-import { Observable } from 'rxjs/Observable';
+import { Store, select } from '@ngrx/store';
+import { AppState, categoryDictionary } from '../../../store';
+import { Observable, Subscription } from 'rxjs';
+
 import { Category, User, LeaderBoardUser } from '../../../model';
-import { Subscription } from 'rxjs/Subscription';
 import { leaderBoardState } from '../../store';
-import { concat } from 'rxjs/operator/concat';
 import { UserActions } from '../../../core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
 import { Utils } from '../../../core/services';
@@ -37,7 +35,7 @@ export class LeaderboardComponent implements OnDestroy {
 
     this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
 
-    this.store.select(leaderBoardState).select(s => s.scoreBoard).subscribe(lbsStat => {
+    this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
 
       if (lbsStat !== null) {
         this.leaderBoardStatDict = lbsStat;

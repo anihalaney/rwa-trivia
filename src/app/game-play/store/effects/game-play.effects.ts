@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
-import { switchMap, map, catchError, filter } from 'rxjs/operators';
-import { empty } from 'rxjs/observable/empty';
-import { Observable } from 'rxjs/Rx';
+import { switchMap, map, catchError, filter, mergeMap } from 'rxjs/operators';
+
 import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from '../../../model';
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
@@ -56,18 +54,18 @@ export class GamePlayEffects {
   // handle location update
   loadGame2$ = this.actions$
     .ofType('ROUTER_NAVIGATION')
-    .map((action: any): RouterStateUrl => action.payload.routerState)
-    .filter((routerState: RouterStateUrl) =>
-      routerState.url.toLowerCase().startsWith('/game-play/') &&
-      routerState.params.gameid
-    )
     .pipe(
-    switchMap((routerState: RouterStateUrl) =>
+      map((action: any): RouterStateUrl => action.payload.routerState),
+      filter((routerState: RouterStateUrl) =>
+        routerState.url.toLowerCase().startsWith('/game-play/') &&
+        routerState.params.gameid
+      ))
+    .pipe(
+      switchMap((routerState: RouterStateUrl) =>
       this.svc.getGame(routerState.params.gameid).pipe(
         map((game: Game) => new gameplayactions.LoadGameSuccess(game))
       )
-    )
-    );
+    ));
 
   @Effect()
   loadNextQuestion$ = this.actions$
@@ -115,7 +113,7 @@ export class GamePlayEffects {
     .pipe(
     switchMap((action: gameplayactions.SaveReportQuestion) =>
       this.svc.saveReportQuestion(action.payload.reportQuestion, action.payload.game)
-        .mergeMap((status: any) => this.svc.updateGame(action.payload.reportQuestion, action.payload.game))
+        .pipe(mergeMap((status: any) => this.svc.updateGame(action.payload.reportQuestion, action.payload.game)))
         .pipe(map((report: any) => new gameplayactions.SaveReportQuestionSuccess())))
     );
 

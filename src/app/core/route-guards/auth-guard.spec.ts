@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { TEST_DATA } from '../../testing';
 import { AuthGuard } from './auth-guard';

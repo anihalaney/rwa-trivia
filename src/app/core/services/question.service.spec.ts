@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Store } from '@ngrx/store';
 

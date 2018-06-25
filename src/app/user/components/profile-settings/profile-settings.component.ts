@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable } from 'rxjs/Observable';
+import { Store, select } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { map, take, finalize } from 'rxjs/operators';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { Utils } from '../../../core/services';
 import { User, Category } from '../../../model';
@@ -62,7 +62,7 @@ export class ProfileSettingsComponent implements OnDestroy {
     private storage: AngularFireStorage,
     private snackBar: MatSnackBar) {
 
-    this.store.select(appState.coreState).take(1).subscribe((s) => {
+    this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user
     });
     this.categoriesObs = store.select(getCategories);
@@ -73,7 +73,7 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.setCropperSettings();
 
-    this.userObs = this.store.select(appState.coreState).select(s => s.user);
+    this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
     this.userObs.subscribe(user => {
       if (user) {
@@ -87,7 +87,7 @@ export class ProfileSettingsComponent implements OnDestroy {
         this.createForm(this.user);
 
         this.filteredTags$ = this.userForm.get('tags').valueChanges
-          .map(val => val.length > 0 ? this.filter(val) : []);
+          .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
         if (this.user.profilePictureUrl) {
           this.profileImage.image = this.user.profilePictureUrl;
@@ -95,7 +95,7 @@ export class ProfileSettingsComponent implements OnDestroy {
       }
     });
 
-    this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+    this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.snackBar.open('Profile saved!', '', { duration: 2000 });
       }
@@ -179,9 +179,13 @@ export class ProfileSettingsComponent implements OnDestroy {
       const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
       this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile);
       if (imageBlob) {
-        // tslint:disable-next-line:max-line-length
-        const cropperImageUploadTask = this.storage.upload(`${this.basePath}/${this.user.userId}/${this.profileImagePath}/${fileName}`, imageBlob);
-        cropperImageUploadTask.downloadURL().subscribe(url => {
+        const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${fileName}`;
+        const fileRef = this.storage.ref(filePath);
+
+        const cropperImageUploadTask = this.storage.upload(filePath, imageBlob);
+        cropperImageUploadTask.snapshotChanges().pipe(
+          finalize(() => fileRef.getDownloadURL() )
+        ).subscribe(url => {
           this.profileImage.image = url ? url : '/assets/images/avatarimg.jpg';
           this.user.profilePicture = fileName;
           this.profileImageFile = undefined;
@@ -286,7 +290,7 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.user = cloneDeep(this.userCopyForReset);
     this.createForm(this.user);
     this.filteredTags$ = this.userForm.get('tags').valueChanges
-      .map(val => val.length > 0 ? this.filter(val) : []);
+      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
   }
 
   onSubmit() {
