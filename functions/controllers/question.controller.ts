@@ -91,6 +91,13 @@ exports.getNextQuestion = (req, res) => {
                         questionId: question.id,
                         addedOn: createdOn
                     }
+                    const filteredPlayerQnAs = game.playerQnAs.filter((fPlayerQnA) => fPlayerQnA.playerId === userId);
+                    if (filteredPlayerQnAs.length > 0) {
+                        const lastAddedQuestion = filteredPlayerQnAs[filteredPlayerQnAs.length - 1];
+                        if (!lastAddedQuestion.answerCorrect) {
+                            game.stats[game.nextTurnPlayerId].round = game.stats[game.nextTurnPlayerId].round + 1;
+                        }
+                    }
                     question.addedOn = createdOn;
                     game.playerQnAs.push(playerQnA);
                     const dbGame = game.getDbModel();
