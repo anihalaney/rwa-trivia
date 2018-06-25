@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { Question, RouterStateUrl } from '../../../model';
-import { ActionWithPayload, QuestionActions } from '../actions';
+import { QuestionActions } from '../actions';
 import { QuestionService } from '../../services'
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, filter } from 'rxjs/operators';
 
 @Injectable()
 export class QuestionEffects {
@@ -14,12 +14,12 @@ export class QuestionEffects {
     // handle location update
     loadRouteQuestionOfDay$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/dashboard'))
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+                routerState.url.toLowerCase().startsWith('/dashboard')))
         .pipe(() => this.svc.getQuestionOfTheDay(false))
-        .map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)
-        );
+        .pipe(map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)));
 
 
     @Effect()
@@ -27,13 +27,12 @@ export class QuestionEffects {
     loadNextQuestionOfDay$ = this.actions$
         .ofType(QuestionActions.GET_QUESTION_OF_THE_DAY)
         .pipe(
-        switchMap((action) =>
+            switchMap((action) =>
             this.svc.getQuestionOfTheDay(true)
                 .pipe(
-                map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question))
+                    map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question))
                 )
-        )
-        );
+        ));
 
     constructor(
         private actions$: Actions,

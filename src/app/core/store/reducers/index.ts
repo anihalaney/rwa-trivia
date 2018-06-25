@@ -6,7 +6,7 @@ import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
 import { loginRedirectUrl } from './ui-state.reducer';
 import { activeGames } from './game.reducer';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export * from './user.reducer';
 export * from './categories.reducer';

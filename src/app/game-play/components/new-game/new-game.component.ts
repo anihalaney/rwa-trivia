@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { Store } from '@ngrx/store';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import * as useractions from '../../../user/store/actions';
@@ -11,8 +11,7 @@ import { AppState, appState } from '../../../store';
 
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Category, GameOptions, GameMode, User, Friends, PlayerMode, OpponentType } from '../../../model';
-import { userFriends } from 'app/user/store';
+import { Category, GameOptions, GameMode, User, PlayerMode, OpponentType } from '../../../model';
 
 @Component({
   selector: 'new-game',
@@ -50,21 +49,21 @@ export class NewGameComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private gameActions: GameActions,
     private router: Router) {
-    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
-    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
+    this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
-    this.userDict$ = this.store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => this.userDict = userDict);
 
 
-    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
         this.store.dispatch(new useractions.LoadUserFriends({ 'userId': user.userId }));
       }
     });
 
 
-    this.store.select(appState.userState).select(s => s.userFriends).subscribe(uFriends => {
+    this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends !== null) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
@@ -121,7 +120,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     */
 
     this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-      .map(val => val.length > 0 ? this.filter(val) : []);
+      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
   }
 
   filter(val: string): string[] {
@@ -226,7 +225,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   startNewGame(gameOptions: GameOptions) {
     let user: User;
-    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user); //logged in user
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user); //logged in user
     gameOptions.friendId = this.friendUserId;
     this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }

@@ -2,15 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { Observable } from 'rxjs/Observable';
-import '../../rxjs-extensions';
+import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../model';
+import { Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
 import { QuestionActions } from '../store/actions';
-import { query } from '@angular/core/src/render3/instructions';
 
 @Injectable()
 export class QuestionService {
@@ -41,11 +40,12 @@ export class QuestionService {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     return this.db.collection(`/${collection}`, ref => ref.where('created_uid', '==', userId))
       .valueChanges()
-      .map(qs => qs.map(q => Question.getViewModelFromDb(q)))
-      .catch(error => {
-        console.log(error);
-        return Observable.of(null);
-      });
+      .pipe(
+        map(qs => qs.map(q => Question.getViewModelFromDb(q))),
+        catchError(error => {
+          console.log(error);
+          return of(null);
+      }));
   }
 
   // get Questions by bulk upload id
@@ -56,20 +56,21 @@ export class QuestionService {
         .where('bulkUploadId', '==', bulkUploadFileInfo.id)
     })
       .valueChanges()
-      .map(qs => qs.map(q => Question.getViewModelFromDb(q)))
-      .catch(error => {
+      .pipe(
+        map(qs => qs.map(q => Question.getViewModelFromDb(q))),
+        catchError(error => {
         console.log(error);
-        return Observable.of(null);
-      });
+        return of(null);
+      }));
   }
 
   getUnpublishedQuestions(flag: boolean): Observable<Question[]> {
     const question_source = (!flag) ? 'question' : 'bulk-question';
     return this.db.collection('/unpublished_questions', ref => ref.where('source', '==', question_source)).valueChanges()
-      .catch(error => {
+      .pipe(catchError(error => {
         console.log(error);
-        return Observable.of(null);
-      });
+        return of(null);
+      }));
   }
 
   saveQuestion(question: Question) {

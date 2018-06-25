@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { Observable } from 'rxjs/Observable';
-import '../../rxjs-extensions';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Category } from '../../model/category';
-import { BulkUploadFileInfo, User, BulkUpload } from '../../model';
+import { HttpClient } from '@angular/common/http';
+import { BulkUploadFileInfo, User } from '../../model';
 
 @Injectable()
 export class BulkService {
@@ -22,17 +21,17 @@ export class BulkService {
     if (!archive) {
       return this.db.collection('/bulk_uploads', ref => ref.where('isAdminArchived', '==', archive))
         .valueChanges()
-        .catch(error => {
+        .pipe(catchError(error => {
           console.log(error);
-          return Observable.of(null);
-        });
+          return of(null);
+        }));
 
     } else {
       return this.db.collection('/bulk_uploads').valueChanges()
-        .catch(error => {
+        .pipe(catchError(error => {
           console.log(error);
-          return Observable.of(null);
-        });
+          return of(null);
+        }));
     }
   }
 
@@ -61,20 +60,20 @@ export class BulkService {
 
     return this.db.collection('/bulk_uploads', whereCondition)
       .valueChanges()
-      .catch(error => {
+      .pipe(catchError(error => {
         console.log(error);
-        return Observable.of(null);
-      });
+        return of(null);
+      }));
   }
 
   // get BulkUpload by Id
   getBulkUploadById(bulkUploadFileInfo: BulkUploadFileInfo): Observable<BulkUploadFileInfo> {
     return this.db.doc(`/bulk_uploads/${bulkUploadFileInfo.id}`)
       .valueChanges()
-      .catch(error => {
+      .pipe(catchError(error => {
         console.log(error);
-        return Observable.of(null);
-      });
+        return of(null);
+      }));
   }
 
   // update Bulk Upload
@@ -90,7 +89,7 @@ export class BulkService {
   getFileByBulkUploadFileUrl(bulkUploadFileInfo: BulkUploadFileInfo): Observable<string> {
     const filePath = `bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadFileInfo.id}-${bulkUploadFileInfo.fileName}`;
     const ref = this.storage.ref(filePath);
-    return ref.getDownloadURL().map(url => url);
+    return ref.getDownloadURL().pipe(map(url => url));
   }
 
   archiveBulkUpload(archiveArray: BulkUploadFileInfo[], user: User) {
@@ -109,15 +108,15 @@ export class BulkService {
       upload.update(itemDoc, obj);
     })
     return upload.commit();
-    // return Observable.of(true);
+    // return of(true);
   }
   // get single Bulk Upload
   getBulkUploadFile(bulkId: string): Observable<BulkUploadFileInfo> {
     return this.db.doc(`/bulk_uploads/${bulkId}`)
       .valueChanges()
-      .catch(error => {
+      .pipe(catchError(error => {
         console.log(error);
-        return Observable.of(null);
-      });
+        return of(null);
+      }));
   }
 }

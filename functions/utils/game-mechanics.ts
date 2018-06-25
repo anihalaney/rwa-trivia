@@ -1,5 +1,4 @@
 import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../src/app/model';
-import { Observable } from 'rxjs/Observable';
 import { Utils } from './utils';
 const utils: Utils = new Utils();
 const gameService = require('../services/game.service');

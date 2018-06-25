@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { Store } from '@ngrx/store';
+import { Observable, Subscription, pipe } from 'rxjs';
+import { map, distinctUntilChanged } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
 import { AppState, appState, categoryDictionary } from '../../store';
 import { Utils } from '../../core/services';
 import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
@@ -42,14 +43,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private questionActions: QuestionActions,
     private gameActions: GameActions,
     private userActions: UserActions) {
-    this.questionOfTheDay$ = store.select(appState.coreState).select(s => s.questionOfTheDay);
-    this.activeGames$ = store.select(appState.coreState).select(s => s.activeGames);
-    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.questionOfTheDay$ = store.select(appState.coreState).pipe(select(s => s.questionOfTheDay));
+    this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
 
-    this.subs.push(store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user
       if (user) {
-        this.user = user;
+        this.user = user; 
         if (this.user.isSubscribed) {
           this.showNewsCard = false;
         }
@@ -87,7 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.gameSliceStartIndex = 0;
     this.gameSliceLastIndex = 8;
 
-    this.subs.push(this.store.select(appState.gameplayState).select(s => s.gameInvites).subscribe(iGames => {
+    this.subs.push(this.store.select(appState.gameplayState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
       this.gameInvites = iGames;
       this.friendCount = 0;
       this.randomPlayerCount = 0;

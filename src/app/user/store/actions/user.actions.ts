@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { User, Question, Invitation, Game, Friends } from '../../../model';
 
 export enum UserActionTypes {

@@ -8,7 +8,7 @@ import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { ShareButtonModule } from '@ngx-share/button';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 import {
   QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
@@ -43,7 +43,8 @@ import {
     ImageCropperModule,
 
     HttpClientModule,       // for share counts
-    ShareButtonModule.forRoot()
+    ShareButtonModule.forRoot(),
+    FontAwesomeModule
 
   ],
   providers: [
@@ -52,6 +53,6 @@ import {
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
-    ImageCropperModule, HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent]
+    ImageCropperModule, HttpClientModule, ShareButtonModule, FontAwesomeModule, SocialPaletteComponent, AuthorComponent]
 })
 export class SharedModule { }

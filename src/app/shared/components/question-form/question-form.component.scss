@@ -73,7 +73,7 @@ mat-card-actions {
 .remove-tag {
   cursor: pointer;
 }
-::ng-deep mat-input-container.ng-invalid.ng-touched .mat-input-underline {
+::ng-deep mat-form-field.ng-invalid.ng-touched .mat-input-underline {
   border-color: red;
 }
 ::ng-deep mat-hint.error, .error {

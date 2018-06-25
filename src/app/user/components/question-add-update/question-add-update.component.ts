@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators, FormArray, FormControl, ValidatorFn } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { Store } from '@ngrx/store';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { Observable, Subscription } from 'rxjs';
+import { debounceTime, take } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 import { Utils } from '../../../core/services';
@@ -42,8 +42,8 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   // Constructor
   constructor(private fb: FormBuilder,
               private store: Store<AppState>) {
-    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
-    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
+    this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
   }
 
   // Lifecycle hooks
@@ -53,8 +53,8 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
     let questionControl = this.questionForm.get('questionText');
 
-    questionControl.valueChanges.debounceTime(500).subscribe(v => this.computeAutoTags());
-    this.answers.valueChanges.debounceTime(500).subscribe(v => this.computeAutoTags());
+    questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
+    this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
 
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
@@ -89,7 +89,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
     question.status = QuestionStatus.SUBMITTED;
-    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
 
     question.created_uid = this.user.userId;
     // call saveQuestion

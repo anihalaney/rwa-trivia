@@ -1,7 +1,9 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { User, Game, PlayerMode } from '../../../model';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import * as socialactions from '../../../social/store/actions';
@@ -44,7 +46,7 @@ export class GameOverComponent implements OnInit {
   }
 
   constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2, private userActions: UserActions) {
-    this.user$ = this.store.select(appState.coreState).select(s => s.user);
+    this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
@@ -56,12 +58,12 @@ export class GameOverComponent implements OnInit {
       link: this.imageUrl
     }];
 
-    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => {
       this.userDict = userDict
     });
 
-    this.store.select(gameplayState).select(s => s.userAnsweredQuestion).subscribe(stats => {
+    this.store.select(gameplayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
         this.questionsArray.map((question) => {
@@ -72,13 +74,13 @@ export class GameOverComponent implements OnInit {
       }
     });
 
-    this.store.select(gameplayState).select(s => s.saveReportQuestion).subscribe(state => {
+    this.store.select(gameplayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       if (state === 'SUCCESS') {
         (this.dialogRef) ? this.dialogRef.close() : '';
       }
     });
 
-    this.store.select(appState.socialState).select(s => s.socialShareImageUrl).subscribe(imageUrl => {
+    this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(imageUrl => {
       if (imageUrl !== 'NONE') {
         if (imageUrl != null) {
           this.blogData[0].share_status = true;

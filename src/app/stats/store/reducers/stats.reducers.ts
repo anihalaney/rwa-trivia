@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { StatsActions, StatsActionTypes } from '../actions';
 import { SystemStats } from '../../../model';
