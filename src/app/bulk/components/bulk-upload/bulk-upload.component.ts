@@ -173,59 +173,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
         }
       }
     });
-    // parse(csvString, parseOptions,
-    //   (error, output) => {
-    //     if (error) {
-    //       this.fileParseError = true;
-    //       this.fileParseErrorMessage = `File Parsing ${error}`;
-    //     }
-    //     if (output !== undefined && output !== '') {
-    //       this.questions =
-    //         output.map(element => {
-    //           const question: Question = new Question();
-    //           question.questionText = element['Question'];
-    //           question.answers = [
-    //             { 'id': 1, 'answerText': element['Option 1'], correct: false },
-    //             { 'id': 2, 'answerText': element['Option 2'], correct: false },
-    //             { 'id': 3, 'answerText': element['Option 3'], correct: false },
-    //             { 'id': 4, 'answerText': element['Option 4'], correct: false }
-    //           ]
-    //           if (question.answers[element['Answer Index'] - 1] !== undefined) {
-    //             question.answers[element['Answer Index'] - 1].correct = true;
-    //           }
-    //           for (let i = 1; i < 10; i++) {
-    //             if (element['Tag ' + i] && element['Tag ' + i] !== '') {
-    //               if (this.isTagExist(element['Tag ' + i], question) === -1) {
-    //                 question.tags.push(element['Tag ' + i].trim());
-    //               }
-    //             }
-    //           }
-    //           question.published = false;
-    //           question.explanation = 'status - not approved';
-    //           question.status = QuestionStatus.PENDING;
-    //           question.created_uid = this.user.userId;
-    //           if (!question.questionText || question.questionText.trim() === '') {
-    //             this.questionValidationError = true;
-    //             question.validationErrorMessages.push('Missing Question');
-    //           } else if (question.answers[0].answerText.trim() === '' || question.answers[1].answerText.trim() === '' ||
-    //             question.answers[2].answerText.trim() === '' || question.answers[3].answerText.trim() === '') {
-    //             this.questionValidationError = true;
-    //             question.validationErrorMessages.push('Missing Question Answer Options');
-    //           } else if (question.answers.filter(a => a.correct).length !== 1) {
-    //             this.questionValidationError = true;
-    //             question.validationErrorMessages.push('Must have exactly one correct answer');
-    //           } else if (question.answers.filter(a => !a.answerText || a.answerText.trim() === '').length > 0) {
-    //             this.questionValidationError = true;
-    //             question.validationErrorMessages.push('Missing Answer');
-    //           } else if (question.tags.length < 3) {
-    //             this.questionValidationError = true;
-    //             question.validationErrorMessages.push('Atleast 3 tags required');
-    //           }
-    //           return question;
-    //         });
-    //       this.bulkUploadFileInfo.uploaded = this.questions.length;
-    //     }
-    //   });
   }
 
   isTagExist(tag, question) {
