@@ -48,6 +48,8 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 
 [Part 18: Revisiting ngrx - Splitting store into feature modules, using action classes, selectors & router-store](https://blog.realworldfullstack.io/real-world-app-part-18-revisiting-ngrx-e20feed6312c)
 
+[Part 19: Ready Player Two - Two player game play, computing stats, dashboard and other features](https://blog.realworldfullstack.io/real-world-app-part-19-ready-player-two-9e17c2e7c694)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)

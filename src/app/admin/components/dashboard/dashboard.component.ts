@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { QuestionActions } from '../../../core/store/actions';
 import { Category, SearchResults } from '../../../model';
@@ -18,10 +20,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>,
               private questionActions: QuestionActions) {
-    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.categoryDictObs = store.select(categoryDictionary);
-    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
-    this.questionsSearchResultsObs = store.select(appState.adminState).select(s => s.questionsSearchResults);
+    this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
+    this.questionsSearchResultsObs = store.select(appState.adminState).pipe(select(s => s.questionsSearchResults));
   }
 
   ngOnInit() {

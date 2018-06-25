@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing'
 import { SharedMaterialModule } from '../../shared/shared-material.module';
 //import { OverlayRef } from '@angular/cdk';
 import { MatDialogRef, MatDialog, MatDialogConfig } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 //import { AngularFire, FirebaseAuthState, AuthProviders } from 'angularfire2';
 import { AngularFireAuth, AngularFireAuthProvider } from 'angularfire2/auth';

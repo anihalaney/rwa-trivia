@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { Observable } from 'rxjs/Observable';
-import '../../rxjs-extensions';
+import { Observable, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+
 import { AppState } from '../../store/app-store';
 import { User, Invitation, Friends } from '../../model';
-import { ObservableInput } from 'rxjs/Observable';
+import { ObservableInput } from 'rxjs';
 import { CONFIG } from '../../../environments/environment';
 import { UserActions } from '../../core/store/actions';
 import * as useractions from '../../user/store/actions';
@@ -27,7 +28,7 @@ export class UserService {
     loadUserProfile(user: User): Observable<User> {
 
         return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
-            .map(u => {
+            .pipe(map(u => {
                 if (u) {
                     user = { ...u, ...user };
                     if (u.stats) {
@@ -38,8 +39,8 @@ export class UserService {
                 }
 
                 return user;
-            })
-            .mergeMap(u => this.getUserProfileImage(u));
+            }),
+            mergeMap(u => this.getUserProfileImage(u)));
     }
 
     saveUserProfile(user: User) {
@@ -56,7 +57,7 @@ export class UserService {
 
     loadOtherUserProfile(userId: string): Observable<User> {
         const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
-        return this.http.get<User>(url).mergeMap(u => this.getUserProfileImage(u));
+        return this.http.get<User>(url).pipe(mergeMap(u => this.getUserProfileImage(u)));
     }
 
 
@@ -64,13 +65,13 @@ export class UserService {
         if (user.profilePicture && user.profilePicture !== '') {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.storage.ref(filePath);
-            return ref.getDownloadURL().map(url => {
+            return ref.getDownloadURL().pipe(map(url => {
                 user.profilePictureUrl = (url) ? url : '/assets/images/default-avatar.png';
                 return user;
-            });
+            }));
         } else {
             user.profilePictureUrl = '/assets/images/default-avatar.png'
-            return Observable.of(user);
+            return of(user);
         }
     }
 
@@ -91,7 +92,7 @@ export class UserService {
             email.set(this.db.firestore.collection('invitations').doc(dbInvitation.id), dbInvitation);
         });
         email.commit();
-        return Observable.of(true);
+        return of(true);
     }
 
     checkInvitationToken(obj: any): Observable<any> {

@@ -3,6 +3,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { RouterStateUrl } from '../../../model';
 import { TagActions } from '../actions';
 import { TagService } from '../../services'
+import { map, filter } from 'rxjs/operators';
 
 @Injectable()
 export class TagEffects {
@@ -17,11 +18,12 @@ export class TagEffects {
     // handle location update
     loadRouteCategories$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/'))
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+                routerState.url.toLowerCase().startsWith('/')
+            ))
         .pipe(() => this.svc.getTags())
-        .map((tags: string[]) => this.tagActions.loadTagsSuccess(tags)
-        );
+        .pipe(map((tags: string[]) => this.tagActions.loadTagsSuccess(tags)));
 
 }

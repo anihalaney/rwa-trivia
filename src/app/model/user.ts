@@ -1,5 +1,5 @@
 import * as firebase from 'firebase/app';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 export class User {
   id?: string;

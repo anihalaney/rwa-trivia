@@ -1,8 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { Utils } from '../../../core/services';
 import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload } from '../../../model';
@@ -50,9 +50,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
     private store: Store<AppState>) {
-    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
-    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
-    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
+    this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
   }
 
   ngOnInit() {
@@ -66,7 +66,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     });
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
-      .map(val => val.length > 0 ? this.filter(val) : []);
+      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
   }
 
   filter(val: string): string[] {

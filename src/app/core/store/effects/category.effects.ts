@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { map, filter } from 'rxjs/operators';
 import { Effect, Actions } from '@ngrx/effects';
 import { CategoryActions } from '../actions';
 import { Category, RouterStateUrl } from '../../../model';
@@ -17,10 +18,10 @@ export class CategoryEffects {
     // handle location update
     loadRouteCategories$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/'))
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+                routerState.url.toLowerCase().startsWith('/')))
         .pipe(() => this.svc.getCategories())
-        .map((categories: Category[]) => this.categoryActions.loadCategoriesSuccess(categories)
-        );
+        .pipe(map((categories: Category[]) => this.categoryActions.loadCategoriesSuccess(categories)));
 }

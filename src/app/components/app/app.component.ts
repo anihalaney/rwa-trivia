@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
+import { map, skip, take, filter } from 'rxjs/operators';
 
 import { AppState, appState } from '../../store';
 import { CategoryActions, TagActions, QuestionActions, GameActions } from '../../core/store';
@@ -42,23 +43,23 @@ export class AppComponent implements OnInit, OnDestroy {
     private location: Location,
     private windowRef: WindowRef) {
 
-    this.sub = store.select(appState.coreState).select(s => s.questionSaveStatus).subscribe((status) => {
+    this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.snackBar.open('Question saved!', '', { duration: 2000 });
       }
     });
 
 
-    this.sub2 = store.select(appState.coreState).select(s => s.user).skip(1).subscribe(user => {
+    this.sub2 = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user
       if (user) {
         let url: string;
-        this.store.select(appState.coreState).select(s => s.invitationToken).subscribe(status => {
+        this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
           if (status !== 'NONE') {
             this.store.dispatch(new userActions.MakeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }))
           }
         });
-        this.store.select(appState.coreState).take(1).subscribe(s => url = s.loginRedirectUrl);
+        this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl);
         if (url) {
           this.router.navigate([url]);
         }
@@ -69,21 +70,21 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.sub3 = this.store.select(appState.gameplayState).select(s => s.newGameId).filter(g => g !== '').subscribe(gameObj => {
+    this.sub3 = this.store.select(appState.gameplayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
 
       //  console.log("Navigating to game: " + gameObj['gameId']);
       this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     });
 
-    this.sub4 = this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+    this.sub4 = this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.router.navigate(['my/invite-friends']);
         this.snackBar.open('You become the friend!', '', { duration: 2000 });
       }
     });
 
-    this.sub5 = store.select(appState.userState).select(s => s.questionSaveStatus).subscribe((status) => {
+    this.sub5 = store.select(appState.userState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'IN PROGRESS') {
         this.router.navigate(['/my/questions']);
       }

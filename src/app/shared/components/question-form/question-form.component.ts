@@ -2,8 +2,8 @@ import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } 
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Utils } from '../../../core/services';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { Question, QuestionStatus, Category, User, Answer } from '../../../model';
 
 import { AppState, appState, getCategories, getTags } from '../../../store';
@@ -56,8 +56,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
     const questionControl = this.questionForm.get('questionText');
 
-    questionControl.valueChanges.debounceTime(500).subscribe(v => this.computeAutoTags());
-    this.answers.valueChanges.debounceTime(500).subscribe(v => this.computeAutoTags());
+    questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
+    this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
 
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));

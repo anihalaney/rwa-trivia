@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../store';
@@ -24,7 +25,7 @@ export class AuthInterceptor implements HttpInterceptor {
       // Clone the request to add the new header.
       let authReq = req.clone({ headers: req.headers.set('Authorization', authHeader) });
       // Pass on the cloned request instead of the original request.
-      return next.handle(authReq).catch((error, caught) => {
+      return next.handle(authReq).pipe(catchError((error, caught) => {
 
         if (error.status === 401) {
           // logout users, redirect to login page
@@ -43,9 +44,9 @@ export class AuthInterceptor implements HttpInterceptor {
         }
 
         //return all others errors 
-        return Observable.throw(error);
+        return throwError(error);
 
-      }) as any;
+      })) as any;
     } else {
       return next.handle(req);
     }

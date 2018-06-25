@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { map } from 'rxjs/operators';
+
 import * as bulkActions from '../../../../app/bulk/store/actions';
 import { bulkState } from '../../../../app/bulk/store';
 import { AppState, appState, categoryDictionary } from '../../../store/app-store';
-import { Store } from '@ngrx/store';
-
+import { Store, select } from '@ngrx/store';
 
 @Component({
   selector: 'app-bulk',
@@ -21,7 +22,7 @@ export class BulkComponent implements OnInit {
 
 
   constructor(private store: Store<AppState>) {
-    this.store.select(bulkState).select(s => s.getArchiveToggleState).subscribe((state) => {
+    this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;
       } else {
@@ -29,7 +30,7 @@ export class BulkComponent implements OnInit {
       }
     });
 
-    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.isArchive = true;
       } else {
