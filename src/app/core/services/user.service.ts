@@ -30,7 +30,8 @@ export class UserService {
         return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
             .pipe(map(u => {
                 if (u) {
-                    user = { ...u, ...user };
+                    // user = { ...u, ...user };
+                    user = u;
                     if (u.stats) {
                         user.stats = u.stats;
                     }
