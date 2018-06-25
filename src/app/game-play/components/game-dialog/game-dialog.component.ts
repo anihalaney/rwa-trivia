@@ -1,10 +1,9 @@
 import { Component, Inject, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { Store } from '@ngrx/store';
-import '../../../rxjs-extensions';
+import { Observable, Subscription, timer } from 'rxjs';
+import { take, filter } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import { categoryDictionary } from '../../../store';
@@ -76,17 +75,17 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.user = data.user;
     this.userDict = data.userDict;
 
-    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => {
       this.userDict = userDict
     });
 
     this.resetValues();
-    this.gameObs = store.select(gameplayState).select(s => s.currentGame).filter(g => g != null);
-    this.gameQuestionObs = store.select(gameplayState).select(s => s.currentGameQuestion);
+    this.gameObs = store.select(gameplayState).pipe(select(s => s.currentGame), filter(g => g != null));
+    this.gameQuestionObs = store.select(gameplayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
+    this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => { this.categoryDictionary = c });
     this.sub.push(
       this.gameObs.subscribe(game => {
         if (game !== null && !this.isGameLoaded) {
@@ -169,7 +168,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           if (!this.isQuestionAvailable) {
             this.showLoader = true;
             this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
-            this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+            this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
               this.timer--;
             },
               null,
@@ -196,7 +195,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     if (this.isCorrectAnswer) {
       this.showWinBadge = true;
       this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
-      this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+      this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
         this.timer--;
       },
         null,
@@ -216,7 +215,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     // Show Loading screen
     this.showLoader = true;
     this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
-    this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+    this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
       this.timer--;
     },
       null,
@@ -226,7 +225,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.showLoader = false;
         this.showBadge = true;
         this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
-        this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+        this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
           this.timer--;
         },
           null,
@@ -255,7 +254,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       if (this.isQuestionAvailable) {
         this.questionIndex++;
         this.timerSub =
-          Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+          timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
             this.timer--;
           },
             null,
@@ -265,7 +264,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
                 this.afterAnswer();
                 this.genQuestionComponent.fillTimer();
               }
-
             });
       } else {
         setTimeout(() => {

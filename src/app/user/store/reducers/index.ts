@@ -5,7 +5,7 @@ import {
     userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions,
     questionSaveStatus, getGameResult, userFriends
 } from './user.reducer';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 
 export * from './user.reducer';

@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core
 
 import { Question, Answer, User } from '../../../model';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { QuestionActions } from '../../../../app/core/store/actions';
 
@@ -25,7 +25,7 @@ export class QuestionComponent implements OnChanges {
   constructor(private fb: FormBuilder, private store: Store<AppState>, private questionAction: QuestionActions) {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.store.select(appState.coreState).select(s => s.questionOfTheDay).subscribe(questionOfTheDay => {
+    this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
     });
   }
 

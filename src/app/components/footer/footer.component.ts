@@ -1,7 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
 
 import { User } from '../../model';
 

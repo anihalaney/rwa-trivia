@@ -1,10 +1,9 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { Observable, Subscription, timer } from 'rxjs';
+import { Store, select } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { User, Game, Category, PlayerMode } from '../../../model';
-import { userState } from '../../store';
-import { Subscription } from 'rxjs/Subscription';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'game-card',
@@ -32,7 +31,7 @@ export class GameCardComponent implements OnInit, OnChanges {
 
   constructor(private store: Store<AppState>) {
 
-    this.user$ = this.store.select(appState.coreState).select(s => s.user);
+    this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
@@ -43,7 +42,7 @@ export class GameCardComponent implements OnInit, OnChanges {
     this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict);
 
     this.timerSub =
-      Observable.timer(1000, 1000).subscribe(t => {
+      timer(1000, 1000).subscribe(t => {
         if (this.game.nextTurnPlayerId === this.user.userId) {
 
           const utcDate = new Date(new Date().toUTCString());
@@ -62,11 +61,12 @@ export class GameCardComponent implements OnInit, OnChanges {
             this.remainingMinutes = 0;
           }
         }
-      })
+      });
+      
   }
 
   ngOnInit() {
-    this.store.select(appState.coreState).take(1).subscribe(s => {
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);

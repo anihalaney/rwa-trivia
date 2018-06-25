@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
-import { OnInit, OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
-import { Input } from '@angular/core/src/metadata/directives';
-import { AppState, appState, categoryDictionary } from '../../../store/app-store';
+import { Component, OnInit, OnChanges } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
+import { AppState } from '../../../store/app-store';
 import * as bulkActions from '../../store/actions';
 import { bulkState } from '../../store';
 
@@ -23,14 +22,14 @@ export class BulkSummaryComponent implements OnInit, OnChanges {
 
 
   constructor(private store: Store<AppState>, ) {
-    this.store.select(bulkState).select(s => s.getArchiveToggleState).subscribe((state) => {
+    this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;
       } else {
         this.toggleValue = false;
       }
     });
-    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.isArchive = true;
       } else {
@@ -40,7 +39,6 @@ export class BulkSummaryComponent implements OnInit, OnChanges {
       }
     });
   }
-
 
   ngOnInit() {
     this.setDefaultTitle();

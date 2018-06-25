@@ -28,18 +28,18 @@
             <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>
             <span *ngSwitchCase="2">Forgot Password</span>
           </div>
-          <mat-input-container class="full-width required">
+          <mat-form-field class="full-width required">
             <input matInput placeholder="Email *" formControlName="email" class="required">
             <mat-hint align="end" *ngIf="loginForm.controls.email.errors && !loginForm.controls.email.pristine" class="error">Invalid Email!</mat-hint>
-          </mat-input-container>
-          <mat-input-container [class.hide]="mode === 2" class="full-width required">
+          </mat-form-field>
+          <mat-form-field [class.hide]="mode === 2" class="full-width required">
             <input type="password" matInput placeholder="Password *" class="required" formControlName="password">
             <mat-hint align="end" *ngIf="mode !== 2 && (loginForm.controls.password.errors && !loginForm.controls.password.pristine)" class="error">Password must be atleast 6 characters</mat-hint>
-          </mat-input-container>
-          <mat-input-container [class.hide]="mode !== 1" class="full-width required">
+          </mat-form-field>
+          <mat-form-field [class.hide]="mode !== 1" class="full-width required">
             <input type="password" matInput placeholder="Confirm Password" class="required" formControlName="confirmPassword">
             <mat-hint align="end" *ngIf="mode === 1 && (loginForm.controls.password.valid && loginForm.hasError('passwordmismatch'))" class="error">Must match Password</mat-hint>
-          </mat-input-container>
+          </mat-form-field>
           <ng-container [ngSwitch]="mode">
             <ng-container *ngSwitchCase="0">
               <div class="formfield">

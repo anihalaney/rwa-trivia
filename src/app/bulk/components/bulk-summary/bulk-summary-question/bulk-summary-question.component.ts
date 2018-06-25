@@ -1,9 +1,8 @@
 import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 import { BulkUploadFileInfo, Question, Category } from '../../../../model';
-import { Subscription } from 'rxjs/Subscription';
 import { MatTableDataSource } from '@angular/material';
 import { Utils } from '../../../../core/services';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -46,13 +45,13 @@ export class BulkSummaryQuestionComponent implements OnInit {
     private snackBar: MatSnackBar,
     private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router) {
 
-    this.store.select(bulkState).select(s => s.questionSaveStatus).subscribe(status => {
+    this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
       if (status === 'UPDATE') {
         this.snackBar.open('Question Updated!', '', { duration: 1500 });
       }
     });
 
-    this.store.select(bulkState).select(s => s.bulkUploadFileUrl).subscribe((url) => {
+    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
       if (url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
@@ -62,13 +61,13 @@ export class BulkSummaryQuestionComponent implements OnInit {
       }
     });
 
-    this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
+    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
       if (obj) {
         this.bulkUploadFileInfo = obj;
         this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([obj]);
 
         // get published question by BulkUpload Id
-        this.publishedQuestionObs = this.store.select(bulkState).select(s => s.bulkUploadPublishedQuestions);
+        this.publishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadPublishedQuestions));
         this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
         this.publishedQuestionObs.subscribe((questions) => {
           if (questions) {
@@ -78,7 +77,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
         });
 
         // get unpublished question by BulkUpload Id
-        this.unPublishedQuestionObs = this.store.select(bulkState).select(s => s.bulkUploadUnpublishedQuestions);
+        this.unPublishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadUnpublishedQuestions));
         this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
         this.unPublishedQuestionObs.subscribe((questions) => {
           if (questions) {

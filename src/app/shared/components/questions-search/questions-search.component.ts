@@ -1,11 +1,11 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 import { PageEvent, MatCheckboxChange, MatSelectChange } from '@angular/material';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
-import {Observable} from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
-import { Question, QuestionStatus, Category, SearchResults, SearchCriteria } from '../../../model';
+import { Question, QuestionStatus, Category, SearchResults } from '../../../model';
 
 @Component({
   selector: 'question-search',
@@ -31,7 +31,7 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
   tagsChecked: {[key: string]: boolean};
   
   constructor(private store: Store<AppState>) {
-    this.categoriesObs = store.select(appState.coreState).select(s => s.categories);
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
   }
 
   ngOnInit() {

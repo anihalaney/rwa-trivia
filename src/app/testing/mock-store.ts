@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { map } from 'rxjs/operator/map';

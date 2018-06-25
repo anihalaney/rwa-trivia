@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+
 import { AppState, appState } from '../../../store';
-import { Store } from '@ngrx/store';
 import { User } from '../../../model';
 
 @Component({
@@ -12,7 +13,7 @@ export class UserStatsCardComponent {
   user: User;
 
   constructor(private store: Store<AppState>) {
-    store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user
       if (user) {
         this.user = user;

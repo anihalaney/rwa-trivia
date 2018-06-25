@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
-import { switchMap, map } from 'rxjs/operators';
-import { empty } from 'rxjs/observable/empty';
+import { switchMap, map, filter } from 'rxjs/operators';
+import { empty } from 'rxjs';
+
 import { SearchResults, Question, RouterStateUrl, SearchCriteria } from '../../../model';
-import { AdminActions, AdminActionTypes } from '../actions';
+import { AdminActionTypes } from '../actions';
 import * as adminActions from '../actions/admin.actions';
 import { QuestionService } from '../../../core/services';
 
@@ -17,9 +17,10 @@ export class AdminEffects {
     // handle location update
     loadRouteQuestions$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/admin'))
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+                routerState.url.toLowerCase().startsWith('/admin')))
         .pipe(
         switchMap((routerState: RouterStateUrl) =>
             this.svc.getQuestions(0, 25, new SearchCriteria()).pipe(
@@ -33,10 +34,11 @@ export class AdminEffects {
     // handle location update
     loadUnpublishedRouteQuestions$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
             routerState.url.toLowerCase().startsWith('/admin')
-        )
+        ))
         .pipe(
         switchMap((routerState: RouterStateUrl) =>
             this.svc.getUnpublishedQuestions(routerState.url.toLowerCase().includes('bulk')).pipe(
