@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { Utils } from '../../../core/services';
 import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload } from '../../../model';
-import { parse } from 'csv';
+import { PapaParseService } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
 
 @Component({
@@ -49,7 +49,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
 
   constructor(private fb: FormBuilder,
-    private store: Store<AppState>) {
+    private store: Store<AppState>, private papa: PapaParseService) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
@@ -111,13 +111,9 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       },
       'skip_empty_lines': true
     };
-
-    parse(csvString, parseOptions,
-      (error, output) => {
-        if (error) {
-          this.fileParseError = true;
-          this.fileParseErrorMessage = `File Parsing ${error}`;
-        }
+    this.papa.parse(csvString, {
+      complete: (result) => {
+        const output = result.data;
         if (output !== undefined && output !== '') {
           this.questions =
             output.map(element => {
@@ -169,7 +165,16 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
             });
           this.bulkUploadFileInfo.uploaded = this.questions.length;
         }
-      });
+      },
+      header: true,
+      skipEmptyLines: true,
+      error: (error) => {
+        if (error) {
+          this.fileParseError = true;
+          this.fileParseErrorMessage = `File Parsing ${error}`;
+        }
+      }
+    });
   }
 
   isTagExist(tag, question) {
