@@ -100,7 +100,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.papa.parse(csvString, {
       complete: (result) => {
         const output = result.data;
-        const isHeaderValidate = false;
         const validColumns = ['Question', 'Option 1', 'Option 2', 'Option 3', 'Option 4', 'Answer Index', 'Tag 1', 'Tag 2', 'Tag 3',
           'Tag 4', 'Tag 5', 'Tag 6', 'Tag 7', 'Tag 8', 'Tag 9'];
         if (validColumns.toString() !== result.meta.fields.toString()) {
