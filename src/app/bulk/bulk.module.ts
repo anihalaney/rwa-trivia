@@ -10,6 +10,7 @@ import {
   BulkDetailsComponent, BulkUploadComponent, BulkSummaryComponent,
   BulkSummaryTableComponent, BulkSummaryQuestionComponent
 } from './components';
+import { PapaParseModule } from 'ngx-papaparse';
 
 
 @NgModule({
@@ -29,6 +30,7 @@ import {
 
     //  //ngrx effects
     EffectsModule.forFeature(effects),
+    PapaParseModule
   ],
   exports: [BulkSummaryTableComponent, BulkSummaryQuestionComponent]
 })
