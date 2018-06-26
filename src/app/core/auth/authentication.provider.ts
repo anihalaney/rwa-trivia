@@ -4,7 +4,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Store } from '@ngrx/store';
 import { Observable, defer, throwError, from } from 'rxjs';
-import { share, take } from 'rxjs/operators';
+import { share, take, tap } from 'rxjs/operators';
 
 import { AppState, appState } from '../../store';
 import { LoginComponent } from '../components';
@@ -59,15 +59,15 @@ export class AuthenticationProvider {
   }
 
 
-  refreshToken = function () {
-    return this.refreshTokenObserver.do((tokenResponse) => {
+  refreshToken = function (): Observable<any> {
+    return this.refreshTokenObserver.pipe(tap((tokenResponse) => {
       this.user.idToken = tokenResponse;
       this.store.dispatch(this.userActions.loginSuccess(this.user));
       return tokenResponse;
     },
       (err) => {
         return throwError(err);
-      });
+    }));
   }
 
 
