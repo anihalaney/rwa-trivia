@@ -48,6 +48,20 @@ label
     margin-bottom:10px;
   }
 }
+@media (min-width:960px) and (max-width:1025px)
+  {
+    .archive-div,.div-alignment
+    {
+      margin-bottom:10px;
+    }
+  }
+  @media (min-width:1026px) and (max-width:1300px)
+  {
+    label
+    {
+      margin-right: 0;
+    }
+  }
 @media(width: 768px) {
   .archive-div
   {
@@ -67,4 +81,13 @@ label
   {
     text-align: center;
   }
+}
+.switch-div
+{
+  display: inline-flex;
+  line-height: -moz-block-height;
+}
+.switch-label
+{
+  line-height: 32px;
 }

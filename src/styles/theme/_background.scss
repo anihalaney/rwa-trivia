@@ -52,6 +52,16 @@
 		background:#af3424;
 		}
 	}
+	.mat-button-toggle {
+		background-color: #e0e0e0;
+		color: rgba(0, 0, 0, 0.38);
+	  }
+	
+	  .mat-button-toggle-checked {
+		background-color: #bdbdbd;
+		color: rgba(0, 0, 0, 0.54);
+	  }
+	
 
 	/*Header*/
 	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary,.bulk-summary-table,bulk-summary-question-table,.add-tag-btn,.mat-table,.mat-paginator,.vs:after,.btn-share,.social-icons,.mat-expansion-panel,.friend-list-table,#share-content { 
