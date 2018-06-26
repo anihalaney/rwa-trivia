@@ -30,8 +30,11 @@ export class UserService {
         return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
             .pipe(map(u => {
                 if (u) {
+                    const userInfo = user;
                     // user = { ...u, ...user };
                     user = u;
+                    user.idToken = userInfo.idToken;
+                    user.authState = userInfo.authState;
                     if (u.stats) {
                         user.stats = u.stats;
                     }
@@ -41,7 +44,7 @@ export class UserService {
 
                 return user;
             }),
-            mergeMap(u => this.getUserProfileImage(u)));
+                mergeMap(u => this.getUserProfileImage(u)));
     }
 
     saveUserProfile(user: User) {
