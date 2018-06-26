@@ -64,9 +64,7 @@ export class GameMechanics {
 
         const randomGameNo = Math.floor(Math.random() * totalGames);
         const game = queriedItems[randomGameNo];
-        // console.log('randomGameNo', randomGameNo);
-        // console.log('game', game);
-        // console.log('condition', game.playerIds[0] !== this.userId && game.nextTurnPlayerId === '')
+
         if (game.playerIds[0] !== this.userId && game.nextTurnPlayerId === '') {
             game.nextTurnPlayerId = this.userId;
             game.GameStatus = GameStatus.JOINED_GAME;
@@ -153,7 +151,7 @@ export class GameMechanics {
                 lastAddedQuestion.answerCorrect = false;
                 lastAddedQuestion.playerAnswerInSeconds = 16;
                 game.playerQnAs[index] = lastAddedQuestion;
-                game.stats[game.nextTurnPlayerId].round = game.stats[game.nextTurnPlayerId].round + 1;
+                // game.stats[game.nextTurnPlayerId].round = game.stats[game.nextTurnPlayerId].round + 1;
                 if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
                     game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0];
                 }

@@ -40,6 +40,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   filteredTags$: Observable<string[]>;
 
   friendUserId: string;
+  loaderStatus = false;
 
   get categoriesFA(): FormArray {
     //console.log(this.newGameForm.get('categoriesFA'));
@@ -208,6 +209,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     if (this.newGameForm.invalid)
       return;
 
+    this.loaderStatus = true;
 
 
     //console.log(this.newGameForm.value);

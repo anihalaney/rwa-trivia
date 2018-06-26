@@ -32,7 +32,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   currentQuestion: Question;
   correctAnswerCount: number;
   totalRound: number;
-  questionRound: number;
+  // questionRound: number;
   questionIndex: number;
   sub: Subscription[] = [];
   timerSub: Subscription;
@@ -88,8 +88,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => { this.categoryDictionary = c });
     this.sub.push(
       this.gameObs.subscribe(game => {
+        this.game = game;
         if (game !== null && !this.isGameLoaded) {
-          this.game = game;
           this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
             this.game.GameStatus === GameStatus.RESTARTED ||
             ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
@@ -101,18 +101,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
           if (!this.turnFlag) {
             this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
-
             this.correctAnswerCount = this.game.stats[this.user.userId].score;
-
-            this.questionRound = (game.stats[this.user.userId].round === 0)
-              ? game.stats[this.user.userId].round + 1
-              : ((this.questionRound > game.stats[this.user.userId].round) ?
-                this.questionRound :
-                game.stats[this.user.userId].round);
-
-            this.questionRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? this.questionRound :
-              (this.isCorrectAnswer || game.stats[this.user.userId].round === 0) ? this.questionRound : this.questionRound + 1;
-
           }
 
           this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
@@ -131,7 +120,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   resetValues() {
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
-    this.questionRound = 0;
   }
 
 
@@ -155,11 +143,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
         if (this.game.playerQnAs.length > 0) {
           const timeoutFlag = this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds;
-          if (timeoutFlag === undefined) {
-            this.questionRound = this.questionRound + 1;
-          }
-          this.isQuestionAvailable = (timeoutFlag === undefined &&
-            Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) ? false : true;
+          this.isQuestionAvailable = (timeoutFlag === undefined ) ? false : true;
         }
 
         if (!this.currentQuestion) {
@@ -312,9 +296,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       if (!this.gameOver) {
         this.getLoader();
         this.getNextQuestion();
-        if (!this.isCorrectAnswer) {
-          this.questionRound = this.questionRound + 1;
-        }
       }
     }
   }
