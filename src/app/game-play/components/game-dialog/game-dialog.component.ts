@@ -143,8 +143,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
         if (this.game.playerQnAs.length > 0) {
           const timeoutFlag = this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds;
-          this.isQuestionAvailable = (timeoutFlag === undefined &&
-            Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) ? false : true;
+          this.isQuestionAvailable = (timeoutFlag === undefined ) ? false : true;
         }
 
         if (!this.currentQuestion) {
