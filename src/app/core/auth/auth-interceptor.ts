@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../store';
@@ -36,10 +36,10 @@ export class AuthInterceptor implements HttpInterceptor {
 
         if (error.status === 419) {
 
-          return this.authService.refreshToken().mergeMap((tokenResponse) => {
+          return this.authService.refreshToken().pipe(mergeMap((tokenResponse) => {
             authReq = req.clone({ headers: req.headers.set('Authorization', 'Bearer ' + tokenResponse) });
             return next.handle(authReq);
-          });
+          }));
 
         }
 
