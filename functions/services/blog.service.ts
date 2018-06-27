@@ -16,3 +16,11 @@ exports.setBlog = (blogs: Array<Blog>): Promise<any> => {
     return batch.commit().then((ref) => { return ref });
 };
 
+
+exports.deleteBlog = (): Promise<any> => {
+    const batch = blogFireStoreClient.batch();
+    return blogFireStoreClient.collection('blogs').get().then((qs) => {
+        qs.forEach(doc => batch.delete(doc.ref));
+        return batch.commit().then((res) => { return res });
+    });
+};
