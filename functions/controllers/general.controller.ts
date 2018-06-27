@@ -217,10 +217,8 @@ exports.generateBlogsData = (req, res) => {
         });
         console.log('blogs', blogs);
 
-        blogService.deleteBlog().then((ref) => {
-            blogService.setBlog(blogs).then((ref1) => {
-                res.send('created feed blogs');
-            });
+        blogService.setBlog(blogs).then((ref1) => {
+            res.send('created feed blogs');
         });
     });
 };

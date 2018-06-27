@@ -64,12 +64,12 @@ export class SocialService {
         const socialShareImageObj = this.storage.upload(filePath, imageBlob);
         return socialShareImageObj.snapshotChanges().pipe(
             finalize(() => fileRef.getDownloadURL())
-          );
+        );
     }
 
 
     loadBlogs(): Observable<Blog[]> {
-        return this.db.collection('blogs')
+        return this.db.collection('blogs', ref => ref.orderBy('id', 'desc').limit(3))
             .valueChanges()
             .pipe(catchError(error => {
                 console.log(error);
