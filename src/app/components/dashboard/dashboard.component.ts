@@ -156,7 +156,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (this.activeGames.length < this.maxGameCardPerRow) {
         this.missingCardCount = this.maxGameCardPerRow - this.activeGames.length;
         this.numbers = Array(this.missingCardCount).fill(0).map((x, i) => i);
-      } else if (this.activeGames.length > this.maxGameCardPerRow && this.activeGames.length < this.gameSliceLastIndex) {
+      } else if (this.activeGames.length > this.maxGameCardPerRow && this.activeGames.length <= this.gameSliceLastIndex) {
         const diff = Math.trunc(this.activeGames.length / this.maxGameCardPerRow);
         if (this.activeGames.length % this.maxGameCardPerRow !== 0) {
           this.missingCardCount = (diff + 1) * this.maxGameCardPerRow - this.activeGames.length;
