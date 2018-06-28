@@ -1,15 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
 import { switchMap, map } from 'rxjs/operators';
-import { empty } from 'rxjs/observable/empty';
+import { empty } from 'rxjs';
 
 import { BulkUploadFileInfo, Question } from '../../../model';
-import { BulkActions, BulkActionTypes } from '../actions';
+import { BulkActionTypes } from '../actions';
 import * as bulkActions from '../actions/bulk.actions';
 import { BulkService, QuestionService } from '../../../core/services';
-import { Observable } from 'rxjs';
-import { pipe } from 'rxjs/util/pipe';
 
 @Injectable()
 export class BulkEffects {
