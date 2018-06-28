@@ -26,6 +26,7 @@ ul {
 {
   padding: 10px 25px;
   font-size: 16px;
+  width: 100%;
 }
 .instruction-nextBtn
 {
@@ -78,13 +79,6 @@ input[type="file"] {
 {
     text-align: right;
     float: right;
-}
-@media(max-width: 600px) {
-  .btn,.btn-back
-  {
-    width: 100%;
-    // margin-bottom: 10px;
-  }
 }
 .next-btn-alignment
 {
