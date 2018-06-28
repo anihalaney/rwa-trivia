@@ -1,5 +1,5 @@
 import { Injectable }    from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Injectable()
 export class Utils {
