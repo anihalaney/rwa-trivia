@@ -16,7 +16,7 @@
     <div class="archive-btn-div col-md-2 col-sm-2 col-xs-12 text-alignment spacing-bottom">
       <button class="btn-share" type="button" *ngIf="isArchive" (click)="archiveData()"> Archive </button>
     </div>
-    <div class="col-md-3 col-xs-6 text-alignment div-alignment spacing-bottom">
+    <div class="col-md-3 col-sm-4 col-xs-12 text-alignment div-alignment spacing-bottom">
       <button class="btn startupload" *ngIf="showSummaryTable" [routerLink]="['./upload']"> Start New Bulk Upload </button>
       <button class="btn startupload" *ngIf="!showSummaryTable" (click)="backToSummary()"> Back to Summary </button>
     </div>
