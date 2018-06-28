@@ -20,9 +20,9 @@
           [checked]="tagsChecked[tagCount.tag]"
           (change)="tagChanged($event, tagCount.tag)">{{tagCount.tag}} ({{tagCount.count}})</mat-checkbox>
       </mat-list-item>
-      <mat-input-container>
+      <mat-form-field>
         <input matInput placeholder="Enter Tag">
-      </mat-input-container>
+      </mat-form-field>
       <mat-divider></mat-divider>
 
       <h3 mdSubheader>Status</h3>

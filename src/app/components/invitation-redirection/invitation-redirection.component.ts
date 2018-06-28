@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { userState } from '../../user/store';
-import { ActionWithPayload, UserActions } from ' ../../app/core/store/actions';
-import { Store } from '@ngrx/store';
+
+import { UserActions } from ' ../../app/core/store/actions';
+import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../store';
 import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
@@ -18,7 +18,7 @@ export class InvitationRedirectionComponent implements OnInit {
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
         private userAction: UserActions, private authService: AuthenticationProvider) {
-        this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+        this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             if (user) {
                 this.user = user;

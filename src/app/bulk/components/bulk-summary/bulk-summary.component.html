@@ -2,8 +2,8 @@
   <div class="row">
     <div class="pageheading col-xs-12 hidden-xs" [ngClass]="showSummaryTable?'col-md-4':'col-md-9'">{{bulkSummaryTitle}}</div>
 
-    <div class="archive-div col-md-3 col-xs-12 col-sm-8 text-alignment" *ngIf="showSummaryTable">
-      <label>Show Archived</label>
+    <div class="archive-div col-md-3 col-xs-12 col-sm-4 text-alignment switch-div" *ngIf="showSummaryTable">
+      <label class="switch-label">Show Archived</label>
       <mat-button-toggle-group #group="matButtonToggleGroup" value="{{toggleValue}}">
         <mat-button-toggle value=true (click)="tapped(true)">
           On

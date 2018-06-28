@@ -1,12 +1,11 @@
 import { Component, Input } from '@angular/core';
 
 import { User } from '../../../model';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
-import * as userActions from '../../store/actions';
-import { Observable } from 'rxjs/Observable';
-import { userState } from '../../store';
+import { AppState, appState } from '../../../store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'profile-card',
@@ -19,7 +18,7 @@ export class ProfileCardComponent {
   location = 'unknown';
 
   constructor(private store: Store<AppState>, private router: Router) {
-    this.userObs = this.store.select(appState.coreState).select(s => s.user);
+    this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
     this.userObs.subscribe(user => {
       if (user !== null) {

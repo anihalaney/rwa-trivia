@@ -1,6 +1,5 @@
 import { Game, Question, Category, SearchResults, SearchCriteria } from '../../src/app/model';
 
-
 const fs = require('fs');
 const path = require('path');
 const elasticsearch = require('elasticsearch');

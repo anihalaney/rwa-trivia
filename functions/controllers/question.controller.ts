@@ -81,7 +81,7 @@ exports.getNextQuestion = (req, res) => {
         const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
 
         gameMechanics.changeTheTurn(game).then((status) => {
-            if (Number(game.gameOptions.playerMode) === PlayerMode.Single || status) {
+            if (status) {
                 const questionIds = [];
                 game.playerQnAs.map((question) => questionIds.push(question.questionId));
                 ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
@@ -90,6 +90,13 @@ exports.getNextQuestion = (req, res) => {
                         playerId: userId,
                         questionId: question.id,
                         addedOn: createdOn
+                    }
+                    const filteredPlayerQnAs = game.playerQnAs.filter((fPlayerQnA) => fPlayerQnA.playerId === userId);
+                    if (filteredPlayerQnAs.length > 0) {
+                        const lastAddedQuestion = filteredPlayerQnAs[filteredPlayerQnAs.length - 1];
+                        if (!lastAddedQuestion.answerCorrect) {
+                            game.stats[game.nextTurnPlayerId].round = game.stats[game.nextTurnPlayerId].round + 1;
+                        }
                     }
                     question.addedOn = createdOn;
                     game.playerQnAs.push(playerQnA);

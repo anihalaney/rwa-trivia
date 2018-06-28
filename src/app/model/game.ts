@@ -18,7 +18,7 @@ export class Stat {
   consecutiveCorrectAnswers: number;
   constructor() {
     this.score = 0;
-    this.round = 0;
+    this.round = 1;
     this.avgAnsTime = 0;
     this.consecutiveCorrectAnswers = 0;
   }
@@ -134,7 +134,7 @@ export class Game {
       this.stats[playerId].consecutiveCorrectAnswers : 0;
     const stat: Stat = new Stat();
     stat.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
-    let round = 0;
+    let round = 1;
     let totalQTime = 0;
     this.playerQnAs.map((playerQn) => {
       if (playerQn.playerId === playerId) {
@@ -144,7 +144,7 @@ export class Game {
         totalQTime = totalQTime + playerQn.playerAnswerInSeconds;
       }
     });
-    stat.round = round;
+    stat.round = (this.stats[playerId] && this.stats[playerId].round) ? this.stats[playerId].round : 1;
     stat.avgAnsTime = Math.floor((totalQTime) / this.playerQnAs.filter((p) => p.playerId === playerId).length);
     stat.consecutiveCorrectAnswers = (consecutiveCorrectAnswers === 3) ? 0 : consecutiveCorrectAnswers;
     this.stats[playerId] = stat;

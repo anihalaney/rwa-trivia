@@ -1,10 +1,9 @@
 import { Component, Input } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../../user/store/actions';
-import { User, Subscription, Game, Category } from '../../../model';
+import { User } from '../../../model';
 import { userState } from '../../store';
-import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'recent-games',
@@ -22,7 +21,7 @@ export class RecentGamesComponent {
 
   constructor(private store: Store<AppState>, ) {
 
-    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
         this.user = user;
@@ -30,7 +29,7 @@ export class RecentGamesComponent {
     });
     this.store.dispatch(new userActions.GetGameResult({ userId: this.user.userId }));
 
-    this.store.select(userState).select(s => s.getGameResult).subscribe(result => {
+    this.store.select(userState).pipe(select(s => s.getGameResult)).subscribe(result => {
       this.finalResult = result;
     });
 

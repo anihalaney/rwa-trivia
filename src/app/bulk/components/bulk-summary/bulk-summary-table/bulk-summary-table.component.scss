@@ -10,9 +10,10 @@
 .mat-row .mat-cell {
           
   vertical-align: middle;
-  padding: 0px 5px 0px 10px;
+  padding:1%;
   font-size: 14px;
   word-wrap: break-word;
+  display: inline-block;
 }
 .mat-header-row .mat-header-cell
 {
@@ -50,6 +51,15 @@ a{
 .formfield input[type="checkbox"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  cursor: pointer;}
 .formfield input[type="checkbox"]:checked:after{ height: 10px; transform: rotate(45deg); }
 .formfield input[type="checkbox"]:checked:after{ border-color:#fff; }
+.checkbox-div
+{
+  text-align: center;
+  padding:12px;
+}
+.approvedicon
+{
+  width: 29px;
+}
 
 
        

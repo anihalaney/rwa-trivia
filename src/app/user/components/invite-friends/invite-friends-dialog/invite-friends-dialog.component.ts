@@ -1,6 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { User } from '../../../../model';
+import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+
+import { User } from '../../../../model';
 import { AppState, appState } from '../../../../store';
 
 @Component({
@@ -15,7 +17,7 @@ export class InviteFriendsDialogComponent implements OnInit {
   ref: any;
 
   constructor(private store: Store<AppState>, private renderer: Renderer2) {
-    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
 
   }
 
