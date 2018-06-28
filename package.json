@@ -58,7 +58,6 @@
     "ngx-img-cropper": "^0.10.4",
     "ngx-papaparse": "^2.1.4",
     "rxjs": "6.2.1",
-    "rxjs-compat": "6.2.1",
     "stream": "0.0.2",
     "zone.js": "0.8.26"
   },
