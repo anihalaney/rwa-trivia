@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { empty } from 'rxjs/observable/empty';
-import { switchMap, map, mergeMap } from 'rxjs/operators';
-import { StatsActionTypes, StatsActions } from '../actions';
+import { switchMap, map } from 'rxjs/operators';
+import { StatsActionTypes } from '../actions';
 import * as statsActions from '../actions/stats.actions';
 import { StatsService } from '../../../core/services';
-import { Game, SystemStats } from '../../../model';
+import { SystemStats } from '../../../model';
 
 
 @Injectable()
