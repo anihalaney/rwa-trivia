@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
 import { PageEvent } from '@angular/material';
 import { AppState, appState, categoryDictionary } from '../../../store/app-store';
@@ -30,8 +31,8 @@ export class AdminQuestionsComponent implements OnInit {
 
   constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
 
-    this.questionsSearchResultsObs = this.store.select(adminState).select(s => s.questionsSearchResults);
-    this.unpublishedQuestionsObs = this.store.select(adminState).select(s => s.unpublishedQuestions).map((question) => {
+    this.questionsSearchResultsObs = this.store.select(adminState).pipe(select(s => s.questionsSearchResults));
+    this.unpublishedQuestionsObs = this.store.select(adminState).pipe(select(s => s.unpublishedQuestions), map((question) => {
       const questionList = question;
       if (questionList) {
         questionList.map((q) => {
@@ -42,9 +43,9 @@ export class AdminQuestionsComponent implements OnInit {
       }
 
       return questionList;
-    });
+    }));
 
-    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => this.userDict = userDict);
 
 
@@ -54,12 +55,12 @@ export class AdminQuestionsComponent implements OnInit {
     const url = this.router.url;
     this.toggleValue = url.includes('bulk') ? true : false;
 
-    this.store.select(adminState).select(s => s.getQuestionToggleState).subscribe((stat) => {
+    this.store.select(adminState).pipe(select(s => s.getQuestionToggleState)).subscribe((stat) => {
       if (stat != null) {
         this.selectedTab = stat === 'Published' ? 0 : 1
       }
     });
-    this.store.select(adminState).select(s => s.getArchiveToggleState).subscribe((state) => {
+    this.store.select(adminState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;
         (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
@@ -78,7 +79,7 @@ export class AdminQuestionsComponent implements OnInit {
   approveQuestion(question: Question) {
     let user: User;
 
-    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user);
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user);
     question.approved_uid = user.userId;
     this.store.dispatch(new adminActions.LoadUnpublishedQuestions({ 'question_flag': this.toggleValue }));
     this.store.dispatch(new adminActions.ApproveQuestion({ question: question }));

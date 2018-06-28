@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import {  FormBuilder, FormGroup, Validators, FormControl, ValidatorFn } from '@angular/forms';
-import { Store } from '@ngrx/store';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+
 import { AppState, appState } from '../../../store';
 import { User, Subscription } from '../../../model';
 import * as socialActions from '../../../social/store/actions';
-import { userState } from '../../../user/store';
 import { socialState } from '../../store';
-import * as userActions from '../../../user/store/actions';
 
 // tslint:disable-next-line:max-line-length
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -25,7 +25,7 @@ export class NewsletterComponent implements OnInit {
   message = '';
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, ) {
-    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       this.user = user;
       if (user) {
@@ -39,7 +39,7 @@ export class NewsletterComponent implements OnInit {
         }
       }
     });
-    this.store.select(socialState).select(s => s.checkEmailSubscriptionStatus).subscribe(status => {
+    this.store.select(socialState).pipe(select(s => s.checkEmailSubscriptionStatus)).subscribe(status => {
 
       if (status === true) {
         this.isSubscribed = true;
@@ -50,7 +50,7 @@ export class NewsletterComponent implements OnInit {
         this.message = 'Your EmailId is Successfully Subscribed!!';
       }
     });
-    this.store.select(socialState).select(s => s.getTotalSubscriptionStatus).subscribe(subscribers => {
+    this.store.select(socialState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
     });
   }

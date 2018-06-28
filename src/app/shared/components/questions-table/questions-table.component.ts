@@ -5,13 +5,11 @@ import {
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Utils } from '../../../core/services';
 import { AppState, appState } from '../../../store';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { Subscription } from 'rxjs/Subscription';
+import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../model';
 import { bulkState } from '../../../bulk/store';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
@@ -69,7 +67,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
 
   ngOnInit() {
 
-    this.store.select(appState.coreState).take(1).subscribe(s => this.user = s.user);
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
     this.requestFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });
@@ -117,7 +115,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
     } else if (!this.bulkUploadFileInfo && question.bulkUploadId) {
       this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: question.bulkUploadId }));
-      this.sub = this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
+      this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
         if (obj) {
           this.bulkUploadFileInfo = obj;
           if (question.status === QuestionStatus.REJECTED) {
@@ -157,7 +155,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
 
     } else if (!this.bulkUploadFileInfo && this.requestQuestion.bulkUploadId && this.requestQuestion.status !== QuestionStatus.REJECTED) {
       this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: this.requestQuestion.bulkUploadId }));
-      this.sub = this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
+      this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
         if (obj) {
           this.bulkUploadFileInfo = obj;
           if (this.bulkUploadFileInfo.rejected > 0) {
@@ -188,7 +186,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
     } else if (!this.bulkUploadFileInfo && this.rejectQuestion.bulkUploadId && this.rejectQuestion.status !== QuestionStatus.REJECTED) {
       this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: this.rejectQuestion.bulkUploadId }));
-      this.sub = this.store.select(bulkState).select(s => s.bulkUploadFileInfo).subscribe((obj) => {
+      this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
         if (obj) {
           this.bulkUploadFileInfo = obj;
           this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
