@@ -10,7 +10,7 @@ ul {
     font-family: hindregular;
     font-size: 15px;
 }
-.bulk-instuctions h2, .upload-questions h2,.review-questions h2{ font-size:18px; font-family: 'hindsemibold'; letter-spacing: 0.1px; margin-bottom: 13px;}
+.bulk-instuctions h2, .upload-questions h2,.review-questions h2{ font-size:18px; font-family: 'hindsemibold'; letter-spacing: 0.1px; }
 .bulk-instuctions h4,.upload-questions h4,.review-questions h4{ font-family: 'hindsemibold'; letter-spacing: 0.1px; margin-top: 13px;}
 .primary-tag
 {
@@ -83,7 +83,7 @@ input[type="file"] {
   .btn,.btn-back
   {
     width: 100%;
-    margin-bottom: 10px;
+    // margin-bottom: 10px;
   }
 }
 .next-btn-alignment
