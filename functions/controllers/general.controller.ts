@@ -216,7 +216,8 @@ exports.generateBlogsData = (req, res) => {
             commentCount = commentCount + Math.floor((Math.random() * 5) + 1);
         });
         console.log('blogs', blogs);
-        blogService.setBlog(blogs).then((ref) => {
+
+        blogService.setBlog(blogs).then((ref1) => {
             res.send('created feed blogs');
         });
     });
