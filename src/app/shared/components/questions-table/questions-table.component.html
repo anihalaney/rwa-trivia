@@ -35,7 +35,7 @@
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div> -->
         <div class="col-sm-12 col-xs-12 question-section" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
-          <div class="date">{{row.createdOn | date:'dd MMM yyyy' }}</div>
+          <div class="date">{{ ( (row.createdOn) ? (row.createdOn.seconds * 1000) : row.createdOn) | date:'dd MMM yyyy' }}</div>
           <p class="dark">{{row.questionText}}</p>
           <ul class="currentans">
             <li>

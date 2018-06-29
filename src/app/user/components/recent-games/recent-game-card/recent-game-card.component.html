@@ -26,7 +26,7 @@
                     />
 
                 </div>
-                <p class="light ellipsis">{{userDict[getOpponentId(game)]?.displayName}}</p>
+                <p class="light ellipsis" title="{{userDict[getOpponentId(game)]?.displayName}}">{{userDict[getOpponentId(game)]?.displayName}}</p>
                 <p class="light">Score {{game.stats[getOpponentId(game)]?.score}}</p>
             </div>
             <div class="col-xs-6 card-left-border no-padding card-center-position" *ngIf="game.winnerPlayerId !== user.userId">
@@ -40,7 +40,7 @@
                 <img *ngIf="user?.profilePictureUrl" [src]="user?.profilePictureUrl" alt="user" />
 
             </div>
-            <p class="light">{{user?.displayName}}</p>
+            <p class="light" title="{{user?.displayName}}">{{user?.displayName}}</p>
             <p class="light">Score {{game.stats[user.userId]?.score}}</p>
         </div>
     </div>
