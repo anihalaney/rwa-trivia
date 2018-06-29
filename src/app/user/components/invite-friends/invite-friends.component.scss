@@ -1,3 +1,7 @@
+.mat-header-row, .mat-row
+{
+  padding-left: 2%;
+}
 .mat-row .mat-cell {
 vertical-align: middle;
 padding: 0px 5px 0px 10px;
@@ -9,6 +13,7 @@ word-break: break-all;
 {
 font-family:'hindsemibold';
 font-size: 16px;
+
 }
 .mat-table {
   width: 100%;
@@ -58,7 +63,3 @@ img{ border-radius: 50%;vertical-align: middle; max-height: 40px; }
 {
   float:right;
 }
-// .display-name
-// {
-//   word-break: break-all;
-// }
