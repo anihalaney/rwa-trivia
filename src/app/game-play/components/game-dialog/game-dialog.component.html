@@ -60,7 +60,7 @@
   <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName" [question]="currentQuestion"
     [questionIndex]="questionIndex" [timer]="timer" [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
     [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)"
-    (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [questionRound]="game.stats[user.userId].round"
+    (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [questionRound]="game.round"
     [totalRound]="totalRound">
   </game-question>
 

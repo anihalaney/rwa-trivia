@@ -17,7 +17,7 @@
         <img *ngIf="user?.profilePictureUrl " [src]="user.profilePictureUrl " alt="yourimg">
       </div>
       <label href="# " class="dark text-style ">You</label>
-      <div class="dark div-top-spacing text-style ">Round {{game.stats[user.userId].round}} / {{totalRound}}</div>
+      <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}}</div>
       <div class="div-top-spacing score-div-height">
         <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
@@ -34,7 +34,7 @@
           <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
         </div>
         <label href="#" class="dark text-style">You</label>
-        <div class="dark div-top-spacing text-style ">Round {{game.stats[user.userId].round}} / {{totalRound}}</div>
+        <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
         <div class="div-top-spacing">
           <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
@@ -51,7 +51,7 @@
           <img *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" alt="yourimg">
         </div>
         <label href="#" class="dark text-style">{{otherUserInfo?.displayName}}</label>
-        <div class="dark div-top-spacing text-style ">Round {{game.stats[otherUserId].round}} / {{totalRound}}</div>
+        <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
         <div class="dark div-top-spacing text-style">Score {{game.stats[otherUserId].score}}</div>
         <div class="div-top-spacing">
           <div *ngIf="game.stats[otherUserId].score >= 1" class="sprite score1"></div>
