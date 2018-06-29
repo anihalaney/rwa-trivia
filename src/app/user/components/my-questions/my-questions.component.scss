@@ -14,23 +14,8 @@ mat-card {
   right: 30px;
 }
 .startgame{ font-family:'hindsemibold' ; text-transform: uppercase; box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 42px; border-radius: 4px; display: inline-block; text-align: center; letter-spacing: 1px; width: 100%} 
-@media (min-width: 767px){
-  .startgame{ padding: 0 15px; width: auto;}
-}
 .align-right
 {
   text-align: right;
+  float: right;
 }
-
-@media (max-width:768px){
-  .startgame{
-    margin-bottom: 20px !important; 
-  }
-}
-
-@media screen and (min-width : 768px) and (max-width : 1024px)  { 
-  .startgame{
-    margin-bottom: 20px;
-  }
-}
-  
