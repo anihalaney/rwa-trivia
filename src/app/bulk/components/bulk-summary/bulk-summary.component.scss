@@ -39,19 +39,6 @@ label
 {
   float: right;
 }
-@media (min-width:1026px) and (max-width:1300px)
-{
-  label
-  {
-    margin-right: 0;
-  }
-}
-@media(max-width: 600px) {
-  .text-alignment
-  {
-    text-align: center;
-  }
-}
 .switch-div
 {
   display: inline-flex;
@@ -60,4 +47,29 @@ label
 .switch-label
 {
   line-height: 32px;
+}
+@media (min-width:990px) and (max-width:1300px)
+{
+  // label
+  // {
+  //   margin-right: 0;
+  // }
+  .switch-div
+  {
+    display: initial;
+  }
+  .pageheading
+  {
+    font-size: 16px;
+  }
+  .switch-label
+  {
+    line-height: 0px;
+  }
+}
+@media(max-width: 600px) {
+  .text-alignment
+  {
+    text-align: center;
+  }
 }

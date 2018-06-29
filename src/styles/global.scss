@@ -568,3 +568,9 @@ nav .user.card{
 {
   margin-bottom: 10px;
 }
+mat-cell:last-child, mat-footer-cell:last-child, mat-header-cell:last-child {
+  padding-right: 0px !important;
+}
+mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
+  padding-left: 0px !important;
+}
