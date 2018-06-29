@@ -91,11 +91,10 @@ exports.getNextQuestion = (req, res) => {
                         questionId: question.id,
                         addedOn: createdOn
                     }
-                    const filteredPlayerQnAs = game.playerQnAs.filter((fPlayerQnA) => fPlayerQnA.playerId === userId);
-                    if (filteredPlayerQnAs.length > 0) {
-                        const lastAddedQuestion = filteredPlayerQnAs[filteredPlayerQnAs.length - 1];
+                    if (game.playerQnAs.length > 0) {
+                        const lastAddedQuestion = game.playerQnAs[game.playerQnAs.length - 1];
                         if (!lastAddedQuestion.answerCorrect) {
-                            game.stats[game.nextTurnPlayerId].round = game.stats[game.nextTurnPlayerId].round + 1;
+                            game.round = game.round + 1;
                         }
                     }
                     question.addedOn = createdOn;

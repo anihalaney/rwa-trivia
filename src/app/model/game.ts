@@ -13,12 +13,10 @@ export class PlayerQnA {
 
 export class Stat {
   score: number;
-  round: number;
   avgAnsTime: number;
   consecutiveCorrectAnswers: number;
   constructor() {
     this.score = 0;
-    this.round = 1;
     this.avgAnsTime = 0;
     this.consecutiveCorrectAnswers = 0;
   }
@@ -36,9 +34,11 @@ export class Game {
   public GameStatus: string;
   public createdAt: number;
   public turnAt: number;
+  public round: number;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
-    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number) {
+    nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number,
+    round?: number) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
@@ -84,6 +84,7 @@ export class Game {
     }
 
     this.stats = {};
+    this.round = (round) ? round : 1;
   }
 
   addPlayer(playerUUId: string) {
@@ -134,17 +135,12 @@ export class Game {
       this.stats[playerId].consecutiveCorrectAnswers : 0;
     const stat: Stat = new Stat();
     stat.score = this.playerQnAs.filter((p) => p.answerCorrect && p.playerId === playerId).length;
-    let round = 1;
     let totalQTime = 0;
     this.playerQnAs.map((playerQn) => {
       if (playerQn.playerId === playerId) {
-        if (!playerQn.answerCorrect) {
-          round++;
-        }
         totalQTime = totalQTime + playerQn.playerAnswerInSeconds;
       }
     });
-    stat.round = (this.stats[playerId] && this.stats[playerId].round) ? this.stats[playerId].round : 1;
     stat.avgAnsTime = Math.floor((totalQTime) / this.playerQnAs.filter((p) => p.playerId === playerId).length);
     stat.consecutiveCorrectAnswers = (consecutiveCorrectAnswers === 3) ? 0 : consecutiveCorrectAnswers;
     this.stats[playerId] = stat;
@@ -236,7 +232,8 @@ export class Game {
       'gameOver': (this.gameOver) ? this.gameOver : false,
       'playerQnAs': this.playerQnAs,
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
-      'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED
+      'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED,
+      'round': this.round
     }
     if (this.winnerPlayerId) {
       dbModel['winnerPlayerId'] = this.winnerPlayerId;
@@ -271,7 +268,7 @@ export class Game {
     const game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt']);
+      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'], dbModel['round']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }
