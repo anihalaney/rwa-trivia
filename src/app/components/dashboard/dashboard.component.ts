@@ -1,14 +1,15 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { Observable, Subscription, pipe } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { AppState, appState, categoryDictionary } from '../../store';
-import { Utils } from '../../core/services';
+import { Utils, WindowRef } from '../../core/services';
 import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
 import * as gameplayactions from '../../game-play/store/actions';
 import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../model';
 import { OpponentType } from '../../model/game-options';
+
 
 @Component({
   selector: 'dashboard',
@@ -38,19 +39,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
   gameInvites: Game[];
   friendCount = 0;
   randomPlayerCount = 0;
+  maxGameCardPerRow: number;
+  screenWidth: number;
 
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
     private gameActions: GameActions,
-    private userActions: UserActions) {
+    private userActions: UserActions, private windowRef: WindowRef) {
     this.questionOfTheDay$ = store.select(appState.coreState).pipe(select(s => s.questionOfTheDay));
     this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
 
+
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user
       if (user) {
-        this.user = user; 
+        this.user = user;
         if (this.user.isSubscribed) {
           this.showNewsCard = false;
         }
@@ -66,8 +70,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
     this.subs.push(this.activeGames$.subscribe(games => {
+      this.activeGames = games;
       if (games.length > 0) {
-        this.activeGames = games;
+        this.screenWidth = this.windowRef.nativeWindow.innerWidth;
         this.checkCardCountPerRow();
         this.activeGames.map(game => {
           const playerIds = game.playerIds;
@@ -140,17 +145,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   checkCardCountPerRow() {
+    this.numbers = [];
+    if (this.screenWidth > 1000 && this.screenWidth < 1200) {
+      this.maxGameCardPerRow = 3;
+    } else {
+      this.maxGameCardPerRow = 4;
+    }
     if (this.activeGames.length > 0) {
-      if (this.activeGames.length < this.gameSliceLastIndex) {
-        this.missingCardCount = this.gameSliceLastIndex - this.activeGames.length;
+      if (this.activeGames.length < this.maxGameCardPerRow) {
+        this.missingCardCount = this.maxGameCardPerRow - this.activeGames.length;
         this.numbers = Array(this.missingCardCount).fill(0).map((x, i) => i);
-      } else if (this.activeGames.length === this.gameSliceLastIndex) {
-        const diff = Math.trunc(this.activeGames.length / 4);
-        if (this.activeGames.length % 4 !== 0) {
-          this.missingCardCount = (diff + 1) * 4 - this.activeGames.length;
+      } else if (this.activeGames.length > this.maxGameCardPerRow && this.activeGames.length <= this.gameSliceLastIndex) {
+        const diff = Math.trunc(this.activeGames.length / this.maxGameCardPerRow);
+        if (this.activeGames.length % this.maxGameCardPerRow !== 0) {
+          this.missingCardCount = (diff + 1) * this.maxGameCardPerRow - this.activeGames.length;
           this.numbers = Array(this.missingCardCount).fill(0).map((x, i) => i);
         }
+
       }
     }
   }
+  @HostListener('window: resize', ['$event'])
+  onResize(event) {
+    this.screenWidth = event.target.innerWidth;
+    this.checkCardCountPerRow();
+  }
 }
+
+
