@@ -1,4 +1,5 @@
 export class Blog {
+    id: number;
     blogNo: number;
     share_status: boolean;
     link: string;
