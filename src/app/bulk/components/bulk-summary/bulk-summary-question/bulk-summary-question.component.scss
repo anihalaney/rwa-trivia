@@ -48,11 +48,5 @@ a
   text-align: right;
   float: right;
 }
-.btn{ padding:10px 25px;font-size: 16px;float: right }
+.btn{ padding:10px 25px;font-size: 16px;float: right;width: 100%; }
 
-@media(max-width: 600px) {
-  .btn
-  {
-    width: 100%;
-  }
-}
