@@ -92,11 +92,25 @@ exports.getNextQuestion = (req, res) => {
                         addedOn: createdOn
                     }
                     if (game.playerQnAs.length > 0) {
-                        const lastAddedQuestion = game.playerQnAs[game.playerQnAs.length - 1];
-                        if (!lastAddedQuestion.answerCorrect) {
+
+                        const otherPlayerUserId = game.playerIds.filter(playerId => playerId !== userId)[0];
+                        const currentUserQuestions = game.playerQnAs.filter((pastPlayerQnA) =>
+                            pastPlayerQnA.playerId === userId && pastPlayerQnA.round === game.round);
+                        const otherUserQuestions = game.playerQnAs.filter((pastPlayerQnA) => pastPlayerQnA.playerId === otherPlayerUserId
+                            && pastPlayerQnA.round === game.round);
+
+                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single &&
+                            !currentUserQuestions[currentUserQuestions.length - 1].answerCorrect) {
+                            game.round = game.round + 1;
+                        } else if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
+                            currentUserQuestions.length > 0 && otherUserQuestions.length > 0
+                            && !currentUserQuestions[currentUserQuestions.length - 1].answerCorrect
+                            && !otherUserQuestions[otherUserQuestions.length - 1].answerCorrect) {
                             game.round = game.round + 1;
                         }
                     }
+                    playerQnA.round = game.round;
+                    question.gameRound = game.round;
                     question.addedOn = createdOn;
                     game.playerQnAs.push(playerQnA);
                     const dbGame = game.getDbModel();
@@ -111,6 +125,7 @@ exports.getNextQuestion = (req, res) => {
                 });
             } else {
                 ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId).then((question) => {
+                    question.gameRound = game.round;
                     res.send(question);
                 });
             }
