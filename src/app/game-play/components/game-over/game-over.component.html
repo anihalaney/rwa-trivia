@@ -81,9 +81,11 @@
   <mat-card-content class="textcenter">
     <div class="button-div">
       <div class="win-icon spacing-bottom">
-        <social-palette *ngIf="blogData[0].share_status" class="spacing position" [blogData]="blogData[0]" (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
+        <social-palette *ngIf="blogData[0].share_status" class="spacing position" [blogData]="blogData[0]" (notify)="onNotify($event)"
+          [isFromBlog]=false></social-palette>
         <button class="btn-share" type="button" (click)="shareScore()" [disabled]="blogData[0].share_status" [ngClass]="blogData[0].share_status?'hide-share-btn':'show-share-btn'">Share</button>
         <button class="btn-share" type="button" (click)="reMatch()">Rematch</button>
+        <img src="/assets/images/ajax-loader.gif" class="rematch-loaderimage" *ngIf="disableRematchBtn">
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
     </div>
