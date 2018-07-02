@@ -9,6 +9,7 @@ export class PlayerQnA {
   answerCorrect?: boolean;
   isReported?: boolean;
   addedOn?: number;
+  round?: number;
 }
 
 export class Stat {
@@ -59,6 +60,7 @@ export class Game {
         (qna['playerAnswerId'] !== undefined) ? playerOnA.playerAnswerId = qna.playerAnswerId : '';
         (qna['playerAnswerInSeconds'] !== undefined) ? playerOnA.playerAnswerInSeconds = qna.playerAnswerInSeconds : '';
         (qna['answerCorrect'] !== undefined) ? playerOnA.answerCorrect = qna.answerCorrect : '';
+        playerOnA.round = qna.round;
         playerOnA.isReported = (qna.isReported) ? true : false;
         this.playerQnAs.push({ ...playerOnA });
       }

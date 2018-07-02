@@ -348,7 +348,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
       questionId: this.currentQuestion.id,
-      addedOn: this.currentQuestion.addedOn
+      addedOn: this.currentQuestion.addedOn,
+      round: this.currentQuestion.gameRound
     }
     this.questionAnswered = true;
     this.isGameLoaded = false;
