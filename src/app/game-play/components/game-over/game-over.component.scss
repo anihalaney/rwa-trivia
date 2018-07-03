@@ -243,4 +243,7 @@ ul li:last-child{ border-bottom: 0 }
     margin-bottom: 2%;
     width: 100%;
   }
- }                         
+ } 
+.mat-expansion-panel-header-description, .mat-expansion-panel-header-title {
+  display: initial;
+  }
