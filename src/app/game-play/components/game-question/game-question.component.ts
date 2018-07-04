@@ -23,6 +23,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
   @Output() okClick = new EventEmitter();
   @Output() continueClicked = new EventEmitter();
   @Output() viewQuestionClicked = new EventEmitter();
+  @Input() turnFlag: boolean;
 
   answeredIndex: number;
   correctAnswerIndex: number;

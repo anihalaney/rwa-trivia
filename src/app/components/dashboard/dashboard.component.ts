@@ -73,12 +73,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
     this.subs.push(this.activeGames$.subscribe(games => {
+      this.activeGames = games;
       if (games.length > 0) {
-        this.activeGames = games;
-        if (isPlatformBrowser(this.platformId)) {
-          this.screenWidth = this.windowRef.nativeWindow.innerWidth;
-        }
-
+        this.screenWidth = this.windowRef.nativeWindow.innerWidth;
         this.checkCardCountPerRow();
         this.activeGames.map(game => {
           const playerIds = game.playerIds;

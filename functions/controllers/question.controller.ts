@@ -91,13 +91,32 @@ exports.getNextQuestion = (req, res) => {
                         questionId: question.id,
                         addedOn: createdOn
                     }
-                    const filteredPlayerQnAs = game.playerQnAs.filter((fPlayerQnA) => fPlayerQnA.playerId === userId);
-                    if (filteredPlayerQnAs.length > 0) {
-                        const lastAddedQuestion = filteredPlayerQnAs[filteredPlayerQnAs.length - 1];
-                        if (!lastAddedQuestion.answerCorrect) {
-                            game.stats[game.nextTurnPlayerId].round = game.stats[game.nextTurnPlayerId].round + 1;
+                    if (game.playerQnAs.length > 0) {
+                        game.round = (game.round) ? game.round : game.stats[userId]['round'];
+                        const otherPlayerUserId = game.playerIds.filter(playerId => playerId !== userId)[0];
+                        const currentUserQuestions = game.playerQnAs.filter((pastPlayerQnA) =>
+                            pastPlayerQnA.playerId === userId);
+                        const otherUserQuestions = game.playerQnAs.filter((pastPlayerQnA) => pastPlayerQnA.playerId === otherPlayerUserId
+                        );
+
+                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single &&
+                            !currentUserQuestions[currentUserQuestions.length - 1].answerCorrect) {
+                            game.round = game.round + 1;
+                        } else if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
+                            currentUserQuestions.length > 0 && otherUserQuestions.length > 0) {
+                            const lastcurrentUserQuestion = currentUserQuestions[currentUserQuestions.length - 1];
+                            const lastotherUserQuestions = otherUserQuestions[otherUserQuestions.length - 1];
+                            lastcurrentUserQuestion.round = (lastcurrentUserQuestion.round) ? lastcurrentUserQuestion.round : game.round;
+                            lastotherUserQuestions.round = (lastotherUserQuestions.round) ? lastotherUserQuestions.round : game.round;
+                            if (lastcurrentUserQuestion.round === lastotherUserQuestions.round
+                                && !lastcurrentUserQuestion.answerCorrect
+                                && !lastotherUserQuestions.answerCorrect) {
+                                game.round = game.round + 1;
+                            }
                         }
                     }
+                    playerQnA.round = game.round;
+                    question.gameRound = game.round;
                     question.addedOn = createdOn;
                     game.playerQnAs.push(playerQnA);
                     const dbGame = game.getDbModel();
@@ -112,6 +131,7 @@ exports.getNextQuestion = (req, res) => {
                 });
             } else {
                 ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId).then((question) => {
+                    question.gameRound = game.round;
                     res.send(question);
                 });
             }

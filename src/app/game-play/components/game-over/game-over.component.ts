@@ -192,6 +192,6 @@ export class GameOverComponent implements OnInit {
   }
 
   onNotify(info: any) {
-    this.blogData[0].share_status = info.status;
+    this.blogData[0].share_status = info.share_status;
   }
 }

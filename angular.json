@@ -18,7 +18,8 @@
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              "src/manifest.json"
             ],
             "styles": [
               "src/styles/rwa-trivia.theme.scss",
@@ -53,7 +54,8 @@
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true
             }
           }
         },
@@ -94,7 +96,8 @@
             ],
             "assets": [
               "src/assets",
-              "src/favicon.ico"
+              "src/favicon.ico",
+              "src/manifest.json"
             ]
           }
         },

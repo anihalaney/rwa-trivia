@@ -17,9 +17,7 @@ export class BlogComponent implements OnDestroy {
 
   constructor(private store: Store<AppState>) {
     this.sub = this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
-      if (blogs.length > 0) {
-        this.blogData = blogs.reverse().slice(0, 3);
-      }
+      this.blogData = blogs;
     });
   }
 
