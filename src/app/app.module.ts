@@ -22,6 +22,8 @@ import {
   AppComponent, DashboardComponent,
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent
 } from './components';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,7 @@ import {
     UserModule,
     StatsModule,
     BrowserModule.withServerTransition({ appId: 'trivia' })
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer }

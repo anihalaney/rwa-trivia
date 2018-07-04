@@ -32,7 +32,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   currentQuestion: Question;
   correctAnswerCount: number;
   totalRound: number;
-  // questionRound: number;
   questionIndex: number;
   sub: Subscription[] = [];
   timerSub: Subscription;
@@ -120,6 +119,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   resetValues() {
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
+    this.isCorrectAnswer = false;
+    this.showWinBadge = false;
+
   }
 
 
@@ -143,7 +145,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
         if (this.game.playerQnAs.length > 0) {
           const timeoutFlag = this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds;
-          this.isQuestionAvailable = (timeoutFlag === undefined ) ? false : true;
+          this.isQuestionAvailable = (timeoutFlag === undefined) ? false : true;
         }
 
         if (!this.currentQuestion) {
@@ -162,7 +164,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
               });
           }
         }
-
       } else {
         this.showContinueBtn = true;
 
@@ -306,7 +307,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         Number(this.game.gameOptions.opponentType) === OpponentType.Friend)) {
       this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
       if (this.correctAnswerCount >= 5 ||
-        (this.game.stats[this.user.userId].round >= 16 && this.game.stats[this.otherPlayerUserId].round >= 16)) {
+        (this.game.round >= 16)) {
         this.gameOverContinueClicked();
       }
     } else if (((this.questionIndex - this.correctAnswerCount) === 3) ||
@@ -324,6 +325,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     this.isGameLoaded = false;
     this.gameOver = true;
+    this.showWinBadge = false;
     this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
 
@@ -350,7 +352,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
       questionId: this.currentQuestion.id,
-      addedOn: this.currentQuestion.addedOn
+      addedOn: this.currentQuestion.addedOn,
+      round: this.currentQuestion.gameRound
     }
     this.questionAnswered = true;
     this.isGameLoaded = false;
