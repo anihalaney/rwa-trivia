@@ -44,6 +44,7 @@
     "@angular/platform-server": "^6.0.7",
     "@angular/pwa": "^0.6.8",
     "@angular/router": "6.0.6",
+    "@angular/service-worker": "6.0.6",
     "@fortawesome/angular-fontawesome": "0.1.0-10",
     "@fortawesome/fontawesome-svg-core": "^1.2.0",
     "@fortawesome/free-brands-svg-icons": "^5.1.0",
@@ -68,8 +69,7 @@
     "ngx-papaparse": "^2.1.4",
     "rxjs": "6.2.1",
     "stream": "0.0.2",
-    "zone.js": "0.8.26",
-    "@angular/service-worker": "6.0.6"
+    "zone.js": "0.8.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.8",
