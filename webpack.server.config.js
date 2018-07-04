@@ -5,11 +5,11 @@ module.exports = {
   entry: { server: './server.ts' },
   resolve: { extensions: ['.js', '.ts'] },
   target: 'node',
-  mode: 'none',
+  mode: 'development',
   // this makes sure we include node_modules and other 3rd party libraries
   externals: [/node_modules/],
   output: {
-    path: path.join(__dirname, 'dist', 'browser'),
+    path: path.join(__dirname, 'dist'),
     filename: '[name].js'
   },
   module: {
