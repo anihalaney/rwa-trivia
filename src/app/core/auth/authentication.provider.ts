@@ -10,7 +10,7 @@ import { AppState, appState } from '../../store';
 import { LoginComponent } from '../components';
 import { UserActions, UIStateActions } from '../store/actions';
 import { User } from '../../model';
-import { firebase } from 'firebase/app';
+import * as firebase from 'firebase/app';
 
 @Injectable()
 export class AuthenticationProvider {
