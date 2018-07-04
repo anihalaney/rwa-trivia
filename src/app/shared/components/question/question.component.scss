@@ -10,7 +10,7 @@
   p{margin-top: 3%}
 }
 
-.gameplay li{ padding: 10px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer;  position: relative;}
+.gameplay li{ padding: 10px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer;  position: relative;word-break: break-all;}
 .gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
 
 .gameplay li.question-answered {cursor: not-allowed;}
