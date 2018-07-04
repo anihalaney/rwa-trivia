@@ -52,7 +52,8 @@ import {
     GamePlayModule,
     SocialModule,
     UserModule,
-    StatsModule
+    StatsModule,
+    BrowserModule.withServerTransition({ appId: 'trivia' })
   ],
   providers: [
     { provide: RouterStateSerializer, useClass: CustomSerializer }

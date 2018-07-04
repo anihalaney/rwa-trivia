@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, Inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
@@ -7,6 +7,8 @@ import { map, skip, take, filter } from 'rxjs/operators';
 
 import { AppState, appState } from '../../store';
 import { CategoryActions, TagActions, QuestionActions, GameActions } from '../../core/store';
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Utils, WindowRef } from '../../core/services';
 import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
@@ -41,7 +43,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public router: Router,
     public snackBar: MatSnackBar,
     private location: Location,
-    private windowRef: WindowRef) {
+    private windowRef: WindowRef,
+    @Inject(PLATFORM_ID) private platformId: Object) {
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
@@ -92,12 +95,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.router.events.subscribe((evt) => {
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
-      this.windowRef.nativeWindow.scrollTo(0, 0);
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      this.router.events.subscribe((evt) => {
+        if (!(evt instanceof NavigationEnd)) {
+          return;
+        }
+        this.windowRef.nativeWindow.scrollTo(0, 0);
+      });
+    }
   }
 
   ngOnDestroy() {

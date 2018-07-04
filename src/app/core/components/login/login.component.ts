@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
-import * as firebase from 'firebase/app';
+import { firebase } from 'firebase/app';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -14,11 +14,11 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 export class LoginComponent implements OnInit {
   mode: SignInMode;
   loginForm: FormGroup;
-  
+
   constructor(private fb: FormBuilder,
-              private afAuth: AngularFireAuth,
-              private dialog: MatDialog,
-              public dialogRef: MatDialogRef<LoginComponent>) {
+    private afAuth: AngularFireAuth,
+    private dialog: MatDialog,
+    public dialogRef: MatDialogRef<LoginComponent>) {
     this.mode = SignInMode.signIn;  //default
   }
 
@@ -28,15 +28,15 @@ export class LoginComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
       confirmPassword: ['']
-      }, {validator: loginFormValidator}
+    }, { validator: loginFormValidator }
     );
 
-    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {     
+    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
           //Signup
           this.loginForm.get('confirmPassword').setValidators([Validators.required, Validators.minLength(6)]);
-          //no break - fall thru
+        //no break - fall thru
         case 0:
           //Login or Signup
           this.loginForm.get('password').setValidators([Validators.required, Validators.minLength(6)]);
@@ -76,8 +76,8 @@ export class LoginComponent implements OnInit {
         ).then((user: any) => {
           //success
           this.dialogRef.close();
-          if(user && !user.emailVerified){
-            user.sendEmailVerification().then(function(){
+          if (user && !user.emailVerified) {
+            user.sendEmailVerification().then(function () {
               console.log("email verification sent to user");
             });
           }
@@ -89,12 +89,12 @@ export class LoginComponent implements OnInit {
       case 2:
         //Forgot Password
         firebase.auth().sendPasswordResetEmail(this.loginForm.get('email').value)
-        .then((a: any) => {
-          console.log("success. check your email");
-        },
-        (error: Error) => {
-          console.log(error);
-        });
+          .then((a: any) => {
+            console.log("success. check your email");
+          },
+            (error: Error) => {
+              console.log(error);
+            });
     }
   }
 
@@ -121,12 +121,12 @@ export enum SignInMode {
   forgotPassword
 }
 
-function loginFormValidator(fg: FormGroup): {[key: string]: boolean} {
+function loginFormValidator(fg: FormGroup): { [key: string]: boolean } {
   //TODO: check if email is already taken
 
   //Password match validation for Signup only
   if (fg.get('mode').value == 1 && fg.get('password').value !== fg.get('confirmPassword').value) {
-    return {'passwordmismatch': true}
+    return { 'passwordmismatch': true }
   }
 
   return null;

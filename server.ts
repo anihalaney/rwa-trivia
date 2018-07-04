@@ -1,11 +1,26 @@
+const domino = require('domino');
+const fs = require('fs');
+const path = require('path');
+const template = fs.readFileSync(path.join(process.cwd(), '.', 'dist/browser', 'index.html')).toString()
+const win = domino.createWindow(template);
+global['window'] = win;
+global['document'] = win.document;
+
+
+// These are important and needed before anything else
 import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
 
 import { enableProdMode } from '@angular/core';
+
+import * as express from 'express';
 import { join } from 'path';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
+
+// Express server
+const app = express();
 
 const PORT = process.env.PORT || 4000;
 const DIST_FOLDER = join(process.cwd(), 'dist');
@@ -19,46 +34,31 @@ import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 
 
-const functions = require('firebase-functions');
-const auth = require('./middlewares/auth');
-const parse = require('csv').parse;
-const fs = require('fs');
-const path = require('path');
-express = require('express');
-const cookieParser = require('cookie-parser')();
-const bodyParser = require('body-parser');
-const cors = require('cors')({ origin: true });
-const app = express();
-require('./db/firebase-functions').addMessage(functions);
-
-app.use(cors);
-app.use(cookieParser);
-app.use(auth.validateFirebaseIdToken);
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use('/images', express.static(__dirname + '/../../images'));
-
-// Routes
-app.use(require('./routes/routes'))
-
 
 app.engine('html', ngExpressEngine({
-    bootstrap: AppServerModuleNgFactory,
-    providers: [
-        provideModuleMap(LAZY_MODULE_MAP)
-    ]
+  bootstrap: AppServerModuleNgFactory,
+  providers: [
+    provideModuleMap(LAZY_MODULE_MAP)
+  ]
 }));
 
 app.set('view engine', 'html');
 app.set('views', join(DIST_FOLDER, 'browser'));
+
+// TODO: implement data requests securely
+app.get('/api/*', (req, res) => {
+  res.status(404).send('data requests are not supported');
+});
 
 // Server static files from /browser
 app.get('*.*', express.static(join(DIST_FOLDER, 'browser')));
 
 // All regular routes use the Universal engine
 app.get('*', (req, res) => {
-    res.render('index', { req });
+  res.render('index', { req });
 });
 
-
-exports.app = functions.https.onRequest(app);
+// Start up the Node server
+app.listen(PORT, () => {
+  console.log(`Node server listening on http://localhost:${PORT}`);
+});
