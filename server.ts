@@ -1,66 +1,74 @@
-const domino = require('domino');
-const fs = require('fs');
-const path = require('path');
-const DIST_FOLDER = join(process.cwd(), 'dist');
-const template = readFileSync(join(DIST_FOLDER, 'browser', 'index.html')).toString();
-const win = domino.createWindow(template);
-global['window'] = win;
-global['document'] = win.document;
-
 // These are important and needed before anything else
 import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
 
-import { renderModuleFactory } from '@angular/platform-server';
+
+// DOM libs required for Firebase
+// (global as any).WebSocket = require('ws');
+// (global as any).XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+
 import { enableProdMode } from '@angular/core';
 
 import * as express from 'express';
+import { ngExpressEngine } from '@nguniversal/express-engine';
+import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import { join } from 'path';
 import { readFileSync } from 'fs';
 
-// Faster server renders w/ Prod mode (dev mode never needed)
-enableProdMode();
 
-// Express server
-const app = express();
+const domino = require('domino');
+const DIST_FOLDER = join(process.cwd(), 'dist');
+const template = readFileSync(join(DIST_FOLDER, 'browser', 'index.html')).toString();
+const win = domino.createWindow(template);
+
+global['window'] = win;
+global['document'] = win.document;
+global['WebSocket'] = require('ws');
+global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 
 const PORT = process.env.PORT || 4000;
+const APP_NAME = 'browser';
 
 
-// Our index.html we'll use as our template
+const {
+  AppServerModuleNgFactory,
+  LAZY_MODULE_MAP
+} = require(`./dist/server/main`);
 
+enableProdMode();
 
-// * NOTE :: leave this as require() since this file is built Dynamically from webpack
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');
+const app = express();
 
-const { provideModuleMap } = require('@nguniversal/module-map-ngfactory-loader');
+// Set the engine
+app.engine(
+  'html',
+  ngExpressEngine({
+    bootstrap: AppServerModuleNgFactory,
+    providers: [provideModuleMap(LAZY_MODULE_MAP)]
+  })
+);
 
-app.engine('html', (_, options, callback) => {
-  renderModuleFactory(AppServerModuleNgFactory, {
-    // Our index.html
-    document: template,
-    url: options.req.url,
-    // DI so that we can get lazy-loading to work differently (since we need it to just instantly render it)
-    extraProviders: [
-      provideModuleMap(LAZY_MODULE_MAP)
-    ]
-  }).then(html => {
-    callback(null, html);
+app.set('view engine', 'html');
+
+app.get('/**/*', (req, res) => {
+  res.render(join(DIST_FOLDER, APP_NAME, 'index'), {
+    req,
+    res
   });
 });
 
 app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, 'browser'));
+app.set('views', join(DIST_FOLDER, APP_NAME));
 
-// Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser')));
+// Static Assets
+app.get('*.*', express.static(join(DIST_FOLDER, APP_NAME)));
 
-// All regular routes use the Universal engine
+// Point all routes to Universal
 app.get('*', (req, res) => {
-  res.render(join(DIST_FOLDER, 'browser', 'index.html'), { req });
+  res.render('index', { req });
 });
 
-// Start up the Node server
+// Start Express Server
 app.listen(PORT, () => {
-  console.log(`Node server listening on http://localhost:${PORT}`);
+  console.log(`Node Express server listening on http://localhost:${PORT}`);
 });
