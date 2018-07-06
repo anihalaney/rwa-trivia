@@ -1,4 +1,4 @@
-import { TestBed, ComponentFixture, async } from '@angular/core/testing';
+import { TestBed, ComponentFixture, async, fakeAsync } from '@angular/core/testing';
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { NewsletterComponent } from './newsletter.component';
 import { StoreModule, Store } from '@ngrx/store';
@@ -7,7 +7,7 @@ import * as socialActions from '../../../social/store/actions';
 import { TEST_DATA } from '../../../testing/test.data';
 import { subscribeOn } from 'rxjs/internal/operators/subscribeOn';
 
-describe('Component: NewsletterComponent', () => {
+describe('Component: NewsletterComponent', async () => {
 
     let component: NewsletterComponent;
     let fixture: ComponentFixture<NewsletterComponent>;
@@ -48,11 +48,11 @@ describe('Component: NewsletterComponent', () => {
 
     });
 
-    it('form invalid when empty', async () => {
+    it('form invalid when empty', () => {
         expect(component.subscriptionForm.valid).toBeFalsy();
     });
 
-    it('email field validity', async () => {
+    it('email field validity', () => {
         let errors = {};
         const email = component.subscriptionForm.controls['email'];
 
@@ -73,7 +73,7 @@ describe('Component: NewsletterComponent', () => {
         expect(errors['pattern']).toBeFalsy();
     });
 
-    it('subscription for normal user', async () => {
+    it('subscription for normal user', () => {
         expect(component.subscriptionForm.valid).toBeFalsy();
         component.subscriptionForm.controls['email'].setValue('test@test.com');
         expect(component.subscriptionForm.valid).toBeTruthy();
@@ -99,7 +99,7 @@ describe('Component: NewsletterComponent', () => {
         expect(component.subscriptionForm.get('email').value).toBe('test@test.com');
     });
 
-    it('subscription for logged in user', async () => {
+    it('subscription for logged in user', () => {
         expect(component.subscriptionForm.valid).toBeFalsy();
         user = { ...TEST_DATA.userList[0] };
         component.user = user;
