@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { Subscription, Subscribers, Blog } from '../../../model';
 import { SocialActions, SocialActionTypes } from '../actions';
+import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 
 // add subscription Status
 export function subscriptionSaveStatus(state: any = 'NONE', action: SocialActions): String {
@@ -48,7 +49,7 @@ export function checkEmailSubscriptionStatus(state: any = [], action: SocialActi
 };
 
 // return string value of social share image url
-export function socialShareImageUrl(state: any = 'NONE', action: SocialActions): string {
+export function socialShareImageUrl(state: any = null, action: SocialActions): UploadTaskSnapshot {
     switch (action.type) {
         case SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS:
             return action.payload;

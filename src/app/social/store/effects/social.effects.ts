@@ -6,6 +6,7 @@ import { Subscribers, Blog, RouterStateUrl } from '../../../model';
 import { SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
 import { SocialService } from '../../../core/services';
+import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 
 
 @Injectable()
@@ -49,7 +50,7 @@ export class SocialEffects {
         switchMap((action: socialActions.LoadSocialScoreShareUrl) =>
             this.socialService.generateScoreShareImage(action.payload.imageBlob, action.payload.userId)
                 .pipe(
-                map((imageUrl: string) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
+                map((imageUrl: UploadTaskSnapshot) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
         ));
 
 

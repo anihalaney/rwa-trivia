@@ -15,6 +15,7 @@ import * as domtoimage from 'dom-to-image';
 import { UserActions } from '../../../core/store/actions';
 
 
+
 @Component({
   selector: 'game-over',
   templateUrl: './game-over.component.html',
@@ -80,14 +81,15 @@ export class GameOverComponent implements OnInit {
       }
     });
 
-    this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(imageUrl => {
-      if (imageUrl !== 'NONE') {
-        if (imageUrl != null) {
-          this.blogData[0].share_status = true;
-          this.blogData[0].link = imageUrl;
-          this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
-        }
+    this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
 
+      if (uploadTask != null) {
+        if (uploadTask.task.snapshot.state === 'success') {
+          uploadTask.task.snapshot.ref.getDownloadURL().then((url) => {
+            this.blogData[0].share_status = true;
+            this.blogData[0].link = url;
+          });
+        }
       } else {
         this.blogData[0].share_status = false;
       }
