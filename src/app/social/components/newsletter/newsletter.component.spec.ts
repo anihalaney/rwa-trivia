@@ -1,11 +1,11 @@
 import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { NewsletterComponent } from './newsletter.component';
-import { Store } from '@ngrx/store';
-import { StoreModule } from '@ngrx/store';
+import { StoreModule, Store } from '@ngrx/store';
 import { User, Subscription } from '../../../model';
-import { AppState, appState } from '../../../store';
 import * as socialActions from '../../../social/store/actions';
+import { TEST_DATA } from '../../../testing/test.data';
+import { subscribeOn } from 'rxjs/internal/operators/subscribeOn';
 
 describe('Component: NewsletterComponent', () => {
 
@@ -13,6 +13,7 @@ describe('Component: NewsletterComponent', () => {
     let fixture: ComponentFixture<NewsletterComponent>;
     let _store: any;
     let spy: any;
+    let user: User;
 
     beforeEach(() => {
 
@@ -28,6 +29,7 @@ describe('Component: NewsletterComponent', () => {
 
         // get NewsletterComponent component from the fixture
         component = fixture.componentInstance;
+        component.user = user;
 
         // get the injected instances
         _store = fixture.debugElement.injector.get(Store);
@@ -46,11 +48,11 @@ describe('Component: NewsletterComponent', () => {
 
     });
 
-    it('form invalid when empty', () => {
+    it('form invalid when empty', async () => {
         expect(component.subscriptionForm.valid).toBeFalsy();
     });
 
-    it('email field validity', () => {
+    it('email field validity', async () => {
         let errors = {};
         const email = component.subscriptionForm.controls['email'];
 
@@ -71,7 +73,7 @@ describe('Component: NewsletterComponent', () => {
         expect(errors['pattern']).toBeFalsy();
     });
 
-    it('submitting a form', () => {
+    it('subscription for normal user', async () => {
         expect(component.subscriptionForm.valid).toBeFalsy();
         component.subscriptionForm.controls['email'].setValue('test@test.com');
         expect(component.subscriptionForm.valid).toBeTruthy();
@@ -80,6 +82,9 @@ describe('Component: NewsletterComponent', () => {
 
         const subscription = new Subscription();
         subscription.email = component.subscriptionForm.controls['email'].value;
+        if (user) {
+            subscription.userId = user.userId;
+        }
         spy.and.callFake((action: any) => {
             expect(action.AddSubscriber);
             expect(action.payload.subscription).toEqual(subscription);
@@ -92,5 +97,36 @@ describe('Component: NewsletterComponent', () => {
 
         // Now we can check to make sure the emitted value is correct
         expect(component.subscriptionForm.get('email').value).toBe('test@test.com');
+    });
+
+    it('subscription for logged in user', async () => {
+        expect(component.subscriptionForm.valid).toBeFalsy();
+        user = { ...TEST_DATA.userList[0] };
+        component.user = user;
+        component.subscriptionForm.controls['email'].setValue(user.email);
+        expect(component.subscriptionForm.valid).toBeTruthy();
+
+        // dispatch service to save subscribe email
+
+        const subscription = new Subscription();
+        subscription.email = user.email;
+        if (user) {
+            subscription.userId = user.userId;
+        }
+
+        spy.and.callFake((action: any) => {
+            expect(action.AddSubscriber);
+            expect(action.payload.subscription).toEqual(subscription);
+        });
+
+        // Trigger the subscribe function
+        component.onSubscribe();
+
+        expect(_store.dispatch).toHaveBeenCalled();
+
+        // Now we can check to make sure the emitted value is correct
+        console.log("expected" + JSON.stringify(user));
+        expect(component.subscriptionForm.get('email').value).toBe(user.email);
+        expect(component.user.userId).toBe(user.userId);
     });
 });
