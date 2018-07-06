@@ -14,6 +14,7 @@ import { AuthenticationProvider } from '../../core/auth';
 import { User } from '../../model';
 import { Location } from '@angular/common';
 import { userState } from '../../user/store';
+import { Meta, Title } from '@angular/platform-browser';
 import * as gameplayactions from '../../game-play/store/actions';
 import * as userActions from '../../user/store/actions';
 
@@ -44,7 +45,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     private location: Location,
     private windowRef: WindowRef,
-    @Inject(PLATFORM_ID) private platformId: Object) {
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private meta: Meta) {
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
@@ -103,10 +105,37 @@ export class AppComponent implements OnInit, OnDestroy {
         this.windowRef.nativeWindow.scrollTo(0, 0);
       });
     }
+    this.generateTags();
   }
 
   ngOnDestroy() {
     Utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4, this.sub5]);
+  }
+
+  generateTags(tags?) {
+    // default values
+    tags = {
+      title: 'Angular SSR',
+      description: 'My SEO friendly Angular Component',
+      image: 'https://angularfirebase.com/images/logo.png',
+      slug: '',
+      ...tags
+    }
+
+
+    // Set meta tags
+    this.meta.updateTag({ name: 'twitter:card', content: 'summary' });
+    this.meta.updateTag({ name: 'twitter:site', content: '@angularfirebase' });
+    this.meta.updateTag({ name: 'twitter:title', content: tags.title });
+    this.meta.updateTag({ name: 'twitter:description', content: tags.description });
+    this.meta.updateTag({ name: 'twitter:image', content: tags.image });
+
+    this.meta.updateTag({ property: 'og:type', content: 'article' });
+    this.meta.updateTag({ property: 'og:site_name', content: 'AngularFirebase' });
+    this.meta.updateTag({ property: 'og:title', content: tags.title });
+    this.meta.updateTag({ property: 'og:description', content: tags.description });
+    this.meta.updateTag({ property: 'og:image', content: tags.image });
+    this.meta.updateTag({ property: 'og:url', content: `https://instafire-app.firebaseapp.com/${tags.slug}` });
   }
 
   login() {
