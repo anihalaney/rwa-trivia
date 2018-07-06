@@ -8,23 +8,23 @@ import { SocialEffects } from './social.effects';
 import { SocialActions } from '../actions';
 import { SocialService } from '../../../core/services/social.service';
 
-// describe('Effects: SocialEffects', () => {
-//     let effects: SocialEffects;
-//     let actions: Observable<any>;
-//     beforeEach(() => {
-//         TestBed.configureTestingModule({
-//             imports: [
-//                 // any modules needed
-//             ],
-//             providers: [
-//                 SocialEffects,
-//                 provideMockActions(() => actions),
-//                 // other providers
-//             ],
-//         });
+describe('Effects: SocialEffects', () => {
+    let effects: SocialEffects;
+    let actions: Observable<any>;
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                // any modules needed
+            ],
+            providers: [
+                SocialEffects,
+                provideMockActions(() => actions),
+                // other providers
+            ],
+        });
 
-//         effects = TestBed.get(SocialEffects);
-//     });
+        effects = TestBed.get(SocialEffects);
+    });
 
-// });
+});
 
