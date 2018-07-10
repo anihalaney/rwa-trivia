@@ -99,8 +99,7 @@ exports.getNextQuestion = (req, res) => {
                         const otherUserQuestions = game.playerQnAs.filter((pastPlayerQnA) => pastPlayerQnA.playerId === otherPlayerUserId
                         );
 
-                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single &&
-                            !currentUserQuestions[currentUserQuestions.length - 1].answerCorrect) {
+                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
                             game.round = game.round + 1;
                         } else if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                             currentUserQuestions.length > 0 && otherUserQuestions.length > 0) {
