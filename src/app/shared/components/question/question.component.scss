@@ -1,6 +1,6 @@
 .question-list{ float: left;margin: 0% 0% 0% 4% }
 .question-list li{ margin-bottom: 12px; text-align: center; }
-.question-list li{ width: 45%; margin-right: 4%; float: left; }
+.question-list li{ width: 45%; margin-right: 4%; float: left;word-break: break-all; }
 @media screen and ( max-width:767px){
   .rocateicon{margin:0 16px 0 0; }
   .question-list li{ width: 100%; }
