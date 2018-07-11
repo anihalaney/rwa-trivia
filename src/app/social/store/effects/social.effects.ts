@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/app-store';
-import { switchMap, map, mergeMap } from 'rxjs/operators';
-import { empty } from 'rxjs/observable/empty';
+import { switchMap, map, filter } from 'rxjs/operators';
 
-import { Subscription, Subscribers, Blog, RouterStateUrl } from '../../../model';
-import { SocialActions, SocialActionTypes } from '../actions';
+import { Subscribers, Blog, RouterStateUrl } from '../../../model';
+import { SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
 import { SocialService } from '../../../core/services';
 
@@ -61,9 +57,10 @@ export class SocialEffects {
     @Effect()
     getBlogs$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
-        .map((action: any): RouterStateUrl => action.payload.routerState)
-        .filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/'))
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/')))
         .pipe(
         switchMap(() =>
             this.socialService.loadBlogs()

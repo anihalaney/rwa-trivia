@@ -2,7 +2,7 @@
 
 This is part of building a new app for my series - Real World Angular @ https://blog.realworldfullstack.io/
 
-See demo (development server) - https://rwa-trivia.firebaseapp.com
+See it in action (still a work in progress) - https://bitwiser.io
 
 [Part 0: From zero to cli-ng](https://blog.realworldfullstack.io/real-world-angular-part-0-from-zero-to-cli-ng-a2ff646b90cc)
 
@@ -47,6 +47,10 @@ See demo (development server) - https://rwa-trivia.firebaseapp.com
 [Part 17: Bulk upload and User profile settings using firebase cloud storage](https://blog.realworldfullstack.io/real-world-app-part-17-cloud-storage-with-firebase-and-angular-d3d2c9f5f27c)
 
 [Part 18: Revisiting ngrx - Splitting store into feature modules, using action classes, selectors & router-store](https://blog.realworldfullstack.io/real-world-app-part-18-revisiting-ngrx-e20feed6312c)
+
+[Part 19: Ready Player Two - Two player game play, computing stats, dashboard and other features](https://blog.realworldfullstack.io/real-world-app-part-19-ready-player-two-9e17c2e7c694)
+
+[Part 20: Angular, ngrx & cli version 6 - Upgrading Angular, cli, ngrx, material & RxJS to version 6](https://blog.realworldfullstack.io/real-world-app-part-20-angular-ngrx-cli-version-6-a3490b64f0c7)
 
 ## Quick Installation Instructions
 

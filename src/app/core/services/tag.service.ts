@@ -1,7 +1,7 @@
 import { Injectable }    from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { Observable } from 'rxjs/Observable';
-import '../../rxjs-extensions';
+import { Observable } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 
 @Injectable()
 export class TagService {
@@ -11,6 +11,6 @@ export class TagService {
 
   getTags(): Observable<string[]> {
     //console.log(firebase.app().options);
-    return this.db.doc<{"tagList": string[]}>('/lists/tags').valueChanges().take(1).map(t => t.tagList);
+    return this.db.doc<{"tagList": string[]}>('/lists/tags').valueChanges().pipe(take(1), map(t => t.tagList));
   }
 }

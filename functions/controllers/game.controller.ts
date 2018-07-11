@@ -79,8 +79,6 @@ exports.updateGame = (req, res) => {
                 game.gameOver = true;
                 game.decideWinner();
                 game.calculateStat(game.nextTurnPlayerId);
-                const userRound = game.stats[userId].round;
-                game.stats[userId].round = (userRound === 0) ? userRound + 1 : userRound;
                 game.GameStatus = GameStatus.COMPLETED;
                 const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
                 systemStatsCalculations.updateSystemStats('game_played').then((stats) => {

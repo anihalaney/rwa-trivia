@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState, appState } from '../../../store';
+import { Store, select } from '@ngrx/store';
+
+import { AppState } from '../../../store';
 import { leaderBoardState } from '../../store';
 import * as StatActions from '../../store/actions';
 import { SystemStats } from '../../../model';
@@ -18,7 +19,7 @@ export class RealtimeStatsComponent {
 
     this.store.dispatch(new StatActions.LoadSystemStat());
 
-    this.store.select(leaderBoardState).select(s => s.systemStat).subscribe(systemStats => {
+    this.store.select(leaderBoardState).pipe(select(s => s.systemStat)).subscribe(systemStats => {
       if (systemStats !== null) {
         this.systemStats = systemStats;
       }

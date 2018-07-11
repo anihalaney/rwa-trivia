@@ -1,5 +1,4 @@
 import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../src/app/model';
-import { Observable } from 'rxjs/Observable';
 import { Utils } from './utils';
 const utils: Utils = new Utils();
 const gameService = require('../services/game.service');
@@ -65,9 +64,7 @@ export class GameMechanics {
 
         const randomGameNo = Math.floor(Math.random() * totalGames);
         const game = queriedItems[randomGameNo];
-        // console.log('randomGameNo', randomGameNo);
-        // console.log('game', game);
-        // console.log('condition', game.playerIds[0] !== this.userId && game.nextTurnPlayerId === '')
+
         if (game.playerIds[0] !== this.userId && game.nextTurnPlayerId === '') {
             game.nextTurnPlayerId = this.userId;
             game.GameStatus = GameStatus.JOINED_GAME;
@@ -149,12 +146,11 @@ export class GameMechanics {
             const index = game.playerQnAs.length - 1;
             const lastAddedQuestion = game.playerQnAs[index];
 
-            if (!lastAddedQuestion.playerAnswerInSeconds) {
+            if (!lastAddedQuestion.playerAnswerInSeconds && lastAddedQuestion.playerAnswerInSeconds !== 0) {
                 lastAddedQuestion.playerAnswerId = null;
                 lastAddedQuestion.answerCorrect = false;
                 lastAddedQuestion.playerAnswerInSeconds = 16;
                 game.playerQnAs[index] = lastAddedQuestion;
-                game.stats[game.nextTurnPlayerId].round = game.stats[game.nextTurnPlayerId].round + 1;
                 if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
                     game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0];
                 }

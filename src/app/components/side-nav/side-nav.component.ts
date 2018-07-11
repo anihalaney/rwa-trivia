@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy } from '@angular/core';
-import { User } from '../../model';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
-import { AppState, appState, categoryDictionary } from '../../store';
-import { Subscription } from 'rxjs/Subscription';
-import { Utils } from '../../core/services';
 import { Router } from '@angular/router';
+import { Observable, Subscription } from 'rxjs';
+import { Store, select } from '@ngrx/store';
+
+import { User } from '../../model';
+import { AppState, appState } from '../../store';
+import { Utils } from '../../core/services';
 
 @Component({
   selector: 'side-nav',
@@ -20,7 +20,7 @@ export class SideNavComponent implements OnDestroy {
   blogUrl = 'https://bitwiser.io';
 
   constructor(private store: Store<AppState>, private router: Router) {
-    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
   }
   ngOnDestroy() {

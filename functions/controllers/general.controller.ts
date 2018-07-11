@@ -198,17 +198,26 @@ exports.generateBlogsData = (req, res) => {
             blog.viewCount = viewCount;
             blog.share_status = false;
             delete blog['description'];
-            const result = blog.content.match(/<em>(.*?)<\/em>/g).map(function (val) {
-                return val.replace(/<\/?em>/g, '');
+            const result = blog.content.match(/<p>(.*?)<\/p>/g).map(function (val) {
+                return val.replace(/<\/?p>/g, '');
             });
-            blog.subtitle = result[0];
+            let subtitle = result[0];
+            if (subtitle.includes('<em>')) {
+                const result1 = subtitle.match(/<em>(.*?)<\/em>/g).map(function (val) {
+                    return val.replace(/<\/?em>/g, '');
+                });
+                subtitle = result1[0];
+            }
+
+            blog.subtitle = subtitle;
             blogs.push({ ...blog });
             index++;
             viewCount = viewCount + Math.floor((Math.random() * 100) + 1);
             commentCount = commentCount + Math.floor((Math.random() * 5) + 1);
         });
         console.log('blogs', blogs);
-        blogService.setBlog(blogs).then((ref) => {
+
+        blogService.setBlog(blogs).then((ref1) => {
             res.send('created feed blogs');
         });
     });
