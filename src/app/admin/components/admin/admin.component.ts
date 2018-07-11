@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { map } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 import { User } from '../../../model';
@@ -17,7 +17,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>,
     private router: Router) {
-    this.sub = store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.sub = store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (!user || !user.roles['admin']) {
         this.router.navigate(['/']);
 

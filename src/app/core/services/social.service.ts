@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
+import { finalize, catchError, take, map } from 'rxjs/operators';
+
 import { CONFIG } from '../../../environments/environment';
 import { Subscription, Subscribers, SocialGameScoreShare, Blog } from '../../model';
 import { UserService } from './user.service';
@@ -20,17 +22,18 @@ export class SocialService {
     }
 
     checkSubscription(subscription: Subscription) {
-        return this.db.doc(`/subscription/${subscription.email}`)
+        return this.db.doc<any>(`/subscription/${subscription.email}`)
             .snapshotChanges()
-            .take(1)
-            .map(s => {
-                if (s.payload.exists && s.payload.data().email === subscription.email) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-
+            .pipe(
+                take(1),
+                map(s => {
+                    if (s.payload.exists && s.payload.data().email === subscription.email) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                })
+            );
     }
     saveSubscription(subscription: Subscription) {
         const dbSubscription = Object.assign({}, subscription);
@@ -54,17 +57,23 @@ export class SocialService {
         socialGameScoreShare.filename = fileName;
         socialGameScoreShare.created_uid = userId;
         this.db.doc(`/social_share/${socialGameScoreShare.filename}`).set({ ...socialGameScoreShare });
-        const socialShareImageObj = this.storage.upload(`${this.basePath}/${userId}/${this.folderPath}/${new Date().getTime()}`, imageBlob);
-        return socialShareImageObj.downloadURL().map(url => url);
+
+        const filePath = `${this.basePath}/${userId}/${this.folderPath}/${new Date().getTime()}`;
+        const fileRef = this.storage.ref(filePath);
+
+        const socialShareImageObj = this.storage.upload(filePath, imageBlob);
+        return socialShareImageObj.snapshotChanges().pipe(
+            finalize(() => fileRef.getDownloadURL())
+        );
     }
 
 
     loadBlogs(): Observable<Blog[]> {
-        return this.db.collection('blogs')
+        return this.db.collection('blogs', ref => ref.orderBy('id', 'desc').limit(3))
             .valueChanges()
-            .catch(error => {
+            .pipe(catchError(error => {
                 console.log(error);
-                return Observable.of(null);
-            });
+                return of(null);
+            }));
     }
 }

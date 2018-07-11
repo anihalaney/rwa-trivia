@@ -1,10 +1,10 @@
 import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, OnInit, SimpleChanges } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
 import { BulkUploadFileInfo, Category, User } from '../../../../model';
-import { Subscription } from 'rxjs/Subscription';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
 import { AngularFireStorage } from 'angularfire2/storage';
@@ -44,11 +44,11 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     private storage: AngularFireStorage, private router: Router) {
     this.categoryDictObs = store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
-    this.store.select(appState.coreState).take(1).subscribe((s) => {
+    this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user
     });
 
-    this.store.select(bulkState).select(s => s.bulkUploadFileUrl).subscribe((url) => {
+    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
       if (url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
@@ -58,14 +58,14 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       }
     });
 
-    this.store.select(bulkState).select(s => s.bulkUploadArchiveStatus).subscribe((state) => {
+    this.store.select(bulkState).pipe(select(s => s.bulkUploadArchiveStatus)).subscribe((state) => {
       if (state === 'ARCHIVED') {
         this.archivedArray = [];
         this.store.dispatch(new bulkActions.SaveArchiveList(this.archivedArray));
       }
     });
 
-    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.archivedArray = list;
       } else {
@@ -73,7 +73,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       }
     });
 
-    this.store.select(bulkState).select(s => s.getArchiveList).subscribe((list) => {
+    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.archivedArray = list;
       } else {
@@ -109,8 +109,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       new bulkActions.LoadBulkUpload({ user: this.user, archive: this.isArchiveBtnClicked ? false : this.toggleValue ? true : false })
       : new bulkActions.LoadUserBulkUpload(
         { user: this.user, archive: this.isArchiveBtnClicked ? false : this.toggleValue ? true : false }));
-    this.bulkUploadObs = this.store.select(bulkState).select((this.bulkSummaryDetailPath.includes('admin'))
-      ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos);
+    this.bulkUploadObs = this.store.select(bulkState).pipe(select((this.bulkSummaryDetailPath.includes('admin'))
+      ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos));
 
     this.bulkUploadObs.subscribe(bulkUploadFileInfos => {
       if (bulkUploadFileInfos && bulkUploadFileInfos.length !== 0) {

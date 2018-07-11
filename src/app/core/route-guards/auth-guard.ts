@@ -1,11 +1,12 @@
 import { Injectable }    from '@angular/core';
 import { CanActivate, CanActivateChild, 
-         Route, ActivatedRouteSnapshot, RouterStateSnapshot }    from '@angular/router';
-import { AuthenticationProvider }    from '../auth';
-import { Observable } from 'rxjs/Observable';
+         ActivatedRouteSnapshot, RouterStateSnapshot }    from '@angular/router';
+import { Observable } from 'rxjs';
+import { map, filter, take, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
+         
+import { AuthenticationProvider }    from '../auth';
 import { AppState, appState } from '../../store';
-import { User } from '../../model';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild {
@@ -13,10 +14,19 @@ export class AuthGuard implements CanActivate, CanActivateChild {
 
   }
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {  
-    return this.store.select(appState.coreState).select(s => s.authInitialized).filter(i => i).take(1).switchMap(i => {
-     this.authService.ensureLogin();
-     return this.store.select(appState.coreState).select(s => s.user).filter(u => (u != null && u.userId != "")).take(1).map(u => true)
-    });
+    return this.store.select(appState.coreState).pipe(
+      map(s => s.authInitialized), 
+      filter(i => i), 
+      take(1), 
+      switchMap(i => {
+        this.authService.ensureLogin();
+        return this.store.select(appState.coreState).pipe(
+          map(s => s.user), 
+          filter(u => (u != null && u.userId != "")), 
+          take(1),
+          map(u => true));
+      })
+    );
   }
 
   canActivateChild(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {

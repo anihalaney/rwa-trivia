@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { User } from '../../../model';
 import { BulkActions, BulkActionTypes } from '../actions';

@@ -19,6 +19,7 @@
   margin-right: 2%;
   border-width: 1px;
   border-style: solid;
+  width: 100%;
 } 
 .text-alignment
 {
@@ -38,31 +39,31 @@ label
 {
   float: right;
 }
-@media(max-width: 768px) {
-  .btn
-  { 
-    margin-bottom: 10px;
-  }
-  .archive-div,.archive-btn-div
-  {
-    margin-bottom:10px;
-  }
+.switch-div
+{
+  display: inline-flex;
+  line-height: -moz-block-height;
 }
-@media(width: 768px) {
-  .archive-div
+.switch-label
+{
+  line-height: 32px;
+}
+@media (min-width:990px) and (max-width:1300px)
+{
+  .switch-div
   {
-    width: 33%;
+    display: initial;
   }
-  .archive-btn-div
+  .pageheading
   {
-    width: 15%;
+    font-size: 16px;
+  }
+  .switch-label
+  {
+    line-height: 0px;
   }
 }
 @media(max-width: 600px) {
-  .div-alignment,.btn-share
-  {
-    width: 100%;
-  }
   .text-alignment
   {
     text-align: center;

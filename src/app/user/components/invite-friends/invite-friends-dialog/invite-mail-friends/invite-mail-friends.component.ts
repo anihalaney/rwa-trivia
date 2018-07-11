@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { User, Invitation } from '../../../../../model';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+
+import { User } from '../../../../../model';
 import { AppState, appState } from '../../../../../store';
 import * as userActions from '../../../../../user/store/actions';
 import { userState } from '../../../../../user/store';
@@ -23,14 +24,14 @@ export class InviteMailFriendsComponent implements OnInit {
   validEmail = [];
 
   constructor(private fb: FormBuilder, private store: Store<AppState>) {
-    this.store.select(appState.coreState).select(s => s.user).subscribe(user => {
+    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
         this.user = user;
       }
     });
 
-    this.store.select(userState).select(s => s.userProfileSaveStatus).subscribe(status => {
+    this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
 
       if (status === 'INVITATION SUCCESS') {
         this.showSuccessMsg = 'Your Invitations are send Successfully!!';

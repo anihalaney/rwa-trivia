@@ -1,10 +1,9 @@
 import { Component, Inject, Input, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { Store } from '@ngrx/store';
-import '../../../rxjs-extensions';
+import { Observable, Subscription, timer } from 'rxjs';
+import { take, filter } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import { categoryDictionary } from '../../../store';
@@ -33,7 +32,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   currentQuestion: Question;
   correctAnswerCount: number;
   totalRound: number;
-  questionRound: number;
   questionIndex: number;
   sub: Subscription[] = [];
   timerSub: Subscription;
@@ -76,21 +74,21 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.user = data.user;
     this.userDict = data.userDict;
 
-    this.userDict$ = store.select(appState.coreState).select(s => s.userDict);
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => {
       this.userDict = userDict
     });
 
     this.resetValues();
-    this.gameObs = store.select(gameplayState).select(s => s.currentGame).filter(g => g != null);
-    this.gameQuestionObs = store.select(gameplayState).select(s => s.currentGameQuestion);
+    this.gameObs = store.select(gameplayState).pipe(select(s => s.currentGame), filter(g => g != null));
+    this.gameQuestionObs = store.select(gameplayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.store.select(categoryDictionary).take(1).subscribe(c => { this.categoryDictionary = c });
+    this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => { this.categoryDictionary = c });
     this.sub.push(
       this.gameObs.subscribe(game => {
+        this.game = game;
         if (game !== null && !this.isGameLoaded) {
-          this.game = game;
           this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
             this.game.GameStatus === GameStatus.RESTARTED ||
             ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
@@ -102,18 +100,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
           if (!this.turnFlag) {
             this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
-
             this.correctAnswerCount = this.game.stats[this.user.userId].score;
-
-            this.questionRound = (game.stats[this.user.userId].round === 0)
-              ? game.stats[this.user.userId].round + 1
-              : ((this.questionRound > game.stats[this.user.userId].round) ?
-                this.questionRound :
-                game.stats[this.user.userId].round);
-
-            this.questionRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? this.questionRound :
-              (this.isCorrectAnswer || game.stats[this.user.userId].round === 0) ? this.questionRound : this.questionRound + 1;
-
           }
 
           this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
@@ -132,7 +119,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   resetValues() {
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
-    this.questionRound = 0;
+    this.isCorrectAnswer = false;
+    this.showWinBadge = false;
+
   }
 
 
@@ -156,11 +145,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
         if (this.game.playerQnAs.length > 0) {
           const timeoutFlag = this.game.playerQnAs[this.game.playerQnAs.length - 1].playerAnswerInSeconds;
-          if (timeoutFlag === undefined) {
-            this.questionRound = this.questionRound + 1;
-          }
-          this.isQuestionAvailable = (timeoutFlag === undefined &&
-            Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent) ? false : true;
+          this.isQuestionAvailable = (timeoutFlag === undefined) ? false : true;
         }
 
         if (!this.currentQuestion) {
@@ -169,7 +154,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           if (!this.isQuestionAvailable) {
             this.showLoader = true;
             this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
-            this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+            this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
               this.timer--;
             },
               null,
@@ -179,7 +164,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
               });
           }
         }
-
       } else {
         this.showContinueBtn = true;
 
@@ -196,7 +180,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     if (this.isCorrectAnswer) {
       this.showWinBadge = true;
       this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
-      this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+      this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
         this.timer--;
       },
         null,
@@ -216,7 +200,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     // Show Loading screen
     this.showLoader = true;
     this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
-    this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+    this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
       this.timer--;
     },
       null,
@@ -226,7 +210,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.showLoader = false;
         this.showBadge = true;
         this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
-        this.timerSub = Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+        this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
           this.timer--;
         },
           null,
@@ -255,7 +239,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       if (this.isQuestionAvailable) {
         this.questionIndex++;
         this.timerSub =
-          Observable.timer(1000, 1000).take(this.timer).subscribe(t => {
+          timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
             this.timer--;
           },
             null,
@@ -265,7 +249,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
                 this.afterAnswer();
                 this.genQuestionComponent.fillTimer();
               }
-
             });
       } else {
         setTimeout(() => {
@@ -314,9 +297,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       if (!this.gameOver) {
         this.getLoader();
         this.getNextQuestion();
-        if (!this.isCorrectAnswer) {
-          this.questionRound = this.questionRound + 1;
-        }
       }
     }
   }
@@ -327,7 +307,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         Number(this.game.gameOptions.opponentType) === OpponentType.Friend)) {
       this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
       if (this.correctAnswerCount >= 5 ||
-        (this.game.stats[this.user.userId].round >= 16 && this.game.stats[this.otherPlayerUserId].round >= 16)) {
+        (this.game.round >= 16)) {
         this.gameOverContinueClicked();
       }
     } else if (((this.questionIndex - this.correctAnswerCount) === 3) ||
@@ -345,6 +325,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     this.isGameLoaded = false;
     this.gameOver = true;
+    this.showWinBadge = false;
     this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
 
@@ -371,7 +352,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
       questionId: this.currentQuestion.id,
-      addedOn: this.currentQuestion.addedOn
+      addedOn: this.currentQuestion.addedOn,
+      round: this.currentQuestion.gameRound
     }
     this.questionAnswered = true;
     this.isGameLoaded = false;

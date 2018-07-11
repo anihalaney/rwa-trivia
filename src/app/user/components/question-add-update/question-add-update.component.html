@@ -98,18 +98,18 @@
     </mat-card-header>
 
     <mat-card-content>
-      <mat-input-container class="full-width required">
+      <mat-form-field class="full-width required">
         <input matInput placeholder="Question" formControlName="questionText" class="required">
         <mat-hint align="end" *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</mat-hint>
-      </mat-input-container>
+      </mat-form-field>
 
       <div formArrayName="answers" class="well well-lg">
         <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" >
-          <mat-input-container class="full-width">
+          <mat-form-field class="full-width">
             <mat-checkbox mdPrefix formControlName="correct"></mat-checkbox>
             <input matInput [placeholder]="'Answer ' + (i+1)" formControlName="answerText" />
             <mat-hint align="end" *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine" class="error">Answer required</mat-hint>
-          </mat-input-container>
+          </mat-form-field>
         </div>
       </div>
       <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
@@ -120,15 +120,15 @@
         <mat-checkbox formControlName="ordered">Ordered?</mat-checkbox>
       </p>
       <p> 
-        <mat-input-container class="full-width required">
+        <mat-form-field class="full-width required">
           <textarea matInput placeholder="Explanation" formControlName="explanation"></textarea>
-        </mat-input-container>
+        </mat-form-field>
       </p> 
 
       <p> 
-        <mat-input-container>
+        <mat-form-field>
           <input matInput placeholder="Tag" formControlName="tags">
-        </mat-input-container>
+        </mat-form-field>
         <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
       </p> 
 

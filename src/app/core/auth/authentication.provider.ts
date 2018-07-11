@@ -3,8 +3,8 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-import '../../rxjs-extensions';
+import { Observable, defer, throwError, from } from 'rxjs';
+import { share, take, tap } from 'rxjs/operators';
 
 import { AppState, appState } from '../../store';
 import { LoginComponent } from '../components';
@@ -40,9 +40,9 @@ export class AuthenticationProvider {
       }
     });
 
-    this.refreshTokenObserver = Observable.defer(() => {
-      return Observable.fromPromise(this.generateToken(true));
-    }).share();
+    this.refreshTokenObserver = defer(() => {
+      return from(this.generateToken(true));
+    }).pipe(share());
   }
 
   ensureLogin = function (url?: string) {
@@ -59,15 +59,15 @@ export class AuthenticationProvider {
   }
 
 
-  refreshToken = function () {
-    return this.refreshTokenObserver.do((tokenResponse) => {
+  refreshToken = function (): Observable<any> {
+    return this.refreshTokenObserver.pipe(tap((tokenResponse) => {
       this.user.idToken = tokenResponse;
       this.store.dispatch(this.userActions.loginSuccess(this.user));
       return tokenResponse;
     },
       (err) => {
-        return Observable.throw(err);
-      });
+        return throwError(err);
+    }));
   }
 
 
@@ -84,7 +84,7 @@ export class AuthenticationProvider {
 
   get isAuthenticated(): boolean {
     let user: User;
-    this.store.select(appState.coreState).take(1).subscribe(s => user = s.user)
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user)
     if (user) {
       return true;
     }

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 
@@ -16,7 +16,7 @@ export class TagsComponent implements OnInit, OnDestroy {
   sub: any;
 
   constructor(private store: Store<AppState>) {
-    this.tagsObs = store.select(appState.coreState).select(s => s.tags);
+    this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
   }
 
   ngOnInit() {

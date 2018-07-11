@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { EffectsTestingModule, EffectsRunner } from '@ngrx/effects/testing';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { TEST_DATA } from '../../../testing/test.data';
 import { UserEffects } from './user.effects';
