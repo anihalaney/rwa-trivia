@@ -22,7 +22,6 @@
           <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
           <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
         </div>
-
       </div>
       <div class="col-sm-3">
         <div class="timer">
@@ -34,9 +33,6 @@
             <span class="time deg90"></span>
           </div>
         </div>
-      </div>
-      <div *ngIf="turnFlag && correctCount==3" class="col-xs-12 turn-change-reason">
-        <span>You gave three correct answer, lets give chance to play a Game to other player</span>
       </div>
 
     </div>

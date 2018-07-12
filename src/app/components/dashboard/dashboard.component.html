@@ -23,13 +23,11 @@
         <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
           <game-card [game]="game" [userDict]="userDict"></game-card>
         </li>
-        <ng-container *ngIf="activeGames.length > 0">
-          <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">
-            <div class="no-card">
-              <p class="light">No active game</p>
-            </div>
-          </li>
-        </ng-container>
+        <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">
+          <div class="no-card">
+            <p class="light">No active game</p>
+          </div>
+        </li>
         <!-- <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
           <a href="#" class="innerli textcenter">
             <div class="viewallbtn">view all</div>

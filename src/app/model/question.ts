@@ -22,7 +22,6 @@ export class Question {
   validationErrorMessages?: string[];
   userGivenAnswer?: string;
   addedOn?: number;
-  gameRound?: number;
 
   static getViewModelFromDb(db: any): Question {
     const question: Question = new Question();
