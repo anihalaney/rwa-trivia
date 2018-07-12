@@ -56,10 +56,12 @@ ssrApp.get('*', (req, res) => {
       .then(body => {
         res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
         res.set('Vary', 'User-Agent');
+        //console.log(body.toString());
         res.send(body.toString());
       });
   }
   else {
+    //console.log(`Standard: https://${appUrl}`);
     nodeFetch(`https://${appUrl}`)
     .then(res => res.text())
     .then(body => {
