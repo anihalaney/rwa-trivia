@@ -110,7 +110,7 @@
 	{
 		color: map-get($theme, box-hover-lg);
 	}
-	.answer-label
+	.answer-label,.turn-change-reason
 	{
 		color: map-get($theme, answer);
 	}

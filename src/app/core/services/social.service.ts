@@ -69,7 +69,7 @@ export class SocialService {
 
 
     loadBlogs(): Observable<Blog[]> {
-        return this.db.collection('blogs', ref => ref.orderBy('id', 'asc').limit(3))
+        return this.db.collection('blogs', ref => ref.orderBy('id', 'desc').limit(3))
             .valueChanges()
             .pipe(catchError(error => {
                 console.log(error);
