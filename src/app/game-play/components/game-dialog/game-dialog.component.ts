@@ -119,9 +119,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   resetValues() {
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
-    this.isCorrectAnswer = false;
-    this.showWinBadge = false;
-
   }
 
 
@@ -325,7 +322,6 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     this.isGameLoaded = false;
     this.gameOver = true;
-    this.showWinBadge = false;
     this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
 
@@ -352,8 +348,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
       questionId: this.currentQuestion.id,
-      addedOn: this.currentQuestion.addedOn,
-      round: this.currentQuestion.gameRound
+      addedOn: this.currentQuestion.addedOn
     }
     this.questionAnswered = true;
     this.isGameLoaded = false;

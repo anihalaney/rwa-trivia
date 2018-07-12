@@ -533,6 +533,11 @@ nav .user.card{
   padding: 0px !important;
  
 }
+.mat-expansion-panel-header-description
+{
+  overflow-x: auto;
+  max-height: 300px;
+}
 .no-opponent
 {
   background-position: -138px -519px;

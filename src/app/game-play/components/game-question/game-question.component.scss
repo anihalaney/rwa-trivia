@@ -190,10 +190,6 @@ mat-card {
  .margin-top-6{
   margin-top: 6px;
  }
- .turn-change-reason {
-  margin-top: 5px;
-  font-size: 18px;
-}
  @media(max-width: 1000px) {
   .secondbg {
   padding: 50px 0;
@@ -203,14 +199,10 @@ mat-card {
   }
  }
  @media(max-width: 768px) { 
-  .header
-  {
-    margin-bottom: 20%;
-  }
+ 
  }
  @media(max-width: 600px) {
   .startgame, .continue-btn-div { width: 100%; margin-top:6px; }
   .question-tag-space{ width: 100%; }
   .popupbottom{ display: inline-block; width:100%; padding:1% 1%}
  }
- 
