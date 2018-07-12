@@ -12,5 +12,5 @@ router.put('/:gameId', gameAuth.authorizedOnly, gameController.updateGame);
 router.post('/game-over/scheduler', gameAuth.authTokenOnly, gameController.checkGameOver);
 router.get('/update/all', gameAuth.adminOnly, gameController.updateAllGame);
 router.post('/turn/scheduler', gameAuth.authTokenOnly, gameController.changeGameTurn);
-
+router.get('/social/:userId/:socialId', gameController.createSocialUrl);
 module.exports = router;

@@ -3,7 +3,11 @@ import { Utils } from '../utils/utils';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 const gameControllerService = require('../services/game.service');
+const socialGameService = require('../services/social.service');
 const utils: Utils = new Utils();
+const fs = require('fs');
+const request = require('request');
+const path = require('path');
 
 /**
  * createGame
@@ -172,6 +176,24 @@ exports.changeGameTurn = (req, res) => {
             })
         });
         res.send('scheduler check is completed');
+    });
+};
+
+
+/**
+ * createSocialUrl
+ * return file
+ */
+exports.createSocialUrl = (req, res) => {
+    const storageFolderPath = './images';
+    const socialId = req.params.socialId;
+    socialGameService.generateSocialUrl(req.params.userId, socialId).then((social_url) => {
+        console.log('social_url--->', social_url);
+
+        res.setHeader('content-disposition', 'attachment; filename=social_image.png');
+        res.setHeader('content-type', 'image/png');
+        request(social_url).pipe(res);
+
     });
 };
 
