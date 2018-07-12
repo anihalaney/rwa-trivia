@@ -152,6 +152,12 @@ ul li:last-child{ border-bottom: 0 }
 .loaderimage{
     width: 50px;
 }
+.rematch-loaderimage
+{
+  width: 30px;
+  position: absolute;
+  margin-left: -81px;
+}
 .main-div
 {
   min-height:480px !important;
@@ -237,4 +243,7 @@ ul li:last-child{ border-bottom: 0 }
     margin-bottom: 2%;
     width: 100%;
   }
- }                         
+ } 
+.mat-expansion-panel-header-description, .mat-expansion-panel-header-title {
+  display: initial;
+  }
