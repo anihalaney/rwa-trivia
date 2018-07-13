@@ -36,7 +36,7 @@ export class GameOverComponent implements OnInit {
   otherUserInfo: User;
   questionsArray = [];
   dialogRef: MatDialogRef<ReportGameComponent>;
-  blogData;
+  socialFeedData;
   imageUrl = '';
   disableRematchBtn = false;
   PlayerMode = PlayerMode;
@@ -56,12 +56,12 @@ export class GameOverComponent implements OnInit {
         this.user = user;
       }
     });
-    this.blogData = [];
-    this.blogData = [{
+
+    this.socialFeedData = {
       blogNo: 0,
       share_status: false,
       link: this.imageUrl
-    }];
+    };
     this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -91,13 +91,13 @@ export class GameOverComponent implements OnInit {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
           const url = `${CONFIG.functionsUrl}/app/game/social/${this.user.userId}/${path[path.length - 1]}`;
-          this.blogData[0].share_status = true;
-          this.blogData[0].link = url;
+          this.socialFeedData.share_status = true;
+          this.socialFeedData.link = url;
           console.log('url---->', url);
           this.loaderStatus = false;
         }
       } else {
-        this.blogData[0].share_status = false;
+        this.socialFeedData.share_status = false;
         this.loaderStatus = false;
       }
     });
@@ -116,7 +116,7 @@ export class GameOverComponent implements OnInit {
   }
 
   reMatch() {
-    this.blogData[0].share_status = false;
+    this.socialFeedData.share_status = false;
     this.disableRematchBtn = true;
     this.game.gameOptions.rematch = true;
     if (this.game.playerIds.length > 0) {
@@ -205,6 +205,6 @@ export class GameOverComponent implements OnInit {
   }
 
   onNotify(info: any) {
-    this.blogData[0].share_status = info.share_status;
+    this.socialFeedData.share_status = info.share_status;
   }
 }
