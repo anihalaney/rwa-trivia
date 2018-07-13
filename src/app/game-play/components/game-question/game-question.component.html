@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="turnFlag && correctCount==3" class="col-xs-12 turn-change-reason">
+      <div *ngIf="turnFlag && threeConsecutiveAnswer" class="col-xs-12 turn-change-reason">
         <span>You gave three correct answer, lets give chance to play a Game to other player</span>
       </div>
 
