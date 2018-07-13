@@ -185,7 +185,8 @@ exports.changeGameTurn = (req, res) => {
  * return htmlcontent
  */
 exports.createSocialContent = (req, res) => {
-    const imageUrl = `${req.protocol}://${req.hostname}/app/game/social-image/${req.params.userId}/${req.params.socialId}/`;
+    const websiteUrl = `${req.protocol}://${req.hostname}`;
+    const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}/`;
 
     const htmlContent = `<!DOCTYPE html>
                        <html>
@@ -194,7 +195,7 @@ exports.createSocialContent = (req, res) => {
                           <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
                           <meta property="og:title" content="RWA-Trivia Game Score">
                           <meta property="og:url"
-                            content="https://log.realworldfullstack.io/real-world-app-part-20-angular-ngrx-cli-version-6-a3490b64f0c7">
+                            content="${imageUrl}">
                           <meta property="og:image" content="${imageUrl}">
                           <meta name="twitter:description" content="RWA-Trivia Game Score">
                         </head>
