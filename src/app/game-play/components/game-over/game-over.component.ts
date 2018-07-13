@@ -42,7 +42,7 @@ export class GameOverComponent implements OnInit {
   PlayerMode = PlayerMode;
   userDict$: Observable<{ [key: string]: User }>;
   loaderStatus = false;
-  singlePlayerUserName = 'You';
+  playerUserName = 'You';
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
@@ -145,7 +145,7 @@ export class GameOverComponent implements OnInit {
   }
   shareScore() {
     this.loaderStatus = true;
-    this.singlePlayerUserName = this.user.displayName;
+    this.playerUserName = this.user.displayName;
     setTimeout(() => {
       const node = document.getElementById('share-content');
       domtoimage.toPng(node)
@@ -154,7 +154,7 @@ export class GameOverComponent implements OnInit {
             imageBlob: Utils.dataURItoBlob(dataUrl, 'png'),
             userId: this.user.userId
           }));
-          this.singlePlayerUserName = 'You';
+          this.playerUserName = 'You';
         })
         .catch((error) => {
           console.error('oops, something went wrong!', error);
