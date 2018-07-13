@@ -130,7 +130,7 @@ export class GameOverComponent implements OnInit {
       this.renderer.addClass(document.body, 'dialog-open');
     });
     this.dialogRef.afterClosed().subscribe(x => {
-      this.renderer.removeClass(document.body, 'dialog-open');
+      this.dialogRef = null;
     });
   }
   shareScore() {
