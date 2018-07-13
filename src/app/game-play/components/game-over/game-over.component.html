@@ -16,7 +16,7 @@
         <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
         <img *ngIf="user?.profilePictureUrl " [src]="user.profilePictureUrl " alt="yourimg">
       </div>
-      <label href="# " class="dark text-style ">You</label>
+      <label href="#" id="you" class="dark text-style ">{{playerUserName}}</label>
       <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}}</div>
       <div class="div-top-spacing score-div-height">
@@ -33,7 +33,7 @@
           <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
           <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
         </div>
-        <label href="#" class="dark text-style">You</label>
+        <label href="#" class="dark text-style">{{playerUserName}}</label>
         <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
         <div class="div-top-spacing">
@@ -65,11 +65,11 @@
     <div class="div-top-spacing win-icon-div">
       <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score > game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score !== 3)">
         <div class="sprite thumb-up"></div>
-        <span class="win-text">You Win</span>
+        <span class="win-text">{{playerUserName}} Wins</span>
       </div>
       <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score < game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score === 3)">
         <div class="sprite thumb-down"></div>
-        <span class="win-text">You Lose</span>
+        <span class="win-text">{{playerUserName}} Lose</span>
       </div>
       <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score == game.stats[otherUserId].score)">
         <div class="sprite thumb-up"></div>
@@ -81,8 +81,9 @@
   <mat-card-content class="textcenter">
     <div class="button-div">
       <div class="win-icon spacing-bottom">
-        <social-palette *ngIf="blogData[0].share_status" class="spacing position" [blogData]="blogData[0]" (notify)="onNotify($event)"
+        <social-palette *ngIf="blogData[0].share_status && !loaderStatus" class="spacing position" [blogData]="blogData[0]" (notify)="onNotify($event)"
           [isFromBlog]=false></social-palette>
+        <img *ngIf="loaderStatus" src="/assets/images/ajax-loader.gif" class="share-loaderimage" />
         <button class="btn-share" type="button" (click)="shareScore()" [disabled]="blogData[0].share_status" [ngClass]="blogData[0].share_status?'hide-share-btn':'show-share-btn'">Share</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">Rematch</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play Again</button>
