@@ -25,6 +25,9 @@ export class NewsletterComponent implements OnInit {
   message = '';
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, ) {
+    this.subscriptionForm = this.fb.group({
+      email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
+    });
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       this.user = user;
@@ -56,9 +59,7 @@ export class NewsletterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.subscriptionForm = this.fb.group({
-      email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
-    });
+
     this.store.dispatch(new socialActions.GetTotalSubscriber());
   }
 
