@@ -52,6 +52,8 @@ See it in action (still a work in progress) - https://bitwiser.io
 
 [Part 20: Angular, ngrx & cli version 6 - Upgrading Angular, cli, ngrx, material & RxJS to version 6](https://blog.realworldfullstack.io/real-world-app-part-20-angular-ngrx-cli-version-6-a3490b64f0c7)
 
+[Part 21: Service Workers (Progressive Web App) with Angular](https://blog.realworldfullstack.io/real-world-app-part-21-service-workers-pwa-with-angular-3ba5c7168f3f)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)

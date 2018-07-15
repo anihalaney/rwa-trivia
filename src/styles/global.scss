@@ -474,7 +474,7 @@ nav .user.card{
 	//TODO: coming from dark-theme. should be with borders
 	border-width: 0 !important
 }
-.downloadicon{ background-position: -96px -295px; width: 31px; height: 33px;}
+.downloadicon{ background-position: -96px -295px; width: 33px; height: 33px;}
 .cancelicon{ background-position: -127px -293px; width: 25px; height: 30px;}
 .closeicon{ background-position: -154px -293px; width: 27px; height: 30px;}
 .pendingicon{ background-position: -178px -293px;  width: 19px;  height: 33px;}
@@ -516,7 +516,7 @@ nav .user.card{
 .score3{ background-position: -132px -362px; width: 27px; height: 33px;}
 .score4{ background-position: -75px -391px; width: 27px; height: 33px;}
 .score5{ background-position: -103px -391px; width: 27px; height: 33px;}
-.score0{ background-position: -82px -327px; width: 27px; height: 33px;}
+.score0{ background-position: -82px -327px; width: 30px; height: 33px;}
 
 
 .score1-L{ background-position: -4px -456px; width: 27px; height: 33px;}
@@ -532,11 +532,6 @@ nav .user.card{
 {
   padding: 0px !important;
  
-}
-.mat-expansion-panel-header-description
-{
-  overflow-x: auto;
-  max-height: 300px;
 }
 .no-opponent
 {
@@ -574,3 +569,39 @@ mat-cell:last-child, mat-footer-cell:last-child, mat-header-cell:last-child {
 mat-cell:first-child, mat-footer-cell:first-child, mat-header-cell:first-child {
   padding-left: 0px !important;
 }
+
+html.cdk-global-scrollblock {
+  overflow-y: initial;
+}
+
+body.dialog-open {
+  overflow: hidden;
+}
+
+body.dialog-open .cdk-overlay-pane {
+  position: relative !important;
+  margin: auto !important;
+}
+
+body.cdk-overlay-backdrop {
+  position: fixed !important;
+}
+
+.mat-dialog-container {
+  margin: 0 auto 30px !important;
+  height: auto !important;
+  overflow: initial !important;
+}
+
+.mat-dialog-content {
+  max-width: none !important;
+  max-height: none !important;
+  overflow: initial !important;
+}
+body.dialog-open .cdk-global-overlay-wrapper {
+  pointer-events: auto !important;
+  overflow-y: auto !important;
+  pointer-events: all;
+}
+
+

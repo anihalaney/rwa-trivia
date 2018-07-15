@@ -23,11 +23,13 @@
         <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
           <game-card [game]="game" [userDict]="userDict"></game-card>
         </li>
-        <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">
-          <div class="no-card">
-            <p class="light">No active game</p>
-          </div>
-        </li>
+        <ng-container *ngIf="activeGames.length > 0">
+          <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">
+            <div class="no-card">
+              <p class="light">No active game</p>
+            </div>
+          </li>
+        </ng-container>
         <!-- <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
           <a href="#" class="innerli textcenter">
             <div class="viewallbtn">view all</div>
@@ -77,6 +79,20 @@
   </section>
   <!-- Invitation to play games end   -->
 
+  <div class="row">
+    <!-- Question of the day -->
+    <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
+      <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
+    </div>
+    <!-- Question of the day end -->
+
+    <!-- Subscribe -->
+    <div class="col-lg-5 col-md-12 col-sm-12 " *ngIf="showNewsCard">
+      <newsletter></newsletter>
+    </div>
+    <!-- Subscribe end -->
+  </div>
+
   <!-- Category leaderboard -->
   <section class="card">
     <div class="row">
@@ -94,19 +110,7 @@
   </section>
   <!-- Category leaderboard end-->
 
-  <div class="row">
-    <!-- Question of the day -->
-    <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
-      <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
-    </div>
-    <!-- Question of the day end -->
 
-    <!-- Subscribe -->
-    <div class="col-lg-5 col-md-12 col-sm-12 " *ngIf="showNewsCard">
-      <newsletter></newsletter>
-    </div>
-    <!-- Subscribe end -->
-  </div>
 
 
 

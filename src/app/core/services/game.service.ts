@@ -46,11 +46,8 @@ export class GameService {
       .where('GameStatus', '==', GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE))
       .valueChanges();
 
-
-
-
-    const OtherGames1 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.RESTARTED))
+    const userGames6 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
+      .where('GameStatus', '==', GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE))
       .valueChanges();
 
     const OtherGames2 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
@@ -62,19 +59,19 @@ export class GameService {
       .valueChanges();
 
 
-    return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, OtherGames1, OtherGames2, OtherGames3)
+    return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, userGames6, OtherGames2, OtherGames3)
       .pipe(
-        map(games => [].concat.apply([], games)),
-        map(gs => gs.map(g => Game.getViewModel(g))),
-        map(games => {
-          let myTurnGames = [];
-          let notMyTurnGames = [];
-          games.map(gameObj => {
-            if (gameObj.nextTurnPlayerId === user.userId) {
-              myTurnGames.push(gameObj);
-            } else {
-              notMyTurnGames.push(gameObj);
-            }
+      map(games => [].concat.apply([], games)),
+      map(gs => gs.map(g => Game.getViewModel(g))),
+      map(games => {
+        let myTurnGames = [];
+        let notMyTurnGames = [];
+        games.map(gameObj => {
+          if (gameObj.nextTurnPlayerId === user.userId) {
+            myTurnGames.push(gameObj);
+          } else {
+            notMyTurnGames.push(gameObj);
+          }
         });
         myTurnGames = myTurnGames.sort((a: any, b: any) => { return (a.turnAt - b.turnAt) });
         notMyTurnGames = notMyTurnGames.sort((a: any, b: any) => { return (b.turnAt - a.turnAt) });
@@ -127,10 +124,10 @@ export class GameService {
 
     return combineLatest(query1, query2)
       .pipe(
-        map((data) => data[0].concat(data[1])),
-        map(gs => gs.map(g => Game.getViewModel(g))
-          .sort((a: any, b: any) => { return b.turnAt - a.turnAt; })
-        )
+      map((data) => data[0].concat(data[1])),
+      map(gs => gs.map(g => Game.getViewModel(g))
+        .sort((a: any, b: any) => { return b.turnAt - a.turnAt; })
+      )
       );
   }
 
@@ -150,9 +147,9 @@ export class GameService {
 
     return combineLatest(query1, query2)
       .pipe(map((data) => data[0].concat(data[1])),
-        map(gs => gs.map(g => Game.getViewModel(g))
-          .sort((a: any, b: any) => { return b.turnAt - a.turnAt; })
-        )
+      map(gs => gs.map(g => Game.getViewModel(g))
+        .sort((a: any, b: any) => { return b.turnAt - a.turnAt; })
+      )
       );
   }
 
@@ -168,7 +165,10 @@ export class GameService {
     const observables = [];
 
     game.playerQnAs.map(playerQnA => {
-      observables.push(this.checkUserQuestion(playerQnA));
+      if (playerQnA.playerId === userId) {
+        observables.push(this.checkUserQuestion(playerQnA));
+      }
+
     });
     return forkJoin(observables);
   }
@@ -178,8 +178,8 @@ export class GameService {
     return this.db.collection(`/report_questions`, ref => ref.where('created_uid', '==', report.created_uid).
       where('gameId', '==', report.gameId))
       .valueChanges().pipe(
-        take(1),
-        map(question => {
+      take(1),
+      map(question => {
         if (question.length > 0) {
           const reportQuestion = new ReportQuestion();
           reportQuestion.questions = question[0]['questions'];
