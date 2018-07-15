@@ -22,7 +22,6 @@
           <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
           <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
         </div>
-
       </div>
       <div class="col-sm-3">
         <div class="timer">
@@ -38,7 +37,6 @@
       <div *ngIf="turnFlag && threeConsecutiveAnswer" class="col-xs-12 turn-change-reason">
         <span>You have reached the maximum number of correct answers you are allowed to give in the first round.</span>
       </div>
-
     </div>
 
     <ng-container>
