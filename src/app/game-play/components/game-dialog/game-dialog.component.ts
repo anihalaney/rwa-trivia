@@ -60,6 +60,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   isQuestionAvailable = true;
   isGameLoaded: boolean;
+  threeConsecutiveAnswer = false;
 
   private genQuestionComponent: GameQuestionComponent;
 
@@ -88,6 +89,14 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
+        this.threeConsecutiveAnswer = false;
+        if (game !== null && game.playerQnAs.length === 3) {
+          let consecutiveCount = 0;
+          this.game.playerQnAs.map((playerQnA) => {
+            consecutiveCount = (playerQnA.answerCorrect) ? ++consecutiveCount : consecutiveCount;
+          });
+          this.threeConsecutiveAnswer = (consecutiveCount === 3) ? true : false;
+        }
         if (game !== null && !this.isGameLoaded) {
           this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
             this.game.GameStatus === GameStatus.RESTARTED ||
@@ -119,6 +128,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   resetValues() {
     this.questionIndex = 0;
     this.correctAnswerCount = 0;
+    this.isCorrectAnswer = false;
+    this.showWinBadge = false;
+
   }
 
 
@@ -322,6 +334,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.continueNext = false;
     this.isGameLoaded = false;
     this.gameOver = true;
+    this.showWinBadge = false;
     this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
 
@@ -348,7 +361,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
       questionId: this.currentQuestion.id,
-      addedOn: this.currentQuestion.addedOn
+      addedOn: this.currentQuestion.addedOn,
+      round: this.currentQuestion.gameRound
     }
     this.questionAnswered = true;
     this.isGameLoaded = false;

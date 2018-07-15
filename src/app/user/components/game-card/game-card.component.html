@@ -146,13 +146,14 @@
     <p class="ellipsis">remaining to play your turn</p>
   </div>
 
-  <div *ngIf="!myTurn && game.playerIds.length == 1" class="opponent">
+  <div *ngIf="game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE"
+    class="opponent">
     <a class="btn-share waiting-for-opponent">Waiting for
       <p>Opponent</p>
     </a>
   </div>
 
-  <div *ngIf="!myTurn && game.playerIds.length > 1" class="opponent">
-    <a class="btn-share opponent-turn">Opponent's Turn</a>
+  <div *ngIf="!myTurn && game.GameStatus === gameStatus.WAITING_FOR_NEXT_Q" class="opponent">
+    <a class="btn-share opponent-turn">Opponent's Turn </a>
   </div>
 </div>

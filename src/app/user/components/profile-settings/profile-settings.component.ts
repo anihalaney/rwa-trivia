@@ -77,11 +77,7 @@ export class ProfileSettingsComponent implements OnDestroy {
 
     this.userObs.subscribe(user => {
       if (user) {
-        if (user.name) {
-          this.user = user;
-        } else {
-          this.user.roles = user.roles;
-        }
+        this.user = user;
 
         this.userCopyForReset = cloneDeep(user);
         this.createForm(this.user);
@@ -183,14 +179,16 @@ export class ProfileSettingsComponent implements OnDestroy {
         const fileRef = this.storage.ref(filePath);
 
         const cropperImageUploadTask = this.storage.upload(filePath, imageBlob);
+
         cropperImageUploadTask.snapshotChanges().pipe(
-          finalize(() => fileRef.getDownloadURL() )
-        ).subscribe(url => {
-          this.profileImage.image = url ? url : '/assets/images/avatarimg.jpg';
-          this.user.profilePicture = fileName;
-          this.profileImageFile = undefined;
-          this.saveUser(this.user);
-        });
+          finalize(() => fileRef.getDownloadURL().subscribe((url) => {
+            this.profileImage.image = url ? url : '/assets/images/avatar.png';
+            this.user.profilePicture = fileName;
+            this.profileImageFile = undefined;
+            this.saveUser(this.user);
+          }))
+        ).subscribe();
+
       }
     }
   }
