@@ -165,7 +165,10 @@ export class GameService {
     const observables = [];
 
     game.playerQnAs.map(playerQnA => {
-      observables.push(this.checkUserQuestion(playerQnA));
+      if (playerQnA.playerId === userId) {
+        observables.push(this.checkUserQuestion(playerQnA));
+      }
+
     });
     return forkJoin(observables);
   }
