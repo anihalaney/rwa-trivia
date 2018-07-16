@@ -79,6 +79,20 @@
   </section>
   <!-- Invitation to play games end   -->
 
+  <div class="row">
+    <!-- Question of the day -->
+    <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
+      <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
+    </div>
+    <!-- Question of the day end -->
+
+    <!-- Subscribe -->
+    <div class="col-lg-5 col-md-12 col-sm-12 " *ngIf="showNewsCard">
+      <newsletter></newsletter>
+    </div>
+    <!-- Subscribe end -->
+  </div>
+
   <!-- Category leaderboard -->
   <section class="card">
     <div class="row">
@@ -96,19 +110,7 @@
   </section>
   <!-- Category leaderboard end-->
 
-  <div class="row">
-    <!-- Question of the day -->
-    <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
-      <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
-    </div>
-    <!-- Question of the day end -->
 
-    <!-- Subscribe -->
-    <div class="col-lg-5 col-md-12 col-sm-12 " *ngIf="showNewsCard">
-      <newsletter></newsletter>
-    </div>
-    <!-- Subscribe end -->
-  </div>
 
 
 
