@@ -7,7 +7,8 @@ const serviceAccount = JSON.parse(fs1.readFileSync
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: 'https://rwa-trivia-dev-e57fc.firebaseio.com'
+    databaseURL: 'https://rwa-trivia-dev-e57fc.firebaseio.com',
+    storageBucket: `gs://${serviceAccount.project_id}.appspot.com`
 });
 
 module.exports = admin;
