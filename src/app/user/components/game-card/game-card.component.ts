@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
-import { User, Game, Category, PlayerMode } from '../../../model';
+import { User, Game, Category, PlayerMode, GameStatus } from '../../../model';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -28,8 +28,11 @@ export class GameCardComponent implements OnInit, OnChanges {
   randomCategoryId = 0;
   PlayerMode = PlayerMode;
   totalRound = 16;
+  gameStatus: any;
 
   constructor(private store: Store<AppState>) {
+
+    this.gameStatus = GameStatus;
 
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.user$.subscribe(user => {
@@ -62,7 +65,7 @@ export class GameCardComponent implements OnInit, OnChanges {
           }
         }
       });
-      
+
   }
 
   ngOnInit() {
