@@ -10,6 +10,8 @@ export function subscriptionSaveStatus(state: any = 'NONE', action: SocialAction
             return 'IN PROCESS';
         case SocialActionTypes.ADD_SUBSCRIBER_SUCCESS:
             return 'SUCCESS';
+        case SocialActionTypes.ADD_SUBSCRIBER_ERROR:
+            return action.payload;
         default:
             return state;
     }
