@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { switchMap, map, filter } from 'rxjs/operators';
+import { switchMap, map, filter, catchError } from 'rxjs/operators';
 
 import { Subscribers, Blog, RouterStateUrl } from '../../../model';
 import { SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
 import { SocialService } from '../../../core/services';
 import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
+import { of } from 'rxjs';
 
 
 @Injectable()
@@ -16,30 +17,31 @@ export class SocialEffects {
     addSubscription$ = this.actions$
         .ofType(SocialActionTypes.ADD_SUBSCRIBER)
         .pipe(
-        switchMap((action: socialActions.AddSubscriber) =>
-            this.socialService.checkSubscription(action.payload.subscription)
-                .pipe(
-                map(isSubscribed => {
-                    if (isSubscribed) {
-                        return new socialActions.CheckSubscriptionStatus(true);
-                    } else {
-                        this.socialService.saveSubscription(action.payload.subscription)
-                        return new socialActions.CheckSubscriptionStatus(false);
-                    }
-                }))
-        ));
+            switchMap((action: socialActions.AddSubscriber) =>
+                this.socialService.checkSubscription(action.payload.subscription)
+                    .pipe(
+                        map(isSubscribed => {
+                            if (isSubscribed) {
+                                return new socialActions.CheckSubscriptionStatus(true);
+                            } else {
+                                this.socialService.saveSubscription(action.payload.subscription)
+                                return new socialActions.CheckSubscriptionStatus(false);
+                            }
+                        }), catchError(err => of(new socialActions.AddSubscriberError(err))))
+
+            ));
 
     // get total subscription
     @Effect()
     getTotalSubscription$ = this.actions$
         .ofType(SocialActionTypes.TOTAL_SUBSCRIBER)
         .pipe(
-        switchMap((action: socialActions.GetTotalSubscriber) =>
-            this.socialService.getTotalSubscription()
-                .pipe(
-                map((totalCount: Subscribers) => new socialActions.GetTotalSubscriberSuccess(totalCount))
-                )
-        )
+            switchMap((action: socialActions.GetTotalSubscriber) =>
+                this.socialService.getTotalSubscription()
+                    .pipe(
+                        map((totalCount: Subscribers) => new socialActions.GetTotalSubscriberSuccess(totalCount))
+                    )
+            )
         );
 
     // Load Social Score share url
@@ -61,14 +63,14 @@ export class SocialEffects {
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/')))
+                routerState.url.toLowerCase().startsWith('/')))
         .pipe(
-        switchMap(() =>
-            this.socialService.loadBlogs()
-                .pipe(
-                map((blogs: Blog[]) => new socialActions.LoadBlogsSuccess(blogs))
-                )
-        )
+            switchMap(() =>
+                this.socialService.loadBlogs()
+                    .pipe(
+                        map((blogs: Blog[]) => new socialActions.LoadBlogsSuccess(blogs))
+                    )
+            )
         );
 
     constructor(
