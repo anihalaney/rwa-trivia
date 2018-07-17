@@ -347,5 +347,16 @@ export const TEST_DATA = {
             "roles": {},
             "authState": null
         }
-    ]
+    ],
+    "leaderBoard": {
+        "1": [{ "score": 123, "userId": "ssHmHkKq9BPByP9c4CtmEqvO4xp2" },
+        { "score": 406, "userId": "ssHmHkKq9BPByo9c4CtmEqvO4xp2" },
+        { "score": 10, "userId": "ssHmHkKq9BPSyP9c4CtmEqvO4xp2" }],
+        "2": [{ "score": 100, "userId": "ssHmHkKq9BPByP9c4CtmEqvO4xp2" },
+        { "score": 40, "userId": "ssHmHkKq9BPByo9c4CtmEqvO4xp2" },
+        { "score": 54, "userId": "ssHmHkKq9BPSyP9c4CtmEqvO4xp2" }],
+        "3": [{ "score": 5, "userId": "ssHmHkKq9BPByP9c4CtmEqvO4xp2" },
+        { "score": 80, "userId": "ssHmHkKq9BPByo9c4CtmEqvO4xp2" },
+        { "score": 500, "userId": "ssHmHkKq9BPSyP9c4CtmEqvO4xp2" }]
+    }
 }
