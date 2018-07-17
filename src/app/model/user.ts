@@ -11,16 +11,16 @@ export class User {
   facebookUrl?: string;
   twitterUrl?: string;
   linkedInUrl?: string;
-  profileSetting: string;
-  profileLocationSetting: string;
-  privateProfileSetting: boolean;
+  profileSetting?: string;
+  profileLocationSetting?: string;
+  privateProfileSetting?: boolean;
   profilePicture?: String;
   email: string;
   idToken?: string;
   authState: firebase.User;
   roles?: any;
   tags?: string[];
-  isSubscribed: boolean;
+  isSubscribed?: boolean;
   profilePictureUrl?: string;
   stats?: UserStats;
 
