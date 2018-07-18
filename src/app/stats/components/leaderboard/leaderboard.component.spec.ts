@@ -11,23 +11,20 @@ describe('Component: LeaderboardComponent', () => {
 
     let component: LeaderboardComponent;
     let fixture: ComponentFixture<LeaderboardComponent>;
-    // let dict: { [key: string]: Array<LeaderBoardUser> };
 
     beforeEach(() => {
-        // refine the test module by declaring the NewsletterComponent component
+        // refine the test module by declaring the LeaderboardComponent component
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({})],
             providers: [Store, UserActions],
             declarations: [LeaderboardComponent]
         });
 
-        // create component and NewsletterComponent fixture
+        // create component and LeaderboardComponent fixture
         fixture = TestBed.createComponent(LeaderboardComponent);
 
-        // get NewsletterComponent component from the fixture
+        // get LeaderboardComponent component from the fixture
         component = fixture.componentInstance;
-
-
     });
 
     it('check length of record', () => {
