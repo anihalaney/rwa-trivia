@@ -1,8 +1,5 @@
 import { browser, element, by, Key } from 'protractor';
 export class LeaderBoardPage {
-    navigateTo() {
-        return browser.get('/dashboard');
-    }
 
     getTitle() {
         const titleElement = element(by.css('.board-title h2'));

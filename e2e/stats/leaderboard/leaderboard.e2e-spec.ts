@@ -7,6 +7,7 @@ describe('NewsLetterPage', () => {
     page = new LeaderBoardPage();
 
     it('Should display title', () => {
+        browser.waitForAngularEnabled(false);
         expect(page.getTitle()).toMatch('Leaderboard');
     });
 
