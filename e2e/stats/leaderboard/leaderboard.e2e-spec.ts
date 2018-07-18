@@ -16,6 +16,7 @@ describe('NewsLetterPage', () => {
         browser.waitForAngularEnabled(false);
         browser.driver.sleep(500);
         page.getViewMoreButton().click();
-        browser.driver.sleep(5000);
+        browser.driver.sleep(2000);
     });
 });
+
