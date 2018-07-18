@@ -11,7 +11,7 @@ describe('Component: LeaderboardComponent', () => {
 
     let component: LeaderboardComponent;
     let fixture: ComponentFixture<LeaderboardComponent>;
-    let dict: { [key: string]: Array<LeaderBoardUser> };
+    // let dict: { [key: string]: Array<LeaderBoardUser> };
 
     beforeEach(() => {
         // refine the test module by declaring the NewsletterComponent component
@@ -34,22 +34,32 @@ describe('Component: LeaderboardComponent', () => {
         component.leaderBoardStatDict = TEST_DATA.leaderBoard;
         console.log(JSON.stringify(component.leaderBoardStatDict));
 
-        let length = component.leaderBoardStatDict['1'].length;
+        let length = component.leaderBoardStatDict['1'].slice(0, 3).length;
         expect(length).toEqual(3);
         expect(length).toBeTruthy();
 
-        length = component.leaderBoardStatDict['2'].length;
+        length = component.leaderBoardStatDict['2'].slice(0, 3).length;
         expect(length).toEqual(3);
         expect(length).toBeTruthy();
 
-        length = component.leaderBoardStatDict['3'].length;
+        length = component.leaderBoardStatDict['3'].slice(0, 3).length;
         expect(length).toEqual(3);
         expect(length).toBeTruthy();
     });
-    // it('click on view more button', () => {
-    //     component.leaderBoardCat = ['1', '2', '3'];
-    //     const length = component.leaderBoardCat.length;
-    //     expect(length).toEqual(3);
-    //     expect(length).toBeTruthy();
-    // });
+    it('click on view more button', () => {
+        component.leaderBoardStatDict = TEST_DATA.leaderBoard;
+
+        let length = component.leaderBoardStatDict['1'].length;
+        expect(length).toEqual(10);
+        expect(length).toBeTruthy();
+
+        length = component.leaderBoardStatDict['2'].length;
+        expect(length).toEqual(10);
+        expect(length).toBeTruthy();
+
+        length = component.leaderBoardStatDict['3'].length;
+        expect(length).toEqual(10);
+        expect(length).toBeTruthy();
+
+    });
 });
