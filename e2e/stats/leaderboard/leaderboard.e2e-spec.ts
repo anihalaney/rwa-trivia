@@ -11,6 +11,14 @@ describe('NewsLetterPage', () => {
         expect(page.getTitle()).toMatch('Leaderboard');
     });
 
+    it('should checked for 3  category', () => {
+        browser.driver.findElements(by.css('.div-count .categorybox')).
+            then((elements) => {
+                expect(elements.length).toEqual(3);
+            }
+            );
+    });
+
 
     it('Should click on View More Button', () => {
         browser.waitForAngularEnabled(false);
