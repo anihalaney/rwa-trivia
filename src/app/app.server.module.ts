@@ -11,7 +11,7 @@ import { AppComponent } from './components/app/app.component';
     AppModule,
     ServerModule,
     ModuleMapLoaderModule,
-    ServerTransferStateModule,
+ //   ServerTransferStateModule,
     FlexLayoutServerModule,
   ],
   providers: [
