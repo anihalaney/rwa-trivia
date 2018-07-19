@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
-import { cold, hot, getTestScheduler } from 'jasmine-marbles';
+import { cold, hot } from 'jasmine-marbles';
 import { Actions } from '@ngrx/effects';
 import { TEST_DATA } from '../../../testing/test.data';
 import { StatsEffects } from './stats.effects';
@@ -12,12 +12,7 @@ import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFirestore, AngularFirestoreModule } from 'angularfire2/firestore';
 import { CONFIG } from '../../../../environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthenticationProvider, AuthInterceptor } from '../../../../app/core/auth';
-import { HttpClientModule } from '@angular/common/http';
 import { AngularFireStorageModule } from 'angularfire2/storage';
-import { UserService } from '../../../core/services';
-import { UserActions } from '../../../core/store/actions';
-
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 describe('Effects: StatsEffects', () => {
@@ -28,7 +23,7 @@ describe('Effects: StatsEffects', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({}), AngularFireModule.initializeApp(firebaseConfig),
-                AngularFirestoreModule, AngularFirestoreModule, HttpClientModule, AngularFireStorageModule],
+                AngularFirestoreModule, AngularFirestoreModule, AngularFireStorageModule],
             providers: [
                 AngularFirestore,
                 StatsEffects,
@@ -36,8 +31,6 @@ describe('Effects: StatsEffects', () => {
                     provide: StatsService,
                     useValue: { getTotalSubscription: jest.fn(), checkSubscription: jest.fn(), saveSubscription: jest.fn() },
                 },
-                UserActions,
-                UserService,
                 provideMockActions(() => actions$),
                 {
                     provide: HTTP_INTERCEPTORS,
