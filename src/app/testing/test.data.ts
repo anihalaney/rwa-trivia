@@ -347,5 +347,42 @@ export const TEST_DATA = {
             "roles": {},
             "authState": null
         }
-    ]
+    ],
+    "leaderBoard": {
+        "1": [
+            { "score": 123, "userId": "ssHmHkKq9BPByP9c4CtmEqvO4xp2" },
+            { "score": 406, "userId": "ssHmHkKq9BPByo9c4CtmEqvO4xp2" },
+            { "score": 10, "userId": "ssHmHkKq9BPSyP9c4CtmEqvO4xp2" },
+            { "score": 80, "userId": "ssHmHkKq9BPSyP9c4CtmEqvO4xp2" },
+            { "score": 100, "userId": "ssHmHkKq9BPPyP9c4CtmEqvO4xp2" },
+            { "score": 102, "userId": "ssHmHkKq9BPYyP9c4CtmEqvO4xp2" },
+            { "score": 109, "userId": "ssHmHkKq9BPOyP9c4CtmEqvO4xp2" },
+            { "score": 105, "userId": "ssHmHkKq9BPLyP9c4CtmEqvO4xp2" },
+            { "score": 1000, "userId": "ssHmHkKq9BPRyP9c4CtmEqvO4xp2" },
+            { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" }
+        ],
+        "2": [
+            { "score": 100, "userId": "ssHmHkKq9BPByP9c4CtmEqvO4xp2" },
+            { "score": 40, "userId": "ssHmHkKq9BPByo9c4CtmEqvO4xp2" },
+            { "score": 54, "userId": "ssHmHkKq9BPSyP9c4CtmEqvO4xp2" },
+            { "score": 100, "userId": "ssHmHkKq9BPPyP9c4CtmEqvO4xp2" },
+            { "score": 102, "userId": "ssHmHkKq9BPYyP9c4CtmEqvO4xp2" },
+            { "score": 109, "userId": "ssHmHkKq9BPOyP9c4CtmEqvO4xp2" },
+            { "score": 105, "userId": "ssHmHkKq9BPLyP9c4CtmEqvO4xp2" },
+            { "score": 1000, "userId": "ssHmHkKq9BPRyP9c4CtmEqvO4xp2" },
+            { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" },
+            { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" }],
+        "3": [
+            { "score": 5, "userId": "ssHmHkKq9BPByP9c4CtmEqvO4xp2" },
+            { "score": 80, "userId": "ssHmHkKq9BPByo9c4CtmEqvO4xp2" },
+            { "score": 500, "userId": "ssHmHkKq9BPSyP9c4CtmEqvO4xp2" },
+            { "score": 100, "userId": "ssHmHkKq9BPPyP9c4CtmEqvO4xp2" },
+            { "score": 102, "userId": "ssHmHkKq9BPYyP9c4CtmEqvO4xp2" },
+            { "score": 109, "userId": "ssHmHkKq9BPOyP9c4CtmEqvO4xp2" },
+            { "score": 105, "userId": "ssHmHkKq9BPLyP9c4CtmEqvO4xp2" },
+            { "score": 1000, "userId": "ssHmHkKq9BPRyP9c4CtmEqvO4xp2" },
+            { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" },
+            { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" }
+        ]
+    }
 }
