@@ -24,7 +24,7 @@
     "run-scheduler-prod": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js prod",
     "build:ssr": "npm run build:client-and-server-bundles && npm run webpack:server",
     "serve:ssr": "node dist/server.js",
-    "build:client-and-server-bundles": "ng build --prod && ng run trivia:server",
+    "build:client-and-server-bundles": "ng build && ng run trivia:server",
     "webpack:server": "webpack --config webpack.server.config.js"
   },
   "private": true,
@@ -62,7 +62,7 @@
     "core-js": "2.5.7",
     "dom-to-image": "^2.6.0",
     "domino": "^2.0.2",
-    "firebase": "5.1.0",
+    "firebase": "^5.2.0",
     "hammerjs": "2.0.8",
     "lodash": "^4.17.10",
     "ngx-img-cropper": "^0.10.4",
@@ -90,10 +90,11 @@
     "karma-jasmine-html-reporter": "1.1.0",
     "protractor": "5.3.0",
     "source-map-explorer": "1.5.0",
-    "ts-node": "7.0.0",
     "ts-loader": "^4.2.0",
+    "ts-node": "7.0.0",
     "tslint": "5.10.0",
     "typescript": "2.7.2",
-    "webpack-cli": "^3.0.8"
+    "webpack-cli": "^3.0.8",
+    "xmlhttprequest": "^1.8.0"
   }
 }

@@ -56,7 +56,7 @@ import { environment } from '../environments/environment';
     UserModule,
     StatsModule,
     BrowserModule.withServerTransition({ appId: 'trivia' }),
-    BrowserTransferStateModule,
+    //BrowserTransferStateModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [

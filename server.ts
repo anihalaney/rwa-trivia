@@ -23,10 +23,10 @@ const win = domino.createWindow(template);
 
 global['window'] = win;
 global['document'] = win.document;
-global['WebSocket'] = require('ws');
+//global['WebSocket'] = require('ws');
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4010;
 const APP_NAME = 'browser';
 
 
@@ -50,14 +50,14 @@ app.engine(
 
 app.set('view engine', 'html');
 
-app.get('/**/*', (req, res) => {
-  res.render(join(DIST_FOLDER, APP_NAME, 'index'), {
-    req,
-    res
-  });
-});
+// app.get('/**/*', (req, res) => {
+//   res.render(join(DIST_FOLDER, APP_NAME, 'index'), {
+//     req,
+//     res
+//   });
+// });
 
-app.set('view engine', 'html');
+// app.set('view engine', 'html');
 app.set('views', join(DIST_FOLDER, APP_NAME));
 
 // Static Assets
