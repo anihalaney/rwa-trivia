@@ -17,6 +17,10 @@ export class ProfileCardComponent {
   userObs: Observable<User>;
   location = 'unknown';
 
+
+  defaultAvatarSmall = '/assets/images/default-avatar-small.png';
+  defaultAvatar = 'assets/images/default-avatar.png';
+
   constructor(private store: Store<AppState>, private router: Router) {
     this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
