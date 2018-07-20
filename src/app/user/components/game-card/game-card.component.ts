@@ -29,7 +29,7 @@ export class GameCardComponent implements OnInit, OnChanges {
   PlayerMode = PlayerMode;
   totalRound = 16;
   gameStatus: any;
-
+  defaultAvatar = 'assets/images/default-avatar-small.png';
   constructor(private store: Store<AppState>) {
 
     this.gameStatus = GameStatus;

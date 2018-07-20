@@ -41,6 +41,9 @@ export class GameOverComponent implements OnInit {
   PlayerMode = PlayerMode;
   userDict$: Observable<{ [key: string]: User }>;
 
+  defaultAvatar = 'assets/images/default-avatar-game-over.png';
+
+
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }

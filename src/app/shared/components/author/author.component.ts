@@ -12,4 +12,6 @@ export class AuthorComponent {
     @Input() userDict: { [key: string]: User };
     @Input() userId;
 
+    defaultAvatar = 'assets/images/default-avatar-small.png';
+
 }

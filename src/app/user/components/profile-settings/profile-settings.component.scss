@@ -44,6 +44,7 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
 .namefield .formfield{display: block !important; text-align: left;}
 .namefield .formfield > label{ text-align: left; font-size: 18px; font-family: 'hindmedium' }
 .namefield .formfield > p{ margin-top: 5px }
+.hide{ display: none !important; }
 /*Custom File Upload End*/
 @media screen and ( min-width:767px){
   .optionbox h2{ margin-top: 17px }

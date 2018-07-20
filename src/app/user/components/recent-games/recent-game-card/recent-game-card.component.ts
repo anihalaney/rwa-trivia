@@ -22,7 +22,7 @@ export class RecentGameCardComponent implements OnChanges {
     myTurn: boolean;
     categoryDictObs: Observable<{ [key: number]: Category }>;
     categoryDict: { [key: number]: Category };
-
+    defaultAvatar = 'assets/images/default-avatar-small.png';
     constructor(private store: Store<AppState>, private userActions: UserActions) {
 
         this.categoryDictObs = store.select(categoryDictionary);
