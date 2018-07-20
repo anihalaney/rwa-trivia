@@ -185,22 +185,29 @@ exports.changeGameTurn = (req, res) => {
  * return htmlcontent
  */
 exports.createSocialContent = (req, res) => {
-    const websiteUrl = `${req.protocol}://${req.hostname}`;
-    const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}/`;
+    //  const websiteUrl = `${req.protocol}://${req.hostname}`;
+    const websiteUrl = `https://rwa-trivia-dev-e57fc.firebaseapp.com`;
+    const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;
 
     const htmlContent = `<!DOCTYPE html>
                        <html>
                         <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
                           <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                           <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
+                          <meta property="og:locale" content="en_US" />
+                          <meta property="og:type" content="article" />
                           <meta property="og:title" content="RWA-Trivia Game Score">
-                          <meta property="og:url"
-                            content="${imageUrl}">
+                          <meta property="og:description" content="RWA-Trivia Game Score">
+                          <meta property="og:url"  content="${imageUrl}">
                           <meta property="og:image" content="${imageUrl}">
+                          <meta name="twitter:card" content="summary_large_image"/>
+                          <meta name="twitter:title" content="RWA-Trivia Game Score"/>
                           <meta name="twitter:description" content="RWA-Trivia Game Score">
+                          <meta name="twitter:site" content="@${req.hostname}"/>
+                          <meta name="twitter:image" content="${imageUrl}"/>
                         </head>
                         <body>
-                         <image src="${imageUrl}">
+                         <img src="${imageUrl}" />
                         </body>
                       </html>`;
     res.setHeader('content-type', 'text/html');
@@ -217,8 +224,7 @@ exports.createSocialImage = (req, res) => {
     socialGameService.generateSocialUrl(req.params.userId, socialId).then((social_url) => {
         res.setHeader('content-disposition', 'attachment; filename=social_image.png');
         res.setHeader('content-type', 'image/png');
-        request(social_url).pipe(res);
-
+        res.send(social_url)
     });
 };
 
