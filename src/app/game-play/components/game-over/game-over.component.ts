@@ -10,7 +10,7 @@ import * as socialactions from '../../../social/store/actions';
 import { gameplayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Utils } from '../../../core/services';
+import { Utils, WindowRef } from '../../../core/services';
 import * as domtoimage from 'dom-to-image';
 import { UserActions } from '../../../core/store/actions';
 import { CONFIG } from '../../../../environments/environment';
@@ -48,7 +48,8 @@ export class GameOverComponent implements OnInit {
     this.gameOverContinueClicked.emit();
   }
 
-  constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2, private userActions: UserActions) {
+  constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2, private userActions: UserActions,
+    private windowRef: WindowRef) {
 
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.user$.subscribe(user => {
@@ -90,7 +91,7 @@ export class GameOverComponent implements OnInit {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
-          const url = `https://${CONFIG.firebaseConfig.authDomain}/app/game/social/${this.user.userId}/${path[path.length - 1]}`;
+          const url = `https://${this.windowRef.nativeWindow.location.hostname}/app/game/social/${this.user.userId}/${path[path.length - 1]}`;
           this.socialFeedData.share_status = true;
           this.socialFeedData.link = url;
           console.log('url---->', url);
