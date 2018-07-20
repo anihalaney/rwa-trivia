@@ -5,17 +5,20 @@ describe('NewsLetterPage', () => {
 
     let page: NewsLetterPage;
     page = new NewsLetterPage();
-    page.navigateTo();
+    // page.navigateTo();
 
     it('Should display title', () => {
+        browser.waitForAngularEnabled(false);
         expect(page.getTitle()).toMatch('Sign up for our newsletter to stay connected');
     });
 
     it('Should display subtitle', () => {
+        browser.waitForAngularEnabled(false);
         expect(page.getSubTitle()).toMatch('Subscribe to our bi-weekly email newsletter for useful tips and valuable resources.');
     });
 
     it('Should check email validation by clicking Subscribe Button', () => {
+        browser.waitForAngularEnabled(false);
         browser.driver.sleep(500);
         page.getSubscribeButton().click();
         expect(page.getRequiredMessage()).toMatch('Email is required!');
