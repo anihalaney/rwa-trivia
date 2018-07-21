@@ -1,8 +1,8 @@
 import { browser, element, by, Key } from 'protractor';
 export class NewsLetterPage {
-    navigateTo() {
-        return browser.get('/dashboard');
-    }
+    // navigateTo() {
+    //     return browser.get('/dashboard');
+    // }
 
     getTitle() {
         const titleElement = element(by.css('.subscrib h2'));
