@@ -163,7 +163,7 @@ export const TEST_DATA = {
     "questions": {
         "published": [
             {
-                "id": 1,
+                "id": "1",
                 "questionText": "Which of the following function of Array object reverses the order of the elements of an array?",
                 "answers": [
                     {
@@ -192,7 +192,7 @@ export const TEST_DATA = {
                 "categoryIds": [2]
             },
             {
-                "id": 2,
+                "id": "2",
                 "questionText": "Which of the following function of Array object calls a function for each element in the array?",
                 "answers": [
                     {
@@ -221,7 +221,7 @@ export const TEST_DATA = {
                 "categoryIds": [2]
             },
             {
-                "id": 3,
+                "id": "3",
                 "questionText": "Which of the following function of String object returns the index within the calling String object of the first occurrence of the specified value?",
                 "answers": [
                     {
@@ -250,7 +250,7 @@ export const TEST_DATA = {
                 "categoryIds": [2]
             },
             {
-                "id": 4,
+                "id": "4",
                 "questionText": "Which of the following function of Boolean object returns a string containing the source of the Boolean object?",
                 "answers": [
                     {
@@ -279,7 +279,7 @@ export const TEST_DATA = {
                 "categoryIds": [2]
             },
             {
-                "id": 5,
+                "id": "5",
                 "questionText": "Which of the following is true about cookie handling in JavaScript?",
                 "answers": [
                     {
@@ -308,7 +308,7 @@ export const TEST_DATA = {
                 "categoryIds": [2]
             },
             {
-                "id": 6,
+                "id": "6",
                 "questionText": "What's the best Trivia game?",
                 "answers": [
                     {
@@ -348,6 +348,16 @@ export const TEST_DATA = {
             "authState": null
         }
     ],
+
+    "userDict": {
+        'ssHmHkKq9BPByP9c4CtmEqvO4xp2': {
+            "userId": "ssHmHkKq9BPByP9c4CtmEqvO4xp2",
+            "displayName": "trivia",
+            "email": "trivia@realworldfullstack.io",
+            "roles": {},
+            "authState": null
+        },
+
     "leaderBoard": {
         "1": [
             { "score": 123, "userId": "ssHmHkKq9BPByP9c4CtmEqvO4xp2" },
@@ -384,5 +394,6 @@ export const TEST_DATA = {
             { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" },
             { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" }
         ]
+
     }
 }
