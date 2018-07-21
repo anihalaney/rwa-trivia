@@ -356,7 +356,8 @@ export const TEST_DATA = {
             "email": "trivia@realworldfullstack.io",
             "roles": {},
             "authState": null
-        },
+        }
+    },
 
     "leaderBoard": {
         "1": [
@@ -394,6 +395,5 @@ export const TEST_DATA = {
             { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" },
             { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" }
         ]
-
     }
 }
