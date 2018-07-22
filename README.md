@@ -54,6 +54,8 @@ See it in action (still a work in progress) - https://bitwiser.io
 
 [Part 21: Service Workers (Progressive Web App) with Angular](https://blog.realworldfullstack.io/real-world-app-part-21-service-workers-pwa-with-angular-3ba5c7168f3f)
 
+[Part 22: Angular Testing with Protractor, Jasmine and Jest](https://blog.realworldfullstack.io/real-world-app-part-22-angular-testing-with-protractor-jasmine-and-jest-6a0e03a89038)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)
