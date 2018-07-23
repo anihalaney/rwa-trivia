@@ -52,7 +52,7 @@ exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
 
     for (var i = 0; i < users.length; i += BATCH_SIZE) {
         chunks.push(users.slice(i, i + BATCH_SIZE));
-    }    
+    }
 
     let promises: Promise<any>[];
     chunks.map((chunk) => {
@@ -62,12 +62,28 @@ exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
             Object.keys(user).forEach(key => user[key] === undefined && delete user[key]);
             const userInstance = userFireStoreClient.collection('users').doc(user.userId);
             batch.set(userInstance, { ...user }, { merge: true });
-            return batch.commit().then((ref) => { 
+            return batch.commit().then((ref) => {
                 console.log("saved user chunk");
                 return ref;
             });
         });
     });
-    
+
     return Promise.all(promises);
+};
+
+
+/**
+ * getImage
+ * return ref
+ */
+exports.generateProfileImage = (userId: string, profilePicture: string): Promise<string> => {
+    const fileName = `profile/${userId}/avatar/${profilePicture}`;
+    const file = bucket.file(fileName);
+    return file.download().then(downloadUrl => {
+        return downloadUrl[0];
+    }).catch(error => {
+        console.log('error', error);
+        return error;
+    })
 };
