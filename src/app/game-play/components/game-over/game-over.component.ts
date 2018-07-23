@@ -94,7 +94,6 @@ export class GameOverComponent implements OnInit {
           const url = `https://${this.windowRef.nativeWindow.location.hostname}/app/game/social/${this.user.userId}/${path[path.length - 1]}`;
           this.socialFeedData.share_status = true;
           this.socialFeedData.link = url;
-          console.log('url---->', url);
           this.loaderStatus = false;
         }
       } else {
