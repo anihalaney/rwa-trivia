@@ -185,9 +185,8 @@ exports.changeGameTurn = (req, res) => {
  * return htmlcontent
  */
 exports.createSocialContent = (req, res) => {
-    console.log('before req.url--->', req.url);
+
     const websiteUrl = `${req.protocol}://${req.hostname}`;
-    // const websiteUrl = `https://rwa-trivia-dev-e57fc.firebaseapp.com`;
     const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;
 
     const htmlContent = `<!DOCTYPE html>
