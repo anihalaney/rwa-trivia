@@ -55,6 +55,7 @@ export class SocialEffects {
                         map((imageUrl: UploadTaskSnapshot) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
             ));
 
+
     // load blogs
     @Effect()
     getBlogs$ = this.actions$
