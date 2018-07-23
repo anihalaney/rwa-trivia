@@ -17,6 +17,7 @@ export enum SocialActionTypes {
     LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS = '[Social] LoadSocialScoreShareUrlSuccess',
     LOAD_BLOGS = '[Social] LoadBlogs',
     LOAD_BLOGS_SUCCESS = '[Social] LoadBlogsSuccess',
+    ADD_SUBSCRIBER_ERROR = '[Social] AddSubscriberError'
 }
 
 // Save subscriber
@@ -30,6 +31,13 @@ export class AddSubscriberSuccess implements Action {
     readonly type = SocialActionTypes.ADD_SUBSCRIBER_SUCCESS;
     payload = null;
 }
+
+// Save subscriber error
+export class AddSubscriberError implements Action {
+    readonly type = SocialActionTypes.ADD_SUBSCRIBER_ERROR;
+    constructor(public payload: string) { }
+}
+
 
 // Get total subscriber
 export class GetTotalSubscriber implements Action {
@@ -98,4 +106,5 @@ export type SocialActions
     | RemoveSubscriber
     | RemoveSubscriberSuccess
     | CheckSubscriptionStatus
+    | AddSubscriberError
 
