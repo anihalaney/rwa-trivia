@@ -10,9 +10,10 @@ import * as socialactions from '../../../social/store/actions';
 import { gameplayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Utils } from '../../../core/services';
+import { Utils, WindowRef } from '../../../core/services';
 import * as domtoimage from 'dom-to-image';
 import { UserActions } from '../../../core/store/actions';
+import { CONFIG } from '../../../../environments/environment';
 
 
 @Component({
@@ -35,28 +36,34 @@ export class GameOverComponent implements OnInit {
   otherUserInfo: User;
   questionsArray = [];
   dialogRef: MatDialogRef<ReportGameComponent>;
-  blogData = [];
+  socialFeedData;
   imageUrl = '';
   disableRematchBtn = false;
   PlayerMode = PlayerMode;
   userDict$: Observable<{ [key: string]: User }>;
+  loaderStatus = false;
+  playerUserName = 'You';
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
 
-  constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2, private userActions: UserActions) {
+  constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2, private userActions: UserActions,
+    private windowRef: WindowRef) {
+
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
     });
-    this.blogData = [{
+
+    this.socialFeedData = {
       blogNo: 0,
       share_status: false,
       link: this.imageUrl
-    }];
+    };
+    this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => {
@@ -80,16 +87,18 @@ export class GameOverComponent implements OnInit {
       }
     });
 
-    this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(imageUrl => {
-      if (imageUrl !== 'NONE') {
-        if (imageUrl != null) {
-          this.blogData[0].share_status = true;
-          this.blogData[0].link = imageUrl;
-          this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
+    this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+      if (uploadTask != null) {
+        if (uploadTask.task.snapshot.state === 'success') {
+          const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
+          const url = `https://${this.windowRef.nativeWindow.location.hostname}/app/game/social/${this.user.userId}/${path[path.length - 1]}`;
+          this.socialFeedData.share_status = true;
+          this.socialFeedData.link = url;
+          this.loaderStatus = false;
         }
-
       } else {
-        this.blogData[0].share_status = false;
+        this.socialFeedData.share_status = false;
+        this.loaderStatus = false;
       }
     });
   }
@@ -107,6 +116,7 @@ export class GameOverComponent implements OnInit {
   }
 
   reMatch() {
+    this.socialFeedData.share_status = false;
     this.disableRematchBtn = true;
     this.game.gameOptions.rematch = true;
     if (this.game.playerIds.length > 0) {
@@ -134,19 +144,22 @@ export class GameOverComponent implements OnInit {
     });
   }
   shareScore() {
-
-    const node = document.getElementById('share-content');
-
-    domtoimage.toPng(node)
-      .then((dataUrl) => {
-        this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
-          imageBlob: Utils.dataURItoBlob(dataUrl, 'png'),
-          userId: this.user.userId
-        }));
-      })
-      .catch((error) => {
-        console.error('oops, something went wrong!', error);
-      });
+    this.loaderStatus = true;
+    this.playerUserName = this.user.displayName;
+    setTimeout(() => {
+      const node = document.getElementById('share-content');
+      domtoimage.toPng(node)
+        .then((dataUrl) => {
+          this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
+            imageBlob: Utils.dataURItoBlob(dataUrl, 'png'),
+            userId: this.user.userId
+          }));
+          this.playerUserName = 'You';
+        })
+        .catch((error) => {
+          console.error('oops, something went wrong!', error);
+        });
+    }, 2000);
 
   }
 
@@ -192,6 +205,6 @@ export class GameOverComponent implements OnInit {
   }
 
   onNotify(info: any) {
-    this.blogData[0].share_status = info.share_status;
+    this.socialFeedData.share_status = info.share_status;
   }
 }

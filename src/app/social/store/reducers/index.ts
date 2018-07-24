@@ -6,6 +6,7 @@ import {
     subscriptionRemoveStatus, checkEmailSubscriptionStatus,
     socialShareImageUrl, blogs
 } from './social.reducer';
+import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 
 export * from './social.reducer';
 
@@ -14,7 +15,7 @@ export interface SocialState {
     getTotalSubscriptionStatus: Subscribers;
     subscriptionRemoveStatus: String;
     checkEmailSubscriptionStatus: Boolean;
-    socialShareImageUrl: String;
+    socialShareImageUrl: UploadTaskSnapshot;
     blogs: Blog[];
 }
 
