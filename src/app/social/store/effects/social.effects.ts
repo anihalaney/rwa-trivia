@@ -6,6 +6,7 @@ import { Subscribers, Blog, RouterStateUrl } from '../../../model';
 import { SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
 import { SocialService } from '../../../core/services';
+import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 import { of } from 'rxjs';
 
 
@@ -48,11 +49,11 @@ export class SocialEffects {
     loadSocialScoreShareUrl$ = this.actions$
         .ofType(SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL)
         .pipe(
-            switchMap((action: socialActions.LoadSocialScoreShareUrl) =>
-                this.socialService.generateScoreShareImage(action.payload.imageBlob, action.payload.userId)
-                    .pipe(
-                        map((imageUrl: string) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
-            ));
+        switchMap((action: socialActions.LoadSocialScoreShareUrl) =>
+            this.socialService.generateScoreShareImage(action.payload.imageBlob, action.payload.userId)
+                .pipe(
+                map((imageUrl: UploadTaskSnapshot) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
+        ));
 
 
     // load blogs

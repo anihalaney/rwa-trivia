@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
 import { Subscription, Subscribers, Blog } from '../../../model';
+import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 
 export enum SocialActionTypes {
 
@@ -71,7 +72,7 @@ export class LoadSocialScoreShareUrl implements Action {
 // Load Social Score share Url Success
 export class LoadSocialScoreShareUrlSuccess implements Action {
     readonly type = SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS;
-    constructor(public payload: string) { }
+    constructor(public payload: UploadTaskSnapshot) { }
 }
 
 // Remove subscriber
