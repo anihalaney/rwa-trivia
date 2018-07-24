@@ -2,6 +2,7 @@
 const userService = require('../services/user.service');
 const sharp = require('sharp');
 import { User, UserStats } from '../../src/app/model';
+import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 
 /**
  * getUserById
@@ -58,5 +59,20 @@ exports.getUserImages = (req, res) => {
             res.send(stream);
         });
 
+    });
+};
+
+/**
+ * generateUserProfileImage
+ * return status
+ */
+exports.generateUserProfileImage = (req, res) => {
+    const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
+    userService.getUserById(req.user.uid).then((u) => {
+        const dbUser = u.data();
+        profileImagesGenerator.
+            getStoredImage(req.user.uid, dbUser.profilePicture).then((status) => {
+                res.send({ 'status': 'Images are created !!' })
+            })
     });
 };

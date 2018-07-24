@@ -48,13 +48,15 @@ export class UserService {
     }
 
     saveUserProfile(user: User) {
+        const url = `${CONFIG.functionsUrl}/app/user/profile`;
         user.roles = (!user.roles) ? {} : user.roles;
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
         delete dbUser.profilePictureUrl;
         this.db.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => {
-            // this.store.dispatch(this.userActions.addUserProfileSuccess());
-            this.store.dispatch(new useractions.AddUserProfileSuccess());
+            this.http.post<User>(url, {}).subscribe((status) => {
+                this.store.dispatch(new useractions.AddUserProfileSuccess());
+            });
         });
     }
 
