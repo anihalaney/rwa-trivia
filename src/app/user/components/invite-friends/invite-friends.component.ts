@@ -24,7 +24,8 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   dataSource: any;
-
+  defaultAvatar = 'assets/images/default-avatar.png';
+  
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog, private store: Store<AppState>, private renderer: Renderer2, private userActions: UserActions) {

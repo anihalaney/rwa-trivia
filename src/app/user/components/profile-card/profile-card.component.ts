@@ -26,9 +26,6 @@ export class ProfileCardComponent {
       if (user !== null) {
         this.user = user;
         (this.user.location) ? this.location = this.user.location : '';
-        if (this.user.profilePicture) {
-          this.userProfileImageUrl = Utils.getImageUrl(this.user, 263, 263, '400X400');
-        }
       }
     });
   }
@@ -36,4 +33,9 @@ export class ProfileCardComponent {
   navigateToProfile() {
     this.router.navigate(['my/profile', this.user.userId]);
   }
+
+  getImageUrl(user: User) {
+    return Utils.getImageUrl(user, 263, 263, '400X400');
+  }
+
 }

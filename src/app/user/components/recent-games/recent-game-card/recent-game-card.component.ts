@@ -24,8 +24,7 @@ export class RecentGameCardComponent implements OnChanges {
     myTurn: boolean;
     categoryDictObs: Observable<{ [key: number]: Category }>;
     categoryDict: { [key: number]: Category };
-    userProfileImageUrl;
-    otherUserProfileImageUrl;
+    otherUserId: string;
 
     constructor(private store: Store<AppState>, private userActions: UserActions) {
 
@@ -40,17 +39,18 @@ export class RecentGameCardComponent implements OnChanges {
 
     ngOnChanges() {
         if (this.game) {
-            const userId = this.getOpponentId(this.game);
-            if (userId !== undefined) {
-                if (this.userDict[userId] === undefined) {
-                    this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
+            this.otherUserId = this.getOpponentId(this.game);
+            if (this.otherUserId !== undefined) {
+                if (this.userDict[this.otherUserId] === undefined) {
+                    this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
                 }
-                this.otherUserProfileImageUrl = Utils.getImageUrl(this.userDict[userId], 44, 40, '44X40');
-            }
-            if (this.user.profilePicture) {
-                this.userProfileImageUrl = Utils.getImageUrl(this.user, 44, 40, '44X40');
             }
         }
     }
+
+    getImageUrl(user: User) {
+        return Utils.getImageUrl(user, 44, 40, '44X40');
+    }
+
 
 }

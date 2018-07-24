@@ -23,7 +23,7 @@ export class UserEffects {
         .ofType(UserActions.LOAD_OTHER_USER_PROFILE)
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(),
-            //  mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
+            mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
 
