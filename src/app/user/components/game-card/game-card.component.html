@@ -4,7 +4,7 @@
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="col-xs-12 textcenter clearfix">
         <div class="yourimg">
-          <img [src]="getImageUrl(user)" alt="yourimg">
+          <img [src]="getImageUrl(user)" alt="User Profile Image">
         </div>
         <div class="clear"></div>
         <span class="dark ellipsis" title="{{user.displayName}}">{{user.displayName}}</span>
@@ -25,7 +25,7 @@
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg vs">
-            <img [src]="getImageUrl(user)" alt="yourimg" />
+            <img [src]="getImageUrl(user)" alt="User Profile Image" />
           </div>
         </div>
         <div class="col-xs-6">
@@ -52,7 +52,7 @@
         </div>
       </div>
       <div class="text-align clearfix">
-        <div class="div-width div-right-border" style="float:left">
+        <div class="div-width div-right-border float-left">
           <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
@@ -60,7 +60,7 @@
           <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
 
-        <div class="div-width text-align padding-right" style="float:right">
+        <div class="div-width text-align padding-right float-right">
           <div class="sprite score0"></div>
           <div class="sprite score0"></div>
           <div class="sprite score0"></div>
@@ -74,12 +74,16 @@
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
-            <img [src]="getImageUrl(user)" alt="yourimg" />
+            <<<<<<< HEAD <img [src]="getImageUrl(user)" alt="yourimg" /> =======
+            <img *ngIf="!user?.profilePictureUrl" [src]="defaultAvatar" alt="Default Profile Picture">
+            <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="User Profile Picture" /> >>>>>>> origin/BW-202
           </div>
         </div>
         <div class="col-xs-6">
           <div class="yourimg ">
-            <img [src]="getImageUrl(otherUserInfo)" alt="yourimg" />
+            <<<<<<< HEAD <img [src]="getImageUrl(otherUserInfo)" alt="yourimg" /> =======
+            <img *ngIf="!otherUserInfo?.profilePictureUrl" [src]="defaultAvatar" alt="Default Profile Picture">
+            <img *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" alt="User Profile Picture" /> >>>>>>> origin/BW-202
           </div>
         </div>
       </div>
@@ -108,7 +112,7 @@
         </div>
       </div>
       <div class="text-align clearfix">
-        <div class="div-width div-right-border" style="float:left">
+        <div class="div-width div-right-border float-left">
           <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
@@ -116,7 +120,7 @@
           <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
         </div>
 
-        <div class="div-width text-align padding-right" style="float:right">
+        <div class="div-width text-align padding-right float-right">
           <div [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'" class="sprite"></div>
           <div [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'" class="sprite"></div>

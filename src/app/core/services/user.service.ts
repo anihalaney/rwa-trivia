@@ -61,7 +61,7 @@ export class UserService {
 
     loadOtherUserProfile(userId: string): Observable<User> {
         const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
-        return this.http.get<User>(url).pipe(mergeMap(u => this.getUserProfileImage(u)));
+        return this.http.get<User>(url);
     }
 
 
@@ -70,11 +70,11 @@ export class UserService {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.storage.ref(filePath);
             return ref.getDownloadURL().pipe(map(url => {
-                user.profilePictureUrl = (url) ? url : '/assets/images/default-avatar.png';
+                user.profilePictureUrl = (url) ? url : '/assets/images/default-avatar-small.png';
                 return user;
             }));
         } else {
-            user.profilePictureUrl = '/assets/images/default-avatar.png'
+            user.profilePictureUrl = '/assets/images/default-avatar-small.png'
             return of(user);
         }
     }

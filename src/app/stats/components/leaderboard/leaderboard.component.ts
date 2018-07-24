@@ -26,6 +26,8 @@ export class LeaderboardComponent implements OnDestroy {
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;
 
+  defaultAvatar = 'assets/images/default-avatar-small.png';
+
   constructor(private store: Store<AppState>,
     private userActions: UserActions) {
     this.categoryDict$ = store.select(categoryDictionary);

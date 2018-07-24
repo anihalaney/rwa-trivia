@@ -13,7 +13,7 @@
     </div>
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="yourimg">
-        <img [src]="getImageUrl(user)" alt="yourimg" />
+        <img [src]="getImageUrl(user)" alt="User Profile Image" />
       </div>
       <label href="#" id="you" class="dark text-style ">{{playerUserName}}</label>
       <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
@@ -29,7 +29,7 @@
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
       <div class="col-sm-3 col-sm-offset-3">
         <div class="yourimg" [ngClass]="{'vs': game.playerIds.length>1 }">
-          <img [src]="getImageUrl(user)" alt="yourimg" />
+          <img [src]="getImageUrl(user)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{playerUserName}}</label>
         <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
@@ -45,7 +45,7 @@
       </div>
       <div class="col-sm-3 yourimg-spacing">
         <div class="yourimg">
-          <img [src]="getImageUrl(otherUserInfo)" alt="yourimg" />
+          <img [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{otherUserInfo?.displayName}}</label>
         <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
@@ -84,7 +84,7 @@
         <button class="btn-share" type="button" (click)="shareScore()" [disabled]="blogData[0].share_status" [ngClass]="blogData[0].share_status?'hide-share-btn':'show-share-btn'">Share</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">Rematch</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play Again</button>
-        <img src="/assets/images/ajax-loader.gif" class="rematch-loaderimage" *ngIf="disableRematchBtn">
+        <img *ngIf="disableRematchBtn" src="/assets/images/ajax-loader.gif" class="rematch-loaderimage" alt="Loader Image">
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
     </div>
@@ -99,7 +99,7 @@
 
           <mat-panel-description>
             <div class="col-xs-12" *ngIf="questionsArray.length == 0">
-              <img src="/assets/images/ajax-loader.gif" class="loaderimage">
+              <img src="/assets/images/ajax-loader.gif" class="loaderimage" alt="Loader Image">
             </div>
             <ul class="questions" *ngIf="questionsArray.length != 0">
               <li class="question-section" *ngFor="let row  of questionsArray;let i=index;">

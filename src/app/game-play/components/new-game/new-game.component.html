@@ -23,7 +23,7 @@
                         <input type="radio" id="p-radio2" formControlName="playerMode" value="1">
                         <label for="p-radio2">
                             <span class="sprite twop-icon icon"></span> Two Player</label>
-                        <div class="twoplayer" style="display: none;">
+                        <div class="twoplayer">
                             <input type="radio" id="tp-radio1" formControlName="opponentType" value="0">
                             <label for="tp-radio1">
                                 <span class="sprite randomp-icon icon"></span>Random</label>
@@ -39,7 +39,7 @@
                                         <input type="radio" id="friends{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
                                         <label for="friends{{i}}">
                                             <span class="labelimg">
-                                                <img [src]="getImageUrl(userDict[friendId])" />
+                                                <img [src]="getImageUrl(userDict[friendId])" alt="User Profile Image" />
                                             </span>
                                             <span class="dark">{{userDict[friendId]?.displayName}}</span>
                                             <span class="expertise">
@@ -122,7 +122,7 @@
                             Start Game
                         </button>
                         <div class="loaderCenter" *ngIf="loaderStatus">
-                            <img src="/assets/images/ajax-loader.gif" class="loaderimage">
+                            <img src="/assets/images/ajax-loader.gif" class="loaderimage" alt="Loader Image">
                         </div>
                     </div>
                 </div>

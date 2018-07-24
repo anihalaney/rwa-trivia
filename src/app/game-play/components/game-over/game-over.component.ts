@@ -44,6 +44,9 @@ export class GameOverComponent implements OnInit {
   loaderStatus = false;
   playerUserName = 'You';
 
+  defaultAvatar = 'assets/images/default-avatar-game-over.png';
+
+
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
