@@ -207,4 +207,8 @@ export class GameOverComponent implements OnInit {
   onNotify(info: any) {
     this.blogData[0].share_status = info.share_status;
   }
+
+  getImageUrl(user: User) {
+    return Utils.getImageUrl(user, 44, 40, '44X40');
+  }
 }

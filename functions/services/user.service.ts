@@ -1,5 +1,7 @@
 const userFireBaseClient = require('../db/firebase-client');
 const userFireStoreClient = userFireBaseClient.firestore();
+const bucket = userFireBaseClient.storage().bucket();
+const stream = require('stream');
 import { User } from '../../src/app/model';
 /**
  * getUserById
@@ -50,7 +52,7 @@ exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
     const BATCH_SIZE = 500;
     const chunks: User[][] = [];
 
-    for (var i = 0; i < users.length; i += BATCH_SIZE) {
+    for (let i = 0; i < users.length; i += BATCH_SIZE) {
         chunks.push(users.slice(i, i + BATCH_SIZE));
     }
 
@@ -58,12 +60,11 @@ exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
     chunks.map((chunk) => {
         console.log(chunk);
         promises = chunk.map((user) => {
-            let batch = userFireStoreClient.batch();
+            const batch = userFireStoreClient.batch();
             Object.keys(user).forEach(key => user[key] === undefined && delete user[key]);
             const userInstance = userFireStoreClient.collection('users').doc(user.userId);
             batch.set(userInstance, { ...user }, { merge: true });
             return batch.commit().then((ref) => {
-                console.log("saved user chunk");
                 return ref;
             });
         });
@@ -77,8 +78,8 @@ exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
  * getImage
  * return ref
  */
-exports.generateProfileImage = (userId: string, profilePicture: string): Promise<string> => {
-    const fileName = `profile/${userId}/avatar/${profilePicture}`;
+exports.generateProfileImage = (userId: string, profilePicture: string, size: string): Promise<string> => {
+    const fileName = `profile/${userId}/avatar/${size}/${profilePicture}`;
     const file = bucket.file(fileName);
     return file.download().then(downloadUrl => {
         return downloadUrl[0];
@@ -87,3 +88,36 @@ exports.generateProfileImage = (userId: string, profilePicture: string): Promise
         return error;
     })
 };
+
+
+/**
+ * getImage
+ * return ref
+ */
+exports.uploadProfileImage = (userId: string, profilePicture: string, data: any, size: string, originalStream: any): Promise<string> => {
+    const filePath = `profile/${userId}/avatar/${size}/${profilePicture}`;
+    const file = bucket.file(filePath);
+    const dataStream = new stream.PassThrough();
+    dataStream.push(data);
+    dataStream.push(null);
+
+    return new Promise((resolve, reject) => {
+        dataStream.pipe(file.createWriteStream({
+            metadata: {
+                contentType: originalStream.mimetype,
+                metadata: {
+                    custom: 'metadata'
+                }
+            }
+        }))
+            .on('error', function (err) {
+                console.log('error', err);
+                reject(err);
+            })
+            .on('finish', function () {
+                resolve('upload finished');
+            });
+    });
+
+};
+
