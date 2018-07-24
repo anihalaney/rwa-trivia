@@ -5,6 +5,8 @@ import { AppState, appState, categoryDictionary } from '../../../../store';
 import { User, Game, Category, PlayerMode } from '../../../../model';
 import { userState } from '../../../store';
 import { UserActions } from '../../../../core/store/actions';
+import { Utils } from '../../../../core/services';
+
 
 @Component({
     selector: 'recent-game-card',
@@ -22,6 +24,8 @@ export class RecentGameCardComponent implements OnChanges {
     myTurn: boolean;
     categoryDictObs: Observable<{ [key: number]: Category }>;
     categoryDict: { [key: number]: Category };
+    userProfileImageUrl;
+    otherUserProfileImageUrl;
 
     constructor(private store: Store<AppState>, private userActions: UserActions) {
 
@@ -40,13 +44,13 @@ export class RecentGameCardComponent implements OnChanges {
             if (userId !== undefined) {
                 if (this.userDict[userId] === undefined) {
                     this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
-
                 }
+                this.otherUserProfileImageUrl = Utils.getImageUrl(this.userDict[userId], 44, 40, '44X40');
             }
-
-
+            if (this.user.profilePicture) {
+                this.userProfileImageUrl = Utils.getImageUrl(this.user, 44, 40, '44X40');
+            }
         }
     }
-
 
 }

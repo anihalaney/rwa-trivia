@@ -63,6 +63,10 @@ export class LeaderboardComponent implements OnDestroy {
     this.lbsUsersSliceLastIndex = this.lbsUsersSliceLastIndex + 7;
   }
 
+  getImageUrl(user: User) {
+    return Utils.getImageUrl(user, 44, 40, '44X40');
+  }
+
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
   }
