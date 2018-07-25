@@ -25,6 +25,7 @@ export class RecentGameCardComponent implements OnChanges {
     categoryDictObs: Observable<{ [key: number]: Category }>;
     categoryDict: { [key: number]: Category };
     otherUserId: string;
+    userProfileImageUrl: string;
 
     constructor(private store: Store<AppState>, private userActions: UserActions) {
 
@@ -45,6 +46,7 @@ export class RecentGameCardComponent implements OnChanges {
                     this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
                 }
             }
+            this.userProfileImageUrl = this.getImageUrl(this.user);
         }
     }
 

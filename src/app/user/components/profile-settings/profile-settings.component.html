@@ -19,7 +19,7 @@
       </div>
       <!-- Prefered Categories end -->
     </div>
-    <form *ngIf="userForm" (ngSubmit)="onSubmit()" [formGroup]="userForm" novalidate>
+    <form *ngIf="userForm" [formGroup]="userForm" novalidate>
       <!-- Profile pik -->
       <div class="enterquestion secondbg">
         <div class="optionbox">
@@ -186,7 +186,7 @@
       </div>
       <!-- Profile pik end -->
       <div class="savebox textcenter">
-        <button type="submit" [disabled]="!userForm.valid" class="btn save">Save</button>
+        <button type="button" [disabled]="!userForm.valid" class="btn save" (click)="onSubmit()">Save</button>
         <!-- <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button> -->
       </div>
     </form>

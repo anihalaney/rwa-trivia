@@ -17,7 +17,7 @@ export class ProfileCardComponent {
   @Input() user: User;
   userObs: Observable<User>;
   location = 'unknown';
-  userProfileImageUrl;
+  userProfileImageUrl: string;
 
   constructor(private store: Store<AppState>, private router: Router) {
     this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
@@ -26,6 +26,7 @@ export class ProfileCardComponent {
       if (user !== null) {
         this.user = user;
         (this.user.location) ? this.location = this.user.location : '';
+        this.userProfileImageUrl = this.getImageUrl(this.user);
       }
     });
   }

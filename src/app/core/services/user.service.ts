@@ -47,17 +47,14 @@ export class UserService {
                 mergeMap(u => this.getUserProfileImage(u)));
     }
 
-    saveUserProfile(user: User) {
+    saveUserProfile(user: User): Observable<any> {
         const url = `${CONFIG.functionsUrl}/app/user/profile`;
         user.roles = (!user.roles) ? {} : user.roles;
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
         delete dbUser.profilePictureUrl;
-        this.db.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => {
-            this.http.post<User>(url, {}).subscribe((status) => {
-                this.store.dispatch(new useractions.AddUserProfileSuccess());
-            });
-        });
+        return this.http.post<User>(url, { user: dbUser });
+
     }
 
 

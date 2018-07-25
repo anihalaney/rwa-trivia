@@ -20,8 +20,9 @@ export class UserEffects {
         .ofType(UserActionTypes.ADD_USER_PROFILE)
         .pipe(
             switchMap((action: userActions.AddUserProfile) => {
-                this.userService.saveUserProfile(action.payload.user);
-                return empty();
+                return this.userService.saveUserProfile(action.payload.user).pipe(
+                    map((status: any) => new userActions.AddUserProfileSuccess())
+                )
             })
         );
 

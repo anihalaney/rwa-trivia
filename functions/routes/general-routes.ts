@@ -23,6 +23,6 @@ router.get('/bulkupload/update', generalAuth.adminOnly, generalController.update
 router.post('/question/update/:collectionName', generalAuth.adminOnly, generalController.updateQuestionCollection);
 router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsData);
 router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuthUsersInFirestore);
-router.post('/user/profile/image', generalController.generateAllUsersProfileImages);
+router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
 
 module.exports = router;
