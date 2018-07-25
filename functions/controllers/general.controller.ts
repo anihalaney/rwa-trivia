@@ -266,7 +266,7 @@ exports.dumpAuthUsersInFirestore = (req, res) => {
 
 
 /**
- * dumpAuthUsersInFirestore
+ * generateAllUsersProfileImages
  * return status
  */
 exports.generateAllUsersProfileImages = (req, res) => {

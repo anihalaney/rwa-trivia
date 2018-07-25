@@ -74,16 +74,12 @@
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
-            <<<<<<< HEAD <img [src]="getImageUrl(user)" alt="yourimg" /> =======
-            <img *ngIf="!user?.profilePictureUrl" [src]="defaultAvatar" alt="Default Profile Picture">
-            <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="User Profile Picture" /> >>>>>>> origin/BW-202
+            <img [src]="getImageUrl(user)" alt="User Profile Picture" />
           </div>
         </div>
         <div class="col-xs-6">
           <div class="yourimg ">
-            <<<<<<< HEAD <img [src]="getImageUrl(otherUserInfo)" alt="yourimg" /> =======
-            <img *ngIf="!otherUserInfo?.profilePictureUrl" [src]="defaultAvatar" alt="Default Profile Picture">
-            <img *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" alt="User Profile Picture" /> >>>>>>> origin/BW-202
+            <img [src]="getImageUrl(otherUserInfo)" alt="User Profile Picture" />
           </div>
         </div>
       </div>

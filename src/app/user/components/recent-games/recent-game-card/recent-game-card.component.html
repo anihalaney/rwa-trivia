@@ -33,7 +33,7 @@
         </div>
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Single">
             <div class="yourimg">
-                <img [src]="getImageUrl(user)" alt="User Profile Image" />
+                <img [src]="userProfileImageUrl" alt="User Profile Image" />
             </div>
             <p class="light" title="{{user?.displayName}}">{{user?.displayName}}</p>
             <p class="light">Score {{game.stats[user.userId]?.score}}</p>

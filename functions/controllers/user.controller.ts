@@ -68,11 +68,13 @@ exports.getUserImages = (req, res) => {
  */
 exports.generateUserProfileImage = (req, res) => {
     const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
-    userService.getUserById(req.user.uid).then((u) => {
-        const dbUser = u.data();
-        profileImagesGenerator.
-            getStoredImage(req.user.uid, dbUser.profilePicture).then((status) => {
-                res.send({ 'status': 'Images are created !!' })
-            })
-    });
+    const user = req.body.user;
+
+    profileImagesGenerator.
+        getStoredImage(user.userId, user.profilePicture).then((status) => {
+            userService.setUser(user).then((ref) => {
+                res.send({ 'status': 'Profile Data is saved !!' })
+            });
+        })
+
 };

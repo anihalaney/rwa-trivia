@@ -35,7 +35,7 @@ export class Utils {
 
   static getImageUrl(user: User, width: Number, height: Number, size: string) {
     if (user && user.profilePicture && user.profilePicture !== '') {
-      return `${CONFIG.functionsUrl}/app/user/profile/${user.userId}/${width}/${height}`;
+      return `${CONFIG.functionsUrl}/app/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
     } else {
       return `assets/images/avatar-${size}.png`;
     }

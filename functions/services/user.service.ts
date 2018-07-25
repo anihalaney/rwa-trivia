@@ -75,14 +75,14 @@ exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
 
 
 /**
- * getImage
- * return ref
+ * generateProfileImage
+ * return stream
  */
 exports.generateProfileImage = (userId: string, profilePicture: string, size: string): Promise<string> => {
     const fileName = (size) ? `profile/${userId}/avatar/${size}/${profilePicture}` : `profile/${userId}/avatar/${profilePicture}`;
     const file = bucket.file(fileName);
-    return file.download().then(downloadUrl => {
-        return downloadUrl[0];
+    return file.download().then(streamData => {
+        return streamData[0];
     }).catch(error => {
         console.log('error', error);
         return error;
@@ -91,8 +91,8 @@ exports.generateProfileImage = (userId: string, profilePicture: string, size: st
 
 
 /**
- * getImage
- * return ref
+ * uploadProfileImage
+ * return status
  */
 exports.uploadProfileImage = (userId: string, profilePicture: string, data: any, size: string, originalStream: any): Promise<string> => {
     const filePath = `profile/${userId}/avatar/${size}/${profilePicture}`;
