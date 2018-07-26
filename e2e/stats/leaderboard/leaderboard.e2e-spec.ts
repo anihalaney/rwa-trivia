@@ -1,7 +1,7 @@
 import { LeaderBoardPage } from './leaderboard.po';
 import { browser, element, by, Key } from 'protractor';
 
-describe('NewsLetterPage', () => {
+describe('LeaderBoardPage', () => {
 
     let page: LeaderBoardPage;
     page = new LeaderBoardPage();
