@@ -1,4 +1,5 @@
 exports.app = require('./server/functions/app').app;
+exports.ssr = require('./server/functions/ssr').ssr;
 exports.onFirestoreQuestionWrite = require('./server/functions/db/firebase-functions').onQuestionWrite;
 exports.onFirestoreInvitationWrite = require('./server/functions/db/firebase-functions').onInvitationWrite;
 exports.onFirestoreGameCreate = require('./server/functions/db/firebase-functions').onGameCreate;
