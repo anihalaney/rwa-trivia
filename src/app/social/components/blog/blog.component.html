@@ -1,4 +1,4 @@
-<div class="col-md-4 col-xs-12" *ngFor="let blog of blogData;let i=index;">
+<div class="col-md-4 col-xs-12 info" *ngFor="let blog of blogData;let i=index;">
   <div class="card" [ngClass]="blog.share_status?'card-opacity':''">
     <a class="blogimg" target="_blank" rel="noopener" [href]="blog.link">
       <img src="{{blog.thumbnail}}" alt="{{blog.title}}" />
