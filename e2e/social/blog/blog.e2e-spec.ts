@@ -24,6 +24,7 @@ describe('BlogPage', () => {
     it('Click on Share Button', () => {
         browser.waitForAngularEnabled(false);
         page.getShareButton().click();
+        browser.driver.sleep(500);
     });
 
     // it('Should click on Fb button to share blog', () => {
@@ -33,6 +34,7 @@ describe('BlogPage', () => {
     //     browser.driver.sleep(5000);
     // });
     it('Click on Close Button to hide social share option', () => {
+        browser.waitForAngularEnabled(false);
         browser.driver.sleep(500);
         page.getCloseButton().click();
     });

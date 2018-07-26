@@ -1,7 +1,7 @@
 import { TEST_DATA } from '../../../testing/test.data';
-import { subscriptionSaveStatus, getTotalSubscriptionStatus } from './social.reducer';
+import { subscriptionSaveStatus, getTotalSubscriptionStatus, blogs } from './social.reducer';
 import { SocialActions, SocialActionTypes } from '../actions';
-import { Subscription, Subscribers } from '../../../model';
+import { Subscription, Subscribers, Blog } from '../../../model';
 import { Subscriber } from 'rxjs';
 
 describe('Reducer: subscriptionSaveStatus', () => {
@@ -51,6 +51,36 @@ describe('Reducer: getTotalSubscriptionStatus', () => {
             payload: subscriber
         });
         expect(newState).toEqual(subscriber);
+
+    });
+
+    it('Any other action', () => {
+        const state: Subscribers = _testReducer(<Subscribers>[], { type: SocialActionTypes.ADD_SUBSCRIBER_SUCCESS, payload: null });
+        expect(state).toEqual(<Subscribers>[]);
+    });
+
+});
+
+describe('Reducer: blogs', () => {
+    const _testReducer = blogs;
+
+    it('Initial State', () => {
+        const state: Blog[] = _testReducer(undefined, { type: null, payload: [] });
+        expect(state).toEqual(null);
+    });
+
+    it('Total Blogs Actions', () => {
+
+        const blog: Blog[] = TEST_DATA.blog;
+        const newState: Blog[] = _testReducer(<Blog[]>[], {
+            type: SocialActionTypes.LOAD_BLOGS_SUCCESS,
+            payload: blog
+        });
+        expect(newState).toEqual(blog);
+
+        const errorState: String = _testReducer('Error while getting Blogs',
+            { type: SocialActionTypes.LOAD_BLOGS_ERROR, payload: 'Error while getting Blogs' });
+        expect(errorState).toEqual('Error while getting Blogs');
 
     });
 
