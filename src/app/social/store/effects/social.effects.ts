@@ -68,7 +68,8 @@ export class SocialEffects {
         switchMap(() =>
             this.socialService.loadBlogs()
                 .pipe(
-                map((blogs: Blog[]) => new socialActions.LoadBlogsSuccess(blogs))
+                map((blogs: Blog[]) => new socialActions.LoadBlogsSuccess(blogs)),
+                catchError(err => of(new socialActions.LoadBlogsError(err)))
                 )
         )
         );
