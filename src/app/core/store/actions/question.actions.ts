@@ -30,5 +30,12 @@ export class QuestionActions {
     };
   }
 
+  static GET_QUESTION_OF_THE_DAY_ERROR = 'GET_QUESTION_OF_THE_DAY_ERROR';
+  getQuestionOfTheDayError(errorObj: any): ActionWithPayload<any> {
+    return {
+      type: QuestionActions.GET_QUESTION_OF_THE_DAY_ERROR,
+      payload: errorObj
+    };
+  }
 
 }
