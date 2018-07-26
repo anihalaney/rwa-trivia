@@ -12,6 +12,7 @@
     "firebase-admin": "^5.12.1",
     "firebase-functions": "^1.1.0",
     "fs": "0.0.1-security",
+    "node-fetch": "^2.2.0",
     "nodemailer": "^4.6.7",
     "path": "^0.12.7",
     "request": "^2.87.0"

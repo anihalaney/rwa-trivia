@@ -96,6 +96,8 @@ export class AppComponent implements OnInit, OnDestroy {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
+      (<any>window).ga('set', 'page', evt.urlAfterRedirects);
+      (<any>window).ga('send', 'pageview');
       this.windowRef.nativeWindow.scrollTo(0, 0);
     });
   }
