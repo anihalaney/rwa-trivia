@@ -3,16 +3,16 @@ const bucket = socialFireBaseClient.storage().bucket();
 
 
 /**
- * setBlog
+ * generateSocialUrl
  * return ref
  */
-exports.generateSocialUrl = (userId: string, social_share_id: string): Promise<string> => {
+exports.generateSocialUrl = (userId: string, social_share_id: string): Promise<any> => {
     const fileName = `social_share/${userId}/score_images/${social_share_id}`;
     const file = bucket.file(fileName);
-    return file.getSignedUrl({
-        action: 'read',
-        expires: '03-09-2491'
-    }).then(signedUrls => {
+    return file.download().then(signedUrls => {
         return signedUrls[0];
+    }).catch(error => {
+        console.log('error', error);
+        return error;
     })
 };

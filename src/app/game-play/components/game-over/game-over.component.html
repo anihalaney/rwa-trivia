@@ -77,11 +77,11 @@
   </mat-card-content>
   <mat-card-content class="textcenter">
     <div class="button-div">
-      <div class="win-icon spacing-bottom">
-        <social-palette *ngIf="blogData[0].share_status && !loaderStatus" class="spacing position" [blogData]="blogData[0]" (notify)="onNotify($event)"
-          [isFromBlog]=false></social-palette>
+      <div class="win-icon spacing-bottom" *ngIf="socialFeedData">
+        <social-palette *ngIf="socialFeedData.share_status && !loaderStatus" class="spacing position" [blogData]="socialFeedData"
+          (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
         <img *ngIf="loaderStatus" src="/assets/images/ajax-loader.gif" class="share-loaderimage" />
-        <button class="btn-share" type="button" (click)="shareScore()" [disabled]="blogData[0].share_status" [ngClass]="blogData[0].share_status?'hide-share-btn':'show-share-btn'">Share</button>
+        <button class="btn-share" type="button" (click)="shareScore()" [disabled]="socialFeedData.share_status" [ngClass]="socialFeedData.share_status?'hide-share-btn':'show-share-btn'">Share</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">Rematch</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play Again</button>
         <img *ngIf="disableRematchBtn" src="/assets/images/ajax-loader.gif" class="rematch-loaderimage" alt="Loader Image">
