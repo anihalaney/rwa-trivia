@@ -12,14 +12,16 @@
     "firebase-admin": "^5.12.1",
     "firebase-functions": "^1.1.0",
     "fs": "0.0.1-security",
+    "node-fetch": "^2.2.0",
     "nodemailer": "^4.6.7",
     "path": "^0.12.7",
-    "request": "^2.87.0"
+    "request": "^2.87.0",
+    "sharp": "^0.20.5"
   },
   "private": true,
   "devDependencies": {
+    "@types/csv-parse": "1.1.11",
     "@types/elasticsearch": "5.0.14",
-    "@types/node": "7.0.21",
-    "@types/csv-parse": "1.1.11"
+    "@types/node": "7.0.21"
   }
 }
