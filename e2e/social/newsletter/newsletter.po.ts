@@ -34,7 +34,7 @@ export class NewsLetterPage {
     }
 
     getResponseMessage() {
-        const responseElement = element(by.css('.subscrib-form p'));
+        const responseElement = element(by.css('.message p'));
         if (responseElement.isPresent) {
             return responseElement.getText();
         }
