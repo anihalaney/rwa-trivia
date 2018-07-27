@@ -6,9 +6,9 @@
     <div class="question-list col-sm-12">
       <div class="col-xs-12">
         <ul id="list">
-          <li class="col-sm-5 col-xs-12 item" *ngFor="let answer of question.answers|slice:0:2;" (click)="answerButtonClicked(answer)" [class.players-answer]="answeredText === answer.answerText"
-            [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText" [class.right]="answeredText !== '' && correctAnswerText === answer.answerText"
-            [class.question-answered]="answeredText!==''">
+          <li class="col-sm-5 col-xs-12 item" *ngFor="let answer of question.answers|slice:0:2;" (click)="answerButtonClicked(answer)"
+            [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+            [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [class.question-answered]="answeredText!==''">
             {{answer.answerText}}
           </li>
         </ul>
@@ -24,7 +24,8 @@
       </div>
       <div class="row col-xs-12">
         <div class="col-sm-6 col-xs-12 ellipsis question-tags" title=" {{question.tags?.toString()}}">
-          Tags : {{question.tags?.toString()}}
+          Tags :
+          <span>{{question.tags?.toString()}}</span>
         </div>
         <div class="col-sm-6 col-xs-12 alignment" *ngIf="userDict[question.created_uid]">
           <author [userDict]="userDict" [userId]="question.created_uid"></author>

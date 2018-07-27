@@ -8,7 +8,7 @@
         <div class="row subscrib-form">
           <div class="col-sm-7 col-xs-12">
             <input placeholder="enter your email ID" type="email" name="email" formControlName="email" class="required" [readonly]="user!=null"
-             />
+            />
             <!-- <span *ngIf="formDir.submitted" class="label">Email is Required!</span> -->
             <span *ngIf="subscriptionForm.hasError('required', 'email') && formDir.submitted" class="label errorSpan">
               Email is required!
@@ -21,7 +21,7 @@
         </div>
       </form>
     </div>
-    <div  class="row col-sm-12 col-xs-12 subscrib-form">
+    <div class="row col-sm-12 col-xs-12 message">
       <!-- <button class="btn" (click)="onUnSubscribe()">UnSubscribe</button> -->
       <p class="label">{{message}}</p>
     </div>

@@ -19,9 +19,11 @@ export class QuestionEffects {
         map((action: any): RouterStateUrl => action.payload.routerState),
         filter((routerState: RouterStateUrl) =>
             routerState.url.toLowerCase().startsWith('/dashboard')))
-        .pipe(() => this.svc.getQuestionOfTheDay(false))
-        .pipe(map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question))
-        , catchError(err => of(this.questionActions.getQuestionOfTheDayError(err))));
+        .pipe(
+        switchMap(() => this.svc.getQuestionOfTheDay(false)
+            .pipe(
+            map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question))
+            , catchError(err => of(this.questionActions.getQuestionOfTheDayError(err))))));
 
 
     @Effect()

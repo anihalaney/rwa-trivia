@@ -12,7 +12,7 @@ describe('Reducer: questionOfTheDay', () => {
     it('Initial State', () => {
         const state: String = _testReducer(undefined, { type: null, payload: null });
 
-        expect(state).toEqual([]);
+        expect(state).toEqual(null);
     });
 
     it('Get Question of the Day Question', () => {
