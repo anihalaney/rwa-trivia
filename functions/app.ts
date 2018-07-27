@@ -29,6 +29,7 @@ const cookieParser = require('cookie-parser')();
 const bodyParser = require('body-parser');
 const cors = require('cors')({ origin: true });
 const app = express();
+const API_PREFIX = 'app';
 require('./db/firebase-functions').addMessage(functions);
 
 app.use(cors);
@@ -38,10 +39,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use('/images', express.static(__dirname + '/../../images'));
 
-// Routes
-app.use(require('./routes/routes'))
 
 
+<<<<<<< HEAD
 app.engine('html', ngExpressEngine({
     bootstrap: AppServerModuleNgFactory,
     providers: [
@@ -60,5 +60,16 @@ app.get('*', (req, res) => {
     res.render('index', { req });
 });
 
+=======
+app.use((req, res, next) => {
+    if (req.url.indexOf(`/${API_PREFIX}/`) === 0) {
+        req.url = req.url.substring(API_PREFIX.length + 1);
+    }
+    next();
+});
+
+// Routes
+app.use(require('./routes/routes'))
+>>>>>>> d39e369d4695e9ffd4daf5d36449e90a6a0c3270
 
 exports.app = functions.https.onRequest(app);
