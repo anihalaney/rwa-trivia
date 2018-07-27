@@ -21,10 +21,7 @@
             </div>
             <div class="col-xs-6 no-padding " [ngClass]="game.winnerPlayerId !== user.userId?'card-border-right':'card-border-left'">
                 <div class="yourimg">
-                    <img *ngIf="!userDict[getOpponentId(game)]?.profilePictureUrl" src="assets/images/default-avatar.png" alt="user1" />
-                    <img *ngIf="userDict[getOpponentId(game)]?.profilePictureUrl" [src]="userDict[getOpponentId(game)]?.profilePictureUrl" alt="user1"
-                    />
-
+                    <img [src]="getImageUrl(userDict[this.otherUserId])" alt="Other User Profile Image" />
                 </div>
                 <p class="light ellipsis" title="{{userDict[getOpponentId(game)]?.displayName}}">{{userDict[getOpponentId(game)]?.displayName}}</p>
                 <p class="light">Score {{game.stats[getOpponentId(game)]?.score}}</p>
@@ -36,9 +33,7 @@
         </div>
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Single">
             <div class="yourimg">
-                <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="user" />
-                <img *ngIf="user?.profilePictureUrl" [src]="user?.profilePictureUrl" alt="user" />
-
+                <img [src]="userProfileImageUrl" alt="User Profile Image" />
             </div>
             <p class="light" title="{{user?.displayName}}">{{user?.displayName}}</p>
             <p class="light">Score {{game.stats[user.userId]?.score}}</p>
