@@ -41,26 +41,6 @@ app.use('/images', express.static(__dirname + '/../../images'));
 
 
 
-<<<<<<< HEAD
-app.engine('html', ngExpressEngine({
-    bootstrap: AppServerModuleNgFactory,
-    providers: [
-        provideModuleMap(LAZY_MODULE_MAP)
-    ]
-}));
-
-app.set('view engine', 'html');
-app.set('views', join(DIST_FOLDER, 'browser'));
-
-// Server static files from /browser
-app.get('*.*', express.static(join(DIST_FOLDER, 'browser')));
-
-// All regular routes use the Universal engine
-app.get('*', (req, res) => {
-    res.render('index', { req });
-});
-
-=======
 app.use((req, res, next) => {
     if (req.url.indexOf(`/${API_PREFIX}/`) === 0) {
         req.url = req.url.substring(API_PREFIX.length + 1);
@@ -70,6 +50,5 @@ app.use((req, res, next) => {
 
 // Routes
 app.use(require('./routes/routes'))
->>>>>>> d39e369d4695e9ffd4daf5d36449e90a6a0c3270
 
 exports.app = functions.https.onRequest(app);

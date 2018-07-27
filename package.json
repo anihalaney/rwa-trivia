@@ -98,16 +98,8 @@
     "ts-loader": "^4.2.0",
     "ts-node": "7.0.0",
     "tslint": "5.10.0",
-<<<<<<< HEAD
     "typescript": "2.7.2",
     "webpack-cli": "^3.0.8",
     "xmlhttprequest": "^1.8.0"
-=======
-    "typescript": "2.7.2"
-  },
-  "jest": {
-    "preset": "jest-preset-angular",
-    "setupTestFrameworkScriptFile": "<rootDir>/src/setup-jest.ts"
->>>>>>> d39e369d4695e9ffd4daf5d36449e90a6a0c3270
   }
 }
