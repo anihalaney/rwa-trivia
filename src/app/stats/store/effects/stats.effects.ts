@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { switchMap, map } from 'rxjs/operators';
+import { switchMap, map, catchError } from 'rxjs/operators';
 import { StatsActionTypes } from '../actions';
 import * as statsActions from '../actions/stats.actions';
 import { StatsService } from '../../../core/services';
 import { SystemStats } from '../../../model';
+import { of } from 'rxjs';
 
 
 @Injectable()
@@ -31,7 +32,7 @@ export class StatsEffects {
             this.statsService.loadSystemStat().pipe(
                 map((stat: SystemStats) =>
                     new statsActions.LoadSystemStatSuccess(stat)
-                )
+                ), catchError(err => of(new statsActions.LoadSystemStatError(err)))
             )));
 
     constructor(
