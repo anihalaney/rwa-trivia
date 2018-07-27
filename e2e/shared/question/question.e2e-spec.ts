@@ -5,7 +5,7 @@ describe('QuestionPage', () => {
     let page: QuestionPage;
 
     beforeEach(() => {
-        browser.driver.sleep(500);
+        browser.driver.sleep(1000);
         page = new QuestionPage();
     });
 
