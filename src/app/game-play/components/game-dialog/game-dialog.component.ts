@@ -60,6 +60,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   isQuestionAvailable = true;
   isGameLoaded: boolean;
+  threeConsecutiveAnswer = false;
 
   private genQuestionComponent: GameQuestionComponent;
 
@@ -88,6 +89,14 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
+        this.threeConsecutiveAnswer = false;
+        if (game !== null && game.playerQnAs.length === 3) {
+          let consecutiveCount = 0;
+          this.game.playerQnAs.map((playerQnA) => {
+            consecutiveCount = (playerQnA.answerCorrect) ? ++consecutiveCount : consecutiveCount;
+          });
+          this.threeConsecutiveAnswer = (consecutiveCount === 3) ? true : false;
+        }
         if (game !== null && !this.isGameLoaded) {
           this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
             this.game.GameStatus === GameStatus.RESTARTED ||
