@@ -28,7 +28,7 @@ export class QuestionComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    if (this.question.questionText !== undefined) {
+    if (this.question && this.question.questionText !== undefined) {
       this.question.answers.forEach((item, index) => {
         if (item.correct === true) {
           this.correctAnswerText = item.answerText;
