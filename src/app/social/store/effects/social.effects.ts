@@ -44,6 +44,7 @@ export class SocialEffects {
         )
         );
 
+
     // Load Social Score share url
     @Effect()
     loadSocialScoreShareUrl$ = this.actions$
