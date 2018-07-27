@@ -20,8 +20,9 @@ export class UserEffects {
         .ofType(UserActionTypes.ADD_USER_PROFILE)
         .pipe(
             switchMap((action: userActions.AddUserProfile) => {
-                this.userService.saveUserProfile(action.payload.user);
-                return empty();
+                return this.userService.saveUserProfile(action.payload.user).pipe(
+                    map((status: any) => new userActions.AddUserProfileSuccess())
+                )
             })
         );
 
@@ -35,11 +36,11 @@ export class UserEffects {
                 routerState.url.toLowerCase().startsWith('/my/questions')),
             mergeMap((routerState: RouterStateUrl) =>
                 this.store.select(coreState).pipe(
-                map(s => s.user),
-                filter(u => !!u),
-                take(1),
-                map(user => user.userId))
-        ))
+                    map(s => s.user),
+                    filter(u => !!u),
+                    take(1),
+                    map(user => user.userId))
+            ))
         .pipe(
             switchMap((id: string) => {
                 return this.questionService.getUserQuestions(id, true).pipe(map((questions: Question[]) =>
@@ -58,11 +59,11 @@ export class UserEffects {
                 routerState.url.toLowerCase().startsWith('/my/questions')),
             mergeMap((routerState: RouterStateUrl) =>
                 this.store.select(coreState).pipe(
-                map(s => s.user),
-                filter(u => !!u),
-                take(1),
-                map(user => user.userId))
-        ))
+                    map(s => s.user),
+                    filter(u => !!u),
+                    take(1),
+                    map(user => user.userId))
+            ))
         .pipe(
             switchMap((id: string) => {
                 return this.questionService.getUserQuestions(id, false).pipe(map((questions: Question[]) =>
