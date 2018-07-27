@@ -7,6 +7,7 @@ import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
 import { RSSFeedConstants, Blog, User } from '../../src/app/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
@@ -264,3 +265,14 @@ exports.dumpAuthUsersInFirestore = (req, res) => {
 };
 
 
+/**
+ * generateAllUsersProfileImages
+ * return status
+ */
+exports.generateAllUsersProfileImages = (req, res) => {
+    const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
+    profileImagesGenerator.
+        fetchUsers().then((status) => {
+            res.send(status);
+        })
+};

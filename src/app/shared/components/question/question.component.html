@@ -5,10 +5,17 @@
     <p class="">{{question.questionText}}</p>
     <div class="question-list col-sm-12">
       <div class="col-xs-12">
+<<<<<<< HEAD
         <ul id="list">
           <li class="col-sm-5 col-xs-12 item" *ngFor="let answer of question.answers|slice:0:2;" (click)="answerButtonClicked(answer)"
             [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
             [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [class.question-answered]="answeredText!==''">
+=======
+        <ul>
+          <li class="col-sm-5 col-xs-12" *ngFor="let answer of question.answers|slice:0:2;" (click)="answerButtonClicked(answer)" [class.players-answer]="answeredText === answer.answerText"
+            [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText" [class.right]="answeredText !== '' && correctAnswerText === answer.answerText"
+            [class.question-answered]="answeredText!==''">
+>>>>>>> origin/BW-220
             {{answer.answerText}}
           </li>
         </ul>

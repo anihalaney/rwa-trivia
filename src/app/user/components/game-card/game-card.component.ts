@@ -4,6 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { User, Game, Category, PlayerMode, GameStatus } from '../../../model';
 import { take } from 'rxjs/operators';
+import { Utils } from '../../../core/services';
 
 @Component({
   selector: 'game-card',
@@ -29,7 +30,7 @@ export class GameCardComponent implements OnInit, OnChanges {
   PlayerMode = PlayerMode;
   totalRound = 16;
   gameStatus: any;
-
+  defaultAvatar = 'assets/images/default-avatar-small.png';
   constructor(private store: Store<AppState>) {
 
     this.gameStatus = GameStatus;
@@ -83,6 +84,10 @@ export class GameCardComponent implements OnInit, OnChanges {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
+  }
+
+  getImageUrl(user: User) {
+    return Utils.getImageUrl(user, 70, 60, '70X60');
   }
 
 
