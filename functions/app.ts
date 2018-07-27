@@ -2,22 +2,9 @@ import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
 
 import { enableProdMode } from '@angular/core';
-import { join } from 'path';
 
 // Faster server renders w/ Prod mode (dev mode never needed)
 enableProdMode();
-
-const PORT = process.env.PORT || 4000;
-const DIST_FOLDER = join(process.cwd(), 'dist');
-
-// * NOTE :: leave this as require() since this file is built Dynamically from webpack
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');
-
-// Express Engine
-import { ngExpressEngine } from '@nguniversal/express-engine';
-// Import module map for lazy loading
-import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
-
 
 const functions = require('firebase-functions');
 const auth = require('./middlewares/auth');
