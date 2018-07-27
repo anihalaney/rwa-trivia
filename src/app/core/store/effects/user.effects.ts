@@ -13,8 +13,8 @@ export class UserEffects {
     loadUserProfile$ = this.actions$
         .ofType(UserActions.LOGIN_SUCCESS)
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
-        switchMap((user: User) => this.svc.loadUserProfile(user)),
-        map((user: User) => this.userActions.addUserWithRoles(user)));
+            switchMap((user: User) => this.svc.loadUserProfile(user)),
+            map((user: User) => this.userActions.addUserWithRoles(user)));
 
 
     @Effect()
@@ -22,9 +22,9 @@ export class UserEffects {
     loadOtherUserProfile$ = this.actions$
         .ofType(UserActions.LOAD_OTHER_USER_PROFILE)
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
-        distinct(),
-        mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
-        map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
+            distinct(),
+            mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
+            map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
 
     constructor(
