@@ -49,11 +49,11 @@ export class SocialEffects {
     loadSocialScoreShareUrl$ = this.actions$
         .ofType(SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL)
         .pipe(
-        switchMap((action: socialActions.LoadSocialScoreShareUrl) =>
-            this.socialService.generateScoreShareImage(action.payload.imageBlob, action.payload.userId)
-                .pipe(
-                map((imageUrl: UploadTaskSnapshot) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
-        ));
+            switchMap((action: socialActions.LoadSocialScoreShareUrl) =>
+                this.socialService.generateScoreShareImage(action.payload.imageBlob, action.payload.userId)
+                    .pipe(
+                        map((imageUrl: UploadTaskSnapshot) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
+            ));
 
 
     // load blogs

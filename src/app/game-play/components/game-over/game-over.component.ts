@@ -44,6 +44,9 @@ export class GameOverComponent implements OnInit {
   loaderStatus = false;
   playerUserName = 'You';
 
+  defaultAvatar = 'assets/images/default-avatar-game-over.png';
+
+
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
@@ -206,5 +209,9 @@ export class GameOverComponent implements OnInit {
 
   onNotify(info: any) {
     this.socialFeedData.share_status = info.share_status;
+  }
+
+  getImageUrl(user: User) {
+    return Utils.getImageUrl(user, 44, 40, '44X40');
   }
 }

@@ -76,6 +76,14 @@ hr{height:15px; visibility: hidden; margin: 0;}
     text-align: left;
 }
 
+.float-left {
+    float: left !important;
+}
+
+.float-right {
+    float: right !important;
+}
+
 @media screen and ( max-width:990px){
     .text-align,.div-score
     {
