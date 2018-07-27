@@ -9,6 +9,7 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserActions } from '../../../core/store/actions';
+import { Utils } from '../../../core/services';
 
 @Component({
   selector: 'app-invite-friends',
@@ -24,6 +25,7 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   dataSource: any;
+  defaultAvatar = 'assets/images/default-avatar.png';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -76,6 +78,9 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy() {
     (this.dialogRef) ? this.dialogRef.close() : '';
+  }
+  getImageUrl(user: User) {
+    return Utils.getImageUrl(user, 44, 40, '44X40');
   }
 
 }

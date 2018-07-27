@@ -395,5 +395,12 @@ export const TEST_DATA = {
             { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" },
             { "score": 50, "userId": "ssHmHkKq9BPTyP9c4CtmEqvO4xp2" }
         ]
-    }
+    },
+    realTimeStats:
+        {
+            'active_games': 2,
+            'game_played': 2518,
+            'total_questions': 106,
+            'total_users': 67
+        }
 }

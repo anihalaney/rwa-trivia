@@ -27,6 +27,8 @@ button[disabled], input[disabled] { cursor: default; }
 input[type="checkbox"], input[type="radio"], li, div, p, span { box-sizing: border-box; }
 input[type="search"] { -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; -webkit-appearance: textfield; }
 textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize: none; }
+.hide{ display: none !important }
+.chart-image{ display: block; margin:0 auto; }
 /*Fonts family*/
 @font-face {font-family: 'hindsemibold'; src: url('../fonts/hind-semibold-webfont.woff2') format('woff2'),  url('../fonts/hind-semibold-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
 @font-face { font-family: 'hindbold'; src: url('../fonts/hind-bold-webfont.woff2') format('woff2'), url('../fonts/hind-bold-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}

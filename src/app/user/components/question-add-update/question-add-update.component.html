@@ -93,7 +93,7 @@
             {{category.categoryName}}
           </mat-option>
         </mat-select>
-        <p *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine" style="font-size: 11px;">Select a category</p>
+        <p class="category-font-size" *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine">Select a category</p>
       </mat-card-title>
     </mat-card-header>
 

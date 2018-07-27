@@ -244,4 +244,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     return gameOptions;
   }
+
+  getImageUrl(user: User) {
+    return Utils.getImageUrl(user, 70, 60, '70X60');
+  }
 }
