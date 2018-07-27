@@ -5,9 +5,23 @@ export class QuestionPage {
     }
     getTitle() {
         const titleElement = element(by.css('.question-cont h2'));
-        if (titleElement.isPresent) {
+        if (titleElement.isPresent()) {
             return titleElement.getText();
         }
+    }
+    getQuestionTags() {
+        const tagElement = element(by.css('.question-tags span'));
+        if (tagElement.isPresent()) {
+            return tagElement.getText();
+        }
+
+    }
+    getTryAnotherButton() {
+        const buttonElement = element(by.cssContainingText('a', 'Try Another'));
+        if (buttonElement.isPresent()) {
+            return buttonElement;
+        }
+
     }
 
 }

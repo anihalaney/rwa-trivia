@@ -4,7 +4,10 @@ import { browser, element, by, Key } from 'protractor';
 describe('LeaderBoardPage', () => {
 
     let page: LeaderBoardPage;
-    page = new LeaderBoardPage();
+    beforeEach(() => {
+        browser.driver.sleep(1000);
+        page = new LeaderBoardPage();
+    });
 
     it('Should display title', () => {
         browser.waitForAngularEnabled(false);
