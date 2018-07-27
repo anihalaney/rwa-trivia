@@ -23,6 +23,8 @@
 #curentactive .btnbox{ background: #fff; }
 .btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px;line-height: 1.2; margin:0 auto}
 .btn.startg:disabled{ background-color: silver; }
+.category-font-size { font-size: 11px; }
+
 @media screen and (min-width: 767px){
   .optionbox h2 span{ font-size: 22px }
   .pcategories .formfield select{  width: 300px }
