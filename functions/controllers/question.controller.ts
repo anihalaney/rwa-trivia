@@ -99,9 +99,9 @@ exports.getNextQuestion = (req, res) => {
                         const otherUserQuestions = game.playerQnAs.filter((pastPlayerQnA) => pastPlayerQnA.playerId === otherPlayerUserId
                         );
 
-                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single &&
-                            !currentUserQuestions[currentUserQuestions.length - 1].answerCorrect) {
+                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
                             game.round = game.round + 1;
+
                         } else if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                             currentUserQuestions.length > 0 && otherUserQuestions.length > 0) {
                             const lastcurrentUserQuestion = currentUserQuestions[currentUserQuestions.length - 1];
@@ -115,12 +115,13 @@ exports.getNextQuestion = (req, res) => {
                             }
                         }
                     }
+
                     playerQnA.round = game.round;
                     question.gameRound = game.round;
                     question.addedOn = createdOn;
                     game.playerQnAs.push(playerQnA);
                     const dbGame = game.getDbModel();
-                    console.log('update the question ---->', question);
+                    //  console.log('update the question ---->', question);
                     gameMechanics.UpdateGame(dbGame).then((id) => {
                         res.send(question);
                     });

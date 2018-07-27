@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { UserActions } from ' ../../app/core/store/actions';
+import { UserActions } from '../../core/store/actions';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../store';
 import { AuthenticationProvider } from '../../core/auth';
