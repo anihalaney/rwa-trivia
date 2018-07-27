@@ -4,7 +4,10 @@ import { browser, element, by, Key } from 'protractor';
 describe('NewsLetterPage', () => {
 
     let page: NewsLetterPage;
-    page = new NewsLetterPage();
+    beforeEach(() => {
+        browser.driver.sleep(500);
+        page = new NewsLetterPage();
+    });
     // page.navigateTo();
 
     it('Should display title', () => {
