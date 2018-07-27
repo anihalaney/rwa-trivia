@@ -79,23 +79,6 @@
   </section>
   <!-- Invitation to play games end   -->
 
-  <!-- Category leaderboard -->
-  <section class="card">
-    <div class="row">
-      <div class="col-sm-12 col-xs-12">
-        <h2>Leaderboard</h2>
-      </div>
-      <!-- <div class="col-sm-3 col-xs-12 textrigth hidden-xs">
-              <a href="#" class="viewall">view all</a>
-            </div> -->
-    </div>
-    <leaderboard *ngIf="userDict" [userDict]="userDict"></leaderboard>
-
-
-
-  </section>
-  <!-- Category leaderboard end-->
-
   <div class="row">
     <!-- Question of the day -->
     <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
@@ -109,6 +92,25 @@
     </div>
     <!-- Subscribe end -->
   </div>
+
+  <!-- Category leaderboard -->
+  <section class="card">
+    <div class="row">
+      <div class="col-sm-12 col-xs-12 board-title">
+        <h2>Leaderboard</h2>
+      </div>
+      <!-- <div class="col-sm-3 col-xs-12 textrigth hidden-xs">
+              <a href="#" class="viewall">view all</a>
+            </div> -->
+    </div>
+    <leaderboard *ngIf="userDict" [userDict]="userDict"></leaderboard>
+
+
+
+  </section>
+  <!-- Category leaderboard end-->
+
+
 
 
 
