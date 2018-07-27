@@ -17,6 +17,7 @@ import { FriendGameStats } from '../utils/friend-game-stats';
 import { MailClient } from '../utils/mail-client';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 
+
 // Take the text parameter passed to this HTTP endpoint and insert it into the
 // Realtime Database under the path /messages/:pushId/original
 exports.addMessage = (firebaseFunctions: any) => {

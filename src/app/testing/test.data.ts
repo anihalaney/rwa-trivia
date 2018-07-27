@@ -418,5 +418,12 @@ export const TEST_DATA = {
         'viewCount': 100,
         'created_uuid': 'ssHmHkKq9BPByP9c4CtmEqvO4xp2'
     }
-    ]
+    ],
+    realTimeStats:
+        {
+            'active_games': 2,
+            'game_played': 2518,
+            'total_questions': 106,
+            'total_users': 67
+        }
 }
