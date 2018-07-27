@@ -16,7 +16,7 @@ export interface SocialState {
     subscriptionRemoveStatus: String;
     checkEmailSubscriptionStatus: Boolean;
     socialShareImageUrl: UploadTaskSnapshot;
-    blogs: Blog[];
+    blogs: any;
 }
 
 export const reducer: ActionReducerMap<SocialState> = {
