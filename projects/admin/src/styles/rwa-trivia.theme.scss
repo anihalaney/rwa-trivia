@@ -1,0 +1,54 @@
+@import '~@angular/material/theming';
+@import '~@ngx-share/button/styles/share-buttons';
+@import '~@ngx-share/button/styles/themes/circles/circles-dark-theme';
+
+// Include the base styles for Angular Material core. 
+@include mat-core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue.
+$trivia-app-primary: mat-palette($mat-indigo);
+$trivia-app-accent:  mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$trivia-app-warn:    mat-palette($mat-red);
+
+//customize the background theme
+$trivia-app-theme-background: (
+  status-bar: map_get($mat-teal, 300),
+  app-bar:    map_get($mat-teal, 100),
+  background: map_get($mat-teal, 50),
+  hover:      rgba(black, 0.04),
+  card:       white,
+  dialog:     white,
+  disabled-button: $black-12-opacity,
+  raised-button: white,
+  focused-button: $black-6-opacity,
+  selected-button: map_get($mat-grey, 300),
+  selected-disabled-button: map_get($mat-grey, 400),
+  disabled-button-toggle: map_get($mat-grey, 200),
+  unselected-chip: map_get($mat-grey, 300),
+  disabled-list-option: map_get($mat-grey, 200),
+);
+
+//app theme funtion returns the theme from the palletes
+@function trivia-app-theme-fn($primary, $accent, $warn, $foreground, $background) {
+  @return (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+    is-dark: false,
+    foreground: $foreground,
+    background: $background,
+  );
+}
+
+// Create the theme object (a Sass map containing all of the palettes).
+$trivia-app-theme: trivia-app-theme-fn($trivia-app-primary, $trivia-app-accent, $trivia-app-warn, 
+                                       $mat-light-theme-foreground, $trivia-app-theme-background);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($trivia-app-theme);
