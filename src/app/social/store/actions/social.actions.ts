@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
 import { Subscription, Subscribers, Blog } from '../../../model';
+import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 
 export enum SocialActionTypes {
 
@@ -16,6 +17,8 @@ export enum SocialActionTypes {
     LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS = '[Social] LoadSocialScoreShareUrlSuccess',
     LOAD_BLOGS = '[Social] LoadBlogs',
     LOAD_BLOGS_SUCCESS = '[Social] LoadBlogsSuccess',
+    ADD_SUBSCRIBER_ERROR = '[Social] AddSubscriberError',
+    LOAD_BLOGS_ERROR = '[Social] LoadBlogsError'
 }
 
 // Save subscriber
@@ -29,6 +32,13 @@ export class AddSubscriberSuccess implements Action {
     readonly type = SocialActionTypes.ADD_SUBSCRIBER_SUCCESS;
     payload = null;
 }
+
+// Save subscriber error
+export class AddSubscriberError implements Action {
+    readonly type = SocialActionTypes.ADD_SUBSCRIBER_ERROR;
+    constructor(public payload: string) { }
+}
+
 
 // Get total subscriber
 export class GetTotalSubscriber implements Action {
@@ -63,7 +73,7 @@ export class LoadSocialScoreShareUrl implements Action {
 // Load Social Score share Url Success
 export class LoadSocialScoreShareUrlSuccess implements Action {
     readonly type = SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL_SUCCESS;
-    constructor(public payload: string) { }
+    constructor(public payload: UploadTaskSnapshot) { }
 }
 
 // Remove subscriber
@@ -83,6 +93,12 @@ export class CheckSubscriptionStatus implements Action {
     readonly type = SocialActionTypes.CHECK_SUBSCRIPTION;
     constructor(public payload: Boolean) { }
 }
+// Load Blogs error
+export class LoadBlogsError implements Action {
+    readonly type = SocialActionTypes.LOAD_BLOGS_ERROR;
+    constructor(public payload: string) { }
+}
+
 
 
 export type SocialActions
@@ -97,4 +113,6 @@ export type SocialActions
     | RemoveSubscriber
     | RemoveSubscriberSuccess
     | CheckSubscriptionStatus
+    | AddSubscriberError
+    | LoadBlogsError
 

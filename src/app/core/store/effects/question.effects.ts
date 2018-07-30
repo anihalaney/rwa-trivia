@@ -3,7 +3,8 @@ import { Effect, Actions } from '@ngrx/effects';
 import { Question, RouterStateUrl } from '../../../model';
 import { QuestionActions } from '../actions';
 import { QuestionService } from '../../services'
-import { switchMap, map, filter } from 'rxjs/operators';
+import { switchMap, map, filter, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable()
 export class QuestionEffects {
@@ -15,11 +16,14 @@ export class QuestionEffects {
     loadRouteQuestionOfDay$ = this.actions$
         .ofType('ROUTER_NAVIGATION')
         .pipe(
-            map((action: any): RouterStateUrl => action.payload.routerState),
-            filter((routerState: RouterStateUrl) =>
-                routerState.url.toLowerCase().startsWith('/dashboard')))
-        .pipe(() => this.svc.getQuestionOfTheDay(false))
-        .pipe(map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)));
+        map((action: any): RouterStateUrl => action.payload.routerState),
+        filter((routerState: RouterStateUrl) =>
+            routerState.url.toLowerCase().startsWith('/dashboard')))
+        .pipe(
+        switchMap(() => this.svc.getQuestionOfTheDay(false)
+            .pipe(
+            map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question))
+            , catchError(err => of(this.questionActions.getQuestionOfTheDayError(err))))));
 
 
     @Effect()
@@ -27,10 +31,11 @@ export class QuestionEffects {
     loadNextQuestionOfDay$ = this.actions$
         .ofType(QuestionActions.GET_QUESTION_OF_THE_DAY)
         .pipe(
-            switchMap((action) =>
+        switchMap((action) =>
             this.svc.getQuestionOfTheDay(true)
                 .pipe(
-                    map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question))
+                map((question: Question) => this.questionActions.getQuestionOfTheDaySuccess(question)),
+                catchError(err => of(this.questionActions.getQuestionOfTheDayError(err)))
                 )
         ));
 

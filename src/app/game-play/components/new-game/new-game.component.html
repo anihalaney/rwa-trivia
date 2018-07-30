@@ -39,7 +39,7 @@
                                         <input type="radio" id="friends{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
                                         <label for="friends{{i}}">
                                             <span class="labelimg">
-                                                <img *ngIf="userDict[friendId]?.profilePictureUrl" [src]="userDict[friendId]?.profilePictureUrl" alt="User Profile Picture">
+                                                <img [src]="getImageUrl(userDict[friendId])" alt="User Profile Image" />
                                             </span>
                                             <span class="dark">{{userDict[friendId]?.displayName}}</span>
                                             <span class="expertise">
@@ -132,56 +132,4 @@
 
 
 
-
-    <!-- <mat-card *ngIf="false">
-        <mat-card-title>Start New Game</mat-card-title>
-        <mat-card-content>
-
-            <div>
-                <h3 mat-subheader>Player Mode</h3>
-                <mat-button-toggle-group #group="matButtonToggleGroup" formControlName="playerMode" [value]="0">
-                    <mat-button-toggle [value]="0">
-                        Single Player
-                    </mat-button-toggle>
-                    <mat-button-toggle [value]="1">
-                        Two Player
-                    </mat-button-toggle>
-                </mat-button-toggle-group>
-
-            </div>
-
-            <div>
-                <mat-button-toggle-group #group="matButtonToggleGroup" formControlName="opponentType">
-                    <mat-button-toggle value="0">
-                        Against Computer
-                    </mat-button-toggle>
-                    <mat-button-toggle value="1">
-                        Random Opponent
-                    </mat-button-toggle>
-                    <mat-button-toggle value="2">
-                        Friend
-                    </mat-button-toggle>
-                </mat-button-toggle-group>
-            </div>
-            <mat-divider></mat-divider>
-            <mat-divider></mat-divider>
-            <div class="tag-container">
-                <h3 mat-subheader>Tag Preference</h3>
-                <p>
-                    <mat-chip *ngIf="selectedTags.length === 0">
-                        None
-                    </mat-chip>
-                    <mat-chip-list>
-                        <mat-chip *ngFor="let tag of selectedTags">
-                            {{tag}}
-                            <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
-                        </mat-chip>
-                    </mat-chip-list>
-                </p>
-
-            </div>
-
-            <button mat-button color="primary">START</button>
-        </mat-card-content>
-    </mat-card> -->
 </form>

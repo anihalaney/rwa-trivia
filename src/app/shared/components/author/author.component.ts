@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { User } from '../../../model';
+import { Utils } from '../../../core/services';
 
 @Component({
     selector: 'author',
@@ -7,11 +8,15 @@ import { User } from '../../../model';
     styleUrls: ['./author.component.scss']
 })
 
-export class AuthorComponent {
+export class AuthorComponent implements OnChanges {
 
     @Input() userDict: { [key: string]: User };
     @Input() userId;
+    userProfileImageUrl;
 
-    defaultAvatar = 'assets/images/default-avatar-small.png';
-
+    ngOnChanges() {
+        if (this.userId) {
+            this.userProfileImageUrl = Utils.getImageUrl(this.userDict[this.userId], 44, 40, '44X40');
+        }
+    }
 }

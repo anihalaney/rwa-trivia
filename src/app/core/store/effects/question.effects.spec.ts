@@ -1,156 +1,113 @@
-import { ComponentFixture, TestBed, async, inject } from '@angular/core/testing';
-import { EffectsTestingModule, EffectsRunner } from '@ngrx/effects/testing';
+import { Component } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable } from 'rxjs';
-import { AngularFire } from 'angularfire2';
-import { Store } from '@ngrx/store';
-
+import { cold, hot } from 'jasmine-marbles';
+import { Actions } from '@ngrx/effects';
 import { TEST_DATA } from '../../../testing/test.data';
-import { MockStore } from '../../../testing/mock-store';
 import { QuestionEffects } from './question.effects';
+import { QuestionService } from '../../../core/services/question.service';
 import { QuestionActions } from '../actions';
-import { QuestionService } from '../../services';
+import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
+import { RoutesRecognized } from '@angular/router';
+import { Question, RouterStateUrl } from '../../../model';
+
 
 describe('Effects: QuestionEffects', () => {
-  let _runner: EffectsRunner;
-  let _effects: QuestionEffects;
-  let _service: QuestionService;
+    let effects: QuestionEffects;
+    let actions$: Observable<any>;
+    let questionService: any;
+    const question: Question = TEST_DATA.questions.published.filter(obj => { return obj.id === '1' })[0];
 
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [
-      EffectsTestingModule
-    ],
-    providers: [
-      QuestionEffects, QuestionActions, QuestionService,
-      { "provide": AngularFire, "useValue": {} },
-      { "provide": Store, "useValue": new MockStore({}) }
-    ]
-  }));
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [],
+            providers: [
+                QuestionActions,
+                QuestionEffects,
+                {
+                    provide: QuestionService,
+                    useValue: { getQuestionOfTheDay: jest.fn() }
+                },
+                provideMockActions(() => actions$),
+            ],
+        });
+        effects = TestBed.get(QuestionEffects);
+        questionService = TestBed.get(QuestionService);
+        actions$ = TestBed.get(Actions);
+    });
 
-  it('Call Load Questions Success action after Load Questions',
-    inject([
-      EffectsRunner, QuestionEffects, QuestionService
-    ],
-    (runner, questionEffects, questionService) => {
-      _runner = runner;
-      _effects = questionEffects;
-      _service = questionService;
+    it('load question of the day', () => {
+        const completion = new QuestionActions().getQuestionOfTheDaySuccess(question);
 
-      spyOn(_service, 'getQuestions')
-          .and.returnValue(Observable.of(TEST_DATA.questions.published));
+        // not sure this best way to emulate it, this can be converted into utility function
+        // here to test effect which use router navigation action we are manually mocking it
+        // this by pass ngrx route-store and  router all together and only test effect
+        const routerState: RouterStateUrl = { url: '/dashboard', queryParams: {}, params: {} };
+        const event: RoutesRecognized = new RoutesRecognized(1, '/dashboard', '', null);
+        const payload: RouterNavigationPayload<RouterStateUrl> = {
+            routerState,
+            event
+        };
+        const action: RouterNavigationAction<RouterStateUrl> = {
+            type: ROUTER_NAVIGATION,
+            payload
+        };
 
-      _runner.queue({ type: QuestionActions.LOAD_QUESTIONS });
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: question });
+        const expected = cold('--b', { b: completion });
+        questionService.getQuestionOfTheDay = jest.fn(() => {
+            console.log('mocked getQuestionOfTheDay');
+            return response
+        });
+        expect(effects.loadRouteQuestionOfDay$).toBeObservable(expected);
+    });
 
-      _effects.loadQuestions$.subscribe(result => {
-        expect(result.type).toEqual(QuestionActions.LOAD_QUESTIONS_SUCCESS);
-        expect(result.payload).toEqual(TEST_DATA.questions.published);
-      });
-    })
-  );
+    it('load question of the day throws Error', () => {
+        const routerState: RouterStateUrl = { url: '/dashboard', queryParams: {}, params: {} };
+        const event: RoutesRecognized = new RoutesRecognized(1, '/dashboard', '', null);
+        const payload: RouterNavigationPayload<RouterStateUrl> = {
+            routerState,
+            event
+        };
+        const action: RouterNavigationAction<RouterStateUrl> = {
+            type: ROUTER_NAVIGATION,
+            payload
+        };
+        const completion = new QuestionActions().getQuestionOfTheDayError('Error while getting Question of the day');
+        const error = 'Error while getting Question of the day';
 
-  it('Call Load Unpublished Questions Success action after Load  Unpublished Questions',
-    inject([
-      EffectsRunner, QuestionEffects, QuestionService
-    ],
-    (runner, questionEffects, questionService) => {
-      _runner = runner;
-      _effects = questionEffects;
-      _service = questionService;
 
-      spyOn(_service, 'getUnpublishedQuestions')
-          .and.returnValue(Observable.of(TEST_DATA.questions.published));
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-#|', {}, error);
+        const expected = cold('--b', { b: completion });
+        questionService.getQuestionOfTheDay = jest.fn(() => response);
 
-      _runner.queue({ type: QuestionActions.LOAD_UNPUBLISHED_QUESTIONS });
+        expect(effects.loadRouteQuestionOfDay$).toBeObservable(expected);
+    });
 
-      _effects.loadUnpublishedQuestions$.subscribe(result => {
-        expect(result.type).toEqual(QuestionActions.LOAD_UNPUBLISHED_QUESTIONS_SUCCESS);
-        expect(result.payload).toEqual(TEST_DATA.questions.published);
-      });
-    })
-  );
+    it('load next question', () => {
+        const action = new QuestionActions().getQuestionOfTheDay();
+        const completion = new QuestionActions().getQuestionOfTheDaySuccess(question);
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: question });
+        const expected = cold('--b', { b: completion });
 
-  it('Call Load User Questions Success action after Load  User Questions',
-    inject([
-      EffectsRunner, QuestionEffects, QuestionService
-    ],
-    (runner, questionEffects, questionService) => {
-      _runner = runner;
-      _effects = questionEffects;
-      _service = questionService;
+        questionService.getQuestionOfTheDay = jest.fn(() => response);
 
-      spyOn(_service, 'getUserQuestions')
-          .and.returnValue(Observable.of(TEST_DATA.questions.published));
+        expect(effects.loadNextQuestionOfDay$).toBeObservable(expected);
+    });
 
-      _runner.queue({ type: QuestionActions.LOAD_USER_QUESTIONS });
+    it('load next question throws Error', () => {
+        const action = new QuestionActions().getQuestionOfTheDay();
+        const completion = new QuestionActions().getQuestionOfTheDayError('Error while getting next Question of the day');
+        const error = 'Error while getting next Question of the day';
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-#|', {}, error);
+        const expected = cold('--b', { b: completion });
+        questionService.getQuestionOfTheDay = jest.fn(() => response);
 
-      _effects.loadUserQuestions$.subscribe(result => {
-        expect(result.type).toEqual(QuestionActions.LOAD_USER_QUESTIONS_SUCCESS);
-        expect(result.payload).toEqual(TEST_DATA.questions.published);
-      });
-
-    })
-  );
-
-  it('Call Load Sample Questions Success action after Load Sample Questions',
-    inject([
-      EffectsRunner, QuestionEffects, QuestionService
-    ],
-    (runner, questionEffects, questionService) => {
-      _runner = runner;
-      _effects = questionEffects;
-      _service = questionService;
-
-      spyOn(_service, 'getSampleQuestions')
-          .and.returnValue(Observable.of(TEST_DATA.questions.published));
-
-      _runner.queue({ type: QuestionActions.LOAD_SAMPLE_QUESTIONS });
-
-      _effects.loadSampleQuestions$.subscribe(result => {
-        expect(result.type).toEqual(QuestionActions.LOAD_SAMPLE_QUESTIONS_SUCCESS);
-        expect(result.payload).toEqual(TEST_DATA.questions.published);
-      });
-    })
-  );
-
-  it('Call Save Question service after when adding Question',
-    inject([
-      EffectsRunner, QuestionEffects, QuestionService
-    ],
-    (runner, questionEffects, questionService) => {
-      _runner = runner;
-      _effects = questionEffects;
-      _service = questionService;
-
-      spyOn(_service, 'saveQuestion')
-          .and.returnValue(Observable.of(TEST_DATA.questions.published[0]));
-
-      _runner.queue({ type: QuestionActions.ADD_QUESTION });
-
-      _effects.addQuestion$.subscribe(result => {
-        expect(result).toEqual(false);
-        expect(result.payload).toEqual(null);
-      });
-    })
-  );
-
-  it('Call Approve Question service after when calling approve Question',
-    inject([
-      EffectsRunner, QuestionEffects, QuestionService
-    ],
-    (runner, questionEffects, questionService) => {
-      _runner = runner;
-      _effects = questionEffects;
-      _service = questionService;
-
-      spyOn(_service, 'approveQuestion')
-          .and.returnValue(Observable.of(TEST_DATA.questions.published[0]));
-
-      _runner.queue({ type: QuestionActions.APPROVE_QUESTION });
-
-      _effects.approveQuestion$.subscribe(result => {
-        expect(result).toEqual(false);
-        expect(result.payload).toEqual(null);
-      });
-    })
-  );
-
+        expect(effects.loadNextQuestionOfDay$).toBeObservable(expected);
+    });
 });

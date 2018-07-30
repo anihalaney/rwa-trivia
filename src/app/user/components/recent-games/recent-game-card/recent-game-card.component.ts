@@ -5,6 +5,8 @@ import { AppState, appState, categoryDictionary } from '../../../../store';
 import { User, Game, Category, PlayerMode } from '../../../../model';
 import { userState } from '../../../store';
 import { UserActions } from '../../../../core/store/actions';
+import { Utils } from '../../../../core/services';
+
 
 @Component({
     selector: 'recent-game-card',
@@ -22,7 +24,9 @@ export class RecentGameCardComponent implements OnChanges {
     myTurn: boolean;
     categoryDictObs: Observable<{ [key: number]: Category }>;
     categoryDict: { [key: number]: Category };
-    defaultAvatar = 'assets/images/default-avatar-small.png';
+    otherUserId: string;
+    userProfileImageUrl: string;
+
     constructor(private store: Store<AppState>, private userActions: UserActions) {
 
         this.categoryDictObs = store.select(categoryDictionary);
@@ -36,16 +40,18 @@ export class RecentGameCardComponent implements OnChanges {
 
     ngOnChanges() {
         if (this.game) {
-            const userId = this.getOpponentId(this.game);
-            if (userId !== undefined) {
-                if (this.userDict[userId] === undefined) {
-                    this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
-
+            this.otherUserId = this.getOpponentId(this.game);
+            if (this.otherUserId !== undefined) {
+                if (this.userDict[this.otherUserId] === undefined) {
+                    this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
                 }
             }
-
-
+            this.userProfileImageUrl = this.getImageUrl(this.user);
         }
+    }
+
+    getImageUrl(user: User) {
+        return Utils.getImageUrl(user, 44, 40, '44X40');
     }
 
 
