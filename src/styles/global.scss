@@ -578,10 +578,6 @@ body.dialog-open {
   overflow: hidden;
 }
 
-body.dialog-open .cdk-global-overlay-wrapper {
-  pointer-events: all
-}
-
 body.dialog-open .cdk-overlay-pane {
   position: relative !important;
   margin: auto !important;
@@ -602,9 +598,10 @@ body.cdk-overlay-backdrop {
   max-height: none !important;
   overflow: initial !important;
 }
-.cdk-global-overlay-wrapper {
+body.dialog-open .cdk-global-overlay-wrapper {
   pointer-events: auto !important;
   overflow-y: auto !important;
+  pointer-events: all;
 }
 
 

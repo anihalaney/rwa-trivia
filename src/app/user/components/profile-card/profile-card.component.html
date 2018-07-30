@@ -1,6 +1,10 @@
 <a class="user card" *ngIf="user && user!=null" (click)="navigateToProfile()">
+<<<<<<< HEAD
   <img *ngIf="!user?.profilePictureUrl" [attr.data-src]="defaultAvatar" alt="Default Profile Picture">
   <img *ngIf="user?.profilePictureUrl" [attr.data-src]="(user.profilePictureUrl === defaultAvatarSmall) ? defaultAvatar : user.profilePictureUrl" alt="User Profile Picture" />
+=======
+  <img [src]="userProfileImageUrl" alt="User Profile Image" />
+>>>>>>> b910c96ab371a83c0b77131eedf45806401bfed3
   <span class="username">
     <span class="name">{{user.displayName}}</span>
     <span class="userlocation">

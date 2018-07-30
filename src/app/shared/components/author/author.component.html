@@ -1,4 +1,8 @@
 <label class="text-alignment">Author :</label>
 <label class="alignment-left text-alignment truncate" title="{{userDict[userId]?.displayName}}">{{userDict[userId]?.displayName}}</label>
+<<<<<<< HEAD
 <img *ngIf="!userDict[userId]?.profilePictureUrl" [attr.data-src]="defaultAvatar" alt="Default Profile Picture">
 <img *ngIf="userDict[userId]?.profilePictureUrl" [attr.data-src]="userDict[userId]?.profilePictureUrl" alt="User Profile Picture"/>
+=======
+<img [src]="userProfileImageUrl" alt="User Profile Image" />
+>>>>>>> b910c96ab371a83c0b77131eedf45806401bfed3

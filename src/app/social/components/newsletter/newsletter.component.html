@@ -7,13 +7,13 @@
       <form (ngSubmit)="onSubscribe()" [formGroup]="subscriptionForm" class="upload-questions" #formDir="ngForm">
         <div class="row subscrib-form">
           <div class="col-sm-7 col-xs-12">
-            <input placeholder="enter your email ID" type="email" name="enter your email ID" formControlName="email" class="required" [readonly]="user!=null"
-             />
+            <input placeholder="enter your email ID" type="email" name="email" formControlName="email" class="required" [readonly]="user!=null"
+            />
             <!-- <span *ngIf="formDir.submitted" class="label">Email is Required!</span> -->
-            <span *ngIf="subscriptionForm.hasError('required', 'email') && formDir.submitted" class="label">
+            <span *ngIf="subscriptionForm.hasError('required', 'email') && formDir.submitted" class="label errorSpan">
               Email is required!
             </span>
-            <span *ngIf="subscriptionForm.controls.email.invalid && !subscriptionForm.controls.email.errors.required" class="label">Invalid Email!</span>
+            <span *ngIf="subscriptionForm.controls.email.invalid && !subscriptionForm.controls.email.errors.required" class="label errorSpan">Invalid Email!</span>
           </div>
           <div class="col-sm-5 col-xs-12 div-spacing">
             <button class="btn">Subscribe</button>
@@ -21,7 +21,7 @@
         </div>
       </form>
     </div>
-    <div *ngIf="isSubscribed" class="row col-sm-12 col-xs-12 subscrib-form">
+    <div class="row col-sm-12 col-xs-12 message">
       <!-- <button class="btn" (click)="onUnSubscribe()">UnSubscribe</button> -->
       <p class="label">{{message}}</p>
     </div>
