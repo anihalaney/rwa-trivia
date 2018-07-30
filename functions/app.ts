@@ -1,11 +1,3 @@
-import 'zone.js/dist/zone-node';
-import 'reflect-metadata';
-
-import { enableProdMode } from '@angular/core';
-
-// Faster server renders w/ Prod mode (dev mode never needed)
-enableProdMode();
-
 const functions = require('firebase-functions');
 const auth = require('./middlewares/auth');
 const parse = require('csv').parse;

@@ -10,7 +10,7 @@ module.exports = {
   target: 'node',
   externals: [/(node_modules|main(\\|\/)..*(\\|\/).js)/],
   output: {
-    path: path.join(__dirname, `dist`),
+    path: path.join(__dirname, `functions/server/functions`),
     filename: '[name].js'
   },
   module: {

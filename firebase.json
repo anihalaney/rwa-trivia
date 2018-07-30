@@ -1,10 +1,14 @@
 {
   "hosting": {
-    "public": "dist",
+    "public": "dist/browser",
     "rewrites": [
       {
         "source": "/app/**",
         "function": "app"
+      },
+      {
+        "source" : "**/*.@(css|js|png)",
+        "destination": "/index2.html"
       },
       {
         "source": "**",
