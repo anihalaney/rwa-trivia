@@ -7,12 +7,7 @@
           <div class="row">
             <div class="col-xs-2 has">#{{j+1}}</div>
             <div class="col-xs-3 yourimg">
-<<<<<<< HEAD
-              <img *ngIf="!userDict[user.userId]?.profilePictureUrl" [attr.data-src]="defaultAvatar" alt="Defalut Profile Picture">
-              <img *ngIf="userDict[user.userId]?.profilePictureUrl" [attr.data-src]="userDict[user.userId]?.profilePictureUrl" alt="User Profile Picture"/>
-=======
               <img [src]="getImageUrl(userDict[user.userId])" alt="User Profile Image" />
->>>>>>> b910c96ab371a83c0b77131eedf45806401bfed3
             </div>
             <div class="col-xs-4 ellipsis">
               <label href="#" class="dark" title="{{userDict[user.userId]?.displayName}}">{{userDict[user.userId]?.displayName}}</label>
