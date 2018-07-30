@@ -13,5 +13,5 @@ export const CONFIG: IConfig = {
       storageBucket: 'rwa-trivia.appspot.com',
       messagingSenderId: '479350787602'
   },
-   'functionsUrl': 'https://us-central1-rwa-trivia.cloudfunctions.net'
+   'functionsUrl': 'https://bitwiser.io'
 };
