@@ -7,7 +7,7 @@ import { enableProdMode } from '@angular/core';
 import * as express from 'express';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
-import { join, resolve } from 'path';
+import { resolve } from 'path';
 
 const domino = require('domino');
 const win = domino.createWindow('');
@@ -16,18 +16,18 @@ global['window'] = win;
 global['document'] = win.document;
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 
-const APP_NAME = 'browser';
-const DIST_FOLDER = resolve(process.cwd(), '../dist');
+console.log(process.cwd());
+const DIST_FOLDER = resolve(process.cwd(), './dist');
 console.log(DIST_FOLDER);
 
 const {
   AppServerModuleNgFactory,
   LAZY_MODULE_MAP
-} = require(`./dist/server/main`);
+} = require(`./functions/dist/server/main`);
 
 enableProdMode();
 
-const app = express();
+const app =  express();
 
 // Set the engine
 app.engine(
@@ -40,7 +40,7 @@ app.engine(
 
 app.set('view engine', 'html');
 
-app.set('views', join(DIST_FOLDER, APP_NAME));
+app.set('views', DIST_FOLDER);
 
 // Point all routes to Universal
 app.get('*', (req, res) => {
