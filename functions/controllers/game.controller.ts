@@ -2,6 +2,7 @@ import { SearchCriteria, Game, GameOperations, PlayerQnA, GameStatus, schedulerC
 import { Utils } from '../utils/utils';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
 const utils: Utils = new Utils();
@@ -180,13 +181,24 @@ exports.changeGameTurn = (req, res) => {
 };
 
 
+
 /**
  * createSocialContent
  * return htmlcontent
  */
 exports.createSocialContent = (req, res) => {
 
-    const websiteUrl = `${req.protocol}://${req.hostname}`;
+    let websiteUrl = `${req.protocol}://`;
+
+    if (functions.config().elasticsearch &&
+        functions.config().elasticsearch.index &&
+        functions.config().elasticsearch.index.production &&
+        functions.config().elasticsearch.index.production === 'true') {
+        websiteUrl += 'bitwiser.io'
+    } else {
+        websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com'
+    }
+
     const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;
 
     const htmlContent = `<!DOCTYPE html>
@@ -196,20 +208,21 @@ exports.createSocialContent = (req, res) => {
                           <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
                           <meta property="og:locale" content="en_US" />
                           <meta property="og:type" content="article" />
-                          <meta property="og:title" content="RWA-Trivia Game Score">
-                          <meta property="og:description" content="RWA-Trivia Game Score">
+                          <meta property="og:title" content="Bitwiser Game Score">
+                          <meta property="og:description" content="Bitwiser Game Score">
                           <meta property="og:url"  content="${imageUrl}">
                           <meta property="og:image" content="${imageUrl}">
                           <meta name="twitter:card" content="summary_large_image"/>
-                          <meta name="twitter:title" content="RWA-Trivia Game Score"/>
-                          <meta name="twitter:description" content="RWA-Trivia Game Score">
-                          <meta name="twitter:site" content="@${req.hostname}"/>
+                          <meta name="twitter:title" content="Bitwiser Game Score"/>
+                          <meta name="twitter:description" content="Bitwiser Game Score">
+                          <meta name="twitter:site" content="@${websiteUrl}"/>
                           <meta name="twitter:image" content="${imageUrl}"/>
                         </head>
                         <body>
                          <img src="${imageUrl}" />
                         </body>
                       </html>`;
+
     res.setHeader('content-type', 'text/html');
     res.send(htmlContent);
 };
