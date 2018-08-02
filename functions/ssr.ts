@@ -3,7 +3,17 @@ const url = require('url');
 const nodeFetch = require('node-fetch');
 const ssrApp = require('express')();
 
-const appUrl = 'bitwiser.io';
+let appUrl = 'bitwiser.io';
+
+if (ssrFunctions.config().elasticsearch &&
+  ssrFunctions.config().elasticsearch.index &&
+  ssrFunctions.config().elasticsearch.index.production &&
+  ssrFunctions.config().elasticsearch.index.production === 'true') {
+  appUrl = 'bitwiser.io'
+} else {
+  appUrl = 'rwa-trivia-dev-e57fc.firebaseapp.com'
+}
+
 const renderUrl = 'https://render-tron.appspot.com/render';
 
 function generateUrl(request) {
@@ -59,14 +69,13 @@ ssrApp.get('*', (req, res) => {
         //console.log(body.toString());
         res.send(body.toString());
       });
-  }
-  else {
+  } else {
     //console.log(`Standard: https://${appUrl}`);
     nodeFetch(`https://${appUrl}`)
-    .then(res => res.text())
-    .then(body => {
-      res.send(body.toString());
-    });
+      .then(res => res.text())
+      .then(body => {
+        res.send(body.toString());
+      });
   }
 });
 
