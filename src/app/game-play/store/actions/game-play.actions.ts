@@ -22,7 +22,8 @@ export enum GamePlayActionTypes {
   GET_USERS_ANSWERED_QUESTION = '[GamePlay] GetUsersAnsweredQuestion',
   GET_USERS_ANSWERED_QUESTION_SUCCESS = '[GamePlay] GetUsersAnsweredQuestionSuccess',
   SAVE_REPORT_QUESTION = '[GamePlay] SaveReportQuestion',
-  SAVE_REPORT_QUESTION_SUCCESS = '[GamePlay] SaveReportQuestionSuccess'
+  SAVE_REPORT_QUESTION_SUCCESS = '[GamePlay] SaveReportQuestionSuccess',
+  UPDATE_GAME_ROUND = '[GamePlay] UpdateGameRound'
 }
 
 export class ResetNewGame implements Action {
@@ -118,6 +119,11 @@ export class SaveReportQuestionSuccess implements Action {
   payload = null;
 }
 
+export class UpdateGameRound implements Action {
+  readonly type = GamePlayActionTypes.UPDATE_GAME_ROUND;
+  constructor(public payload: string) { }
+}
+
 
 
 export type GamePlayActions
@@ -138,4 +144,5 @@ export type GamePlayActions
   | GetUsersAnsweredQuestion
   | GetUsersAnsweredQuestionSuccess
   | SaveReportQuestion
-  | SaveReportQuestionSuccess;
+  | SaveReportQuestionSuccess
+  | UpdateGameRound;
