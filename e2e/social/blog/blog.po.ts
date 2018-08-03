@@ -1,5 +1,5 @@
 import { browser, element, by, Key } from 'protractor';
-export class QuestionPage {
+export class BlogPage {
     navigateTo() {
         return browser.get('/dashboard');
     }
@@ -9,19 +9,18 @@ export class QuestionPage {
             return titleElement.getText();
         }
     }
-    getQuestionTags() {
-        const tagElement = element(by.css('.question-tags span'));
-        if (tagElement.isPresent()) {
-            return tagElement.getText();
-        }
 
-    }
-    getTryAnotherButton() {
-        const buttonElement = element(by.cssContainingText('a', 'Try Another'));
+    getShareButton() {
+        const buttonElement = element(by.css('.share'));
         if (buttonElement.isPresent()) {
             return buttonElement;
         }
-
     }
 
+    getCloseButton() {
+        const buttonElement = element(by.css('.close-div'));
+        if (buttonElement.isPresent()) {
+            return buttonElement;
+        }
+    }
 }

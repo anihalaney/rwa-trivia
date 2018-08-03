@@ -12,9 +12,11 @@ export function scoreBoard(state: any = null, action: StatsActions): any {
     }
 }
 
-export function systemStat(state: any = null, action: StatsActions): SystemStats {
+export function systemStat(state: any = null, action: StatsActions): any {
     switch (action.type) {
         case StatsActionTypes.LOAD_SYSTEM_STAT_SUCCESS:
+            return action.payload;
+        case StatsActionTypes.LOAD_SYSTEM_STAT_ERROR:
             return action.payload;
         default:
             return state;

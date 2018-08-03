@@ -8,9 +8,9 @@ import { SocialEffects } from './social.effects';
 import { SocialService } from '../../../core/services/social.service';
 import {
     AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess, CheckSubscriptionStatus,
-    AddSubscriberError
+    AddSubscriberError, LoadBlogs, LoadBlogsSuccess, LoadBlogsError
 } from '../actions';
-import { Subscription, User, Subscribers } from '../../../model';
+import { Subscription, User, Subscribers, Blog, RouterStateUrl } from '../../../model';
 import { StoreModule, Store } from '@ngrx/store';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFirestore, AngularFirestoreModule } from 'angularfire2/firestore';
@@ -21,6 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { UserService } from '../../../core/services';
 import { UserActions } from '../../../core/store/actions';
+import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
+import { RoutesRecognized } from '@angular/router';
 
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
@@ -38,7 +40,10 @@ describe('Effects: SocialEffects', () => {
                 SocialEffects,
                 {
                     provide: SocialService,
-                    useValue: { getTotalSubscription: jest.fn(), checkSubscription: jest.fn(), saveSubscription: jest.fn() },
+                    useValue: {
+                        getTotalSubscription: jest.fn(), checkSubscription: jest.fn(), saveSubscription: jest.fn(),
+                        LoadBlogsSuccess: jest.fn()
+                    },
                 },
                 UserActions,
                 UserService,
@@ -131,7 +136,50 @@ describe('Effects: SocialEffects', () => {
         expect(effects.addSubscription$).toBeObservable(expected);
     });
 
+    it('get all blogs', () => {
+        const obj = TEST_DATA.blog;
+        // const action = new LoadBlogs();
+        const routerState: RouterStateUrl = { url: '/', queryParams: {}, params: {} };
+        const event: RoutesRecognized = new RoutesRecognized(1, '/', '', null);
+        const payload: RouterNavigationPayload<RouterStateUrl> = {
+            routerState,
+            event
+        };
+        const action: RouterNavigationAction<RouterStateUrl> = {
+            type: ROUTER_NAVIGATION,
+            payload
+        };
+        const completion = new LoadBlogsSuccess(TEST_DATA.blog);
+        actions$ = hot('-a----', { a: action });
+        const response = cold('-a|', { a: obj });
+        const expected = cold('--b', { b: completion });
+        socialService.loadBlogs = jest.fn(() => response);
+
+        expect(effects.getBlogs$).toBeObservable(expected);
+    });
+
+    it('get all blogs throws Error', () => {
+        const obj = TEST_DATA.blog;
+        // const action = new LoadBlogs();
+        const routerState: RouterStateUrl = { url: '/', queryParams: {}, params: {} };
+        const event: RoutesRecognized = new RoutesRecognized(1, '/', '', null);
+        const payload: RouterNavigationPayload<RouterStateUrl> = {
+            routerState,
+            event
+        };
+        const action: RouterNavigationAction<RouterStateUrl> = {
+            type: ROUTER_NAVIGATION,
+            payload
+        };
+        const completion = new LoadBlogsError('Error while getting Blogs');
+        const error = 'Error while getting Blogs';
 
 
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-#|', {}, error);
+        const expected = cold('--b', { b: completion });
+        socialService.loadBlogs = jest.fn(() => response);
+
+        expect(effects.getBlogs$).toBeObservable(expected);
+    });
 });
-
