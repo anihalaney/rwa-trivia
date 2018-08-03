@@ -27,7 +27,7 @@ const {
 
 enableProdMode();
 
-const app =  express();
+const app = express();
 
 // Set the engine
 app.engine(
