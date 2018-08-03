@@ -4,7 +4,7 @@ import { ActionWithPayload, QuestionActions } from '../actions';
 import { Question, SearchResults } from '../../../model';
 
 
-export function questionOfTheDay(state: any = [], action: ActionWithPayload<any>): any {
+export function questionOfTheDay(state: any = null, action: ActionWithPayload<any>): any {
   switch (action.type) {
     case QuestionActions.GET_QUESTION_OF_THE_DAY_SUCCESS:
       return action.payload;

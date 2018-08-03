@@ -95,14 +95,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.router.events.subscribe((evt) => {
-        if (!(evt instanceof NavigationEnd)) {
-          return;
-        }
-        this.windowRef.nativeWindow.scrollTo(0, 0);
-      });
-    }
+    this.router.events.subscribe((evt) => {
+      if (!(evt instanceof NavigationEnd)) {
+        return;
+      }
+      this.windowRef.nativeWindow.ga('set', 'page', evt.urlAfterRedirects);
+      this.windowRef.nativeWindow.ga('send', 'pageview');
+      this.windowRef.nativeWindow.scrollTo(0, 0);
+    });
   }
 
   ngOnDestroy() {

@@ -9,9 +9,8 @@
     <ng-container cdkColumnDef="friends">
       <mat-header-cell *cdkHeaderCellDef>Friends</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell" *cdkCellDef="let row">
-        <div class="profile" *ngIf="userDict[row.userId]?.profilePictureUrl">
-          <img *ngIf="!userDict[row.userId]?.profilePictureUrl" [src]="defaultAvatar" alt="Default Profile Picture" />
-          <img *ngIf="userDict[row.userId]?.profilePictureUrl" [src]="userDict[row.userId]?.profilePictureUrl" alt="User Profile Picture">
+        <div class="profile">
+          <img [src]="getImageUrl(userDict[row.userId])" alt="User Profile Image" />
         </div>
         <div class="display-name">
           <label *ngIf="userDict[row.userId]?.displayName" title="{{userDict[row.userId]?.displayName}}">{{userDict[row.userId]?.displayName}}</label>

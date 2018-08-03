@@ -61,7 +61,7 @@ export function socialShareImageUrl(state: any = null, action: SocialActions): U
 };
 
 // return blogs array
-export function blogs(state: any = [], action: SocialActions): Blog[] {
+export function blogs(state: any = null, action: SocialActions): any {
     switch (action.type) {
         case SocialActionTypes.LOAD_BLOGS_SUCCESS:
             return action.payload;

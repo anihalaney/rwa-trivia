@@ -1,6 +1,8 @@
-// import * as socialActions from '../actions/social.actions';
-import { Subscription, User, Subscribers } from '../../../model';
-import { AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess } from './social.actions'
+import { Subscription, User, Subscribers, Blog } from '../../../model';
+import {
+    AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess,
+    LoadBlogs, LoadBlogsSuccess
+} from './social.actions'
 import { SocialActionTypes } from './social.actions';
 import { TEST_DATA } from '../../../testing/test.data';
 
@@ -49,5 +51,22 @@ describe('GetTotalSubscriberSuccess', async () => {
         const action = new GetTotalSubscriberSuccess(subscribers);
         expect(action.type).toEqual(SocialActionTypes.TOTAL_SUBSCRIBER_SUCCESS);
         expect(action.payload).toEqual(subscribers);
+    });
+});
+
+describe('LoadBlogs', async () => {
+    it('should create an action', () => {
+        const action = new LoadBlogs();
+        expect(action.type).toEqual(SocialActionTypes.LOAD_BLOGS);
+        expect(action.payload).toEqual(null);
+    });
+});
+
+describe('LoadBlogsSuccess', async () => {
+    it('should create an action', () => {
+        const blog: Blog[] = TEST_DATA.blog;
+        const action = new LoadBlogsSuccess(blog);
+        expect(action.type).toEqual(SocialActionTypes.LOAD_BLOGS_SUCCESS);
+        expect(action.payload).toEqual(blog);
     });
 });
