@@ -5,4 +5,3 @@ exports.onFirestoreGameCreate = require('./server/functions/db/firebase-function
 exports.onFirestoreGameUpdate = require('./server/functions/db/firebase-functions').onGameUpdate;
 exports.onFirestoreUserCreate = require('./server/functions/db/firebase-functions').onUserCreate;
 exports.onFirestoreUserUpdate = require('./server/functions/db/firebase-functions').onUserUpdate;
-exports.ssr = require('./server/functions/ssr').ssr;
