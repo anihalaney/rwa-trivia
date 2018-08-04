@@ -42,6 +42,7 @@ functions/node_modules/
 functions/server/
 functions/config/
 functions/package-lock.json
+functions/dist/
 package-lock.json
 firebase-debug.log
 

@@ -1,6 +1,9 @@
 {
   "name": "functions",
   "description": "Cloud Functions for Firebase",
+  "engines": {
+    "node": "8"
+  },
   "dependencies": {
     "body-parser": "1.18.3",
     "cookie-parser": "1.4.3",
@@ -9,8 +12,8 @@
     "elasticsearch": "15.0.0",
     "express": "4.16.3",
     "feed-to-json": "^1.0.3",
-    "firebase-admin": "^5.12.1",
-    "firebase-functions": "^1.1.0",
+    "firebase-admin": "^5.13.1",
+    "firebase-functions": "^2.0.2",
     "fs": "0.0.1-security",
     "node-fetch": "^2.2.0",
     "nodemailer": "^4.6.7",
