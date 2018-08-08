@@ -67,7 +67,7 @@ export class AuthenticationProvider {
     },
       (err) => {
         return throwError(err);
-    }));
+      }));
   }
 
 

@@ -296,6 +296,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       this.continueNext = false;
       this.store.dispatch(new gameplayactions.ResetCurrentGame());
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.store.dispatch(new gameplayactions.UpdateGameRound(this.game.gameId));
       this.router.navigate(['/dashboard'])
     } else {
       this.questionAnswered = false;
