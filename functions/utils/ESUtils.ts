@@ -142,18 +142,22 @@ export class ESUtils {
       .then((response) => {
         const body = [];
         // TODO: build bulk index in batches (maybe 1000 at a time)
-        data.forEach(d => {
-          body.push({ index: { index: index, type: d.type, _id: d.id } });
-          body.push(d.source);
-        });
-        client.bulk({ 'body': body }).then(resp => {
-          ;
-          console.log('All items indexed');
-        })
+        let arrayLength = data.length
+        const batchSize = 500;
+        for (let i = 0; i < arrayLength; i += batchSize) {
+          let batchData = data.slice(i, i + batchSize);
+          batchData.forEach(d => {
+            body.push({ index: { _index: index, _type: d.type, _id: d.id } });
+            body.push(d.source);
+          });
+          client.bulk({ 'body': body }).then(resp => {
+            console.log('All items indexed');
+          })
           .catch((error) => {
             console.log(error);
             throw (error);
           });
+        }
       })
       .catch((error) => {
         console.log(error);

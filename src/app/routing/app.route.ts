@@ -18,25 +18,25 @@ export const routes: Routes = [
   },
   {
     path: 'my',
-    loadChildren: 'app/user/user.module#UserModule',
+    loadChildren: '../user/user.module#UserModule',
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'game-play',
-    loadChildren: 'app/game-play/game-play.module#GamePlayModule',
+    loadChildren: '../game-play/game-play.module#GamePlayModule',
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {
     path: 'admin',
-    loadChildren: 'app/admin/admin.module#AdminModule',
+    loadChildren: '../admin/admin.module#AdminModule',
     canActivate: [AuthGuard],
     canLoad: [AdminLoadGuard]
   },
   {
     path: 'bulk',
-    loadChildren: 'app/bulk/bulk.module#BulkModule',
+    loadChildren: '../bulk/bulk.module#BulkModule',
     canActivate: [AuthGuard],
     canLoad: [BulkLoadGuard]
   },

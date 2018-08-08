@@ -26,6 +26,8 @@ export class LeaderboardComponent implements OnDestroy {
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;
 
+  defaultAvatar = 'assets/images/default-avatar-small.png';
+
   constructor(private store: Store<AppState>,
     private userActions: UserActions) {
     this.categoryDict$ = store.select(categoryDictionary);
@@ -37,7 +39,7 @@ export class LeaderboardComponent implements OnDestroy {
 
     this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
 
-      if (lbsStat !== null) {
+      if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
         if (this.leaderBoardCat.length > 0) {
@@ -61,6 +63,10 @@ export class LeaderboardComponent implements OnDestroy {
 
   displayMore(): void {
     this.lbsUsersSliceLastIndex = this.lbsUsersSliceLastIndex + 7;
+  }
+
+  getImageUrl(user: User) {
+    return Utils.getImageUrl(user, 44, 40, '44X40');
   }
 
   ngOnDestroy() {
