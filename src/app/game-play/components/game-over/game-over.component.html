@@ -13,10 +13,9 @@
     </div>
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="yourimg">
-        <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
-        <img *ngIf="user?.profilePictureUrl " [src]="user.profilePictureUrl " alt="yourimg">
+        <img [src]="getImageUrl(user)" alt="User Profile Image" />
       </div>
-      <label href="# " class="dark text-style ">You</label>
+      <label href="#" id="you" class="dark text-style ">{{playerUserName}}</label>
       <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}}</div>
       <div class="div-top-spacing score-div-height">
@@ -30,10 +29,9 @@
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
       <div class="col-sm-3 col-sm-offset-3">
         <div class="yourimg" [ngClass]="{'vs': game.playerIds.length>1 }">
-          <img *ngIf="!user?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
-          <img *ngIf="user?.profilePictureUrl" [src]="user.profilePictureUrl" alt="yourimg">
+          <img [src]="getImageUrl(user)" alt="User Profile Image" />
         </div>
-        <label href="#" class="dark text-style">You</label>
+        <label href="#" class="dark text-style">{{playerUserName}}</label>
         <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
         <div class="div-top-spacing">
@@ -47,8 +45,7 @@
       </div>
       <div class="col-sm-3 yourimg-spacing">
         <div class="yourimg">
-          <img *ngIf="!otherUserInfo?.profilePictureUrl" src="assets/images/default-avatar.png" alt="yourimg">
-          <img *ngIf="otherUserInfo?.profilePictureUrl" [src]="otherUserInfo.profilePictureUrl" alt="yourimg">
+          <img [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{otherUserInfo?.displayName}}</label>
         <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
@@ -65,11 +62,11 @@
     <div class="div-top-spacing win-icon-div">
       <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score > game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score !== 3)">
         <div class="sprite thumb-up"></div>
-        <span class="win-text">You Win</span>
+        <span class="win-text">{{playerUserName}} Wins</span>
       </div>
       <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score < game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score === 3)">
         <div class="sprite thumb-down"></div>
-        <span class="win-text">You Lose</span>
+        <span class="win-text">{{playerUserName}} Lose</span>
       </div>
       <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score == game.stats[otherUserId].score)">
         <div class="sprite thumb-up"></div>
@@ -80,13 +77,14 @@
   </mat-card-content>
   <mat-card-content class="textcenter">
     <div class="button-div">
-      <div class="win-icon spacing-bottom">
-        <social-palette *ngIf="blogData[0].share_status" class="spacing position" [blogData]="blogData[0]" (notify)="onNotify($event)"
-          [isFromBlog]=false></social-palette>
-        <button class="btn-share" type="button" (click)="shareScore()" [disabled]="blogData[0].share_status" [ngClass]="blogData[0].share_status?'hide-share-btn':'show-share-btn'">Share</button>
+      <div class="win-icon spacing-bottom" *ngIf="socialFeedData">
+        <social-palette *ngIf="socialFeedData.share_status && !loaderStatus" class="spacing position" [blogData]="socialFeedData"
+          (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
+        <img *ngIf="loaderStatus" src="/assets/images/ajax-loader.gif" class="share-loaderimage" />
+        <button class="btn-share" type="button" (click)="shareScore()" [disabled]="socialFeedData.share_status" [ngClass]="socialFeedData.share_status?'hide-share-btn':'show-share-btn'">Share</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">Rematch</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play Again</button>
-        <img src="/assets/images/ajax-loader.gif" class="rematch-loaderimage" *ngIf="disableRematchBtn">
+        <img *ngIf="disableRematchBtn" src="/assets/images/ajax-loader.gif" class="rematch-loaderimage" alt="Loader Image">
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
     </div>
@@ -101,7 +99,7 @@
 
           <mat-panel-description>
             <div class="col-xs-12" *ngIf="questionsArray.length == 0">
-              <img src="/assets/images/ajax-loader.gif" class="loaderimage">
+              <img src="/assets/images/ajax-loader.gif" class="loaderimage" alt="Loader Image">
             </div>
             <ul class="questions" *ngIf="questionsArray.length != 0">
               <li class="question-section" *ngFor="let row  of questionsArray;let i=index;">

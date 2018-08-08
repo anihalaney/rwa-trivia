@@ -2,8 +2,13 @@ import { SearchCriteria, Game, GameOperations, PlayerQnA, GameStatus, schedulerC
 import { Utils } from '../utils/utils';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
+const socialGameService = require('../services/social.service');
 const utils: Utils = new Utils();
+const fs = require('fs');
+const request = require('request');
+const path = require('path');
 
 /**
  * createGame
@@ -92,6 +97,9 @@ exports.updateGame = (req, res) => {
                 );
                 game.playerQnAs[index] = playerQnA;
                 break;
+            case GameOperations.UPDATE_ROUND:
+                game = gameMechanics.updateRound(game, userId);
+                break;
         }
         dbGame = game.getDbModel();
 
@@ -172,6 +180,67 @@ exports.changeGameTurn = (req, res) => {
             })
         });
         res.send('scheduler check is completed');
+    });
+};
+
+
+
+/**
+ * createSocialContent
+ * return htmlcontent
+ */
+exports.createSocialContent = (req, res) => {
+
+    let websiteUrl = `${req.protocol}://`;
+
+    if (functions.config().elasticsearch &&
+        functions.config().elasticsearch.index &&
+        functions.config().elasticsearch.index.production &&
+        functions.config().elasticsearch.index.production === 'true') {
+        websiteUrl += 'bitwiser.io'
+    } else {
+        websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com'
+    }
+
+    const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;
+
+    const htmlContent = `<!DOCTYPE html>
+                       <html>
+                        <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb#">
+                          <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+                          <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=contain">
+                          <meta property="og:locale" content="en_US" />
+                          <meta property="og:type" content="article" />
+                          <meta property="og:title" content="Bitwiser Game Score">
+                          <meta property="og:description" content="Bitwiser Game Score">
+                          <meta property="og:url"  content="${imageUrl}">
+                          <meta property="og:image" content="${imageUrl}">
+                          <meta name="twitter:card" content="summary_large_image"/>
+                          <meta name="twitter:title" content="Bitwiser Game Score"/>
+                          <meta name="twitter:description" content="Bitwiser Game Score">
+                          <meta name="twitter:site" content="@${websiteUrl}"/>
+                          <meta name="twitter:image" content="${imageUrl}"/>
+                        </head>
+                        <body>
+                         <img src="${imageUrl}" />
+                        </body>
+                      </html>`;
+
+    res.setHeader('content-type', 'text/html');
+    res.send(htmlContent);
+};
+
+
+/**
+ * createSocialImage
+ * return file
+ */
+exports.createSocialImage = (req, res) => {
+    const socialId = req.params.socialId;
+    socialGameService.generateSocialUrl(req.params.userId, socialId).then((social_url) => {
+        res.setHeader('content-disposition', 'attachment; filename=social_image.png');
+        res.setHeader('content-type', 'image/png');
+        res.send(social_url)
     });
 };
 

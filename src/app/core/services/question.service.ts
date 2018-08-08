@@ -30,7 +30,6 @@ export class QuestionService {
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
     const url: string = CONFIG.functionsUrl + '/app/question/';
-    // let url: string = "https://us-central1-rwa-trivia.cloudfunctions.net/app/day/";
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }

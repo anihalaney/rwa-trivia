@@ -6,7 +6,7 @@ import { Actions } from '@ngrx/effects';
 import { TEST_DATA } from '../../../testing/test.data';
 import { StatsEffects } from './stats.effects';
 import { StatsService } from '../../../core/services/stats.service';
-import { LoadLeaderBoard, LoadLeaderBoardSuccess } from '../actions';
+import { LoadLeaderBoard, LoadLeaderBoardSuccess, LoadSystemStat, LoadSystemStatSuccess } from '../actions';
 import { StoreModule, Store } from '@ngrx/store';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFirestore, AngularFirestoreModule } from 'angularfire2/firestore';
@@ -29,7 +29,7 @@ describe('Effects: StatsEffects', () => {
                 StatsEffects,
                 {
                     provide: StatsService,
-                    useValue: { getTotalSubscription: jest.fn(), checkSubscription: jest.fn(), saveSubscription: jest.fn() },
+                    useValue: { loadSystemStat: jest.fn(), loadLeaderBoardStat: jest.fn() },
                 },
                 provideMockActions(() => actions$),
                 {
@@ -55,4 +55,16 @@ describe('Effects: StatsEffects', () => {
         statsService.loadLeaderBoardStat = jest.fn(() => response);
         expect(effects.LoadLeaderBoardInfo$).toBeObservable(expected);
     });
+
+    it('LoadSystemStat', () => {
+        const data = TEST_DATA.realTimeStats;
+        const action = new LoadSystemStat();
+        const completion = new LoadSystemStatSuccess(data);
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: data });
+        const expected = cold('--b', { b: completion });
+        statsService.loadSystemStat = jest.fn(() => response);
+        expect(effects.LoadSystemStat$).toBeObservable(expected);
+    });
+
 });
