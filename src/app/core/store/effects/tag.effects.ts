@@ -3,7 +3,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { RouterStateUrl } from '../../../model';
 import { TagActions } from '../actions';
 import { TagService } from '../../services'
-import { map, filter } from 'rxjs/operators';
+import { map, filter, switchMap } from 'rxjs/operators';
 
 @Injectable()
 export class TagEffects {
@@ -23,7 +23,12 @@ export class TagEffects {
             filter((routerState: RouterStateUrl) =>
                 routerState.url.toLowerCase().startsWith('/')
             ))
-        .pipe(() => this.svc.getTags())
-        .pipe(map((tags: string[]) => this.tagActions.loadTagsSuccess(tags)));
+        .pipe(
+        switchMap(() => 
+        this.svc.getTags()
+        .pipe(
+            map((tags: string[]) => this.tagActions.loadTagsSuccess(tags))
+        )));
 
 }
+
