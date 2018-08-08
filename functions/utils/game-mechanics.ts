@@ -170,6 +170,27 @@ export class GameMechanics {
 
     }
 
-
-
+    public updateRound(game: Game, userId: string): Game {
+        if (game.playerQnAs.length > 0) {
+            game.round = (game.round) ? game.round : game.stats[userId]['round'];
+            const otherPlayerUserId = game.playerIds.filter(playerId => playerId !== userId)[0];
+            const currentUserQuestions = game.playerQnAs.filter((pastPlayerQnA) =>
+                pastPlayerQnA.playerId === userId);
+            const otherUserQuestions = game.playerQnAs.filter((pastPlayerQnA) => pastPlayerQnA.playerId === otherPlayerUserId
+            );
+            if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
+                currentUserQuestions.length > 0 && otherUserQuestions.length > 0) {
+                const lastcurrentUserQuestion = currentUserQuestions[currentUserQuestions.length - 1];
+                const lastotherUserQuestions = otherUserQuestions[otherUserQuestions.length - 1];
+                lastcurrentUserQuestion.round = (lastcurrentUserQuestion.round) ? lastcurrentUserQuestion.round : game.round;
+                lastotherUserQuestions.round = (lastotherUserQuestions.round) ? lastotherUserQuestions.round : game.round;
+                if (lastcurrentUserQuestion.round === lastotherUserQuestions.round
+                    && !lastcurrentUserQuestion.answerCorrect
+                    && !lastotherUserQuestions.answerCorrect) {
+                    game.round = game.round + 1;
+                }
+            }
+        }
+        return game;
+    }
 }

@@ -1,9 +1,11 @@
-import { Component, Input, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, HostListener, Inject } from '@angular/core';
 import { Observable, Subscription, pipe } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { AppState, appState, categoryDictionary } from '../../store';
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Utils, WindowRef } from '../../core/services';
 import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
 import * as gameplayactions from '../../game-play/store/actions';
@@ -45,7 +47,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>,
     private questionActions: QuestionActions,
     private gameActions: GameActions,
-    private userActions: UserActions, private windowRef: WindowRef) {
+    private userActions: UserActions, private windowRef: WindowRef,
+    @Inject(PLATFORM_ID) private platformId: Object) {
     this.questionOfTheDay$ = store.select(appState.coreState).pipe(select(s => s.questionOfTheDay));
     this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -165,11 +168,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
   }
-  @HostListener('window: resize', ['$event'])
-  onResize(event) {
-    this.screenWidth = event.target.innerWidth;
-    this.checkCardCountPerRow();
-  }
+  // @HostListener('window: resize', ['$event'])
+  // onResize(event) {
+  //   this.screenWidth = event.target.innerWidth;
+  //   this.checkCardCountPerRow();
+  // }
 }
 
 
