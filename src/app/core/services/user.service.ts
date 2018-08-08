@@ -39,7 +39,11 @@ export class UserService {
                         user.stats = u.stats;
                     }
                 } else {
-                    this.saveUserProfile(user);
+                    //  this.saveUserProfile(user);
+                    const dbUser = Object.assign({}, user); // object to be saved
+                    delete dbUser.authState;
+                    delete dbUser.profilePictureUrl;
+                    this.db.doc(`/users/${user.userId}`).set(dbUser);
                 }
 
                 return user;

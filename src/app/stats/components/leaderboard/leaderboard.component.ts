@@ -39,7 +39,7 @@ export class LeaderboardComponent implements OnDestroy {
 
     this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
 
-      if (lbsStat !== null) {
+      if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
         if (this.leaderBoardCat.length > 0) {

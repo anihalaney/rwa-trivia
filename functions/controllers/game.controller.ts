@@ -97,6 +97,9 @@ exports.updateGame = (req, res) => {
                 );
                 game.playerQnAs[index] = playerQnA;
                 break;
+            case GameOperations.UPDATE_ROUND:
+                game = gameMechanics.updateRound(game, userId);
+                break;
         }
         dbGame = game.getDbModel();
 

@@ -1,4 +1,3 @@
-
 const functions = require('firebase-functions');
 const auth = require('./middlewares/auth');
 const parse = require('csv').parse;

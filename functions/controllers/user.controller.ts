@@ -70,11 +70,17 @@ exports.generateUserProfileImage = (req, res) => {
     const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
     const user = req.body.user;
 
-    profileImagesGenerator.
-        getStoredImage(user.userId, user.profilePicture).then((status) => {
-            userService.setUser(user).then((ref) => {
-                res.send({ 'status': 'Profile Data is saved !!' })
-            });
-        })
+    if (user.profilePicture) {
+        profileImagesGenerator.
+            getStoredImage(user.userId, user.profilePicture).then((status) => {
+                userService.setUser(user).then((ref) => {
+                    res.send({ 'status': 'Profile Data is saved !!' })
+                });
+            })
 
+    } else {
+        userService.setUser(user).then((ref) => {
+            res.send({ 'status': 'Profile Data is saved !!' })
+        });
+    }
 };

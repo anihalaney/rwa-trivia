@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore } from 'angularfire2/firestore';
@@ -10,7 +10,9 @@ import { AppState, appState } from '../../store';
 import { LoginComponent } from '../components';
 import { UserActions, UIStateActions } from '../store/actions';
 import { User } from '../../model';
+import { isPlatformBrowser } from '@angular/common';
 import * as firebase from 'firebase/app';
+import { IfStmt } from '@angular/compiler';
 
 @Injectable()
 export class AuthenticationProvider {
@@ -23,7 +25,9 @@ export class AuthenticationProvider {
     private uiStateActions: UIStateActions,
     public afAuth: AngularFireAuth,
     private db: AngularFirestore,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string) {
 
 
     this.afAuth.authState.subscribe(afUser => {
@@ -46,9 +50,12 @@ export class AuthenticationProvider {
   }
 
   ensureLogin = function (url?: string) {
-    if (!this.isAuthenticated) {
-      this.showLogin(url);
+    if (isPlatformBrowser(this.platformId)) {
+      if (!this.isAuthenticated) {
+        this.showLogin(url);
+      }
     }
+
   };
 
   generateToken = function (flag) {
@@ -67,7 +74,7 @@ export class AuthenticationProvider {
     },
       (err) => {
         return throwError(err);
-    }));
+      }));
   }
 
 
