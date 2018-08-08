@@ -2,4 +2,8 @@
 const ssrFunction = require('firebase-functions');
 const ngApp = require('./server').app;
 
-exports.ssr = ssrFunction.https.onRequest(ngApp);
+const runtimeOpts = {
+    memory: '512MB'
+}
+
+exports.ssr = ssrFunction.runWith(runtimeOpts).https.onRequest(ngApp);
