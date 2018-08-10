@@ -12,15 +12,12 @@ import { reducers, CustomSerializer } from './store';
 import { CoreModule } from './core/core.module';
 import { SharedModule } from '../../../shared/shared.module';
 import { RoutingModule } from './routing/routing.module';
-//import { MyQuestionsModule } from  './myQuestions/my-questions.module';
-import { GamePlayModule } from './game-play/game-play.module';
-import { SocialModule } from './social/social.module';
-import { UserModule } from './user/user.module';
-import { StatsModule } from './stats/stats.module';
+
+
 
 import {
   AppComponent, DashboardComponent,
-  SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent
+  HeaderComponent, FooterComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -29,10 +26,8 @@ import { environment } from '../environments/environment';
   declarations: [
     AppComponent,
     DashboardComponent,
-    SideNavComponent,
     HeaderComponent,
-    FooterComponent,
-    InvitationRedirectionComponent
+    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -43,19 +38,16 @@ import { environment } from '../environments/environment';
     StoreDevtoolsModule.instrument({
       maxAge: 20
     }),
-    //StoreModule.forRoot(reducers),
+
     StoreRouterConnectingModule,
 
     //rwa modules
     CoreModule,
     SharedModule,
     RoutingModule,
-    // MyQuestionsModule,
-    GamePlayModule,
-    SocialModule,
-    UserModule,
-    StatsModule,
-    BrowserModule.withServerTransition({ appId: 'trivia' }),
+
+
+    BrowserModule.withServerTransition({ appId: 'trivia-admin' }),
     //BrowserTransferStateModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],

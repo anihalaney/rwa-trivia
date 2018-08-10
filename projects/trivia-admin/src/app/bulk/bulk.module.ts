@@ -7,7 +7,7 @@ import { BulkRoutingModule } from './routing/bulk-routing.module';
 import { effects, reducer } from './store';
 
 import {
-  BulkDetailsComponent, BulkUploadComponent, BulkSummaryComponent,
+  BulkDetailsComponent, BulkSummaryComponent,
   BulkSummaryTableComponent, BulkSummaryQuestionComponent
 } from './components';
 import { PapaParseModule } from 'ngx-papaparse';
@@ -16,7 +16,6 @@ import { PapaParseModule } from 'ngx-papaparse';
 @NgModule({
   declarations: [
     BulkDetailsComponent,
-    BulkUploadComponent,
     BulkSummaryComponent,
     BulkSummaryTableComponent,
     BulkSummaryQuestionComponent

@@ -12,7 +12,7 @@ import { UserActions, UIStateActions } from '../store/actions';
 import { User } from '../../../../../model';
 import { isPlatformBrowser } from '@angular/common';
 import * as firebase from 'firebase/app';
-import { IfStmt } from '@angular/compiler';
+
 
 @Injectable()
 export class AuthenticationProvider {

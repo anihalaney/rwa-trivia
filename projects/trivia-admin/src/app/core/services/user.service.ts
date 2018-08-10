@@ -11,7 +11,7 @@ import { User, Invitation, Friends } from '../../../../../model';
 import { ObservableInput } from 'rxjs';
 import { CONFIG } from '../../../environments/environment';
 import { UserActions } from '../../core/store/actions';
-import * as useractions from '../../user/store/actions';
+
 
 
 
@@ -82,32 +82,5 @@ export class UserService {
         }
     }
 
-    setSubscriptionFlag(userId: string) {
-        this.db.doc(`/users/${userId}`).update({ isSubscribed: true });
-    }
 
-    saveUserInvitations(obj: any): Observable<boolean> {
-        const invitation = new Invitation();
-        invitation.created_uid = obj.created_uid;
-        invitation.status = obj.status;
-        const email = this.db.firestore.batch();
-        obj.emails.map((element) => {
-            invitation.email = element;
-            const dbInvitation = Object.assign({}, invitation); // object to be saved
-            const id = this.db.createId();
-            dbInvitation.id = id;
-            email.set(this.db.firestore.collection('invitations').doc(dbInvitation.id), dbInvitation);
-        });
-        email.commit();
-        return of(true);
-    }
-
-    checkInvitationToken(obj: any): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/friend`;
-        return this.http.post<any>(url, obj);
-    }
-
-    loadUserFriends(userId: string): Observable<Friends> {
-        return this.db.doc<Friends>(`/friends/${userId}`).valueChanges();
-    }
 }

@@ -15,6 +15,10 @@ import {
   QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent
 } from './components';
 
+import {
+  Utils
+} from './services';
+
 @NgModule({
   declarations: [
     QuestionComponent,
@@ -48,6 +52,7 @@ import {
 
   ],
   providers: [
+    Utils
   ],
   exports: [QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
     CommonModule, HttpClientModule, ReactiveFormsModule,

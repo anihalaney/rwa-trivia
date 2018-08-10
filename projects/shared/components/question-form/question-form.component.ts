@@ -1,13 +1,13 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Utils } from '../../../core/services';
+import { Utils } from '../../../shared/services';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Question, QuestionStatus, Category, User, Answer } from '../../../model';
 
-import { AppState, appState, getCategories, getTags } from '../../../store';
-import * as bulkActions from '../../../bulk/store/actions';
+import { AppState, appState, getCategories, getTags } from '../../../../projects/trivia-admin/src/app/store';
+import * as bulkActions from '../../../../projects/trivia-admin/src/app/bulk/store';
 
 @Component({
   selector: 'app-question-form',

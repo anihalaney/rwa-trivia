@@ -2,7 +2,7 @@ import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } 
 import { PageEvent, MatCheckboxChange, MatSelectChange } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState } from '../../../store';
+import { AppState, appState } from '../../../../projects/trivia-admin/src/app/store';
 import { Observable } from 'rxjs';
 
 import { Question, QuestionStatus, Category, SearchResults } from '../../../model';
@@ -26,10 +26,10 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
   totalCount: number;
 
   categoriesObs: Observable<Category[]>;
-  categoryAggregation: {[key: number]: number};
-  tagsCount: {tag: string, count: number}[];
-  tagsChecked: {[key: string]: boolean};
-  
+  categoryAggregation: { [key: number]: number };
+  tagsCount: { tag: string, count: number }[];
+  tagsChecked: { [key: string]: boolean };
+
   constructor(private store: Store<AppState>) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
   }
