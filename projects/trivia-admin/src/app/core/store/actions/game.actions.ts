@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
 import { Observable } from 'rxjs';
-import { User, Game } from '../../../model';
+import { User, Game } from '../../../../../../model';
 
 @Injectable()
 export class GameActions {

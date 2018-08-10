@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
-import { User } from '../../../model';
+import { User } from '../../../../../../model';
 
 @Component({
   selector: 'user-stats-card',

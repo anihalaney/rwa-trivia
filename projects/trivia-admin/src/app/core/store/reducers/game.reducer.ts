@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 
 import { ActionWithPayload, GameActions, UserActions } from '../actions';
-import { Game } from '../../../model';
+import { Game } from '../../../../../../model';
 
 export function activeGames(state: any = [], action: ActionWithPayload<Game[]>): Game[] {
   switch (action.type) {

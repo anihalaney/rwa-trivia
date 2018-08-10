@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { User, Question, Game, Friends } from '../../../model';
+import { User, Question, Game, Friends } from '../../../../../../model';
 import { UserActions, UserActionTypes } from '../actions';
 
 

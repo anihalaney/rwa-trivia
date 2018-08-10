@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
-import { User } from '../../../model';
+import { User } from '../../../../../../model';
 
 @Component({
   selector: 'admin-dashboard',

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User } from '../../../model';
+import { User } from '../../../../../../model';
 
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
@@ -14,14 +14,14 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
   }
 }
 
-export function userDict(state: {[key: string]: User } = {}, action: ActionWithPayload<User>): { [key: string]: User } {
+export function userDict(state: { [key: string]: User } = {}, action: ActionWithPayload<User>): { [key: string]: User } {
   switch (action.type) {
     case UserActions.LOAD_OTHER_USER_PROFILE_SUCCESS:
-          const users = {...state };
-          if (action.payload) {
-            users[action.payload.userId] = { ...action.payload };
-          }
-          return users;
+      const users = { ...state };
+      if (action.payload) {
+        users[action.payload.userId] = { ...action.payload };
+      }
+      return users;
     default:
       return state;
   }

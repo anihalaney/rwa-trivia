@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { leaderBoardState } from '../../store';
 import * as StatActions from '../../store/actions';
-import { SystemStats } from '../../../model';
+import { SystemStats } from '../../../../../../model';
 
 @Component({
   selector: 'realtime-stats',

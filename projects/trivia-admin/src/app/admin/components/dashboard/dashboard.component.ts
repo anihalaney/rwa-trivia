@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { QuestionActions } from '../../../core/store/actions';
-import { Category, SearchResults } from '../../../model';
+import { Category, SearchResults } from '../../../../../../model';
 
 @Component({
   selector: 'dashboard',

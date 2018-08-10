@@ -16,7 +16,7 @@ import {
   Game, GameOptions, GameMode, PlayerQnA,
   User, Question, Category, GameStatus,
   PlayerMode, OpponentType
-} from '../../../model';
+} from '../../../../../../model';
 import { AppState, appState } from '../../../store';
 
 @Component({

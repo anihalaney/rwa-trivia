@@ -5,7 +5,7 @@ import { Observable, forkJoin, combineLatest, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
 import { CONFIG } from '../../../environments/environment';
-import { User, GameOptions, Game, Question, PlayerQnA, GameOperations, GameStatus, ReportQuestion, QuestionMetadata } from '../../model';
+import { User, GameOptions, Game, Question, PlayerQnA, GameOperations, GameStatus, ReportQuestion, QuestionMetadata } from '../../../../../model';
 import { GameActions } from '../store/actions';
 
 @Injectable()
@@ -61,22 +61,22 @@ export class GameService {
 
     return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, userGames6, OtherGames2, OtherGames3)
       .pipe(
-      map(games => [].concat.apply([], games)),
-      map(gs => gs.map(g => Game.getViewModel(g))),
-      map(games => {
-        let myTurnGames = [];
-        let notMyTurnGames = [];
-        games.map(gameObj => {
-          if (gameObj.nextTurnPlayerId === user.userId) {
-            myTurnGames.push(gameObj);
-          } else {
-            notMyTurnGames.push(gameObj);
-          }
-        });
-        myTurnGames = myTurnGames.sort((a: any, b: any) => { return (a.turnAt - b.turnAt) });
-        notMyTurnGames = notMyTurnGames.sort((a: any, b: any) => { return (b.turnAt - a.turnAt) });
-        return myTurnGames.concat(notMyTurnGames);
-      }));
+        map(games => [].concat.apply([], games)),
+        map(gs => gs.map(g => Game.getViewModel(g))),
+        map(games => {
+          let myTurnGames = [];
+          let notMyTurnGames = [];
+          games.map(gameObj => {
+            if (gameObj.nextTurnPlayerId === user.userId) {
+              myTurnGames.push(gameObj);
+            } else {
+              notMyTurnGames.push(gameObj);
+            }
+          });
+          myTurnGames = myTurnGames.sort((a: any, b: any) => { return (a.turnAt - b.turnAt) });
+          notMyTurnGames = notMyTurnGames.sort((a: any, b: any) => { return (b.turnAt - a.turnAt) });
+          return myTurnGames.concat(notMyTurnGames);
+        }));
   }
 
   getGame(gameId: string): Observable<Game> {
@@ -131,10 +131,10 @@ export class GameService {
 
     return combineLatest(query1, query2)
       .pipe(
-      map((data) => data[0].concat(data[1])),
-      map(gs => gs.map(g => Game.getViewModel(g))
-        .sort((a: any, b: any) => { return b.turnAt - a.turnAt; })
-      )
+        map((data) => data[0].concat(data[1])),
+        map(gs => gs.map(g => Game.getViewModel(g))
+          .sort((a: any, b: any) => { return b.turnAt - a.turnAt; })
+        )
       );
   }
 
@@ -154,9 +154,9 @@ export class GameService {
 
     return combineLatest(query1, query2)
       .pipe(map((data) => data[0].concat(data[1])),
-      map(gs => gs.map(g => Game.getViewModel(g))
-        .sort((a: any, b: any) => { return b.turnAt - a.turnAt; })
-      )
+        map(gs => gs.map(g => Game.getViewModel(g))
+          .sort((a: any, b: any) => { return b.turnAt - a.turnAt; })
+        )
       );
   }
 
@@ -185,19 +185,19 @@ export class GameService {
     return this.db.collection(`/report_questions`, ref => ref.where('created_uid', '==', report.created_uid).
       where('gameId', '==', report.gameId))
       .valueChanges().pipe(
-      take(1),
-      map(question => {
-        if (question.length > 0) {
-          const reportQuestion = new ReportQuestion();
-          reportQuestion.questions = question[0]['questions'];
-          const key = Object.keys(report.questions)[0];
-          reportQuestion.questions[key] = report.questions[key];
-          return of(this.db.doc(`/report_questions/${dbReport.gameId}`).update({ questions: reportQuestion.questions }));
+        take(1),
+        map(question => {
+          if (question.length > 0) {
+            const reportQuestion = new ReportQuestion();
+            reportQuestion.questions = question[0]['questions'];
+            const key = Object.keys(report.questions)[0];
+            reportQuestion.questions[key] = report.questions[key];
+            return of(this.db.doc(`/report_questions/${dbReport.gameId}`).update({ questions: reportQuestion.questions }));
 
-        } else {
-          return of(this.db.doc(`/report_questions/${dbReport.gameId}`).set(dbReport));
-        }
-      }));
+          } else {
+            return of(this.db.doc(`/report_questions/${dbReport.gameId}`).set(dbReport));
+          }
+        }));
   }
 
   updateGame(report: ReportQuestion, game: Game): Observable<any> {

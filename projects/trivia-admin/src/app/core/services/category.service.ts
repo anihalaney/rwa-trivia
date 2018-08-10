@@ -3,7 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { Category } from '../../model/category';
+import { Category } from '../../../../../model/category';
 
 @Injectable()
 export class CategoryService {

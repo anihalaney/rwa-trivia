@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../../user/store/actions';
-import { User } from '../../../model';
+import { User } from '../../../../../../model';
 import { userState } from '../../store';
 
 @Component({

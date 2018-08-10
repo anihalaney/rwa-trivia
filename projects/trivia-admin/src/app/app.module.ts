@@ -10,7 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers, CustomSerializer } from './store';
 
 import { CoreModule } from './core/core.module';
-import { SharedModule } from './shared/shared.module';
+import { SharedModule } from '../../../shared/shared.module';
 import { RoutingModule } from './routing/routing.module';
 //import { MyQuestionsModule } from  './myQuestions/my-questions.module';
 import { GamePlayModule } from './game-play/game-play.module';

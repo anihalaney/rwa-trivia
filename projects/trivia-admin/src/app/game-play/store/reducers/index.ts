@@ -1,6 +1,6 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { Game, Question } from '../../../model';
+import { Game, Question } from '../../../../../../model';
 import {
   currentGame, newGameId, currentGameQuestion, updateGame, gameInvites, userAnsweredQuestion,
   saveReportQuestion

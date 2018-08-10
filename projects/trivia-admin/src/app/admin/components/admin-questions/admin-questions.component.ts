@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 
 import { PageEvent } from '@angular/material';
 import { AppState, appState, categoryDictionary } from '../../../store/app-store';
-import { User, Question, Category, SearchResults, SearchCriteria } from '../../../model';
+import { User, Question, Category, SearchResults, SearchCriteria } from '../../../../../../model';
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
