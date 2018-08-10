@@ -1,0 +1,155 @@
+<div class="innerli">
+  <div class="T-tagging">{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}</div>
+  <div class="row">
+    <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
+      <div class="col-xs-12 textcenter clearfix">
+        <div class="yourimg">
+          <img [src]="getImageUrl(user)" alt="User Profile Image">
+        </div>
+        <div class="clear"></div>
+        <span class="dark ellipsis" title="{{user.displayName}}">{{user.displayName}}</span>
+        <div class="light ellipsis div-location" title="{{user?.location}}">{{user?.location}}</div>
+        <hr>
+        <div class="dark">Score {{game.stats[user.userId].score}}</div>
+        <div class="div-badge">
+          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length == 1">
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 div-right-border">
+          <div class="yourimg vs">
+            <img [src]="getImageUrl(user)" alt="User Profile Image" />
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="yourimg ">
+
+            <div class="sprite no-opponent"></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?'div-right-border':''">
+          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
+        </div>
+      </div>
+      <div class="textcenter clearfix ">
+        <div class="col-xs-6 ellipsis div-right-border div-location">
+          <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
+        </div>
+      </div>
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 div-right-border div-score">
+          <div class="dark">Score {{game.stats[user.userId].score}}</div>
+        </div>
+      </div>
+      <div class="text-align clearfix">
+        <div class="div-width div-right-border float-left">
+          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+        </div>
+
+        <div class="div-width text-align padding-right float-right">
+          <div class="sprite score0"></div>
+          <div class="sprite score0"></div>
+          <div class="sprite score0"></div>
+          <div class="sprite score0"></div>
+          <div class="sprite score0"></div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1">
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 div-right-border">
+          <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
+            <img [src]="getImageUrl(user)" alt="User Profile Picture" />
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="yourimg ">
+            <img [src]="getImageUrl(otherUserInfo)" alt="User Profile Picture" />
+          </div>
+        </div>
+      </div>
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 ellipsis " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
+          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
+        </div>
+        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
+          <span class="dark" title="{{otherUserInfo?.displayName}}">{{otherUserInfo?.displayName}}</span>
+        </div>
+      </div>
+      <div class="textcenter clearfix">
+        <div class="col-xs-6 ellipsis div-location div-right-border">
+          <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
+        </div>
+        <div class="col-xs-6 ellipsis div-location">
+          <span class="light" *ngIf="otherUserInfo?.displayName" title="{{otherUserInfo?.location}}">{{otherUserInfo?.location}}</span>
+        </div>
+      </div>
+      <div class="clearfix">
+        <div class="col-xs-6 div-right-border div-score score-text-align">
+          <div class="dark">Score {{game.stats[user.userId].score}}</div>
+        </div>
+        <div class="col-xs-6 div-score score-text-align">
+          <div class="dark">Score {{game.stats[otherUserId].score}}</div>
+        </div>
+      </div>
+      <div class="text-align clearfix">
+        <div class="div-width div-right-border float-left">
+          <div [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'" class="sprite"></div>
+        </div>
+
+        <div class="div-width text-align padding-right float-right">
+          <div [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[otherUserId].score >= 4?'score4':'score0'" class="sprite"></div>
+          <div [ngClass]="game.stats[otherUserId].score >= 5?'score5':'score0'" class="sprite"></div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="col-xs-12 div-spacing textcenter" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">
+      <span class="light">Round {{game.round}} / {{totalRound}}</span>
+    </div>
+  </div>
+
+  <div class="textcenter">
+    <a *ngIf="myTurn" [routerLink]="['/game-play', game.gameId]" class="playnow btn">
+      <span>Your Turn</span>
+      <p>Play Now</p>
+    </a>
+  </div>
+
+  <div *ngIf="myTurn" class="opponent">
+    <p class="dark">{{remainingHours}}:{{remainingMinutes}} hrs</p>
+    <p class="ellipsis">remaining to play your turn</p>
+  </div>
+
+  <div *ngIf="game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE"
+    class="opponent">
+    <a class="btn-share waiting-for-opponent">Waiting for
+      <p>Opponent</p>
+    </a>
+  </div>
+
+  <div *ngIf="!myTurn && game.GameStatus === gameStatus.WAITING_FOR_NEXT_Q" class="opponent">
+    <a class="btn-share opponent-turn">Opponent's Turn </a>
+  </div>
+</div>

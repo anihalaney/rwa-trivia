@@ -1,0 +1,47 @@
+mat-card-content>:last-child, mat-card>:last-child{
+  margin-bottom: 15px;
+}
+mat-card-content>:first-child, mat-card>:first-child{
+  margin-top: 15px;
+}
+mat-card {
+  margin: 15px;
+}
+// .question-card {
+//   width: 400px;
+//   min-width: 350px;
+// }
+.question-status {
+  float: right;
+  margin-right: 15px;
+}
+.row{ font-family: 'hindregular'; }
+.question-section {
+  padding: 20px 0;
+  border-bottom:1px solid;
+  margin: 0;
+  // border-color: rgba(204,204,204,0.44);
+}
+.dark{ font-family: 'hindsemibold'; display: inline-block;font-size: 18px; }
+.question-text{ display: inline-block; font-size: 16px;font-family: 'hindsemibold';};
+.answer-text{ display: inline-block; font-size: 16px;color: #282828}
+// .question-status
+// {
+//   float: right;
+//   text-align: center;
+// }
+.view-reason-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 38px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;}
+.edit-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 38px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;width: 60%;}
+
+.rejection-div,.edit-form-div
+{
+  background-color: #f4f5f7;
+}
+.csv-error-msg{padding: 10px;  margin-top: 15px;font-size: 14px;font-family:'hindsemibold';padding-left: 15px;}
+.error-que
+{
+  padding-bottom: 0px;
+}
+.currentans li:nth-child(1) {
+  margin-top: 10px;
+}

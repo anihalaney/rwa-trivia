@@ -1,0 +1,16 @@
+.card{ border-bottom: 1px solid }
+.card {border-color: rgba(204, 204, 204, 0.44); }
+.user{position: relative; display: block;}
+.user:after{ content: ""; position: absolute; bottom: 0; width: 100%; height: 46%; background: linear-gradient(to bottom, rgba(41,53,59,0) 0%, rgba(41,53,59,0.7) 50%, rgba(41,53,59,1) 100%); transition: 0.3s ease-in-out; z-index: 9}
+.user img{ display: block; max-width: 100%; height: 263px;}
+.user .username{ display: block; position: absolute; color: #fff; bottom: 0; width: 100%; box-sizing: border-box; padding: 30px 24px 12px; color: #fff; z-index: 99}
+.name{ display: block; font-size: 20px; font-family: 'hindbold'; }
+.userstatus, .userlocation{ display: block; font-size: 13px; margin: 5px 0; letter-spacing: 0.3px}
+.card{ border-bottom: 1px solid }
+@media screen and ( min-width:1000px){
+  .user:hover:after{height: 100%; background: linear-gradient(to bottom, rgba(41,53,59,0.7) 0%, rgba(41,53,59,0.7) 50%, rgba(41,53,59,0.9) 100%)}
+}
+@media (min-width: 1200px){
+  .card{ margin-bottom: 14px; border-bottom: 0;  box-shadow: 0 2px 6px rgba(0,0,0,0.12);}
+}
+a{cursor: pointer}

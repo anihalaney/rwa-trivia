@@ -1,0 +1,37 @@
+<profile-card [user]="user"></profile-card>
+<recent-games [userDict]="userDict"></recent-games>
+<div class="card playwith">
+  <a (click)="navigateUrl()">
+    <span class="sprite myqestion"></span>
+    <span class="playtext">Submit
+      <span>Questions</span>
+    </span>
+  </a>
+</div>
+<user-stats-card></user-stats-card>
+
+
+<div class="card playwith">
+  <a [routerLink]="['/my/invite-friends']">
+    <span class="sprite playwithicon"></span>
+    <span class="playtext">
+      <span>Friends</span>
+    </span>
+  </a>
+</div>
+
+<div class="card social-icon textcenter">
+  <share-button [theme]="'circles-dark'" [button]="'facebook'" [size]="4" [url]="blogUrl" [autoSetMeta]="false"> </share-button>
+  <share-button [theme]="'circles-dark'" [button]="'twitter'" [size]="4" [url]="blogUrl" [autoSetMeta]="false"> </share-button>
+  <share-button [theme]="'circles-dark'" [button]="'linkedin'" [size]="4" [url]="blogUrl" [autoSetMeta]="false"> </share-button>
+</div>
+<div class="card playwith visible-xs">
+  <a class="playtext" href="#">
+    <span>Blog</span>
+  </a>
+</div>
+<div class="card playwith visible-xs">
+  <a class="playtext" href="#">
+    <span>System Stats</span>
+  </a>
+</div>

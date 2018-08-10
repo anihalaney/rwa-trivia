@@ -1,0 +1,112 @@
+.card{ padding: 0; margin: 0 20px 30px 0}
+.blog-cont{ padding: 25px 30px 30px; cursor: pointer; min-height: 200px}
+.blogimg{ display: block; transition: 0.3s ease-in-out}
+.blogimg img{ height: 220px; width: 100%; object-fit: cover; }
+h2{margin: 15px 0 10px; line-height: 1}
+h2 a{ font-family:'hindmedium'; font-size: 16px; transition: 0.3s ease-in-out;}
+.more{ display: none; }
+.blog-social{line-height: 50px; height: 50px; border-top: 1px solid; border-color: rgba(204,204,204,0.44);}
+@media screen and ( min-width:1000px){
+  .card{margin:0 0 30px }
+  .card:hover .blogimg{ opacity: 0.7 }
+}
+.T-tagging
+{
+  font-size: 16px;
+  letter-spacing: 1px;
+  height: 40px;
+}
+
+.shareicon
+{
+  position: relative;
+  // z-index: -1;
+}
+
+.hide-bottom
+{
+  display: none;
+}
+.hide-top-border
+{
+  border-top: 0px;
+}
+.card-opacity
+{
+  opacity: 0.2;
+}
+.share
+{
+  cursor: pointer;
+}
+.subtitle
+{
+  height: 65px;
+  font-size: 16px;
+  font-family:'hindmedium';
+}
+.blog-tags {
+  font-size: 12px;
+}
+.minimize
+{
+  height: 50px;
+}
+.title-line-height
+{
+/* max-height = line-height (1.2) * lines max number (3) */
+  max-height: 2.5em; 
+}
+.category-line-height
+{
+  /* max-height = line-height (1.2) * lines max number (3) */
+  max-height: 2.1em; 
+}
+
+.subtitle-line-height
+{
+/* max-height = line-height (1.2) * lines max number (3) */
+  max-height: 3.6em; 
+}
+/* styles for '...' */ 
+.block-with-text {
+  /* hide text if it more than N lines  */
+  overflow: hidden;
+  /* for set '...' in absolute position */
+  position: relative; 
+  /* use this value to count block height */
+  line-height: 1.2em;
+  
+  /* fix problem when last visible word doesn't adjoin right side  */
+  text-align: justify;
+  
+  padding-right: 1em;
+}
+.block-with-text:before {
+  /* points in the end */
+  content: '...';
+  /* absolute position */
+  position: absolute;
+  /* set position to right bottom corner of block */
+  right: 0;
+  bottom: 0;
+}
+.block-with-text:after {
+  /* points in the end */
+  content: '';
+  /* absolute position */
+  position: absolute;
+  /* set position to right bottom corner of text */
+  right: 0;
+  width: 1em;
+  /* set width and height */
+  height: 1em;
+  margin-top: 0.2em;
+}
+.commenticon,.viewicon
+{
+  font-family:'hindmedium';
+}
+
+
+

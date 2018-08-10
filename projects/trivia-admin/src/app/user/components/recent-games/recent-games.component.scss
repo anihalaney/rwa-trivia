@@ -1,0 +1,23 @@
+.card{ border-bottom: 1px solid }
+.card {border-color: rgba(204, 204, 204, 0.44); }
+ .recentlygames h2{ font-size:18px; font-family: 'hindsemibold'; letter-spacing: 0.1px; margin-bottom: 13px;}
+.recentlygames{ padding: 17px; text-align: center; }
+.recentlygames li{  border-bottom: 1px solid transparent; text-align: left; display: inline-block }
+// .recentlygames li a{padding: 7px 0; display: block;}
+.recentlygames li:last-child{ border-bottom: 0 }
+.recentlygames li{border-color: rgba(204,204,204,0.44);}
+.recentlygames .datebox{ display: inline-block; width: 122px; vertical-align: -14px }
+.recentlygames .scorebox{ width:57px;display: inline-block; vertical-align: top }
+.dark{ font-size: 16px; }
+.recentlygames .scorebox .dark{ letter-spacing: 0.75px; }
+.viewall{cursor: pointer; font-size: 12px; padding: 6px 25px 6px 17px; position: relative; border:1px solid; border-radius: 14px; display: inline-block; margin-top: 5px;}
+.viewall:after{ content: ""; position: absolute; right: 15px; top: 0; bottom: 0; width: 7px; height: 7px; border-width: 1px 1px 0 0; border-style: solid; transform: rotate(45deg); margin: auto; transition: 0.3s ease-in-out}
+.viewall{border-color: rgba(204,204,204,0.44);}
+.viewall:hover{ border-color: #3b5998}
+@media screen and ( min-width:1000px){
+  .viewall:hover:after{ right: 12px; }
+}
+@media (min-width: 1200px){
+  .card{ margin-bottom: 14px; border-bottom: 0;  box-shadow: 0 2px 6px rgba(0,0,0,0.12);}
+}
+

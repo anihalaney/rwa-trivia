@@ -1,0 +1,20 @@
+.card{ border-bottom: 1px solid }
+.card {border-color: rgba(204, 204, 204, 0.44); }
+.statsview #stats, .statsview #graph{padding:17px;}
+.statsview #stats li{border-bottom: 1px solid transparent; text-align: left;}
+.statsview #stats li{border-color: rgba(204,204,204,0.44);}
+.statsview #stats li {padding: 7px 0; display: block;}
+.statsview #stats li:last-child, .statsview #graph li:last-child{ border-bottom: 0 }
+.viewtext{ display: inline-block; vertical-align: middle; width: 50%; font-size: 16px;  }
+.viewcount{ display: inline-block; vertical-align: middle; width: 30%; font-size: 16px; letter-spacing: 0.75px; font-family: 'hindmedium'; line-height: 1;text-align: right; }
+.statsview .sprite{ width: 25px; height: 26px; margin-right:10px }
+.sec{ font-size: 12px; margin-top: -2px}
+.tabbing{box-shadow: 0 2px 6px rgba(0,0,0,0.12) }
+.tabbing li{  font-family: 'hindsemibold';width: 100%; float: left; height: 57px; line-height: 57px; font-size: 16px; border-bottom: 3px solid transparent; text-align: center; transition: 0.3s ease-in-out;}
+.tab-content { display: none;}
+.tab-content.active { display: block;}
+.tabbing li.active{ border-color: #3b5998}
+.chart-image{ display: block; margin:0 auto; }
+@media (min-width: 1200px){
+  .card{ margin-bottom: 14px; border-bottom: 0;  box-shadow: 0 2px 6px rgba(0,0,0,0.12);}
+}

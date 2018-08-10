@@ -1,0 +1,45 @@
+.sort-page-header {
+  margin-left: 30px;
+  margin-top: 30px;
+}
+.row-question {
+  height: auto;
+}
+.col-chkbox {
+  flex: 1;
+}
+.col-question {
+  flex: 10;
+  //display: flex;
+  > div {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+.answer {
+  flex: 1 50%;
+}
+.col-status {
+  flex: 3;
+}
+/*
+.answer.correct {
+  &::before {
+    content: '\2713';
+    margin-left: -14px;
+    color: red;
+  }
+}
+*/
+.answer.correct {
+  .mat-icon {
+    height: auto;
+    width: auto;
+    font-size: 14px;
+    color: red;
+    margin-left: -16px;
+  }
+}
+.subtitle {
+  font-weight: bold;
+}

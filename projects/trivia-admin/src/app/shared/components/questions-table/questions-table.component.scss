@@ -1,0 +1,169 @@
+.row{ font-family: 'hindregular'; }
+.question-section {
+  padding: 20px 0;
+  border-bottom:1px solid;
+  margin: 0;
+  // border-color: rgba(204,204,204,0.44);
+}
+.dark{ font-family: 'hindsemibold'; display: inline-block;font-size: 18px; }
+.question-text{ display: inline-block; font-size: 16px;font-family: 'hindsemibold';};
+.answer-text{ display: inline-block; font-size: 16px;color: #282828}
+
+.currentans li:nth-child(1) {
+  margin-top: 10px;
+}
+
+.mat-header-row, .mat-row { 
+  border-bottom-style: none;
+  padding: 0px;
+}
+
+.row-question {
+  height: auto;
+}
+.col-chkbox {
+  flex: 1;
+}
+.answer {
+  flex: 1 50%;
+}
+.col-status {
+  flex: 3;
+}
+
+.answer.correct {
+  .mat-icon {
+    height: auto;
+    width: auto;
+    font-size: 14px;
+    color: red;
+    margin-left: -16px;
+  }
+}
+.subtitle {
+  font-weight: bold;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-container > * {
+  width: 100%;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+#curentactive { text-align: center; }
+.submitpage .card{ padding: 25px 0 0 }
+.optionbox{ margin-top: 30px; text-align: left;}
+.optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
+.optionbox h2 span{ font-size: 20px; text-transform: none; letter-spacing: .10px; padding-left: 0; font-family: 'hindmedium' }
+.submitpage .optionbox{ padding: 0 10px }
+.submitpage textarea{ width: 100%; display: inline-block; border-width: 1px; border-style: solid; border-radius: 4px; font-size: 18px; }
+.card .enterquestion h3{ font-size: 18px; margin: 30px 0 16px}
+.enterquestion .optionbox{ margin-top: 0 }
+.card .enterquestion h3:before{ display: none;  }
+
+.enterquestion .formfield{ padding: 0; margin-bottom: 32px; }
+.enterquestion .formfield > input{ border-width: 1px; border-style: solid; border-radius: 4px; padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px)}
+.formfield select {  border-width: 1px; border-style: solid; border-radius: 4px; font-size: 18px; display: inline-block; }
+.enterquestion .formfield > label{ width: 30px; display: inline-block; vertical-align: -4px}
+.enterquestion .formfield input[type="radio"]{ display: block;}
+
+.question-list li input[type="radio"], .optionbox input[type="radio"]{ display: none; }
+.question-list li label{ cursor: pointer; font-family: 'hindmedium'; font-size: 16px; padding: 6px 13px; border-radius: 17px; transition: 0.3s ease-in-out; position: relative; display: inline-block;}
+.question-list li label:before{ content: "";position: absolute; height: 17px; width: 8px; border-width:0 2px 2px 0; border-style: solid; transform: rotate(45deg); left: 22px; display: none;}
+.question-list li input:checked ~ label{ padding-left: 40px; }
+.question-list li input:checked ~ label:before{ display: block; }
+#curentactive .btnbox{ background: #fff; }
+.btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px;line-height: 1.2; margin:0 auto}
+.btn.startg:disabled{ background-color: silver; }
+@media screen and (min-width: 767px){
+  .optionbox h2 span{ font-size: 22px }
+  .pcategories .formfield select{  width: 300px }
+  .card .enterquestion h3{margin-top: 40px}
+  .formfield, .mysetting .formfield { display: inline-block; }
+  .savebox a.btn.startg{ display: inline-block; margin-right: 70px}
+  .enterquestion .formfield{ width: calc(50% - 3px) }
+  .enterquestion .formfield:nth-child(2n + 1){ text-align: right; }
+  .enterquestion .formfield > input{width: calc(85%) }
+}
+@media screen and ( max-width:760px){
+  .savebox a.btn.startg{ width: 90%; margin: 0 auto 30px; }
+}
+
+
+mat-card {
+  margin: 15px;
+}
+mat-card-title {
+  margin-bottom: 50px;
+}
+mat-card-actions {
+  margin-bottom: 0px;
+}
+
+.full-width {
+  width: 100%;
+}
+.remove-tag {
+  cursor: pointer;
+}
+.question-status
+{
+  float: right;
+  text-align: center;
+}
+.paginator-position
+{
+  float: right;
+}
+.view-reason-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 38px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;margin-bottom: 3%;}
+.edit-btn{ font-family:'hindsemibold' ;box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 38px; border-radius: 4px; display: inline-block; text-align: center; font-size: 16px;width: 60%;}
+
+.rejection-div,.edit-form-div
+{
+  background-color: #f4f5f7;
+}
+.csv-error-msg{padding: 10px;  margin-top: 15px;font-size: 14px;font-family:'hindsemibold';padding-left: 15px;}
+.error-que
+{
+  padding-bottom: 0px;
+}
+.button-mobile-css{
+  display: none;
+}
+
+@media (max-width:1366px){
+  .view-reason-btn {
+    margin: 4px 0 8px 0;
+  }
+}
+
+
+@media(max-width: 750px) {
+  .button-web-css{
+    display: none;
+  }
+  .button-mobile-css{
+    display: block;
+  }
+}
+
+@media (max-width:320px){
+  .view-reason-btn, .edit-btn{
+    font-size: 13px
+  }
+}
+
+@media(max-width: 700px) {
+  .edit-btn,.mat-raised-button,.view-reason-btn
+  {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}

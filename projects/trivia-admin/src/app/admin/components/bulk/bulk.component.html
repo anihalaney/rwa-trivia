@@ -1,0 +1,25 @@
+<div>
+  <div class="row">
+    <div class="pageheading col-xs-12 hidden-xs" [ngClass]="showSummaryTable?'col-md-4':'col-md-9'">Bulk Upload Summary</div>
+    <div class="archive-div col-md-5 col-xs-6 hidden-xs align-right" *ngIf="showSummaryTable">
+      <button class="btn-share" type="button" *ngIf="isArchive" (click)="archiveData()"> Archive </button>
+      <!-- <div> -->
+      <label>Show Archived</label>
+      <mat-button-toggle-group #group="matButtonToggleGroup" value=false>
+        <mat-button-toggle value=true (click)="tapped(true)">
+          On
+        </mat-button-toggle>
+        <mat-button-toggle value=false (click)="tapped(false)" selected>
+          Off
+        </mat-button-toggle>
+
+      </mat-button-toggle-group>
+    </div>
+    <div class="col-md-3 col-xs-6 align-right">
+      <button class="btn startupload" *ngIf="!showSummaryTable" (click)="backToSummary()"> Back to Summary </button>
+    </div>
+  </div>
+</div>
+<bulk-summary-table [bulkSummaryDetailPath]="bulkSummaryDetailPath" [showSummaryTable]="showSummaryTable" (showBulkUploadBtn)="changeTableHeading($event)"
+  [isArchiveBtnClicked]="isArchiveBtnClicked" [toggleValue]="toggleValue">
+</bulk-summary-table>

@@ -1,0 +1,12 @@
+<div class="textcenter" [ngClass]="isFromBlog?'social-icons-blog':'social-icons-gameOver'" >
+    <div class="btn-spacing">
+        <share-button [theme]="'circles-dark'" button="facebook" [size]="4" [url]="blogUrl"  [autoSetMeta]="false"> </share-button>
+        <share-button [theme]="'circles-dark'" [button]="'twitter'" [size]="4" [url]="blogUrl" [autoSetMeta]="false"> </share-button>
+        <share-button [theme]="'circles-dark'" [button]="'linkedin'" [size]="4" [url]="blogUrl" [autoSetMeta]="false"> </share-button>
+    </div>
+    <!-- <hr> -->
+    <div (click)="closeSocial()" class="close-div">
+        <span class="cross-icon sprite"></span>
+    </div>
+
+</div>

@@ -1,0 +1,72 @@
+/*--Dashboard--*/
+
+.viewall{  font-size: 12px; padding: 6px 25px 6px 17px; position: relative; border:1px solid; border-radius: 14px; display: inline-block; margin-top: 5px;cursor: pointer;}
+.viewall:after{ content: ""; position: absolute; right: 15px; top: 0; bottom: 0; width: 7px; height: 7px; border-width: 1px 1px 0 0; border-style: solid; transform: rotate(45deg); margin: auto; transition: 0.3s ease-in-out}
+.viewall{border-color: rgba(204,204,204,0.44);}
+.viewall:hover{ border-color: #3b5998;cursor: pointer;}
+
+@media screen and ( min-width:1000px){
+  .viewall:hover:after{ right: 12px; }
+}
+
+/*Main Content*/
+/*Heading*/
+.pageheading + .align-right{ margin-bottom: 10px;}
+.startgame{ font-family:'hindsemibold' ; text-transform: uppercase; box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 42px; border-radius: 4px; display: inline-block; text-align: center; letter-spacing: 1px; width: 100%} 
+.sunicon{  height: 35px; width:35px;  margin-right: 10px; animation-name: spin; animation-duration: 20000ms; animation-iteration-count: infinite; animation-timing-function: linear;}
+#curentactive { text-align: center; }
+@media (min-width: 767px){
+  .startgame{ padding: 0 15px; width: auto;}
+  .h1block {padding: 0 30px 20px;}
+  .sunicon{vertical-align: -4px; }
+}
+/*Heading End*/
+/*Currentgame*/
+#currentgame{ text-align: left; margin-top: 30px;}
+#currentgame ul{ margin-top: 16px }
+#currentgame ul li{ margin-bottom: 15px }
+#currentgame ul li .innerli{ border:1px solid; border-radius: 4px; padding: 15px; display: block; }
+.viewallbtn{     background: #f0f0f0;  height: 100px; width: 100px; display: inline-block; border-radius: 50%;font-size: 29px; line-height: 1.2; padding: 19px; margin: 94px 0; color: #3b5998 }
+
+@media screen and ( min-width:1000px){  
+}
+/*Currentgame End*/
+
+/*Invitation to play games*/
+h2 span{ font-size: 14px; font-family: 'hindregular';margin-right: 10px;}
+.invitationlist{ margin-top: 16px; }
+.invitationlist li{ padding: 15px 30px; margin:0 10px}
+//.invitationlist li:nth-child(odd){ background:#fafafa;  }
+.invitationlist .viewallbtn{  margin: 75px 0}
+@media screen and ( min-width:767px){
+  h2 span{ display: inline-block; padding-left: 15px; }
+}
+@media screen and ( min-width:1000px){
+  h2 span{ display: block;}
+  .pageinner h2 span{ display: inline-block;}
+  .invitationlist li{ margin: 0 }
+}
+
+/*Category*/
+.card h3{ font-family: 'hindmedium'; font-size: 16px;}
+.card h3:before{ height: 11px; width:11px; border-radius: 50%; border:1px solid; content: ""; display: inline-block; margin-right: 10px}
+/*Category End*/
+/*Question of the day*/
+/*Question of the day End*/
+/*Subscribe*/
+/*Subscribe End*/
+/*blog*/
+/*blog End*/
+/*Real-time System Stats*/
+/*Real-time System Stats End*/
+/*--Dashboard End--*/
+
+.align-right
+{
+  text-align: right;
+}
+.view-all-btn
+{
+  text-align: center;
+  margin-top: 10px;
+}
