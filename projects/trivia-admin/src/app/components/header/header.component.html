@@ -11,12 +11,6 @@
             <mat-icon mat-list-icon>flip</mat-icon>
           </a>
         </div>
-        <div class="headerdrop" *ngIf="user">
-          <a (click)="navigateUrl()">
-            <span class="sprite settingicon"></span>
-            <span class="hidden-xs">Profile Setting</span>
-          </a>
-        </div>
         <div class="headerdrop">
           <a *ngIf="user" class="logout" (click)="logoutClicked.emit($event)">
             <span class="sprite logouticon"></span>

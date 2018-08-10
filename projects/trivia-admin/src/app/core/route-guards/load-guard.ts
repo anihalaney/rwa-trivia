@@ -14,7 +14,7 @@ export class AdminLoadGuard implements CanLoad {
   }
   canLoad(route: Route): Observable<boolean> {
     return this.store.select(appState.coreState).pipe(
-      map(s => s.authInitialized), 
+      map(s => s.authInitialized),
       filter(i => i),
       take(1),
       switchMap(i => {
@@ -29,23 +29,3 @@ export class AdminLoadGuard implements CanLoad {
   }
 }
 
-@Injectable()
-export class BulkLoadGuard implements CanLoad {
-  constructor(private store: Store<AppState>, private authService: AuthenticationProvider) {
-
-  } canLoad(route: Route): Observable<boolean> {
-    return this.store.select(appState.coreState).pipe(
-      map(s => s.authInitialized),
-      filter(i => i),
-      take(1),
-      switchMap(i => {
-        this.authService.ensureLogin();
-        return this.store.select(appState.coreState).pipe(
-          map(s => s.user),
-          filter(u => (u != null && u.userId != "")),
-          take(1),
-          map(u => u.roles && u.roles["admin"] || u.roles["bulkuploader"]));
-      })
-    );
-  }
-}

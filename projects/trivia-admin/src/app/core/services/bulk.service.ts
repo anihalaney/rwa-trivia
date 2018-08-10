@@ -16,7 +16,6 @@ export class BulkService {
   }
 
   // get All Bulk Upload
-  // get All Bulk Upload
   getBulkUpload(user: User, archive: boolean): Observable<BulkUploadFileInfo[]> {
     if (!archive) {
       return this.db.collection('/bulk_uploads', ref => ref.where('isAdminArchived', '==', archive))

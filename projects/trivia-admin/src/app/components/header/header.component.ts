@@ -19,11 +19,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-
-  navigateUrl() {
-    this.router.navigate(['my/profile', this.user.userId]);
-  }
-
   ngOnDestroy() {
   }
 

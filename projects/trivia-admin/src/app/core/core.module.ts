@@ -14,16 +14,15 @@ import { CONFIG } from '../../environments/environment';
 import {
   Utils,
   CategoryService, TagService, QuestionService,
-  GameService, BulkService, UserService, SocialService, StatsService,
-  WindowRef
+  UserService, BulkService
 } from './services';
 
 import { AuthenticationProvider, AuthInterceptor } from './auth';
 
-import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
+import { AuthGuard, AdminLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
 
-import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
-import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects, effects } from './store/effects';
+import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions } from './store/actions';
+import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, effects } from './store/effects';
 import { reducer } from './store';
 
 import { LoginComponent } from './components';
@@ -61,15 +60,14 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     //Services
     Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
-    GameService, BulkService, UserService, SocialService, StatsService,
-    WindowRef,
+    UserService, BulkService,
 
     //route guards
-    AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
+    AuthGuard, AdminLoadGuard, CategoriesResolver, TagsResolver,
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
-    UIStateActions, GameActions,
+    UIStateActions,
 
     {
       provide: HTTP_INTERCEPTORS,
