@@ -11,7 +11,7 @@ import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Utils, WindowRef } from '../../core/services';
 import { AuthenticationProvider } from '../../core/auth';
-import { User } from '../../model';
+import { User } from '../../../../../model';
 import { Location } from '@angular/common';
 import { userState } from '../../user/store';
 import * as gameplayactions from '../../game-play/store/actions';

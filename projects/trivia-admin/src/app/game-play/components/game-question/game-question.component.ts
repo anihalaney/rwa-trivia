@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
-import { Question, Answer, User } from '../../../model';
+import { Question, Answer, User } from '../../../../../../model';
 
 @Component({
   selector: 'game-question',

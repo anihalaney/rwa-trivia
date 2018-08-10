@@ -3,7 +3,7 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { SystemStats } from '../../model';
+import { SystemStats } from '../../../../../model';
 
 @Injectable()
 export class StatsService {

@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
-import { User, Subscription } from '../../../model';
+import { User, Subscription } from '../../../../../../model';
 import * as socialActions from '../../../social/store/actions';
 import { socialState } from '../../store';
 

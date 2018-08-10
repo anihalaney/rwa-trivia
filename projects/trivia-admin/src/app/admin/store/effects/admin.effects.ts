@@ -3,7 +3,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, filter } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
-import { SearchResults, Question, RouterStateUrl, SearchCriteria } from '../../../model';
+import { SearchResults, Question, RouterStateUrl, SearchCriteria } from '../../../../../../model';
 import { AdminActionTypes } from '../actions';
 import * as adminActions from '../actions/admin.actions';
 import { QuestionService } from '../../../core/services';

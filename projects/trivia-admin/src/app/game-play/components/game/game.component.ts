@@ -9,7 +9,7 @@ import { AppState, appState } from '../../../store';
 
 import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { Utils } from '../../../core/services';
-import { User } from '../../../model';
+import { User } from '../../../../../../model';
 import * as gameplayactions from '../../store/actions';
 
 

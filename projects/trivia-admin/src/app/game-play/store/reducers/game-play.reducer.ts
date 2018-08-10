@@ -1,6 +1,6 @@
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import { UserActions } from '../../../core/store';
-import { Game, Question, ReportQuestion } from '../../../model';
+import { Game, Question, ReportQuestion } from '../../../../../../model';
 
 export function currentGame(state: any = null, action: GamePlayActions): Game {
   switch (action.type) {

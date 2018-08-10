@@ -4,7 +4,7 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
-import { BulkUploadFileInfo, Category, User } from '../../../../model';
+import { BulkUploadFileInfo, Category, User } from '../../../../../../../model';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
 import { AngularFireStorage } from 'angularfire2/storage';

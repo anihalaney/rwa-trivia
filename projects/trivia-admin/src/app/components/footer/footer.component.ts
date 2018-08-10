@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '../../model';
+import { User } from '../../../../../model';
 
 @Component({
   selector: 'app-footer',

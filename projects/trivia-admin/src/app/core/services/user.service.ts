@@ -7,7 +7,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../store/app-store';
-import { User, Invitation, Friends } from '../../model';
+import { User, Invitation, Friends } from '../../../../../model';
 import { ObservableInput } from 'rxjs';
 import { CONFIG } from '../../../environments/environment';
 import { UserActions } from '../../core/store/actions';

@@ -5,7 +5,7 @@ import { Router, Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@a
 import { Store } from '@ngrx/store';
   
 import { AppState, appState } from '../../store';
-import { Category } from '../../model';
+import { Category } from '../../../../../model';
   
 @Injectable()
 export class CategoriesResolver implements Resolve<Category[]> {

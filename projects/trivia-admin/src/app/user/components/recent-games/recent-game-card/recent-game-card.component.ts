@@ -2,7 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../../store';
-import { User, Game, Category, PlayerMode } from '../../../../model';
+import { User, Game, Category, PlayerMode } from '../../../../../../../model';
 import { userState } from '../../../store';
 import { UserActions } from '../../../../core/store/actions';
 import { Utils } from '../../../../core/services';

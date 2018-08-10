@@ -2,7 +2,7 @@ import { Component, Input, Inject, OnInit } from '@angular/core';
 import { Question } from 'app/model';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { ReportQuestion, User, Game, QuestionMetadata, Category } from '../../../model';
+import { ReportQuestion, User, Game, QuestionMetadata, Category } from '../../../../../../model';
 import * as gameplayactions from '../../store/actions';
 import { AppState, categoryDictionary } from '../../../store';
 import { Store } from '@ngrx/store';

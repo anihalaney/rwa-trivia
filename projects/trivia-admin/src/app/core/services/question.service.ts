@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { CONFIG } from '../../../environments/environment';
-import { Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../model';
+import { Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../../../../model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
 import { QuestionActions } from '../store/actions';
@@ -44,7 +44,7 @@ export class QuestionService {
         catchError(error => {
           console.log(error);
           return of(null);
-      }));
+        }));
   }
 
   // get Questions by bulk upload id
@@ -58,9 +58,9 @@ export class QuestionService {
       .pipe(
         map(qs => qs.map(q => Question.getViewModelFromDb(q))),
         catchError(error => {
-        console.log(error);
-        return of(null);
-      }));
+          console.log(error);
+          return of(null);
+        }));
   }
 
   getUnpublishedQuestions(flag: boolean): Observable<Question[]> {

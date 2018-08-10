@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User, RouterStateUrl } from '../../../model';
+import { User, RouterStateUrl } from '../../../../../../model';
 import { UserService } from '../../services'
 import { switchMap, map, distinct, mergeMap } from 'rxjs/operators';
 

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
-import { User } from '../../../model';
+import { User } from '../../../../../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import * as useractions from '../../../user/store/actions';

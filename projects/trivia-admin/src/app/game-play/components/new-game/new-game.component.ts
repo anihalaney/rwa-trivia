@@ -11,7 +11,7 @@ import { AppState, appState } from '../../../store';
 
 import { GameActions } from '../../../core/store/actions';
 import { Utils } from '../../../core/services';
-import { Category, GameOptions, GameMode, User, PlayerMode, OpponentType } from '../../../model';
+import { Category, GameOptions, GameMode, User, PlayerMode, OpponentType } from '../../../../../../model';
 
 @Component({
   selector: 'new-game',

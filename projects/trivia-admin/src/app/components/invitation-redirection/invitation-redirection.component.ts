@@ -5,7 +5,7 @@ import { UserActions } from '../../core/store/actions';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../store';
 import { AuthenticationProvider } from '../../core/auth';
-import { User } from '../../model';
+import { User } from '../../../../../model';
 import * as userActions from '../../user/store/actions';
 
 @Component({

@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 import { Utils } from '../../../core/services';
-import { User, Category, Question, QuestionStatus, Answer } from '../../../model';
+import { User, Category, Question, QuestionStatus, Answer } from '../../../../../../model';
 import * as userActions from '../../store/actions';
 
 @Component({
@@ -41,7 +41,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
   // Constructor
   constructor(private fb: FormBuilder,
-              private store: Store<AppState>) {
+    private store: Store<AppState>) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
   }
@@ -111,7 +111,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     return question;
   }
 
-  saveQuestion(question: Question) {   
+  saveQuestion(question: Question) {
     this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
