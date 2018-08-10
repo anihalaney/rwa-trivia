@@ -1,0 +1,20 @@
+<div class="card">
+  <mat-card-title>rwa Stats</mat-card-title>
+  <mat-list>
+    <mat-list-item>
+      <span>Categories Count:
+        <span id="category-count">{{(categoriesObs | async).length}}</span>
+      </span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>Tag Count:
+        <span id="tag-count">{{(tagsObs | async).length}}</span>
+      </span>
+    </mat-list-item>
+    <mat-list-item>
+      <span>Question Count:
+        <span id="question-count">{{(questionsSearchResultsObs | async).totalCount}}</span>
+      </span>
+    </mat-list-item>
+  </mat-list>
+</div>

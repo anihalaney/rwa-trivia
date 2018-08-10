@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="pageheading col-md-9 col-xs-12 hidden-xs">Friends</div>
+  <div class="col-md-3 col-sm-4 col-xs-12 div-alignment spacing-bottom">
+    <button class="btn startupload" (click)="inviteMoreFriend()"> Invite Friends </button>
+  </div>
+</div>
+<div class="mat-elevation-z8">
+  <mat-table #table [dataSource]="dataSource" matSort class="friend-list-table">
+    <ng-container cdkColumnDef="friends">
+      <mat-header-cell *cdkHeaderCellDef>Friends</mat-header-cell>
+      <mat-cell class="col-chkbox friend-list-table-cell" *cdkCellDef="let row">
+        <div class="profile">
+          <img [src]="getImageUrl(userDict[row.userId])" alt="User Profile Image" />
+        </div>
+        <div class="display-name">
+          <label *ngIf="userDict[row.userId]?.displayName" title="{{userDict[row.userId]?.displayName}}">{{userDict[row.userId]?.displayName}}</label>
+        </div>
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="game_played">
+      <mat-header-cell *cdkHeaderCellDef>Game Played</mat-header-cell>
+      <mat-cell class="col-chkbox cursor friend-list-table-cell " *cdkCellDef="let row">
+        <label *ngIf="row?.gamePlayed">{{row?.gamePlayed}}</label>
+        <label *ngIf="!row?.gamePlayed">0</label>
+
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="won">
+      <mat-header-cell *cdkHeaderCellDef>Won</mat-header-cell>
+      <mat-cell class="col-chkbox friend-list-table-cell success" *cdkCellDef="let row">
+        <label *ngIf="row?.wins">{{row?.wins}} </label>
+        <label *ngIf="!row?.wins">0 </label>
+
+      </mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="lost">
+      <mat-header-cell *cdkHeaderCellDef>Lost</mat-header-cell>
+      <mat-cell class="col-chkbox friend-list-table-cell label" *cdkCellDef="let row">
+        <label *ngIf="row?.losses">{{row?.losses}}</label>
+        <label *ngIf="!row?.losses">0</label>
+
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *cdkHeaderRowDef="displayedColumns" class="friend-list-header">
+    </mat-header-row>
+
+    <mat-row class="row-question " *cdkRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </mat-table>
+  <mat-paginator #paginator class="matHeader friend-list-table" [pageSize]="10" [pageSizeOptions]="[5, 10, 20]">
+  </mat-paginator>
+</div>

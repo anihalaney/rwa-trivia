@@ -143,6 +143,130 @@
           }
         }
       }
+    },
+    "trivia-admin": {
+      "root": "projects/trivia-admin/",
+      "sourceRoot": "projects/trivia-admin/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/trivia-admin",
+            "index": "projects/trivia-admin/src/index.html",
+            "main": "projects/trivia-admin/src/main.ts",
+            "polyfills": "projects/trivia-admin/src/polyfills.ts",
+            "tsConfig": "projects/trivia-admin/tsconfig.app.json",
+            "assets": [
+              "projects/trivia-admin/src/assets",
+              "projects/trivia-admin/src/favicon.ico",
+              "projects/trivia-admin/src/manifest.json"
+            ],
+            "styles": [
+              "projects/trivia-admin/src/styles/rwa-trivia.theme.scss",
+              "projects/trivia-admin/src/styles/styles.scss",
+              "projects/trivia-admin/src/styles/global.scss",
+              "projects/trivia-admin/src/styles/light.theme.scss",
+              "projects/trivia-admin/src/styles/dark.theme.scss"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/trivia-admin/src/environments/environment.ts",
+                  "with": "projects/trivia-admin/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "trivia-admin:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "trivia-admin:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "trivia-admin:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/trivia-admin/src/test.ts",
+            "polyfills": "projects/trivia-admin/src/polyfills.ts",
+            "tsConfig": "projects/trivia-admin/tsconfig.spec.json",
+            "karmaConfig": "projects/trivia-admin/karma.conf.js",
+            "styles": [
+              "projects/trivia-admin/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/trivia-admin/src/favicon.ico",
+              "projects/trivia-admin/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/trivia-admin/tsconfig.app.json",
+              "projects/trivia-admin/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "trivia-admin-e2e": {
+      "root": "projects/trivia-admin-e2e/",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/trivia-admin-e2e/protractor.conf.js",
+            "devServerTarget": "trivia-admin:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "trivia-admin:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/trivia-admin-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "trivia",

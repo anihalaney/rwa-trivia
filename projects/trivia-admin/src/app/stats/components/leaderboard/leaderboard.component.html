@@ -1,0 +1,28 @@
+<div class="row" *ngIf="leaderBoardCat && leaderBoardCat.length>0 && userDict">
+  <div class="div-count" *ngFor="let cat of leaderBoardCat | slice:lbsSliceStartIndex:lbsSliceLastIndex; let i=index">
+    <div class="col-md-4 col-xs-12 categorybox skyblue">
+      <h3>{{categoryDict[cat]?.categoryName.charAt(0).toUpperCase() + categoryDict[cat]?.categoryName.slice(1)}}</h3>
+      <ul>
+        <li *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index;">
+          <div class="row">
+            <div class="col-xs-2 has">#{{j+1}}</div>
+            <div class="col-xs-3 yourimg">
+              <img [src]="getImageUrl(userDict[user.userId])" alt="User Profile Image" />
+            </div>
+            <div class="col-xs-4 ellipsis">
+              <label href="#" class="dark" title="{{userDict[user.userId]?.displayName}}">{{userDict[user.userId]?.displayName}}</label>
+              <div class="light ellipsis" title="{{userDict[user.userId]?.location}}">{{userDict[user.userId]?.location}}</div>
+            </div>
+            <div class="col-xs-3">
+              <div class="dark">{{user.score}}</div>
+              <div class="light">points</div>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="col-sm-12 col-xs-12 view-all-btn">
+  <a *ngIf="lbsUsersSliceLastIndex!==10" class="viewall" (click)="displayMore()">view more</a>
+</div>

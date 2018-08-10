@@ -1,0 +1,25 @@
+.card{ border-bottom: 1px solid }
+.card {border-color: rgba(204, 204, 204, 0.44); }
+.playwith a{ display: block; padding:20px 25px; position: relative;cursor: pointer }
+.playwith a:after{ content: ""; position: absolute; right: 35px; height: 26px; width: 26px; border-radius: 23px;margin: auto; top: 0; bottom: 0;z-index: 99; transition: 0.3s ease-in-out}
+.playwith a:before{ content: ""; position: absolute; right: 45px; height:8px; width:8px; border-width: 1px 1px 0 0; border-style: solid; transform: rotate(45deg); z-index: 999; margin: auto; top: 0; bottom: 0; transition: .3s ease-in-out;}
+.playtext{ display: inline-block;vertical-align: -9px; font-family: 'hindmedium';}
+.playtext span{ display: block; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px;}
+.myqestion{ background-position: -179px -22px; width: 30px; height: 30px; margin-right: 16px; }
+
+@media screen and ( min-width:1000px){
+  .playwith a:hover:after{ right: 30px; }
+  .playwith a:hover:before{ right: 40px; }
+}
+@media (min-width: 1200px){
+  .card{ margin-bottom: 14px; border-bottom: 0;  box-shadow: 0 2px 6px rgba(0,0,0,0.12);}
+}
+@media screen and ( max-width:1024px){
+  ul li { margin-left: -200px; }
+  ul li { margin-left: 0; }
+}
+.social-icon
+{
+  padding: 10px 0;
+}
+

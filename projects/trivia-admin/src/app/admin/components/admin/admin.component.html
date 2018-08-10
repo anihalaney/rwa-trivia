@@ -1,0 +1,8 @@
+<nav mat-tab-nav-bar *ngIf="user?.roles.admin">
+  <a mat-tab-link routerLinkActive="active" [routerLink]="['./']">Dashboard</a>
+  <a mat-tab-link routerLinkActive="active" [routerLink]="['./categories']">Categories</a>
+  <a mat-tab-link routerLinkActive="active" [routerLink]="['./tags']">Tags</a>
+  <a mat-tab-link routerLinkActive="active" [routerLink]="['./questions']">Questions</a>
+  <a mat-tab-link routerLinkActive="active" [routerLink]="['./bulk']">Bulk Upload</a>
+</nav>
+<router-outlet></router-outlet>

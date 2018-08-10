@@ -1,0 +1,71 @@
+
+.font-size-16{
+  font-size: 14px !important;
+  border:1px solid #FFF !important;
+}
+
+.cursor{
+  cursor: pointer;
+}
+
+.startupload{ width: 100%;float: right;} 
+.btn-share{ 
+  font-size: 14px;
+  font-family: 'hindsemibold';
+   border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  padding: 11px 23px;
+  margin-right: 2%;
+  border-width: 1px;
+  border-style: solid;
+  width: 100%;
+} 
+.text-alignment
+{
+  text-align: right;
+}
+.archive-div
+{
+  font-size: 16px;
+  font-family: 'hindsemibold';
+}
+label
+{
+  margin-right: 2%;
+}
+.btn{font-size: 16px;}
+.div-alignment
+{
+  float: right;
+}
+.switch-div
+{
+  display: inline-flex;
+  line-height: -moz-block-height;
+}
+.switch-label
+{
+  line-height: 32px;
+}
+@media (min-width:990px) and (max-width:1300px)
+{
+  .switch-div
+  {
+    display: initial;
+  }
+  .pageheading
+  {
+    font-size: 16px;
+  }
+  .switch-label
+  {
+    line-height: 0px;
+  }
+}
+@media(max-width: 600px) {
+  .text-alignment
+  {
+    text-align: center;
+  }
+}
