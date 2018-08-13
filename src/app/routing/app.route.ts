@@ -2,7 +2,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from '../components/index';
 import { InvitationRedirectionComponent } from '../components/index';
 import {
-  AuthGuard, AdminLoadGuard, BulkLoadGuard,
+  AuthGuard, BulkLoadGuard,
   CategoriesResolver, TagsResolver
 } from '../core/route-guards';
 
@@ -27,12 +27,6 @@ export const routes: Routes = [
     loadChildren: '../game-play/game-play.module#GamePlayModule',
     canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
-  },
-  {
-    path: 'admin',
-    loadChildren: '../admin/admin.module#AdminModule',
-    canActivate: [AuthGuard],
-    canLoad: [AdminLoadGuard]
   },
   {
     path: 'bulk',

@@ -20,7 +20,7 @@ import {
 
 import { AuthenticationProvider, AuthInterceptor } from './auth';
 
-import { AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
+import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
 
 import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
 import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, GameEffects, effects } from './store/effects';
@@ -65,7 +65,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     WindowRef,
 
     //route guards
-    AuthGuard, AdminLoadGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
+    AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
