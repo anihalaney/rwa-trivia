@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { AppState, appState, categoryDictionary } from '../../../store';
-import { QuestionActions } from '../../../core/store/actions';
+
 import { Category, SearchResults } from '../../../../../../model';
 
 @Component({
@@ -18,8 +18,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
   questionsSearchResultsObs: Observable<SearchResults>;
 
-  constructor(private store: Store<AppState>,
-              private questionActions: QuestionActions) {
+  constructor(private store: Store<AppState>
+  ) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.categoryDictObs = store.select(categoryDictionary);
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));

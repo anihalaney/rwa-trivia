@@ -21,8 +21,8 @@ import { AuthenticationProvider, AuthInterceptor } from './auth';
 
 import { AuthGuard, AdminLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
 
-import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions } from './store/actions';
-import { UserEffects, CategoryEffects, TagEffects, QuestionEffects, effects } from './store/effects';
+import { UserActions, CategoryActions, TagActions, UIStateActions } from './store/actions';
+import { UserEffects, CategoryEffects, TagEffects, effects } from './store/effects';
 import { reducer } from './store';
 
 import { LoginComponent } from './components';
@@ -66,7 +66,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     AuthGuard, AdminLoadGuard, CategoriesResolver, TagsResolver,
 
     //Actions
-    UserActions, CategoryActions, TagActions, QuestionActions,
+    UserActions, CategoryActions, TagActions,
     UIStateActions,
 
     {

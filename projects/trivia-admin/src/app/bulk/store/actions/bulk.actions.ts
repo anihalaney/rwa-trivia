@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-
 import { BulkUploadFileInfo, User, Question, BulkUpload } from '../../../../../../model';
 
 export enum BulkActionTypes {
