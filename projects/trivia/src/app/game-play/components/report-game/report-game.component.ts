@@ -1,5 +1,5 @@
 import { Component, Input, Inject, OnInit } from '@angular/core';
-import { Question } from 'app/model';
+import { Question } from '.././../../model';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { ReportQuestion, User, Game, QuestionMetadata, Category } from '../../../model';
