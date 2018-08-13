@@ -1,6 +1,6 @@
 import { TriviaPage } from './app.po';
 
-describe('trivia App', function() {
+describe('trivia App', function () {
   let page: TriviaPage;
 
   beforeEach(() => {

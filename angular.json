@@ -4,29 +4,29 @@
   "newProjectRoot": "projects",
   "projects": {
     "trivia": {
-      "root": "",
-      "sourceRoot": "src",
+      "root": "projects/trivia/",
+      "sourceRoot": "projects/trivia/src",
       "projectType": "application",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "polyfills": "src/polyfills.ts",
+            "outputPath": "dist/trivia",
+            "index": "projects/trivia/src/index.html",
+            "main": "projects/trivia/src/main.ts",
+            "tsConfig": "projects/trivia/tsconfig.app.json",
+            "polyfills": "projects/trivia/src/polyfills.ts",
             "assets": [
-              "src/assets",
-              "src/favicon.ico",
-              "src/manifest.json"
+              "projects/trivia/src/assets",
+              "projects/trivia/src/favicon.ico",
+              "projects/trivia/src/manifest.json"
             ],
             "styles": [
-              "src/styles/rwa-trivia.theme.scss",
-              "src/styles/styles.scss",
-              "src/styles/global.scss",
-              "src/styles/light.theme.scss",
-              "src/styles/dark.theme.scss"
+              "projects/trivia/src/styles/rwa-trivia.theme.scss",
+              "projects/trivia/src/styles/styles.scss",
+              "projects/trivia/src/styles/global.scss",
+              "projects/trivia/src/styles/light.theme.scss",
+              "projects/trivia/src/styles/dark.theme.scss"
             ],
             "scripts": []
           },
@@ -34,8 +34,8 @@
             "dev": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.dev.ts"
+                  "replace": "projects/trivia/src/environments/environment.ts",
+                  "with": "projects/trivia/src/environments/environment.dev.ts"
                 }
               ]
             },
@@ -51,8 +51,8 @@
               "buildOptimizer": true,
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "projects/trivia/src/environments/environment.ts",
+                  "with": "projects/trivia/src/environments/environment.prod.ts"
                 }
               ],
               "serviceWorker": true
@@ -82,22 +82,22 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
+            "main": "projects/trivia/src/test.ts",
+            "karmaConfig": "projects/trivia/karma.conf.js",
+            "polyfills": "projects/trivia/src/polyfills.ts",
+            "tsConfig": "projects/trivia/tsconfig.spec.json",
             "scripts": [],
             "styles": [
-              "src/styles/rwa-trivia.theme.scss",
-              "src/styles/styles.scss",
-              "src/styles/global.scss",
-              "src/styles/light.theme.scss",
-              "src/styles/dark.theme.scss"
+              "projects/trivia/src/styles/rwa-trivia.theme.scss",
+              "projects/trivia/src/styles/styles.scss",
+              "projects/trivia/src/styles/global.scss",
+              "projects/trivia/src/styles/light.theme.scss",
+              "projects/trivia/src/styles/dark.theme.scss"
             ],
             "assets": [
-              "src/assets",
-              "src/favicon.ico",
-              "src/manifest.json"
+              "projects/trivia/src/assets",
+              "projects/trivia/src/favicon.ico",
+              "projects/trivia/src/manifest.json"
             ]
           }
         },
@@ -105,8 +105,8 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
+              "projects/trivia/tsconfig.app.json",
+              "projects/trivia/tsconfig.spec.json"
             ],
             "exclude": []
           }
@@ -115,31 +115,35 @@
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "functions/dist/server",
-            "main": "src/main.server.ts",
-            "tsConfig": "src/tsconfig.server.json"
+            "main": "projects/trivia/src/main.server.ts",
+            "tsConfig": "projects/trivia/tsconfig.server.json"
           }
         }
       }
     },
     "trivia-e2e": {
-      "root": "",
-      "sourceRoot": "e2e",
+      "root": "projects/trivia-e2e/",
       "projectType": "application",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "./protractor.conf.js",
+            "protractorConfig": "projects/trivia-e2e/protractor.conf.js",
             "devServerTarget": "trivia:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "trivia:serve:production"
+            }
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
-            "exclude": []
+            "tsConfig": "projects/trivia-e2e/tsconfig.e2e.json",
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }

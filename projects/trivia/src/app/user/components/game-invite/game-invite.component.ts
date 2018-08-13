@@ -5,7 +5,8 @@ import { AppState, appState, categoryDictionary } from '../../../store';
 
 
 import { User, Game, Category, GameStatus } from '../../../model';
-import { gameInvites } from 'app/game-play/store';
+import { gameInvites } from '../../../game-play/store';
+
 
 @Component({
   selector: 'game-invite',
