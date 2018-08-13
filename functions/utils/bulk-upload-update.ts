@@ -1,6 +1,6 @@
 const bulkUploadUserService = require('../services/bulkupload.service');
 
-import { User, BulkUploadFileInfo } from '../../src/app/model';
+import { User, BulkUploadFileInfo } from '../../projects/model';
 
 export class BulkUploadUpdate {
     getUserList() {

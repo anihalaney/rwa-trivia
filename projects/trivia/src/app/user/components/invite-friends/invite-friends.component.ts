@@ -38,7 +38,8 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
       }
     });
     this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
-      if (uFriends !== null) {
+
+      if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
         uFriends.myFriends.map((friend, index) => {
           this.store.dispatch(this.userActions.loadOtherUserProfile(Object.keys(friend)[0]));

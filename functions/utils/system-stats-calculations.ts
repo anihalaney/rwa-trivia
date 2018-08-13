@@ -3,7 +3,7 @@ const statUserService = require('../services/user.service');
 const statQuestionService = require('../services/question.service');
 const statGameService = require('../services/game.service');
 
-import { SystemStats } from '../../src/app/model';
+import { SystemStats } from '../../projects/model';
 
 
 export class SystemStatsCalculations {

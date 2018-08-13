@@ -3,7 +3,7 @@ const friendGameStatService = require('../services/friend.service');
 import {
     Game, GameStatus, GameOptions, PlayerMode, OpponentType, Stat, User, UserStats,
     LeaderBoardUser, UserStatConstants, Friends, FriendsMetadata
-} from '../../src/app/model';
+} from '../../projects/model';
 
 
 export class FriendGameStats {

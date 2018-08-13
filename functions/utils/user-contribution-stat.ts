@@ -1,6 +1,6 @@
 import {
     User, Question, UserStatConstants
-} from '../../src/app/model';
+} from '../../projects/model';
 const userContributionQuestionService = require('../services/question.service');
 const userContributionUserService = require('../services/user.service');
 

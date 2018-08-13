@@ -1,6 +1,6 @@
 const blogFireBaseClient = require('../db/firebase-client');
 const blogFireStoreClient = blogFireBaseClient.firestore();
-import { Blog } from '../../src/app/model';
+import { Blog } from '../../projects/model';
 
 /**
  * setBlog
