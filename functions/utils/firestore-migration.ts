@@ -1,4 +1,4 @@
-import { Game, Question, Category, SearchResults, SearchCriteria } from '../../src/app/model';
+import { Game, Question, Category, SearchResults, SearchCriteria } from '../../projects/model';
 const migrateFireBaseClient = require('../db/firebase-client');
 
 export class FirestoreMigration {

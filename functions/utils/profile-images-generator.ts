@@ -1,6 +1,6 @@
 import {
     User
-} from '../../src/app/model';
+} from '../../projects/model';
 const profileImagesUserService = require('../services/user.service');
 const sharp = require('sharp');
 

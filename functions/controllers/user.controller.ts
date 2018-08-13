@@ -1,7 +1,7 @@
 
 const userService = require('../services/user.service');
 const sharp = require('sharp');
-import { User, UserStats } from '../../src/app/model';
+import { User, UserStats } from '../../projects/model';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 
 /**
