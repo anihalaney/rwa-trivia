@@ -13,8 +13,6 @@ import { CoreModule } from './core/core.module';
 import { SharedModule } from '../../../shared/shared.module';
 import { RoutingModule } from './routing/routing.module';
 
-
-
 import {
   AppComponent, DashboardComponent,
   HeaderComponent, FooterComponent

@@ -3,7 +3,7 @@ import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core
 import { Question, Answer, User } from '../../../model';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../../projects/trivia-admin/src/app/store';
-import { QuestionActions } from '../../../../projects/trivia-admin/src/app/core/store/actions';
+
 
 @Component({
   selector: 'question',
@@ -20,11 +20,11 @@ export class QuestionComponent implements OnChanges {
   answeredText: string;
   correctAnswerText: string;
 
-  constructor(private store: Store<AppState>, private questionAction: QuestionActions) {
+  constructor(private store: Store<AppState>) {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
-    });
+    //   this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+    //  });
   }
 
   ngOnChanges() {
@@ -49,7 +49,7 @@ export class QuestionComponent implements OnChanges {
   getNextQuestion() {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.store.dispatch(this.questionAction.getQuestionOfTheDay());
+    //  this.store.dispatch(this.questionAction.getQuestionOfTheDay());
 
   }
 

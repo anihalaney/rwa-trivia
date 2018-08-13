@@ -31,14 +31,6 @@ export class UserActions {
     };
   }
 
-  static STORE_INVITATION_TOKEN = 'STORE_INVITATION_TOKEN';
-  storeInvitationToken(token: string): ActionWithPayload<string> {
-    return {
-      type: UserActions.STORE_INVITATION_TOKEN,
-      payload: token
-    };
-  }
-
   static LOAD_OTHER_USER_PROFILE = 'LOAD_OTHER_USER_PROFILE';
   loadOtherUserProfile(userId: string): ActionWithPayload<string> {
     return {

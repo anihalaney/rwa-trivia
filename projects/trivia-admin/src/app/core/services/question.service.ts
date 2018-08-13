@@ -9,7 +9,7 @@ import { CONFIG } from '../../../environments/environment';
 import { Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../../../../model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
-import { QuestionActions } from '../store/actions';
+
 
 @Injectable()
 export class QuestionService {
@@ -17,15 +17,7 @@ export class QuestionService {
   constructor(private db: AngularFirestore,
     private storage: AngularFireStorage,
     private store: Store<AppState>,
-    private questionActions: QuestionActions,
     private http: HttpClient) {
-  }
-
-  // Elasticsearch
-  getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
-    let url: string = CONFIG.functionsUrl + '/app/question/day';
-    url = (isNextQuestion) ? `${url}/next` : `${url}/current`
-    return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
@@ -81,7 +73,7 @@ export class QuestionService {
     }
     this.db.doc('/unpublished_questions/' + dbQuestion.id).set(dbQuestion).then(ref => {
       if (questionId === dbQuestion.id) {
-        this.store.dispatch(this.questionActions.addQuestionSuccess());
+        //    this.store.dispatch(this.questionActions.addQuestionSuccess());
       }
     });
   }
@@ -129,7 +121,7 @@ export class QuestionService {
       .set(question)
       .then(ref => {
         if (index === questions.length - 1) {
-          this.store.dispatch(this.questionActions.addQuestionSuccess());
+          //  this.store.dispatch(this.questionActions.addQuestionSuccess());
         } else {
           index++;
           this.storeQuestion(index, questions);
