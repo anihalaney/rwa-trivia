@@ -11,7 +11,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/trivia",
+            "outputPath": "dist",
             "index": "projects/trivia/src/index.html",
             "main": "projects/trivia/src/main.ts",
             "tsConfig": "projects/trivia/tsconfig.app.json",
@@ -158,7 +158,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/trivia-admin",
+            "outputPath": "dist",
             "index": "projects/trivia-admin/src/index.html",
             "main": "projects/trivia-admin/src/main.ts",
             "polyfills": "projects/trivia-admin/src/polyfills.ts",
@@ -178,6 +178,14 @@
             "scripts": []
           },
           "configurations": {
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/trivia-admin/src/environments/environment.ts",
+                  "with": "projects/trivia-admin/src/environments/environment.dev.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -241,6 +249,14 @@
             "exclude": [
               "**/node_modules/**"
             ]
+          }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "functions/dist/server",
+            "main": "projects/trivia-admin/src/main.server.ts",
+            "tsConfig": "projects/trivia-admin/tsconfig.server.json"
           }
         }
       }
