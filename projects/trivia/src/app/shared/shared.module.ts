@@ -11,13 +11,12 @@ import { ShareButtonModule } from '@ngx-share/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
 
 import {
-  QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
+  QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
   QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent
 } from './components';
 
 @NgModule({
   declarations: [
-    QuestionComponent,
     QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
@@ -49,7 +48,7 @@ import {
   ],
   providers: [
   ],
-  exports: [QuestionComponent, QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
+  exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,

@@ -19,7 +19,7 @@ import { UserModule } from './user/user.module';
 import { StatsModule } from './stats/stats.module';
 
 import {
-  AppComponent, DashboardComponent,
+  AppComponent, DashboardComponent, QuestionComponent,
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -29,6 +29,7 @@ import { environment } from '../environments/environment';
   declarations: [
     AppComponent,
     DashboardComponent,
+    QuestionComponent,
     SideNavComponent,
     HeaderComponent,
     FooterComponent,

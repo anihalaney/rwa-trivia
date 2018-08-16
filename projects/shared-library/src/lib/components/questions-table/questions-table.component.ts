@@ -7,13 +7,13 @@ import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { Utils } from '../../services';
-import { AppState, appState } from '../../../../projects/trivia-admin/src/app/store';
+import { AppState, appState } from '../../../../../../projects/trivia-admin/src/app/store';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../model';
-import { bulkState } from '../../../../projects/trivia-admin/src/app/bulk/store';
+import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../../../model';
+import { bulkState } from '../../../../../../projects/trivia-admin/src/app/bulk/store';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
-import * as bulkActions from '../../../../projects/trivia-admin/src/app/bulk/store/actions';
+import * as bulkActions from '../../../../../../projects/trivia-admin/src/app/bulk/store/actions';
 
 
 @Component({

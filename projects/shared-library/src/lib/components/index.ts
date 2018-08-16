@@ -1,4 +1,4 @@
-import { QuestionComponent } from './question/question.component';
+
 import { QuestionsComponent } from './questions/questions.component';
 import { QuestionsSearchComponent } from './questions-search/questions-search.component';
 import { QuestionsTableComponent } from './questions-table/questions-table.component';
@@ -7,7 +7,6 @@ import { RejectedQuestionContentComponent } from './rejected-question-content/re
 import { SocialPaletteComponent } from './social-palette/social-palette.component';
 import { AuthorComponent } from './author/author.component';
 export {
-    QuestionComponent,
     QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
@@ -18,7 +17,6 @@ export {
 };
 
 export default [
-    QuestionComponent,
     QuestionsComponent,
     QuestionsSearchComponent,
     QuestionsTableComponent,
