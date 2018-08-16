@@ -15,6 +15,14 @@
     "lib": [
       "es2016",
       "dom"
-    ]
+    ],
+    "paths": {
+      "shared-library": [
+        "dist/shared-library"
+      ],
+      "shared-library/*": [
+        "dist/shared-library/*"
+      ]
+    }
   }
 }

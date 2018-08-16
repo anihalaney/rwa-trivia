@@ -2,10 +2,10 @@ import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } 
 import { PageEvent, MatCheckboxChange, MatSelectChange } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState } from '../../../../projects/trivia-admin/src/app/store';
+import { AppState, appState } from '../../../../../../projects/trivia-admin/src/app/store';
 import { Observable } from 'rxjs';
 
-import { Question, QuestionStatus, Category, SearchResults } from '../../../model';
+import { Question, QuestionStatus, Category, SearchResults } from '../../../../../model';
 
 @Component({
   selector: 'question-search',
