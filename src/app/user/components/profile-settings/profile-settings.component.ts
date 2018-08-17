@@ -171,7 +171,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   saveProfileImage() {
     if (!this.profileImageValidation) {
       const file = this.profileImageFile
-      const imageBlob = Utils.dataURItoBlob(this.profileImage.image, this.profileImageFile.type);
+      const imageBlob = Utils.dataURItoBlob(this.profileImage.image);
       const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
       this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile)
         .then((status) => {
