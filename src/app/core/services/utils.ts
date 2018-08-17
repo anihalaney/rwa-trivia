@@ -22,15 +22,13 @@ export class Utils {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  static dataURItoBlob(dataURI: any, type: string) {
+  static dataURItoBlob(dataURI: any) {
     const binary = atob(dataURI.split(',')[1]);
     const array = [];
     for (let i = 0; i < binary.length; i++) {
       array.push(binary.charCodeAt(i));
     }
-    return new Blob([new Uint8Array(array)], {
-      type: type
-    });
+    return new Blob([new Uint8Array(array)]);
   }
 
   static getImageUrl(user: User, width: Number, height: Number, size: string) {
