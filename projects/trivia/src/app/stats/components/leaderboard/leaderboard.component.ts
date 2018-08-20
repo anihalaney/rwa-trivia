@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState, categoryDictionary } from '../../../store';
 import { Observable, Subscription } from 'rxjs';
 
-import { Category, User, LeaderBoardUser } from '../../../model';
+import { Category, User, LeaderBoardUser } from '../../../../../../shared-library/src/public_api';
 import { leaderBoardState } from '../../store';
 import { UserActions } from '../../../core/store/actions';
 import * as leaderBoardActions from '../../store/actions';

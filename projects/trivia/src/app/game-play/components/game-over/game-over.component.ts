@@ -1,5 +1,5 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { User, Game, PlayerMode } from '../../../model';
+import { User, Game, PlayerMode } from '../../../../../../shared-library/src/public_api';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';

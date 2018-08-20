@@ -6,7 +6,7 @@ import { map, skip, take, filter } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
 import { Utils } from '../../core/services';
 import { AuthenticationProvider } from '../../core/auth';
-import { User } from '../../../../../model';
+import { User } from '../../../../../shared-library/src/public_api';
 import { Location } from '@angular/common';
 
 

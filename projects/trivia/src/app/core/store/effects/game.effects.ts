@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 
-import { Game, PlayerQnA, GameOptions, User, Question } from '../../../model';
+import { Game, PlayerQnA, GameOptions, User, Question } from '../../../../../../shared-library/src/public_api';
 import { ActionWithPayload, GameActions } from '../actions';
 import { GameService } from '../../services'
 import { map, switchMap } from 'rxjs/operators';

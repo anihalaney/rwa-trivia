@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, catchError, filter, mergeMap } from 'rxjs/operators';
 
-import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from '../../../model';
+import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from '../../../../../../shared-library/src/public_api';
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
 import { GameService } from '../../../core/services';

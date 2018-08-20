@@ -10,7 +10,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { reducers, CustomSerializer } from './store';
 
 import { CoreModule } from './core/core.module';
-// import { SharedModule } from '../../../shared/shared.module';
+import { SharedModule } from '../../../../projects/shared-library/src/public_api';
 import { RoutingModule } from './routing/routing.module';
 
 import {
@@ -19,7 +19,7 @@ import {
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { SharedModule } from '../../../../projects/shared-library/src/public_api';
+
 
 @NgModule({
   declarations: [

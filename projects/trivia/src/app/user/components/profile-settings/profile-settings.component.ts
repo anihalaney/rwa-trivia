@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map, take, finalize } from 'rxjs/operators';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { Utils } from '../../../core/services';
-import { User, Category } from '../../../model';
+import { User, Category } from '../../../../../../shared-library/src/public_api';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as cloneDeep from 'lodash.clonedeep';

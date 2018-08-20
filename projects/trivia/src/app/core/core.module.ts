@@ -28,7 +28,7 @@ import { reducer } from './store';
 
 import { LoginComponent } from './components';
 
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../../../shared-library/src/public_api';
 
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 

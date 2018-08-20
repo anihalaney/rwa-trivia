@@ -1,6 +1,6 @@
 import {
     User
-} from '../../projects/model';
+} from '../../projects/shared-library/src/lib/model';
 const profileImagesUserService = require('../services/user.service');
 const sharp = require('sharp');
 

@@ -2,7 +2,7 @@ const generalFireBaseClient = require('../db/firebase-client');
 const generalFireStoreClient = generalFireBaseClient.firestore();
 const functions = require('firebase-functions');
 import { ESUtils } from '../utils/ESUtils';
-import { Question } from '../../projects/model';
+import { Question } from '../../projects/shared-library/src/lib/model';
 
 /**
  * migrateCollection

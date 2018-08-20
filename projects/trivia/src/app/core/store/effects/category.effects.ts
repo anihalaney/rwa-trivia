@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { map, filter, switchMap } from 'rxjs/operators';
 import { Effect, Actions } from '@ngrx/effects';
 import { CategoryActions } from '../actions';
-import { Category, RouterStateUrl } from '../../../model';
+import { Category, RouterStateUrl } from '../../../../../../shared-library/src/public_api';
 import { CategoryService } from '../../services';
 
 @Injectable()
@@ -23,9 +23,9 @@ export class CategoryEffects {
             filter((routerState: RouterStateUrl) =>
                 routerState.url.toLowerCase().startsWith('/')))
         .pipe(
-        switchMap(() =>
-            this.svc.getCategories()
-        .pipe(
-            map((categories: Category[]) => this.categoryActions.loadCategoriesSuccess(categories))
-        )));
+            switchMap(() =>
+                this.svc.getCategories()
+                    .pipe(
+                        map((categories: Category[]) => this.categoryActions.loadCategoriesSuccess(categories))
+                    )));
 }

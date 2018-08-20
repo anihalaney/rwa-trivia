@@ -17,14 +17,16 @@
     <mat-tab-group (selectedTabChange)="tabChanged($event)" [(selectedIndex)]="selectedTab">
       <mat-tab label="Published">
         <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" [categoryDictionary]="categoryDictObs | async"
-          (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)" (onTagChanged)="tagChanged($event)"
-          (onSortOrderChanged)="sortOrderChanged($event)" class="flex-container" fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center"
-          fxLayoutAlign.xs="start">
+          [categoriesObs]="categoriesObs" (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)"
+          (onTagChanged)="tagChanged($event)" (onSortOrderChanged)="sortOrderChanged($event)" class="flex-container" fxLayoutWrap="wrap"
+          fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.xs="start">
         </question-search>
       </mat-tab>
       <mat-tab label="Unpublished">
         <question-table [showSort]="false" [showPaginator]="true" [questions]="unpublishedQuestionsObs | async" [totalCount]="10"
-          [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true" [showButtons]="true" [userDict]="userDict" [clientSidePagination]="true">
+          [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true" [showButtons]="true" [userDict]="userDict"
+          [user]="user" [clientSidePagination]="true" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)"
+          (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)">
         </question-table>
       </mat-tab>
     </mat-tab-group>

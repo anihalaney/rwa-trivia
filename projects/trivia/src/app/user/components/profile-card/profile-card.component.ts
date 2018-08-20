@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { User } from '../../../model';
+import { User } from '../../../../../../shared-library/src/public_api';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { AppState, appState } from '../../../store';

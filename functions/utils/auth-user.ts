@@ -1,5 +1,5 @@
 const firebaseAuthService = require('../services/firebase-auth.service');
-import { User } from '../../projects/model';
+import { User } from '../../projects/shared-library/src/lib/model';
 
 export class AuthUser {
 

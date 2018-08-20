@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { AdminActions, AdminActionTypes } from '../actions';
-import { SearchResults, Question } from '../../../../../../model';
+import { SearchResults, Question } from '../../../../../../shared-library/src/public_api';
 
 // Load Question As per Search criteria
 export function questionsSearchResults(state: any = [], action: AdminActions): SearchResults {

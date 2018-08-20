@@ -1,11 +1,8 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 import { PageEvent, MatCheckboxChange, MatSelectChange } from '@angular/material';
-import { Store, select } from '@ngrx/store';
-
-import { AppState, appState } from '../../../../../../projects/trivia-admin/src/app/store';
 import { Observable } from 'rxjs';
 
-import { Question, QuestionStatus, Category, SearchResults } from '../../../../../model';
+import { Question, QuestionStatus, Category, SearchResults } from '../../model';
 
 @Component({
   selector: 'question-search',
@@ -16,6 +13,7 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
   @Input() questionsSearchResults: SearchResults;
   @Input() categoryDictionary: { [key: number]: Category };
   @Input() showApproveButton: boolean;
+  @Input() categoriesObs: Observable<Category[]>;
   @Output() approveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onCategoryChanged = new EventEmitter<{ categoryId: number, added: boolean }>();
@@ -25,13 +23,13 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
   questions: Question[];
   totalCount: number;
 
-  categoriesObs: Observable<Category[]>;
+
   categoryAggregation: { [key: number]: number };
   tagsCount: { tag: string, count: number }[];
   tagsChecked: { [key: string]: boolean };
 
-  constructor(private store: Store<AppState>) {
-    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
+  constructor() {
+
   }
 
   ngOnInit() {

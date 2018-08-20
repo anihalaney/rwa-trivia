@@ -1,5 +1,5 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
-import { Question, QuestionStatus, Category, User, Answer } from '../../../../../model';
+import { Question, QuestionStatus, Category, User, Answer } from '../../model';
 
 @Component({
   selector: 'app-rejected-question-content',

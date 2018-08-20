@@ -49,7 +49,8 @@
                 <div class="row col-sm-3 col-xs-12 question-status">
                   <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
                   <label>
-                    <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
+                    <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",'
+                      ') | titlecase}}</b>
                   </label>
                   <div *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'" class="status-btn">
                     <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
@@ -110,7 +111,8 @@
                   <div class="col-md-12 question-status">
                     <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
                     <label>
-                      <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",' ') | titlecase}}</b>
+                      <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",'
+                        ') | titlecase}}</b>
                     </label>
                   </div>
                 </div>
@@ -186,7 +188,8 @@
         </div>
       </div>
       <div class="row edit-form-div" *ngIf="row === editQuestion">
-        <app-question-form [editQuestion]="editQuestion" (updateStatus)=nullifyQuestion($event)></app-question-form>
+        <app-question-form [editQuestion]="editQuestion" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" (updateStatus)=nullifyQuestion($event)
+          (updateUnpublishedQuestion)="updateQuestionData($event)"></app-question-form>
       </div>
       <div class="row rejection-div" *ngIf="row === viewReasonArray[i]">
         <app-rejected-question-content [rejectQuestion]="viewReasonArray[i]" (cancelStatus)=showQuestion($event)></app-rejected-question-content>

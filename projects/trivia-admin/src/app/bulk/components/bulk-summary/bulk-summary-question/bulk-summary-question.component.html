@@ -66,7 +66,11 @@
     <mat-tab label="Unpublished">
       <question-table *ngIf="unPublishedCount != 0" [bulkUploadFileInfo]="bulkUploadFileInfo" [showSort]="false" [showPaginator]="true"
         [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions" [totalCount]="unPublishedCount"
-        [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false" [clientSidePagination]="true">
+        [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false" [clientSidePagination]="true" [user]="user"
+        [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)"
+        (updateBulkUpload)="updateBulkUpload($event)" (loadBulkUploadById)="loadBulkUploadById($event)" (updateBulkUploadedApprovedQuestionStatus)="updateBulkUploadedApprovedQuestionStatus($event)"
+        (updateBulkUploadedRequestToChangeQuestionStatus)="updateBulkUploadedRequestToChangeQuestionStatus($event)" (updateBulkUploadedRejectQuestionStatus)="updateBulkUploadedRejectQuestionStatus($event)"
+        (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)">
       </question-table>
     </mat-tab>
   </mat-tab-group>

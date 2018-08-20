@@ -2,7 +2,7 @@ import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 
 import { ActionWithPayload, CategoryActions } from '../actions';
-import { Category } from '../../../../../../model';
+import { Category } from '../../../../../../shared-library/src/public_api';
 
 export function categories(state: any = [], action: ActionWithPayload<Category[]>): Category[] {
   switch (action.type) {

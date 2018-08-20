@@ -1,13 +1,9 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { Utils } from '../../services/utils';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { Question, QuestionStatus, Category, User, Answer } from '../../../../../model';
-
-import { AppState, appState, getCategories, getTags } from '../../../../../../projects/trivia-admin/src/app/store';
-import * as bulkActions from '../../../../../../projects/trivia-admin/src/app/bulk/store';
+import { Question, QuestionStatus, Category, User, Answer } from '../../model';
 
 @Component({
   selector: 'app-question-form',
@@ -17,12 +13,14 @@ import * as bulkActions from '../../../../../../projects/trivia-admin/src/app/bu
 export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() editQuestion: Question;
+  @Input() tagsObs: Observable<string[]>;
+  @Input() categoriesObs: Observable<Category[]>;
   @Output() updateStatus = new EventEmitter<boolean>();
+  @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
 
   questionForm: FormGroup;
 
-  tagsObs: Observable<string[]>;
-  categoriesObs: Observable<Category[]>;
+
   subs: Subscription[] = [];
 
   // Properties
@@ -40,10 +38,9 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     return this.questionForm.get('tagsArray') as FormArray;
   }
 
-  constructor(private store: Store<AppState>,
+  constructor(
     private fb: FormBuilder) {
-    this.categoriesObs = store.select(getCategories);
-    this.tagsObs = this.store.select(getTags);
+
 
   }
 
@@ -186,8 +183,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateQuestion(question: Question) {
-    // this.store.dispatch(this.questionActions.updateQuestion(question));
-    this.store.dispatch(new bulkActions.UpdateQuestion({ question: question }));
+    this.updateUnpublishedQuestions.emit(question);
     this.updateStatus.emit(true);
   }
 

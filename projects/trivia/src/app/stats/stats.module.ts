@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../../../shared-library/src/public_api';
 import { LeaderboardComponent, RealtimeStatsComponent } from './components';
 import { effects, reducer } from './store';
 

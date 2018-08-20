@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '../../../../../model';
+import { User } from '../../../../../shared-library/src/public_api';
 
 @Component({
   selector: 'app-header',

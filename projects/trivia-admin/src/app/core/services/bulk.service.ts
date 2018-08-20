@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { HttpClient } from '@angular/common/http';
-import { BulkUploadFileInfo, User } from '../../../../../model';
+import { BulkUploadFileInfo, User } from '../../../../../shared-library/src/public_api';
 
 @Injectable()
 export class BulkService {

@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { CONFIG } from '../../../environments/environment';
-import { Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../model';
+import { Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../../../../shared-library/src/public_api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
 import { QuestionActions } from '../store/actions';
@@ -44,7 +44,7 @@ export class QuestionService {
         catchError(error => {
           console.log(error);
           return of(null);
-      }));
+        }));
   }
 
   // get Questions by bulk upload id
@@ -58,9 +58,9 @@ export class QuestionService {
       .pipe(
         map(qs => qs.map(q => Question.getViewModelFromDb(q))),
         catchError(error => {
-        console.log(error);
-        return of(null);
-      }));
+          console.log(error);
+          return of(null);
+        }));
   }
 
   getUnpublishedQuestions(flag: boolean): Observable<Question[]> {
@@ -137,16 +137,5 @@ export class QuestionService {
       });
   }
 
-  approveQuestion(question: Question) {
-    const dbQuestion = Object.assign({}, question); // object to be saved
-    const questionId = dbQuestion.id;
-    dbQuestion.status = QuestionStatus.APPROVED;
-    // Transaction to remove from unpublished and add to published questions collection
-    this.db.firestore.runTransaction(transaction => {
-      return transaction.get(this.db.doc('/unpublished_questions/' + questionId).ref).then(doc =>
-        transaction.set(this.db.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
-      )
-    })
 
-  }
 }

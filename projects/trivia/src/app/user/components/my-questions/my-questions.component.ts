@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { QuestionActions } from '../../../core/store';
-import { User, Question, QuestionStatus, Category } from '../../../model';
+import { User, Question, QuestionStatus, Category } from '../../../../../../shared-library/src/public_api';
 
 import { userState } from '../../../user/store';
 import * as userActions from '../../store/actions';

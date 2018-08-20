@@ -2,7 +2,7 @@ import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { BulkUploadFileInfo, Question, Category } from '../../../../model';
+import { BulkUploadFileInfo, Question, Category } from '../../../../../../../shared-library/src/public_api';
 import { MatTableDataSource } from '@angular/material';
 import { Utils } from '../../../../core/services';
 import { AngularFireStorage } from 'angularfire2/storage';

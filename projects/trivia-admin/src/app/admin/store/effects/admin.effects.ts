@@ -3,7 +3,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, filter } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
-import { SearchResults, Question, RouterStateUrl, SearchCriteria } from '../../../../../../model';
+import { SearchResults, Question, RouterStateUrl, SearchCriteria } from '../../../../../../shared-library/src/public_api';
 import { AdminActionTypes } from '../actions';
 import * as adminActions from '../actions/admin.actions';
 import { QuestionService } from '../../../core/services';
@@ -22,11 +22,11 @@ export class AdminEffects {
             filter((routerState: RouterStateUrl) =>
                 routerState.url.toLowerCase().startsWith('/admin')))
         .pipe(
-        switchMap((routerState: RouterStateUrl) =>
-            this.svc.getQuestions(0, 25, new SearchCriteria()).pipe(
-                map((results: SearchResults) => new adminActions.LoadQuestionsSuccess(results))
+            switchMap((routerState: RouterStateUrl) =>
+                this.svc.getQuestions(0, 25, new SearchCriteria()).pipe(
+                    map((results: SearchResults) => new adminActions.LoadQuestionsSuccess(results))
+                )
             )
-        )
         );
 
     // Load User Published Question by userId from router
@@ -37,14 +37,14 @@ export class AdminEffects {
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
-            routerState.url.toLowerCase().startsWith('/admin')
-        ))
+                routerState.url.toLowerCase().startsWith('/admin')
+            ))
         .pipe(
-        switchMap((routerState: RouterStateUrl) =>
-            this.svc.getUnpublishedQuestions(routerState.url.toLowerCase().includes('bulk')).pipe(
-                map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
+            switchMap((routerState: RouterStateUrl) =>
+                this.svc.getUnpublishedQuestions(routerState.url.toLowerCase().includes('bulk')).pipe(
+                    map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
+                )
             )
-        )
         );
 
     // Load Question As per Search critearea
@@ -52,11 +52,11 @@ export class AdminEffects {
     loadQuestions$ = this.actions$
         .ofType(AdminActionTypes.LOAD_QUESTIONS)
         .pipe(
-        switchMap((action: adminActions.LoadQuestions) =>
-            this.svc.getQuestions(action.payload.startRow, action.payload.pageSize, action.payload.criteria).pipe(
-                map((results: SearchResults) => new adminActions.LoadQuestionsSuccess(results))
+            switchMap((action: adminActions.LoadQuestions) =>
+                this.svc.getQuestions(action.payload.startRow, action.payload.pageSize, action.payload.criteria).pipe(
+                    map((results: SearchResults) => new adminActions.LoadQuestionsSuccess(results))
+                )
             )
-        )
         );
 
     // Load All Unpublished Question
@@ -64,11 +64,11 @@ export class AdminEffects {
     loadUnpublishedQuestions$ = this.actions$
         .ofType(AdminActionTypes.LOAD_UNPUBLISHED_QUESTIONS)
         .pipe(
-        switchMap((action: adminActions.LoadUnpublishedQuestions) =>
-            this.svc.getUnpublishedQuestions(action.payload.question_flag).pipe(
-                map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
+            switchMap((action: adminActions.LoadUnpublishedQuestions) =>
+                this.svc.getUnpublishedQuestions(action.payload.question_flag).pipe(
+                    map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
+                )
             )
-        )
         );
 
     // Approve Question
@@ -76,10 +76,10 @@ export class AdminEffects {
     approveQuestion$ = this.actions$
         .ofType(AdminActionTypes.APPROVE_QUESTION)
         .pipe(
-        switchMap((action: adminActions.ApproveQuestion) => {
-            this.svc.approveQuestion(action.payload.question);
-            return empty();
-        })
+            switchMap((action: adminActions.ApproveQuestion) => {
+                this.svc.approveQuestion(action.payload.question);
+                return empty();
+            })
         );
 
     constructor(
