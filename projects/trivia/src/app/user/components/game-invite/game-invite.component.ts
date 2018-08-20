@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
 
 
-import { User, Game, Category, GameStatus } from '../../../model';
+import { User, Game, Category, GameStatus } from '../../../../../../shared-library/src/public_api';
 import { gameInvites } from '../../../game-play/store';
 
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
 
-import { Category } from '../../../model';
+import { Category } from '../../../../../../shared-library/src/public_api';
 
 @Injectable()
 export class CategoryActions {

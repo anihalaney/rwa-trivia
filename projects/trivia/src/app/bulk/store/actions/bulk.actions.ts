@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { BulkUploadFileInfo, User, Question, BulkUpload } from '../../../model';
+import { BulkUploadFileInfo, User, Question, BulkUpload } from '../../../../../../shared-library/src/public_api';
 
 export enum BulkActionTypes {
     LOAD_BULK_UPLOAD = '[Bulk] LoadBulkUpload',
@@ -16,7 +16,6 @@ export enum BulkActionTypes {
     LOAD_BULK_UPLOAD_FILE_URL_SUCCESS = '[Bulk] LoadBulkUploadFileUrlSuccess',
     UPDATE_QUESTION = '[Bulk] UpdateQuestion',
     UPDATE_BULK_UPLOAD = '[Bulk] UpdateBulkUpload',
-    APPROVE_QUESTION = '[Bulk] ApproveQuestion',
     ADD_BULK_QUESTIONS = '[Bulk] AddBulkQuestion',
     ARCHIVE_BULK_UPLOAD = '[Bulk] ArchiveBulkUpload',
     ARCHIVE_BULK_UPLOAD_SUCCESS = '[Bulk] ArchiveBulkUploadSuccess',
@@ -102,12 +101,6 @@ export class UpdateBulkUpload implements Action {
     constructor(public payload: { bulkUploadFileInfo: BulkUploadFileInfo }) { }
 }
 
-// approve  Questions
-export class ApproveQuestion implements Action {
-    readonly type = BulkActionTypes.APPROVE_QUESTION;
-    constructor(public payload: { question: Question }) { }
-}
-
 // add bulk Question
 export class AddBulkQuestions implements Action {
     readonly type = BulkActionTypes.ADD_BULK_QUESTIONS;
@@ -162,7 +155,6 @@ export type BulkActions
     | LoadBulkUploadFileUrlSuccess
     | UpdateQuestion
     | UpdateBulkUpload
-    | ApproveQuestion
     | AddBulkQuestions
     | ArchiveBulkUpload
     | ArchiveBulkUploadSuccess

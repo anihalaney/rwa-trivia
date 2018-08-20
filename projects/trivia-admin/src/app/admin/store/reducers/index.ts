@@ -1,5 +1,5 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
-import { SearchResults, Question } from '../../../../../../model';
+import { SearchResults, Question } from '../../../../../../shared-library/src/public_api';
 import { questionsSearchResults, unpublishedQuestions, getQuestionToggleState, getArchiveToggleState } from './admin.reducer';
 export * from './admin.reducer';
 

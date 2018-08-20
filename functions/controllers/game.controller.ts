@@ -1,4 +1,4 @@
-import { SearchCriteria, Game, GameOperations, PlayerQnA, GameStatus, schedulerConstants } from '../../projects/model';
+import { SearchCriteria, Game, GameOperations, PlayerQnA, GameStatus, schedulerConstants } from '../../projects/shared-library/src/lib/model';
 import { Utils } from '../utils/utils';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';

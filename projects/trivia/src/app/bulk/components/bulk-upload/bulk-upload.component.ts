@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import { Utils } from '../../../core/services';
-import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload } from '../../../model';
+import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload } from '../../../../../../shared-library/src/public_api';
 import { PapaParseService } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
 

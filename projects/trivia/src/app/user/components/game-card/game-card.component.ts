@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState, appState, categoryDictionary } from '../../../store';
-import { User, Game, Category, PlayerMode, GameStatus } from '../../../model';
+import { User, Game, Category, PlayerMode, GameStatus } from '../../../../../../shared-library/src/public_api';
 import { take } from 'rxjs/operators';
 import { Utils } from '../../../core/services';
 

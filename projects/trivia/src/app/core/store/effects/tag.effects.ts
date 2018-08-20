@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { RouterStateUrl } from '../../../model';
+import { RouterStateUrl } from '../../../../../../shared-library/src/public_api';
 import { TagActions } from '../actions';
 import { TagService } from '../../services'
 import { map, filter, switchMap } from 'rxjs/operators';
@@ -24,11 +24,11 @@ export class TagEffects {
                 routerState.url.toLowerCase().startsWith('/')
             ))
         .pipe(
-        switchMap(() => 
-        this.svc.getTags()
-        .pipe(
-            map((tags: string[]) => this.tagActions.loadTagsSuccess(tags))
-        )));
+            switchMap(() =>
+                this.svc.getTags()
+                    .pipe(
+                        map((tags: string[]) => this.tagActions.loadTagsSuccess(tags))
+                    )));
 
 }
 

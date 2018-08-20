@@ -1,4 +1,4 @@
-import { Game, Question, Category, SearchResults, SearchCriteria } from '../../projects/model';
+import { Game, Question, Category, SearchResults, SearchCriteria } from '../../projects/shared-library/src/lib/model';
 
 const fs = require('fs');
 const path = require('path');
@@ -153,10 +153,10 @@ export class ESUtils {
           client.bulk({ 'body': body }).then(resp => {
             console.log('All items indexed');
           })
-          .catch((error) => {
-            console.log(error);
-            throw (error);
-          });
+            .catch((error) => {
+              console.log(error);
+              throw (error);
+            });
         }
       })
       .catch((error) => {

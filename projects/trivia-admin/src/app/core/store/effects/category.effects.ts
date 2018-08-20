@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { map, filter, switchMap } from 'rxjs/operators';
 import { Effect, Actions } from '@ngrx/effects';
 import { CategoryActions } from '../actions';
-import { Category, RouterStateUrl } from '../../../../../../model';
+import { Category, RouterStateUrl } from '../../../../../../shared-library/src/public_api';
 import { CategoryService } from '../../services';
 
 @Injectable()

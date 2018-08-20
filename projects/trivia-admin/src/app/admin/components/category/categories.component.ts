@@ -5,7 +5,7 @@ import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
-import { Category } from '../../../../../../model';
+import { Category } from '../../../../../../shared-library/src/public_api';
 
 @Component({
   selector: 'category-list',

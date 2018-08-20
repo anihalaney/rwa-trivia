@@ -1,15 +1,15 @@
 import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, Subscription } from 'rxjs';
+import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { BulkUploadFileInfo, Question, Category } from '../../../../../../../model';
+import { BulkUploadFileInfo, Question, Category, User, QuestionStatus } from '../../../../../../../shared-library/src/public_api';
 import { MatTableDataSource } from '@angular/material';
 import { Utils } from '../../../../core/services';
 import { AngularFireStorage } from 'angularfire2/storage';
 
 
 import { MatSnackBar } from '@angular/material';
-import { AppState, appState, categoryDictionary } from '../../../../store';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -38,7 +38,12 @@ export class BulkSummaryQuestionComponent implements OnInit {
 
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl: boolean;
+  user: User;
 
+  sub: Subscription;
+
+  tagsObs: Observable<string[]>;
+  categoriesObs: Observable<Category[]>;
 
   constructor(
     private store: Store<AppState>,
@@ -97,9 +102,13 @@ export class BulkSummaryQuestionComponent implements OnInit {
       }
     });
 
+    this.categoriesObs = store.select(getCategories);
+    this.tagsObs = this.store.select(getTags);
+
   }
 
   ngOnInit() {
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
     const url = this.router.routerState.snapshot.url.toString();
     if (url.includes('admin')) {
       this.isAdminUrl = true;
@@ -124,6 +133,65 @@ export class BulkSummaryQuestionComponent implements OnInit {
     (!this.isAdminUrl) ? this.router.navigate(['/bulk']) : this.router.navigate(['/admin/bulk']);
   }
 
+  approveUnpublishedQuestions(question: Question) {
+    this.store.dispatch(new bulkActions.ApproveQuestion({ question: question }));
+  }
+
+  updateBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo) {
+    this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: bulkUploadFileInfo }));
+  }
+
+  loadBulkUploadById(question: Question) {
+    this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: question.bulkUploadId }));
+  }
+
+  updateUnpublishedQuestions(question: Question) {
+    this.store.dispatch(new bulkActions.UpdateQuestion({ question: question }));
+  }
+
+  updateBulkUploadedApprovedQuestionStatus(question: Question) {
+    this.loadBulkUploadById(question);
+    this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+      if (obj) {
+        this.bulkUploadFileInfo = obj;
+        if (question.status === QuestionStatus.REJECTED) {
+          this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+        }
+        this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
+        this.updateBulkUpload(this.bulkUploadFileInfo);
+        this.bulkUploadFileInfo = undefined;
+        Utils.unsubscribe([this.sub]);
+      }
+    });
+  }
+
+  updateBulkUploadedRequestToChangeQuestionStatus(question: Question) {
+    this.loadBulkUploadById(question);
+    this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+      if (obj) {
+        this.bulkUploadFileInfo = obj;
+        if (this.bulkUploadFileInfo.rejected > 0) {
+          this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
+        }
+        this.updateBulkUpload(this.bulkUploadFileInfo);
+        this.bulkUploadFileInfo = undefined;
+        Utils.unsubscribe([this.sub]);
+      }
+    });
+  }
+
+  updateBulkUploadedRejectQuestionStatus(question: Question) {
+    this.loadBulkUploadById(question);
+    this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+      if (obj) {
+        this.bulkUploadFileInfo = obj;
+        this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
+        this.updateBulkUpload(this.bulkUploadFileInfo);
+        this.bulkUploadFileInfo = undefined;
+        Utils.unsubscribe([this.sub]);
+      }
+    });
+  }
 
 }
 

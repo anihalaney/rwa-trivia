@@ -9,8 +9,8 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Utils, WindowRef } from '../../core/services';
 import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
 import * as gameplayactions from '../../game-play/store/actions';
-import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../model';
-import { OpponentType } from '../../model/game-options';
+import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../../../../shared-library/src/public_api';
+import { OpponentType } from '../../../../../shared-library/src/public_api';
 
 
 @Component({

@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { switchMap, map, filter, take, mergeMap } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
-import { Question, RouterStateUrl, Friends, Game } from '../../../model';
+import { Question, RouterStateUrl, Friends, Game } from '../../../../../../shared-library/src/public_api';
 import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
 import { UserService, QuestionService, GameService } from '../../../core/services';

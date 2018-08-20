@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload, QuestionActions } from '../actions';
-import { Question, SearchResults } from '../../../model';
+import { Question, SearchResults } from '../../../../../../shared-library/src/public_api';
 
 
 export function questionOfTheDay(state: any = null, action: ActionWithPayload<any>): any {

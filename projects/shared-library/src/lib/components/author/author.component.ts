@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
-import { User } from '../../../../../model';
+import { User } from '../../projects/shared-library/src/lib/model';
 import { Utils } from '../../services';
 
 @Component({

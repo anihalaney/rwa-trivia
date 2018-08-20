@@ -4,11 +4,12 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { PageEvent } from '@angular/material';
-import { AppState, appState, categoryDictionary } from '../../../store/app-store';
-import { User, Question, Category, SearchResults, SearchCriteria } from '../../../../../../model';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store/app-store';
+import { User, Question, Category, SearchResults, SearchCriteria, BulkUploadFileInfo } from '../../../../../../shared-library/src/public_api';
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
+import * as bulkActions from '../../../bulk/store/actions';
 import { Router } from '@angular/router';
 import { UserActions } from '../../../core/store/actions';
 import { MatTabChangeEvent } from '@angular/material';
@@ -28,6 +29,9 @@ export class AdminQuestionsComponent implements OnInit {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   selectedTab = 0;
+  user: User;
+  tagsObs: Observable<string[]>;
+  categoriesObs: Observable<Category[]>;
 
   constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
 
@@ -69,18 +73,19 @@ export class AdminQuestionsComponent implements OnInit {
         this.router.navigate(['/admin/questions']);
       }
     });
+
+    this.categoriesObs = store.select(getCategories);
+    this.tagsObs = this.store.select(getTags);
   }
 
   ngOnInit() {
     // this.store.dispatch(new adminActions.SaveQuestionToggleState
     //   ({ toggle_state: 'Published' }));
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
   }
 
   approveQuestion(question: Question) {
-    let user: User;
-
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user);
-    question.approved_uid = user.userId;
+    question.approved_uid = this.user.userId;
     this.store.dispatch(new adminActions.LoadUnpublishedQuestions({ 'question_flag': this.toggleValue }));
     this.store.dispatch(new adminActions.ApproveQuestion({ question: question }));
 
@@ -138,4 +143,14 @@ export class AdminQuestionsComponent implements OnInit {
     this.store.dispatch(new adminActions.SaveQuestionToggleState
       ({ toggle_state: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));
   }
+
+  approveUnpublishedQuestions(question: Question) {
+    this.store.dispatch(new bulkActions.ApproveQuestion({ question: question }));
+  }
+
+  updateUnpublishedQuestions(question: Question) {
+    this.store.dispatch(new bulkActions.UpdateQuestion({ question: question }));
+  }
+
+
 }

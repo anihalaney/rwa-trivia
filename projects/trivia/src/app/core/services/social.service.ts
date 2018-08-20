@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { finalize, catchError, take, map } from 'rxjs/operators';
 
 import { CONFIG } from '../../../environments/environment';
-import { Subscription, Subscribers, SocialGameScoreShare, Blog } from '../../model';
+import { Subscription, Subscribers, SocialGameScoreShare, Blog } from '../../../../../shared-library/src/public_api';
 import { UserService } from './user.service';
 
 

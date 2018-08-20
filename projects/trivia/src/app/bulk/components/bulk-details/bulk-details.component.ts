@@ -1,23 +1,29 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { AppState, appState, categoryDictionary } from '../../../store';
-import { User, Category, Question } from '../../../model';
-
+import { take } from 'rxjs/operators';
+import { Store, select } from '@ngrx/store';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+import { bulkState } from '../../store';
+import { User, Category, Question, BulkUploadFileInfo } from '../../../../../../shared-library/src/public_api';
+import * as bulkActions from '../../store/actions';
 
 @Component({
   selector: 'bulk-details',
   templateUrl: './bulk-details.component.html',
   styleUrls: ['./bulk-details.component.scss']
 })
-export class BulkDetailsComponent implements OnChanges {
+export class BulkDetailsComponent implements OnChanges, OnInit {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   @Input() parsedQuestions: Array<Question>;
   @Input() showPaginator;
   questions: Question[];
   totalCount: number;
+  user: User;
+
+  tagsObs: Observable<string[]>;
+  categoriesObs: Observable<Category[]>;
 
   constructor(private store: Store<AppState>,
     private router: Router) {
@@ -29,6 +35,14 @@ export class BulkDetailsComponent implements OnChanges {
       this.totalCount = this.parsedQuestions.length;
     }
   }
+
+  ngOnInit() {
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
+    this.categoriesObs = this.store.select(getCategories);
+    this.tagsObs = this.store.select(getTags);
+  }
+
+
 }
 
 

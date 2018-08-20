@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../../environments/environment'
-import { User } from '../../model'
+import { User } from '../../../../../shared-library/src/public_api'
 
 @Injectable()
 export class Utils {

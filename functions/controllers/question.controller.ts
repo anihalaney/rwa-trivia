@@ -1,5 +1,5 @@
 import { ESUtils } from '../utils/ESUtils';
-import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode } from '../../projects/model';
+import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode } from '../../projects/shared-library/src/lib/model';
 import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
 const utils: Utils = new Utils();

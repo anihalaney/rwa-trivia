@@ -1,4 +1,4 @@
-import { Subscribers } from '../../projects/model';
+import { Subscribers } from '../../projects/shared-library/src/lib/model';
 const subscriptionService = require('../services/subscription.service');
 
 export class Subscription {

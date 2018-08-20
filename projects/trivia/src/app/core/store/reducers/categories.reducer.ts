@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
-import {Action} from '@ngrx/store';
+import { Action } from '@ngrx/store';
 
-import {ActionWithPayload, CategoryActions} from '../actions';
-import { Category } from '../../../model';
+import { ActionWithPayload, CategoryActions } from '../actions';
+import { Category } from '../../../../../../shared-library/src/public_api';
 
 export function categories(state: any = [], action: ActionWithPayload<Category[]>): Category[] {
   switch (action.type) {
@@ -14,7 +14,7 @@ export function categories(state: any = [], action: ActionWithPayload<Category[]
 }
 
 //selectors
-export const getCategoryDictionary = (state: Category[]) => 
+export const getCategoryDictionary = (state: Category[]) =>
   state.reduce((result, category) => {
     result[category.id] = category;
     return result;

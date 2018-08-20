@@ -2,7 +2,7 @@ const userFireBaseClient = require('../db/firebase-client');
 const userFireStoreClient = userFireBaseClient.firestore();
 const bucket = userFireBaseClient.storage().bucket();
 const stream = require('stream');
-import { User } from '../../projects/model';
+import { User } from '../../projects/shared-library/src/lib/model';
 /**
  * getUserById
  * return user

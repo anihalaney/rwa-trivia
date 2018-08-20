@@ -5,15 +5,11 @@ import {
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
-import { Store, select } from '@ngrx/store';
 import { Utils } from '../../services';
-import { AppState, appState } from '../../../../../../projects/trivia-admin/src/app/store';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../../../../model';
-import { bulkState } from '../../../../../../projects/trivia-admin/src/app/bulk/store';
+import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../model';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
-import * as bulkActions from '../../../../../../projects/trivia-admin/src/app/bulk/store/actions';
 
 
 @Component({
@@ -32,11 +28,24 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   @Input() showApproveButton: boolean;
   @Input() showButtons: boolean;
   @Input() clientSidePagination: boolean;
+  @Input() userDict: { [key: string]: User };
+  @Input() user: User;
+  @Input() tagsObs: Observable<string[]>;
+  @Input() categoriesObs: Observable<Category[]>;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();
+  @Output() approveUnpublishedQuestion = new EventEmitter<Question>();
+  @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
+  @Output() updateBulkUpload = new EventEmitter<BulkUploadFileInfo>();
+  @Output() loadBulkUploadById = new EventEmitter<Question>();
+  @Output() updateBulkUploadedApprovedQuestionStatus = new EventEmitter<Question>();
+  @Output() updateBulkUploadedRequestToChangeQuestionStatus = new EventEmitter<Question>();
+  @Output() updateBulkUploadedRejectQuestionStatus = new EventEmitter<Question>();
+
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  @Input() userDict: { [key: string]: User };
+
 
   requestFormGroup: FormGroup;
   rejectFormGroup: FormGroup;
@@ -53,12 +62,12 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   requestQuestion: Question;
   rejectQuestion: Question;
   editQuestion: Question;
-  user: User;
+
 
   viewReasonArray = [];
   sub: Subscription;
 
-  constructor(private store: Store<AppState>,
+  constructor(
     private fb: FormBuilder) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
@@ -66,8 +75,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   }
 
   ngOnInit() {
-
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
     this.requestFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });
@@ -104,7 +111,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   // approveQuestions
   approveQuestion(question: Question) {
     question.approved_uid = this.user.userId;
-    this.store.dispatch(new bulkActions.ApproveQuestion({ question: question }));
+
+    this.approveUnpublishedQuestion.emit(question);
     if (this.bulkUploadFileInfo) {
       if (question.status === QuestionStatus.REJECTED) {
         if (this.bulkUploadFileInfo.rejected !== 0) {
@@ -112,21 +120,10 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
         }
       }
       this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
-      this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+      this.updateBulkUpload.emit(this.bulkUploadFileInfo);
+
     } else if (!this.bulkUploadFileInfo && question.bulkUploadId) {
-      this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: question.bulkUploadId }));
-      this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
-        if (obj) {
-          this.bulkUploadFileInfo = obj;
-          if (question.status === QuestionStatus.REJECTED) {
-            this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
-          }
-          this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
-          this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-          this.bulkUploadFileInfo = undefined;
-          Utils.unsubscribe([this.sub]);
-        }
-      });
+      this.updateBulkUploadedApprovedQuestionStatus.emit(question);
     }
   }
 
@@ -151,28 +148,16 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       if (this.bulkUploadFileInfo.rejected > 0) {
         this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
       }
-      this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+      this.updateBulkUpload.emit(this.bulkUploadFileInfo);
 
     } else if (!this.bulkUploadFileInfo && this.requestQuestion.bulkUploadId && this.requestQuestion.status !== QuestionStatus.REJECTED) {
-      this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: this.requestQuestion.bulkUploadId }));
-      this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
-        if (obj) {
-          this.bulkUploadFileInfo = obj;
-          if (this.bulkUploadFileInfo.rejected > 0) {
-            this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected - 1;
-          }
-          this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-          this.bulkUploadFileInfo = undefined;
-          Utils.unsubscribe([this.sub]);
-        }
-      });
-
+      this.updateBulkUploadedRequestToChangeQuestionStatus.emit(this.requestQuestion);
     }
     this.requestQuestion.status = QuestionStatus.REQUIRED_CHANGE;
     this.requestQuestion.reason = this.requestFormGroup.get('reason').value;
     this.requestQuestionStatus = false;
     this.requestQuestion.approved_uid = this.user.userId;
-    this.store.dispatch(new bulkActions.UpdateQuestion({ question: this.requestQuestion }));
+    this.updateUnpublishedQuestions.emit(this.requestQuestion);
     this.requestFormGroup.get('reason').setValue('');
   }
 
@@ -183,26 +168,16 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
 
     if (this.bulkUploadFileInfo && this.rejectQuestion.status !== QuestionStatus.REJECTED) {
       this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
-      this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+      this.updateBulkUpload.emit(this.bulkUploadFileInfo);
     } else if (!this.bulkUploadFileInfo && this.rejectQuestion.bulkUploadId && this.rejectQuestion.status !== QuestionStatus.REJECTED) {
-      this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: this.rejectQuestion.bulkUploadId }));
-      this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
-        if (obj) {
-          this.bulkUploadFileInfo = obj;
-          this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
-          this.store.dispatch(new bulkActions.UpdateBulkUpload({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-          this.bulkUploadFileInfo = undefined;
-          Utils.unsubscribe([this.sub]);
-        }
-      });
+      this.updateBulkUploadedRejectQuestionStatus.emit(this.rejectQuestion);
     }
 
     this.rejectQuestion.status = QuestionStatus.REJECTED;
     this.rejectQuestion.reason = this.rejectFormGroup.get('reason').value;
     this.rejectQuestionStatus = false;
     this.rejectQuestion.approved_uid = this.user.userId;
-
-    this.store.dispatch(new bulkActions.UpdateQuestion({ question: this.rejectQuestion }));
+    this.updateUnpublishedQuestions.emit(this.rejectQuestion);
     this.rejectFormGroup.get('reason').setValue('');
   }
 
@@ -240,6 +215,10 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
     if (this.viewReasonArray[index] === undefined) {
       this.viewReasonArray[index] = row;
     }
+  }
+
+  updateQuestionData(question: Question) {
+    this.updateUnpublishedQuestions.emit(question);
   }
 }
 

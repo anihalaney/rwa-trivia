@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { User } from '../../model';
+import { User } from '../../../../../shared-library/src/public_api';
 import { AppState, appState } from '../../store';
 import { Utils } from '../../core/services';
 

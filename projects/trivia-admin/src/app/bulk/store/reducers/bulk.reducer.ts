@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { User, BulkUploadFileInfo, Question } from '../../../../../../model';
+import { User, BulkUploadFileInfo, Question } from '../../../../../../shared-library/src/public_api';
 import { BulkActions, BulkActionTypes } from '../actions';
 
 

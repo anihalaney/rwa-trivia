@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
-import { Question } from '../../../model';
+import { Question } from '../../../../../../shared-library/src/public_api';
 
 @Injectable()
 export class QuestionActions {

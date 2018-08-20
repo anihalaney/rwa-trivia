@@ -9,7 +9,7 @@ import { share, take, tap } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
 import { LoginComponent } from '../components';
 import { UserActions, UIStateActions } from '../store/actions';
-import { User } from '../../../../../model';
+import { User } from '../../../../../shared-library/src/public_api';
 import { isPlatformBrowser } from '@angular/common';
 import * as firebase from 'firebase/app';
 

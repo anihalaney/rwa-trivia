@@ -1,6 +1,6 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { BulkUploadFileInfo, Question } from '../../../../../../model';
+import { BulkUploadFileInfo, Question } from '../../../../../../shared-library/src/public_api';
 import {
     bulkUploadFileInfos, userBulkUploadFileInfos,
     bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions, questionSaveStatus,

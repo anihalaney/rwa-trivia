@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
 
-import { Question, QuestionStatus, Category, User } from '../../../../../model';
+import { Question, QuestionStatus, Category, User } from '../../model';
 
 @Component({
   selector: 'question-list',

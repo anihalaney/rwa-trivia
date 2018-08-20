@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { User } from '../../../model';
+import { User } from '../../../../../../shared-library/src/public_api';
 import { BulkActions, BulkActionTypes } from '../actions';
-import { BulkUploadFileInfo, Question } from '../../../model';
+import { BulkUploadFileInfo, Question } from '../../../../../../shared-library/src/public_api';
 
 // for get all BulkUploadFileInfo
 export function bulkUploadFileInfos(state: any = [], action: BulkActions): BulkUploadFileInfo[] {

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User } from '../../../../../../model';
+import { User } from '../../../../../../shared-library/src/public_api';
 
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {

@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
 import { CONFIG } from '../../../environments/environment';
-import { Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../../../../model';
+import { Question, QuestionStatus, SearchResults, SearchCriteria, BulkUploadFileInfo, BulkUpload } from '../../../../../shared-library/src/public_api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app-store';
 

@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
-import { User } from '../../../../../model';
+import { User } from '../../../../../../../../shared-library/src/public_api';
 import { AppState, appState } from '../../../../../store';
 import * as userActions from '../../../../../user/store/actions';
 import { userState } from '../../../../../user/store';
