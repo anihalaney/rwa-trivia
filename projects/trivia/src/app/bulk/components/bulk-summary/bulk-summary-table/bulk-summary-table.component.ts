@@ -2,9 +2,11 @@ import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, OnInit, S
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
-import { BulkUploadFileInfo, Category, User } from '../../../../../../../shared-library/src/public_api';
+import {
+  BulkUploadFileInfo, Category, User
+} from '../../../../../../../shared-library/src/public_api';
+import { AppState, appState, categoryDictionary } from '../../../../../../../shared-library/src/lib/store';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
 import { AngularFireStorage } from 'angularfire2/storage';

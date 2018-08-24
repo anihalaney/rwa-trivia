@@ -6,7 +6,7 @@ import { empty } from 'rxjs';
 import { BulkUploadFileInfo, Question } from '../../../../../../shared-library/src/public_api';
 import { BulkActionTypes } from '../actions';
 import * as bulkActions from '../actions/bulk.actions';
-import { BulkService, QuestionService } from '../../../core/services';
+import { BulkService, QuestionService } from '../../../../../../shared-library/src/lib/core/services';
 
 @Injectable()
 export class BulkEffects {

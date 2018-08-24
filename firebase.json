@@ -7,6 +7,10 @@
         "function": "app"
       },
       {
+        "source": "/trivia-admin/**",
+        "destination": "/admin/index.html"
+      },
+      {
         "source": "**",
         "function": "ssr"
       }

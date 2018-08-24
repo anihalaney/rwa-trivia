@@ -6,18 +6,18 @@ import { take, filter } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
-import { categoryDictionary } from '../../../store';
+
 import { gameplayState, GamePlayState } from '../../store';
 
 import { GameQuestionComponent } from '../game-question/game-question.component';
-import { GameActions, UserActions } from '../../../core/store/actions';
-import { Utils } from '../../../core/services';
+import { GameActions, UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import {
   Game, GameOptions, GameMode, PlayerQnA,
   User, Question, Category, GameStatus,
-  PlayerMode, OpponentType
+  PlayerMode, OpponentType, Utils
 } from '../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
+
 
 @Component({
   selector: 'game-dialog',

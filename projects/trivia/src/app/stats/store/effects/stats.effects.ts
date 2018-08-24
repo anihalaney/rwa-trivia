@@ -3,8 +3,8 @@ import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { StatsActionTypes } from '../actions';
 import * as statsActions from '../actions/stats.actions';
-import { StatsService } from '../../../core/services';
-import { SystemStats } from '../../../../../../shared-library/src/public_api';
+import { StatsService } from '../../../../../../shared-library/src/lib/core/services';
+import { SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
 import { of } from 'rxjs';
 
 

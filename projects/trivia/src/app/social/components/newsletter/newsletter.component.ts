@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState } from '../../../store';
 import { User, Subscription } from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 import * as socialActions from '../../../social/store/actions';
 import { socialState } from '../../store';
 

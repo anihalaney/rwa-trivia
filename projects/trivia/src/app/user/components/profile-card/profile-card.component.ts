@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 
-import { User } from '../../../../../../shared-library/src/public_api';
+import { User, Utils } from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { AppState, appState } from '../../../store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Utils } from '../../../core/services';
+
 
 @Component({
   selector: 'profile-card',

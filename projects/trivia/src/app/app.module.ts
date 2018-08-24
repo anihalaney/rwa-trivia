@@ -7,12 +7,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { reducers, CustomSerializer } from './store';
-
-import { CoreModule } from './core/core.module';
-import { SharedModule } from '../../../../projects/shared-library/src/public_api';
+import { SharedModule, CoreModule } from '../../../../projects/shared-library/src/public_api';
+import { reducers, CustomSerializer } from '../../../shared-library/src/lib/store';
 import { RoutingModule } from './routing/routing.module';
-//import { MyQuestionsModule } from  './myQuestions/my-questions.module';
+
 import { GamePlayModule } from './game-play/game-play.module';
 import { SocialModule } from './social/social.module';
 import { UserModule } from './user/user.module';
@@ -23,7 +21,7 @@ import {
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { environment } from '../../../shared-library/src/lib/environments/environment';
 
 @NgModule({
   declarations: [
@@ -51,7 +49,6 @@ import { environment } from '../environments/environment';
     CoreModule,
     SharedModule,
     RoutingModule,
-    // MyQuestionsModule,
     GamePlayModule,
     SocialModule,
     UserModule,

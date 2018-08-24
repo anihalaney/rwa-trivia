@@ -1,5 +1,5 @@
 const statQuestionService = require('../services/question.service');
-import { Question } from '../../projects/shared-library/src/lib/model';
+import { Question } from '../../projects/shared-library/src/lib/shared/model';
 
 export class QuestionBifurcation {
     getQuestionList(collectionName) {

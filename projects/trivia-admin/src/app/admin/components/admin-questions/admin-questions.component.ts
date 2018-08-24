@@ -4,14 +4,17 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { PageEvent } from '@angular/material';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store/app-store';
-import { User, Question, Category, SearchResults, SearchCriteria, BulkUploadFileInfo } from '../../../../../../shared-library/src/public_api';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../../../shared-library/src/lib/store';
+import {
+  User, Question, Category, SearchResults,
+  SearchCriteria, BulkUploadFileInfo
+} from '../../../../../../shared-library/src/public_api';
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
 import * as bulkActions from '../../../bulk/store/actions';
 import { Router } from '@angular/router';
-import { UserActions } from '../../../core/store/actions';
+import { UserActions } from '../../../../../../shared-library/src/lib/core/store';
 import { MatTabChangeEvent } from '@angular/material';
 
 @Component({

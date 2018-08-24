@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState } from '../../../store';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 import { User } from '../../../../../../shared-library/src/public_api';
 
 @Component({

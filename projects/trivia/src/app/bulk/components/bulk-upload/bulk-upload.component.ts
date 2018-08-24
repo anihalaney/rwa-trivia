@@ -3,9 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { AppState, appState } from '../../../store';
-import { Utils } from '../../../core/services';
-import { Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload } from '../../../../../../shared-library/src/public_api';
+import {
+  Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload, Utils
+} from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 import { PapaParseService } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
 

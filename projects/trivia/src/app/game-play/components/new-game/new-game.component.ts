@@ -7,11 +7,12 @@ import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import * as useractions from '../../../user/store/actions';
-import { AppState, appState } from '../../../store';
+import { GameActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 
-import { GameActions } from '../../../core/store/actions';
-import { Utils } from '../../../core/services';
-import { Category, GameOptions, GameMode, User, PlayerMode, OpponentType } from '../../../../../../shared-library/src/public_api';
+import {
+  Category, GameOptions, GameMode, User, PlayerMode, OpponentType, Utils
+} from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 
 @Component({
   selector: 'new-game',

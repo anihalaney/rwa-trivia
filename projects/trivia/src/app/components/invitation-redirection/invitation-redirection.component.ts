@@ -1,11 +1,11 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { UserActions } from '../../core/store/actions';
+import { UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
 import { Store, select } from '@ngrx/store';
-import { AppState, appState } from '../../store';
-import { AuthenticationProvider } from '../../core/auth';
-import { User } from '../../../../../shared-library/src/public_api';
+import { User } from '../../../../../shared-library/src/lib/shared/model';
+import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
+import { AppState, appState } from '../../../../../shared-library/src/lib/store';
 import * as userActions from '../../user/store/actions';
 
 @Component({

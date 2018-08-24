@@ -4,7 +4,7 @@ import { InvitationRedirectionComponent } from '../components/index';
 import {
   AuthGuard, BulkLoadGuard,
   CategoriesResolver, TagsResolver
-} from '../core/route-guards';
+} from '../../../../shared-library/src/lib/core/route-guards';
 
 export const routes: Routes = [
   {

@@ -2,10 +2,10 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, filter, catchError } from 'rxjs/operators';
 
-import { Subscribers, Blog, RouterStateUrl } from '../../../../../../shared-library/src/public_api';
+import { SocialService } from '../../../../../../shared-library/src/lib/core/services';
+import { Subscribers, Blog, RouterStateUrl } from '../../../../../../shared-library/src/lib/shared/model';
 import { SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
-import { SocialService } from '../../../core/services';
 import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 import { of } from 'rxjs';
 

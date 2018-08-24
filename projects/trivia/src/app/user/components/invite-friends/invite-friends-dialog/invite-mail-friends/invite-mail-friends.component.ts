@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { Store, select } from '@ngrx/store';
 
 import { User } from '../../../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../../../store';
+import { AppState, appState } from '../../../../../../../../shared-library/src/lib/store';
 import * as userActions from '../../../../../user/store/actions';
 import { userState } from '../../../../../user/store';
 

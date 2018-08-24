@@ -1,13 +1,16 @@
 import { Component, Input, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { AppState, categoryDictionary } from '../../../store';
+
 import { Observable, Subscription } from 'rxjs';
 
-import { Category, User, LeaderBoardUser } from '../../../../../../shared-library/src/public_api';
+import {
+  Category, User, LeaderBoardUser, Utils
+} from '../../../../../../shared-library/src/public_api';
+import { AppState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
 import { leaderBoardState } from '../../store';
-import { UserActions } from '../../../core/store/actions';
+import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
-import { Utils } from '../../../core/services';
+
 
 @Component({
   selector: 'leaderboard',

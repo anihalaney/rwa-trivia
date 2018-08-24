@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState } from '../../../store';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';;
 
 @Component({
   selector: 'tag-list',

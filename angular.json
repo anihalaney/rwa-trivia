@@ -34,8 +34,8 @@
             "dev": {
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia/src/environments/environment.ts",
-                  "with": "projects/trivia/src/environments/environment.dev.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
                 }
               ]
             },
@@ -51,8 +51,8 @@
               "buildOptimizer": true,
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia/src/environments/environment.ts",
-                  "with": "projects/trivia/src/environments/environment.prod.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.prod.ts"
                 }
               ],
               "serviceWorker": true
@@ -158,7 +158,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/admin",
             "index": "projects/trivia-admin/src/index.html",
             "main": "projects/trivia-admin/src/main.ts",
             "polyfills": "projects/trivia-admin/src/polyfills.ts",
@@ -181,16 +181,16 @@
             "dev": {
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia-admin/src/environments/environment.ts",
-                  "with": "projects/trivia-admin/src/environments/environment.dev.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
                 }
               ]
             },
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia-admin/src/environments/environment.ts",
-                  "with": "projects/trivia-admin/src/environments/environment.prod.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,

@@ -4,12 +4,9 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
-import { AppState, appState } from '../../../store';
-
 import { GameDialogComponent } from '../game-dialog/game-dialog.component';
-import { Utils } from '../../../core/services';
-import { User } from '../../../../../../shared-library/src/public_api';
+import { User, Utils } from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 import * as gameplayactions from '../../store/actions';
 
 

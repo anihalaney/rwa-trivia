@@ -1,6 +1,6 @@
 const subscriptionFireBaseClient = require('../db/firebase-client');
 const subscriptionFireStoreClient = subscriptionFireBaseClient.firestore();
-import { User } from '../../projects/shared-library/src/lib/model';
+import { User } from '../../projects/shared-library/src/lib/shared/model';
 
 /**
  * getSubscriptions

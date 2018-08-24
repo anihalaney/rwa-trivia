@@ -1,9 +1,8 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-
-import { AppState, appState } from '../../../store';
-import { Utils } from '../../../core/services';
+import { Utils } from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 
 @Component({
   selector: 'blog',

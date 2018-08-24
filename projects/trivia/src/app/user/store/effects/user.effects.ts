@@ -4,13 +4,17 @@ import { Store } from '@ngrx/store';
 import { switchMap, map, filter, take, mergeMap } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
-import { Question, RouterStateUrl, Friends, Game } from '../../../../../../shared-library/src/public_api';
+import {
+    UserService, QuestionService, GameService
+} from '../../../../../../shared-library/src/lib/core/services';
+import {
+    Question, RouterStateUrl, Friends, Game
+} from '../../../../../../shared-library/src/lib/shared/model';
 import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
-import { UserService, QuestionService, GameService } from '../../../core/services';
-import { UserActions } from '../../../../app/core/store/actions';
-import { AppState } from '../../../store/app-store';
-import { coreState } from '../../../core/store';
+import { AppState } from '../../../../../../shared-library/src/lib/store';
+import { UserActions, coreState } from '../../../../../../shared-library/src/lib/core/store';
+
 
 @Injectable()
 export class UserEffects {

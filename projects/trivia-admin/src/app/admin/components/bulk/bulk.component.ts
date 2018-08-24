@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 
 import * as bulkActions from '../../../../app/bulk/store/actions';
 import { bulkState } from '../../../../app/bulk/store';
-import { AppState, appState, categoryDictionary } from '../../../store/app-store';
+import { AppState, appState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
 import { Store, select } from '@ngrx/store';
 
 @Component({
