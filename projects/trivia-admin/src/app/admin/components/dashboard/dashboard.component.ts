@@ -3,9 +3,9 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 
-import { Category, SearchResults } from '../../../../../../shared-library/src/public_api';
+import { Category, SearchResults } from '../../../../../../shared-library/src/lib/shared/model';
 
 @Component({
   selector: 'dashboard',

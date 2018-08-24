@@ -3,11 +3,9 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import {
-  User, Category, Question, QuestionStatus, Answer,
-  Utils
-} from '../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
+import { User, Category, Question, QuestionStatus, Answer } from '../../../../../../shared-library/src/lib/shared/model';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 
 @Component({

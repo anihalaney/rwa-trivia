@@ -4,14 +4,13 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-
 import { CONFIG } from '../../environments/environment';
 import {
   Question, QuestionStatus, SearchResults, SearchCriteria,
   BulkUploadFileInfo, BulkUpload
 } from '../../shared/model';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/app-store';
+import { CoreState } from '../store';
 import { QuestionActions } from '../store/actions';
 
 @Injectable()
@@ -19,7 +18,7 @@ export class QuestionService {
 
   constructor(private db: AngularFirestore,
     private storage: AngularFireStorage,
-    private store: Store<AppState>,
+    private store: Store<CoreState>,
     private questionActions: QuestionActions,
     private http: HttpClient) {
   }

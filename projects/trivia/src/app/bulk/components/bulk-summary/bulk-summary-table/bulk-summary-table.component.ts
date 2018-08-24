@@ -3,10 +3,8 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { bulkState } from '../../../store';
-import {
-  BulkUploadFileInfo, Category, User
-} from '../../../../../../../shared-library/src/public_api';
-import { AppState, appState, categoryDictionary } from '../../../../../../../shared-library/src/lib/store';
+import { BulkUploadFileInfo, Category, User } from '../../../../../../../shared-library/src/lib/shared/model';
+import { AppState, appState, categoryDictionary } from '../../../../store';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
 import { AngularFireStorage } from 'angularfire2/storage';

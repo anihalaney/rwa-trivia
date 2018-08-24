@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Game, SystemStats } from '../../../../../../shared-library/src/public_api';
+import { Game, SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
 
 export enum StatsActionTypes {
     LOAD_LEADERBOARD = '[Stats] LoadLeaderBoard',

@@ -5,7 +5,7 @@ import {
   QuestionAddUpdateComponent,
   InviteFriendsComponent
 } from '../components';
-import { AuthGuard, CategoriesResolver, TagsResolver } from '../../../../../../projects/shared-library/src/public_api';
+import { AuthGuard, CategoriesResolver, TagsResolver } from '../../../../../shared-library/src/lib/core/route-guards';
 
 export const userRoutes: Routes = [
   {

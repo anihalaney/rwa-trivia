@@ -9,10 +9,10 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { QuestionActions, GameActions, UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
 import * as gameplayactions from '../../game-play/store/actions';
 import {
-  User, Category, Question, SearchResults, Game, LeaderBoardUser,
-  Utils, WindowRef, OpponentType
-} from '../../../../../shared-library/src/public_api';
-import { AppState, appState, categoryDictionary } from '../../../../../shared-library/src/lib/store';
+  User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType
+} from '../../../../../shared-library/src/lib/shared/model';
+import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
+import { AppState, appState, categoryDictionary } from '../../store';
 
 
 @Component({

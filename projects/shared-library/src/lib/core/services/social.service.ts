@@ -4,7 +4,6 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable, of } from 'rxjs';
 import { finalize, catchError, take, map } from 'rxjs/operators';
-
 import { CONFIG } from '../../environments/environment';
 import { Subscription, Subscribers, SocialGameScoreShare, Blog } from '../../shared/model';
 import { UserService } from './user.service';

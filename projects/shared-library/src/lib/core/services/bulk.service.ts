@@ -3,7 +3,6 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-
 import { HttpClient } from '@angular/common/http';
 import { BulkUploadFileInfo, User } from '../../shared/model';
 

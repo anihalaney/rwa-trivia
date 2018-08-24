@@ -3,10 +3,9 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
 
-import {
-  Category, User, LeaderBoardUser, Utils
-} from '../../../../../../shared-library/src/public_api';
-import { AppState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
+import { Category, User, LeaderBoardUser } from '../../../../../../shared-library/src/lib/shared/model';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { AppState, categoryDictionary } from '../../../store';
 import { leaderBoardState } from '../../store';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';

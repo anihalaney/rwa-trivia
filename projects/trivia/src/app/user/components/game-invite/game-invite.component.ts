@@ -1,10 +1,8 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import {
-  User, Game, Category, GameStatus
-} from '../../../../../../shared-library/src/public_api';
-import { AppState, appState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
+import { User, Game, Category, GameStatus } from '../../../../../../shared-library/src/lib/shared/model';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { gameInvites } from '../../../game-play/store';
 
 

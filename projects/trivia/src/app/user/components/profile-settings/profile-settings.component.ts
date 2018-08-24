@@ -4,10 +4,9 @@ import { MatSnackBar } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, take, finalize } from 'rxjs/operators';
-import {
-  User, Category, Utils
-} from '../../../../../../shared-library/src/public_api';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../../../shared-library/src/lib/store';
+import { User, Category } from '../../../../../../shared-library/src/lib/shared/model';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as cloneDeep from 'lodash.clonedeep';

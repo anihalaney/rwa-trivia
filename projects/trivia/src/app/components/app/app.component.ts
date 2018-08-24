@@ -13,7 +13,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { User } from '../../../../../shared-library/src/lib/shared/model';
 import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
 import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
-import { AppState, appState } from '../../../../../shared-library/src/lib/store';
+import { AppState, appState } from '../../store';
 import { Location } from '@angular/common';
 import { userState } from '../../user/store';
 import * as gameplayactions from '../../game-play/store/actions';

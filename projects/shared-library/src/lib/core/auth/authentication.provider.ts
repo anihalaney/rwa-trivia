@@ -5,11 +5,8 @@ import { AngularFirestore } from 'angularfire2/firestore';
 import { Store } from '@ngrx/store';
 import { Observable, defer, throwError, from } from 'rxjs';
 import { share, take, tap } from 'rxjs/operators';
-
-import { AppState, appState } from '../../store';
-
+import { CoreState, coreState } from '../store';
 import { User } from '../../shared/model';
-
 import { LoginComponent } from '../components';
 import { UserActions, UIStateActions } from '../store/actions';
 import { isPlatformBrowser } from '@angular/common';
@@ -22,7 +19,7 @@ export class AuthenticationProvider {
   refreshTokenObserver: Observable<any>;
   user: User;
 
-  constructor(private store: Store<AppState>,
+  constructor(private store: Store<CoreState>,
     private userActions: UserActions,
     private uiStateActions: UIStateActions,
     public afAuth: AngularFireAuth,
@@ -93,7 +90,7 @@ export class AuthenticationProvider {
 
   get isAuthenticated(): boolean {
     let user: User;
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user)
+    this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user)
     if (user) {
       return true;
     }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { SearchCriteria, SearchResults, Question } from '../../../../../../shared-library/src/public_api';
+import { SearchCriteria, SearchResults, Question } from '../../../../../../shared-library/src/lib/shared/model';
 
 export enum AdminActionTypes {
     LOAD_QUESTIONS = '[Admin] LoadQuestions',

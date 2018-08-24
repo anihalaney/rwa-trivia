@@ -3,10 +3,8 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { QuestionActions } from '../../../../../../shared-library/src/lib/core/store';
-import {
-  User, Question, QuestionStatus, Category
-} from '../../../../../../shared-library/src/public_api';
-import { AppState, appState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
+import { User, Question, QuestionStatus, Category } from '../../../../../../shared-library/src/lib/shared/model';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { userState } from '../../../user/store';
 import * as userActions from '../../store/actions';
 
