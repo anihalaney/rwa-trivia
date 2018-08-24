@@ -3,9 +3,8 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { User } from '../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../store';
-import { Utils } from '../../core/services';
+import { User, Utils } from '../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../shared-library/src/lib/store';
 
 @Component({
   selector: 'side-nav',

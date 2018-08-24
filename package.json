@@ -40,7 +40,7 @@
     "deploy-functions-local": "npm run compile-functions  && firebase serve --only functions",
     "run-scheduler-dev": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js dev",
     "run-scheduler-prod": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js prod",
-    "build-trivia:ssr": "ng build trivia --prod --configuration=dev && ng run trivia:server",
+    "build-trivia:ssr": "ng build trivia --prod --configuration=dev && ng build trivia-admin --prod --configuration=dev && ng run trivia:server",
     "build-trivia-admin:ssr": "ng build trivia-admin --prod --configuration=dev && ng run trivia-admin:server",
     "prod:build-trivia:ssr": "ng build trivia --prod --configuration=production && ng run trivia:server",
     "prod:build-trivia-admin:ssr": "ng build trivia-admin --prod --configuration=production && ng run trivia-admin:server",

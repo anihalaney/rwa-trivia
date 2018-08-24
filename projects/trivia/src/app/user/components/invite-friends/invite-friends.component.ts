@@ -1,15 +1,15 @@
 import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
-import { User } from '../../../../../../shared-library/src/public_api';
+import { User, Utils } from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 import { Store, select } from '@ngrx/store';
-import { AppState, appState } from '../../../store';
 import * as useractions from '../../../user/store/actions';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UserActions } from '../../../core/store/actions';
-import { Utils } from '../../../core/services';
+import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
+
 
 @Component({
   selector: 'app-invite-friends',

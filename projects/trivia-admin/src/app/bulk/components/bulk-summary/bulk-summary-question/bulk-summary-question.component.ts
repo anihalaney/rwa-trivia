@@ -2,14 +2,14 @@ import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { BulkUploadFileInfo, Question, Category, User, QuestionStatus } from '../../../../../../../shared-library/src/public_api';
+import { BulkUploadFileInfo, Question, Category, User, QuestionStatus } from '../../../../../../../shared-library/src/lib/shared/model';
 import { MatTableDataSource } from '@angular/material';
-import { Utils } from '../../../../core/services';
+import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
 import { AngularFireStorage } from 'angularfire2/storage';
 
 
 import { MatSnackBar } from '@angular/material';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../store';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../../../../shared-library/src/lib/store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
 import { ActivatedRoute, Params, Router } from '@angular/router';

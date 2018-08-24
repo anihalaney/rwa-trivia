@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 
 import { Question, Answer, User } from '../../../../../shared-library/src/public_api';
+import { AppState, appState, categoryDictionary } from '../../../../../shared-library/src/lib/store';
 import { Store, select } from '@ngrx/store';
-import { AppState, appState, categoryDictionary } from '../../store';
-import { QuestionActions } from '../../../app/core/store/actions';
+import { QuestionActions } from '../../../../../shared-library/src/lib/core/store/actions';
 
 @Component({
   selector: 'question',

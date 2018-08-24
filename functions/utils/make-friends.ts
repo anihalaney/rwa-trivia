@@ -1,5 +1,5 @@
 const friendService = require('../services/friend.service');
-import { Invitation, Friends, FriendsMetadata } from '../../projects/shared-library/src/lib/model';
+import { Invitation, Friends, FriendsMetadata } from '../../projects/shared-library/src/lib/shared/model';
 import { Observable } from 'rxjs';
 
 export class MakeFriends {

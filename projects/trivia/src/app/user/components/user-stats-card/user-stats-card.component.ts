@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-
-import { AppState, appState } from '../../../store';
 import { User } from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 
 @Component({
   selector: 'user-stats-card',

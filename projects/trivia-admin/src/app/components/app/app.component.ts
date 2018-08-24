@@ -3,9 +3,9 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map, skip, take, filter } from 'rxjs/operators';
-import { AppState, appState } from '../../store';
-import { Utils } from '../../core/services';
-import { AuthenticationProvider } from '../../core/auth';
+import { AppState, appState } from '../../../../../shared-library/src/lib/store';
+import { Utils } from '../../../../../shared-library/src/lib/core/services';
+import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
 import { User } from '../../../../../shared-library/src/public_api';
 import { Location } from '@angular/common';
 

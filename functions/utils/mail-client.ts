@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const fs = require('fs');
 const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
-import { TriggerConstants } from '../../projects/shared-library/src/lib/model';
+import { TriggerConstants } from '../../projects/shared-library/src/lib/shared/model';
 
 export class MailClient {
 

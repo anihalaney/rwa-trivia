@@ -2,11 +2,11 @@ import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@a
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
-import { AppState, appState, categoryDictionary } from '../../../store';
-import { QuestionActions } from '../../../core/store';
-import { User, Question, QuestionStatus, Category } from '../../../../../../shared-library/src/public_api';
-
+import { QuestionActions } from '../../../../../../shared-library/src/lib/core/store';
+import {
+  User, Question, QuestionStatus, Category
+} from '../../../../../../shared-library/src/public_api';
+import { AppState, appState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
 import { userState } from '../../../user/store';
 import * as userActions from '../../store/actions';
 

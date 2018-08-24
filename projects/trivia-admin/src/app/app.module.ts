@@ -7,9 +7,9 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { reducers, CustomSerializer } from './store';
+import { reducers, CustomSerializer } from '../../../shared-library/src/lib/store';
 
-import { CoreModule } from './core/core.module';
+import { CoreModule } from '../../../../projects/shared-library/src/lib/core/core.module';
 import { SharedModule } from '../../../../projects/shared-library/src/public_api';
 import { RoutingModule } from './routing/routing.module';
 
@@ -18,7 +18,7 @@ import {
   HeaderComponent, FooterComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+import { environment } from '../../../../projects/shared-library/src/lib/environments/environment';
 
 
 @NgModule({

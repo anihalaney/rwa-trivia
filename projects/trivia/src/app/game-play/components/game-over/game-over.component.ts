@@ -1,19 +1,20 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { User, Game, PlayerMode } from '../../../../../../shared-library/src/public_api';
+import { User, Game, PlayerMode, Utils, WindowRef } from '../../../../../../shared-library/src/public_api';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
+import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
+import { CONFIG } from '../../../../../../shared-library/src/lib/environments/environment';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import * as socialactions from '../../../social/store/actions';
 import { gameplayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Utils, WindowRef } from '../../../core/services';
+
 import * as domtoimage from 'dom-to-image';
-import { UserActions } from '../../../core/store/actions';
-import { CONFIG } from '../../../../environments/environment';
+
 
 
 @Component({

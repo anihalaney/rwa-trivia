@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState } from '../../../store';
+import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
 import { Category } from '../../../../../../shared-library/src/public_api';
 
 @Component({

@@ -1,8 +1,7 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
-import { AppState } from '../../../store/app-store';
+import { AppState } from '../../../../../../shared-library/src/lib/store';
 import * as bulkActions from '../../store/actions';
 import { bulkState } from '../../store';
 

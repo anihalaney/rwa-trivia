@@ -3,9 +3,11 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { bulkState } from '../../store';
-import { User, Category, Question, BulkUploadFileInfo } from '../../../../../../shared-library/src/public_api';
+import {
+  User, Category, Question, BulkUploadFileInfo
+} from '../../../../../../shared-library/src/public_api';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../../../shared-library/src/lib/store';
 import * as bulkActions from '../../store/actions';
 
 @Component({

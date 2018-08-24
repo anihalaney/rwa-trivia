@@ -1,5 +1,5 @@
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
-import { UserActions } from '../../../core/store';
+import { UserActions } from '../../../../../../shared-library/src/lib/core/store';
 import { Game, Question, ReportQuestion } from '../../../../../../shared-library/src/public_api';
 
 export function currentGame(state: any = null, action: GamePlayActions): Game {

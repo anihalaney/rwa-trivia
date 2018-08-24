@@ -5,13 +5,15 @@ import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { map, skip, take, filter } from 'rxjs/operators';
 
-import { AppState, appState } from '../../store';
-import { CategoryActions, TagActions, QuestionActions, GameActions } from '../../core/store';
+
+import { CategoryActions, TagActions, QuestionActions, GameActions } from '../../../../../shared-library/src/lib/core/store';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Utils, WindowRef } from '../../core/services';
-import { AuthenticationProvider } from '../../core/auth';
-import { User } from '../../../../../shared-library/src/public_api';
+
+import { User } from '../../../../../shared-library/src/lib/shared/model';
+import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
+import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
+import { AppState, appState } from '../../../../../shared-library/src/lib/store';
 import { Location } from '@angular/common';
 import { userState } from '../../user/store';
 import * as gameplayactions from '../../game-play/store/actions';

@@ -3,14 +3,16 @@ import { Observable, Subscription, pipe } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { AppState, appState, categoryDictionary } from '../../store';
+
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { Utils, WindowRef } from '../../core/services';
-import { QuestionActions, GameActions, UserActions } from '../../core/store/actions';
+import { QuestionActions, GameActions, UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
 import * as gameplayactions from '../../game-play/store/actions';
-import { User, Category, Question, SearchResults, Game, LeaderBoardUser } from '../../../../../shared-library/src/public_api';
-import { OpponentType } from '../../../../../shared-library/src/public_api';
+import {
+  User, Category, Question, SearchResults, Game, LeaderBoardUser,
+  Utils, WindowRef, OpponentType
+} from '../../../../../shared-library/src/public_api';
+import { AppState, appState, categoryDictionary } from '../../../../../shared-library/src/lib/store';
 
 
 @Component({
