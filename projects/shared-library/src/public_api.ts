@@ -11,8 +11,8 @@ export * from './lib/shared/model';
 export * from './lib/core/core.module';
 export * from './lib/core/components';
 export * from './lib/core/services';
-// export * from './lib/core/auth';
+export * from './lib/core/auth';
 export * from './lib/core/route-guards';
-// export * from './lib/store';
+export * from './lib/store';
 
 

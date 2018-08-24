@@ -7,7 +7,7 @@
         "function": "app"
       },
       {
-        "source": "/trivia-admin/**",
+        "source": "/admin/**",
         "destination": "/admin/index.html"
       },
       {
