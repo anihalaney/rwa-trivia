@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 
-import { User, Utils } from '../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
+import { User } from '../../../../../../shared-library/src/lib/shared/model';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { AppState, appState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';

@@ -1,8 +1,8 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { User } from '../../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../../../../../shared-library/src/lib/store';
+import { User } from '../../../../../../../shared-library/src/lib/shared/model';
+import { AppState, appState } from '../../../../store';
 
 @Component({
   selector: 'app-invite-friends-dialog',

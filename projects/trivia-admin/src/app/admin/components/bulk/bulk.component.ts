@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
 
-import * as bulkActions from '../../../../app/bulk/store/actions';
-import { bulkState } from '../../../../app/bulk/store';
-import { AppState, appState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
+import * as bulkActions from '../../../bulk/store/actions';
+import { bulkState } from '../../../bulk/store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { Store, select } from '@ngrx/store';
 
 @Component({

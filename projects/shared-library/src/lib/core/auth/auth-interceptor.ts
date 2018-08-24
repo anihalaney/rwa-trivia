@@ -3,15 +3,13 @@ import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/c
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-
-import { AppState } from '../../store';
-import { authorizationHeader } from '../store';
+import { coreState, CoreState, authorizationHeader } from '../store';
 import { AuthenticationProvider } from './authentication.provider';
 import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private store: Store<AppState>, private authService: AuthenticationProvider, private router: Router) { }
+  constructor(private store: Store<CoreState>, private authService: AuthenticationProvider, private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Get the auth header from the service.

@@ -1,11 +1,10 @@
 import { Component, Input, Inject, OnInit } from '@angular/core';
-import { Question } from '../../../../../../shared-library/src/public_api';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {
-    ReportQuestion, User, Game, QuestionMetadata, Category
-} from '../../../../../../shared-library/src/public_api';
-import { AppState, categoryDictionary } from '../../../../../../shared-library/src/lib/store';
+    ReportQuestion, User, Game, QuestionMetadata, Category, Question
+} from '../../../../../../shared-library/src/lib/shared/model';
+import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';

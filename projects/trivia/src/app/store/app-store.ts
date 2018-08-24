@@ -1,16 +1,16 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { getCategoryDictionary } from '../core/store';
+import { getCategoryDictionary } from '../../../../shared-library/src/lib/core/store';
 
 import * as rootStoreReducers from './reducers';
-import * as gamePlayStore from '../../../../trivia/src/app/game-play/store';
-import * as userStore from '../../../../trivia/src/app/user/store';
-import * as bulkStore from '../../../../trivia/src/app/bulk/store';
-import * as leaderBoardStore from '../../../../trivia/src/app/stats/store';
-import * as coreStore from '../core/store';
-import * as socialStore from '../../../../trivia/src/app/social/store';
-import * as adminStore from '../../../../trivia-admin/src/app/admin/store';
-import { adminState } from '../../../../trivia-admin/src/app/admin/store';
+import * as gamePlayStore from '../game-play/store';
+import * as userStore from '../user/store';
+import * as bulkStore from '../bulk/store';
+import * as leaderBoardStore from '../stats/store';
+import * as coreStore from '../../../../shared-library/src/lib/core/store';
+import * as socialStore from '../social/store';
+
+
 
 //do we even need this?
 export interface AppState {
@@ -21,7 +21,6 @@ export interface AppState {
   rootState: rootStoreReducers.State,
   leaderBoardState: leaderBoardStore.LeaderBoardState,
   socialState: socialStore.SocialState
-  adminState: adminStore.AdminState
 }
 
 export const appState = {
@@ -31,8 +30,7 @@ export const appState = {
   coreState: coreStore.coreState,
   rootState: rootStoreReducers.rootState,
   leaderBoardState: leaderBoardStore.leaderBoardState,
-  socialState: socialStore.socialState,
-  adminState: adminStore.adminState
+  socialState: socialStore.socialState
 };
 
 

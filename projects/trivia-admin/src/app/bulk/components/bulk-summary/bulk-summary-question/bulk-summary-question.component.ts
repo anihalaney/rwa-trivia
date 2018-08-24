@@ -9,7 +9,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 
 
 import { MatSnackBar } from '@angular/material';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../../../../shared-library/src/lib/store';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
 import { ActivatedRoute, Params, Router } from '@angular/router';

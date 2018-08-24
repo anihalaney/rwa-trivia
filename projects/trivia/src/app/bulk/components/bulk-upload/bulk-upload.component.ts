@@ -4,9 +4,10 @@ import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import {
-  Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload, Utils
-} from '../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
+  Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload
+} from '../../../../../../shared-library/src/lib/shared/model';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { AppState, appState } from '../../../store';
 import { PapaParseService } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
 

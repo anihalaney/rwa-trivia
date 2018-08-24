@@ -1,10 +1,7 @@
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from '../components/index';
 import { InvitationRedirectionComponent } from '../components/index';
-import {
-  AuthGuard, BulkLoadGuard,
-  CategoriesResolver, TagsResolver
-} from '../../../../shared-library/src/lib/core/route-guards';
+import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from '../../../../shared-library/src/lib/core/route-guards';
 
 export const routes: Routes = [
   {

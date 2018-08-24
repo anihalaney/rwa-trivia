@@ -1,6 +1,7 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { User, Game, PlayerMode, Utils, WindowRef } from '../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
+import { User, Game, PlayerMode } from '../../../../../../shared-library/src/lib/shared/model';
+import { Utils, WindowRef } from '../../../../../../shared-library/src/lib/core/services';
+import { AppState, appState } from '../../../store';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import { CONFIG } from '../../../../../../shared-library/src/lib/environments/environment';
 import { Observable } from 'rxjs';

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { SharedModule } from '../../../../shared-library/src/public_api';
+import { SharedModule } from '../../../../shared-library/src/lib/shared/shared.module';
 import { BlogComponent, NewsletterComponent } from './components';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';

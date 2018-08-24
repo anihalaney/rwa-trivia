@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as userActions from '../../../user/store/actions';
-import { User } from '../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
+import { User } from '../../../../../../shared-library/src/lib/shared/model';
+import { AppState, appState } from '../../../store';
 import { userState } from '../../store';
 
 @Component({

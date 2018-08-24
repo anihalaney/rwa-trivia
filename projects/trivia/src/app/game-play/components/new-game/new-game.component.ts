@@ -10,9 +10,11 @@ import * as useractions from '../../../user/store/actions';
 import { GameActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 
 import {
-  Category, GameOptions, GameMode, User, PlayerMode, OpponentType, Utils
-} from '../../../../../../shared-library/src/public_api';
-import { AppState, appState } from '../../../../../../shared-library/src/lib/store';
+  Category, GameOptions, GameMode, User, PlayerMode, OpponentType
+} from '../../../../../../shared-library/src/lib/shared/model';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+
+import { AppState, appState } from '../../../store';
 
 @Component({
   selector: 'new-game',

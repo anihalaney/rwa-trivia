@@ -5,8 +5,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-
-import { AppState } from '../../store/app-store';
+import { CoreState } from '../store';
 import { User, Invitation, Friends } from '../../shared/model';
 import { ObservableInput } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
@@ -21,7 +20,7 @@ export class UserService {
     constructor(private db: AngularFirestore,
         private storage: AngularFireStorage,
         private http: HttpClient,
-        private store: Store<AppState>, private userActions: UserActions) {
+        private store: Store<CoreState>, private userActions: UserActions) {
     }
 
 

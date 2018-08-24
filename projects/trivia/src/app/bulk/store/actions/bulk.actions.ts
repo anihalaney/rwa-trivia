@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { BulkUploadFileInfo, User, Question, BulkUpload } from '../../../../../../shared-library/src/public_api';
+import { BulkUploadFileInfo, User, Question, BulkUpload } from '../../../../../../shared-library/src/lib/shared/model';
 
 export enum BulkActionTypes {
     LOAD_BULK_UPLOAD = '[Bulk] LoadBulkUpload',

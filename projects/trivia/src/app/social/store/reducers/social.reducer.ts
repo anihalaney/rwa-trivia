@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { Subscription, Subscribers, Blog } from '../../../../../../shared-library/src/public_api';
+import { Subscription, Subscribers, Blog } from '../../../../../../shared-library/src/lib/shared/model';
 import { SocialActions, SocialActionTypes } from '../actions';
 import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
 

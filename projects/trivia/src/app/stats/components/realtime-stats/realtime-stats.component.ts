@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { leaderBoardState } from '../../store';
 import * as StatActions from '../../store/actions';
-import { SystemStats } from '../../../../../../shared-library/src/public_api';
-import { AppState } from '../../../../../../shared-library/src/lib/store';
+import { SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
+import { AppState } from '../../../store';
 
 @Component({
   selector: 'realtime-stats',

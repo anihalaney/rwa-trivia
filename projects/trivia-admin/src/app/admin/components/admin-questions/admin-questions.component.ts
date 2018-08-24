@@ -4,11 +4,11 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { PageEvent } from '@angular/material';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../../../shared-library/src/lib/store';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import {
   User, Question, Category, SearchResults,
   SearchCriteria, BulkUploadFileInfo
-} from '../../../../../../shared-library/src/public_api';
+} from '../../../../../../shared-library/src/lib/shared/model';
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';

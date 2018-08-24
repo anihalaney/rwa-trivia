@@ -8,7 +8,7 @@ import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { SharedModule, CoreModule } from '../../../../projects/shared-library/src/public_api';
-import { reducers, CustomSerializer } from '../../../shared-library/src/lib/store';
+import { reducers, CustomSerializer } from './store';
 import { RoutingModule } from './routing/routing.module';
 
 import { GamePlayModule } from './game-play/game-play.module';

@@ -5,7 +5,7 @@ import { UserActions } from '../../../../../shared-library/src/lib/core/store/ac
 import { Store, select } from '@ngrx/store';
 import { User } from '../../../../../shared-library/src/lib/shared/model';
 import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
-import { AppState, appState } from '../../../../../shared-library/src/lib/store';
+import { AppState, appState } from '../../store';
 import * as userActions from '../../user/store/actions';
 
 @Component({

@@ -7,10 +7,10 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { reducers, CustomSerializer } from '../../../shared-library/src/lib/store';
+import { reducers, CustomSerializer } from './store';
 
 import { CoreModule } from '../../../../projects/shared-library/src/lib/core/core.module';
-import { SharedModule } from '../../../../projects/shared-library/src/public_api';
+import { SharedModule } from '../../../../projects/shared-library/src/lib/shared/shared.module';
 import { RoutingModule } from './routing/routing.module';
 
 import {
