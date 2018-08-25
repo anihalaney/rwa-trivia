@@ -5,11 +5,7 @@
       {
         "source": "/app/**",
         "function": "app"
-      },
-      {
-        "source": "/admin/**",
-        "destination": "/admin/index.html"
-      },
+      },     
       {
         "source": "**",
         "function": "ssr"
