@@ -159,6 +159,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/admin",
+            "baseHref": "/admin",
+            "deployUrl": "/admin/",
             "index": "projects/trivia-admin/src/index.html",
             "main": "projects/trivia-admin/src/main.ts",
             "polyfills": "projects/trivia-admin/src/polyfills.ts",
