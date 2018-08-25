@@ -1,0 +1,112 @@
+@mixin theme-border-color($theme) {
+	.card{ 
+		border-color: map-get($theme, card);
+	}
+	.recentlygames li, .viewall, .navview #statis li, .navview #graph li, .blog-social, .time-stats, .pcategories > .col-sm-9, .tag, .btnbox, .form-group .bar, .questionstatus .tab-content > ul > li, nav .card,.question-section,.report-question-section,.social-icons,.close-div,.no-card,.social-icons-gameOver,.social-icons-blog,.close-div{ 
+		border-color: map-get($theme, default);
+	}
+	.viewall:after{ 
+		border-color: map-get($theme, viewall-after);
+	}
+	#currentgame li .innerli,.btn-share, .questions li{ 
+		border-color: map-get($theme, currentgame-list);
+	}
+	.gameplay li, .questionstatus .tabbing li, .questionstatus .tabbing li.active,.viewbublic, .tag, .avatarimg, #file-name, .expertise{ 
+		border-color: map-get($theme, primary);
+	}
+	input[type="text"], input[type="email"], .submitpage textarea, .enterquestion .formfield > input, #currentgame li .innerli .yourimg, .gameOver .yourimg, .invitationlist img, .categorybox img,.withfriends label .labelimg img, .saccount .formfield select, .subscrib-cont input[type="email"],.custom-file-upload{ 
+		border-color: map-get($theme, input);
+	}
+	.viewall:hover,.btn-share:hover,#currentgame li .innerli:hover{ 
+		border-color: map-get($theme, hover);
+	}
+	.tabbing li.active{ 
+		border-color: map-get($theme, active);
+	}
+	.h1block{ 
+		border-color: map-get($theme, header-block);
+	}
+	.h1block:after{
+		border-color: map-get($theme, header-block-after);
+	}
+	.optionbox .radiobtn label, .withfriends,.friendsslider .owl-prev,.friendsslider .owl-next, .formfield select,textarea{ 
+		border-color: map-get($theme, form-options);
+	}
+	.question-list li input:checked ~ label:before, .optionbox .radiobtn label:after, .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after, .gameplay li:after{ 
+		border-color: map-get($theme, form-options-label);
+	}
+	.skyblue h3:before{ 
+		border-color: map-get($theme, skyblue-before);
+	}
+	.red h3:before{ 
+		border-color: map-get($theme, red-before);
+	}
+	.green h3:before{ 
+		border-color: map-get($theme, green-before);
+	}
+	.yellow h3:before{ 
+		border-color: map-get($theme, yellow-before);
+	}
+	.orrange h3:before{ 
+		border-color: map-get($theme, orange-before);
+	}
+	.bluegrey h3:before{ 
+		border-color: map-get($theme, bluegrey-before);
+	}
+	.optionbox input:checked + label, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .gameplay li:hover, .gameplay li.right{
+		border-color: map-get($theme, form-checkbox);
+	}
+	.formfield input[type="checkbox"]:disabled:before { 
+		border-color: map-get($theme, form-checkbox-disabled);
+	}
+	.secondbg{ 
+		border-color: map-get($theme, secondary);
+		&:before {
+			border-color: map-get($theme, secondary) transparent transparent transparent;
+		}
+		&:after {
+			border-color: map-get($theme, secondary-after) transparent transparent transparent;
+		}
+	}
+	.logininner .formfield input[type="checkbox"]:before, .gameplay li.wrong, .reasons{ 
+		border-color: map-get($theme, login);
+	}
+	.timer .dots{ 
+		border-color: map-get($theme, timer);
+	}
+	.optionbox input:checked + label:before, .gameplay li.right:before{ 
+		border-top-color: map-get($theme, form-checkbox-checked);
+		border-right-color: map-get($theme, form-checkbox-checked);
+	}
+	.gameplay li.wrong:before{ 
+		border-top-color: map-get($theme, gameplay-wrong);
+		border-right-color: map-get($theme, gameplay-wrong);
+	}
+	.submitpage textarea, .enterquestion .formfield > input{ 
+		box-shadow: map-get($theme, input-box-shadow);
+	}
+
+	@media screen and ( min-width:1000px) {
+		.categorybox{
+			border-color: map-get($theme, categorybox-lg);
+		}
+		.withfriends .owl-prev:hover,.withfriends .owl-next:hover, .viewbublic:hover{ 
+			border-color: map-get($theme, hover-lg);
+		}
+	}
+	.div-border
+	{
+		border-bottom-color: map-get($theme,card);
+	}
+	.csv-error-msg
+	{
+		border-top-color: map-get($theme, red-before);
+	}
+	.downloadFile,.custom-file-upload,.rejection-div,.add-tag-btn{ 
+		border-color: map-get($theme, download-btn);
+	}
+	.mat-list .mat-list-item
+	{
+		border-top-color: map-get($theme, primary);
+	}
+} 
