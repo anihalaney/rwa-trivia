@@ -9,7 +9,7 @@ const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../
 import {
     Game, Question, Category, User, UserStatConstants, Invitation,
     TriggerConstants, PlayerMode, OpponentType
-} from '../../src/app/model';
+} from '../../projects/shared-library/src/lib/shared/model';
 import { ESUtils } from '../utils/ESUtils';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';

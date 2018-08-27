@@ -5,7 +5,7 @@ const leaderBoardService = require('../services/leaderboard.service');
 import {
     Game, GameStatus, GameOptions, PlayerMode, OpponentType, Stat, User, UserStats,
     LeaderBoardUser, UserStatConstants
-} from '../../src/app/model';
+} from '../../projects/shared-library/src/lib/shared/model';
 
 
 export class GameLeaderBoardStats {

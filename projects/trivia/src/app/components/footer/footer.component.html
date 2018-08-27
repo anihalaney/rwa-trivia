@@ -1,0 +1,23 @@
+<div class="container footer">
+  <div class="col-md-8 col-sm-8 col-xs-12">
+    <div class="col-xs-12 menu" [ngClass]="!user?'col-md-4 col-sm-7 ':'col-md-12 col-sm-12'">
+      <a [routerLink]="['/']" title="Home">Home</a>
+      <a *ngIf="user" (click)="navigateUrl()" title="My Questions" class="myQuestion">My Questions</a>
+      <a *ngIf="user?.roles?.admin || user?.roles?.bulkuploader" [routerLink]="['/bulk']">Bulk</a>
+      <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
+      <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
+      <ng-container *ngIf="!user">
+        <a class="login" (click)="loginClicked.emit($event)" title="Sign in">Sign in</a>
+      </ng-container>
+      <a *ngIf="user" class="logout" (click)="logoutClicked.emit($event)" title="Logout">Logout</a>
+    </div>
+    <div class="row col-md-5 col-sm-5 col-xs-12 ">
+      <span *ngIf="!user" class="footer-social-icon">
+        <share-button [theme]="'circles-dark'" [button]="'facebook'" [size]="4" [url]="blogUrl" [autoSetMeta]="false"> </share-button>
+        <share-button [theme]="'circles-dark'" [button]="'twitter'" [size]="4" [url]="blogUrl" [autoSetMeta]="false"> </share-button>
+        <share-button [theme]="'circles-dark'" [button]="'linkedin'" [size]="4" [url]="blogUrl" [autoSetMeta]="false"> </share-button>
+      </span>
+    </div>
+  </div>
+  <div class="col-md-4 col-sm-4 col-xs-12 copyright textright">bitWiser © 2017. All rights reserved.</div>
+</div>
