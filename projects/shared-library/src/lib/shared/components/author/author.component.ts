@@ -1,6 +1,9 @@
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { User } from '../../model';
 import { Utils } from '../../../core/services';
+import { Store } from '@ngrx/store';
+import { CoreState } from '../../../core/store';
+import { UserActions } from '../../../core/store/actions';
 
 @Component({
     selector: 'author',
@@ -14,9 +17,17 @@ export class AuthorComponent implements OnChanges {
     @Input() userId;
     userProfileImageUrl;
 
+    constructor(private store: Store<CoreState>, private userActions: UserActions) {
+
+    }
+
     ngOnChanges() {
         if (this.userId) {
-            this.userProfileImageUrl = Utils.getImageUrl(this.userDict[this.userId], 44, 40, '44X40');
+            if (this.userDict[this.userId] === undefined) {
+                this.store.dispatch(this.userActions.loadOtherUserProfile(this.userId));
+            } else {
+                this.userProfileImageUrl = Utils.getImageUrl(this.userDict[this.userId], 44, 40, '44X40');
+            }
         }
     }
 }
