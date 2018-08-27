@@ -39,4 +39,9 @@ export class Utils {
     }
 
   }
+
+  static convertIntoDoubleDigit(digit: Number) {
+    return (digit < 10) ? `0${digit}` : digit;
+  }
+
 }

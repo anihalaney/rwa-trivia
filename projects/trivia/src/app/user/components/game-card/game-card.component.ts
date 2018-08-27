@@ -22,8 +22,8 @@ export class GameCardComponent implements OnInit, OnChanges {
   myTurn: boolean;
   otherUserId: string;
   otherUserInfo: User;
-  remainingHours: number;
-  remainingMinutes: number;
+  remainingHours: any;
+  remainingMinutes: any;
   timerSub: Subscription;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -58,12 +58,12 @@ export class GameCardComponent implements OnInit, OnChanges {
           const minute = Math.floor(diff % (60 * 60 * 1000) / (60 * 1000));
 
           if (minute > 0) {
-            this.remainingHours = 31 - hour;
-            this.remainingMinutes = 60 - minute;
+            this.remainingHours = Utils.convertIntoDoubleDigit(31 - hour);
+            this.remainingMinutes = Utils.convertIntoDoubleDigit(60 - minute);
 
           } else {
-            this.remainingHours = 32 - hour;
-            this.remainingMinutes = 0;
+            this.remainingHours = Utils.convertIntoDoubleDigit(32 - hour);
+            this.remainingMinutes = Utils.convertIntoDoubleDigit(0);
           }
         }
       });
