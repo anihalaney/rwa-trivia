@@ -156,7 +156,7 @@ export class GameOverComponent implements OnInit {
       domtoimage.toPng(node)
         .then((dataUrl) => {
           this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
-            imageBlob: Utils.dataURItoBlob(dataUrl, 'png'),
+            imageBlob: Utils.dataURItoBlob(dataUrl),
             userId: this.user.userId
           }));
           this.playerUserName = 'You';
