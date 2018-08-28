@@ -39,14 +39,19 @@ app.engine(
 );
 
 app.set('view engine', 'html');
-
 app.set('views', DIST_FOLDER);
 
 // Point all routes to Universal
 app.get('*', (req, res) => {
+  res.set('Cache-Control', 'public, max-age=3600, s-maxage=3600');
   res.render('index', { req });
 });
 
+// app.set('port', process.env.PORT || 3000);
+
+// app.listen(app.get('port'), function () {
+//   console.log('Express server listening on port ' + 3000);
+// });
 
 exports.app = app;
 
