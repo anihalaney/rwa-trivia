@@ -40,9 +40,11 @@ export class ESUtils {
     return prefix + index;
   }
 
-  static createOrUpdateIndex(index: string, type: string, data: any, key: string): Promise<any> {
+  static createOrUpdateIndex(index: string, type: string, data: Question, key: string): Promise<any> {
     const client: Elasticsearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
+
+    data.createdOn = new Date(data.createdOn['_seconds'] * 1000);
 
     return client.index({
       index: index,
@@ -105,7 +107,7 @@ export class ESUtils {
 
   static deleteIndex(index) {
     const client: Elasticsearch.Client = this.getElasticSearchClient();
-    index = this.getIndex(index);
+    // index = this.getIndex(index);
 
     return client.indices.exists({ 'index': index })
       .then((response) => {
