@@ -9,6 +9,7 @@ import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from 'angularfire2/storage';
+import { MatSnackBar } from '@angular/material';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { userState } from '../../../user/store';
@@ -237,7 +238,8 @@ export class ProfileSettingsComponent implements OnDestroy {
       profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
         (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
       privateProfileSetting: [user.privateProfileSetting],
-      profilePicture: [user.profilePicture]
+      profilePicture: [user.profilePicture],
+      requestForBulkUpload: [user.isRequestedBulkUpload]
     });
     this.enteredTags = user.tags;
   }
@@ -283,9 +285,22 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.user.profileSetting = formValue.profileSetting;
     this.user.profileLocationSetting = formValue.profileLocationSetting;
     this.user.privateProfileSetting = formValue.privateProfileSetting;
+    this.user.isRequestedBulkUpload = formValue.requestForBulkUpload;
     this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
   }
 
+  setBulkUploadRequest(): void {
+    const userForm = this.userForm.value;
+    if (!userForm.name || !userForm.displayName || !userForm.location || userForm.categoryList.length === 0 ||
+      !userForm.facebookUrl || !userForm.linkedInUrl || !userForm.twitterUrl || this.enteredTags.length === 0 ||
+      !userForm.profileSetting || !userForm.privateProfileSetting || !userForm.profilePicture) {
+      this.userForm.get('requestForBulkUpload').setValue(false);
+      this.snackBar.open('Please complete profile settings for bulk upload request', '', { duration: 2000 });
+    } else {
+      this.userForm.get('requestForBulkUpload').setValue(true);
+    }
+
+  }
 
   resetUserProfile() {
     this.user = cloneDeep(this.userCopyForReset);
@@ -310,6 +325,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   saveUser(user: User) {
     this.store.dispatch(new userActions.AddUserProfile({ user: user }));
   }
+
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
