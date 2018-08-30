@@ -41,6 +41,9 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
 
     if (data) {
         const question: Question = data;
+
+        data.createdOn = new Date(data.createdOn['_seconds'] * 1000);
+
         // add or update
         ESUtils.createOrUpdateIndex(ESUtils.QUESTIONS_INDEX, data.categoryIds['0'], question, context.params.questionId);
 
