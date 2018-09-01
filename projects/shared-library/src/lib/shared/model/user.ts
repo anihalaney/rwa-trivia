@@ -23,6 +23,7 @@ export class User {
   isSubscribed?: boolean;
   profilePictureUrl?: string;
   stats?: UserStats;
+  isRequestedBulkUpload: boolean;
 
   constructor(authState?: firebase.User) {
     if (authState) {
