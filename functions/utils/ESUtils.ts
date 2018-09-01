@@ -105,7 +105,7 @@ export class ESUtils {
 
   static deleteIndex(index) {
     const client: Elasticsearch.Client = this.getElasticSearchClient();
-    index = this.getIndex(index);
+    // index = this.getIndex(index);
 
     return client.indices.exists({ 'index': index })
       .then((response) => {
