@@ -2,6 +2,8 @@
   "name": "trivia",
   "version": "0.0.0",
   "scripts": {
+    "android": "tns run android --bundle",
+    "ios": "tns run ios --bundle",
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
@@ -20,9 +22,14 @@
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
+    "@nativescript/schematics": "^0.2.5",
     "core-js": "^2.5.4",
     "rxjs": "^6.0.0",
-    "zone.js": "~0.8.26"
+    "zone.js": "~0.8.26",
+    "nativescript-angular": "~6.1.0",
+    "nativescript-theme-core": "~1.0.4",
+    "reflect-metadata": "~0.1.8",
+    "tns-core-modules": "~4.2.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.7.0",
@@ -43,6 +50,13 @@
     "protractor": "~5.4.0",
     "ts-node": "~5.0.1",
     "tslint": "~5.9.1",
-    "typescript": "~2.7.2"
+    "typescript": "~2.7.2",
+    "nativescript-dev-webpack": "^0.15.0"
+  },
+  "nativescript": {
+    "id": "org.nativescript.ngsample",
+    "tns-android": {
+      "version": "4.2.0"
+    }
   }
 }
