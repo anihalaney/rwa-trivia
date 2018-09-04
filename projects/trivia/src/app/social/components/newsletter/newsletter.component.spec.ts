@@ -1,8 +1,8 @@
 import { TestBed, ComponentFixture, async, fakeAsync } from '@angular/core/testing';
-import { ReactiveFormsModule, FormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NewsletterComponent } from './newsletter.component';
 import { StoreModule, Store } from '@ngrx/store';
-import { User, Subscription } from '../../../model';
+import { User, Subscription } from '../../../../../../shared-library/src/lib/shared/model';
 import { TEST_DATA } from '../../../testing/test.data';
 import { subscribeOn } from 'rxjs/internal/operators/subscribeOn';
 
