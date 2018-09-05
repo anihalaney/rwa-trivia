@@ -17,6 +17,7 @@ export enum GamePlayActionTypes {
   ADD_PLAYER_QNA = '[GamePlay] AddPlayerQnA',
   ADD_PLAYER_QNA_SUCCESS = '[GamePlay] AddPlayerQnASuccess',
   SET_GAME_OVER = '[GamePlay] SetGameOver',
+  REJECT_GAME_INVITATION = '[GamePlay] RejectGameInvitation',
   RESET_CURRENT_QUESTION = '[GamePlay] ResetCurrentQuestion',
   UPDATE_GAME_SUCCESS = '[GamePlay] UpdateGameSuccess',
   GET_USERS_ANSWERED_QUESTION = '[GamePlay] GetUsersAnsweredQuestion',
@@ -92,6 +93,12 @@ export class SetGameOver implements Action {
   constructor(public payload: string) { }
 }
 
+export class RejectGameInvitation implements Action {
+  readonly type = GamePlayActionTypes.REJECT_GAME_INVITATION;
+  constructor(public payload: string) { }
+}
+
+
 export class ResetCurrentQuestion implements Action {
   readonly type = GamePlayActionTypes.RESET_CURRENT_QUESTION;
   payload = null;
@@ -139,6 +146,7 @@ export type GamePlayActions
   | AddPlayerQnA
   | AddPlayerQnASuccess
   | SetGameOver
+  | RejectGameInvitation
   | ResetCurrentQuestion
   | UpdateGameSuccess
   | GetUsersAnsweredQuestion

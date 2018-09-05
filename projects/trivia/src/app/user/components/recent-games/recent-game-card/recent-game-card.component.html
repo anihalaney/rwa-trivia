@@ -1,4 +1,6 @@
-<ng-container>
+<ng-container *ngIf="(game.GameStatus !== 'rejected' && game.GameStatus !== 'invitation timeout' ) || 
+                     (game.GameStatus === 'rejected' && game.playerIds[0] === user.userId) ||
+                     (game.GameStatus === 'invitation timeout' && game.playerIds[0] === user.userId)">
     <div class="col-xs-12 textcenter clearfix">
         <div>
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
@@ -9,7 +11,11 @@
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                 <div class="success result" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">Won</div>
                 <div class="label result" *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId">Lost</div>
-                <div class="success result" *ngIf="!game.winnerPlayerId">Tie</div>
+                <div class="success result" *ngIf="!game.winnerPlayerId && game.GameStatus !== 'rejected' && game.GameStatus !== 'invitation timeout'">Tie</div>
+                <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === 'rejected'">Rejected</div>
+                <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === 'invitation timeout'">
+                    Invitation Timeout
+                </div>
             </div>
 
         </div>
