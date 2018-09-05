@@ -39,7 +39,9 @@ export enum GameStatus {
   WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE = 'waiting for random player invitation acceptance',
   JOINED_GAME = 'joined opponent',
   WAITING_FOR_NEXT_Q = 'waiting for next question',
-  COMPLETED = 'completed'
+  COMPLETED = 'completed',
+  REJECTED = 'rejected',
+  INVITATION_TIMEOUT = 'invitation timeout'
 }
 
 
@@ -47,5 +49,6 @@ export enum GameOperations {
   CALCULATE_SCORE = 'calculate_score',
   GAME_OVER = 'game_over',
   REPORT_STATUS = 'report_status',
-  UPDATE_ROUND = 'update_round'
+  UPDATE_ROUND = 'update_round',
+  REJECT_GAME = 'reject game'
 }

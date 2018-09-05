@@ -100,6 +100,16 @@ export class GamePlayEffects {
       ));
 
   @Effect()
+  rejectGameInvitation$ = this.actions$
+    .ofType(GamePlayActionTypes.REJECT_GAME_INVITATION)
+    .pipe(
+      switchMap((action: gameplayactions.RejectGameInvitation) =>
+        this.svc.rejectGameInvitation(action.payload).pipe(
+          map((msg: any) => new gameplayactions.UpdateGameSuccess())
+        )
+      ));
+
+  @Effect()
   getUserAnsweredQuestions$ = this.actions$
     .ofType(GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION)
     .pipe(
