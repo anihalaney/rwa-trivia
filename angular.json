@@ -20,19 +20,32 @@
             "tsConfig": "projects/trivia/src/tsconfig.app.json",
             "assets": [
               "projects/trivia/src/favicon.ico",
-              "projects/trivia/src/assets"
+              "projects/trivia/src/assets",
+              "projects/trivia/src/manifest.json"
             ],
             "styles": [
-              "projects/trivia/src/styles.css"
+              "projects/trivia/src/styles/rwa-trivia.theme.scss",
+              "projects/trivia/src/styles/styles.scss",
+              "projects/trivia/src/styles/global.scss",
+              "projects/trivia/src/styles/light.theme.scss",
+              "projects/trivia/src/styles/dark.theme.scss"
             ],
             "scripts": []
           },
           "configurations": {
+            "dev": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
+                }
+              ]
+            },
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia/src/environments/environment.ts",
-                  "with": "projects/trivia/src/environments/environment.prod.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
                 }
               ],
               "optimization": true,

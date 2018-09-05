@@ -1,0 +1,76 @@
+<mat-dialog-content>
+  <div class="" *ngIf="showLoader && !gameOver">
+    <div class="card main-div textcenter">
+      <div class="badge-icon">
+        <div class="circle-loader">
+          <div [ngClass]="correctAnswerCount < 1?'score0':'score1'" class="sprite  badge1"></div>
+          <div class="col-xs-12 first-row">
+            <div [ngClass]="correctAnswerCount < 5?'score0':'score5'" class="sprite col-xs-6 badge5"></div>
+            <div [ngClass]="correctAnswerCount < 2?'score0':'score2'" class="sprite col-xs-6 badge2"></div>
+          </div>
+          <div class="col-xs-12 second-row">
+            <div [ngClass]="correctAnswerCount < 4?'score0':'score4'" class="sprite col-xs-6 badge4"></div>
+            <div [ngClass]="correctAnswerCount < 3?'score0':'score3'" class="sprite col-xs-6 badge3"></div>
+          </div>
+        </div>
+        <div class="text-loading textcenter">
+          <span> Loading </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="" *ngIf="showBadge && !gameOver ">
+    <div class="card main-div textcenter">
+      <div class="badge-icon">
+        <div class="circle">
+          <div [ngClass]="correctAnswerCount === 0
+            ?'score1-L':correctAnswerCount === 1
+            ?'score2-L':correctAnswerCount === 2
+            ?'score3-L':correctAnswerCount === 3
+            ?'score4-L':correctAnswerCount === 4
+            ?'score5-L':''" class="sprite circle-image"></div>
+        </div>
+        <div class="text textcenter">
+          <span> Give the right answer & with this badge</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="" *ngIf="showWinBadge && !gameOver ">
+    <div class="card main-div textcenter">
+      <div class="badge-icon">
+        <div class="circle">
+          <div [ngClass]="correctAnswerCount === 1
+          ?'score1-L':correctAnswerCount === 2
+          ?'score2-L':correctAnswerCount === 3
+          ?'score3-L':correctAnswerCount === 4
+          ?'score4-L':correctAnswerCount === 5
+          ?'score5-L':''" class="sprite circle-image">
+          </div>
+        </div>
+        <div class="text textcenter">
+          <span> You Earned </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName" [question]="currentQuestion"
+    [questionIndex]="questionIndex" [timer]="timer" [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+    [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)"
+    (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [questionRound]="game.round"
+    [totalRound]="totalRound" [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer">
+  </game-question>
+
+  <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion" (continueClicked)="continueClicked($event)"
+    (viewQuestionClicked)="viewQuestionClicked($event)">
+  </game-question-continue>
+
+  <game-over *ngIf="gameOver" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName" [correctCount]="correctAnswerCount"
+    [noOfQuestions]="questionIndex" [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
+  </game-over>
+
+
+</mat-dialog-content>

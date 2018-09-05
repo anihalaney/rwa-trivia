@@ -1,0 +1,34 @@
+<section class="headermain" id="stickyheader">
+  <div class="container">
+    <div class="row">
+      <div class="logo col-xs-6 col-md-3">
+        <a [routerLink]="['/']" title="trivia.com">
+          <img src="/assets/images/logo.png" alt="Trivia Logo"> under development</a>
+      </div>
+      <div class="col-md-6 col-xs-6 pull-right align-right">
+        <div class="headerdrop">
+          <a (click)="toggleThemeClicked.emit($event)">
+            <mat-icon mat-list-icon>flip</mat-icon>
+          </a>
+        </div>
+        <div class="headerdrop" *ngIf="user">
+          <a (click)="navigateUrl()">
+            <span class="sprite settingicon"></span>
+            <span class="hidden-xs">Profile Setting</span>
+          </a>
+        </div>
+        <div class="headerdrop">
+          <a *ngIf="user" class="logout" (click)="logoutClicked.emit($event)">
+            <span class="sprite logouticon"></span>
+            <span class="hidden-xs">Logout</span>
+          </a>
+          <a *ngIf="!user" class="login" (click)="loginClicked.emit($event)">
+            <span class="sprite logouticon"></span>
+            <span class="hidden-xs">Sign in</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="clear"></div>

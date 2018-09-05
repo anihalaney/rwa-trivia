@@ -1,0 +1,13 @@
+Question,Option 1,Option 2,Option 3,Option 4,Answer Index,Tag 1,Tag 2,Tag 3,Tag 4,Tag 5,Tag 6,Tag 7,Tag 8,Tag 9
+Which one of the following is a Structural Directive?,ngClass,*ngIf,ngModel,ngStyle,2,Angular,Directive,Structural Directive,,,,,,
+Which one of the following is not a lifecycle hook method in Angular?,ngOnInit(),ngCheck() ,ngAfterContentInit(),ngOnDestroy(),2,Angular,Lifecycle methods,angular/core,,,,,,
+Angular comes with which of the following built-in pipes?,PercentPipe,UpperCasePipe,LowerCasePipe,All are correct,4,Angular,Pipes,Built-in-pipes,,,,,,
+Which third-party library angular uses for observables?,angular/observables,NgRx,RxJS ,angular/core,3,Angular,Observables,Subscribe,,,,,,
+Which module needs to be imported to use HttpClient?,HttpModule,HttpClientModule,HttpRequestModule,HttpClient,2,Angular,HttpRequest,Request to API's,,,,,,
+Which directive from the router library marks the spot in the template where the router should display the views for that outlet?,Router-outlet ,RouterLink,RouterLinkActive,Router,1,Angular,Directive,Route,,,,,,
+Which command is used for building angular code for production?,ng build,ng serve,ng build --prod,ng lint,3,Angular,Command,Build ,,,,,,
+Which interface needs to be implemented for writing custom pipes?,Pipe,PipeTransform,Transform,CreatePipe,2,Angular,Pipes,Custom Pipes,,,,,,
+How do we pass data from child component to parent component?,Using @Output ,Using @Input,Using @Child,Using @Parent,1,Angular,Components,Communication between components,,,,,,
+Who developed Angular JS?,Facebook,Google,Microsoft,None of them is correct,2,Angular,Angular JS,angular/core,,,,,,
+Which method is offered by RouterModule to configure the routes of lazy-loaded modules?,forRoot(),lazy(),forParent(),forChild(),4,Angular,Lazy Loading,Route,,,,,,
+Which decorator is used for dependency injection?,Injectable,ServiceInject,Inject,InjectService,1,Angular,Dependency Injection,Decorator,,,,,,

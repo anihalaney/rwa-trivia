@@ -1,0 +1,83 @@
+service firebase.storage {
+
+function isAuthenticated() {
+    return request.auth != null;
+  }
+ // Add uid of admin user 
+ // This is temp solution for time being till fetching role from user document does not work
+  function isAdmin() {
+  	return isAuthenticated() && 
+    			(request.auth.uid == '');
+  }
+
+  function isUserAuthenticated(userId) {
+    return isAuthenticated() && request.auth.uid == userId;
+  }
+  
+  match /b/{bucket}/o {
+    match /templates {
+      // Anyone can view any template file
+      match /{allFiles=**} {
+        allow read;
+      }
+    }
+    match /questions {
+      // questions files, only authenticated user (for now)
+      match /{allFiles=**} {
+        allow read, write: if request.auth != null;
+      }
+    }
+     match /bulk_upload/{userId} {
+      // bulk upload files, only authenticated user allowed to write
+      // only user is allowed to write user folder
+      // request.resource != null, ensure that delete operation is not allowed
+      // resource == null, ensure that update/overwrite operation on file is not allowed
+      match /{allFiles=**} {
+        allow write: if isUserAuthenticated(userId)
+                      && request.resource != null
+                      && resource == null;
+        allow read:  if isUserAuthenticated(userId)
+        							|| isAdmin();                      
+      }
+    }
+    
+    match /profile/{userId} {
+      // user profile, only authenticated user allowed to write
+      // only user is allowed to write user profile
+      // request.resource != null, ensure that delete operation is not allowed
+      // resource == null, ensure that update/overwrite operation on file is not allowed      
+      match /avatar {
+        match /{allFiles=**} {
+          allow write: if isUserAuthenticated(userId)
+                        && request.resource != null
+                        && resource == null;  
+          allow read:  if true; 
+          }
+      }
+      match /original {
+        match /{allFiles=**} {
+          allow write: if isUserAuthenticated(userId)
+                        && request.resource != null
+                        && resource == null;           
+          }
+      }
+    }  
+
+
+     match /social_share/{userId} {
+      // social share, only authenticated user allowed to write
+      // only user is allowed to write user profile
+      // request.resource != null, ensure that delete operation is not allowed
+      // resource == null, ensure that update/overwrite operation on file is not allowed      
+      match /score_images {
+        match /{allFiles=**} {
+          allow write: if isUserAuthenticated(userId)
+                        && request.resource != null
+                        && resource == null;  
+          allow read:  if true; 
+          }
+      }      
+    }   
+    
+  }
+}

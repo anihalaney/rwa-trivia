@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "rwa-trivia-dev-e57fc",
+    "production": "rwa-trivia"
+  }
+}

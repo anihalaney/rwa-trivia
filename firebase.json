@@ -1,0 +1,15 @@
+{
+  "hosting": {
+    "public": "dist",
+    "rewrites": [
+      {
+        "source": "/app/**",
+        "function": "app"
+      },     
+      {
+        "source": "**",
+        "function": "ssr"
+      }
+    ]
+  }
+}

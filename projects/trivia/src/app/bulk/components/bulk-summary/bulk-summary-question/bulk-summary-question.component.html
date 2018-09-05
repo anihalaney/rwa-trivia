@@ -1,0 +1,73 @@
+<div class="row">
+  <div class="pageheading col-md-9 col-xs-12 hidden-xs">BULK UPLOAD FILE DETAILS</div>
+  <div class="col-md-3 col-xs-12 col-sm-4 align-right spacing-bottom">
+    <button class="btn " (click)="navigation()"> Back to Summary </button>
+  </div>
+</div>
+<div class="card">
+  <mat-table #table [dataSource]="fileInfoDS" class="bulk-summary-question-table">
+    <ng-container cdkColumnDef="fileName">
+      <mat-header-cell *cdkHeaderCellDef>File Name</mat-header-cell>
+      <mat-cell class="col-chkbox bulk-summary-question-table-cell" *cdkCellDef="let row">{{row.fileName}}</mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="category">
+      <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
+      <mat-cell class="col-chkbox bulk-summary-question-table-cell" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="primaryTag">
+      <mat-header-cell *cdkHeaderCellDef>Primary Tag</mat-header-cell>
+      <mat-cell class="col-chkbox bulk-summary-question-table-cell" *cdkCellDef="let row">{{row.primaryTag}}</mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="countQuestionsUploaded">
+      <mat-header-cell *cdkHeaderCellDef>Uploaded #</mat-header-cell>
+      <mat-cell class="col-chkbox bulk-summary-question-table-cell" *cdkCellDef="let row">{{row.uploaded}}</mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="countQuestionsApproved">
+      <mat-header-cell *cdkHeaderCellDef>Approved #</mat-header-cell>
+      <mat-cell class="col-chkbox bulk-summary-question-table-cell" *cdkCellDef="let row">{{row.approved}}</mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="countQuestionsRejected">
+      <mat-header-cell *cdkHeaderCellDef>Rejected #</mat-header-cell>
+      <mat-cell class="col-chkbox bulk-summary-question-table-cell" *cdkCellDef="let row">{{row.rejected}}</mat-cell>
+    </ng-container>
+
+    <ng-container cdkColumnDef="status">
+      <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+      <mat-cell class="col-status bulk-summary-question-table-cell" *cdkCellDef="let row">{{row.status}}</mat-cell>
+    </ng-container>
+    <ng-container cdkColumnDef="download">
+      <mat-header-cell *cdkHeaderCellDef> Download File </mat-header-cell>
+      <mat-cell class="col-status cursor bulk-summary-question-table-cell" *cdkCellDef="let row">
+        <a (click)="downloadFile(row)">Download</a>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row class="bulk-summary-question-header" *cdkHeaderRowDef="['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
+    </mat-header-row>
+    <mat-row class="row-question" *cdkRowDef="let row; columns: ['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download'];">
+    </mat-row>
+  </mat-table>
+
+  <br />
+  <br />
+  <mat-card-title>Questions</mat-card-title>
+  <mat-tab-group>
+    <mat-tab label="Published">
+      <question-table *ngIf="publishedCount != 0" [showSort]="false" [showPaginator]="true" [showButtons]="PUBLISHED_SHOW_BUTTON_STATE"
+        [questions]="publishedQuestions" [totalCount]="publishedCount" [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false"
+        [clientSidePagination]="true">
+      </question-table>
+    </mat-tab>
+    <mat-tab label="Unpublished">
+      <question-table *ngIf="unPublishedCount != 0" [bulkUploadFileInfo]="bulkUploadFileInfo" [showSort]="false" [showPaginator]="true"
+        [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions" [totalCount]="unPublishedCount"
+        [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false" [clientSidePagination]="true">
+      </question-table>
+    </mat-tab>
+  </mat-tab-group>
+</div>

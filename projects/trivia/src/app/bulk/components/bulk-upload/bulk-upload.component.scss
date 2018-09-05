@@ -1,0 +1,92 @@
+ul {
+  list-style: square inside
+}
+
+.error { 
+  color: red;
+}
+.bulk-instuctions
+{
+    font-family: hindregular;
+    font-size: 15px;
+}
+.bulk-instuctions h2, .upload-questions h2,.review-questions h2{ font-size:18px; font-family: 'hindsemibold'; letter-spacing: 0.1px; }
+.bulk-instuctions h4,.upload-questions h4,.review-questions h4{ font-family: 'hindsemibold'; letter-spacing: 0.1px; margin-top: 13px;}
+.primary-tag
+{
+  margin-top: 13px;
+}
+.downloadFile
+{
+    width: 95px;
+    padding: 5px 5px 5px 10px;
+}
+
+.btn
+{
+  padding: 10px 25px;
+  font-size: 16px;
+}
+.instruction-nextBtn
+{
+  margin-top: 13px;
+  padding: 10px 60px;
+}
+.upload-questions,.review-questions,.submit
+{
+  margin: 15px 0px;
+}
+.btn-back{ 
+  font-size: 16px;
+  font-family: 'hindsemibold';
+  -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px -2px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  padding: 10px 25px;
+  margin-right: 2%;
+} 
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: 'hindsemibold';
+  border-radius: 4px;
+  margin-right: 10px;
+  
+}
+.control-spacing
+{
+  margin-top: 15px;
+}
+.sub-header
+{
+    margin-top: 15px;
+    font-family: hindregular;
+    font-size: 16px;
+}
+.mat-option
+{
+  height: 25px;
+}
+.alignment
+{
+    text-align: right;
+    float: right;
+}
+.next-btn-alignment
+{
+  text-align: center;
+}
+@media(max-width: 600px){
+  .btn,.btn-back
+  {
+	 width: 100%;
+ 	 margin-bottom: 10px;
+ 	 }
+ 	}		

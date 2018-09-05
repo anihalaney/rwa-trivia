@@ -1,0 +1,39 @@
+
+
+.social-icons-blog{ 
+  position: absolute;
+  top: 295px;
+  left: 75%;
+  border-style: solid;
+  border-width: 1px;
+  width: 56px;
+  z-index: 1;
+  border-radius: 5px;
+  }
+  .social-icons-gameOver{ 
+    z-index: 1;
+    position: relative;
+    border-style: solid;
+    border-width: 1px;
+    width: 56px;
+    border-radius: 5px;
+    }
+  .facebookicon,.twiticon,.linkdenicon
+  {
+    height: 40px;
+    width:40px;
+  }
+  .icon-spacing
+  {
+    margin-top: 25%;
+  }
+  .btn-spacing
+  {
+    padding: 10px 0px 0px 0px;
+  }
+  .close-div
+  {
+    cursor: pointer;
+    border-top-style: solid;
+    border-top-width: 1px;
+  }

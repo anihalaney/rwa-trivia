@@ -1,0 +1,27 @@
+.yourimg{ width: 94%; max-width: 50px; border-radius: 50%; height: auto; margin: auto; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 5px; border:1px solid; padding: 2px}
+.yourimg img{ display: block; width: 50px; height: 40px; border-radius: 50% }
+.result
+{
+  font-family: 'hindsemibold';
+  font-size: 18px;
+  margin-top: 5%;
+}
+.card-border-right{ border-right: 1px solid transparent;}
+.card-border-right{border-color: rgba(204,204,204,0.44);}
+
+.card-border-left{ border-left: 1px solid transparent;}
+.card-border-left{border-color: rgba(204,204,204,0.44);}
+
+.no-padding
+{
+    padding: 0px;
+  
+}
+.card-bottom-spacing
+{
+    margin-bottom: 5%;
+}
+.card-center-position
+{
+   margin-top: 15%;
+}

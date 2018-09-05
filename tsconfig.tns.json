@@ -15,6 +15,8 @@
     "**/*.tns.ts",
     "**/*.android.ts",
     "**/*.ios.ts",
-    "app/main.aot.ts"
+    "app/main.aot.ts",
+    "functions",
+    "**/*.spec.ts"
   ]
 }

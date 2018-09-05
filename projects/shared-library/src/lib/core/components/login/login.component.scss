@@ -1,0 +1,67 @@
+button {
+  margin-top: 10px;
+}
+.full-width {
+  width: 100%;
+}
+::ng-deep mat-form-field.ng-invalid.ng-touched .mat-input-underline {
+  border-color: red;
+}
+::ng-deep mat-hint.error, .error {
+  color: red;
+}
+/*Login page*/
+.logininner .card .row{margin: 0 }
+.logininner .withsocial, .logininner .col-xs-12{ padding: 30px }
+.heading{ font-size: 24px; font-family:'hindlight'; line-height: 1.2 }
+
+.form-group{position:relative;margin-top:35px;margin-bottom:30px;}
+.form-group .control-label{position:absolute;top:4px;pointer-events:none;padding-left:2px;z-index:1;font-size:14px;font-weight:normal;transition:all 0.28s ease;font-family:'hindmedium'}
+.form-group .bar{position:relative;border-bottom:1px solid;display:block;}
+.form-group .bar::before{content:'';height:2px;width:0;left:50%;bottom:-1px;position:absolute;transition:left 0.28s ease, width 0.28s ease;z-index:2;}
+.form-group input{display:block;background:none;padding:2px 2px 1px;font-size:14px;border-width:0;border-color:transparent;line-height:1.9;width:100%;transition:all 0.28s ease;box-shadow:none;}
+.form-group input:focus ~ .control-label,.form-group input:valid ~ .control-label{font-size:11px;color:gray;top:-16px;left:0;}
+.form-group input:focus{outline:none;}
+.form-group input:focus ~ .bar::before{width:100%;left:0;}
+.logininner .formfield{ padding: 0 }
+.logininner .formfield label{ font-size: 14px; font-family: 'hindmedium' }
+.logininner .btn{ line-height: 16px; display: block; font-size: 18px; font-family: 'hindregular'; padding: 18px 0; color: white;}
+.loginlink > div{ padding: 0; line-height: 1.6}
+.loginlink > div:nth-child(2){ text-align: right; }
+.loginlink a{ display: inline-block; border-bottom: 1px solid; line-height: 15px; font-family: 'hindmedium'}
+
+.logininner .withsocial h3{ font-size: 18px; line-height: 22px; margin-bottom: 40px;}
+.logininner .withsocial h3:before{ display: none; }
+.withsocial a{ display: block; margin-bottom: 20px }
+
+/*Signup*/
+.loginlink a.forgot{ font-size: 12px; border-bottom:1px solid transparent; }
+.signupfree{ font-size: 12px; padding: 10px 0 }
+
+@media screen and ( min-width:767px){
+	//.landinginner, .logininner{ position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%); padding:0 }
+	.landinginner img{  height:auto; }
+	.landinginner p{ font-size: 48px; line-height: 58px }
+	.landinginner .btn, .logininner .btn{ width: 217px; margin: 35px 10px; }
+	.ladding-copyr{ position: absolute; bottom: 30px; width: 100% }
+	.logininner .btn{ margin: 35px 0 25px; }
+
+	.signupinner .btn{ display: block; margin: 35px auto 25px;}
+	.heading{ font-size: 30px;}
+}
+@media screen and ( min-width:1000px){
+	/*loginpage*/
+	.logininner{  width: 800px; right: 0; margin: auto;  }
+	.logininner .withsocial, .logininner .col-sm-7.col-xs-12{ display: table-cell; float: none; }
+	.loginlink a:hover{ border-bottom:1px solid transparent; }
+	.signupinner{width: 405px;}
+}
+a {
+  cursor: pointer;
+}
+.hide {
+  display: none;
+}
+.logininner input {
+	background-color: transparent;
+}

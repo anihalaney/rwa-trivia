@@ -5,4 +5,9 @@ import { Component } from '@angular/core';
   templateUrl: './app.component.html',
 })
 
-export class AppComponent { }
+export class AppComponent { 
+
+  constructor(){
+    console.log('hello world 2');
+  }
+}

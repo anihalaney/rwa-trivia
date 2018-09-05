@@ -1,0 +1,30 @@
+{
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "engines": {
+    "node": "8"
+  },
+  "dependencies": {
+    "body-parser": "1.18.3",
+    "cookie-parser": "1.4.3",
+    "cors": "2.8.4",
+    "csv": "3.1.0",
+    "elasticsearch": "15.0.0",
+    "express": "4.16.3",
+    "feed-to-json": "^1.0.3",
+    "firebase-admin": "^5.13.1",
+    "firebase-functions": "^2.0.2",
+    "fs": "0.0.1-security",
+    "node-fetch": "^2.2.0",
+    "nodemailer": "^4.6.7",
+    "path": "^0.12.7",
+    "request": "^2.87.0",
+    "sharp": "^0.20.5"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/csv-parse": "1.1.11",
+    "@types/elasticsearch": "5.0.14",
+    "@types/node": "7.0.21"
+  }
+}

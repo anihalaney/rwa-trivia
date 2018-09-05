@@ -1,0 +1,25 @@
+<mat-card class="flex-item" class="game-question-continue">
+    <mat-card-title fxLayout="row">
+      <div >{{question.questionText}}</div>
+      <div fxFlex></div>
+      <div></div>
+    </mat-card-title>
+  <mat-card-header>
+    <mat-card-subtitle>
+      {{categoryName}}:
+      <span *ngFor="let tag of question.tags">
+       #{{tag}}
+      </span>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content fxLayoutAlign="center center">
+    <button mat-button (click)="continueClicked.emit($event)">CONTINUE</button>
+  </mat-card-content>
+
+  <mat-card-footer fxLayout="row" fxLayoutAlign="space-between center">
+    <button mat-button (click)="viewQuestionClicked.emit($event)">VIEW QUESTION</button>
+    <div fxFlexAlign="center"></div>
+    <button mat-button>CLOSE</button>
+  </mat-card-footer>
+</mat-card>
+ 
