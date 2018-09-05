@@ -1,1 +1,7 @@
-<Button text="home works" class="btn btn-primary" (tap)="onClick()"></Button>
+<!-- <Button text="home works" class="btn btn-primary" (tap)="onClick()"></Button> -->
+<StackLayout>
+    <Label text="Welcome to Dashboard" textWrap="true"></Label>
+    <Button text="Logout" (tap)="logout()" *ngIf="true"></Button>    
+</StackLayout>
+
+

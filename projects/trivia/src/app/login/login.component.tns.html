@@ -1,1 +1,9 @@
-<Button text="Loginddd" class="btn btn-primary" (tap)="onClick()"></Button>
+<ActionBar class="action-bar">
+    <Label class="action-bar-title" text="Home"></Label>
+</ActionBar>
+
+<StackLayout>
+    <Button text="Login with Google" (tap)="googleLogin()"></Button>
+    <Button text="Login with Facebook" (tap)="facebookLogin()"></Button>
+</StackLayout>
+
