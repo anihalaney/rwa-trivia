@@ -1,6 +1,4 @@
-<ng-container *ngIf="(game.GameStatus !== 'rejected' && game.GameStatus !== 'invitation timeout' ) || 
-                     (game.GameStatus === 'rejected' && game.playerIds[0] === user.userId) ||
-                     (game.GameStatus === 'invitation timeout' && game.playerIds[0] === user.userId)">
+<ng-container>
     <div class="col-xs-12 textcenter clearfix">
         <div>
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
