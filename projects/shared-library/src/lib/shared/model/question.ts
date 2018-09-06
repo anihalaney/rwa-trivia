@@ -48,8 +48,10 @@ export class Question {
     const question: Question = new Question();
     question.id = hit['_id'];
     const source = hit['_source'];
+    const orderedAnswers: Answer[] = [];
 
-    question.answers = source.answers;
+    question.answers = this.changeAnswerOrder(source.answers, orderedAnswers);
+
     question.categoryIds = source.categoryIds;
     question.published = source.published;
     question.questionText = source.questionText;
@@ -58,6 +60,17 @@ export class Question {
     question.created_uid = source.created_uid;
 
     return question;
+  }
+
+  static changeAnswerOrder(answers: Answer[], orderedAnswers: Answer[]) {
+    if (orderedAnswers.length !== 4) {
+      const randomIndex = Math.floor(Math.random() * 4);
+      if (orderedAnswers.indexOf(answers[randomIndex]) === -1) {
+        orderedAnswers.push(answers[randomIndex]);
+      }
+      this.changeAnswerOrder(answers, orderedAnswers);
+    }
+    return orderedAnswers;
   }
 
   constructor() {
