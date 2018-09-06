@@ -1,6 +1,6 @@
 export enum schedulerConstants {
     gamePlayDuration = 32,  // 32 hours
-    gameInvitationDuration = 8   // 8 hours
+    gameInvitationDuration = 192   // 8 days
 }
 
 

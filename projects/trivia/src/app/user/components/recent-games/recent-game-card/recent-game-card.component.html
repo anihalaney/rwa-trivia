@@ -12,7 +12,7 @@
                 <div class="success result" *ngIf="!game.winnerPlayerId && game.GameStatus !== 'rejected' && game.GameStatus !== 'invitation timeout'">Tie</div>
                 <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === 'rejected'">Rejected</div>
                 <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === 'invitation timeout'">
-                    Invitation Timeout
+                    Expired
                 </div>
             </div>
 
