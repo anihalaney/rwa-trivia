@@ -163,9 +163,7 @@ exports.checkGameOver = (req, res) => {
             const millis = utils.getUTCTimeStamp();
             const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
             const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
-            console.log('game', game.gameId);
-            console.log('playedHours', playedHours);
-            console.log('game.GameStatus', game.GameStatus);
+
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
                 game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
