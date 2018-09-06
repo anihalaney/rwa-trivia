@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import * as firebase from "nativescript-plugin-firebase";
+import { Store, select } from '@ngrx/store';
+import { AppState, appState } from './../store';
+import { User } from './../../../../shared-library/src/lib/shared/model';
+import { ChangeDetectorRef } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -8,13 +13,16 @@ import * as firebase from "nativescript-plugin-firebase";
   styles: []
 })
 export class HomeComponent implements OnInit {
-
-  constructor(private router: Router) {
+  user: User = new User();
+  sub: Subscription;
+  constructor(private router: Router, private store: Store<AppState>) {
 
   }
 
   ngOnInit() {
-
+    this.sub = this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+      this.user = user;
+    });
   }
 
 

@@ -9,4 +9,17 @@ In many cases you may want to use the NativeScript core theme instead
 of writing your own CSS rules. For a full list of class names in the theme
 refer to http://docs.nativescript.org/ui/theme.
 */
+
+// @import '~@angular/material/theming';
+// @import '~@ngx-share/button/styles/share-buttons';
+// @import '~@ngx-share/button/styles/themes/circles/circles-dark-theme';
+
+
 @import '~nativescript-theme-core/css/core.light.css';
+@import './styles/light.theme.scss';
+@import './styles/styles.scss';
+@import './styles/rwa-trivia.theme.scss';
+
+.new-btn{
+    color: map-get($light-theme-text-color , primary-light);
+  }
