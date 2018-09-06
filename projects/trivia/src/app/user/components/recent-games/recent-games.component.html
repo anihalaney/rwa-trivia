@@ -1,9 +1,13 @@
 <div class="card recentlygames">
   <h2>Recently Completed Games</h2>
   <ul>
-    <li *ngFor="let game of finalResult|slice:startIndex:nextIndex" class="col-sm-12">
-      <recent-game-card [game]="game" [userDict]="userDict" [user]="user"></recent-game-card>
-    </li>
+    <ng-container *ngFor="let game of finalResult|slice:startIndex:nextIndex">
+      <li *ngIf="(game.GameStatus !== 'rejected' && game.GameStatus !== 'invitation timeout' ) || 
+      (game.GameStatus === 'rejected' && game.playerIds[0] === user.userId) ||
+      (game.GameStatus === 'invitation timeout' && game.playerIds[0] === user.userId)" class="col-sm-12">
+        <recent-game-card [game]="game" [userDict]="userDict" [user]="user"></recent-game-card>
+      </li>
+    </ng-container>
   </ul>
   <a class="viewall" title="view more" (click)="getMoreCard()" *ngIf="finalResult.length!=nextIndex && finalResult.length > 4">view
     more
