@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
@@ -14,7 +14,8 @@ import * as leaderBoardActions from '../../store/actions';
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
-  styleUrls: ['./leaderboard.component.scss']
+  styleUrls: ['./leaderboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeaderboardComponent implements OnDestroy {
   @Input() userDict: { [key: string]: User };
@@ -33,13 +34,13 @@ export class LeaderboardComponent implements OnDestroy {
   constructor(private store: Store<AppState>,
     private userActions: UserActions) {
     this.categoryDict$ = store.select(categoryDictionary);
-    this.categoryDict$.subscribe(categoryDict => {
+    this.subs.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
-    });
+    }));
 
     this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
 
-    this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
+    this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
 
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
@@ -59,7 +60,7 @@ export class LeaderboardComponent implements OnDestroy {
           this.lbsUsersSliceLastIndex = 3;
         }
       }
-    });
+    }));
   }
 
 
