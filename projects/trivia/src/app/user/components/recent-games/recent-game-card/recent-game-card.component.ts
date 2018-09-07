@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { User, Game, Category, PlayerMode } from '../../../../../../../shared-library/src/lib/shared/model';
+import { User, Game, Category, PlayerMode, GameStatus } from '../../../../../../../shared-library/src/lib/shared/model';
 import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { userState } from '../../../store';
@@ -26,6 +26,8 @@ export class RecentGameCardComponent implements OnChanges {
     categoryDict: { [key: number]: Category };
     otherUserId: string;
     userProfileImageUrl: string;
+    REJECTED_GAME = GameStatus.REJECTED;
+    EXPIRED_GAME = GameStatus.INVITATION_TIMEOUT;
 
     constructor(private store: Store<AppState>, private userActions: UserActions) {
 

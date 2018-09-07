@@ -9,9 +9,9 @@
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                 <div class="success result" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">Won</div>
                 <div class="label result" *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId">Lost</div>
-                <div class="success result" *ngIf="!game.winnerPlayerId && game.GameStatus !== 'rejected' && game.GameStatus !== 'invitation timeout'">Tie</div>
-                <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === 'rejected'">Rejected</div>
-                <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === 'invitation timeout'">
+                <div class="success result" *ngIf="!game.winnerPlayerId && game.GameStatus !== REJECTED_GAME && game.GameStatus !== EXPIRED_GAME">Tie</div>
+                <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === REJECTED_GAME">Rejected</div>
+                <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === EXPIRED_GAME                                           ">
                     Expired
                 </div>
             </div>
