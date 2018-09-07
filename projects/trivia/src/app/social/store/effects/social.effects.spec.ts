@@ -5,22 +5,21 @@ import { cold, hot, getTestScheduler } from 'jasmine-marbles';
 import { Actions } from '@ngrx/effects';
 import { TEST_DATA } from '../../../testing/test.data';
 import { SocialEffects } from './social.effects';
-import { SocialService } from '../../../core/services/social.service';
 import {
     AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess, CheckSubscriptionStatus,
     AddSubscriberError, LoadBlogs, LoadBlogsSuccess, LoadBlogsError
 } from '../actions';
-import { Subscription, User, Subscribers, Blog, RouterStateUrl } from '../../../model';
+import { Subscription, User, Subscribers, Blog, RouterStateUrl } from '../../../../../../shared-library/src/lib/shared/model';
 import { StoreModule, Store } from '@ngrx/store';
 import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
 import { AngularFirestore, AngularFirestoreModule } from 'angularfire2/firestore';
-import { CONFIG } from '../../../../environments/environment';
+import { CONFIG } from '../../../../../../shared-library/src/lib/environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthenticationProvider, AuthInterceptor } from '../../../../app/core/auth';
+import { AuthenticationProvider, AuthInterceptor } from '../../../../../../shared-library/src/lib/core/auth';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireStorageModule } from 'angularfire2/storage';
-import { UserService } from '../../../core/services';
-import { UserActions } from '../../../core/store/actions';
+import { UserService, SocialService } from '../../../../../../shared-library/src/lib/core/services';
+import { UserActions } from '../../../../../../shared-library/src/lib/core/store';
 import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { RoutesRecognized } from '@angular/router';
 

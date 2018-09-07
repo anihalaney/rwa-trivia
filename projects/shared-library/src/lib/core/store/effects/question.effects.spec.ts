@@ -10,7 +10,7 @@ import { QuestionService } from '../../../core/services/question.service';
 import { QuestionActions } from '../actions';
 import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { RoutesRecognized } from '@angular/router';
-import { Question, RouterStateUrl } from '../../../model';
+import { Question, RouterStateUrl } from '../../../shared/model';
 
 
 describe('Effects: QuestionEffects', () => {

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { QuestionActions } from '../actions';
-import { Question, SearchResults } from '../../../model';
+import { Question, SearchResults } from '../../../../../../shared-library/src/lib/shared/model';
 import { questionOfTheDay } from './questions.reducer';
 import { TEST_DATA } from '../../../testing/test.data';
 
