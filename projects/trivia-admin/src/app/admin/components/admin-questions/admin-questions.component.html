@@ -1,0 +1,34 @@
+<div>
+  <div class="row">
+    <div class="pageheading col-md-4 col-xs-12 hidden-xs">Questions</div>
+    <div class="archive-div col-md-5 col-xs-6 hidden-xs align-right" *ngIf="selectedTab==1">
+      <label>Show Bulk Questions</label>
+      <mat-button-toggle-group #group="matButtonToggleGroup" value="{{toggleValue}}">
+        <mat-button-toggle value=true (click)="tapped(true)">
+          On
+        </mat-button-toggle>
+        <mat-button-toggle value=false (click)="tapped(false)" selected>
+          Off
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+  <div class="card">
+    <mat-tab-group (selectedTabChange)="tabChanged($event)" [(selectedIndex)]="selectedTab">
+      <mat-tab label="Published">
+        <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" [categoryDictionary]="categoryDictObs | async"
+          [categoriesObs]="categoriesObs" (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)"
+          (onTagChanged)="tagChanged($event)" (onSortOrderChanged)="sortOrderChanged($event)" class="flex-container" fxLayoutWrap="wrap"
+          fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+        </question-search>
+      </mat-tab>
+      <mat-tab label="Unpublished">
+        <question-table [showSort]="false" [showPaginator]="true" [questions]="unpublishedQuestionsObs | async" [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true" [showButtons]="true" [userDict]="userDict"
+          [user]="user" [clientSidePagination]="true" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)"
+          (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)">
+        </question-table>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

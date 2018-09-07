@@ -5,7 +5,7 @@
       {
         "source": "/app/**",
         "function": "app"
-      },   
+      },     
       {
         "source": "**",
         "function": "ssr"
