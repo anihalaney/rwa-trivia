@@ -1,0 +1,24 @@
+.headermain{ padding: 10px 0; box-shadow: 0 1px 3px rgba(0,0,0,0.56) }
+.headershadow{ width: 100%; z-index: 99999}
+.headerdrop{ display: inline-block; vertical-align: middle;}
+.align-right{ text-align: right; }
+.headerdrop a{ opacity: 0.8; padding: 8px; display: block;margin-left: 35px;}
+@media screen and ( min-width:400px){
+  // .headerdrop{ margin-left: 35px; }
+  .settingicon, .logouticon{ margin-right: 12px; vertical-align: -3px;}
+}
+@media screen and ( min-width:1000px){
+  .headerdrop a:hover{ opacity:1;}
+  .headerdrop a:hover .settingicon{transform: rotate(-45deg)}
+  h1{ font-size: 40px;}
+}
+@media screen and ( max-width:1024px){  
+  .logo a { display: inline-block; padding-left: 40px;}
+  .innerhead .logo a{ padding-left: 0 }
+  .logo a img{ height: 100%; max-width: none;  }
+  .headerdrop a{margin: 0px;}
+}
+
+.headerdrop {
+  cursor: pointer;
+}
