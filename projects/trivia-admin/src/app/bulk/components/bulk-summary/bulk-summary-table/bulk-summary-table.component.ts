@@ -1,4 +1,7 @@
-import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, OnInit, SimpleChanges } from '@angular/core';
+import {
+  Component, Input, ViewChild, OnChanges, Output, EventEmitter,
+  OnInit, SimpleChanges, ChangeDetectionStrategy
+} from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';

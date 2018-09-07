@@ -14,7 +14,7 @@
           <div class="row">
             <div class="formfield">
               <select placeholder="Select Category" class="required" formControlName="category">
-                <option *ngFor="let category of categories" [value]="category.id">
+                <option *ngFor="let category of categories; trackBy: trackById" [value]="category.id">
                   {{category.categoryName}}
                 </option>
               </select>
@@ -29,7 +29,8 @@
       <div class="optionbox row col-md-11 formfield">
         <p class="field-caption">Enter Your Question</p>
         <textarea placeholder="Enter Your Question" formControlName="questionText" class="required col-md-12 col-xs-12"></textarea>
-        <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</p>
+        <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
+          is required!</p>
       </div>
       <div class="optionbox row col-md-11 enterquestion">
         <p class="field-caption">Answers</p>

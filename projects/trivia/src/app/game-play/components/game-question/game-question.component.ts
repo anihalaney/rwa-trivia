@@ -43,6 +43,7 @@ export class GameQuestionComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
   }
+
   ngAfterViewInit() {
     const seconds = 30;
     const loader = this.loader.nativeElement, α = 0;

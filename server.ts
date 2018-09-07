@@ -9,6 +9,7 @@ import { resolve } from 'path';
 import * as express from 'express';
 
 const domino = require('domino');
+const compression = require('compression')
 const win = domino.createWindow('');
 const app = express();
 let isProductionEnv = false;
@@ -42,7 +43,7 @@ app.engine(
 
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
-
+app.use(compression())
 // Point all routes to Universal
 app.get('*', (req, res) => {
   res.set('Cache-Control', 'public, max-age=3600, s-maxage=3600');
