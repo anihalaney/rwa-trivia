@@ -2,9 +2,9 @@
   <h2>Recently Completed Games</h2>
   <ul>
     <ng-container *ngFor="let game of finalResult|slice:startIndex:nextIndex">
-      <li *ngIf="(game.GameStatus !== 'rejected' && game.GameStatus !== 'invitation timeout' ) || 
-      (game.GameStatus === 'rejected' && game.playerIds[0] === user.userId) ||
-      (game.GameStatus === 'invitation timeout' && game.playerIds[0] === user.userId)" class="col-sm-12">
+      <li *ngIf="(game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT ) || 
+      (game.GameStatus === GameStatus.REJECTED && game.playerIds[0] === user.userId) ||
+      (game.GameStatus === GameStatus.INVITATION_TIMEOUT && game.playerIds[0] === user.userId)" class="col-sm-12">
         <recent-game-card [game]="game" [userDict]="userDict" [user]="user"></recent-game-card>
       </li>
     </ng-container>

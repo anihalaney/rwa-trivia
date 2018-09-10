@@ -26,8 +26,8 @@ export class RecentGameCardComponent implements OnChanges {
     categoryDict: { [key: number]: Category };
     otherUserId: string;
     userProfileImageUrl: string;
-    REJECTED_GAME = GameStatus.REJECTED;
-    EXPIRED_GAME = GameStatus.INVITATION_TIMEOUT;
+    GameStatus = GameStatus;
+
 
     constructor(private store: Store<AppState>, private userActions: UserActions) {
 
