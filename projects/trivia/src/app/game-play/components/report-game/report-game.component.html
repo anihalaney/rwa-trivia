@@ -50,8 +50,8 @@
 
                 </div>
                 <div class="report-reason-section">
-                    <label class="question-text">If you're having trouble with above question, please use this from to tell us about the issue you're
-                        experiencing.
+                    <label class="question-text">If you're having trouble with above question, please use this from to tell
+                        us about the issue you're experiencing.
                     </label>
 
                     <div class="report-reasons">
@@ -60,7 +60,7 @@
                             <ul class="dark">
                                 <li>
                                     <label class="container">Offensive content
-                                        <input type="radio" [checked]="true" name="reason" formControlName="reason" value="Offensive content">
+                                        <input type="radio" [checked]="true" name="reason" formControlName="reason" value="Offensive content" aria-label="offensive-content">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
@@ -69,41 +69,41 @@
                                 </li> -->
                                 <li>
                                     <label class="container">Spelling or grammar error
-                                        <input type="radio" name="reason" formControlName="reason" value="Spelling or grammar error">
+                                        <input type="radio" name="reason" formControlName="reason" value="Spelling or grammar error" aria-label="error">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
                                 <li>
                                     <label class="container">Wrong answer
-                                        <input type="radio" name="reason" formControlName="reason" value="Wrong answer">
+                                        <input type="radio" name="reason" formControlName="reason" value="Wrong answer" aria-label="wrong-answer">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
                                 <li>
                                     <label class="container">Incorrect category or tags
-                                        <input type="radio" name="reason" formControlName="reason" value="Incorrect category or tags">
+                                        <input type="radio" name="reason" formControlName="reason" value="Incorrect category or tags" aria-label="tag">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
                                 <li>
                                     <label class="container">Question is not clear
-                                        <input type="radio" name="reason" formControlName="reason" value="Question is not clear">
+                                        <input type="radio" name="reason" formControlName="reason" value="Question is not clear" aria-label="question">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
                                 <li>
                                     <label class="container">Spam
-                                        <input type="radio" name="reason" formControlName="reason" value="Spam">
+                                        <input type="radio" name="reason" formControlName="reason" value="Spam" aria-label="spam">
                                         <span class="checkmark"></span>
                                     </label>
                                 </li>
                                 <li>
                                     <label class="container">Other
-                                        <input type="radio" name="reason" formControlName="reason" value="other">
+                                        <input type="radio" name="reason" formControlName="reason" value="other" aria-label="other">
                                         <span class="checkmark"></span>
                                     </label>
                                     <div>
-                                        <textarea rows="2" formControlName="otherReason">
+                                        <textarea rows="2" formControlName="otherReason" aria-label="other-reason">
                                             </textarea>
                                         <div *ngIf="reportQuestionForm.get('reason').value==='other' && reportQuestionForm.get('otherReason').value===''">
                                             <span class="label">
