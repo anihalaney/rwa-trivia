@@ -123,6 +123,13 @@ export class GameService {
       });
   }
 
+  rejectGameInvitation(gameId: string) {
+    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+      {
+        operation: GameOperations.REJECT_GAME
+      });
+  }
+
   getGameResult(userId: String): Observable<Game[]> {
     const query1 = this.db.collection('/games', ref => ref.where('playerId_0', '==', userId).where('gameOver', '==', true)
       .orderBy('turnAt', 'desc').limit(4))
