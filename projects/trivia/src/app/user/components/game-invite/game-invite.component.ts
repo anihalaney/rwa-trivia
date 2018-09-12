@@ -38,7 +38,6 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
     this.store.dispatch(new gameplayactions.RejectGameInvitation(this.game.gameId));
   }
 
-
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
   }
