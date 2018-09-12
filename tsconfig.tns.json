@@ -6,6 +6,9 @@
     "experimentalDecorators": true,
     "baseUrl": "./",
     "paths": {
+        "shared-library/*": [
+          "./projects/shared-library/src/lib/*"
+        ],
       "*": [
         "./node_modules/tns-core-modules/*",
         "./node_modules/*"

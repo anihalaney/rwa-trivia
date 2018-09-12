@@ -13,5 +13,6 @@ export * from './lib/core/components';
 export * from './lib/core/services';
 export * from './lib/core/auth';
 export * from './lib/core/route-guards';
+export * from './lib/core/db-service';
 
 

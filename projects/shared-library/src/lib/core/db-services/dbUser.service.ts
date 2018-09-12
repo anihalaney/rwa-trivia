@@ -6,29 +6,53 @@ import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { CoreState } from '../store';
-import { User, Invitation, Friends } from './../../../lib/shared/model';
+import { User, Invitation, Friends } from '../../shared/model';
 import { ObservableInput } from 'rxjs';
-import { CONFIG } from './../../environments/environment';
-import { UserActions } from '../../core/store/actions';
-// import { DbService } from "@dbservice/core";
+import { CONFIG } from '../../environments/environment';
+import { UserActions } from '../store/actions';
+
 
 
 
 @Injectable()
-export class UserService {
+export class DBUserService {
 
     constructor(private db: AngularFirestore,
         private storage: AngularFireStorage,
         private http: HttpClient,
-        private store: Store<CoreState>,
-        private userActions: UserActions) {
+        private store: Store<CoreState>, private userActions: UserActions) {
     }
 
 
     loadUserProfile(user: User): Observable<User> {
-        // const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
+
         return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
-        // return this.dbService.listenForChanges('users', queryParams)
+            .pipe(map(u => {
+                if (u) {
+                    const userInfo = user;
+                    // user = { ...u, ...user };
+                    user = u;
+                    user.idToken = userInfo.idToken;
+                    user.authState = userInfo.authState;
+                    if (u.stats) {
+                        user.stats = u.stats;
+                    }
+                } else {
+                    //  this.saveUserProfile(user);
+                    const dbUser = Object.assign({}, user); // object to be saved
+                    delete dbUser.authState;
+                    delete dbUser.profilePictureUrl;
+                    this.db.doc(`/users/${user.userId}`).set(dbUser);
+                }
+
+                return user;
+            }),
+                mergeMap(u => this.getUserProfileImage(u)));
+    }
+
+    loadUserProfile2(user: User): Observable<User> {
+
+        return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
             .pipe(map(u => {
                 if (u) {
                     const userInfo = user;

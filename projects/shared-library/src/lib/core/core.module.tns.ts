@@ -14,6 +14,7 @@ import {
 } from './services';
 
 // import { AuthenticationProvider, AuthInterceptor } from './auth';
+import { DbService, TNSDbService } from './db-service'
 
 // import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver, AdminLoadGuard } from './route-guards';
 
@@ -26,6 +27,7 @@ import { reducer } from './store';
 // import { SharedModule } from '../shared/shared.module';
 
 // export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
+
 
 @NgModule({
   declarations: [
@@ -61,6 +63,11 @@ import { reducer } from './store';
     UserActions, CategoryActions, TagActions, QuestionActions,
     UIStateActions, GameActions,
     UserActions,
+    TNSDbService,
+    {
+      provide: DbService,
+      useClass: TNSDbService
+    }
   ]
 })
 export class CoreModule {

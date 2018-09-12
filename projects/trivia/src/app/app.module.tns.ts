@@ -17,7 +17,15 @@ import { CoreModule } from './../../../shared-library/src/lib/core/core.module';
 import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 import { HttpHeaders, HttpClientModule } from '@angular/common/http';
 
-import { TestServiceService } from './../../../shared-library/src/test.service';
+import { DBUserService } from './../../../shared-library/src/lib/core/db-services/dbUser.service';
+import { TNSFirebaseService } from './nativescript/core/services/tns-firebase.service';
+import { FirebaseService } from './../../../shared-library/src/lib/core/db-services/firebase.service';
+import * as TNSFirebase from 'nativescript-plugin-firebase';
+import { PlatformFirebaseToken } from './../../../shared-library/src/lib/core/db-service/tokens';
+
+export function firebaseFactory() {
+  return TNSFirebase;
+}
 
 @NgModule({
   declarations: [
@@ -34,14 +42,24 @@ import { TestServiceService } from './../../../shared-library/src/test.service';
     CoreModule,
     HttpClientModule,
   ],
-  providers: [TestServiceService],
+  providers: [DBUserService,
+    TNSFirebaseService,
+    {
+      provide: FirebaseService,
+      useClass: TNSFirebaseService
+    },
+    {
+      provide: PlatformFirebaseToken,
+      useFactory: firebaseFactory
+    },
+  ],
   bootstrap: [AppComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })
 /*
 Pass your application module to the bootstrapModule function located in main.ts to start your app
 */
-export class AppModule { 
-  constructor(){
+export class AppModule {
+  constructor() {
   }
 }

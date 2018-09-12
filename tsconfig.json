@@ -17,6 +17,11 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "shared-library/*": [
+        "./projects/shared-library/src/lib/*"
+      ],
+    }
   }
 }

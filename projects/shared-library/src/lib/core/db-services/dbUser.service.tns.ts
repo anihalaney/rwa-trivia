@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -10,48 +10,102 @@ import { CONFIG } from '../../environments/environment';
 import { UserActions } from '../../core/store/actions';
 const firebase = require("nativescript-plugin-firebase/app");
 const firebaseWebApi = require("nativescript-plugin-firebase/app");
-// import { DbService } from "@dbservice/core";
-import { DbService } from "./../db-service" 
+import { firestore } from "nativescript-plugin-firebase";
+import { DbBaseService } from './dbbase.service';
 
 @Injectable()
-export class UserService {
+export class DBUserService {
 
     constructor(
         private http: HttpClient,
         private store: Store<CoreState>, private userActions: UserActions,
-        private dbService: DbService
-    ) {
+        private dbBaseService: DbBaseService) {
     }
 
 
     loadUserProfile(user: User): Observable<User> {
-        const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
-        return this.dbService.listenForChanges('users', queryParams).pipe(map(u => {
-            if (u) {
-                const userInfo = user;
-                // user = { ...u, ...user };
-                user = u;
-                user.idToken = userInfo.idToken;
-                user.authState = userInfo.authState;
-                if (u.stats) {
-                    user.stats = u.stats;
-                }
+
+        const userCollection = firebase.firestore().collection("users");
+        // console.log('user called', user);
+
+        const dbUser = Object.assign({}, user);
+        delete dbUser.authState;
+        delete dbUser.profilePictureUrl;
+        userCollection.doc(user.userId).set(user);
+        let res = firebase.firestore().collection("users").doc(`${user.userId}`);
+
+        return res.get().then(doc => {
+            if (doc.exists) {
+                return doc.data();
             } else {
-                //  this.saveUserProfile(user);
-                const dbUser = Object.assign({}, user); // object to be saved
-                delete dbUser.authState;
-                delete dbUser.profilePictureUrl;
-                // this.db.doc(`/users/${user.userId}`).set(dbUser);
-                this.dbService.saveUser(user);
+                return new Observable();
             }
-            return user;
-        }));
+        });
+
+    }
+
+    loadUserProfile2(user: User): Observable<User> {
+        console.log('db called', user);
+        this.dbBaseService.getData();
+        let _listenSub: any;
+
+        // let res = firebase.firestore().collection("users").doc(`${user.userId}`);
+        let res = firebase.firestore().collection("users").where("userId", "==", user.userId);
+
+        return Observable.create(observer => {
+            console.log('obserable called', res);
+            _listenSub = res.onSnapshot((snapshot: any) => {
+                let results: any = {};
+                if (snapshot && snapshot.forEach) {
+                    snapshot.forEach(doc => {
+                        results = doc.data();
+                    });
+                }
+                observer.next(results);
+            });
+        });
+
+        // Observable.create(subscriber => {
+        //     firebase.firestore().collection("users").where("displayName", "==", "San Francisco").limit(2)
+        //         .onSnapshot((querySnapshot: firestore.QuerySnapshot) => {
+        //             this.zone.run(() => {
+        //                 let selectU = [];
+        //                 querySnapshot.forEach(doc => {
+        //                     selectU.push(<any>doc.data());
+        //                 });
+        //                 subscriber.next(selectU);
+        //             });
+        //         });
+        // });
+
+        // return res.onSnapshot(doc => {
+        //     if (doc.exists) {
+        //         return doc.data();
+        //     } else {
+        //         const userCollection = firebase.firestore().collection("users");
+        //         console.log('user called', user);
+        //         const dbUser = Object.assign({}, user);
+        //         delete dbUser.authState;
+        //         delete dbUser.profilePictureUrl;
+        //         userCollection.doc(user.userId).set(user);
+        //     }
+        // });
+        // return of();
+
+        // return res.get().then(doc => {
+        //     if (doc.exists) {
+        //         return doc.data();
+        //     } else {
+        //         return new Observable();
+        //     }
+        // });
+
     }
 
     saveUserProfile(user: User): Observable<any> {
         const url = `${CONFIG.functionsUrl}/app/user/profile`;
         user.roles = (!user.roles) ? {} : user.roles;
-        const dbUser = Object.assign({}, user); // object to be save
+        const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
         delete dbUser.profilePictureUrl;
         return this.http.post<User>(url, { user: dbUser });

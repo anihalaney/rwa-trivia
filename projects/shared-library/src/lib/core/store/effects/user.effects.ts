@@ -13,7 +13,7 @@ export class UserEffects {
     loadUserProfile$ = this.actions$
         .ofType(UserActions.LOGIN_SUCCESS)
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
-            switchMap((user: User) => this.svc.loadUserProfile(user)),
+            switchMap((user: User) => { console.log('user', this.svc.loadUserProfile(user)); return this.svc.loadUserProfile(user) }),
             map((user: User) => this.userActions.addUserWithRoles(user)));
 
 

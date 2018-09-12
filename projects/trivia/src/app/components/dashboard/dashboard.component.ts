@@ -13,7 +13,7 @@ import {
 } from '../../../../../shared-library/src/lib/shared/model';
 import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary } from '../../store';
-
+import { DbBaseService } from './../../../../../shared-library/src/lib/core/db-services/dbbase.service';
 
 @Component({
   selector: 'dashboard',
@@ -50,12 +50,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private questionActions: QuestionActions,
     private gameActions: GameActions,
     private userActions: UserActions, private windowRef: WindowRef,
-    @Inject(PLATFORM_ID) private platformId: Object) {
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private dbService: DbBaseService) {
     this.questionOfTheDay$ = store.select(appState.coreState).pipe(select(s => s.questionOfTheDay));
     this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
 
-
+    console.log('logged');
+    this.dbService.getData();
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user
       if (user) {

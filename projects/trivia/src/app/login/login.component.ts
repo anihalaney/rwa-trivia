@@ -6,7 +6,11 @@ import { User } from './../../../../shared-library/src/lib/shared/model';
 import { UserActions, UIStateActions } from './../../../../shared-library/src/lib/core/store/actions'
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription, pipe } from 'rxjs';
-import { TestServiceService } from './../../../../shared-library/src/test.service';
+import { TNSFirebaseService } from './../nativescript/core/services/tns-firebase.service';
+import { FirebaseService } from './../../../../shared-library/src/lib/core/db-services/firebase.service'
+import { DbBaseService } from './../../../../shared-library/src/lib/core/db-services/dbbase.service';
+// import { DbService } from 'shared-library/core';
+ 
 @Component({
   selector: 'login-home',
   templateUrl: './login.component.html',
@@ -19,51 +23,43 @@ export class LoginComponent implements OnInit {
   userList: any[];
   userActions: UserActions;
   userDict$: Observable<{ [key: string]: User }>;
-  constructor(private _userActions: UserActions, private store: Store<AppState>, private router: Router) {
+  constructor(private _userActions: UserActions,
+    private store: Store<AppState>,
+    private router: Router,
+    private tnsFirebaseService: FirebaseService,
+    private dbService: DbBaseService) {
     this.userActions = _userActions;
   }
-
+  // private tnsService: DbService
   ngOnInit() {
-    firebase.init({
-      onAuthStateChanged: (user) => {
-        if (user.loggedIn) {
-          let userObj: User = new User();
-          userObj.userId = user.user.uid;
-          userObj.displayName = user.user.name;
-          userObj.email = user.user.email;
-          this.store.dispatch(this.userActions.loginSuccess(userObj));
-          setTimeout(() => {
-            this.router.navigate(["home"]);
-          }, 1000);
-        }
+    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+      if (user !== null) {
+        this.router.navigate(["home"]);
       }
     });
+    // this.dbService.getData()
+    // this.tnsService.getData();
+    console.log('called cd');
   }
 
   googleLogin() {
-    firebase.login({
-      type: firebase.LoginType.GOOGLE,
-    }).then(
-      function (result) {
-      },
-      function (errorMessage) {
-        console.log(errorMessage);
-      }
-    );
+    this.tnsFirebaseService.googleConnect();
 
   }
 
   facebookLogin() {
-    firebase.login({
-      type: firebase.LoginType.FACEBOOK,
-      facebookOptions: {
-      }
-    }).then(
-      function (result) {
-      },
-      function (errorMessage) {
-        console.log(errorMessage);
-      }
-    );
+    console.log('facebook ');
+    this.tnsFirebaseService.facebookConnect();
+    // firebase.login({
+    //   type: firebase.LoginType.FACEBOOK,
+    //   facebookOptions: {
+    //   }
+    // }).then(
+    //   function (result) {
+    //   },
+    //   function (errorMessage) {
+    //     console.log(errorMessage);
+    //   }
+    // );
   }
 }
