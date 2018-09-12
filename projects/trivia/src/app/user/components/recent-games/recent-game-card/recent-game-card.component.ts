@@ -1,7 +1,7 @@
 import { Component, Input, OnChanges, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { User, Game, Category, PlayerMode } from '../../../../../../../shared-library/src/lib/shared/model';
+import { User, Game, Category, PlayerMode, GameStatus } from '../../../../../../../shared-library/src/lib/shared/model';
 import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { userState } from '../../../store';
@@ -28,6 +28,8 @@ export class RecentGameCardComponent implements OnChanges, OnDestroy {
     otherUserId: string;
     userProfileImageUrl: string;
     subs: Subscription[] = [];
+    GameStatus = GameStatus;
+
 
     constructor(private store: Store<AppState>, private userActions: UserActions) {
 

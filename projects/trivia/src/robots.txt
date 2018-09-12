@@ -1,0 +1,6 @@
+User-agent: *
+Disallow : /admin
+Disallow : /my/*
+Disallow : /game-play/*
+Disallow : /bulk/*
+Disallow : /invitation-redirection/*
