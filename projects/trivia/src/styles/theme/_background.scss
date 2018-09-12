@@ -91,7 +91,7 @@
 	.headermain{ 
 		background: map-get($theme, header);
 	}
-	.startgame,.view-reason-btn,.csv-error-msg{ 
+	.startgame,.view-reason-btn,.csv-error-msg,.reject-btn{ 
 		background: map-get($theme, button-important); 
 	}
 	.btn, .question-list li input:checked ~ label, .optionbox input:checked + label, .formfield input[type="checkbox"]:checked:before,.enterquestion .formfield input[type="radio"]:checked:before, .gameplay li.right,.questionstatus .tabbing li:after{ 

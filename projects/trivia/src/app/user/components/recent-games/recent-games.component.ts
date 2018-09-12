@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as userActions from '../../../user/store/actions';
-import { User } from '../../../../../../shared-library/src/lib/shared/model';
+import { User, GameStatus } from '../../../../../../shared-library/src/lib/shared/model';
 import { AppState, appState } from '../../../store';
 import { userState } from '../../store';
 import { Subscription } from 'rxjs';
@@ -22,8 +22,9 @@ export class RecentGamesComponent implements OnDestroy {
   nextIndex = 4;
   maxIndex = 10;
   subs: Subscription[] = [];
+  GameStatus = GameStatus;
 
-  constructor(private store: Store<AppState>, ) {
+  constructor(private store: Store<AppState>) {
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
