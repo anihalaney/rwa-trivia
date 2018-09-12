@@ -29,12 +29,12 @@ input[type="checkbox"], input[type="radio"], li, div, p, span { box-sizing: bord
 input[type="search"] { -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; -webkit-appearance: textfield; }
 textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize: none; }
 /*Fonts family*/
-@font-face {font-family: 'hindsemibold'; src: url('/assets/fonts/hind-semibold-webfont.woff2') format('woff2'),  url('/assets/fonts/hind-semibold-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
-@font-face { font-family: 'hindbold'; src: url('/assets/fonts/hind-bold-webfont.woff2') format('woff2'), url('/assets/fonts/hind-bold-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
-@font-face { font-family: 'hindlight'; src: url('/assets/fonts/hind-light-webfont.woff2') format('woff2'), url('/assets/fonts/hind-light-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
-@font-face { font-family: 'hindmedium'; src: url('/assets/fonts/hind-medium-webfont.woff2') format('woff2'), url('/assets/fonts/hind-medium-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
-@font-face { font-family: 'hindregular'; src: url('/assets/fonts/hind-regular-webfont.woff2') format('woff2'), url('/assets/fonts/hind-regular-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
-@font-face { font-family: 'latolight_italic'; src: url('/assets/fonts/lato-lightitalic-webfont.woff2') format('woff2'), url('/assets/fonts/lato-lightitalic-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
+@font-face {font-family: 'hindsemibold';  font-display: swap; src: url('/assets/fonts/hind-semibold-webfont.woff2') format('woff2'),  url('/assets/fonts/hind-semibold-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
+@font-face { font-family: 'hindbold';  font-display: swap; src: url('/assets/fonts/hind-bold-webfont.woff2') format('woff2'), url('/assets/fonts/hind-bold-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
+@font-face { font-family: 'hindlight';  font-display: swap; src: url('/assets/fonts/hind-light-webfont.woff2') format('woff2'), url('/assets/fonts/hind-light-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
+@font-face { font-family: 'hindmedium';  font-display: swap; src: url('/assets/fonts/hind-medium-webfont.woff2') format('woff2'), url('/assets/fonts/hind-medium-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
+@font-face { font-family: 'hindregular';  font-display: swap; src: url('/assets/fonts/hind-regular-webfont.woff2') format('woff2'), url('/assets/fonts/hind-regular-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
+@font-face { font-family: 'latolight_italic';  font-display: swap; src: url('/assets/fonts/lato-lightitalic-webfont.woff2') format('woff2'), url('/assets/fonts/lato-lightitalic-webfont.woff') format('woff'); font-weight: normal; font-style: normal;}
 /*Misc*/
 .floatleft { float: left; }
 .floatright { float: right; }

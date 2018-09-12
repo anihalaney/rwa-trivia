@@ -22,7 +22,7 @@ global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 const DIST_FOLDER = resolve(process.cwd(), './dist');
 // console.log(DIST_FOLDER);
 
-console.log('isProductionEnv', isProductionEnv);
+// console.log('isProductionEnv', isProductionEnv);
 
 const {
   AppServerModuleNgFactory,
@@ -46,7 +46,7 @@ app.set('views', DIST_FOLDER);
 app.use(compression())
 // Point all routes to Universal
 app.get('*', (req, res) => {
-  res.setHeader('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+  res.setHeader('Cache-Control', 'public, max-age=21600, s-maxage=21600');
   res.render('index', { req }, (err, html) => {
     if (isProductionEnv) {
       html += `\n<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122807814-1"></script>
