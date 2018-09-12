@@ -19,6 +19,7 @@ export class TNSDbService extends DbService {
     }
 
     public getUser(user: User): Observable<User> {
+        console.log('firebase >>> ');
         let _listenSub: any;
         let res = firebase.firestore().collection("users").where("userId", "==", user.userId);
         return Observable.create(observer => {
@@ -35,6 +36,7 @@ export class TNSDbService extends DbService {
     }
 
     public saveUser(user: User) {
+        console.log('save >>> ');
         const userCollection = firebase.firestore().collection("users");
         userCollection.doc(user.userId).set(user);
     }
@@ -53,9 +55,12 @@ export class TNSDbService extends DbService {
         }
         return Observable.create(observer => {
             this._listenSub = query.onSnapshot((snapshot: any) => {
-                let results: any = {};
+                let results = [];
                 if (snapshot && snapshot.forEach) {
-                    snapshot.forEach(doc => { results = doc.data(); });
+                    snapshot.forEach(doc => results.push({
+                        id: doc.id,
+                        ...doc.data()
+                      }));
 
                 }
                 observer.next(results);

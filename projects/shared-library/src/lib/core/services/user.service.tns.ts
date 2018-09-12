@@ -25,9 +25,11 @@ export class UserService {
 
 
     loadUserProfile(user: User): Observable<User> {
+       
         const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
         return this.dbService.listenForChanges('users', queryParams).pipe(map(u => {
-            if (u) {
+            if (u.length > 1) {
+                console.log(" if load profile", u);
                 const userInfo = user;
                 // user = { ...u, ...user };
                 user = u;
@@ -37,6 +39,7 @@ export class UserService {
                     user.stats = u.stats;
                 }
             } else {
+                console.log(" ELSE load profile",user);
                 //  this.saveUserProfile(user);
                 const dbUser = Object.assign({}, user); // object to be saved
                 delete dbUser.authState;

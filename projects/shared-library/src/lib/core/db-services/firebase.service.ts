@@ -60,8 +60,10 @@ export class FirebaseService {
             // payload.pic = user.photoURL || user.profileImageURL;
             payload.userId = user.uid;
         }
+        console.log('payload > ', payload);
         this._ngZone.run(() => {
             //   this._store.dispatch(new UserActions.Login(payload));
+            console.log('payload > ', payload);
             this._store.dispatch(this.userActions.loginSuccess(payload));
         });
     }

@@ -17,7 +17,6 @@ export class UserActions {
 
   static LOGIN_SUCCESS = 'LOGIN_SUCCESS';
   loginSuccess(user: User): ActionWithPayload<User> {
-    console.log('log');
     return {
       type: UserActions.LOGIN_SUCCESS,
       payload: user
