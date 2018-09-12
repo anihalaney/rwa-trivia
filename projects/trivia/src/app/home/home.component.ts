@@ -6,7 +6,7 @@ import { AppState, appState } from './../store';
 import { User } from './../../../../shared-library/src/lib/shared/model';
 import { ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { DBUserService } from './../../../../shared-library/src/lib/core/db-services/dbUser.service';
+// import { DBUserService } from './../../../../shared-library/src/lib/core/db-services/dbUser.service';
 import { map, mergeMap } from 'rxjs/operators';
 import { TNSFirebaseService } from './../nativescript/core/services/tns-firebase.service';
 // import { DbService } from 'shared-library/core';
@@ -21,9 +21,10 @@ export class HomeComponent implements OnInit {
   sub: Subscription;
   constructor(private router: Router,
     private store: Store<AppState>,
-    private dbUserService: DBUserService,
-    private tnsFirebaseService: TNSFirebaseService) {
-
+    // private dbUserService: DBUserService,
+    private tnsFirebaseService: TNSFirebaseService,
+ ) {
+  // private dbService: DbService
   }
 
   ngOnInit() {
@@ -56,6 +57,7 @@ export class HomeComponent implements OnInit {
   logout() {
     // this.firebaseService.logout();
     // firebase.logout();
+
     this.tnsFirebaseService.logout();
     this.router.navigate(["login"]);
 

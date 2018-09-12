@@ -27,10 +27,12 @@ export class LoginComponent implements OnInit {
     private store: Store<AppState>,
     private router: Router,
     private tnsFirebaseService: FirebaseService,
-    private dbService: DbBaseService) {
+   ) {
+    // private dbService: DbBaseService,
+    // private tnsService: DbService
     this.userActions = _userActions;
   }
-  // private tnsService: DbService
+
   ngOnInit() {
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user !== null) {
@@ -39,7 +41,7 @@ export class LoginComponent implements OnInit {
     });
     // this.dbService.getData()
     // this.tnsService.getData();
-    console.log('called cd');
+    console.log('called d dd');
   }
 
   googleLogin() {

@@ -14,8 +14,8 @@ import {
 } from './services';
 
 // import { AuthenticationProvider, AuthInterceptor } from './auth';
-import { DbService, TNSDbService } from './db-service'
-
+import { DbService } from './db-service'
+import { TNSDbService } from './db-service/mobile/db.service';
 // import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver, AdminLoadGuard } from './route-guards';
 
 import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';

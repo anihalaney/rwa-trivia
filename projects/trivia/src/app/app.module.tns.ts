@@ -17,7 +17,7 @@ import { CoreModule } from './../../../shared-library/src/lib/core/core.module';
 import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 import { HttpHeaders, HttpClientModule } from '@angular/common/http';
 
-import { DBUserService } from './../../../shared-library/src/lib/core/db-services/dbUser.service';
+
 import { TNSFirebaseService } from './nativescript/core/services/tns-firebase.service';
 import { FirebaseService } from './../../../shared-library/src/lib/core/db-services/firebase.service';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
@@ -42,15 +42,16 @@ export function firebaseFactory() {
     CoreModule,
     HttpClientModule,
   ],
-  providers: [DBUserService,
+  providers: [
     TNSFirebaseService,
-    {
-      provide: FirebaseService,
-      useClass: TNSFirebaseService
-    },
+    // FirebaseService,
     {
       provide: PlatformFirebaseToken,
       useFactory: firebaseFactory
+    },
+    {
+      provide: FirebaseService,
+      useClass: TNSFirebaseService
     },
   ],
   bootstrap: [AppComponent],

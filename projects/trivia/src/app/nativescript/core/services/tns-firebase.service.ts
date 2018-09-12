@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 // import { FirebaseService, PlatformFirebaseToken, LogService, WindowService } from '@ore';
 // import { fileNameFromPath, isObject } from '@sketchpoints/utils';
 // import { File } from 'tns-core-modules/file-system';
-import { PlatformFirebaseToken } from './../../../../../../shared-library/src/lib/core/db-services/tokens';
+import { PlatformFirebaseToken } from './../../../../../../shared-library/src/lib/core/db-service/tokens';
 // import { PlatformFirebaseToken } from '@dbservice/core';
 import { FirebaseService } from './../../../../../../shared-library/src/lib/core/db-services/firebase.service';
 import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
@@ -18,8 +18,8 @@ export class TNSFirebaseService extends FirebaseService {
     constructor(
         protected _store: Store<any>,
         protected _ngZone: NgZone,
+        public userAction: UserActions,
         @Inject(PlatformFirebaseToken) protected _firebase: any,
-        public userAction: UserActions
     ) {
         super(
             _store,
