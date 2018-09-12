@@ -10,7 +10,6 @@ import { CONFIG } from '../../environments/environment';
 import { UserActions } from '../../core/store/actions';
 const firebase = require("nativescript-plugin-firebase/app");
 const firebaseWebApi = require("nativescript-plugin-firebase/app");
-// import { DbService } from "@dbservice/core";
 import { DbService } from "./../db-service" 
 
 @Injectable()

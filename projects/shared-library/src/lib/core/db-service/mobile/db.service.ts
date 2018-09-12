@@ -36,7 +36,6 @@ export class TNSDbService extends DbService {
     }
 
     public saveUser(user: User) {
-        console.log('save >>> ');
         const userCollection = firebase.firestore().collection("users");
         userCollection.doc(user.userId).set(user);
     }

@@ -11,7 +11,7 @@ import { ObservableInput } from 'rxjs';
 import { CONFIG } from './../../environments/environment';
 import { UserActions } from '../../core/store/actions';
 // import { DbService } from "@dbservice/core";
-
+import { DbService } from "./../db-service" 
 
 
 @Injectable()
@@ -21,16 +21,19 @@ export class UserService {
         private storage: AngularFireStorage,
         private http: HttpClient,
         private store: Store<CoreState>,
-        private userActions: UserActions) {
+        private userActions: UserActions,
+        private dbService: DbService) {
     }
 
 
     loadUserProfile(user: User): Observable<User> {
-        // const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
-        return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
-        // return this.dbService.listenForChanges('users', queryParams)
+        const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
+        console.log('web', queryParams);
+        // return this.db.doc<any>(`/users/${user.userId}`) 
+        return this.dbService.listenForChanges('users', queryParams)
             .pipe(map(u => {
                 if (u) {
+                    console.log('user ji', u);
                     const userInfo = user;
                     // user = { ...u, ...user };
                     user = u;
@@ -40,6 +43,7 @@ export class UserService {
                         user.stats = u.stats;
                     }
                 } else {
+                    console.log('user 46 ', u);
                     //  this.saveUserProfile(user);
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;

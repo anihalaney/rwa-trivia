@@ -5,11 +5,13 @@ import { User } from '../../../shared/model';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { map } from 'rxjs/operators';
+
+
 @Injectable()
 export class WebDbService extends DbService {
 
     constructor(protected _afAuth: AngularFireAuth,
-        protected _afStore: AngularFirestore, ) {
+        protected _afStore: AngularFirestore) {
         super();
     }
 
@@ -27,7 +29,6 @@ export class WebDbService extends DbService {
     }
 
     public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
-      console.log('in WEB CALLED');
         return this._afStore.collection(name, ref => {
             let query: any = ref;
             if (queryParams) {
@@ -41,7 +42,7 @@ export class WebDbService extends DbService {
                 return actions.map(a => {
                     const data = a.payload.doc.data();
                     const id = a.payload.doc.id;
-                    return { data };
+                    return { id, ...data };
                 })
             })
         );

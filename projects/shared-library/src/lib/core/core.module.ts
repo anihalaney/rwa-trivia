@@ -29,7 +29,8 @@ import { reducer } from './store';
 import { LoginComponent } from './components';
 
 import { SharedModule } from '../shared/shared.module';
-
+import { DbService } from './db-service';
+import { WebDbService } from './db-service/web/db.service';
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 @NgModule({
@@ -70,15 +71,20 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
     UIStateActions, GameActions,
-
+    WebDbService,
+    {
+      provide: DbService,
+      useClass: WebDbService
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
-    }
+    },
+
   ]
 })
-export class CoreModule { 
+export class CoreModule {
   constructor() {
     console.log('in Angular');
   }
