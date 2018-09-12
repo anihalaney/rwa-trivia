@@ -22,6 +22,10 @@ export class DbService {
 
     }
 
+    public setCollection(name,id,collection){
+    
+    }
+
     public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
         return of();
     }

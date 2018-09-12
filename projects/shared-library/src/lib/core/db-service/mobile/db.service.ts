@@ -40,6 +40,11 @@ export class TNSDbService extends DbService {
         userCollection.doc(user.userId).set(user);
     }
 
+    public setCollection(name, id, collection) {
+        const userCollection = firebase.firestore().collection(name);
+        userCollection.doc(id).set(collection);
+    }
+
     private _listenSub: any;
     public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
         if (this._listenSub) {
@@ -59,7 +64,7 @@ export class TNSDbService extends DbService {
                     snapshot.forEach(doc => results.push({
                         id: doc.id,
                         ...doc.data()
-                      }));
+                    }));
 
                 }
                 observer.next(results);

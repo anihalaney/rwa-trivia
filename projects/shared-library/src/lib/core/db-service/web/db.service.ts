@@ -28,6 +28,11 @@ export class WebDbService extends DbService {
         console.log('db web');
     }
 
+    public setCollection(name,id,collection){
+        console.log('web collectgion');
+        this._afStore.doc(`/${name}/${id}`).set(collection);
+    }
+
     public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
         return this._afStore.collection(name, ref => {
             let query: any = ref;

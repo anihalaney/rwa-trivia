@@ -44,7 +44,7 @@ export class UserService {
                 delete dbUser.authState;
                 delete dbUser.profilePictureUrl;
                 // this.db.doc(`/users/${user.userId}`).set(dbUser);
-                this.dbService.saveUser(user);
+                this.dbService.setCollection('users',user.userId,user);
             }
             return user;
         }));

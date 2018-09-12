@@ -33,9 +33,7 @@ export class UserService {
         return this.dbService.listenForChanges('users', queryParams)
             .pipe(map(u => {
                 if (u) {
-                    console.log('user ji', u);
                     const userInfo = user;
-                    // user = { ...u, ...user };
                     user = u;
                     user.idToken = userInfo.idToken;
                     user.authState = userInfo.authState;
@@ -48,7 +46,8 @@ export class UserService {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
-                    this.db.doc(`/users/${user.userId}`).set(dbUser);
+                    // this.db.doc(`/users/${user.userId}`).set(dbUser);
+                    // this.dbService.setCollection('users',user.userId,user);
                 }
 
                 return user;
