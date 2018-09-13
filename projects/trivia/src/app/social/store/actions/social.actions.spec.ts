@@ -1,4 +1,4 @@
-import { Subscription, User, Subscribers, Blog } from '../../../model';
+import { Subscription, User, Subscribers, Blog } from '../../../../../../shared-library/src/lib/shared/model';
 import {
     AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess,
     LoadBlogs, LoadBlogsSuccess

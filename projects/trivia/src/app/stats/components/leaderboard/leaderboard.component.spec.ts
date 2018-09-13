@@ -3,8 +3,8 @@ import { LeaderboardComponent } from './leaderboard.component';
 import { StoreModule, Store } from '@ngrx/store';
 import * as leaderBoardActions from '../../store/actions';
 import { TEST_DATA } from '../../../testing/test.data';
-import { Category, User, LeaderBoardUser } from '../../../model';
-import { UserActions } from '../../../core/store/actions';
+import { Category, User, LeaderBoardUser } from '../../../../../../shared-library/src/lib/shared/model';
+import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 
 
 describe('Component: LeaderboardComponent', () => {

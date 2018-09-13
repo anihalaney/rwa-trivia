@@ -19,7 +19,8 @@
             "assets": [
               "projects/trivia/src/assets",
               "projects/trivia/src/favicon.ico",
-              "projects/trivia/src/manifest.json"
+              "projects/trivia/src/manifest.json",
+              "projects/trivia/src/robots.txt"
             ],
             "styles": [
               "projects/trivia/src/styles/rwa-trivia.theme.scss",
@@ -97,7 +98,8 @@
             "assets": [
               "projects/trivia/src/assets",
               "projects/trivia/src/favicon.ico",
-              "projects/trivia/src/manifest.json"
+              "projects/trivia/src/manifest.json",
+              "projects/trivia/src/robots.txt"
             ]
           }
         },
