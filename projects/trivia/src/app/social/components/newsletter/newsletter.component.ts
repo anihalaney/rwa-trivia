@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { User, Subscription } from '../../../../../../shared-library/src/lib/sha
 import { AppState, appState } from '../../../store';
 import * as socialActions from '../../../social/store/actions';
 import { socialState } from '../../store';
+import { isPlatformBrowser } from '@angular/common';
 
 // tslint:disable-next-line:max-line-length
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -24,7 +25,9 @@ export class NewsletterComponent implements OnInit {
   totalCount: Number = 0;
   message = '';
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>, ) {
+  constructor(private fb: FormBuilder, private store: Store<AppState>,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string) {
     this.subscriptionForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
@@ -59,8 +62,9 @@ export class NewsletterComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.store.dispatch(new socialActions.GetTotalSubscriber());
+    if (isPlatformBrowser(this.platformId)) {
+      this.store.dispatch(new socialActions.GetTotalSubscriber());
+    }
   }
 
   onSubscribe() {
