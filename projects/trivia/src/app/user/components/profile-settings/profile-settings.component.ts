@@ -325,7 +325,6 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.store.dispatch(new userActions.AddUserProfile({ user: user }));
   }
 
-
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
   }

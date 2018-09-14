@@ -10,7 +10,13 @@ import { User, Invitation, Friends } from '../../shared/model';
 import { ObservableInput } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
 import { UserActions } from '../../core/store/actions';
+import { DbService } from "./../db-service";
 
+// import { User, Invitation, Friends } from './../../../lib/shared/model';
+// import { ObservableInput } from 'rxjs';
+// import { CONFIG } from './../../environments/environment';
+// import { UserActions } from '../../core/store/actions';
+// import { DbService } from "@dbservice/core";
 
 
 
@@ -20,17 +26,20 @@ export class UserService {
     constructor(private db: AngularFirestore,
         private storage: AngularFireStorage,
         private http: HttpClient,
-        private store: Store<CoreState>, private userActions: UserActions) {
+        private store: Store<CoreState>,
+        private userActions: UserActions,
+        private dbService: DbService) {
     }
 
 
     loadUserProfile(user: User): Observable<User> {
-
-        return this.db.doc<any>(`/users/${user.userId}`).valueChanges()
+        const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
+        console.log('web', queryParams);
+        // return this.db.doc<any>(`/users/${user.userId}`) 
+        return this.dbService.listenForChanges('users', queryParams)
             .pipe(map(u => {
                 if (u) {
                     const userInfo = user;
-                    // user = { ...u, ...user };
                     user = u;
                     user.idToken = userInfo.idToken;
                     user.authState = userInfo.authState;
@@ -42,7 +51,8 @@ export class UserService {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
-                    this.db.doc(`/users/${user.userId}`).set(dbUser);
+                    // this.db.doc(`/users/${user.userId}`).set(dbUser);
+                    this.dbService.setCollection('users',user.userId,user);
                 }
 
                 return user;

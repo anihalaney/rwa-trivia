@@ -36,26 +36,28 @@
     "prod:deploy-apps-to-firebase": "firebase deploy -P production --only hosting",
     "run-scheduler-dev": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js dev",
     "compile-scheduler-functions": "rmdir /s/q scheduler\\server & tsc --project scheduler",
-    "run-scheduler-prod": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js prod"
+    "run-scheduler-prod": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js prod",
+    "android": "tns run android --bundle",
+    "ios": "tns run ios --bundle"
   },
   "private": true,
   "dependencies": {
-    "@angular/common": "6.0.6",
-    "@angular/core": "6.0.6",
-    "@angular/compiler": "6.0.6",
+    "@angular/common": "^6.1.0",
+    "@angular/core": "6.1.6",
+    "@angular/compiler": "^6.1.0",
     "@angular-devkit/core": "^0.6.8",
-    "@angular/animations": "6.0.6",
+    "@angular/animations": "6.1.7",
     "@angular/cdk": "6.3.0",
-    "@angular/flex-layout": "6.0.0-beta.16",
-    "@angular/forms": "6.0.6",
-    "@angular/http": "6.0.6",
-    "@angular/material": "6.3.0",
-    "@angular/platform-browser": "6.0.6",
-    "@angular/platform-browser-dynamic": "6.0.6",
+    "@angular/flex-layout": "6.0.0-beta.18",
+    "@angular/forms": "6.1.7",
+    "@angular/http": "6.1.7",
+    "@angular/material": "6.4.7",
+    "@angular/platform-browser": "6.1.7",
+    "@angular/platform-browser-dynamic": "6.1.7",
     "@angular/platform-server": "^6.0.7",
     "@angular/pwa": "^0.6.8",
-    "@angular/router": "6.0.6",
-    "@angular/service-worker": "6.0.6",
+    "@angular/router": "6.1.7",
+    "@angular/service-worker": "6.1.7",
     "@fortawesome/angular-fontawesome": "0.1.0-10",
     "@fortawesome/fontawesome-svg-core": "^1.2.0",
     "@fortawesome/free-brands-svg-icons": "^5.1.0",
@@ -79,15 +81,22 @@
     "lodash": "^4.17.10",
     "ngx-img-cropper": "^0.10.4",
     "ngx-papaparse": "^2.1.4",
-    "rxjs": "6.2.1",
+    "rxjs": "6.3.2",
     "stream": "0.0.2",
-    "zone.js": "0.8.26"
+    "zone.js": "0.8.26",
+    "@nativescript/schematics": "^0.2.5",
+    "nativescript-angular": "~6.1.0",
+    "nativescript-plugin-firebase": "^6.7.0",
+    "nativescript-theme-core": "~1.0.4",
+    "reflect-metadata": "~0.1.8",
+    "tns-core-modules": "~4.2.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.6.8",
     "@angular-devkit/build-ng-packagr": "~0.6.8",
-    "@angular/cli": "6.0.8",
-    "@angular/compiler-cli": "6.0.6",
+    "@angular/cli": "6.2.1",
+    "@angular/compiler-cli": "6.1.7",
+    "@ngtools/webpack": "^6.2.1",
     "@types/hammerjs": "2.0.35",
     "@types/jasmine": "2.8.8",
     "@types/jest": "^23.1.4",
@@ -105,6 +114,7 @@
     "karma-coverage-istanbul-reporter": "2.0.1",
     "karma-jasmine": "1.1.2",
     "karma-jasmine-html-reporter": "1.1.0",
+    "nativescript-dev-webpack": "^0.15.0",
     "ng-packagr": "^3.0.0-rc.2",
     "protractor": "5.3.0",
     "source-map-explorer": "1.5.0",
@@ -113,7 +123,8 @@
     "tsickle": ">=0.25.5",
     "tslib": "^1.7.1",
     "tslint": "5.10.0",
-    "typescript": "2.7.2",
+    "typescript": "~2.9.2",
+    "webpack": "^4.19.0",
     "webpack-cli": "^3.0.8",
     "xmlhttprequest": "^1.8.0"
   },
@@ -132,6 +143,12 @@
   "husky": {
     "hooks": {
       "pre-push": "npm run test && ng e2e trivia-e2e"
+    }
+  },
+  "nativescript": {
+    "id": "org.nativescript.triviamobile",
+    "tns-android": {
+      "version": "4.2.0"
     }
   }
 }
