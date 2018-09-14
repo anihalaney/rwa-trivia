@@ -14,7 +14,6 @@ import {
 import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary } from '../../store';
 
-
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
@@ -54,7 +53,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.questionOfTheDay$ = store.select(appState.coreState).pipe(select(s => s.questionOfTheDay));
     this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-
 
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user

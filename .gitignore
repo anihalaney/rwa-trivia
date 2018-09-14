@@ -1,8 +1,15 @@
+# NativeScript
+node_modules/
+platforms/
+hooks/
+projects/trivia/src/**/*.js
+
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
 /dist
 /tmp
+/out-tsc
 
 # dependencies
 /node_modules
@@ -14,9 +21,10 @@
 .c9/
 *.launch
 .settings/
+*.sublime-workspace
 
 # IDE - VSCode
-.vscode/
+.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
@@ -25,28 +33,13 @@
 # misc
 /.sass-cache
 /connect.lock
-/coverage/*
+/coverage
 /libpeerconnection.log
 npm-debug.log
+yarn-error.log
 testem.log
 /typings
 
-# e2e
-/e2e/*.js
-/e2e/*.map
-
-#System Files
+# System Files
 .DS_Store
 Thumbs.db
-functions/node_modules/
-functions/server/
-functions/config/
-functions/package-lock.json
-functions/dist/
-package-lock.json
-firebase-debug.log
-
-scheduler/node_modules/
-scheduler/server/
-scheduler/config/
-scheduler/package-lock.json

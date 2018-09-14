@@ -4,23 +4,24 @@
   "newProjectRoot": "projects",
   "projects": {
     "trivia": {
-      "root": "projects/trivia/",
+      "root": "projects",
       "sourceRoot": "projects/trivia/src",
       "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/trivia",
             "index": "projects/trivia/src/index.html",
             "main": "projects/trivia/src/main.ts",
-            "tsConfig": "projects/trivia/tsconfig.app.json",
             "polyfills": "projects/trivia/src/polyfills.ts",
+            "tsConfig": "projects/trivia/src/tsconfig.app.json",
             "assets": [
-              "projects/trivia/src/assets",
               "projects/trivia/src/favicon.ico",
-              "projects/trivia/src/manifest.json",
-              "projects/trivia/src/robots.txt"
+              "projects/trivia/src/assets",
+              "projects/trivia/src/manifest.json"
             ],
             "styles": [
               "projects/trivia/src/styles/rwa-trivia.theme.scss",
@@ -41,6 +42,12 @@
               ]
             },
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -49,14 +56,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
-                  "with": "projects/shared-library/src/lib/environments/environment.prod.ts"
-                }
-              ],
-              "serviceWorker": true
+              "buildOptimizer": true
             }
           }
         },
@@ -66,9 +66,6 @@
             "browserTarget": "trivia:build"
           },
           "configurations": {
-            "dev": {
-              "browserTarget": "trivia:build:dev"
-            },
             "production": {
               "browserTarget": "trivia:build:production"
             }
@@ -83,23 +80,17 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/trivia/src/test.ts",
-            "karmaConfig": "projects/trivia/karma.conf.js",
-            "polyfills": "projects/trivia/src/polyfills.ts",
-            "tsConfig": "projects/trivia/tsconfig.spec.json",
-            "scripts": [],
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "projects/trivia/src/styles/rwa-trivia.theme.scss",
-              "projects/trivia/src/styles/styles.scss",
-              "projects/trivia/src/styles/global.scss",
-              "projects/trivia/src/styles/light.theme.scss",
-              "projects/trivia/src/styles/dark.theme.scss"
+              "projects/trivia/src/styles.css"
             ],
+            "scripts": [],
             "assets": [
-              "projects/trivia/src/assets",
               "projects/trivia/src/favicon.ico",
-              "projects/trivia/src/manifest.json",
-              "projects/trivia/src/robots.txt"
+              "projects/trivia/src/assets"
             ]
           }
         },
@@ -107,30 +98,24 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/trivia/tsconfig.app.json",
-              "projects/trivia/tsconfig.spec.json"
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
             ],
-            "exclude": []
-          }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "functions/dist/server",
-            "main": "projects/trivia/src/main.server.ts",
-            "tsConfig": "projects/trivia/tsconfig.server.json"
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
     },
     "trivia-e2e": {
-      "root": "projects/trivia-e2e/",
+      "root": "e2e/",
       "projectType": "application",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "projects/trivia-e2e/protractor.conf.js",
+            "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "trivia:serve"
           },
           "configurations": {
@@ -142,7 +127,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": "projects/trivia-e2e/tsconfig.e2e.json",
+            "tsConfig": "e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]
@@ -151,7 +136,7 @@
       }
     },
     "trivia-admin": {
-      "root": "projects/trivia-admin/",
+      "root": "projects",
       "sourceRoot": "projects/trivia-admin/src",
       "projectType": "application",
       "prefix": "app",
@@ -160,41 +145,26 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/admin",
-            "baseHref": "/admin",
-            "deployUrl": "/admin/",
+            "outputPath": "dist/trivia-admin",
             "index": "projects/trivia-admin/src/index.html",
             "main": "projects/trivia-admin/src/main.ts",
             "polyfills": "projects/trivia-admin/src/polyfills.ts",
-            "tsConfig": "projects/trivia-admin/tsconfig.app.json",
+            "tsConfig": "projects/trivia-admin/src/tsconfig.app.json",
             "assets": [
-              "projects/trivia-admin/src/assets",
               "projects/trivia-admin/src/favicon.ico",
-              "projects/trivia-admin/src/manifest.json"
+              "projects/trivia-admin/src/assets"
             ],
             "styles": [
-              "projects/trivia-admin/src/styles/rwa-trivia.theme.scss",
-              "projects/trivia-admin/src/styles/styles.scss",
-              "projects/trivia-admin/src/styles/global.scss",
-              "projects/trivia-admin/src/styles/light.theme.scss",
-              "projects/trivia-admin/src/styles/dark.theme.scss"
+              "projects/trivia-admin/src/styles.css"
             ],
             "scripts": []
           },
           "configurations": {
-            "dev": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
-                  "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
-                }
-              ]
-            },
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
-                  "with": "projects/shared-library/src/lib/environments/environment.prod.ts"
+                  "replace": "projects/trivia-admin/src/environments/environment.ts",
+                  "with": "projects/trivia-admin/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -229,10 +199,10 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/trivia-admin/src/test.ts",
-            "polyfills": "projects/trivia-admin/src/polyfills.ts",
-            "tsConfig": "projects/trivia-admin/tsconfig.spec.json",
-            "karmaConfig": "projects/trivia-admin/karma.conf.js",
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
             "styles": [
               "projects/trivia-admin/src/styles.css"
             ],
@@ -247,44 +217,9 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "projects/trivia-admin/tsconfig.app.json",
-              "projects/trivia-admin/tsconfig.spec.json"
+              "src/tsconfig.app.json",
+              "src/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        },
-        "server": {
-          "builder": "@angular-devkit/build-angular:server",
-          "options": {
-            "outputPath": "functions/dist/server",
-            "main": "projects/trivia-admin/src/main.server.ts",
-            "tsConfig": "projects/trivia-admin/tsconfig.server.json"
-          }
-        }
-      }
-    },
-    "trivia-admin-e2e": {
-      "root": "projects/trivia-admin-e2e/",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "projects/trivia-admin-e2e/protractor.conf.js",
-            "devServerTarget": "trivia-admin:serve"
-          },
-          "configurations": {
-            "production": {
-              "devServerTarget": "trivia-admin:serve:production"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": "projects/trivia-admin-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]
@@ -343,6 +278,9 @@
     },
     "@schematics/angular:directive": {
       "prefix": "app"
-    }
+    },
+    "cli": {
+    "defaultCollection": "@nativescript/schematics"
+   }
   }
 }
