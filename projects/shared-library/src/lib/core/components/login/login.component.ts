@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
       mode: [0],
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      confirmPassword: ['']
+      confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
     }, { validator: loginFormValidator }
     );
 
