@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
-import * as firebase from "nativescript-plugin-firebase";
 import { AppState, appState } from './../store'
 import { User } from './../../../../shared-library/src/lib/shared/model';
 import { UserActions, UIStateActions } from './../../../../shared-library/src/lib/core/store/actions'
@@ -39,7 +38,7 @@ export class LoginComponent implements OnInit {
     });
     // this.dbService.getData()
     // this.tnsService.getData();
-    console.log('called');
+    console.log('calls');
   }
 
   googleLogin() {
