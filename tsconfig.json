@@ -19,15 +19,9 @@
       "dom"
     ],
     "paths": {
-      "shared-library": [
-        "dist/shared-library"
-      ],
       "shared-library/*": [
-        "dist/shared-library/*"
+        "./projects/shared-library/src/lib/*"
       ],
-      // "shared-library/*": [
-      //   "./projects/shared-library/src/lib/*"
-      // ],
     }
   }
 }
