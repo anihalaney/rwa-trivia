@@ -15,9 +15,9 @@
       </div>
       <div class="col-xs-12">
         <ul>
-          <li class="col-sm-5 col-xs-12" *ngFor="let answer of question.answers|slice:2:4;" (click)="answerButtonClicked(answer)" [class.players-answer]="answeredText === answer.answerText"
-            [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText" [class.right]="answeredText !== '' && correctAnswerText === answer.answerText"
-            [class.question-answered]="answeredText!==''">
+          <li class="col-sm-5 col-xs-12" *ngFor="let answer of question.answers|slice:2:4;" (click)="answerButtonClicked(answer)"
+            [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+            [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [class.question-answered]="answeredText!==''">
             {{answer.answerText}}
           </li>
         </ul>
@@ -27,7 +27,7 @@
           Tags :
           <span>{{question.tags?.toString()}}</span>
         </div>
-        <div class="col-sm-6 col-xs-12 alignment" *ngIf="userDict[question.created_uid]">
+        <div class="col-sm-6 col-xs-12 alignment">
           <author [userDict]="userDict" [userId]="question.created_uid"></author>
         </div>
       </div>
