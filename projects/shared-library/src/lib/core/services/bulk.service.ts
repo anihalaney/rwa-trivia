@@ -108,6 +108,7 @@ export class BulkService {
     return upload.commit();
     // return of(true);
   }
+  
   // get single Bulk Upload
   getBulkUploadFile(bulkId: string): Observable<BulkUploadFileInfo> {
     return this.db.doc(`/bulk_uploads/${bulkId}`)

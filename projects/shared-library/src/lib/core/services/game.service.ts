@@ -130,6 +130,7 @@ export class GameService {
       });
   }
 
+
   getGameResult(userId: String): Observable<Game[]> {
     const query1 = this.db.collection('/games', ref => ref.where('playerId_0', '==', userId).where('gameOver', '==', true)
       .orderBy('turnAt', 'desc').limit(4))
