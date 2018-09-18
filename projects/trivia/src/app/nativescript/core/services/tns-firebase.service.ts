@@ -1,17 +1,11 @@
 
-import { Injectable, Inject, NgZone } from '@angular/core';
+import { Inject, NgZone } from '@angular/core';
 
-// libs
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-// import { FirebaseService, PlatformFirebaseToken, LogService, WindowService } from '@ore';
-// import { fileNameFromPath, isObject } from '@sketchpoints/utils';
-// import { File } from 'tns-core-modules/file-system';
-import { PlatformFirebaseToken } from './../../../../../../shared-library/src/lib/core/db-service/tokens';
-// import { PlatformFirebaseToken } from '@dbservice/core';
-import { FirebaseService } from './../../../../../../shared-library/src/lib/core/db-services/firebase.service';
-import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
-import { User } from '../../../../../../shared-library/src/lib/shared/model';
+import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens';
+import { FirebaseService } from 'shared-library/core/db-service/firebase.service';
+import { UserActions } from 'shared-library/core/store/actions';
 
 export class TNSFirebaseService extends FirebaseService {
 
@@ -60,17 +54,14 @@ export class TNSFirebaseService extends FirebaseService {
                             // social connect flow
                             this.connectToken(token, result);
                         } else {
-                            console.log('{N} Firebase plugin did not return a token.');
                         }
                     }, (errorMessage: any) => {
                         console.log(`{N} Firebase plugin Auth token retrieval error: ${errorMessage}`);
-                        console.log(errorMessage);
                     });
                 } else {
                     console.log('{N} Firebase login did not return a result.');
                 }
             }, (errorMessage: any) => {
-                // this._showAlert(`{N} Firebase login failed: ${errorMessage}`);
                 console.log(errorMessage, 'console.log');
             });
         }, error => {

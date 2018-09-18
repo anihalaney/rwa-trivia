@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { CoreState } from '../store';
-import { User, Invitation, Friends } from '../../shared/model';
-import { ObservableInput } from 'rxjs';
+import { User, Friends } from '../../shared/model';
 import { CONFIG } from '../../environments/environment';
 import { UserActions } from '../../core/store/actions';
-const firebase = require("nativescript-plugin-firebase/app");
-const firebaseWebApi = require("nativescript-plugin-firebase/app");
-import { DbService } from "./../db-service" 
+import { DbService } from "./../db-service"
 
 @Injectable()
 export class UserService {
@@ -24,11 +21,10 @@ export class UserService {
 
 
     loadUserProfile(user: User): Observable<User> {
-       
+
         const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
         return this.dbService.listenForChanges('users', queryParams).pipe(map(u => {
             if (u.length > 1) {
-                console.log(" if load profile", u);
                 const userInfo = user;
                 // user = { ...u, ...user };
                 user = u;
@@ -38,13 +34,13 @@ export class UserService {
                     user.stats = u.stats;
                 }
             } else {
-                console.log(" ELSE load profile",user);
+
                 //  this.saveUserProfile(user);
                 const dbUser = Object.assign({}, user); // object to be saved
                 delete dbUser.authState;
                 delete dbUser.profilePictureUrl;
                 // this.db.doc(`/users/${user.userId}`).set(dbUser);
-                this.dbService.setCollection('users',user.userId,user);
+                this.dbService.setCollection('users', user.userId, user);
             }
             return user;
         }));

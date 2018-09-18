@@ -14,9 +14,6 @@ export class TNSDbService extends DbService {
         super();
     }
 
-    public getData() {
-        console.log('tns service add');
-    }
 
     public getUser(user: User): Observable<User> {
         console.log('firebase >>> ');

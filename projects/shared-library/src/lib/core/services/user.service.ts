@@ -7,11 +7,9 @@ import { map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { CoreState } from '../store';
 import { User, Invitation, Friends } from './../../../lib/shared/model';
-import { ObservableInput } from 'rxjs';
 import { CONFIG } from './../../environments/environment';
 import { UserActions } from '../../core/store/actions';
-// import { DbService } from "@dbservice/core";
-import { DbService } from "./../db-service" 
+import { DbService } from "./../db-service"
 
 
 @Injectable()
@@ -28,7 +26,6 @@ export class UserService {
 
     loadUserProfile(user: User): Observable<User> {
         const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
-        console.log('web', queryParams);
         // return this.db.doc<any>(`/users/${user.userId}`) 
         return this.dbService.listenForChanges('users', queryParams)
             .pipe(map(u => {
@@ -45,7 +42,7 @@ export class UserService {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
-                    this.dbService.setCollection('users',user.userId,user);
+                    this.dbService.setCollection('users', user.userId, user);
                 }
 
                 return user;
