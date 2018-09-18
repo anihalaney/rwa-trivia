@@ -111,7 +111,10 @@ export class BulkService {
     // })
     // return upload.commit();
     // return of(true);
-    return of();
+    // return of();
+    return new Promise(function(resolve, reject) {
+      resolve();
+  });
 
   }
   // get single Bulk Upload

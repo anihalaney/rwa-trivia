@@ -3,9 +3,7 @@ import { Router } from "@angular/router";
 import { Store, select } from '@ngrx/store';
 import { AppState, appState } from './../store';
 import { User } from './../../../../shared-library/src/lib/shared/model';
-import { ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs';
-// import { DBUserService } from './../../../../shared-library/src/lib/core/db-services/dbUser.service';
 import { map, mergeMap } from 'rxjs/operators';
 import { TNSFirebaseService } from './../nativescript/core/services/tns-firebase.service';
 // import { DbService } from 'shared-library/core';
@@ -32,7 +30,6 @@ export class HomeComponent implements OnInit {
       console.log('home', this.user);
     });
     const users: User = new User();
-    // debugger
     users.email = "jitendra.ashutec@gmail.com";
     users.userId = "lZxdGMVkvkQehoa4ZkPVLE71phm1";
     users.displayName = "jitendra prajapati";
@@ -49,7 +46,6 @@ export class HomeComponent implements OnInit {
     // this.dbService.getUser(users).pipe(map(u => {
     //     console.log('de');
     // }));
-
   }
 
 

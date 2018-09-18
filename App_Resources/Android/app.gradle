@@ -1,6 +1,7 @@
 android {  
   defaultConfig {  
     generatedDensities = []     
+    multiDexEnabled true
   }  
   aaptOptions {  
     additionalParameters "--no-version-vectors"  

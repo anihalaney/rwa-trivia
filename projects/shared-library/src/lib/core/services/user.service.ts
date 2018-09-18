@@ -6,18 +6,12 @@ import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { CoreState } from '../store';
-import { User, Invitation, Friends } from '../../shared/model';
+import { User, Invitation, Friends } from './../../../lib/shared/model';
 import { ObservableInput } from 'rxjs';
-import { CONFIG } from '../../environments/environment';
+import { CONFIG } from './../../environments/environment';
 import { UserActions } from '../../core/store/actions';
-import { DbService } from "./../db-service";
-
-// import { User, Invitation, Friends } from './../../../lib/shared/model';
-// import { ObservableInput } from 'rxjs';
-// import { CONFIG } from './../../environments/environment';
-// import { UserActions } from '../../core/store/actions';
 // import { DbService } from "@dbservice/core";
-
+import { DbService } from "./../db-service" 
 
 
 @Injectable()
@@ -51,7 +45,6 @@ export class UserService {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
-                    // this.db.doc(`/users/${user.userId}`).set(dbUser);
                     this.dbService.setCollection('users',user.userId,user);
                 }
 
