@@ -1,15 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from "@angular/router";
 import { AppState, appState } from './../store'
-import { User } from './../../../../shared-library/src/lib/shared/model';
-import { UserActions, UIStateActions } from './../../../../shared-library/src/lib/core/store/actions'
 import { Store, select } from '@ngrx/store';
-import { Observable, Subscription, pipe } from 'rxjs';
-import { TNSFirebaseService } from './../nativescript/core/services/tns-firebase.service';
-import { FirebaseService } from './../../../../shared-library/src/lib/core/db-services/firebase.service'
-import { DbBaseService } from './../../../../shared-library/src/lib/core/db-services/dbbase.service';
-// import { DbService } from 'shared-library/core';
- 
+import { Observable } from 'rxjs';
+import { User } from 'shared-library/shared/model';
+import { UserActions } from 'shared-library/core/store/actions';
+import { FirebaseService } from 'shared-library/core/db-service/firebase.service';
 @Component({
   selector: 'login-home',
   templateUrl: './login.component.html',
@@ -26,7 +22,7 @@ export class LoginComponent implements OnInit {
     private store: Store<AppState>,
     private router: Router,
     private tnsFirebaseService: FirebaseService,
-   ) {
+  ) {
     this.userActions = _userActions;
   }
 
@@ -36,29 +32,20 @@ export class LoginComponent implements OnInit {
         this.router.navigate(["home"]);
       }
     });
-    // this.dbService.getData()
-    // this.tnsService.getData();
-    console.log('calls');
   }
 
+  /**
+   * Google Login
+   */
   googleLogin() {
     this.tnsFirebaseService.googleConnect();
 
   }
 
+  /**
+   * Facebook Login
+   */
   facebookLogin() {
-    console.log('facebook ');
     this.tnsFirebaseService.facebookConnect();
-    // firebase.login({
-    //   type: firebase.LoginType.FACEBOOK,
-    //   facebookOptions: {
-    //   }
-    // }).then(
-    //   function (result) {
-    //   },
-    //   function (errorMessage) {
-    //     console.log(errorMessage);
-    //   }
-    // );
   }
 }

@@ -7,21 +7,21 @@ import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
-import { reducers, CustomSerializer } from './store';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { reducers } from './store';
 import { CoreModule } from './../../../shared-library/src/lib/core/core.module';
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
 
 // Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
-import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
-import { HttpHeaders, HttpClientModule } from '@angular/common/http';
+// import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
+import { HttpClientModule } from '@angular/common/http';
 
 
 import { TNSFirebaseService } from './nativescript/core/services/tns-firebase.service';
-import { FirebaseService } from './../../../shared-library/src/lib/core/db-services/firebase.service';
+import { FirebaseService } from 'shared-library/core/db-service/firebase.service';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
-import { PlatformFirebaseToken } from './../../../shared-library/src/lib/core/db-service/tokens';
+import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens'
 
 export function firebaseFactory() {
   return TNSFirebase;
@@ -44,7 +44,6 @@ export function firebaseFactory() {
   ],
   providers: [
     TNSFirebaseService,
-    // FirebaseService,
     {
       provide: PlatformFirebaseToken,
       useFactory: firebaseFactory

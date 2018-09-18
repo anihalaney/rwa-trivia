@@ -5,25 +5,22 @@ import { User } from '../../shared/model';
 @Injectable()
 export class DbService {
 
-    constructor(){
+    constructor() {
 
     }
 
-    public getData(){
 
-    }
-
-    public getUser(user:User): Observable<User> {
+    public getUser(user: User): Observable<User> {
         // Must Implement in child 
         return of();
     }
 
-    public saveUser(user:User){
+    public saveUser(user: User) {
 
     }
 
-    public setCollection(name,id,collection){
-    
+    public setCollection(name, id, collection) {
+
     }
 
     public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {

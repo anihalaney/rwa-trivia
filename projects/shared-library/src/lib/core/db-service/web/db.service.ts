@@ -15,10 +15,6 @@ export class WebDbService extends DbService {
         super();
     }
 
-    public getData() {
-        console.log('web servicess');
-    }
-
     public getUser(user: User): Observable<User> {
         console.log('db web');
         return of();
@@ -28,7 +24,7 @@ export class WebDbService extends DbService {
         console.log('db web');
     }
 
-    public setCollection(name,id,collection){
+    public setCollection(name, id, collection) {
         console.log('web collectgion');
         this._afStore.doc(`/${name}/${id}`).set(collection);
     }
