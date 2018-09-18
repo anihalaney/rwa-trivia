@@ -1,0 +1,205 @@
+@mixin theme-background-color($selected-theme-name,$theme, $sprite) {
+	textarea, select,.edit-form-input-field,.tag,.mat-option { 
+		background: map-get($theme, input);
+	}
+	.mat-step-header .mat-step-icon-not-touched
+	{
+		@if $selected-theme-name == 'dark' {
+			background: #FFF;
+			color:rgba(0, 0, 0, 0.54);
+		}
+	}
+	.mat-stepper-horizontal-line {
+		@if $selected-theme-name == 'dark' {
+			border-top-width: 3px;
+			background: #78909C;
+		}
+	}
+	.mat-step-label.mat-step-label-active,.mat-step-label
+	{
+		@if $selected-theme-name == 'dark' {
+			color: #FFF;
+		}
+	}
+	.mat-form-field-underline
+	{
+		@if $selected-theme-name == 'dark' {
+			background: #78909C;
+			height: 2px;
+		}
+	}
+
+	.matHeader > div > button,  {
+		@if $theme='dark' {
+			background: #FFF;
+			color:rgba(0, 0, 0, 0.54);
+		}
+	}
+
+	.color-black{
+		@if $theme='dark' {
+			color:#282828;
+		}
+	}
+	.color-white > span, .color-white{
+		@if $theme='dark' {
+			color:#FFF;
+		}
+	}
+	.mat-option:hover,.mat-autocomplete-panel .mat-option.mat-selected:not(.mat-active):not(:hover)
+	{
+		@if $selected-theme-name == 'dark' {
+		background:#af3424;
+		}
+	}
+	.mat-button-toggle {
+		background-color: #e0e0e0;
+		color: rgba(0, 0, 0, 0.38);
+	  }
+	
+	  .mat-button-toggle-checked {
+		background-color: #bdbdbd;
+		color: rgba(0, 0, 0, 0.54);
+	  }
+	
+
+	/*Header*/
+	.card, nav .smartphone-menu-trigger span, .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before, .cd-popup-container, .gameplay li, .resubmit,.avatarimg input[type="file"], #file-name, #curentactive .btnbox,.bulk-upload-summary,.bulk-summary-table,bulk-summary-question-table,.add-tag-btn,.mat-table,.mat-paginator,.vs:after,.btn-share,.social-icons,.mat-expansion-panel,.friend-list-table,#share-content { 
+		background: map-get($theme, card);
+	}
+	&, .playwith a:after, .h1block:after, .question-list li label, .recentlygames li a:hover, .navview #statis li a:hover, .tag .tag-i, .secondbg, .logininner .withsocial { 
+		background: map-get($theme, primary);
+	}
+	.secondbg{ 
+		background: map-get($theme, secondary);
+	}
+	.cd-popup-container{
+		background: map-get($theme, popup-container);
+	}
+	.question-list li label{ 
+		background: map-get($theme, question-list-label);
+	}
+	.question-list li label:hover,.btn-back{ 
+		background: map-get($theme, li-hover); 
+	}
+	// #curentactive{ 
+	// 	background: map-get($theme, current-active);
+	// }
+	.playwith a:after{ 
+		background: map-get($theme, playwith-after);
+	}
+	.headermain{ 
+		background: map-get($theme, header);
+	}
+	.startgame,.view-reason-btn,.csv-error-msg,.reject-btn{ 
+		background: map-get($theme, button-important); 
+	}
+	.btn, .question-list li input:checked ~ label, .optionbox input:checked + label, .formfield input[type="checkbox"]:checked:before,.enterquestion .formfield input[type="radio"]:checked:before, .gameplay li.right,.questionstatus .tabbing li:after{ 
+		background: map-get($theme, button-primary); 
+	}
+	footer{ 
+		background:  map-get($theme, footer);
+	}
+	.landingpage, .loginpage{ 
+		background: map-get($theme, overlay); 
+	}
+	.btn.signup, .logininner .formfield input[type="checkbox"]:checked:before, .gameplay li.wrong, .rejected{ 
+		background: map-get($theme, button-error);
+	}
+	.formfield input[type="checkbox"]:disabled:before { 
+		background: map-get($theme, form-checkbox-disabled);
+	}
+	.approval,.edit-btn{ 
+		background: map-get($theme, button-warning); 
+	}
+	.reasons{ 
+		background: map-get($theme, reasons);  
+	}
+	.form-group .bar:before{ 
+		background: map-get($theme, form-group);
+	}
+	.invitationlist li:nth-child(odd){ 
+		background:map-get($theme, invitationlist-alt);
+	}
+	.subscrib-cont input[type="email"]{ 
+		background: map-get($theme, subscribe-email);
+	}
+	.bulk-summary-header,.bulk-summary-question-header,.friend-list-header{
+		background: map-get($theme, table-header);
+	}
+	.col-question:hover
+	{
+		background: map-get($theme, hover);
+	}
+	.win-icon-div
+	{
+		background: map-get($theme, thumb);
+	}
+	.button-div
+	{
+		background: map-get($theme, button-row);
+	}
+	
+	
+
+	@media screen and ( min-width:1000px){
+		.startgame:hover{ 
+			background: map-get($theme, startgame-hover-lg);
+		}
+		.btn:hover{
+			background: map-get($theme, button-hover-lg);
+		}
+		.btn.signup:hover, .rejected:hover{ 
+			background: map-get($theme, button-error-hover-lg);
+		}
+		.approval:hover{ 
+			background: map-get($theme, button-warning-lg);
+		}
+		.viewbublic:hover{ 
+			background: map-get($theme, viewpublic-hover-lg);
+		}
+	}
+
+	@media screen and ( max-width:1024px){
+		nav { 
+			background: map-get($theme, nav-sm);
+		}
+	}
+	
+	@media screen and ( max-width:989px){
+		.invitationlist li{ 
+			background:map-get($theme, invitationlist-list-sm);
+		}
+	}
+
+	/* For material overlay */
+	.cdk-overlay-dark-backdrop {
+		background: map-get($theme, overlay); 
+	}
+	.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+		opacity: 1;
+	}
+	// .mat-dialog-container {
+	// 	background-color: map-get($theme, primary) !important;
+	// }
+	.sprite,.withfriends .owl-prev:after,.withfriends .owl-next:after { 
+		background-image: url(/assets/images/#{$sprite});
+		background-repeat: no-repeat;
+	}
+	// .optionbox input:checked + label .sprite{ 
+	// 	background-color: #fff;
+	// 	background-image: url(/assets/images/#{$sprite});
+	// 	background-repeat: no-repeat;
+	// }
+	.csv-error-msg{ 
+		background: map-get($theme,error-message); 
+	}
+	.downloadFile,.rejection-div,.edit-form-div,.add-tag-btn{ 
+		background: map-get($theme, download-btn);
+	}
+	.radiobtn .icon
+	{
+		background-color: #fff;
+	}
+	
+}

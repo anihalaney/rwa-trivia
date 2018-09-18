@@ -1,4 +1,7 @@
-import { SearchCriteria, Game, GameOperations, PlayerQnA, GameStatus, schedulerConstants } from '../../src/app/model';
+import {
+    SearchCriteria, Game, GameOperations, PlayerQnA,
+    GameStatus, schedulerConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
@@ -97,6 +100,14 @@ exports.updateGame = (req, res) => {
                 );
                 game.playerQnAs[index] = playerQnA;
                 break;
+            case GameOperations.REJECT_GAME:
+                game.gameOver = true;
+                game.GameStatus = GameStatus.REJECTED;
+                const sysStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
+                sysStatsCalculations.updateSystemStats('game_played').then((stats) => {
+                    console.log(stats);
+                });
+                break;
             case GameOperations.UPDATE_ROUND:
                 game = gameMechanics.updateRound(game, userId);
                 break;
@@ -152,12 +163,22 @@ exports.checkGameOver = (req, res) => {
             const millis = utils.getUTCTimeStamp();
             const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
             const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
+
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
                 game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
                 const dbGame = game.getDbModel();
                 gameControllerService.updateGame(dbGame).then((ref) => {
                     console.log('updated game', dbGame.id);
+                });
+            } else if (playedHours >= schedulerConstants.gameInvitationDuration
+                && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+                    game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)) {
+                game.gameOver = true;
+                game.GameStatus = GameStatus.INVITATION_TIMEOUT;
+                const dbGame = game.getDbModel();
+                gameControllerService.updateGame(dbGame).then((ref) => {
+                    console.log('invitation expires', dbGame.id);
                 });
             }
         });

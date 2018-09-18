@@ -1,0 +1,21 @@
+<!--Header Start Here-->
+<div>
+  <header>
+    <app-header [user]="user" (logoutClicked)="logout()" (loginClicked)="login()" (toggleThemeClicked)="toggleTheme()"></app-header>
+  </header>
+  <!--Header End-->
+
+  <!-- Page Layout -->
+  <div class="container pagelayout">
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  <!-- Page Layout End -->
+
+  <!-- Footer -->
+  <footer>
+    <app-footer [user]="user" (logoutClicked)="logout()" (loginClicked)="login()"></app-footer>
+  </footer>
+  <!-- Footer end -->
+</div>

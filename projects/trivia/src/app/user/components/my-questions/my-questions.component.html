@@ -1,0 +1,28 @@
+<div class="row">
+  <div class="pageheading col-md-4 col-sm-4  col-xs-12 hidden-xs">My Questions</div>
+  <div *ngIf="user && user.roles && (user.roles['bulkuploader'] || user.roles['admin'])" class="col-md-4 col-sm-4 col-xs-12 align-right spacing-bottom">
+    <a [routerLink]="['/bulk']" class="btn startupload">Bulk Upload</a>
+  </div>
+  <div class="col-md-4 col-xs-12 col-sm-4 align-right spacing-bottom">
+    <a [routerLink]="['add']" class="startgame">Create New Question</a>
+  </div>
+
+</div>
+<!-- <mat-card> -->
+<div class="card">
+  <mat-card-content>
+    <mat-tab-group>
+      <mat-tab label="Published">
+        <question-table [showSort]="false" [showPaginator]="false" [questions]="publishedQuestions$ | async" [totalCount]="10" [categoryDictionary]="categoryDictObs | async"
+          [user]="user" [showApproveButton]="false">
+        </question-table>
+      </mat-tab>
+      <mat-tab label="Pending">
+        <question-table [showSort]="false" [showPaginator]="false" [questions]="unpublishedQuestions$ | async" [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async" [user]="user" [showApproveButton]="false">
+        </question-table>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</div>
+<!-- </mat-card> -->

@@ -1,4 +1,4 @@
-import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../src/app/model';
+import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from './utils';
 const utils: Utils = new Utils();
 const gameService = require('../services/game.service');
