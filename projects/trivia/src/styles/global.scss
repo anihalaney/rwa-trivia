@@ -439,7 +439,8 @@ h1 + p{ font-size: 18px; font-family: 'hindlight'; }
 }
 @media screen and ( max-width:767px){      
   .mat-dialog-container,.main-div {
-    height: 90vh !important;
+  //  height: 90vh !important;
+  overflow: scroll !important;
   }
 }
 body.dialog-open {
@@ -591,7 +592,7 @@ body.cdk-overlay-backdrop {
   margin: 0 auto 30px !important;
   height: auto !important;
   overflow: initial !important;
-}
+} 
 
 .mat-dialog-content {
   max-width: none !important;

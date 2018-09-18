@@ -218,7 +218,7 @@ exports.changeGameTurn = (req, res) => {
  */
 exports.createSocialContent = (req, res) => {
 
-    let websiteUrl = `${req.protocol}://`;
+    let websiteUrl = `https://`;
 
     if (functions.config().elasticsearch &&
         functions.config().elasticsearch.index &&
