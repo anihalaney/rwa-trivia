@@ -28,11 +28,11 @@ export class WebDbService extends DbService {
     }
 
     public setCollection(name, id, collection) {
-        this._afStore.doc(`/${name}/${id}`).set(collection);
+        return this._afStore.doc(`/${name}/${id}`).set(collection);
     }
 
     public updateCollection(name, id, collection) {
-        this._afStore.doc(`/${name}/${id}`).update(collection);
+        return this._afStore.doc(`/${name}/${id}`).update(collection);
     }
 
 
