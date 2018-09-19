@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable, forkJoin, combineLatest, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 
@@ -10,56 +9,95 @@ import {
   GameStatus, ReportQuestion, QuestionMetadata
 } from '../../shared/model';
 import { GameActions } from '../store/actions';
+import { DbService } from './../db-service';
 
 @Injectable()
 export class GameService {
-  constructor(private db: AngularFirestore,
-    private http: HttpClient,
-    private gameActions: GameActions) {
+  constructor(private http: HttpClient,
+    private gameActions: GameActions,
+    private dbService: DbService) {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
     const url: string = CONFIG.functionsUrl + '/app/game';
     const payload = { gameOptions: gameOptions, userId: user.userId };
     return this.http.post<string>(url, payload);
-
   }
 
-
   getActiveGames(user: User): Observable<Game[]> {
-    const userGames1 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.STARTED))
-      .valueChanges();
+    const queryParams1 = {
+      condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
+      { name: "gameOver", comparator: "==", value: false },
+      { name: "GameStatus", comparator: "==", value: GameStatus.STARTED }
+      ]
+    };
 
-    const userGames2 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.RESTARTED))
-      .valueChanges();
+    const userGames1 = this.dbService.listenForChanges('games', '', queryParams1);
+
+    const queryParams2 = {
+      condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
+      { name: "gameOver", comparator: "==", value: false },
+      { name: "GameStatus", comparator: "==", value: GameStatus.RESTARTED }
+      ]
+    };
+
+    const userGames2 = this.dbService.listenForChanges('games', '', queryParams2);
 
 
-    const userGames3 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q))
-      .valueChanges();
+    const queryParams3 = {
+      condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
+      { name: "gameOver", comparator: "==", value: false },
+      { name: "GameStatus", comparator: "==", value: GameStatus.WAITING_FOR_NEXT_Q }
+      ]
+    };
 
-    const userGames4 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT))
-      .valueChanges();
+    const userGames3 = this.dbService.listenForChanges('games', '', queryParams3);
 
-    const userGames5 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE))
-      .valueChanges();
+    const queryParams4 = {
+      condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
+      { name: "gameOver", comparator: "==", value: false },
+      { name: "GameStatus", comparator: "==", value: GameStatus.AVAILABLE_FOR_OPPONENT }
+      ]
+    };
 
-    const userGames6 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE))
-      .valueChanges();
+    const userGames4 = this.dbService.listenForChanges('games', '', queryParams4);
 
-    const OtherGames2 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.JOINED_GAME))
-      .valueChanges();
+    const queryParams5 = {
+      condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
+      { name: "gameOver", comparator: "==", value: false },
+      { name: "GameStatus", comparator: "==", value: GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE }
+      ]
+    };
 
-    const OtherGames3 = this.db.collection('/games', ref => ref.where('playerId_1', '==', user.userId).where('gameOver', '==', false)
-      .where('GameStatus', '==', GameStatus.WAITING_FOR_NEXT_Q))
-      .valueChanges();
+    const userGames5 = this.dbService.listenForChanges('games', '', queryParams5);
 
+
+    const queryParams6 = {
+      condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
+      { name: "gameOver", comparator: "==", value: false },
+      { name: "GameStatus", comparator: "==", value: GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE }
+      ]
+    };
+
+    const userGames6 = this.dbService.listenForChanges('games', '', queryParams6);
+
+    const queryParams7 = {
+      condition: [{ name: "playerId_1", comparator: "==", value: user.userId },
+      { name: "gameOver", comparator: "==", value: false },
+      { name: "GameStatus", comparator: "==", value: GameStatus.JOINED_GAME }
+      ]
+    };
+
+    const OtherGames2 = this.dbService.listenForChanges('games', '', queryParams7);
+
+    const queryParams8 = {
+      condition: [{ name: "playerId_1", comparator: "==", value: user.userId },
+      { name: "gameOver", comparator: "==", value: false },
+      { name: "GameStatus", comparator: "==", value: GameStatus.WAITING_FOR_NEXT_Q }
+      ]
+    };
+
+    const OtherGames3 = this.dbService.listenForChanges('games', '', queryParams8);
 
     return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, userGames6, OtherGames2, OtherGames3)
       .pipe(
@@ -82,8 +120,7 @@ export class GameService {
   }
 
   getGame(gameId: string): Observable<Game> {
-    return this.db.doc('/games/' + gameId)
-      .valueChanges()
+    return this.dbService.listenForChanges('games', gameId)
       .pipe(map(
         g => {
           g['id'] = (g['id']) ? g['id'] : gameId;
@@ -131,13 +168,26 @@ export class GameService {
 
 
   getGameResult(userId: String): Observable<Game[]> {
-    const query1 = this.db.collection('/games', ref => ref.where('playerId_0', '==', userId).where('gameOver', '==', true)
-      .orderBy('turnAt', 'desc').limit(4))
-      .valueChanges();
 
-    const query2 = this.db.collection('/games', ref => ref.where('playerId_1', '==', userId).where('gameOver', '==', true)
-      .orderBy('turnAt', 'desc').limit(4))
-      .valueChanges();
+    const queryParams1 = {
+      condition: [{ name: "playerId_0", comparator: "==", value: userId },
+      { name: "gameOver", comparator: "==", value: true },
+      ],
+      orderBy: { name: "turnAt", value: 'desc' },
+      limit: 4
+    };
+
+    const query1 = this.dbService.listenForChanges('games', '', queryParams1);
+
+    const queryParams2 = {
+      condition: [{ name: "playerId_1", comparator: "==", value: userId },
+      { name: "gameOver", comparator: "==", value: true },
+      ],
+      orderBy: { name: "turnAt", value: 'desc' },
+      limit: 4
+    };
+
+    const query2 = this.dbService.listenForChanges('games', '', queryParams2);
 
     return combineLatest(query1, query2)
       .pipe(
@@ -150,17 +200,25 @@ export class GameService {
 
   getGameInvites(userId: String): Observable<Game[]> {
 
-    const query1 = this.db.collection('/games',
-      ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE)
-        .where('playerId_1', '==', userId).where('gameOver', '==', false)
-        .orderBy('turnAt', 'desc'))
-      .valueChanges();
+    const queryParams1 = {
+      condition: [{ name: "GameStatus", comparator: "==", value: GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE },
+      { name: "playerId_1", comparator: "==", value: userId },
+      { name: "gameOver", comparator: "==", value: false }
+      ],
+      orderBy: { name: "turnAt", value: 'desc' }
+    };
 
-    const query2 = this.db.collection('/games',
-      ref => ref.where('GameStatus', '==', GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)
-        .where('playerId_1', '==', userId).where('gameOver', '==', false)
-        .orderBy('turnAt', 'desc'))
-      .valueChanges();
+    const query1 = this.dbService.listenForChanges('games', '', queryParams1);
+
+    const queryParams2 = {
+      condition: [{ name: "GameStatus", comparator: "==", value: GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE },
+      { name: "playerId_1", comparator: "==", value: userId },
+      { name: "gameOver", comparator: "==", value: false }
+      ],
+      orderBy: { name: "turnAt", value: 'desc' }
+    };
+
+    const query2 = this.dbService.listenForChanges('games', '', queryParams2);
 
     return combineLatest(query1, query2)
       .pipe(map((data) => data[0].concat(data[1])),
@@ -192,22 +250,27 @@ export class GameService {
 
   saveReportQuestion(report: ReportQuestion, game: Game): Observable<any> {
     const dbReport = Object.assign({}, report);
-    return this.db.collection(`/report_questions`, ref => ref.where('created_uid', '==', report.created_uid).
-      where('gameId', '==', report.gameId))
-      .valueChanges().pipe(
-        take(1),
-        map(question => {
-          if (question.length > 0) {
-            const reportQuestion = new ReportQuestion();
-            reportQuestion.questions = question[0]['questions'];
-            const key = Object.keys(report.questions)[0];
-            reportQuestion.questions[key] = report.questions[key];
-            return of(this.db.doc(`/report_questions/${dbReport.gameId}`).update({ questions: reportQuestion.questions }));
 
-          } else {
-            return of(this.db.doc(`/report_questions/${dbReport.gameId}`).set(dbReport));
-          }
-        }));
+    const queryParams = {
+      condition: [{ name: "created_uid", comparator: "==", value: report.created_uid },
+      { name: "gameId", comparator: "==", value: report.gameId }
+      ]
+    };
+
+    return this.dbService.listenForChanges('report_questions', '', queryParams).pipe(
+      take(1),
+      map(question => {
+        if (question.length > 0) {
+          const reportQuestion = new ReportQuestion();
+          reportQuestion.questions = question[0]['questions'];
+          const key = Object.keys(report.questions)[0];
+          reportQuestion.questions[key] = report.questions[key];
+
+          return of(this.dbService.updateCollection('report_questions', dbReport.gameId, { questions: reportQuestion.questions }));
+        } else {
+          return of(this.dbService.setCollection('report_questions', dbReport.gameId, dbReport));
+        }
+      }));
   }
 
   updateGame(report: ReportQuestion, game: Game): Observable<any> {
