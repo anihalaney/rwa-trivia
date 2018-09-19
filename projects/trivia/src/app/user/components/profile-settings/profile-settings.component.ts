@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Store, select } from '@ngrx/store';
@@ -17,7 +17,8 @@ import { userState } from '../../../user/store';
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.scss']
+  styleUrls: ['./profile-settings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileSettingsComponent implements OnDestroy {
   @Input() user: User;
@@ -62,20 +63,20 @@ export class ProfileSettingsComponent implements OnDestroy {
     private storage: AngularFireStorage,
     private snackBar: MatSnackBar) {
 
-    this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
+    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user
-    });
+    }));
     this.categoriesObs = store.select(getCategories);
-    this.categoriesObs.subscribe(categories => this.categories = categories);
+    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.categoryDictObs = store.select(categoryDictionary);
-    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
     this.tagsObs = this.store.select(getTags);
     this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.setCropperSettings();
 
     this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
-    this.userObs.subscribe(user => {
+    this.subs.push(this.userObs.subscribe(user => {
       if (user) {
         this.user = user;
 
@@ -89,13 +90,13 @@ export class ProfileSettingsComponent implements OnDestroy {
           this.profileImage.image = this.user.profilePictureUrl;
         }
       }
-    });
+    }));
 
-    this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subs.push(this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.snackBar.open('Profile saved!', '', { duration: 2000 });
       }
-    });
+    }));
   }
 
   get tagsArray(): FormArray {

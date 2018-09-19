@@ -9,6 +9,7 @@ import { resolve } from 'path';
 import * as express from 'express';
 
 const domino = require('domino');
+const compression = require('compression')
 const win = domino.createWindow('');
 const app = express();
 let isProductionEnv = false;
@@ -21,7 +22,7 @@ global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 const DIST_FOLDER = resolve(process.cwd(), './dist');
 // console.log(DIST_FOLDER);
 
-console.log('isProductionEnv', isProductionEnv);
+// console.log('isProductionEnv', isProductionEnv);
 
 const {
   AppServerModuleNgFactory,
@@ -42,10 +43,10 @@ app.engine(
 
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
-
+app.use(compression())
 // Point all routes to Universal
 app.get('*', (req, res) => {
-  res.set('Cache-Control', 'public, max-age=3600, s-maxage=3600');
+  res.setHeader('Cache-Control', 'public, max-age=21600, s-maxage=21600');
   res.render('index', { req }, (err, html) => {
     if (isProductionEnv) {
       html += `\n<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122807814-1"></script>

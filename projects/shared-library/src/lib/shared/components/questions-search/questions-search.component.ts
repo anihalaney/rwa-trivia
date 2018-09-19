@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { PageEvent, MatCheckboxChange, MatSelectChange } from '@angular/material';
 import { Observable } from 'rxjs';
 
@@ -7,7 +7,8 @@ import { Question, QuestionStatus, Category, SearchResults } from '../../model';
 @Component({
   selector: 'question-search',
   templateUrl: './questions-search.component.html',
-  styleUrls: ['./questions-search.component.scss']
+  styleUrls: ['./questions-search.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
   @Input() questionsSearchResults: SearchResults;

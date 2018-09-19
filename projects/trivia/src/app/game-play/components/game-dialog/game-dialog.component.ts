@@ -76,16 +76,16 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     this.userDict = data.userDict;
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => {
+    this.sub.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict
-    });
+    }));
 
     this.resetValues();
     this.gameObs = store.select(gameplayState).pipe(select(s => s.currentGame), filter(g => g != null));
     this.gameQuestionObs = store.select(gameplayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => { this.categoryDictionary = c });
+    this.sub.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => { this.categoryDictionary = c }));
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;

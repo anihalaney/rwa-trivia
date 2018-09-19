@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, ChangeDetectionStrategy, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
@@ -9,12 +9,13 @@ import { AppState, categoryDictionary } from '../../../store';
 import { leaderBoardState } from '../../store';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
-
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
-  styleUrls: ['./leaderboard.component.scss']
+  styleUrls: ['./leaderboard.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeaderboardComponent implements OnDestroy {
   @Input() userDict: { [key: string]: User };
@@ -31,15 +32,20 @@ export class LeaderboardComponent implements OnDestroy {
   defaultAvatar = 'assets/images/default-avatar-small.png';
 
   constructor(private store: Store<AppState>,
-    private userActions: UserActions) {
+    private userActions: UserActions,
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string) {
     this.categoryDict$ = store.select(categoryDictionary);
-    this.categoryDict$.subscribe(categoryDict => {
+    this.subs.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
-    });
+    }));
 
-    this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
+    if (isPlatformBrowser(this.platformId)) {
+      this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
+    }
 
-    this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
+
+    this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
 
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
@@ -59,7 +65,7 @@ export class LeaderboardComponent implements OnDestroy {
           this.lbsUsersSliceLastIndex = 3;
         }
       }
-    });
+    }));
   }
 
 

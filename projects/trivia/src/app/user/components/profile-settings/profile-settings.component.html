@@ -37,7 +37,7 @@
             </div>
             <div class="col-sm-9 col-xs-12 avatarinput">
               <div>
-                <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide">
+                <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide" aria-label="file">
               </div>
               <P *ngIf="profileImageValidation" class="error">
                 {{profileImageValidation}}
@@ -55,18 +55,18 @@
           <div class="clearfix namefield">
             <div class="formfield">
               <label>Name</label>
-              <input formControlName="name" type="text" placeholder="Enter Name" class="required">
+              <input formControlName="name" type="text" placeholder="Enter Name" class="required" aria-label="name">
               <p>Enter your real name, so people you know and recognize you</p>
             </div>
             <div class="formfield">
               <label>Display Name</label>
-              <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required">
+              <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required" aria-label="display-name">
               <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">Display
                 Name is required!</p>
             </div>
             <div class="formfield">
               <label>Location</label>
-              <input formControlName="location" placeholder="Enter Location" type="text" class="required">
+              <input formControlName="location" placeholder="Enter Location" type="text" class="required" aria-label="location">
               <p>Where in the world you are</p>
             </div>
           </div>
@@ -106,7 +106,8 @@
                     </mat-basic-chip>
                   </mat-chip-list>
 
-                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags" [matAutocomplete]="tagAuto">
+                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags" [matAutocomplete]="tagAuto"
+                    aria-label="tags">
                   <mat-autocomplete #tagAuto="matAutocomplete">
                     <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                       {{tag}}
@@ -128,19 +129,19 @@
             </div>
             <div class="col-md-6 col-sm-9">
               <div class="formfield">
-                <input type="url" formControlName="facebookUrl" placeholder="Facebook">
+                <input type="url" formControlName="facebookUrl" placeholder="Facebook" aria-label="facebook-url">
                 <p *ngIf="userForm.controls.facebookUrl.errors && !userForm.controls.facebookUrl.pristine" class="error">Invalid
                   facebook url</p>
               </div>
 
               <div class="formfield">
-                <input formControlName="twitterUrl" placeholder="Twitter">
+                <input formControlName="twitterUrl" placeholder="Twitter" aria-label="twitter-url">
                 <p *ngIf="userForm.controls.twitterUrl.errors && !userForm.controls.twitterUrl.pristine" class="error">Invalid
                   twitter url</p>
               </div>
 
               <div class="formfield">
-                <input formControlName="linkedInUrl" placeholder="Linkedin">
+                <input formControlName="linkedInUrl" placeholder="Linkedin" aria-label="linkedin-url">
                 <p *ngIf="userForm.controls.linkedInUrl.errors && !userForm.controls.linkedInUrl.pristine" class="error">Invalid
                   linkedin url</p>
               </div>

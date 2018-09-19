@@ -5,6 +5,7 @@
       <a [routerLink]="['/game-play']" class="startgame">Start New Game</a>
     </div>
   </div>
+
   <!-- Currently active games -->
   <section *ngIf="user" id="curentactive" class="card">
     <div class="h1block">
@@ -30,11 +31,6 @@
             </div>
           </li>
         </ng-container>
-        <!-- <li class="col-lg-3 col-sm-12 col-xs-12 visible-xs">
-          <a href="#" class="innerli textcenter">
-            <div class="viewallbtn">view all</div>
-          </a>
-        </li> -->
       </ul>
     </div>
 
@@ -75,7 +71,6 @@
     <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
       <a class="viewall" (click)="displayMoreGameInvites()">view more</a>
     </div>
-
   </section>
   <!-- Invitation to play games end   -->
 
@@ -99,20 +94,10 @@
       <div class="col-sm-12 col-xs-12 board-title">
         <h2>Leaderboard</h2>
       </div>
-      <!-- <div class="col-sm-3 col-xs-12 textrigth hidden-xs">
-              <a href="#" class="viewall">view all</a>
-            </div> -->
     </div>
     <leaderboard *ngIf="userDict" [userDict]="userDict"></leaderboard>
-
-
-
   </section>
   <!-- Category leaderboard end-->
-
-
-
-
 
   <!-- <blog -->
   <div class="row blog hidden-xs">
