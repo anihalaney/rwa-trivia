@@ -1,5 +1,5 @@
-import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { BulkUploadFileInfo, Question, Category } from '../../../../../../../shared-library/src/lib/shared/model';
@@ -16,12 +16,14 @@ import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
+
+
 @Component({
   selector: 'app-bulk-summary-questions',
   templateUrl: './bulk-summary-question.component.html',
   styleUrls: ['./bulk-summary-question.component.scss']
 })
-export class BulkSummaryQuestionComponent implements OnInit {
+export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
 
   unPublishedQuestions: Question[];
   publishedQuestions: Question[];
@@ -41,19 +43,20 @@ export class BulkSummaryQuestionComponent implements OnInit {
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl: boolean;
 
+  subs: Subscription[] = [];
 
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
     private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router) {
 
-    this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
+    this.subs.push(this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
       if (status === 'UPDATE') {
         this.snackBar.open('Question Updated!', '', { duration: 1500 });
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
+    this.subs.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
       if (url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
@@ -61,9 +64,9 @@ export class BulkSummaryQuestionComponent implements OnInit {
         link.click();
         this.store.dispatch(new bulkActions.LoadBulkUploadFileUrlSuccess(undefined));
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+    this.subs.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
       if (obj) {
         this.bulkUploadFileInfo = obj;
         this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([obj]);
@@ -97,7 +100,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
           this.downloadUrl = res;
         });
       }
-    });
+    }));
 
   }
 
@@ -126,6 +129,9 @@ export class BulkSummaryQuestionComponent implements OnInit {
     (!this.isAdminUrl) ? this.router.navigate(['/bulk']) : this.router.navigate(['/admin/bulk']);
   }
 
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
+  }
 
 }
 

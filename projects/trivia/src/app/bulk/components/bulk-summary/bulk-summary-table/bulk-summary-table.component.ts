@@ -1,5 +1,8 @@
-import { Component, Input, ViewChild, OnChanges, Output, EventEmitter, OnInit, SimpleChanges } from '@angular/core';
-import { Observable } from 'rxjs';
+import {
+  Component, Input, ViewChild, OnChanges, Output, EventEmitter,
+  OnInit, SimpleChanges, ChangeDetectionStrategy, OnDestroy
+} from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { bulkState } from '../../../store';
@@ -10,13 +13,15 @@ import { Sort } from '@angular/material';
 import { AngularFireStorage } from 'angularfire2/storage';
 import * as bulkActions from '../../../store/actions';
 import { Router } from '@angular/router';
+import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
 
 @Component({
   selector: 'bulk-summary-table',
   templateUrl: './bulk-summary-table.component.html',
-  styleUrls: ['./bulk-summary-table.component.scss']
+  styleUrls: ['./bulk-summary-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BulkSummaryTableComponent implements OnInit, OnChanges {
+export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -25,6 +30,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
   dataSource: any;
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
+  subs: Subscription[] = [];
 
 
   displayedColumns = ['archive', 'uploadDate', 'fileName', 'category',
@@ -43,12 +49,14 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     private store: Store<AppState>,
     private storage: AngularFireStorage, private router: Router) {
     this.categoryDictObs = store.select(categoryDictionary);
-    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
-    this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
-      this.user = s.user
-    });
 
-    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
+    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+
+    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
+      this.user = s.user
+    }));
+
+    this.subs.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
       if (url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
@@ -56,30 +64,30 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
         link.click();
         this.store.dispatch(new bulkActions.LoadBulkUploadFileUrlSuccess(undefined));
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.bulkUploadArchiveStatus)).subscribe((state) => {
+    this.subs.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadArchiveStatus)).subscribe((state) => {
       if (state === 'ARCHIVED') {
         this.archivedArray = [];
         this.store.dispatch(new bulkActions.SaveArchiveList(this.archivedArray));
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
+    this.subs.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.archivedArray = list;
       } else {
         this.archivedArray = [];
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
+    this.subs.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.archivedArray = list;
       } else {
         this.archivedArray = [];
       }
-    });
+    }));
 
 
   }
@@ -164,6 +172,10 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
 
   checkArchieved(id: any) {
     return this.archivedArray.findIndex((row) => row.id === id) === -1 ? false : true;
+  }
+
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
   }
 
 

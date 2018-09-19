@@ -13,8 +13,8 @@
           <p class="field-caption">Select the category for bulk upload</p>
           <div class="row">
             <div class="formfield">
-              <select placeholder="Select Category" class="required" formControlName="category">
-                <option *ngFor="let category of categories" [value]="category.id">
+              <select placeholder="Select Category" class="required" formControlName="category" aria-label="category">
+                <option *ngFor="let category of categories; trackBy: trackById" [value]="category.id">
                   {{category.categoryName}}
                 </option>
               </select>
@@ -28,8 +28,9 @@
       </div>
       <div class="optionbox row col-md-11 formfield">
         <p class="field-caption">Enter Your Question</p>
-        <textarea placeholder="Enter Your Question" formControlName="questionText" class="required col-md-12 col-xs-12"></textarea>
-        <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question is required!</p>
+        <textarea placeholder="Enter Your Question" formControlName="questionText" class="required col-md-12 col-xs-12" aria-label="questionText"></textarea>
+        <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
+          is required!</p>
       </div>
       <div class="optionbox row col-md-11 enterquestion">
         <p class="field-caption">Answers</p>
@@ -38,7 +39,8 @@
             <label>
               <input type="checkbox" formControlName="correct">
             </label>
-            <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required edit-form-input-field">
+            <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required edit-form-input-field"
+              aria-label="answerText">
           </div>
         </ng-container>
         <div class="error" *ngIf="!answers.valid && !answers.pristine">
@@ -64,9 +66,9 @@
             </mat-basic-chip>
           </mat-chip-list>
           <input type="text" class="type-zone margin-bottom-8 edit-form-input-field" contenteditable="true" formControlName="tags"
-            placeholder="add tags">
+            placeholder="add tags" aria-label="tags">
           <div>
-            <button type="button" class="add-tag-btn" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">Add</button>
+            <button type="button" class="add-tag-btn" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()" aria-label="password">Add</button>
           </div>
 
           <div class="error row col-md-12" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
@@ -75,7 +77,7 @@
         </div>
       </div>
       <div class="savebox">
-        <button class="btn resubmit-btn" type="submit" [disabled]="!questionForm.valid">Resubmit</button>
+        <button class="btn resubmit-btn" type="submit" [disabled]="!questionForm.valid" aria-label="submit">Resubmit</button>
       </div>
     </section>
   </div>

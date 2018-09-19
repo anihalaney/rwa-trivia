@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -11,7 +11,8 @@ import * as bulkActions from '../../store/actions';
 @Component({
   selector: 'bulk-details',
   templateUrl: './bulk-details.component.html',
-  styleUrls: ['./bulk-details.component.scss']
+  styleUrls: ['./bulk-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BulkDetailsComponent implements OnChanges, OnInit {
 
