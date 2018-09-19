@@ -29,8 +29,19 @@ export class DbService {
     public listenForChanges(name: string, path?: any, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
         return of();
     }
-    
-    public createId(){
-         
+
+    public createId():any {
+
+    }
+    public getFireStoreReference(filePath): any {
+
+    }
+
+    public getFireStore(): any {
+
+    }
+
+    public getCollection(collectionName,docId):any{
+
     }
 }
