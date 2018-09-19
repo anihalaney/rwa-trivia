@@ -27,7 +27,6 @@ export class GameService {
 
 
   getActiveGames(user: User): Observable<Game[]> {
-
     const userGames1 = this.db.collection('/games', ref => ref.where('playerId_0', '==', user.userId).where('gameOver', '==', false)
       .where('GameStatus', '==', GameStatus.STARTED))
       .valueChanges();
