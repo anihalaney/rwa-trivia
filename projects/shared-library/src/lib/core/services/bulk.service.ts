@@ -1,31 +1,31 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { HttpClient } from '@angular/common/http';
 import { BulkUploadFileInfo, User } from '../../shared/model';
+import { DbService } from './../db-service';
 
 @Injectable()
 export class BulkService {
 
-  constructor(private db: AngularFirestore,
-    private storage: AngularFireStorage,
-    private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private dbService: DbService) {
   }
 
   // get All Bulk Upload
   getBulkUpload(user: User, archive: boolean): Observable<BulkUploadFileInfo[]> {
     if (!archive) {
-      return this.db.collection('/bulk_uploads', ref => ref.where('isAdminArchived', '==', archive))
-        .valueChanges()
+      const queryParams = { condition: [{ name: "isAdminArchived", comparator: "==", archive }] };
+
+      return this.dbService.listenForChanges('bulk_uploads', '', queryParams)
         .pipe(catchError(error => {
           console.log(error);
           return of(null);
         }));
 
     } else {
-      return this.db.collection('/bulk_uploads').valueChanges()
+      return this.dbService.listenForChanges('bulk_uploads')
         .pipe(catchError(error => {
           console.log(error);
           return of(null);
@@ -38,26 +38,37 @@ export class BulkService {
 
     const adminArchive = 'isAdminArchived';
     const userArchive = 'isUserArchived';
+    let queryParams: any;
 
-    let whereCondition;
     if (!archive) {
       if (user.roles.admin && user.roles.bulkuploader) {
-        whereCondition = ref => ref.where('created_uid', '==', user.userId).
-          where(userArchive, '==', archive).where(adminArchive, '==', archive);
+        queryParams = {
+          condition: [{ name: "created_uid", comparator: "==", value: user.userId },
+          { name: userArchive, comparator: "==", value: 'archive' },
+          { name: adminArchive, comparator: "==", value: 'archive' }
+          ]
+        };
       } else if (user.roles.admin) {
-        whereCondition = ref => ref.where('created_uid', '==', user.userId).
-          where(adminArchive, '==', archive);
+        queryParams = {
+          condition: [{ name: "created_uid", comparator: "==", value: user.userId },
+          { name: adminArchive, comparator: "==", value: 'archive' }
+          ]
+        };
       } else {
-        whereCondition = ref => ref.where('created_uid', '==', user.userId).
-          where(userArchive, '==', archive);
+        queryParams = {
+          condition: [{ name: "created_uid", comparator: "==", value: user.userId },
+          { name: userArchive, comparator: "==", value: 'archive' }
+          ]
+        };
       }
 
     } else {
-      whereCondition = ref => ref.where('created_uid', '==', user.userId)
+      queryParams = {
+        condition: [{ name: "created_uid", comparator: "==", value: user.userId }]
+      };
     }
 
-    return this.db.collection('/bulk_uploads', whereCondition)
-      .valueChanges()
+    return this.dbService.listenForChanges('bulk_uploads', '', queryParams)
       .pipe(catchError(error => {
         console.log(error);
         return of(null);
@@ -66,8 +77,7 @@ export class BulkService {
 
   // get BulkUpload by Id
   getBulkUploadById(bulkUploadFileInfo: BulkUploadFileInfo): Observable<BulkUploadFileInfo> {
-    return this.db.doc(`/bulk_uploads/${bulkUploadFileInfo.id}`)
-      .valueChanges()
+    return this.dbService.listenForChanges('bulk_uploads', bulkUploadFileInfo.id)
       .pipe(catchError(error => {
         console.log(error);
         return of(null);
@@ -78,15 +88,14 @@ export class BulkService {
   updateBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo) {
     const dbBulkUploadFileInfo = Object.assign({}, bulkUploadFileInfo); // object to be saved
     // remove download URL it is observable
-    delete dbBulkUploadFileInfo.downloadUrl
-    this.db.doc('/bulk_uploads/' + dbBulkUploadFileInfo.id).set(dbBulkUploadFileInfo).then(ref => {
-    });
+    delete dbBulkUploadFileInfo.downloadUrl;
+    this.dbService.setCollection('bulk_uploads', dbBulkUploadFileInfo.id, dbBulkUploadFileInfo);
   }
 
   // get File By Bulk Upload File Name
   getFileByBulkUploadFileUrl(bulkUploadFileInfo: BulkUploadFileInfo): Observable<string> {
     const filePath = `bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadFileInfo.id}-${bulkUploadFileInfo.fileName}`;
-    const ref = this.storage.ref(filePath);
+    const ref = this.dbService.getFireStoreReference(filePath);
     return ref.getDownloadURL().pipe(map(url => url));
   }
 
@@ -100,19 +109,20 @@ export class BulkService {
     } else {
       obj = { 'isUserArchived': true };
     }
-    const upload = this.db.firestore.batch();
+
+    const fireStore = this.dbService.getFireStore();
+    const upload = this.dbService.getFireStore().batch();
     archiveArray.map((bulkInfo) => {
-      const itemDoc = this.db.firestore.collection('bulk_uploads').doc(bulkInfo.id);
+      const itemDoc = fireStore.collection('bulk_uploads').doc(bulkInfo.id);
       upload.update(itemDoc, obj);
     })
     return upload.commit();
     // return of(true);
   }
-  
+
   // get single Bulk Upload
   getBulkUploadFile(bulkId: string): Observable<BulkUploadFileInfo> {
-    return this.db.doc(`/bulk_uploads/${bulkId}`)
-      .valueChanges()
+    return this.dbService.listenForChanges('bulk_uploads', bulkId)
       .pipe(catchError(error => {
         console.log(error);
         return of(null);
