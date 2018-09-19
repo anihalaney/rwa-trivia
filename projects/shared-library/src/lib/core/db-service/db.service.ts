@@ -26,11 +26,11 @@ export class DbService {
     public updateCollection(name, id, collection) {
 
     }
-    public listenForChanges(name: string, path?: any, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
+    public listenForChanges(name: string, path?: any, queryParams?: any): Observable<any> {
         return of();
     }
 
-    public createId():any {
+    public createId(): any {
 
     }
     public getFireStoreReference(filePath): any {
@@ -41,7 +41,10 @@ export class DbService {
 
     }
 
-    public getCollection(collectionName,docId):any{
+    public getCollection(collectionName, docId): any {
 
+    }
+
+    public upload(filePath, imageBlob): any {
     }
 }
