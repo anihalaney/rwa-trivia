@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
@@ -15,8 +13,7 @@ import { DbService } from "./../db-service"
 @Injectable()
 export class UserService {
 
-    constructor(private db: AngularFirestore,
-        private storage: AngularFireStorage,
+    constructor(
         private http: HttpClient,
         private store: Store<CoreState>,
         private userActions: UserActions,
@@ -70,9 +67,9 @@ export class UserService {
     getUserProfileImage(user: User): Observable<User> {
         if (user.profilePicture && user.profilePicture !== '') {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
-            const ref = this.storage.ref(filePath);
+            const ref = this.dbService.getFireStoreReference(filePath); //this.storage.ref(filePath);
             return ref.getDownloadURL().pipe(map(url => {
-                user.profilePictureUrl = (url) ? url : '/assets/images/default-avatar-small.png';
+                user.profilePictureUrl = url.toString() ? url.toString() : '/assets/images/default-avatar-small.png';
                 return user;
             }));
         } else {
@@ -82,21 +79,22 @@ export class UserService {
     }
 
     setSubscriptionFlag(userId: string) {
-        // this.db.doc(`/users/${userId}`).update({ isSubscribed: true });
         this.dbService.updateCollection('users', userId, { isSubscribed: true });
     }
 
     saveUserInvitations(obj: any): Observable<boolean> {
+        // debugger;
         const invitation = new Invitation();
         invitation.created_uid = obj.created_uid;
         invitation.status = obj.status;
-        const email = this.db.firestore.batch();
+        const fireStore = this.dbService.getFireStore();
+        const email = fireStore.batch();
         obj.emails.map((element) => {
             invitation.email = element;
             const dbInvitation = Object.assign({}, invitation); // object to be saved
-            const id = this.db.createId();
+            const id = this.dbService.createId();
             dbInvitation.id = id;
-            email.set(this.db.firestore.collection('invitations').doc(dbInvitation.id), dbInvitation);
+            email.set(fireStore.collection('invitations').doc(dbInvitation.id), dbInvitation);
         });
         email.commit();
         return of(true);
@@ -108,6 +106,6 @@ export class UserService {
     }
 
     loadUserFriends(userId: string): Observable<Friends> {
-        return this.db.doc<Friends>(`/friends/${userId}`).valueChanges();
+        return this.dbService.listenForChanges('friends', userId);
     }
 }

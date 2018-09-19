@@ -6,17 +6,20 @@ import { User } from '../../../shared/model';
 
 // @Inject(PlatformFirebaseToken) protected _firebase: any
 const firebase = require("nativescript-plugin-firebase/app");
+import { firestore } from "nativescript-plugin-firebase";
 
 @Injectable()
 export class TNSDbService extends DbService {
 
-    constructor() {
+    constructor(private zone: NgZone) {
         super();
     }
 
 
     public getUser(user: User): Observable<User> {
         let _listenSub: any;
+
+        firebase._firebaseAppFactory
         let res = firebase.firestore().collection("users").where("userId", "==", user.userId);
         return Observable.create(observer => {
             _listenSub = res.onSnapshot((snapshot: any) => {
@@ -67,14 +70,30 @@ export class TNSDbService extends DbService {
                     }));
 
                 }
-                observer.next(results);
+                observer.next((results.length == 1) ? results[0] : results);
             });
+
         });
     }
 
     public createId() {
-        // this._afStore.collection('_').doc('_').id;
-        return '';
+        return firebase.createId();
+    }
+
+    public getFireStoreReference(filePath) {
+
+    }
+
+    public getFireStore() {
+
+    }
+
+    public getStore(): any {
+
+    }
+
+    public getCollection(collectionName, docId): any {
+
     }
 
 }

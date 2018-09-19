@@ -4,6 +4,7 @@ import { Observable, of } from 'rxjs';
 import { User } from '../../../shared/model';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFireStorage, AngularFireStorageReference } from 'angularfire2/storage';
 import { map } from 'rxjs/operators';
 
 
@@ -11,7 +12,8 @@ import { map } from 'rxjs/operators';
 export class WebDbService extends DbService {
 
     constructor(protected _afAuth: AngularFireAuth,
-        protected _afStore: AngularFirestore) {
+        protected _afStore: AngularFirestore,
+        private _afstorage: AngularFireStorage) {
         super();
     }
 
@@ -49,8 +51,19 @@ export class WebDbService extends DbService {
         );
     }
 
-    public createId(){
-        // this._afStore.collection('_').doc('_').id;
-        return '';
+    public createId() {
+        return this._afStore.createId();
+    }
+
+    public getFireStoreReference(filePath): AngularFireStorageReference {
+        return this._afstorage.ref(filePath);
+    }
+
+    public getFireStore() {
+        return this._afStore.firestore;
+    }
+
+    public getCollection(collectionName, docId): any {
+        return this._afStore.firestore.collection(collectionName).doc(docId)
     }
 }
