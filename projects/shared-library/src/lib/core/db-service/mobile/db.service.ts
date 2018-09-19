@@ -49,14 +49,14 @@ export class TNSDbService extends DbService {
     }
 
     private _listenSub: any;
-    public listenForChanges(name: string, path?: any, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
+    public listenForChanges(name: string, path?: any, queryParams?: any): Observable<any> {
         if (this._listenSub) {
             this._listenSub();
             this._listenSub = null;
         }
         let query = firebase.firestore().collection(name);
         if (queryParams) {
-            for (const param of queryParams) {
+            for (const param of queryParams.condition) {
                 query = query.where(param.name, param.comparator, param.value);
             }
         }
@@ -76,6 +76,7 @@ export class TNSDbService extends DbService {
         });
     }
 
+
     public createId() {
         return firebase.createId();
     }
@@ -93,6 +94,10 @@ export class TNSDbService extends DbService {
     }
 
     public getCollection(collectionName, docId): any {
+
+    }
+
+    public upload(filePath, imageBlob): any {
 
     }
 
