@@ -26,8 +26,8 @@ export class UserService {
 
     loadUserProfile(user: User): Observable<User> {
         const queryParams = [{ name: "userId", comparator: "==", value: user.userId }];
-        // return this.db.doc<any>(`/users/${user.userId}`) 
-        return this.dbService.listenForChanges('users', queryParams)
+        // return this.db.doc<any>(`/users/${user.userId}`).valueChanges() 
+        return this.dbService.listenForChanges('users', user.userId, queryParams)
             .pipe(map(u => {
                 if (u) {
                     const userInfo = user;
@@ -42,7 +42,7 @@ export class UserService {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
-                    this.dbService.setCollection('users', user.userId, user);
+                    this.dbService.setCollection('users', dbUser.userId, dbUser);
                 }
 
                 return user;
@@ -82,7 +82,8 @@ export class UserService {
     }
 
     setSubscriptionFlag(userId: string) {
-        this.db.doc(`/users/${userId}`).update({ isSubscribed: true });
+        // this.db.doc(`/users/${userId}`).update({ isSubscribed: true });
+        this.dbService.updateCollection('users', userId, { isSubscribed: true });
     }
 
     saveUserInvitations(obj: any): Observable<boolean> {

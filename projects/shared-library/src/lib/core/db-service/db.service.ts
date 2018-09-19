@@ -23,7 +23,14 @@ export class DbService {
 
     }
 
-    public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
+    public updateCollection(name, id, collection) {
+
+    }
+    public listenForChanges(name: string, path?: any, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
         return of();
+    }
+    
+    public createId(){
+         
     }
 }

@@ -25,11 +25,15 @@ export class WebDbService extends DbService {
     }
 
     public setCollection(name, id, collection) {
-        console.log('web collectgion');
         this._afStore.doc(`/${name}/${id}`).set(collection);
     }
 
-    public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
+    public updateCollection(name, id, collection) {
+        this._afStore.doc(`/${name}/${id}`).set(collection);
+    }
+
+
+    public listenForChanges(name: string, path?: any, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
         return this._afStore.collection(name, ref => {
             let query: any = ref;
             if (queryParams) {
@@ -38,14 +42,15 @@ export class WebDbService extends DbService {
                 }
             }
             return query;
-        }).snapshotChanges().pipe(
+        }).doc(path).snapshotChanges().pipe(
             map(actions => {
-                return actions.map(a => {
-                    const data = a.payload.doc.data();
-                    const id = a.payload.doc.id;
-                    return { id, ...data };
-                })
+                return actions.payload.data();
             })
         );
+    }
+
+    public createId(){
+        // this._afStore.collection('_').doc('_').id;
+        return '';
     }
 }

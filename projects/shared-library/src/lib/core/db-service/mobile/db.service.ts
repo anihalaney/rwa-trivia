@@ -16,7 +16,6 @@ export class TNSDbService extends DbService {
 
 
     public getUser(user: User): Observable<User> {
-        console.log('firebase >>> ');
         let _listenSub: any;
         let res = firebase.firestore().collection("users").where("userId", "==", user.userId);
         return Observable.create(observer => {
@@ -42,8 +41,12 @@ export class TNSDbService extends DbService {
         userCollection.doc(id).set(collection);
     }
 
+    public updateCollection(name, id, collection) {
+
+    }
+
     private _listenSub: any;
-    public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
+    public listenForChanges(name: string, path?: any, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
         if (this._listenSub) {
             this._listenSub();
             this._listenSub = null;
@@ -68,4 +71,10 @@ export class TNSDbService extends DbService {
             });
         });
     }
+
+    public createId() {
+        // this._afStore.collection('_').doc('_').id;
+        return '';
+    }
+
 }
