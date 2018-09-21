@@ -49,6 +49,7 @@
                   "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
                 }
               ],
+              "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -346,9 +347,6 @@
     },
     "@schematics/angular:directive": {
       "prefix": "app"
-    },
-    "cli": {
-    "defaultCollection": "@nativescript/schematics"
-   }
+    }
   }
 }

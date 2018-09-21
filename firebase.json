@@ -5,7 +5,11 @@
       {
         "source": "/app/**",
         "function": "app"
-      },     
+      },
+      {
+        "source": "/robots.txt",
+        "destination": "/robots.txt"
+      },
       {
         "source": "**",
         "function": "ssr"
@@ -13,3 +17,5 @@
     ]
   }
 }
+
+

@@ -1,11 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { QuestionActions } from '../actions';
-<<<<<<< HEAD
 import { Question, SearchResults } from '../../../../../../shared-library/src/lib/shared/model';
-=======
-import { Question, SearchResults } from '../../../model';
->>>>>>> 5cb465b4d8adddf023929f77b9fd04dec8292b58
 import { questionOfTheDay } from './questions.reducer';
 import { TEST_DATA } from '../../../testing/test.data';
 

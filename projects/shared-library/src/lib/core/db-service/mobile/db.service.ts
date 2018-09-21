@@ -6,7 +6,7 @@ import { User } from '../../../shared/model';
 
 // @Inject(PlatformFirebaseToken) protected _firebase: any
 const firebase = require("nativescript-plugin-firebase/app");
-import { firestore } from "nativescript-plugin-firebase";
+// import { firestore } from "nativescript-plugin-firebase";
 
 @Injectable()
 export class TNSDbService extends DbService {

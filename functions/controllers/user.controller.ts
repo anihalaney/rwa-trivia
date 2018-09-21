@@ -1,14 +1,9 @@
 
 const userService = require('../services/user.service');
 const sharp = require('sharp');
-<<<<<<< HEAD
 import { User, UserStats, UserControllerConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
-=======
-import { User, UserStats } from '../../projects/shared-library/src/lib/shared/model';
-import { ProfileImagesGenerator } from '../utils/profile-images-generator';
->>>>>>> 5cb465b4d8adddf023929f77b9fd04dec8292b58
 
 /**
  * getUserById
@@ -79,7 +74,6 @@ exports.generateUserProfileImage = (req, res) => {
     if (user.profilePicture) {
         profileImagesGenerator.
             getStoredImage(user.userId, user.profilePicture).then((status) => {
-<<<<<<< HEAD
                 setUser(user, res);
             })
 
@@ -99,16 +93,3 @@ function setUser(user, res) {
         res.send({ 'status': 'Profile Data is saved !!' })
     });
 }
-=======
-                userService.setUser(user).then((ref) => {
-                    res.send({ 'status': 'Profile Data is saved !!' })
-                });
-            })
-
-    } else {
-        userService.setUser(user).then((ref) => {
-            res.send({ 'status': 'Profile Data is saved !!' })
-        });
-    }
-};
->>>>>>> 5cb465b4d8adddf023929f77b9fd04dec8292b58

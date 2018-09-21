@@ -21,6 +21,7 @@
     "**/*.ios.ts",
     "app/main.aot.ts",
     "functions",
-    "**/*.spec.ts"
+    "**/*.spec.ts",
+    "server.ts"
   ]
 }
