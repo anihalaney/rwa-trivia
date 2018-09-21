@@ -8,6 +8,7 @@ import { BulkService } from './bulk.service';
 import { SocialService } from './social.service';
 import { StatsService } from './stats.service';
 import { WindowRef } from './windowref.service';
+import { UpdateService } from './update.service';
 
 
 export {
@@ -20,7 +21,8 @@ export {
     UserService,
     SocialService,
     StatsService,
-    WindowRef
+    WindowRef,
+    UpdateService
 };
 
 export default [
@@ -33,5 +35,6 @@ export default [
     UserService,
     SocialService,
     StatsService,
-    WindowRef
+    WindowRef,
+    UpdateService
 ];

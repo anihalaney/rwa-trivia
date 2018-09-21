@@ -12,13 +12,14 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 import { User } from '../../../../../shared-library/src/lib/shared/model';
 import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
-import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
+import { Utils, WindowRef, UpdateService } from '../../../../../shared-library/src/lib/core/services';
 import { AppState, appState } from '../../store';
 import { Location } from '@angular/common';
 import { userState } from '../../user/store';
 import * as gameplayactions from '../../game-play/store/actions';
 import * as userActions from '../../user/store/actions';
 
+import { SwUpdate } from '@angular/service-worker';
 
 @Component({
   selector: 'app-root',
@@ -46,6 +47,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     private location: Location,
     private windowRef: WindowRef,
+    private swUpdate: SwUpdate,
+    private updateService: UpdateService,
     @Inject(PLATFORM_ID) private platformId: Object) {
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
@@ -94,6 +97,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate(['/my/questions']);
       }
     });
+
+
   }
 
   ngOnInit() {
@@ -111,6 +116,44 @@ export class AppComponent implements OnInit, OnDestroy {
         }
       }
     });
+
+    if (isPlatformBrowser(this.platformId) && this.swUpdate.isEnabled) {
+      console.log('update 1');
+      // this.swUpdate.available.subscribe((evt) => {
+      //   this.snackBar.open('update is available', '', { duration: 2000 });
+      //   console.log('update is available 2');
+      //   // if (confirm('New version available. Load New Version?')) {
+
+      //   //   window.location.reload();
+      //   // }
+      // });
+
+      this.swUpdate.available.subscribe(event => {
+        console.log('current version is', event.current);
+        console.log('available version is', event.available);
+        alert('available update called');
+      });
+      this.swUpdate.activated.subscribe(event => {
+        console.log('old version was', event.previous);
+        console.log('new version is', event.current);
+        alert('activated update called');
+      });
+
+
+    }
+    // if (isPlatformBrowser(this.platformId) && this.swUpdate.isEnabled) {
+    //   console.log('update is available 1');
+    //   this.swUpdate.available.subscribe((evt) => {
+    //     this.snackBar.open('update is available', '', { duration: 2000 });
+    //     console.log('update is available 2');
+    //     // if (confirm('New version available. Load New Version?')) {
+
+    //     //   window.location.reload();
+    //     // }
+    //   });
+
+
+    // }
   }
 
   ngOnDestroy() {
