@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { User } from '../../model';
 import { Utils } from '../../../core/services';
 import { Store } from '@ngrx/store';
@@ -8,7 +8,8 @@ import { UserActions } from '../../../core/store/actions';
 @Component({
     selector: 'author',
     templateUrl: './author.component.html',
-    styleUrls: ['./author.component.scss']
+    styleUrls: ['./author.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class AuthorComponent implements OnChanges {

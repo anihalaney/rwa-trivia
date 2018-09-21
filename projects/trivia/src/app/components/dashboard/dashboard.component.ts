@@ -143,9 +143,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.gameInviteSliceLastIndex + 3 : this.gameInvites.length;
   }
 
-  ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
-  }
 
   checkCardCountPerRow() {
     this.numbers = [];
@@ -173,6 +170,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   //   this.screenWidth = event.target.innerWidth;
   //   this.checkCardCountPerRow();
   // }
+
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
+  }
+
 }
 
 

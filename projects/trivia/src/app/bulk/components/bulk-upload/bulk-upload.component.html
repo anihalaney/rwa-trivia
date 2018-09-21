@@ -9,8 +9,8 @@
   <div class="card bulk-instuctions" *ngIf="showInstructions">
     <h2>Instructions</h2>
     <div class=" row col-sm-8 col-xs-12">
-      <p>The bulk upload feature allows you to submit your questions in a batch, instead of one at a time. Please read the instructions
-        carefully before using this feature.</p>
+      <p>The bulk upload feature allows you to submit your questions in a batch, instead of one at a time. Please read the
+        instructions carefully before using this feature.</p>
     </div>
 
     <div class="row">
@@ -55,9 +55,8 @@
           <p>Another file could have Category: Programming with Primary Tag: Angular.</p>
         </div>
         <div class="primary-tag">
-          <p> The questions themselves can have additional tags associated with them.
-            This helps us streamline the approval workflow
-            which reduces time involved in getting all questions approved.</p>
+          <p> The questions themselves can have additional tags associated with them. This helps us streamline the approval
+            workflow which reduces time involved in getting all questions approved.</p>
         </div>
       </div>
     </div>
@@ -70,11 +69,10 @@
           <li>Questions should be answerable in under 30 seconds.</li>
           <li>Each Question should have one and only one correct answer.</li>
           <li>
-            Answers will be presented in random order, so you cannot rely on the order of answers. 
-            Do not use answers like "Both a and b" or "all of the above". 
-            If needed use "None of them is correct" or "All are correct".
+            Answers will be presented in random order, so you cannot rely on the order of answers. Do not use answers like "Both a and
+            b" or "all of the above". If needed use "None of them is correct" or "All are correct".
           </li>
-          <li> 
+          <li>
             Each Q/A should have at least 3 tags including the primary tag and could have a maximum of 9 tags.
           </li>
           <li>Tags should not be such to give away the answer.</li>
@@ -107,7 +105,8 @@
           </div>
           <div>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Primary Tag" class="matHeader" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto">
+              <input matInput placeholder="Primary Tag" class="matHeader" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto"
+                aria-label="tag">
               <mat-autocomplete #tagAuto="matAutocomplete">
                 <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                   {{tag}}
@@ -121,7 +120,7 @@
               CHOOSE FILE
             </label>
             <label *ngIf="bulkUploadFileInfo!==undefined">{{bulkUploadFileInfo.fileName}}</label>
-            <input id="file-upload" type="file" accept=".csv" (change)="onFileChange($event)" #fileInput/>
+            <input id="file-upload" type="file" accept=".csv" (change)="onFileChange($event)" #fileInput aria-label="file" />
             <p *ngIf="fileParseError" class="error">
               {{fileParseErrorMessage}}
             </p>

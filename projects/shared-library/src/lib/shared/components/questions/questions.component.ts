@@ -1,11 +1,12 @@
-import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { Question, QuestionStatus, Category, User } from '../../model';
 
 @Component({
   selector: 'question-list',
   templateUrl: './questions.component.html',
-  styleUrls: ['./questions.component.scss']
+  styleUrls: ['./questions.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionsComponent implements OnInit, OnDestroy, OnChanges {
   @Input() questions: Question[];
