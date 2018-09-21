@@ -60,11 +60,11 @@
       </div>
     </div>
     <div class="div-top-spacing win-icon-div">
-      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score > game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score !== 3)">
+      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score > game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score !== 4)">
         <div class="sprite thumb-up"></div>
         <span class="win-text">{{playerUserName}} Wins</span>
       </div>
-      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score < game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score === 3)">
+      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score < game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score === 4)">
         <div class="sprite thumb-down"></div>
         <span class="win-text">{{playerUserName}} Lose</span>
       </div>
