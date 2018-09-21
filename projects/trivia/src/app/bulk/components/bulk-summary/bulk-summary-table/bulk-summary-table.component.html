@@ -7,7 +7,8 @@
       <mat-header-cell *cdkHeaderCellDef>Archive</mat-header-cell>
       <mat-cell *cdkCellDef="let row" class="formfield checkbox-div">
         <div *ngIf="user.roles.admin?row.isAdminArchived:row.isUserArchived" class="sprite approvedicon"></div>
-        <input type="checkbox" *ngIf="user.roles.admin?!row.isAdminArchived:!row.isUserArchived" (change)="checkedRow(row)" [checked]="checkArchieved(row.id)">
+        <input type="checkbox" *ngIf="user.roles.admin?!row.isAdminArchived:!row.isUserArchived" (change)="checkedRow(row)" [checked]="checkArchieved(row.id)"
+          aria-label="archive">
       </mat-cell>
     </ng-container>
     <ng-container cdkColumnDef="uploadDate">

@@ -4,7 +4,7 @@ import { Utils, WindowRef } from '../../../../../../shared-library/src/lib/core/
 import { AppState, appState } from '../../../store';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import { CONFIG } from '../../../../../../shared-library/src/lib/environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
@@ -23,7 +23,7 @@ import * as domtoimage from 'dom-to-image';
   templateUrl: './game-over.component.html',
   styleUrls: ['./game-over.component.scss']
 })
-export class GameOverComponent implements OnInit {
+export class GameOverComponent implements OnInit, OnDestroy {
   @Input() correctCount: number;
   @Input() noOfQuestions: number;
   @Output() gameOverContinueClicked = new EventEmitter();
@@ -47,6 +47,7 @@ export class GameOverComponent implements OnInit {
   playerUserName = 'You';
 
   defaultAvatar = 'assets/images/default-avatar-game-over.png';
+  subs: Subscription[] = [];
 
 
   continueButtonClicked(event: any) {
@@ -71,11 +72,11 @@ export class GameOverComponent implements OnInit {
     this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => {
+    this.subs.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict
-    });
+    }));
 
-    this.store.select(gameplayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
+    this.subs.push(this.store.select(gameplayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
         this.questionsArray.map((question) => {
@@ -84,15 +85,15 @@ export class GameOverComponent implements OnInit {
           }
         })
       }
-    });
+    }));
 
-    this.store.select(gameplayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
+    this.subs.push(this.store.select(gameplayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       if (state === 'SUCCESS') {
         (this.dialogRef) ? this.dialogRef.close() : '';
       }
-    });
+    }));
 
-    this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.subs.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -105,7 +106,7 @@ export class GameOverComponent implements OnInit {
         this.socialFeedData.share_status = false;
         this.loaderStatus = false;
       }
-    });
+    }));
   }
   ngOnInit() {
     if (this.game) {
@@ -216,4 +217,9 @@ export class GameOverComponent implements OnInit {
   getImageUrl(user: User) {
     return Utils.getImageUrl(user, 44, 40, '44X40');
   }
+
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
+  }
+
 }
