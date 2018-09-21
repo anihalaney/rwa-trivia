@@ -33,13 +33,33 @@ projects/trivia/src/**/*.js
 # misc
 /.sass-cache
 /connect.lock
-/coverage
+/coverage/*
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
 testem.log
 /typings
 
+# e2e
+/e2e/*.js
+/e2e/*.map
+
 # System Files
 .DS_Store
 Thumbs.db
+
+
+# System Files
+.DS_Store
+Thumbs.db
+functions/node_modules/
+functions/server/
+functions/config/
+functions/package-lock.json
+functions/dist/
+package-lock.json
+firebase-debug.log
+ scheduler/node_modules/
+scheduler/server/
+scheduler/config/
+scheduler/package-lock.json

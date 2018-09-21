@@ -163,10 +163,6 @@ exports.checkGameOver = (req, res) => {
             const millis = utils.getUTCTimeStamp();
             const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
             const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
-<<<<<<< HEAD
-
-=======
->>>>>>> 5cb465b4d8adddf023929f77b9fd04dec8292b58
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
                 game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
@@ -174,18 +170,6 @@ exports.checkGameOver = (req, res) => {
                 gameControllerService.updateGame(dbGame).then((ref) => {
                     console.log('updated game', dbGame.id);
                 });
-<<<<<<< HEAD
-            } else if (playedHours >= schedulerConstants.gameInvitationDuration
-                && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-                    game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)) {
-                game.gameOver = true;
-                game.GameStatus = GameStatus.INVITATION_TIMEOUT;
-                const dbGame = game.getDbModel();
-                gameControllerService.updateGame(dbGame).then((ref) => {
-                    console.log('invitation expires', dbGame.id);
-                });
-=======
->>>>>>> 5cb465b4d8adddf023929f77b9fd04dec8292b58
             }
         });
         res.send('scheduler check is completed');
