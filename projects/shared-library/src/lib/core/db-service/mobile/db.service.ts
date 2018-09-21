@@ -101,4 +101,8 @@ export class TNSDbService extends DbService {
 
     }
 
+    public fireStore(): any {
+
+    }
+
 }

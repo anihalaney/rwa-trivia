@@ -92,6 +92,10 @@ export class WebDbService extends DbService {
     }
 
     public upload(filePath, imageBlob) {
-        return this._afstorage.upload(filePath, imageBlob).snapshotChanges();
+        return this._afstorage.upload(filePath, imageBlob);
+    }
+
+    public fireStore() {
+        return this._afStore.firestore;
     }
 }

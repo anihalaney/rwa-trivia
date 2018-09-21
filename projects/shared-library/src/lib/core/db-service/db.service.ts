@@ -19,7 +19,7 @@ export class DbService {
 
     }
 
-    public setCollection(name, id, collection) {
+    public setCollection(name, id, collection): any {
 
     }
 
@@ -46,5 +46,10 @@ export class DbService {
     }
 
     public upload(filePath, imageBlob): any {
+
+    }
+
+    public fireStore(): any {
+
     }
 }
