@@ -30,9 +30,10 @@ export class RecentGamesComponent implements OnDestroy {
       this.user = user;
       if (user) {
         this.user = user;
+        this.store.dispatch(new userActions.GetGameResult({ userId: this.user.userId }));
       }
     }));
-    this.store.dispatch(new userActions.GetGameResult({ userId: this.user.userId }));
+
 
     this.subs.push(this.store.select(userState).pipe(select(s => s.getGameResult)).subscribe(result => {
       this.finalResult = result;

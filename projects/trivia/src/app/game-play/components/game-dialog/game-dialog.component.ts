@@ -320,7 +320,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         (this.game.round >= 16)) {
         this.gameOverContinueClicked();
       }
-    } else if (((this.questionIndex - this.correctAnswerCount) === 3) ||
+    } else if (((this.questionIndex - this.correctAnswerCount) === 4) ||
       this.correctAnswerCount >= 5 ||
       this.questionIndex >= this.game.gameOptions.maxQuestions) {
       this.gameOverContinueClicked();
