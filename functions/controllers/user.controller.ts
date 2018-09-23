@@ -1,8 +1,9 @@
 
 const userService = require('../services/user.service');
 const sharp = require('sharp');
-import { User, UserStats } from '../../src/app/model';
+import { User, UserStats, UserControllerConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
+import { MailClient } from '../utils/mail-client';
 
 /**
  * getUserById
@@ -73,14 +74,22 @@ exports.generateUserProfileImage = (req, res) => {
     if (user.profilePicture) {
         profileImagesGenerator.
             getStoredImage(user.userId, user.profilePicture).then((status) => {
-                userService.setUser(user).then((ref) => {
-                    res.send({ 'status': 'Profile Data is saved !!' })
-                });
+                setUser(user, res);
             })
 
     } else {
-        userService.setUser(user).then((ref) => {
-            res.send({ 'status': 'Profile Data is saved !!' })
-        });
+        setUser(user, res);
     }
 };
+
+function setUser(user, res) {
+    userService.setUser(user).then((ref) => {
+        if (user.isRequestedBulkUpload) {
+            const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
+            const mail: MailClient = new MailClient(UserControllerConstants.adminEmail, UserControllerConstants.mailSubject,
+                UserControllerConstants.mailSubject, htmlContent);
+            mail.sendMail();
+        }
+        res.send({ 'status': 'Profile Data is saved !!' })
+    });
+}

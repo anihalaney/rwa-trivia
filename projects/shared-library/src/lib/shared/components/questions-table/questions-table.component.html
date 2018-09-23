@@ -1,0 +1,215 @@
+<div *ngIf="showSort || showPaginator" fxLayout="row" fxLayoutAlign="space-between center" class="sort-page-header">
+  <mat-select *ngIf="showSort" placeholder="Sort Order" (change)="sortOrderChanged($event)">
+    <mat-option [value]="'Category'">Category</mat-option>
+    <mat-option [value]="'Status'">Status</mat-option>
+    <mat-option [value]="'CreatedTimeDesc'">Created On (Latest)</mat-option>
+    <mat-option [value]="'CreatedTimeAsc'">Created On (Earliest)</mat-option>
+    <mat-option [value]="'UpdatedTimeDesc'">Updated On (Latest)</mat-option>
+    <mat-option [value]="'UpdatedTimeAsc'">Updated On (Earliest)</mat-option>
+  </mat-select>
+</div>
+<mat-paginator *ngIf="showPaginator && !clientSidePagination" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25"
+  [pageSizeOptions]="[25, 50, 100, 200]" (page)="pageChanged($event)">
+</mat-paginator>
+
+<mat-table #table [dataSource]="questionsDS">
+
+  <!--- Note that these columns can be defined in any order.
+        The actual rendered columns are set as a property on the row definition" -->
+
+  <ng-container cdkColumnDef="chkBox">
+    <mat-header-cell *cdkHeaderCellDef>
+      <mat-checkbox></mat-checkbox>
+    </mat-header-cell>
+    <mat-cell class="col-chkbox" *cdkCellDef="let row">
+      <mat-checkbox></mat-checkbox>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Question Column -->
+  <ng-container cdkColumnDef="questionText">
+    <mat-header-cell class="col-question" *cdkHeaderCellDef> Question </mat-header-cell>
+    <mat-cell *cdkCellDef="let row;let i = index" class="col-question" fxLayout="column" fxLayoutAlign="space-between">
+      <div *ngIf="row !== editQuestion && row !== viewReasonArray[i]">
+        <!-- <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="col-xs-12 textrigth">
+          <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
+        </div> -->
+        <div class="col-sm-12 col-xs-12 question-section" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
+          <div class="date">{{ ( (row.createdOn) ? (row.createdOn.seconds * 1000) : row.createdOn) | date:'dd MMM yyyy' }}</div>
+          <p class="dark">{{row.questionText}}</p>
+          <ul class="currentans">
+            <li>
+              <div class="button-web-css">
+                <div class="question-text ">Correct answer :</div>
+                <div class="answer-text">
+                  <span *ngFor="let answer of row.answers">
+                    <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                  </span>
+                </div>
+                <div class="row col-sm-3 col-xs-12 question-status">
+                  <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
+                  <label>
+                    <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",'
+                      ') | titlecase}}</b>
+                  </label>
+                  <div *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'" class="status-btn">
+                    <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
+                  </div>
+                  <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="status-btn">
+                    <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="question-text ">Other options :</div>
+              <div class="answer-text">
+                <span *ngFor="let answer of row.answers">
+                  <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
+                </span>
+              </div>
+            </li>
+            <li>
+              <div class="textleft ">
+                <div class="question-text ">Category :</div>
+                <div class="answer-text">
+                  <span *ngFor="let id of row.categoryIds">
+                    {{categoryDictionary[id].categoryName}}
+                  </span>
+                </div>
+              </div>
+
+            </li>
+            <li>
+              <div class="question-text ">Tags :</div>
+              <div class="answer-text">
+                {{row.tags?.toString()}}
+                <!-- <span *ngFor="let tag of row.tags">
+                  {{tag}},
+                </span> -->
+              </div>
+            </li>
+            <li *ngIf="userDict">
+              <div class="question-text ">Created By :</div>
+              <div class="answer-text">
+                {{userDict[row.created_uid]?.displayName}}
+              </div>
+            </li>
+            <li>
+              <div class="button-mobile-css">
+                <div class="question-text">Correct answer :</div>
+                <div class="answer-text">
+                  <span *ngFor="let answer of row.answers">
+                    <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="button-mobile-css">
+                <div class="row">
+                  <div class="col-md-12 question-status">
+                    <div [ngClass]="getDisplayStatus(row.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(row.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
+                    <label>
+                      <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",'
+                        ') | titlecase}}</b>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li>
+              <div class="button-mobile-css">
+                <div class="row">
+                  <div class="col-xs-12" *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'">
+                    <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
+                  </div>
+                  <div class="col-xs-12" *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons">
+                    <button class="edit-btn" type="button" (click)="editQuestions(row)">Edit it</button>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li *ngIf="row.validationErrorMessages?.length > 0">
+              <div class="csv-error-msg">
+                <p>ERROR :</p>
+                <div>
+                  <span *ngFor="let error of row.validationErrorMessages;let last = last;">
+                    - {{error}}
+                    <label *ngIf="last!=error && $index > 0">,</label>
+                  </span>
+                </div>
+              </div>
+            </li>
+            <li *ngIf="viewReasonArray.length>0 && viewReasonArray[i] && viewReasonArray[i].val">
+              <div class="question-text ">Reason :</div>
+              <div class="answer-text">
+                {{viewReasonArray[i].reason}}
+              </div>
+            </li>
+          </ul>
+          <div *ngIf="showButtons">
+            <div class="textrigth">
+              <button mat-raised-button (click)="approveQuestion(row)">Approve</button>
+              <button mat-raised-button (click)="displayRequestToChange(row)" color="primary">Request a change</button>
+              <button mat-raised-button (click)="displayRejectToChange(row)" color="accent">Reject</button>
+            </div>
+            <div *ngIf="row==requestQuestion && requestQuestionStatus">
+              <form [formGroup]="requestFormGroup">
+                <div class="col-sm-10">
+                  <div class="example-container">
+                    <mat-form-field>
+                      <textarea matInput placeholder="Reason for requesting a change" formControlName="reason" aria-label="reason"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <br />
+                  <button mat-raised-button type="button" (click)="saveRequestToChangeQuestion()" color="primary">Confirm</button>
+                </div>
+              </form>
+            </div>
+            <div class="col-sm-12 col-xs-12" *ngIf="row==rejectQuestion && rejectQuestionStatus">
+              <form [formGroup]="rejectFormGroup">
+                <div class="col-sm-10">
+                  <div class="example-container">
+                    <mat-form-field>
+                      <textarea matInput placeholder="Reason for Rejection" formControlName="reason" aria-label="reason"></textarea>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-sm-2">
+                  <br />
+                  <button mat-raised-button type="button" (click)="saveRejectToChangeQuestion()" color="primary">Confirm</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row edit-form-div" *ngIf="row === editQuestion">
+        <app-question-form [editQuestion]="editQuestion" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" (updateStatus)=nullifyQuestion($event)
+          (updateUnpublishedQuestion)="updateQuestionData($event)"></app-question-form>
+      </div>
+      <div class="row rejection-div" *ngIf="row === viewReasonArray[i]">
+        <app-rejected-question-content [rejectQuestion]="viewReasonArray[i]" (cancelStatus)=showQuestion($event)></app-rejected-question-content>
+      </div>
+
+    </mat-cell>
+  </ng-container>
+
+  <ng-container cdkColumnDef="status">
+    <mat-header-cell *cdkHeaderCellDef> Status </mat-header-cell>
+    <mat-cell class="col-status" *cdkCellDef="let row"> {{row.status}} </mat-cell>
+  </ng-container>
+
+  <!-- <mat-header-row *cdkHeaderRowDef="['questionText']"></mat-header-row> -->
+  <mat-row class="row-question" *cdkRowDef="let row; columns: ['questionText'];"></mat-row>
+</mat-table>
+
+<mat-paginator *ngIf="showPaginator && clientSidePagination" #paginator class="matHeader" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]">
+</mat-paginator>
+
+<mat-paginator *ngIf="showPaginator && !clientSidePagination" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25"
+  [pageSizeOptions]="[25, 50, 100, 200]" (page)="pageChanged($event)" class="paginator-position">
+</mat-paginator>

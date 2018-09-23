@@ -1,0 +1,158 @@
+<form (ngSubmit)="onSubmit()" class="question-form" [formGroup]="questionForm" novalidate>
+
+  <div class="mainpage submitpage">
+    <div class="row hidden-xs">
+      <div class="pageheading col-sm-6 col-xs-12">Submit Question</div>
+    </div>
+    <section id="curentactive" class="card">
+      <div class="h1block">
+        <h1>Submit Question</h1>
+        <p>You can submit your question for trivia game</p>
+      </div>
+      <div class="optionbox">
+        <!-- Category -->
+        <div class="pcategories">
+          <h2><span>Select the category for bulk upload:</span></h2>
+          <div class="row">
+            <div class="formfield">
+              <select placeholder="Select Category" class="required" formControlName="category">
+                <option value="">
+                  Select a Category
+                </option>
+                <option *ngFor="let category of categories" [value]="category.id">
+                  {{category.categoryName}}
+                </option>
+              </select>
+              <p *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine" class="error">
+                Select a category
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Category end -->
+      </div>
+
+      <!-- Enter Your Question -->
+      <div class="enterquestion secondbg">
+        <div class="optionbox">
+          <h2><span>Enter Your Question:</span></h2>
+          <textarea class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required" aria-label="question-area"></textarea>
+          <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
+            is required!</p>
+
+          <h3>Answers</h3>
+          <ng-container formArrayName="answers">
+            <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
+              <label>
+                <input type="checkbox" formControlName="correct">
+              </label>
+              <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required" aria-label="answer-text">
+            </div>
+          </ng-container>
+          <div class="error" *ngIf="!answers.valid && !answers.pristine">
+            All answers required
+          </div>
+          <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
+            Pick one and only one correct answer
+          </div>
+
+          <div class="tags">
+            <p>Tags associated categories</p>
+            <div data-tags-input-name="tag" id="tagBox" class="tagging">
+              <mat-chip-list>
+                <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
+                  {{tag}}
+                </mat-basic-chip>
+                <mat-basic-chip *ngFor="let tag of enteredTags" class="tag">
+                  {{tag}} <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+                </mat-basic-chip>
+              </mat-chip-list>
+              <input class="type-zone" contenteditable="true" formControlName="tags" aria-label="tags">
+              <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+              <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
+                Must have atleast 3 tags
+              </div>
+            </div>
+          </div>
+          <div class="btnbox">
+            <button class="btn startg" type="submit" [disabled]="!questionForm.valid">SAVE</button>
+          </div>
+        </div>
+      </div>
+      <!-- Enter Your Question end -->
+    </section>
+  </div>
+</form>
+
+<mat-card *ngIf="false">
+  <form (ngSubmit)="onSubmit()" class="question-form" [formGroup]="questionForm" novalidate>
+    <mat-card-title>Add Question</mat-card-title>
+    <mat-card-header>
+      <mat-card-title>
+        <mat-select placeholder="Category" name="category" class="required" formControlName="category">
+          <mat-option *ngFor="let category of categories" [value]="category.id">
+            {{category.categoryName}}
+          </mat-option>
+        </mat-select>
+        <p class="category-font-size" *ngIf="questionForm.controls.category.errors && !questionForm.controls.category.pristine">Select
+          a category</p>
+      </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field class="full-width required">
+        <input matInput placeholder="Question" formControlName="questionText" class="required" aria-label="question">
+        <mat-hint align="end" *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
+          is required!</mat-hint>
+      </mat-form-field>
+
+      <div formArrayName="answers" class="well well-lg">
+        <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
+          <mat-form-field class="full-width">
+            <mat-checkbox mdPrefix formControlName="correct"></mat-checkbox>
+            <input matInput [placeholder]="'Answer ' + (i+1)" formControlName="answerText" aria-label="answerText" />
+            <mat-hint align="end" *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine"
+              class="error">Answer required</mat-hint>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
+        Pick one and only one correct answer
+      </div>
+
+      <p>
+        <mat-checkbox formControlName="ordered">Ordered?</mat-checkbox>
+      </p>
+      <p>
+        <mat-form-field class="full-width required">
+          <textarea matInput placeholder="Explanation" formControlName="explanation" aria-label="explanation"></textarea>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <input matInput placeholder="Tag" formControlName="tags" aria-label="tags">
+        </mat-form-field>
+        <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+      </p>
+
+      <mat-chip-list>
+        <mat-chip *ngFor="let tag of autoTags">
+          {{tag}}
+        </mat-chip>
+        <mat-chip *ngFor="let tag of enteredTags">
+          {{tag}} <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+        </mat-chip>
+      </mat-chip-list>
+    </mat-card-content>
+
+    <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
+      Must have atleast 3 tags
+    </div>
+
+    <mat-card-actions>
+      <button mat-button color="primary" type="submit" [disabled]="!questionForm.valid">SAVE</button>
+      <button mat-button>CANCEL</button>
+    </mat-card-actions>
+  </form>
+</mat-card>

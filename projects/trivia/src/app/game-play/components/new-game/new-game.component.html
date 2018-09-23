@@ -1,0 +1,136 @@
+<form *ngIf="newGameForm" (ngSubmit)="onSubmit()" class="new-game-form" [formGroup]="newGameForm" novalidate>
+    <div class="mainpage">
+        <div class="row hidden-xs">
+            <div class="pageheading col-sm-6 col-xs-12">Game Options</div>
+        </div>
+        <section id="curentactive" class="card textcenter">
+            <div class="h1block">
+                <h1>Game Options</h1>
+                <p>Please select a player mode to start a new game</p>
+            </div>
+            <div class="optionbox">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <h2>Select
+                            <span>Player Mode</span>
+                        </h2>
+                    </div>
+                    <div class="col-sm-9 radiobtn">
+                        <input type="radio" id="p-radio1" formControlName="playerMode" value="0" checked="true">
+                        <label for="p-radio1">
+                            <span class="sprite singlep-icon icon"></span> Single Player</label>
+
+                        <input type="radio" id="p-radio2" formControlName="playerMode" value="1">
+                        <label for="p-radio2">
+                            <span class="sprite twop-icon icon"></span> Two Player</label>
+                        <div class="twoplayer">
+                            <input type="radio" id="tp-radio1" formControlName="opponentType" value="0">
+                            <label for="tp-radio1">
+                                <span class="sprite randomp-icon icon"></span>Random</label>
+                            <input type="radio" id="tp-radio2" formControlName="opponentType" value="1">
+                            <label for="tp-radio2">
+                                <span class="sprite friendsp-icon icon"></span>With Friends</label>
+                            <input type="radio" id="tp-radio3" formControlName="opponentType" value="2">
+                            <!-- <label for="tp-radio3">
+                                <span class="sprite computerp-icon"></span>With Computer</label> -->
+                            <div class="withfriends">
+                                <ul class="friendsslider" *ngIf="uFriends && uFriends.length>0">
+                                    <li *ngFor="let friendId of uFriends; let i=index">
+                                        <input type="radio" id="friends{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
+                                        <label for="friends{{i}}">
+                                            <span class="labelimg">
+                                                <img [src]="getImageUrl(userDict[friendId])" alt="User Profile Image" />
+                                            </span>
+                                            <span class="dark">{{userDict[friendId]?.displayName}}</span>
+                                            <span class="expertise">
+                                                <span class="light">Expertise</span>
+                                                <span class="dark">PHP</span>
+                                            </span>
+                                            <span class="light">Favorite</span>
+                                            <span class="dark">C++</span>
+                                        </label>
+                                    </li>
+                                </ul>
+                                <span *ngIf="noFriendsStatus">I do not have any friends, invite your friends using link
+                                    <a [routerLink]="['/my/invite-friends']">
+                                        Invite Friends</a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Prefered Categories -->
+                <div class="row pcategories">
+                    <div class="col-sm-3">
+                        <h2>Prefered
+                            <span>Categories</span>
+                        </h2>
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="row" formArrayName="categoriesFA">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <ng-container *ngFor="let category of categoriesFA.value; let i=index">
+                                        <div [formGroupName]="i" class="formfield">
+                                            <!-- [class.hide]="!(categoriesFA.value[i].requiredForGamePlay || categoriesFA.value[i].categorySelected || showUncheckedCategories)" -->
+                                            <label>
+                                                <input type="checkbox" formControlName="categorySelected">
+                                                <span>{{categoriesFA.value[i].categoryName}}</span>
+                                            </label>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="chancat" (click)="toggleShowUncheckedCategories()" [class.hide]="true">
+                                    <span class="sprite chancaticon"></span>
+                                    <span class="chancat-text" [class.hide]="showUncheckedCategories">Change Category Preference</span>
+                                    <!--<span class="chancat-text" [class.hide]="!showUncheckedCategories">Close</span>-->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tags">
+                            <p>Tags associated categories</p>
+                            <div data-tags-input-name="tag" id="tagBox" class="tagging-js">
+                                <mat-chip-list>
+                                    <mat-basic-chip *ngIf="selectedTags.length === 0" class="tag">
+                                        None
+                                    </mat-basic-chip>
+                                    <mat-basic-chip *ngFor="let tag of selectedTags" class="tag">
+                                        {{tag}}
+                                        <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
+                                    </mat-basic-chip>
+                                </mat-chip-list>
+
+                            </div>
+                            <input type="text" placeholder="Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)"
+                                aria-label="tag">
+                            <mat-autocomplete #tagAuto="matAutocomplete">
+                                <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+                                    {{ tag }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <a mat-button class="add-tag-button" color="primary" (click)="addTag()">ADD</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Prefered Categories end -->
+
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div id="sidebar" class="col-sm-12 btnbox">
+                        <button *ngIf="!loaderStatus" mat-button class="btn startg" [ngClass]="loaderStatus?'not-allowed':''">
+                            Start Game
+                        </button>
+                        <div class="loaderCenter" *ngIf="loaderStatus">
+                            <img src="/assets/images/ajax-loader.gif" class="loaderimage" alt="Loader Image">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+
+
+</form>

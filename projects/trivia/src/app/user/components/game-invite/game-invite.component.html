@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-1  col-sm-2 col-xs-12 usreimg">
+    <img *ngIf="userDict[game.playerIds[0]]?.profilePictureUrl" [src]="userDict[game.playerIds[0]].profilePictureUrl" alt="User Profile Picture"
+    />
+  </div>
+  <div class="col-md-2 col-sm-2  col-xs-12 text-align">
+    <div class="dark ellipsis col-xs-12" title="{{userDict[game.playerIds[0]]?.displayName}}">{{userDict[game.playerIds[0]]?.displayName}}</div>
+    <div class="light col-xs-12">{{gameStatus}}</div>
+  </div>
+  <div class=" col-md-4 col-sm-4 col-lg-4 col-xs-12 text-align">
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 T-tagging ellipsis" title="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase() + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}">{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
+      + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}</div>
+    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12 clinton ellipsis" title="{{userDict[game.playerIds[0]]?.location}}">{{userDict[game.playerIds[0]]?.location}}</div>
+  </div>
+  <div class="col-md-3 col-sm-2 col-xs-12 text-align">
+    <a class="btn" [routerLink]="['/game-play', game.gameId]">Accept </a>
+    <a class="reject-btn" (click)="rejectGameInvitation()">Reject </a>
+  </div>
+  <div class="col-md-2 col-sm-2 col-xs-12  invitationleft">1 days left to accept invitation</div>
+</div>

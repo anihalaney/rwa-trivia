@@ -1,0 +1,116 @@
+<div class="pageinner">
+  <div class="row">
+    <div class="pageheading col-md-6 col-xs-12 hidden-xs">Dashboard</div>
+    <div class="col-md-6 col-xs-12 align-right">
+      <a [routerLink]="['/game-play']" class="startgame">Start New Game</a>
+    </div>
+  </div>
+
+  <!-- Currently active games -->
+  <section *ngIf="user" id="curentactive" class="card">
+    <div class="h1block">
+      <h1>
+        <span class="sprite sunicon"></span>Good {{greeting}} {{user.displayName}}!</h1>
+      <p>{{message}}</p>
+    </div>
+    <div id="currentgame">
+      <div class="row">
+        <div class=" col-sm-12 col-xs-12">
+          <h2>Active games</h2>
+        </div>
+
+      </div>
+      <ul class="row" *ngIf="showGames">
+        <li *ngFor="let game of activeGames | slice:gameSliceStartIndex:gameSliceLastIndex" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 ">
+          <game-card [game]="game" [userDict]="userDict"></game-card>
+        </li>
+        <ng-container *ngIf="activeGames.length > 0">
+          <li *ngFor="let number of numbers" class="col-lg-3 col-md-4 col-sm-12 col-xs-12 hidden-xs">
+            <div class="no-card">
+              <p class="light">No active game</p>
+            </div>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+
+    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="showGames && activeGames.length!=gameSliceLastIndex && activeGames.length > 8 ">
+      <a class="viewall" (click)="displayMoreGames()">view more</a>
+    </div>
+
+
+  </section>
+  <!-- Currently active games end -->
+
+  <!-- Invitation to play games -->
+  <section *ngIf="user && gameInvites.length>0" class="card">
+    <div class="row">
+      <div class="col-md-12 col-xs-12 invitation-title">
+        <h2>Invitation to play games
+          <span> from </span>
+          <span *ngIf="friendCount != 0">{{friendCount}}</span>
+          <span *ngIf="friendCount == 1">friend</span>
+          <span *ngIf="friendCount > 1 ">friends</span>
+          <span *nfI>&</span>
+          <span *ngIf="randomPlayerCount != 0"> {{randomPlayerCount}}</span>
+          <span *ngIf="randomPlayerCount == 1">random player</span>
+          <span *ngIf="randomPlayerCount > 1">random players</span>
+        </h2>
+      </div>
+      <div class="col-md-8 col-xs-12 subtext">
+
+      </div>
+    </div>
+
+    <ul class="invitationlist">
+      <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
+        <game-invite [userDict]="userDict" [game]="game"></game-invite>
+      </li>
+    </ul>
+
+    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
+      <a class="viewall" (click)="displayMoreGameInvites()">view more</a>
+    </div>
+  </section>
+  <!-- Invitation to play games end   -->
+
+  <div class="row">
+    <!-- Question of the day -->
+    <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
+      <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
+    </div>
+    <!-- Question of the day end -->
+
+    <!-- Subscribe -->
+    <div class="col-lg-5 col-md-12 col-sm-12 " *ngIf="showNewsCard">
+      <newsletter></newsletter>
+    </div>
+    <!-- Subscribe end -->
+  </div>
+
+  <!-- Category leaderboard -->
+  <section class="card">
+    <div class="row">
+      <div class="col-sm-12 col-xs-12 board-title">
+        <h2>Leaderboard</h2>
+      </div>
+    </div>
+    <leaderboard *ngIf="userDict" [userDict]="userDict"></leaderboard>
+  </section>
+  <!-- Category leaderboard end-->
+
+  <!-- <blog -->
+  <div class="row blog hidden-xs">
+    <div class="col-xs-12">
+      <blog [blogId]="1"></blog>
+    </div>
+  </div>
+  <!-- blog end -->
+
+  <!-- Real-time System Stats -->
+  <div class="card hidden-xs">
+    <realtime-stats></realtime-stats>
+  </div>
+  <!-- Real-time System Stats end -->
+
+</div>

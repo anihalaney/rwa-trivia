@@ -1,0 +1,50 @@
+<div class="card statsview">
+  <ul class="tabbing clearfix">
+    <li class="active" data-tab="stats">Stats View</li>
+  </ul>
+  <ul id="stats" class="tab-content active">
+    <li>
+      <div class="sprite playedicon"></div>
+      <div class="viewtext">Game Played</div>
+      <div class="viewcount align-right">{{user?.stats?.gamePlayed}}</div>
+    </li>
+
+    <li>
+      <div class="sprite topicsicon"></div>
+      <div class="viewtext">Categories</div>
+      <div class="viewcount align-right">{{user?.stats?.categories}}</div>
+    </li>
+
+    <li>
+      <div class="sprite winsicon"></div>
+      <div class="viewtext">Win-Loss</div>
+      <div class="viewcount align-right">{{user?.stats?.wins}}-{{user?.stats?.losses}}</div>
+    </li>
+
+    <li>
+      <div class="sprite badgesicon"></div>
+      <div class="viewtext">Badges</div>
+      <div class="viewcount align-right">{{user?.stats?.badges}}</div>
+    </li>
+
+    <li>
+      <div class="sprite avgicon"></div>
+      <div class="viewtext">Avg. answer time</div>
+      <div class="viewcount align-right">{{user?.stats?.avgAnsTime}}
+        <div class="sec">sec</div>
+      </div>
+    </li>
+
+    <li>
+      <div class="sprite contributicon"></div>
+      <div class="viewtext">Contribution</div>
+      <div class="viewcount align-right">{{user?.stats?.contribution}}</div>
+    </li>
+  </ul>
+
+  <div id="graph" class="tab-content">
+    <img class="chart-image" attr.data-src="/assets/images/chart.jpg" alt="chart" />
+
+  </div>
+
+</div>
