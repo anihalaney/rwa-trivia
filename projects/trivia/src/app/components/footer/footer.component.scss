@@ -1,0 +1,13 @@
+.footer{ font-size: 13px; line-height: 45px; padding:15px 0}
+.footer a{ display: inline-block; margin-right: 5%; letter-spacing: 0.2px }
+
+.signup, .logout, .login, .myQuestion {
+  cursor: pointer;
+}
+
+@media screen and ( min-width:768px){      
+  .textright{text-align: right;}
+}
+@media screen and ( max-width:768px){      
+  .footer{ text-align: center; line-height: 2 }
+}

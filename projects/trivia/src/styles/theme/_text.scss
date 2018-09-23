@@ -1,0 +1,140 @@
+@mixin theme-text-color($selected-theme-name,$theme) {
+	&, .recentlygames h2, .pageheading, main h2, .question-list li label, .blog h2 a, .optionbox h2,.optionbox h2 span, .submitpage textarea, .formfield select, .cd-popup-container,.viewbublic,.bulk-summary-table-cell,.bulk-summary-question-table-cell,.matStepLabel,.message,.sub-message,.field-caption,.btn-share,.text,.text-loading,.mat-expansion-panel-header-title, .social-nam,.mat-list .mat-list-item,.mat-tab-link{ 
+		color: map-get($theme, primary);
+	}
+	.question-list li label{ 
+		color: map-get($theme, question-list-label); 
+	}
+	.copyright{ 
+		color: map-get($theme, copyright);
+	}
+	footer a{ 
+		color: map-get($theme, footer);
+	}
+	.startgame, .btn, .question-list li input:checked ~ label, .optionbox .radiobtn input:checked + label, .optionbox input:checked + label .dark, .optionbox input:checked + label .light, .landinginner, .gameplay li.right, .gameplay li.wrong,.view-reason-btn,.edit-btn,.reject-btn{ 
+		color: map-get($theme, btn-text);
+	}
+
+	.headerdrop a, .logo a, .ladding-copyr {
+		color: map-get($theme, header);
+	}
+	.light, .breadcrumbs span, .tag-i{
+		color: map-get($theme, primary-light);
+	}
+	.dark, .viewtext, .playwith a, .clinton,.card h3, .breadcrumbs a, .optionbox .radiobtn label, .formfield label, .tags p, .questionstatus .tab-content > ul > li p, .questionstatus .light, .saccount select ~ label, .savebox a:nth-child(2),.question-text,.answer-text{ 
+		color: map-get($theme, primary-dark);
+	}
+	.sec, .vs:after, .opponent, main h2 span, .invitationleft, .subscrib-cont p, .subs-bottom, .chancat, .tag, .popupbottom,.date, .signupfree, .avatarinput p, .saccount .formfield label + p, #file-name, .namefield .formfield > p{ 
+		color: map-get($theme, secondary);
+	}
+	.tabbing li{
+		color: map-get($theme, tab-text);
+	}
+	h1, .gameplay h1, .custom-file-upload{ 
+		color: map-get($theme, heading);
+	}
+	h1 + p{ 
+		color: map-get($theme, heading-alt);
+	}
+	.gameplay p,.win-text{ 
+		color: map-get($theme, heading-secondary);
+	}
+	.tabbing li.active, .form-group input:focus,.form-group input:valid{ 
+		color: map-get($theme, active); 
+	}
+	.T-tagging{ 
+		color: map-get($theme, tags);
+	}
+	.viewall, .viewcount, a.dark:hover,.gameplay p a, .loginlink a.forgot{ 
+		color: map-get($theme, viewall);
+	}
+	.logininner .heading, .form-group .control-label, .logininner .formfield label, .logininner .withsocial h3{ 
+		color: map-get($theme, login); 
+	}
+	.form-group input:focus ~ .control-label{
+		color: map-get($theme, form-focus);
+	}
+	.loginlink a{ 
+		color: map-get($theme, login-link);
+	}
+	.resubmit,.status-approved{
+		color: map-get($theme, resubmit);
+	}
+	.blog-social{ 
+		color: map-get($theme, blog-social);
+	}
+	.formfield select,.formfield textarea,.tag,.add-tag-btn,.edit-form-input-field{ 
+		color: map-get($theme, form-select); 
+	}
+	
+	::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+		color: map-get($theme, placeholder);
+	}
+	::-moz-placeholder { /* Firefox 19+ */
+		color: map-get($theme, placeholder);
+	}
+	:-ms-input-placeholder { /* IE 10+ */
+		color: map-get($theme, placeholder);
+	}
+	:-moz-placeholder { /* Firefox 18- */
+		color: map-get($theme, placeholder);
+	}
+	.mat-dialog-container {
+		color: map-get($theme, primary) !important;
+	}
+	.status-rejected,.status-reported{ 
+		color: map-get($theme, reject);
+	}
+	.status-change-request
+	{
+		color: map-get($theme, warning);
+		
+	}
+	.status-pending
+	{
+		color: map-get($theme, pending);
+	}
+	.csv-error-msg
+	{
+		color: map-get($theme, error);
+		
+	}
+	.downloadFile a,.custom-file-upload,.rejection-div,.bulk-summary-table-cell a
+	{
+		color: map-get($theme, link);
+	}
+	.label{ 
+		color: map-get($theme, label);
+	}
+	.success
+	{
+		color: map-get($theme, box-hover-lg);
+	}
+	.answer-label,.turn-change-reason
+	{
+		color: map-get($theme, answer);
+	}
+	
+
+	@media screen and ( min-width:1000px){
+		.playwith a:hover, .viewall:hover, .blog .card:hover h2 a, .breadcrumbs a:hover, .chancat:hover{ 
+			color: map-get($theme, hover-lg);
+		}
+		.tabbing li:hover, .tag:hover, .tag .tag-i:hover{ 
+			color: map-get($theme, tag-hover-lg);
+		}
+		footer a:hover, .viewbublic:hover{ 
+			color: map-get($theme, footer-hover-lg);
+		}
+		.resubmit:hover, .savebox a:nth-child(2):hover{
+			color: map-get($theme, box-hover-lg);
+		}
+	}
+
+	.mat-form-field-label,.mat-select-value-text,.mat-paginator-page-size-label,.mat-paginator-range-label,.mat-tab-label,.mat-header-cell,.bulk-summary-table-cell a,.bulk-summary-question-table-cell a,.friend-list-table-cell{
+		@if $selected-theme-name == 'dark' {
+			color:#fff;
+			
+		}
+	}
+}

@@ -1,0 +1,49 @@
+<div *ngIf="questions && categoryAggregation && tagsCount" class="question-table-form">
+  <div fxLayout="row" fxLayoutAlign="space-between">
+    <div class="filter-facet-column" fxLayout="column">
+      <mat-list dense>
+        <h3 mdSubheader>Categories</h3>
+        <mat-list-item *ngFor="let category of categoriesObs | async">
+          <mat-checkbox [disabled]="!categoryAggregation.hasOwnProperty(category.id) || categoryAggregation[category.id] === 0" [value]="category.id"
+            (change)="categoryChanged($event, category)">
+            {{category.categoryName}} ({{categoryAggregation.hasOwnProperty(category.id) ? categoryAggregation[category.id] : 0}})
+          </mat-checkbox>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+
+        <h3 mdSubheader>Tags</h3>
+        <mat-list-item *ngFor="let tagCount of tagsCount">
+          <mat-checkbox [checked]="tagsChecked[tagCount.tag]" (change)="tagChanged($event, tagCount.tag)">{{tagCount.tag}}
+            ({{tagCount.count}})</mat-checkbox>
+        </mat-list-item>
+        <mat-form-field>
+          <input matInput placeholder="Enter Tag" aria-label="tag">
+        </mat-form-field>
+        <mat-divider></mat-divider>
+
+        <h3 mdSubheader>Status</h3>
+        <mat-divider></mat-divider>
+
+        <h3 mdSubheader>Updated By</h3>
+        <mat-divider></mat-divider>
+
+        <h3 mdSubheader>Created By</h3>
+        <mat-divider></mat-divider>
+
+        <h3 mdSubheader>Updated On</h3>
+        <mat-divider></mat-divider>
+
+        <h3 mdSubheader>Created By</h3>
+      </mat-list>
+    </div>
+
+    <div class="example-container mat-elevation-z8">
+
+      <question-table [showSort]="true" [showPaginator]="true" [questions]="questions" [totalCount]="totalCount" [categoryDictionary]="categoryDictionary"
+        [showApproveButton]="false" [clientSidePagination]="false" (onApproveClicked)="approveClicked($event)" (onPageChanged)="pageChanged($event)"
+        (onSortOrderChanged)="sortOrderChanged($event)">
+      </question-table>
+    </div>
+
+  </div>
+</div>

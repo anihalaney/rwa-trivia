@@ -1,0 +1,23 @@
+mat-card-content>:last-child, mat-card>:last-child{
+  margin-bottom: 15px;
+}
+mat-card-content>:first-child, mat-card>:first-child{
+  margin-top: 15px;
+}
+mat-card {
+  margin: 15px;
+}
+.page-action {
+  display: inline-block;
+  position: fixed;
+  top: 40px;
+  right: 30px;
+}
+.startgame{ font-family:'hindsemibold' ; text-transform: uppercase; box-shadow:0 2px 5px rgba(0,0,0,0.3); height: 42px; line-height: 42px; border-radius: 4px; display: inline-block; text-align: center; letter-spacing: 1px; width: 100%} 
+.align-right
+{
+  text-align: right;
+  float: right;
+}
+.startupload{ width: 100%;float: right;     box-shadow:0 2px 5px rgba(0,0,0,0.3);     padding: 13px;} 
+.btn{font-size: 16px;}

@@ -1,0 +1,104 @@
+<div *ngFor="let question of questions;let i = index" class="col-sm-12 col-xs-12 question-section">
+  <div class="date">{{question.createdOn | date:'dd MMM yyyy' }}</div>
+  <p class="dark">{{question.questionText}}</p>
+  <ul class="currentans">
+    <li>
+      <div class="question-text ">Correct answer :</div>
+      <div class="answer-text">
+        <span *ngFor="let answer of question.answers">
+          <span *ngIf="answer.correct">{{answer.answerText}}</span>
+        </span>
+      </div>
+      <div class="row col-sm-3 col-xs-12 question-status">
+        <div [ngClass]="getDisplayStatus(question.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(question.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
+        <label>
+          <b [ngClass]="getDisplayStatus(question.status)==='APPROVED'?'status-approved':getDisplayStatus(question.status)==='REJECTED'?'status-rejected':getDisplayStatus(question.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(question.status).replace("_",'
+            ') | titlecase}}</b>
+        </label>
+        <div *ngIf="getDisplayStatus(question.status)==='REJECTED' || getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="status-btn">
+          <button class="view-reason-btn" type="button" (click)='showReason(question,i)'>View Reason</button>
+        </div>
+        <div *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE' || showButtons" class="status-btn">
+          <button class="edit-btn" type="button" (click)="editQuestions(question)">Edit it</button>
+        </div>
+      </div>
+    </li>
+    <li>
+      <div class="question-text ">Other options :</div>
+      <div class="answer-text">
+        <span *ngFor="let answer of question.answers">
+          <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
+        </span>
+      </div>
+    </li>
+    <li>
+      <div class="textleft ">
+        <div class="question-text ">Category :</div>
+        <div class="answer-text">
+          <span *ngFor="let id of question.categoryIds">
+            {{categoryDictionary[id].categoryName}}
+          </span>
+        </div>
+      </div>
+
+    </li>
+    <li>
+      <div class="question-text ">Tags :</div>
+      <div class="answer-text">
+        {{question.tags?.toString()}}
+      </div>
+    </li>
+    <li>
+      <div class="question-text ">Created By :</div>
+      <div class="answer-text">
+        {{userDict[question.created_uid]?.displayName}}
+      </div>
+    </li>
+
+    <li *ngIf="viewReasonArray.length>0 && viewReasonArray[i] && viewReasonArray[i].val">
+      <div class="question-text ">Reason :</div>
+      <div class="answer-text">
+        {{viewReasonArray[i].reason}}
+      </div>
+    </li>
+  </ul>
+  <div *ngIf="question.status != 2">
+    <div class="col-sm-12 col-xs-12 textrigth">
+      <div class="button-row">
+        <button mat-raised-button (click)="approveQuestion(question)">Approve</button>
+        <button mat-raised-button (click)="displayRequestToChange(question)" color="primary">Request a change</button>
+        <button mat-raised-button (click)="displayRejectToChange(question)" color="accent">Reject</button>
+      </div>
+    </div>
+    <div class="col-sm-12 col-xs-12" *ngIf="question==requestQuestion && requestQuestionStatus">
+      <form [formGroup]="requestFormGroup">
+        <div class="col-sm-10">
+          <div class="example-container">
+            <mat-form-field>
+              <textarea matInput placeholder="Reason for requesting a change" formControlName="reason" aria-label="reason"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <br />
+          <button mat-raised-button type="button" (click)="saveRequestToChangeQuestion()" color="primary">Confirm</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-12 col-xs-12" *ngIf="question==rejectQuestion && rejectQuestionStatus">
+      <form [formGroup]="rejectFormGroup">
+        <div class="col-sm-10">
+          <div class="example-container">
+            <mat-form-field>
+              <textarea matInput placeholder="Reason for Rejection" formControlName="reason" aria-label="reason"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-sm-2">
+          <br />
+          <button mat-raised-button type="button" (click)="saveRejectToChangeQuestion()" color="primary">Confirm</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

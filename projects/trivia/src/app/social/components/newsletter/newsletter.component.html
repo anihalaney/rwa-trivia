@@ -1,0 +1,33 @@
+<div class="card">
+  <div class="subscrib-cion sprite"></div>
+  <div class="subscrib">
+    <h2>Sign up for our newsletter to stay connected </h2>
+    <p>Subscribe to our bi-weekly email newsletter for useful tips and valuable resources.</p>
+    <div *ngIf="!isSubscribed">
+      <form (ngSubmit)="onSubscribe()" [formGroup]="subscriptionForm" class="upload-questions" #formDir="ngForm">
+        <div class="row subscrib-form">
+          <div class="col-sm-7 col-xs-12">
+            <input placeholder="enter your email ID" type="email" name="email" formControlName="email" class="required" [readonly]="user!=null"
+              aria-label="email" />
+            <!-- <span *ngIf="formDir.submitted" class="label">Email is Required!</span> -->
+            <span *ngIf="subscriptionForm.hasError('required', 'email') && formDir.submitted" class="label errorSpan">
+              Email is required!
+            </span>
+            <span *ngIf="subscriptionForm.controls.email.invalid && !subscriptionForm.controls.email.errors.required" class="label errorSpan">Invalid
+              Email!</span>
+          </div>
+          <div class="col-sm-5 col-xs-12 div-spacing">
+            <button class="btn">Subscribe</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="row col-sm-12 col-xs-12 message">
+      <!-- <button class="btn" (click)="onUnSubscribe()">UnSubscribe</button> -->
+      <p class="label">{{message}}</p>
+    </div>
+  </div>
+  <div class="subs-bottom-spacing row col-sm-12 col-xs-12">
+    <div class="subs-bottom">{{totalCount}} Subscribers</div>
+  </div>
+</div>

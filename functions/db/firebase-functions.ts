@@ -9,7 +9,7 @@ const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../
 import {
     Game, Question, Category, User, UserStatConstants, Invitation,
     TriggerConstants, PlayerMode, OpponentType
-} from '../../src/app/model';
+} from '../../projects/shared-library/src/lib/shared/model';
 import { ESUtils } from '../utils/ESUtils';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { UserContributionStat } from '../utils/user-contribution-stat';
@@ -40,10 +40,14 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
     const data = change.after.data();
 
     if (data) {
-        // add or update
-        ESUtils.createOrUpdateIndex(ESUtils.QUESTIONS_INDEX, data.categoryIds['0'], data, context.params.questionId);
-
         const question: Question = data;
+
+        data.createdOn = new Date(data.createdOn['_seconds'] * 1000);
+
+        // add or update
+        ESUtils.createOrUpdateIndex(ESUtils.QUESTIONS_INDEX, data.categoryIds['0'], question, context.params.questionId);
+
+
         const userContributionStat: UserContributionStat = new UserContributionStat();
         userContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution).then((userDictResults) => {
             console.log('updated user category stat');

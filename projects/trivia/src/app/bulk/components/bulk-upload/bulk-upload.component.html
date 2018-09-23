@@ -1,0 +1,162 @@
+<div class="row">
+  <div class="pageheading col-md-6 col-xs-12 hidden-xs">Bulk Upload</div>
+  <div class="col-md-3 col-xs-12 col-sm-4 alignment spacing-bottom">
+    <button class="btn" [routerLink]="['/bulk']"> Back To Summary </button>
+  </div>
+</div>
+
+<section>
+  <div class="card bulk-instuctions" *ngIf="showInstructions">
+    <h2>Instructions</h2>
+    <div class=" row col-sm-8 col-xs-12">
+      <p>The bulk upload feature allows you to submit your questions in a batch, instead of one at a time. Please read the
+        instructions carefully before using this feature.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-9 col-xs-12">
+        <h4 class="label">CSV FILE FORMAT</h4>
+      </div>
+
+      <div class="col-sm-8 col-xs-12">
+        <p>The bulk upload allows you to upload a csv file with multiple questions. The format of the csv file must be similar
+          to the sample file, else your upload will be rejected. </p>
+      </div>
+      <a target="new" href="/assets/Sample Questions.csv">
+        <div class="col-md-1 col-xs-4 downloadFile">
+          <div class="sprite downloadicon col-md-offset-3 col-xs-offset-3"></div>
+          <div>
+            <a>Download
+              <p>Sample File</p>
+            </a>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-9 col-xs-12">
+        <h4 class="label">QUESTIONS & CATEGORY</h4>
+      </div>
+      <div class="col-sm-8 col-xs-12">
+        <p> You can only submit questions of a single category in a single file. For questions spanning multiple categories,
+          please use multiple files. </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-9 col-xs-12">
+        <h4 class="label">SINGLE TOPIC WITH SINGLE PRIMARY TAG</h4>
+      </div>
+      <div class="col-sm-8 col-xs-12">
+        <p> It is recommended to keep all questions in a file related with a single topic and have a single primary tag.</p>
+        <div class="primary-tag">
+          <p>For example:</p>
+          <p>You can upload a file with Category: Programming and Primary Tag: React.</p>
+          <p>Another file could have Category: Programming with Primary Tag: Angular.</p>
+        </div>
+        <div class="primary-tag">
+          <p> The questions themselves can have additional tags associated with them. This helps us streamline the approval
+            workflow which reduces time involved in getting all questions approved.</p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-9 col-xs-12">
+        <h4 class="label">OTHER DETAILS</h4>
+      </div>
+      <div class="col-sm-8 col-xs-12">
+        <ul>
+          <li>Questions should be answerable in under 30 seconds.</li>
+          <li>Each Question should have one and only one correct answer.</li>
+          <li>
+            Answers will be presented in random order, so you cannot rely on the order of answers. Do not use answers like "Both a and
+            b" or "all of the above". If needed use "None of them is correct" or "All are correct".
+          </li>
+          <li>
+            Each Q/A should have at least 3 tags including the primary tag and could have a maximum of 9 tags.
+          </li>
+          <li>Tags should not be such to give away the answer.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="next-btn-alignment ">
+      <button class="btn instruction-nextBtn " (click)="showUploadSteps()"> Next </button>
+    </div>
+  </div>
+
+
+  <div class="card" *ngIf="!showInstructions">
+    <mat-horizontal-stepper [linear]="isLinear" class="bulk-upload-summary" alternativeLabel>
+      <mat-step [stepControl]="uploadFormGroup">
+        <form [formGroup]="uploadFormGroup" class="upload-questions">
+          <ng-template matStepLabel class>UPLOAD QUESTIONS</ng-template>
+          <h2>
+            <b>Upload Questions</b>
+          </h2>
+          <p>Select Your Prefered Category for the Question: </p>
+          <div class="control-spacing">
+            <mat-form-field>
+              <mat-select placeholder="Select Category" class="matHeader" formControlName="category">
+                <mat-option *ngFor="let category of categories" [value]="category.id">
+                  {{category.categoryName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Primary Tag" class="matHeader" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto"
+                aria-label="tag">
+              <mat-autocomplete #tagAuto="matAutocomplete">
+                <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+                  {{tag}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+          <div>
+            <!-- <input type="file" class="matHeader" placeholder="Upload csv file" accept=".csv" (change)="onFileChange($event)" #fileInput> -->
+            <label for="file-upload" class="custom-file-upload">
+              CHOOSE FILE
+            </label>
+            <label *ngIf="bulkUploadFileInfo!==undefined">{{bulkUploadFileInfo.fileName}}</label>
+            <input id="file-upload" type="file" accept=".csv" (change)="onFileChange($event)" #fileInput aria-label="file" />
+            <p *ngIf="fileParseError" class="error">
+              {{fileParseErrorMessage}}
+            </p>
+          </div>
+          <div class="control-spacing">
+            <button class="btn-back" type="button" (click)="showUploadSteps()">Back</button>
+            <button class="btn" matStepperNext type="button" [disabled]="fileParseError" (click)="onUploadSubmit()">Next</button>
+          </div>
+        </form>
+      </mat-step>
+      <mat-step>
+        <div class="review-questions">
+          <ng-template matStepLabel>REVIEW</ng-template>
+          <h2 class="md-title">
+            <b>Review</b>
+          </h2>
+          <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions" [showPaginator]="false"></bulk-details>
+          <div class="control-spacing">
+            <button class="btn-back" type="button" matStepperPrevious>Back</button>
+            <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError"
+              (click)="onReviewSubmit()">Submit</button>
+          </div>
+        </div>
+      </mat-step>
+      <mat-step>
+        <div class="review-questions">
+          <ng-template matStepLabel>SUBMIT</ng-template>
+          <h2 class="md-title">
+            <b>Submit</b>
+          </h2>
+          <p class="sub-header">Thank you for uploaded questions</p>
+          <div class="control-spacing">
+            <button class="btn-back" type="button" [routerLink]="['/bulk']">Back To Summary</button>
+          </div>
+        </div>
+      </mat-step>
+    </mat-horizontal-stepper>
+  </div>
+</section>

@@ -1,0 +1,134 @@
+<mat-dialog-content>
+    <mat-card-content>
+
+        <div class="cd-popup" id="0" role="alert">
+            <div class="cd-popup-container">
+                <div class="report-question-section">
+                    <div class="header">
+                        <div>
+                            <label class="light">Question</label>
+                            <div class="sprite cancelicon col-sm-1" (click)="closeModel()"></div>
+                        </div>
+                    </div>
+
+                    <label class="dark question-text question">{{question.questionText}}</label>
+                    <div>
+                        <div class="question-text">Correct answer :</div>
+                        <div class="answer-text">
+                            <span *ngFor="let answer of question.answers">
+                                <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="question-text">Other options :</div>
+                        <div class="answer-text">
+                            <span *ngFor="let answer of question.answers">
+                                <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="question-text">Category :</div>
+                        <div class="answer-text">
+                            <span *ngFor="let id of question.categoryIds">
+                                {{categoryDict[id].categoryName}}
+                            </span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="question-text">Tags :</div>
+                        <div class="answer-text">
+                            {{question.tags?.toString()}}
+                        </div>
+                    </div>
+                    <div *ngIf="userDict[question.created_uid]" class="author-div-spacing">
+                        <div class=" col-sm-12 col-xs-12 alignment">
+                            <author [userDict]="userDict" [userId]="question.created_uid"></author>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="report-reason-section">
+                    <label class="question-text">If you're having trouble with above question, please use this from to tell
+                        us about the issue you're experiencing.
+                    </label>
+
+                    <div class="report-reasons">
+                        <label class="question-text">Issues:</label>
+                        <form [formGroup]="reportQuestionForm" #formDir="ngForm" novalidate>
+                            <ul class="dark">
+                                <li>
+                                    <label class="container">Offensive content
+                                        <input type="radio" [checked]="true" name="reason" formControlName="reason" value="Offensive content" aria-label="offensive-content">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <!-- <li>
+                                    <label>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantiu, doloremque landantium.</label>
+                                </li> -->
+                                <li>
+                                    <label class="container">Spelling or grammar error
+                                        <input type="radio" name="reason" formControlName="reason" value="Spelling or grammar error" aria-label="error">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Wrong answer
+                                        <input type="radio" name="reason" formControlName="reason" value="Wrong answer" aria-label="wrong-answer">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Incorrect category or tags
+                                        <input type="radio" name="reason" formControlName="reason" value="Incorrect category or tags" aria-label="tag">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Question is not clear
+                                        <input type="radio" name="reason" formControlName="reason" value="Question is not clear" aria-label="question">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Spam
+                                        <input type="radio" name="reason" formControlName="reason" value="Spam" aria-label="spam">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </li>
+                                <li>
+                                    <label class="container">Other
+                                        <input type="radio" name="reason" formControlName="reason" value="other" aria-label="other">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                    <div>
+                                        <textarea rows="2" formControlName="otherReason" aria-label="other-reason">
+                                            </textarea>
+                                        <div *ngIf="reportQuestionForm.get('reason').value==='other' && reportQuestionForm.get('otherReason').value===''">
+                                            <span class="label">
+                                                Reason is required!
+                                            </span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+
+                </div>
+                <div class="report-footer">
+                    <label class="report-text">
+                        Thanks for taking the time to submit a issue. We will be in touch with you for more details as we investigate.
+                    </label>
+                    <div class="report-footer">
+                        <button class="btn" (click)="saveReportQuestion()" [disabled]="reportQuestionForm.get('reason').value==='other' && reportQuestionForm.get('otherReason').value===''">
+                            Send</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </mat-card-content>
+</mat-dialog-content>
