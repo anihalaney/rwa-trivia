@@ -173,7 +173,7 @@ export class GameService {
       condition: [{ name: "playerId_0", comparator: "==", value: userId },
       { name: "gameOver", comparator: "==", value: true },
       ],
-      orderBy: { name: "turnAt", value: 'desc' },
+      orderBy: [{ name: "turnAt", value: 'desc' }],
       limit: 4
     };
 
@@ -183,7 +183,7 @@ export class GameService {
       condition: [{ name: "playerId_1", comparator: "==", value: userId },
       { name: "gameOver", comparator: "==", value: true },
       ],
-      orderBy: { name: "turnAt", value: 'desc' },
+      orderBy: [{ name: "turnAt", value: 'desc' }],
       limit: 4
     };
 
@@ -205,7 +205,7 @@ export class GameService {
       { name: "playerId_1", comparator: "==", value: userId },
       { name: "gameOver", comparator: "==", value: false }
       ],
-      orderBy: { name: "turnAt", value: 'desc' }
+      orderBy: [{ name: "turnAt", value: 'desc' }]
     };
 
     const query1 = this.dbService.valueChanges('games', '', queryParams1);
@@ -215,7 +215,7 @@ export class GameService {
       { name: "playerId_1", comparator: "==", value: userId },
       { name: "gameOver", comparator: "==", value: false }
       ],
-      orderBy: { name: "turnAt", value: 'desc' }
+      orderBy: [{ name: "turnAt", value: 'desc' }]
     };
 
     const query2 = this.dbService.valueChanges('games', '', queryParams2);

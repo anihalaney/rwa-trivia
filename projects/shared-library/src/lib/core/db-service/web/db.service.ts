@@ -34,7 +34,10 @@ export class WebDbService extends DbService {
                     query = query.where(param.name, param.comparator, param.value);
                 }
                 if (queryParams.orderBy) {
-                    query = query.orderBy(queryParams.orderBy.name, queryParams.orderBy.value);
+                    for (const param of queryParams.orderBy) {
+                        query = query.orderBy(param.name, param.value);
+                    }
+
                 }
                 if (queryParams.limit) {
                     query = query.limit(queryParams.limit);
