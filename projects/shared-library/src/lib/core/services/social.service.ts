@@ -70,7 +70,7 @@ export class SocialService {
     loadBlogs(): Observable<Blog[]> {
         const queryParams = {
             condition: [],
-            orderBy: { name: "id", value: 'desc' },
+            orderBy: [{ name: "id", value: 'desc' }],
             limit: 3
         };
 
