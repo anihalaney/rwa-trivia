@@ -1,9 +1,9 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 import { DbService } from './../db.service';
 import { Observable, of } from 'rxjs';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFireStorage, AngularFireStorageReference } from 'angularfire2/storage';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
 import { map } from 'rxjs/operators';
 import { isArray } from 'util';
 
