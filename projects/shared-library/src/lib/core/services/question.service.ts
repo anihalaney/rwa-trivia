@@ -39,7 +39,7 @@ export class QuestionService {
   getUserQuestions(userId: string, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     const queryParams = { condition: [{ name: "created_uid", comparator: "==", value: userId }] };
-    return this.dbService.listenForChanges(collection, '', queryParams)
+    return this.dbService.valueChanges(collection, '', queryParams)
       .pipe(
         map(qs => qs.map(q => Question.getViewModelFromDb(q))),
         catchError(error => {
@@ -56,7 +56,7 @@ export class QuestionService {
       { name: "bulkUploadId", comparator: "==", value: bulkUploadFileInfo.id }]
     };
 
-    return this.dbService.listenForChanges(collection, '', queryParams)
+    return this.dbService.valueChanges(collection, '', queryParams)
       .pipe(
         map(qs => qs.map(q => Question.getViewModelFromDb(q))),
         catchError(error => {
@@ -69,7 +69,7 @@ export class QuestionService {
     const question_source = (!flag) ? 'question' : 'bulk-question';
     const queryParams = { condition: [{ name: "source", comparator: "==", question_source }] };
     // return this.db.collection('/unpublished_questions', ref => ref.where('source', '==', question_source)).valueChanges()
-    return this.dbService.listenForChanges('unpublished_questions', '', queryParams)
+    return this.dbService.valueChanges('unpublished_questions', '', queryParams)
       .pipe(catchError(error => {
         console.log(error);
         return of(null);
@@ -146,7 +146,7 @@ export class QuestionService {
     const questionId = this.dbService.createId();
     dbQuestion.status = QuestionStatus.APPROVED;
     // Transaction to remove from unpublished and add to published questions collection
-    let firestore = this.dbService.fireStore();
+    let firestore = this.dbService.getFireStore();
     firestore.runTransaction(transaction => {
       return transaction.get(firestore.doc('/unpublished_questions/' + questionId).ref).then(doc =>
         transaction.set(firestore.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)

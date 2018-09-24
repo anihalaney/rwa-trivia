@@ -10,7 +10,7 @@ export class TagService {
   }
 
   getTags(): Observable<string[]> {
-    return this.dbService.listenForChanges('lists', 'tags').pipe(take(1), map(t => t.tagList), catchError(() => []))
+    return this.dbService.valueChanges('lists', 'tags').pipe(take(1), map(t => t.tagList), catchError(() => []))
   }
   
 }

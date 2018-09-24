@@ -21,7 +21,7 @@ export class SocialService {
     }
 
     checkSubscription(subscription: Subscription) {
-        return this.dbService.listenForChanges('subscription', subscription.email)
+        return this.dbService.valueChanges('subscription', subscription.email)
             .pipe(
                 take(1),
                 map(s => {
@@ -74,7 +74,7 @@ export class SocialService {
             limit: 3
         };
 
-        return this.dbService.listenForChanges('blogs', '', queryParams).pipe(catchError(error => {
+        return this.dbService.valueChanges('blogs', '', queryParams).pipe(catchError(error => {
             console.log(error);
             return of(null);
         }))
