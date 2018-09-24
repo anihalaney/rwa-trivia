@@ -24,6 +24,7 @@ export class UserService {
     loadUserProfile(user: User): Observable<User> {
         const queryParams = { condition: [{ name: "userId", comparator: "==", value: user.userId }] };
         // return this.db.doc<any>(`/users/${user.userId}`).valueChanges() 
+
         return this.dbService.listenForChanges('users', user.userId, queryParams)
             .pipe(map(u => {
                 if (u) {

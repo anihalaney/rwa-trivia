@@ -105,4 +105,8 @@ export class TNSDbService extends DbService {
 
     }
 
+    public valueChanges(firebase): any {
+
+    }
+
 }
