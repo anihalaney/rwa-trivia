@@ -38,7 +38,7 @@ export class UserService {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
-                    this.dbService.setCollection('users', dbUser.userId, dbUser);
+                    this.dbService.setDoc('users', dbUser.userId, dbUser);
                 }
 
                 return user;
@@ -66,7 +66,7 @@ export class UserService {
     getUserProfileImage(user: User): Observable<User> {
         if (user.profilePicture && user.profilePicture !== '') {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
-            const ref = this.dbService.getFireStoreReference(filePath); //this.storage.ref(filePath);
+            const ref = this.dbService.getFireStorageReference(filePath); //this.storage.ref(filePath);
             return ref.getDownloadURL().pipe(map(url => {
                 user.profilePictureUrl = url.toString() ? url.toString() : '/assets/images/default-avatar-small.png';
                 return user;
@@ -78,7 +78,7 @@ export class UserService {
     }
 
     setSubscriptionFlag(userId: string) {
-        this.dbService.updateCollection('users', userId, { isSubscribed: true });
+        this.dbService.updateDoc('users', userId, { isSubscribed: true });
     }
 
     saveUserInvitations(obj: any): Observable<boolean> {

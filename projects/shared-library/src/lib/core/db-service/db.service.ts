@@ -8,21 +8,21 @@ export abstract class DbService {
 
     }
 
-    public setCollection(name, id, collection): any {
+    public setDoc(collectionName, docId, document): any {
 
     }
 
-    public updateCollection(name, id, collection) {
+    public updateDoc(collectionName, docId, document) {
 
     }
-    public valueChanges(name: string, path?: any, queryParams?: any): Observable<any> {
+    public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {
         return of();
     }
 
     public createId(): any {
 
     }
-    public getFireStoreReference(filePath): any {
+    public getFireStorageReference(filePath): any {
 
     }
 
@@ -30,7 +30,7 @@ export abstract class DbService {
 
     }
 
-    public getCollection(collectionName, docId): any {
+    public getDoc(collectionName, docId): any {
 
     }
 

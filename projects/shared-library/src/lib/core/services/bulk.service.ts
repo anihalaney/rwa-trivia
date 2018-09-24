@@ -89,13 +89,13 @@ export class BulkService {
     const dbBulkUploadFileInfo = Object.assign({}, bulkUploadFileInfo); // object to be saved
     // remove download URL it is observable
     delete dbBulkUploadFileInfo.downloadUrl;
-    this.dbService.setCollection('bulk_uploads', dbBulkUploadFileInfo.id, dbBulkUploadFileInfo);
+    this.dbService.setDoc('bulk_uploads', dbBulkUploadFileInfo.id, dbBulkUploadFileInfo);
   }
 
   // get File By Bulk Upload File Name
   getFileByBulkUploadFileUrl(bulkUploadFileInfo: BulkUploadFileInfo): Observable<string> {
     const filePath = `bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadFileInfo.id}-${bulkUploadFileInfo.fileName}`;
-    const ref = this.dbService.getFireStoreReference(filePath);
+    const ref = this.dbService.getFireStorageReference(filePath);
     return ref.getDownloadURL().pipe(map(url => url));
   }
 

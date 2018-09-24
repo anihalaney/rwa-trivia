@@ -17,17 +17,17 @@ export class WebDbService extends DbService {
         super();
     }
 
-    public setCollection(name, id, collection) {
-        return this._afStore.doc(`/${name}/${id}`).set(collection);
+    public setDoc(collectionName, docId, document) {
+        return this._afStore.doc(`/${collectionName}/${docId}`).set(document);
     }
 
-    public updateCollection(name, id, collection) {
-        return this._afStore.doc(`/${name}/${id}`).update(collection);
+    public updateDoc(collectionName, docId, document) {
+        return this._afStore.doc(`/${collectionName}/${docId}`).update(document);
     }
 
 
-    public valueChanges(name: string, path?: any, queryParams?: any): Observable<any> {
-        let query = this._afStore.collection(name, ref => {
+    public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {
+        let query = this._afStore.collection(collectionName, ref => {
             let query: any = ref;
             if (queryParams) {
                 for (const param of queryParams.condition) {
@@ -72,7 +72,7 @@ export class WebDbService extends DbService {
         return this._afStore.createId();
     }
 
-    public getFireStoreReference(filePath): AngularFireStorageReference {
+    public getFireStorageReference(filePath): AngularFireStorageReference {
         return this._afstorage.ref(filePath);
     }
 
@@ -80,8 +80,8 @@ export class WebDbService extends DbService {
         return this._afStore.firestore;
     }
 
-    public getCollection(collectionName, docId): any {
-        return this._afStore.firestore.collection(collectionName).doc(docId)
+    public getDoc(collectionName, docId): any {
+        return this._afStore.firestore.collection(collectionName).doc(docId);
     }
 
     public upload(filePath, imageBlob) {

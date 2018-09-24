@@ -84,7 +84,7 @@ export class QuestionService {
       dbQuestion['source'] = 'question';
     }
 
-    this.dbService.setCollection('unpublished_questions', dbQuestion.id, dbQuestion).then(ref => {
+    this.dbService.setDoc('unpublished_questions', dbQuestion.id, dbQuestion).then(ref => {
       if (questionId === dbQuestion.id) {
         this.store.dispatch(this.questionActions.addQuestionSuccess());
       }
@@ -122,7 +122,7 @@ export class QuestionService {
     dbFile.rejected = 0;
     dbFile.approved = 0;
     dbFile.status = 'Under Review';
-    this.dbService.setCollection('bulk_uploads', dbFile['id'], dbFile).then(ref => {
+    this.dbService.setDoc('bulk_uploads', dbFile['id'], dbFile).then(ref => {
       this.storeQuestion(0, questions);
     });
   }
@@ -130,7 +130,7 @@ export class QuestionService {
   storeQuestion(index: number, questions: Array<Question>): void {
     const question = questions[index];
     question['source'] = 'bulk-question';
-    this.dbService.setCollection('unpublished_questions', question.id, question)
+    this.dbService.setDoc('unpublished_questions', question.id, question)
       .then(ref => {
         if (index === questions.length - 1) {
           this.store.dispatch(this.questionActions.addQuestionSuccess());
