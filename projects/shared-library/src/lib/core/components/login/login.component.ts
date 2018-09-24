@@ -134,7 +134,6 @@ function loginFormValidator(fg: FormGroup): { [key: string]: boolean } {
   if (fg.get('mode').value === 1 && fg.get('password') && fg.get('confirmPassword')
     && fg.get('password').value && fg.get('confirmPassword').value
     && fg.get('password').value !== fg.get('confirmPassword').value) {
-    console.log(fg);
     return { 'passwordmismatch': true }
   }
 
