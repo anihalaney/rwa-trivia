@@ -34,15 +34,13 @@ export class LoginComponent implements OnInit {
     this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
-          //Signup
-          // this.loginForm.addControl('confirmPassword', new FormControl('', [Validators.required, Validators.minLength(6)]));
+          //Signup          
           this.loginForm.get('confirmPassword').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('confirmPassword').updateValueAndValidity();
           break;
         //no break - fall thru
         case 0:
-          //Login or Signup
-          //   this.loginForm.removeControl('confirmPassword');
+          //Login or Signup       
           this.loginForm.get('confirmPassword').clearValidators();
           this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('password').updateValueAndValidity();
@@ -51,7 +49,7 @@ export class LoginComponent implements OnInit {
           //Forgot Password
           this.loginForm.get('password').clearValidators();
           this.loginForm.get('confirmPassword').clearValidators();
-        //   this.loginForm.removeControl('confirmPassword');
+
       }
 
 
