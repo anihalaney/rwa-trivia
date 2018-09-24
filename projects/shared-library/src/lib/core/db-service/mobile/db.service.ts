@@ -1,42 +1,16 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 import { DbService } from './../db.service';
-import { Store } from '@ngrx/store';
 import { Observable, of } from 'rxjs';
-import { User } from '../../../shared/model';
 
-// @Inject(PlatformFirebaseToken) protected _firebase: any
 const firebase = require("nativescript-plugin-firebase/app");
 // import { firestore } from "nativescript-plugin-firebase";
+
 
 @Injectable()
 export class TNSDbService extends DbService {
 
     constructor(private zone: NgZone) {
         super();
-    }
-
-
-    public getUser(user: User): Observable<User> {
-        let _listenSub: any;
-
-        firebase._firebaseAppFactory
-        let res = firebase.firestore().collection("users").where("userId", "==", user.userId);
-        return Observable.create(observer => {
-            _listenSub = res.onSnapshot((snapshot: any) => {
-                let results: any = {};
-                if (snapshot && snapshot.forEach) {
-                    snapshot.forEach(doc => {
-                        results = doc.data();
-                    });
-                }
-                observer.next(results);
-            });
-        });
-    }
-
-    public saveUser(user: User) {
-        const userCollection = firebase.firestore().collection("users");
-        userCollection.doc(user.userId).set(user);
     }
 
     public setCollection(name, id, collection) {
@@ -49,7 +23,7 @@ export class TNSDbService extends DbService {
     }
 
     private _listenSub: any;
-    public listenForChanges(name: string, path?: any, queryParams?: any): Observable<any> {
+    public valueChanges(name: string, path?: any, queryParams?: any): Observable<any> {
         if (this._listenSub) {
             this._listenSub();
             this._listenSub = null;
@@ -98,14 +72,6 @@ export class TNSDbService extends DbService {
     }
 
     public upload(filePath, imageBlob): any {
-
-    }
-
-    public fireStore(): any {
-
-    }
-
-    public valueChanges(firebase): any {
 
     }
 

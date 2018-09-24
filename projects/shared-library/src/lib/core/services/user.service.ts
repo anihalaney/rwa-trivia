@@ -23,9 +23,7 @@ export class UserService {
 
     loadUserProfile(user: User): Observable<User> {
         const queryParams = { condition: [{ name: "userId", comparator: "==", value: user.userId }] };
-        // return this.db.doc<any>(`/users/${user.userId}`).valueChanges() 
-
-        return this.dbService.listenForChanges('users', user.userId, queryParams)
+        return this.dbService.valueChanges('users', user.userId, queryParams)
             .pipe(map(u => {
                 if (u) {
                     const userInfo = user;
@@ -107,6 +105,6 @@ export class UserService {
     }
 
     loadUserFriends(userId: string): Observable<Friends> {
-        return this.dbService.listenForChanges('friends', userId);
+        return this.dbService.valueChanges('friends', userId);
     }
 }

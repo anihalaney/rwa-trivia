@@ -1,21 +1,10 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { User } from '../../shared/model';
 
 @Injectable()
 export abstract class DbService {
 
     constructor() {
-
-    }
-
-
-    public getUser(user: User): Observable<User> {
-        // Must Implement in child 
-        return of();
-    }
-
-    public saveUser(user: User) {
 
     }
 
@@ -26,7 +15,7 @@ export abstract class DbService {
     public updateCollection(name, id, collection) {
 
     }
-    public listenForChanges(name: string, path?: any, queryParams?: any): Observable<any> {
+    public valueChanges(name: string, path?: any, queryParams?: any): Observable<any> {
         return of();
     }
 
@@ -49,11 +38,4 @@ export abstract class DbService {
 
     }
 
-    public fireStore(): any {
-
-    }
-
-    public valueChanges(firebase): any {
-
-    }
 }

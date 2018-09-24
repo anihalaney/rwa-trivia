@@ -32,7 +32,7 @@ export class GameService {
       ]
     };
 
-    const userGames1 = this.dbService.listenForChanges('games', '', queryParams1);
+    const userGames1 = this.dbService.valueChanges('games', '', queryParams1);
 
     const queryParams2 = {
       condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
@@ -41,7 +41,7 @@ export class GameService {
       ]
     };
 
-    const userGames2 = this.dbService.listenForChanges('games', '', queryParams2);
+    const userGames2 = this.dbService.valueChanges('games', '', queryParams2);
 
 
     const queryParams3 = {
@@ -51,7 +51,7 @@ export class GameService {
       ]
     };
 
-    const userGames3 = this.dbService.listenForChanges('games', '', queryParams3);
+    const userGames3 = this.dbService.valueChanges('games', '', queryParams3);
 
     const queryParams4 = {
       condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
@@ -60,7 +60,7 @@ export class GameService {
       ]
     };
 
-    const userGames4 = this.dbService.listenForChanges('games', '', queryParams4);
+    const userGames4 = this.dbService.valueChanges('games', '', queryParams4);
 
     const queryParams5 = {
       condition: [{ name: "playerId_0", comparator: "==", value: user.userId },
@@ -69,7 +69,7 @@ export class GameService {
       ]
     };
 
-    const userGames5 = this.dbService.listenForChanges('games', '', queryParams5);
+    const userGames5 = this.dbService.valueChanges('games', '', queryParams5);
 
 
     const queryParams6 = {
@@ -79,7 +79,7 @@ export class GameService {
       ]
     };
 
-    const userGames6 = this.dbService.listenForChanges('games', '', queryParams6);
+    const userGames6 = this.dbService.valueChanges('games', '', queryParams6);
 
     const queryParams7 = {
       condition: [{ name: "playerId_1", comparator: "==", value: user.userId },
@@ -88,7 +88,7 @@ export class GameService {
       ]
     };
 
-    const OtherGames2 = this.dbService.listenForChanges('games', '', queryParams7);
+    const OtherGames2 = this.dbService.valueChanges('games', '', queryParams7);
 
     const queryParams8 = {
       condition: [{ name: "playerId_1", comparator: "==", value: user.userId },
@@ -97,7 +97,7 @@ export class GameService {
       ]
     };
 
-    const OtherGames3 = this.dbService.listenForChanges('games', '', queryParams8);
+    const OtherGames3 = this.dbService.valueChanges('games', '', queryParams8);
 
     return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, userGames6, OtherGames2, OtherGames3)
       .pipe(
@@ -120,7 +120,7 @@ export class GameService {
   }
 
   getGame(gameId: string): Observable<Game> {
-    return this.dbService.listenForChanges('games', gameId)
+    return this.dbService.valueChanges('games', gameId)
       .pipe(map(
         g => {
           g['id'] = (g['id']) ? g['id'] : gameId;
@@ -177,7 +177,7 @@ export class GameService {
       limit: 4
     };
 
-    const query1 = this.dbService.listenForChanges('games', '', queryParams1);
+    const query1 = this.dbService.valueChanges('games', '', queryParams1);
 
     const queryParams2 = {
       condition: [{ name: "playerId_1", comparator: "==", value: userId },
@@ -187,7 +187,7 @@ export class GameService {
       limit: 4
     };
 
-    const query2 = this.dbService.listenForChanges('games', '', queryParams2);
+    const query2 = this.dbService.valueChanges('games', '', queryParams2);
 
     return combineLatest(query1, query2)
       .pipe(
@@ -208,7 +208,7 @@ export class GameService {
       orderBy: { name: "turnAt", value: 'desc' }
     };
 
-    const query1 = this.dbService.listenForChanges('games', '', queryParams1);
+    const query1 = this.dbService.valueChanges('games', '', queryParams1);
 
     const queryParams2 = {
       condition: [{ name: "GameStatus", comparator: "==", value: GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE },
@@ -218,7 +218,7 @@ export class GameService {
       orderBy: { name: "turnAt", value: 'desc' }
     };
 
-    const query2 = this.dbService.listenForChanges('games', '', queryParams2);
+    const query2 = this.dbService.valueChanges('games', '', queryParams2);
 
     return combineLatest(query1, query2)
       .pipe(map((data) => data[0].concat(data[1])),
@@ -257,7 +257,7 @@ export class GameService {
       ]
     };
 
-    return this.dbService.listenForChanges('report_questions', '', queryParams).pipe(
+    return this.dbService.valueChanges('report_questions', '', queryParams).pipe(
       take(1),
       map(question => {
         if (question.length > 0) {

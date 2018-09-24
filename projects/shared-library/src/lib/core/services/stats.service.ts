@@ -11,14 +11,14 @@ export class StatsService {
 
     loadLeaderBoardStat(): Observable<any> {
         return this.dbService
-            .listenForChanges('leader_board_stats', 'categories')
+            .valueChanges('leader_board_stats', 'categories')
             .pipe(map(lbsStat => lbsStat));
 
     }
 
     loadSystemStat(): Observable<SystemStats> {
         return this.dbService
-            .listenForChanges('stats', 'system')
+            .valueChanges('stats', 'system')
             .pipe(map(stat => stat));
     }
 }

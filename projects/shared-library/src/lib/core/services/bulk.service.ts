@@ -18,14 +18,14 @@ export class BulkService {
     if (!archive) {
       const queryParams = { condition: [{ name: "isAdminArchived", comparator: "==", archive }] };
 
-      return this.dbService.listenForChanges('bulk_uploads', '', queryParams)
+      return this.dbService.valueChanges('bulk_uploads', '', queryParams)
         .pipe(catchError(error => {
           console.log(error);
           return of(null);
         }));
 
     } else {
-      return this.dbService.listenForChanges('bulk_uploads')
+      return this.dbService.valueChanges('bulk_uploads')
         .pipe(catchError(error => {
           console.log(error);
           return of(null);
@@ -68,7 +68,7 @@ export class BulkService {
       };
     }
 
-    return this.dbService.listenForChanges('bulk_uploads', '', queryParams)
+    return this.dbService.valueChanges('bulk_uploads', '', queryParams)
       .pipe(catchError(error => {
         console.log(error);
         return of(null);
@@ -77,7 +77,7 @@ export class BulkService {
 
   // get BulkUpload by Id
   getBulkUploadById(bulkUploadFileInfo: BulkUploadFileInfo): Observable<BulkUploadFileInfo> {
-    return this.dbService.listenForChanges('bulk_uploads', bulkUploadFileInfo.id)
+    return this.dbService.valueChanges('bulk_uploads', bulkUploadFileInfo.id)
       .pipe(catchError(error => {
         console.log(error);
         return of(null);
@@ -122,7 +122,7 @@ export class BulkService {
 
   // get single Bulk Upload
   getBulkUploadFile(bulkId: string): Observable<BulkUploadFileInfo> {
-    return this.dbService.listenForChanges('bulk_uploads', bulkId)
+    return this.dbService.valueChanges('bulk_uploads', bulkId)
       .pipe(catchError(error => {
         console.log(error);
         return of(null);
