@@ -13,22 +13,22 @@ export class TNSDbService extends DbService {
         super();
     }
 
-    public setCollection(name, id, collection) {
-        const userCollection = firebase.firestore().collection(name);
-        userCollection.doc(id).set(collection);
+    public setDoc(collectionName, docId, document) {
+        const userCollection = firebase.firestore().collection(collectionName);
+        userCollection.doc(docId).set(document);
     }
 
-    public updateCollection(name, id, collection) {
+    public updateDoc(collectionName, docId, document) {
 
     }
 
     private _listenSub: any;
-    public valueChanges(name: string, path?: any, queryParams?: any): Observable<any> {
+    public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {
         if (this._listenSub) {
             this._listenSub();
             this._listenSub = null;
         }
-        let query = firebase.firestore().collection(name);
+        let query = firebase.firestore().collection(collectionName);
         if (queryParams) {
             for (const param of queryParams.condition) {
                 query = query.where(param.name, param.comparator, param.value);
@@ -55,7 +55,7 @@ export class TNSDbService extends DbService {
         return firebase.createId();
     }
 
-    public getFireStoreReference(filePath) {
+    public getFireStorageReference(filePath) {
 
     }
 
@@ -67,7 +67,7 @@ export class TNSDbService extends DbService {
 
     }
 
-    public getCollection(collectionName, docId): any {
+    public getDoc(collectionName, docId): any {
 
     }
 

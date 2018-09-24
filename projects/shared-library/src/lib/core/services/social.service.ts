@@ -37,7 +37,7 @@ export class SocialService {
     saveSubscription(subscription: Subscription) {
         const dbSubscription = Object.assign({}, subscription);
 
-        this.dbService.getCollection('subscription', dbSubscription.email)
+        this.dbService.getDoc('subscription', dbSubscription.email)
             .set(dbSubscription)
             .then(ref => {
                 if (subscription.userId) {
@@ -56,10 +56,10 @@ export class SocialService {
         const socialGameScoreShare: SocialGameScoreShare = new SocialGameScoreShare();
         socialGameScoreShare.filename = fileName;
         socialGameScoreShare.created_uid = userId;
-        this.dbService.setCollection('social_share', socialGameScoreShare.filename, { ...socialGameScoreShare });
+        this.dbService.setDoc('social_share', socialGameScoreShare.filename, { ...socialGameScoreShare });
 
         const filePath = `${this.basePath}/${userId}/${this.folderPath}/${new Date().getTime()}`;
-        const fileRef = this.dbService.getFireStoreReference(filePath);
+        const fileRef = this.dbService.getFireStorageReference(filePath);
 
         return this.dbService.upload(filePath, imageBlob).snapshotChanges().pipe(
             finalize(() => fileRef.getDownloadURL())
