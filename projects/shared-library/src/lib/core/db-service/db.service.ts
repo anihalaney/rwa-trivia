@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { User } from '../../shared/model';
 
 @Injectable()
-export class DbService {
+export abstract class DbService {
 
     constructor() {
 
@@ -50,6 +50,10 @@ export class DbService {
     }
 
     public fireStore(): any {
+
+    }
+
+    public valueChanges(firebase): any {
 
     }
 }

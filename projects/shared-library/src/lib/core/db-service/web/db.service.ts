@@ -96,6 +96,9 @@ export class WebDbService extends DbService {
     }
 
     public fireStore() {
-        return this._afStore.firestore;
+        return this._afStore;
+    }
+    public valueChanges(firebase): any {
+        return firebase.valueChanges();
     }
 }
