@@ -68,7 +68,7 @@ export class TNSDbService extends DbService {
     }
 
     public getDoc(collectionName, docId): any {
-
+        console.log('in mob ca');
     }
 
     public upload(filePath, imageBlob): any {

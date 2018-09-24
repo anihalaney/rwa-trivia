@@ -8,11 +8,11 @@ import { StatsEffects } from './stats.effects';
 import { StatsService } from '../../../../../../shared-library/src/lib/core/services/stats.service';
 import { LoadLeaderBoard, LoadLeaderBoardSuccess, LoadSystemStat, LoadSystemStatSuccess } from '../actions';
 import { StoreModule, Store } from '@ngrx/store';
-import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
-import { AngularFirestore, AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireModule, FirebaseAppConfig } from '@angular/fire';
+import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
 import { CONFIG } from '../../../../../../shared-library/src/lib/environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AngularFireStorageModule } from 'angularfire2/storage';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 describe('Effects: StatsEffects', () => {
