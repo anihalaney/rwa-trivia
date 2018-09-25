@@ -14,12 +14,14 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 export class LoginComponent implements OnInit {
   mode: SignInMode;
   loginForm: FormGroup;
+  errMsg: string;
 
   constructor(private fb: FormBuilder,
     private afAuth: AngularFireAuth,
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<LoginComponent>) {
     this.mode = SignInMode.signIn;  //default
+    this.errMsg = '';
   }
 
   ngOnInit() {
@@ -27,7 +29,7 @@ export class LoginComponent implements OnInit {
       mode: [0],
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      confirmPassword: ['']
     }, { validator: loginFormValidator }
     );
 
@@ -47,6 +49,7 @@ export class LoginComponent implements OnInit {
           this.loginForm.get('confirmPassword').clearValidators();
       }
       this.loginForm.get('password').updateValueAndValidity();
+      this.errMsg = '';
     });
   }
 
@@ -65,7 +68,10 @@ export class LoginComponent implements OnInit {
           this.dialogRef.close();
         }, (error: Error) => {
           //error
-          console.log(error);
+          // console.log(error);
+          this.errMsg = error.message;
+        }).catch((error: Error) => {
+          this.errMsg = error.message;
         });
         break;
       case 1:
@@ -83,7 +89,10 @@ export class LoginComponent implements OnInit {
           }
         }, (error: Error) => {
           //error
-          console.log(error);
+          // console.log(error);
+          this.errMsg = error.message;
+        }).catch((error: Error) => {
+          this.errMsg = error.message;
         });
         break;
       case 2:
@@ -93,25 +102,40 @@ export class LoginComponent implements OnInit {
             console.log("success. check your email");
           },
             (error: Error) => {
-              console.log(error);
+              //    console.log(error);
+              this.errMsg = error.message;
+            }).catch((error: Error) => {
+              this.errMsg = error.message;
             });
     }
   }
 
   googleLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .catch((error: Error) => {
+        this.errMsg = error.message;
+      });
   }
 
   fbLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
+    this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+      .catch((error: Error) => {
+        this.errMsg = error.message;
+      });
   }
 
   twitterLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
+    this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider())
+      .catch((error: Error) => {
+        this.errMsg = error.message;
+      });
   }
 
   githubLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
+      .catch((error: Error) => {
+        this.errMsg = error.message;
+      });
   }
 }
 
