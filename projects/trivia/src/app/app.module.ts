@@ -70,25 +70,32 @@ export class AppModule {
 
   constructor(updates: SwUpdate, @Inject(PLATFORM_ID) private platformId: Object, ngZone: NgZone) {
 
-    if (isPlatformBrowser(this.platformId)) {
-      console.log('Service worker update called');
-      updates.available.subscribe(event => {
-        console.log('current version is', event.current);
-        console.log('available version is', event.available);
-        updates.activateUpdate().then(() => document.location.reload());
-      });
-      updates.activated.subscribe(event => {
-        console.log('old version was', event.previous);
-        console.log('new version is', event.current);
-      });
+    // if (isPlatformBrowser(this.platformId)) {
+    //   console.log('Service worker update called');
 
-      ngZone.runOutsideAngular(() => {
-        interval(60000).subscribe(() => {
-          console.log('Inside Interval')
-          ngZone.run(() => updates.checkForUpdate());
-        });
-      });
-    }
+    //   if (updates.isEnabled) {
+
+    //     updates.available.subscribe(() => {
+
+    //       if (confirm('New version available. Load New Version?')) {
+
+    //         window.location.reload();
+    //       }
+    //     });
+    //   }
+
+    //   updates.activated.subscribe(event => {
+    //     console.log('old version was', event.previous);
+    //     console.log('new version is', event.current);
+    //   });
+
+    //   ngZone.runOutsideAngular(() => {
+    //     interval(60000).subscribe(() => {
+    //       console.log('Inside Interval')
+    //       ngZone.run(() => updates.checkForUpdate());
+    //     });
+    //   });
+    // }
 
   }
 }
