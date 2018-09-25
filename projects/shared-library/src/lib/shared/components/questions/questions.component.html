@@ -12,7 +12,8 @@
       <div class="row col-sm-3 col-xs-12 question-status">
         <div [ngClass]="getDisplayStatus(question.status)==='APPROVED'?['sprite', 'approvedicon']:getDisplayStatus(question.status)==='PENDING'?['sprite', 'pendingicon']:'status-btn'"></div>
         <label>
-          <b [ngClass]="getDisplayStatus(question.status)==='APPROVED'?'status-approved':getDisplayStatus(question.status)==='REJECTED'?'status-rejected':getDisplayStatus(question.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(question.status).replace("_",' ') | titlecase}}</b>
+          <b [ngClass]="getDisplayStatus(question.status)==='APPROVED'?'status-approved':getDisplayStatus(question.status)==='REJECTED'?'status-rejected':getDisplayStatus(question.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(question.status).replace("_",'
+            ') | titlecase}}</b>
         </label>
         <div *ngIf="getDisplayStatus(question.status)==='REJECTED' || getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="status-btn">
           <button class="view-reason-btn" type="button" (click)='showReason(question,i)'>View Reason</button>
@@ -74,7 +75,7 @@
         <div class="col-sm-10">
           <div class="example-container">
             <mat-form-field>
-              <textarea matInput placeholder="Reason for requesting a change" formControlName="reason"></textarea>
+              <textarea matInput placeholder="Reason for requesting a change" formControlName="reason" aria-label="reason"></textarea>
             </mat-form-field>
           </div>
         </div>
@@ -89,7 +90,7 @@
         <div class="col-sm-10">
           <div class="example-container">
             <mat-form-field>
-              <textarea matInput placeholder="Reason for Rejection" formControlName="reason"></textarea>
+              <textarea matInput placeholder="Reason for Rejection" formControlName="reason" aria-label="reason"></textarea>
             </mat-form-field>
           </div>
         </div>

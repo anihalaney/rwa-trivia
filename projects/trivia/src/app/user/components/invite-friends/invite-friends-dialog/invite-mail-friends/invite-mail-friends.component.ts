@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
@@ -12,7 +12,8 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 @Component({
   selector: 'app-invite-mail-friends',
   templateUrl: './invite-mail-friends.component.html',
-  styleUrls: ['./invite-mail-friends.component.scss']
+  styleUrls: ['./invite-mail-friends.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InviteMailFriendsComponent implements OnInit {
   @Input() user: User;

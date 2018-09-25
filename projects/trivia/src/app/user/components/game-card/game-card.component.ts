@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus } from '../../../../../../shared-library/src/lib/shared/model';
@@ -10,9 +10,10 @@ import { take } from 'rxjs/operators';
 @Component({
   selector: 'game-card',
   templateUrl: './game-card.component.html',
-  styleUrls: ['./game-card.component.scss']
+  styleUrls: ['./game-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameCardComponent implements OnInit, OnChanges {
+export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
   user$: Observable<User>;
@@ -24,7 +25,7 @@ export class GameCardComponent implements OnInit, OnChanges {
   otherUserInfo: User;
   remainingHours: any;
   remainingMinutes: any;
-  timerSub: Subscription;
+  subs: Subscription[] = [];
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
   randomCategoryId = 0;
@@ -37,16 +38,16 @@ export class GameCardComponent implements OnInit, OnChanges {
     this.gameStatus = GameStatus;
 
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.user$.subscribe(user => {
+    this.subs.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
-    });
+    }));
 
     this.categoryDict$ = store.select(categoryDictionary);
-    this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict);
+    this.subs.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
 
-    this.timerSub =
+    this.subs.push(
       timer(1000, 1000).subscribe(t => {
         if (this.game.nextTurnPlayerId === this.user.userId) {
 
@@ -66,7 +67,7 @@ export class GameCardComponent implements OnInit, OnChanges {
             this.remainingMinutes = Utils.convertIntoDoubleDigit(0);
           }
         }
-      });
+      }));
 
   }
 
@@ -91,5 +92,7 @@ export class GameCardComponent implements OnInit, OnChanges {
     return Utils.getImageUrl(user, 70, 60, '70X60');
   }
 
-
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
+  }
 }

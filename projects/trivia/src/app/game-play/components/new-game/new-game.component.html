@@ -103,7 +103,8 @@
                                 </mat-chip-list>
 
                             </div>
-                            <input type="text" placeholder="Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)">
+                            <input type="text" placeholder="Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)"
+                                aria-label="tag">
                             <mat-autocomplete #tagAuto="matAutocomplete">
                                 <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                                     {{ tag }}

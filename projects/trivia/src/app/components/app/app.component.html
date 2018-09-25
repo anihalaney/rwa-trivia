@@ -1,5 +1,5 @@
 <!--Header Start Here-->
-<div>
+<div lazy-load-images>
 <header>
   <app-header [user]="user" (logoutClicked)="logout()" (loginClicked)="login()" (toggleThemeClicked)="toggleTheme()"></app-header>
 </header>
@@ -23,7 +23,7 @@
 <!-- Page Layout End -->
 
 <!-- Footer -->
-<footer>
+<footer>  
   <app-footer [user]="user" (logoutClicked)="logout()" (loginClicked)="login()"></app-footer>
 </footer>
 <!-- Footer end -->
