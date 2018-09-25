@@ -26,6 +26,12 @@
             "shared-library/*": [
                 "./projects/shared-library/src/lib/*"
             ]
-        }
-    }
+        },
+    },
+    "exclude": [
+        "**/*.tns.ts",
+        "**/*.android.ts",
+        "**/*.ios.ts",
+        "app/main.aot.ts"
+    ]
 }
