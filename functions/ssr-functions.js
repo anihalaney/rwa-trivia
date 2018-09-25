@@ -1,1 +1,1 @@
-exports.ssr = require('./server/functions/ssr').ssr;
+exports.app = require('./server/functions/app').app;

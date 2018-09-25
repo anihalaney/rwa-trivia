@@ -47,7 +47,6 @@ export class FirebaseService {
             payload.userId = user.uid;
         }
         this._ngZone.run(() => {
-            //   this._store.dispatch(new UserActions.Login(payload));
             this._store.dispatch(this.userActions.loginSuccess(payload));
         });
     }

@@ -104,7 +104,7 @@ export class TNSFirebaseService extends FirebaseService {
     }
 
     private _listenSub: any;
-    public valueChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
+    public listenForChanges(name: string, queryParams?: Array<{ name: string; comparator: string; value: any }>): Observable<any> {
         if (this._listenSub) {
             this._listenSub();
             this._listenSub = null;
