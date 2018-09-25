@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnChanges, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 import { Question, Answer, User } from '../../../../../shared-library/src/lib/shared/model';
 import { AppState, appState, categoryDictionary } from '../../store';
@@ -8,7 +8,8 @@ import { QuestionActions } from '../../../../../shared-library/src/lib/core/stor
 @Component({
   selector: 'question',
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss']
+  styleUrls: ['./question.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionComponent implements OnChanges {
   @Input() question: Question;

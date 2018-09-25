@@ -35,7 +35,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user); //logged in user
+    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user)); //logged in user
     //use the setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
     //The error happens as bindings change after change detection has run. using setTimeout runs another round of CD
     // REF: https://github.com/angular/angular/issues/6005

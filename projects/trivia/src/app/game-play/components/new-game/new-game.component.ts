@@ -28,9 +28,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   tags: string[];
   userDict$: Observable<{ [key: string]: User }>;
   selectedTags: string[];
-  sub: Subscription;
-  sub2: Subscription;
-  sub3: Subscription;
+  subs: Subscription[] = [];
 
   newGameForm: FormGroup;
   gameOptions: GameOptions;
@@ -60,14 +58,14 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.userDict$.subscribe(userDict => this.userDict = userDict);
 
 
-    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
         this.store.dispatch(new useractions.LoadUserFriends({ 'userId': user.userId }));
       }
-    });
+    }));
 
 
-    this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subs.push(this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
@@ -77,7 +75,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
       } else {
         this.noFriendsStatus = true;
       }
-    });
+    }));
 
 
 
@@ -87,10 +85,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
     this.store.dispatch(new gameplayactions.ResetNewGame());
 
 
-    this.sub = this.categoriesObs.subscribe(categories => this.categories = categories);
-    this.sub2 = this.tagsObs.subscribe(tags => this.tags = tags);
-
-
+    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
 
     this.gameOptions = new GameOptions();
@@ -149,9 +145,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
     if (tag && tag !== "")
       this.selectedTags.push(tag);
   }
-  ngOnDestroy() {
-    Utils.unsubscribe([this.sub, this.sub2, this.sub3]);
-  }
+
 
   toggleShowUncheckedCategories() {
     this.showUncheckedCategories = true;
@@ -250,5 +244,9 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   getImageUrl(user: User) {
     return Utils.getImageUrl(user, 70, 60, '70X60');
+  }
+
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
   }
 }

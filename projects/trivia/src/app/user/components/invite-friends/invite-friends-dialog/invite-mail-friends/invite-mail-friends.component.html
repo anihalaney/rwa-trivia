@@ -3,8 +3,9 @@
     <img class="mail-icon" src="assets/images/mail-icon.png" alt="Mail Icon">
   </div>
   <div fxLayoutAlign="left">
-    <form *ngIf="invitationForm" (ngSubmit)="onSubscribe()" [formGroup]="invitationForm" class="col-md-12 col-sm-12 col-lg-12 col-xs-12" #formDir="ngForm">
-      <input type="text" formControlName="email" class="required" placeholder="Email address">
+    <form *ngIf="invitationForm" (ngSubmit)="onSubscribe()" [formGroup]="invitationForm" class="col-md-12 col-sm-12 col-lg-12 col-xs-12"
+      #formDir="ngForm">
+      <input type="text" formControlName="email" class="required" placeholder="Email address" aria-label="email">
       <button class="btn send-btn">Send Invite</button>
       <span *ngIf="invitationForm.controls.email.invalid && formDir.submitted" class="label">
         Email is required!

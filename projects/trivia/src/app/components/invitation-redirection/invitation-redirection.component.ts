@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
@@ -11,7 +11,8 @@ import * as userActions from '../../user/store/actions';
 @Component({
     selector: 'invitation-redirection',
     templateUrl: './invitation-redirection.component.html',
-    styleUrls: ['./invitation-redirection.component.scss', './invitation-redirection.component.scss']
+    styleUrls: ['./invitation-redirection.component.scss', './invitation-redirection.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InvitationRedirectionComponent implements OnInit {
     @Input() user: User;

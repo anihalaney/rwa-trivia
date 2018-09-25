@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Question, QuestionStatus, Category, User, Answer } from '../../model';
 import { Utils } from '../../../core/services';
@@ -9,7 +9,8 @@ import { debounceTime } from 'rxjs/operators';
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
-  styleUrls: ['./question-form.component.scss']
+  styleUrls: ['./question-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
@@ -200,10 +201,16 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     return null;
   }
 
-  ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
-  }
   showQuestion() {
     this.updateStatus.emit(true);
   }
+
+  trackById(index, item) {
+    return item.id;
+  }
+
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
+  }
+
 }

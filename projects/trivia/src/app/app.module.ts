@@ -15,6 +15,7 @@ import { GamePlayModule } from './game-play/game-play.module';
 import { SocialModule } from './social/social.module';
 import { UserModule } from './user/user.module';
 import { StatsModule } from './stats/stats.module';
+import { LazyLoadImagesModule } from 'ngx-lazy-load-images';
 
 import {
   AppComponent, DashboardComponent, QuestionComponent,
@@ -40,6 +41,7 @@ import { interval } from 'rxjs';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    LazyLoadImagesModule,
 
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers),
