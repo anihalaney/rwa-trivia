@@ -17,7 +17,7 @@
     "./src/vendor.ts",
     "./src/app/home",
     "./src/app/login",
-    "./src/app/nativescript",
+    "./src/app/mobile",
   ],
   "angularCompilerOptions": {
     "entryModule": "src/app/app.server.module#AppServerModule"
