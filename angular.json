@@ -4,9 +4,11 @@
   "newProjectRoot": "projects",
   "projects": {
     "trivia": {
-      "root": "projects/trivia/",
+      "root": "projects",
       "sourceRoot": "projects/trivia/src",
       "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -41,6 +43,13 @@
               ]
             },
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
+                }
+              ],
+              "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -49,14 +58,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
-                  "with": "projects/shared-library/src/lib/environments/environment.prod.ts"
-                }
-              ],
-              "serviceWorker": true
+              "buildOptimizer": true
             }
           }
         },
@@ -110,7 +112,9 @@
               "projects/trivia/tsconfig.app.json",
               "projects/trivia/tsconfig.spec.json"
             ],
-            "exclude": []
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "server": {

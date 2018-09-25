@@ -3,22 +3,21 @@ import 'zone.js/dist/zone-node';
 import 'reflect-metadata';
 
 import { enableProdMode } from '@angular/core';
+
+import * as express from 'express';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import { resolve } from 'path';
-import * as express from 'express';
 
 const domino = require('domino');
 const compression = require('compression')
 const win = domino.createWindow('');
-const app = express();
-let isProductionEnv = false;
 
 global['window'] = win;
 global['document'] = win.document;
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 
-// console.log(process.cwd());
+console.log(process.cwd());
 const DIST_FOLDER = resolve(process.cwd(), './dist');
 // console.log(DIST_FOLDER);
 
@@ -31,6 +30,7 @@ const {
 
 enableProdMode();
 
+const app = express();
 
 // Set the engine
 app.engine(
@@ -73,11 +73,12 @@ app.get('*', (req, res) => {
     res.send(html);
   });
 });
-app.setEnvironment = setEnvironment
+
+// app.set('port', process.env.PORT || 3000);
+
+// app.listen(app.get('port'), function () {
+//   console.log('Express server listening on port ' + 3000);
+// });
+
 exports.app = app;
 
-function setEnvironment(envFlag) {
-  isProductionEnv = envFlag;
-}
-
-exports.setEnvironment = setEnvironment;

@@ -8,7 +8,7 @@ import { User, Category } from '../../../../../../shared-library/src/lib/shared/
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { userState } from '../../../user/store';
@@ -325,7 +325,6 @@ export class ProfileSettingsComponent implements OnDestroy {
   saveUser(user: User) {
     this.store.dispatch(new userActions.AddUserProfile({ user: user }));
   }
-
 
   ngOnDestroy() {
     Utils.unsubscribe(this.subs);
