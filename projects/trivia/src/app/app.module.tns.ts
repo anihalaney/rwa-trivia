@@ -18,7 +18,7 @@ import { CoreModule } from './../../../shared-library/src/lib/core/core.module';
 import { HttpClientModule } from '@angular/common/http';
 
 
-import { TNSFirebaseService } from './nativescript/core/services/tns-firebase.service';
+import { TNSFirebaseService } from './mobile/core/services/tns-firebase.service';
 import { FirebaseService } from 'shared-library/core/db-service/firebase.service';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
 import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens'
