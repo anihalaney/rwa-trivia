@@ -5,7 +5,6 @@ const fs = require('fs');
 const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
-
 import {
     Game, Question, Category, User, UserStatConstants, Invitation,
     TriggerConstants, PlayerMode, OpponentType
@@ -46,7 +45,6 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
 
         // add or update
         ESUtils.createOrUpdateIndex(ESUtils.QUESTIONS_INDEX, data.categoryIds['0'], question, context.params.questionId);
-
 
         const userContributionStat: UserContributionStat = new UserContributionStat();
         userContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution).then((userDictResults) => {

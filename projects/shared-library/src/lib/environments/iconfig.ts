@@ -1,4 +1,4 @@
-import { FirebaseAppConfig } from 'angularfire2';
+import { FirebaseAppConfig } from '@angular/fire';
 
 export interface IConfig {
   firebaseConfig: FirebaseAppConfig;
