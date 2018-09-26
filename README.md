@@ -128,4 +128,3 @@ Set: users/\<user id\>/roles/admin: true
 * Test the application using
 
 `ng test`
-
