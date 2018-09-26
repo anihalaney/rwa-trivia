@@ -14,12 +14,16 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 export class LoginComponent implements OnInit {
   mode: SignInMode;
   loginForm: FormGroup;
+  notificationMsg: string;
+  errorStatus: boolean;
 
   constructor(private fb: FormBuilder,
     private afAuth: AngularFireAuth,
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<LoginComponent>) {
     this.mode = SignInMode.signIn;  //default
+    this.notificationMsg = '';
+    this.errorStatus = false;
   }
 
   ngOnInit() {
@@ -27,7 +31,7 @@ export class LoginComponent implements OnInit {
       mode: [0],
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
       password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      confirmPassword: ['', Validators.compose([Validators.required, Validators.minLength(6)])]
+      confirmPassword: ['']
     }, { validator: loginFormValidator }
     );
 
@@ -47,6 +51,8 @@ export class LoginComponent implements OnInit {
           this.loginForm.get('confirmPassword').clearValidators();
       }
       this.loginForm.get('password').updateValueAndValidity();
+      this.notificationMsg = '';
+      this.errorStatus = false;
     });
   }
 
@@ -65,7 +71,12 @@ export class LoginComponent implements OnInit {
           this.dialogRef.close();
         }, (error: Error) => {
           //error
-          console.log(error);
+          // console.log(error);
+          this.notificationMsg = error.message;
+          this.errorStatus = true;
+        }).catch((error: Error) => {
+          this.notificationMsg = error.message;
+          this.errorStatus = true;
         });
         break;
       case 1:
@@ -78,40 +89,70 @@ export class LoginComponent implements OnInit {
           this.dialogRef.close();
           if (user && !user.emailVerified) {
             user.sendEmailVerification().then(function () {
-              console.log("email verification sent to user");
+              // console.log("email verification sent to user");
+              this.notificationMsg = `email verification sent to ${this.loginForm.get('email').value}`;
+              this.errorStatus = false;
             });
           }
         }, (error: Error) => {
           //error
-          console.log(error);
+          // console.log(error);
+          this.notificationMsg = error.message;
+          this.errorStatus = true;
+        }).catch((error: Error) => {
+          this.notificationMsg = error.message;
+          this.errorStatus = true;
         });
         break;
       case 2:
         //Forgot Password
         firebase.auth().sendPasswordResetEmail(this.loginForm.get('email').value)
           .then((a: any) => {
-            console.log("success. check your email");
-          },
-            (error: Error) => {
-              console.log(error);
-            });
+            //  console.log("success. check your email");
+            this.notificationMsg = `email sent to ${this.loginForm.get('email').value}`;
+            this.errorStatus = false;
+          }, (error: Error) => {
+            //error
+            // console.log(error);
+            this.notificationMsg = error.message;
+            this.errorStatus = true;
+          }).catch((error: Error) => {
+            this.notificationMsg = error.message;
+            this.errorStatus = true;
+          });
     }
   }
 
   googleLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
+      .catch((error: Error) => {
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
+      });
   }
 
   fbLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
+    this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+      .catch((error: Error) => {
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
+      });
   }
 
   twitterLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
+    this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider())
+      .catch((error: Error) => {
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
+      });
   }
 
   githubLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
+    this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
+      .catch((error: Error) => {
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
+      });
   }
 }
 

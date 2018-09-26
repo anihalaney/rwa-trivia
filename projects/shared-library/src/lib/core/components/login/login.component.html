@@ -26,7 +26,13 @@
               <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>
               <span *ngSwitchCase="2">Forgot Password</span>
             </div>
-            <mat-form-field class="full-width required">
+            <div class="auth-msg" [ngClass]="{'error':errorStatus, 'success':!errorStatus}">
+              <label>
+                {{notificationMsg}}
+              </label>
+            </div>
+            <mat-form-field class="
+              full-width required">
               <input matInput placeholder="Email *" formControlName="email" class="required" aria-label="email">
               <mat-hint align="end" *ngIf="loginForm.controls.email.errors && !loginForm.controls.email.pristine" class="error">Invalid
                 Email!
@@ -60,10 +66,11 @@
               <ng-container *ngSwitchCase="1">
                 <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Sign Up</button>
                 <div class="signupfree">by clicking "Sign Up" I agree to bitWiser's Terms & Conditions</div>
-                <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">Already have an account? Login</a></div>
+                <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">Already have an account?
+                    Login</a></div>
               </ng-container>
               <ng-container *ngSwitchCase="2">
-                <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Forgot
+                <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid || notificationMsg.length > 0">Forgot
                   Password</button>
                 <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">No. I remember it now!</a></div>
               </ng-container>
