@@ -6,7 +6,7 @@ import {
     subscriptionRemoveStatus, checkEmailSubscriptionStatus,
     socialShareImageUrl, blogs
 } from './social.reducer';
-import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
+import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 export * from './social.reducer';
 

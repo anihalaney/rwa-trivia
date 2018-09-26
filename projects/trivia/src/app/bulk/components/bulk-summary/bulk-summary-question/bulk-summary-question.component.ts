@@ -7,7 +7,7 @@ import { Utils } from '../../../../../../../shared-library/src/lib/core/services
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { MatTableDataSource } from '@angular/material';
 
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 
 import { MatSnackBar } from '@angular/material';

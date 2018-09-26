@@ -1,0 +1,7 @@
+<StackLayout>
+    <Label text="Welcome to Dashboard" textWrap="true"></Label>
+    <Label [text]="user?.displayName" textWrap="true"></Label>
+    <Button text="Logout" (tap)="logout()" *ngIf="true"></Button>    
+</StackLayout>
+
+
