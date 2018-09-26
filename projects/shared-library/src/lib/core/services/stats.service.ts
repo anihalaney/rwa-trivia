@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SystemStats } from '../../shared/model';
+import { DbService } from './../db-service';
 
 @Injectable()
 export class StatsService {
 
-    constructor(private db: AngularFirestore) { }
+    constructor(private dbService: DbService) { }
 
     loadLeaderBoardStat(): Observable<any> {
-        return this.db.doc('/leader_board_stats/categories')
-            .valueChanges()
+        return this.dbService
+            .valueChanges('leader_board_stats', 'categories')
             .pipe(map(lbsStat => lbsStat));
+
     }
 
     loadSystemStat(): Observable<SystemStats> {
-        return this.db.doc('/stats/system')
-            .valueChanges()
+        return this.dbService
+            .valueChanges('stats', 'system')
             .pipe(map(stat => stat));
     }
 }
