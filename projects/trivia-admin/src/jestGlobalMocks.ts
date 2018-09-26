@@ -1,4 +1,4 @@
-const mock = () => {
+const mockAdmin = () => {
   let storage = {};
   return {
     getItem: key => key in storage ? storage[key] : null,
@@ -8,8 +8,8 @@ const mock = () => {
   };
 };
 
-Object.defineProperty(window, 'localStorage', { value: mock() });
-Object.defineProperty(window, 'sessionStorage', { value: mock() });
+Object.defineProperty(window, 'localStorage', { value: mockAdmin() });
+Object.defineProperty(window, 'sessionStorage', { value: mockAdmin() });
 Object.defineProperty(window, 'getComputedStyle', {
   value: () => ['-webkit-appearance']
 });
