@@ -123,7 +123,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
-    location.reload();
+    this.router.navigate(['/dashboard']);
   }
 
   toggleTheme() {
