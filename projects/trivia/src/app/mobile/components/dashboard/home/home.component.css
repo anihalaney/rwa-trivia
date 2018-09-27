@@ -1,0 +1,53 @@
+button {
+    font-size: 15;
+    horizontal-align: center;
+}
+
+.drawerContentText {
+    font-size: 13;
+    padding: 10;
+}
+
+.drawerContentButton {
+    margin: 10;
+    horizontal-align: left;
+}
+
+.sideStackLayout {
+    background-color: gray;
+}
+
+.sideTitleStackLayout {
+    height: 56;
+    text-align: center;
+    vertical-align: center;
+}
+
+.sideLabel {
+    padding: 10;
+}
+
+.sideLightGrayLabel {
+    background-color: lightgray;
+}
+
+.textcenter{
+    text-align: center;
+}
+
+.question-answered{
+    border-color: #000;
+    border-width: 1;
+}
+
+.gameplay .right{
+    border-color: #71b02f;
+    background-color: #71b02f;
+    color: #fff;
+}
+
+.gameplay .wrong{
+    border-color: #d54937;
+    background-color: #d54937;
+    color: #fff;
+}
