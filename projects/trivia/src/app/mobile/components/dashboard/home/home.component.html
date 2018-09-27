@@ -1,0 +1,50 @@
+<ns-action-bar  title="Dashboard" showAdd="true" (open)="openDrawer()" ></ns-action-bar>
+<RadSideDrawer #drawerComponent tkExampleTitle tkToggleNavButton>
+    <StackLayout tkDrawerContent class="sideStackLayout">
+        <ns-drawer-component (output)="onCloseDrawerTap()"></ns-drawer-component>
+        <Label text="Close Drawer" color="lightgray" padding="10" style="horizontal-align: center" (tap)="onCloseDrawerTap()"></Label>
+    </StackLayout>
+    <StackLayout tkMainContent backgroundColor="#f8f8f8">
+        <ScrollView>
+            <StackLayout>
+                <!-- <StackLayout backgroundColor="#129794" orientation="horizontal">
+                        <Label text="&#xE5D2;" fontSize="35" color="white" horizontalAlignment="left" (tap)="openDrawer()"
+                            class="gi ga-font text-center" padding="10"></Label>
+                        <Label text="Welcome User!" fontSize="20" color="white" fontWeight="500" paddingTop="15" textWrap="true"></Label>
+                    </StackLayout> -->
+                <CardView margin="10" elevation="20" radius="15" class="gameplay">
+                    <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
+                        height="100%" margin="15">
+                        <StackLayout horizontalAlignment="center" verticalAlignment="center">
+                            <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
+                            <Label text="The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "
+                                fontSize="15" fontWeight="500" marginTop="10" textWrap="true"></Label>
+                            <StackLayout orientation="horizontal" marginTop="10">
+                                <Label text="Tags:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
+                                <Label text="Social, Unity, App Store, C#, Swift, Selenium" fontSize="15" textWrap="true"></Label>
+                            </StackLayout>
+
+                            <StackLayout class="question-answered right"  marginTop="10">
+                                <Label text="Java Compiler" horizontalAlignment="center" fontSize="15" fontWeight="500"
+                                    marginTop="10" marginBottom="10" textWrap="true"></Label>
+                            </StackLayout>
+                            <StackLayout class="question-answered" marginTop="10">
+                                <Label text="Java Interpreter" horizontalAlignment="center" fontSize="15" fontWeight="500"
+                                    marginTop="10" marginBottom="10" textWrap="true"></Label>
+                            </StackLayout>
+                            <StackLayout class="question-answered" marginTop="10">
+                                <Label text="Java Disassemble" horizontalAlignment="center" fontSize="15" fontWeight="500"
+                                    marginTop="10" marginBottom="10" textWrap="true"></Label>
+                            </StackLayout>
+                            <StackLayout class="question-answered" marginTop="10">
+                                <Label text="Java Debugger" horizontalAlignment="center" fontSize="15" fontWeight="500"
+                                    marginTop="10" marginBottom="10" textWrap="true"></Label>
+                            </StackLayout>
+                            <button backgroundColor="#89C24F" margin="10 0 10 0" width="100%" text="Try Another"></button>
+                        </StackLayout>
+                    </StackLayout>
+                </CardView>
+            </StackLayout>
+        </ScrollView>
+    </StackLayout>
+</RadSideDrawer>

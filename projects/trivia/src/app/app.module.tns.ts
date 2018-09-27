@@ -3,7 +3,7 @@ import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
 
 import { AppRoutingModule } from './app-routing.module.tns';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+// import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -16,13 +16,13 @@ import { CoreModule } from './../../../shared-library/src/lib/core/core.module';
 // Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
 // import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 import { HttpClientModule } from '@angular/common/http';
-
-
 import { TNSFirebaseService } from './mobile/core/services/tns-firebase.service';
 import { FirebaseService } from 'shared-library/core/db-service/firebase.service';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
 import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens'
-
+import { LeaderBoardComponent } from './mobile/components/leaderboard/leaderboard.component';
+import { SharedModule } from "./mobile/shared";
+import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -30,8 +30,9 @@ export function firebaseFactory() {
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
+    // HomeComponent,
     LoginComponent,
+    LeaderBoardComponent
   ],
   imports: [
     NativeScriptModule,
@@ -41,6 +42,8 @@ export function firebaseFactory() {
     StoreRouterConnectingModule,
     CoreModule,
     HttpClientModule,
+    SharedModule,
+    NativeScriptUISideDrawerModule
   ],
   providers: [
     TNSFirebaseService,

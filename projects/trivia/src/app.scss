@@ -23,3 +23,14 @@ refer to http://docs.nativescript.org/ui/theme.
 .new-btn{
     color: map-get($light-theme-text-color , primary-light);
   }
+
+.material-icon {
+  font-family: "Material Icons", MaterialIcons-Regular;
+}
+
+.fa {
+  font-family: "FontAwesome", fontawesome-webfont;
+}
+.new-btn-s {
+  color: red;
+}
