@@ -1,8 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
+import { CoreState, coreState, UserActions, UIStateActions } from '../../store';
+import { Store, select } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { Utils } from '../../services';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -11,17 +15,24 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   mode: SignInMode;
   loginForm: FormGroup;
-  errMsg: string;
+  notificationMsg: string;
+  errorStatus: boolean;
+  subs: Subscription[] = [];
+  notificationLogs: string[];
 
   constructor(private fb: FormBuilder,
     private afAuth: AngularFireAuth,
     private dialog: MatDialog,
-    public dialogRef: MatDialogRef<LoginComponent>) {
+    public dialogRef: MatDialogRef<LoginComponent>,
+    private store: Store<CoreState>,
+    private uiStateActions: UIStateActions) {
+
     this.mode = SignInMode.signIn;  //default
-    this.errMsg = '';
+    this.notificationMsg = '';
+    this.errorStatus = false;
   }
 
   ngOnInit() {
@@ -54,8 +65,12 @@ export class LoginComponent implements OnInit {
 
       }
       this.loginForm.get('password').updateValueAndValidity();
-      this.errMsg = '';
+      this.notificationMsg = '';
+      this.errorStatus = false;
     });
+
+    this.subs.push(this.store.select(coreState).pipe(select(s => s.resetPasswordLogs))
+      .subscribe(notificationLogs => this.notificationLogs = notificationLogs));
   }
 
   onSubmit() {
@@ -74,9 +89,11 @@ export class LoginComponent implements OnInit {
         }, (error: Error) => {
           //error
           // console.log(error);
-          this.errMsg = error.message;
+          this.notificationMsg = error.message;
+          this.errorStatus = true;
         }).catch((error: Error) => {
-          this.errMsg = error.message;
+          this.notificationMsg = error.message;
+          this.errorStatus = true;
         });
         break;
       case 1:
@@ -89,58 +106,85 @@ export class LoginComponent implements OnInit {
           this.dialogRef.close();
           if (user && !user.emailVerified) {
             user.sendEmailVerification().then(function () {
-              console.log("email verification sent to user");
+              // console.log("email verification sent to user");
+              this.notificationMsg = `email verification sent to ${this.loginForm.get('email').value}`;
+              this.errorStatus = false;
             });
           }
         }, (error: Error) => {
           //error
           // console.log(error);
-          this.errMsg = error.message;
+          this.notificationMsg = error.message;
+          this.errorStatus = true;
         }).catch((error: Error) => {
-          this.errMsg = error.message;
+          this.notificationMsg = error.message;
+          this.errorStatus = true;
         });
         break;
       case 2:
         //Forgot Password
         firebase.auth().sendPasswordResetEmail(this.loginForm.get('email').value)
           .then((a: any) => {
-            console.log("success. check your email");
-          },
-            (error: Error) => {
-              //    console.log(error);
-              this.errMsg = error.message;
-            }).catch((error: Error) => {
-              this.errMsg = error.message;
-            });
+            //  console.log("success. check your email");
+            this.notificationMsg = `email sent to ${this.loginForm.get('email').value}`;
+            this.errorStatus = false;
+            this.notificationLogs.push(this.loginForm.get('email').value);
+            this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs(this.notificationLogs));
+          }, (error: Error) => {
+            //error
+            // console.log(error);
+            this.notificationMsg = error.message;
+            this.errorStatus = true;
+          }).catch((error: Error) => {
+            this.notificationMsg = error.message;
+            this.errorStatus = true;
+          });
     }
   }
 
   googleLogin() {
     this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
       .catch((error: Error) => {
-        this.errMsg = error.message;
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
       });
   }
 
   fbLogin() {
     this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
       .catch((error: Error) => {
-        this.errMsg = error.message;
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
       });
   }
 
   twitterLogin() {
     this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider())
       .catch((error: Error) => {
-        this.errMsg = error.message;
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
       });
   }
 
   githubLogin() {
     this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
       .catch((error: Error) => {
-        this.errMsg = error.message;
+        this.notificationMsg = error.message;
+        this.errorStatus = true;
       });
+  }
+
+  validateLogs() {
+    if (this.notificationLogs.indexOf(this.loginForm.get('email').value) !== -1) {
+      this.notificationMsg = `email has already sent to ${this.loginForm.get('email').value}`;
+      return true;
+    }
+    this.notificationMsg = '';
+    return false;
+  }
+
+  ngOnDestroy() {
+    Utils.unsubscribe(this.subs);
   }
 }
 

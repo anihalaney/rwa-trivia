@@ -66,16 +66,23 @@ a {
 	background-color: transparent;
 }
 
+.auth-msg{
+	padding-top: 10px;	
+	padding-bottom: 10px;
+}
+
+.error{
+	color: red;
+}
+
+.success{
+	color: #008004;
+}
+
 .disabled-btn{
 	background-color: #dddddd;
 }
 
 .active-btn{
 	background-color: #af3424;
-}
-
-.auth-error-msg{
-	padding-top: 10px;
-	color: red;
-	padding-bottom: 10px;
 }
