@@ -6,7 +6,7 @@
   <section id="curentactive" class="card">
     <div class="h1block">
       <h1>My Settings</h1>
-      <p>Control You profile information, both what is says and what other people see</p>
+      <p>Control You profile information, both what it says and what other people see</p>
     </div>
     <div class="optionbox">
       <!-- Prefered Categories -->
@@ -28,8 +28,8 @@
           <div class="row">
             <div class="col-sm-3 col-xs-12">
               <label for="file-upload" class="custom-file-upload">
-                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight" alt="Avatar"
-                />
+                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"
+                  alt="Avatar" />
               </label>
               <div>
                 <button *ngIf="profileImageFile && !profileImageValidation" class="btn" (click)="saveProfileImage()">Save</button>
@@ -37,17 +37,20 @@
             </div>
             <div class="col-sm-9 col-xs-12 avatarinput">
               <div>
-                <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide" aria-label="file">
+                <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide"
+                  aria-label="file">
               </div>
               <P *ngIf="profileImageValidation" class="error">
                 {{profileImageValidation}}
               </P>
-              <p *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can adjust the cropped image Recommend
+              <p *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can adjust the cropped image
+                Recommend
                 an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
               <div>
                 <div class="file-upload">
                 </div>
-                <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage" [settings]="cropperSettings"></img-cropper>
+                <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage"
+                  [settings]="cropperSettings"></img-cropper>
                 <br>
               </div>
             </div>
@@ -60,7 +63,8 @@
             </div>
             <div class="formfield">
               <label>Display Name</label>
-              <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required" aria-label="display-name">
+              <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required"
+                aria-label="display-name">
               <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">Display
                 Name is required!</p>
             </div>
@@ -106,8 +110,8 @@
                     </mat-basic-chip>
                   </mat-chip-list>
 
-                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags" [matAutocomplete]="tagAuto"
-                    aria-label="tags">
+                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags"
+                    [matAutocomplete]="tagAuto" aria-label="tags">
                   <mat-autocomplete #tagAuto="matAutocomplete">
                     <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                       {{tag}}
@@ -177,7 +181,8 @@
                   <div class="formfield">
                     <label>Privacy:</label>
                     <label>
-                      <input formControlName="privateProfileSetting" type="checkbox"> Keep your profile activity private
+                      <input formControlName="privateProfileSetting" type="checkbox"> Keep your profile activity
+                      private
                     </label>
                     <p>This means no one can invite you or can see you profile.</p>
                   </div>
@@ -197,7 +202,8 @@
                   <div class="formfield">
                     <label></label>
                     <label>
-                      <input formControlName="requestForBulkUpload" type="checkbox" (change)="setBulkUploadRequest()"> Bulk
+                      <input formControlName="requestForBulkUpload" type="checkbox" (change)="setBulkUploadRequest()">
+                      Bulk
                       Upload Request
                     </label>
                   </div>
