@@ -47,8 +47,13 @@
               <input type="password" matInput placeholder="Confirm Password *" class="required" formControlName="confirmPassword"
                 aria-label="confirm-password">
               <mat-hint align="end" *ngIf="loginForm.controls.confirmPassword.errors && !loginForm.controls.confirmPassword.pristine"
+<<<<<<< HEAD
+                class="error">Confirm Password must be atleast 6 characters</mat-hint>
+              <mat-hint align="end" *ngIf="(loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch'))"
+=======
                 class="error">Password must be atleast 6 characters</mat-hint>
               <mat-hint align="end" *ngIf="mode === 1 && (loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch'))"
+>>>>>>> 3e1bd07297da275f960478fed45699cf9275653a
                 class="error">Must match Password</mat-hint>
             </mat-form-field>
             <ng-container [ngSwitch]="mode">
