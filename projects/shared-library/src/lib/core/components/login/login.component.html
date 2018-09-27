@@ -70,7 +70,7 @@
                     Login</a></div>
               </ng-container>
               <ng-container *ngSwitchCase="2">
-                <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid || notificationMsg.length > 0">Forgot
+                <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid || validateLogs()">Forgot
                   Password</button>
                 <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">No. I remember it now!</a></div>
               </ng-container>
