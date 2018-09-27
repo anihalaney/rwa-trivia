@@ -1,5 +1,4 @@
 import { IConfig } from './iconfig';
-
 export const environment = {
   production: true
 };
