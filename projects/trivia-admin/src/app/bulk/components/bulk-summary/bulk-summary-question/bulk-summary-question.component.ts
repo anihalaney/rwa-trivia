@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { BulkUploadFileInfo, Question, Category, User, QuestionStatus } from '../../../../../../../shared-library/src/lib/shared/model';
 import { MatTableDataSource } from '@angular/material';
 import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 
 import { MatSnackBar } from '@angular/material';

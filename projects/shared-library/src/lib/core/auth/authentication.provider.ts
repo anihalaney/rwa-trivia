@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { Observable, defer, throwError, from } from 'rxjs';
 import { share, take, tap } from 'rxjs/operators';

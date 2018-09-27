@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "475161979232",
+    "firebase_url": "https://login-auth-839c6.firebaseio.com",
+    "project_id": "login-auth-839c6",
+    "storage_bucket": "login-auth-839c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475161979232:android:fb726eab0708e096",
+        "android_client_info": {
+          "package_name": "org.nativescript.triviamobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "475161979232-dbka1rotitiv3bufb215nh3af3u6bs03.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.nativescript.triviamobile",
+            "certificate_hash": "242b67274d94ebacfb81197875b33d58cf207583"
+          }
+        },
+        {
+          "client_id": "475161979232-rvf0sdtgf4p1jeglqpkua91mci0mtctj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.nativescript.triviamobile",
+            "certificate_hash": "a4670ee30bd3be47b9e3b9c90cdf2d9958a57b7e"
+          }
+        },
+        {
+          "client_id": "475161979232-gc41hcei3q8unmgqampkjcai4qcdjqe7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvU8EsDT7ao0EEf4CfDrEIwc_SgaT4o0Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "475161979232-gc41hcei3q8unmgqampkjcai4qcdjqe7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
