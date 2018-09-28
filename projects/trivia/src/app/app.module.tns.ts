@@ -3,8 +3,6 @@ import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
 
 import { AppRoutingModule } from './app-routing.module.tns';
 import { AppComponent } from './app.component';
-// import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -21,8 +19,12 @@ import { FirebaseService } from 'shared-library/core/db-service/firebase.service
 import * as TNSFirebase from 'nativescript-plugin-firebase';
 import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens'
 import { LeaderBoardComponent } from './mobile/components/leaderboard/leaderboard.component';
+import { LoginComponent } from './mobile/components/login/login.component';
 import { SharedModule } from "./mobile/shared";
 import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
+import { QuestionComponent } from "./components/question/question.component";
+import { DashboardComponent } from  "./components/dashboard/dashboard.component";
+
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -32,7 +34,9 @@ export function firebaseFactory() {
     AppComponent,
     // HomeComponent,
     LoginComponent,
-    LeaderBoardComponent
+    LeaderBoardComponent,
+    // QuestionComponent,
+    DashboardComponent
   ],
   imports: [
     NativeScriptModule,

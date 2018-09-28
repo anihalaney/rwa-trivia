@@ -54,6 +54,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
 
+    this.userDict$.subscribe(userData => {
+      console.log('user data', userData);
+    })
+
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user
       if (user) {

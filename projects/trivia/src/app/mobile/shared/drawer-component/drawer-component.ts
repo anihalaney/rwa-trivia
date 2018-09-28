@@ -39,6 +39,9 @@ export class DrawerComponent implements OnInit {
     dashboard() {
         this.routerExtension.navigate(["/dashboard"], { clearHistory: true });
     }
-    // leaderboard
+    
+    login(){
+        this.routerExtension.navigate(["/login"], { clearHistory: true });
+    }
   
 }

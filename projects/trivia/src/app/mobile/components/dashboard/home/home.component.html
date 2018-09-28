@@ -12,7 +12,7 @@
                             class="gi ga-font text-center" padding="10"></Label>
                         <Label text="Welcome User!" fontSize="20" color="white" fontWeight="500" paddingTop="15" textWrap="true"></Label>
                     </StackLayout> -->
-                <CardView margin="10" elevation="20" radius="15" class="gameplay">
+                <!-- <CardView margin="10" elevation="20" radius="15" class="gameplay">
                     <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
                         height="100%" margin="15">
                         <StackLayout horizontalAlignment="center" verticalAlignment="center">
@@ -43,7 +43,10 @@
                             <button backgroundColor="#89C24F" margin="10 0 10 0" width="100%" text="Try Another"></button>
                         </StackLayout>
                     </StackLayout>
-                </CardView>
+                </CardView> -->
+
+                <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
+                
             </StackLayout>
         </ScrollView>
     </StackLayout>
