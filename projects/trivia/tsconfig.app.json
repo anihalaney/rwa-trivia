@@ -1,8 +1,8 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {    
+  "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "module": "es2015",    
+    "module": "es2015",
     "types": []
   },
   "exclude": [
@@ -13,6 +13,9 @@
     "./src/**/*.ios.ts",
     "./src/main.ns.aot.ts",
     "./src/main.ns.ts",
-    "./src/vendor.ts"
+    "./src/vendor.ts",
+    "./src/app/home",
+    "./src/app/login",
+    "./src/app/mobile"
   ]
 }
