@@ -1,18 +1,27 @@
 import { NgModule } from '@angular/core';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './mobile/components/login/login.component';
 import { LeaderBoardComponent } from './mobile/components/leaderboard/leaderboard.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 export const routes: Routes = [
 
-    { path: "", redirectTo: "leaderboard", pathMatch: "full" },
+    { path: "", redirectTo: "dashboard", pathMatch: "full" },
     {
         path: "dashboard",
-        loadChildren: "./mobile/components/dashboard/dashboard.module#DashboardModule"
+        component: DashboardComponent
+    }, 
+    // {
+    //     path: "dashboard",
+    //     loadChildren: "./mobile/components/dashboard/dashboard.module#DashboardModule"
+    // },
+    {
+        path: "leaderboard",
+        component: LeaderBoardComponent
     },
     {
-        path:"leaderboard",
-        component:LeaderBoardComponent
+        path: 'login',
+        component: LoginComponent,
     },
     // {
     //     path: '',
@@ -23,10 +32,7 @@ export const routes: Routes = [
     //     path: 'home',
     //     component: HomeComponent,
     // },
-    // {
-    //     path: 'login',
-    //     component: LoginComponent,
-    // },
+
 ];
 
 @NgModule({

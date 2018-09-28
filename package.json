@@ -4,7 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "org.nativescript.triviamobile",
+    "id": "com.bitwiser.trivia.dev",
     "tns-android": {
       "version": "4.2.0"
     }

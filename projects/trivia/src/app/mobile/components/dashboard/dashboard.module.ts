@@ -16,6 +16,8 @@ import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angul
 // import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
 import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
+import { QuestionComponent } from './../../../components/question/question.component';
+
 registerElement('CardView', () => CardView);
 @NgModule({
     imports: [
@@ -28,7 +30,8 @@ registerElement('CardView', () => CardView);
     ],
     declarations: [
         HomeComponent,
-        // DrawerComponent
+        // DrawerComponent,
+        QuestionComponent
     ],
     providers: [
     ],
