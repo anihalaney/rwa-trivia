@@ -1,1 +1,14 @@
-<Label text="Native Script" textWrap="true"></Label>
+<ns-action-bar title="Dashboard" showAdd="true" (open)="openDrawer()"></ns-action-bar>
+<RadSideDrawer #drawerComponent tkExampleTitle tkToggleNavButton>
+  <StackLayout tkDrawerContent class="sideStackLayout">
+    <ns-drawer-component (output)="onCloseDrawerTap()"></ns-drawer-component>
+    <Label text="Close Drawer" color="lightgray" padding="10" style="horizontal-align: center" (tap)="onCloseDrawerTap()"></Label>
+  </StackLayout>
+  <StackLayout tkMainContent backgroundColor="#f8f8f8">
+    <ScrollView>
+      <StackLayout>
+        <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
+      </StackLayout>
+    </ScrollView>
+  </StackLayout>
+</RadSideDrawer>

@@ -24,10 +24,14 @@ import { SharedModule } from "./mobile/shared";
 import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 import { QuestionComponent } from "./components/question/question.component";
 import { DashboardComponent } from  "./components/dashboard/dashboard.component";
+import { AuthorComponent } from "shared-library/shared/components/author/author.component";
+import { registerElement } from 'nativescript-angular/element-registry';
+import { CardView } from 'nativescript-cardview';
 
 export function firebaseFactory() {
   return TNSFirebase;
 }
+registerElement('CardView', () => CardView);
 
 @NgModule({
   declarations: [
@@ -35,8 +39,9 @@ export function firebaseFactory() {
     // HomeComponent,
     LoginComponent,
     LeaderBoardComponent,
-    // QuestionComponent,
-    DashboardComponent
+    QuestionComponent,
+    DashboardComponent,
+    AuthorComponent
   ],
   imports: [
     NativeScriptModule,
