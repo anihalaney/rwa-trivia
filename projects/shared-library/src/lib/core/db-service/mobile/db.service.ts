@@ -24,11 +24,18 @@ export class TNSDbService extends DbService {
 
 
     public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {
+        // console.log('mobile 9' , collectionName);
+        // console.log('mobile Path' , path);
+
         let query = firebase.firestore().collection(collectionName);
         if (queryParams) {
             for (const param of queryParams.condition) {
                 query = query.where(param.name, param.comparator, param.value);
             }
+        }
+
+        if(path) {
+            query = query.doc(path);
         }
         return Observable.create(observer => {
             const unsubscribe = query.onSnapshot((snapshot: any) => {
@@ -38,14 +45,16 @@ export class TNSDbService extends DbService {
                         id: doc.id,
                         ...doc.data()
                     }));
-                }
-                observer.next((results.length == 1) ? results[0] : results);
+                }else {
+                    results = snapshot.data();
+                  }
+                  this.zone.run(() => {
+                        observer.next((results.length == 1) ? results[0] : results);
+                  });
             });
             return () => unsubscribe();
         });
     }
-
-
     public createId() {
         return firebase.createId();
     }
@@ -63,7 +72,7 @@ export class TNSDbService extends DbService {
     }
 
     public getDoc(collectionName, docId): any {
-        console.log('in mob ca');
+        console.log('in mob');
     }
 
     public upload(filePath, imageBlob): any {

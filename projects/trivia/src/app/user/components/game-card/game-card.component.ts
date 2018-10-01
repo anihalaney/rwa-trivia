@@ -33,7 +33,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   totalRound = 16;
   gameStatus: any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private utils:Utils) {
 
     this.gameStatus = GameStatus;
 
@@ -89,7 +89,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   getImageUrl(user: User) {
-    return Utils.getImageUrl(user, 70, 60, '70X60');
+    return this.utils.getImageUrl(user, 70, 60, '70X60');
   }
 
   ngOnDestroy() {

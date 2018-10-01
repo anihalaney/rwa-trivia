@@ -14,8 +14,9 @@
               <Label text="{{answer.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
                   marginTop="10" marginBottom="10" textWrap="true" ></Label>
           </StackLayout>
-          <button backgroundColor="#89C24F" margin="10 0 10 0" (tap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another"></button>
           <author [userDict]="userDict" [userId]="question.created_uid"></author>
+          <button backgroundColor="#89C24F" margin="10 0 10 0" (tap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another"></button>
+          
       </StackLayout>
   </StackLayout>
 </CardView>

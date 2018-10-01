@@ -31,7 +31,7 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(public dialog: MatDialog, private store: Store<AppState>, private renderer: Renderer2, private userActions: UserActions) {
+  constructor(public dialog: MatDialog, private store: Store<AppState>, private renderer: Renderer2, private userActions: UserActions, private utils: Utils) {
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -81,7 +81,7 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
   }
 
   getImageUrl(user: User) {
-    return Utils.getImageUrl(user, 44, 40, '44X40');
+    return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 
   ngOnDestroy() {

@@ -11,7 +11,7 @@ import { RouterExtensions } from "nativescript-angular/router";
 })
 export class DrawerComponent implements OnInit {
     @Output() output = new EventEmitter();
-    photoUrl= "../../../../assets/icons/icon-192x192.png";
+    photoUrl= "~/assets/icons/icon-192x192.png";
     // ~/assets/icons/icon-192x192/png
     firstName = "Daniel";
     lastName = "Chi";
