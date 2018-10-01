@@ -23,10 +23,12 @@ import { LoginComponent } from './mobile/components/login/login.component';
 import { SharedModule } from "./mobile/shared";
 import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 import { QuestionComponent } from "./components/question/question.component";
-import { DashboardComponent } from  "./components/dashboard/dashboard.component";
+import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { AuthorComponent } from "shared-library/shared/components/author/author.component";
 import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
+// import { LeaderboardComponent } from './stats/components/leaderboard/leaderboard.component';
+import { StatsModule } from './stats/stats.module';
 
 export function firebaseFactory() {
   return TNSFirebase;
@@ -41,7 +43,8 @@ registerElement('CardView', () => CardView);
     LeaderBoardComponent,
     QuestionComponent,
     DashboardComponent,
-    AuthorComponent
+    AuthorComponent,
+    // LeaderboardComponent
   ],
   imports: [
     NativeScriptModule,
@@ -52,6 +55,7 @@ registerElement('CardView', () => CardView);
     CoreModule,
     HttpClientModule,
     SharedModule,
+    StatsModule,
     NativeScriptUISideDrawerModule
   ],
   providers: [

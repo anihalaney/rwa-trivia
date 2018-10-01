@@ -31,7 +31,7 @@ export class RecentGameCardComponent implements OnChanges, OnDestroy {
     GameStatus = GameStatus;
 
 
-    constructor(private store: Store<AppState>, private userActions: UserActions) {
+    constructor(private store: Store<AppState>, private userActions: UserActions, private utils: Utils) {
 
         this.categoryDictObs = store.select(categoryDictionary);
         this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
@@ -55,7 +55,7 @@ export class RecentGameCardComponent implements OnChanges, OnDestroy {
     }
 
     getImageUrl(user: User) {
-        return Utils.getImageUrl(user, 44, 40, '44X40');
+        return this.utils.getImageUrl(user, 44, 40, '44X40');
     }
 
     ngOnDestroy() {

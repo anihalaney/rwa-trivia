@@ -4,13 +4,14 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './mobile/components/login/login.component';
 import { LeaderBoardComponent } from './mobile/components/leaderboard/leaderboard.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { LeaderboardComponent } from './stats/components';
 export const routes: Routes = [
 
     { path: "", redirectTo: "dashboard", pathMatch: "full" },
     {
         path: "dashboard",
         component: DashboardComponent
-    }, 
+    },
     // {
     //     path: "dashboard",
     //     loadChildren: "./mobile/components/dashboard/dashboard.module#DashboardModule"

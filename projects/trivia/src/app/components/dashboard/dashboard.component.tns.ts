@@ -37,7 +37,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       gameActions,
       userActions, windowRef,
       platformId);
-    console.log('in child class');
+ 
   }
 
   @ViewChild('drawerComponent') public drawerComponent: RadSideDrawerComponent;

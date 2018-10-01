@@ -22,7 +22,7 @@ export class ProfileCardComponent implements OnDestroy {
   userProfileImageUrl: string;
   subs: Subscription[] = [];
 
-  constructor(private store: Store<AppState>, private router: Router) {
+  constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
     this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
     this.subs.push(this.userObs.subscribe(user => {
@@ -39,7 +39,7 @@ export class ProfileCardComponent implements OnDestroy {
   }
 
   getImageUrl(user: User) {
-    return Utils.getImageUrl(user, 263, 263, '400X400');
+    return this.utils.getImageUrl(user, 263, 263, '400X400');
   }
 
   ngOnDestroy() {

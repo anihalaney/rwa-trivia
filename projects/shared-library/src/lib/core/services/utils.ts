@@ -1,10 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../environments/environment'
 import { User } from '../../shared/model'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Injectable()
 export class Utils {
+  private static platforms;
+
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(APP_ID) private appId: string) {
+    Utils.platforms = this.platformId;
+  }
 
   static regExpEscape = function (s): string {
     return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
@@ -31,14 +39,21 @@ export class Utils {
     return new Blob([new Uint8Array(array)]);
   }
 
-  static getImageUrl(user: User, width: Number, height: Number, size: string) {
+  public getImageUrl(user: User, width: Number, height: Number, size: string) {
+
     if (user && user.profilePicture && user.profilePicture !== '') {
       return `${CONFIG.functionsUrl}/app/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
     } else {
-      return `assets/images/avatar-${size}.png`;
+      if (isPlatformBrowser(Utils.platforms) == false && isPlatformBrowser(Utils.platforms) == false) {
+        return `~/assets/images/avatar-${size}.png`;
+      } else {
+        return `assets/images/avatar-${size}.png`;
+      }
     }
 
+
   }
+
 
   static convertIntoDoubleDigit(digit: Number) {
     return (digit < 10) ? `0${digit}` : digit;

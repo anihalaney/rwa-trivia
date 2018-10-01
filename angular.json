@@ -4,7 +4,7 @@
   "newProjectRoot": "projects",
   "projects": {
     "trivia": {
-      "root": "projects",
+      "root": "projects/trivia",
       "sourceRoot": "projects/trivia/src",
       "projectType": "application",
       "prefix": "app",

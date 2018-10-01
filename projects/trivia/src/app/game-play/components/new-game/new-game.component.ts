@@ -50,7 +50,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     private store: Store<AppState>,
     private gameActions: GameActions,
-    private router: Router) {
+    private router: Router,
+    private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
@@ -243,7 +244,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
 
   getImageUrl(user: User) {
-    return Utils.getImageUrl(user, 70, 60, '70X60');
+    return this.utils.getImageUrl(user, 70, 60, '70X60');
   }
 
   ngOnDestroy() {

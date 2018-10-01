@@ -5,13 +5,14 @@
         <Label text="Close Drawer" color="lightgray" padding="10" style="horizontal-align: center" (tap)="onCloseDrawerTap()"></Label>
     </StackLayout>
     <StackLayout tkMainContent backgroundColor="#f8f8f8">
-        <ScrollView>
+                <leaderboard *ngIf="userDict" [userDict]="userDict"></leaderboard>
+            <!-- <leaderboard *ngIf="userDict" [userDict]="userDict"></leaderboard>
             <StackLayout>
                 <CardView margin="10" elevation="20" radius="15" class="gameplay">
                     <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
                         height="100%" margin="15">
                         <StackLayout horizontalAlignment="center" verticalAlignment="center">
-                            <Label text="Programming" textWrap="true" class="title" verticalAlignment="center"></Label>
+                            <Label text="Programming" textWrap="true" class="title" verticalAlignment="center" (tap)="clicked()"></Label>
                         </StackLayout>
                          <StackLayout margin="10">
                             <GridLayout rows="*" columns="auto,auto,*,auto"  marginTop="10">
@@ -30,7 +31,6 @@
 
                             <GridLayout rows="*" columns="auto,auto,*,auto" marginTop="10">
                                 <Label text="#2" row="0" col="0" class="padding-10 text-black"></Label>
-                                <!-- <Label text="0, 1" row="0" col="1" class="padding-10"></Label> -->
                                 <Image row="0" col="1" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
                                 marginLeft="10" verticalAlignment="center" marginRight="10"></Image>
                                 <GridLayout  row="0" col="2" rows="*, *" columns="*" class="padding-10">
@@ -46,7 +46,6 @@
                          </StackLayout>
                     </StackLayout>
                 </CardView>
-            </StackLayout>
-        </ScrollView>
+            </StackLayout> -->
     </StackLayout>
 </RadSideDrawer>
