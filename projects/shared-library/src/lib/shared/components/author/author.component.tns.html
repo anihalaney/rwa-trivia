@@ -1,12 +1,5 @@
-<!-- <label class="text-alignment">Author :</label>
-<label class="alignment-left text-alignment truncate" title="{{userDict[userId]?.displayName}}">{{userDict[userId]?.displayName}}</label>
-<img [src]="userProfileImageUrl" alt="User Profile Image" /> -->
-
-<GridLayout rows="*" columns="*,auto,auto"  marginTop="10">
-    <Label row="0" col="0" text="Author :" textWrap="true" horizontalAlignment="right" paddingTop="15"></Label>
-    <Label row="0" col="1" text="{{userDict[userId]?.displayName}}" textWrap="true" paddingTop="15"></Label>
-    <Image row="0" col="2" src="{{userProfileImageUrl}}" color="#FFFFFF" stretch="aspectFill" height="55" width="55" marginLeft="10"
-    verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
+<GridLayout rows="auto" columns="*,auto"  marginTop="10">
+    <Label row="0" col="0" text="Author : {{userDict[userId]?.displayName}}" textWrap="true" horizontalAlignment="right" paddingTop="15" ></Label>
+    <Image row="0" col="1" src="{{userProfileImageUrl}}" color="#FFFFFF" stretch="aspectFill" height="44" width="44" marginLeft="10" marginRight="10" borderRadius="50" ></Image>
 </GridLayout>
-
 

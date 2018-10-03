@@ -1,5 +1,5 @@
 <CardView margin="10" elevation="20" radius="15" class="gameplay">
-  <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
+  <StackLayout class="cardStyle" backgroundColor="#ffffff"
       height="100%" width="100%" margin="15">
       <StackLayout horizontalAlignment="center" verticalAlignment="center" width="100%">
           <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
@@ -14,9 +14,10 @@
               <Label text="{{answer.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
                   marginTop="10" marginBottom="10" textWrap="true" ></Label>
           </StackLayout>
-          <author [userDict]="userDict" [userId]="question.created_uid"></author>
-          <button backgroundColor="#89C24F" margin="10 0 10 0" (tap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another"></button>
-          
+          <StackLayout  orientation="vertical">
+            <author [userDict]="userDict" [userId]="question.created_uid"></author>
+            <button backgroundColor="#89C24F" margin="10 0 10 0" (tap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another"></button>
+          </StackLayout>
       </StackLayout>
   </StackLayout>
 </CardView>

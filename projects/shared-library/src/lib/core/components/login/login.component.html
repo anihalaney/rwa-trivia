@@ -26,7 +26,13 @@
               <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>
               <span *ngSwitchCase="2">Forgot Password</span>
             </div>
-            <mat-form-field class="full-width required">
+            <div class="auth-msg" [ngClass]="{'error':errorStatus, 'success':!errorStatus}">
+              <label>
+                {{notificationMsg}}
+              </label>
+            </div>
+            <mat-form-field class="
+              full-width required">
               <input matInput placeholder="Email *" formControlName="email" class="required" aria-label="email">
               <mat-hint align="end" *ngIf="loginForm.controls.email.errors && !loginForm.controls.email.pristine" class="error">Invalid
                 Email!
@@ -41,7 +47,9 @@
             <mat-form-field [class.hide]="mode !== 1" class="full-width required">
               <input type="password" matInput placeholder="Confirm Password *" class="required" formControlName="confirmPassword"
                 aria-label="confirm-password">
-              <mat-hint align="end" *ngIf="mode === 1 && (loginForm.controls.password.valid && loginForm.hasError('passwordmismatch'))"
+              <mat-hint align="end" *ngIf="loginForm.controls.confirmPassword.errors && !loginForm.controls.confirmPassword.pristine"
+                class="error">Confirm Password must be atleast 6 characters</mat-hint>
+              <mat-hint align="end" *ngIf="(loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch'))"
                 class="error">Must match Password</mat-hint>
             </mat-form-field>
             <ng-container [ngSwitch]="mode">
@@ -51,20 +59,23 @@
                     <input type="checkbox" name="">Keep me logged in
                   </label>
                 </div>
-                <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Login</button>
+                <button mat-raised-button class="auth-btn" [ngClass]="{'active-btn': loginForm.valid, 'disabled-btn': !loginForm.valid}"
+                  type="submit" [disabled]="!loginForm.valid">Login</button>
                 <div class="row loginlink">
                   <div class="col-xs-6"><a (click)="this.mode=2" title="Forgot Password?">Forgot Password?</a></div>
                   <div class="col-xs-6 textrigth"><a (click)="this.mode=1" title="New Signup">New Signup</a></div>
                 </div>
               </ng-container>
               <ng-container *ngSwitchCase="1">
-                <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Sign Up</button>
+                <button mat-raised-button class="auth-btn" [ngClass]="{'active-btn': loginForm.valid, 'disabled-btn': !loginForm.valid}"
+                  type="submit" [disabled]="!loginForm.valid">Sign Up</button>
                 <div class="signupfree">by clicking "Sign Up" I agree to bitWiser's Terms & Conditions</div>
-                <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">Already have an account? Login</a></div>
+                <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">Already have an account?
+                    Login</a></div>
               </ng-container>
               <ng-container *ngSwitchCase="2">
-                <button mat-raised-button class="btn signup" type="submit" [disabled]="!loginForm.valid">Forgot
-                  Password</button>
+                <button mat-raised-button class="auth-btn" type="submit" [ngClass]="{'active-btn': loginForm.valid, 'disabled-btn': !loginForm.valid}"
+                  [disabled]="!loginForm.valid || validateLogs()">Forgot Password</button>
                 <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">No. I remember it now!</a></div>
               </ng-container>
             </ng-container>

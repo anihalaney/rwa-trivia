@@ -1,4 +1,4 @@
-<GridLayout rows="120,auto,auto,auto,auto,auto,auto,*" class="sideStackLayout">
+<GridLayout rows="120,auto,auto,auto,*" class="sideStackLayout">
     <GridLayout row="0" columns="auto,auto" class="sideStackLayoutHeader">
         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
             marginLeft="10" verticalAlignment="center" marginRight="10"  borderRadius="50"></Image>
@@ -11,11 +11,8 @@
         </StackLayout>
     </GridLayout>
     <Label row="1" colSpan="2" text="Home" textWrap="true" class="sideLabel"  (tap)="dashboard()"></Label>
-    <!-- <Label row="2" colSpan="2" text="Recently Completed Games" class="sideLabel sideStackLayout" (tap)="myCurrentTrip()"></Label> -->
-    <Label row="3" colSpan="2" text="Category Leaderboard" class="sideLabel sideStackLayout" (tap)="leaderBoard()"></Label>
-    <Label row="4" colSpan="2" text="Login" class="sideLabel sideStackLayout" (tap)="login()"></Label>
-    <!-- <Label row="4" colSpan="2" text="Friend request" class="sideLabel sideStackLayout" (tap)="goToPayment()"></Label>
-    <Label row="6" colSpan="2" text="" class="sideLabel sideStackLayout" (tap)="logout()" textWrap="true"></Label> -->
-    <Label row="7" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D" textAlignment="center" fontSize="16"
+    <Label row="2" colSpan="2" text="Category Leaderboard" class="sideLabel sideStackLayout" (tap)="leaderBoard()"></Label>
+    <Label row="3" colSpan="2" text="Login" class="sideLabel sideStackLayout" (tap)="login()"></Label>
+    <Label row="4" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D" textAlignment="center" fontSize="16"
         text="Logout" class="sideLabel sideStackLayout"></Label>
 </GridLayout>
