@@ -46,7 +46,8 @@ export class AppComponent implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     private location: Location,
     private windowRef: WindowRef,
-    @Inject(PLATFORM_ID) private platformId: Object) {
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private utils: Utils) {
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
@@ -114,7 +115,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4, this.sub5]);
+    this.utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4, this.sub5]);
   }
 
   login() {

@@ -27,7 +27,8 @@ export class MyQuestionsComponent implements OnInit, OnDestroy {
   subs: Subscription[] = [];
 
   constructor(private store: Store<AppState>,
-    private questionActions: QuestionActions) {
+    private questionActions: QuestionActions,
+    private utils: Utils) {
     this.categoryDictObs = store.select(categoryDictionary);
   }
 
@@ -40,7 +41,7 @@ export class MyQuestionsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

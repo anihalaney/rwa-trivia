@@ -41,7 +41,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   constructor(
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private utils: Utils) {
 
 
   }
@@ -210,7 +211,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

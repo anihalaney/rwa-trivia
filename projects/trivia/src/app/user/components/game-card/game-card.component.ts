@@ -59,12 +59,12 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
           const minute = Math.floor(diff % (60 * 60 * 1000) / (60 * 1000));
 
           if (minute > 0) {
-            this.remainingHours = Utils.convertIntoDoubleDigit(31 - hour);
-            this.remainingMinutes = Utils.convertIntoDoubleDigit(60 - minute);
+            this.remainingHours = this.utils.convertIntoDoubleDigit(31 - hour);
+            this.remainingMinutes = this.utils.convertIntoDoubleDigit(60 - minute);
 
           } else {
-            this.remainingHours = Utils.convertIntoDoubleDigit(32 - hour);
-            this.remainingMinutes = Utils.convertIntoDoubleDigit(0);
+            this.remainingHours = this.utils.convertIntoDoubleDigit(32 - hour);
+            this.remainingMinutes = this.utils.convertIntoDoubleDigit(0);
           }
         }
       }));
@@ -93,6 +93,6 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

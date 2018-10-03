@@ -125,7 +125,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
 
   filter(val: string): string[] {
-    return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
+    return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
   autoOptionClick(event) {
     //Auto complete doesn't seem to have an event on selection of an entry
@@ -248,6 +248,6 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

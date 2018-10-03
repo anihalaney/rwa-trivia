@@ -24,7 +24,7 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   subs: Subscription[] = [];
 
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private utils: Utils) {
     this.categoryDict$ = store.select(categoryDictionary);
     this.subs.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
   }
@@ -39,6 +39,6 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }
