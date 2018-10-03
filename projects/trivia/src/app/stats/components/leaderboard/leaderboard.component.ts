@@ -48,7 +48,7 @@ export class LeaderboardComponent implements OnDestroy {
       this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
     // }
 
-    // console.log(util.getImage());
+
     this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;

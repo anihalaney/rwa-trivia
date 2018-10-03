@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { RouterExtensions } from "nativescript-angular/router";
-
+import { DrawerTransitionBase, RadSideDrawer, SlideInOnTopTransition } from "nativescript-ui-sidedrawer";
+import * as app from "application";
 
 @Component({
     moduleId: module.id,
@@ -29,19 +30,25 @@ export class DrawerComponent implements OnInit {
     }
 
     closeDrawer() {
-        this.output.emit("close Drawer");
+        const sideDrawer = <RadSideDrawer>app.getRootView();
+        sideDrawer.closeDrawer();
     }
 
     leaderBoard(){
         this.routerExtension.navigate(["/leaderboard"], { clearHistory: true });
+        this.closeDrawer();
     }
 
     dashboard() {
         this.routerExtension.navigate(["/dashboard"], { clearHistory: true });
+        this.closeDrawer();
     }
     
     login(){
         this.routerExtension.navigate(["/login"], { clearHistory: true });
+        this.closeDrawer();
     }
+
+    
   
 }
