@@ -62,6 +62,8 @@
 .chancat.active span:nth-child(2){vertical-align: middle;}
 .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
 .btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px ;line-height: 1.2; margin:0 auto; color: #fff}
+.no-frd-msg{ color: #1f7b2b;  font-size: 1rem;}
+.frd-err-msg{ color: red;  font-size: 1rem;padding-top:30px;}
 //#curentactive .btnbox{ background: #fff; }
 
 @media (min-width: 767px){
@@ -71,7 +73,7 @@
   .optionbox .radiobtn label { width: calc(50% - 17px); margin-right:30px }
   .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .twoplayer label:nth-child(6) { margin-right:0; }
 
-  .optionbox .radiobtn .twoplayer label{ width: calc(33.33% - 10px); margin-right: 10px; }
+  .optionbox .radiobtn .twoplayer label{ width: calc(50% - 10px); margin-right: 10px; }
   .optionbox .twoplayer .withfriends label{ width: 100%; margin-right: 0 }
   .formfield, .mysetting .formfield { display: inline-block;}
 }
