@@ -86,7 +86,7 @@ export class InviteFriendsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     (this.dialogRef) ? this.dialogRef.close() : '';
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

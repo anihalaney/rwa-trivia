@@ -51,7 +51,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
 
   constructor(private fb: FormBuilder,
-    private store: Store<AppState>, private papa: PapaParseService) {
+    private store: Store<AppState>, private papa: PapaParseService,
+    private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
@@ -72,7 +73,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   filter(val: string): string[] {
-    return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
+    return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
 
   onFileChange(event) {
@@ -241,7 +242,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
   showUploadSteps() {

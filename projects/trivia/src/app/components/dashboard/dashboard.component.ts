@@ -20,18 +20,19 @@ import { Dashboard } from './dashboard';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss', './dashboard.scss']
 })
-export class DashboardComponent extends Dashboard implements OnInit, OnDestroy  {
+export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   constructor(store: Store<AppState>,
-     questionActions: QuestionActions,
-     gameActions: GameActions,
-     userActions: UserActions,  windowRef: WindowRef,
-    @Inject(PLATFORM_ID)  platformId: Object){
+    questionActions: QuestionActions,
+    gameActions: GameActions,
+    userActions: UserActions, windowRef: WindowRef,
+    @Inject(PLATFORM_ID) platformId: Object,
+    private utils: Utils) {
 
     super(store,
-         questionActions,
-        gameActions,
-        userActions, windowRef,
-         platformId);
+      questionActions,
+      gameActions,
+      userActions, windowRef,
+      platformId);
   }
 
 
@@ -85,7 +86,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy  
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

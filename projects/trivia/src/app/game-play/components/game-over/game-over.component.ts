@@ -157,7 +157,7 @@ export class GameOverComponent implements OnInit, OnDestroy {
       domtoimage.toPng(node)
         .then((dataUrl) => {
           this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
-            imageBlob: Utils.dataURItoBlob(dataUrl),
+            imageBlob: this.utils.dataURItoBlob(dataUrl),
             userId: this.user.userId
           }));
           this.playerUserName = 'You';
@@ -219,7 +219,7 @@ export class GameOverComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }
