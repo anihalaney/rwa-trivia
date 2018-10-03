@@ -2,7 +2,7 @@
 .optionbox input[type="radio"]{ display: none; }
 
 .optionbox{ margin-top: 30px; text-align: left;}
-.optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
+// .optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
 .optionbox h2 span{ font-size: 20px; text-transform: none; letter-spacing: .10px; padding-left: 0; font-family: 'hindmedium' }
 .optionbox .radiobtn{ padding:0 0 46px   }
 .optionbox .radiobtn label{ font-size: 20px; display: inline-block; width: 100%; border-width:1px; border-style: solid; border-radius: 4px; padding: 9px 0; text-align: center; cursor: pointer; transition: 0.3s ease-in-out; position: relative; overflow: hidden;}
@@ -68,8 +68,8 @@
 
 @media (min-width: 767px){
   main h2 span{ display: inline-block; padding-left: 15px; }
-  .optionbox h2{ margin-top: 17px }
-  .optionbox h2 span{ font-size: 22px }
+  // .optionbox h2{ margin-top: 17px }
+  // .optionbox h2 span{ font-size: 22px }
   .optionbox .radiobtn label { width: calc(50% - 17px); margin-right:30px }
   .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .twoplayer label:nth-child(6) { margin-right:0; }
 
@@ -83,7 +83,7 @@
   .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
   .chancat{ margin-top: 0 }
   .chancat span:nth-child(2){ vertical-align: -12px; }
-  .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
+  // .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
   .optionbox .pcategories h2{ margin-top: 40px}
   .submitpage .optionbox h2{ margin-bottom: 7px }
   .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
