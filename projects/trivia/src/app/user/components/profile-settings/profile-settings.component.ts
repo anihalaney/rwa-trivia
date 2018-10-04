@@ -30,7 +30,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   subs: Subscription[] = [];
   categoriesObs: Observable<Category[]>;
   userForm: FormGroup;
-  profileOptions: string[] = ['Only with friends', 'General', 'Programming', 'Architecture'];
+  profileOptions: string[] = ['Only with friends', 'With EveryOne'];
   locationOptions: string[] = ['Only with friends', 'With EveryOne'];
 
   userObs: Observable<User>;
