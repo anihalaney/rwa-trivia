@@ -1,2 +1,6 @@
 <ns-action-bar title="Dashboard" showAdd="true" (open)="openDrawer()"></ns-action-bar>
-<question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
+<StackLayout>
+    <ScrollView>
+        <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
+    </ScrollView>    
+</StackLayout>

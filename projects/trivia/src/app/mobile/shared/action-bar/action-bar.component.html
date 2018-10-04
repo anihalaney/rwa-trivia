@@ -1,8 +1,7 @@
 <ActionBar title="" class="action-bar action-title">
-    <GridLayout rows="auto" columns="auto,*">
-        <Label col="0" text="Menu" (tap)="open.emit()" class="fa text-left" fontSize="15"
-            verticalAlignment="center"></Label>
-        <Label col="1" [text]="title" class="action-text-title" paddingBottom="4" padding="5 10 5 0"
-            verticalAlignment="center"></Label>
+    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*" android:columns="*,auto" width="100%" >
+        <Label col="0" text="Menu" (tap)="open.emit()"  class="text-left padding-back"
+            fontSize="26" verticalAlignment="center"></Label>
+        <Label col="1" [text]="title" class="action-text-title" marginLeft="10" paddingBottom="4" padding="5 10 5 0" verticalAlignment="center"></Label>
     </GridLayout>
 </ActionBar>

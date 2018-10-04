@@ -1,3 +1,4 @@
+<StackLayout>
 <ScrollView>
     <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0">
             <StackLayout class="question-answered " marginTop="10" *ngFor="let cat of leaderBoardCat | slice:lbsSliceStartIndex:lbsSliceLastIndex; let i=index">
@@ -24,8 +25,11 @@
                     </StackLayout>
                 </CardView>
             </StackLayout>
-            <StackLayout>
-                <Button *ngIf="lbsUsersSliceLastIndex!==10"  class="viewall tns-btn"  text="View More" (tap)="displayMore()" width="100"></Button>
+            <StackLayout  width="400" orientation="vertical" >
+                    <CardView margin="10" elevation="20" radius="15" class="gameplay">
+                <Button *ngIf="lbsUsersSliceLastIndex!==10"  class="viewall tns-btn"  text="View More" (tap)="displayMore()" width="400" textWrap="true"></Button>
+                </CardView>
             </StackLayout>
         </StackLayout>
 </ScrollView>
+</StackLayout>
