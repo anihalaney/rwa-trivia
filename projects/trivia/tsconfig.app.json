@@ -14,8 +14,7 @@
     "./src/main.ns.aot.ts",
     "./src/main.ns.ts",
     "./src/vendor.ts",
-    "./src/app/home",
-    "./src/app/login",
-    "./src/app/mobile"
+    "./src/app/mobile",
+    "./src/app/**/mobile"
   ]
 }

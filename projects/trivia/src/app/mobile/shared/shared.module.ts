@@ -2,7 +2,7 @@ import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { NativeScriptCommonModule } from "nativescript-angular/common";
 import { NativeScriptFormsModule } from "nativescript-angular/forms";
 import { NativeScriptHttpClientModule } from "nativescript-angular/http-client";
-
+import { LoginComponent } from "./../components/login/login.component";
 
 // Declare Pipe Here
 import { ActionBarComponent } from "./action-bar/action-bar.component";
@@ -20,11 +20,13 @@ import { DrawerComponent } from './drawer-component/drawer-component';
         NativeScriptFormsModule,
         NativeScriptHttpClientModule,
         ActionBarComponent,
-        DrawerComponent
+        DrawerComponent,
+        LoginComponent
     ],
     declarations: [
         ActionBarComponent,
-        DrawerComponent
+        DrawerComponent,
+        LoginComponent
     ],
 
     entryComponents: [
@@ -33,4 +35,4 @@ import { DrawerComponent } from './drawer-component/drawer-component';
         NO_ERRORS_SCHEMA
     ]
 })
-export class SharedModule { }
+export class MobileSharedModule { }

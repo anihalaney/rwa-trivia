@@ -1,4 +1,6 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
+import * as app from "application";
 
 @Component({
     selector: "ns-action-bar",
@@ -11,4 +13,11 @@ export class ActionBarComponent {
 
     @Input() title;
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
+
+    openSidebar() {
+        this.open.emit();
+        const sideDrawer = <RadSideDrawer>app.getRootView();
+        sideDrawer.showDrawer();
+    }
+
 }
