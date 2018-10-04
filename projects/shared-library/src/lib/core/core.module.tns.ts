@@ -1,5 +1,4 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -19,9 +18,6 @@ import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActio
 import { effects } from './store/effects';
 import { reducer } from './store';
 
-// export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
-
-
 @NgModule({
   declarations: [
 
@@ -33,24 +29,17 @@ import { reducer } from './store';
 
     //store
     StoreModule.forFeature('core', reducer),
-    //StoreModule.forRoot(reducer),
 
     //ngrx effects
     EffectsModule.forFeature(effects),
 
-    //rwa module
-    // SharedModule
   ],
   providers: [
-    //Services
+
     Utils,
-    // AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService, SocialService, StatsService,
     WindowRef,
-
-    //route guards
-    // AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver, AdminLoadGuard,
 
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
