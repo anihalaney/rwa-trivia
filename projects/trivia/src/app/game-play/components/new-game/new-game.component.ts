@@ -12,7 +12,7 @@ import { GameActions } from '../../../../../../shared-library/src/lib/core/store
 import {
   Category, GameOptions, GameMode, User, PlayerMode, OpponentType
 } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils, WindowRef } from '../../../../../../shared-library/src/lib/core/services';
 
 import { AppState, appState } from '../../../store';
 
@@ -42,6 +42,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   friendUserId: string;
   loaderStatus = false;
+  errMsg: string;
 
   get categoriesFA(): FormArray {
     //console.log(this.newGameForm.get('categoriesFA'));
@@ -50,6 +51,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     private store: Store<AppState>,
     private gameActions: GameActions,
+    private windowRef: WindowRef,
     private router: Router,
     private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
@@ -198,6 +200,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
+    this.errMsg = undefined;
   }
 
 
@@ -212,10 +215,17 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     //console.log(this.newGameForm.value);
     let gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
-    console.log(gameOptions);
+    // console.log(gameOptions);
 
     if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
       && !this.friendUserId) {
+      if (!this.friendUserId) {
+        this.errMsg = 'Please Select Friend';
+      }
+      this.loaderStatus = false;
+      if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
+        this.windowRef.nativeWindow.scrollTo(0, 0);
+      }
       return;
     }
 
