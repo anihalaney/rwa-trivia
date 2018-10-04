@@ -1,23 +1,26 @@
-<CardView margin="10" elevation="20" radius="15" class="gameplay">
-  <StackLayout class="cardStyle" backgroundColor="#ffffff"
-      height="100%" width="100%" margin="15">
-      <StackLayout horizontalAlignment="center" verticalAlignment="center" width="100%">
-          <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
-          <Label [text]="question.questionText"
-              fontSize="15" fontWeight="500" marginTop="10" textWrap="true"></Label>
-          <StackLayout orientation="horizontal" marginTop="10">
-              <Label text="Tags:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
-              <Label text="{{question.tags?.toString()}}" fontSize="15" textWrap="true"></Label>
-          </StackLayout>
-          <StackLayout class="question-answered "  marginTop="10" *ngFor="let answer of question.answers"  [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
-          [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" (tap)="answerButtonClicked(answer)">
-              <Label text="{{answer.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
-                  marginTop="10" marginBottom="10" textWrap="true" ></Label>
-          </StackLayout>
-          <StackLayout  orientation="vertical">
+<CardView class="cardStyle" margin="10" elevation="40" radius="1" class="gameplay">
+    <StackLayout class="cardStyle" backgroundColor="#fffff0" height="100%" width="100%" margin="15">
+        <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
+
+        <Label [text]="question?.questionText" fontSize="15" fontWeight="500" margin="10" textWrap="true"></Label>
+
+        <StackLayout orientation="horizontal" margin="10" *ngIf="question">
+            <Label text="Tags:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
+            <Label text="{{question.tags?.toString()}}" fontSize="15" textWrap="true"></Label>
+        </StackLayout>
+        <StackLayout *ngIf="question">
+            <StackLayout class="question-answered " margin="10" *ngFor="let answer of question.answers"
+            [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+            [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" (tap)="answerButtonClicked(answer)">
+            <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500" marginTop="10"
+                marginBottom="10" textWrap="true"></Label>
+        </StackLayout>
+        </StackLayout>
+        <StackLayout orientation="vertical" *ngIf="question">
             <author [userDict]="userDict" [userId]="question.created_uid"></author>
-            <button backgroundColor="#89C24F" margin="10 0 10 0" (tap)="getNextQuestion()" *ngIf="answeredText!==''" width="100%" text="Try Another"></button>
-          </StackLayout>
-      </StackLayout>
-  </StackLayout>
+            <button backgroundColor="#89C24F" margin="20" (tap)="getNextQuestion()" *ngIf="answeredText!==''"
+                width="100%" text="Try Another" padding="10"></button>
+        </StackLayout>
+    </StackLayout>
+
 </CardView>
