@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output, OnInit } from "@angular/core";
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import * as app from "application";
 
@@ -9,10 +9,13 @@ import * as app from "application";
     styleUrls: ["action-bar.component.css"]
 })
 
-export class ActionBarComponent {
+export class ActionBarComponent implements OnInit {
 
     @Input() title;
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
+
+    ngOnInit() {
+    }
 
     openSidebar() {
         this.open.emit();

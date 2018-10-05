@@ -3,16 +3,13 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
-
-// import {
-//   AuthorComponent
-// } from './components';
-
+import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
+import { ActionBarComponent, DrawerComponent } from './mobile/component'
 
 @NgModule({
   declarations: [
-    // AuthorComponent
+    ActionBarComponent,
+    DrawerComponent
   ],
   imports: [
     CommonModule,
@@ -23,9 +20,12 @@ import { RouterModule } from '@angular/router';
     ReactiveFormsModule,
     RouterModule,
     HttpClientModule,       // for share counts
+    NativeScriptModule
   ],
   exports: [
     CommonModule, HttpClientModule, ReactiveFormsModule,
-    HttpClientModule]
+    HttpClientModule,
+    ActionBarComponent,
+    DrawerComponent]
 })
 export class SharedModule { }
