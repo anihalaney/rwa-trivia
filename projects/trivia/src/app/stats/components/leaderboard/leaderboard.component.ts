@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import { Category, User, LeaderBoardUser } from '../../../../../../shared-library/src/lib/shared/model';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
-import { AppState, categoryDictionary } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { leaderBoardState } from '../../store';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
@@ -18,7 +18,9 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeaderboardComponent implements OnDestroy {
-  @Input() userDict: { [key: string]: User };
+
+  userDict$: Observable<{ [key: string]: User }>;
+  userDict: { [key: string]: User };
   leaderBoardStatDict: { [key: string]: Array<LeaderBoardUser> };
   subs: Subscription[] = [];
   leaderBoardCat: Array<string>;
@@ -28,9 +30,9 @@ export class LeaderboardComponent implements OnDestroy {
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;
-  platformIds:any;
-  isbrowser:any;
-  isServer:any;
+  platformIds: any;
+  isbrowser: any;
+  isServer: any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
 
   constructor(private store: Store<AppState>,
@@ -38,14 +40,18 @@ export class LeaderboardComponent implements OnDestroy {
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(APP_ID) private appId: string,
     private utils: Utils) {
+
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+
     this.categoryDict$ = store.select(categoryDictionary);
-   
+
     this.subs.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
     }));
 
     // if (isPlatformBrowser(this.platformId)) {
-      this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
+    this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
     // }
 
 
