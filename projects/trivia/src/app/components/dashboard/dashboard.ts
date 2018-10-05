@@ -15,12 +15,10 @@ import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/ser
 import { AppState, appState, categoryDictionary } from '../../store';
 
 
-export  class Dashboard {
-
+export class Dashboard {
     user: User;
     subs: Subscription[] = [];
     users: User[];
-    questionOfTheDay$: Observable<Question>;
     activeGames$: Observable<Game[]>;
     userDict$: Observable<{ [key: string]: User }>;
     gameSliceStartIndex: number;
@@ -48,12 +46,11 @@ export  class Dashboard {
         private gameActions: GameActions,
         private userActions: UserActions, private windowRef: WindowRef,
         @Inject(PLATFORM_ID) private platformId: Object) {
-        this.questionOfTheDay$ = store.select(appState.coreState).pipe(select(s => s.questionOfTheDay));
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
 
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.user = user
+            this.user = user;
             if (user) {
                 this.user = user;
                 if (this.user.isSubscribed) {
@@ -106,12 +103,12 @@ export  class Dashboard {
                 }
                 this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
             });
-        }))
+        }));
 
 
         this.gameInviteSliceStartIndex = 0;
         this.gameInviteSliceLastIndex = 3;
-        
+
     }
 
     displayMoreGames(): void {

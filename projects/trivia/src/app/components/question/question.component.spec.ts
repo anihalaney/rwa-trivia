@@ -37,7 +37,7 @@ describe('Component: QuestionComponent', () => {
         component.userDict = TEST_DATA.userDict;
         component.question = TEST_DATA.questions.published.filter(obj => { return obj.id === '1' })[0];
         fixture.detectChanges();
-        component.ngOnChanges();
+
 
         // get the injected instances
         _store = fixture.debugElement.injector.get(Store);
