@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import { CoreState } from '../../../core/store';
 import { UserActions } from '../../../core/store/actions';
 
+
 @Component({
     selector: 'author',
     templateUrl: './author.component.html',
@@ -18,7 +19,7 @@ export class AuthorComponent implements OnChanges {
     @Input() userId;
     userProfileImageUrl;
 
-    constructor(private store: Store<CoreState>, private userActions: UserActions) {
+    constructor(private store: Store<CoreState>, private userActions: UserActions, private utils: Utils) {
 
     }
 
@@ -27,7 +28,7 @@ export class AuthorComponent implements OnChanges {
             if (this.userDict[this.userId] === undefined) {
                 this.store.dispatch(this.userActions.loadOtherUserProfile(this.userId));
             } else {
-                this.userProfileImageUrl = Utils.getImageUrl(this.userDict[this.userId], 44, 40, '44X40');
+                this.userProfileImageUrl = this.utils.getImageUrl(this.userDict[this.userId], 44, 40, '44X40');
             }
         }
     }

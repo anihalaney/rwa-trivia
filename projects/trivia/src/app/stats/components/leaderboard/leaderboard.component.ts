@@ -9,13 +9,13 @@ import { AppState, categoryDictionary } from '../../../store';
 import { leaderBoardState } from '../../store';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeaderboardComponent implements OnDestroy {
   @Input() userDict: { [key: string]: User };
@@ -28,25 +28,28 @@ export class LeaderboardComponent implements OnDestroy {
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;
-
+  platformIds:any;
+  isbrowser:any;
+  isServer:any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(APP_ID) private appId: string) {
+    @Inject(APP_ID) private appId: string,
+    private utils: Utils) {
     this.categoryDict$ = store.select(categoryDictionary);
+   
     this.subs.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
     }));
 
-    if (isPlatformBrowser(this.platformId)) {
+    // if (isPlatformBrowser(this.platformId)) {
       this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
-    }
+    // }
 
 
     this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
-
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
@@ -68,16 +71,15 @@ export class LeaderboardComponent implements OnDestroy {
     }));
   }
 
-
   displayMore(): void {
     this.lbsUsersSliceLastIndex = this.lbsUsersSliceLastIndex + 7;
   }
 
   getImageUrl(user: User) {
-    return Utils.getImageUrl(user, 44, 40, '44X40');
+    return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

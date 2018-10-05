@@ -48,7 +48,8 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
-    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router) {
+    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router,
+    private utils: Utils) {
 
     this.subs.push(this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
       if (status === 'UPDATE') {
@@ -130,7 +131,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

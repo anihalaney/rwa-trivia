@@ -48,7 +48,8 @@ export class BulkSummaryQuestionComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
-    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router) {
+    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router,
+    private utils: Utils) {
 
     this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
       if (status === 'UPDATE') {
@@ -160,7 +161,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
         this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        Utils.unsubscribe([this.sub]);
+        this.utils.unsubscribe([this.sub]);
       }
     });
   }
@@ -175,7 +176,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
         }
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        Utils.unsubscribe([this.sub]);
+        this.utils.unsubscribe([this.sub]);
       }
     });
   }
@@ -188,7 +189,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
         this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        Utils.unsubscribe([this.sub]);
+        this.utils.unsubscribe([this.sub]);
       }
     });
   }

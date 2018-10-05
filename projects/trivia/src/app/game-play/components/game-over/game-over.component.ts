@@ -55,7 +55,7 @@ export class GameOverComponent implements OnInit, OnDestroy {
   }
 
   constructor(private store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2, private userActions: UserActions,
-    private windowRef: WindowRef) {
+    private windowRef: WindowRef, private utils: Utils) {
 
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.user$.subscribe(user => {
@@ -157,7 +157,7 @@ export class GameOverComponent implements OnInit, OnDestroy {
       domtoimage.toPng(node)
         .then((dataUrl) => {
           this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
-            imageBlob: Utils.dataURItoBlob(dataUrl),
+            imageBlob: this.utils.dataURItoBlob(dataUrl),
             userId: this.user.userId
           }));
           this.playerUserName = 'You';
@@ -215,11 +215,11 @@ export class GameOverComponent implements OnInit, OnDestroy {
   }
 
   getImageUrl(user: User) {
-    return Utils.getImageUrl(user, 44, 40, '44X40');
+    return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

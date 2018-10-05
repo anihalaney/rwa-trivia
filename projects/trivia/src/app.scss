@@ -19,7 +19,24 @@ refer to http://docs.nativescript.org/ui/theme.
 @import './styles/light.theme.scss';
 @import './styles/styles.scss';
 @import './styles/rwa-trivia.theme.scss';
+@import './styles/global.scss';
+@import './styles/light.theme.scss';
 
 .new-btn{
     color: map-get($light-theme-text-color , primary-light);
   }
+
+.material-icon {
+  font-family: "Material Icons", MaterialIcons-Regular;
+}
+
+.fa {
+  font-family: "FontAwesome", fontawesome-webfont;
+}
+.new-btn-s {
+  color: red;
+}
+
+.tns-btn{
+  font-size: 16;
+}

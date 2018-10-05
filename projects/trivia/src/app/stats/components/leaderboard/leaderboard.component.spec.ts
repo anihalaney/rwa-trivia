@@ -5,7 +5,7 @@ import * as leaderBoardActions from '../../store/actions';
 import { TEST_DATA } from '../../../testing/test.data';
 import { Category, User, LeaderBoardUser } from '../../../../../../shared-library/src/lib/shared/model';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
-
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 
 describe('Component: LeaderboardComponent', () => {
 
@@ -16,7 +16,7 @@ describe('Component: LeaderboardComponent', () => {
         // refine the test module by declaring the LeaderboardComponent component
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({})],
-            providers: [Store, UserActions],
+            providers: [Store, UserActions, Utils],
             declarations: [LeaderboardComponent]
         });
 

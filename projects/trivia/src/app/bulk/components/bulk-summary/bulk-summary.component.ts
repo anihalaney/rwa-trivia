@@ -23,7 +23,7 @@ export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
   subs: Subscription[] = [];
 
 
-  constructor(private store: Store<AppState>, ) {
+  constructor(private store: Store<AppState>, private utils: Utils ) {
     this.subs.push(this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;
@@ -75,7 +75,7 @@ export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }
