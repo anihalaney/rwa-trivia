@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CONFIG } from '../../environments/environment'
-import { User } from '../../shared/model'
+import { CONFIG } from '../../environments/environment';
+import { User, Answer } from '../../shared/model';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Injectable()
@@ -18,9 +18,10 @@ export class Utils {
 
   unsubscribe(subs: Subscription[]) {
     subs.forEach(sub => {
-      if (sub && sub instanceof Subscription)
+      if (sub && sub instanceof Subscription) {
         sub.unsubscribe();
-    })
+      }
+    });
   };
 
   getRandomInt(min, max) {
@@ -51,6 +52,16 @@ export class Utils {
 
   convertIntoDoubleDigit(digit: Number) {
     return (digit < 10) ? `0${digit}` : digit;
+  }
+
+  changeAnswerOrder(answers: Answer[]) {
+    for (let i = answers.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = answers[i];
+      answers[i] = answers[j];
+      answers[j] = temp;
+    }
+    return answers;
   }
 
 }

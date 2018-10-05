@@ -49,7 +49,7 @@ export class Question {
     question.id = hit['_id'];
     const source = hit['_source'];
 
-    question.answers = this.changeAnswerOrder(source.answers);
+    question.answers = source.answers;
 
     question.categoryIds = source.categoryIds;
     question.published = source.published;
@@ -59,16 +59,6 @@ export class Question {
     question.created_uid = source.created_uid;
 
     return question;
-  }
-
-  static changeAnswerOrder(answers: Answer[]) {
-    for (let i = answers.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      const temp = answers[i];
-      answers[i] = answers[j];
-      answers[j] = temp;
-    }
-    return answers;
   }
 
   constructor() {
