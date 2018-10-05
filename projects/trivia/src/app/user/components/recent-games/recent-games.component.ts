@@ -24,7 +24,7 @@ export class RecentGamesComponent implements OnDestroy {
   subs: Subscription[] = [];
   GameStatus = GameStatus;
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private utils: Utils) {
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
@@ -48,7 +48,7 @@ export class RecentGamesComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

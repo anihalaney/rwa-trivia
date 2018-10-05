@@ -13,6 +13,7 @@
     "./src/**/*.ios.ts",
     "./src/main.ns.aot.ts",
     "./src/main.ns.ts",
-    "./src/vendor.ts"
+    "./src/vendor.ts",
+    "./src/**/mobile"
   ]
 }

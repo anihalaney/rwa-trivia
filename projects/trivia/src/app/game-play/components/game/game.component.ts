@@ -27,7 +27,8 @@ export class GameComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private renderer: Renderer2) {
+    private renderer: Renderer2,
+    private utils: Utils) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -66,6 +67,6 @@ export class GameComponent implements OnInit, OnDestroy {
       this.store.dispatch(new gameplayactions.ResetCurrentGame());
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     }
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

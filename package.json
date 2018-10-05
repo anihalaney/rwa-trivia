@@ -4,8 +4,11 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "org.nativescript.triviamobile",
+    "id": "com.bitwiser.trivia.dev",
     "tns-android": {
+      "version": "4.2.0"
+    },
+    "tns-ios": {
       "version": "4.2.0"
     }
   },
@@ -26,7 +29,7 @@
     "deploy-trivia-functions": "npm run deploy-trivia-functions-build && npm run deploy-functions-app && npm run deploy-functions-ssr && npm run deploy-apps-to-firebase",
     "deploy-trivia-functions-build": "npm run build-trivia:ssr && npm run compile-ssr-functions",
     "build-trivia:ssr": "ng build trivia --prod --configuration=dev && ng build trivia-admin --prod --configuration=dev && ng run trivia:server",
-    "compile-ssr-functions": "npm run compile-functions && npm run webpack:server && cpx dist/index.html functions/dist",
+    "compile-ssr-functions": "npm run compile-functions && npm run webpack:server && cpx dist/index.html functions/dist && rimraf dist/index.html",
     "webpack:server": "webpack --config webpack.server.config.js",
     "deploy-functions-app": "npm run pre-compile-app-functions && firebase deploy -P default --only functions",
     "pre-compile-app-functions": "rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js",
@@ -42,7 +45,9 @@
     "prod:deploy-apps-to-firebase": "firebase deploy -P production --only hosting",
     "run-scheduler-dev": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js dev",
     "compile-scheduler-functions": "rmdir /s/q scheduler\\server & tsc --project scheduler",
-    "run-scheduler-prod": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js prod"
+    "run-scheduler-prod": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js prod",
+    "android": "tns run android --bundle",
+    "ios": "tns run ios --bundle"
   },
   "private": true,
   "dependencies": {
@@ -85,8 +90,11 @@
     "jasmine-marbles": "^0.3.1",
     "lodash": "^4.17.10",
     "nativescript-angular": "~6.1.0",
+    "nativescript-cardview": "^3.1.1",
+    "nativescript-ngx-fonticon": "^4.2.0",
     "nativescript-plugin-firebase": "^6.8.1",
     "nativescript-theme-core": "~1.0.4",
+    "nativescript-ui-sidedrawer": "^4.3.0",
     "ngx-img-cropper": "^0.10.4",
     "ngx-lazy-load-images": "^1.3.1",
     "ngx-papaparse": "^2.1.4",

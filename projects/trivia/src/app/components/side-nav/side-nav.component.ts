@@ -20,12 +20,12 @@ export class SideNavComponent implements OnDestroy {
   subs: Subscription[] = [];
   blogUrl = 'https://bitwiser.io';
 
-  constructor(private store: Store<AppState>, private router: Router) {
+  constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
   }
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
   navigateUrl() {
     this.router.navigate(['my/questions']);

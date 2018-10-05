@@ -71,7 +71,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<GamePlayState>, private gameActions: GameActions, private router: Router,
     private appStore: Store<AppState>, private userActions: UserActions,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private utils: Utils) {
 
     this.user = data.user;
     this.userDict = data.userDict;
@@ -195,7 +195,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       },
         null,
         () => {
-          Utils.unsubscribe([this.timerSub]);
+          this.utils.unsubscribe([this.timerSub]);
           this.showWinBadge = false;
           this.isCorrectAnswer = false;
           this.showBadgeScreen();
@@ -216,7 +216,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       null,
       () => {
         // Show badge screen
-        Utils.unsubscribe([this.timerSub]);
+        this.utils.unsubscribe([this.timerSub]);
         this.showLoader = false;
         this.showBadge = true;
         this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
@@ -226,7 +226,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           null,
           () => {
             // load question screen timer
-            Utils.unsubscribe([this.timerSub]);
+            this.utils.unsubscribe([this.timerSub]);
             this.showBadge = false;
             this.subscribeQuestion();
           });
@@ -242,7 +242,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       }
       this.originalAnswers = Object.assign({}, question.answers);
       this.currentQuestion = question;
-      this.currentQuestion.answers = Utils.changeAnswerOrder(this.currentQuestion.answers);
+      this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);
       this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName;
       if (!this.userDict[this.currentQuestion.created_uid]) {
         this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
@@ -344,7 +344,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   afterAnswer(userAnswerId?: number) {
-    Utils.unsubscribe([this.timerSub, this.questionSub]);
+    this.utils.unsubscribe([this.timerSub, this.questionSub]);
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
     let index;
     if (userAnswerId === undefined) {
@@ -386,8 +386,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.timerSub]);
-    Utils.unsubscribe(this.sub);
+    this.utils.unsubscribe([this.timerSub]);
+    this.utils.unsubscribe(this.sub);
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
   }
 }

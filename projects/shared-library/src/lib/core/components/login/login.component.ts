@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     public dialogRef: MatDialogRef<LoginComponent>,
     private store: Store<CoreState>,
-    private uiStateActions: UIStateActions) {
+    private uiStateActions: UIStateActions,
+    private utils: Utils) {
 
     this.mode = SignInMode.signIn;  //default
     this.notificationMsg = '';
@@ -184,7 +185,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }
 
