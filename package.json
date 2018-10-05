@@ -5,10 +5,10 @@
   "angular-cli": {},
   "nativescript": {
     "id": "com.bitwiser.trivia.dev",
-    "tns-android": {
+    "tns-ios": {
       "version": "4.2.0"
     },
-    "tns-ios": {
+    "tns-android": {
       "version": "4.2.0"
     }
   },

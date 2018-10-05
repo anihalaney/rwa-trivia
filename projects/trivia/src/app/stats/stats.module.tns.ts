@@ -2,10 +2,9 @@ import { NgModule } from '@angular/core';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { SharedModule } from '../../../../shared-library/src/lib/shared/shared.module';
+import { SharedModule } from 'shared-library/shared/shared.module';
 import { LeaderboardComponent, RealtimeStatsComponent } from './components';
 import { effects, reducer } from './store';
-import { MobileSharedModule } from './../mobile/shared';
 import { StatsRoutingModule } from './routing/stats-routing.module';
 @NgModule({
   declarations: [
@@ -19,7 +18,6 @@ import { StatsRoutingModule } from './routing/stats-routing.module';
     StoreModule.forFeature('stats', reducer),
     //ngrx effects
     EffectsModule.forFeature(effects),
-    MobileSharedModule,
     StatsRoutingModule
   ],
   providers: [
