@@ -6,6 +6,7 @@ import { Question, Answer } from '../../../../../shared-library/src/lib/shared/m
 import { QuestionActions } from '../../../../../shared-library/src/lib/core/store/actions';
 import { UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
 import { AuthorComponent } from '../../../../../shared-library/src/lib/shared/components/author/author.component';
+import { Utils } from '../../../../../shared-library/src/lib/core/services';
 
 describe('Component: QuestionComponent', () => {
 
@@ -20,7 +21,7 @@ describe('Component: QuestionComponent', () => {
         // refine the test module by declaring the QuestionComponent component
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({})],
-            providers: [Store, QuestionActions, UserActions],
+            providers: [Store, QuestionActions, UserActions, Utils],
             declarations: [QuestionComponent, AuthorComponent]
         });
 

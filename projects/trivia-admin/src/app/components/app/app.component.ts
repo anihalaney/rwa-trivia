@@ -26,7 +26,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthenticationProvider,
     private store: Store<AppState>,
     public router: Router,
-    private location: Location) {
+    private location: Location,
+    private utils: Utils) {
 
 
 
@@ -51,7 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub]);
+    this.utils.unsubscribe([this.sub]);
   }
 
   login() {

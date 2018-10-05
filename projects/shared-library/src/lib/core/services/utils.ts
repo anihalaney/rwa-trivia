@@ -1,28 +1,33 @@
-import { Injectable } from '@angular/core';
+import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../environments/environment'
 import { User } from '../../shared/model'
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Injectable()
 export class Utils {
 
-  static regExpEscape = function (s): string {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object) {
+  }
+
+  regExpEscape(s: string) {
     return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
       replace(/\x08/g, '\\x08');
   };
 
-  static unsubscribe = function (subs: Subscription[]) {
+  unsubscribe(subs: Subscription[]) {
     subs.forEach(sub => {
       if (sub && sub instanceof Subscription)
         sub.unsubscribe();
     })
   };
 
-  static getRandomInt = function (min, max) {
+  getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  static dataURItoBlob(dataURI: any) {
+  dataURItoBlob(dataURI: any) {
     const binary = atob(dataURI.split(',')[1]);
     const array = [];
     for (let i = 0; i < binary.length; i++) {
@@ -31,16 +36,20 @@ export class Utils {
     return new Blob([new Uint8Array(array)]);
   }
 
-  static getImageUrl(user: User, width: Number, height: Number, size: string) {
+  getImageUrl(user: User, width: Number, height: Number, size: string) {
+
     if (user && user.profilePicture && user.profilePicture !== '') {
       return `${CONFIG.functionsUrl}/app/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
     } else {
-      return `assets/images/avatar-${size}.png`;
+      if (isPlatformBrowser(this.platformId) == false && isPlatformServer(this.platformId) == false) {
+        return `~/assets/images/avatar-${size}.png`;
+      } else {
+        return `assets/images/avatar-${size}.png`;
+      }
     }
-
   }
 
-  static convertIntoDoubleDigit(digit: Number) {
+  convertIntoDoubleDigit(digit: Number) {
     return (digit < 10) ? `0${digit}` : digit;
   }
 

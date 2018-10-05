@@ -62,7 +62,8 @@ export class ProfileSettingsComponent implements OnDestroy {
   constructor(private fb: FormBuilder,
     private store: Store<AppState>,
     private storage: AngularFireStorage,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    private utils: Utils) {
 
     this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user
@@ -132,7 +133,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   }
 
   filter(val: string): string[] {
-    return this.tagsAutoComplete.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
+    return this.tagsAutoComplete.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
 
   onFileChange($event) {
@@ -173,7 +174,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   saveProfileImage() {
     if (!this.profileImageValidation) {
       const file = this.profileImageFile
-      const imageBlob = Utils.dataURItoBlob(this.profileImage.image);
+      const imageBlob = this.utils.dataURItoBlob(this.profileImage.image);
       const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
       this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile)
         .then((status) => {
@@ -327,7 +328,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

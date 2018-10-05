@@ -52,7 +52,8 @@ export class NewGameComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private gameActions: GameActions,
     private windowRef: WindowRef,
-    private router: Router) {
+    private router: Router,
+    private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
@@ -126,7 +127,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
 
   filter(val: string): string[] {
-    return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
+    return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
   autoOptionClick(event) {
     //Auto complete doesn't seem to have an event on selection of an entry
@@ -253,10 +254,10 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
 
   getImageUrl(user: User) {
-    return Utils.getImageUrl(user, 70, 60, '70X60');
+    return this.utils.getImageUrl(user, 70, 60, '70X60');
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }
