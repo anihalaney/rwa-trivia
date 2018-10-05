@@ -4,14 +4,13 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from '../../../../shared-library/src/lib/shared/shared.module';
 import { LeaderboardComponent, RealtimeStatsComponent } from './components';
-import { LeaderBoardContainerComponent } from './components/mobile/leaderboard-container/leaderboard-container.component'
 import { effects, reducer } from './store';
-import {  MobileSharedModule } from './../mobile/shared';
+import { MobileSharedModule } from './../mobile/shared';
+import { StatsRoutingModule } from './routing/stats-routing.module';
 @NgModule({
   declarations: [
     LeaderboardComponent,
-    RealtimeStatsComponent,
-    LeaderBoardContainerComponent
+    RealtimeStatsComponent
   ],
   imports: [
     //rwa modules
@@ -20,14 +19,14 @@ import {  MobileSharedModule } from './../mobile/shared';
     StoreModule.forFeature('stats', reducer),
     //ngrx effects
     EffectsModule.forFeature(effects),
-    MobileSharedModule
+    MobileSharedModule,
+    StatsRoutingModule
   ],
   providers: [
   ],
   exports: [
     LeaderboardComponent,
-    RealtimeStatsComponent,
-    LeaderBoardContainerComponent
+    RealtimeStatsComponent
   ]
 })
 export class StatsModule { }
