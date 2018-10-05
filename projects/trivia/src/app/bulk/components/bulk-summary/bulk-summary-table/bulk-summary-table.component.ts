@@ -47,7 +47,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private storage: AngularFireStorage, private router: Router) {
+    private storage: AngularFireStorage, private router: Router,
+    private utils: Utils) {
     this.categoryDictObs = store.select(categoryDictionary);
 
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
@@ -175,7 +176,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 

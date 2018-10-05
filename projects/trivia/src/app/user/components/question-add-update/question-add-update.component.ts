@@ -40,7 +40,8 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
   // Constructor
   constructor(private fb: FormBuilder,
-    private store: Store<AppState>) {
+    private store: Store<AppState>,
+    private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
   }
@@ -61,7 +62,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
   // Event Handlers

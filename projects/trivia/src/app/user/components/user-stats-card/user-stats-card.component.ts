@@ -14,7 +14,7 @@ export class UserStatsCardComponent implements OnDestroy {
   user: User;
   subs: Subscription[] = [];
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private utils: Utils) {
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user
       if (user) {
@@ -24,6 +24,6 @@ export class UserStatsCardComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

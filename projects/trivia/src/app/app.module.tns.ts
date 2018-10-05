@@ -2,36 +2,37 @@ import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
 
 import { AppRoutingModule } from './app-routing.module.tns';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { LoginComponent } from './login/login.component';
+import { AppComponent } from './../app/components/app/app.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { reducers } from './store';
 import { CoreModule } from './../../../shared-library/src/lib/core/core.module';
-// Uncomment and add to NgModule imports if you need to use two-way binding
-// import { NativeScriptFormsModule } from "nativescript-angular/forms";
-
-// Uncomment and add to NgModule imports  if you need to use the HTTP wrapper
-// import { NativeScriptHttpClientModule } from 'nativescript-angular/http-client';
 import { HttpClientModule } from '@angular/common/http';
-
-
 import { TNSFirebaseService } from './mobile/core/services/tns-firebase.service';
 import { FirebaseService } from 'shared-library/core/db-service/firebase.service';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
 import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens'
+import { MobileSharedModule } from "./mobile/shared";
+import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
+import { QuestionComponent } from "./components/question/question.component";
+import { DashboardComponent } from "./components/dashboard/dashboard.component";
+import { AuthorComponent } from "shared-library/shared/components/author/author.component";
+import { registerElement } from 'nativescript-angular/element-registry';
+import { CardView } from 'nativescript-cardview';
+import { StatsModule } from './stats/stats.module';
 
 export function firebaseFactory() {
   return TNSFirebase;
 }
+registerElement('CardView', () => CardView);
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    LoginComponent,
+    QuestionComponent,
+    DashboardComponent,
+    AuthorComponent,
   ],
   imports: [
     NativeScriptModule,
@@ -41,6 +42,9 @@ export function firebaseFactory() {
     StoreRouterConnectingModule,
     CoreModule,
     HttpClientModule,
+    MobileSharedModule,
+    StatsModule,
+    NativeScriptUISideDrawerModule
   ],
   providers: [
     TNSFirebaseService,

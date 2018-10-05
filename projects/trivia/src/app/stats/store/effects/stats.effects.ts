@@ -18,8 +18,9 @@ export class StatsEffects {
         .pipe(
             switchMap((action: statsActions.LoadLeaderBoard) =>
                 this.statsService.loadLeaderBoardStat().pipe(
-                    map((score: any) =>
-                        new statsActions.LoadLeaderBoardSuccess(score)
+                    map((score: any) => {
+                        return new statsActions.LoadLeaderBoardSuccess(score)
+                        }
                     )
                 )));
 

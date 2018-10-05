@@ -21,13 +21,13 @@ export class QuestionComponent {
   answeredText: string;
   correctAnswerText: string;
 
-  constructor(private store: Store<AppState>, private questionAction: QuestionActions) {
+  constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils) {
     this.answeredText = '';
     this.correctAnswerText = '';
     this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
       if (questionOfTheDay) {
         this.question = questionOfTheDay;
-        this.question.answers = Utils.changeAnswerOrder(questionOfTheDay.answers);
+        this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
         this.question.answers.forEach((item, index) => {
           if (item.correct === true) {
             this.correctAnswerText = item.answerText;
@@ -38,8 +38,6 @@ export class QuestionComponent {
   }
 
   answerButtonClicked(answer: Answer) {
-    if (this.answeredText !== '')
-      return;
     this.answeredText = answer.answerText;
     const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
     this.answerClicked.emit(index);
