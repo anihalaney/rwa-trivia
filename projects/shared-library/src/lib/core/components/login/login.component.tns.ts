@@ -80,7 +80,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   signup(){
-    console.log('singup');
+   
   }
 
   validateLogs() {
