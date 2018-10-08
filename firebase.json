@@ -3,8 +3,8 @@
     "public": "dist",
     "rewrites": [
       {
-        "source": "/app/**",
-        "function": "app"
+        "source": "/api/**",
+        "function": "api"
       },
       {
         "source": "/robots.txt",
@@ -17,5 +17,3 @@
     ]
   }
 }
-
-

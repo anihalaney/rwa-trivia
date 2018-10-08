@@ -47,7 +47,7 @@ export class UserService {
     }
 
     saveUserProfile(user: User): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/user/profile`;
+        const url = `${CONFIG.functionsUrl}/api/user/profile`;
         user.roles = (!user.roles) ? {} : user.roles;
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
@@ -58,7 +58,7 @@ export class UserService {
 
 
     loadOtherUserProfile(userId: string): Observable<User> {
-        const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
+        const url = `${CONFIG.functionsUrl}/api/user/${userId}`;
         return this.http.get<User>(url);
     }
 
@@ -100,7 +100,7 @@ export class UserService {
     }
 
     checkInvitationToken(obj: any): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/friend`;
+        const url = `${CONFIG.functionsUrl}/api/friend`;
         return this.http.post<any>(url, obj);
     }
 

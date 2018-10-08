@@ -19,7 +19,7 @@ export class GameService {
   }
 
   createNewGame(gameOptions: GameOptions, user: User): Observable<string> {
-    const url: string = CONFIG.functionsUrl + '/app/game';
+    const url: string = CONFIG.functionsUrl + '/api/game';
     const payload = { gameOptions: gameOptions, userId: user.userId };
     return this.http.post<string>(url, payload);
   }
@@ -130,13 +130,13 @@ export class GameService {
   }
 
   getNextQuestion(game: Game): Observable<Question> {
-    const url: string = CONFIG.functionsUrl + '/app/question/next/';
+    const url: string = CONFIG.functionsUrl + '/api/question/next/';
     return this.http.get<Question>(url + game.gameId);
   }
 
 
   addPlayerQnAToGame(gameId: string, playerQnA: PlayerQnA): Observable<any> {
-    const url = `${CONFIG.functionsUrl}/app/game/${gameId}`;
+    const url = `${CONFIG.functionsUrl}/api/game/${gameId}`;
     const payload = {
       playerQnA: playerQnA,
       operation: GameOperations.CALCULATE_SCORE
@@ -146,21 +146,21 @@ export class GameService {
 
 
   setGameOver(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/api/game/${gameId}`,
       {
         operation: GameOperations.GAME_OVER
       });
   }
 
   updateGameRound(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/api/game/${gameId}`,
       {
         operation: GameOperations.UPDATE_ROUND
       });
   }
 
   rejectGameInvitation(gameId: string) {
-    return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+    return this.http.put(`${CONFIG.functionsUrl}/api/game/${gameId}`,
       {
         operation: GameOperations.REJECT_GAME
       });
@@ -230,7 +230,7 @@ export class GameService {
 
   checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
 
-    return this.http.post(`${CONFIG.functionsUrl}/app/question/${playerQnA.questionId}`,
+    return this.http.post(`${CONFIG.functionsUrl}/api/question/${playerQnA.questionId}`,
       {
         playerQnA: playerQnA
       });
@@ -277,7 +277,7 @@ export class GameService {
     let playerQnA = new PlayerQnA();
     playerQnA = game.playerQnAs.filter(info => info.questionId === Object.keys(report.questions)[0])[0];
     playerQnA.isReported = true;
-    const url = `${CONFIG.functionsUrl}/app/game/${game.gameId}`;
+    const url = `${CONFIG.functionsUrl}/api/game/${game.gameId}`;
     const payload = {
       playerQnA: playerQnA,
       operation: GameOperations.REPORT_STATUS
