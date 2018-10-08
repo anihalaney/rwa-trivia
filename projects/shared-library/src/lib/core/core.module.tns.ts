@@ -18,9 +18,14 @@ import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActio
 import { effects } from './store/effects';
 import { reducer } from './store';
 
+import { SharedRoutingModule } from './routing/shared-routing.module';
+
+import { LoginComponent } from './components';
+import { SharedModule } from './../shared/shared.module';
+
 @NgModule({
   declarations: [
-
+    LoginComponent
   ],
 
   entryComponents: [
@@ -33,7 +38,12 @@ import { reducer } from './store';
     //ngrx effects
     EffectsModule.forFeature(effects),
 
+    SharedRoutingModule,
+    SharedModule
+
   ],
+  exports: [],
+
   providers: [
 
     Utils,

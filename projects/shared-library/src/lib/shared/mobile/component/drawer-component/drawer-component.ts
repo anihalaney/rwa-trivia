@@ -35,7 +35,7 @@ export class DrawerComponent implements OnInit {
     }
 
     leaderBoard(){
-        this.routerExtension.navigate(["/leaderboard"], { clearHistory: true });
+        this.routerExtension.navigate(["/stats/leaderboard"], { clearHistory: true });
         this.closeDrawer();
     }
 
