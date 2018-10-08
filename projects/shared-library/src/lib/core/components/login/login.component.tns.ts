@@ -79,6 +79,10 @@ export class LoginComponent implements OnInit, OnDestroy {
  
   }
 
+  signup(){
+    console.log('singup');
+  }
+
   validateLogs() {
     if (this.notificationLogs.indexOf(this.loginForm.get('email').value) !== -1) {
       this.notificationMsg = `email has already sent to ${this.loginForm.get('email').value}`;
