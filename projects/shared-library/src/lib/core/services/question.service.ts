@@ -24,13 +24,13 @@ export class QuestionService {
 
   // Elasticsearch
   getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
-    let url: string = CONFIG.functionsUrl + '/app/question/day';
+    let url: string = CONFIG.functionsUrl + '/api/question/day';
     url = (isNextQuestion) ? `${url}/next` : `${url}/current`
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    const url: string = CONFIG.functionsUrl + '/app/question/';
+    const url: string = CONFIG.functionsUrl + '/api/question/';
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }
@@ -67,7 +67,7 @@ export class QuestionService {
 
   getUnpublishedQuestions(flag: boolean): Observable<Question[]> {
     const question_source = (!flag) ? 'question' : 'bulk-question';
-    const queryParams = { condition: [{ name: "source", comparator: "==", question_source }] };
+    const queryParams = { condition: [{ name: "source", comparator: "==", value: question_source }] };
     // return this.db.collection('/unpublished_questions', ref => ref.where('source', '==', question_source)).valueChanges()
     return this.dbService.valueChanges('unpublished_questions', '', queryParams)
       .pipe(catchError(error => {
@@ -143,13 +143,13 @@ export class QuestionService {
 
   approveQuestion(question: Question) {
     const dbQuestion = Object.assign({}, question); // object to be saved
-    const questionId = this.dbService.createId();
+    const questionId = dbQuestion.id;
     dbQuestion.status = QuestionStatus.APPROVED;
     // Transaction to remove from unpublished and add to published questions collection
-    let firestore = this.dbService.getFireStore();
-    firestore.runTransaction(transaction => {
-      return transaction.get(firestore.doc('/unpublished_questions/' + questionId).ref).then(doc =>
-        transaction.set(firestore.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
+    const firestoreInstance = this.dbService.getFireStore();
+    firestoreInstance.firestore.runTransaction(transaction => {
+      return transaction.get(firestoreInstance.doc('/unpublished_questions/' + questionId).ref).then(doc =>
+        transaction.set(firestoreInstance.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
       )
     })
   }
