@@ -24,13 +24,13 @@ export class QuestionService {
 
   // Elasticsearch
   getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
-    let url: string = CONFIG.functionsUrl + '/api/question/day';
+    let url: string = CONFIG.functionsUrl + '/app/question/day';
     url = (isNextQuestion) ? `${url}/next` : `${url}/current`
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    const url: string = CONFIG.functionsUrl + '/api/question/';
+    const url: string = CONFIG.functionsUrl + '/app/question/';
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }
@@ -95,7 +95,6 @@ export class QuestionService {
     const dbQuestions: Array<any> = [];
     const bulkUploadFileInfo = bulkUpload.bulkUploadFileInfo;
     const questions = bulkUpload.questions;
-    debugger;
     const bulkUploadId = this.dbService.createId(); //this.db.createId();
     // store file in file storage
     // Not written any code monitor progress or error

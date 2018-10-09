@@ -1,4 +1,4 @@
-exports.api = require('./server/functions/app').api;
+exports.app = require('./server/functions/app').app;
 exports.onFirestoreQuestionWrite = require('./server/functions/db/firebase-functions').onQuestionWrite;
 exports.onFirestoreInvitationWrite = require('./server/functions/db/firebase-functions').onInvitationWrite;
 exports.onFirestoreGameCreate = require('./server/functions/db/firebase-functions').onGameCreate;

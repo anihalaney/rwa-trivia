@@ -97,7 +97,7 @@ export class GameOverComponent implements OnInit, OnDestroy {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
-          const url = `https://${this.windowRef.nativeWindow.location.hostname}/api/game/social/${this.user.userId}/${path[path.length - 1]}`;
+          const url = `https://${this.windowRef.nativeWindow.location.hostname}/app/game/social/${this.user.userId}/${path[path.length - 1]}`;
           this.socialFeedData.share_status = true;
           this.socialFeedData.link = url;
           this.loaderStatus = false;
