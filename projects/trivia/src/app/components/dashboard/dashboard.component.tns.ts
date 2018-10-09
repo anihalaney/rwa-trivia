@@ -8,6 +8,7 @@ import {
 import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
 import { AppState } from '../../store';
 import { Dashboard } from './dashboard';
+import { Page } from 'ui/page';
 
 @Component({
   selector: 'dashboard',
@@ -21,7 +22,8 @@ export class DashboardComponent extends Dashboard implements OnInit {
     gameActions: GameActions,
     userActions: UserActions, windowRef: WindowRef,
     @Inject(PLATFORM_ID) platformId: Object,
-    private utils: Utils) {
+    private utils: Utils,
+    private page: Page) {
 
     super(store,
       questionActions,
