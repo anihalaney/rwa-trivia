@@ -27,7 +27,7 @@ export enum UserControllerConstants {
 }
 
 export enum appConstants {
-    API_PREFIX = 'api'
+    API_PREFIX = 'app'
 }
 
 export enum interceptorConstants {

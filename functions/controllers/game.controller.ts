@@ -223,7 +223,7 @@ exports.createSocialContent = (req, res) => {
         websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
     }
 
-    const imageUrl = `${websiteUrl}/api/game/social-image/${req.params.userId}/${req.params.socialId}`;
+    const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;
 
     const htmlContent = `<!DOCTYPE html>
                        <html>
