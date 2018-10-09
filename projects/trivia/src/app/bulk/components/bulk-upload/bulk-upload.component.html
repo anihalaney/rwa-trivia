@@ -9,7 +9,8 @@
   <div class="card bulk-instuctions" *ngIf="showInstructions">
     <h2>Instructions</h2>
     <div class=" row col-sm-8 col-xs-12">
-      <p>The bulk upload feature allows you to submit your questions in a batch, instead of one at a time. Please read the
+      <p>The bulk upload feature allows you to submit your questions in a batch, instead of one at a time. Please read
+        the
         instructions carefully before using this feature.</p>
     </div>
 
@@ -19,7 +20,8 @@
       </div>
 
       <div class="col-sm-8 col-xs-12">
-        <p>The bulk upload allows you to upload a csv file with multiple questions. The format of the csv file must be similar
+        <p>The bulk upload allows you to upload a csv file with multiple questions. The format of the csv file must be
+          similar
           to the sample file, else your upload will be rejected. </p>
       </div>
       <a target="new" href="/assets/Sample Questions.csv">
@@ -39,7 +41,8 @@
         <h4 class="label">QUESTIONS & CATEGORY</h4>
       </div>
       <div class="col-sm-8 col-xs-12">
-        <p> You can only submit questions of a single category in a single file. For questions spanning multiple categories,
+        <p> You can only submit questions of a single category in a single file. For questions spanning multiple
+          categories,
           please use multiple files. </p>
       </div>
     </div>
@@ -48,14 +51,16 @@
         <h4 class="label">SINGLE TOPIC WITH SINGLE PRIMARY TAG</h4>
       </div>
       <div class="col-sm-8 col-xs-12">
-        <p> It is recommended to keep all questions in a file related with a single topic and have a single primary tag.</p>
+        <p> It is recommended to keep all questions in a file related with a single topic and have a single primary
+          tag.</p>
         <div class="primary-tag">
           <p>For example:</p>
           <p>You can upload a file with Category: Programming and Primary Tag: React.</p>
           <p>Another file could have Category: Programming with Primary Tag: Angular.</p>
         </div>
         <div class="primary-tag">
-          <p> The questions themselves can have additional tags associated with them. This helps us streamline the approval
+          <p> The questions themselves can have additional tags associated with them. This helps us streamline the
+            approval
             workflow which reduces time involved in getting all questions approved.</p>
         </div>
       </div>
@@ -69,7 +74,8 @@
           <li>Questions should be answerable in under 30 seconds.</li>
           <li>Each Question should have one and only one correct answer.</li>
           <li>
-            Answers will be presented in random order, so you cannot rely on the order of answers. Do not use answers like "Both a and
+            Answers will be presented in random order, so you cannot rely on the order of answers. Do not use answers
+            like "Both a and
             b" or "all of the above". If needed use "None of them is correct" or "All are correct".
           </li>
           <li>
@@ -93,7 +99,7 @@
           <h2>
             <b>Upload Questions</b>
           </h2>
-          <p>Select Your Prefered Category for the Question: </p>
+          <p>Select Your Preferred Category for the Question: </p>
           <div class="control-spacing">
             <mat-form-field>
               <mat-select placeholder="Select Category" class="matHeader" formControlName="category">
@@ -105,8 +111,8 @@
           </div>
           <div>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Primary Tag" class="matHeader" aria-label="Primary Tag" formControlName="tagControl" [matAutocomplete]="tagAuto"
-                aria-label="tag">
+              <input matInput placeholder="Primary Tag" class="matHeader" aria-label="Primary Tag" formControlName="tagControl"
+                [matAutocomplete]="tagAuto" aria-label="tag">
               <mat-autocomplete #tagAuto="matAutocomplete">
                 <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                   {{tag}}
@@ -137,7 +143,8 @@
           <h2 class="md-title">
             <b>Review</b>
           </h2>
-          <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions" [showPaginator]="false"></bulk-details>
+          <bulk-details *ngIf="parsedQuestions && parsedQuestions.length>0" [parsedQuestions]="parsedQuestions"
+            [showPaginator]="false"></bulk-details>
           <div class="control-spacing">
             <button class="btn-back" type="button" matStepperPrevious>Back</button>
             <button type="button" class="btn" matStepperNext [disabled]="bulkUploadFileInfo === undefined || questionValidationError"
