@@ -7,13 +7,13 @@ import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { reducers } from './store';
-import { CoreModule } from './../../../shared-library/src/lib/core/core.module';
+import { CoreModule } from 'shared-library/core/core.module';
+import { SharedModule } from 'shared-library/shared/shared.module'
 import { HttpClientModule } from '@angular/common/http';
 import { TNSFirebaseService } from './mobile/core/services/tns-firebase.service';
 import { FirebaseService } from 'shared-library/core/db-service/firebase.service';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
 import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens'
-import { MobileSharedModule } from "./mobile/shared";
 import { NativeScriptUISideDrawerModule } from "nativescript-ui-sidedrawer/angular";
 import { QuestionComponent } from "./components/question/question.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
@@ -42,8 +42,8 @@ registerElement('CardView', () => CardView);
     StoreRouterConnectingModule,
     CoreModule,
     HttpClientModule,
-    MobileSharedModule,
     StatsModule,
+    SharedModule,
     NativeScriptUISideDrawerModule
   ],
   providers: [
