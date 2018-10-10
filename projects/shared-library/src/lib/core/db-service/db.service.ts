@@ -38,4 +38,9 @@ export abstract class DbService {
 
     }
 
+
+    public loginUser(){
+        
+    }
+
 }

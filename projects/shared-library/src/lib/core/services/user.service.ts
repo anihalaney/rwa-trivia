@@ -22,8 +22,8 @@ export class UserService {
 
 
     loadUserProfile(user: User): Observable<User> {
-        const queryParams = { condition: [{ name: "userId", comparator: "==", value: user.userId }] };
-        return this.dbService.valueChanges('users', user.userId, queryParams)
+        // const queryParams = { condition: [{ name: "userId", comparator: "==", value: user.userId }] };
+        return this.dbService.valueChanges('users', user.userId)
             .pipe(map(u => {
                 if (u) {
                     const userInfo = user;
@@ -67,10 +67,11 @@ export class UserService {
         if (user.profilePicture && user.profilePicture !== '') {
             const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
             const ref = this.dbService.getFireStorageReference(filePath); //this.storage.ref(filePath);
-            return ref.getDownloadURL().pipe(map(url => {
-                user.profilePictureUrl = url.toString() ? url.toString() : '/assets/images/default-avatar-small.png';
-                return user;
-            }));
+            // return ref.getDownloadURL().pipe(map(url => {
+            //     user.profilePictureUrl = url.toString() ? url.toString() : '/assets/images/default-avatar-small.png';
+            //     return user;
+            // }));
+            return of(user);
         } else {
             user.profilePictureUrl = '/assets/images/default-avatar-small.png'
             return of(user);

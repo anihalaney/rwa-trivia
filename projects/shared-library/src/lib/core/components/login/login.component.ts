@@ -7,6 +7,7 @@ import { CoreState, coreState, UserActions, UIStateActions } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Utils } from '../../services';
+import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -29,7 +30,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<LoginComponent>,
     private store: Store<CoreState>,
     private uiStateActions: UIStateActions,
-    private utils: Utils) {
+    private utils: Utils,
+    private firebaseAuth: FirebaseAuthService) {
 
     this.mode = SignInMode.signIn;  //default
     this.notificationMsg = '';
@@ -37,6 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.firebaseAuth.createUserWithEmailAndPassword('email','pwd');
     this.loginForm = this.fb.group({
       mode: [0],
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
