@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-
+import { FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
+const firebaseWebApi = require("nativescript-plugin-firebase/app");
+import { DbService } from "./../../db-service"
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 
 @Component({
   selector: 'login',
@@ -15,14 +17,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   errorStatus: boolean;
   notificationLogs: string[];
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private dbService: DbService, private firebaseAuth: FirebaseAuthService) {
 
     this.mode = SignInMode.signIn;  //default
     this.notificationMsg = '';
     this.errorStatus = false;
-  }
 
-  ngOnInit() {
     this.loginForm = this.fb.group({
       mode: [0],
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
@@ -31,6 +31,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     }, { validator: loginFormValidator }
     );
 
+  }
+
+  ngOnInit() {
+    this.firebaseAuth.createUserWithEmailAndPassword('email','pwd');
     this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
@@ -56,7 +60,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.errorStatus = false;
     });
 
-   
+
   }
 
   onSubmit() {
@@ -64,11 +68,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   googleLogin() {
-  
+
   }
 
   fbLogin() {
-   
+
   }
 
   twitterLogin() {
@@ -76,11 +80,18 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   githubLogin() {
- 
+
   }
 
-  signup(){
-   
+  signup() {
+
+    firebaseWebApi.auth().createUserWithEmailAndPassword('demo@demo.com', '123456')
+      .then((user: any) => {
+        console.log("User created: " + JSON.stringify(user));
+      })
+      .catch(error => console.log("Error creating user: " + error));
+
+    // console.log(JSON.stringify(this.loginForm.value));
   }
 
   validateLogs() {
@@ -93,7 +104,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-  
+
   }
 }
 

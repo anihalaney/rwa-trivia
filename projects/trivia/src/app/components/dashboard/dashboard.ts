@@ -48,7 +48,6 @@ export class Dashboard {
         @Inject(PLATFORM_ID) private platformId: Object) {
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             if (user) {

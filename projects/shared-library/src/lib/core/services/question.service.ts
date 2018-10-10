@@ -95,7 +95,6 @@ export class QuestionService {
     const dbQuestions: Array<any> = [];
     const bulkUploadFileInfo = bulkUpload.bulkUploadFileInfo;
     const questions = bulkUpload.questions;
-    debugger;
     const bulkUploadId = this.dbService.createId(); //this.db.createId();
     // store file in file storage
     // Not written any code monitor progress or error

@@ -29,8 +29,15 @@ export class User {
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;
-      this.email = authState.providerData[0].email;
-      if (authState.providerData[0].displayName) {
+      if(authState.providerData !== undefined){
+        this.email = authState.providerData[0].email;
+      }
+
+      if(authState.email !== undefined){
+        this.email = authState.email;
+      }
+     
+      if (authState.providerData !== undefined && authState.providerData[0].displayName) {
         this.displayName = authState.providerData[0].displayName
       } else {
         this.displayName = this.email.split('@')[0] + new Date().getTime();
