@@ -218,9 +218,9 @@ exports.createSocialContent = (req, res) => {
         functions.config().elasticsearch.index &&
         functions.config().elasticsearch.index.production &&
         functions.config().elasticsearch.index.production === 'true') {
-        websiteUrl += 'bitwiser.io'
+        websiteUrl += 'bitwiser.io';
     } else {
-        websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com'
+        websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
     }
 
     const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;

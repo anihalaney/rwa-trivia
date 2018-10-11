@@ -62,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
         let url: string;
         this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
           if (status !== 'NONE') {
-            this.store.dispatch(new userActions.MakeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }))
+            this.store.dispatch(new userActions.MakeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }));
           }
         });
         this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl);
@@ -125,6 +125,7 @@ export class AppComponent implements OnInit, OnDestroy {
   logout() {
     this.authService.logout();
     this.router.navigate(['/dashboard']);
+    location.reload();
   }
 
   toggleTheme() {
