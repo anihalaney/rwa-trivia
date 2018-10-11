@@ -16,7 +16,7 @@ export class BulkService {
   // get All Bulk Upload
   getBulkUpload(user: User, archive: boolean): Observable<BulkUploadFileInfo[]> {
     if (!archive) {
-      const queryParams = { condition: [{ name: "isAdminArchived", comparator: "==", archive }] };
+      const queryParams = { condition: [{ name: "isAdminArchived", comparator: "==", value: archive }] };
 
       return this.dbService.valueChanges('bulk_uploads', '', queryParams)
         .pipe(catchError(error => {

@@ -25,3 +25,15 @@ export enum UserControllerConstants {
     mailTxt = 'Please allow access of bulk upload to below user',
     mailSubject = 'bitwiser.io: Bulk Upload Request',
 }
+
+export enum appConstants {
+    API_PREFIX = 'app'
+}
+
+export enum interceptorConstants {
+    UNAUTHORIZED = 401,
+    TOKEN_EXPIRE = 419,
+    INTERNAL_ERROR = 500,
+    MAXIMUM_RE_REQUEST_LIMIT = 3
+}
+
