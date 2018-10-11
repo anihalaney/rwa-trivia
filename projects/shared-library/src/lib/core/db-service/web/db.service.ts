@@ -77,7 +77,7 @@ export class WebDbService extends DbService {
     }
 
     public getFireStore() {
-        return this._afStore.firestore;
+        return this._afStore;
     }
 
     public getDoc(collectionName, docId): any {

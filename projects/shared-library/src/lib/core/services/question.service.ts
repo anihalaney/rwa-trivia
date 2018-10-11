@@ -67,7 +67,7 @@ export class QuestionService {
 
   getUnpublishedQuestions(flag: boolean): Observable<Question[]> {
     const question_source = (!flag) ? 'question' : 'bulk-question';
-    const queryParams = { condition: [{ name: "source", comparator: "==", question_source }] };
+    const queryParams = { condition: [{ name: "source", comparator: "==", value: question_source }] };
     // return this.db.collection('/unpublished_questions', ref => ref.where('source', '==', question_source)).valueChanges()
     return this.dbService.valueChanges('unpublished_questions', '', queryParams)
       .pipe(catchError(error => {
@@ -95,7 +95,6 @@ export class QuestionService {
     const dbQuestions: Array<any> = [];
     const bulkUploadFileInfo = bulkUpload.bulkUploadFileInfo;
     const questions = bulkUpload.questions;
-    debugger;
     const bulkUploadId = this.dbService.createId(); //this.db.createId();
     // store file in file storage
     // Not written any code monitor progress or error
@@ -143,13 +142,13 @@ export class QuestionService {
 
   approveQuestion(question: Question) {
     const dbQuestion = Object.assign({}, question); // object to be saved
-    const questionId = this.dbService.createId();
+    const questionId = dbQuestion.id;
     dbQuestion.status = QuestionStatus.APPROVED;
     // Transaction to remove from unpublished and add to published questions collection
-    let firestore = this.dbService.getFireStore();
-    firestore.runTransaction(transaction => {
-      return transaction.get(firestore.doc('/unpublished_questions/' + questionId).ref).then(doc =>
-        transaction.set(firestore.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
+    const firestoreInstance = this.dbService.getFireStore();
+    firestoreInstance.firestore.runTransaction(transaction => {
+      return transaction.get(firestoreInstance.doc('/unpublished_questions/' + questionId).ref).then(doc =>
+        transaction.set(firestoreInstance.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
       )
     })
   }

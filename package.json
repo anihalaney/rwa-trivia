@@ -28,7 +28,7 @@
     "compile-functions": "rmdir /s/q functions\\server & tsc --project functions",
     "deploy-trivia-functions": "npm run deploy-trivia-functions-build && npm run deploy-functions-app && npm run deploy-functions-ssr && npm run deploy-apps-to-firebase",
     "deploy-trivia-functions-build": "npm run build-trivia:ssr && npm run compile-ssr-functions",
-    "build-trivia:ssr": "ng build trivia --prod --configuration=dev && ng build trivia-admin --prod --configuration=dev && ng run trivia:server",
+    "build-trivia:ssr": "ng build trivia --prod --configuration=production && ng build trivia-admin --prod --configuration=production && ng run trivia:server",
     "compile-ssr-functions": "npm run compile-functions && npm run webpack:server && cpx dist/index.html functions/dist && rimraf dist/index.html",
     "webpack:server": "webpack --config webpack.server.config.js",
     "deploy-functions-app": "npm run pre-compile-app-functions && firebase deploy -P default --only functions",
