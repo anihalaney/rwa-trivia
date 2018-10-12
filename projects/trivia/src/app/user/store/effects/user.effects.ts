@@ -113,7 +113,7 @@ export class UserEffects {
         .ofType(UserActionTypes.GET_GAME_RESULT)
         .pipe(
             switchMap((action: userActions.GetGameResult) =>
-                this.gameService.getGameResult(action.payload.userId)
+                this.gameService.getGameResult(action.payload)
                     .pipe(map((games: Game[]) => new userActions.GetGameResultSuccess(games)))
             )
         );
