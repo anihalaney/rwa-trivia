@@ -72,7 +72,7 @@ export class UserService {
                 return user;
             }));
         } else {
-            user.profilePictureUrl = '/assets/images/default-avatar-small.png'
+            user.profilePictureUrl = '/assets/images/default-avatar-small.png';
             return of(user);
         }
     }

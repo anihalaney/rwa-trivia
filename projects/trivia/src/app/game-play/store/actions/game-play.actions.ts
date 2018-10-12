@@ -55,7 +55,7 @@ export class LoadGameSuccess implements Action {
 
 export class LoadGameInvites implements Action {
   readonly type = GamePlayActionTypes.LOAD_GAME_INVITES;
-  constructor(public payload: string) { } //game
+  constructor(public payload: User) { } //game
 }
 
 export class LoadGameInvitesSuccess implements Action {
