@@ -55,19 +55,19 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         return this.afAuth.auth;
     }
 
-    public googleLogin() {
+    public googleLogin(): Promise<any> {
         return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
     }
 
-    public facebookLogin() {
+    public facebookLogin(): Promise<any> {
         return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
     }
 
-    public twitterLogin() {
+    public twitterLogin(): Promise<any> {
         return this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
     }
 
-    public githubLogin() {
+    public githubLogin(): Promise<any> {
         return this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
     }
 

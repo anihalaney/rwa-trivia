@@ -11,8 +11,8 @@ export abstract class FirebaseAuthService {
     abstract sendEmailVerification(user): Promise<any>;
     abstract sendPasswordResetEmail(email: string): Promise<any>;
     abstract firebaseAuth(): any;
-    abstract googleLogin();
-    abstract facebookLogin();
-    abstract twitterLogin();
-    abstract githubLogin();
+    abstract googleLogin(): Promise<any>;
+    abstract facebookLogin(): Promise<any>;
+    abstract twitterLogin(): Promise<any>;
+    abstract githubLogin(): Promise<any>;
 }
