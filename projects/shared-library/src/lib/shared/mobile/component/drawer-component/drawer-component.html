@@ -1,5 +1,5 @@
 <GridLayout rows="120,auto,auto,auto,*" class="sideStackLayout">
-    <GridLayout row="0" columns="auto,auto" class="sideStackLayoutHeader">
+    <GridLayout row="0" columns="auto,auto" class="sideStackLayoutHeader" *ngIf="user">
         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
             marginLeft="10" verticalAlignment="center" marginRight="10"  borderRadius="50"></Image>
         <StackLayout row="0" col="1" marginTop="27">
@@ -12,7 +12,11 @@
     </GridLayout>
     <Label row="1" colSpan="2" text="Home" textWrap="true" class="sideLabel"  (tap)="dashboard()"></Label>
     <Label row="2" colSpan="2" text="Category Leaderboard" class="sideLabel sideStackLayout" (tap)="leaderBoard()"></Label>
-    <Label row="3" colSpan="2" text="Login" class="sideLabel sideStackLayout" (tap)="login()"></Label>
-    <Label row="4" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D" textAlignment="center" fontSize="16"
-        text="Logout" class="sideLabel sideStackLayout"></Label>
+
+
+    <Label *ngIf="!authProvider.isAuthenticated" row="4" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D" textAlignment="center" fontSize="16"
+    text="Login" class="sideLabel sideStackLayout" (tap)="login()"></Label>
+
+    <Label  *ngIf="authProvider.isAuthenticated" row="4" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D" textAlignment="center" fontSize="16"
+        text="Logout" class="sideLabel sideStackLayout" (tap)="logout()"></Label>
 </GridLayout>

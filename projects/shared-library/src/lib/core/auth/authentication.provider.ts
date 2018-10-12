@@ -25,7 +25,7 @@ export class AuthenticationProvider {
     this.firebaseAuthService.authState().subscribe(afUser => {
       if (afUser) {
         this.firebaseAuthService.getIdToken(afUser, false).then((token) => {
-          this.user = new User(afUser)
+          this.user = new User(afUser);
           this.user.idToken = token;
           this.store.dispatch(this.userActions.loginSuccess(this.user));
         });
@@ -42,16 +42,15 @@ export class AuthenticationProvider {
 
   }
 
-  ensureLogin = function (url?: string) {
+  ensureLogin (url?: string) {
     if (isPlatformBrowser(this.platformId)) {
       if (!this.isAuthenticated) {
         this.showLogin(url);
       }
     }
 
-  };
-
-  generateToken = function (flag) {
+  }
+  generateToken (flag) {
     return this.firebaseAuthService.refreshToken(flag).then((token) => {
       return token;
     });
@@ -59,7 +58,7 @@ export class AuthenticationProvider {
   }
 
 
-  refreshToken = function (): Observable<any> {
+  refreshToken (): Observable<any> {
     return this.refreshTokenObserver.pipe(tap((tokenResponse) => {
       this.user.idToken = tokenResponse;
       this.store.dispatch(this.userActions.loginSuccess(this.user));
@@ -71,21 +70,21 @@ export class AuthenticationProvider {
   }
 
 
-  showLogin = function (url?: string) {
+  showLogin (url?: string) {
     this.store.dispatch(this.uiStateActions.setLoginRedirectUrl(url));
     this.firebaseAuthService.showLogin();
-  };
+  }
 
-  logout = function () {
+  logout () {
     this.firebaseAuthService.signOut();
-  };
+  }
 
   get isAuthenticated(): boolean {
     let user: User;
-    this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user)
+    this.store.select(coreState).pipe(take(1)).subscribe(s => user = s.user);
     if (user) {
       return true;
     }
     return false;
-  };
+  }
 }

@@ -1,18 +1,12 @@
-import { Component, Input, OnInit, OnDestroy, HostListener, Inject } from '@angular/core';
-import { Observable, Subscription, pipe } from 'rxjs';
-import { map, distinctUntilChanged } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-
-
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { QuestionActions, GameActions, UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
-import * as gameplayactions from '../../game-play/store/actions';
 import {
   User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType
 } from '../../../../../shared-library/src/lib/shared/model';
 import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
-import { AppState, appState, categoryDictionary } from '../../store';
+import { AppState } from '../../store';
 import { Dashboard } from './dashboard';
 
 @Component({

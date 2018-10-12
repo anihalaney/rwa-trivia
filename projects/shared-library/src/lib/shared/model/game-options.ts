@@ -9,7 +9,7 @@ export class GameOptions {
   rematch?: boolean;
 
   constructor() {
-    //defaults
+    // Defaults
     this.playerMode = PlayerMode.Single;
     this.gameMode = GameMode.Normal;
     this.categoryIds = [];

@@ -2,32 +2,30 @@ import { Injectable } from '@angular/core';
 import { FirebaseAuthService } from './../firebase-auth.service';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
 import * as firebase from 'firebase/app';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { LoginComponent } from './../../components/login/login.component'
+import { LoginComponent } from './../../components/login/login.component';
 
 @Injectable()
-export class WebFirebaseAuthService extends FirebaseAuthService {
+export class WebFirebaseAuthService implements FirebaseAuthService {
 
     dialogRef: MatDialogRef<LoginComponent>;
     constructor(protected afAuth: AngularFireAuth,
         protected afStore: AngularFirestore,
-        private _afstorage: AngularFireStorage,
-        public dialog: MatDialog,) {
-        super();
-    }
+        public dialog: MatDialog) { }
 
     authState(): any {
         return this.afAuth.authState;
     }
 
     public createUserWithEmailAndPassword(email, password) {
-
+        return this.afAuth.auth.createUserWithEmailAndPassword(email, password);
     }
 
     public getIdToken(user, forceRefresh: boolean) {
-        (this.dialogRef) ? this.dialogRef.close() : '';
+        if (this.dialogRef) {
+            this.dialogRef.close();
+        }
         return user.getIdToken(forceRefresh);
     }
 
@@ -35,14 +33,45 @@ export class WebFirebaseAuthService extends FirebaseAuthService {
         return firebase.auth().currentUser.getIdToken(forceRefresh);
     }
 
-    public signOut(){
+    public signOut() {
         this.afAuth.auth.signOut();
     }
 
-    public showLogin(){
+    public showLogin() {
         this.dialogRef = this.dialog.open(LoginComponent, {
             disableClose: false
-          });
+        });
     }
 
+    public sendEmailVerification(user) {
+        return user.sendEmailVerification();
+    }
+
+    public signInWithEmailAndPassword(email: string, password: string) {
+        return this.afAuth.auth.signInWithEmailAndPassword(email, password);
+    }
+
+    public firebaseAuth() {
+        return this.afAuth.auth;
+    }
+
+    public googleLogin() {
+        return this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    }
+
+    public facebookLogin() {
+        return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
+    }
+
+    public twitterLogin() {
+        return this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());
+    }
+
+    public githubLogin() {
+        return this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider());
+    }
+
+    public sendPasswordResetEmail(email: string) {
+        return firebase.auth().sendPasswordResetEmail(email);
+    }
 }

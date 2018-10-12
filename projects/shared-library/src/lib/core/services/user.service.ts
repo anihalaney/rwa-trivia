@@ -8,7 +8,7 @@ import { User, Invitation, Friends } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { UserActions } from '../../core/store/actions';
 import { DbService } from "./../db-service"
-
+import { Utils } from "./utils";
 
 @Injectable()
 export class UserService {
@@ -17,7 +17,8 @@ export class UserService {
         private http: HttpClient,
         private store: Store<CoreState>,
         private userActions: UserActions,
-        private dbService: DbService) {
+        private dbService: DbService,
+        private utils: Utils) {
     }
 
 
@@ -65,12 +66,7 @@ export class UserService {
 
     getUserProfileImage(user: User): Observable<User> {
         if (user.profilePicture && user.profilePicture !== '') {
-            const filePath = `profile/${user.userId}/avatar/${user.profilePicture}`;
-            const ref = this.dbService.getFireStorageReference(filePath); //this.storage.ref(filePath);
-            // return ref.getDownloadURL().pipe(map(url => {
-            //     user.profilePictureUrl = url.toString() ? url.toString() : '/assets/images/default-avatar-small.png';
-            //     return user;
-            // }));
+            user.profilePictureUrl = this.utils.getImageUrl(user, 263, 263, '400X400');
             return of(user);
         } else {
             user.profilePictureUrl = '/assets/images/default-avatar-small.png'
