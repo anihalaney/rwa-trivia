@@ -31,16 +31,10 @@ export abstract class DbService {
     }
 
     public getDoc(collectionName, docId): any {
-        
+
     }
 
     public upload(filePath, imageBlob): any {
 
     }
-
-
-    public loginUser(){
-        
-    }
-
 }

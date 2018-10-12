@@ -59,11 +59,11 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         return firebase.resetPassword({ email: email });
     }
 
-    public googleLogin() {
+    public googleLogin(): Promise<any> {
         return firebase.login({ type: firebase.LoginType.GOOGLE });
     }
 
-    public facebookLogin() {
+    public facebookLogin(): Promise<any> {
         return firebase.login({
             type: firebase.LoginType.FACEBOOK,
             facebookOptions: {
@@ -72,7 +72,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
           });
     }
 
-    public twitterLogin() { }
+    public twitterLogin(): Promise<any> { return new Promise(resolve => resolve()); }
 
-    public githubLogin() { }
+    public githubLogin(): Promise<any> { return new Promise(resolve => resolve()); }
 }
