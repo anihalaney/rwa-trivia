@@ -16,7 +16,7 @@ export class BulkService {
   // get All Bulk Upload
   getBulkUpload(user: User, archive: boolean): Observable<BulkUploadFileInfo[]> {
     if (!archive) {
-      const queryParams = { condition: [{ name: "isAdminArchived", comparator: "==", archive }] };
+      const queryParams = { condition: [{ name: "isAdminArchived", comparator: "==", value: archive }] };
 
       return this.dbService.valueChanges('bulk_uploads', '', queryParams)
         .pipe(catchError(error => {
@@ -44,20 +44,20 @@ export class BulkService {
       if (user.roles.admin && user.roles.bulkuploader) {
         queryParams = {
           condition: [{ name: "created_uid", comparator: "==", value: user.userId },
-          { name: userArchive, comparator: "==", value: 'archive' },
-          { name: adminArchive, comparator: "==", value: 'archive' }
+          { name: userArchive, comparator: "==", value: archive },
+          { name: adminArchive, comparator: "==", value: archive }
           ]
         };
       } else if (user.roles.admin) {
         queryParams = {
           condition: [{ name: "created_uid", comparator: "==", value: user.userId },
-          { name: adminArchive, comparator: "==", value: 'archive' }
+          { name: adminArchive, comparator: "==", value: archive }
           ]
         };
       } else {
         queryParams = {
           condition: [{ name: "created_uid", comparator: "==", value: user.userId },
-          { name: userArchive, comparator: "==", value: 'archive' }
+          { name: userArchive, comparator: "==", value: archive }
           ]
         };
       }
@@ -110,12 +110,12 @@ export class BulkService {
       obj = { 'isUserArchived': true };
     }
 
-    const fireStore = this.dbService.getFireStore();
-    const upload = this.dbService.getFireStore().batch();
+    const fireStoreInstance = this.dbService.getFireStore().firestore;
+    const upload = fireStoreInstance.batch();
     archiveArray.map((bulkInfo) => {
-      const itemDoc = fireStore.collection('bulk_uploads').doc(bulkInfo.id);
+      const itemDoc = fireStoreInstance.collection('bulk_uploads').doc(bulkInfo.id);
       upload.update(itemDoc, obj);
-    })
+    });
     return upload.commit();
     // return of(true);
   }
