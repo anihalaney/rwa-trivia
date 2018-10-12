@@ -1,63 +1,51 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, ValidationErrors, Validators } from "@angular/forms";
-const firebaseWebApi = require("nativescript-plugin-firebase/app");
-import { DbService } from "./../../db-service"
-const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { RouterExtensions } from 'nativescript-angular/router';
+import * as Toast from 'nativescript-toast';
+import { CoreState, UIStateActions } from '../../store';
+import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
+import { Login } from './login';
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
-  mode: SignInMode;
-  loginForm: FormGroup;
-  notificationMsg: string;
-  errorStatus: boolean;
-  notificationLogs: string[];
+export class LoginComponent extends Login implements OnInit {
 
-  constructor(private fb: FormBuilder, private dbService: DbService, private firebaseAuth: FirebaseAuthService) {
-
-    this.mode = SignInMode.signIn;  //default
-    this.notificationMsg = '';
-    this.errorStatus = false;
-
-    this.loginForm = this.fb.group({
-      mode: [0],
-      email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      confirmPassword: ['']
-    }, { validator: loginFormValidator }
-    );
-
+  title: string;
+  constructor(public fb: FormBuilder,
+    public store: Store<CoreState>,
+    private routerExtension: RouterExtensions,
+    private uiStateActions: UIStateActions,
+    private cdRef: ChangeDetectorRef,
+    private firebaseAuthService: FirebaseAuthService) {
+    super(fb, store);
   }
 
   ngOnInit() {
-    this.firebaseAuth.createUserWithEmailAndPassword('email','pwd');
+    this.title = 'Login';
     this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
-          //Signup          
-          this.loginForm.get('confirmPassword').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
-          this.loginForm.get('confirmPassword').updateValueAndValidity();
+          // Sign up
+          this.title = 'Get a bit wiser - Sign up';
+          this.cdRef.detectChanges();
           break;
-        //no break - fall thru
+        // no break - fall thru
         case 0:
-          //Login or Signup       
-          this.loginForm.get('confirmPassword').clearValidators();
-          this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
-          this.loginForm.get('password').updateValueAndValidity();
+          // Login or Sign up
+          this.title = 'Login';
+          this.cdRef.detectChanges();
           break;
         default:
-          //Forgot Password
-          this.loginForm.get('password').clearValidators();
-          this.loginForm.get('confirmPassword').clearValidators();
+          // Forgot Password
+          this.title = 'Forgot Password';
+          this.cdRef.detectChanges();
 
       }
       this.loginForm.get('password').updateValueAndValidity();
-      this.notificationMsg = '';
-      this.errorStatus = false;
     });
 
 
@@ -65,64 +53,92 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onSubmit() {
 
+    if (!this.loginForm.valid) {
+      return;
+    }
+
+    switch (this.mode) {
+      case 0:
+        // Login
+        this.firebaseAuthService.signInWithEmailAndPassword(
+          this.loginForm.value.email,
+          this.loginForm.value.password
+        ).then((user: any) => {
+          // Success
+          Toast.makeText('You have been successfully logged in').show();
+          this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+        }, (error: Error) => {
+          // Error
+          Toast.makeText(error.message).show();
+        }).catch((error: Error) => {
+          Toast.makeText(error.message).show();
+        });
+        break;
+      case 1:
+        // Sign up
+        this.firebaseAuthService.createUserWithEmailAndPassword(
+          this.loginForm.value.email,
+          this.loginForm.value.password
+        ).then((user: any) => {
+          // Success
+          if (user && !user.emailVerified) {
+            this.firebaseAuthService.sendEmailVerification(user).then(
+              (response) => {
+                this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+              },
+              (error) => {
+                Toast.makeText(error.message).show();
+              }
+            );
+          }
+        }, (error: Error) => {
+          Toast.makeText(error.message).show();
+        }).catch((error: Error) => {
+          Toast.makeText(error.message).show();
+        });
+        break;
+      case 2:
+        // Forgot Password
+        this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.value.email)
+          .then((a: any) => {
+            this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
+            Toast.makeText(this.notificationMsg).show();
+            this.errorStatus = false;
+            this.notificationLogs.push(this.loginForm.get('email').value);
+            this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
+          }, (error: Error) => {
+            // Error
+            Toast.makeText(error.message).show();
+          }).catch((error: Error) => {
+            Toast.makeText(error.message).show();
+          });
+    }
+
   }
 
   googleLogin() {
-
+    this.firebaseAuthService.googleLogin().then(
+      (result) => {
+        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+        Toast.makeText('You have been successfully logged in').show();
+      },
+      (errorMessage) => {
+        Toast.makeText(errorMessage).show();
+      }
+    );
   }
 
   fbLogin() {
-
+    this.firebaseAuthService.facebookLogin().then(
+      (result) => {
+        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+        Toast.makeText('You have been successfully logged in').show();
+      },
+      (errorMessage) => {
+        Toast.makeText(errorMessage).show();
+      }
+    );
   }
 
-  twitterLogin() {
-
-  }
-
-  githubLogin() {
-
-  }
-
-  signup() {
-
-    firebaseWebApi.auth().createUserWithEmailAndPassword('demo@demo.com', '123456')
-      .then((user: any) => {
-        console.log("User created: " + JSON.stringify(user));
-      })
-      .catch(error => console.log("Error creating user: " + error));
-
-    // console.log(JSON.stringify(this.loginForm.value));
-  }
-
-  validateLogs() {
-    if (this.notificationLogs.indexOf(this.loginForm.get('email').value) !== -1) {
-      this.notificationMsg = `email has already sent to ${this.loginForm.get('email').value}`;
-      return true;
-    }
-    this.notificationMsg = '';
-    return false;
-  }
-
-  ngOnDestroy() {
-
-  }
 }
 
-export enum SignInMode {
-  signIn,
-  signUp,
-  forgotPassword
-}
-
-function loginFormValidator(fg: FormGroup): { [key: string]: boolean } {
-  //TODO: check if email is already taken
-
-  //Password match validation for Signup only
-  if (fg.get('mode').value === 1 && fg.get('password') && fg.get('confirmPassword')
-    && fg.get('password').value && fg.get('confirmPassword').value
-    && fg.get('password').value !== fg.get('confirmPassword').value) {
-    return { 'passwordmismatch': true }
-  }
-
-  return null;
-}

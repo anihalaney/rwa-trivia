@@ -1,15 +1,14 @@
-import { Injectable, NgZone } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { FirebaseAuthService } from './../firebase-auth.service';
-const firebaseApp = require("nativescript-plugin-firebase/app");
-const firebase = require("nativescript-plugin-firebase");
-import { of, Observable } from 'rxjs';
-import { Subject } from 'rxjs';
+import * as firebaseApp from 'nativescript-plugin-firebase/app';
+import * as firebase from 'nativescript-plugin-firebase';
+import { Subject, Observable } from 'rxjs';
 
 @Injectable()
-export class TNSFirebaseAuthService extends FirebaseAuthService {
+export class TNSFirebaseAuthService implements FirebaseAuthService {
+
     private userSubject: Subject<firebase.User>;
-    constructor(private zone: NgZone) {
-        super();
+    constructor() {
         this.userSubject = new Subject<firebase.User>();
         firebase.addAuthStateListener({
             onAuthStateChanged: (data) => this.userSubject.next(data.user),
@@ -17,30 +16,63 @@ export class TNSFirebaseAuthService extends FirebaseAuthService {
     }
 
     public createUserWithEmailAndPassword(email, password) {
-
+        return firebaseApp.auth().createUserWithEmailAndPassword(email, password);
     }
 
-    public authState(): any {
+    public showLogin() {
+        throw new Error('Not implemented');
+    }
+
+    public authState(): Observable<firebase.User> {
         return this.userSubject.asObservable();
     }
 
     public getIdToken(user, forceRefresh: boolean) {
-
         return firebase.getAuthToken({
-            // default false, not recommended to set to true by Firebase but exposed for {N} devs nonetheless :)
             forceRefresh: forceRefresh
         });
     }
 
-    public refreshToken(forceRefresh: boolean) {
+    public signOut() {
+        firebaseApp.auth().signOut();
+    }
+
+    public firebaseAuth() {
+        return firebaseApp.auth();
+    }
+
+    public refreshToken(forceRefresh: boolean): Promise<string> {
         return firebase.getAuthToken({
-            // default false, not recommended to set to true by Firebase but exposed for {N} devs nonetheless :)
             forceRefresh: forceRefresh
         });
     }
 
-    public signOut(){
-        firebaseApp.auth().signOut()
+    public signInWithEmailAndPassword(email: string, password: string) {
+        return firebaseApp.auth().signInWithEmailAndPassword(email, password);
     }
 
+    public sendEmailVerification(user) {
+        return firebase.sendEmailVerification();
+    }
+
+    public sendPasswordResetEmail(email: string) {
+        return firebase.resetPassword({ email: email });
+    }
+
+    public googleLogin() {
+        return firebase.login({ type: firebase.LoginType.GOOGLE });
+    }
+
+    public facebookLogin() {
+        return firebase.login({
+            type: firebase.LoginType.FACEBOOK,
+            facebookOptions: {
+              scope: ['public_profile', 'email']
+            }
+          });
+    }
+
+    public twitterLogin() { }
+
+    public githubLogin() { }
 }

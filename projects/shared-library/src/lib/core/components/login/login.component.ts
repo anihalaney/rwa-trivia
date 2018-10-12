@@ -1,81 +1,30 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
-import { MatDialogRef, MatDialog } from '@angular/material';
-import { AngularFireAuth } from '@angular/fire/auth';
-import * as firebase from 'firebase/app';
-import { CoreState, coreState, UserActions, UIStateActions } from '../../store';
+import { FormBuilder } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
+import { CoreState, coreState, UIStateActions } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Utils } from '../../services';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
-
-const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+import { Login } from './login';
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit, OnDestroy {
-  mode: SignInMode;
-  loginForm: FormGroup;
-  notificationMsg: string;
-  errorStatus: boolean;
-  subs: Subscription[] = [];
-  notificationLogs: string[];
+export class LoginComponent extends Login implements OnInit, OnDestroy {
 
-  constructor(private fb: FormBuilder,
-    private afAuth: AngularFireAuth,
-    private dialog: MatDialog,
+  constructor(public fb: FormBuilder,
+    public store: Store<CoreState>,
     public dialogRef: MatDialogRef<LoginComponent>,
-    private store: Store<CoreState>,
     private uiStateActions: UIStateActions,
     private utils: Utils,
-    private firebaseAuth: FirebaseAuthService) {
-
-    this.mode = SignInMode.signIn;  //default
-    this.notificationMsg = '';
-    this.errorStatus = false;
+    private firebaseAuthService: FirebaseAuthService) {
+    super(fb, store);
   }
 
-  ngOnInit() {
-    this.firebaseAuth.createUserWithEmailAndPassword('email','pwd');
-    this.loginForm = this.fb.group({
-      mode: [0],
-      email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      confirmPassword: ['']
-    }, { validator: loginFormValidator }
-    );
-
-    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
-      switch (mode) {
-        case 1:
-          //Signup          
-          this.loginForm.get('confirmPassword').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
-          this.loginForm.get('confirmPassword').updateValueAndValidity();
-          break;
-        //no break - fall thru
-        case 0:
-          //Login or Signup       
-          this.loginForm.get('confirmPassword').clearValidators();
-          this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
-          this.loginForm.get('password').updateValueAndValidity();
-          break;
-        default:
-          //Forgot Password
-          this.loginForm.get('password').clearValidators();
-          this.loginForm.get('confirmPassword').clearValidators();
-
-      }
-      this.loginForm.get('password').updateValueAndValidity();
-      this.notificationMsg = '';
-      this.errorStatus = false;
-    });
-
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.resetPasswordLogs))
-      .subscribe(notificationLogs => this.notificationLogs = notificationLogs));
-  }
+  ngOnInit() { }
 
   onSubmit() {
     if (!this.loginForm.valid) {
@@ -83,16 +32,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     switch (this.mode) {
       case 0:
-        //Login
-        this.afAuth.auth.signInWithEmailAndPassword(
+        // Login
+        this.firebaseAuthService.signInWithEmailAndPassword(
           this.loginForm.get('email').value,
           this.loginForm.get('password').value
         ).then((user: any) => {
-          //success
+          // Success
           this.dialogRef.close();
         }, (error: Error) => {
-          //error
-          // console.log(error);
+          // Error
           this.notificationMsg = error.message;
           this.errorStatus = true;
         }).catch((error: Error) => {
@@ -101,23 +49,25 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
         break;
       case 1:
-        //Signup
-        this.afAuth.auth.createUserWithEmailAndPassword(
+        // Sign up
+        this.firebaseAuthService.createUserWithEmailAndPassword(
           this.loginForm.get('email').value,
           this.loginForm.get('password').value
         ).then((user: any) => {
-          //success
+          // Success
           this.dialogRef.close();
           if (user && !user.emailVerified) {
-            user.sendEmailVerification().then(function () {
-              // console.log("email verification sent to user");
+            this.firebaseAuthService.sendEmailVerification(user).then(() => {
               this.notificationMsg = `email verification sent to ${this.loginForm.get('email').value}`;
               this.errorStatus = false;
+            }, (error: Error) => {
+              // Error
+              this.notificationMsg = error.message;
+              this.errorStatus = true;
             });
           }
         }, (error: Error) => {
-          //error
-          // console.log(error);
+          // Error
           this.notificationMsg = error.message;
           this.errorStatus = true;
         }).catch((error: Error) => {
@@ -126,17 +76,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
         break;
       case 2:
-        //Forgot Password
-        firebase.auth().sendPasswordResetEmail(this.loginForm.get('email').value)
+        // Forgot Password
+        this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.get('email').value)
           .then((a: any) => {
-            //  console.log("success. check your email");
             this.notificationMsg = `email sent to ${this.loginForm.get('email').value}`;
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs(this.notificationLogs));
           }, (error: Error) => {
-            //error
-            // console.log(error);
+            // Error
             this.notificationMsg = error.message;
             this.errorStatus = true;
           }).catch((error: Error) => {
@@ -147,15 +95,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   googleLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .catch((error: Error) => {
-        this.notificationMsg = error.message;
-        this.errorStatus = true;
-      });
+    this.firebaseAuthService.googleLogin().catch((error: Error) => {
+      this.notificationMsg = error.message;
+      this.errorStatus = true;
+    });
   }
 
   fbLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider())
+    this.firebaseAuthService.facebookLogin()
       .catch((error: Error) => {
         this.notificationMsg = error.message;
         this.errorStatus = true;
@@ -163,7 +110,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   twitterLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider())
+    this.firebaseAuthService.twitterLogin()
       .catch((error: Error) => {
         this.notificationMsg = error.message;
         this.errorStatus = true;
@@ -171,7 +118,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   githubLogin() {
-    this.afAuth.auth.signInWithPopup(new firebase.auth.GithubAuthProvider())
+    this.firebaseAuthService.githubLogin()
       .catch((error: Error) => {
         this.notificationMsg = error.message;
         this.errorStatus = true;
@@ -190,23 +137,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
   }
+
 }
 
-export enum SignInMode {
-  signIn,
-  signUp,
-  forgotPassword
-}
-
-function loginFormValidator(fg: FormGroup): { [key: string]: boolean } {
-  //TODO: check if email is already taken
-
-  //Password match validation for Signup only
-  if (fg.get('mode').value === 1 && fg.get('password') && fg.get('confirmPassword')
-    && fg.get('password').value && fg.get('confirmPassword').value
-    && fg.get('password').value !== fg.get('confirmPassword').value) {
-    return { 'passwordmismatch': true }
-  }
-
-  return null;
-}

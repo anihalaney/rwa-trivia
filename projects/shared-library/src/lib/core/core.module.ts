@@ -85,7 +85,8 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
       useClass: AuthInterceptor,
       multi: true,
     },
-    WebFirebaseAuthService,{
+    WebFirebaseAuthService,
+    {
       provide: FirebaseAuthService,
       useClass: WebFirebaseAuthService
     }

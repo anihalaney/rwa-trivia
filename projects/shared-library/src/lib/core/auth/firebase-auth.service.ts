@@ -1,32 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 
-@Injectable()
 export abstract class FirebaseAuthService {
-
-    constructor() {
-
-    }
-
-    public createUserWithEmailAndPassword(email, password) {
-
-    }
-
-    public authState(): any {
-        return '';
-    }
-
-    public getIdToken(user, forceRefresh: boolean): any {
-        return '';
-    }
-
-    public refreshToken(forceRefresh: boolean) {
-
-    }
-
-    public signOut() {
-
-    }
-    public showLogin() {
-
-    }
+    abstract createUserWithEmailAndPassword(email, password);
+    abstract authState(): Observable<any>;
+    abstract signOut();
+    abstract showLogin();
+    abstract getIdToken(user, forceRefresh: boolean);
+    abstract refreshToken(forceRefresh: boolean): Promise<string>;
+    abstract signInWithEmailAndPassword(email: string, password: string);
+    abstract sendEmailVerification(user): Promise<any>;
+    abstract sendPasswordResetEmail(email: string): Promise<any>;
+    abstract firebaseAuth(): any;
+    abstract googleLogin();
+    abstract facebookLogin();
+    abstract twitterLogin();
+    abstract githubLogin();
 }

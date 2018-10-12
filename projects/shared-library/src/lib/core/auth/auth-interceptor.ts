@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
     // Get the auth header from the service.
     let authHeader;
     this.store.select(authorizationHeader).subscribe(ah => {
-      authHeader = ah
+      authHeader = ah;
     }
     );
 
