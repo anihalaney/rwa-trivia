@@ -2,28 +2,22 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { CoreState } from '../store';
 import { User, Invitation, Friends } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
-import { UserActions } from '../../core/store/actions';
-import { DbService } from "./../db-service"
-import { Utils } from "./utils";
+import { DbService } from './../db-service';
+import { Utils } from './utils';
 
 @Injectable()
 export class UserService {
 
     constructor(
         private http: HttpClient,
-        private store: Store<CoreState>,
-        private userActions: UserActions,
         private dbService: DbService,
         private utils: Utils) {
     }
 
-
     loadUserProfile(user: User): Observable<User> {
-        // const queryParams = { condition: [{ name: "userId", comparator: "==", value: user.userId }] };
+
         return this.dbService.valueChanges('users', user.userId)
             .pipe(map(u => {
                 if (u) {
@@ -35,7 +29,6 @@ export class UserService {
                         user.stats = u.stats;
                     }
                 } else {
-                    //  this.saveUserProfile(user);
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
@@ -69,7 +62,7 @@ export class UserService {
             user.profilePictureUrl = this.utils.getImageUrl(user, 263, 263, '400X400');
             return of(user);
         } else {
-            user.profilePictureUrl = '/assets/images/default-avatar-small.png'
+            user.profilePictureUrl = '/assets/images/default-avatar-small.png';
             return of(user);
         }
     }
@@ -79,7 +72,6 @@ export class UserService {
     }
 
     saveUserInvitations(obj: any): Observable<boolean> {
-        // debugger;
         const invitation = new Invitation();
         invitation.created_uid = obj.created_uid;
         invitation.status = obj.status;
