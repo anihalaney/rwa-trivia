@@ -75,14 +75,14 @@ export class UserService {
         const invitation = new Invitation();
         invitation.created_uid = obj.created_uid;
         invitation.status = obj.status;
-        const fireStore = this.dbService.getFireStore();
-        const email = fireStore.batch();
+        const fireStoreInstance = this.dbService.getFireStore().firestore;
+        const email = fireStoreInstance.batch();
         obj.emails.map((element) => {
             invitation.email = element;
             const dbInvitation = Object.assign({}, invitation); // object to be saved
             const id = this.dbService.createId();
             dbInvitation.id = id;
-            email.set(fireStore.collection('invitations').doc(dbInvitation.id), dbInvitation);
+            email.set(fireStoreInstance.collection('invitations').doc(dbInvitation.id), dbInvitation);
         });
         email.commit();
         return of(true);
