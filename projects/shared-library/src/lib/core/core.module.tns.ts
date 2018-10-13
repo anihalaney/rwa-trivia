@@ -10,6 +10,8 @@ import {
   WindowRef
 } from './services';
 
+import { AuthenticationProvider } from './auth';
+
 import { DbService } from './db-service';
 import { TNSDbService } from './db-service/mobile/db.service';
 import { FirebaseService } from './db-service/firebase.service';
@@ -22,6 +24,13 @@ import { SharedRoutingModule } from './routing/shared-routing.module';
 
 import { LoginComponent } from './components';
 import { SharedModule } from './../shared/shared.module';
+
+import { NativeScriptFormsModule } from "nativescript-angular/forms";
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { FirebaseAuthService } from './auth/firebase-auth.service';
+import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
+
 
 @NgModule({
   declarations: [
@@ -39,14 +48,17 @@ import { SharedModule } from './../shared/shared.module';
     EffectsModule.forFeature(effects),
 
     SharedRoutingModule,
-    SharedModule
+    SharedModule,
+
+    NativeScriptFormsModule,
+    ReactiveFormsModule
 
   ],
   exports: [],
 
   providers: [
 
-    Utils,
+    Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService, SocialService, StatsService,
     WindowRef,
@@ -60,6 +72,10 @@ import { SharedModule } from './../shared/shared.module';
     {
       provide: DbService,
       useClass: TNSDbService
+    },
+    TNSFirebaseAuthService, {
+      provide: FirebaseAuthService,
+      useClass: TNSFirebaseAuthService
     }
   ]
 })
