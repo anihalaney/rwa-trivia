@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 
-import { gameplayState, GamePlayState } from '../../store';
+import { gamePlayState, GamePlayState } from '../../store';
 
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions, UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
@@ -82,8 +82,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     }));
 
     this.resetValues();
-    this.gameObs = store.select(gameplayState).pipe(select(s => s.currentGame), filter(g => g != null));
-    this.gameQuestionObs = store.select(gameplayState).pipe(select(s => s.currentGameQuestion));
+    this.gameObs = store.select(gamePlayState).pipe(select(s => s.currentGame), filter(g => g != null));
+    this.gameQuestionObs = store.select(gamePlayState).pipe(select(s => s.currentGameQuestion));
 
 
     this.sub.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));

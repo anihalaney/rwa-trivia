@@ -6,6 +6,8 @@ import { ActionWithPayload } from './action-with-payload';
 export class UIStateActions {
 
   static LOGIN_REDIRECT_URL = 'LOGIN_REDIRECT_URL';
+  static RESET_PASSWORD_NOTIFICATION_LOGS = 'RESET_PASSWORD_NOTIFICATION_LOGS';
+
   setLoginRedirectUrl(url?: string): ActionWithPayload<string> {
     return {
       type: UIStateActions.LOGIN_REDIRECT_URL,
@@ -13,7 +15,6 @@ export class UIStateActions {
     };
   }
 
-  static RESET_PASSWORD_NOTIFICATION_LOGS = 'RESET_PASSWORD_NOTIFICATION_LOGS';
   saveResetPasswordNotificationLogs(notificationLogs?: string[]): ActionWithPayload<string[]> {
     return {
       type: UIStateActions.RESET_PASSWORD_NOTIFICATION_LOGS,

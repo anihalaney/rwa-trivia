@@ -1,18 +1,12 @@
-import { Component, Input, OnInit, OnDestroy, HostListener, Inject } from '@angular/core';
-import { Observable, Subscription, pipe } from 'rxjs';
-import { map, distinctUntilChanged } from 'rxjs/operators';
+import { Inject } from '@angular/core';
+import { Observable, Subscription} from 'rxjs';
 import { Store, select } from '@ngrx/store';
-
-
 import { PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { QuestionActions, GameActions, UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
-import * as gameplayactions from '../../game-play/store/actions';
-import {
-    User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType
-} from '../../../../../shared-library/src/lib/shared/model';
-import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
-import { AppState, appState, categoryDictionary } from '../../store';
+import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
+import * as gamePlayActions from '../../game-play/store/actions';
+import { User, Game, OpponentType } from 'shared-library/shared/model';
+import { WindowRef } from 'shared-library/core/services';
+import { AppState, appState} from '../../store';
 
 
 export class Dashboard {
@@ -48,21 +42,11 @@ export class Dashboard {
         @Inject(PLATFORM_ID) private platformId: Object) {
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
-            if (user) {
-                this.user = user;
-                if (this.user.isSubscribed) {
-                    this.showNewsCard = false;
-                }
-                // Load active Games
-                this.store.dispatch(this.gameActions.getActiveGames(user));
-                this.store.dispatch(new gameplayactions.LoadGameInvites(user.userId));
-
-            } else {
-                this.showNewsCard = true;
-            }
+            this.store.dispatch(this.gameActions.getActiveGames(user));
+            this.store.dispatch(new gamePlayActions.LoadGameInvites(user));
+            this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
 
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -91,7 +75,7 @@ export class Dashboard {
         this.gameSliceStartIndex = 0;
         this.gameSliceLastIndex = 8;
 
-        this.subs.push(this.store.select(appState.gameplayState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
+        this.subs.push(this.store.select(appState.gamePlayState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
             this.gameInvites = iGames;
             this.friendCount = 0;
             this.randomPlayerCount = 0;

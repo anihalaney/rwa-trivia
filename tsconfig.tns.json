@@ -22,6 +22,7 @@
     "app/main.aot.ts",
     "functions",
     "**/*.spec.ts",
-    "server.ts"
+    "server.ts",
+    "scheduler"
   ]
 }
