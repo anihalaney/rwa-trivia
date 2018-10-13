@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase'
+import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +9,12 @@ import * as firebase from 'nativescript-plugin-firebase'
 
 export class AppComponent implements OnInit {
 
-  constructor() {
+  constructor(private authService: AuthenticationProvider) {
 
   }
   ngOnInit() {
 
-    firebase.init({}).then( (instance) => { });
+    firebase.init({}).then((instance) => { });
   }
 
 }
