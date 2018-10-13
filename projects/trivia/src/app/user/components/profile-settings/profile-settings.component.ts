@@ -186,7 +186,6 @@ export class ProfileSettingsComponent implements OnDestroy {
             this.saveUser(this.user);
             }
         });
-
     }
   }
 
