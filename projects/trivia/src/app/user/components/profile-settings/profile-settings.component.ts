@@ -179,21 +179,12 @@ export class ProfileSettingsComponent implements OnDestroy {
       this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile)
         .then((status) => {
           if (imageBlob) {
-            const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${fileName}`;
-            const fileRef = this.storage.ref(filePath);
-
-            const cropperImageUploadTask = this.storage.upload(filePath, imageBlob);
-
-            cropperImageUploadTask.snapshotChanges().pipe(
-              finalize(() => fileRef.getDownloadURL().subscribe((url) => {
-                this.profileImage.image = url ? url : '/assets/images/avatar.png';
-                this.user.profilePicture = fileName;
-                this.profileImageFile = undefined;
-                this.saveUser(this.user);
-              }))
-            ).subscribe();
-
-          }
+            this.user.profilePicture = fileName;
+            this.user.croppedImageUrl=this.profileImage.image;
+            this.user.croppedImageType= this.profileImageFile.type;
+            this.profileImageFile = undefined;
+            this.saveUser(this.user);
+            }
         });
 
     }
