@@ -14,7 +14,7 @@ export class Utils {
   regExpEscape(s: string) {
     return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
       replace(/\x08/g, '\\x08');
-  };
+  }
 
   unsubscribe(subs: Subscription[]) {
     subs.forEach(sub => {
@@ -22,11 +22,11 @@ export class Utils {
         sub.unsubscribe();
       }
     });
-  };
+  }
 
   getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
+  }
 
   dataURItoBlob(dataURI: any) {
     const binary = atob(dataURI.split(',')[1]);
@@ -42,7 +42,7 @@ export class Utils {
     if (user && user.profilePicture && user.profilePicture !== '') {
       return `${CONFIG.functionsUrl}/app/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
     } else {
-      if (isPlatformBrowser(this.platformId) == false && isPlatformServer(this.platformId) == false) {
+      if (isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false) {
         return `~/assets/images/avatar-${size}.png`;
       } else {
         return `assets/images/avatar-${size}.png`;

@@ -1,20 +1,25 @@
 import { Injectable, Inject, NgZone } from '@angular/core';
 import { DbService } from './../db.service';
-import { Observable} from 'rxjs';
-
-const firebase = require("nativescript-plugin-firebase/app");
+import { Observable } from 'rxjs';
+import { User } from './../../../shared/model';
+const firebaseApp = require("nativescript-plugin-firebase/app");
+const firebase = require("nativescript-plugin-firebase");
 // import { firestore } from "nativescript-plugin-firebase";
+import { Store } from '@ngrx/store';
+import { UserActions, UIStateActions } from './../../store/actions';
 
 
 @Injectable()
 export class TNSDbService extends DbService {
 
-    constructor(private zone: NgZone) {
+    constructor(private zone: NgZone,
+        protected _store: Store<any>,
+        private userActions: UserActions) {
         super();
     }
 
     public setDoc(collectionName, docId, document) {
-        const userCollection = firebase.firestore().collection(collectionName);
+        const userCollection = firebaseApp.firestore().collection(collectionName);
         userCollection.doc(docId).set(document);
     }
 
@@ -22,19 +27,19 @@ export class TNSDbService extends DbService {
 
     }
 
-
     public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {
-        
-        let query = firebase.firestore().collection(collectionName);
+
+        let query = firebaseApp.firestore().collection(collectionName);
+
         if (queryParams) {
             for (const param of queryParams.condition) {
                 query = query.where(param.name, param.comparator, param.value);
             }
         }
-
-        if(path) {
+        if (path) {
             query = query.doc(path);
         }
+
         return Observable.create(observer => {
             const unsubscribe = query.onSnapshot((snapshot: any) => {
                 let results = [];
@@ -43,18 +48,22 @@ export class TNSDbService extends DbService {
                         id: doc.id,
                         ...doc.data()
                     }));
-                }else {
+                } else {
                     results = snapshot.data();
-                  }
-                  this.zone.run(() => {
+                }
+                this.zone.run(() => {
+                    if (results !== undefined) {
                         observer.next((results.length == 1) ? results[0] : results);
-                  });
+                    } else {
+                        observer.next(undefined);
+                    }
+                });
             });
             return () => unsubscribe();
         });
     }
     public createId() {
-        return firebase.createId();
+        return firebaseApp.createId();
     }
 
     public getFireStorageReference(filePath) {
@@ -70,7 +79,7 @@ export class TNSDbService extends DbService {
     }
 
     public getDoc(collectionName, docId): any {
-  
+
     }
 
     public upload(filePath, imageBlob): any {

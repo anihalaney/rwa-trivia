@@ -1,5 +1,4 @@
 import * as firebase from 'firebase/app';
-import { Observable } from 'rxjs';
 
 export class User {
   id?: string;
@@ -27,24 +26,24 @@ export class User {
   croppedImageUrl: any;
   croppedImageType: string;
 
-  constructor(authState?: firebase.User) {
+  constructor(authState?: firebase.User & { name: string } ) {
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;
-      this.email = authState.providerData[0].email;
-      if (authState.providerData[0].displayName) {
-        this.displayName = authState.providerData[0].displayName
+      this.email = authState.providerData ? authState.providerData[0].email : authState.email;
+      if (authState.providerData && authState.providerData[0].displayName) {
+        this.displayName = authState.providerData[0].displayName;
+      } else if (authState.name) {
+        this.displayName = authState.name;
       } else {
         this.displayName = this.email.split('@')[0] + new Date().getTime();
       }
-
     }
   }
-
 }
 
 export class UserStats {
-  leaderBoardStats?: { [key: number]: number }
+  leaderBoardStats?: { [key: number]: number };
   gamePlayed?: number;
   categories?: number;
   wins?: number;

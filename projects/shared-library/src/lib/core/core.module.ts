@@ -31,6 +31,9 @@ import { LoginComponent } from './components';
 import { SharedModule } from '../shared/shared.module';
 import { DbService } from './db-service';
 import { WebDbService } from './db-service/web/db.service';
+import { FirebaseAuthService } from './auth/firebase-auth.service';
+import { WebFirebaseAuthService } from './auth/web/firebase-auth.service';
+
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 @NgModule({
@@ -71,6 +74,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     //Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
     UIStateActions, GameActions,
+
     WebDbService,
     {
       provide: DbService,
@@ -80,6 +84,11 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
+    },
+    WebFirebaseAuthService,
+    {
+      provide: FirebaseAuthService,
+      useClass: WebFirebaseAuthService
     }
   ]
 })

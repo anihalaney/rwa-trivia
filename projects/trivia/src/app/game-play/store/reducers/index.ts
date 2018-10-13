@@ -11,11 +11,11 @@ export * from './game-play.reducer';
 export interface GamePlayState {
   currentGame: Game;
   newGameId: string;
-  currentGameQuestion: Question,
-  updateGame: any,
-  gameInvites: Game[]
-  userAnsweredQuestion: any,
-  saveReportQuestion: string
+  currentGameQuestion: Question;
+  updateGame: any;
+  gameInvites: Game[];
+  userAnsweredQuestion: any;
+  saveReportQuestion: string;
 }
 
 export const reducer: ActionReducerMap<GamePlayState> = {
@@ -28,4 +28,4 @@ export const reducer: ActionReducerMap<GamePlayState> = {
   saveReportQuestion: saveReportQuestion
 };
 
-export const gameplayState = createFeatureSelector<GamePlayState>('gameplay');
+export const gamePlayState = createFeatureSelector<GamePlayState>('gameplay');
