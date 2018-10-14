@@ -23,6 +23,8 @@ export class User {
   profilePictureUrl?: string;
   stats?: UserStats;
   isRequestedBulkUpload: boolean;
+  croppedImageUrl: any;
+  croppedImageType: string;
 
   constructor(authState?: firebase.User & { name: string } ) {
     if (authState) {
