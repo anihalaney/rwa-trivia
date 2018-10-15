@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
 
-import { Category, User, LeaderBoardUser } from '../../../../../../shared-library/src/lib/shared/model';
+import { Category, User, LeaderBoardUser, LeaderBoardConstants } from '../../../../../../shared-library/src/lib/shared/model';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { leaderBoardState } from '../../store';
@@ -34,6 +34,7 @@ export class LeaderboardComponent implements OnDestroy {
   isbrowser: any;
   isServer: any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
+  unknown = LeaderBoardConstants.UNKNOWN;
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
