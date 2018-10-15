@@ -145,6 +145,7 @@ export class ProfileSettingsComponent implements OnDestroy {
       reader.readAsDataURL(this.profileImageFile);
       reader.onloadend = (loadEvent: any) => {
         image.src = loadEvent.target.result;
+        this.user.originalImageUrl = image.src;
         this.cropper.setImage(image);
       };
     }
@@ -173,19 +174,12 @@ export class ProfileSettingsComponent implements OnDestroy {
 
   saveProfileImage() {
     if (!this.profileImageValidation) {
-      const file = this.profileImageFile
-      const imageBlob = this.utils.dataURItoBlob(this.profileImage.image);
       const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
-      this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile)
-        .then((status) => {
-          if (imageBlob) {
-            this.user.profilePicture = fileName;
-            this.user.croppedImageUrl=this.profileImage.image;
-            this.user.croppedImageType= this.profileImageFile.type;
-            this.profileImageFile = undefined;
-            this.saveUser(this.user);
-            }
-        });
+      this.user.profilePicture = fileName;
+      this.user.croppedImageUrl = this.profileImage.image;
+      this.user.imageType = this.profileImageFile.type;
+      this.profileImageFile = undefined;
+      this.saveUser(this.user);
     }
   }
 
