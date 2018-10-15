@@ -64,4 +64,12 @@ export class Utils {
     return answers;
   }
 
+  getTimeDifference(gameTimeStamp: number): number {
+    const utcDate = new Date(new Date().toUTCString());
+    const currentMillis = utcDate.getTime();
+
+    const diff = currentMillis - gameTimeStamp;
+    return diff;
+  }
+
 }
