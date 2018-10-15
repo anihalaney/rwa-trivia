@@ -24,9 +24,10 @@ export class User {
   stats?: UserStats;
   isRequestedBulkUpload: boolean;
   croppedImageUrl: any;
-  croppedImageType: string;
+  originalImageUrl: any;
+  imageType: string;
 
-  constructor(authState?: firebase.User & { name: string } ) {
+  constructor(authState?: firebase.User & { name: string }) {
     if (authState) {
       this.authState = authState;
       this.userId = authState.uid;

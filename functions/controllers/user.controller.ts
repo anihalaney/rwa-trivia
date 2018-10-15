@@ -72,12 +72,15 @@ exports.generateUserProfileImage = (req, res) => {
     const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
     const user = req.body.user;
 
-    if (user.profilePicture && user.croppedImageUrl) {
-       
+    if (user.profilePicture && user.croppedImageUrl && user.originalImageUrl) {
+
         profileImagesGenerator.
-        uploadCroppedImage(user.userId,user.croppedImageUrl, user.profilePicture,user.croppedImageType).then((status) => {
+            uploadProfileImage(user).then((status) => {
+                delete user.originalImageUrl;
+                delete user.croppedImageUrl;
+                delete user.imageType;
                 setUser(user, res);
-            })
+            });
 
     } else {
         setUser(user, res);
@@ -92,6 +95,6 @@ function setUser(user, res) {
                 UserControllerConstants.mailSubject, htmlContent);
             mail.sendMail();
         }
-        res.send({ 'status': 'Profile Data is saved !!' })
+        res.send({ 'status': 'Profile Data is saved !!' });
     });
 }
