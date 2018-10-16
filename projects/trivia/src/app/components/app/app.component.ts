@@ -3,20 +3,18 @@ import { Router, NavigationEnd } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { map, skip, take, filter } from 'rxjs/operators';
+import { skip, take, filter } from 'rxjs/operators';
 
 
-import { CategoryActions, TagActions, QuestionActions, GameActions } from '../../../../../shared-library/src/lib/core/store';
+import { CategoryActions, TagActions, QuestionActions, GameActions } from 'shared-library/core/store';
 import { PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-
 import { User } from '../../../../../shared-library/src/lib/shared/model';
-import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
-import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
+import { AuthenticationProvider } from 'shared-library/core/auth';
+import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
-import { Location } from '@angular/common';
+import { Location, isPlatformBrowser } from '@angular/common';
 import { userState } from '../../user/store';
-import * as gameplayactions from '../../game-play/store/actions';
+import * as gamePlayActions from '../../game-play/store/actions';
 import * as userActions from '../../user/store/actions';
 
 import { SwUpdate } from '@angular/service-worker';
@@ -38,17 +36,13 @@ export class AppComponent implements OnInit, OnDestroy {
   theme = '';
   constructor(private renderer: Renderer2,
     private authService: AuthenticationProvider,
-    private categoryActions: CategoryActions,
-    private tagActions: TagActions,
-    private questionActions: QuestionActions,
-    private gameActions: GameActions,
     private store: Store<AppState>,
     public router: Router,
     public snackBar: MatSnackBar,
-    private location: Location,
     private windowRef: WindowRef,
     private swUpdate: SwUpdate,
-    @Inject(PLATFORM_ID) private platformId: Object) {
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private utils: Utils) {
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
@@ -58,12 +52,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     this.sub2 = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
-      this.user = user
+      this.user = user;
       if (user) {
         let url: string;
         this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
           if (status !== 'NONE') {
-            this.store.dispatch(new userActions.MakeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }))
+            this.store.dispatch(new userActions.MakeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }));
           }
         });
         this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl);
@@ -77,11 +71,11 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.sub3 = this.store.select(appState.gameplayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
 
       //  console.log("Navigating to game: " + gameObj['gameId']);
       this.router.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
 
     this.sub4 = this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
@@ -133,7 +127,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4, this.sub5]);
+    this.utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4, this.sub5]);
   }
 
   login() {
@@ -142,15 +136,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
-    location.reload();
+    this.router.navigate(['/dashboard']);
   }
 
   toggleTheme() {
     if (this.theme === '') {
       this.theme = 'dark';
-      this.renderer.addClass(document.body, this.theme)
+      this.renderer.addClass(document.body, this.theme);
     } else {
-      this.renderer.removeClass(document.body, this.theme)
+      this.renderer.removeClass(document.body, this.theme);
       this.theme = '';
     }
   }

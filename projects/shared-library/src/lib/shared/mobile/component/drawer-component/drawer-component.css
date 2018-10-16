@@ -1,0 +1,40 @@
+.sideStackLayoutHeader {
+    background-color: #13284F;
+}
+
+.sideStackLayout {
+    background-color: #13284F;
+}
+
+
+.sideLabel {
+    padding: 10;
+    font-size: 16;
+    color: #ffffff;
+}
+
+.sideLightGrayLabel {
+    background-color: lightgray;
+}
+
+#icmenu{
+    width: 50;
+    height: 50;
+}
+
+.icmenu{
+    width: 50;
+    height: 50;
+}
+
+.ou-allez-vous{
+    /* padding: 8 8 8 0 ; */
+    font-size: 18;
+    width: 92%;
+    height: 50;
+    color: black;
+}
+
+.center {
+    text-align: center;
+}

@@ -12,7 +12,7 @@ import { GameActions } from '../../../../../../shared-library/src/lib/core/store
 import {
   Category, GameOptions, GameMode, User, PlayerMode, OpponentType
 } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils, WindowRef } from '../../../../../../shared-library/src/lib/core/services';
 
 import { AppState, appState } from '../../../store';
 
@@ -42,6 +42,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   friendUserId: string;
   loaderStatus = false;
+  errMsg: string;
 
   get categoriesFA(): FormArray {
     //console.log(this.newGameForm.get('categoriesFA'));
@@ -50,7 +51,9 @@ export class NewGameComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     private store: Store<AppState>,
     private gameActions: GameActions,
-    private router: Router) {
+    private windowRef: WindowRef,
+    private router: Router,
+    private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
@@ -124,7 +127,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
 
   filter(val: string): string[] {
-    return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
+    return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
   autoOptionClick(event) {
     //Auto complete doesn't seem to have an event on selection of an entry
@@ -197,6 +200,7 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
+    this.errMsg = undefined;
   }
 
 
@@ -211,10 +215,17 @@ export class NewGameComponent implements OnInit, OnDestroy {
 
     //console.log(this.newGameForm.value);
     let gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
-    console.log(gameOptions);
+    // console.log(gameOptions);
 
     if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
       && !this.friendUserId) {
+      if (!this.friendUserId) {
+        this.errMsg = 'Please Select Friend';
+      }
+      this.loaderStatus = false;
+      if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
+        this.windowRef.nativeWindow.scrollTo(0, 0);
+      }
       return;
     }
 
@@ -243,10 +254,10 @@ export class NewGameComponent implements OnInit, OnDestroy {
   }
 
   getImageUrl(user: User) {
-    return Utils.getImageUrl(user, 70, 60, '70X60');
+    return this.utils.getImageUrl(user, 70, 60, '70X60');
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

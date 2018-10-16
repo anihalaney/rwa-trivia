@@ -1,0 +1,57 @@
+<ns-action-bar [title]="title" showAdd="true"></ns-action-bar>
+
+<CardView class="cardStyle" margin="10" elevation="40" radius="1" padding="15">
+  <ScrollView>
+
+
+    <GridLayout rows="auto,auto,auto" columns="*">
+      <StackLayout [formGroup]="loginForm" padding="15" row="0" col="0">
+        <Label [text]="title" textWrap="true" class="h3 center" textAlignment="center" fontSize="20"></Label>
+
+        <TextField visibility="collapsed" formControlName="mode" [(ngModel)]="mode"></TextField>
+        <StackLayout marginTop="50">
+          <TextField hint="Email" formControlName="email"></TextField>
+          <Label *ngIf="!loginForm.controls.email.pristine && loginForm.controls.email.invalid" text="Invalid Email!"
+            textWrap="true" class="error"></Label>
+        </StackLayout>
+
+        <TextField [visibility]="this.mode === 2 ? 'collapsed' : 'visible'" hint="Password" formControlName="password"
+          secure="true"></TextField>
+        <Label *ngIf="!loginForm.controls.password.pristine && loginForm.controls.password.invalid" text="Password must be atleast 6 characters"
+          textWrap="true" class="error"></Label>
+
+        <TextField [visibility]="this.mode !== 1 ? 'collapsed' : 'visible'" hint="Confirm Password" formControlName="confirmPassword"
+          secure="true"></TextField>
+        <Label *ngIf="!loginForm.controls.confirmPassword.pristine && loginForm.controls.confirmPassword.invalid" text="Confirm Password must be atleast 6 characters"
+          textWrap="true" class="error"></Label>
+        <Label *ngIf="(loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch'))"
+          text="Must match Password" textWrap="true" class="error"></Label>
+
+        <StackLayout [ngSwitch]="mode">
+          <StackLayout *ngSwitchCase="0">
+            <Button text="Login" (tap)="onSubmit()" [disabled]="loginForm.invalid"></Button>
+            <Button text="New Signup" (tap)="this.mode=1"></Button>
+            <Button text="Forgot Password?" (tap)="this.mode=2"></Button>
+          </StackLayout>
+          <StackLayout *ngSwitchCase="1">
+            <Button text="Sign Up" (tap)="onSubmit()"></Button>
+            <Button text="Login" (tap)="this.mode=0"></Button>
+          </StackLayout>
+          <StackLayout *ngSwitchCase="2">
+            <Button text="Forgot Password" (tap)="onSubmit()"></Button>
+            <Button text="No. I remember it now!" (tap)="this.mode=0"></Button>
+          </StackLayout>
+        </StackLayout>
+      </StackLayout>
+
+      <StackLayout row="1" col="0" class="hr-dark m-10"></StackLayout>
+
+      <StackLayout row="2" col="0" padding="15">
+        <Label text="You can also login with your social account" textWrap="true" fontSize="20"></Label>
+        <Button text="Sign in with Google+" (tap)="googleLogin()" fontSize="18" backgroundColor="#c94438" color="#ffffff"></Button>
+        <Button text="Sign in with Facebook" (tap)="fbLogin()" fontSize="18" backgroundColor="#4263a0" color="#ffffff"></Button>
+      </StackLayout>
+
+    </GridLayout>
+  </ScrollView>
+</CardView>

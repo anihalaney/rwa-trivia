@@ -1,0 +1,42 @@
+/*
+In NativeScript, the app.css file is where you place CSS rules that
+you would like to apply to your entire application. Check out
+http://docs.nativescript.org/ui/styling for a full list of the CSS
+selectors and properties you can use to style UI components.
+
+/*
+In many cases you may want to use the NativeScript core theme instead
+of writing your own CSS rules. For a full list of class names in the theme
+refer to http://docs.nativescript.org/ui/theme.
+*/
+
+// @import '~@angular/material/theming';
+// @import '~@ngx-share/button/styles/share-buttons';
+// @import '~@ngx-share/button/styles/themes/circles/circles-dark-theme';
+
+
+@import '~nativescript-theme-core/css/core.light.css';
+@import './styles/light.theme.scss';
+@import './styles/styles.scss';
+@import './styles/rwa-trivia.theme.scss';
+@import './styles/global.scss';
+@import './styles/light.theme.scss';
+
+.new-btn{
+    color: map-get($light-theme-text-color , primary-light);
+  }
+
+.material-icon {
+  font-family: "Material Icons", MaterialIcons-Regular;
+}
+
+.fa {
+  font-family: "FontAwesome", fontawesome-webfont;
+}
+.new-btn-s {
+  color: red;
+}
+
+.tns-btn{
+  font-size: 16;
+}

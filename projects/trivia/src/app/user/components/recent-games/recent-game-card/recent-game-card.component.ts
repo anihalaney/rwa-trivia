@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus } from '../../../../../../../shared-library/src/lib/shared/model';
@@ -11,8 +11,7 @@ import { UserActions } from '../../../../../../../shared-library/src/lib/core/st
 @Component({
     selector: 'recent-game-card',
     templateUrl: './recent-game-card.component.html',
-    styleUrls: ['./recent-game-card.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    styleUrls: ['./recent-game-card.component.scss']
 })
 export class RecentGameCardComponent implements OnChanges, OnDestroy {
     @Input() game: Game;
@@ -31,10 +30,10 @@ export class RecentGameCardComponent implements OnChanges, OnDestroy {
     GameStatus = GameStatus;
 
 
-    constructor(private store: Store<AppState>, private userActions: UserActions) {
+    constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils) {
 
         this.categoryDictObs = store.select(categoryDictionary);
-        this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+        this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
 
     }
 
@@ -55,10 +54,10 @@ export class RecentGameCardComponent implements OnChanges, OnDestroy {
     }
 
     getImageUrl(user: User) {
-        return Utils.getImageUrl(user, 44, 40, '44X40');
+        return this.utils.getImageUrl(user, 44, 40, '44X40');
     }
 
     ngOnDestroy() {
-        Utils.unsubscribe(this.subs);
+        this.utils.unsubscribe(this.subs);
     }
 }

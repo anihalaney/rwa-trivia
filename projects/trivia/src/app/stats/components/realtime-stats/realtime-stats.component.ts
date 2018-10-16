@@ -17,7 +17,7 @@ export class RealtimeStatsComponent implements OnDestroy {
   systemStats: SystemStats;
   subs: Subscription[] = [];
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private utils: Utils) {
 
     this.store.dispatch(new StatActions.LoadSystemStat());
 
@@ -29,6 +29,6 @@ export class RealtimeStatsComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

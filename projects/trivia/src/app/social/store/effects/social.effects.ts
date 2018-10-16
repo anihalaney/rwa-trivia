@@ -6,7 +6,7 @@ import { SocialService } from '../../../../../../shared-library/src/lib/core/ser
 import { Subscribers, Blog, RouterStateUrl } from '../../../../../../shared-library/src/lib/shared/model';
 import { SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
-import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
+import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 import { of } from 'rxjs';
 
 

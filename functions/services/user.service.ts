@@ -94,17 +94,18 @@ exports.generateProfileImage = (userId: string, profilePicture: string, size: st
  * uploadProfileImage
  * return status
  */
-exports.uploadProfileImage = (userId: string, profilePicture: string, data: any, size: string, originalStream: any): Promise<string> => {
-    const filePath = `profile/${userId}/avatar/${size}/${profilePicture}`;
+exports.uploadProfileImage = (data: any, mimeType: any, filePath: string,): Promise<string> => {
+    
     const file = bucket.file(filePath);
     const dataStream = new stream.PassThrough();
     dataStream.push(data);
     dataStream.push(null);
-
+    mimeType=(mimeType)?mimeType:dataStream.mimetype;
+    
     return new Promise((resolve, reject) => {
         dataStream.pipe(file.createWriteStream({
             metadata: {
-                contentType: originalStream.mimetype,
+                contentType: mimeType,
                 metadata: {
                     custom: 'metadata'
                 }

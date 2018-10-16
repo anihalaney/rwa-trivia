@@ -112,7 +112,7 @@ export class MakeFriendSuccess implements Action {
 // Get User's game result
 export class GetGameResult implements Action {
     readonly type = UserActionTypes.GET_GAME_RESULT;
-    constructor(public payload: { userId: String }) { }
+    constructor(public payload: User) { }
 }
 
 //// Get User's game result Success

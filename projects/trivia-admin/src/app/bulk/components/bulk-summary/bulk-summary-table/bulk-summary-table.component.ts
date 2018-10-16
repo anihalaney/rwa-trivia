@@ -10,7 +10,7 @@ import { bulkState } from '../../../store';
 import { BulkUploadFileInfo, Category, User } from '../../../../../../../shared-library/src/lib/shared/model';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 import * as bulkActions from '../../../store/actions';
 import { Router } from '@angular/router';
 

@@ -1,6 +1,6 @@
 
-express = require('express'),
-    router = express.Router();
+import * as express from 'express';
+const router = express.Router();
 
 const gameAuth = require('../middlewares/auth');
 
