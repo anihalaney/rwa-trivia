@@ -7,13 +7,13 @@ import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 
-import { gameplayState, GamePlayState } from '../../store';
+import { gamePlayState, GamePlayState } from '../../store';
 
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { GameActions, UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import {
   Game, GameOptions, GameMode, PlayerQnA, User, Question, Category, GameStatus,
-  PlayerMode, OpponentType
+  PlayerMode, OpponentType, Answer
 } from '../../../../../../shared-library/src/lib/shared/model';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
@@ -30,6 +30,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   game: Game;
   gameQuestionObs: Observable<Question>;
   currentQuestion: Question;
+  originalAnswers: Answer[];
   correctAnswerCount: number;
   totalRound: number;
   questionIndex: number;
@@ -66,26 +67,26 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   @ViewChild(GameQuestionComponent) set questionComponent(questionComponent: GameQuestionComponent) {
     this.genQuestionComponent = questionComponent;
-  };
+  }
 
   constructor(private store: Store<GamePlayState>, private gameActions: GameActions, private router: Router,
     private appStore: Store<AppState>, private userActions: UserActions,
-    @Inject(MAT_DIALOG_DATA) public data: any) {
+    @Inject(MAT_DIALOG_DATA) public data: any, private utils: Utils) {
 
     this.user = data.user;
     this.userDict = data.userDict;
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.sub.push(this.userDict$.subscribe(userDict => {
-      this.userDict = userDict
+      this.userDict = userDict;
     }));
 
     this.resetValues();
-    this.gameObs = store.select(gameplayState).pipe(select(s => s.currentGame), filter(g => g != null));
-    this.gameQuestionObs = store.select(gameplayState).pipe(select(s => s.currentGameQuestion));
+    this.gameObs = store.select(gamePlayState).pipe(select(s => s.currentGame), filter(g => g != null));
+    this.gameQuestionObs = store.select(gamePlayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.sub.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => { this.categoryDictionary = c }));
+    this.sub.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
     this.sub.push(
       this.gameObs.subscribe(game => {
         this.game = game;
@@ -147,7 +148,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           const otherPlayerObj = this.userDict[this.otherPlayerUserId];
           (otherPlayerObj) ? this.otherPlayer = otherPlayerObj : this.initializeOtherUser();
           this.otherPlayer.displayName = (this.otherPlayer.displayName && this.otherPlayer.displayName !== '') ?
-            this.otherPlayer.displayName : this.RANDOM_PLAYER
+            this.otherPlayer.displayName : this.RANDOM_PLAYER;
         } else {
           this.initializeOtherUser();
         }
@@ -194,7 +195,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       },
         null,
         () => {
-          Utils.unsubscribe([this.timerSub]);
+          this.utils.unsubscribe([this.timerSub]);
           this.showWinBadge = false;
           this.isCorrectAnswer = false;
           this.showBadgeScreen();
@@ -215,7 +216,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
       null,
       () => {
         // Show badge screen
-        Utils.unsubscribe([this.timerSub]);
+        this.utils.unsubscribe([this.timerSub]);
         this.showLoader = false;
         this.showBadge = true;
         this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
@@ -225,10 +226,10 @@ export class GameDialogComponent implements OnInit, OnDestroy {
           null,
           () => {
             // load question screen timer
-            Utils.unsubscribe([this.timerSub]);
+            this.utils.unsubscribe([this.timerSub]);
             this.showBadge = false;
             this.subscribeQuestion();
-          })
+          });
       });
   }
 
@@ -239,8 +240,9 @@ export class GameDialogComponent implements OnInit, OnDestroy {
         this.currentQuestion = undefined;
         return;
       }
-
+      this.originalAnswers = Object.assign({}, question.answers);
       this.currentQuestion = question;
+      this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);
       this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName;
       if (!this.userDict[this.currentQuestion.created_uid]) {
         this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
@@ -292,12 +294,13 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   continueClicked($event) {
     this.currentQuestion = undefined;
+    this.originalAnswers = undefined;
     if (this.turnFlag) {
       this.continueNext = false;
       this.store.dispatch(new gameplayactions.ResetCurrentGame());
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
       this.store.dispatch(new gameplayactions.UpdateGameRound(this.game.gameId));
-      this.router.navigate(['/dashboard'])
+      this.router.navigate(['/dashboard']);
     } else {
       this.questionAnswered = false;
       this.showContinueBtn = false;
@@ -330,6 +333,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
   gameOverContinueClicked() {
     this.currentQuestion = undefined;
+    this.originalAnswers = undefined;
     this.questionAnswered = false;
     this.showContinueBtn = false;
     this.continueNext = false;
@@ -340,7 +344,7 @@ export class GameDialogComponent implements OnInit, OnDestroy {
   }
 
   afterAnswer(userAnswerId?: number) {
-    Utils.unsubscribe([this.timerSub, this.questionSub]);
+    this.utils.unsubscribe([this.timerSub, this.questionSub]);
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
     let index;
     if (userAnswerId === undefined) {
@@ -355,16 +359,23 @@ export class GameDialogComponent implements OnInit, OnDestroy {
     }
 
     const seconds = this.MAX_TIME_IN_SECONDS - this.timer;
+    const originalAnswers: Answer[] = [];
+    for (const key of Object.keys(this.originalAnswers)) {
+      const originalAnswer: Answer = this.originalAnswers[key];
+      originalAnswers[key] = originalAnswer;
+    }
+
     const playerQnA: PlayerQnA = {
       playerId: this.user.userId,
       // playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
-      playerAnswerId: index,
+      playerAnswerId: (index) ?
+        originalAnswers.findIndex(a => a.answerText === this.currentQuestion.answers[index].answerText).toString() : null,
       playerAnswerInSeconds: seconds,
       answerCorrect: (userAnswerId === correctAnswerId),
       questionId: this.currentQuestion.id,
       addedOn: this.currentQuestion.addedOn,
       round: this.currentQuestion.gameRound
-    }
+    };
     this.questionAnswered = true;
     this.isGameLoaded = false;
     // dispatch action to push player answer
@@ -375,8 +386,8 @@ export class GameDialogComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.timerSub]);
-    Utils.unsubscribe(this.sub);
+    this.utils.unsubscribe([this.timerSub]);
+    this.utils.unsubscribe(this.sub);
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
   }
 }

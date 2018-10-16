@@ -77,7 +77,7 @@
   <div class="row">
     <!-- Question of the day -->
     <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
-      <question [question]="questionOfTheDay$ | async" [userDict]="userDict"></question>
+      <question [userDict]="userDict"></question>
     </div>
     <!-- Question of the day end -->
 
@@ -95,7 +95,7 @@
         <h2>Leaderboard</h2>
       </div>
     </div>
-    <leaderboard *ngIf="userDict" [userDict]="userDict"></leaderboard>
+    <leaderboard *ngIf="userDict"></leaderboard>
   </section>
   <!-- Category leaderboard end-->
 

@@ -1,4 +1,5 @@
 
+
 const userService = require('../services/user.service');
 const sharp = require('sharp');
 import { User, UserStats, UserControllerConstants } from '../../projects/shared-library/src/lib/shared/model';
@@ -71,9 +72,10 @@ exports.generateUserProfileImage = (req, res) => {
     const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
     const user = req.body.user;
 
-    if (user.profilePicture) {
+    if (user.profilePicture && user.croppedImageUrl) {
+       
         profileImagesGenerator.
-            getStoredImage(user.userId, user.profilePicture).then((status) => {
+        uploadCroppedImage(user.userId,user.croppedImageUrl, user.profilePicture,user.croppedImageType).then((status) => {
                 setUser(user, res);
             })
 

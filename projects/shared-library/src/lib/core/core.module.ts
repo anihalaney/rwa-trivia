@@ -1,10 +1,10 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
-import { AngularFireModule, FirebaseAppConfig } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireAuthModule } from 'angularfire2/auth';
-import { AngularFireStorageModule } from 'angularfire2/storage';
+import { AngularFireModule, FirebaseAppConfig } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -29,6 +29,10 @@ import { reducer } from './store';
 import { LoginComponent } from './components';
 
 import { SharedModule } from '../shared/shared.module';
+import { DbService } from './db-service';
+import { WebDbService } from './db-service/web/db.service';
+import { FirebaseAuthService } from './auth/firebase-auth.service';
+import { WebFirebaseAuthService } from './auth/web/firebase-auth.service';
 
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
@@ -71,10 +75,20 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     UserActions, CategoryActions, TagActions, QuestionActions,
     UIStateActions, GameActions,
 
+    WebDbService,
+    {
+      provide: DbService,
+      useClass: WebDbService
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true,
+    },
+    WebFirebaseAuthService,
+    {
+      provide: FirebaseAuthService,
+      useClass: WebFirebaseAuthService
     }
   ]
 })

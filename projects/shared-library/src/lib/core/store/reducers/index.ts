@@ -4,7 +4,7 @@ import { user, authInitialized, invitationToken, userDict } from './user.reducer
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
-import { loginRedirectUrl } from './ui-state.reducer';
+import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import { activeGames } from './game.reducer';
 import { Observable } from 'rxjs';
 
@@ -27,6 +27,7 @@ export interface CoreState {
   questionSaveStatus: string;
   activeGames: Game[];
   invitationToken: string;
+  resetPasswordLogs: string[];
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -39,7 +40,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   questionSaveStatus: questionSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
   activeGames: activeGames,
-  invitationToken: invitationToken
+  invitationToken: invitationToken,
+  resetPasswordLogs: resetPasswordLogs
 };
 
 // Features

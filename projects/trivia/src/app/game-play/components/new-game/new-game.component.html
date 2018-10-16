@@ -8,6 +8,9 @@
                 <h1>Game Options</h1>
                 <p>Please select a player mode to start a new game</p>
             </div>
+            <div class="frd-err-msg">
+                <label *ngIf="errMsg">{{errMsg}}</label>
+            </div>
             <div class="optionbox">
                 <div class="row">
                     <div class="col-sm-3">
@@ -22,7 +25,7 @@
 
                         <input type="radio" id="p-radio2" formControlName="playerMode" value="1">
                         <label for="p-radio2">
-                            <span class="sprite twop-icon icon"></span> Two Player</label>
+                            <span class="sprite twop-icon icon"></span> Two Players</label>
                         <div class="twoplayer">
                             <input type="radio" id="tp-radio1" formControlName="opponentType" value="0">
                             <label for="tp-radio1">
@@ -33,6 +36,7 @@
                             <input type="radio" id="tp-radio3" formControlName="opponentType" value="2">
                             <!-- <label for="tp-radio3">
                                 <span class="sprite computerp-icon"></span>With Computer</label> -->
+
                             <div class="withfriends">
                                 <ul class="friendsslider" *ngIf="uFriends && uFriends.length>0">
                                     <li *ngFor="let friendId of uFriends; let i=index">
@@ -51,9 +55,9 @@
                                         </label>
                                     </li>
                                 </ul>
-                                <span *ngIf="noFriendsStatus">I do not have any friends, invite your friends using link
-                                    <a [routerLink]="['/my/invite-friends']">
-                                        Invite Friends</a>
+                                <span class="no-frd-msg" *ngIf="noFriendsStatus">
+                                    I do not have any friends, invite your friends using link
+                                    <a [routerLink]="['/my/invite-friends']">Invite Friends</a>
                                 </span>
                             </div>
                         </div>
@@ -62,7 +66,7 @@
                 <!-- Prefered Categories -->
                 <div class="row pcategories">
                     <div class="col-sm-3">
-                        <h2>Prefered
+                        <h2>Preferred
                             <span>Categories</span>
                         </h2>
                     </div>
@@ -84,7 +88,8 @@
                             <div class="col-md-4">
                                 <div class="chancat" (click)="toggleShowUncheckedCategories()" [class.hide]="true">
                                     <span class="sprite chancaticon"></span>
-                                    <span class="chancat-text" [class.hide]="showUncheckedCategories">Change Category Preference</span>
+                                    <span class="chancat-text" [class.hide]="showUncheckedCategories">Change Category
+                                        Preference</span>
                                     <!--<span class="chancat-text" [class.hide]="!showUncheckedCategories">Close</span>-->
                                 </div>
                             </div>
@@ -103,8 +108,8 @@
                                 </mat-chip-list>
 
                             </div>
-                            <input type="text" placeholder="Tag" matInput formControlName="tagControl" [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)"
-                                aria-label="tag">
+                            <input type="text" placeholder="Tag" matInput formControlName="tagControl"
+                                [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)" aria-label="tag">
                             <mat-autocomplete #tagAuto="matAutocomplete">
                                 <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                                     {{ tag }}

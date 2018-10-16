@@ -6,6 +6,7 @@ import { Question, Answer } from '../../../../../shared-library/src/lib/shared/m
 import { QuestionActions } from '../../../../../shared-library/src/lib/core/store/actions';
 import { UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
 import { AuthorComponent } from '../../../../../shared-library/src/lib/shared/components/author/author.component';
+import { Utils } from '../../../../../shared-library/src/lib/core/services';
 
 describe('Component: QuestionComponent', () => {
 
@@ -20,7 +21,7 @@ describe('Component: QuestionComponent', () => {
         // refine the test module by declaring the QuestionComponent component
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({})],
-            providers: [Store, QuestionActions, UserActions],
+            providers: [Store, QuestionActions, UserActions, Utils],
             declarations: [QuestionComponent, AuthorComponent]
         });
 
@@ -36,7 +37,7 @@ describe('Component: QuestionComponent', () => {
         component.userDict = TEST_DATA.userDict;
         component.question = TEST_DATA.questions.published.filter(obj => { return obj.id === '1' })[0];
         fixture.detectChanges();
-        component.ngOnChanges();
+
 
         // get the injected instances
         _store = fixture.debugElement.injector.get(Store);
