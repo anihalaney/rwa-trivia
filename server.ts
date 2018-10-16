@@ -9,10 +9,11 @@ import { resolve } from 'path';
 import * as express from 'express';
 
 const domino = require('domino');
-const compression = require('compression')
+const compression = require('compression');
 const win = domino.createWindow('');
 const app = express();
 let isProductionEnv = false;
+const path = require('path');
 
 global['window'] = win;
 global['document'] = win.document;
@@ -21,7 +22,6 @@ global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
 // console.log(process.cwd());
 const DIST_FOLDER = resolve(process.cwd(), './dist');
 // console.log(DIST_FOLDER);
-
 // console.log('isProductionEnv', isProductionEnv);
 
 const {
@@ -43,11 +43,22 @@ app.engine(
 
 app.set('view engine', 'html');
 app.set('views', DIST_FOLDER);
-app.use(compression())
+app.use(compression());
 // Point all routes to Universal
 app.get('*', (req, res) => {
   res.setHeader('Cache-Control', 'public, max-age=21600, s-maxage=21600');
   res.render('index', { req }, (err, html) => {
+
+    //  console.log('ssr url---->', req.url);
+
+    if (req.url.includes('index.html')) {
+      const index = require('fs')
+        .readFileSync(resolve(process.cwd(), './dist/index.html'), 'utf8')
+        .toString();
+      // console.log('cached html---->', index);
+      html = index;
+    }
+
     if (isProductionEnv) {
       html += `\n<script async src="https://www.googletagmanager.com/gtag/js?id=UA-122807814-1"></script>
         <script>

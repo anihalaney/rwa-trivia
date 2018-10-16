@@ -110,20 +110,20 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    if (isPlatformBrowser(this.platformId)) {
-      console.log('Service worker update called');
+    // if (isPlatformBrowser(this.platformId)) {
+    //   console.log('Service worker update called');
 
-      if (this.swUpdate.isEnabled) {
+    //   if (this.swUpdate.isEnabled) {
 
-        this.swUpdate.available.subscribe(() => {
+    //     this.swUpdate.available.subscribe(() => {
 
-          if (confirm('New version available. Load New Version?')) {
+    //       if (confirm('New version available. Load New Version?')) {
 
-            window.location.reload();
-          }
-        });
-      }
-    }
+    //         window.location.reload();
+    //       }
+    //     });
+    //   }
+    // }
   }
 
   ngOnDestroy() {
