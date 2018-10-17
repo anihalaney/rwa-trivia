@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
-import { ActionBarComponent, DrawerComponent } from './mobile/component'
+import { ActionBarComponent, DrawerComponent } from './mobile/component';
 
 @NgModule({
   declarations: [

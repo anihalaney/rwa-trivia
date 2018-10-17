@@ -92,4 +92,4 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     }
   ]
 })
-export class CoreModule { };
+export class CoreModule { }

@@ -12,6 +12,8 @@ import {
 
 import { AuthenticationProvider } from './auth';
 
+import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
+
 import { DbService } from './db-service';
 import { TNSDbService } from './db-service/mobile/db.service';
 import { FirebaseService } from './db-service/firebase.service';
@@ -25,7 +27,7 @@ import { SharedRoutingModule } from './routing/shared-routing.module';
 import { LoginComponent } from './components';
 import { SharedModule } from './../shared/shared.module';
 
-import { NativeScriptFormsModule } from "nativescript-angular/forms";
+import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { FirebaseAuthService } from './auth/firebase-auth.service';
@@ -41,10 +43,10 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
   ],
   imports: [
 
-    //store
+    // store
     StoreModule.forFeature('core', reducer),
 
-    //ngrx effects
+    // ngrx effects
     EffectsModule.forFeature(effects),
 
     SharedRoutingModule,
@@ -63,7 +65,7 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
     GameService, BulkService, UserService, SocialService, StatsService,
     WindowRef,
 
-    //Actions
+    // Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
     UIStateActions, GameActions,
     UserActions,
@@ -76,11 +78,13 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
     TNSFirebaseAuthService, {
       provide: FirebaseAuthService,
       useClass: TNSFirebaseAuthService
-    }
+    },
+    // Route guards
+    AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver
   ]
 })
 export class CoreModule {
   constructor() {
 
   }
-};
+}
