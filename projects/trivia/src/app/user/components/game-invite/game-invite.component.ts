@@ -1,7 +1,10 @@
 import { Component, Input, OnChanges, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { User, Game, Category, GameStatus } from '../../../../../../shared-library/src/lib/shared/model';
+import {
+  User, Game, Category, GameStatus,
+  GameInviteConstants, CalenderConstants
+} from '../../../../../../shared-library/src/lib/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../../game-play/store/actions';
 import { gameInvites } from '../../../game-play/store';
@@ -22,6 +25,7 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   randomCategoryId = 0;
   gameStatus;
   subs: Subscription[] = [];
+  remainingDays: number;
 
 
   constructor(private store: Store<AppState>, private utils: Utils) {
@@ -30,8 +34,12 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges() {
-    this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
-    this.gameStatus = (this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) ? 'Random' : 'Friend'
+    if (this.game) {
+      this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
+      this.gameStatus = (this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) ? 'Random' : 'Friend';
+      this.remainingDays = (GameInviteConstants.INVITATION_APPROVAL_TOTAL_DAYS -
+        Math.floor(this.utils.getTimeDifference(this.game.turnAt) / (CalenderConstants.DAYS_CALCULATIONS)));
+    }
   }
 
   rejectGameInvitation() {
