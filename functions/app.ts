@@ -22,11 +22,11 @@ app.use('/images', express.static(__dirname + '/../../images'));
 
 
 app.use((req, res, next) => {
-    console.log('before', req.url);
+    //  console.log('before', req.url);
     if (req.url.indexOf(`/${appConstants.API_PREFIX}/`) === -1) {
         req.url = `/${appConstants.API_PREFIX}${req.url}`; // prepend '/' to keep query params if any
     }
-    console.log('after', req.url);
+    //  console.log('after', req.url);
     next();
 });
 
