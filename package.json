@@ -16,7 +16,7 @@
     "ng": "ng",
     "start-trivia": "ng serve trivia",
     "start-trivia-admin": "ng serve trivia-admin",
-    "prod:start-trivia": "ng serve --prod trivia --configuration=production",
+    "prod:start-trivia": "cp angular-prod.json angular.json && ng serve --prod trivia --configuration=production",
     "prod:start-trivia-admin": "ng serve --prod trivia-admin --configuration=production",
     "api": "json-server --watch src/db.json",
     "lint": "tslint \"src/**/*.ts\" --project src/tsconfig.json --type-check && tslint \"e2e/**/*.ts\" --project e2e/tsconfig.json --type-check",
@@ -26,7 +26,7 @@
     "e2e": "protractor",
     "deploy-functions-local": "npm run compile-functions  && firebase serve --only functions",
     "compile-functions": "rmdir /s/q functions\\server & tsc --project functions",
-    "deploy-trivia-functions": "npm run deploy-trivia-functions-build && npm run deploy-functions-app && npm run deploy-functions-ssr && npm run deploy-apps-to-firebase",
+    "deploy-trivia-functions": "npm run deploy-trivia-functions-build && npm run deploy-functions-app &&  npm run deploy-functions-ssr && npm run deploy-apps-to-firebase",
     "deploy-trivia-functions-build": "npm run build-trivia:ssr && npm run compile-ssr-functions",
     "build-trivia:ssr": "ng build trivia --prod --configuration=dev && ng build trivia-admin --prod --configuration=dev && ng run trivia:server",
     "compile-ssr-functions": "npm run compile-functions && npm run webpack:server && cpx dist/index.html functions/dist && rimraf dist/index.html",
@@ -38,7 +38,7 @@
     "deploy-apps-to-firebase": "firebase deploy -P default --only hosting",
     "prod:deploy-trivia-functions": "npm run prod:deploy-trivia-functions-build && npm run prod:set-index && npm run prod:deploy-functions-app && npm run prod:deploy-functions-ssr && npm run prod:deploy-apps-to-firebase",
     "prod:deploy-trivia-functions-build": "npm run prod:build-trivia:ssr && npm run compile-ssr-functions",
-    "prod:build-trivia:ssr": "ng build trivia --prod --configuration=production && ng build trivia-admin --prod --configuration=production && ng run trivia:server",
+    "prod:build-trivia:ssr": "cp angular-prod.json angular.json && ng build trivia --prod --configuration=production && ng build trivia-admin --prod --configuration=production && ng run trivia:server",
     "prod:set-index": "firebase -P production functions:config:set elasticsearch.index.production=true",
     "prod:deploy-functions-app": "npm run pre-compile-app-functions && firebase deploy -P production --only functions",
     "prod:deploy-functions-ssr": "npm run pre-compile-ssr-functions && firebase deploy -P production --only functions:ssr",
@@ -158,7 +158,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run test && ng e2e trivia-e2e"
+      "pre-push": ""
     }
   }
 }

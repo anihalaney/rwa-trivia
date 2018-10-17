@@ -72,10 +72,13 @@ export class AppModule {
 
   constructor(updates: SwUpdate, @Inject(PLATFORM_ID) private platformId: Object, ngZone: NgZone) {
 
-    if (isPlatformBrowser(this.platformId)) {
+    if (isPlatformBrowser(this.platformId) && environment.production) {
+
       if (updates.isEnabled) {
         updates.available.subscribe(() => {
-          window.location.reload();
+          if (confirm('New version available. Load New Version?')) {
+            window.location.reload();
+          }
         });
       }
       ngZone.runOutsideAngular(() => {
