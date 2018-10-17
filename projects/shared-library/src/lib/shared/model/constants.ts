@@ -37,3 +37,17 @@ export enum interceptorConstants {
     MAXIMUM_RE_REQUEST_LIMIT = 3
 }
 
+
+export enum GameInviteConstants {
+    INVITATION_APPROVAL_TOTAL_DAYS = 8
+}
+
+export enum CalenderConstants {
+    MINUTE_CALCULATIONS = 60 * 1000,
+    HOURS_CALCULATIONS = MINUTE_CALCULATIONS * 60,
+    DAYS_CALCULATIONS = HOURS_CALCULATIONS * 24
+}
+
+export enum LeaderBoardConstants {
+    UNKNOWN = 'Unknown'
+}
