@@ -1,6 +1,11 @@
 <ns-action-bar title="Dashboard" showAdd="true"></ns-action-bar>
 <StackLayout>
     <ScrollView>
-        <question [userDict]="userDict"></question>
-    </ScrollView>    
+        <GridLayout rows="*, *" columns="*">
+            <Button row="0" col="0" text="Start New Game" (tap)="startNewGame()" margin="10"></Button>
+            <StackLayout row="1" col="0">
+                <question [userDict]="userDict"></question>
+            </StackLayout>
+        </GridLayout>
+    </ScrollView>
 </StackLayout>

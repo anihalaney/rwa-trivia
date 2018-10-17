@@ -1,14 +1,14 @@
-import { Component, Input, OnInit, OnDestroy, HostListener, Inject, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { Store} from '@ngrx/store';
+import { Component, Input, OnInit, OnDestroy, HostListener, Inject, ChangeDetectorRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
-import { QuestionActions, GameActions, UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
+import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
   User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType
-} from '../../../../../shared-library/src/lib/shared/model';
-import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
+} from 'shared-library/shared/model';
+import { WindowRef } from 'shared-library/core/services';
 import { AppState } from '../../store';
 import { Dashboard } from './dashboard';
-import { Page } from 'ui/page';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 @Component({
   selector: 'dashboard',
@@ -22,8 +22,8 @@ export class DashboardComponent extends Dashboard implements OnInit {
     gameActions: GameActions,
     userActions: UserActions, windowRef: WindowRef,
     @Inject(PLATFORM_ID) platformId: Object,
-    private utils: Utils,
-    private page: Page) {
+    private routerExtension: RouterExtensions
+  ) {
 
     super(store,
       questionActions,
@@ -33,7 +33,10 @@ export class DashboardComponent extends Dashboard implements OnInit {
 
   }
   ngOnInit() {
+  }
 
+  startNewGame() {
+    this.routerExtension.navigate(['/game-play'], { clearHistory: true });
   }
 
 }

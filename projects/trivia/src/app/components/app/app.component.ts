@@ -4,15 +4,10 @@ import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skip, take, filter } from 'rxjs/operators';
-
-
-import { CategoryActions, TagActions, QuestionActions, GameActions } from 'shared-library/core/store';
-import { PLATFORM_ID } from '@angular/core';
-import { User } from '../../../../../shared-library/src/lib/shared/model';
+import { User } from 'shared-library/shared/model';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
-import { Location } from '@angular/common';
 import { userState } from '../../user/store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import * as userActions from '../../user/store/actions';
