@@ -104,9 +104,10 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
     question.categoryIds = [formValue.category];
-    question.tags = [...this.autoTags, ...this.enteredTags]
+    question.tags = [...this.autoTags, ...this.enteredTags];
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
+    question.createdOn = new Date();
 
     return question;
   }
