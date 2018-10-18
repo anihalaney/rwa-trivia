@@ -51,7 +51,7 @@ export class Utils {
   }
 
   convertIntoDoubleDigit(digit: Number) {
-    return (digit < 10) ? `0${digit}` : digit;
+    return (digit < 10) ? `0${digit}` : `${digit}`;
   }
 
   changeAnswerOrder(answers: Answer[]) {
