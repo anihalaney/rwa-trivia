@@ -76,9 +76,8 @@ export class AppModule {
 
       if (updates.isEnabled) {
         updates.available.subscribe(() => {
-          if (confirm('New version available. Load New Version?')) {
-            window.location.reload();
-          }
+          alert('New version available. Load New Version?');
+          window.location.reload();
         });
       }
       ngZone.runOutsideAngular(() => {
