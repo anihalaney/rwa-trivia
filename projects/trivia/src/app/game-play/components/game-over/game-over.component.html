@@ -98,7 +98,7 @@
   </mat-card-content>
   <mat-card-content class="textcenter">
     <div class="button-div">
-      <div class="win-icon spacing-bottom" *ngIf="socialFeedData">
+      <div class="win-icon safari-icons spacing-bottom" *ngIf="socialFeedData">
         <social-palette *ngIf="socialFeedData.share_status && !loaderStatus" class="spacing position" [blogData]="socialFeedData"
           (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
         <img *ngIf="loaderStatus" src="/assets/images/ajax-loader.gif" class="share-loaderimage" />
