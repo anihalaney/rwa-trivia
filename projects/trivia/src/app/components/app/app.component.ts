@@ -4,10 +4,7 @@ import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skip, take, filter } from 'rxjs/operators';
-
-
 import { CategoryActions, TagActions, QuestionActions, GameActions } from 'shared-library/core/store';
-import { PLATFORM_ID } from '@angular/core';
 import { User } from '../../../../../shared-library/src/lib/shared/model';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
@@ -35,12 +32,10 @@ export class AppComponent implements OnInit, OnDestroy {
   theme = '';
   constructor(private renderer: Renderer2,
     private authService: AuthenticationProvider,
- 
     private store: Store<AppState>,
     public router: Router,
     public snackBar: MatSnackBar,
     private windowRef: WindowRef,
-
     private utils: Utils) {
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
@@ -89,6 +84,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate(['/my/questions']);
       }
     });
+
+
   }
 
   ngOnInit() {
@@ -124,9 +121,9 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleTheme() {
     if (this.theme === '') {
       this.theme = 'dark';
-      this.renderer.addClass(document.body, this.theme)
+      this.renderer.addClass(document.body, this.theme);
     } else {
-      this.renderer.removeClass(document.body, this.theme)
+      this.renderer.removeClass(document.body, this.theme);
       this.theme = '';
     }
   }

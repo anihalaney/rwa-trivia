@@ -1,6 +1,6 @@
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, Inject, NgZone } from '@angular/core';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -23,6 +23,10 @@ import {
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../../../shared-library/src/lib/environments/environment';
+import { SwUpdate } from '@angular/service-worker';
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { interval } from 'rxjs';
 
 @NgModule({
   declarations: [
@@ -64,4 +68,24 @@ import { environment } from '../../../shared-library/src/lib/environments/enviro
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(updates: SwUpdate, @Inject(PLATFORM_ID) private platformId: Object, ngZone: NgZone) {
+
+    if (isPlatformBrowser(this.platformId) && environment.production) {
+
+      if (updates.isEnabled) {
+        updates.available.subscribe(() => {
+          alert('New version available. Load New Version?');
+          window.location.reload();
+        });
+      }
+      ngZone.runOutsideAngular(() => {
+        interval(60000).subscribe(() => {
+          ngZone.run(() => updates.checkForUpdate());
+        });
+      });
+    }
+
+  }
+}
