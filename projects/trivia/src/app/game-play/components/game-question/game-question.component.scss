@@ -108,7 +108,7 @@
   //.timer{position: absolute; right: 48px; top: 33px;} 
 }
 @media screen and ( min-width:1000px){
-  .gameplay p a:hover{text-decoration: underline;}
+   .gameplay p a:hover{cursor: pointer}
   .gameplay h2{ width: 80% }  
 }
 /*Game Play End*/
