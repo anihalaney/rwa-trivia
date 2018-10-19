@@ -50,6 +50,9 @@
                   "with": "projects/shared-library/src/lib/environments/environment.prod.ts"
                 }
               ],
+              "scripts": [
+                "projects/trivia/src/scripts/google-analytics.js"
+              ],
               "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",

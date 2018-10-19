@@ -254,3 +254,11 @@ ul li:last-child{ border-bottom: 0 }
   position: absolute;
   margin-left: 28px;
 }
+
+@media not all and (min-resolution:.001dpcm)
+{ @supports (-webkit-appearance:none) {
+  .safari-icons{
+    padding-top: 4px;
+  } 
+}
+}

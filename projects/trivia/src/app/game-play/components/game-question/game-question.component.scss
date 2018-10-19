@@ -92,7 +92,7 @@
 .gameplay h2{ font-size: 20px; font-family: 'hindregular'; margin: 0 auto; }
 .popupbottom{ font-size: 16px; padding: 1% 4%;text-align: left;font-family: 'hindregular';}
 .gameplay p a{font-family: 'hindmedium'}
-.gameplay li{ margin:30px 20px 0; padding: 15px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer; overflow: hidden; position: relative;word-wrap: break-word;}
+.gameplay li{ margin:30px 20px 0; padding: 15px; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer; overflow: hidden; position: relative;word-wrap: break-word;}
 
 .timer{width:61px;height:61px;margin:0 auto; position: relative;}
 .timer .rotate{width:51px;height:51px;display:block;position:absolute; margin: 5px 0 0 5px;border-radius: 50%;}
@@ -104,11 +104,11 @@
 .timer .dots .time.deg135{-moz-transform:rotate(135deg);-ms-transform:rotate(135deg);-webkit-transform:rotate(135deg);transform:rotate(135deg);}
 @media screen and ( min-width:767px){
   .gameplay ul{ max-width: 576px; margin: 0 auto}
-  .gameplay li{ display: inline-block; padding: 15px 0; width: 219px }
+  .gameplay li{ display: inline-block; padding: 15px; width: 219px }
   //.timer{position: absolute; right: 48px; top: 33px;} 
 }
 @media screen and ( min-width:1000px){
-  .gameplay p a:hover{text-decoration: underline;}
+   .gameplay p a:hover{cursor: pointer}
   .gameplay h2{ width: 80% }  
 }
 /*Game Play End*/

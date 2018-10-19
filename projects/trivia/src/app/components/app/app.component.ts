@@ -30,12 +30,10 @@ export class AppComponent implements OnInit, OnDestroy {
   theme = '';
   constructor(private renderer: Renderer2,
     private authService: AuthenticationProvider,
- 
     private store: Store<AppState>,
     public router: Router,
     public snackBar: MatSnackBar,
     private windowRef: WindowRef,
-
     private utils: Utils) {
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
@@ -84,6 +82,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.router.navigate(['/my/questions']);
       }
     });
+
+
   }
 
   ngOnInit() {
@@ -119,9 +119,9 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleTheme() {
     if (this.theme === '') {
       this.theme = 'dark';
-      this.renderer.addClass(document.body, this.theme)
+      this.renderer.addClass(document.body, this.theme);
     } else {
-      this.renderer.removeClass(document.body, this.theme)
+      this.renderer.removeClass(document.body, this.theme);
       this.theme = '';
     }
   }

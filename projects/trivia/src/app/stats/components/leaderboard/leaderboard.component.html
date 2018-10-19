@@ -10,8 +10,10 @@
               <img [src]="getImageUrl(userDict[user.userId])" alt="User Profile Image" />
             </div>
             <div class="col-xs-4 ellipsis">
-              <label href="#" class="dark" title="{{userDict[user.userId]?.displayName}}">{{userDict[user.userId]?.displayName}}</label>
-              <div class="light ellipsis" title="{{userDict[user.userId]?.location}}">{{userDict[user.userId]?.location}}</div>
+              <label *ngIf="userDict[user.userId]?.displayName" class="dark" title="{{userDict[user.userId]?.displayName}}">{{userDict[user.userId]?.displayName}}</label>
+              <div *ngIf="userDict[user.userId]?.location" class="light ellipsis" title="{{userDict[user.userId]?.location}}">{{userDict[user.userId]?.location}}</div>
+              <label *ngIf="!userDict[user.userId]?.displayName" class="dark" title="{{unknown}}">{{unknown}}</label>
+              <div *ngIf="!userDict[user.userId]?.location" class="light ellipsis" title="{{unknown}}">{{unknown}}</div>
             </div>
             <div class="col-xs-3">
               <div class="dark">{{user.score}}</div>

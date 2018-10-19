@@ -51,7 +51,7 @@ export class Utils {
   }
 
   convertIntoDoubleDigit(digit: Number) {
-    return (digit < 10) ? `0${digit}` : digit;
+    return (digit < 10) ? `0${digit}` : `${digit}`;
   }
 
   changeAnswerOrder(answers: Answer[]) {
@@ -62,6 +62,14 @@ export class Utils {
       answers[j] = temp;
     }
     return answers;
+  }
+
+  getTimeDifference(gameTimeStamp: number): number {
+    const utcDate = new Date(new Date().toUTCString());
+    const currentMillis = utcDate.getTime();
+
+    const diff = currentMillis - gameTimeStamp;
+    return diff;
   }
 
 }
