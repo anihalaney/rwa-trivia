@@ -96,7 +96,7 @@
                         </div>
                         <div class="tags">
                             <p>Tags associated categories</p>
-                            <div data-tags-input-name="tag" id="tagBox" class="tagging-js">
+                            <div data-tags-input-name="tag" id="tagBox" class="tagging">
                                 <mat-chip-list>
                                     <mat-basic-chip *ngIf="selectedTags.length === 0" class="tag">
                                         None
@@ -115,7 +115,7 @@
                                     {{ tag }}
                                 </mat-option>
                             </mat-autocomplete>
-                            <a mat-button class="add-tag-button" color="primary" (click)="addTag()">ADD</a>
+                            <a mat-button class="add-tag-button" color="primary" (click)="addTag()" [disabled]="newGameForm.controls.tagControl.value === ''">ADD</a>
                         </div>
                     </div>
                 </div>
