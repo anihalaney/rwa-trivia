@@ -3,12 +3,13 @@ import { FirebaseAuthService } from './../firebase-auth.service';
 import * as firebaseApp from 'nativescript-plugin-firebase/app';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Subject, Observable } from 'rxjs';
+import { RouterExtensions } from 'nativescript-angular/router';
 
 @Injectable()
 export class TNSFirebaseAuthService implements FirebaseAuthService {
 
     private userSubject: Subject<firebase.User>;
-    constructor() {
+    constructor(private routerExtension: RouterExtensions) {
         this.userSubject = new Subject<firebase.User>();
         firebase.addAuthStateListener({
             onAuthStateChanged: (data) => this.userSubject.next(data.user),
@@ -20,8 +21,9 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public showLogin() {
-        throw new Error('Not implemented');
+        this.routerExtension.navigate(['/login'], { clearHistory: true });
     }
+
 
     public authState(): Observable<firebase.User> {
         return this.userSubject.asObservable();
@@ -67,9 +69,9 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         return firebase.login({
             type: firebase.LoginType.FACEBOOK,
             facebookOptions: {
-              scope: ['public_profile', 'email']
+                scope: ['public_profile', 'email']
             }
-          });
+        });
     }
 
     public twitterLogin(): Promise<any> { return new Promise(resolve => resolve()); }

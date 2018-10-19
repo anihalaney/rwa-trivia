@@ -11,8 +11,8 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     dialogRef: MatDialogRef<LoginComponent>;
     constructor(protected afAuth: AngularFireAuth,
-        protected afStore: AngularFirestore,
-        public dialog: MatDialog) { }
+                protected afStore: AngularFirestore,
+                public dialog: MatDialog) { }
 
     authState(): any {
         return this.afAuth.authState;

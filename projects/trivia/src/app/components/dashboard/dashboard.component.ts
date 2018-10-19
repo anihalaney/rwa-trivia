@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
-import { QuestionActions, GameActions, UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
+import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
   User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType
-} from '../../../../../shared-library/src/lib/shared/model';
-import { Utils, WindowRef } from '../../../../../shared-library/src/lib/core/services';
+} from 'shared-library/shared/model';
+import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState } from '../../store';
 import { Dashboard } from './dashboard';
 
