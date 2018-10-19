@@ -102,3 +102,37 @@
   text-align: center !important;
   margin-top: 20px;
 }
+
+.new-game {
+  .selected-player {
+    background-color: #89C24F;
+    color: #FFF;
+    font-size: 15px;
+  }
+
+  .two-player-option{
+    border-color: #D2D2D2;
+    border-width: 0 0 1 0;
+    border-style: solid;
+  }
+
+  .singlep-icon-mobile {
+    background-position: -88px -200px;
+    height: 53px;
+    width: 53px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+  }
+
+  .bottom-border{
+    border-color: #D2D2D2;
+    border-width: 0 0 1 0;
+    border-style: solid;
+  }
+
+  .friend-list{
+    border-color: #D2D2D2;
+    border-width:  1 1 1 1;
+    border-style: solid;
+  }
+}
