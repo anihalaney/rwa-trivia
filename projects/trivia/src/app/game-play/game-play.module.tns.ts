@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-// import { SharedModule } from 'shared-library/shared/shared.module';
+import { SharedModule } from 'shared-library/shared/shared.module';
 import { GamePlayRoutingModule } from './routing/game-play-routing.module';
-
+import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
+import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import {
   NewGameComponent
 } from './components';
@@ -13,10 +14,11 @@ import {
   entryComponents: [
   ],
   imports: [
-    //rwa modules
-    // SharedModule,
+    // rwa modules
+    SharedModule,
     GamePlayRoutingModule,
-
+    TNSCheckBoxModule,
+    NativeScriptUIListViewModule
     //ngrx feature store
     // StoreModule.forFeature('gameplay', reducer),
 

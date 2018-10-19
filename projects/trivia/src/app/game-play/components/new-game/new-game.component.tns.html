@@ -1,2 +1,134 @@
-<ns-action-bar title="Dashboard" showAdd="true"></ns-action-bar>
-<Label text="Lets game play" textWrap="true"></Label>
+<ns-action-bar title="Start New Game" showAdd="true"></ns-action-bar>
+<ScrollView>
+
+    <StackLayout class="new-game" backgroundColor="#f1f2f2">
+        <GridLayout rows="auto,auto" columns="auto,*" padding="10 10 5 10">
+            <Label row="0" col="0" text="Select Player Mode" textWrap="true"></Label>
+            <Label row="0" col="1" class="fa" horizontalAlignment="right" text="{{ showSelectPlayer ? '&#xf067;' : '&#xf068;' }}"
+                textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer"></Label>
+        </GridLayout>
+
+        <CardView margin="10" elevation="40" radius="1" width="95%" margin="15 0 15 0" visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
+            <StackLayout orientation="horizontal" horizontalAlignment="center">
+                <Label text="Single Player" textWrap="true" [class.selected-player]="playerMode === 0" (tap)="playerMode = 0"
+                    width="50%" height="50" padding="15 15 5 15"></Label>
+                <Label text="Two Players" textWrap="true" [class.selected-player]="playerMode === 1" (tap)="playerMode = 1"
+                    width="50%" height="50" padding="15 15 5 15"></Label>
+            </StackLayout>
+        </CardView>
+
+        <CardView margin="10" elevation="40" radius="1" width="95%" margin="20" visibility="{{ showSelectPlayer ? 'visible' : 'collapsed' }}">
+            <StackLayout orientation="horizontal" horizontalAlignment="center">
+                <Label text="Two Player" textWrap="true" width="50%" height="50" padding="17 15 5 17"></Label>
+                <Label text="Random" textWrap="true" width="50%" height="50" padding="17 15 5 17"></Label>
+            </StackLayout>
+        </CardView>
+
+        <CardView visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}" *ngIf="playerMode === 1" margin="15 0 15 0">
+            <StackLayout>
+                <Label text="Random" textWrap="true" padding="15" class="two-player-option"></Label>
+                <GridLayout rows="*,*" columns="*">
+                    <StackLayout row="0" col="0">
+                        <Label text="With Friends" textWrap="true" padding="15"></Label>
+                    </StackLayout>
+                    <StackLayout row="1" col="0">
+                        <RadListView [items]="dataItem">
+                            <ng-template let-item="item">
+                                <StackLayout class="friend-list" paddingTop="10">
+                                    <Image row="0" col="0" src="~/assets/images/avatar-44X40.png" backgroundColor="gray"
+                                        stretch="aspectFill" height="64" width="64" marginLeft="10" verticalAlignment="center"
+                                        marginRight="10" borderRadius="50"></Image>
+                                    <Label class="nameLabel" [text]="item.name" horizontalAlignment="center"></Label>
+                                    <CheckBox row="0" col="1" checked="true" horizontalAlignment="center"
+                                        android:fillColor="#89C24F" boxType="circle"></CheckBox>
+                                </StackLayout>
+                            </ng-template>
+                            <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal"></ListViewLinearLayout>
+                        </RadListView>
+                    </StackLayout>
+                </GridLayout>
+                <Label text="With Computer" textWrap="true" padding="15"></Label>
+            </StackLayout>
+        </CardView>
+
+        <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="0 5">
+            <Label row="0" col="0" text="Select Preferred Category" textWrap="true"></Label>
+            <Label row="0" col="1" class="fa" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
+                textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"></Label>
+        </GridLayout>
+
+        <CardView margin="5 10" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
+            <StackLayout>
+                <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option">
+                    <Label text="Special" row="0" col="0" textWrap="true" padding="8"></Label>
+                    <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F"
+                        boxType="circle"></CheckBox>
+                </GridLayout>
+                <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option">
+                    <Label text="Programming" row="0" col="0" textWrap="true" padding="8"></Label>
+                    <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F"
+                        boxType="circle"></CheckBox>
+                </GridLayout>
+                <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option">
+                    <Label text="Architecture" row="0" col="0" textWrap="true" padding="8"></Label>
+                    <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F"
+                        boxType="circle"></CheckBox>
+                </GridLayout>
+                <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option">
+                    <Label text="Networking" row="0" col="0" textWrap="true" padding="8"></Label>
+                    <!-- <CheckBox row="0" col="1" horizontalAlignment="right"></CheckBox> -->
+                </GridLayout>
+            </StackLayout>
+        </CardView>
+
+        <CardView margin="5 10" visibility="{{ showSelectCategory ? 'visible' : 'collapsed' }}">
+            <Label padding="15" text="Special, Programming, Architecture" textWrap="true"></Label>
+        </CardView>
+
+
+        <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
+            <Label row="0" col="0" text="Tags associated categories" textWrap="true"></Label>
+            <Label row="0" col="1" class="fa" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
+                textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
+        </GridLayout>
+
+        <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}">
+            <StackLayout>
+                <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option">
+                    <Label text="Social" row="0" col="0" textWrap="true" padding="8"></Label>
+                    <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
+                        horizontalAlignment="right"></Label>
+                </GridLayout>
+                <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option">
+                    <Label text="Unity" row="0" col="0" textWrap="true" padding="8"></Label>
+                    <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
+                        horizontalAlignment="right"></Label>
+                </GridLayout>
+                <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option">
+                    <Label text="App Store" row="0" col="0" textWrap="true" padding="8"></Label>
+                    <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
+                        horizontalAlignment="right"></Label>
+                </GridLayout>
+                <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option">
+                    <Label text="C#" row="0" col="0" textWrap="true" padding="8"></Label>
+                    <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
+                        horizontalAlignment="right"></Label>
+                </GridLayout>
+
+                <GridLayout rows="auto,auto" columns="*,auto" padding="10" class="two-player-option">
+                    <Label row="0" col="0" text="Add Tags" textWrap="true"></Label>
+                    <TextField row="1" col="0" hint="" text=""></TextField>
+                    <Button row="1" col="1" text="Add" (tap)="addTag()" padding="10" backgroundColor="#89C24F" color="#ffffff"></Button>
+                </GridLayout>
+            </StackLayout>
+        </CardView>
+
+        <CardView margin="5 10" visibility="{{ showSelectTag ? 'visible' : 'collapsed' }}">
+            <Label padding="15" text="Social, Unity, App" textWrap="true"></Label>
+        </CardView>
+
+        <StackLayout margin="5 10">
+            <Button text="START A NEW GAME" (tap)="startGame()" backgroundColor="#D4493D" color="#ffffff" padding="20 0"></Button>
+        </StackLayout>
+    </StackLayout>
+</ScrollView>

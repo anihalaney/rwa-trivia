@@ -35,12 +35,12 @@ registerElement('CardView', () => CardView);
     AuthorComponent,
   ],
   imports: [
+    CoreModule,
     NativeScriptModule,
     AppRoutingModule,
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers),
     StoreRouterConnectingModule,
-    CoreModule,
     HttpClientModule,
     StatsModule,
     SharedModule,
