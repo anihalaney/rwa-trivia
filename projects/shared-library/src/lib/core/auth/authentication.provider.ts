@@ -1,13 +1,13 @@
 import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Observable, defer, throwError, from } from 'rxjs';
-import { share, take, tap } from 'rxjs/operators';
+import { Observable, defer, throwError, from, of } from 'rxjs';
+import { share, take, tap, mapTo, map, filter } from 'rxjs/operators';
 import { CoreState, coreState } from '../store';
 import { User } from '../../shared/model';
-
 import { UserActions, UIStateActions } from '../store/actions';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { FirebaseAuthService } from './firebase-auth.service';
+
 @Injectable()
 export class AuthenticationProvider {
 
@@ -42,15 +42,25 @@ export class AuthenticationProvider {
 
   }
 
-  ensureLogin (url?: string) {
+  ensureLogin(url?: string): Observable<boolean> {
     if (isPlatformBrowser(this.platformId)) {
       if (!this.isAuthenticated) {
         this.showLogin(url);
       }
+    } else if (!isPlatformServer(this.platformId) && !isPlatformBrowser(this.platformId)) {
+      if (!this.isAuthenticated) {
+        this.showLogin(url);
+        return of(false);
+      }
     }
+    return this.store.select(coreState).pipe(
+      map(s => s.user),
+      filter(u => (u != null && u.userId !== '')),
+      take(1),
+      mapTo(true));
 
   }
-  generateToken (flag) {
+  generateToken(flag) {
     return this.firebaseAuthService.refreshToken(flag).then((token) => {
       return token;
     });
@@ -58,7 +68,7 @@ export class AuthenticationProvider {
   }
 
 
-  refreshToken (): Observable<any> {
+  refreshToken(): Observable<any> {
     return this.refreshTokenObserver.pipe(tap((tokenResponse) => {
       this.user.idToken = tokenResponse;
       this.store.dispatch(this.userActions.loginSuccess(this.user));
@@ -70,12 +80,13 @@ export class AuthenticationProvider {
   }
 
 
-  showLogin (url?: string) {
+  showLogin(url?: string) {
     this.store.dispatch(this.uiStateActions.setLoginRedirectUrl(url));
     this.firebaseAuthService.showLogin();
+
   }
 
-  logout () {
+  logout() {
     this.firebaseAuthService.signOut();
   }
 
@@ -87,4 +98,5 @@ export class AuthenticationProvider {
     }
     return false;
   }
+
 }

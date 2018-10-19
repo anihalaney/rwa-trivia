@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
-import { CoreState, UIStateActions } from '../../store';
+import { take, map, filter } from 'rxjs/operators';
+import { CoreState, coreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
@@ -65,8 +66,7 @@ export class LoginComponent extends Login implements OnInit {
           this.loginForm.value.password
         ).then((user: any) => {
           // Success
-          Toast.makeText('You have been successfully logged in').show();
-          this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+          this.redirectTo();
         }, (error: Error) => {
           // Error
           Toast.makeText(error.message).show();
@@ -84,7 +84,7 @@ export class LoginComponent extends Login implements OnInit {
           if (user && !user.emailVerified) {
             this.firebaseAuthService.sendEmailVerification(user).then(
               (response) => {
-                this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+                this.redirectTo();
               },
               (error) => {
                 Toast.makeText(error.message).show();
@@ -119,8 +119,7 @@ export class LoginComponent extends Login implements OnInit {
   googleLogin() {
     this.firebaseAuthService.googleLogin().then(
       (result) => {
-        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
-        Toast.makeText('You have been successfully logged in').show();
+        this.redirectTo();
       },
       (errorMessage) => {
         Toast.makeText(errorMessage).show();
@@ -131,13 +130,27 @@ export class LoginComponent extends Login implements OnInit {
   fbLogin() {
     this.firebaseAuthService.facebookLogin().then(
       (result) => {
-        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
-        Toast.makeText('You have been successfully logged in').show();
+        this.redirectTo();
       },
       (errorMessage) => {
         Toast.makeText(errorMessage).show();
       }
     );
+  }
+
+  redirectTo() {
+    this.store.select(coreState).pipe(
+      map(s => s.user),
+      filter(u => (u != null && u.userId !== '')),
+      take(1)).subscribe(() => {
+        this.store.select(coreState).pipe(
+          map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
+            const redirectUrl = url ? url : '/dashboard';
+            Toast.makeText('You have been successfully logged out').show();
+            this.routerExtension.navigate([redirectUrl], { clearHistory: true });
+          });
+      }
+      );
   }
 
 }
