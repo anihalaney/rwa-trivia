@@ -3,6 +3,7 @@ import { SharedModule } from 'shared-library/shared/shared.module';
 import { GamePlayRoutingModule } from './routing/game-play-routing.module';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
+import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import {
   NewGameComponent
 } from './components';
@@ -18,7 +19,8 @@ import {
     SharedModule,
     GamePlayRoutingModule,
     TNSCheckBoxModule,
-    NativeScriptUIListViewModule
+    NativeScriptUIListViewModule,
+    NativeScriptUIAutoCompleteTextViewModule
     //ngrx feature store
     // StoreModule.forFeature('gameplay', reducer),
 
