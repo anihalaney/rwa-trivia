@@ -48,11 +48,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return this.newGameForm.get('categoriesFA') as FormArray;
   }
   constructor(private fb: FormBuilder,
-    private store: Store<AppState>,
+    public store: Store<AppState>,
     private gameActions: GameActions,
     private windowRef: WindowRef,
     private router: Router,
-    private utils: Utils) {
+    public utils: Utils) {
     super(store, utils);
 
   }
