@@ -6,7 +6,7 @@ import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { LoginComponent } from './../../components/login/login.component';
-import { LocationRef } from './../../services/locationref.service';
+import { WindowRef } from './../../services/windowref.service';
 
 @Injectable()
 export class WebFirebaseAuthService implements FirebaseAuthService {
@@ -16,7 +16,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         public router: Router,
         protected afStore: AngularFirestore,
         public dialog: MatDialog,
-        private locationRef: LocationRef) { }
+        private windowsRef: WindowRef) { }
 
     authState(): any {
         return this.afAuth.authState;
@@ -40,7 +40,7 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     public signOut() {
         this.afAuth.auth.signOut();
         this.router.navigate(['dashboard']);
-        this.locationRef.nativeLocation.reload();
+        this.windowsRef.nativeWindow.location.reload();
     }
 
     public showLogin() {
