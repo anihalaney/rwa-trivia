@@ -1,5 +1,6 @@
 import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 import { Observable, defer, throwError, from, of } from 'rxjs';
 import { share, take, tap, mapTo, map, filter } from 'rxjs/operators';
 import { CoreState, coreState } from '../store';
@@ -17,7 +18,7 @@ export class AuthenticationProvider {
   constructor(private store: Store<CoreState>,
     private userActions: UserActions,
     private uiStateActions: UIStateActions,
-
+    public router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(APP_ID) private appId: string,
     private firebaseAuthService: FirebaseAuthService) {
@@ -88,6 +89,8 @@ export class AuthenticationProvider {
 
   logout() {
     this.firebaseAuthService.signOut();
+    location.reload();
+    this.router.navigate(['dashboard']);
   }
 
   get isAuthenticated(): boolean {
