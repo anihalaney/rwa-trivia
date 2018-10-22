@@ -68,6 +68,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   startGame() {
       this.gameOptions.tags = this.selectedTags;
       this.gameOptions.categoryIds = this.gameActions.categoryIds;
+      this.startNewGame(this.gameOptions);
    }
 
   selectCategory(category) {
@@ -115,7 +116,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
 
   public onDidAutoComplete(args) {
-    this.selectedTags.push(args.text);
+    this.customTag = args.text;
   }
 
   public onTextChanged(args) {

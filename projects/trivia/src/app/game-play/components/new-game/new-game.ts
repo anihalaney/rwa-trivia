@@ -8,7 +8,7 @@ import * as gameplayactions from '../../store/actions';
 import * as useractions from '../../../user/store/actions';
 import { GameActions } from 'shared-library/core/store/actions';
 import { Category, GameOptions, User } from 'shared-library/shared/model';
-import { Utils, WindowRef } from 'shared-library/core/services';
+import { Utils } from 'shared-library/core/services';
 
 import { AppState, appState } from '../../../store';
 
