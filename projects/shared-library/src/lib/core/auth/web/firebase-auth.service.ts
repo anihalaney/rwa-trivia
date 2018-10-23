@@ -49,8 +49,8 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         });
     }
 
-    public sendEmailVerification(user) {
-        return user.sendEmailVerification();
+    public sendEmailVerification(user): Promise<any> {
+        return firebase.auth().currentUser.sendEmailVerification();
     }
 
     public signInWithEmailAndPassword(email: string, password: string) {
