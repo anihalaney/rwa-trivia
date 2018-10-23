@@ -279,29 +279,3 @@ exports.generateAllUsersProfileImages = (req, res) => {
         });
 };
 
-/**
- * changeUsersBulkUploadRequestStatus
- * return status
- */
-exports.changeUsersBulkUploadRequestStatus = (req, res) => {
-
-    generalUserService.
-        getUsers().then((users) => {
-            const userPromises = [];
-            users.docs.map(user => {
-                const userObj: User = user.data();
-                if (userObj.isRequestedBulkUpload) {
-                    userObj.bulkUploadPermissionStatus = profileSettingsConstants.APPROVED;
-                    userObj.bulkUploadPermissionStatusUpdateTime = utils.getUTCTimeStamp();
-                    const dbUser = Object.assign({}, userObj);
-                    delete dbUser.isRequestedBulkUpload;
-                    userPromises.push(generalUserService.setUser(dbUser));
-                }
-
-            });
-            Promise.all(userPromises)
-                .then((updateResults) => {
-                    res.send('user bulk upload request status is changed successfully !!');
-                });
-        });
-};

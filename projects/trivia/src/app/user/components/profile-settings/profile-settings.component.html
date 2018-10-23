@@ -200,7 +200,10 @@
                 </div>
                 <div class="col-md-9 col-sm-9 bulk-upload-request">
                   <label>
-                    <button *ngIf="!user.bulkUploadPermissionStatus || user.bulkUploadPermissionStatus === NONE || user.bulkUploadPermissionStatus === PENDING"
+                    <button *ngIf="(!user.bulkUploadPermissionStatus
+                     || user.bulkUploadPermissionStatus === NONE
+                     || user.bulkUploadPermissionStatus === PENDING)
+                     && !user.isRequestedBulkUpload"
                       type="button" class="btn" (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
                     <p *ngIf="user.bulkUploadPermissionStatus === PENDING">Bulk upload requested on
                       {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}.</p>
