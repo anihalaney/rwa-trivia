@@ -23,7 +23,7 @@
       <!-- Profile pik -->
       <div class="enterquestion secondbg">
         <div class="optionbox">
-          <h3>Upload Avatar :-</h3>
+          <h3>Upload Avatar * :-</h3>
           <!-- Upload avatar -->
           <div class="row">
             <div class="col-sm-3 col-xs-12">
@@ -57,19 +57,19 @@
           </div>
           <div class="clearfix namefield">
             <div class="formfield">
-              <label>Name</label>
+              <label>Name *</label>
               <input formControlName="name" type="text" placeholder="Enter Name" class="required" aria-label="name">
               <p>Enter your real name, so people you know and recognize you</p>
             </div>
             <div class="formfield">
-              <label>Display Name</label>
+              <label>Display Name *</label>
               <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required"
                 aria-label="display-name">
               <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">Display
                 Name is required!</p>
             </div>
             <div class="formfield">
-              <label>Location</label>
+              <label>Location *</label>
               <input formControlName="location" placeholder="Enter Location" type="text" class="required" aria-label="location">
               <p>Where in the world you are</p>
             </div>
@@ -198,16 +198,16 @@
                 <div class="col-sm-3">
                   <h3>Access</h3>
                 </div>
-                <div class="col-md-4 col-sm-9">
-                  <div class="formfield">
-                    <label></label>
-                    <label>
-                      <input formControlName="requestForBulkUpload" type="checkbox" (change)="setBulkUploadRequest($event.target.checked)">
-                      Bulk
-                      Upload Request
-                    </label>
-                  </div>
-                  <!-- Security Setting end -->
+                <div class="col-md-9 col-sm-9 bulk-upload-request">
+                  <label>
+                    <button *ngIf="!user.bulkUploadPermissionStatus || user.bulkUploadPermissionStatus === NONE || user.bulkUploadPermissionStatus === PENDING"
+                      type="button" class="btn" (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
+                    <p *ngIf="user.bulkUploadPermissionStatus === PENDING">Bulk upload requested on
+                      {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}.</p>
+                    <p *ngIf="user.bulkUploadPermissionStatus === APPROVED">User has bulk upload
+                      privilege</p>
+
+                  </label>
                 </div>
               </div>
             </div>
