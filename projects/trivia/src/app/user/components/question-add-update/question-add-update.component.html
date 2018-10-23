@@ -36,7 +36,8 @@
       <div class="enterquestion secondbg">
         <div class="optionbox">
           <h2><span>Enter Your Question:</span></h2>
-          <textarea class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required" aria-label="question-area"></textarea>
+          <textarea class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"
+            aria-label="question-area"></textarea>
           <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
             is required!</p>
 
@@ -46,7 +47,8 @@
               <label>
                 <input type="checkbox" formControlName="correct">
               </label>
-              <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required" aria-label="answer-text">
+              <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required"
+                aria-label="answer-text">
             </div>
           </ng-container>
           <div class="error" *ngIf="!answers.valid && !answers.pristine">
@@ -67,15 +69,22 @@
                   {{tag}} <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
                 </mat-basic-chip>
               </mat-chip-list>
-              <input class="type-zone" contenteditable="true" formControlName="tags" aria-label="tags">
-              <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+              <input class="type-zone" contenteditable="true" formControlName="tags" aria-label="tags"
+                [matAutocomplete]="tagAuto">
+              <mat-autocomplete #tagAuto="matAutocomplete">
+                <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+                  {{tag}}
+                </mat-option>
+              </mat-autocomplete>
+              <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''"
+                (click)="addTag()">ADD</button>
               <div class="error" *ngIf="answers.valid && questionForm.controls.questionText.valid && questionForm.hasError('tagCountInvalid')">
                 Must have atleast 3 tags
               </div>
             </div>
           </div>
           <div class="btnbox">
-            <button class="btn startg" type="submit" [disabled]="!questionForm.valid">SAVE</button>
+            <button class="btn startg" type="submit" [disabled]="!questionForm.valid">SUBMIT</button>
           </div>
         </div>
       </div>
@@ -102,7 +111,8 @@
     <mat-card-content>
       <mat-form-field class="full-width required">
         <input matInput placeholder="Question" formControlName="questionText" class="required" aria-label="question">
-        <mat-hint align="end" *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
+        <mat-hint align="end" *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine"
+          class="error">Question
           is required!</mat-hint>
       </mat-form-field>
 
@@ -133,7 +143,8 @@
         <mat-form-field>
           <input matInput placeholder="Tag" formControlName="tags" aria-label="tags">
         </mat-form-field>
-        <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''" (click)="addTag()">ADD</button>
+        <button mat-button class="add-tag-button" color="primary" [disabled]="questionForm.controls.tags.value==''"
+          (click)="addTag()">ADD</button>
       </p>
 
       <mat-chip-list>
