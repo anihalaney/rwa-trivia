@@ -100,6 +100,10 @@ export class ProfileSettingsComponent implements OnDestroy {
           case this.PENDING: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT; break; }
           default: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
         }
+
+        if (user.roles && user.roles['bulkuploader']) {
+          this.user.bulkUploadPermissionStatus = profileSettingsConstants.APPROVED;
+        }
       }
     }));
 
