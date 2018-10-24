@@ -161,7 +161,7 @@ exports.changeUnpublishedQuestionStatus = (req, res) => {
         const questionUpdatePromises = [];
         questions.docs.map((question) => {
             const questionObj: Question = question.data();
-            if (questionObj.status = QuestionStatus.SUBMITTED) {
+            if (questionObj.status === QuestionStatus.SUBMITTED) {
                 questionObj.status = QuestionStatus.PENDING;
                 const dbQuestion = { ...questionObj };
                 console.log('dbQuestion', dbQuestion);
