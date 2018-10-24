@@ -88,7 +88,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     // get question object from the forms
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
-    question.status = QuestionStatus.SUBMITTED;
+    question.status = QuestionStatus.PENDING;
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
 
     question.created_uid = this.user.userId;
