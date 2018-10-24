@@ -3,16 +3,16 @@ import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import { PageEvent } from '@angular/material';
+import { PageEvent, MatCheckboxChange } from '@angular/material';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import {
   User, Question, Category, SearchResults,
-  SearchCriteria, BulkUploadFileInfo
+  SearchCriteria, BulkUploadFileInfo, QuestionStatus
 } from '../../../../../../shared-library/src/lib/shared/model';
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
-import * as bulkActions from '../../../bulk/store/actions';
+import * as bulkActions from '../../../bulk/store/actions'; 0
 import { Router } from '@angular/router';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store';
 import { MatTabChangeEvent } from '@angular/material';
@@ -35,6 +35,12 @@ export class AdminQuestionsComponent implements OnInit {
   user: User;
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
+  filteredStatus: Array<QuestionStatus>;
+  APPROVED = QuestionStatus.APPROVED;
+  INACTIVE = QuestionStatus.INACTIVE;
+  PENDING = QuestionStatus.PENDING;
+  REJECTED = QuestionStatus.REJECTED;
+  REQUIRED_CHANGE = QuestionStatus.REQUIRED_CHANGE;
 
   constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
 
@@ -79,6 +85,9 @@ export class AdminQuestionsComponent implements OnInit {
 
     this.categoriesObs = store.select(getCategories);
     this.tagsObs = this.store.select(getTags);
+
+    this.filteredStatus = [];
+    this.filteredStatus.push(this.PENDING);
   }
 
   ngOnInit() {
@@ -89,8 +98,9 @@ export class AdminQuestionsComponent implements OnInit {
 
   approveQuestion(question: Question) {
     question.approved_uid = this.user.userId;
-    this.store.dispatch(new adminActions.LoadUnpublishedQuestions({ 'question_flag': this.toggleValue }));
     this.store.dispatch(new adminActions.ApproveQuestion({ question: question }));
+    this.store.dispatch(new adminActions.LoadUnpublishedQuestions(
+      { 'question_flag': this.toggleValue, 'filteredStatus': this.filteredStatus }));
 
   }
 
@@ -142,6 +152,17 @@ export class AdminQuestionsComponent implements OnInit {
     this.toggleValue = value;
     (this.toggleValue) ? this.router.navigate(['admin/questions/bulk-questions']) : this.router.navigate(['/admin/questions']);
   }
+
+  applyFilter(status: QuestionStatus, event: MatCheckboxChange) {
+    if (event.checked) {
+      this.filteredStatus.push(status);
+    } else {
+      this.filteredStatus.splice(this.filteredStatus.indexOf(status), 1);
+    }
+    this.store.dispatch(new adminActions.LoadUnpublishedQuestions(
+      { 'question_flag': this.toggleValue, 'filteredStatus': this.filteredStatus }));
+  }
+
   tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
     this.store.dispatch(new adminActions.SaveQuestionToggleState
       ({ toggle_state: tabChangeEvent.index === 0 ? 'Published' : 'Unpublished' }));

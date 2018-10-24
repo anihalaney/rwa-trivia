@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
-      this.user = user
+      this.user = user;
       if (user) {
         let url: string;
         this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl);

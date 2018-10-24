@@ -3,7 +3,7 @@ import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, filter } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
-import { SearchResults, Question, RouterStateUrl, SearchCriteria } from '../../../../../../shared-library/src/lib/shared/model';
+import { SearchResults, Question, RouterStateUrl, SearchCriteria, QuestionStatus } from '../../../../../../shared-library/src/lib/shared/model';
 import { AdminActionTypes } from '../actions';
 import * as adminActions from '../actions/admin.actions';
 import { QuestionService } from '../../../../../../shared-library/src/lib/core/services';
@@ -40,10 +40,13 @@ export class AdminEffects {
                 routerState.url.toLowerCase().startsWith('/admin')
             ))
         .pipe(
-            switchMap((routerState: RouterStateUrl) =>
-                this.svc.getUnpublishedQuestions(routerState.url.toLowerCase().includes('bulk')).pipe(
+            switchMap((routerState: RouterStateUrl) => {
+                const filteredStatus = [];
+                filteredStatus.push(QuestionStatus.PENDING);
+                return this.svc.getUnpublishedQuestions(routerState.url.toLowerCase().includes('bulk'), filteredStatus).pipe(
                     map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
-                )
+                );
+            }
             )
         );
 
@@ -65,7 +68,7 @@ export class AdminEffects {
         .ofType(AdminActionTypes.LOAD_UNPUBLISHED_QUESTIONS)
         .pipe(
             switchMap((action: adminActions.LoadUnpublishedQuestions) =>
-                this.svc.getUnpublishedQuestions(action.payload.question_flag).pipe(
+                this.svc.getUnpublishedQuestions(action.payload.question_flag, action.payload.filteredStatus).pipe(
                     map((questions: Question[]) => new adminActions.LoadUnpublishedQuestionsSuccess(questions))
                 )
             )

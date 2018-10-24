@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, of, combineLatest } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
 import {
   Question, QuestionStatus, SearchResults, SearchCriteria,
-  BulkUploadFileInfo, BulkUpload
+  BulkUploadFileInfo, BulkUpload, QueryParams, QueryParam
 } from '../../shared/model';
 import { Store } from '@ngrx/store';
 import { CoreState } from '../store';
 import { QuestionActions } from '../store/actions';
-import { DbService } from "./../db-service"
+import { DbService } from './../db-service';
 
 @Injectable()
 export class QuestionService {
@@ -38,7 +38,7 @@ export class QuestionService {
   // Firestore
   getUserQuestions(userId: string, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
-    const queryParams = { condition: [{ name: "created_uid", comparator: "==", value: userId }] };
+    const queryParams = { condition: [{ name: 'created_uid', comparator: '==', value: userId }] };
     return this.dbService.valueChanges(collection, '', queryParams)
       .pipe(
         map(qs => qs.map(q => Question.getViewModelFromDb(q))),
@@ -52,8 +52,8 @@ export class QuestionService {
   getQuestionsForBulkUpload(bulkUploadFileInfo: BulkUploadFileInfo, published: boolean): Observable<Question[]> {
     const collection = (published) ? 'questions' : 'unpublished_questions';
     const queryParams = {
-      condition: [{ name: "created_uid", comparator: "==", value: bulkUploadFileInfo.created_uid },
-      { name: "bulkUploadId", comparator: "==", value: bulkUploadFileInfo.id }]
+      condition: [{ name: 'created_uid', comparator: '==', value: bulkUploadFileInfo.created_uid },
+      { name: 'bulkUploadId', comparator: '==', value: bulkUploadFileInfo.id }]
     };
 
     return this.dbService.valueChanges(collection, '', queryParams)
@@ -65,16 +65,40 @@ export class QuestionService {
         }));
   }
 
-  getUnpublishedQuestions(flag: boolean): Observable<Question[]> {
+  getUnpublishedQuestions(flag: boolean, filterStatus?: Array<number>): Observable<Question[]> {
     const question_source = (!flag) ? 'question' : 'bulk-question';
-    const queryParams = { condition: [{ name: "source", comparator: "==", value: question_source }] };
-    // return this.db.collection('/unpublished_questions', ref => ref.where('source', '==', question_source)).valueChanges()
-    return this.dbService.valueChanges('unpublished_questions', '', queryParams)
+    const queryParams = new QueryParams();
+
+    const queryObservables = [];
+
+    if (filterStatus && filterStatus.length > 0) {
+      filterStatus.map((status) => {
+        queryParams.condition = [];
+        let queryParam = new QueryParam('source', '==', question_source);
+        queryParams.condition.push(queryParam);
+        queryParam = new QueryParam('status', '==', status);
+        queryParams.condition.push(queryParam);
+
+        queryObservables.push(this.dbService.valueChanges('unpublished_questions', '', { ...queryParams }));
+      });
+    } else {
+      queryParams.condition = [];
+      queryObservables.push(this.dbService.valueChanges('unpublished_questions', '', queryParams));
+    }
+
+
+    return combineLatest(queryObservables)
+      .pipe(
+        map(questions => {
+          return [].concat.apply([], questions);
+        })
+      )
       .pipe(catchError(error => {
         console.log(error);
         return of(null);
       }));
   }
+
 
   saveQuestion(question: Question) {
     const dbQuestion = Object.assign({}, question); // object to be saved
@@ -149,7 +173,7 @@ export class QuestionService {
     firestoreInstance.firestore.runTransaction(transaction => {
       return transaction.get(firestoreInstance.doc('/unpublished_questions/' + questionId).ref).then(doc =>
         transaction.set(firestoreInstance.doc('/questions/' + questionId).ref, dbQuestion).delete(doc.ref)
-      )
-    })
+      );
+    });
   }
 }
