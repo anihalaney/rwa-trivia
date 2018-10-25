@@ -3,10 +3,10 @@ import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, filter } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
-import { SearchResults, Question, RouterStateUrl, SearchCriteria, QuestionStatus } from '../../../../../../shared-library/src/lib/shared/model';
+import { SearchResults, Question, RouterStateUrl, SearchCriteria, QuestionStatus } from 'shared-library/shared/model';
 import { AdminActionTypes } from '../actions';
 import * as adminActions from '../actions/admin.actions';
-import { QuestionService } from '../../../../../../shared-library/src/lib/core/services';
+import { QuestionService } from 'shared-library/core/services';
 
 @Injectable()
 export class AdminEffects {

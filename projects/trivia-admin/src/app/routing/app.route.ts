@@ -4,7 +4,7 @@ import { DashboardComponent } from '../components/index';
 import {
   AuthGuard, AdminLoadGuard,
   CategoriesResolver, TagsResolver
-} from '../../../../shared-library/src/lib/core/route-guards';
+} from 'shared-library/core/route-guards';
 
 export const routes: Routes = [
   {

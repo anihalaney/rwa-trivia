@@ -1,6 +1,6 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { Subscription, Subscribers, Blog } from '../../../../../../shared-library/src/public_api';
+import { Subscription, Subscribers, Blog } from 'shared-library/shared/model';
 import {
     subscriptionSaveStatus, getTotalSubscriptionStatus,
     subscriptionRemoveStatus, checkEmailSubscriptionStatus,

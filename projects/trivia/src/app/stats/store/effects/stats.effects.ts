@@ -3,8 +3,8 @@ import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { StatsActionTypes } from '../actions';
 import * as statsActions from '../actions/stats.actions';
-import { StatsService } from '../../../../../../shared-library/src/lib/core/services';
-import { SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
+import { StatsService } from 'shared-library/core/services';
+import { SystemStats } from 'shared-library/shared/model';
 import { of } from 'rxjs';
 
 
@@ -20,7 +20,7 @@ export class StatsEffects {
                 this.statsService.loadLeaderBoardStat().pipe(
                     map((score: any) => {
                         return new statsActions.LoadLeaderBoardSuccess(score)
-                        }
+                    }
                     )
                 )));
 

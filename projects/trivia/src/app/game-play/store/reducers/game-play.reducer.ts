@@ -1,6 +1,6 @@
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
-import { UserActions } from '../../../../../../shared-library/src/lib/core/store';
-import { Game, Question, ReportQuestion } from '../../../../../../shared-library/src/lib/shared/model';
+import { UserActions } from 'shared-library/core/store';
+import { Game, Question, ReportQuestion } from 'shared-library/shared/model';
 
 export function currentGame(state: any = null, action: GamePlayActions): Game {
   switch (action.type) {
