@@ -53,9 +53,7 @@ export enum LeaderBoardConstants {
 }
 
 export enum DashboardConstants {
-    HTTPS_PROTOCOL = 'https://',
     ADMIN_ROUTE = 'admin',
-    SLASH = '/'
 }
 export enum profileSettingsConstants {
     NONE = 'none',
