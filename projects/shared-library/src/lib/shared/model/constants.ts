@@ -52,6 +52,9 @@ export enum LeaderBoardConstants {
     UNKNOWN = 'Unknown'
 }
 
+export enum DashboardConstants {
+    ADMIN_ROUTE = 'admin',
+}
 export enum profileSettingsConstants {
     NONE = 'none',
     PENDING = 'pending',
