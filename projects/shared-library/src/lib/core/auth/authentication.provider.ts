@@ -17,7 +17,6 @@ export class AuthenticationProvider {
   constructor(private store: Store<CoreState>,
     private userActions: UserActions,
     private uiStateActions: UIStateActions,
-
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(APP_ID) private appId: string,
     private firebaseAuthService: FirebaseAuthService) {

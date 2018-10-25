@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { debounceTime, take } from 'rxjs/operators';
+import { debounceTime, take, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { User, Category, Question, QuestionStatus, Answer } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { User, Category, Question, QuestionStatus, Answer } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 
@@ -28,6 +28,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
 
   autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
+  filteredTags$: Observable<string[]>;
 
   user: User;
 
@@ -44,12 +45,17 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
+
   }
 
   // Lifecycle hooks
   ngOnInit() {
     this.question = new Question();
     this.createForm(this.question);
+
+
+    this.filteredTags$ = this.questionForm.get('tags').valueChanges
+      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
     let questionControl = this.questionForm.get('questionText');
 
@@ -88,12 +94,15 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     // get question object from the forms
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
-    question.status = QuestionStatus.SUBMITTED;
+    question.status = QuestionStatus.PENDING;
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
 
     question.created_uid = this.user.userId;
     // call saveQuestion
     this.saveQuestion(question);
+
+    this.filteredTags$ = this.questionForm.get('tags').valueChanges
+      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
   }
 
   // Helper functions
@@ -169,7 +178,13 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     );
   }
 
+
+  filter(val: string): string[] {
+    return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
+  }
+
 }
+
 
 // Custom Validators
 function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {

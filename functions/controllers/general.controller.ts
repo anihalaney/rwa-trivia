@@ -9,9 +9,11 @@ import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
-import { RSSFeedConstants, Blog, User } from '../../projects/shared-library/src/lib/shared/model';
+import { RSSFeedConstants, Blog, User, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
+import { Utils } from '../utils/utils';
+const utils: Utils = new Utils();
 
 /**
  * migrateCollections
@@ -274,5 +276,6 @@ exports.generateAllUsersProfileImages = (req, res) => {
     profileImagesGenerator.
         fetchUsers().then((status) => {
             res.send(status);
-        })
+        });
 };
+
