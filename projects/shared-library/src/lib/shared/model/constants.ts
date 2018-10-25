@@ -51,3 +51,9 @@ export enum CalenderConstants {
 export enum LeaderBoardConstants {
     UNKNOWN = 'Unknown'
 }
+
+export enum DashboardConstants {
+    HTTPS_PROTOCOL = 'https://',
+    ADMIN_ROUTE = 'admin',
+    SLASH = '/'
+}
