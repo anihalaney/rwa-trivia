@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import * as bulkActions from '../../store/actions';
 import { bulkState } from '../../store';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'app-bulk-summary',
@@ -23,7 +23,7 @@ export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
   subs: Subscription[] = [];
 
 
-  constructor(private store: Store<AppState>, private utils: Utils ) {
+  constructor(private store: Store<AppState>, private utils: Utils) {
     this.subs.push(this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;

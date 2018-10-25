@@ -1,7 +1,7 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { getCategoryDictionary } from '../../../../shared-library/src/lib/core/store';
-import * as coreStore from '../../../../shared-library/src/lib/core/store';
+import { getCategoryDictionary } from 'shared-library/core/store';
+import * as coreStore from 'shared-library/core/store';
 import * as adminStore from '../admin/store';
 import { adminState } from '../admin/store';
 

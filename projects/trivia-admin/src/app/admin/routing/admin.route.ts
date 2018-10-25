@@ -4,7 +4,7 @@ import {
   AdminQuestionsComponent, AdminComponent, BulkComponent
 } from '../components/index';
 import { BulkSummaryQuestionComponent } from '../../bulk/components';
-import { AuthGuard } from '../../../../../shared-library/src/lib/core/route-guards';
+import { AuthGuard } from 'shared-library/core/route-guards';
 
 export const adminRoutes: Routes = [
   {
