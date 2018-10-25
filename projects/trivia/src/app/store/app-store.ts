@@ -3,7 +3,7 @@ import * as gamePlayStore from '../game-play/store';
 import * as userStore from '../user/store';
 import * as bulkStore from '../bulk/store';
 import * as leaderBoardStore from '../stats/store';
-import * as coreStore from 'shared-library/core/store';
+import * as coreStore from '../../../../shared-library/src/lib/core/store';
 import * as socialStore from '../social/store';
 
 
