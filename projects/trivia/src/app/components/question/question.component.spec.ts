@@ -2,11 +2,11 @@ import { TestBed, ComponentFixture, async } from '@angular/core/testing';
 import { QuestionComponent } from './question.component';
 import { StoreModule, Store } from '@ngrx/store';
 import { TEST_DATA } from '../../testing/test.data';
-import { Question, Answer } from 'shared-library/shared/model';
-import { QuestionActions } from 'shared-library/core/store/actions';
-import { UserActions } from 'shared-library/core/store/actions';
-import { AuthorComponent } from 'shared-library/shared/components/author/author.component';
-import { Utils } from 'shared-library/core/services';
+import { Question, Answer } from '../../../../../shared-library/src/lib/shared/model';
+import { QuestionActions } from '../../../../../shared-library/src/lib/core/store/actions';
+import { UserActions } from '../../../../../shared-library/src/lib/core/store/actions';
+import { AuthorComponent } from '../../../../../shared-library/src/lib/shared/components/author/author.component';
+import { Utils } from '../../../../../shared-library/src/lib/core/services';
 
 describe('Component: QuestionComponent', () => {
 
