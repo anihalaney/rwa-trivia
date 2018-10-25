@@ -1,11 +1,11 @@
 import { Component, Input, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as userActions from '../../../user/store/actions';
-import { User, GameStatus, Game } from '../../../../../../shared-library/src/lib/shared/model';
+import { User, GameStatus, Game } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { userState } from '../../store';
 import { Subscription, Observable } from 'rxjs';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'recent-games',

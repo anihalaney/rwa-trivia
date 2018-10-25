@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
-import { Question, Answer, User } from '../../../../../../shared-library/src/lib/shared/model';
+import { Question, Answer, User } from 'shared-library/shared/model';
 
 @Component({
   selector: 'game-question',

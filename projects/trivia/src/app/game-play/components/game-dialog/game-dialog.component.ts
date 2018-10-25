@@ -10,12 +10,12 @@ import * as gameplayactions from '../../store/actions';
 import { gamePlayState, GamePlayState } from '../../store';
 
 import { GameQuestionComponent } from '../game-question/game-question.component';
-import { GameActions, UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
   Game, GameOptions, GameMode, PlayerQnA, User, Question, Category, GameStatus,
   PlayerMode, OpponentType, Answer
-} from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+} from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 
 

@@ -2,8 +2,8 @@ import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestro
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { BulkUploadFileInfo, Question, Category } from '../../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
+import { BulkUploadFileInfo, Question, Category } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { MatTableDataSource } from '@angular/material';
 

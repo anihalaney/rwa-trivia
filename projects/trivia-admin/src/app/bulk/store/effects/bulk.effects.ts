@@ -3,10 +3,10 @@ import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
-import { BulkUploadFileInfo, Question } from '../../../../../../shared-library/src/lib/shared/model';
+import { BulkUploadFileInfo, Question } from 'shared-library/shared/model';
 import { BulkActionTypes } from '../actions';
 import * as bulkActions from '../actions/bulk.actions';
-import { BulkService, QuestionService } from '../../../../../../shared-library/src/lib/core/services';
+import { BulkService, QuestionService } from 'shared-library/core/services';
 
 @Injectable()
 export class BulkEffects {
