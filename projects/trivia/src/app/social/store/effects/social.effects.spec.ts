@@ -9,17 +9,17 @@ import {
     AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess, CheckSubscriptionStatus,
     AddSubscriberError, LoadBlogs, LoadBlogsSuccess, LoadBlogsError
 } from '../actions';
-import { Subscription, User, Subscribers, Blog, RouterStateUrl } from 'shared-library/shared/model';
+import { Subscription, User, Subscribers, Blog, RouterStateUrl } from '../../../../../../shared-library/src/lib/shared/model';
 import { StoreModule, Store } from '@ngrx/store';
 import { AngularFireModule, FirebaseAppConfig } from '@angular/fire';
 import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
-import { CONFIG } from 'shared-library/environments/environment';
+import { CONFIG } from '../../../../../../shared-library/src/lib/environments/environment';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthenticationProvider, AuthInterceptor } from 'shared-library/core/auth';
+import { AuthenticationProvider, AuthInterceptor } from '../../../../../../shared-library/src/lib/core/auth';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { UserService, SocialService } from 'shared-library/core/services';
-import { UserActions } from 'shared-library/core/store';
+import { UserService, SocialService } from '../../../../../../shared-library/src/lib/core/services';
+import { UserActions } from '../../../../../../shared-library/src/lib/core/store';
 import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { RoutesRecognized } from '@angular/router';
 
