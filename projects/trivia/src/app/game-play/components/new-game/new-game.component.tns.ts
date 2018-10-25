@@ -1,20 +1,15 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
-import { CheckBox } from 'nativescript-checkbox';
 import { Observable, Subscription } from 'rxjs';
-import * as gameplayactions from '../../store/actions';
-import * as useractions from '../../../user/store/actions';
 import { Store, select } from '@ngrx/store';
 import { GameActions } from 'shared-library/core/store/actions';
-import {
-  Category, GameOptions, GameMode, User, PlayerMode, OpponentType
-} from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
+import { Category } from 'shared-library/shared/model';
+import { AppState } from '../../../store';
 import { NewGame } from './new-game';
 import { Utils } from 'shared-library/core/services';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-
+import { RouterExtensions } from 'nativescript-angular/router';
 
 const data = [{ id: 1, name: 'name 1', image: 'image' },
 { id: 2, name: 'name 2', image: 'image' },
@@ -47,7 +42,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
-    public utils: Utils) {
+    public utils: Utils,
+    private routerExtension: RouterExtensions) {
     super(store, utils);
     this.initDataItems();
   }
@@ -66,10 +62,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   startGame() {
-      this.gameOptions.tags = this.selectedTags;
-      this.gameOptions.categoryIds = this.gameActions.categoryIds;
-      this.startNewGame(this.gameOptions);
-   }
+    this.gameOptions.tags = this.selectedTags;
+    this.gameOptions.categoryIds = this.gameActions.categoryIds;
+    this.startNewGame(this.gameOptions);
+  }
 
   selectCategory(category) {
     category.isSelected = (!category.isSelected) ? true : false;
@@ -113,7 +109,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.tagItems.push(new TokenModel(this.tags[i], undefined));
     }
   }
-
 
   public onDidAutoComplete(args) {
     this.customTag = args.text;

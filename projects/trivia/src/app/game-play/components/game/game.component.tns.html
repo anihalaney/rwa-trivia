@@ -1,1 +1,2 @@
-<Label text="Lets play game" textWrap="true"></Label>
+<ns-action-bar title="Play Game" showAdd="true"></ns-action-bar>
+<game-dialog *ngIf="displayQuestion" [userDict]="userDict" [user]="user" ></game-dialog>

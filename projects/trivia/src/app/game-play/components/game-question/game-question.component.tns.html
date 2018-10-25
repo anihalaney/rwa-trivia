@@ -1,0 +1,49 @@
+<StackLayout>
+    <ScrollView>
+        <StackLayout class="cardStyle gameplay" padding="15" backgroundColor="#ffffff" height="100%" width="100%"
+            margin="5">
+            <StackLayout height="70">
+                <GridLayout row="auto" columns="auto,*,auto" class="sideStackLayoutHeader" *ngIf="user">
+                    <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
+                        width="64" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
+                    <StackLayout row="0" col="1">
+                        <Label text="You" textWrap="true" fontSize="15"></Label>
+                        <Label text="Score {{correctCount}} | Round {{questionRound}} / {{totalRound}}" textWrap="true"
+                            fontSize="12"></Label>
+                        <Label *ngIf="otherPlayer?.displayName" text="Playing with {{otherPlayer?.displayName}}"
+                            textWrap="true" fontSize="12"></Label>
+                    </StackLayout>
+                    <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
+                        <Button [ngClass]="correctCount < 1?'score0':'score1'" text=""></Button>
+                        <Button [ngClass]="correctCount < 2?'score0':'score2'" text=""></Button>
+                        <Button [ngClass]="correctCount < 3?'score0':'score3'" text=""></Button>
+                        <Button [ngClass]="correctCount < 4?'score0':'score4'" text=""></Button>
+                        <Button [ngClass]="correctCount < 5?'score0':'score5'" text=""></Button>
+                    </StackLayout>
+                </GridLayout>
+            </StackLayout>
+            <StackLayout verticalAlign="center" height="45">
+                <Progress [value]="progressValue" maxValue="100" class="m-20"></Progress>
+            </StackLayout>
+            <Label text="{{questionIndex}}. {{question?.questionText}}" fontSize="15" fontWeight="500" margin="10"
+                textWrap="true"></Label>
+            <StackLayout orientation="horizontal" margin="10" *ngIf="question">
+                <Label text="Tags:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"></Label>
+                <Label text="{{question.tags?.toString()}}" fontSize="15" textWrap="true"></Label>
+            </StackLayout>
+            <StackLayout *ngIf="question">
+                <StackLayout class="question-answered" margin="10" *ngFor="let answer of question.answers;let i=index"
+                    [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
+                    [class.right]="correctAnswerIndex === i" (tap)="answerButtonClicked(answer,i)">
+                    <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
+                        marginTop="10" marginBottom="10" textWrap="true"></Label>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout orientation="vertical" *ngIf="question">
+                <author [userDict]="userDict" [userId]="question.created_uid"></author>
+                <button *ngIf="showContinueBtn" backgroundColor="#89C24F" marginTop="5"(tap)="continueClicked.emit($event)"
+                    text="Continue" padding="10"></button>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</StackLayout>

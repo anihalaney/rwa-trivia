@@ -6,30 +6,33 @@ import { GamePlayRoutingModule } from './routing/game-play-routing.module';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
+import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import {
-  NewGameComponent, GameComponent
+  NewGameComponent, GameComponent, GameDialogComponent, GameQuestionComponent, GameOverComponent
 } from './components';
 import { effects, reducer } from './store';
 
 @NgModule({
   declarations: [
     NewGameComponent,
-    GameComponent
-  ],
-  entryComponents: [
+    GameComponent,
+    GameDialogComponent,
+    GameQuestionComponent,
+    GameOverComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     GamePlayRoutingModule,
     TNSCheckBoxModule,
+    NativeScriptRouterModule,
     NativeScriptUIListViewModule,
     NativeScriptUIAutoCompleteTextViewModule,
     //ngrx feature store
-     StoreModule.forFeature('gameplay', reducer),
+    StoreModule.forFeature('gameplay', reducer),
 
     //ngrx effects
-     EffectsModule.forFeature(effects),
+    EffectsModule.forFeature(effects),
 
   ],
   providers: [

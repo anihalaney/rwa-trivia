@@ -57,15 +57,29 @@ export class GamePlayEffects {
     .ofType('ROUTER_NAVIGATION')
     .pipe(
       map((action: any): RouterStateUrl => action.payload.routerState),
-      filter((routerState: RouterStateUrl) =>
-        routerState.url.toLowerCase().startsWith('/game-play/') &&
-        routerState.params.gameid
+      filter((routerState: RouterStateUrl) => {
+        if (routerState.url.toLowerCase().startsWith('/game-play/') &&
+          routerState.params) {
+          return true;
+        } else if (routerState.url.toLowerCase().startsWith('/game-play/') && routerState['root']) {
+          return true;
+        } else {
+          return false;
+        }
+      }
       ))
     .pipe(
-      switchMap((routerState: RouterStateUrl) =>
-        this.svc.getGame(routerState.params.gameid).pipe(
+      switchMap((routerState: RouterStateUrl) => {
+        let gameid = '';
+        if (routerState.params) {
+          gameid = routerState.params.gameid;
+        } else if (routerState['root'].firstChild.firstChild.params.gameid) {
+          gameid = routerState['root'].firstChild.firstChild.params.gameid;
+        }
+        return this.svc.getGame(gameid).pipe(
           map((game: Game) => new gameplayactions.LoadGameSuccess(game))
-        )
+        );
+      }
       ));
 
   @Effect()
