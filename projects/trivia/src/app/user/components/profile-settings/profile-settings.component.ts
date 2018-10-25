@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, take, finalize } from 'rxjs/operators';
-import { User, Category } from 'shared-library/shared/model';
+import { User, Category, profileSettingsConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
