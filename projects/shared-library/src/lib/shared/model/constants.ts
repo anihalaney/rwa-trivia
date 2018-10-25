@@ -57,3 +57,11 @@ export enum DashboardConstants {
     ADMIN_ROUTE = 'admin',
     SLASH = '/'
 }
+export enum profileSettingsConstants {
+    NONE = 'none',
+    PENDING = 'pending',
+    APPROVED = 'approved',
+    BULK_UPLOAD_REQUEST_BTN_TEXT = 'Bulk Upload Request',
+    BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT = 'Send Request Again',
+}
+

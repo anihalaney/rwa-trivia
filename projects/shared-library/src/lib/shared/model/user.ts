@@ -22,7 +22,9 @@ export class User {
   isSubscribed?: boolean;
   profilePictureUrl?: string;
   stats?: UserStats;
-  isRequestedBulkUpload: boolean;
+  isRequestedBulkUpload?: boolean;
+  bulkUploadPermissionStatus: string;
+  bulkUploadPermissionStatusUpdateTime: number;
   croppedImageUrl: any;
   originalImageUrl: any;
   imageType: string;
