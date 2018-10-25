@@ -20,7 +20,7 @@ export class StatsEffects {
                 this.statsService.loadLeaderBoardStat().pipe(
                     map((score: any) => {
                         return new statsActions.LoadLeaderBoardSuccess(score)
-                        }
+                    }
                     )
                 )));
 

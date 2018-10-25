@@ -1,5 +1,5 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
-import { User, Category, Question, Game } from '../../../../../../shared-library/src/public_api';
+import { User, Category, Question, Game } from 'shared-library/shared/model';
 import { user, authInitialized, invitationToken, userDict } from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';

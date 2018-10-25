@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User } from '../../../../../shared-library/src/lib/shared/model';
+import { User } from 'shared-library/shared/model';
 
 @Component({
   selector: 'app-footer',

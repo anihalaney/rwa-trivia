@@ -1,7 +1,7 @@
 import { Component, Input, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 
-import { User } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { User } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';

@@ -2,7 +2,7 @@ import { TEST_DATA } from '../../../testing/test.data';
 import { scoreBoard, systemStat } from './stats.reducers';
 import { StatsActions, StatsActionTypes } from '../actions';
 import { Subscriber } from 'rxjs';
-import { SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
+import { SystemStats } from 'shared-library/shared/model';
 
 describe('Reducer: scoreBoard', () => {
     const _testReducer = scoreBoard;

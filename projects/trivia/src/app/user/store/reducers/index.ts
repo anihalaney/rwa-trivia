@@ -1,6 +1,6 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { User, Question, Game, Friends } from '../../../../../../shared-library/src/public_api';
+import { User, Question, Game, Friends } from 'shared-library/shared/model';
 import {
     userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions,
     questionSaveStatus, getGameResult, userFriends

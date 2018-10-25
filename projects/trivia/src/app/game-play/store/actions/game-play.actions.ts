@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { User, GameOptions, Game, PlayerQnA, Question, ReportQuestion } from '../../../../../../shared-library/src/lib/shared/model';
+import { User, GameOptions, Game, PlayerQnA, Question, ReportQuestion } from 'shared-library/shared/model';
 
 export enum GamePlayActionTypes {
   RESET_NEW = '[GamePlay] ResetNew',
