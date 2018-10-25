@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { User, DashboardConstants } from '../../../../../shared-library/src/lib/shared/model';
-import { WindowRef } from 'shared-library/src/lib/core/services';
+import { User, DashboardConstants } from 'shared-library/shared/model';
+import { WindowRef } from 'shared-library/core/services';
 
 @Component({
   selector: 'app-footer',
@@ -15,7 +15,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   hostname: string;
 
   constructor(private router: Router, private windowRef: WindowRef) {
-    this.hostname = `${DashboardConstants.HTTPS_PROTOCOL}${windowRef.nativeWindow.location.hostname}`;
+    this.hostname = `${windowRef.nativeWindow.location.protocol}//${windowRef.nativeWindow.location.hostname}`;
+    console.log('hostname---->', this.hostname);
   }
 
   ngOnInit() {
