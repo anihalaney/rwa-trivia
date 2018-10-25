@@ -7,12 +7,12 @@ import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import * as useractions from '../../../user/store/actions';
-import { GameActions } from '../../../../../../shared-library/src/lib/core/store/actions';
+import { GameActions } from 'shared-library/core/store/actions';
 
 import {
   Category, GameOptions, GameMode, User, PlayerMode, OpponentType
-} from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils, WindowRef } from '../../../../../../shared-library/src/lib/core/services';
+} from 'shared-library/shared/model';
+import { Utils, WindowRef } from 'shared-library/core/services';
 
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';

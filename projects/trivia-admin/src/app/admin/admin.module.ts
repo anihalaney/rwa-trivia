@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
-import { SharedModule } from '../../../../shared-library/src/lib/shared/shared.module';
+import { SharedModule } from 'shared-library/shared/shared.module';
 import { BulkModule } from '../bulk/bulk.module';
 import { AdminRoutingModule } from './routing/admin-routing.module';
 import { effects, reducer } from './store';

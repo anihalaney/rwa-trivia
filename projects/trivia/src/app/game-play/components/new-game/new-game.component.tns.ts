@@ -37,6 +37,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   categories: Category[];
   subs: Subscription[] = [];
   customTag: string;
+  categoryIds: number[] = [];
   private tagItems: ObservableArray<TokenModel>;
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
@@ -63,13 +64,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   startGame() {
     this.gameOptions.tags = this.selectedTags;
-    this.gameOptions.categoryIds = this.gameActions.categoryIds;
+    this.gameOptions.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
     this.startNewGame(this.gameOptions);
   }
 
   selectCategory(category) {
     category.isSelected = (!category.isSelected) ? true : false;
-    this.gameActions.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
+    // this.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
   }
 
   getSelectedCatName() {

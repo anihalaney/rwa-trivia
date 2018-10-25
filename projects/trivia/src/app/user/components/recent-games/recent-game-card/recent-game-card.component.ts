@@ -1,11 +1,11 @@
 import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { User, Game, Category, PlayerMode, GameStatus } from '../../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
+import { User, Game, Category, PlayerMode, GameStatus } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { userState } from '../../../store';
-import { UserActions } from '../../../../../../../shared-library/src/lib/core/store/actions';
+import { UserActions } from 'shared-library/core/store/actions';
 
 
 @Component({

@@ -4,9 +4,9 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { map, skip, take, filter } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
-import { Utils } from '../../../../../shared-library/src/lib/core/services';
-import { AuthenticationProvider } from '../../../../../shared-library/src/lib/core/auth';
-import { User } from '../../../../../shared-library/src/lib/shared/model';
+import { Utils } from 'shared-library/core/services';
+import { AuthenticationProvider } from 'shared-library/core/auth';
+import { User } from 'shared-library/shared/model';
 import { Location } from '@angular/common';
 
 
@@ -32,7 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
     this.sub = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
-      this.user = user
+      this.user = user;
       if (user) {
         let url: string;
         this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl);

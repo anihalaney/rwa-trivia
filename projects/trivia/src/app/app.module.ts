@@ -7,7 +7,8 @@ import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { SharedModule, CoreModule } from '../../../../projects/shared-library/src/public_api';
+import { SharedModule } from 'shared-library/shared/shared.module';
+import { CoreModule } from 'shared-library/core/core.module';
 import { reducers, CustomSerializer } from './store';
 import { RoutingModule } from './routing/routing.module';
 
@@ -22,7 +23,7 @@ import {
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../../../shared-library/src/lib/environments/environment';
+import { environment } from 'shared-library/environments/environment';
 import { SwUpdate } from '@angular/service-worker';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
