@@ -2,7 +2,7 @@ import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
-import { User } from '../../../../../../../../shared-library/src/lib/shared/model';
+import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../../../store';
 import * as userActions from '../../../../../user/store/actions';
 import { userState } from '../../../../../user/store';

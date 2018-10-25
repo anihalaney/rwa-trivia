@@ -8,13 +8,13 @@ import { AppState, appState, categoryDictionary, getCategories, getTags } from '
 import {
   User, Question, Category, SearchResults,
   SearchCriteria, BulkUploadFileInfo, QuestionStatus
-} from '../../../../../../shared-library/src/lib/shared/model';
+} from 'shared-library/shared/model';
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
 import * as bulkActions from '../../../bulk/store/actions'; 0
 import { Router } from '@angular/router';
-import { UserActions } from '../../../../../../shared-library/src/lib/core/store';
+import { UserActions } from 'shared-library/core/store';
 import { MatTabChangeEvent } from '@angular/material';
 
 @Component({

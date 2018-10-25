@@ -3,8 +3,8 @@ import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
-import { BulkService, QuestionService } from '../../../../../../shared-library/src/lib/core/services';
-import { BulkUploadFileInfo, Question } from '../../../../../../shared-library/src/lib/shared/model';
+import { BulkService, QuestionService } from 'shared-library/core/services';
+import { BulkUploadFileInfo, Question } from 'shared-library/shared/model';
 import { BulkActionTypes } from '../actions';
 import * as bulkActions from '../actions/bulk.actions';
 

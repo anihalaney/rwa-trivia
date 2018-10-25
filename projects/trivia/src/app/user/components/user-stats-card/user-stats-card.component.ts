@@ -1,9 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { User } from '../../../../../../shared-library/src/lib/shared/model';
+import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { Observable, Subscription } from 'rxjs';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'user-stats-card',

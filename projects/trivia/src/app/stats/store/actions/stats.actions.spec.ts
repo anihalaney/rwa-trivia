@@ -1,4 +1,4 @@
-import { Subscription, Subscribers, SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
+import { Subscription, Subscribers, SystemStats } from 'shared-library/shared/model';
 import { LoadLeaderBoard, LoadLeaderBoardSuccess, LoadSystemStat, LoadSystemStatSuccess } from './stats.actions';
 import { StatsActionTypes } from './stats.actions';
 import { TEST_DATA } from '../../../testing/test.data';
