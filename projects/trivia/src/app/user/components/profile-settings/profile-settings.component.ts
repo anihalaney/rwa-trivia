@@ -1,11 +1,16 @@
-import { Component, Input, OnDestroy, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, take, finalize } from 'rxjs/operators';
+<<<<<<< HEAD
 import { User, Category } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
+=======
+import { User, Category, profileSettingsConstants } from '../../../../../../shared-library/src/lib/shared/model';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+>>>>>>> cf16340fbebeaaeed46ba2f3cd3c7b420968880a
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -17,8 +22,7 @@ import { userState } from '../../../user/store';
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./profile-settings.component.scss']
 })
 export class ProfileSettingsComponent implements OnDestroy {
   @Input() user: User;
@@ -55,6 +59,10 @@ export class ProfileSettingsComponent implements OnDestroy {
   enteredTags: string[] = [];
   filteredTags$: Observable<string[]>;
   tagsArrays: String[];
+  NONE = profileSettingsConstants.NONE;
+  PENDING = profileSettingsConstants.PENDING;
+  APPROVED = profileSettingsConstants.APPROVED;
+  bulkUploadBtnText: string;
 
   // tslint:disable-next-line:quotemark
   linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
@@ -66,7 +74,7 @@ export class ProfileSettingsComponent implements OnDestroy {
     private utils: Utils) {
 
     this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
-      this.user = s.user
+      this.user = s.user;
     }));
     this.categoriesObs = store.select(getCategories);
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
@@ -90,6 +98,16 @@ export class ProfileSettingsComponent implements OnDestroy {
 
         if (this.user.profilePictureUrl) {
           this.profileImage.image = this.user.profilePictureUrl;
+        }
+
+        switch (this.user.bulkUploadPermissionStatus) {
+          case this.NONE: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
+          case this.PENDING: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT; break; }
+          default: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
+        }
+
+        if (user.roles && user.roles['bulkuploader']) {
+          this.user.bulkUploadPermissionStatus = profileSettingsConstants.APPROVED;
         }
       }
     }));
@@ -224,8 +242,7 @@ export class ProfileSettingsComponent implements OnDestroy {
       profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
         (this.locationOptions.length > 0 ? this.locationOptions[0] : '')],
       privateProfileSetting: [user.privateProfileSetting],
-      profilePicture: [user.profilePicture],
-      requestForBulkUpload: [user.isRequestedBulkUpload]
+      profilePicture: [user.profilePicture]
     });
     this.enteredTags = user.tags;
   }
@@ -271,18 +288,16 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.user.profileSetting = formValue.profileSetting;
     this.user.profileLocationSetting = formValue.profileLocationSetting;
     this.user.privateProfileSetting = formValue.privateProfileSetting;
-    this.user.isRequestedBulkUpload = formValue.requestForBulkUpload;
     this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
   }
 
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      this.userForm.get('requestForBulkUpload').setValue(false);
       this.snackBar.open('Please complete profile settings for bulk upload request', '', { duration: 2000 });
     } else {
-      (checkStatus) ? this.userForm.get('requestForBulkUpload').setValue(true) :
-        this.userForm.get('requestForBulkUpload').setValue(false);
+      this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
+      this.onSubmit();
     }
 
   }
@@ -297,7 +312,8 @@ export class ProfileSettingsComponent implements OnDestroy {
   onSubmit() {
     // validations
     this.userForm.updateValueAndValidity();
-    if (this.userForm.invalid) {
+    if (this.userForm.invalid || !this.user.bulkUploadPermissionStatus) {
+      this.snackBar.open('Please fill the mandatory fields', '', { duration: 2000 });
       return;
     }
     // get user object from the forms
