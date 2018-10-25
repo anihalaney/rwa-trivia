@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { SearchCriteria, SearchResults, Question } from '../../../../../../shared-library/src/lib/shared/model';
+import { SearchCriteria, SearchResults, Question, QuestionStatus } from 'shared-library/shared/model';
 
 export enum AdminActionTypes {
     LOAD_QUESTIONS = '[Admin] LoadQuestions',
@@ -27,7 +27,7 @@ export class LoadQuestionsSuccess implements Action {
 // Load All Unpublished Question
 export class LoadUnpublishedQuestions implements Action {
     readonly type = AdminActionTypes.LOAD_UNPUBLISHED_QUESTIONS;
-    constructor(public payload: { question_flag: boolean }) { }
+    constructor(public payload: { question_flag: boolean, filteredStatus: Array<QuestionStatus> }) { }
 }
 
 // Load All Unpublished Question Success

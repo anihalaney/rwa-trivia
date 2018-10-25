@@ -4,11 +4,11 @@ import { Store } from '@ngrx/store';
 import {
   User, Game, Category, GameStatus,
   GameInviteConstants, CalenderConstants
-} from '../../../../../../shared-library/src/lib/shared/model';
+} from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../../game-play/store/actions';
 import { gameInvites } from '../../../game-play/store';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'game-invite',

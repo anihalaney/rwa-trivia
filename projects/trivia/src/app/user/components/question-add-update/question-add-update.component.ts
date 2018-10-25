@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, take, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { User, Category, Question, QuestionStatus, Answer } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { User, Category, Question, QuestionStatus, Answer } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 
@@ -94,7 +94,7 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
     // get question object from the forms
     let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
-    question.status = QuestionStatus.SUBMITTED;
+    question.status = QuestionStatus.PENDING;
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
 
     question.created_uid = this.user.userId;

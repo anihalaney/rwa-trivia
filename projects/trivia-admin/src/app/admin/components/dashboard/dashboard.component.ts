@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 
 import { AppState, appState, categoryDictionary } from '../../../store';
 
-import { Category, SearchResults } from '../../../../../../shared-library/src/lib/shared/model';
+import { Category, SearchResults } from 'shared-library/shared/model';
 
 @Component({
   selector: 'dashboard',

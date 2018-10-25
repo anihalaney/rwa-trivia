@@ -3,9 +3,9 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { leaderBoardState } from '../../store';
 import * as StatActions from '../../store/actions';
-import { SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
+import { SystemStats } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'realtime-stats',

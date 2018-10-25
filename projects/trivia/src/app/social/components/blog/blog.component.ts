@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 
 @Component({

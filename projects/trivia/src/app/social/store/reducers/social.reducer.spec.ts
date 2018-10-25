@@ -1,7 +1,7 @@
 import { TEST_DATA } from '../../../testing/test.data';
 import { subscriptionSaveStatus, getTotalSubscriptionStatus, blogs } from './social.reducer';
 import { SocialActions, SocialActionTypes } from '../actions';
-import { Subscription, Subscribers, Blog } from '../../../../../../shared-library/src/lib/shared/model';
+import { Subscription, Subscribers, Blog } from 'shared-library/shared/model';
 import { Subscriber } from 'rxjs';
 
 describe('Reducer: subscriptionSaveStatus', () => {
