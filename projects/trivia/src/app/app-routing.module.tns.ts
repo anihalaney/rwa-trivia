@@ -5,7 +5,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 export const routes: Routes = [
 
-    { path: '', redirectTo: 'game-play', pathMatch: 'full' },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
         path: 'dashboard',
         component: DashboardComponent

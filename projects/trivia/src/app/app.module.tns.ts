@@ -21,6 +21,7 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
 import { StatsModule } from './stats/stats.module';
 import { RouterModule } from '@angular/router';
+import { GamePlayModule } from './game-play/game-play.module';
 
 export function firebaseFactory() {
   return TNSFirebase;
@@ -45,7 +46,8 @@ registerElement('CardView', () => CardView);
     StatsModule,
     SharedModule,
     NativeScriptUISideDrawerModule,
-    RouterModule
+    RouterModule,
+    GamePlayModule
   ],
   providers: [
     TNSFirebaseService,

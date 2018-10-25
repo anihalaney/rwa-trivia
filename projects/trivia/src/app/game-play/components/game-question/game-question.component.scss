@@ -214,3 +214,36 @@ mat-card {
   .popupbottom{ display: inline-block; width:100%; padding:1% 1%}
  }
  
+
+ .question-answered{
+  border-color: #000;
+  border-width: 1;
+}
+
+.gameplay .right{
+  border-color: #71b02f;
+  background-color: #71b02f;
+  color: #fff;
+}
+
+.gameplay .wrong{
+  border-color: #d54937;
+  background-color: #d54937;
+  color: #fff;
+}
+
+Progress{
+  color: #d54937;
+  background-color:#C0C0C0;
+  
+}
+
+.progressbar {
+  height: 30;
+  margin: 10;
+  border-radius: 10;
+  background: #ECEFF1;
+}
+.progressbar-value {
+  background: #51BC6B;
+}

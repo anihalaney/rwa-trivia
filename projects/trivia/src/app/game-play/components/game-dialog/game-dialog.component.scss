@@ -225,3 +225,16 @@ mat-card {
     min-height:502px !important;
     max-height: 610px !important;
 }
+
+.text-center{
+  text-align: center;
+  width:100%;
+}
+
+.circle-loader {
+  border-color: #D2D2D2;
+  border-width: 1;
+  border-style: solid;
+  margin:20;
+  border-radius:83%;
+}
