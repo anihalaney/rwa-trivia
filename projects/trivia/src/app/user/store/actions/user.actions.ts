@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { User, Question, Invitation, Game, Friends } from '../../../../../../shared-library/src/lib/shared/model';
+import { User, Question, Invitation, Game, Friends } from 'shared-library/shared/model';
 
 export enum UserActionTypes {
 

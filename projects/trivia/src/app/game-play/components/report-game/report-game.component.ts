@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {
     ReportQuestion, User, Game, QuestionMetadata, Category, Question
-} from '../../../../../../shared-library/src/lib/shared/model';
+} from 'shared-library/shared/model';
 import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';

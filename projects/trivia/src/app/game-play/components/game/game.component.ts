@@ -5,8 +5,8 @@ import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { GameDialogComponent } from '../game-dialog/game-dialog.component';
-import { User } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { User } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 

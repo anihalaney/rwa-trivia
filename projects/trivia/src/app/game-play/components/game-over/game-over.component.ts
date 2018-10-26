@@ -1,9 +1,9 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { User, Game, PlayerMode } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils, WindowRef } from '../../../../../../shared-library/src/lib/core/services';
+import { User, Game, PlayerMode } from 'shared-library/shared/model';
+import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
-import { CONFIG } from '../../../../../../shared-library/src/lib/environments/environment';
+import { UserActions } from 'shared-library/core/store/actions';
+import { CONFIG } from 'shared-library/environments/environment';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';

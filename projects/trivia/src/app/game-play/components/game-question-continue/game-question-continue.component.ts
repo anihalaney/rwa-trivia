@@ -1,6 +1,6 @@
 import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 
-import { Question, Answer } from '../../../../../../shared-library/src/public_api';
+import { Question, Answer } from 'shared-library/shared/model';
 
 @Component({
   selector: 'game-question-continue',
