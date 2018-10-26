@@ -606,3 +606,21 @@ body.dialog-open .cdk-global-overlay-wrapper {
 }
 
 
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+  background-color: #73af3e ;
+}
+
+.mat-checkbox-layout .mat-checkbox-label {
+  font-size: 20px;
+  font-family: hindregular,sans-serif;
+  cursor: pointer;
+}
+
+.mat-checkbox-background, .mat-checkbox-frame{
+  border-radius: 3px !important;
+}
+
+.mat-checkbox-inner-container{
+  height: 18px !important;
+  width: 18px !important;
+}
