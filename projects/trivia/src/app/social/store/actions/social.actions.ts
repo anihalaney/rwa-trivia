@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Subscription, Subscribers, Blog } from '../../../../../../shared-library/src/lib/shared/model';
+import { Subscription, Subscribers, Blog } from 'shared-library/shared/model';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 export enum SocialActionTypes {

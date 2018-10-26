@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { User } from '../../../../../../../shared-library/src/lib/shared/model';
+import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../../store';
 
 @Component({

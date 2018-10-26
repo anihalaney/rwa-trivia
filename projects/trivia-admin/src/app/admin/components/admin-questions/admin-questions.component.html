@@ -18,15 +18,28 @@
       <mat-tab label="Published">
         <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" [categoryDictionary]="categoryDictObs | async"
           [categoriesObs]="categoriesObs" (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)"
-          (onTagChanged)="tagChanged($event)" (onSortOrderChanged)="sortOrderChanged($event)" class="flex-container" fxLayoutWrap="wrap"
-          fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          (onTagChanged)="tagChanged($event)" (onSortOrderChanged)="sortOrderChanged($event)" class="flex-container"
+          fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.xs="start">
         </question-search>
       </mat-tab>
       <mat-tab label="Unpublished">
-        <question-table [showSort]="false" [showPaginator]="true" [questions]="unpublishedQuestionsObs | async" [totalCount]="10"
-          [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true" [showButtons]="true" [userDict]="userDict"
-          [user]="user" [clientSidePagination]="true" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)"
-          (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)">
+        <h4 class="filter-h4">Question Filter</h4>
+        <section class="filter-section">
+          <mat-checkbox class="filter-margin" [value]="PENDING" [checked]="filteredStatus.indexOf(PENDING)!==-1"
+            (change)="applyFilter(PENDING, $event)">Pending</mat-checkbox>
+          <mat-checkbox class="filter-margin" [value]="REJECTED" (change)="applyFilter(REJECTED, $event)">Rejected</mat-checkbox>
+          <mat-checkbox class="filter-margin" [value]="INACTIVE" (change)="applyFilter(INACTIVE, $event)">Inactive</mat-checkbox>
+          <mat-checkbox class="filter-margin" [value]="REQUIRED_CHANGE" (change)="applyFilter(REQUIRED_CHANGE, $event)">Required
+            Change</mat-checkbox>
+        </section>
+
+        <mat-divider></mat-divider>
+
+
+        <question-table [showSort]="false" [showPaginator]="true" [questions]="unpublishedQuestionsObs | async"
+          [totalCount]="10" [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true" [showButtons]="true"
+          [userDict]="userDict" [user]="user" [clientSidePagination]="true" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs"
+          (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)">
         </question-table>
       </mat-tab>
     </mat-tab-group>
