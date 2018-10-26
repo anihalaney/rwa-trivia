@@ -43,9 +43,7 @@ export class GameComponent implements OnInit, OnDestroy {
     // REF: https://github.com/angular/angular/issues/17572
     // REF: https://github.com/angular/angular/issues/10131
     //TODO: se what's causing the error and fix.
-    setTimeout(() => this.openDialog(), 0);
-
-
+    setTimeout(() => this.openDialog(), 100);
   }
 
   openDialog() {
