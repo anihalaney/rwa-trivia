@@ -1,4 +1,4 @@
-<form (ngSubmit)="onSubmit()" class="question-form" [formGroup]="questionForm" novalidate>
+<form class="question-form" [formGroup]="questionForm" novalidate>
 
   <div class="mainpage submitpage">
     <div class="row hidden-xs">
@@ -84,7 +84,7 @@
             </div>
           </div>
           <div class="btnbox">
-            <button class="btn startg" type="submit" [disabled]="!questionForm.valid">SUBMIT</button>
+            <button class="btn startg" type="submit" (click)="onSubmit()" [disabled]="!questionForm.valid">SUBMIT</button>
           </div>
         </div>
       </div>

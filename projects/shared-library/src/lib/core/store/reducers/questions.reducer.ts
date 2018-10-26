@@ -20,8 +20,11 @@ export function questionSaveStatus(state: any = 'NONE', action: ActionWithPayloa
   switch (action.type) {
     case QuestionActions.ADD_QUESTION_SUCCESS:
       return 'SUCCESS';
+    case QuestionActions.RESET_QUESTION_SUCCESS:
+      return 'NONE';
     default:
       return state;
   }
 };
+
 
