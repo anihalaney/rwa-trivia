@@ -3,13 +3,15 @@ import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions } from 'shared-library/core/store/actions';
 import { Category } from 'shared-library/shared/model';
-import { AppState } from '../../../store';
+import { AppState,appState } from '../../../store';
 import { NewGame } from './new-game';
 import { Utils } from 'shared-library/core/services';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { RouterExtensions } from 'nativescript-angular/router';
+import * as gamePlayActions from './../../store/actions';
+import { filter } from 'rxjs/operators';
 
 const data = [{ id: 1, name: 'name 1', image: 'image' },
 { id: 2, name: 'name 2', image: 'image' },
@@ -39,6 +41,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   customTag: string;
   categoryIds: number[] = [];
   private tagItems: ObservableArray<TokenModel>;
+  sub3: Subscription;
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
   constructor(public store: Store<AppState>,
@@ -50,6 +53,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
+      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+    });
+
     this.dataItem = data;
     this.categories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)];
   }
