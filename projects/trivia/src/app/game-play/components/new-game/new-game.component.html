@@ -71,16 +71,15 @@
                         </h2>
                     </div>
                     <div class="col-sm-9">
-                        <div class="row" formArrayName="categoriesFA">
+                        <div class="row">
                             <div class="col-md-8">
                                 <div class="row">
-                                    <ng-container *ngFor="let category of categoriesFA.value; let i=index">
-                                        <div [formGroupName]="i" class="formfield">
-                                            <!-- [class.hide]="!(categoriesFA.value[i].requiredForGamePlay || categoriesFA.value[i].categorySelected || showUncheckedCategories)" -->
-                                            <label>
-                                                <input type="checkbox" formControlName="categorySelected">
-                                                <span>{{categoriesFA.value[i].categoryName}}</span>
-                                            </label>
+                                    <ng-container *ngFor="let category of sortedCategories; let i=index">
+                                        <div class="checkbox-group">
+                                            <mat-checkbox [disableRipple]="true" [value]="category.id" [disabled]="category.requiredForGamePlay"
+                                                [checked]="true" (change)="selectCategory($event,category.id)">
+                                                {{category.categoryName}}
+                                            </mat-checkbox>
                                         </div>
                                     </ng-container>
                                 </div>
