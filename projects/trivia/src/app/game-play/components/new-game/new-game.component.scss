@@ -46,15 +46,15 @@
   border-top-style: solid; 
   padding:46px 0 0; 
 }
-.formfield { padding: 8px 15px; }
-.formfield input[type="checkbox"],.enterquestion .formfield input[type="radio"]{  position: relative; height: 18px; width: 18px; vertical-align: -4px; margin-right: 8px;}
-.formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before{ content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 100%; border-radius: 2px; border-width:1px; border-style: solid; cursor: pointer;}
+// .formfield { padding: 8px 15px; }
+// .formfield input[type="checkbox"],.enterquestion .formfield input[type="radio"]{  position: relative; height: 18px; width: 18px; vertical-align: -4px; margin-right: 8px;}
+// .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before{ content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 100%; border-radius: 2px; border-width:1px; border-style: solid; cursor: pointer;}
 
-.formfield input[type="checkbox"]:after,.enterquestion .formfield input[type="radio"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  cursor: pointer;}
-.formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ height: 10px; transform: rotate(45deg); }
-.formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ border-color:#fff; }
+// .formfield input[type="checkbox"]:after,.enterquestion .formfield input[type="radio"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  cursor: pointer;}
+// .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ height: 10px; transform: rotate(45deg); }
+// .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ border-color:#fff; }
 
-.formfield label{ font-size: 20px; cursor: pointer;}
+// .formfield label{ font-size: 20px; cursor: pointer;}
 .chancat{ cursor: pointer; transition: 0.3s ease-in-out; margin-top: 10px}
 .chancat span:nth-child(2){ display: inline-block;width: calc(100% - 40px); line-height: 1.1; vertical-align: -2px;}
 .preference{ display: none; margin: 9px -15px 0}
@@ -135,4 +135,9 @@
     border-width:  1 1 1 1;
     border-style: solid;
   }
+}
+
+.checkbox-group{
+  display: inline-block;
+  padding: 8px 15px;
 }
