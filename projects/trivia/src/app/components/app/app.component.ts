@@ -36,13 +36,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private windowRef: WindowRef,
     private utils: Utils) {
 
-    this.sub = store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
-      if (status === 'SUCCESS') {
-        this.snackBar.open('Question saved!', '', { duration: 2000 });
-      }
-    });
-
-
     this.sub2 = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
@@ -77,13 +70,6 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.sub5 = store.select(appState.userState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
-      if (status === 'IN PROGRESS') {
-        this.router.navigate(['/my/questions']);
-      }
-    });
-
-
   }
 
   ngOnInit() {
@@ -104,7 +90,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4, this.sub5]);
+    this.utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4]);
   }
 
   login() {

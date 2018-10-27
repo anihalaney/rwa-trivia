@@ -3,7 +3,7 @@ import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/s
 import { User, Question, Game, Friends } from 'shared-library/shared/model';
 import {
     userProfileSaveStatus, userPublishedQuestions, userUnpublishedQuestions,
-    questionSaveStatus, getGameResult, userFriends
+    getGameResult, userFriends
 } from './user.reducer';
 import { Observable } from 'rxjs';
 
@@ -14,7 +14,6 @@ export interface UserState {
     userProfileSaveStatus: String;
     userPublishedQuestions: Question[];
     userUnpublishedQuestions: Question[];
-    questionSaveStatus: String;
     getGameResult: Game[];
     userFriends: Friends
 }
@@ -23,7 +22,6 @@ export const reducer: ActionReducerMap<UserState> = {
     userProfileSaveStatus: userProfileSaveStatus,
     userPublishedQuestions: userPublishedQuestions,
     userUnpublishedQuestions: userUnpublishedQuestions,
-    questionSaveStatus: questionSaveStatus,
     getGameResult: getGameResult,
     userFriends: userFriends
 };
