@@ -6,7 +6,10 @@ import { Store, select } from '@ngrx/store';
 import { User, Category, Question, QuestionStatus, Answer } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
+import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 import * as userActions from '../../store/actions';
+import { QuestionActions } from 'shared-library/core/store/actions/question.actions'
 
 @Component({
   templateUrl: './question-add-update.component.html',
@@ -42,9 +45,20 @@ export class QuestionAddUpdateComponent implements OnInit, OnDestroy {
   // Constructor
   constructor(private fb: FormBuilder,
     private store: Store<AppState>,
-    private utils: Utils) {
+    private utils: Utils,
+    public router: Router,
+    public snackBar: MatSnackBar,
+    private questionAction: QuestionActions) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
+
+    this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+      if (status === 'SUCCESS') {
+        this.snackBar.open('Question saved!', '', { duration: 2000 });
+        this.router.navigate(['/my/questions']);
+        this.store.dispatch(this.questionAction.resetQuestionSuccess());
+      }
+    }));
 
   }
 

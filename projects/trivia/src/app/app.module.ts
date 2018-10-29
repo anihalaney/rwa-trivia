@@ -20,7 +20,8 @@ import { LazyLoadImagesModule } from 'ngx-lazy-load-images';
 
 import {
   AppComponent, DashboardComponent, QuestionComponent,
-  SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent
+  SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent,
+  PrivacyPolicyComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'shared-library/environments/environment';
@@ -37,7 +38,8 @@ import { interval } from 'rxjs';
     SideNavComponent,
     HeaderComponent,
     FooterComponent,
-    InvitationRedirectionComponent
+    InvitationRedirectionComponent,
+    PrivacyPolicyComponent
   ],
   imports: [
     BrowserModule,
