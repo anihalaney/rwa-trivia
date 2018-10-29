@@ -1,9 +1,23 @@
 <ns-action-bar title="Dashboard" showAdd="true"></ns-action-bar>
 <StackLayout>
     <ScrollView>
-        <GridLayout rows="*, *" columns="*">               
+        <GridLayout rows="*, *, *" columns="*">               
             <Button row="0" col="0" text="Start New Game" (tap)="startNewGame()" margin="10"></Button>
             <StackLayout row="1" col="0">
+                <CardView class="cardStyle" margin="10" elevation="40" radius="1" class="gameplay">
+                    <Label text="Waiting for Opponent" textWrap="true" > </Label>
+                    <StackLayout *ngIf="activeGames">
+                        <Label text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center" padding="10" textWrap="true" color="#3B5998" fontSize="17"> </Label>
+                        <StackLayout *ngFor="let game of activeGames">
+                            <StackLayout>
+                                <game-card [game]="game" [userDict]="userDict" [cardType]="'opponent'"></game-card>
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+                    
+                </CardView>
+            </StackLayout>
+            <StackLayout row="2" col="0">
                 <question [userDict]="userDict"></question>
             </StackLayout>           
         </GridLayout>      

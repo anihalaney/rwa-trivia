@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
-  User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType
+  User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType, GameStatus
 } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
 import { AppState } from '../../store';
@@ -16,6 +16,8 @@ import { RouterExtensions } from 'nativescript-angular/router';
   styleUrls: ['./dashboard.component.scss', './dashboard.scss']
 })
 export class DashboardComponent extends Dashboard implements OnInit {
+
+  gameStatus: any;
 
   constructor(store: Store<AppState>,
     questionActions: QuestionActions,
@@ -30,13 +32,16 @@ export class DashboardComponent extends Dashboard implements OnInit {
       gameActions,
       userActions, windowRef,
       platformId);
+    this.gameStatus = GameStatus;
 
   }
   ngOnInit() {
+
   }
 
   startNewGame() {
-    this.routerExtension.navigate(['/game-play'], { clearHistory: true });
+    console.log('active games', this.activeGames);
+    // this.routerExtension.navigate(['/game-play'], { clearHistory: true });
   }
 
 }
