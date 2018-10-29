@@ -1,5 +1,5 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
-
+import { NgModule } from '@angular/core';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 
@@ -10,7 +10,7 @@ import {
   WindowRef
 } from './services';
 
-import { AuthenticationProvider } from './auth';
+import { AuthenticationProvider, AuthInterceptor } from './auth';
 
 import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
 
@@ -74,6 +74,11 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
     {
       provide: DbService,
       useClass: TNSDbService
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
     },
     TNSFirebaseAuthService, {
       provide: FirebaseAuthService,
