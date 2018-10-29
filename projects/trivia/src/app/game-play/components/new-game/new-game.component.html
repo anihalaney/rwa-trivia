@@ -105,16 +105,17 @@
                                         <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
                                     </mat-basic-chip>
                                 </mat-chip-list>
+                                <input matInput type="text" placeholder="Tag" contenteditable="true" formControlName="tagControl"
+                                    [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)" aria-label="tag">
+                                <mat-autocomplete #tagAuto="matAutocomplete">
+                                    <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
+                                        {{ tag }}
+                                    </mat-option>
+                                </mat-autocomplete>
+                                <button mat-button class="add-tag-button" color="primary" (click)="addTag()" [disabled]="newGameForm.controls.tagControl.value === ''">ADD</button>
 
                             </div>
-                            <input type="text" placeholder="Tag" matInput formControlName="tagControl"
-                                [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)" aria-label="tag">
-                            <mat-autocomplete #tagAuto="matAutocomplete">
-                                <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
-                                    {{ tag }}
-                                </mat-option>
-                            </mat-autocomplete>
-                            <a mat-button class="add-tag-button" color="primary" (click)="addTag()" [disabled]="newGameForm.controls.tagControl.value === ''">ADD</a>
+
                         </div>
                     </div>
                 </div>
