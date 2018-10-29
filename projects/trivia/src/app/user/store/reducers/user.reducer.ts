@@ -43,14 +43,6 @@ export function userUnpublishedQuestions(state: any = [], action: UserActions): 
 };
 
 
-export function questionSaveStatus(state: any = 'NONE', action: UserActions): string {
-    switch (action.type) {
-        case UserActionTypes.ADD_QUESTION:
-            return 'IN PROGRESS';
-        default:
-            return state;
-    }
-};
 export function getGameResult(state: any = [], action: UserActions):
     Game[] {
     switch (action.type) {

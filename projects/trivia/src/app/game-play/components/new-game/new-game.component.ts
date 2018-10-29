@@ -24,11 +24,13 @@ import { NewGame } from './new-game';
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
+  sortedCategories: Category[];
   tagsObs: Observable<string[]>;
   tags: string[];
   userDict$: Observable<{ [key: string]: User }>;
   selectedTags: string[];
   subs: Subscription[] = [];
+  selectedCategories = [];
 
   newGameForm: FormGroup;
   gameOptions: GameOptions;
@@ -123,17 +125,15 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   createForm(gameOptions: GameOptions) {
 
-    const sortedCategories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)]
-    const fgs: FormGroup[] = sortedCategories.map(category => {
-      const fg = new FormGroup({
-        categorySelected: new FormControl({ value: true, disabled: category.requiredForGamePlay }),
-        categoryId: new FormControl(category.id),
-        categoryName: new FormControl(category.categoryName),
-        requiredForGamePlay: new FormControl(category.requiredForGamePlay)
-      });
-      return fg;
+    const sortedCategories = [...this.categories.filter(c => c.requiredForGamePlay),
+    ...this.categories.filter(c => !c.requiredForGamePlay)];
+
+    this.sortedCategories = sortedCategories;
+
+    sortedCategories.map(category => {
+      this.selectedCategories.push(category.id);
     });
-    const categoriesFA = new FormArray(fgs);
+
 
     let fcs: FormControl[] = gameOptions.tags.map(tag => {
       const fc = new FormControl(tag);
@@ -150,9 +150,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       opponentType: [gameOptions.opponentType],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
-      tagsArray: tagsFA,
-      categoriesFA: categoriesFA
-    }
+      tagsArray: tagsFA
+    } //, {validator: questionFormValidator}
     );
     return form;
   }
@@ -163,6 +162,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.errMsg = undefined;
   }
 
+  selectCategory(event: any, categoryId: number): void {
+    if (event.checked) {
+      this.selectedCategories.push(categoryId);
+    } else {
+      this.selectedCategories.splice(this.selectedCategories.indexOf(categoryId), 1);
+    }
+  }
 
   onSubmit() {
     // validations
@@ -198,7 +204,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     gameOptions = new GameOptions();
     gameOptions.playerMode = formValue.playerMode;
     gameOptions.opponentType = (formValue.opponentType) ? formValue.opponentType : null;
-    gameOptions.categoryIds = this.categoriesFA.value.filter(c => c.categorySelected || c.requiredForGamePlay).map(c => c.categoryId);
+    gameOptions.categoryIds = this.selectedCategories;
     gameOptions.gameMode = GameMode.Normal;
     gameOptions.tags = this.selectedTags;
 
