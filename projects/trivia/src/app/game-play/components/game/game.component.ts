@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';

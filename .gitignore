@@ -59,7 +59,8 @@ functions/package-lock.json
 functions/dist/
 package-lock.json
 firebase-debug.log
- scheduler/node_modules/
+scheduler/node_modules/
 scheduler/server/
 scheduler/config/
 scheduler/package-lock.json
+functions/index.js

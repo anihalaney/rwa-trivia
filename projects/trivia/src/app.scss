@@ -40,3 +40,90 @@ refer to http://docs.nativescript.org/ui/theme.
 .tns-btn{
   font-size: 16;
 }
+
+.sprite {
+  background-repeat: no-repeat;
+  background-image: url('~/assets/images/sprite.png');
+  background-size: 1500 1500;
+}
+
+.score2-L {
+  width: 50;
+  height: 52;
+  background-position: -10 -880;
+
+
+}
+
+.score1-L {
+  width: 50;
+  height: 54;
+  background-position: -10 -1110;
+}
+
+.score3-L {
+  width: 50;
+  height: 53;
+  background-position: -160 -1110;
+}
+
+
+.score4-L {
+  width: 50;
+  height: 53;
+  background-position: -5 -1265;
+}
+
+.score5-L {
+  width: 50;
+  height: 53;
+  background-position: -155 -1265;
+}
+
+.score1 {
+  width: 26;
+  height: 26;
+  background-position: -162 -885;
+}
+
+.score2 {
+  width: 26;
+  height: 26;
+  background-position: -232 -885;
+}
+
+.score3 {
+  width: 26;
+  height: 28;
+  background-position: -300 -885;
+}
+
+.score4 {
+  width: 26;
+  height: 26;
+  background-position: -162 -955;
+}
+
+.score5 {
+  width: 26;
+  height: 26;
+  background-position: -232 -955;
+}
+
+.score0 {
+  width: 26;
+  height: 26;
+  background-position: -189 -800;
+}
+
+.thumb-up {
+  width: 42;
+  height: 28;
+  background-position: -255 -785;
+}
+
+.thumb-down {
+  width: 42;
+  height: 28;
+  background-position: -2 -1030;
+}
