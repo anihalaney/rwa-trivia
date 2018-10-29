@@ -41,131 +41,89 @@ refer to http://docs.nativescript.org/ui/theme.
   font-size: 16;
 }
 
+.sprite {
+  background-repeat: no-repeat;
+  background-image: url('~/assets/images/sprite.png');
+  background-size: 1500 1500;
+}
+
 .score2-L {
   width: 50;
   height: 52;
-  background-size: 1500 1500;
   background-position: -10 -880;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
+
+
 }
 
 .score1-L {
   width: 50;
   height: 54;
-  background-size: 1500 1500;
   background-position: -10 -1110;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .score3-L {
   width: 50;
   height: 53;
-  background-size: 1500 1500;
   background-position: -160 -1110;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 
 .score4-L {
   width: 50;
   height: 53;
-  background-size: 1500 1500;
   background-position: -5 -1265;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .score5-L {
   width: 50;
   height: 53;
-  background-size: 1500 1500;
   background-position: -155 -1265;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .score1 {
   width: 26;
   height: 26;
-  background-size: 1500 1500;
   background-position: -162 -885;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .score2 {
   width: 26;
   height: 26;
-  background-size: 1500 1500;
   background-position: -232 -885;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .score3 {
   width: 26;
   height: 28;
-  background-size: 1500 1500;
   background-position: -300 -885;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .score4 {
   width: 26;
   height: 26;
-  background-size: 1500 1500;
   background-position: -162 -955;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .score5 {
   width: 26;
   height: 26;
-  background-size: 1500 1500;
   background-position: -232 -955;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .score0 {
   width: 26;
   height: 26;
-  background-size: 1500 1500;
   background-position: -189 -800;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
-  color: red;
 }
 
 .thumb-up {
   width: 42;
   height: 28;
-  background-size: 1500 1500;
   background-position: -255 -785;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
 }
 
 .thumb-down {
   width: 42;
   height: 28;
-  background-size: 1500 1500;
   background-position: -2 -1030;
-  background-repeat: no-repeat;
-  background-image: url('~/assets/images/sprite.png');
 }
