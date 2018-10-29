@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User, Invitation, friendInvitationConstants } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { Store } from '@ngrx/store';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../../user/store/actions';
