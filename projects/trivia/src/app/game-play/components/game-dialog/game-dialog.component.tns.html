@@ -4,11 +4,11 @@
           <StackLayout verticalAlignment="center" height="100%" horizontalAlignment="center" width="100%">
               <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
                   <GridLayout class="circle-loader" width="150" height="150" > </GridLayout>
-                  <Button [ngClass]="correctAnswerCount < 1?'score0':'score1'" text=""  top="10"  left="80"></Button>
-                  <Button [ngClass]="correctAnswerCount < 2?'score0':'score2'" text=""  top="50"  left="15"></Button>
-                  <Button [ngClass]="correctAnswerCount < 5?'score0':'score5'" text=""  top="50"  left="150"></Button>
-                  <Button [ngClass]="correctAnswerCount < 3?'score0':'score3'" text=""  top="120"  left="15"></Button>
-                  <Button [ngClass]="correctAnswerCount < 4?'score0':'score4'" text=""  top="120"  left="145"></Button>
+                  <Button class="sprite" [ngClass]="correctAnswerCount < 1?'score0':'score1'" text=""  top="10"  left="80"></Button>
+                  <Button class="sprite" [ngClass]="correctAnswerCount < 2?'score0':'score2'" text=""  top="50"  left="15"></Button>
+                  <Button class="sprite" [ngClass]="correctAnswerCount < 5?'score0':'score5'" text=""  top="50"  left="150"></Button>
+                  <Button class="sprite" [ngClass]="correctAnswerCount < 3?'score0':'score3'" text=""  top="120"  left="15"></Button>
+                  <Button class="sprite" [ngClass]="correctAnswerCount < 4?'score0':'score4'" text=""  top="120"  left="145"></Button>
               </AbsoluteLayout>
               <Label text="Loading" textWrap="true" fontSize="17" verticalAlignment="center" horizontalAlignment="center"></Label>
           </StackLayout>
@@ -20,7 +20,7 @@
         ?'score3-L':correctAnswerCount === 3
         ?'score4-L':correctAnswerCount === 4
         ?'score5-L':''"
-        text=""></Button>
+        text="" class="sprite" ></Button>
       <Label text="Give the right answer & with this badge" class='text-center' horizontalAlignment="center"
         verticalAlignment="center" textWrap="true"></Label>
     </StackLayout>
@@ -32,7 +32,7 @@
           ?'score3-L':correctAnswerCount === 4
           ?'score4-L':correctAnswerCount === 5
         ?'score5-L':''"
-        text=""></Button>
+        text="" class="sprite" ></Button>
       <Label text="You Earned" class='text-center' textWrap="true" horizontalAlignment="center" verticalAlignment="center"></Label>
     </StackLayout>
     <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName"
