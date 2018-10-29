@@ -1,0 +1,26 @@
+<StackLayout *ngIf="game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE" class="mobile">
+    <GridLayout rows="*" columns="auto,*,*">
+        <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
+        marginLeft="2" verticalAlignment="center"  borderRadius="50"></Image>
+        <StackLayout row="0" col="1" paddingLeft="20">
+            <GridLayout rows="*,*,*" columns="*">
+                <Label row="0" column="0" text="You" textWrap="true"></Label>
+                <Label row="1" column="0" text="Round {{game.round}} / {{totalRound}}" textWrap="true" ></Label>
+                <Label row="2" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
+    + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}" textWrap="true" class="tagging"> </Label>
+            </GridLayout>
+
+        </StackLayout>
+            <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
+                <Button [ngClass]="game.stats[user.userId].score < 1?'score0':'score1'" text=""></Button>
+                <Button [ngClass]="game.stats[user.userId].score < 2?'score0':'score2'" text=""></Button>
+                <Button [ngClass]="game.stats[user.userId].score < 3?'score0':'score3'" text=""></Button>
+                <Button [ngClass]="game.stats[user.userId].score < 4?'score0':'score4'" text=""></Button>
+                <Button [ngClass]="game.stats[user.userId].score < 5?'score0':'score5'" text=""></Button>
+            </StackLayout>
+    </GridLayout>
+    <Button text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center" padding="10"></Button>
+    
+</StackLayout>
+
+<!-- this.cardType === 'opponent' &&  -->
