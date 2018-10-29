@@ -11,11 +11,11 @@
                 <Label horizontalAlignment="center" text="Round {{game.round}} / {{totalRound}}" textWrap="true"></Label>
                 <Label horizontalAlignment="center" text="Score {{game.stats[user.userId].score}}" textWrap="true"></Label>
                 <StackLayout orientation="horizontal" horizontalAlignment="center">
-                    <Button *ngIf="game.stats[user.userId].score>= 1" class="score1" text=""></Button>
-                    <Button *ngIf="game.stats[user.userId].score>= 2" class="score2" text=""></Button>
-                    <Button *ngIf="game.stats[user.userId].score>= 3" class="score3" text=""></Button>
-                    <Button *ngIf="game.stats[user.userId].score>= 4" class="score4" text=""></Button>
-                    <Button *ngIf="game.stats[user.userId].score>= 5" class="score5" text=""></Button>
+                    <Button *ngIf="game.stats[user.userId].score>= 1" class="score1 sprite" text=""></Button>
+                    <Button *ngIf="game.stats[user.userId].score>= 2" class="score2 sprite" text=""></Button>
+                    <Button *ngIf="game.stats[user.userId].score>= 3" class="score3 sprite" text=""></Button>
+                    <Button *ngIf="game.stats[user.userId].score>= 4" class="score4 sprite" text=""></Button>
+                    <Button *ngIf="game.stats[user.userId].score>= 5" class="score5 sprite" text=""></Button>
                 </StackLayout>
             </StackLayout>
             <StackLayout>
