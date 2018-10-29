@@ -223,9 +223,9 @@ export class ProfileSettingsComponent implements OnDestroy {
 
     const categoryFA = new FormArray(categoryIds);
     this.userForm = this.fb.group({
-      name: [user.name],
+      name: [user.name, Validators.required],
       displayName: [user.displayName, Validators.required],
-      location: [user.location],
+      location: [user.location, Validators.required],
       categoryList: categoryFA,
       tags: '',
       tagsArray: tagsFA,
@@ -237,7 +237,7 @@ export class ProfileSettingsComponent implements OnDestroy {
       profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
         (this.locationOptions.length > 0 ? this.locationOptions[0] : '')],
       privateProfileSetting: [user.privateProfileSetting],
-      profilePicture: [user.profilePicture]
+      profilePicture: [user.profilePicture, Validators.required]
     });
     this.enteredTags = user.tags;
   }
@@ -307,7 +307,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   onSubmit() {
     // validations
     this.userForm.updateValueAndValidity();
-    if (this.userForm.invalid || !this.user.bulkUploadPermissionStatus) {
+    if (this.userForm.invalid) {
       this.snackBar.open('Please fill the mandatory fields', '', { duration: 2000 });
       return;
     }
