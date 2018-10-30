@@ -39,7 +39,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
   ngOnInit() {}
 
   startNewGame() {
-    // this.routerExtension.navigate(['/game-play'], { clearHistory: true });
+    this.routerExtension.navigate(['/game-play'], { clearHistory: true });
   }
 
   filterGame(game: any, gameStatus) {
@@ -49,7 +49,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
 
 
   filterSinglePlayerGame(game: any, gameStatus) {
-    return game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length === 1;
+    return Number(game.gameOptions.playerMode) === Number(PlayerMode.Single) && game.playerIds.length === 1;
   }
 
   filterTwoPlyerGame(game: any, gameStatus) {
