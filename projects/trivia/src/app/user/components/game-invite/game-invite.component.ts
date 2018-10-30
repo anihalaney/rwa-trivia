@@ -46,6 +46,11 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
     this.store.dispatch(new gameplayactions.RejectGameInvitation(this.game.gameId));
   }
 
+
+  getImageUrl(user: User) {
+    return this.utils.getImageUrl(user, 44, 40, '44X40');
+  }
+
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
   }
