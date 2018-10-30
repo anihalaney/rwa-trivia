@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { User, Invitation, Friends } from './../../../lib/shared/model';
+import { User, Invitation, Friends, QueryParams, QueryParam, friendInvitationConstants } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
@@ -95,5 +95,24 @@ export class UserService {
 
     loadUserFriends(userId: string): Observable<Friends> {
         return this.dbService.valueChanges('friends', userId);
+    }
+
+    loadFriendInvitations(email: string): Observable<Invitation[]> {
+        const queryParams: QueryParams = new QueryParams();
+        queryParams.condition = [];
+
+        let queryParam: QueryParam = new QueryParam('email', '==', email);
+        queryParams.condition.push(queryParam);
+
+        queryParam = new QueryParam('status', '==', friendInvitationConstants.PENDING);
+        queryParams.condition.push(queryParam);
+
+
+        return this.dbService.valueChanges('invitations', '', queryParams).pipe(
+            map(invitations => invitations));
+    }
+
+    setInvitation(invitation: Invitation) {
+        this.dbService.updateDoc('invitations', invitation.id, invitation);
     }
 }
