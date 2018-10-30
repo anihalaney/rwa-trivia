@@ -72,6 +72,8 @@
               <label>Location *</label>
               <input formControlName="location" placeholder="Enter Location" type="text" class="required" aria-label="location">
               <p>Where in the world you are</p>
+              <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">Location
+                is required!</p>
             </div>
           </div>
           <!-- Upload avatar end -->
