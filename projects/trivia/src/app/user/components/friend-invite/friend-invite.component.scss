@@ -1,7 +1,6 @@
 .user-img{ text-align: center; margin-bottom: 20px }
 img{ border-radius: 50%; width: 50%; max-width:70px;  display: inline-block;border:1px solid; padding: 2px }
-.invitation-left{ text-align: center;}
-.btn{ padding: 10px 25px;font-size: 16px }
+.btn{ padding: 10px 25px;font-size: 16px; cursor: pointer}
 .reject-btn{
    padding: 10px 25px;
    font-size: 16px;
@@ -25,7 +24,6 @@ img{ border-radius: 50%; width: 50%; max-width:70px;  display: inline-block;bord
   .btn,.reject-btn{ margin: 2% }
   .clinton, .T-tagging{ line-height: 45px; }
   img { padding: 1px }
-  .invitation-left{ text-align: left; }
 }
 @media screen and ( min-width:767px){
   .btn{font-size: 14px;padding: 5% 5%; }

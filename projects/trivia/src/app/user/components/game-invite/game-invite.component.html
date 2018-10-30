@@ -1,7 +1,6 @@
 <div class="row">
-  <div class="col-md-1  col-sm-2 col-xs-12 usreimg">
-    <img *ngIf="userDict[game.playerIds[0]]?.profilePictureUrl" [src]="userDict[game.playerIds[0]].profilePictureUrl"
-      alt="User Profile Picture" />
+  <div class="col-md-1  col-sm-2 col-xs-12 user-img">
+    <img [src]="getImageUrl(userDict[game.playerIds[0]])" alt="User Profile Picture" />
   </div>
   <div class="col-md-2 col-sm-2  col-xs-12 text-align">
     <div class="dark ellipsis col-xs-12" title="{{userDict[game.playerIds[0]]?.displayName}}">{{userDict[game.playerIds[0]]?.displayName}}</div>
@@ -16,5 +15,5 @@
     <a class="btn" [routerLink]="['/game-play', game.gameId]">Accept </a>
     <a class="reject-btn" (click)="rejectGameInvitation()">Reject </a>
   </div>
-  <div class="col-md-2 col-sm-2 col-xs-12  invitationleft">{{remainingDays}} days left to accept invitation</div>
+  <div class="col-md-2 col-sm-2 col-xs-12  invitation-left">{{remainingDays}} days left to accept invitation</div>
 </div>

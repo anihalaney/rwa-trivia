@@ -1,12 +1,12 @@
 import { Inject } from '@angular/core';
-import { Observable, Subscription} from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import * as gamePlayActions from '../../game-play/store/actions';
-import { User, Game, OpponentType } from 'shared-library/shared/model';
+import { User, Game, OpponentType, Invitation } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
-import { AppState, appState} from '../../store';
+import { AppState, appState } from '../../store';
 
 
 export class Dashboard {
@@ -33,6 +33,9 @@ export class Dashboard {
     randomPlayerCount = 0;
     maxGameCardPerRow: number;
     screenWidth: number;
+    friendInvitations: Invitation[] = [];
+    friendInviteSliceStartIndex: number;
+    friendInviteSliceLastIndex: number;
 
 
     constructor(private store: Store<AppState>,
@@ -93,6 +96,18 @@ export class Dashboard {
         this.gameInviteSliceStartIndex = 0;
         this.gameInviteSliceLastIndex = 3;
 
+        this.subs.push(store.select(appState.userState).pipe(select(s => s.friendInvitations)).subscribe(invitations => {
+            if (invitations.length > 0) {
+                this.friendInvitations = invitations;
+                invitations.map(invitation => {
+                    this.store.dispatch(this.userActions.loadOtherUserProfile(invitation.created_uid));
+                });
+            }
+        }));
+
+        this.friendInviteSliceStartIndex = 0;
+        this.friendInviteSliceLastIndex = 3;
+
     }
 
     displayMoreGames(): void {
@@ -106,6 +121,11 @@ export class Dashboard {
             this.gameInviteSliceLastIndex + 3 : this.gameInvites.length;
     }
 
+
+    displayMoreFriendInvites(): void {
+        this.friendInviteSliceLastIndex = (this.friendInvitations.length > (this.friendInviteSliceLastIndex + 3)) ?
+            this.friendInviteSliceLastIndex + 3 : this.friendInvitations.length;
+    }
 
     checkCardCountPerRow() {
         this.numbers = [];
