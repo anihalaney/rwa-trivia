@@ -5,11 +5,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { ActionBarComponent, DrawerComponent } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
+import { GameFilterPipe } from './pipe/game-filter.pipe';
 
 @NgModule({
   declarations: [
     ActionBarComponent,
-    DrawerComponent
+    DrawerComponent,
+    GameFilterPipe
   ],
   imports: [
     CommonModule,
@@ -26,6 +28,7 @@ import { NativeScriptCommonModule } from 'nativescript-angular/common';
     CommonModule, HttpClientModule, ReactiveFormsModule,
     HttpClientModule,
     ActionBarComponent,
-    DrawerComponent]
+    DrawerComponent,
+    GameFilterPipe]
 })
 export class SharedModule { }
