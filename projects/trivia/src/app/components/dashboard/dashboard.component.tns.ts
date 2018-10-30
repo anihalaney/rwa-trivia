@@ -2,13 +2,12 @@ import { Component, Input, OnInit, OnDestroy, HostListener, Inject, ChangeDetect
 import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
-import {
-  User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType, GameStatus
-} from 'shared-library/shared/model';
+import { PlayerMode, GameStatus } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
-import { AppState } from '../../store';
+import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'dashboard',
@@ -33,17 +32,33 @@ export class DashboardComponent extends Dashboard implements OnInit {
       userActions, windowRef,
       platformId);
     this.gameStatus = GameStatus;
-
+    store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+      this.user = s.user;
+    });
   }
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 
   startNewGame() {
-    console.log('active games', this.activeGames);
     // this.routerExtension.navigate(['/game-play'], { clearHistory: true });
   }
 
+  filterGame(game: any, gameStatus) {
+    // tslint:disable-next-line:max-line-length
+    return game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
+  }
+
+
+  filterSinglePlayerGame(game: any, gameStatus) {
+    return game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length === 1;
+  }
+
+  filterTwoPlyerGame(game: any, gameStatus) {
+    return game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1;
+  }
+
+  filterTwoPlyerWaitNextQGame(game: any, gameStatus) {
+    return game.GameStatus === gameStatus.WAITING_FOR_NEXT_Q;
+  }
 }
 
 

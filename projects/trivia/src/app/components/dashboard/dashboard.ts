@@ -7,7 +7,7 @@ import * as gamePlayActions from '../../game-play/store/actions';
 import { User, Game, OpponentType } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
 import { AppState, appState} from '../../store';
-
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 export class Dashboard {
     user: User;
@@ -48,14 +48,14 @@ export class Dashboard {
             this.store.dispatch(new gamePlayActions.LoadGameInvites(user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
-
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
-
         this.subs.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
             if (games.length > 0) {
-                this.screenWidth = this.windowRef.nativeWindow.innerWidth;
-                this.checkCardCountPerRow();
+                if (!(isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false)) {
+                    this.screenWidth = this.windowRef.nativeWindow.innerWidth;
+                    this.checkCardCountPerRow();
+                }
                 this.activeGames.map(game => {
                     const playerIds = game.playerIds;
                     playerIds.map(playerId => {
