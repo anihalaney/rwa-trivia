@@ -22,7 +22,7 @@
           </li>
         </ul>
       </div>
-      <div class="row col-xs-12">
+      <div class=" col-xs-12">
         <div class="col-sm-6 col-xs-12 ellipsis question-tags" title=" {{question.tags?.toString()}}">
           Tags :
           <span>{{question.tags?.toString()}}</span>
@@ -31,7 +31,7 @@
           <author [userDict]="userDict" [userId]="question.created_uid"></author>
         </div>
       </div>
-      <div class="row col-xs-12">
+      <div class="col-xs-12">
         <div class="col-sm-6 col-xs-12">
           <a class="btn" (click)="getNextQuestion()" *ngIf="answeredText!==''">Try Another</a>
         </div>

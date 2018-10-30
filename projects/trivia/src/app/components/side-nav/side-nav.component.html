@@ -1,7 +1,7 @@
 <profile-card [user]="user"></profile-card>
 <recent-games [userDict]="userDict"></recent-games>
 <div class="card playwith">
-  <a [routerLink]="['/my/questions']">
+  <a [routerLink]="['/my/questions']" target="_blank">
     <span class="sprite myqestion"></span>
     <span class="playtext">Submit
       <span>Questions</span>
@@ -12,11 +12,17 @@
 
 
 <div class="card playwith">
-  <a [routerLink]="['/my/invite-friends']">
+  <a [routerLink]="['/my/invite-friends']" target="_blank">
     <span class="sprite playwithicon"></span>
     <span class="playtext">
       <span>Friends</span>
     </span>
+  </a>
+</div>
+
+<div class="card playwith visible-xs">
+  <a class="playtext" href="https://blog.realworldfullstack.io" target="_blank">
+    <span>Blog</span>
   </a>
 </div>
 
@@ -27,10 +33,4 @@
   </share-button>
   <share-button [theme]="'circles-dark'" [button]="'linkedin'" [size]="4" [url]="blogUrl" [autoSetMeta]="false">
   </share-button>
-</div>
-
-<div class="card playwith visible-xs">
-  <a class="playtext" href="https://blog.realworldfullstack.io" target="_blank">
-    <span>Blog</span>
-  </a>
 </div>

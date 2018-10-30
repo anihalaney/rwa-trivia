@@ -18,7 +18,7 @@ export class FirestoreMigration {
           'requiredForGamePlay': (c.val()['requiredForGamePlay']) ? true : false
         };
         categories.push(category);
-      })
+      });
 
       console.log(categories);
 
