@@ -326,7 +326,7 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.getUserFromFormValue(this.userForm.value);
     // call saveUser
     this.saveUser(this.user);
-    this.setNotificationMsg('', false);
+    this.setNotificationMsg('', false, 0);
   }
 
   // store the user object
