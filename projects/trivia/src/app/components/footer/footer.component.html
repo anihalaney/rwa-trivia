@@ -2,10 +2,11 @@
   <div class="col-md-8 col-sm-8 col-xs-12">
     <div class="col-xs-12 menu" [ngClass]="!user?'col-md-5 col-sm-7 ':'col-md-12 col-sm-12'">
       <a [routerLink]="['/']" title="Home">Home</a>
-      <a *ngIf="user?.roles?.admin" href="{{hostname}}">Admin</a>
-      <a *ngIf="user" (click)="navigateUrl()" title="My Questions" class="myQuestion">My Questions</a>
-      <a [routerLink]="['/privacy-policy']">Privacy Policy</a>
-      <a *ngIf="user?.roles?.admin || user?.roles?.bulkuploader" [routerLink]="['/bulk']">Bulk</a>
+      <a *ngIf="user?.roles?.admin" href="{{hostname}}" target="_blank">Admin</a>
+      <a *ngIf="user" [routerLink]="['/my/questions']" title="My Questions" class="myQuestion" target="_blank">My
+        Questions</a>
+      <a [routerLink]="['/privacy-policy']" target="_blank">Privacy Policy</a>
+      <a *ngIf="user?.roles?.admin || user?.roles?.bulkuploader" [routerLink]="['/bulk']" target="_blank">Bulk</a>
       <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
       <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
       <ng-container *ngIf="!user">
