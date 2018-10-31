@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
-import { User, Question, Game, Friends } from 'shared-library/shared/model';
+import { User, Question, Game, Friends, Invitation } from 'shared-library/shared/model';
 import { UserActions, UserActionTypes } from '../actions';
 
 
@@ -30,7 +30,7 @@ export function userPublishedQuestions(state: any = [], action: UserActions): Qu
         default:
             return state;
     }
-};
+}
 
 // Load User Unpublished Question by userId
 export function userUnpublishedQuestions(state: any = [], action: UserActions): Question[] {
@@ -40,7 +40,7 @@ export function userUnpublishedQuestions(state: any = [], action: UserActions): 
         default:
             return state;
     }
-};
+}
 
 
 export function getGameResult(state: any = [], action: UserActions):
@@ -51,7 +51,7 @@ export function getGameResult(state: any = [], action: UserActions):
         default:
             return state;
     }
-};
+}
 
 // Load User Published Question by userId
 export function userFriends(state: any = null, action: UserActions): Friends {
@@ -61,4 +61,14 @@ export function userFriends(state: any = null, action: UserActions): Friends {
         default:
             return state;
     }
-};
+}
+
+// Load User Published Question by userId
+export function friendInvitations(state: any = [], action: UserActions): Invitation[] {
+    switch (action.type) {
+        case UserActionTypes.LOAD_FRIEND_INVITATION_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}

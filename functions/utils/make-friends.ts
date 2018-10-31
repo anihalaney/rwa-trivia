@@ -1,5 +1,5 @@
 const friendService = require('../services/friend.service');
-import { Invitation, Friends, FriendsMetadata } from '../../projects/shared-library/src/lib/shared/model';
+import { Invitation, Friends, FriendsMetadata, friendInvitationConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { Observable } from 'rxjs';
 
 export class MakeFriends {
@@ -10,10 +10,11 @@ export class MakeFriends {
         return friendService.getInvitationByToken(this.token)
             .then(invitation => {
                 if (invitation.data().email === this.email) {
-                    const invitations = new Invitation();
-                    invitations.created_uid = invitation.data().created_uid;
-                    return this.updateFriendsList(invitations.created_uid, this.userId)
-                        .then(ref => this.updateFriendsList(this.userId, invitations.created_uid))
+                    const invitationObj: Invitation = invitation.data();
+                    invitationObj.status = friendInvitationConstants.APPROVED;
+                    return this.updateFriendsList(invitationObj.created_uid, this.userId)
+                        .then(ref => this.updateFriendsList(this.userId, invitationObj.created_uid))
+                        .then(ref => friendService.updateInvitation({ ...invitationObj }))
                         .then(ref => this.userId);
                 }
             });
