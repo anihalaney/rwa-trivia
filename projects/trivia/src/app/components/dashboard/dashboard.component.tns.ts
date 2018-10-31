@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, HostListener, Inject, ChangeDetectorRef, ViewChild, ViewContainerRef } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import { PlayerMode, GameStatus } from 'shared-library/shared/model';
@@ -8,6 +8,7 @@ import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { take } from 'rxjs/operators';
+import * as gamePlayActions from '../../game-play/store/actions';
 
 @Component({
   selector: 'dashboard',
@@ -18,7 +19,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
 
   gameStatus: any;
 
-  constructor(store: Store<AppState>,
+  constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
     gameActions: GameActions,
     userActions: UserActions, windowRef: WindowRef,
@@ -34,9 +35,19 @@ export class DashboardComponent extends Dashboard implements OnInit {
     this.gameStatus = GameStatus;
     store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user;
+      this.store.dispatch(new gamePlayActions.LoadGameInvites(this.user));
     });
   }
-  ngOnInit() {}
+  ngOnInit() {
+
+    this.subs.push(this.store.select(appState.gamePlayState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
+      console.log('in', iGames);
+      this.gameInvites = iGames;
+      this.friendCount = 0;
+      this.randomPlayerCount = 0;
+    }));
+
+  }
 
   startNewGame() {
     this.routerExtension.navigate(['/game-play'], { clearHistory: true });

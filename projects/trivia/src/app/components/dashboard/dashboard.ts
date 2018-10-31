@@ -38,7 +38,7 @@ export class Dashboard {
     friendInviteSliceLastIndex: number;
 
 
-    constructor(private store: Store<AppState>,
+    constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
         private gameActions: GameActions,
         private userActions: UserActions, private windowRef: WindowRef,
@@ -47,8 +47,10 @@ export class Dashboard {
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
+            // console.log('game user' , this.user);
             this.store.dispatch(this.gameActions.getActiveGames(user));
             this.store.dispatch(new gamePlayActions.LoadGameInvites(user));
+            console.log('game user' , 'load user');
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
