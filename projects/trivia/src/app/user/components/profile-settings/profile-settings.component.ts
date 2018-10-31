@@ -1,11 +1,10 @@
 import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, take, finalize } from 'rxjs/operators';
 import { User, Category, profileSettingsConstants } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
+import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -62,11 +61,16 @@ export class ProfileSettingsComponent implements OnDestroy {
   // tslint:disable-next-line:quotemark
   linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
+  notificationMsg: string;
+  errorStatus: boolean;
+
   constructor(private fb: FormBuilder,
     private store: Store<AppState>,
     private storage: AngularFireStorage,
-    private snackBar: MatSnackBar,
+    private windowRef: WindowRef,
     private utils: Utils) {
+
+    this.setNotificationMsg('', false, 0);
 
     this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user;
@@ -109,7 +113,7 @@ export class ProfileSettingsComponent implements OnDestroy {
 
     this.subs.push(this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
-        this.snackBar.open('Profile saved!', '', { duration: 2000 });
+        this.setNotificationMsg('Profile Saved !', false, 100);
       }
     }));
   }
@@ -126,6 +130,13 @@ export class ProfileSettingsComponent implements OnDestroy {
     return this.userForm.get('socialAccountList') as FormArray;
   }
 
+  setNotificationMsg(msg: string, flag: boolean, scrollPosition: number): void {
+    this.notificationMsg = msg;
+    this.errorStatus = flag;
+    if (this.windowRef.nativeWindow.scrollTo) {
+      this.windowRef.nativeWindow.scrollTo(0, scrollPosition);
+    }
+  }
 
 
   private setCropperSettings() {
@@ -199,7 +210,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   // create the form based on user object
   createForm(user: User) {
     const categoryIds: FormGroup[] = this.categories.map(category => {
-      const status = (user.categoryIds && user.categoryIds.indexOf(category.id) !== -1) ? true : false
+      const status = (user.categoryIds && user.categoryIds.indexOf(category.id) !== -1) ? true : false;
       const fg = new FormGroup({
         category: new FormControl(category.id),
         isSelected: new FormControl(status),
@@ -289,7 +300,7 @@ export class ProfileSettingsComponent implements OnDestroy {
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      this.snackBar.open('Please complete profile settings for bulk upload request', '', { duration: 2000 });
+      this.setNotificationMsg('Please complete profile settings for bulk upload request', true, 100);
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
@@ -308,13 +319,14 @@ export class ProfileSettingsComponent implements OnDestroy {
     // validations
     this.userForm.updateValueAndValidity();
     if (this.userForm.invalid) {
-      this.snackBar.open('Please fill the mandatory fields', '', { duration: 2000 });
+      this.setNotificationMsg('Please fill the mandatory fields', true, 100);
       return;
     }
     // get user object from the forms
     this.getUserFromFormValue(this.userForm.value);
     // call saveUser
     this.saveUser(this.user);
+    this.setNotificationMsg('', false, 0);
   }
 
   // store the user object
