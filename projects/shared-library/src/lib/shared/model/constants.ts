@@ -55,6 +55,7 @@ export enum LeaderBoardConstants {
 export enum DashboardConstants {
     ADMIN_ROUTE = 'admin',
 }
+
 export enum profileSettingsConstants {
     NONE = 'none',
     PENDING = 'pending',
@@ -63,3 +64,8 @@ export enum profileSettingsConstants {
     BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT = 'Send Request Again',
 }
 
+export enum friendInvitationConstants {
+    PENDING = 'pending',
+    APPROVED = 'approved',
+    REJECTED = 'rejected'
+}

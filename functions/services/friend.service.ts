@@ -10,6 +10,17 @@ exports.getInvitationByToken = (token: any): Promise<any> => {
         .then(invitation => { return invitation });
 };
 
+/**
+ * updateInvitation
+ * return userId
+ */
+exports.updateInvitation = (invitation: any): Promise<any> => {
+    return friendFireStoreClient.doc(`/invitations/${invitation.id}`)
+        .update(invitation)
+        .then(ref => { return invitation.created_uid });
+};
+
+
 
 /**
  * getFriendByInvitee

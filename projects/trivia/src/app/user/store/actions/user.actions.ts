@@ -21,7 +21,9 @@ export enum UserActionTypes {
     MAKE_FRIEND = '[User] MakeFriend',
     MAKE_FRIEND_SUCCESS = '[User] MakeFriendSuccess',
     GET_GAME_RESULT = '[User] GetGameResult',
-    GET_GAME_RESULT_SUCCESS = '[User] GetGameResultSuccess'
+    GET_GAME_RESULT_SUCCESS = '[User] GetGameResultSuccess',
+    LOAD_FRIEND_INVITATION_SUCCESS = '[User] loadFriendInvitationsSuccess',
+    UPDATE_INVITATION = '[User] UpdateInvitation'
 }
 
 // Save user profile
@@ -115,13 +117,23 @@ export class GetGameResult implements Action {
     constructor(public payload: User) { }
 }
 
-//// Get User's game result Success
+// Get User's game result Success
 export class GetGameResultSuccess implements Action {
     readonly type = UserActionTypes.GET_GAME_RESULT_SUCCESS;
     constructor(public payload: Game[]) { }
 }
 
+// Load Friend Invitations
+export class LoadUserInvitationsSuccess implements Action {
+    readonly type = UserActionTypes.LOAD_FRIEND_INVITATION_SUCCESS;
+    constructor(public payload: Invitation[]) { }
+}
 
+// Update Invitation
+export class UpdateInvitation implements Action {
+    readonly type = UserActionTypes.UPDATE_INVITATION;
+    constructor(public payload: Invitation) { }
+}
 
 
 export type UserActions
@@ -140,4 +152,6 @@ export type UserActions
     | MakeFriendSuccess
     | GetGameResult
     | GetGameResultSuccess
+    | LoadUserInvitationsSuccess
+    | UpdateInvitation;
 
