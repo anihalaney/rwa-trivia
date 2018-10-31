@@ -3,7 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions } from 'shared-library/core/store/actions';
 import { Category } from 'shared-library/shared/model';
-import { AppState,appState } from '../../../store';
+import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { Utils } from 'shared-library/core/services';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
@@ -12,6 +12,7 @@ import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/a
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
 import { filter } from 'rxjs/operators';
+import { UserActions } from 'shared-library/core/store/actions';
 
 const data = [{ id: 1, name: 'name 1', image: 'image' },
 { id: 2, name: 'name 2', image: 'image' },
@@ -47,8 +48,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
     public utils: Utils,
-    private routerExtension: RouterExtensions) {
-    super(store, utils);
+    private routerExtension: RouterExtensions,
+    public userActions: UserActions) {
+    super(store, utils, userActions);
     this.initDataItems();
   }
 
@@ -59,8 +61,24 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
 
-    this.dataItem = data;
+    // this.dataItem = data;
     this.categories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)];
+
+    this.subs.push(this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+      if (uFriends) {
+        this.uFriends = [];
+        uFriends.myFriends.map(friend => {
+          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
+        });
+        this.dataItem = this.uFriends;
+        this.noFriendsStatus = false;
+      } else {
+        this.noFriendsStatus = true;
+      }
+    }));
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.dataItem = this.uFriends;
   }
 
   ngOnDestroy() { }
@@ -91,21 +109,21 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   getGameMode() {
-    let gameMode = '';
+    let opponentType = '';
     if (this.gameOptions.playerMode === 1) {
-      switch (this.gameOptions.gameMode) {
+      switch (this.gameOptions.opponentType) {
         case 0:
-          gameMode = 'Random';
+          opponentType = 'Random';
           break;
         case 1:
-          gameMode = 'With Friend';
+          opponentType = 'With Friend';
           break;
         case 2:
-          gameMode = 'With Computer';
+          opponentType = 'With Computer';
           break;
       }
     }
-    return gameMode;
+    return opponentType;
   }
 
   get dataItems(): ObservableArray<TokenModel> {
