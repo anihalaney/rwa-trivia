@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
-import { User } from '../../../shared/model';
+import { User, Game } from '../../../shared/model';
 
 
 @Injectable()
@@ -55,4 +55,37 @@ export class UserActions {
       payload: user
     };
   }
+
+  static LOAD_GAME_INVITES = 'LOAD_GAME_INVITES';
+  loadGameInvites(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.LOAD_GAME_INVITES,
+      payload: user
+    };
+  }
+
+  static LOAD_GAME_INVITES_SUCCESS = 'LOAD_GAME_INVITES_SUCCESS';
+  loadGameInvitesSuccess(games: Game[]): ActionWithPayload<Game[]> {
+    return {
+      type: UserActions.LOAD_GAME_INVITES_SUCCESS,
+      payload: games
+    };
+  }
+
+  static REJECT_GAME_INVITATION = 'REJECT_GAME_INVITATION';
+  rejectGameInvitation(payload: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.REJECT_GAME_INVITATION,
+      payload: payload
+    };
+  }
+
+  static UPDATE_GAME_SUCCESS = 'UPDATE_GAME_SUCCESS';
+  updateGameSuccess(): ActionWithPayload<string> {
+    return {
+      type: UserActions.UPDATE_GAME_SUCCESS,
+      payload: ''
+    };
+  }
+
 }
