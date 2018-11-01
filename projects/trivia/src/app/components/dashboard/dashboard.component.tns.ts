@@ -7,8 +7,6 @@ import { WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { take } from 'rxjs/operators';
-import * as gamePlayActions from '../../game-play/store/actions';
 
 @Component({
   selector: 'dashboard',
@@ -33,20 +31,12 @@ export class DashboardComponent extends Dashboard implements OnInit {
       userActions, windowRef,
       platformId);
     this.gameStatus = GameStatus;
-    store.select(appState.coreState).pipe(take(1)).subscribe(s => {
-      this.user = s.user;
-      this.store.dispatch(new gamePlayActions.LoadGameInvites(this.user));
-    });
+
   }
   ngOnInit() {
 
-    this.subs.push(this.store.select(appState.gamePlayState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
-      console.log('in', iGames);
-      this.gameInvites = iGames;
-      this.friendCount = 0;
-      this.randomPlayerCount = 0;
-    }));
-
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subs.push(this.userDict$.subscribe(userDict => {this.userDict = userDict; }));
   }
 
   startNewGame() {

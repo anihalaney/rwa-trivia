@@ -63,7 +63,6 @@ export class GameOver implements OnInit{
       this.userDict = userDict;
     }));
 
-    console.log('user dic', this.userDict);
     this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
@@ -77,9 +76,7 @@ export class GameOver implements OnInit{
   }
 
   ngOnInit() {
-    console.log('ng init');
     if (this.game) {
-      console.log('ng gaame');
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
     }

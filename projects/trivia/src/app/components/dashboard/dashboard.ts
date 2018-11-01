@@ -47,10 +47,8 @@ export class Dashboard {
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
-            // console.log('game user' , this.user);
             this.store.dispatch(this.gameActions.getActiveGames(user));
-            this.store.dispatch(new gamePlayActions.LoadGameInvites(user));
-            console.log('game user' , 'load user');
+            this.store.dispatch(this.userActions.loadGameInvites(user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -80,7 +78,7 @@ export class Dashboard {
         this.gameSliceStartIndex = 0;
         this.gameSliceLastIndex = 8;
 
-        this.subs.push(this.store.select(appState.gamePlayState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
+        store.select(appState.coreState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
             this.gameInvites = iGames;
             this.friendCount = 0;
             this.randomPlayerCount = 0;
@@ -92,9 +90,7 @@ export class Dashboard {
                 }
                 this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
             });
-        }));
-
-
+        });
         this.gameInviteSliceStartIndex = 0;
         this.gameInviteSliceLastIndex = 3;
 
