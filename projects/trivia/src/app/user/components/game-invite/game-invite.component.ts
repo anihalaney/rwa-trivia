@@ -6,8 +6,6 @@ import {
   GameInviteConstants, CalenderConstants
 } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
-import * as gameplayactions from '../../../game-play/store/actions';
-import { gameInvites } from '../../../game-play/store';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 @Component({

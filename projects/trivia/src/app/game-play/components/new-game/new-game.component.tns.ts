@@ -14,16 +14,6 @@ import * as gamePlayActions from './../../store/actions';
 import { filter } from 'rxjs/operators';
 import { UserActions } from 'shared-library/core/store/actions';
 
-const data = [{ id: 1, name: 'name 1', image: 'image' },
-{ id: 2, name: 'name 2', image: 'image' },
-{ id: 3, name: 'name 3', image: 'image' },
-{ id: 1, name: 'name 1', image: 'image' },
-{ id: 2, name: 'name 2', image: 'image' },
-{ id: 3, name: 'name 3', image: 'image' },
-{ id: 1, name: 'name 1', image: 'image' },
-{ id: 2, name: 'name 2', image: 'image' },
-{ id: 3, name: 'name 3', image: 'image' }];
-
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -97,7 +87,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   selectCategory(category) {
     category.isSelected = (!category.isSelected) ? true : false;
-    // this.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
   }
 
   getSelectedCatName() {
