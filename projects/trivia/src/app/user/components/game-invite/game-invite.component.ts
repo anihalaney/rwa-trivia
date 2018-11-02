@@ -6,10 +6,8 @@ import {
   GameInviteConstants, CalenderConstants
 } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
-import * as gameplayactions from '../../../game-play/store/actions';
-import { gameInvites } from '../../../game-play/store';
 import { Utils } from 'shared-library/core/services';
-
+import { UserActions } from 'shared-library/core/store/actions';
 @Component({
   selector: 'game-invite',
   templateUrl: './game-invite.component.html',
@@ -28,7 +26,7 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   remainingDays: number;
 
 
-  constructor(private store: Store<AppState>, private utils: Utils) {
+  constructor(private store: Store<AppState>, private utils: Utils, private userActions: UserActions) {
     this.categoryDict$ = store.select(categoryDictionary);
     this.subs.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
   }
@@ -43,7 +41,7 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   }
 
   rejectGameInvitation() {
-    this.store.dispatch(new gameplayactions.RejectGameInvitation(this.game.gameId));
+    this.store.dispatch(this.userActions.rejectGameInvitation(this.game.gameId));
   }
 
 

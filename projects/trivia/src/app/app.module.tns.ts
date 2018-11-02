@@ -21,7 +21,8 @@ import { registerElement } from 'nativescript-angular/element-registry';
 import { CardView } from 'nativescript-cardview';
 import { StatsModule } from './stats/stats.module';
 import { RouterModule } from '@angular/router';
-
+import { UserModule } from './user/user.module';
+import { GameInviteComponent } from './user/components/game-invite/game-invite.component';
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -33,6 +34,7 @@ registerElement('CardView', () => CardView);
     QuestionComponent,
     DashboardComponent,
     AuthorComponent,
+    GameInviteComponent
   ],
   imports: [
     CoreModule,
@@ -45,7 +47,8 @@ registerElement('CardView', () => CardView);
     StatsModule,
     SharedModule,
     NativeScriptUISideDrawerModule,
-    RouterModule
+    RouterModule,
+    UserModule
   ],
   providers: [
     TNSFirebaseService,

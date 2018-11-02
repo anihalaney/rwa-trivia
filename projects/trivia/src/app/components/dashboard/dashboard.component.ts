@@ -2,9 +2,6 @@ import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
-import {
-  User, Category, Question, SearchResults, Game, LeaderBoardUser, OpponentType
-} from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState } from '../../store';
 import { Dashboard } from './dashboard';

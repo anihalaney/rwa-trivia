@@ -57,8 +57,6 @@ export class AppComponent implements OnInit, OnDestroy {
     });
 
     this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-
-      //  console.log("Navigating to game: " + gameObj['gameId']);
       this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
