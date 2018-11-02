@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable, forkJoin, combineLatest, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
-import { User, Invitation, Friends, QueryParams, QueryParam, friendInvitationConstants } from './../../../lib/shared/model';
+import {
+    User, Invitation, Friends, QueryParams, QueryParam, friendInvitationConstants, Game,
+    GameStatus, GameOperations
+} from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
@@ -114,5 +117,41 @@ export class UserService {
 
     setInvitation(invitation: Invitation) {
         this.dbService.updateDoc('invitations', invitation.id, invitation);
+    }
+
+    getGameInvites(user: User): Observable<Game[]> {
+        if (user && user.userId) {
+            const queryParams1 = {
+                condition: [{ name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE },
+                { name: 'playerId_1', comparator: '==', value: user.userId },
+                { name: 'gameOver', comparator: '==', value: false }
+                ],
+                orderBy: [{ name: 'turnAt', value: 'desc' }]
+            };
+            const query1 = this.dbService.valueChanges('games', '', queryParams1);
+            const queryParams2 = {
+                condition: [{ name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE },
+                { name: 'playerId_1', comparator: '==', value: user.userId },
+                { name: 'gameOver', comparator: '==', value: false }
+                ],
+                orderBy: [{ name: 'turnAt', value: 'desc' }]
+            };
+            const query2 = this.dbService.valueChanges('games', '', queryParams2);
+            return combineLatest(query1, query2)
+                .pipe(map((data) => data[0].concat(data[1])),
+                    map(gs => gs.map(g => Game.getViewModel(g))
+                        .sort((a: any, b: any) => b.turnAt - a.turnAt)
+                    )
+                );
+        } else {
+            return of<Game[]>([]);
+        }
+    }
+
+    rejectGameInvitation(gameId: string) {
+        return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+            {
+                operation: GameOperations.REJECT_GAME
+            });
     }
 }

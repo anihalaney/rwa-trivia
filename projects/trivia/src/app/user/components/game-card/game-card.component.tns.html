@@ -1,0 +1,167 @@
+<StackLayout *ngIf="cardType == 'opponent'" class="mobile">
+    <GridLayout rows="*" columns="auto,auto,*">
+        <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+            width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
+        <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
+            <GridLayout rows="*,*,*,*" columns="*">
+                <Label row="0" column="0" text="You" textWrap="true" class="user-name" ></Label>
+                <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
+                    textWrap="true"></Label>
+                <Label row="2" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
+    + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}"
+                    textWrap="true" class="tagging"> </Label>
+            </GridLayout>
+
+        </StackLayout>
+        <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 1" [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 2" [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 3" [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 4" [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 5" [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'"
+                text=""></Button>
+        </StackLayout>
+    </GridLayout>
+    <Button text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center" padding="10" ></Button>
+</StackLayout>
+
+<StackLayout *ngIf="cardType == 'singlePlayer'" class="mobile">
+    <GridLayout rows="*" columns="*,auto">
+        <StackLayout row="0" col="0" [nsRouterLink]="['/game-play', game.gameId]">
+            <GridLayout rows="*,*,*" columns="*">
+                <Label row="0" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
+                    textWrap="true"></Label>
+                <Label row="1" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
+        + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}"
+                    textWrap="true" class="tagging"> </Label>
+            </GridLayout>
+
+        </StackLayout>
+        <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="center">
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 1" [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 2" [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 3" [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 4" [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 5" [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'"
+                text=""></Button>
+        </StackLayout>
+    </GridLayout>
+</StackLayout>
+
+<StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile" [nsRouterLink]="['/game-play', game.gameId]">
+    <GridLayout rows="*" columns="auto,auto,*">
+        <Image row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
+            stretch="aspectFill" height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
+        <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
+            <GridLayout rows="*,*" columns="*">
+                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="user-name"></Label>
+                <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[otherUserId]?.score}}"
+                    textWrap="true"></Label>
+            </GridLayout>
+        </StackLayout>
+        <StackLayout *ngIf="otherUserId" row="0" col="2" orientation="horizontal" horizontalAlignment="right">
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 1" [ngClass]="game.stats[otherUserId]?.score >= 1?'score1':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 2" [ngClass]="game.stats[otherUserId]?.score >= 2?'score2':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 3" [ngClass]="game.stats[otherUserId]?.score >= 3?'score3':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 4" [ngClass]="game.stats[otherUserId]?.score >= 4?'score4':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 5" [ngClass]="game.stats[otherUserId]?.score >= 5?'score5':'score0'"
+                text=""></Button>
+        </StackLayout>
+    </GridLayout>
+    <GridLayout rows="*" columns="*,*,*">
+        <StackLayout row="0" col="0" class="hr-light m-10"></StackLayout>
+        <Label row="0" col="1" horizontalAlignment="center" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
+                + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}"
+            textWrap="true" class="tagging"> </Label>
+        <StackLayout row="0" col="2" class="hr-light m-10"></StackLayout>
+    </GridLayout>
+    <GridLayout rows="*" columns="auto,auto,*">
+        <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+            width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
+        <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
+            <GridLayout rows="*,*" columns="*">
+                <Label row="0" column="0" text="You" textWrap="true" class="user-name"></Label>
+                <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
+                    textWrap="true"></Label>
+            </GridLayout>
+
+        </StackLayout>
+        <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="right">
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 1" [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 2" [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 3" [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 4" [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 5" [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'"
+                text=""></Button>
+        </StackLayout>
+    </GridLayout>
+    <Label row="2" column="0" class="fa" text="&#xf017; You have {{remainingHours }}:{{remainingMinutes}} hrs left to play"
+        textWrap="true" padding="10 5 5 15"></Label>
+    <StackLayout class="hr-light m-10"></StackLayout>
+</StackLayout>
+
+
+
+<StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile">
+    <GridLayout rows="*" columns="auto,auto,*" *ngIf="otherUserInfo">
+        <Image row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+            width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
+        <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
+            <GridLayout rows="*,*,*,*" columns="*">
+                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="user-name"></Label>
+                <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[otherUserId]?.score}}"
+                    textWrap="true"></Label>
+                <Label row="2" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
+    + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}"
+                    textWrap="true" class="tagging"> </Label>
+            </GridLayout>
+        </StackLayout>
+        <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="right" *ngIf="otherUserId">
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 1" [ngClass]="game.stats[otherUserId]?.score >= 1?'score1':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 2" [ngClass]="game.stats[otherUserId]?.score >= 2?'score2':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 3" [ngClass]="game.stats[otherUserId]?.score >= 3?'score3':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 4" [ngClass]="game.stats[otherUserId]?.score >= 4?'score4':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[otherUserId]?.score >= 5" [ngClass]="game.stats[otherUserId]?.score >= 5?'score5':'score0'"
+                text=""></Button>
+        </StackLayout>
+    </GridLayout>
+    <StackLayout class="hr-light" margin="10 10 10 190"></StackLayout>
+    <GridLayout rows="*" columns="*,*">
+        <StackLayout row="0" col="0">
+            <Label text="You Scored: {{game.stats[user.userId].score}}" textWrap="true"></Label>
+        </StackLayout>
+        <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right">
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 1" [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 2" [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 3" [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 4" [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'"
+                text=""></Button>
+            <Button class="sprite" *ngIf="game.stats[user.userId].score >= 5" [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'"
+                text=""></Button>
+        </StackLayout>
+    </GridLayout>
+    <StackLayout class="hr-light m-10"></StackLayout>
+</StackLayout>

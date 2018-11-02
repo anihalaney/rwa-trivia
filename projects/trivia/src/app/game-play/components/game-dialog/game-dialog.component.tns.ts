@@ -19,7 +19,6 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     super(store, userActions, utils);
   }
 
-
   continueClicked($event) {
     this.currentQuestion = undefined;
     this.originalAnswers = undefined;

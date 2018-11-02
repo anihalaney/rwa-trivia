@@ -12,7 +12,7 @@
             <StackLayout orientation="horizontal" horizontalAlignment="center">
                 <Label text="Single Player" textWrap="true" [class.selected-player]="gameOptions.playerMode === 0" (tap)="gameOptions.playerMode = 0;"
                     width="50%" height="50" padding="15 15 5 15"></Label>
-                <Label text="Two Players" textWrap="true" [class.selected-player]="gameOptions.playerMode === 1" (tap)="gameOptions.playerMode = 1"
+                <Label text="Two Players" textWrap="true" [class.selected-player]="gameOptions.playerMode === 1" (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0"
                     width="50%" height="50" padding="15 15 5 15"></Label>
             </StackLayout>
         </CardView>
@@ -26,37 +26,31 @@
 
         <CardView visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}" *ngIf="gameOptions.playerMode === 1" margin="15 0 15 0">
             <StackLayout>
-                    <GridLayout rows="auto,auto" columns="auto,*" (tap)="gameOptions.gameMode = 0;gameOptions.opponentType=0;">
+                    <GridLayout rows="auto,auto" columns="auto,*" (tap)="gameOptions.opponentType=0;">
                         <Label row="0" col="0" text="Random" textWrap="true" padding="15"></Label>
                         <CheckBox row="0" col="1" checked="true"horizontalAlignment="right"
-                        android:fillColor="#89C24F" boxType="circle" *ngIf="gameOptions.gameMode == 0"></CheckBox>
+                        android:fillColor="#89C24F" boxType="circle" *ngIf="gameOptions.opponentType == 0"></CheckBox>
                     </GridLayout>
 
                 <GridLayout rows="*,*" columns="*">
-                    <Label  row="0" col="0" text="With Friends" textWrap="true" padding="15"  (tap)="gameOptions.gameMode = 1;gameOptions.opponentType=1;"></Label>
+                    <Label  row="0" col="0" text="With Friends" textWrap="true" padding="15"  (tap)="gameOptions.opponentType=1;"></Label>
                     <CheckBox row="0" col="1" checked="true"horizontalAlignment="right"
-                    android:fillColor="#89C24F" boxType="circle" *ngIf="gameOptions.gameMode == 1"  (tap)="gameOptions.gameMode = 1;;gameOptions.opponentType=1;"></CheckBox>
-
-                    <StackLayout row="1" col="0">
+                    android:fillColor="#89C24F" boxType="circle" *ngIf="gameOptions.opponentType == 1" (tap)="gameOptions.opponentType=1;"></CheckBox>
+                    <StackLayout row="1" col="0" *ngIf="gameOptions.opponentType == 1">
                         <RadListView [items]="dataItem">
-                            <ng-template let-item="item">
-                                <StackLayout class="friend-list" paddingTop="10">
-                                    <Image row="0" col="0" src="~/assets/images/avatar-44X40.png" backgroundColor="gray"
+                            <ng-template let-item="item" >
+                                <StackLayout  paddingTop="10" class="friend-list" (tap)="selectFriendId(item)">
+                                    <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray"
                                         stretch="aspectFill" height="64" width="64" marginLeft="10" verticalAlignment="center"
                                         marginRight="10" borderRadius="50"></Image>
-                                    <Label class="nameLabel" [text]="item.name" horizontalAlignment="center"></Label>
-                                    <CheckBox row="0" col="1" checked="true" horizontalAlignment="center"
+                                    <Label class="nameLabel" [text]="userDict[item]?.displayName" horizontalAlignment="center"></Label>
+                                    <CheckBox  visibility="{{ item === friendUserId ? 'visible' : 'collapsed' }}"checked="true" horizontalAlignment="center"
                                         android:fillColor="#89C24F" boxType="circle"></CheckBox>
                                 </StackLayout>
                             </ng-template>
                             <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal"></ListViewLinearLayout>
                         </RadListView>
                     </StackLayout>
-                </GridLayout>
-                <GridLayout rows="auto,auto" columns="auto,*"  (tap)="gameOptions.gameMode = 2;gameOptions.opponentType=2;">
-                    <Label row="0" col="0" text="With Computer" textWrap="true" padding="15"></Label>
-                    <CheckBox row="0" col="1" checked="true"horizontalAlignment="right"
-                    android:fillColor="#89C24F" boxType="circle" *ngIf="gameOptions.gameMode == 2;"></CheckBox>
                 </GridLayout>
             </StackLayout>
         </CardView>

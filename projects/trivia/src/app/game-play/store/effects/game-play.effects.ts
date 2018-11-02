@@ -37,19 +37,6 @@ export class GamePlayEffects {
       )
     );
 
-  //load invited games
-  @Effect()
-  // handle location update
-  loadGameInvites$ = this.actions$
-    .ofType(GamePlayActionTypes.LOAD_GAME_INVITES)
-    .pipe(
-      switchMap((action: gameplayactions.LoadGameInvites) =>
-        this.svc.getGameInvites(action.payload).pipe(
-          map((games: Game[]) => new gameplayactions.LoadGameInvitesSuccess(games))
-        )
-      )
-    );
-
   //load from router
   @Effect()
   // handle location update
@@ -109,16 +96,6 @@ export class GamePlayEffects {
     .pipe(
       switchMap((action: gameplayactions.SetGameOver) =>
         this.svc.setGameOver(action.payload).pipe(
-          map((msg: any) => new gameplayactions.UpdateGameSuccess())
-        )
-      ));
-
-  @Effect()
-  rejectGameInvitation$ = this.actions$
-    .ofType(GamePlayActionTypes.REJECT_GAME_INVITATION)
-    .pipe(
-      switchMap((action: gameplayactions.RejectGameInvitation) =>
-        this.svc.rejectGameInvitation(action.payload).pipe(
           map((msg: any) => new gameplayactions.UpdateGameSuccess())
         )
       ));

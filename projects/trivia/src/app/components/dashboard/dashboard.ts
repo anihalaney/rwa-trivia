@@ -6,8 +6,8 @@ import { QuestionActions, GameActions, UserActions } from 'shared-library/core/s
 import * as gamePlayActions from '../../game-play/store/actions';
 import { User, Game, OpponentType, Invitation } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
-import { AppState, appState } from '../../store';
-
+import { AppState, appState} from '../../store';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 export class Dashboard {
     user: User;
@@ -38,7 +38,7 @@ export class Dashboard {
     friendInviteSliceLastIndex: number;
 
 
-    constructor(private store: Store<AppState>,
+    constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
         private gameActions: GameActions,
         private userActions: UserActions, private windowRef: WindowRef,
@@ -48,17 +48,17 @@ export class Dashboard {
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             this.store.dispatch(this.gameActions.getActiveGames(user));
-            this.store.dispatch(new gamePlayActions.LoadGameInvites(user));
+            this.store.dispatch(this.userActions.loadGameInvites(user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
-
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
-
         this.subs.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
             if (games.length > 0) {
-                this.screenWidth = this.windowRef.nativeWindow.innerWidth;
-                this.checkCardCountPerRow();
+                if (!(isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false)) {
+                    this.screenWidth = this.windowRef.nativeWindow.innerWidth;
+                    this.checkCardCountPerRow();
+                }
                 this.activeGames.map(game => {
                     const playerIds = game.playerIds;
                     playerIds.map(playerId => {
@@ -78,7 +78,7 @@ export class Dashboard {
         this.gameSliceStartIndex = 0;
         this.gameSliceLastIndex = 8;
 
-        this.subs.push(this.store.select(appState.gamePlayState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
+        store.select(appState.coreState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
             this.gameInvites = iGames;
             this.friendCount = 0;
             this.randomPlayerCount = 0;
@@ -90,9 +90,7 @@ export class Dashboard {
                 }
                 this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
             });
-        }));
-
-
+        });
         this.gameInviteSliceStartIndex = 0;
         this.gameInviteSliceLastIndex = 3;
 
