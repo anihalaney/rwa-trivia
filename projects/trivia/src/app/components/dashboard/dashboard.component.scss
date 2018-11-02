@@ -60,3 +60,10 @@ mat-card>:first-child{
 .text-gray {
   color:gray;
 }
+
+.border-bottom{
+  border-color: #333;
+  border-width: 0 0 1 0;
+  border-style: solid;
+  width: 95%;
+}

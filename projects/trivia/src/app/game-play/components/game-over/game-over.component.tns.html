@@ -18,6 +18,65 @@
                     <Button *ngIf="game.stats[user.userId].score>= 5" class="score5 sprite" text=""></Button>
                 </StackLayout>
             </StackLayout>
+
+            <StackLayout  *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+                <GridLayout rows="*" columns="auto,auto,*">
+                    <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+                        width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
+                    <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
+                        <GridLayout rows="*,*,*,*" columns="*">
+                            <Label row="0" column="0" text="{{playerUserName}}" textWrap="true" class="user-name" ></Label>
+                            <Label row="1" column="0" text="Round {{game.round}} / {{totalRound}}"
+                                textWrap="true"></Label>
+                            <Label row="2" column="0" text="Score {{game.stats[user.userId].score}}"
+                                textWrap="true" class="tagging"> </Label>
+                        </GridLayout>
+                    </StackLayout>
+                    <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
+                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'"
+                            text=""></Button>
+                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'"
+                            text=""></Button>
+                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'"
+                            text=""></Button>
+                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'"
+                            text=""></Button>
+                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'"
+                            text=""></Button>
+                            <Label text="badge" textWrap="true"></Label>
+                    </StackLayout>
+                </GridLayout>   
+                <StackLayout>
+                    <Label text="V/S" verticalAlignment="center" textWrap="true" padding="15"> </Label>
+                <GridLayout rows="*" columns="auto,auto,*">
+                        <Image row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+                            width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
+                        <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
+                            <GridLayout rows="*,*,*,*" columns="*">
+                                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="user-name" ></Label>
+                                <Label row="1" column="0" text="Round {{game.round}} / {{totalRound}}"
+                                    textWrap="true"></Label>
+                                <Label row="2" column="0" text="Score {{game.stats[user.userId].score}}"
+                                    textWrap="true" class="tagging"> </Label>
+                            </GridLayout>
+                        </StackLayout>
+                        <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
+                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'"
+                                text=""></Button>
+                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'"
+                                text=""></Button>
+                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'"
+                                text=""></Button>
+                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 4?'score4':'score0'"
+                                text=""></Button>
+                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 5?'score5':'score0'"
+                                text=""></Button>
+                                <Label text="badge" textWrap="true"></Label>
+                        </StackLayout>
+                    </GridLayout>   
+                </StackLayout>
+            </StackLayout>
+
             <StackLayout>
                 <StackLayout *ngIf="
                 (game.gameOptions.playerMode != PlayerMode.Single && 

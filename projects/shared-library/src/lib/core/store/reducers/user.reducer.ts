@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User } from '../../../shared/model';
+import { User, Game } from '../../../shared/model';
 
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
@@ -47,5 +47,14 @@ export function invitationToken(state: any = 'NONE', action: ActionWithPayload<s
     default:
       return state;
   }
-};
+}
+
+export function gameInvites(state: any = [], action: ActionWithPayload<Game[]>): Game[] {
+  switch (action.type) {
+    case UserActions.LOAD_GAME_INVITES_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
 

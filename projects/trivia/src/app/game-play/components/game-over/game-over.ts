@@ -1,4 +1,4 @@
-import { Input, Output, EventEmitter } from '@angular/core';
+import { Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { User, Game, PlayerMode } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
@@ -9,7 +9,7 @@ import * as gameplayactions from '../../store/actions';
 import * as socialactions from '../../../social/store/actions';
 import { gamePlayState } from '../../store';
 
-export class GameOver {
+export class GameOver implements OnInit{
 
   @Input() correctCount: number;
   @Input() noOfQuestions: number;
@@ -73,7 +73,9 @@ export class GameOver {
         });
       }
     }));
+  }
 
+  ngOnInit() {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
