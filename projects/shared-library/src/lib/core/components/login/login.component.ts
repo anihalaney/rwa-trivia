@@ -127,7 +127,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   validateLogs() {
     if (this.notificationLogs.indexOf(this.loginForm.get('email').value) !== -1) {
-      this.notificationMsg = `email has already sent to ${this.loginForm.get('email').value}`;
+      this.notificationMsg = `Password is sent on your email ${this.loginForm.get('email').value}`;
       return true;
     }
     this.notificationMsg = '';

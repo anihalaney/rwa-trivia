@@ -96,7 +96,7 @@ export class AddUserInvitation implements Action {
 // Save user invitations success
 export class AddUserInvitationSuccess implements Action {
     readonly type = UserActionTypes.ADD_USER_INVITATION_SUCCESS;
-    payload = null;
+    constructor(public payload: string) { }
 }
 
 // Save user invitations success

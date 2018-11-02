@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 export class MakeFriends {
 
-    constructor(private token: string, private userId: string, private email: string) { }
+    constructor(private token?: string, private userId?: string, private email?: string) { }
 
     validateToken(): Promise<string> {
         return friendService.getInvitationByToken(this.token)
@@ -59,5 +59,55 @@ export class MakeFriends {
             return friendService.setFriend(dbUser, invitee)
                 .then(ref => inviter);
         }
+    }
+
+    createInvitations(emails: string[]) {
+        const invitationPromises = [];
+        emails.map((email) => {
+            invitationPromises.push(this.checkAndUpdateToken(email));
+        });
+
+        return Promise.all(invitationPromises)
+            .then((invitationResults) => invitationResults)
+            .catch((e) => {
+                console.log('user invitations promise error', e);
+            });
+    }
+
+    checkAndUpdateToken(email: string): Promise<string> {
+        return friendService.checkInvitation(email, this.userId)
+            .then(snapshot => {
+                const invitationNewObj: Invitation = new Invitation();
+                invitationNewObj.created_uid = this.userId;
+                invitationNewObj.email = email;
+                invitationNewObj.status = friendInvitationConstants.PENDING;
+                if (snapshot.empty) {
+                    return this.createInvitation({ ...invitationNewObj });
+                } else {
+                    const invitation = snapshot.docs[0];
+                    if (invitation.exists) {
+                        const invitationObj: Invitation = invitation.data();
+                        if (invitationObj.status === friendInvitationConstants.APPROVED ||
+                            invitationObj.status === friendInvitationConstants.REJECTED) {
+                            return `User with email as ${email} is already friend`;
+                        } else {
+                            return this.createInvitation({ ...invitationObj });
+                        }
+                    } else {
+
+                        return this.createInvitation({ ...invitationNewObj });
+                    }
+
+                }
+
+            });
+    }
+
+    createInvitation(dbInvitation: any): Promise<string> {
+        return friendService.createInvitation(dbInvitation)
+            .then(ref => {
+                dbInvitation.id = ref.id;
+                return friendService.updateInvitation(dbInvitation).then(dRef => `Invitation is sent on ${dbInvitation.email}`);
+            });
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
@@ -12,8 +12,7 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 @Component({
   selector: 'app-invite-mail-friends',
   templateUrl: './invite-mail-friends.component.html',
-  styleUrls: ['./invite-mail-friends.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./invite-mail-friends.component.scss']
 })
 export class InviteMailFriendsComponent implements OnInit {
   @Input() user: User;
@@ -21,7 +20,7 @@ export class InviteMailFriendsComponent implements OnInit {
   showErrorMsg = false;
   invalidEmailList = [];
   errorMsg = '';
-  showSuccessMsg = undefined;
+  showSuccessMsg: string;
   validEmail = [];
 
   constructor(private fb: FormBuilder, private store: Store<AppState>) {
@@ -32,10 +31,9 @@ export class InviteMailFriendsComponent implements OnInit {
       }
     });
 
-    this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-
-      if (status === 'INVITATION SUCCESS') {
-        this.showSuccessMsg = 'Your Invitations are send Successfully!!';
+    this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.showSuccessMsg = status;
       }
     });
 
@@ -92,7 +90,7 @@ export class InviteMailFriendsComponent implements OnInit {
       }
       if (this.invalidEmailList.length === 0) {
         this.store.dispatch(new userActions.AddUserInvitation(
-          { created_uid: this.user.userId, emails: this.validEmail, status: 'pending' }));
+          { userId: this.user.userId, emails: this.validEmail }));
       }
     }
   }

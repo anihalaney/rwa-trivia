@@ -74,21 +74,9 @@ export class UserService {
         this.dbService.updateDoc('users', userId, { isSubscribed: true });
     }
 
-    saveUserInvitations(obj: any): Observable<boolean> {
-        const invitation = new Invitation();
-        invitation.created_uid = obj.created_uid;
-        invitation.status = obj.status;
-        const fireStoreInstance = this.dbService.getFireStore().firestore;
-        const email = fireStoreInstance.batch();
-        obj.emails.map((element) => {
-            invitation.email = element;
-            const dbInvitation = Object.assign({}, invitation); // object to be saved
-            const id = this.dbService.createId();
-            dbInvitation.id = id;
-            email.set(fireStoreInstance.collection('invitations').doc(dbInvitation.id), dbInvitation);
-        });
-        email.commit();
-        return of(true);
+    saveUserInvitations(obj: any): Observable<string> {
+        const url = `${CONFIG.functionsUrl}/app/friend/invitation`;
+        return this.http.post<any>(url, obj);
     }
 
     checkInvitationToken(obj: any): Observable<any> {
