@@ -23,10 +23,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
 
-  navigateUrl() {
-    this.router.navigate(['my/questions']);
-  }
-
   ngOnDestroy() {
   }
 }
