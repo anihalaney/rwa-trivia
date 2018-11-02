@@ -34,6 +34,7 @@ export enum interceptorConstants {
     UNAUTHORIZED = 401,
     TOKEN_EXPIRE = 419,
     INTERNAL_ERROR = 500,
+    GATEWAY_TIMEOUT = 504,
     MAXIMUM_RE_REQUEST_LIMIT = 3
 }
 
