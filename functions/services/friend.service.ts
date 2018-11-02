@@ -1,5 +1,15 @@
 const friendFireBaseClient = require('../db/firebase-client');
 const friendFireStoreClient = friendFireBaseClient.firestore();
+
+
+/**
+ * createInvitation
+ * return ref
+ */
+exports.createInvitation = (dbInvitation: any): Promise<any> => {
+    return friendFireStoreClient.collection('invitations').add(dbInvitation).then(ref => ref);
+};
+
 /**
  * getInvitationByToken
  * return invitation
@@ -8,6 +18,18 @@ exports.getInvitationByToken = (token: any): Promise<any> => {
     return friendFireStoreClient.doc(`/invitations/${token}`)
         .get()
         .then(invitation => { return invitation });
+};
+
+/**
+ * checkInvitation
+ * return invitation
+ */
+exports.checkInvitation = (email: string, userId: string): Promise<any> => {
+    return friendFireStoreClient.collection('invitations')
+        .where('created_uid', '==', userId)
+        .where('email', '==', email)
+        .get()
+        .then(snapshot => snapshot);
 };
 
 /**
