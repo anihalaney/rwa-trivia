@@ -146,7 +146,7 @@ export class LoginComponent extends Login implements OnInit {
         this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
-            Toast.makeText('You have been successfully logged out').show();
+            Toast.makeText('You have been successfully logged in').show();
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
           });
       }
