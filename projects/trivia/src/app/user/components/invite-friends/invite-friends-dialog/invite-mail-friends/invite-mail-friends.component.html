@@ -12,7 +12,7 @@
       </span>
       <span *ngIf="showErrorMsg" class="label row col-sm-12"> {{errorMsg}} </span>
       <span *ngIf="showErrorMsg" class="label row col-sm-12">{{invalidEmailList}}</span>
-      <span *ngIf="showSuccessMsg!=undefined" class="success row col-sm-12">{{showSuccessMsg}}</span>
+      <span *ngIf="showSuccessMsg" class="success row col-sm-12" [innerHtml]="showSuccessMsg"></span>
     </form>
   </div>
   <div class="mail-option-div">
