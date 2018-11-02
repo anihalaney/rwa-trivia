@@ -48,7 +48,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
         console.log('error------>', error);
 
-        if (error.status === interceptorConstants.INTERNAL_ERROR) {
+        if (error.status === interceptorConstants.INTERNAL_ERROR || error.status === interceptorConstants.GATEWAY_TIMEOUT) {
           if (errorCount < interceptorConstants.MAXIMUM_RE_REQUEST_LIMIT) {
             errorCount++;
             return next.handle(authReq);
