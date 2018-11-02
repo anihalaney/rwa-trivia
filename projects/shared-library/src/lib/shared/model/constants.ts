@@ -69,3 +69,8 @@ export enum friendInvitationConstants {
     APPROVED = 'approved',
     REJECTED = 'rejected'
 }
+
+export enum gamePlayConstants {
+    GAME_Q_TIMER = 500
+}
+
