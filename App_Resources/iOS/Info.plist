@@ -43,5 +43,23 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.googleusercontent.apps.701588063269-o2olav7bkuqbovcouuqk8lbieu3d7nl1</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.701588063269-o2olav7bkuqbovcouuqk8lbieu3d7nl1</string>
+				<string>fb266820933965932</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>266820933965932</string>
+	<key>FacebookDisplayName</key>
+	<string>bitwiser.io_test</string>
 </dict>
 </plist>
