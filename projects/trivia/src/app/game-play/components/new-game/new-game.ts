@@ -6,10 +6,9 @@ import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import * as useractions from '../../../user/store/actions';
-import { GameActions } from 'shared-library/core/store/actions';
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, GameOptions, User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
-
 import { AppState, appState } from '../../../store';
 
 export class NewGame {
@@ -36,7 +35,8 @@ export class NewGame {
 
   constructor(
     public store: Store<AppState>,
-    public utils: Utils) {
+    public utils: Utils,
+    public userActions: UserActions) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
@@ -53,6 +53,9 @@ export class NewGame {
       if (uFriends) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
+          if (this.userDict && !this.userDict[Object.keys(friend)[0]]) {
+            this.store.dispatch(this.userActions.loadOtherUserProfile(Object.keys(friend)[0]));
+          }
           this.uFriends = [...this.uFriends, ...Object.keys(friend)];
         });
         this.noFriendsStatus = false;
@@ -60,7 +63,6 @@ export class NewGame {
         this.noFriendsStatus = true;
       }
     }));
-
     this.store.dispatch(new gameplayactions.ResetNewGame());
 
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
@@ -90,4 +92,8 @@ export class NewGame {
     this.selectedTags = this.selectedTags.filter(t => t !== tag);
   }
 
+  selectFriendId(friendId: string) {
+    this.friendUserId = friendId;
+    this.errMsg = undefined;
+  }
 }

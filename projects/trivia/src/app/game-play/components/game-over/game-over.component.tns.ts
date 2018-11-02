@@ -36,7 +36,12 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       }
     }));
   }
-  ngOnInit() { }
+  ngOnInit() {
+    if (this.game) {
+      this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
+      this.otherUserInfo = this.userDict[this.otherUserId];
+    }
+   }
 
   shareScore() {
     this.loaderStatus = true;

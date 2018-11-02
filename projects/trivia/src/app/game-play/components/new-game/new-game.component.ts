@@ -7,8 +7,7 @@ import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import * as useractions from '../../../user/store/actions';
-import { GameActions } from 'shared-library/core/store/actions';
-
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
   Category, GameOptions, GameMode, User, PlayerMode, OpponentType
 } from 'shared-library/shared/model';
@@ -54,8 +53,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private gameActions: GameActions,
     private windowRef: WindowRef,
     private router: Router,
+    public userActions: UserActions,
     public utils: Utils) {
-    super(store, utils);
+    super(store, utils, userActions);
 
   }
 

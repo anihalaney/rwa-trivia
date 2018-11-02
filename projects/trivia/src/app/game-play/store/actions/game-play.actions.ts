@@ -9,15 +9,12 @@ export enum GamePlayActionTypes {
   CREATE_NEW_SUCCESS = '[GamePlay] CreateNewSuccess',
   LOAD_GAME = '[GamePlay] LoadGame',
   LOAD_SUCCESS = '[GamePlay] LoadSuccess',
-  LOAD_GAME_INVITES = '[GamePlay] LoadGameInvites',
-  LOAD_GAME_INVITES_SUCCESS = '[GamePlay] LoadGameInvitesSuccess',
   RESET_CURRENT = '[GamePlay] ResetCurrent',
   GET_NEXT_QUESTION = '[GamePlay] GetNextQuestion',
   GET_NEXT_QUESTION_SUCCESS = '[GamePlay] GetNextQuestionSuccess',
   ADD_PLAYER_QNA = '[GamePlay] AddPlayerQnA',
   ADD_PLAYER_QNA_SUCCESS = '[GamePlay] AddPlayerQnASuccess',
   SET_GAME_OVER = '[GamePlay] SetGameOver',
-  REJECT_GAME_INVITATION = '[GamePlay] RejectGameInvitation',
   RESET_CURRENT_QUESTION = '[GamePlay] ResetCurrentQuestion',
   UPDATE_GAME_SUCCESS = '[GamePlay] UpdateGameSuccess',
   GET_USERS_ANSWERED_QUESTION = '[GamePlay] GetUsersAnsweredQuestion',
@@ -53,16 +50,6 @@ export class LoadGameSuccess implements Action {
   constructor(public payload: Game) { } //game
 }
 
-export class LoadGameInvites implements Action {
-  readonly type = GamePlayActionTypes.LOAD_GAME_INVITES;
-  constructor(public payload: User) { } //game
-}
-
-export class LoadGameInvitesSuccess implements Action {
-  readonly type = GamePlayActionTypes.LOAD_GAME_INVITES_SUCCESS;
-  constructor(public payload: Game[]) { } //game
-}
-
 export class ResetCurrentGame implements Action {
   readonly type = GamePlayActionTypes.RESET_CURRENT;
   payload = null;
@@ -92,12 +79,6 @@ export class SetGameOver implements Action {
   readonly type = GamePlayActionTypes.SET_GAME_OVER;
   constructor(public payload: string) { }
 }
-
-export class RejectGameInvitation implements Action {
-  readonly type = GamePlayActionTypes.REJECT_GAME_INVITATION;
-  constructor(public payload: string) { }
-}
-
 
 export class ResetCurrentQuestion implements Action {
   readonly type = GamePlayActionTypes.RESET_CURRENT_QUESTION;
@@ -138,15 +119,12 @@ export type GamePlayActions
   | CreateNewGame
   | CreateNewGameSuccess
   | LoadGameSuccess
-  | LoadGameInvites
-  | LoadGameInvitesSuccess
   | ResetCurrentGame
   | GetNextQuestion
   | GetNextQuestionSuccess
   | AddPlayerQnA
   | AddPlayerQnASuccess
   | SetGameOver
-  | RejectGameInvitation
   | ResetCurrentQuestion
   | UpdateGameSuccess
   | GetUsersAnsweredQuestion

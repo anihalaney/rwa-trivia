@@ -6,14 +6,16 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { take } from 'rxjs/operators';
 
-
 @Component({
   selector: 'game-card',
   templateUrl: './game-card.component.html',
   styleUrls: ['./game-card.component.scss']
 })
+
 export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
+
   @Input() game: Game;
+  @Input() cardType: Game;
   @Input() userDict: { [key: string]: User };
   user$: Observable<User>;
   correctAnswerCount: number;
@@ -33,16 +35,25 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   totalRound = 16;
   gameStatus: any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
-  constructor(private store: Store<AppState>, private utils: Utils) {
+  userDict$: Observable<{ [key: string]: User }>;
+  constructor(public store: Store<AppState>, public utils: Utils) {
 
     this.gameStatus = GameStatus;
-
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
     this.subs.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
     }));
+
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.userDict$.subscribe(userDict => {
+      this.userDict = userDict;
+      if (this.game) {
+        this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
+        this.otherUserInfo = this.userDict[this.otherUserId];
+      }
+    });
 
     this.categoryDict$ = store.select(categoryDictionary);
     this.subs.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
@@ -54,8 +65,10 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
       this.user = s.user;
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
-      (this.myTurn) ? this.updateRemainingTime() : '';
-    }); // logged in user
+      if (this.myTurn) {
+        this.updateRemainingTime();
+      }
+    });
   }
 
   ngOnChanges() {

@@ -2,7 +2,7 @@ import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/s
 
 import { Game, Question } from 'shared-library/shared/model';
 import {
-  currentGame, newGameId, currentGameQuestion, updateGame, gameInvites, userAnsweredQuestion,
+  currentGame, newGameId, currentGameQuestion, updateGame, userAnsweredQuestion,
   saveReportQuestion
 } from './game-play.reducer';
 
@@ -13,7 +13,6 @@ export interface GamePlayState {
   newGameId: string;
   currentGameQuestion: Question;
   updateGame: any;
-  gameInvites: Game[];
   userAnsweredQuestion: any;
   saveReportQuestion: string;
 }
@@ -23,7 +22,6 @@ export const reducer: ActionReducerMap<GamePlayState> = {
   newGameId: newGameId,
   currentGameQuestion: currentGameQuestion,
   updateGame: updateGame,
-  gameInvites: gameInvites,
   userAnsweredQuestion: userAnsweredQuestion,
   saveReportQuestion: saveReportQuestion
 };
