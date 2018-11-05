@@ -22,7 +22,8 @@ import { CardView } from 'nativescript-cardview';
 import { StatsModule } from './stats/stats.module';
 import { RouterModule } from '@angular/router';
 import { UserModule } from './user/user.module';
-import { GameInviteComponent } from './user/components/game-invite/game-invite.component';
+import { GameInviteComponent, RecentGamesComponent, RecentGameCardComponent } from './user/components';
+
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -34,7 +35,9 @@ registerElement('CardView', () => CardView);
     QuestionComponent,
     DashboardComponent,
     AuthorComponent,
-    GameInviteComponent
+    GameInviteComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent
   ],
   imports: [
     CoreModule,
