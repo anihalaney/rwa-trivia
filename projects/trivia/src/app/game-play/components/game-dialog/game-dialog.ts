@@ -11,7 +11,7 @@ import { GameQuestionComponent } from '../game-question/game-question.component'
 import { UserActions } from 'shared-library/core/store/actions';
 import {
   Game, PlayerQnA, User, Question, Category, GameStatus,
-  PlayerMode, OpponentType, Answer
+  PlayerMode, OpponentType, Answer, gamePlayConstants
 } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { appState, categoryDictionary } from '../../../store';
@@ -147,10 +147,10 @@ export class GameDialog {
         }
 
         if (!this.currentQuestion) {
+          this.getNextQuestion();
           if (this.isQuestionAvailable) {
             this.getLoader();
           }
-          this.getNextQuestion();
           if (!this.isQuestionAvailable) {
             this.showLoader = true;
             this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
@@ -200,7 +200,7 @@ export class GameDialog {
     // Show Loading screen
     this.showLoader = true;
     this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
-    this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
+    this.timerSub = timer(gamePlayConstants.GAME_Q_TIMER, gamePlayConstants.GAME_Q_TIMER).pipe(take(this.timer)).subscribe(t => {
       this.timer--;
     },
       null,
@@ -210,7 +210,7 @@ export class GameDialog {
         this.showLoader = false;
         this.showBadge = true;
         this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
-        this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
+        this.timerSub = timer(gamePlayConstants.GAME_Q_TIMER, gamePlayConstants.GAME_Q_TIMER).pipe(take(this.timer)).subscribe(t => {
           this.timer--;
         },
           null,
