@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
@@ -13,11 +13,12 @@ import { UserActions } from 'shared-library/core/store/actions';
     templateUrl: './recent-game-card.component.html',
     styleUrls: ['./recent-game-card.component.scss']
 })
-export class RecentGameCardComponent implements OnChanges, OnDestroy {
+export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     @Input() game: Game;
-    @Input() userDict: { [key: string]: User };
+    // @Input() userDict: { [key: string]: User };
     @Input() user: User;
-
+    userDict$: Observable<{ [key: string]: User }>;
+    userDict: { [key: string]: User } = {};
     PlayerMode = PlayerMode;
     correctAnswerCount: number;
     questionIndex: number;
@@ -30,11 +31,28 @@ export class RecentGameCardComponent implements OnChanges, OnDestroy {
     GameStatus = GameStatus;
 
 
-    constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils) {
-
+    constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
         this.categoryDictObs = store.select(categoryDictionary);
         this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+    }
 
+    ngOnInit(): void {
+        this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+        this.userDict$.subscribe(userDict => {
+        this.userDict = userDict;
+            this.cd.detectChanges();
+        });
+
+        if (this.game) {
+            this.otherUserId = this.getOpponentId(this.game);
+            if (this.otherUserId !== undefined) {
+                if (this.userDict[this.otherUserId] === undefined) {
+                    this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
+                    this.cd.detectChanges();
+                }
+            }
+            this.userProfileImageUrl = this.getImageUrl(this.user);
+        }
     }
 
     getOpponentId(game) {
@@ -42,15 +60,15 @@ export class RecentGameCardComponent implements OnChanges, OnDestroy {
     }
 
     ngOnChanges() {
-        if (this.game) {
-            this.otherUserId = this.getOpponentId(this.game);
-            if (this.otherUserId !== undefined) {
-                if (this.userDict[this.otherUserId] === undefined) {
-                    this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
-                }
-            }
-            this.userProfileImageUrl = this.getImageUrl(this.user);
-        }
+        // if (this.game) {
+        //     this.otherUserId = this.getOpponentId(this.game);
+        //     if (this.otherUserId !== undefined) {
+        //         if (this.userDict[this.otherUserId] === undefined) {
+        //             this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
+        //         }
+        //     }
+        //     this.userProfileImageUrl = this.getImageUrl(this.user);
+        // }
     }
 
     getImageUrl(user: User) {
@@ -58,6 +76,7 @@ export class RecentGameCardComponent implements OnChanges, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.cd.detach();
         this.utils.unsubscribe(this.subs);
     }
 }

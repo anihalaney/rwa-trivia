@@ -1,0 +1,13 @@
+<ns-action-bar title="Recently Completed Games" showAdd="true"></ns-action-bar>
+  <ScrollView>
+    <StackLayout marginTop="15">
+      <StackLayout *ngFor="let game of recentGames">
+        <StackLayout *ngIf="(game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT ) || 
+        (game.GameStatus === GameStatus.REJECTED && game.playerIds[0] === user.userId) ||
+        (game.GameStatus === GameStatus.INVITATION_TIMEOUT && game.playerIds[0] === user.userId)">
+          <recent-game-card [game]="game" [user]="user"></recent-game-card>
+          <StackLayout class="hr-light m-10"></StackLayout>
+        </StackLayout>
+      </StackLayout>
+    </StackLayout>
+  </ScrollView>
