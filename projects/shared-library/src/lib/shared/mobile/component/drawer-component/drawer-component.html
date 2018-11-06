@@ -12,7 +12,8 @@
     </GridLayout>
     <Label row="1" colSpan="2" text="Home" textWrap="true" class="sideLabel"  (tap)="dashboard()"></Label>
     <Label row="2" colSpan="2" text="Category Leaderboard" class="sideLabel sideStackLayout" (tap)="leaderBoard()"></Label>
-
+    <Label row="3" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Recently Completed Games" class="sideLabel sideStackLayout" (tap)="recentGame()"></Label>
+    
     <Label *ngIf="!authProvider.isAuthenticated" row="4" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D" textAlignment="center" fontSize="16"
     text="Login" class="sideLabel sideStackLayout" (tap)="login()"></Label>
 

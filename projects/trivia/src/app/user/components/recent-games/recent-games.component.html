@@ -6,7 +6,7 @@
       (game.GameStatus === GameStatus.REJECTED && game.playerIds[0] === user.userId) ||
       (game.GameStatus === GameStatus.INVITATION_TIMEOUT && game.playerIds[0] === user.userId)"
         class="col-sm-12">
-        <recent-game-card [game]="game" [userDict]="userDict" [user]="user"></recent-game-card>
+        <recent-game-card [game]="game" [user]="user"></recent-game-card>
       </li>
     </ng-container>
   </ul>

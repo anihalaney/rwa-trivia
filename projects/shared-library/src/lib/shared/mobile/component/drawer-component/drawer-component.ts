@@ -68,4 +68,8 @@ export class DrawerComponent implements OnInit {
         this.closeDrawer();
     }
 
+    recentGame() {
+        this.routerExtension.navigate(['/recent-game']);
+        this.closeDrawer();
+    }
 }

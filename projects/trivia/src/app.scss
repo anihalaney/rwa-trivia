@@ -127,3 +127,46 @@ refer to http://docs.nativescript.org/ui/theme.
   height: 28;
   background-position: -2 -1030;
 }
+
+.mobile {
+	.btn-red{
+		font-size:18; 
+		background-color:#D4493D;
+		color:#ffffff;
+		margin: 20 0 10 0;
+		padding:15 0 15 0;
+  }
+  
+  .title{
+    color:#3B5998;
+    font-weight: bold;
+    line-height: 0.24;
+    font-size: 20;
+  }
+
+  .main-title{
+    color:#616161;
+    font-size: 16;
+    padding:3 0 3 0;
+  }
+  .sub-title{
+    color: #8C8C8C;
+    font-size: 15;
+    padding:2 0 2 0;
+  }
+
+  .timer{
+    color: #949494;
+    font-size: 15;
+    padding:2 0 2 0;
+  }
+
+  .hr-light{
+    background-color: #949494;
+  }
+
+  .btn-wait-opp{
+    background-color:#f1f5f7;
+    color:#949494;
+  }
+}

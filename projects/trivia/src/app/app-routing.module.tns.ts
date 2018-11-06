@@ -3,6 +3,8 @@ import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
+import { RecentGamesComponent } from './user/components';
+
 export const routes: Routes = [
 
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -13,9 +15,13 @@ export const routes: Routes = [
     {
         path: 'game-play',
         loadChildren: './game-play/game-play.module#GamePlayModule',
-       canActivate: [AuthGuard],
-       resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
+        canActivate: [AuthGuard],
+        resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
     },
+    {
+        path: 'recent-game',
+        component: RecentGamesComponent,
+    }
 ];
 
 @NgModule({
