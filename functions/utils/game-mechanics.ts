@@ -41,7 +41,7 @@ export class GameMechanics {
 
 
     private joinGame(): Promise<string> {
-        console.log('joinGame');
+        //  console.log('joinGame');
         return gameService.getAvailableGames().then(games => {
             const gameArr = [];
 
@@ -74,6 +74,7 @@ export class GameMechanics {
             })
 
             const dbGame = game.getDbModel();
+            //   console.log('dbGame', dbGame);
             return this.setGame(dbGame).then((gameId) => { return gameId });
         } else if (totalGames === 1) {
             return this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
