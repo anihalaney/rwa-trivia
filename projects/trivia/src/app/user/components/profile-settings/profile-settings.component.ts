@@ -198,6 +198,7 @@ export class ProfileSettingsComponent implements OnDestroy {
 
   saveProfileImage() {
     if (!this.profileImageValidation) {
+      this.getUserFromFormValue(this.userForm.value);
       this.assignImageValues();
       this.saveUser(this.user);
     }
