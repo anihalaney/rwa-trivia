@@ -80,7 +80,6 @@ export class Dashboard {
 
         store.select(appState.coreState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
             this.gameInvites = iGames;
-            console.log('invite game', this.gameInvites);
             this.friendCount = 0;
             this.randomPlayerCount = 0;
             iGames.map(iGame => {
