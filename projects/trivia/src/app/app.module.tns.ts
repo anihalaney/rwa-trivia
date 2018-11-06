@@ -73,7 +73,5 @@ registerElement('CardView', () => require('nativescript-cardview').CardView);
 Pass your application module to the bootstrapModule function located in main.ts to start your app
 */
 export class AppModule {
-  constructor() {
-    console.log('log sdsd');
-  }
+  constructor() {}
 }

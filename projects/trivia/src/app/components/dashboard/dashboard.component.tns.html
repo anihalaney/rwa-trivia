@@ -2,23 +2,6 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2" >
     <ScrollView>
         <StackLayout>
-
-                <!-- <Image src="~/assets/images/score1.png" backgroundColor="#f26651"  height="30" width="30"
-                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image>
-       
-                <Image src="~/assets/images/score2.png" backgroundColor="#f26651"  height="30" width="30"
-                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image>
-
-                <Image src="~/assets/images/score3.png" backgroundColor="#f26651"  height="30" width="30"
-                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image>
-
-                <Image src="~/assets/images/score4.png" backgroundColor="#f26651"  height="30" width="30"
-                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image>
-
-                <Image src="~/assets/images/score5.png" backgroundColor="#f26651"  height="30" width="30"
-                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image> -->
-
-        
         <GridLayout rows="*, *, *, *, *, *" columns="*">
             <Button row="0" col="0"  text="Start New Game" class="btn-red" (tap)="startNewGame()" margin="10"></Button>
             <StackLayout row="1" col="0">
@@ -61,9 +44,9 @@
                         </StackLayout>
                     </StackLayout>
                 </CardView>
-            </StackLayout>
+            </StackLayout> 
 
-            <StackLayout row="4" col="0">
+            <!-- <StackLayout row="4" col="0">
                 <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <StackLayout *ngIf="gameInvites">
                         <Label text="Invitation to play games" orientation="horizontal"
@@ -74,11 +57,11 @@
                         </StackLayout>
                     </StackLayout>
                 </CardView>
-            </StackLayout>
+            </StackLayout> -->
             <StackLayout row="5" col="0">
                 <question [userDict]="userDict"></question>
             </StackLayout>
-        </GridLayout>
+         </GridLayout>
         </StackLayout> 
      </ScrollView>
 </StackLayout>
