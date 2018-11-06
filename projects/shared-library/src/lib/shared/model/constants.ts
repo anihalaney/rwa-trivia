@@ -54,7 +54,7 @@ export enum LeaderBoardConstants {
 }
 
 export enum DashboardConstants {
-    ADMIN_ROUTE = 'admin',
+    ADMIN_ROUTE = 'admin/index.html',
 }
 
 export enum profileSettingsConstants {
