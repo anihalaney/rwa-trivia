@@ -26,7 +26,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   sortedCategories: Category[];
   tagsObs: Observable<string[]>;
   tags: string[];
-  userDict$: Observable<{ [key: string]: User }>;
+
   selectedTags: string[];
   subs: Subscription[] = [];
   selectedCategories = [];
@@ -36,8 +36,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   showUncheckedCategories: boolean = false;
   allCategoriesSelected: boolean = true;
-  uFriends: Array<string>;
-  userDict: { [key: string]: User } = {};
+
   noFriendsStatus: boolean;
   filteredTags$: Observable<string[]>;
 
