@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { switchMap, map, catchError, filter, mergeMap } from 'rxjs/operators';
-
+import { Store } from '@ngrx/store';
 import { GameService } from '../../../../../../shared-library/src/lib/core/services';
 import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from 'shared-library/shared/model';
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
+import { AppState, appState } from '../../../store';
 
 
 @Injectable()
@@ -63,6 +64,7 @@ export class GamePlayEffects {
         } else if (routerState['root'].firstChild.firstChild.params.gameid) {
           gameid = routerState['root'].firstChild.firstChild.params.gameid;
         }
+        this.store.dispatch(new gameplayactions.ResetCurrentGame());
         return this.svc.getGame(gameid).pipe(
           map((game: Game) => new gameplayactions.LoadGameSuccess(game))
         );
@@ -131,6 +133,7 @@ export class GamePlayEffects {
 
   constructor(
     private actions$: Actions,
+    public store: Store<AppState>,
     private svc: GameService
   ) { }
 
