@@ -5,20 +5,30 @@
         <StackLayout class="new-game" backgroundColor="#f1f2f2">
             <GridLayout rows="auto,auto" columns="auto,*" padding="10 10 5 10">
                 <Label row="0" col="0" text="Select Player Mode" textWrap="true"></Label>
-                <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"  text="{{ showSelectPlayer ? '&#xf067;' : '&#xf068;' }}"
+                <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectPlayer ? '&#xf067;' : '&#xf068;' }}"
                     textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer"></Label>
             </GridLayout>
 
             <CardView margin="10" elevation="40" radius="1" width="95%" margin="15 0 15 0" visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
                 <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white">
-                    <Label text="Single Player" textWrap="true" [class.selected-player]="gameOptions.playerMode === 0"
-                        (tap)="gameOptions.playerMode = 0;" width="50%" height="50" padding="15 15 5 15"></Label>
-                    <Label text="Two Players" textWrap="true" [class.selected-player]="gameOptions.playerMode === 1"
-                        (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" width="50%" height="50" padding="15 15 5 15"></Label>
+                    <StackLayout orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 0"
+                    (tap)="gameOptions.playerMode = 0;" width="50%">
+                        <Image src="~/assets/images/single_player.png" height="30" width="30"
+                            marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
+
+                        <Label text="Single Player" textWrap="true"  height="50" padding="15 15 5 15"></Label>
+                    </StackLayout>
+
+                    <StackLayout orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 1"
+                    (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" width="50%">
+                    
+                    <Label text="Two Players" textWrap="true" height="50" padding="15 15 5 15"></Label>
+                    </StackLayout>
                 </StackLayout>
             </CardView>
 
-            <CardView margin="10" elevation="40" radius="1" width="95%" margin="20" visibility="{{ showSelectPlayer ? 'visible' : 'collapsed' }}" backgroundColor="white">
+            <CardView margin="10" elevation="40" radius="1" width="95%" margin="20" visibility="{{ showSelectPlayer ? 'visible' : 'collapsed' }}"
+                backgroundColor="white">
                 <StackLayout orientation="horizontal" horizontalAlignment="center">
                     <Label [text]="gameOptions.playerMode === 0 ? 'Single Player' : 'Two Player'" textWrap="true" width="50%"
                         height="50" padding="17 15 5 17"></Label>
@@ -101,7 +111,8 @@
                         <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#CDCECE"
                             padding="5">
                             <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
-                                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)" border="none">
+                                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
+                                border="none">
                                 <SuggestionView tkAutoCompleteSuggestionView>
                                     <ng-template tkSuggestionItemTemplate let-item="item">
                                         <StackLayout orientation="vertical" padding="10">
