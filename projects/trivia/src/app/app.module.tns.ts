@@ -27,7 +27,9 @@ import { GameInviteComponent, RecentGamesComponent, RecentGameCardComponent } fr
 export function firebaseFactory() {
   return TNSFirebase;
 }
-registerElement('CardView', () => CardView);
+
+// registerElement('CardView', () => CardView);
+registerElement('CardView', () => require('nativescript-cardview').CardView);
 
 @NgModule({
   declarations: [
@@ -72,5 +74,6 @@ Pass your application module to the bootstrapModule function located in main.ts 
 */
 export class AppModule {
   constructor() {
+    console.log('log sdsd');
   }
 }

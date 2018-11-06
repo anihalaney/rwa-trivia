@@ -1,14 +1,32 @@
 <ns-action-bar title="Dashboard" showAdd="true"></ns-action-bar>
-<StackLayout>
+<StackLayout class="mobile" backgroundColor="#f1f2f2" >
     <ScrollView>
+        <StackLayout>
+
+                <!-- <Image src="~/assets/images/score1.png" backgroundColor="#f26651"  height="30" width="30"
+                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image>
+       
+                <Image src="~/assets/images/score2.png" backgroundColor="#f26651"  height="30" width="30"
+                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image>
+
+                <Image src="~/assets/images/score3.png" backgroundColor="#f26651"  height="30" width="30"
+                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image>
+
+                <Image src="~/assets/images/score4.png" backgroundColor="#f26651"  height="30" width="30"
+                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image>
+
+                <Image src="~/assets/images/score5.png" backgroundColor="#f26651"  height="30" width="30"
+                marginLeft="10" verticalAlignment="center" marginRight="10"  padding="20" borderRadius="50"></Image> -->
+
+        
         <GridLayout rows="*, *, *, *, *, *" columns="*">
-            <Button row="0" col="0" text="Start New Game" (tap)="startNewGame()" margin="10"></Button>
+            <Button row="0" col="0"  text="Start New Game" class="btn-red" (tap)="startNewGame()" margin="10"></Button>
             <StackLayout row="1" col="0">
-                <CardView class="cardStyle" margin="10" elevation="40" radius="1" class="gameplay">
+                <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <GridLayout rows="auto, auto" columns="*">
                         <StackLayout row="0" col="0" *ngIf="activeGames && userDict">
                             <Label text="My Games" orientation="horizontal" horizontalAlignment="center" padding="10"
-                                textWrap="true" color="#3B5998" fontSize="17"> </Label>
+                                textWrap="true" class="title"> </Label>
                             <StackLayout *ngFor="let game of activeGames | gamefilter: filterSinglePlayerGame">
                                 <game-card [game]="game" [cardType]="'singlePlayer'"></game-card>
                                 <StackLayout class="hr-light m-10"></StackLayout>
@@ -22,12 +40,11 @@
                     </GridLayout>
                 </CardView>
             </StackLayout>
-
             <StackLayout row="2" col="0">
-                <CardView class="cardStyle" margin="10" elevation="40" radius="1" class="gameplay">
+                <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <StackLayout *ngIf="activeGames && userDict">
                         <Label text="Their Turn" orientation="horizontal" horizontalAlignment="center" padding="10"
-                            textWrap="true" color="#3B5998" fontSize="17"> </Label>
+                            textWrap="true" class="title"> </Label>
                         <StackLayout *ngFor="let game of activeGames | gamefilter: filterTwoPlyerWaitNextQGame">
                             <game-card [game]="game" [cardType]="'theirTurn'"></game-card>
                         </StackLayout>
@@ -35,10 +52,10 @@
                 </CardView>
             </StackLayout>
             <StackLayout row="3" col="0">
-                <CardView class="cardStyle" margin="10" elevation="40" radius="1" class="gameplay">
+                <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <StackLayout *ngIf="activeGames && userDict">
                         <Label text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center"
-                            padding="10" textWrap="true" color="#3B5998" fontSize="17"> </Label>
+                            padding="10" textWrap="true" class="title"> </Label>
                         <StackLayout *ngFor="let game of activeGames | gamefilter: filterGame">
                             <game-card [game]="game" [cardType]="'opponent'"></game-card>
                         </StackLayout>
@@ -47,21 +64,21 @@
             </StackLayout>
 
             <StackLayout row="4" col="0">
-                <CardView class="cardStyle" margin="10" elevation="40" radius="1" class="gameplay">
+                <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <StackLayout *ngIf="gameInvites">
                         <Label text="Invitation to play games" orientation="horizontal"
-                            horizontalAlignment="center" padding="10" textWrap="true" color="#3B5998" fontSize="17">
+                            horizontalAlignment="center" padding="10" textWrap="true" class="title">
                         </Label>
-                        <StackLayout *ngFor="let game of gameInvites; let last = last;"  [ngClass]="!last?'border-bottom':''" class="">
+                        <StackLayout *ngFor="let game of gameInvites;"  class="">
                             <game-invite [userDict]="userDict" [game]="game"></game-invite>                    
                         </StackLayout>
                     </StackLayout>
                 </CardView>
             </StackLayout>
-
             <StackLayout row="5" col="0">
                 <question [userDict]="userDict"></question>
             </StackLayout>
         </GridLayout>
-    </ScrollView>
+        </StackLayout> 
+     </ScrollView>
 </StackLayout>
