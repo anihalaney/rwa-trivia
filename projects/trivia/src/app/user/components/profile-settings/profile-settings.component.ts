@@ -198,13 +198,19 @@ export class ProfileSettingsComponent implements OnDestroy {
 
   saveProfileImage() {
     if (!this.profileImageValidation) {
-      const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
-      this.user.profilePicture = fileName;
-      this.user.croppedImageUrl = this.profileImage.image;
-      this.user.imageType = this.profileImageFile.type;
-      this.profileImageFile = undefined;
+      this.assignImageValues();
       this.saveUser(this.user);
     }
+  }
+
+  assignImageValues(): void {
+    const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
+    this.user.profilePicture = fileName;
+    this.user.croppedImageUrl = this.profileImage.image;
+    this.user.imageType = this.profileImageFile.type;
+    this.profileImageFile = undefined;
+    this.userForm.get('profilePicture').setValue(fileName);
+    this.userForm.updateValueAndValidity();
   }
 
   // create the form based on user object
@@ -318,10 +324,20 @@ export class ProfileSettingsComponent implements OnDestroy {
   onSubmit() {
     // validations
     this.userForm.updateValueAndValidity();
+
+    if (!this.profileImageFile && !this.user.profilePicture) {
+      this.setNotificationMsg('Please upload the profile picture', true, 100);
+      return;
+    } else if (this.profileImageFile) {
+      this.assignImageValues();
+    }
+
+
     if (this.userForm.invalid) {
       this.setNotificationMsg('Please fill the mandatory fields', true, 100);
       return;
     }
+
     // get user object from the forms
     this.getUserFromFormValue(this.userForm.value);
     // call saveUser
