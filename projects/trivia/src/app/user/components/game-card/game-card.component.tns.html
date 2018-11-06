@@ -4,9 +4,9 @@
             width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
         <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
             <GridLayout rows="*,*,*,*" columns="*">
-                <Label row="0" column="0" text="You" textWrap="true" class="user-name" ></Label>
+                <Label row="0" column="0" text="You" textWrap="true" class="main-title"></Label>
                 <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
-                    textWrap="true"></Label>
+                    textWrap="true" class="sub-title"></Label>
                 <Label row="2" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
     + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}"
                     textWrap="true" class="tagging"> </Label>
@@ -26,7 +26,7 @@
                 text=""></Button>
         </StackLayout>
     </GridLayout>
-    <Button text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center" padding="10" ></Button>
+    <Button text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center" padding="10" class="btn-wait-opp" ></Button>
 </StackLayout>
 
 <StackLayout *ngIf="cardType == 'singlePlayer'" class="mobile">
@@ -34,10 +34,12 @@
         <StackLayout row="0" col="0" [nsRouterLink]="['/game-play', game.gameId]">
             <GridLayout rows="*,*,*" columns="*">
                 <Label row="0" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
-                    textWrap="true"></Label>
+                    textWrap="true" class="sub-title"></Label>
                 <Label row="1" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
         + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}"
-                    textWrap="true" class="tagging"> </Label>
+                    textWrap="true" class="tagging" class="sub-title" > </Label>
+        <Label row="2" column="0" class="fa timer" text="&#xf017; You have {{remainingHours }}:{{remainingMinutes}} hrs left to play"
+        textWrap="true" padding="10 5 5 0" ></Label>
             </GridLayout>
 
         </StackLayout>
@@ -62,9 +64,9 @@
             stretch="aspectFill" height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
         <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
             <GridLayout rows="*,*" columns="*">
-                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="user-name"></Label>
+                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="user-name main-title"></Label>
                 <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[otherUserId]?.score}}"
-                    textWrap="true"></Label>
+                    textWrap="true" class="sub-title"></Label>
             </GridLayout>
         </StackLayout>
         <StackLayout *ngIf="otherUserId" row="0" col="2" orientation="horizontal" horizontalAlignment="right">
@@ -92,9 +94,9 @@
             width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
         <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
             <GridLayout rows="*,*" columns="*">
-                <Label row="0" column="0" text="You" textWrap="true" class="user-name"></Label>
+                <Label row="0" column="0" text="You" textWrap="true" class=" main-title"></Label>
                 <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
-                    textWrap="true"></Label>
+                    textWrap="true" class="sub-title"></Label>
             </GridLayout>
 
         </StackLayout>
@@ -111,8 +113,8 @@
                 text=""></Button>
         </StackLayout>
     </GridLayout>
-    <Label row="2" column="0" class="fa" text="&#xf017; You have {{remainingHours }}:{{remainingMinutes}} hrs left to play"
-        textWrap="true" padding="10 5 5 15"></Label>
+    <Label row="2" column="0" class="fa timer" text="&#xf017; You have {{remainingHours }}:{{remainingMinutes}} hrs left to play"
+        textWrap="true" padding="10 5 5 0"></Label>
     <StackLayout class="hr-light m-10"></StackLayout>
 </StackLayout>
 
@@ -124,9 +126,9 @@
             width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
         <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
             <GridLayout rows="*,*,*,*" columns="*">
-                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="user-name"></Label>
+                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="main-title"></Label>
                 <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[otherUserId]?.score}}"
-                    textWrap="true"></Label>
+                    textWrap="true"  class="sub-title"></Label>
                 <Label row="2" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
     + categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.slice(1)}}"
                     textWrap="true" class="tagging"> </Label>
@@ -148,7 +150,7 @@
     <StackLayout class="hr-light" margin="10 10 10 190"></StackLayout>
     <GridLayout rows="*" columns="*,*">
         <StackLayout row="0" col="0">
-            <Label text="You Scored: {{game.stats[user.userId].score}}" textWrap="true"></Label>
+            <Label text="You Scored: {{game.stats[user.userId].score}}" textWrap="true"  class="sub-title"></Label>
         </StackLayout>
         <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right">
             <Button class="sprite" *ngIf="game.stats[user.userId].score >= 1" [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'"
