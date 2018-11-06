@@ -86,3 +86,25 @@ a {
 .active-btn{
 	background-color: #af3424;
 }
+
+TextField {
+	border: none;
+	border-width: 0;
+	padding:20px;
+  border-bottom-width: 2;
+	border-bottom-color:#D3D3D3;
+}
+
+.mobile {
+	.error{
+		margin:5 0 5 0;
+	}
+
+	.btn-primary{
+		font-size:18; 
+		background-color:#3e5b95;
+		color:#ffffff;
+		margin: 20 0 10 0;
+		padding:10 0 10 0;
+	}
+}

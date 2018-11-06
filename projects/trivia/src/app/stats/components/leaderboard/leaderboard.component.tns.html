@@ -1,5 +1,5 @@
 <ns-action-bar title="LeaderBoard" showAdd="true"></ns-action-bar>
-<StackLayout>
+<StackLayout backgroundColor="#f1f2f2">
 <ScrollView>
     <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0">
             <StackLayout class="question-answered " marginTop="10" *ngFor="let cat of leaderBoardCat | slice:lbsSliceStartIndex:lbsSliceLastIndex; let i=index">
