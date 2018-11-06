@@ -1,7 +1,7 @@
 <ns-action-bar [title]="title" showAdd="true"></ns-action-bar>
-<CardView class="cardStyle" margin="10" elevation="40" radius="1" padding="15">
+<CardView class="cardStyle mobile" margin="10" elevation="40" radius="1" padding="15">
   <ScrollView>
-    <GridLayout rows="auto,auto,auto" columns="*">
+    <GridLayout rows="auto,auto,auto" columns="*" class="form">
       <StackLayout [formGroup]="loginForm" padding="15" row="0" col="0">
         <Label [text]="title" textWrap="true" class="h3 center" textAlignment="center" fontSize="20"></Label>
         <TextField visibility="collapsed" formControlName="mode" [(ngModel)]="mode"></TextField>
@@ -25,7 +25,7 @@
 
         <StackLayout [ngSwitch]="mode">
           <StackLayout *ngSwitchCase="0">
-            <Button text="Login" (tap)="onSubmit()" [disabled]="loginForm.invalid"></Button>
+            <Button text="Login" class="btn-primary" (tap)="onSubmit()" [disabled]="loginForm.invalid"></Button>
 
             <GridLayout rows="*" columns="auto, *">
               <Label row="0" col="0" text="Forgot Password?" textWrap="true" (tap)="this.mode=2" color="#4263a0"></Label>
