@@ -6,7 +6,7 @@ import { GameService } from '../../../../../../shared-library/src/lib/core/servi
 import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from 'shared-library/shared/model';
 import { GamePlayActions, GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
-import { AppState, appState } from '../../../store';
+import { GamePlayState } from '../reducers';
 
 
 @Injectable()
@@ -133,7 +133,7 @@ export class GamePlayEffects {
 
   constructor(
     private actions$: Actions,
-    public store: Store<AppState>,
+    public store: Store<GamePlayState>,
     private svc: GameService
   ) { }
 
