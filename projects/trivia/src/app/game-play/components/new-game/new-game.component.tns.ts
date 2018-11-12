@@ -65,10 +65,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       } else {
         this.noFriendsStatus = true;
       }
+
     }));
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.dataItem = this.uFriends;
+    // this.dataItem = this.uFriends;
+
   }
 
   ngOnDestroy() { }
