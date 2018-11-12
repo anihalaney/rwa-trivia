@@ -1,38 +1,6 @@
 /* Popup */
 
-.cd-popup-container{border-radius:3px;text-align:center;box-shadow:0 0 20px rgba(0, 0, 0, 0.2);
-  padding: 4% 0% 5% 0%;}
- 
- @media screen and ( min-width:1000px){
-  //.cd-popup-container{width:960px;}
-  }
-  /* Popup - end  */
-
-
-
-/*--Game-Option--*/
-/*
-.optionbox input[type="radio"]{ display: none; }
-
-.optionbox{ margin-top: 30px; text-align: left;}
-.optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
-.optionbox h2 span{ font-size: 20px; text-transform: none; letter-spacing: .10px; padding-left: 0; font-family: 'hindmedium' }
-.optionbox .radiobtn{ padding:0 0 46px   }
-.optionbox .radiobtn label{ font-size: 20px; display: inline-block; width: 100%; border:1px solid; border-radius: 4px; padding: 9px 0; text-align: center; cursor: pointer; transition: 0.3s ease-in-out; position: relative; overflow: hidden;}
-.optionbox .radiobtn label .sprite{ border-radius: 50% }
-.optionbox .radiobtn label:before, .gameplay li.right:before, .gameplay li.wrong:before{ content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent;}
-.optionbox .radiobtn label:after, .gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right: 2px solid; border-bottom: 2px solid; transition: 0.3s ease-in-out}
-.optionbox input:checked + label{ box-shadow: 0 2px 5px rgba(0,0,0,0.3) }
-.optionbox input:checked + label:after, .gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
-.optionbox .radiobtn label .sprite{ vertical-align:-20px }
-.gameplay li.wrong:after{content: "+"; border: 0; height: auto;width: auto;font-size: 24px; top: 2px; line-height: 1; right: 6px;}
-
-.towplayer,.withfriends{ display: none;}
-#p-radio2:checked ~ .towplayer, #tp-radio2:checked ~ .withfriends{ display: block !important; }
-.towplayer{ padding: 22px 0 0}
-.optionbox .towplayer label{font-size: 15px; }
-.optionbox .towplayer label .sprite{ vertical-align:-16px }
-*/
+.cd-popup-container{border-radius:3px;text-align:center;box-shadow:0 0 20px rgba(0, 0, 0, 0.2); padding: 20px 0px 40px 0px;}
 .withfriends{border:1px solid; margin-top: 30px; padding:0 45px; overflow: hidden;}
 .optionbox .withfriends label{ text-align: center; padding:10px; border:0; display: block; border-radius: 0}
 .expertise{ border-top: 1px solid; border-bottom: 1px solid; padding: 5px 0; margin: 5px 0; display: inline-block; }
@@ -40,7 +8,7 @@
 .withfriends label .labelimg img{ width: 70px; height: 70px; display: inline-block; border-radius: 50%; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 10px; overflow: hidden;border:1px solid; padding: 1px}
 .optionbox input:checked + label .light{ opacity: 0.7 }
 .withfriends .owl-prev{ left: -35px  }
-  .withfriends .owl-next{ right: -35px }
+.withfriends .owl-next{ right: -35px }
 .friendsslider .owl-prev,.friendsslider .owl-next{position: absolute;top:0; bottom: 0; margin: auto; height:30px; width: 30px; border-radius: 50%; border:1px solid; transition: 0.3s ease-in-out; font-size: 0}
 
 .pcategories > .col-sm-9{ border-top: 1px solid; padding:46px 0 0; }
@@ -59,32 +27,6 @@
 .btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px ;line-height: 1.2; margin:0 auto}
 #curentactive .btnbox{ background: #fff; }
 .btn {color: white;}
-
-@media (min-width: 767px){
-  main h2 span{ display: inline-block; padding-left: 15px; }
-  .optionbox h2{ margin-top: 17px }
-  .optionbox h2 span{ font-size: 22px }
-  .optionbox .radiobtn label { width: calc(50% - 17px); margin-right:30px }
-  .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .towplayer label:nth-child(6) { margin-right:0; }
-
-  .optionbox .radiobtn .towplayer label{ width: calc(33.33% - 10px); margin-right: 10px; }
-  .optionbox .towplayer .withfriends label{ width: 100%; margin-right: 0 }
-  .formfield, .mysetting .formfield { display: inline-block;}
-}
-@media (min-width: 1000px){
-  main h2 span{ display: block;}
-  .optionbox{width: 765px; margin: 60px auto 0;}  
-  .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
-  .chancat{ margin-top: 0 }
-  .chancat span:nth-child(2){ vertical-align: -12px; }
-  .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
-  .optionbox .pcategories h2{ margin-top: 40px}
-  .submitpage .optionbox h2{ margin-bottom: 7px }
-  .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
-  .submitpage .optionbox{ margin-top: 0; padding: 0 }
-  .secondbg{ padding-top: 35px;padding-bottom: 6%;}
-  .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
-}
 /*--Game-Option End--*/
 
 /*Game Play*/
@@ -102,15 +44,8 @@
 .timer .dots .time.deg45{-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);-webkit-transform:rotate(45deg);transform:rotate(45deg);}
 .timer .dots .time.deg90{-moz-transform:rotate(90deg);-ms-transform:rotate(90deg);-webkit-transform:rotate(90deg);transform:rotate(90deg);}
 .timer .dots .time.deg135{-moz-transform:rotate(135deg);-ms-transform:rotate(135deg);-webkit-transform:rotate(135deg);transform:rotate(135deg);}
-@media screen and ( min-width:767px){
-  .gameplay ul{ max-width: 576px; margin: 0 auto}
-  .gameplay li{ display: inline-block; padding: 15px; width: 219px }
-  //.timer{position: absolute; right: 48px; top: 33px;} 
-}
-@media screen and ( min-width:1000px){
-   .gameplay p a:hover{text-decoration: none;}
-  .gameplay h2{ width: 80% }  
-}
+
+
 /*Game Play End*/
 
 .gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
@@ -129,6 +64,7 @@
 .gameplay li.players-answer.right:after{ height: 13px;transform: rotate(45deg); opacity: 1; }
 
 
+
 mat-card {
   width: 100%;
   height: 100%;
@@ -143,10 +79,8 @@ mat-card {
 .correct {
   border: 4px solid green;
 }
-.answer-status {
-  margin-top: 10px;
-  font-size: 1.5em;
-  margin-bottom: -15px !important;
+.answer-status { 
+  font-size: 1.5em; 
 }
 .correct-text {
   color: green;
@@ -179,13 +113,9 @@ mat-card {
   text-align: right;
 }
 
-.padding-top-bottom-8{
-  padding:4px 0 8px 0;
+.pb-8{
+  padding-bottom:8px;
 }
-
-.category-div-spacing{
-  margin-bottom: 24px;
- }
  
  .margin-top-6{
   margin-top: 6px;
@@ -194,28 +124,9 @@ mat-card {
   margin-top: 5px;
   font-size: 18px;
 }
- @media(max-width: 1000px) {
-  .secondbg {
-  padding: 50px 0;
-  }
-  .authorPadding{
-  padding-top:6px;
-  }
- }
- @media(max-width: 768px) { 
-  .header
-  {
-    margin-bottom: 20%;
-  }
- }
- @media(max-width: 600px) {
-  .startgame, .continue-btn-div { width: 100%; margin-top:6px; }
-  .question-tag-space{ width: 100%; }
-  .popupbottom{ display: inline-block; width:100%; padding:1% 1%}
- }
- 
 
- .question-answered{
+
+.question-answered{
   border-color: #000;
   border-width: 1;
 }
@@ -247,3 +158,95 @@ Progress{
 .progressbar-value {
   background: #51BC6B;
 }
+
+
+
+@media (min-width: 1000px){
+  main h2 span{ display: block;}
+  .optionbox{width: 765px; margin: 60px auto 0;}  
+  .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
+  .chancat{ margin-top: 0 }
+  .chancat span:nth-child(2){ vertical-align: -12px; }
+  .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
+  .optionbox .pcategories h2{ margin-top: 40px}
+  .submitpage .optionbox h2{ margin-bottom: 7px }
+  .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
+  .submitpage .optionbox{ margin-top: 0; padding: 0 }
+  // .secondbg{ padding-top: 35px;padding-bottom: 6%;}
+  .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
+}
+
+@media screen and ( min-width:1000px){
+   .gameplay p a:hover{text-decoration: none;}
+  .gameplay h2{ width: 80% }  
+}
+
+ @media(max-width: 1000px) {
+  .authorPadding{
+  padding-top:6px;
+  }
+ }
+
+
+@media screen and ( min-width:767px){
+  .gameplay ul{ max-width: 576px; margin: 0 auto}
+  .gameplay li{ display: inline-block; padding: 15px; width: 219px }
+}
+
+@media (min-width: 767px){ 
+  main h2 span{ display: inline-block; padding-left: 15px; }
+  .optionbox h2{ margin-top: 17px }
+  .optionbox h2 span{ font-size: 22px }
+  .optionbox .radiobtn label { width: calc(50% - 17px); margin-right:30px }
+  .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .towplayer label:nth-child(6) { margin-right:0; }
+
+  .optionbox .radiobtn .towplayer label{ width: calc(33.33% - 10px); margin-right: 10px; }
+  .optionbox .towplayer .withfriends label{ width: 100%; margin-right: 0 }
+  .formfield, .mysetting .formfield { display: inline-block;}
+}
+
+@media(max-width: 768px) { 
+  .header
+  {
+    margin-bottom: 20%;
+  }
+
+.category-div-spacing{
+  margin-bottom: 8px;
+ }
+
+ .gameplay li{
+  margin: 10px;
+  padding: 10px;
+  }
+ }
+
+
+ @media(max-width: 600px) {
+  .cd-popup-container{padding: 0px;}
+  .startgame, .continue-btn-div { width: 100%; margin-top:6px; }
+  .question-tag-space{ width: 100%; }
+  .popupbottom{ display: inline-block; width:100%; padding:1% 1%}
+ }
+
+
+
+ @media screen and (max-width: 320px) { 
+  .gameplay li{
+    margin: 5px;
+     padding: 5px;
+   }
+  .gameplay h1{
+    font-size: 20px;
+   }
+  .gameplay h2{
+    font-size: 18px;
+   }
+  .answer-status{
+    font-size: 1.2em;
+   }
+   .secondbg { 
+    padding: 10px 0px 40px 0px; 
+   }
+ }
+ 
