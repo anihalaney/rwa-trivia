@@ -64,6 +64,7 @@ export class NewGame {
       }
     }));
     this.store.dispatch(new gameplayactions.ResetNewGame());
+    this.store.dispatch(new gameplayactions.ResetCurrentGame());
 
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
