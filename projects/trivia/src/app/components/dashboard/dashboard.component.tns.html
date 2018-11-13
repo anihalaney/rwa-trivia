@@ -4,7 +4,7 @@
         <StackLayout>
         <GridLayout rows="*, *, *, *, *, *" columns="*">
             <Button row="0" col="0"  text="Start New Game" class="btn-red" (tap)="startNewGame()" margin="10"></Button>
-            <StackLayout row="1" col="0">
+            <StackLayout row="1" col="0" *ngIf="user">
                 <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <GridLayout rows="auto, auto" columns="*">
                         <StackLayout row="0" col="0" *ngIf="activeGames && userDict">
@@ -24,7 +24,7 @@
                     </GridLayout>
                 </CardView>
             </StackLayout>
-            <StackLayout row="2" col="0">
+            <StackLayout row="2" col="0" *ngIf="user">
                 <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <StackLayout *ngIf="activeGames && userDict">
                         <Label text="Their Turn" orientation="horizontal" horizontalAlignment="center" padding="10"
@@ -36,7 +36,7 @@
                     </StackLayout>
                 </CardView>
             </StackLayout>
-            <StackLayout row="3" col="0">
+            <StackLayout row="3" col="0" *ngIf="user">
                 <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <StackLayout *ngIf="activeGames && userDict">
                         <Label text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center"
@@ -49,7 +49,7 @@
                 </CardView>
             </StackLayout> 
 
-            <StackLayout row="4" col="0">
+            <StackLayout row="4" col="0" *ngIf="user">
                 <CardView class="cardStyle" margin="10" elevation="40" radius="5" class="gameplay" backgroundColor="white">
                     <StackLayout *ngIf="gameInvites">
                         <Label text="Invitation to play games" orientation="horizontal"
