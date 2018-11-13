@@ -72,8 +72,8 @@
                         <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25"
                             marginLeft="10" verticalAlignment="center" marginRight="5"   *ngIf="gameOptions.opponentType == 1" (tap)="gameOptions.opponentType=1;"></Image>
                         
-                        <!-- <StackLayout row="1" col="0"  colSpan="3" class="hr-light"></StackLayout>
-                         -->
+                        <StackLayout *ngIf="gameOptions.opponentType == 1" row="1" col="0"  colSpan="3" class="hr-light"></StackLayout>
+                        
                         <StackLayout row="2" col="0" colSpan="3" 
                         *ngIf="gameOptions.opponentType == 1" paddingBottom="0">
                             <RadListView #friendListView [items]="dataItem" height="140">
@@ -106,11 +106,8 @@
                     <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option" *ngFor="let category of categories"
                         (tap)="selectCategory(category)">
                         <Label [text]="category.categoryName" row="0" col="0" textWrap="true" padding="8" class="label"></Label>
-                        <!-- <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F"
-                            boxType="circle" *ngIf="category.requiredForGamePlay || category.isSelected"></CheckBox> -->
                         <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25"
                             marginLeft="10" verticalAlignment="center" marginRight="5"   *ngIf="category.requiredForGamePlay || category.isSelected"></Image>
-
                     </GridLayout>
 
                 </StackLayout>
@@ -119,8 +116,6 @@
             <CardView margin="5 10" visibility="{{ showSelectCategory ? 'visible' : 'collapsed' }}" backgroundColor="white">
                 <Label padding="15" text="{{getSelectedCatName()}}" textWrap="true" class="label"></Label>
             </CardView>
-
-
             <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
                 <Label row="0" col="0" text="Tags associated categories" textWrap="true" class="label"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
