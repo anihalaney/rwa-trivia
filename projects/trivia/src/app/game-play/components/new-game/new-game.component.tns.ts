@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions } from 'shared-library/core/store/actions';
@@ -13,7 +13,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
 import { filter } from 'rxjs/operators';
 import { UserActions } from 'shared-library/core/store/actions';
-
+import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -34,6 +34,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   private tagItems: ObservableArray<TokenModel>;
   sub3: Subscription;
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
+  @ViewChild('friendListView') listViewComponent: RadListViewComponent; 
 
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
@@ -51,7 +52,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
 
-    // this.dataItem = data;
     this.categories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)];
 
     this.subs.push(this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
@@ -135,6 +135,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   public onTextChanged(args) {
     this.customTag = args.text;
+  }
+
+  selectFriendId(friendId: string) {
+    this.friendUserId = friendId;
+    this.listViewComponent.listView.refresh();
   }
 }
 

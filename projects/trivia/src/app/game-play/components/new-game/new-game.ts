@@ -95,5 +95,7 @@ export class NewGame {
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
     this.errMsg = undefined;
+    console.log('friend id' , this.friendUserId);
+    console.log('friend item', friendId);
   }
 }
