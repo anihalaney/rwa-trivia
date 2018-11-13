@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions } from 'shared-library/core/store/actions';
-import { Category } from 'shared-library/shared/model';
+import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { Utils } from 'shared-library/core/services';
@@ -14,6 +14,8 @@ import * as gamePlayActions from './../../store/actions';
 import { filter } from 'rxjs/operators';
 import { UserActions } from 'shared-library/core/store/actions';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
+import * as Toast from 'nativescript-toast';
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -34,7 +36,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   private tagItems: ObservableArray<TokenModel>;
   sub3: Subscription;
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
-  @ViewChild('friendListView') listViewComponent: RadListViewComponent; 
+  @ViewChild('friendListView') listViewComponent: RadListViewComponent;
 
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
@@ -65,11 +67,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       } else {
         this.noFriendsStatus = true;
       }
-
     }));
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => this.userDict = userDict);
-    // this.dataItem = this.uFriends;
 
   }
 
@@ -84,6 +84,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   startGame() {
     this.gameOptions.tags = this.selectedTags;
     this.gameOptions.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
+    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
+      && !this.friendUserId) {
+      if (!this.friendUserId) {
+        this.errMsg = 'Please Select Friend';
+        Toast.makeText(this.errMsg).show();
+      }
+      return;
+    }
     this.startNewGame(this.gameOptions);
   }
 
