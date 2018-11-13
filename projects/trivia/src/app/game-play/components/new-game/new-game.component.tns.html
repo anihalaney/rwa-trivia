@@ -4,7 +4,7 @@
     <ScrollView>
         <StackLayout class="new-game" backgroundColor="#f1f2f2">
             <GridLayout rows="auto,auto" columns="auto,*" padding="10 10 5 10">
-                <Label row="0" col="0" text="Select Player Modes {{dataItems.length}}" textWrap="true" class="main-label" color="#616161"></Label>
+                <Label row="0" col="0" text="Select Player Modes" textWrap="true" class="main-label" color="#616161"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectPlayer ? '&#xf067;' : '&#xf068;' }}"
                     textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer" background="#fff"></Label>
             </GridLayout>
@@ -69,27 +69,23 @@
                         marginLeft="10" verticalAlignment="center" marginRight="5"  (tap)="gameOptions.opponentType=1;"></Image>
 
                         <Label row="0" col="1" text="With Friends" textWrap="true" padding="15" (tap)="gameOptions.opponentType=1;"></Label>
-                        <!-- <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F"
-                            boxType="circle" *ngIf="gameOptions.opponentType == 1" (tap)="gameOptions.opponentType=1;"></CheckBox> -->
                         <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25"
                             marginLeft="10" verticalAlignment="center" marginRight="5"   *ngIf="gameOptions.opponentType == 1" (tap)="gameOptions.opponentType=1;"></Image>
                         
                         <!-- <StackLayout row="1" col="0"  colSpan="3" class="hr-light"></StackLayout>
                          -->
                         <StackLayout row="2" col="0" colSpan="3" 
-                        >
-                            <RadListView [items]="dataItem">
+                        *ngIf="gameOptions.opponentType == 1" paddingBottom="0">
+                            <RadListView #friendListView [items]="dataItem" height="140">
                                 <ng-template let-item="item">
                                     <StackLayout paddingTop="10" (tap)="selectFriendId(item)">
-                                        <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray" stretch="aspectFill"
+                                            <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray" stretch="aspectFill"
                                             height="64" width="64" marginLeft="10" verticalAlignment="center"
-                                            marginRight="10" ></Image>
-                                        <Label class="nameLabel" [text]="userDict[item]?.displayName"
-                                            horizontalAlignment="center"></Label>
-                                            <Image visibility="{{ item === friendUserId ? 'visible' : 'collapsed' }}" src="~/assets/images/check.png" height="30" width="30"
-                            marginLeft="10" verticalAlignment="center" marginRight="5" ></Image>
-  <Label text="lable" textWrap="true"></Label>
-  
+                                            marginRight="10" borderRadius="50"></Image>
+                                            <Label class="nameLabel" text="{{userDict[item]?.displayName}}"
+                                            horizontalAlignment="center" textWrap="true"></Label>
+                                            <Image visibility="{{ (item === friendUserId) ? 'visible' : 'collapsed'}}" src="~/assets/images/check.png" height="30" width="30"
+                            marginLeft="10" verticalAlignment="center" marginRight="5" ></Image>  
                                     </StackLayout>
                                 </ng-template>
                                 <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal"></ListViewLinearLayout>
