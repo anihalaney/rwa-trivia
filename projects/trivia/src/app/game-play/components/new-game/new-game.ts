@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import * as useractions from '../../../user/store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, GameOptions, User } from 'shared-library/shared/model';
+import { Category, GameOptions, User, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 
@@ -96,7 +96,5 @@ export class NewGame {
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
     this.errMsg = undefined;
-    console.log('friend id' , this.friendUserId);
-    console.log('friend item', friendId);
   }
 }
