@@ -2,6 +2,10 @@ import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
+import { Store, select } from '@ngrx/store';
+import { GamePlayState } from '../../store';
+import { appState } from '../../../store';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'game-question',
@@ -20,9 +24,12 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   columns;
   doPlay = true;
   photoUrl: String = '~/assets/icons/icon-192x192.png';
+  userDict$: Observable<{ [key: string]: User }>;
 
-  constructor(private utils: Utils) {
+  constructor(private utils: Utils, public store: Store<GamePlayState>, ) {
     super();
+    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+
   }
 
   ngOnInit() {
@@ -49,5 +56,9 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
   fillTimer() {
     clearInterval(this.stopProcessBar);
+  }
+
+  getImage(userId) {
+    return this.utils.getImageUrl(this.userDict[userId], 44, 40, '44X40');
   }
 }

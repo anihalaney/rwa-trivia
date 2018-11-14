@@ -82,22 +82,22 @@
             </GridLayout>
         </StackLayout>
         <StackLayout *ngIf="otherUserId" row="0" col="2" orientation="horizontal" horizontalAlignment="right">
-        
-                <Image *ngIf="game.stats[otherUserId].score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[otherUserId].score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[otherUserId].score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[otherUserId].score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[otherUserId].score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
+
+            <Image *ngIf="game.stats[otherUserId].score >= 1" src="~/assets/images/score1.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[otherUserId].score >= 2" src="~/assets/images/score2.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[otherUserId].score >= 3" src="~/assets/images/score3.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[otherUserId].score >= 4" src="~/assets/images/score4.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[otherUserId].score >= 5" src="~/assets/images/score5.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
         </StackLayout>
     </GridLayout>
     <GridLayout rows="*" columns="*,*,*">
@@ -120,22 +120,22 @@
         </StackLayout>
         <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="right">
 
-                <Image *ngIf="game.stats[user.userId].score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[user.userId].score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[user.userId].score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[user.userId].score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[user.userId].score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                
+            <Image *ngIf="game.stats[user.userId].score >= 1" src="~/assets/images/score1.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId].score >= 2" src="~/assets/images/score2.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId].score >= 3" src="~/assets/images/score3.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId].score >= 4" src="~/assets/images/score4.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId].score >= 5" src="~/assets/images/score5.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+
         </StackLayout>
     </GridLayout>
     <Label row="2" column="0" class="fa timer" text="&#xf017; You have {{remainingHours }}:{{remainingMinutes}} hrs left to play"
@@ -161,8 +161,8 @@
         </StackLayout>
         <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="right" *ngIf="otherUserId">
             <Image *ngIf="game.stats[otherUserId].score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
             <Image *ngIf="game.stats[otherUserId].score >= 2" src="~/assets/images/score2.png" height="30" width="30"
                 marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
 
@@ -184,21 +184,21 @@
         </StackLayout>
         <StackLayout row="1" col="1" orientation="horizontal" horizontalAlignment="right">
 
-                <Image *ngIf="game.stats[user.userId].score >= 1" src="~/assets/images/score1.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[user.userId].score >= 2" src="~/assets/images/score2.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[user.userId].score >= 3" src="~/assets/images/score3.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[user.userId].score >= 4" src="~/assets/images/score4.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
-                    <Image *ngIf="game.stats[user.userId].score >= 5" src="~/assets/images/score5.png" height="30" width="30"
-                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
-        
+            <Image *ngIf="game.stats[user.userId].score >= 1" src="~/assets/images/score1.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId].score >= 2" src="~/assets/images/score2.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId].score >= 3" src="~/assets/images/score3.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId].score >= 4" src="~/assets/images/score4.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+            <Image *ngIf="game.stats[user.userId].score >= 5" src="~/assets/images/score5.png" height="30" width="30"
+                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
         </StackLayout>
     </GridLayout>
 </StackLayout>

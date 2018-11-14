@@ -1,4 +1,4 @@
-<StackLayout>
+<!-- <StackLayout>
     <ScrollView>
         <StackLayout class="cardStyle gameplay" padding="15" backgroundColor="#ffffff" height="100%" width="100%"
             margin="5">
@@ -14,11 +14,21 @@
                             textWrap="true" fontSize="12"></Label>
                     </StackLayout>
                     <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
-                        <Button [ngClass]="correctCount < 1?'score0':'score1'" class="sprite" text=""></Button>
-                        <Button [ngClass]="correctCount < 2?'score0':'score2'" class="sprite" text=""></Button>
-                        <Button [ngClass]="correctCount < 3?'score0':'score3'" class="sprite" text=""></Button>
-                        <Button [ngClass]="correctCount < 4?'score0':'score4'" class="sprite" text=""></Button>
-                        <Button [ngClass]="correctCount < 5?'score0':'score5'" class="sprite" text=""></Button>
+                        <Image *ngIf="correctCount>=1" src="~/assets/images/score1.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
+                            left="80"></Image>
+                        <Image *ngIf="correctCount>=2" src="~/assets/images/score2.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
+                            left="80"></Image>
+                        <Image *ngIf="correctCount>=3" src="~/assets/images/score3.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
+                            left="80"></Image>
+                        <Image *ngIf="correctCount>=4" src="~/assets/images/score4.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
+                            left="80"></Image>
+                        <Image *ngIf="correctCount>=5" src="~/assets/images/score5.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50" top="10"
+                            left="80"></Image>
                     </StackLayout>
                 </GridLayout>
             </StackLayout>
@@ -41,9 +51,88 @@
             </StackLayout>
             <StackLayout orientation="vertical" *ngIf="question">
                 <author [userDict]="userDict" [userId]="question.created_uid"></author>
-                <button *ngIf="showContinueBtn" backgroundColor="#89C24F" marginTop="5"(tap)="continueClicked.emit($event)"
+                <button *ngIf="showContinueBtn" backgroundColor="#89C24F" marginTop="5" (tap)="continueClicked.emit($event)"
                     text="Continue" padding="10"></button>
             </StackLayout>
         </StackLayout>
     </ScrollView>
-</StackLayout>
+</StackLayout>  -->
+
+<GridLayout class="mobile" rows="*,60" backgroundColor="#f1f2f2">
+    <ScrollView row="0">
+        <StackLayout>
+            <CardView class="cardStyle" elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                <StackLayout>
+                    <GridLayout row="auto" columns="auto,*,auto" class="sideStackLayoutHeader" *ngIf="user" paddingTop="10">
+                        <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
+                            width="64" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
+                        <StackLayout row="0" col="1">
+                            <Label text="You" textWrap="true" class="main-title"></Label>
+                            <Label text="Score {{correctCount}} | Round {{questionRound}} / {{totalRound}}" textWrap="true"
+                                class="sub-title"></Label>
+                            <StackLayout orientation="vertical">
+                                <Label text="Playing with other" textWrap="true" class="sub-title"></Label>
+                                <Label *ngIf="otherPlayer?.displayName" text="Playing with {{otherPlayer?.displayName}}"
+                                    textWrap="true" class="sub-title" color="#3b5998" fontWeight="500"></Label>
+                            </StackLayout>
+
+                        </StackLayout>
+                        <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
+                            <Image *ngIf="correctCount>=1" src="~/assets/images/score1.png" height="30" width="30"
+                                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
+                                top="10" left="80"></Image>
+                            <Image *ngIf="correctCount>=2" src="~/assets/images/score2.png" height="30" width="30"
+                                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
+                                top="10" left="80"></Image>
+                            <Image *ngIf="correctCount>=3" src="~/assets/images/score3.png" height="30" width="30"
+                                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
+                                top="10" left="80"></Image>
+                            <Image *ngIf="correctCount>=4" src="~/assets/images/score4.png" height="30" width="30"
+                                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
+                                top="10" left="80"></Image>
+                            <Image *ngIf="correctCount>=5" src="~/assets/images/score5.png" height="30" width="30"
+                                marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"
+                                top="10" left="80"></Image>
+                        </StackLayout>
+
+                    </GridLayout>
+
+                    <StackLayout marginTop="10">
+                        <Progress [value]="progressValue" maxValue="100"></Progress>
+                    </StackLayout>
+                </StackLayout>
+            </CardView>
+            <StackLayout margin="15" orientation="horizontal">
+                <Label text="Tags:" marginRight="5" fontSize="15" fontWeight="500" textWrap="true" color="#1b1c1c"></Label>
+                <Label text="{{question.tags?.toString()}}" fontSize="15" textWrap="true" color="#1b1c1c"></Label>                 
+            </StackLayout>
+
+            <GridLayout margin="0 15" rows="auto" columns="auto,auto,auto" *ngIf="question">
+                    <Label row="0" col="0" text="Author :" textWrap="true" fontSize="15" fontWeight="500" horizontalAlignment="left" ></Label>
+                    <Label row="0" col="1" text="{{userDict[question.created_uid]?.displayName}}" tfontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left" ></Label>
+                    <Image row="0" col="2" src="{{getImage(question.created_uid)}}" color="#FFFFFF" stretch="aspectFill" height="44" width="44" marginLeft="10" marginRight="10" borderRadius="50" ></Image>
+            </GridLayout>
+
+            <CardView class="cardStyle" elevation="40" radius="5" class="gameplay" backgroundColor="white" margin="15">
+                <StackLayout padding="20 10">
+                    <Label text="{{questionIndex}}. {{question?.questionText}}" fontSize="17" fontWeight="700" marginBottom="10" textWrap="true"
+                        color="#1b1c1c" horizontalAlignment="center"></Label>
+                        <StackLayout *ngIf="question">
+                                <StackLayout class="question-answered" margin="10" *ngFor="let answer of question.answers;let i=index"
+                                    [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
+                                    [class.right]="correctAnswerIndex === i" (tap)="answerButtonClicked(answer,i)">
+                                    <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
+                                        marginTop="10" marginBottom="10" textWrap="true" padding="10"></Label>
+                                </StackLayout>
+                            </StackLayout>
+
+                </StackLayout>
+            </CardView>
+    
+            <StackLayout *ngIf="showContinueBtn">
+                    <button backgroundColor="#8ac541" color="white" margin="10"  (tap)="continueClicked.emit($event)" *ngIf="answeredText!==''"
+            width="100%" height="100%" text="Try Another" fontSize="17" padding="15"></button>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</GridLayout>
