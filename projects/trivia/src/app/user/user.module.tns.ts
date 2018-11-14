@@ -4,19 +4,23 @@ import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from 'shared-library/shared/shared.module';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { effects, reducer } from './store';
+import { UserRoutingModule } from './routing/user-routing.module';
 
 import {
   GameCardComponent,
+  ProfileSettingsComponent
 } from './components';
 
 @NgModule({
   declarations: [
     GameCardComponent,
+    ProfileSettingsComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     NativeScriptRouterModule,
+    UserRoutingModule,
 
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
@@ -28,6 +32,7 @@ import {
   providers: [],
   exports: [
     GameCardComponent,
+    ProfileSettingsComponent
   ]
 })
 export class UserModule { }

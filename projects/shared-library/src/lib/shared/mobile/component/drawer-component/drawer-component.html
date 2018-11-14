@@ -1,7 +1,7 @@
 <GridLayout rows="120,auto,auto,auto,*" class="sideStackLayout">
     <GridLayout row="0" columns="auto,auto" class="sideStackLayoutHeader" *ngIf="user">
         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
-            marginLeft="10" verticalAlignment="center" marginRight="10"  borderRadius="50"></Image>
+            marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
         <StackLayout row="0" col="1" marginTop="27">
             <Label text="{{user?.displayName}}" color="#FFFFFF" fontSize="20" width="70%" verticalAlignment="top"></Label>
             <Label text="{{user?.location}}" horizontalAlignment="left" color="#FFFFFF" fontSize="10" width="70%"
@@ -10,13 +10,16 @@
                 verticalAlignment="bottom"></Label>
         </StackLayout>
     </GridLayout>
-    <Label row="1" colSpan="2" text="Home" textWrap="true" class="sideLabel"  (tap)="dashboard()"></Label>
-    <Label row="2" colSpan="2" text="Category Leaderboard" class="sideLabel sideStackLayout" (tap)="leaderBoard()"></Label>
-    <Label row="3" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Recently Completed Games" class="sideLabel sideStackLayout" (tap)="recentGame()"></Label>
-    
-    <Label *ngIf="!authProvider.isAuthenticated" row="4" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D" textAlignment="center" fontSize="16"
-    text="Login" class="sideLabel sideStackLayout" (tap)="login()"></Label>
+    <Label row="1" colSpan="2" text="Home" textWrap="true" class="sideLabel" (tap)="dashboard()"></Label>
+    <Label row="2" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Profile Settings" textWrap="true" class="sideLabel"
+        (tap)="navigateToProfileSettings()"></Label>
+    <Label row="3" colSpan="2" text="Category Leaderboard" class="sideLabel sideStackLayout" (tap)="leaderBoard()"></Label>
+    <Label row="4" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Recently Completed Games" class="sideLabel sideStackLayout"
+        (tap)="recentGame()"></Label>
 
-    <Label  *ngIf="authProvider.isAuthenticated" row="4" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D" textAlignment="center" fontSize="16"
-        text="Logout" class="sideLabel sideStackLayout" (tap)="logout()"></Label>
+    <Label *ngIf="!authProvider.isAuthenticated" row="5" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D"
+        textAlignment="center" fontSize="16" text="Login" class="sideLabel sideStackLayout" (tap)="login()"></Label>
+
+    <Label *ngIf="authProvider.isAuthenticated" row="5" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D"
+        textAlignment="center" fontSize="16" text="Logout" class="sideLabel sideStackLayout" (tap)="logout()"></Label>
 </GridLayout>
