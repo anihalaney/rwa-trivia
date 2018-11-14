@@ -16,7 +16,6 @@ import { RouterExtensions } from 'nativescript-angular/router';
 export class DashboardComponent extends Dashboard implements OnInit {
 
   gameStatus: any;
-
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
     gameActions: GameActions,

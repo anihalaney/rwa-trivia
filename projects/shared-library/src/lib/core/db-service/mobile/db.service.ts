@@ -53,7 +53,7 @@ export class TNSDbService extends DbService {
                 }
                 this.zone.run(() => {
                     if (results !== undefined) {
-                        observer.next((results.length == 1) ? results[0] : results);
+                        observer.next(results);
                     } else {
                         observer.next(undefined);
                     }
