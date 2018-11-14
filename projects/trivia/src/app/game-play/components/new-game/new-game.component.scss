@@ -106,8 +106,11 @@
 .new-game {
   .selected-player {
     background-color: #89C24F;
-    color: #FFF;
-    font-size: 15px;
+    color: #fff;
+  }
+
+  .player-type, .label{
+    color:#616161;
   }
 
   .two-player-option{
@@ -140,6 +143,9 @@
   .expand-options{
     color: #A9A9A9;
     font-size: 11;
+  }
+  .main-label{
+    color: red;
   }
 }
 
