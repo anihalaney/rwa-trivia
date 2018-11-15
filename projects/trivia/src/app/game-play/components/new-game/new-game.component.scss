@@ -46,15 +46,6 @@
   border-top-style: solid; 
   padding:46px 0 0; 
 }
-// .formfield { padding: 8px 15px; }
-// .formfield input[type="checkbox"],.enterquestion .formfield input[type="radio"]{  position: relative; height: 18px; width: 18px; vertical-align: -4px; margin-right: 8px;}
-// .formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before{ content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 100%; border-radius: 2px; border-width:1px; border-style: solid; cursor: pointer;}
-
-// .formfield input[type="checkbox"]:after,.enterquestion .formfield input[type="radio"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  cursor: pointer;}
-// .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ height: 10px; transform: rotate(45deg); }
-// .formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ border-color:#fff; }
-
-// .formfield label{ font-size: 20px; cursor: pointer;}
 .chancat{ cursor: pointer; transition: 0.3s ease-in-out; margin-top: 10px}
 .chancat span:nth-child(2){ display: inline-block;width: calc(100% - 40px); line-height: 1.1; vertical-align: -2px;}
 .preference{ display: none; margin: 9px -15px 0}
@@ -66,33 +57,8 @@
 .frd-err-msg{ color: red;  font-size: 1rem;padding-top:30px;}
 //#curentactive .btnbox{ background: #fff; }
 
-@media (min-width: 767px){
-  main h2 span{ display: inline-block; padding-left: 15px; }
-  // .optionbox h2{ margin-top: 17px }
-  // .optionbox h2 span{ font-size: 22px }
-  .optionbox .radiobtn label { width: calc(50% - 17px); margin-right:30px }
-  .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .twoplayer label:nth-child(6) { margin-right:0; }
-
-  .optionbox .radiobtn .twoplayer label{ width: calc(50% - 10px); margin-right: 10px; }
-  .optionbox .twoplayer .withfriends label{ width: 100%; margin-right: 0 }
-  .formfield, .mysetting .formfield { display: inline-block;}
-}
-@media (min-width: 1000px){
-  main h2 span{ display: block;}
-  .optionbox{width: 765px; margin: 60px auto 0;}  
-  .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
-  .chancat{ margin-top: 0 }
-  .chancat span:nth-child(2){ vertical-align: -12px; }
-  // .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
-  .optionbox .pcategories h2{ margin-top: 40px}
-  .submitpage .optionbox h2{ margin-bottom: 7px }
-  .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
-  .submitpage .optionbox{ margin-top: 0; padding: 0 }
-  .secondbg{ padding-top: 35px }
-  .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
-}
 .hide {display: none !important;}
-/*--Game-Option End--*/
+
 
 .loaderimage{
   width:30px;
@@ -152,4 +118,31 @@
 .checkbox-group{
   display: inline-block;
   padding: 8px 15px;
+}
+
+/*--Game-Option End--*/
+@media (min-width: 767px){
+  main h2 span{ display: inline-block; padding-left: 15px; }
+  // .optionbox h2{ margin-top: 17px }
+  // .optionbox h2 span{ font-size: 22px }
+  .optionbox .radiobtn label { width: calc(50% - 17px); margin-right:30px }
+  .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .twoplayer label:nth-child(6) { margin-right:0; }
+
+  .optionbox .radiobtn .twoplayer label{ width: calc(50% - 10px); margin-right: 10px; }
+  .optionbox .twoplayer .withfriends label{ width: 100%; margin-right: 0 }
+  .formfield, .mysetting .formfield { display: inline-block;}
+}
+@media (min-width: 1000px){
+  main h2 span{ display: block;}
+  .optionbox{width: 765px; margin: 60px auto 0;}  
+  .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
+  .chancat{ margin-top: 0 }
+  .chancat span:nth-child(2){ vertical-align: -12px; }
+  // .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
+  .optionbox .pcategories h2{ margin-top: 40px}
+  .submitpage .optionbox h2{ margin-bottom: 7px }
+  .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
+  .submitpage .optionbox{ margin-top: 0; padding: 0 }
+  .secondbg{ padding-top: 35px }
+  .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
 }
