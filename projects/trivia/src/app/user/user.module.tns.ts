@@ -26,7 +26,8 @@ import {
     StoreModule.forFeature('user', reducer),
 
     //ngrx effects
-    EffectsModule.forFeature(effects),
+    EffectsModule.forFeature(effects)
+
 
   ],
   providers: [],
