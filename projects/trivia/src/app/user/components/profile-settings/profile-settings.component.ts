@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { userState } from '../../../user/store';
@@ -7,6 +7,7 @@ import { ProfileSettings } from './profile-settings';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
+
 
 @Component({
   selector: 'profile-settings',
@@ -129,6 +130,30 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
   }
+
+  // tags start
+  // Event Handlers
+  addTag() {
+    const tag = this.userForm.get('tags').value;
+    if (tag) {
+      if (this.enteredTags.indexOf(tag) < 0) {
+        this.enteredTags.push(tag);
+      }
+      this.userForm.get('tags').setValue('');
+    }
+    this.setTagsArray();
+  }
+
+  removeEnteredTag(tag) {
+    this.enteredTags = this.enteredTags.filter(t => t !== tag);
+    this.setTagsArray();
+  }
+
+  setTagsArray() {
+    this.tagsArray.controls = [];
+    this.enteredTags.forEach(tag => this.tagsArray.push(new FormControl(tag)));
+  }
+  // tags end
 
   onSubmit() {
     // validations

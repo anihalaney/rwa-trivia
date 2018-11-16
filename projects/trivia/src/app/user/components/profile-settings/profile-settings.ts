@@ -14,6 +14,7 @@ export class ProfileSettings {
     user: User;
     fb: FormBuilder;
     categories: Category[];
+    userCategories: Category[];
     categoryDict: { [key: number]: Category };
     categoryDictObs: Observable<{ [key: number]: Category }>;
     subs: Subscription[] = [];
@@ -116,6 +117,12 @@ export class ProfileSettings {
             return fg;
         });
 
+        this.userCategories = this.categories.map((category) => {
+            category.isSelected = (user.categoryIds && user.categoryIds.indexOf(category.id) !== -1) ? true : false;
+            return category;
+        });
+
+
         if (user.tags === undefined) {
             const a = [];
             user.tags = a;
@@ -150,30 +157,6 @@ export class ProfileSettings {
         });
         this.enteredTags = user.tags;
     }
-
-    // tags start
-    // Event Handlers
-    addTag() {
-        const tag = this.userForm.get('tags').value;
-        if (tag) {
-            if (this.enteredTags.indexOf(tag) < 0) {
-                this.enteredTags.push(tag);
-            }
-            this.userForm.get('tags').setValue('');
-        }
-        this.setTagsArray();
-    }
-
-    removeEnteredTag(tag) {
-        this.enteredTags = this.enteredTags.filter(t => t !== tag);
-        this.setTagsArray();
-    }
-
-    setTagsArray() {
-        this.tagsArray.controls = [];
-        this.enteredTags.forEach(tag => this.tagsArray.push(new FormControl(tag)));
-    }
-    // tags end
 
     getUserFromFormValue(formValue: any): void {
         this.user.name = formValue.name;
