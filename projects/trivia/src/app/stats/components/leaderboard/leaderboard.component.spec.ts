@@ -6,7 +6,7 @@ import { TEST_DATA } from '../../../testing/test.data';
 import { Category, User, LeaderBoardUser } from '../../../../../../shared-library/src/lib/shared/model';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
-
+import { ActivatedRoute } from '@angular/router';
 describe('Component: LeaderboardComponent', () => {
 
     let component: LeaderboardComponent;
@@ -16,7 +16,7 @@ describe('Component: LeaderboardComponent', () => {
         // refine the test module by declaring the LeaderboardComponent component
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({})],
-            providers: [Store, UserActions, Utils],
+            providers: [Store, UserActions, Utils, ActivatedRoute],
             declarations: [LeaderboardComponent]
         });
 
