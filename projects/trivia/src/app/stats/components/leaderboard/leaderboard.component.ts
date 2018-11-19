@@ -10,6 +10,7 @@ import { leaderBoardState } from '../../store';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'leaderboard',
@@ -35,13 +36,18 @@ export class LeaderboardComponent implements OnDestroy {
   isServer: any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
   unknown = LeaderBoardConstants.UNKNOWN;
+  category: string;
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(APP_ID) private appId: string,
-    private utils: Utils) {
+    private utils: Utils,
+    public route: ActivatedRoute) {
 
+    this.route.params.subscribe((params) => {
+      this.category = params['category'];
+    });
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
@@ -67,7 +73,7 @@ export class LeaderboardComponent implements OnDestroy {
               if (this.userDict && !this.userDict[userId]) {
                 this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
               }
-            })
+            });
           });
           this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
           this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;

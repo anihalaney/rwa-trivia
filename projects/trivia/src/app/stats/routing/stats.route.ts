@@ -3,7 +3,7 @@ import { LeaderboardComponent } from './../components/leaderboard/leaderboard.co
 
 export const statsRoutes: Routes = [
   {
-    path: 'stats/leaderboard',
+    path: 'stats/leaderboard/:category',
     component: LeaderboardComponent,
 
   }
