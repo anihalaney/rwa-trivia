@@ -1,66 +1,91 @@
 <ns-action-bar title="Start New Game" showAdd="true"></ns-action-bar>
-<StackLayout>
+<StackLayout >
 
     <ScrollView>
         <StackLayout class="new-game" backgroundColor="#f1f2f2">
             <GridLayout rows="auto,auto" columns="auto,*" padding="10 10 5 10">
-                <Label row="0" col="0" text="Select Player Mode" textWrap="true"></Label>
+                <Label row="0" col="0" text="Select Player Modes" textWrap="true" class="main-label" color="#616161"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectPlayer ? '&#xf067;' : '&#xf068;' }}"
-                    textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer"></Label>
+                    textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer" background="#fff"></Label>
             </GridLayout>
 
             <CardView margin="10" elevation="40" radius="1" width="95%" margin="15 0 15 0" visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
-                <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white">
+                <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white" fontSize="17">
                     <StackLayout orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 0"
-                    (tap)="gameOptions.playerMode = 0;" width="50%">
+                    [class.player-type]="gameOptions.playerMode !== 0" (tap)="gameOptions.playerMode = 0;" width="50%" height="60">
                         <Image src="~/assets/images/single_player.png" height="30" width="30"
-                            marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
+                            marginLeft="10" verticalAlignment="center" marginRight="5" ></Image>
 
-                        <Label text="Single Player" textWrap="true"  height="50" padding="15 15 5 15"></Label>
+                        <Label text="Single Player 2" textWrap="true"  height="50" android:padding="15 15 5 5" ios:padding="5 15 5 5" VerticalAlignment="center"></Label>
                     </StackLayout>
 
                     <StackLayout orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 1"
-                    (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" width="50%">
+                    [class.player-type]="gameOptions.playerMode !== 1" (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" width="50%">
                     
-                    <Label text="Two Players" textWrap="true" height="50" padding="15 15 5 15"></Label>
+                    <Image src="~/assets/images/two_player.png" height="30" width="30"
+                            marginLeft="10" verticalAlignment="center" marginRight="5" ></Image>
+
+                    <Label text="Two Players" textWrap="true" height="50" android:padding="15 15 5 5" ios:padding="5 15 5 5"></Label>
                     </StackLayout>
                 </StackLayout>
             </CardView>
 
-            <CardView margin="10" elevation="40" radius="1" width="95%" margin="20" visibility="{{ showSelectPlayer ? 'visible' : 'collapsed' }}"
+            <CardView margin="10 0" elevation="40" radius="1" visibility="{{ showSelectPlayer ? 'visible' : 'collapsed' }}"
                 backgroundColor="white">
-                <StackLayout orientation="horizontal" horizontalAlignment="center">
-                    <Label [text]="gameOptions.playerMode === 0 ? 'Single Player' : 'Two Player'" textWrap="true" width="50%"
-                        height="50" padding="17 15 5 17"></Label>
-                    <Label text="{{getGameMode()}}" textWrap="true" width="50%" height="50" padding="17 15 5 17"></Label>
+                <StackLayout orientation="horizontal" horizontalAlignment="center" padding="10 10 10 20" class="player-type">
+                    <StackLayout orientation="horizontal" width="50%">
+                            <Image *ngIf="gameOptions.playerMode == 0" src="~/assets/images/single_player.png" height="30" width="30"
+                             verticalAlignment="center" marginRight="5" ></Image>
+                            <Image *ngIf="gameOptions.playerMode == 1" src="~/assets/images/two_player.png" height="30" width="30"
+                            verticalAlignment="center" marginRight="5" ></Image>
+                            <Label [text]="gameOptions.playerMode === 0 ? 'Single Player' : 'Two Player'" textWrap="true" 
+                            height="50" padding="17 15 15 0"></Label>      
+                    </StackLayout>
+                    <StackLayout orientation="horizontal" width="50%">
+                            <Image *ngIf="gameOptions.opponentType == 0 && gameOptions.playerMode == 1" src="~/assets/images/two_player_random.png" height="30" width="30"
+                             verticalAlignment="center" marginRight="5" ></Image>
+                            <Image *ngIf="gameOptions.opponentType == 1 && gameOptions.playerMode == 1" src="~/assets/images/two_player_friend.png" height="30" width="30"
+                            verticalAlignment="center" marginRight="5" ></Image>
+                            <Label text="{{getGameMode()}}" textWrap="true" height="50" padding="17 0 15 5"></Label>
+     
+                    </StackLayout>
                 </StackLayout>
             </CardView>
 
             <CardView visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}" *ngIf="gameOptions.playerMode === 1"
                 margin="15 0 15 0" backgroundColor="white">
-                <StackLayout>
-                    <GridLayout rows="auto,auto" columns="auto,*" (tap)="gameOptions.opponentType=0;">
-                        <Label row="0" col="0" text="Random" textWrap="true" padding="15"></Label>
-                        <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F"
-                            boxType="circle" *ngIf="gameOptions.opponentType == 0"></CheckBox>
-                    </GridLayout>
+                <StackLayout class="label">
+                    <GridLayout rows="auto,auto" columns="auto,*,auto" (tap)="gameOptions.opponentType=0;" padding="5 15 5 15">
+                        <Image row="0" col="0" checked="true" horizontalAlignment="right" src="~/assets/images/two_player_random.png" height="30" width="30"
+                            marginLeft="10" verticalAlignment="center" marginRight="5" ></Image>
 
-                    <GridLayout rows="*,*" columns="*">
-                        <Label row="0" col="0" text="With Friends" textWrap="true" padding="15" (tap)="gameOptions.opponentType=1;"></Label>
-                        <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F"
-                            boxType="circle" *ngIf="gameOptions.opponentType == 1" (tap)="gameOptions.opponentType=1;"></CheckBox>
-                        <StackLayout row="1" col="0" *ngIf="gameOptions.opponentType == 1">
-                            <RadListView [items]="dataItem">
+                        <Label row="0" col="1" text="Random" textWrap="true" padding="15"></Label>
+                        <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25"
+                            marginLeft="10" verticalAlignment="center" marginRight="5"  *ngIf="gameOptions.opponentType == 0"></Image>
+                    </GridLayout>
+                    <StackLayout class="hr-light"></StackLayout>
+                    <GridLayout rows="*,*,*" columns="auto,*,auto"  padding="5 15 5 15" >
+                        <Image row="0" col="0" checked="true" horizontalAlignment="right" src="~/assets/images/two_player_friend.png" height="30" width="30"
+                        marginLeft="10" verticalAlignment="center" marginRight="5"  (tap)="gameOptions.opponentType=1;"></Image>
+
+                        <Label row="0" col="1" text="With Friends" textWrap="true" padding="15" (tap)="gameOptions.opponentType=1;"></Label>
+                        <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25"
+                            marginLeft="10" verticalAlignment="center" marginRight="5"   *ngIf="gameOptions.opponentType == 1" (tap)="gameOptions.opponentType=1;"></Image>
+                        
+                        <StackLayout *ngIf="gameOptions.opponentType == 1" row="1" col="0"  colSpan="3" class="hr-light"></StackLayout>
+                        
+                        <StackLayout row="2" col="0" colSpan="3" 
+                        *ngIf="gameOptions.opponentType == 1" paddingBottom="0">
+                            <RadListView #friendListView [items]="dataItem" height="140">
                                 <ng-template let-item="item">
-                                    <StackLayout paddingTop="10" class="friend-list" (tap)="selectFriendId(item)">
-                                        <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray" stretch="aspectFill"
+                                    <StackLayout paddingTop="10" (tap)="selectFriendId(item)">
+                                            <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray" stretch="aspectFill"
                                             height="64" width="64" marginLeft="10" verticalAlignment="center"
                                             marginRight="10" borderRadius="50"></Image>
-                                        <Label class="nameLabel" [text]="userDict[item]?.displayName"
-                                            horizontalAlignment="center"></Label>
-                                        <CheckBox visibility="{{ item === friendUserId ? 'visible' : 'collapsed' }}"
-                                            checked="true" horizontalAlignment="center" android:fillColor="#89C24F"
-                                            boxType="circle"></CheckBox>
+                                            <Label class="nameLabel" text="{{userDict[item]?.displayName}}"
+                                            horizontalAlignment="center" textWrap="true"></Label>
+                                            <Image visibility="{{ (item === friendUserId) ? 'visible' : 'collapsed'}}" src="~/assets/images/check.png" height="30" width="30"
+                            marginLeft="10" verticalAlignment="center" marginRight="5" ></Image>  
                                     </StackLayout>
                                 </ng-template>
                                 <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal"></ListViewLinearLayout>
@@ -70,44 +95,42 @@
                 </StackLayout>
             </CardView>
 
-            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="0 5">
-                <Label row="0" col="0" text="Select Preferred Category" textWrap="true"></Label>
+            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
+                <Label row="0" col="0" text="Select Preferred Category" textWrap="true" class="label"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
-                    textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"></Label>
+                    textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" background="#fff"></Label>
             </GridLayout>
 
             <CardView margin="5 10" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}" backgroundColor="white">
                 <StackLayout>
                     <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option" *ngFor="let category of categories"
                         (tap)="selectCategory(category)">
-                        <Label [text]="category.categoryName" row="0" col="0" textWrap="true" padding="8"></Label>
-                        <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F"
-                            boxType="circle" *ngIf="category.requiredForGamePlay || category.isSelected"></CheckBox>
+                        <Label [text]="category.categoryName" row="0" col="0" textWrap="true" padding="8" class="label"></Label>
+                        <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25"
+                            marginLeft="10" verticalAlignment="center" marginRight="5"   *ngIf="category.requiredForGamePlay || category.isSelected"></Image>
                     </GridLayout>
 
                 </StackLayout>
             </CardView>
 
             <CardView margin="5 10" visibility="{{ showSelectCategory ? 'visible' : 'collapsed' }}" backgroundColor="white">
-                <Label padding="15" text="{{getSelectedCatName()}}" textWrap="true"></Label>
+                <Label padding="15" text="{{getSelectedCatName()}}" textWrap="true" class="label"></Label>
             </CardView>
-
-
-            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="0 5">
-                <Label row="0" col="0" text="Tags associated categories" textWrap="true"></Label>
+            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
+                <Label row="0" col="0" text="Tags associated categories" textWrap="true" class="label"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
-                    textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
+                    textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag" background="#fff"></Label>
             </GridLayout>
 
             <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white">
                 <StackLayout>
-                    <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option" *ngFor="let tag of selectedTags">
+                    <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option label" *ngFor="let tag of selectedTags" >
                         <Label [text]="tag" row="0" col="0" textWrap="true" padding="8"></Label>
                         <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
                             horizontalAlignment="right" (tap)="removeEnteredTag(tag)"></Label>
                     </GridLayout>
                     <GridLayout rows="auto,auto" columns="*,auto" padding="10" class="two-player-option">
-                        <Label row="0" col="0" text="Add Tags" textWrap="true"></Label>
+                        <Label row="0" col="0" text="Add Tags" textWrap="true" class="label" padding="2 0"></Label>
                         <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#CDCECE"
                             padding="5">
                             <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
@@ -123,11 +146,11 @@
                             </RadAutoCompleteTextView>
                         </StackLayout>
                         <Button row="1" col="1" text="Add" (tap)="addCustomTag()" padding="10" backgroundColor="#89C24F"
-                            color="#ffffff"></Button>
+                            color="#ffffff" marginLeft="10" fontWeight="700" ></Button>
                     </GridLayout>
                 </StackLayout>
             </CardView>
-            <CardView margin="5 10" visibility="{{ showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white">
+            <CardView margin="5 10" visibility="{{ showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white" class="label">
                 <Label padding="15" [text]="selectedTags.join(', ')" textWrap="true"></Label>
             </CardView>
 
