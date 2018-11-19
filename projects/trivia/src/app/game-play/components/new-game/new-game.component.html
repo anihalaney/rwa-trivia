@@ -8,8 +8,8 @@
                 <h1>Game Options</h1>
                 <p>Please select a player mode to start a new game</p>
             </div>
-            <div class="frd-err-msg">
-                <label *ngIf="errMsg">{{errMsg}}</label>
+            <div *ngIf="errMsg" class="frd-err-msg">
+                <label>{{errMsg}}</label>
             </div>
             <div class="optionbox">
                 <div class="row">

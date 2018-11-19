@@ -11,11 +11,22 @@
                 <Label horizontalAlignment="center" text="Round {{game.round}} / {{totalRound}}" textWrap="true"></Label>
                 <Label horizontalAlignment="center" text="Score {{game.stats[user.userId].score}}" textWrap="true"></Label>
                 <StackLayout orientation="horizontal" horizontalAlignment="center">
-                    <Button *ngIf="game.stats[user.userId].score>= 1" class="score1 sprite" text=""></Button>
+                    <!-- <Button *ngIf="game.stats[user.userId].score>= 1" class="score1 sprite" text=""></Button>
                     <Button *ngIf="game.stats[user.userId].score>= 2" class="score2 sprite" text=""></Button>
                     <Button *ngIf="game.stats[user.userId].score>= 3" class="score3 sprite" text=""></Button>
                     <Button *ngIf="game.stats[user.userId].score>= 4" class="score4 sprite" text=""></Button>
-                    <Button *ngIf="game.stats[user.userId].score>= 5" class="score5 sprite" text=""></Button>
+                    <Button *ngIf="game.stats[user.userId].score>= 5" class="score5 sprite" text=""></Button> -->
+                    <Image *ngIf="game.stats[user.userId].score>=1" src="~/assets/images/score1.png" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                    <Image *ngIf="game.stats[user.userId].score>=2" src="~/assets/images/score2.png" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                    <Image *ngIf="game.stats[user.userId].score>=3" src="~/assets/images/score3.png" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                    <Image *ngIf="game.stats[user.userId].score>=4" src="~/assets/images/score4.png" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                    <Image *ngIf="game.stats[user.userId].score>=5" src="~/assets/images/score5.png" height="30" width="30"
+                    marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+    
                 </StackLayout>
             </StackLayout>
 
@@ -33,16 +44,17 @@
                         </GridLayout>
                     </StackLayout>
                     <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
-                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 1?'score1':'score0'"
-                            text=""></Button>
-                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 2?'score2':'score0'"
-                            text=""></Button>
-                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 3?'score3':'score0'"
-                            text=""></Button>
-                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 4?'score4':'score0'"
-                            text=""></Button>
-                        <Button class="sprite" [ngClass]="game.stats[user.userId].score >= 5?'score5':'score0'"
-                            text=""></Button>
+                        <Image *ngIf="game.stats[user.userId].score>=1" src="~/assets/images/score1.png" height="30" width="30"
+                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                        <Image *ngIf="game.stats[user.userId].score>=2" src="~/assets/images/score2.png" height="30" width="30"
+                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                        <Image *ngIf="game.stats[user.userId].score>=3" src="~/assets/images/score3.png" height="30" width="30"
+                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                        <Image *ngIf="game.stats[user.userId].score>=4" src="~/assets/images/score4.png" height="30" width="30"
+                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                        <Image *ngIf="game.stats[user.userId].score>=5" src="~/assets/images/score5.png" height="30" width="30"
+                        marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+            
                             <Label text="badge" textWrap="true"></Label>
                     </StackLayout>
                 </GridLayout>   
@@ -61,16 +73,17 @@
                             </GridLayout>
                         </StackLayout>
                         <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center">
-                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 1?'score1':'score0'"
-                                text=""></Button>
-                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 2?'score2':'score0'"
-                                text=""></Button>
-                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 3?'score3':'score0'"
-                                text=""></Button>
-                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 4?'score4':'score0'"
-                                text=""></Button>
-                            <Button class="sprite" [ngClass]="game.stats[otherUserId].score >= 5?'score5':'score0'"
-                                text=""></Button>
+                            <Image *ngIf="game.stats[otherUserId].score>=1" src="~/assets/images/score1.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                            <Image *ngIf="game.stats[otherUserId].score>=2" src="~/assets/images/score2.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                            <Image *ngIf="game.stats[otherUserId].score>=3" src="~/assets/images/score3.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                            <Image *ngIf="game.stats[otherUserId].score>=4" src="~/assets/images/score4.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                            <Image *ngIf="game.stats[otherUserId].score>=5" src="~/assets/images/score5.png" height="30" width="30"
+                            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"  top="10"  left="80"></Image>
+                
                                 <Label text="badge" textWrap="true"></Label>
                         </StackLayout>
                     </GridLayout>   
