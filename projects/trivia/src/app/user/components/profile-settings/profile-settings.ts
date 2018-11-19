@@ -40,6 +40,7 @@ export class ProfileSettings {
     PENDING = profileSettingsConstants.PENDING;
     APPROVED = profileSettingsConstants.APPROVED;
     bulkUploadBtnText: string;
+    loaderBusy = false;
 
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
@@ -49,6 +50,8 @@ export class ProfileSettings {
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
         public utils: Utils) {
+
+        this.toggleLoader(true);
 
         this.fb = formBuilder;
 
@@ -86,6 +89,8 @@ export class ProfileSettings {
                 if (user.roles && user.roles['bulkuploader']) {
                     this.user.bulkUploadPermissionStatus = profileSettingsConstants.APPROVED;
                 }
+
+                this.toggleLoader(false);
             }
         }));
     }
@@ -104,6 +109,10 @@ export class ProfileSettings {
 
     filter(val: string): string[] {
         return this.tagsAutoComplete.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
+    }
+
+    toggleLoader(flag: boolean) {
+        this.loaderBusy = flag;
     }
 
     // create the form based on user object
@@ -187,6 +196,7 @@ export class ProfileSettings {
 
     // store the user object
     saveUser(user: User) {
+        this.toggleLoader(true);
         this.store.dispatch(new userActions.AddUserProfile({ user: user }));
     }
 
