@@ -7,6 +7,8 @@ import { Category, User, LeaderBoardUser } from '../../../../../../shared-librar
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
+
 describe('Component: LeaderboardComponent', () => {
 
     let component: LeaderboardComponent;
@@ -16,7 +18,10 @@ describe('Component: LeaderboardComponent', () => {
         // refine the test module by declaring the LeaderboardComponent component
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({})],
-            providers: [Store, UserActions, Utils, ActivatedRoute],
+            providers: [Store, UserActions, Utils, {
+                provide: ActivatedRoute,
+                useValue: { params: of({ category: 'Special' }) }
+            }],
             declarations: [LeaderboardComponent]
         });
 
@@ -31,7 +36,6 @@ describe('Component: LeaderboardComponent', () => {
 
     it('check length of record', () => {
         component.leaderBoardStatDict = TEST_DATA.leaderBoard;
-        console.log(JSON.stringify(component.leaderBoardStatDict));
 
         let length = component.leaderBoardStatDict['1'].slice(0, 3).length;
         expect(length).toEqual(3);

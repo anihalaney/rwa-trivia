@@ -40,8 +40,6 @@ export class LeaderboardComponent implements OnDestroy {
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
-    @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(APP_ID) private appId: string,
     private utils: Utils,
     public route: ActivatedRoute) {
 
