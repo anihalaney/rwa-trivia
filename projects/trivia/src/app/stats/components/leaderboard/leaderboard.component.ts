@@ -31,6 +31,7 @@ export class LeaderboardComponent implements OnDestroy {
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;
+  maxLeaderBoardDisplay: number;
   platformIds: any;
   isbrowser: any;
   isServer: any;
@@ -58,7 +59,7 @@ export class LeaderboardComponent implements OnDestroy {
     // if (isPlatformBrowser(this.platformId)) {
     this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
     // }
-
+    this.maxLeaderBoardDisplay = 10;
 
     this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
