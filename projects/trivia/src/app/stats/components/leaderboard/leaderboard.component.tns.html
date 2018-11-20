@@ -8,7 +8,7 @@
                             <StackLayout horizontalAlignment="center" verticalAlignment="center">
                                 <Label text="{{categoryDict[cat]?.categoryName.charAt(0).toUpperCase() + categoryDict[cat]?.categoryName.slice(1)}}" textWrap="true" class="title" verticalAlignment="center" paddingTop="25"></Label>
                             </StackLayout>
-                        <StackLayout class="question-answered " marginTop="10" *ngFor="let user of leaderBoardStatDict[cat] ;let j=index;">
+                        <StackLayout class="question-answered " marginTop="10" *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:10;let j=index;">
                             <GridLayout rows="*" columns="auto,auto,*,auto" marginTop="10">
                                 <Label text="#{{j+1}}" row="0" col="0" class="padding-5 text-black" ></Label>
                                 <Image row="0" col="1" [src]="getImageUrl(userDict[user.userId])" backgroundColor="gray" stretch="aspectFill" stretch="aspectFill" height="55" width="55" marginLeft="10"
