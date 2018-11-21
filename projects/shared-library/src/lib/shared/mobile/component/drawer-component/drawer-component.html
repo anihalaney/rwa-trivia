@@ -28,7 +28,7 @@
                     <StackLayout row="3" colSpan="2" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
                         <StackLayout *ngFor="let category of categories" orientation="horizontal" paddingLeft="10"
                             (tap)="leaderBoard(category.categoryName)">
-                            <Label col="0" text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="white"></Label>
+                            <Label col="0" text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
                             <Label text="{{category.categoryName}}" textWrap="true" class="sideLabel sideStackLayout"
                                 padding="10">
                             </Label>

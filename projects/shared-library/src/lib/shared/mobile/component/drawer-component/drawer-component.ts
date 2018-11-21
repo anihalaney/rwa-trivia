@@ -27,7 +27,7 @@ export class DrawerComponent implements OnInit {
     user: User;
     categoriesObs: Observable<Category[]>;
     categories: Category[];
-    showSelectCategory: Boolean = false;
+    showSelectCategory: Boolean = true;
     activeMenu: String = 'Home';
     version: string;
 
