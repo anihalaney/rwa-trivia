@@ -22,4 +22,7 @@
 
     <Label *ngIf="authProvider.isAuthenticated" row="5" colSpan="2" verticalAlignment="bottom" backgroundColor="#39454D"
         textAlignment="center" fontSize="16" text="Logout" class="sideLabel sideStackLayout" (tap)="logout()"></Label>
+
+    <Label row="6" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Submit Question" class="sideLabel sideStackLayout"
+        (tap)="submieQuestion()"></Label>
 </GridLayout>
