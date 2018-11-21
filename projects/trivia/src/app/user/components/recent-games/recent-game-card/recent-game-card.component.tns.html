@@ -1,43 +1,51 @@
 <StackLayout horizontalAlignment="center" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
-    <Label text="WON" textWrap="true" fontSize="19" color="#1f7b2b" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId"
+    <Label text="WON" textWrap="true" class="label-success" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId"
         horizontalAlignment="center"></Label>
-    <Label text="LOST" textWrap="true" fontSize="19" color="#fe4f20" *ngIf="game.winnerPlayerId !== user.userId"
+    <Label text="LOST" textWrap="true" class="label-failed" *ngIf="game.winnerPlayerId !== user.userId"
         horizontalAlignment="center"></Label>
     <Label text="{{categoryDict[game.gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() +
         categoryDict[game.gameOptions.categoryIds[0]].categoryName.slice(1)}}"
-        textWrap="true" fontSize="15" horizontalAlignment="center"></Label>
+        textWrap="true" class="label-category" horizontalAlignment="center"></Label>
     <Image *ngIf="user" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
         marginLeft="2" verticalAlignment="center" borderRadius="50" horizontalAlignment="center"></Image>
-    <Label text="You" textWrap="true" fontSize="18" horizontalAlignment="center"></Label>
-    <Label text="Score {{game.stats[user.userId]?.score}}" textWrap="true" fontSize="15" horizontalAlignment="center"></Label>
+    <Label text="You" textWrap="true" class="user-name" horizontalAlignment="center"></Label>
+    <Label text="Score {{game.stats[user.userId]?.score}}" class="label-score" textWrap="true" horizontalAlignment="center"></Label>
 </StackLayout>
 
-<GridLayout rows="auto" columns="*,auto,*" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+<GridLayout rows="auto" columns="*,auto,*" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" padding="15">
     <StackLayout row="0" col="0">
         <Image *ngIf="user" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
             marginLeft="2" borderRadius="50" horizontalAlignment="center"></Image>
-        <Label text="You" textWrap="true" fontSize="18" horizontalAlignment="center"></Label>
-        <Label text="Score {{game.stats[user.userId]?.score}}" textWrap="true" fontSize="15" horizontalAlignment="center"></Label>
+        <Label text="You" textWrap="true" class="user-name" horizontalAlignment="center"></Label>
+        <Label text="Score {{game.stats[user.userId]?.score}}" textWrap="true" class="label-score" horizontalAlignment="center"></Label>
     </StackLayout>
     <StackLayout row="0" col="1">
-        <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" backgroundColor="#333"
-            borderWidth="1" height="50" width="1">
+        <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" class="border-left" height="50">
         </StackLayout>
-        <Label text="WON" textWrap="true" fontSize="19" color="#1f7b2b" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId"
+        <Label text="WON" textWrap="true" class="label-success" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId"
             horizontalAlignment="center"></Label>
-        <Label text="LOST" textWrap="true" fontSize="19" color="#fe4f20" *ngIf="game.winnerPlayerId !== user.userId"
+        <Label text="LOST" textWrap="true" class="label-failed" *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId"
             horizontalAlignment="center"></Label>
-        <Label text="{{categoryDict[game.gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() +
+        <Label text="TIE" textWrap="true" class="label-success" *ngIf="game.round < 16 && !game.winnerPlayerId && game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT"
+            horizontalAlignment="center"></Label>
+        <Label text="REJECTED" textWrap="true" class="label-failed" *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED"
+            horizontalAlignment="center"></Label>
+        <Label text="EXPIRED" textWrap="true" class="label-failed" *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.INVITATION_TIMEOUT"
+            horizontalAlignment="center"></Label>
+        <Label text="DRAW" textWrap="true" class="label-failed" *ngIf="!game.winnerPlayerId && game.round === 16"
+            horizontalAlignment="center"></Label>
+        <Label class="label-category" text="{{categoryDict[game.gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() +
                 categoryDict[game.gameOptions.categoryIds[0]].categoryName.slice(1)}}"
-            textWrap="true" fontSize="15" horizontalAlignment="center"></Label>
-        <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" backgroundColor="#333"
-            borderWidth="1" height="50" width="1">
+            textWrap="true" horizontalAlignment="center"></Label>
+        <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" class="border-left" height="50">
         </StackLayout>
     </StackLayout>
     <StackLayout row="0" col="2">
-        <Image *ngIf="user" src="{{getImageUrl(userDict[this.otherUserId])}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
-            marginLeft="2" borderRadius="50" horizontalAlignment="center"></Image>
-        <Label text="{{userDict[getOpponentId(game)]?.displayName}}" textWrap="true" fontSize="18" horizontalAlignment="center"></Label>
-        <Label text="Score {{game.stats[getOpponentId(game)]?.score}}" textWrap="true" fontSize="15" horizontalAlignment="center"></Label>
+        <Image *ngIf="user" src="{{getImageUrl(userDict[this.otherUserId])}}" backgroundColor="gray" stretch="aspectFill"
+            height="64" width="64" marginLeft="2" borderRadius="50" horizontalAlignment="center"></Image>
+        <Label text="{{userDict[getOpponentId(game)]?.displayName}}" textWrap="true" class="user-name"
+            horizontalAlignment="center"></Label>
+        <Label text="Score {{game.stats[getOpponentId(game)]?.score}}" textWrap="true" class="label-score"
+            horizontalAlignment="center"></Label>
     </StackLayout>
 </GridLayout>
