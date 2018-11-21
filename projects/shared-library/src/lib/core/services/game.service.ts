@@ -196,7 +196,7 @@ export class GameService {
         { name: 'gameOver', comparator: '==', value: false }
         ],
         orderBy: [{ name: 'turnAt', value: 'desc' }],
-        limit: 7,
+        limit: 20,
       };
       const query1 = this.dbService.valueChanges('games', '', queryParams1);
       const queryParams2 = {
@@ -205,7 +205,7 @@ export class GameService {
         { name: 'gameOver', comparator: '==', value: false }
         ],
         orderBy: [{ name: 'turnAt', value: 'desc' }],
-        limit: 7,
+        limit: 20,
       };
       const query2 = this.dbService.valueChanges('games', '', queryParams2);
       return combineLatest(query1, query2)
