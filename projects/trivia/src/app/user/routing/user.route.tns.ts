@@ -1,13 +1,19 @@
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 import {
-    ProfileSettingsComponent
+    ProfileSettingsComponent,
+    QuestionAddUpdateComponent
 } from '../components';
 
 export const userRoutes: Routes = [
     {
         path: 'profile/:userid',
         component: ProfileSettingsComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'questions/add',
+        component: QuestionAddUpdateComponent,
         canActivate: [AuthGuard]
     }
 ];
