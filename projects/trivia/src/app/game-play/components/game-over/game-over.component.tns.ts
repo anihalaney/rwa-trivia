@@ -6,7 +6,6 @@ import { Store, select } from '@ngrx/store';
 import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
 
-
 @Component({
   selector: 'game-over',
   templateUrl: './game-over.component.html',
@@ -14,6 +13,7 @@ import { GameOver } from './game-over';
 })
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
+  showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils) {
     super(store, userActions, utils);
@@ -41,7 +41,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
-   }
+  }
 
   shareScore() {
     this.loaderStatus = true;
