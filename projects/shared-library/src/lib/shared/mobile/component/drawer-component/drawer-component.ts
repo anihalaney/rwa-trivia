@@ -86,4 +86,9 @@ export class DrawerComponent implements OnInit {
         this.routerExtension.navigate(['/recent-game']);
         this.closeDrawer();
     }
+
+    navigateToProfileSettings() {
+        this.routerExtension.navigate(['/my/profile', this.user.userId]);
+        this.closeDrawer();
+    }
 }
