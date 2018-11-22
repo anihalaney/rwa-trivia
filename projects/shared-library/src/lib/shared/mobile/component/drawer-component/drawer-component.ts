@@ -88,10 +88,7 @@ export class DrawerComponent implements OnInit {
     }
 
     navigateToProfileSettings() {
-<<<<<<< HEAD
         this.activeMenu = 'Profile Settings';
-=======
->>>>>>> d9f900ce32b8ad3c004de9f8fb8ebfb9d6bcdc11
         this.routerExtension.navigate(['/my/profile', this.user.userId]);
         this.closeDrawer();
     }
