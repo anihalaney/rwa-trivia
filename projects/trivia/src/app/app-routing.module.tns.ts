@@ -19,9 +19,16 @@ export const routes: Routes = [
         resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
     },
     {
+        path: 'my',
+        loadChildren: './user/user.module#UserModule',
+        canActivate: [AuthGuard],
+        resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
+    },
+    {
         path: 'recent-game',
         component: RecentGamesComponent,
     }
+
 ];
 
 @NgModule({
