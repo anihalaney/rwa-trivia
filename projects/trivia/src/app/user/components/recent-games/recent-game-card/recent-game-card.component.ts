@@ -38,10 +38,10 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit(): void {
         this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-        this.userDict$.subscribe(userDict => {
+        this.subs.push(this.userDict$.subscribe(userDict => {
         this.userDict = userDict;
             this.cd.detectChanges();
-        });
+        }));
 
         if (this.game) {
             this.otherUserId = this.getOpponentId(this.game);
@@ -76,7 +76,7 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.cd.detach();
+        // this.cd.detach();
         this.utils.unsubscribe(this.subs);
     }
 }
