@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { Store, select } from '@ngrx/store';
 import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
+import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
+import { ReportGameComponent } from './../report-game/report-game.component';
 
 @Component({
   selector: 'game-over',
@@ -15,7 +17,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
-    private windowRef: WindowRef, public utils: Utils) {
+    private windowRef: WindowRef, public utils: Utils,
+    private modal: ModalDialogService, private vcRef: ViewContainerRef) {
     super(store, userActions, utils);
 
     this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => { }));
@@ -52,4 +55,15 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.utils.unsubscribe(this.subs);
   }
 
+  openDialog() {
+    console.log('logs');
+    const options = {
+      context: {},
+      fullscreen: true,
+      viewContainerRef: this.vcRef
+  };
+  this.modal.showModal(ReportGameComponent, options).then(res => {
+      console.log(res);
+  });
+  }
 }

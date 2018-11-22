@@ -1,7 +1,6 @@
 <StackLayout>
     <ScrollView>
         <StackLayout>
-
             <StackLayout marginTop="30">
                 <Label horizontalAlignment="center" text="GAME OVER" textWrap="true" fontSize="19"></Label>
                 <Label horizontalAlignment="center" text="{{categoryName}}" textWrap="true"></Label>
@@ -172,7 +171,7 @@
                             </StackLayout>
                         </StackLayout>
                         <Label row="2" col="1" text="Your Ans: {{row.userGivenAnswer}}" textWrap="true"></Label>
-                        <Button col="3" rowSpan="3" text="report" padding="5"></Button>
+                        <Button col="3" rowSpan="3" text="report" padding="5" (tap)="openDialog()"></Button>
                     </GridLayout>
                 </StackLayout>
             </StackLayout>
