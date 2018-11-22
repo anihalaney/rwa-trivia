@@ -58,6 +58,8 @@ See it in action (still a work in progress) - https://bitwiser.io
 
 [Part 23: Server side rendering with Angular universal](https://blog.realworldfullstack.io/real-world-app-part-23-ssr-with-angular-universal-637ec8490c44)
 
+[Part 24: Angular workspace](https://blog.realworldfullstack.io/real-world-app-part-24-angular-workspace-69345d32e00e)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)
