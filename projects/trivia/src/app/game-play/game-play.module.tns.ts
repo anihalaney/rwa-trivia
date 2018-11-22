@@ -7,7 +7,7 @@ import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import {
-  NewGameComponent, GameComponent, GameDialogComponent, GameQuestionComponent, GameOverComponent
+  ReportGameComponent, NewGameComponent, GameComponent, GameDialogComponent, GameQuestionComponent, GameOverComponent
 } from './components';
 import { effects, reducer } from './store';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
@@ -18,7 +18,8 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
     GameComponent,
     GameDialogComponent,
     GameQuestionComponent,
-    GameOverComponent
+    GameOverComponent,
+    ReportGameComponent
   ],
   imports: [
     // rwa modules
@@ -35,6 +36,7 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
     EffectsModule.forFeature(effects),
 
   ],
+  entryComponents: [ReportGameComponent],
   providers: [
   ]
 })
