@@ -50,10 +50,7 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
     EffectsModule.forFeature(effects),
 
     SharedRoutingModule,
-    SharedModule,
-
-    NativeScriptFormsModule,
-    ReactiveFormsModule
+    SharedModule
 
   ],
   exports: [],
