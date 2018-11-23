@@ -8,7 +8,11 @@ import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
 import { Utils } from './../../../../core/services';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
+import { Observable, Subscription } from 'rxjs';
+import { Category } from './../../../model';
+import { Router, NavigationExtras } from '@angular/router';
 
+// import { coreState, CoreState,  } from './../../../../core/store';
 @Component({
     moduleId: module.id,
     selector: 'ns-drawer-component',
@@ -21,7 +25,10 @@ export class DrawerComponent implements OnInit {
     photoUrl = '~/assets/icons/icon-192x192.png';
     currentState;
     user: User;
-
+    categoriesObs: Observable<Category[]>;
+    categories: Category[];
+    showSelectCategory: Boolean = true;
+    activeMenu: String = 'Home';
     version: string;
 
     constructor(private routerExtension: RouterExtensions,
@@ -31,7 +38,10 @@ export class DrawerComponent implements OnInit {
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,
     ) {
-
+        this.categoriesObs = store.select(coreState).pipe(select(s => s.categories));
+        this.categoriesObs.subscribe(categories => {
+            this.categories = categories;
+        });
     }
     ngOnInit() {
 
@@ -47,12 +57,14 @@ export class DrawerComponent implements OnInit {
         sideDrawer.closeDrawer();
     }
 
-    leaderBoard() {
-        this.routerExtension.navigate(['/stats/leaderboard'], { clearHistory: true });
+    leaderBoard(category) {
+        this.activeMenu = 'Category Leaderboard';
+        this.routerExtension.navigate(['/stats/leaderboard', category], { clearHistory: true });
         this.closeDrawer();
     }
 
     dashboard() {
+        this.activeMenu = 'Home';
         this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
         this.closeDrawer();
     }
@@ -63,17 +75,20 @@ export class DrawerComponent implements OnInit {
     }
 
     logout() {
+        this.activeMenu = 'Home';
         this.authProvider.logout();
         this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
         this.closeDrawer();
     }
 
     recentGame() {
+        this.activeMenu = 'Recently Completed Games';
         this.routerExtension.navigate(['/recent-game']);
         this.closeDrawer();
     }
 
     navigateToProfileSettings() {
+        this.activeMenu = 'Profile Settings';
         this.routerExtension.navigate(['/my/profile', this.user.userId]);
         this.closeDrawer();
     }
