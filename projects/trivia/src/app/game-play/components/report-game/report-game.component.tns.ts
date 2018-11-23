@@ -86,15 +86,15 @@ export class ReportGameComponent implements OnInit {
 
     }
 
-    changeCheckedRadio(radioOption: RadioOption): void {
-        radioOption.selected = !radioOption.selected;
-        if (!radioOption.selected) {
+    changeCheckedRadio(reportOption: ReportOption): void {
+        reportOption.selected = !reportOption.selected;
+        if (!reportOption.selected) {
             return;
         }
-        this.selectedOption = radioOption.text;
+        this.selectedOption = reportOption.text;
         // uncheck all other optionss
         this.reportOptions.forEach(option => {
-            if (option.text !== radioOption.text) {
+            if (option.text !== reportOption.text) {
                 option.selected = false;
             }
         });
