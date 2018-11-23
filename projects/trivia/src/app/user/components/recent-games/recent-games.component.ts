@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef} from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as userActions from '../../../user/store/actions';
 import { User, GameStatus, Game } from 'shared-library/shared/model';
@@ -26,7 +26,9 @@ export class RecentGamesComponent implements OnInit, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
 
-  constructor(private store: Store<AppState>, private utils: Utils, private cd: ChangeDetectorRef) {
+  constructor(private store: Store<AppState>,
+              private utils: Utils,
+              private cd: ChangeDetectorRef) {
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
@@ -34,14 +36,13 @@ export class RecentGamesComponent implements OnInit, OnDestroy {
     }));
 
     this.recentGames$ = this.store.select(userState).pipe(select(s => s.getGameResult));
-
   }
 
   ngOnInit(): void {
-    this.recentGames$.subscribe((recentGames) => {
+      this.subs.push(this.recentGames$.subscribe((recentGames) => {
       this.recentGames = recentGames;
       this.cd.detectChanges();
-    });
+    }));
   }
 
   getMoreCard() {
@@ -50,7 +51,7 @@ export class RecentGamesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.cd.detach();
+
     this.utils.unsubscribe(this.subs);
   }
 
