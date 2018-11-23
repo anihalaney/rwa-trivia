@@ -1,1 +1,44 @@
-<Label text="report new game question" textWrap="true"></Label>
+<StackLayout>
+    <ScrollView>
+        <StackLayout>
+                <Button text="CLOSE MODAL" (tap)="onClose()"></Button>
+            <Label text="{{question.questionText}}" horizontalAlignment="center" textWrap="true"></Label>
+            <GridLayout rows="*,*,*,*,*,*,*" columns="auto,*">
+                <Label row="0" col="0" text="Correct answer: " textWrap="true"></Label>
+                <Label row="0" col="1" text="{{correctAnswer}}" textWrap="true"></Label>
+                <Label row="1" col="0" text="Other Option: " textWrap="true"></Label>
+                <Label row="1" col="1" text="{{otherAnswer}}" textWrap="true"></Label>
+                <Label row="2" col="0" text="Category: " textWrap="true"></Label>
+                <Label row="2" col="1" text="{{categoryName}}" textWrap="true"></Label>
+                <Label row="3" col="0" text="Tags: " textWrap="true"></Label>
+                <Label row="3" col="1" text="{{question.tags?.toString()}}" textWrap="true"></Label>
+                <StackLayout margin="10 0" class="hr-light" row="4" colSpan="2" textWrap="true"></StackLayout>
+
+                <Label row="5" colSpan="2" padding="15 0" text="If you're having trouble with above question, please use this from to tell
+         us about the issue you're experiencing."
+                    textWrap="true"></Label>
+
+                <Label row="6" colSpan="2" text="Issues" fontWeight="600" textWrap="true"></Label>
+
+            </GridLayout>
+            <StackLayout  padding="15" row="0" col="0">
+                <StackLayout class="p-10" *ngFor="let option of reportOptions">
+                    <StackLayout orientation="horizontal" verticalAlignment="center">
+                        <CheckBox #elem [checked]="option.selected" (checkedChange)="elem.checked !== option.selected && changeCheckedRadio(option)"
+                            class="checkbox" boxType="circle"></CheckBox>
+                        <StackLayout verticalAlignment="center">
+                            <Label [text]="option.text" textWrap="true" (tap)="changeCheckedRadio(option)"></Label>
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+                <TextView hint="Other" class="textbox"  [(ngModel)]="otherReason" height="100"></TextView>
+                
+                <Label text="Thanks for taking the time to submit a issue. We will be in touch with you for more details as we investigate.
+                " textWrap="true" padding="20"></Label>
+                
+                
+                <Button text="SUBMIT" (tap)="saveReportQuestion()"></Button>
+            </StackLayout>
+        </StackLayout>      
+    </ScrollView>
+</StackLayout>

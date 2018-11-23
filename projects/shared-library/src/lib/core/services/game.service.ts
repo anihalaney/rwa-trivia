@@ -255,7 +255,6 @@ export class GameService {
           reportQuestion.questions = question[0]['questions'];
           const key = Object.keys(report.questions)[0];
           reportQuestion.questions[key] = report.questions[key];
-
           return of(this.dbService.updateDoc('report_questions', dbReport.gameId, { questions: reportQuestion.questions }));
         } else {
           return of(this.dbService.setDoc('report_questions', dbReport.gameId, dbReport));

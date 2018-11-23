@@ -149,9 +149,7 @@
                     <Button text="Home" [nsRouterLink]="['/dashboard']"></Button>
                 </StackLayout>
             </StackLayout>
-
             <StackLayout>
-
                 <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5"  (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;">
                         <Label row="0" col="0" text="View questions & answers" textWrap="true" class="label"></Label>
                         <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showQuesAndAnswer ? '&#xf067;' : '&#xf068;' }}"
@@ -171,7 +169,9 @@
                             </StackLayout>
                         </StackLayout>
                         <Label row="2" col="1" text="Your Ans: {{row.userGivenAnswer}}" textWrap="true"></Label>
-                        <Button col="3" rowSpan="3" text="report" padding="5" (tap)="openDialog()"></Button>
+                        <Button col="3" rowSpan="3" text="report" padding="5" (tap)="openDialog(row)" *ngIf="!game.playerQnAs[i].isReported"></Button>
+                         <Label col="3" rowSpan="3" text="Reported" color="red" fontWeight="600" textWrap="true"  *ngIf="game.playerQnAs[i].isReported"></Label>
+                            
                     </GridLayout>
                 </StackLayout>
             </StackLayout>
