@@ -35,11 +35,18 @@ export class TNSDbService extends DbService {
             for (const param of queryParams.condition) {
                 query = query.where(param.name, param.comparator, param.value);
             }
+            if (queryParams.orderBy) {
+                for (const param of queryParams.orderBy) {
+                    query = query.orderBy(param.name, param.value);
+                }
+            }
+            if (queryParams.limit) {
+                query = query.limit(queryParams.limit);
+            }
         }
         if (path) {
             query = query.doc(path);
         }
-
         return Observable.create(observer => {
             const unsubscribe = query.onSnapshot((snapshot: any) => {
                 let results = [];
