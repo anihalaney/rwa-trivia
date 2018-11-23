@@ -2,20 +2,24 @@
 <StackLayout backgroundColor="#f1f2f2">
 <ScrollView>
     <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0">
-            <StackLayout class="question-answered " marginTop="10" *ngFor="let cat of leaderBoardCat | slice:lbsSliceStartIndex:lbsSliceLastIndex; let i=index">
-                <CardView margin="10" elevation="20" radius="15" class="gameplay">
+            <StackLayout class="question-answered " *ngFor="let cat of leaderBoardCat">
+                <CardView margin="5" elevation="20" radius="15" class="gameplay"  *ngIf="categoryDict[cat]?.categoryName == category">
                     <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff" height="100%" margin="15">
                             <StackLayout horizontalAlignment="center" verticalAlignment="center">
-                                <Label text="{{categoryDict[cat]?.categoryName.charAt(0).toUpperCase() + categoryDict[cat]?.categoryName.slice(1)}}" textWrap="true" class="title" verticalAlignment="center" ></Label>
+                                <Label text="{{categoryDict[cat]?.categoryName.charAt(0).toUpperCase() + categoryDict[cat]?.categoryName.slice(1)}}" textWrap="true" class="title" verticalAlignment="center" paddingTop="25"></Label>
                             </StackLayout>
-                        <StackLayout class="question-answered " marginTop="10" *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index;">
-                            <GridLayout rows="*" columns="50,auto,*,auto" marginTop="10">
-                                <Label text="#{{j+1}}" row="0" col="0" class="padding-10 text-black" ></Label>
+                        <StackLayout class="question-answered " marginTop="10" *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:10;let j=index;">
+                            <GridLayout rows="*" columns="auto,auto,*,auto" marginTop="10">
+                                <Label text="#{{j+1}}" row="0" col="0" class="padding-5 text-black" ></Label>
                                 <Image row="0" col="1" [src]="getImageUrl(userDict[user.userId])" backgroundColor="gray" stretch="aspectFill" stretch="aspectFill" height="55" width="55" marginLeft="10"
                                 verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
-                                <GridLayout  row="0" col="2" rows="*, *" columns="*" class="padding-10">
-                                    <Label [text]="userDict[user.userId]?.displayName" row="0" col="0" class="text-black"></Label>
-                                    <Label [text]="userDict[user.userId]?.location" row="1" col="0" class="text-gray"></Label>
+                                <GridLayout row="0" col="2" rows="*, *" columns="*" class="padding-10">
+                                    <Label *ngIf="userDict[user.userId]?.displayName" [text]="userDict[user.userId]?.displayName" row="0" col="0" class="text-black"></Label>
+                                    <Label *ngIf="!userDict[user.userId]?.displayName" [text]="unknown" row="0" col="0" class="text-black"></Label>
+
+                                    <Label *ngIf="userDict[user.userId]?.location" [text]="userDict[user.userId]?.location" row="1" col="0" class="text-gray"></Label>
+                                    <Label *ngIf="!userDict[user.userId]?.location" [text]="unknown" row="1" col="0" class="text-gray"></Label>
+                    
                                 </GridLayout>
                                 <GridLayout  row="0" col="3" rows="*, *" columns="*" class="padding-10">
                                     <Label [text]="user.score" row="0" col="0" class="text-black"></Label>
@@ -24,11 +28,6 @@
                             </GridLayout>
                         </StackLayout>
                     </StackLayout>
-                </CardView>
-            </StackLayout>
-            <StackLayout  width="400" orientation="vertical" >
-                    <CardView margin="10" elevation="20" radius="15" class="gameplay">
-                <Button *ngIf="lbsUsersSliceLastIndex!==10"  class="viewall tns-btn"  text="View More" (tap)="displayMore()"  textWrap="true"></Button>
                 </CardView>
             </StackLayout>
         </StackLayout>
