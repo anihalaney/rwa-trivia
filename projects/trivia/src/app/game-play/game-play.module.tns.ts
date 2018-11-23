@@ -9,7 +9,7 @@ import {
   ReportGameComponent, NewGameComponent, GameComponent, GameDialogComponent, GameQuestionComponent, GameOverComponent
 } from './components';
 import { effects, reducer } from './store';
-
+import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,7 +26,7 @@ import { effects, reducer } from './store';
     GamePlayRoutingModule,
     NativeScriptRouterModule,
     NativeScriptUIListViewModule,
-
+    NativeScriptFormsModule,
     //ngrx feature store
     StoreModule.forFeature('gameplay', reducer),
 

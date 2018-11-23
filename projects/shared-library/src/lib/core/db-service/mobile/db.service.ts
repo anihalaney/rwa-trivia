@@ -24,7 +24,8 @@ export class TNSDbService extends DbService {
     }
 
     public updateDoc(collectionName, docId, document) {
-
+        const userCollection = firebaseApp.firestore().collection(collectionName);
+        userCollection.doc(docId).update(document);
     }
 
     public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {

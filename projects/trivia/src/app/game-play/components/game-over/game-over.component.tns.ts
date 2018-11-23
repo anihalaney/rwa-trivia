@@ -55,15 +55,12 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.utils.unsubscribe(this.subs);
   }
 
-  openDialog() {
-    console.log('logs');
+  openDialog(question) {
     const options = {
-      context: {},
-      fullscreen: true,
+      context: { 'question': question, 'user': this.user, 'game': this.game, 'userDict': this.userDict },
+      fullscreen: false,
       viewContainerRef: this.vcRef
-  };
-  this.modal.showModal(ReportGameComponent, options).then(res => {
-      console.log(res);
-  });
+    };
+    this.modal.showModal(ReportGameComponent, options);
   }
 }
