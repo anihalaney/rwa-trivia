@@ -1,169 +1,167 @@
 <ns-action-bar title="Profile Settings" showAdd="true"></ns-action-bar>
-<ScrollView>
-  <StackLayout [formGroup]="userForm">
+<StackLayout>
+  <ActivityIndicator *ngIf="loaderBusy" [busy]="loaderBusy" width="100" height="100" class="activity-indicator"></ActivityIndicator>
+  <ScrollView *ngIf="!loaderBusy">
+    <StackLayout [formGroup]="userForm" class="profile-settings">
 
-    <StackLayout class="input-field">
-      <AbsoluteLayout>
-        <Image [src]="profileImage.image" backgroundColor="gray" stretch="aspectFill" height="110" width="110" left="130"
-          right="130" top="10" verticalAlignment="center" borderRadius="55" (tap)="onTakePhoto()"></Image>
-        <Label color="#ffcc00" text="&#xf030;" class="fa fa-terminal" fontSize="34" textWrap="true" left="165" right="165"
-          top="50"></Label>
-      </AbsoluteLayout>
-    </StackLayout>
-
-    <StackLayout class="input-field">
-      <TextView [hint]="user.displayName" [editable]="false" class="input input-border"></TextView>
-    </StackLayout>
-
-    <StackLayout class="input-field">
-      <TextField hint="@username" formControlName="name"></TextField>
-      <Label *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="input input-border error"
-        textWrap="true" text="Name is required!"></Label>
-    </StackLayout>
-
-    <StackLayout class="input-field">
-      <TextField hint="Display Name" formControlName="displayName"></TextField>
-      <Label *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="input input-border error"
-        textWrap="true" text="Display Name is required!"></Label>
-    </StackLayout>
-
-    <StackLayout class="input-field">
-      <TextField hint="Location" formControlName="location"></TextField>
-      <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="input input-border error"
-        textWrap="true" text="Location is required!"></Label>
-    </StackLayout>
-
-    <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="0 5">
-      <Label row="0" col="0" text="Select Preferred Category" textWrap="true"></Label>
-      <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
-        textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"></Label>
-    </GridLayout>
-
-    <CardView margin="5 10" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}" backgroundColor="white">
-      <StackLayout>
-        <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option" *ngFor="let category of userCategories"
-          (tap)="selectCategory(category)">
-          <Label [text]="category.categoryName" row="0" col="0" textWrap="true" padding="8"></Label>
-          <CheckBox row="0" col="1" checked="true" horizontalAlignment="right" android:fillColor="#89C24F" boxType="circle"
-            *ngIf="category.isSelected"></CheckBox>
-        </GridLayout>
+      <StackLayout class="input-field ">
+        <AbsoluteLayout>
+          <Image [src]="profileImage.image" backgroundColor="gray" stretch="aspectFill" height="110" width="110" left="130"
+            right="130" top="10" verticalAlignment="center" borderRadius="55" (tap)="onTakePhoto()"></Image>
+          <Label color="#ffcc00" text="&#xf030;" class="fa fa-terminal" fontSize="34" textWrap="true" left="165" right="165"
+            top="50"></Label>
+        </AbsoluteLayout>
       </StackLayout>
-    </CardView>
 
-    <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="0 5">
-      <Label row="0" col="0" text="Tags associated categories" textWrap="true"></Label>
-      <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
-        textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
-    </GridLayout>
+      <StackLayout class="input-field">
 
-    <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white">
-      <StackLayout>
-        <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option" *ngFor="let tag of enteredTags">
-          <Label [text]="tag" row="0" col="0" textWrap="true" padding="8"></Label>
-          <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
-            horizontalAlignment="right" (tap)="removeEnteredTag(tag)"></Label>
+        <Label [text]="user.displayName" class="input title" textWrap="true"></Label>
+        <TextField hint="@username" formControlName="name" class="input"></TextField>
+        <Label *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error" textWrap="true"
+          text="Name is required!"></Label>
+
+        <TextField hint="Display Name" formControlName="displayName" class="input"></TextField>
+        <Label *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class=" error"
+          textWrap="true" text="Display Name is required!"></Label>
+
+        <TextField hint="Location" formControlName="location" class="input"></TextField>
+        <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error" textWrap="true"
+          text="Location is required!"></Label>
+
+      </StackLayout>
+
+      <StackLayout class="list-view">
+        <GridLayout class="grid-label" rows="auto,auto" columns="auto,*">
+          <Label class="grid-label-text" row="0" col="0" text="CATEGORIES" textWrap="true"></Label>
+          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
+            textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"></Label>
         </GridLayout>
-        <GridLayout rows="auto,auto" columns="*,auto" padding="10" class="two-player-option">
-          <Label row="0" col="0" text="Add Tags" textWrap="true"></Label>
-          <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#CDCECE" padding="5">
-            <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
-              showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
-              border="none">
-              <SuggestionView tkAutoCompleteSuggestionView>
-                <ng-template tkSuggestionItemTemplate let-item="item">
-                  <StackLayout orientation="vertical" padding="10">
-                    <Label [text]="item.text"></Label>
-                  </StackLayout>
-                </ng-template>
-              </SuggestionView>
-            </RadAutoCompleteTextView>
+        <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
+          <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let category of userCategories"
+            (tap)="selectCategory(category)">
+            <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>
+            <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25"
+              width="25" marginLeft="10" verticalAlignment="center" marginRight="5" *ngIf="category.isSelected"></Image>
+          </GridLayout>
+        </StackLayout>
+      </StackLayout>
+
+      <StackLayout class="list-view">
+
+        <GridLayout class="grid-label" rows="auto,auto" columns="auto,*">
+          <Label row="0" col="0" text="TAGS" textWrap="true"></Label>
+          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
+            textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
+        </GridLayout>
+        <StackLayout visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}">
+          <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let tag of enteredTags">
+            <Label [text]="tag" row="0" col="0" textWrap="true"></Label>
+            <Label id="cross-button" row="0" col="1" class="fa" text="&#xf00d;" textWrap="true" horizontalAlignment="right"
+              (tap)="removeEnteredTag(tag)"></Label>
+          </GridLayout>
+          <GridLayout rows="auto,auto" columns="*,auto" class="two-player-option">
+            <Label class="input-label" row="0" col="0" text="Add Tags" textWrap="true"></Label>
+            <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff">
+              <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
+                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
+                border="none" ios:backgroundColor="#ffffff">
+                <SuggestionView tkAutoCompleteSuggestionView>
+                  <ng-template tkSuggestionItemTemplate let-item="item">
+                    <StackLayout orientation="vertical" padding="10">
+                      <Label [text]="item.text"></Label>
+                    </StackLayout>
+                  </ng-template>
+                </SuggestionView>
+              </RadAutoCompleteTextView>
+            </StackLayout>
+            <StackLayout row="1" col="1" horizontalAlignment="right">
+              <Button ios:padding="10" text="Add" (tap)="addCustomTag()"></Button>
+            </StackLayout>
+          </GridLayout>
+        </StackLayout>
+      </StackLayout>
+
+      <StackLayout class="list-view">
+        <StackLayout class="grid-label">
+          <Label textWrap="true" text="CONNECT YOUR SOCIAL ACCOUNT"></Label>
+        </StackLayout>
+        <StackLayout class="input-field">
+          <TextField hint="Facebook" formControlName="facebookUrl" class="input"></TextField>
+          <Label *ngIf="userForm.controls.facebookUrl.errors && !userForm.controls.facebookUrl.pristine" class="error"
+            textWrap="true" text="Invalid facebook url"></Label>
+
+          <TextField hint="Twitter" formControlName="twitterUrl" class="input"></TextField>
+          <Label *ngIf="userForm.controls.twitterUrl.errors && !userForm.controls.twitterUrl.pristine" class="error"
+            textWrap="true" text="Invalid twitter url"></Label>
+
+          <TextField hint="Linkedin" formControlName="linkedInUrl" class="input"></TextField>
+          <Label *ngIf="userForm.controls.linkedInUrl.errors && !userForm.controls.linkedInUrl.pristine" class="error"
+            textWrap="true" text="Invalid linkedin url"></Label>
+
+        </StackLayout>
+      </StackLayout>
+
+      <StackLayout class="list-view">
+        <StackLayout class="grid-label">
+          <Label textWrap="true" text="SECURITY SETTING"></Label>
+        </StackLayout>
+        <StackLayout class="sub-list-view">
+          <StackLayout class="sub-list-label">
+            <Label textWrap="true" text="Profile"></Label>
           </StackLayout>
-          <Button row="1" col="1" text="Add" (tap)="addCustomTag()" padding="10" backgroundColor="#89C24F" color="#ffffff"></Button>
-        </GridLayout>
+          <StackLayout>
+            <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let profileOption of profileOptions" (tap)="selectProfileOption(profileOption)">
+              <Label [text]="profileOption" row="0" col="0" textWrap="true"></Label>
+              <Image *ngIf="user.profileSetting === profileOption" row="0" col="1" checked="true" horizontalAlignment="right"
+                src="~/assets/images/check.png" height="25" width="25" marginLeft="10" verticalAlignment="center"
+                marginRight="5"></Image>
+            </GridLayout>
+          </StackLayout>
+        </StackLayout>
+        <StackLayout class="sub-list-view">
+          <StackLayout class="sub-list-label">
+            <Label textWrap="true" text="Location"></Label>
+          </StackLayout>
+          <StackLayout>
+            <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let locationOption of locationOptions" (tap)="selectLocationOption(locationOption)">
+              <Label [text]="locationOption" row="0" col="0" textWrap="true"></Label>
+              <Image *ngIf="user.profileLocationSetting === locationOption" row="0" col="1" checked="true"
+                horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25" marginLeft="10"
+                verticalAlignment="center" marginRight="5"></Image>
+            </GridLayout>
+          </StackLayout>
+        </StackLayout>
       </StackLayout>
-    </CardView>
 
-    <StackLayout class="input-field">
-      <Label class="input input-border" textWrap="true" text="CONNECT YOUR SOCIAL ACCOUNT"></Label>
-    </StackLayout>
-
-    <StackLayout class="input-field">
-      <TextField hint="Facebook" formControlName="facebookUrl"></TextField>
-      <Label *ngIf="userForm.controls.facebookUrl.errors && !userForm.controls.facebookUrl.pristine" class="input input-border error"
-        textWrap="true">Invalid facebook url</Label>
-    </StackLayout>
-
-    <StackLayout class="input-field">
-      <TextField hint="Twitter" formControlName="twitterUrl"></TextField>
-      <Label *ngIf="userForm.controls.twitterUrl.errors && !userForm.controls.twitterUrl.pristine" class="input input-border error"
-        textWrap="true">Invalid twitter url</Label>
-    </StackLayout>
-
-    <StackLayout class="input-field">
-      <TextField hint="Linkedin" formControlName="linkedInUrl"></TextField>
-      <Label *ngIf="userForm.controls.linkedInUrl.errors && !userForm.controls.linkedInUrl.pristine" class="input input-border error"
-        textWrap="true">Invalid linkedin url</Label>
-    </StackLayout>
-
-    <StackLayout class="input-field">
-      <Label class="input input-border" textWrap="true" text="SECURITY SETTING"></Label>
-    </StackLayout>
-
-    <CardView margin="5 10" backgroundColor="white">
-      <StackLayout class="input-field">
-        <Label class="input input-border" textWrap="true" text="Profile"></Label>
-      </StackLayout>
-      <StackLayout>
-        <GridLayout rows="auto,auto" columns="auto,*" padding="10" *ngFor="let profileOption of profileOptions" (tap)="selectProfileOption(profileOption)">
-          <Label [text]="profileOption" row="0" col="0" textWrap="true" padding="8"></Label>
-          <CheckBox row="0" col="1" [checked]="user.profileSetting === profileOption" horizontalAlignment="right"
-            android:fillColor="#89C24F" boxType="circle"></CheckBox>
-        </GridLayout>
-
-      </StackLayout>
-    </CardView>
-
-
-    <CardView margin="5 10" backgroundColor="white">
-      <StackLayout class="input-field">
-        <Label class="input input-border" textWrap="true" text="Location"></Label>
-      </StackLayout>
-      <StackLayout>
-        <GridLayout rows="auto,auto" columns="auto,*" padding="10" *ngFor="let locationOption of locationOptions" (tap)="selectLocationOption(locationOption)">
-          <Label [text]="locationOption" row="0" col="0" textWrap="true" padding="8"></Label>
-          <CheckBox row="0" col="1" [checked]="user.profileLocationSetting === locationOption" horizontalAlignment="right"
-            android:fillColor="#89C24F" boxType="circle"></CheckBox>
-        </GridLayout>
-      </StackLayout>
-    </CardView>
-
-    <CardView margin="5 10" backgroundColor="white">
-      <StackLayout>
-        <GridLayout rows="auto,auto" columns="auto,*" padding="10">
-          <Label text="keep your profile activity private" row="0" col="0" textWrap="true" padding="8"></Label>
+      <StackLayout class="privacy-area">
+        <GridLayout rows="auto,auto" columns="auto,*">
+          <Label text="Keep your profile activity private" row="0" col="0" textWrap="true"></Label>
           <CheckBox row="0" col="1" formControlName="privateProfileSetting" horizontalAlignment="right"
-            android:fillColor="#89C24F"></CheckBox>
+            android:fillColor="#89C24F" ios:fillColor="#ffffff" ios:backgroundColor="#ffffff"></CheckBox>
         </GridLayout>
-        <Label text="This means no one can invite you or can see you profile." textWrap="true" padding="8"></Label>
+        <StackLayout class="sub-text">
+          <Label text="This means no one can invite you or can see you profile." textWrap="true"></Label>
+        </StackLayout>
       </StackLayout>
-    </CardView>
 
-    <StackLayout>
-      <Button *ngIf="(!user.bulkUploadPermissionStatus
+
+      <StackLayout class="profile-buttons">
+        <Button *ngIf="(!user.bulkUploadPermissionStatus
         || user.bulkUploadPermissionStatus === NONE
         || user.bulkUploadPermissionStatus === PENDING)
         && !user.isRequestedBulkUpload"
-        [text]="bulkUploadBtnText" (tap)="setBulkUploadRequest()" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
-      <Label *ngIf="user.bulkUploadPermissionStatus === PENDING" text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
-        textWrap="true" padding="8"></Label>
-      <Label *ngIf="user.bulkUploadPermissionStatus === APPROVED" text="User has bulk upload privilege" textWrap="true"
-        padding="8"></Label>
+          [text]="bulkUploadBtnText" (tap)="setBulkUploadRequest()" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
+        <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING" text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
+          textWrap="true" padding="8"></Label>
+        <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED" text="User has bulk upload privilege"
+          textWrap="true" padding="8"></Label>
+      </StackLayout>
+
+      <StackLayout class="profile-buttons">
+        <Button text="SAVE" (tap)="onSubmit()" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
+      </StackLayout>
+
+
     </StackLayout>
-
-    <StackLayout>
-      <Button text="Save" (tap)="onSubmit()" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
-    </StackLayout>
-
-
-  </StackLayout>
-</ScrollView>
+  </ScrollView>
+</StackLayout>
