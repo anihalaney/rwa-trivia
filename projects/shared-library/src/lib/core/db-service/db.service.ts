@@ -8,6 +8,9 @@ export abstract class DbService {
 
     }
 
+    public createDoc(collectionName, document): any {
+    }
+
     public setDoc(collectionName, docId, document): any {
 
     }

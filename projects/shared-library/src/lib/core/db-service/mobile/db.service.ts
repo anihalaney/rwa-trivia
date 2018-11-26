@@ -18,9 +18,17 @@ export class TNSDbService extends DbService {
         super();
     }
 
+    public createDoc(collectionName, document) {
+        const collectionRef = firebaseApp.firestore().collection(collectionName);
+        return collectionRef.add(document).then((documentRef) => {
+            document.id = documentRef.id;
+            return this.setDoc(collectionName, documentRef.id, document);
+        });
+    }
+
     public setDoc(collectionName, docId, document) {
         const userCollection = firebaseApp.firestore().collection(collectionName);
-        userCollection.doc(docId).set(document);
+        return userCollection.doc(docId).set(document);
     }
 
     public updateDoc(collectionName, docId, document) {
@@ -70,7 +78,7 @@ export class TNSDbService extends DbService {
         });
     }
     public createId() {
-        return firebaseApp.createId();
+        return firebaseApp.firestore().createId;
     }
 
     public getFireStorageReference(filePath) {

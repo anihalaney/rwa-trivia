@@ -32,9 +32,6 @@ export class QuestionAddUpdate {
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
-  get tagsArray(): FormArray {
-    return this.questionForm.get('tagsArray') as FormArray;
-  }
 
   // Constructor
   constructor(public fb: FormBuilder,
@@ -42,63 +39,58 @@ export class QuestionAddUpdate {
     public utils: Utils,
     public questionAction: QuestionActions) {
 
-    this.question = new Question();
-    this.createForm(this.question);
-
-
-    this.filteredTags$ = this.questionForm.get('tags').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-
-    const questionControl = this.questionForm.get('questionText');
-
-    questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
-    this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
 
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
 
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
 
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
-
   }
 
+  createForm(question: Question): FormArray {
+    const fgs: FormGroup[] = question.answers.map(answer => {
+      const fg = new FormGroup({
+        answerText: new FormControl(answer.answerText, Validators.required),
+        correct: new FormControl(answer.correct),
+      });
+      return fg;
+    });
+    const answersFA = new FormArray(fgs);
+    return answersFA;
+  }
 
-
-  // Event Handlers
-  addTag() {
-    let tag = this.questionForm.get('tags').value;
-    if (tag) {
-      if (this.enteredTags.indexOf(tag) < 0)
-        this.enteredTags.push(tag);
-      this.questionForm.get('tags').setValue('');
+  addTag(tag: string) {
+    if (this.enteredTags.indexOf(tag) < 0) {
+      this.enteredTags.push(tag);
     }
-    this.setTagsArray();
   }
+
   removeEnteredTag(tag) {
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
-    this.setTagsArray();
   }
-  onSubmit() {
-    // validations
-    this.questionForm.updateValueAndValidity();
-    if (this.questionForm.invalid)
-      return;
 
-    // get question object from the forms
-    let question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
-    question.status = QuestionStatus.PENDING;
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
+  computeAutoTags() {
+    const formValue = this.questionForm.value;
 
-    question.created_uid = this.user.userId;
-    // call saveQuestion
-    this.saveQuestion(question);
+    const allTextValues: string[] = [formValue.questionText];
+    formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
 
-    this.filteredTags$ = this.questionForm.get('tags').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+    const wordString: string = allTextValues.join(" ");
+
+    const matchingTags: string[] = [];
+    this.tags.forEach(tag => {
+      const patt = new RegExp('\\b(' + tag.replace("+", "\\+") + ')\\b', "ig");
+      if (wordString.match(patt)) {
+        matchingTags.push(tag);
+      }
+    });
+    this.autoTags = matchingTags;
   }
+
 
   // Helper functions
   getQuestionFromFormValue(formValue: any): Question {
@@ -107,7 +99,7 @@ export class QuestionAddUpdate {
     question = new Question();
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
-    question.categoryIds = [formValue.category];
+    question.categoryIds = (formValue.category) ? [formValue.category] : [];
     question.tags = [...this.autoTags, ...this.enteredTags];
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
@@ -116,61 +108,21 @@ export class QuestionAddUpdate {
     return question;
   }
 
-  saveQuestion(question: Question) {
-    this.store.dispatch(new userActions.AddQuestion({ question: question }));
-  }
+  onSubmit(): Question {
+    // validations
+    this.questionForm.updateValueAndValidity();
+    if (this.questionForm.invalid) {
+      return;
+    }
 
-  computeAutoTags() {
-    let formValue = this.questionForm.value;
+    // get question object from the forms
+    const question: Question = this.getQuestionFromFormValue(this.questionForm.value);
 
-    let allTextValues: string[] = [formValue.questionText];
-    formValue.answers.forEach(answer => allTextValues.push(answer.answerText));
+    question.status = QuestionStatus.PENDING;
 
-    let wordString: string = allTextValues.join(" ");
+    question.created_uid = this.user.userId;
 
-    let matchingTags: string[] = [];
-    this.tags.forEach(tag => {
-      let patt = new RegExp('\\b(' + tag.replace("+", "\\+") + ')\\b', "ig");
-      if (wordString.match(patt))
-        matchingTags.push(tag);
-    });
-    this.autoTags = matchingTags;
-
-    this.setTagsArray();
-  }
-  setTagsArray() {
-    this.tagsArray.controls = [];
-    [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
-  }
-  createForm(question: Question) {
-
-    let fgs: FormGroup[] = question.answers.map(answer => {
-      let fg = new FormGroup({
-        answerText: new FormControl(answer.answerText, Validators.required),
-        correct: new FormControl(answer.correct),
-      });
-      return fg;
-    });
-    let answersFA = new FormArray(fgs);
-
-    let fcs: FormControl[] = question.tags.map(tag => {
-      let fc = new FormControl(tag);
-      return fc;
-    });
-    if (fcs.length == 0)
-      fcs = [new FormControl('')];
-    let tagsFA = new FormArray(fcs);
-
-    this.questionForm = this.fb.group({
-      category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
-      questionText: [question.questionText, Validators.required],
-      tags: '',
-      tagsArray: tagsFA,
-      answers: answersFA,
-      ordered: [question.ordered],
-      explanation: [question.explanation]
-    }, { validator: questionFormValidator }
-    );
+    return question;
   }
 
 
@@ -178,19 +130,10 @@ export class QuestionAddUpdate {
     return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
 
-}
-
-
-// Custom Validators
-function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
-  let answers: Answer[] = fg.get('answers').value;
-  if (answers.filter(answer => answer.correct).length !== 1) {
-    return { 'correctAnswerCountInvalid': true }
+  saveQuestion(question: Question) {
+    this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
-  let tags: string[] = fg.get('tagsArray').value;
-  if (tags.length < 3)
-    return { 'tagCountInvalid': true }
-
-  return null;
 }
+
+
