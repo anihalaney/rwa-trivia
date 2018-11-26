@@ -22,7 +22,7 @@ export const userRoutes: Routes = [
     path: 'questions',
     component: MyQuestionsComponent,
     canActivate: [AuthGuard],
-    resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
+    resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
   },
   {
     path: 'questions/add',
