@@ -91,8 +91,6 @@ export class AdminQuestionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.store.dispatch(new adminActions.SaveQuestionToggleState
-    //   ({ toggle_state: 'Published' }));
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
   }
 

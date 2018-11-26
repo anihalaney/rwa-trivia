@@ -8,8 +8,8 @@
     <mat-option [value]="'UpdatedTimeAsc'">Updated On (Earliest)</mat-option>
   </mat-select>
 </div>
-<mat-paginator *ngIf="showPaginator && !clientSidePagination" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25"
-  [pageSizeOptions]="[25, 50, 100, 200]" (page)="pageChanged($event)">
+<mat-paginator *ngIf="showPaginator && !clientSidePagination" class="matHeader" [length]="totalCount" [pageIndex]="0"
+  [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]" (page)="pageChanged($event)">
 </mat-paginator>
 
 <mat-table #table [dataSource]="questionsDS">
@@ -35,7 +35,8 @@
           <mat-icon class="cursor" (click)="editQuestions(row)">edit</mat-icon>
         </div> -->
         <div class="col-sm-12 col-xs-12 question-section" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
-          <div class="date">{{ ( (row.createdOn) ? (row.createdOn.seconds * 1000) : row.createdOn) | date:'dd MMM yyyy' }}</div>
+          <div class="date">{{ ( (row.createdOn) ? (row.createdOn.seconds * 1000) : row.createdOn) | date:'dd MMM yyyy'
+            }}</div>
           <p class="dark">{{row.questionText}}</p>
           <ul class="currentans">
             <li>
@@ -52,7 +53,8 @@
                     <b [ngClass]="getDisplayStatus(row.status)==='APPROVED'?'status-approved':getDisplayStatus(row.status)==='REJECTED'?'status-rejected':getDisplayStatus(row.status)==='REQUIRED_CHANGE'?'status-change-request':'status-pending'">{{getDisplayStatus(row.status).replace("_",'
                       ') | titlecase}}</b>
                   </label>
-                  <div *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'" class="status-btn">
+                  <div *ngIf="getDisplayStatus(row.status)==='REJECTED' || getDisplayStatus(row.status)==='REQUIRED_CHANGE'"
+                    class="status-btn">
                     <button class="view-reason-btn" type="button" (click)='showReason(row,i)'>View Reason</button>
                   </div>
                   <div *ngIf="getDisplayStatus(row.status)==='REQUIRED_CHANGE' || showButtons" class="status-btn">
@@ -159,7 +161,8 @@
                 <div class="col-sm-10">
                   <div class="example-container">
                     <mat-form-field>
-                      <textarea matInput placeholder="Reason for requesting a change" formControlName="reason" aria-label="reason"></textarea>
+                      <textarea matInput placeholder="Reason for requesting a change" formControlName="reason"
+                        aria-label="reason"></textarea>
                     </mat-form-field>
                   </div>
                 </div>
@@ -188,8 +191,8 @@
         </div>
       </div>
       <div class="row edit-form-div" *ngIf="row === editQuestion">
-        <app-question-form [editQuestion]="editQuestion" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs" (updateStatus)=nullifyQuestion($event)
-          (updateUnpublishedQuestion)="updateQuestionData($event)"></app-question-form>
+        <app-question-form [editQuestion]="editQuestion" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs"
+          (updateStatus)=nullifyQuestion($event) (updateUnpublishedQuestions)="updateQuestionData($event)"></app-question-form>
       </div>
       <div class="row rejection-div" *ngIf="row === viewReasonArray[i]">
         <app-rejected-question-content [rejectQuestion]="viewReasonArray[i]" (cancelStatus)=showQuestion($event)></app-rejected-question-content>
@@ -207,9 +210,10 @@
   <mat-row class="row-question" *cdkRowDef="let row; columns: ['questionText'];"></mat-row>
 </mat-table>
 
-<mat-paginator *ngIf="showPaginator && clientSidePagination" #paginator class="matHeader" [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]">
+<mat-paginator *ngIf="showPaginator && clientSidePagination" #paginator class="matHeader" [pageSize]="25"
+  [pageSizeOptions]="[25, 50, 100, 200]">
 </mat-paginator>
 
-<mat-paginator *ngIf="showPaginator && !clientSidePagination" class="matHeader" [length]="totalCount" [pageIndex]="0" [pageSize]="25"
-  [pageSizeOptions]="[25, 50, 100, 200]" (page)="pageChanged($event)" class="paginator-position">
+<mat-paginator *ngIf="showPaginator && !clientSidePagination" class="matHeader" [length]="totalCount" [pageIndex]="0"
+  [pageSize]="25" [pageSizeOptions]="[25, 50, 100, 200]" (page)="pageChanged($event)" class="paginator-position">
 </mat-paginator>
