@@ -102,11 +102,18 @@ export class QuestionService {
 
   saveQuestion(question: Question) {
     const dbQuestion = Object.assign({}, question); // object to be saved
-    dbQuestion['source'] = 'question';
 
-    this.dbService.createDoc('unpublished_questions', dbQuestion).then(ref => {
-      this.store.dispatch(this.questionActions.addQuestionSuccess());
-    });
+    if (!question.id || question.id === '') {
+      dbQuestion['source'] = 'question';
+      this.dbService.createDoc('unpublished_questions', dbQuestion).then(ref => {
+        this.store.dispatch(this.questionActions.addQuestionSuccess());
+      });
+    } else {
+      this.dbService.setDoc('unpublished_questions', dbQuestion.id, dbQuestion).then(ref => {
+        this.store.dispatch(this.questionActions.addQuestionSuccess());
+      });
+    }
+
   }
 
   saveBulkQuestions(bulkUpload: BulkUpload) {

@@ -109,16 +109,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   submit() {
-    console.log('submit call');
+
     const question: Question = super.onSubmit();
 
-    console.log('this.categoryIds.length > 0', this.categoryIds.length);
-    console.log('this.enteredTags.length > 2', this.enteredTags.length);
     if (question && this.categoryIds.length > 0 && this.enteredTags.length > 2) {
       question.categoryIds = this.categoryIds;
       // call saveQuestion
-
-      console.log('save question');
       this.saveQuestion(question);
     }
 
