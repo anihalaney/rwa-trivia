@@ -4,6 +4,7 @@ import { RecentGamesComponent } from './recent-games/recent-games.component';
 import { RecentGameCardComponent } from './recent-games/recent-game-card/recent-game-card.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { QuestionAddUpdateComponent } from './question-add-update/question-add-update.component';
+import { MyQuestionsComponent } from './my-questions/my-questions.component';
 
 export {
     GameCardComponent,
@@ -11,7 +12,8 @@ export {
     RecentGamesComponent,
     RecentGameCardComponent,
     ProfileSettingsComponent,
-    QuestionAddUpdateComponent
+    QuestionAddUpdateComponent,
+    MyQuestionsComponent
 };
 
 export default [
@@ -20,5 +22,6 @@ export default [
     RecentGamesComponent,
     RecentGameCardComponent,
     ProfileSettingsComponent,
-    QuestionAddUpdateComponent
+    QuestionAddUpdateComponent,
+    MyQuestionsComponent
 ];
