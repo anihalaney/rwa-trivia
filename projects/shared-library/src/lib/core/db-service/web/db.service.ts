@@ -17,6 +17,14 @@ export class WebDbService extends DbService {
         super();
     }
 
+    public createDoc(collectionName, document) {
+        const collectionRef = this._afStore.collection(collectionName);
+        return collectionRef.add(document).then((documentRef) => {
+            document.id = documentRef.id;
+            return this.setDoc(collectionName, documentRef.id, document);
+        });
+    }
+
     public setDoc(collectionName, docId, document) {
         return this._afStore.doc(`/${collectionName}/${docId}`).set(document);
     }
