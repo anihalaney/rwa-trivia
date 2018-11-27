@@ -43,7 +43,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     this.initDataItems();
     this.question = new Question();
-    this.createMobileForm(this.question);
+    this.createForm(this.question);
 
     const questionControl = this.questionForm.get('questionText');
 
@@ -69,9 +69,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
 
-  createMobileForm(question: Question) {
+  createForm(question: Question) {
 
-    const answersFA: FormArray = super.createForm(question);
+    const answersFA: FormArray = super.createDefaultForm(question);
 
     this.questionForm = this.fb.group({
       questionText: [question.questionText, Validators.required],

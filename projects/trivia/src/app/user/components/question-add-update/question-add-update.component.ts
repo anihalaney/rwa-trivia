@@ -33,7 +33,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     super(fb, store, utils, questionAction);
 
     this.question = new Question();
-    this.createWebForm(this.question);
+    this.createForm(this.question);
 
     const questionControl = this.questionForm.get('questionText');
 
@@ -54,9 +54,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
 
-  createWebForm(question: Question) {
+  createForm(question: Question) {
 
-    const answersFA: FormArray = super.createForm(question);
+    const answersFA: FormArray = super.createDefaultForm(question);
 
     let fcs: FormControl[] = question.tags.map(tag => {
       const fc = new FormControl(tag);
