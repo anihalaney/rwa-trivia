@@ -1,0 +1,17 @@
+.pending-btn {
+    background-color: #fafafa;
+}
+
+.required-change-btn {
+    background-color: #ffb4b4;
+    color: red;
+}
+
+.reject-btn {
+    background-color: #fffde2;
+    color: #aea200;
+}
+
+.approve-btn {
+    background-color: green;
+}

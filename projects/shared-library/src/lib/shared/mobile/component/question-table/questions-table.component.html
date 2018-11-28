@@ -1,0 +1,54 @@
+<ScrollView>
+    <StackLayout>
+        <GridLayout rows="*" columns="*,*,*,*" *ngFor="let question of questions" borderBottomWidth="1"
+            borderBottomColor="#e5e5e5">
+            <StackLayout padding="10" col="0" colSpan="3">
+
+                <Label text="{{ question.createdOn | date:'dd MMM yyyy' }}" textWrap="true" class="label" fontSize="12"
+                    color="#616161" marginTop="5"></Label>
+
+                <Label [text]="question.questionText" textWrap="true" class="label" fontSize="16" fontWeight="bold"></Label>
+
+                <StackLayout fontSize="12">
+                    <GridLayout rows="*" columns="auto,auto" marginTop="5">
+                        <Label row="0" col="0" text="Correct answer :" textWrap="true" class="label" fontWeight="bold"></Label>
+                        <StackLayout row="0" col="1" *ngFor="let answer of question.answers">
+                            <Label *ngIf="answer.correct" [text]="answer.answerText" textWrap="true" class="label"
+                                padding="2" color="#616161"></Label>
+                        </StackLayout>
+                    </GridLayout>
+                    <GridLayout rows="*" columns="auto,auto">
+                        <Label row="0" col="0" text="Other options :" textWrap="true" class="label" fontWeight="bold"></Label>
+                        <StackLayout row="0" col="1">
+                            <Label text="{{getOtherOptionsString(question.answers)}}" textWrap="true" class="label"
+                                width="180" padding="2" color="#616161"></Label>
+                        </StackLayout>
+                    </GridLayout>
+                    <GridLayout rows="*" columns="auto,auto">
+                        <Label row="0" col="0" text="Category :" textWrap="true" class="label" fontWeight="bold"></Label>
+                        <StackLayout row="0" col="1" *ngFor="let id of question.categoryIds">
+                            <Label [text]="categoryDictionary[id].categoryName" textWrap="true" class="label" padding="2"
+                                color="#616161"></Label>
+                        </StackLayout>
+                    </GridLayout>
+                    <GridLayout rows="*" columns="auto,auto">
+                        <Label row="0" col="0" text="Tags :" textWrap="true" class="label" fontWeight="bold"></Label>
+                        <Label row="0" col="1" [text]="question.tags?.toString()" textWrap="true" class="label" padding="2"
+                            width="220" color="#616161"></Label>
+                    </GridLayout>
+                </StackLayout>
+
+            </StackLayout>
+
+            <AbsoluteLayout col="3" borderLeftWidth="1" borderLeftColor="#e5e5e5">
+                <Button text="{{getDisplayStatus(question.status).replace('_','') | titlecase}}" height="200" width="90"
+                    [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
+                             'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
+                             'reject-btn': getDisplayStatus(question.status)==='REJECTED',
+                             'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
+                    fontSize="12" fontWeight="bold">
+                </Button>
+            </AbsoluteLayout>
+        </GridLayout>
+    </StackLayout>
+</ScrollView>

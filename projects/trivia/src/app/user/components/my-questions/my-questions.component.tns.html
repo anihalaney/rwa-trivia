@@ -1,1 +1,18 @@
 <ns-action-bar title="My Question" showAdd="true"></ns-action-bar>
+
+<TabView>
+    <StackLayout *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
+        <StackLayout>
+            <question-table [questions]="publishedQuestions$ | async" [categoryDictionary]="categoryDictObs | async"
+                [user]="user" [showApproveButton]="false" [userDict]="userDict">
+            </question-table>
+        </StackLayout>
+    </StackLayout>
+    <StackLayout *tabItem="{title: 'Pending', textTransform: 'none'}" fontSize="16" fontWeight="600">
+        <StackLayout>
+            <question-table [questions]="unpublishedQuestions$ | async" [categoryDictionary]="categoryDictObs | async"
+                [user]="user" [showApproveButton]="false" [userDict]="userDict">
+            </question-table>
+        </StackLayout>
+    </StackLayout>
+</TabView>
