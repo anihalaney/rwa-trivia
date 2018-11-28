@@ -144,3 +144,46 @@ textarea
     border-color: black;
     padding: 5;
 }
+
+.close-icon{
+    color:#ffffff; 
+    font-size:25;
+}
+
+.main-question{
+    color:#282828; 
+    font-size: 17; 
+    font-weight: 500; 
+    margin:10 0 10 0
+}
+
+.reported-details-title{
+    color:#282828; 
+    font-weight: 500; 
+    margin:0 0 10 0; 
+    font-size: 14;
+}
+
+.reported-details-content{
+    color:#4b4b4b; 
+    margin:0 0 10 0; 
+    font-size: 14;
+}
+
+.problem-content{
+    color:#4b4b4b;
+    text-align: left;
+    padding:15;
+}
+
+.extra-content{
+    color:#282828;
+    padding: 5 15 5 15;
+}
+
+.submit-btn{
+    background-color:#8ac541; 
+    color:#ffffff;
+    padding: 15;
+    margin: 5 15 5 15;
+}
