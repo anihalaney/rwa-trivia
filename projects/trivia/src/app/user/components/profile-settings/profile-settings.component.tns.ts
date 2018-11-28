@@ -17,7 +17,7 @@ import * as Toast from 'nativescript-toast';
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.scss']
+  styleUrls: ['./profile-settings.component.css']
 })
 
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
@@ -48,6 +48,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.subs.push(this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         Toast.makeText('Profile is saved successfully').show();
+        this.toggleLoader(false);
       }
     }));
   }
