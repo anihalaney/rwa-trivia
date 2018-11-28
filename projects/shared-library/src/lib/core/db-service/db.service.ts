@@ -8,14 +8,14 @@ export abstract class DbService {
 
     }
 
-    public createDoc(collectionName, document): any {
+    public createDoc(collectionName: string, document: any): any {
     }
 
-    public setDoc(collectionName, docId, document): any {
+    public setDoc(collectionName: string, docId: any, document: any): any {
 
     }
 
-    public updateDoc(collectionName, docId, document) {
+    public updateDoc(collectionName: string, docId: any, document: any) {
 
     }
     public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {
@@ -25,7 +25,7 @@ export abstract class DbService {
     public createId(): any {
 
     }
-    public getFireStorageReference(filePath): any {
+    public getFireStorageReference(filePath: string): any {
 
     }
 
@@ -33,11 +33,11 @@ export abstract class DbService {
 
     }
 
-    public getDoc(collectionName, docId): any {
+    public getDoc(collectionName: string, docId: any): any {
 
     }
 
-    public upload(filePath, imageBlob): any {
+    public upload(filePath: string, imageBlob: any): any {
 
     }
 }
