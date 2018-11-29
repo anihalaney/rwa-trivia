@@ -1,6 +1,7 @@
 import { Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
@@ -37,7 +38,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public utils: Utils,
-    public questionAction: QuestionActions) {
+    public questionAction: QuestionActions,
+    private routerExtension: RouterExtensions) {
 
     super(fb, store, utils, questionAction);
 
@@ -52,7 +54,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
-        // this.router.navigate(['/my/questions']);
+        this.routerExtension.navigate(['/my/questions']);
         Toast.makeText('Question saved!').show();
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
       }

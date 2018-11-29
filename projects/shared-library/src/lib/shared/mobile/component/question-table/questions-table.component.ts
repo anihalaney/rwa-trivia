@@ -1,5 +1,5 @@
 import {
-  Component, Input
+  Component, Input, Output, EventEmitter
 } from '@angular/core';
 import { Question, QuestionStatus, Category, User, Answer } from '../../../../shared/model';
 import { Utils } from '../../../../core/services';
@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 
 export class QuestionsTableComponent {
 
+  QuestionStatusTexts = ['', '', '&#xf00c;', '', '&#xf251;', '&#xf00d;', '&#xf044;'];
 
   @Input() questions: Question[];
   @Input() categoryDictionary: { [key: number]: Category };
@@ -21,6 +22,10 @@ export class QuestionsTableComponent {
   @Input() user: User;
   @Input() tagsObs: Observable<string[]>;
   @Input() categoriesObs: Observable<Category[]>;
+  @Input() displayReasonViewer: boolean;
+  @Output() displayReason: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() selectedQuestion: EventEmitter<Question> = new EventEmitter<Question>();
+
   // @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
 
 
@@ -40,6 +45,12 @@ export class QuestionsTableComponent {
       }
     });
     return optionValues.join(',');
+  }
+
+  showReason(question: Question) {
+    this.displayReasonViewer = true;
+    this.displayReason.next(this.displayReasonViewer);
+    this.selectedQuestion.next(question);
   }
 
   updateQuestionData(question: Question) {

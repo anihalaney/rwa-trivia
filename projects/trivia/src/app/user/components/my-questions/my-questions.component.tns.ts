@@ -1,8 +1,9 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { QuestionActions } from 'shared-library/core/store';
-import { User } from 'shared-library/shared/model';
+import { User, Question } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
@@ -17,18 +18,34 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
+  displayReasonViewer = false;
+  selectedQuestion: Question;
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
-    public utils: Utils) {
+    public utils: Utils,
+    private routerExtension: RouterExtensions) {
     super(store, questionActions, utils);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
   }
 
+  navigateToSubmitQuestion() {
+    this.routerExtension.navigate(['/my/questions/add']);
+  }
+
+  displayReason(reasonFlag: boolean) {
+    this.displayReasonViewer = reasonFlag;
+  }
+
+  setSelectedQuestion(question: Question) {
+    this.selectedQuestion = question;
+  }
 
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
   }
+
+
 
 }
