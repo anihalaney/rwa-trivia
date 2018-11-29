@@ -1,0 +1,56 @@
+.category{
+ margin-bottom: 20;
+ color:#f47c71;
+}
+
+.username{
+    font-size:22; 
+    margin: 10 0 0 0; 
+    color: #616161;
+}
+.username-double{
+    font-size:18; 
+    margin: 10 0 0 0; 
+    color: #616161;
+}
+
+.roundandscore{
+    font-size:15; 
+    color:#8c8c8c;
+}
+.earnedsymbolsStack{
+    margin: 10 0 0 0;
+}
+.gamestatus{
+    background-color: #f1fff2; 
+    border-width:3px; 
+    border-color:#d0f5d3; 
+    margin:10 0 0 0;
+}
+.gamestatus-username{
+    font-weight:700; 
+    font-size: 22;
+}
+.natvigate-button{
+    color:#000000; 
+    background-color: #ffffff; 
+    padding:10 18 10 18; 
+    margin: 0 3 0 3;
+}
+.question-grid{
+    border-bottom-width:2px; 
+    border-color:#f3f3f3; 
+    padding:10 0 10 0
+}
+.question-tag{
+    vertical-align: top; 
+    color:#3b444f;
+}
+.question-text{
+    margin:0 0 5 10; 
+    color:#3b444f
+}
+.answer-tag{
+    vertical-align: top; 
+    color:#3b444f
+}
