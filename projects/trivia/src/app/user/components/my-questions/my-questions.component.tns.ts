@@ -8,6 +8,8 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
 import { TabView } from 'tns-core-modules/ui/tab-view';
+import { Page } from 'tns-core-modules/ui/page';
+
 
 @Component({
   selector: 'my-questions',
@@ -20,11 +22,13 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   userDict: { [key: string]: User } = {};
   displayReasonViewer = false;
   selectedQuestion: Question;
+  displayEditQuestion: Question;
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
     public utils: Utils,
-    private routerExtension: RouterExtensions) {
+    private routerExtension: RouterExtensions,
+    private page: Page) {
     super(store, questionActions, utils);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -36,10 +40,22 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
   displayReason(reasonFlag: boolean) {
     this.displayReasonViewer = reasonFlag;
+    this.page.actionBarHidden = reasonFlag;
   }
 
   setSelectedQuestion(question: Question) {
     this.selectedQuestion = question;
+  }
+
+  showUpdateQuestion(displayFlag: boolean) {
+    this.displayReasonViewer = false;
+    this.displayEditQuestion = displayFlag;
+    this.page.actionBarHidden = !displayFlag;
+  }
+
+  updateQuestion(question: Question) {
+    this.selectedQuestion = question;
+    this.displayEditQuestion = true;
   }
 
   ngOnDestroy() {

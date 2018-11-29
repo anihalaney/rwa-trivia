@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -14,11 +14,12 @@ import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/a
 import * as Toast from 'nativescript-toast';
 
 @Component({
+  selector: 'app-question-add-update',
   templateUrl: './question-add-update.component.html',
   styleUrls: ['./question-add-update.component.css']
 })
 
-export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy {
+export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy, OnChanges {
 
   showSelectCategory = false;
   showSelectTag = false;
@@ -26,6 +27,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
   categoryIds: any[];
+  submitBtnTxt: string;
+  actionBarTxt: string;
+  @Input() editQuestion: Question;
+  @Output() updateQuestion = new EventEmitter<Question>();
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
@@ -43,6 +48,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     super(fb, store, utils, questionAction);
 
+    this.submitBtnTxt = 'SUBMIT';
+    this.actionBarTxt = 'Submit Question';
     this.initDataItems();
     this.question = new Question();
     this.createMobileForm(this.question);
@@ -55,11 +62,28 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.routerExtension.navigate(['/my/questions']);
-        Toast.makeText('Question saved!').show();
+        (this.editQuestion) ? Toast.makeText('Question updated!').show() : Toast.makeText('Question saved!').show();
+        (this.editQuestion) ? this.updateQuestion.emit(this.editQuestion) : '';
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
       }
     }));
 
+  }
+
+  ngOnChanges() {
+    if (this.editQuestion) {
+      this.createMobileForm(this.editQuestion);
+      this.categoryIds = this.editQuestion.categoryIds;
+      this.categories = this.categories.map(categoryObj => {
+        if (Number(categoryObj.id) === Number(this.categoryIds[0])) {
+          categoryObj['isSelected'] = true;
+        }
+        return categoryObj;
+      });
+      this.enteredTags = this.editQuestion.tags;
+      this.submitBtnTxt = 'RESUBMIT';
+      this.actionBarTxt = 'Update Question';
+    }
   }
 
   private initDataItems() {
@@ -113,9 +137,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   submit() {
 
     const question: Question = super.onSubmit();
-
+    (this.editQuestion) ? question.id = this.editQuestion.id : '';
     if (question && this.categoryIds.length > 0 && this.enteredTags.length > 2) {
       question.categoryIds = this.categoryIds;
+      this.editQuestion = question;
       // call saveQuestion
       this.saveQuestion(question);
     }
