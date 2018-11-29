@@ -26,7 +26,7 @@ export class QuestionsTableComponent {
   @Output() displayReason: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() selectedQuestion: EventEmitter<Question> = new EventEmitter<Question>();
 
-  // @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
+
 
 
 
@@ -53,8 +53,5 @@ export class QuestionsTableComponent {
     this.selectedQuestion.next(question);
   }
 
-  updateQuestionData(question: Question) {
-    //  this.updateUnpublishedQuestions.emit(question);
-  }
 }
 

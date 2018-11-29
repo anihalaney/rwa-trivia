@@ -1,4 +1,4 @@
-<ns-action-bar title="Submit Question" showAdd="true"></ns-action-bar>
+<ns-action-bar [title]="actionBarTxt" showAdd="true"></ns-action-bar>
 <StackLayout>
     <ScrollView>
         <StackLayout class="new-game" backgroundColor="#f1f2f2" [formGroup]="questionForm">
@@ -114,7 +114,7 @@
             </StackLayout>
 
             <StackLayout padding="10">
-                <Button text="SUBMIT" (tap)="submit()" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
+                <Button [text]="submitBtnTxt" (tap)="submit()" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
                     color="#ffffff" padding="20" borderRadius="3" fontSize="20" fontWeight="bold"></Button>
             </StackLayout>
         </StackLayout>
