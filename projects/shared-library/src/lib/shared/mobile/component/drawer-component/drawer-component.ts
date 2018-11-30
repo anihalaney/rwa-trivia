@@ -92,4 +92,9 @@ export class DrawerComponent implements OnInit {
         this.routerExtension.navigate(['/my/profile', this.user.userId]);
         this.closeDrawer();
     }
+
+    submieQuestion() {
+        this.routerExtension.navigate(['/my/questions/add']);
+        this.closeDrawer();
+    }
 }
