@@ -35,7 +35,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnInit() {
     this.progressValue = 0;
     this.stopProcessBar = setInterval(() => {
-      if (this.progressValue <= 100) {
+      if (this.progressValue <= 100 && this.doPlay) {
         this.progressValue = (this.minutes * 100) / 15;
         this.minutes++;
       } else {

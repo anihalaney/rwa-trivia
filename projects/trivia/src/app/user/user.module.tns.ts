@@ -5,12 +5,14 @@ import { SharedModule } from 'shared-library/shared/shared.module';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { effects, reducer } from './store';
 import { UserRoutingModule } from './routing/user-routing.module';
+import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 
 import {
   GameCardComponent,
   ProfileSettingsComponent,
-  QuestionAddUpdateComponent,
-  MyQuestionsComponent
+  MyQuestionsComponent,
+  InviteFriendsComponent,
+  QuestionAddUpdateComponent
 } from './components';
 
 @NgModule({
@@ -18,14 +20,16 @@ import {
     GameCardComponent,
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
-    MyQuestionsComponent
+    MyQuestionsComponent,
+    InviteFriendsComponent,
+    QuestionAddUpdateComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     NativeScriptRouterModule,
     UserRoutingModule,
-
+    NativeScriptUIListViewModule,
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
@@ -39,7 +43,8 @@ import {
     GameCardComponent,
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
-    MyQuestionsComponent
+    MyQuestionsComponent,
+    InviteFriendsComponent
   ]
 })
 export class UserModule { }

@@ -1,7 +1,7 @@
 <GridLayout class="mobile" rows="*,60" backgroundColor="#f1f2f2">
     <ScrollView row="0">
         <StackLayout>
-            <CardView class="cardStyle" elevation="40" radius="5" class="gameplay" backgroundColor="white">
+            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                 <StackLayout>
                     <GridLayout row="auto" columns="auto,*,auto" class="sideStackLayoutHeader" *ngIf="user" paddingTop="10">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
@@ -53,7 +53,7 @@
                     <Image row="0" col="2" src="{{getImage(question.created_uid)}}" color="#FFFFFF" stretch="aspectFill" height="44" width="44" marginLeft="10" marginRight="10" borderRadius="50" ></Image>
             </GridLayout>
 
-            <CardView class="cardStyle" elevation="40" radius="5" class="gameplay" backgroundColor="white" margin="15">
+            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white" margin="15">
                 <StackLayout padding="20 10">
                     <Label text="{{questionIndex}}. {{question?.questionText}}" fontSize="17" fontWeight="700" marginBottom="10" textWrap="true"
                         color="#1b1c1c" horizontalAlignment="center"></Label>

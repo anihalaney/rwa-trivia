@@ -3,7 +3,8 @@ import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core
 import {
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
-    MyQuestionsComponent
+    MyQuestionsComponent,
+    InviteFriendsComponent
 } from '../components';
 
 export const userRoutes: Routes = [
@@ -17,6 +18,11 @@ export const userRoutes: Routes = [
         component: MyQuestionsComponent,
         canActivate: [AuthGuard],
         resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
+    },
+    {
+        path: 'invite-friends',
+        component: InviteFriendsComponent,
+        canActivate: [AuthGuard]
     },
     {
         path: 'questions/add',
