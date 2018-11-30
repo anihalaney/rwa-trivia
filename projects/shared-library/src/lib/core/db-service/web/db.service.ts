@@ -17,11 +17,19 @@ export class WebDbService extends DbService {
         super();
     }
 
-    public setDoc(collectionName, docId, document) {
+    public createDoc(collectionName: string, document: any) {
+        const collectionRef = this._afStore.collection(collectionName);
+        return collectionRef.add(document).then((documentRef) => {
+            document.id = documentRef.id;
+            return this.setDoc(collectionName, documentRef.id, document);
+        });
+    }
+
+    public setDoc(collectionName: string, docId: any, document: any) {
         return this._afStore.doc(`/${collectionName}/${docId}`).set(document);
     }
 
-    public updateDoc(collectionName, docId, document) {
+    public updateDoc(collectionName: string, docId: any, document: any) {
         return this._afStore.doc(`/${collectionName}/${docId}`).update(document);
     }
 
@@ -71,7 +79,7 @@ export class WebDbService extends DbService {
         return this._afStore.createId();
     }
 
-    public getFireStorageReference(filePath): AngularFireStorageReference {
+    public getFireStorageReference(filePath: string): AngularFireStorageReference {
         return this._afstorage.ref(filePath);
     }
 
@@ -79,11 +87,11 @@ export class WebDbService extends DbService {
         return this._afStore;
     }
 
-    public getDoc(collectionName, docId): any {
+    public getDoc(collectionName: string, docId: any): any {
         return this._afStore.firestore.collection(collectionName).doc(docId);
     }
 
-    public upload(filePath, imageBlob) {
+    public upload(filePath: string, imageBlob: any) {
         return this._afstorage.upload(filePath, imageBlob);
     }
 
