@@ -6,7 +6,7 @@
   "nativescript": {
     "id": "com.bitwiser.trivia.dev",
     "tns-ios": {
-      "version": "4.2.0"
+      "version": "5.0.0"
     },
     "tns-android": {
       "version": "4.2.0"
@@ -93,7 +93,10 @@
     "nativescript-camera": "^4.1.1",
     "nativescript-cardview": "^3.1.1",
     "nativescript-checkbox": "^3.0.3",
+    "nativescript-loading-indicator": "^2.4.0",
     "nativescript-plugin-firebase": "^7.1.6",
+    "nativescript-screenshot": "0.0.2",
+    "nativescript-social-share": "^1.5.1",
     "nativescript-theme-core": "~1.0.4",
     "nativescript-toast": "^1.4.6",
     "nativescript-ui-autocomplete": "^3.10.0",

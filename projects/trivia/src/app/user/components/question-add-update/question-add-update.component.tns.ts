@@ -53,7 +53,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.actionBarTxt = 'Submit Question';
     this.initDataItems();
     this.question = new Question();
-    this.createMobileForm(this.question);
+    this.createForm(this.question);
 
     const questionControl = this.questionForm.get('questionText');
 
@@ -77,7 +77,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   ngOnChanges() {
     if (this.editQuestion) {
-      this.createMobileForm(this.editQuestion);
+      this.createForm(this.editQuestion);
       this.categoryIds = this.editQuestion.categoryIds;
       this.categories = this.categories.map(categoryObj => {
         if (Number(categoryObj.id) === Number(this.categoryIds[0])) {
@@ -100,9 +100,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
 
-  createMobileForm(question: Question) {
+  createForm(question: Question) {
 
-    const answersFA: FormArray = super.createForm(question);
+    const answersFA: FormArray = super.createDefaultForm(question);
 
     this.questionForm = this.fb.group({
       questionText: [question.questionText, Validators.required],

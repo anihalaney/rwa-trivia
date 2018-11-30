@@ -50,7 +50,7 @@ export class QuestionAddUpdate {
 
   }
 
-  createForm(question: Question): FormArray {
+  createDefaultForm(question: Question): FormArray {
     const fgs: FormGroup[] = question.answers.map(answer => {
       const fg = new FormGroup({
         answerText: new FormControl(answer.answerText, Validators.required),
