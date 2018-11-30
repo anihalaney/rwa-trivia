@@ -7,6 +7,9 @@ import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { ReportGameComponent } from './../report-game/report-game.component';
+import { getImage } from 'nativescript-screenshot';
+import * as SocialShare from "nativescript-social-share";
+import { Image } from "tns-core-modules/ui/image";
 
 @Component({
   selector: 'game-over',
@@ -15,6 +18,7 @@ import { ReportGameComponent } from './../report-game/report-game.component';
 })
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
+  stackLayout;
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
@@ -62,5 +66,21 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       viewContainerRef: this.vcRef
     };
     this.modal.showModal(ReportGameComponent, options);
+  }
+
+  stackLoaded(args) {
+    this.stackLayout = args.object;
+  }
+
+  screenshot() {
+    this.playerUserName = this.user.displayName;
+    // we need to put setTimeout because to change username before screenshot.
+    setTimeout(() => {
+      const img = new Image;
+      img.imageSource = getImage(this.stackLayout);
+      const shareImage = img.imageSource;
+      SocialShare.shareImage(shareImage);
+      this.playerUserName = "You";
+    }, 100);
   }
 }
