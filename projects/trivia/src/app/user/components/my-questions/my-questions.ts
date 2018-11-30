@@ -10,25 +10,44 @@ import * as userActions from '../../store/actions';
 
 export class MyQuestions {
 
-  publishedQuestions$: Observable<Question[]>;
-  unpublishedQuestions$: Observable<Question[]>;
-  categoryDictObs: Observable<{ [key: number]: Category }>;
-
-  user: User;
   publishedQuestions: Question[];
   unpublishedQuestions: Question[];
+  categoryDictObs: Observable<{ [key: number]: Category }>;
+  user: User;
+  loaderBusy = false;
 
   subs: Subscription[] = [];
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
     public utils: Utils) {
+
+    this.loaderBusy = true;
     this.categoryDictObs = store.select(categoryDictionary);
 
     this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user;
     }));
-    this.publishedQuestions$ = this.store.select(userState).pipe(select(s => s.userPublishedQuestions));
-    this.unpublishedQuestions$ = this.store.select(userState).pipe(select(s => s.userUnpublishedQuestions));
+    this.subs.push(this.store.select(userState).pipe(select(s => s.userPublishedQuestions)).subscribe((questions) => {
+      this.publishedQuestions = questions;
+      this.hideLoader();
+    }));
+    this.subs.push(this.store.select(userState).pipe(select(s => s.userUnpublishedQuestions)).subscribe((questions) => {
+      this.unpublishedQuestions = questions;
+      this.hideLoader();
+    }));
+  }
+
+  hideLoader() {
+    if (this.publishedQuestions && this.unpublishedQuestions) {
+      setTimeout(() => {
+        this.toggleLoader(false);
+      }, 1000);
+    }
+  }
+
+
+  toggleLoader(flag: boolean) {
+    this.loaderBusy = flag;
   }
 }

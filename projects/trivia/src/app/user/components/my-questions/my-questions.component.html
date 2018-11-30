@@ -13,12 +13,12 @@
   <mat-card-content>
     <mat-tab-group>
       <mat-tab label="Published">
-        <question-table [showSort]="false" [showPaginator]="false" [questions]="publishedQuestions$ | async" [totalCount]="10" [categoryDictionary]="categoryDictObs | async"
-          [user]="user" [showApproveButton]="false">
+        <question-table [showSort]="false" [showPaginator]="false" [questions]="publishedQuestions" [totalCount]="10"
+          [categoryDictionary]="categoryDictObs | async" [user]="user" [showApproveButton]="false">
         </question-table>
       </mat-tab>
       <mat-tab label="Pending">
-        <question-table [showSort]="false" [showPaginator]="false" [questions]="unpublishedQuestions$ | async" [totalCount]="10"
+        <question-table [showSort]="false" [showPaginator]="false" [questions]="unpublishedQuestions" [totalCount]="10"
           [categoryDictionary]="categoryDictObs | async" [user]="user" [showApproveButton]="false">
         </question-table>
       </mat-tab>

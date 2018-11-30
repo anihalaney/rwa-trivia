@@ -27,9 +27,6 @@ export class QuestionsTableComponent {
   @Output() selectedQuestion: EventEmitter<Question> = new EventEmitter<Question>();
 
 
-
-
-
   constructor() {
   }
 
