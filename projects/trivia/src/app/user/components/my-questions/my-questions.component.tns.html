@@ -1,17 +1,21 @@
 <ns-action-bar title="My Question" showAdd="true"></ns-action-bar>
 
-<StackLayout visibility="{{ !displayReasonViewer && !displayEditQuestion ? 'visible' : 'hidden' }}">
+<StackLayout>
+    <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
+</StackLayout>
+
+<StackLayout visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
     <TabView>
         <StackLayout *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
             <StackLayout>
-                <question-table [questions]="publishedQuestions$ | async" [categoryDictionary]="categoryDictObs | async"
-                    [user]="user" [showApproveButton]="false" [userDict]="userDict">
+                <question-table [questions]="publishedQuestions" [categoryDictionary]="categoryDictObs | async" [user]="user"
+                    [showApproveButton]="false" [userDict]="userDict">
                 </question-table>
             </StackLayout>
         </StackLayout>
         <StackLayout *tabItem="{title: 'Pending', textTransform: 'none'}" fontSize="16" fontWeight="600">
             <StackLayout>
-                <question-table [questions]="unpublishedQuestions$ | async" [categoryDictionary]="categoryDictObs | async"
+                <question-table [questions]="unpublishedQuestions" [categoryDictionary]="categoryDictObs | async"
                     [user]="user" [showApproveButton]="false" [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"
                     (displayReason)="displayReason($event)" (selectedQuestion)="setSelectedQuestion($event)">
                     <Button class="fa approve-btn" text="&#xf00c;" textWrap="true" top="70" width="90" height="25"
@@ -22,9 +26,9 @@
     </TabView>
 </StackLayout>
 
-<StackLayout visibility="{{ !displayReasonViewer && !displayEditQuestion  ? 'visible' : 'hidden' }}">
-    <Button class="fa" text="&#xf044;" backgroundColor="#71b02f" color="white" textWrap="true" marginTop="470"
-        marginLeft="220" fontSize="25" fontWeight="bold" width="60" height="60" borderRadius="30" (tap)="navigateToSubmitQuestion()"></Button>
+<StackLayout visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
+    <Button class="fa" text="&#xf044;" backgroundColor="#71b02f" color="white" textWrap="true" marginTop="450"
+        marginLeft="180" fontSize="25" fontWeight="bold" width="60" height="60" borderRadius="30" (tap)="navigateToSubmitQuestion()"></Button>
 </StackLayout>
 
 <StackLayout *ngIf="displayReasonViewer && !displayEditQuestion">
@@ -41,11 +45,13 @@
                 borderColor="#f3f3f3" [editable]="false"></TextView>
             <Label text="Please do the needful edits and resubmit the question." textWrap="true" class="label"
                 fontWeight="400" color="#989898" marginTop="20"></Label>
-            <Button text="RESUBMIT" color="#ffffff" backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3"
-                fontSize="20" fontWeight="bold" (tap)="showUpdateQuestion(true)"></Button>
+            <Button text="RESUBMIT" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
+                backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20" fontWeight="bold"
+                (tap)="showUpdateQuestion(true)"></Button>
         </StackLayout>
     </StackLayout>
 </StackLayout>
 
+
 <app-question-add-update *ngIf="!displayReasonViewer && displayEditQuestion" [editQuestion]="selectedQuestion"
-    (updateQuestion)="updateQuestion($event)"></app-question-add-update>
+    (hideQuestion)="hideQuestion($event)"></app-question-add-update>

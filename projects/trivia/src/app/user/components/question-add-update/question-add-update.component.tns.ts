@@ -12,6 +12,7 @@ import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import * as Toast from 'nativescript-toast';
+import { Page } from 'tns-core-modules/ui/page';
 
 @Component({
   selector: 'app-question-add-update',
@@ -30,8 +31,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   submitBtnTxt: string;
   actionBarTxt: string;
   @Input() editQuestion: Question;
-  @Output() updateQuestion = new EventEmitter<Question>();
-
+  @Output() hideQuestion = new EventEmitter<boolean>();
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
   get dataItems(): ObservableArray<TokenModel> {
@@ -44,7 +44,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     public store: Store<AppState>,
     public utils: Utils,
     public questionAction: QuestionActions,
-    private routerExtension: RouterExtensions) {
+    private routerExtension: RouterExtensions,
+    private page: Page) {
 
     super(fb, store, utils, questionAction);
 
@@ -61,10 +62,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
-        this.routerExtension.navigate(['/my/questions']);
-        (this.editQuestion) ? Toast.makeText('Question updated!').show() : Toast.makeText('Question saved!').show();
-        (this.editQuestion) ? this.updateQuestion.emit(this.editQuestion) : '';
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
+        Toast.makeText('Question saved!').show();
+        this.routerExtension.navigate(['/my/questions']);
+        this.actionBarTxt = 'My Question';
+        setTimeout(() => {
+          this.hideQuestion.emit(false);
+          this.toggleLoader(false);
+        }, 0);
       }
     }));
 
@@ -140,7 +145,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     (this.editQuestion) ? question.id = this.editQuestion.id : '';
     if (question && this.categoryIds.length > 0 && this.enteredTags.length > 2) {
       question.categoryIds = this.categoryIds;
-      this.editQuestion = question;
+      this.toggleLoader(true);
       // call saveQuestion
       this.saveQuestion(question);
     }

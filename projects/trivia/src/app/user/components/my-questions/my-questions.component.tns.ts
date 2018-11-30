@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { QuestionActions } from 'shared-library/core/store';
-import { User, Question } from 'shared-library/shared/model';
+import { User, Question, QuestionStatus } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
@@ -21,8 +21,8 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   displayReasonViewer = false;
+  displayEditQuestion = false;
   selectedQuestion: Question;
-  displayEditQuestion: Question;
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -53,9 +53,13 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     this.page.actionBarHidden = !displayFlag;
   }
 
-  updateQuestion(question: Question) {
-    this.selectedQuestion = question;
-    this.displayEditQuestion = true;
+  hideQuestion(displayEditQuestion: boolean) {
+    this.displayEditQuestion = false;
+    this.page.actionBarHidden = false;
+  }
+
+  getDisplayStatus(status: number): string {
+    return QuestionStatus[status];
   }
 
   ngOnDestroy() {

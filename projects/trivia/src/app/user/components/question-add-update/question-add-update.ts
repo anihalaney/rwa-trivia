@@ -26,7 +26,7 @@ export class QuestionAddUpdate {
   autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
   filteredTags$: Observable<string[]>;
-
+  loaderBusy = false;
   user: User;
 
   get answers(): FormArray {
@@ -106,6 +106,10 @@ export class QuestionAddUpdate {
     question.createdOn = new Date();
 
     return question;
+  }
+
+  toggleLoader(flag: boolean) {
+    this.loaderBusy = flag;
   }
 
   onSubmit(): Question {
