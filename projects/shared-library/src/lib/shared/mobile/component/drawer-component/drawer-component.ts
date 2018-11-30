@@ -96,6 +96,10 @@ export class DrawerComponent implements OnInit {
     navigateToFriendList() {
         this.activeMenu = 'Friend List';
         this.routerExtension.navigate(['/my/invite-friends']);
+    }
+
+    submieQuestion() {
+        this.routerExtension.navigate(['/my/questions/add']);
         this.closeDrawer();
     }
 }

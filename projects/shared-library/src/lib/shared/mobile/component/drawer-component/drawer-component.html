@@ -2,7 +2,7 @@
     <GridLayout rows="*,auto">
         <StackLayout row="0">
             <ScrollView>
-                <GridLayout rows="120,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
+                <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
                     <GridLayout row="0" columns="auto,auto" class="sideStackLayoutHeader" *ngIf="user">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
                             width="64" marginLeft="10" verticalAlignment="center" marginRight="10"></Image>
@@ -44,6 +44,9 @@
                     <Label row="6" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Friend List"
                         [class.active-menu]="activeMenu === 'Friend List'" class="sideLabel sideStackLayout"
                         (tap)="navigateToFriendList()"></Label>
+
+                    <Label row="7" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Submit Question" class="sideLabel sideStackLayout"
+                        (tap)="submieQuestion()"></Label>
                 </GridLayout>
             </ScrollView>
         </StackLayout>

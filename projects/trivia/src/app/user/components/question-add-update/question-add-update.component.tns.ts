@@ -1,24 +1,35 @@
-import { Component, OnDestroy } from '@angular/core';
-import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
-import { QuestionAddUpdate } from './question-add-update';
 import { Question, Answer } from 'shared-library/shared/model';
+import { QuestionAddUpdate } from './question-add-update';
 import { debounceTime, map } from 'rxjs/operators';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { TokenModel } from 'nativescript-ui-autocomplete';
+import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
+import * as Toast from 'nativescript-toast';
 
 @Component({
   templateUrl: './question-add-update.component.html',
-  styleUrls: ['./question-add-update.component.scss']
+  styleUrls: ['./question-add-update.component.css']
 })
 
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy {
 
-  get tagsArray(): FormArray {
-    return this.questionForm.get('tagsArray') as FormArray;
+  showSelectCategory = false;
+  showSelectTag = false;
+  dataItem;
+  customTag: string;
+  private tagItems: ObservableArray<TokenModel>;
+  categoryIds: any[];
+
+  @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
+
+  get dataItems(): ObservableArray<TokenModel> {
+    return this.tagItems;
   }
 
 
@@ -26,12 +37,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public utils: Utils,
-    public router: Router,
-    public snackBar: MatSnackBar,
     public questionAction: QuestionActions) {
 
     super(fb, store, utils, questionAction);
 
+    this.initDataItems();
     this.question = new Question();
     this.createForm(this.question);
 
@@ -40,17 +50,22 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
     this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
 
-
-    this.filteredTags$ = this.questionForm.get('tags').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-
     this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
-        this.snackBar.open('Question saved!', '', { duration: 2000 });
-        this.router.navigate(['/my/questions']);
+        // this.router.navigate(['/my/questions']);
+        Toast.makeText('Question saved!').show();
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
       }
     }));
+
+  }
+
+  private initDataItems() {
+    this.tagItems = new ObservableArray<TokenModel>();
+
+    for (let i = 0; i < this.tags.length; i++) {
+      this.tagItems.push(new TokenModel(this.tags[i], undefined));
+    }
   }
 
 
@@ -58,21 +73,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     const answersFA: FormArray = super.createDefaultForm(question);
 
-    let fcs: FormControl[] = question.tags.map(tag => {
-      const fc = new FormControl(tag);
-      return fc;
-    });
-    if (fcs.length === 0) {
-      fcs = [new FormControl('')];
-    }
-
-    const tagsFA = new FormArray(fcs);
-
     this.questionForm = this.fb.group({
-      category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: [question.questionText, Validators.required],
       tags: '',
-      tagsArray: tagsFA,
       answers: answersFA,
       ordered: [question.ordered],
       explanation: [question.explanation]
@@ -81,42 +84,38 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
 
-  // Event Handlers
-  addTag() {
-    const tag = this.questionForm.get('tags').value;
-    if (tag) {
-      super.addTag(tag);
-      this.questionForm.get('tags').setValue('');
-    }
-    this.setTagsArray();
+  selectCategory(category) {
+    this.categoryIds = [];
+    this.categories = this.categories.map(categoryObj => {
+      categoryObj.isSelected = false;
+      return categoryObj;
+    });
+    category.isSelected = (!category.isSelected) ? true : false;
+    this.categoryIds.push(category.id);
   }
 
-  removeEnteredTag(tag) {
-    super.removeEnteredTag(tag);
-    this.setTagsArray();
+  addCustomTag() {
+    super.addTag(this.customTag);
+    this.customTag = '';
+    this.autocomplete.autoCompleteTextView.resetAutocomplete();
   }
 
-
-  computeAutoTags() {
-    super.computeAutoTags();
-    this.setTagsArray();
+  public onDidAutoComplete(args) {
+    this.customTag = args.text;
   }
 
-  setTagsArray() {
-    this.tagsArray.controls = [];
-    [...this.autoTags, ...this.enteredTags].forEach(tag => this.tagsArray.push(new FormControl(tag)));
+  public onTextChanged(args) {
+    this.customTag = args.text;
   }
 
   submit() {
 
     const question: Question = super.onSubmit();
 
-    if (question) {
+    if (question && this.categoryIds.length > 0 && this.enteredTags.length > 2) {
+      question.categoryIds = this.categoryIds;
       // call saveQuestion
       this.saveQuestion(question);
-
-      this.filteredTags$ = this.questionForm.get('tags').valueChanges
-        .pipe(map(val => val.length > 0 ? this.filter(val) : []));
     }
 
   }
@@ -126,18 +125,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 }
 
-
 // Custom Validators
 function questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
   const answers: Answer[] = fg.get('answers').value;
+
   if (answers.filter(answer => answer.correct).length !== 1) {
     return { 'correctAnswerCountInvalid': true };
   }
 
-  const tags: string[] = fg.get('tagsArray').value;
-  if (tags.length < 3) {
-    return { 'tagCountInvalid': true };
-  }
 
-  return null;
 }
+
