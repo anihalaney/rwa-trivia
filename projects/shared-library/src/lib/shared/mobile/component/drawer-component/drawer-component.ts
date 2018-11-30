@@ -8,11 +8,9 @@ import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
 import { Utils } from './../../../../core/services';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Category } from './../../../model';
-import { Router, NavigationExtras } from '@angular/router';
 
-// import { coreState, CoreState,  } from './../../../../core/store';
 @Component({
     moduleId: module.id,
     selector: 'ns-drawer-component',
@@ -90,6 +88,12 @@ export class DrawerComponent implements OnInit {
     navigateToProfileSettings() {
         this.activeMenu = 'Profile Settings';
         this.routerExtension.navigate(['/my/profile', this.user.userId]);
+        this.closeDrawer();
+    }
+
+    navigateToFriendList() {
+        this.activeMenu = 'Friend List';
+        this.routerExtension.navigate(['/my/invite-friends']);
         this.closeDrawer();
     }
 
