@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -10,7 +10,7 @@ import { InviteFriends } from './invite-friends';
   templateUrl: './invite-friends.component.html',
   styleUrls: ['./invite-friends.component.scss']
 })
-export class InviteFriendsComponent extends InviteFriends implements OnInit, OnDestroy {
+export class InviteFriendsComponent extends InviteFriends {
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils) {
     super(store, userActions, utils);
   }
