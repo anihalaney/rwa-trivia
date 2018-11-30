@@ -8,13 +8,15 @@ import { UserRoutingModule } from './routing/user-routing.module';
 
 import {
   GameCardComponent,
-  ProfileSettingsComponent
+  ProfileSettingsComponent,
+  InviteFriendsComponent
 } from './components';
 
 @NgModule({
   declarations: [
     GameCardComponent,
-    ProfileSettingsComponent
+    ProfileSettingsComponent,
+    InviteFriendsComponent
   ],
   imports: [
     // rwa modules
@@ -33,7 +35,8 @@ import {
   providers: [],
   exports: [
     GameCardComponent,
-    ProfileSettingsComponent
+    ProfileSettingsComponent,
+    InviteFriendsComponent
   ]
 })
 export class UserModule { }
