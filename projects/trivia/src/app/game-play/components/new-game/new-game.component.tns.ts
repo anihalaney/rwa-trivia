@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions } from 'shared-library/core/store/actions';
@@ -149,5 +149,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.friendUserId = friendId;
     this.listViewComponent.listView.refresh();
   }
+
 }
 

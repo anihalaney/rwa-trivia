@@ -179,7 +179,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.loaderStatus = true;
 
     const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
-    // console.log(gameOptions);
 
     if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
       && !this.friendUserId) {

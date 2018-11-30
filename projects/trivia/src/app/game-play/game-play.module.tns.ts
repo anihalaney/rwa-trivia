@@ -6,10 +6,10 @@ import { GamePlayRoutingModule } from './routing/game-play-routing.module';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import {
-  NewGameComponent, GameComponent, GameDialogComponent, GameQuestionComponent, GameOverComponent
+  ReportGameComponent, NewGameComponent, GameComponent, GameDialogComponent, GameQuestionComponent, GameOverComponent
 } from './components';
 import { effects, reducer } from './store';
-
+import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,8 @@ import { effects, reducer } from './store';
     GameComponent,
     GameDialogComponent,
     GameQuestionComponent,
-    GameOverComponent
+    GameOverComponent,
+    ReportGameComponent
   ],
   imports: [
     // rwa modules
@@ -25,7 +26,7 @@ import { effects, reducer } from './store';
     GamePlayRoutingModule,
     NativeScriptRouterModule,
     NativeScriptUIListViewModule,
-
+    NativeScriptFormsModule,
     //ngrx feature store
     StoreModule.forFeature('gameplay', reducer),
 
@@ -33,6 +34,7 @@ import { effects, reducer } from './store';
     EffectsModule.forFeature(effects),
 
   ],
+  entryComponents: [ReportGameComponent],
   providers: [
   ]
 })
