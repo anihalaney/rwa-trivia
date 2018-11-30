@@ -5,10 +5,12 @@ import { SharedModule } from 'shared-library/shared/shared.module';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { effects, reducer } from './store';
 import { UserRoutingModule } from './routing/user-routing.module';
+import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 
 import {
   GameCardComponent,
   ProfileSettingsComponent,
+  InviteFriendsComponent,
   QuestionAddUpdateComponent
 } from './components';
 
@@ -16,6 +18,7 @@ import {
   declarations: [
     GameCardComponent,
     ProfileSettingsComponent,
+    InviteFriendsComponent,
     QuestionAddUpdateComponent
   ],
   imports: [
@@ -23,7 +26,7 @@ import {
     SharedModule,
     NativeScriptRouterModule,
     UserRoutingModule,
-
+    NativeScriptUIListViewModule,
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
@@ -36,6 +39,7 @@ import {
   exports: [
     GameCardComponent,
     ProfileSettingsComponent,
+    InviteFriendsComponent,
     QuestionAddUpdateComponent
   ]
 })
