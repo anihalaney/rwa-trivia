@@ -1,0 +1,23 @@
+.status-layout>Button {
+    z-index: 0;
+}
+
+.pending-btn {
+    background-color: #fafafa;
+    color: #574b4c;
+}
+
+.required-change-btn {
+    background-color: #fffde2;
+    color: #aea200;
+}
+
+.reject-btn {
+    background-color: #fbdad9;
+    color: #f05959;
+}
+
+.approve-btn {
+    background-color: #e2f0d6;
+    color: #7cb645;
+}

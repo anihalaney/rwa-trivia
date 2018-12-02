@@ -10,6 +10,7 @@ import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import {
   GameCardComponent,
   ProfileSettingsComponent,
+  MyQuestionsComponent,
   InviteFriendsComponent,
   QuestionAddUpdateComponent
 } from './components';
@@ -18,6 +19,8 @@ import {
   declarations: [
     GameCardComponent,
     ProfileSettingsComponent,
+    QuestionAddUpdateComponent,
+    MyQuestionsComponent,
     InviteFriendsComponent,
     QuestionAddUpdateComponent
   ],
@@ -39,8 +42,9 @@ import {
   exports: [
     GameCardComponent,
     ProfileSettingsComponent,
-    InviteFriendsComponent,
-    QuestionAddUpdateComponent
+    QuestionAddUpdateComponent,
+    MyQuestionsComponent,
+    InviteFriendsComponent
   ]
 })
 export class UserModule { }

@@ -19,17 +19,20 @@
                     <Label row="1" colSpan="2" text="Home" textWrap="true" [class.active-menu]="activeMenu === 'Home'"
                         class="sideLabel" (tap)="dashboard()"></Label>
 
-                    <Label row="2" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Profile Settings" textWrap="true"
+                    <Label row="2" colSpan="2" *ngIf="authProvider.isAuthenticated" text="My Questions" class="sideLabel sideStackLayout"
+                        (tap)="navigateToMyQuestion()"></Label>
+
+                    <Label row="3" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Profile Settings" textWrap="true"
                         class="sideLabel" (tap)="navigateToProfileSettings()" [class.active-menu]="activeMenu === 'Profile Settings'"></Label>
 
-                    <GridLayout rows="*" column="*, auto" row="3" colSpan="2" [class.active-menu]="activeMenu === 'Category Leaderboard'"
+                    <GridLayout rows="*" column="*, auto" row="4" colSpan="2" [class.active-menu]="activeMenu === 'Category Leaderboard'"
                         (tap)="showSelectCategory = !showSelectCategory">
                         <Label row="0" col="0" text="Category Leaderboard" class="sideLabel sideStackLayout"></Label>
                         <Label row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
                             verticalAlignment="center" (tap)="showSelectCategory = !showSelectCategory" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
                             paddingRight="15"></Label>
                     </GridLayout>
-                    <StackLayout row="4" colSpan="2" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
+                    <StackLayout row="5" colSpan="2" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
                         <StackLayout *ngFor="let category of categories" orientation="horizontal" paddingLeft="10"
                             (tap)="leaderBoard(category.categoryName)">
                             <Label col="0" text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
@@ -38,15 +41,11 @@
                             </Label>
                         </StackLayout>
                     </StackLayout>
-                    <Label row="5" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Recently Completed Games"
+                    <Label row="6" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Recently Completed Games"
                         [class.active-menu]="activeMenu === 'Recently Completed Games'" class="sideLabel sideStackLayout"
                         (tap)="recentGame()"></Label>
                     <Label row="6" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Friend List"
-                        [class.active-menu]="activeMenu === 'Friend List'" class="sideLabel sideStackLayout"
-                        (tap)="navigateToFriendList()"></Label>
-
-                    <Label row="7" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Submit Question" class="sideLabel sideStackLayout"
-                        (tap)="submieQuestion()"></Label>
+                        [class.active-menu]="activeMenu === 'Friend List'" class="sideLabel sideStackLayout" (tap)="navigateToFriendList()"></Label>
                 </GridLayout>
             </ScrollView>
         </StackLayout>

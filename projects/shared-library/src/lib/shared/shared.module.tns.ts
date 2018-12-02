@@ -4,7 +4,7 @@ import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { ActionBarComponent, DrawerComponent } from './mobile/component';
+import { ActionBarComponent, DrawerComponent, QuestionsTableComponent } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
@@ -14,6 +14,7 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
   declarations: [
     ActionBarComponent,
     DrawerComponent,
+    QuestionsTableComponent,
     GameFilterPipe
   ],
   imports: [
@@ -27,7 +28,6 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
     HttpClientModule,       // for share counts
     NativeScriptCommonModule,
 
-
     NativeScriptFormsModule,
     ReactiveFormsModule,
     TNSCheckBoxModule,
@@ -38,10 +38,12 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
     NativeScriptFormsModule,
     ReactiveFormsModule,
     TNSCheckBoxModule,
+    NativeScriptCommonModule,
     NativeScriptUIAutoCompleteTextViewModule,
     HttpClientModule,
     ActionBarComponent,
     DrawerComponent,
+    QuestionsTableComponent,
     GameFilterPipe]
 })
 export class SharedModule { }

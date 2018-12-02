@@ -91,14 +91,16 @@ export class DrawerComponent implements OnInit {
         this.closeDrawer();
     }
 
+    navigateToMyQuestion() {
+        this.activeMenu = 'My Questions';
+        this.routerExtension.navigate(['/my/questions']);
+        this.closeDrawer();
+    }
+
     navigateToFriendList() {
         this.activeMenu = 'Friend List';
         this.routerExtension.navigate(['/my/invite-friends']);
         this.closeDrawer();
     }
 
-    submieQuestion() {
-        this.routerExtension.navigate(['/my/questions/add']);
-        this.closeDrawer();
-    }
 }
