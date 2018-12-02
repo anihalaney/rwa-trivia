@@ -52,8 +52,7 @@ registerElement('CardView', () => require('nativescript-cardview').CardView);
     StatsModule,
     SharedModule,
     NativeScriptUISideDrawerModule,
-    RouterModule,
-    UserModule
+    RouterModule
   ],
   providers: [
     TNSFirebaseService,
@@ -73,5 +72,5 @@ registerElement('CardView', () => require('nativescript-cardview').CardView);
 Pass your application module to the bootstrapModule function located in main.ts to start your app
 */
 export class AppModule {
-  constructor() {}
+  constructor() { }
 }

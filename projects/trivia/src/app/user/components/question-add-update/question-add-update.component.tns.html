@@ -1,5 +1,10 @@
-<ns-action-bar title="Submit Question" showAdd="true"></ns-action-bar>
-<StackLayout>
+<ns-action-bar [title]="actionBarTxt" showAdd="true"></ns-action-bar>
+
+<StackLayout *ngIf="loaderBusy">
+    <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
+</StackLayout>
+
+<StackLayout *ngIf="!loaderBusy">
     <ScrollView>
         <StackLayout class="new-game" backgroundColor="#f1f2f2" [formGroup]="questionForm">
 
@@ -114,7 +119,7 @@
             </StackLayout>
 
             <StackLayout padding="10">
-                <Button text="SUBMIT" (tap)="submit()" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
+                <Button [text]="submitBtnTxt" (tap)="submit()" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
                     color="#ffffff" padding="20" borderRadius="3" fontSize="20" fontWeight="bold"></Button>
             </StackLayout>
         </StackLayout>
