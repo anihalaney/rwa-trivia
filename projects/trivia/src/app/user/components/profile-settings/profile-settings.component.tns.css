@@ -9,8 +9,7 @@
     border-radius: 3;
 }
 
-.profile-settings>.input-field>.input,
-.profile-settings>.list-view>.input-field>.input {
+.profile-settings>.input-field>.input, .profile-settings>.list-view>.input-field>.input {
     padding: 15;
     width: 325;
     border: none;
@@ -40,10 +39,7 @@
     padding-top: 4;
 }
 
-.profile-settings>.list-view StackLayout>GridLayout,
-.profile-settings>.list-view>.sub-list-view,
-.profile-settings>.privacy-area,
-.profile-settings>.profile-buttons {
+.profile-settings>.list-view StackLayout>GridLayout, .profile-settings>.list-view>.sub-list-view, .profile-settings>.privacy-area, .profile-settings>.profile-buttons {
     border-bottom-width: 1;
     border-bottom-color: #D3D3D3;
     padding-left: 15;
@@ -100,8 +96,7 @@
     padding-bottom: 10;
 }
 
-.profile-settings>.privacy-area>.sub-text,
-.profile-settings>.profile-buttons>.sub-text {
+.profile-settings>.privacy-area>.sub-text, .profile-settings>.profile-buttons>.sub-text {
     font-size: 12;
 }
 
@@ -123,4 +118,27 @@
     width: 325;
     border: none;
     border-width: 0;
+}
+
+.profile-settings>.social-section StackLayout>GridLayout {
+    border-bottom-width: 0;
+}
+
+.profile-settings>.social-section StackLayout>GridLayout {
+    border-bottom-width: 0;
+}
+
+.profile-settings>.social-section StackLayout>GridLayout>Switch {
+    background-color: #009fe8;
+    color: #009fe8;
+}
+
+.profile-settings>.social-section>.input-field>.input {
+    border-width: 1;
+    border-color: #D3D3D3;
+    border-radius: 3;
+}
+
+.grey-label {
+    color: #d9d9d9;
 }

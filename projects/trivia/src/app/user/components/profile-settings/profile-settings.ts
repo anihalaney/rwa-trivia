@@ -154,8 +154,11 @@ export class ProfileSettings {
             categoryList: categoryFA,
             tags: '',
             tagsArray: tagsFA,
+            facebookUrlStatus: [true],
             facebookUrl: [user.facebookUrl, Validators.pattern(this.linkValidation)],
+            twitterUrlStatus: [true],
             twitterUrl: [user.twitterUrl, Validators.pattern(this.linkValidation)],
+            linkedInUrlStatus: [true],
             linkedInUrl: [user.linkedInUrl, Validators.pattern(this.linkValidation)],
             profileSetting: [(user.profileSetting) ? user.profileSetting :
                 (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
