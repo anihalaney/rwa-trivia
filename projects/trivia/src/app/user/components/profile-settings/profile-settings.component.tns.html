@@ -88,7 +88,7 @@
 
           <GridLayout rows="auto,auto" columns="auto,*">
             <Label class="grid-label-text" text="Facebook" row="0" col="0" textWrap="true" [ngClass]="{'grey-label': !userForm.get('facebookUrlStatus').value}"></Label>
-            <Switch row="0" col="1" formControlName="facebookUrlStatus"></Switch>
+            <Switch row="0" col="1" horizontalAlignment="right" formControlName="facebookUrlStatus" [ngClass]="userForm.get('facebookUrlStatus').value? 'blue-back-label ':'grey-back-label'"></Switch>
           </GridLayout>
 
           <TextField hint="Enter Facebook Url" formControlName="facebookUrl" class="input" [editable]="userForm.get('facebookUrlStatus').value"></TextField>
@@ -101,7 +101,7 @@
 
           <GridLayout rows="auto,auto" columns="auto,*">
             <Label class="grid-label-text" text="Twitter" row="0" col="0" textWrap="true" [ngClass]="{'grey-label':!userForm.get('twitterUrlStatus').value}"></Label>
-            <Switch row="0" col="1" formControlName="twitterUrlStatus"></Switch>
+            <Switch row="0" col="1" horizontalAlignment="right" formControlName="twitterUrlStatus" [ngClass]="userForm.get('twitterUrlStatus').value? 'blue-back-label ':'grey-back-label'"></Switch>
           </GridLayout>
 
           <TextField hint="Enter Twitter Url" formControlName="twitterUrl" class="input" [editable]="userForm.get('twitterUrlStatus').value"></TextField>
@@ -113,8 +113,8 @@
         <StackLayout class="input-field">
 
           <GridLayout rows="auto,auto" columns="auto,*">
-            <Label class="grid-label-text" text="Twitter" row="0" col="0" textWrap="true" [ngClass]="{'grey-label': !userForm.get('linkedInUrlStatus').value}"></Label>
-            <Switch row="0" col="1" formControlName="linkedInUrlStatus"></Switch>
+            <Label class="grid-label-text" text="LinkedIn" row="0" col="0" textWrap="true" [ngClass]="{'grey-label': !userForm.get('linkedInUrlStatus').value}"></Label>
+            <Switch row="0" col="1" horizontalAlignment="right" formControlName="linkedInUrlStatus" [ngClass]="userForm.get('linkedInUrlStatus').value? 'blue-back-label ':'grey-back-label'"></Switch>
           </GridLayout>
 
           <TextField hint="Enter Linkedin Url" formControlName="linkedInUrl" class="input" [editable]="userForm.get('linkedInUrlStatus').value"></TextField>

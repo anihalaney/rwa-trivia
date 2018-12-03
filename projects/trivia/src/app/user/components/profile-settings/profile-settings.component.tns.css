@@ -128,10 +128,10 @@
     border-bottom-width: 0;
 }
 
-.profile-settings>.social-section StackLayout>GridLayout>Switch {
+/* .profile-settings>.social-section StackLayout>GridLayout>Switch {     
     background-color: #009fe8;
-    color: #009fe8;
-}
+    color: #ffffff;
+} */
 
 .profile-settings>.social-section>.input-field>.input {
     border-width: 1;
@@ -141,4 +141,13 @@
 
 .grey-label {
     color: #d9d9d9;
+}
+
+.grey-back-label {   
+    color: #b7b7b7;
+}
+
+.blue-back-label {
+    background-color: #009fe8;
+    color: #ffffff;
 }
