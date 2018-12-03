@@ -1,4 +1,4 @@
-<ns-action-bar [title]="title" showAdd="true"></ns-action-bar>
+<!-- <ns-action-bar [title]="title" showAdd="true"></ns-action-bar>
 <CardView class="cardStyle mobile" margin="10" android:elevation="20" ios:elevation="40" radius="1" padding="15">
   <ScrollView>
     <GridLayout rows="auto,auto,auto" columns="*" class="form">
@@ -55,4 +55,37 @@
 
     </GridLayout>
   </ScrollView>
-</CardView>
+</CardView> -->
+
+<GridLayout>
+
+  <GridLayout #background scaleX="1.4" scaleY="1.4" class="background"></GridLayout>
+  <ScrollView>
+      <StackLayout #initialContainer class="initial-container">
+          <Label text="bit wiser" fontSize="40" class="initial-label"></Label>
+          <GridLayout rows="auto" columns="*,auto" class="initial-button" borderRadius="10" width="70%">
+            <TextView col="0" padding="15" [(ngModel)]="tvtext" hint="User name" editable="true"></TextView>
+            <Label col="1" paddingRight="15" class="fa" text="&#xf2bd;" color="gray" textWrap="true"></Label>
+          </GridLayout>
+          <GridLayout rows="auto" columns="*,auto" class="initial-button" marginTop="20" borderRadius="10" width="70%">
+            <TextView col="0" padding="15" [(ngModel)]="tvtext" hint="●●●●●●●●" editable="true"></TextView>
+            <Label col="1" paddingRight="18" class="fa" text="&#xf13e;" color="gray" textWrap="true"></Label>
+          </GridLayout>
+      
+          <Label text="Login" horiontalAlignment="center" marginTop="30" class="text-center login-button initial-button-label"></Label>
+      
+          <Label text="Forgor your password?" marginTop="40" class="initial-label" textWrap="true"></Label>
+      
+          <AbsoluteLayout verticalAlignment="bottom" backgroundColor="white">
+            <StackLayout horizontalAlignment="center">
+              <Label class="text-center" margin="10 0 10 0" color="gray" text="Sign Up with social account"></Label>
+              <Image class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/faceboockbtn.png"></Image>
+              <Image *ngIf="twitter" class="text-center" margin="10 0 10 0" width="70%" src="~/assets/images/twitbtn.png"></Image>
+              <Image class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/gpulsebtn.png"></Image>
+            </StackLayout>
+          </AbsoluteLayout>
+      
+        </StackLayout>
+  </ScrollView>
+
+</GridLayout>

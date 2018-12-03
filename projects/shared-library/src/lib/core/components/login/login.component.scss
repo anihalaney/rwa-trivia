@@ -108,3 +108,41 @@ TextField {
 		padding:10 0 10 0;
 	}
 }
+
+.background {
+  background-image: url("~/assets/images/background-image.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.initial-container {
+  margin-top: 50;
+}
+.initial-label {
+  color: white;
+  horizontal-align: center;
+  margin-bottom: 30;
+}
+.initial-button {
+  background-color: white;
+  vertical-align: center;
+}
+
+.initial-button-label {
+  horizontal-align: center;
+  font-weight: bold;
+}
+
+.login-button {
+	border-radius: 10;
+  background-color: #8ac541;
+  color: white;
+	height: 45;
+	width: 50%;
+	vertical-align: center;
+}
+.initial-button-label {
+  horizontal-align: center;
+  font-weight: bold;
+}
