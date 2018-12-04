@@ -8,7 +8,6 @@ import { UserRoutingModule } from './routing/user-routing.module';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 
 import {
-  GameCardComponent,
   ProfileSettingsComponent,
   MyQuestionsComponent,
   InviteFriendsComponent,
@@ -17,7 +16,6 @@ import {
 
 @NgModule({
   declarations: [
-    GameCardComponent,
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
@@ -40,7 +38,6 @@ import {
   ],
   providers: [],
   exports: [
-    GameCardComponent,
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,

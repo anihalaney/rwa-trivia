@@ -3,7 +3,7 @@ import { Observable, Subscription, timer, interval } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
-import { AppState, appState, categoryDictionary } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../store';
 import { take } from 'rxjs/operators';
 
 @Component({
