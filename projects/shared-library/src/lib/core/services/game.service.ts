@@ -276,7 +276,4 @@ export class GameService {
     return this.http.put<any>(url, payload);
 
   }
-  loadUserFriends(userId: string): Observable<Friends> {
-    return this.dbService.valueChanges('friends', userId);
-}
 }
