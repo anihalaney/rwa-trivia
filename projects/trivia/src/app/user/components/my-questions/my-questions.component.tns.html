@@ -6,9 +6,39 @@
         <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
     </StackLayout>
 
-    <GridLayout row="*,*" col="*">
-        <StackLayout row="0" rowSpan="2" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
-            <TabView>
+    <GridLayout>
+        <StackLayout row="0" rowSpan="2" col="0" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
+            <GridLayout>
+                <GridLayout row="0">
+                    <StackLayout col="0" horizontalAlignment="left">
+                        <Button text="Published" textWrap="true" backgroundColor="white" (tap)="setTabIndex(0)" width="185"
+                            height="60" fontWeight="bold"></Button>
+                    </StackLayout>
+                    <StackLayout col="1" horizontalAlignment="right">
+                        <Button text="Pending" textWrap="true" backgroundColor="white" (tap)="setTabIndex(1)" width="185"
+                            height="60" fontWeight="bold"></Button>
+                    </StackLayout>
+                </GridLayout>
+                <GridLayout *ngIf="tabIndex === 0" row="1" marginTop="60">
+                    <StackLayout>
+                        <question-table [questions]="publishedQuestions" [categoryDictionary]="categoryDictObs | async"
+                            [user]="user" [showApproveButton]="false" [userDict]="userDict">
+                        </question-table>
+                    </StackLayout>
+                </GridLayout>
+                <GridLayout *ngIf="tabIndex === 1" row="1" marginTop="60">
+                    <StackLayout>
+                        <question-table [questions]="unpublishedQuestions" [categoryDictionary]="categoryDictObs | async"
+                            [user]="user" [showApproveButton]="false" [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"
+                            (displayReason)="displayReason($event)" (selectedQuestion)="setSelectedQuestion($event)">
+                            <Button class="fa approve-btn" text="&#xf00c;" textWrap="true" top="70" width="90" height="25"
+                                fontSize="16" fontWeight="bold"></Button>
+                        </question-table>
+                    </StackLayout>
+                </GridLayout>
+            </GridLayout>
+
+            <!-- <TabView>
                 <StackLayout *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
                     <StackLayout>
                         <question-table [questions]="publishedQuestions" [categoryDictionary]="categoryDictObs | async"
@@ -26,13 +56,13 @@
                         </question-table>
                     </StackLayout>
                 </StackLayout>
-            </TabView>
+            </TabView> -->
         </StackLayout>
 
-        <StackLayout row="0" rowSpan="2" *ngIf="displayReasonViewer && !displayEditQuestion">
+        <StackLayout row="0" rowSpan="2" col="0" *ngIf="displayReasonViewer && !displayEditQuestion">
             <StackLayout>
                 <CardLayout>
-                    <GridLayout row="*" col="*,*" height="80">
+                    <GridLayout rows="*" columns="*,*" height="80">
                         <Button col="0" colSpan="2" text="Reason" textWrap="true" fontSize="23" backgroundColor="white"
                             width="400"></Button>
                         <Button col="1" class="fa " horizontalAlignment="left" text="&#xf00d;" textWrap="true" fontSize="25"
@@ -51,10 +81,10 @@
             </StackLayout>
         </StackLayout>
 
-        <app-question-add-update row="0" rowSpan="2" *ngIf="!displayReasonViewer && displayEditQuestion" [editQuestion]="selectedQuestion"
-            (hideQuestion)="hideQuestion($event)"></app-question-add-update>
+        <app-question-add-update row="0" rowSpan="2" col="0" *ngIf="!displayReasonViewer && displayEditQuestion"
+            [editQuestion]="selectedQuestion" (hideQuestion)="hideQuestion($event)"></app-question-add-update>
 
-        <StackLayout row="1" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
+        <StackLayout row="1" col="0" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
             <Button class="fa" text="&#xf044;" backgroundColor="#71b02f" color="white" textWrap="true" marginTop="450"
                 marginLeft="180" fontSize="25" fontWeight="bold" width="60" height="60" borderRadius="30" (tap)="navigateToSubmitQuestion()"></Button>
         </StackLayout>
