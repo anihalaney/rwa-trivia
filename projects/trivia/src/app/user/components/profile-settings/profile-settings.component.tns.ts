@@ -28,6 +28,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   dataItem;
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
+  private facebookUrlStatus = true;
+  private twitterUrlStatus = true;
+  private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
 
   public imageTaken: ImageAsset;
