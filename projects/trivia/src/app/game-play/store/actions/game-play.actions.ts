@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { User, GameOptions, Game, PlayerQnA, Question, ReportQuestion } from 'shared-library/shared/model';
+import { User, GameOptions, Game, PlayerQnA, Question, ReportQuestion, Friends } from 'shared-library/shared/model';
 
 export enum GamePlayActionTypes {
   RESET_NEW = '[GamePlay] ResetNew',
@@ -21,7 +21,9 @@ export enum GamePlayActionTypes {
   GET_USERS_ANSWERED_QUESTION_SUCCESS = '[GamePlay] GetUsersAnsweredQuestionSuccess',
   SAVE_REPORT_QUESTION = '[GamePlay] SaveReportQuestion',
   SAVE_REPORT_QUESTION_SUCCESS = '[GamePlay] SaveReportQuestionSuccess',
-  UPDATE_GAME_ROUND = '[GamePlay] UpdateGameRound'
+  UPDATE_GAME_ROUND = '[GamePlay] UpdateGameRound',
+  LOAD_USER_FRIENDS = '[User] LoadUserFriends',
+  LOAD_USER_FRIENDS_SUCCESS = '[User] LoadUserFriendsSuccess',
 }
 
 export class ResetNewGame implements Action {
@@ -111,8 +113,6 @@ export class UpdateGameRound implements Action {
   readonly type = GamePlayActionTypes.UPDATE_GAME_ROUND;
   constructor(public payload: string) { }
 }
-
-
 
 export type GamePlayActions
   = ResetNewGame

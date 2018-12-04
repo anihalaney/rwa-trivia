@@ -21,8 +21,6 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   displayedColumns = ['friends', 'game_played',
     'won', 'lost'];
   uFriends: Array<any>;
-  userDict$: Observable<{ [key: string]: User }>;
-  userDict: { [key: string]: User } = {};
   dataSource: any;
   subs: Subscription[] = [];
   defaultAvatar = 'assets/images/default-avatar.png';
@@ -38,7 +36,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   }
 
   ngOnInit() {
-    this.subs.push(this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
         uFriends.myFriends.map((friend, index) => {

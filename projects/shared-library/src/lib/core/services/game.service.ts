@@ -6,7 +6,7 @@ import { map, take } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
 import {
   User, GameOptions, Game, Question, PlayerQnA, GameOperations,
-  GameStatus, ReportQuestion
+  GameStatus, ReportQuestion , Friends
 } from '../../shared/model';
 import { DbService } from './../db-service';
 
@@ -276,4 +276,7 @@ export class GameService {
     return this.http.put<any>(url, payload);
 
   }
+  loadUserFriends(userId: string): Observable<Friends> {
+    return this.dbService.valueChanges('friends', userId);
+}
 }

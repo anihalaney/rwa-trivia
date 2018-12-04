@@ -5,7 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
-import * as useractions from '../../../user/store/actions';
+import * as useractions from 'shared-library/core/store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, GameOptions, User, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
@@ -45,11 +45,11 @@ export class NewGame {
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
-        this.store.dispatch(new useractions.LoadUserFriends({ 'userId': user.userId }));
+        this.store.dispatch(this.userActions.loadUserFriends(user.userId));
       }
     }));
 
-    this.subs.push(this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {

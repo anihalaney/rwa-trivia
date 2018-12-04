@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User, Game } from '../../../shared/model';
+import { User, Game, Friends } from '../../../shared/model';
 
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
@@ -55,6 +55,16 @@ export function gameInvites(state: any = [], action: ActionWithPayload<Game[]>):
       return action.payload;
     default:
       return state;
+  }
+}
+
+// Load User Published Question by userId
+export function userFriends(state: any = null, action: ActionWithPayload<Friends>): Friends {
+  switch (action.type) {
+      case UserActions.LOAD_USER_FRIENDS_SUCCESS:
+          return action.payload;
+      default:
+          return state;
   }
 }
 
