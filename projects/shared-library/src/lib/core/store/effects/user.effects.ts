@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User, RouterStateUrl, Game } from '../../../shared/model';
+import { User, RouterStateUrl, Game, Friends } from '../../../shared/model';
 import { UserService } from '../../services';
 import { switchMap, map, distinct, mergeMap } from 'rxjs/operators';
 
@@ -45,9 +45,20 @@ export class UserEffects {
         .pipe(
             switchMap((action: ActionWithPayload<string>) =>
                 this.svc.rejectGameInvitation(action.payload)
-                .pipe(
-                    map((msg: any) => this.userActions.updateGameSuccess()))
+                    .pipe(
+                        map((msg: any) => this.userActions.updateGameSuccess()))
             ));
+
+    // Get User list
+    @Effect()
+    LoadUserFriends$ = this.actions$
+        .ofType(UserActions.LOAD_USER_FRIENDS)
+        .pipe(
+            switchMap((action: ActionWithPayload<string>) =>
+                this.svc.loadUserFriends(action.payload)
+                    .pipe(map((friends: Friends) => this.userActions.loadUserFriendsSuccess(friends)))
+            )
+        );
 
     constructor(
         private actions$: Actions,

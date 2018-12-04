@@ -15,6 +15,7 @@ import { filter } from 'rxjs/operators';
 import { UserActions } from 'shared-library/core/store/actions';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
+import { Friends } from '../../../../../../shared-library/src/lib/shared/model';
 
 @Component({
   selector: 'new-game',
@@ -56,7 +57,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     this.categories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)];
 
-    this.subs.push(this.store.select(appState.userState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
