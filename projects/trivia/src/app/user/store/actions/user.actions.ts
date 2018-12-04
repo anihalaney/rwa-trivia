@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { User, Question, Invitation, Game, Friends } from 'shared-library/shared/model';
 
 export enum UserActionTypes {
@@ -11,8 +10,6 @@ export enum UserActionTypes {
     LOAD_USER_PUBLISHED_QUESTIONS_SUCCESS = '[User] LoadUserPublishedQuestionsSuccess',
     LOAD_USER_UNPUBLISHED_QUESTIONS = '[User] LoadUserUnpublishedQuestions',
     LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS = '[User] LoadUserUnpublishedQuestionsSuccess',
-    LOAD_USER_FRIENDS = '[User] LoadUserFriends',
-    LOAD_USER_FRIENDS_SUCCESS = '[User] LoadUserFriendsSuccess',
     ADD_QUESTION = '[User] AddQuestions',
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
     UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
@@ -61,19 +58,6 @@ export class LoadUserUnpublishedQuestionsSuccess implements Action {
     readonly type = UserActionTypes.LOAD_USER_UNPUBLISHED_QUESTIONS_SUCCESS;
     constructor(public payload: Question[]) { }
 }
-
-// Load User's friend result
-export class LoadUserFriends implements Action {
-    readonly type = UserActionTypes.LOAD_USER_FRIENDS;
-    constructor(public payload: { userId: string }) { }
-}
-
-// Load User Published Question by userId Success
-export class LoadUserFriendsSuccess implements Action {
-    readonly type = UserActionTypes.LOAD_USER_FRIENDS_SUCCESS;
-    constructor(public payload: Friends) { }
-}
-
 
 // Add Questions
 export class AddQuestion implements Action {
@@ -143,8 +127,6 @@ export type UserActions
     | LoadUserPublishedQuestionsSuccess
     | LoadUserUnpublishedQuestions
     | LoadUserUnpublishedQuestionsSuccess
-    | LoadUserFriends
-    | LoadUserFriendsSuccess
     | AddQuestion
     | UpdateUserSuccess
     | AddUserInvitation
