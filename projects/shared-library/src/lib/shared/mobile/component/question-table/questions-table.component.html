@@ -55,16 +55,16 @@
 
                     <Button row="1" *ngIf="getDisplayStatus(question.status)==='PENDING'" class="fa pending-btn"
                         horizontalAlignment="right" text="&#xf251;" textWrap="true" color="#574b4c" fontSize="16"
-                        fontWeight="bold" width="90" height="25" marginTop="-45"></Button>
+                        fontWeight="bold" width="90" height="25" marginTop="-55"></Button>
                     <Button row="1" *ngIf="getDisplayStatus(question.status)==='REQUIRED_CHANGE'" class="fa required-change-btn"
                         horizontalAlignment="right" text="&#xf044;" textWrap="true" width="90" height="25" fontSize="20"
-                        fontWeight="bold" marginTop="-50"></Button>
+                        fontWeight="bold" marginTop="-60"></Button>
                     <Button row="1" *ngIf="getDisplayStatus(question.status)==='REJECTED'" class="fa reject-btn"
                         horizontalAlignment="right" text="&#xf00d;" textWrap="true" width="90" height="25" fontSize="20"
-                        fontWeight="bold" marginTop="-45"></Button>
+                        fontWeight="bold" marginTop="-55"></Button>
                     <Button row="1" *ngIf="getDisplayStatus(question.status)==='APPROVED'" class="fa approve-btn"
                         horizontalAlignment="right" text="&#xf00c;" textWrap="true" width="90" height="25" fontSize="20"
-                        fontWeight="bold" marginTop="-45"></Button>
+                        fontWeight="bold" marginTop="-55"></Button>
 
                     <Button row="2" text="{{getDisplayStatus(question.status).replace('_',' ') | titlecase}}" [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
                                                              'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
