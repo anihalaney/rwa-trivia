@@ -6,7 +6,7 @@ import { map, take } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
 import {
   User, GameOptions, Game, Question, PlayerQnA, GameOperations,
-  GameStatus, ReportQuestion , Friends
+  GameStatus, ReportQuestion
 } from '../../shared/model';
 import { DbService } from './../db-service';
 
