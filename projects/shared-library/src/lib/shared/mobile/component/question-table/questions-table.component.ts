@@ -16,7 +16,7 @@ export class QuestionsTableComponent {
 
   QuestionStatusTexts = ['', '', '&#xf00c;', '', '&#xf251;', '&#xf00d;', '&#xf044;'];
 
-  @Input() questions: Question[];
+  @Input() questions: Array<Question> = [];
   @Input() categoryDictionary: { [key: number]: Category };
   @Input() userDict: { [key: string]: User };
   @Input() user: User;
