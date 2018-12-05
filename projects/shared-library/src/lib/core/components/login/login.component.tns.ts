@@ -7,6 +7,7 @@ import { CoreState, coreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
+import { Page } from 'tns-core-modules/ui/page';
 
 @Component({
   selector: 'login',
@@ -21,8 +22,10 @@ export class LoginComponent extends Login implements OnInit {
     private routerExtension: RouterExtensions,
     private uiStateActions: UIStateActions,
     private cdRef: ChangeDetectorRef,
+    private page: Page,
     private firebaseAuthService: FirebaseAuthService) {
     super(fb, store);
+    this.page.actionBarHidden = true;
   }
 
   ngOnInit() {
