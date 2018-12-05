@@ -9,6 +9,7 @@ import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
+import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
     NativeScriptFormsModule,
     ReactiveFormsModule,
     TNSCheckBoxModule,
-    NativeScriptUIAutoCompleteTextViewModule
+    NativeScriptUIAutoCompleteTextViewModule,
+    NativeScriptUIListViewModule
   ],
   exports: [
     CommonModule, HttpClientModule,
@@ -40,6 +42,7 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
     TNSCheckBoxModule,
     NativeScriptCommonModule,
     NativeScriptUIAutoCompleteTextViewModule,
+    NativeScriptUIListViewModule,
     HttpClientModule,
     ActionBarComponent,
     DrawerComponent,
