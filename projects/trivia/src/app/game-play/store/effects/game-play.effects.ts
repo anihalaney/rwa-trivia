@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
-import { switchMap, map, catchError, filter, mergeMap } from 'rxjs/operators';
+import { switchMap, map, filter, mergeMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { GameService } from '../../../../../../shared-library/src/lib/core/services';
-import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from 'shared-library/shared/model';
-import { GamePlayActions, GamePlayActionTypes } from '../actions';
+import { GameService } from './../../../../../../shared-library/src/lib/core/services';
+import { Game, Question, RouterStateUrl } from 'shared-library/shared/model';
+import { GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
 import { GamePlayState } from '../reducers';
 
