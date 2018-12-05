@@ -110,7 +110,8 @@ TextField {
 }
 
 .background {
-  background-image: url("~/assets/images/background-image.png");
+	background-image: url('~/assets/images/background-image.png');
+	// background-image: url('~/assets/images/sprite.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
