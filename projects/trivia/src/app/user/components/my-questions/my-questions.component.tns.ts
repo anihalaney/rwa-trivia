@@ -23,6 +23,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   displayReasonViewer = false;
   displayEditQuestion = false;
   selectedQuestion: Question;
+  tabIndex = 0;
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -62,6 +63,9 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     return QuestionStatus[status];
   }
 
+  setTabIndex(index: number) {
+    this.tabIndex = index;
+  }
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
   }
