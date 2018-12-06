@@ -46,8 +46,10 @@
     "run-scheduler-dev": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js dev",
     "compile-scheduler-functions": "rmdir /s/q scheduler\\server & tsc --project scheduler",
     "run-scheduler-prod": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js prod",
-    "android": "tns run android --bundle",
-    "ios": "tns run ios --bundle"
+    "android": "tns run android --bundle --env.package_name=com.bitwiser.trivia.dev ",
+    "ios": "tns run ios --bundle --env.package_name=com.bitwiser.trivia.dev ",
+    "release:android": "sh release/android.sh",
+    "release:ios": "tns run ios --bundle --env.prod"
   },
   "private": true,
   "dependencies": {

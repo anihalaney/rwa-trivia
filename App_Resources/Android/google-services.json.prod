@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "701588063269",
+    "firebase_url": "https://rwa-trivia-dev-e57fc.firebaseio.com",
+    "project_id": "rwa-trivia-dev-e57fc",
+    "storage_bucket": "rwa-trivia-dev-e57fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701588063269:android:be4fc42dbc283be7",
+        "android_client_info": {
+          "package_name": "com.bitwiser.trivia.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701588063269-5adgnkimap934udgmuh94hpnlp5ta070.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitwiser.trivia.dev",
+            "certificate_hash": "a4670ee30bd3be47b9e3b9c90cdf2d9958a57b7e"
+          }
+        },
+        {
+          "client_id": "701588063269-ivu60g84roqpflkdssn1pq0s9qoc9cs7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitwiser.trivia.dev",
+            "certificate_hash": "242b67274d94ebacfb81197875b33d58cf207583"
+          }
+        },
+        {
+          "client_id": "701588063269-mbsga0baongr0s1libf77c6qh43ch0pk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWq_VUyhWQr73n8x1lnUYjZGun6fL4aEQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701588063269-mbsga0baongr0s1libf77c6qh43ch0pk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "701588063269-o2olav7bkuqbovcouuqk8lbieu3d7nl1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.bitwiser.trivia.dev"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
