@@ -5,7 +5,7 @@ import { SharedModule } from 'shared-library/shared/shared.module';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { effects, reducer } from './store';
 import { UserRoutingModule } from './routing/user-routing.module';
-import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
+
 
 import {
   ProfileSettingsComponent,
@@ -29,7 +29,7 @@ import { InviteFriendsDialogComponent } from './components/invite-friends/invite
     SharedModule,
     NativeScriptRouterModule,
     UserRoutingModule,
-    NativeScriptUIListViewModule,
+
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
