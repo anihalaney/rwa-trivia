@@ -17,7 +17,6 @@ export class InviteFriendsDialogComponent implements OnInit {
 
   constructor(private store: Store<AppState>, private renderer: Renderer2) {
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
-
   }
 
   ngOnInit() {
