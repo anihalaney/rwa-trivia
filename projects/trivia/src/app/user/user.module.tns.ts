@@ -14,6 +14,8 @@ import {
   QuestionAddUpdateComponent
 } from './components';
 import { InviteFriendsDialogComponent } from './components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
+// tslint:disable-next-line:max-line-length
+import { InviteMailFriendsComponent } from './components/invite-friends/invite-friends-dialog/invite-mail-friends/invite-mail-friends.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { InviteFriendsDialogComponent } from './components/invite-friends/invite
     MyQuestionsComponent,
     InviteFriendsComponent,
     QuestionAddUpdateComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    InviteMailFriendsComponent
   ],
   imports: [
     // rwa modules

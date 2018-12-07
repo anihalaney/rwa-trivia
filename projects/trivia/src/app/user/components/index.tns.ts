@@ -6,6 +6,7 @@ import { InviteFriendsComponent } from './invite-friends/invite-friends.componen
 import { QuestionAddUpdateComponent } from './question-add-update/question-add-update.component';
 import { MyQuestionsComponent } from './my-questions/my-questions.component';
 import { InviteFriendsDialogComponent } from './invite-friends/invite-friends-dialog/invite-friends-dialog.component';
+import { InviteMailFriendsComponent } from './invite-friends/invite-friends-dialog/invite-mail-friends/invite-mail-friends.component';
 
 
 export {
@@ -16,7 +17,8 @@ export {
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
     InviteFriendsComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    InviteMailFriendsComponent
 };
 
 export default [
@@ -27,5 +29,6 @@ export default [
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
     InviteFriendsComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    InviteMailFriendsComponent
 ];
