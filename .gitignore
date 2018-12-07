@@ -68,3 +68,5 @@ functions/index.js
 #mobile release files
 certificates/*
 release/*
+App_Resources/Android/google-services.*
+App_Resources/iOS/GoogleService-Info.*
