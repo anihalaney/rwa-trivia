@@ -22,6 +22,7 @@ export class InviteMailFriendsComponent implements OnInit {
   errorMsg = '';
   showSuccessMsg: string;
   validEmail = [];
+  emailCheck: Boolean = false;
 
   constructor(private fb: FormBuilder, private store: Store<AppState>) {
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -52,6 +53,7 @@ export class InviteMailFriendsComponent implements OnInit {
 
 
   onSubscribe() {
+    this.emailCheck = true;
     if (!this.invitationForm.valid) {
       return;
     } else {
