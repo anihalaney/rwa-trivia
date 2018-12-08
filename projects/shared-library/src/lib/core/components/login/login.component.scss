@@ -91,8 +91,8 @@ TextField {
 	border: none;
 	border-width: 0;
 	padding:20px;
-  border-bottom-width: 2;
-	border-bottom-color:#D3D3D3;
+  // border-bottom-width: 2;
+	// border-bottom-color:#D3D3D3;
 }
 
 .mobile {
@@ -107,4 +107,50 @@ TextField {
 		margin: 20 0 10 0;
 		padding:10 0 10 0;
 	}
+}
+
+.initial-container {
+  margin: 50 20 0 20;
+}
+.initial-label {
+  color: white;
+  horizontal-align: center;
+  margin-bottom: 25;
+}
+.initial-button {
+  // background-color: white;
+	vertical-align: center;
+}
+
+.initial-button-label {
+  horizontal-align: center;
+  font-weight: bold;
+}
+
+.login-button {
+	border-radius: 5;
+  background-color: #71b02f;
+  color: white;
+	height: 45;
+	width: 50%;
+	vertical-align: center;
+}
+.initial-button-label {
+  horizontal-align: center;
+  font-weight: bold;
+}
+
+.forgotScreen{
+	background-color:white; 
+	border-radius:15;
+	padding: 40 30 20 30;
+  margin:0 5 50 5;
+}
+
+.border-field{
+	border-radius: 10 0 0 10;
+}
+
+.text-icon-field{
+	border-radius: 0 10 10 0;
 }
