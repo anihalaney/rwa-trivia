@@ -38,7 +38,8 @@ import {
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
     RecentGameCardComponent,
-    FriendInviteComponent
+    FriendInviteComponent,
+    InviteFriendsDialogComponent
   ],
   imports: [
     // rwa modules
@@ -64,10 +65,10 @@ import {
     InviteFriendsComponent,
     InviteMailFriendsComponent,
     RecentGameCardComponent,
-    FriendInviteComponent
+    FriendInviteComponent,
+    InviteFriendsDialogComponent
   ],
   entryComponents: [
-    InviteFriendsDialogComponent
   ]
 })
 export class UserModule { }

@@ -25,3 +25,12 @@
   font-size: 17;
   font-weight: 500;
 }
+
+.fab-button {
+	height: 50;
+	width: 50; /// this is required on iOS - Android does not require width so you might need to adjust styles
+	margin: 15;
+	background-color: #ff4081;
+	horizontal-align: right;
+	vertical-align: bottom;
+}
