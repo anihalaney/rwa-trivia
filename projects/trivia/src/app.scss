@@ -47,6 +47,13 @@ refer to http://docs.nativescript.org/ui/theme.
   background-size: 1500 1500;
 }
 
+.background {
+	background-image: url('~/assets/images/background-image.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
 .score2-L {
   width: 50;
   height: 52;
