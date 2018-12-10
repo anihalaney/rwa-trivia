@@ -6,6 +6,7 @@ import {
     MyQuestionsComponent,
     InviteFriendsComponent
 } from '../components';
+import { InviteFriendsDialogComponent } from '../components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 
 export const userRoutes: Routes = [
     {
@@ -27,6 +28,11 @@ export const userRoutes: Routes = [
     {
         path: 'questions/add',
         component: QuestionAddUpdateComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'app-invite-friends-dialog',
+        component: InviteFriendsDialogComponent,
         canActivate: [AuthGuard]
     }
 ];
