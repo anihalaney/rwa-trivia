@@ -1,4 +1,4 @@
-<ns-action-bar title="My Question" showAdd="true"></ns-action-bar>
+<ns-action-bar title="My Question" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 
 <StackLayout>
 
@@ -43,12 +43,12 @@
                             backgroundColor="white" width="80" (tap)="displayReason(false)"></Button>
                     </GridLayout>
                 </CardLayout>
-                <StackLayout padding="30 20 30 20">
+                <StackLayout class="Roboto-Medium" padding="30 20 30 20">
                     <TextView hint="Reason" [text]="selectedQuestion.reason" class="input" border="none"
                         borderBottomWidth="1" borderColor="#f3f3f3" [editable]="false"></TextView>
                     <Label text="Please do the needful edits and resubmit the question." textWrap="true" class="label"
                         fontWeight="400" color="#989898" marginTop="20"></Label>
-                    <Button text="RESUBMIT" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
+                    <Button text="RESUBMIT" class="Roboto-Regular" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
                         backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20" fontWeight="bold"
                         (tap)="showUpdateQuestion(true)"></Button>
                 </StackLayout>
