@@ -49,7 +49,7 @@
     "android": "tns run android --bundle --env.package_name=com.bitwiser.trivia.dev ",
     "ios": "tns run ios --bundle --env.package_name=com.bitwiser.trivia.dev ",
     "release:android": "sh release/android.sh",
-    "release:ios": "tns run ios --bundle --env.prod"
+    "release:ios": "tns prepare ios --bundle --env.prod --env.uglify --env.package_name=io.bitwiser.trivia --release"
   },
   "private": true,
   "dependencies": {
