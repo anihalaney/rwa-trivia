@@ -5,7 +5,7 @@ import { SharedModule } from 'shared-library/shared/shared.module';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { effects, reducer } from './store';
 import { UserRoutingModule } from './routing/user-routing.module';
-import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
+
 
 import {
   ProfileSettingsComponent,
@@ -13,6 +13,9 @@ import {
   InviteFriendsComponent,
   QuestionAddUpdateComponent
 } from './components';
+import { InviteFriendsDialogComponent } from './components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
+// tslint:disable-next-line:max-line-length
+import { InviteMailFriendsComponent } from './components/invite-friends/invite-friends-dialog/invite-mail-friends/invite-mail-friends.component';
 
 @NgModule({
   declarations: [
@@ -20,14 +23,16 @@ import {
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
     InviteFriendsComponent,
-    QuestionAddUpdateComponent
+    QuestionAddUpdateComponent,
+    InviteFriendsDialogComponent,
+    InviteMailFriendsComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     NativeScriptRouterModule,
     UserRoutingModule,
-    NativeScriptUIListViewModule,
+
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
@@ -41,7 +46,7 @@ import {
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent
+    InviteFriendsComponent,
   ]
 })
 export class UserModule { }
