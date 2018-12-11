@@ -24,10 +24,6 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
     },
-    {
-        path: 'recent-game',
-        component: RecentGamesComponent,
-    }
 
 ];
 

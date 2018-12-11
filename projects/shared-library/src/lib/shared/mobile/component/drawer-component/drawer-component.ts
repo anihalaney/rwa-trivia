@@ -81,7 +81,7 @@ export class DrawerComponent implements OnInit {
 
     recentGame() {
         this.activeMenu = 'Recently Completed Games';
-        this.routerExtension.navigate(['/recent-game']);
+        this.routerExtension.navigate(['/my/recent-game']);
         this.closeDrawer();
     }
 
