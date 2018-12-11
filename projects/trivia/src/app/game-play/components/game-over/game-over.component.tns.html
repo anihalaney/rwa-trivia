@@ -161,7 +161,7 @@
                                 <Image *ngIf="disableRematchBtn" src="~/assets/images/ajax-loader.gif" stretch="aspectFill"
                                     height="64" width="64" marginLeft="10" verticalAlignment="center" marginRight="10"
                                     borderRadius="50"></Image>
-                                <Button row="0" col="2" class="natvigate-button" text="Home" [nsRouterLink]="['/dashboard']"></Button>
+                                <Button row="0" col="2" class="natvigate-button" text="Home" [nsRouterLink]="['/dashboard']" clearHistory="true"></Button>
                             </GridLayout>
                         </StackLayout>
                 </StackLayout>
