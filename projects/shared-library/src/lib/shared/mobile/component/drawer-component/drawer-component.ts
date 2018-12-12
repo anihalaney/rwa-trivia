@@ -31,7 +31,7 @@ export class DrawerComponent implements OnInit {
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
-        private authProvider: AuthenticationProvider,
+        public authProvider: AuthenticationProvider,
         private utils: Utils,
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,

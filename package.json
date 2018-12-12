@@ -87,6 +87,7 @@
     "core-js": "2.5.7",
     "dom-to-image": "^2.6.0",
     "domino": "^2.0.2",
+    "edit-json-file": "^1.2.0",
     "firebase": "^5.5.8",
     "hammerjs": "2.0.8",
     "jasmine-marbles": "^0.3.1",
