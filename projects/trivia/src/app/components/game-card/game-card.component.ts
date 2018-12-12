@@ -15,7 +15,7 @@ import { take } from 'rxjs/operators';
 export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() game: Game;
-  @Input() cardType: Game;
+  @Input() cardType: any;
   @Input() userDict: { [key: string]: User };
   user$: Observable<User>;
   correctAnswerCount: number;
