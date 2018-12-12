@@ -44,7 +44,7 @@
                     <Label row="6" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Recently Completed Games"
                         [class.active-menu]="activeMenu === 'Recently Completed Games'" class="sideLabel sideStackLayout"
                         (tap)="recentGame()"></Label>
-                    <Label row="6" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Friend List"
+                    <Label row="7" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Friend List"
                         [class.active-menu]="activeMenu === 'Friend List'" class="sideLabel sideStackLayout" (tap)="navigateToFriendList()"></Label>
                 </GridLayout>
             </ScrollView>
