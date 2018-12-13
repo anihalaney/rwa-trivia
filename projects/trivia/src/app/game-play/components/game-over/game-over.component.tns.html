@@ -1,9 +1,8 @@
-<ns-action-bar title="Game Over" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-
 <StackLayout height="100%" backgroundColor="#f1f5f7">
     <ScrollView>
         <StackLayout>
-            <CardView class="cardStyle Roboto-Regular" android:elevation="20" ios:elevation="20" radius="1" backgroundColor="white">
+            <CardView class="cardStyle Roboto-Regular" android:elevation="20" ios:elevation="20" radius="1"
+                backgroundColor="white">
                 <StackLayout>
                     <StackLayout (onloaded)="stackLoaded($event)" backgroundColor="#ffffff">
                         <StackLayout marginTop="10">
@@ -116,8 +115,8 @@
                              game.playerQnAs.length - game.stats[user.userId].score !== 4)"
                                     orientation="horizontal" margin="15" horizontalAlignment="center">
                                     <Image src="~/assets/images/thumb-win.png" width="40"></Image>
-                                    <Label class="gamestatus-username Roboto-Bold" text="{{playerUserName}} Won" textWrap="true"
-                                        marginLeft="10"></Label>
+                                    <Label class="gamestatus-username Roboto-Bold" text="{{playerUserName}} Won"
+                                        textWrap="true" marginLeft="10"></Label>
                                 </StackLayout>
                                 <StackLayout *ngIf="
                             (game.gameOptions.playerMode != PlayerMode.Single &&
@@ -128,8 +127,8 @@
                              game.playerQnAs.length - game.stats[user.userId].score === 4)"
                                     orientation="horizontal" margin="15" horizontalAlignment="center">
                                     <Image src="~/assets/images/thumb-win.png" width="40"></Image>
-                                    <Label class="gamestatus-username Roboto-Bold" text="{{playerUserName}} Lost" textWrap="true"
-                                        marginLeft="10"></Label>
+                                    <Label class="gamestatus-username Roboto-Bold" text="{{playerUserName}} Lost"
+                                        textWrap="true" marginLeft="10"></Label>
                                 </StackLayout>
 
                                 <StackLayout *ngIf="
@@ -138,7 +137,8 @@
                              game.stats[user.userId].score == game.stats[otherUserId].score)"
                                     orientation="horizontal" margin="15" horizontalAlignment="center">
                                     <Image src="~/assets/images/thumb-win.png" width="40"></Image>
-                                    <Label class="gamestatus-username Roboto-Bold" text="It's a Tie" textWrap="true" marginLeft="10"></Label>
+                                    <Label class="gamestatus-username Roboto-Bold" text="It's a Tie" textWrap="true"
+                                        marginLeft="10"></Label>
                                 </StackLayout>
 
                                 <StackLayout *ngIf="
@@ -146,31 +146,34 @@
                              game.round === 16"
                                     orientation="horizontal" margin="15" horizontalAlignment="center">
                                     <Image src="~/assets/images/thumb-win.png" width="40"></Image>
-                                    <Label class="gamestatus-username Roboto-Bold" text="It's a Draw" textWrap="true" marginLeft="10"></Label>
+                                    <Label class="gamestatus-username Roboto-Bold" text="It's a Draw" textWrap="true"
+                                        marginLeft="10"></Label>
                                 </StackLayout>
 
                             </StackLayout>
                         </StackLayout>
                     </StackLayout>
-                        <StackLayout padding="10" backgroundColor="#f3f3f3">
-                            <GridLayout rows="auto" columns="auto,auto,auto" horizontalAlignment="center">
-                                <Button row="0" col="0" class="natvigate-button Hind-Medium" text="Share" (tap)="screenshot()"></Button>
-                                <button row="0" col="1" class="natvigate-button Hind-Medium" text="Rematch" (tap)="reMatch()" *ngIf="game.gameOptions.playerMode != PlayerMode.Single"></button>
-                                <Button row="0" col="1" class="natvigate-button Hind-Medium" text="Play Game" (tap)="reMatch()"
-                                    *ngIf="game.gameOptions.playerMode == PlayerMode.Single"></Button>
-                                <Image *ngIf="disableRematchBtn" src="~/assets/images/ajax-loader.gif" stretch="aspectFill"
-                                    height="64" width="64" marginLeft="10" verticalAlignment="center" marginRight="10"
-                                    borderRadius="50"></Image>
-                                <Button row="0" col="2" class="natvigate-button" text="Home" [nsRouterLink]="['/dashboard']" clearHistory="true"></Button>
-                            </GridLayout>
-                        </StackLayout>
+                    <StackLayout padding="10" backgroundColor="#f3f3f3">
+                        <GridLayout rows="auto,auto" columns="auto,auto,auto" horizontalAlignment="center">
+                                <ActivityIndicator row="0" colSpan="3" *ngIf="disableRematchBtn" busy="true" ios:width="100"
+                                ios:height="50" android:width="50" android:height="50" class="activity-indicator"></ActivityIndicator>
+                            <Button row="1" col="0" class="natvigate-button Hind-Medium" text="Share" (tap)="screenshot()"></Button>
+                            <button row="1" col="1" class="natvigate-button Hind-Medium" text="Rematch" (tap)="reMatch()"
+                                *ngIf="game.gameOptions.playerMode != PlayerMode.Single"></button>
+                            <Button row="1" col="1" class="natvigate-button Hind-Medium" text="Play Game" (tap)="reMatch()"
+                                *ngIf="game.gameOptions.playerMode == PlayerMode.Single"></Button>
+                            <Button row="1" col="2" class="natvigate-button" text="Home" [nsRouterLink]="['/dashboard']"
+                                clearHistory="true"></Button>
+                        </GridLayout>
+                    </StackLayout>
                 </StackLayout>
             </CardView>
             <CardView class="cardStyle" android:elevation="20" ios:elevation="20" radius="1" backgroundColor="white"
                 margin="15">
                 <StackLayout class="Hind-Medium">
                     <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5" (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;">
-                        <Label row="0" col="0" text="View questions & answers" textWrap="true" color="#000000" fontSize="18" class="label Roboto-Medium"></Label>
+                        <Label row="0" col="0" text="View questions & answers" textWrap="true" color="#000000" fontSize="18"
+                            class="label Roboto-Medium"></Label>
                         <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showQuesAndAnswer ? '&#xf067;' : '&#xf068;' }}"
                             textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" color="#A9A9A9" (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;"
                             background="#fff"></Label>
