@@ -87,7 +87,7 @@ export class DrawerComponent implements OnInit {
 
     navigateToProfileSettings() {
         this.activeMenu = 'Profile Settings';
-        this.routerExtension.navigate(['/my/profile', this.user.userId] , { clearHistory: true });
+        this.routerExtension.navigate(['/my/profile', this.user.userId], { clearHistory: true });
         this.closeDrawer();
     }
 
