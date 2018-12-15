@@ -1,8 +1,8 @@
 {
   "name": "bitwiser.io",
   "short_name": "bitwiser",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "theme_color": "#3b5998",
+  "background_color": "#3b5998",
   "display": "standalone",
   "scope": "/",
   "start_url": "/",

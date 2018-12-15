@@ -6,11 +6,11 @@
                     <GridLayout row="auto" columns="auto,*,auto" class="sideStackLayoutHeader" *ngIf="user" paddingTop="10">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
                             width="64" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
-                        <StackLayout row="0" col="1">
+                        <StackLayout row="0" col="1" class="Roboto-Regular">
                             <Label text="You" textWrap="true" class="main-title"></Label>
                             <Label text="Score {{correctCount}} | Round {{questionRound}} / {{totalRound}}" textWrap="true"
                                 class="sub-title"></Label>
-                            <StackLayout orientation="vertical">
+                            <StackLayout orientation="vertical" class="Hind-Regular">
                                 <Label text="Playing with other" textWrap="true" class="sub-title"></Label>
                                 <Label *ngIf="otherPlayer?.displayName" text="Playing with {{otherPlayer?.displayName}}"
                                     textWrap="true" class="sub-title" color="#3b5998" fontWeight="500"></Label>
@@ -43,22 +43,22 @@
                 </StackLayout>
             </CardView>
             <StackLayout margin="15" orientation="horizontal">
-                <Label text="Tags: " marginRight="5" fontSize="15" fontWeight="500" textWrap="true" color="#1b1c1c"></Label>
-                <Label text="{{question.tags?.toString()}}" fontSize="15" textWrap="true" color="#1b1c1c"></Label>                 
+                <Label text="Tags: " class="Roboto-Medium"  marginRight="5" fontSize="15" fontWeight="500" textWrap="true" color="#1b1c1c"></Label>
+                <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>                 
             </StackLayout>
 
             <GridLayout margin="0 15" rows="auto" columns="auto,auto,auto" *ngIf="question">
-                    <Label row="0" col="0" text="Author: " textWrap="true" fontSize="15" fontWeight="500" horizontalAlignment="left" color="#1b1c1c" paddingTop="5"></Label>
-                    <Label row="0" col="1" text="{{userDict[question.created_uid]?.displayName}}" fontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left" paddingTop="5"></Label>
+                    <Label row="0" col="0" class="Roboto-Medium" text="Author: " textWrap="true" fontSize="15" fontWeight="500" horizontalAlignment="left" color="#1b1c1c" paddingTop="5"></Label>
+                    <Label row="0" col="1" class="Roboto-Regular" text="{{userDict[question.created_uid]?.displayName}}" fontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left" paddingTop="5"></Label>
                     <Image row="0" col="2" src="{{getImage(question.created_uid)}}" color="#FFFFFF" stretch="aspectFill" height="44" width="44" marginLeft="10" marginRight="10" borderRadius="50" ></Image>
             </GridLayout>
 
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white" margin="15">
                 <StackLayout padding="20 10">
-                    <Label text="{{questionIndex}}. {{question?.questionText}}" fontSize="17" fontWeight="700" marginBottom="10" textWrap="true"
+                    <Label text="{{questionIndex}}. {{question?.questionText}}" class="Roboto-Bold" fontSize="17" fontWeight="700" marginBottom="10" textWrap="true"
                         color="#1b1c1c" horizontalAlignment="center"></Label>
                         <StackLayout *ngIf="question">
-                                <StackLayout class="question-answered" margin="10" *ngFor="let answer of question.answers;let i=index"
+                                <StackLayout class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
                                     [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
                                     [class.right]="correctAnswerIndex === i" (tap)="answerButtonClicked(answer,i)">
                                     <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
@@ -70,7 +70,7 @@
             </CardView>
     
             <StackLayout *ngIf="showContinueBtn">
-                    <button backgroundColor="#8ac541" color="white" margin="10"  (tap)="continueClicked.emit($event)" *ngIf="answeredText!==''"
+                    <button backgroundColor="#8ac541" class="Hind-Medium" color="white" margin="10"  (tap)="continueClicked.emit($event)" *ngIf="answeredText!==''"
             width="100%" height="100%" text="CONTINUE" fontSize="17" padding="15"></button>
             </StackLayout>
         </StackLayout>

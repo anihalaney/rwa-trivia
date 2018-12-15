@@ -1,8 +1,8 @@
-<ns-action-bar title="Profile Settings" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Profile Settings" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout>
   <ActivityIndicator *ngIf="loaderBusy" [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
   <ScrollView *ngIf="!loaderBusy">
-    <StackLayout [formGroup]="userForm" class="profile-settings">
+    <StackLayout [formGroup]="userForm" class="profile-settings Roboto-Regular">
 
       <StackLayout class="input-field ">
         <AbsoluteLayout>
@@ -74,7 +74,7 @@
               </RadAutoCompleteTextView>
             </StackLayout>
             <StackLayout row="1" col="1" horizontalAlignment="right">
-              <Button ios:padding="10" text="Add" (tap)="addCustomTag()"></Button>
+              <Button ios:padding="10" text="Add" class="Roboto-Bold" (tap)="addCustomTag()"></Button>
             </StackLayout>
           </GridLayout>
         </StackLayout>
@@ -186,7 +186,7 @@
       </StackLayout>
 
       <StackLayout class="profile-buttons">
-        <Button text="SAVE" (tap)="onSubmit()" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
+        <Button text="SAVE" (tap)="onSubmit()" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
       </StackLayout>
 
 

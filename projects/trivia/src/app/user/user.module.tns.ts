@@ -11,7 +11,9 @@ import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
   InviteFriendsComponent,
-  QuestionAddUpdateComponent
+  QuestionAddUpdateComponent,
+  RecentGamesComponent,
+  RecentGameCardComponent
 } from './components';
 import { InviteFriendsDialogComponent } from './components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 // tslint:disable-next-line:max-line-length
@@ -25,7 +27,9 @@ import { InviteMailFriendsComponent } from './components/invite-friends/invite-f
     InviteFriendsComponent,
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent
+    InviteMailFriendsComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent
   ],
   imports: [
     // rwa modules

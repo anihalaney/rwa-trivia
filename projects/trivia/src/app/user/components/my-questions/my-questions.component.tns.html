@@ -1,4 +1,4 @@
-<ns-action-bar title="My Question" showAdd="true"></ns-action-bar>
+<ns-action-bar title="My Question" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 
 <StackLayout>
 
@@ -11,7 +11,8 @@
     <GridLayout row="*,*" col="*">
 
         <StackLayout row="0" rowSpan="2" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
-            <TabView>
+            <TabView androidSelectedTabHighlightColor="#ef4545" tabTextFontSize="14" tabTextColor="#3b5998"
+                selectedTabTextColor="#3b5998">
                 <StackLayout *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
                     <StackLayout>
                         <question-table [questions]="publishedQuestions" [categoryDictionary]="categoryDictObs | async"
@@ -42,12 +43,12 @@
                             backgroundColor="white" width="80" (tap)="displayReason(false)"></Button>
                     </GridLayout>
                 </CardLayout>
-                <StackLayout padding="30 20 30 20">
+                <StackLayout class="Roboto-Medium" padding="30 20 30 20">
                     <TextView hint="Reason" [text]="selectedQuestion.reason" class="input" border="none"
                         borderBottomWidth="1" borderColor="#f3f3f3" [editable]="false"></TextView>
                     <Label text="Please do the needful edits and resubmit the question." textWrap="true" class="label"
                         fontWeight="400" color="#989898" marginTop="20"></Label>
-                    <Button text="RESUBMIT" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
+                    <Button text="RESUBMIT" class="Roboto-Regular" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
                         backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20" fontWeight="bold"
                         (tap)="showUpdateQuestion(true)"></Button>
                 </StackLayout>
@@ -57,10 +58,8 @@
         <app-question-add-update row="0" rowSpan="2" *ngIf="!displayReasonViewer && displayEditQuestion" [editQuestion]="selectedQuestion"
             (hideQuestion)="hideQuestion($event)"></app-question-add-update>
 
-
-        <Button row="0" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}"
-            class="fa" text="&#xf044;" backgroundColor="#71b02f" color="white" textWrap="true" marginTop="410"
-            marginLeft="130" fontSize="25" fontWeight="bold" width="60" height="60" borderRadius="30" (tap)="navigateToSubmitQuestion()"></Button>
+        <Image row="0" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}"
+            src="~/assets/images/mobile/pencil-icon.png" marginTop="360" marginLeft="140" width="60" height="60" (tap)="navigateToSubmitQuestion()"></Image>
 
 
     </GridLayout>

@@ -81,19 +81,19 @@ export class DrawerComponent implements OnInit {
 
     recentGame() {
         this.activeMenu = 'Recently Completed Games';
-        this.routerExtension.navigate(['/recent-game']);
+        this.routerExtension.navigate(['/my/recent-game'], { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToProfileSettings() {
         this.activeMenu = 'Profile Settings';
-        this.routerExtension.navigate(['/my/profile', this.user.userId]);
+        this.routerExtension.navigate(['/my/profile', this.user.userId] , { clearHistory: true });
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
         this.activeMenu = 'My Questions';
-        this.routerExtension.navigate(['/my/questions']);
+        this.routerExtension.navigate(['/my/questions'], { clearHistory: true });
         this.closeDrawer();
     }
 
