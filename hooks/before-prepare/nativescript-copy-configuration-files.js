@@ -59,13 +59,20 @@ module.exports = function ($logger, $projectData, hookArgs) {
             var sourceInfoPlistProd = path.join($projectData.projectDir, "configurations", "ios", "Info.plist.prod");
             var sourceInfoPlistDev = path.join($projectData.projectDir, "configurations", "ios", "Info.plist.dev");
 
-            // if we have both dev/prod versions, let's remove Info.plist in destination dir
+            // ensure we have both dev/prod versions so we never overwrite singlular Info.plist
             if (fs.existsSync(sourceInfoPlistProd) && fs.existsSync(sourceInfoPlistDev)) {
-                if (fs.existsSync(destinationInfoPlist)) { fs.unlinkSync(destinationInfoPlist); }
+                if (buildType === 'production') { sourceInfoPlist = sourceInfoPlistProd; } // use prod version
+                else { sourceInfoPlist = sourceInfoPlistDev; } // use dev version
+            }
+
+            // copy correct version to destination
+            if (fs.existsSync(sourceInfoPlist) && fs.existsSync(path.dirname(destinationInfoPlist))) {
+                $logger.out("Copy " + sourceInfoPlist + " to " + destinationInfoPlist + ".");
+                fs.writeFileSync(destinationInfoPlist, fs.readFileSync(sourceInfoPlist));
                 resolve();
-            } else { // single Info.plist modus
+            } else {
                 $logger.warn("Unable to copy Info.plist.");
-                resolve();
+                reject();
             }
         } else {
             resolve();
