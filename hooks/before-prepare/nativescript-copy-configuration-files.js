@@ -56,6 +56,7 @@ module.exports = function ($logger, $projectData, hookArgs) {
         } else if (hookArgs.platform.toLowerCase() === 'ios') {  /* Handle preparing of Ios xml files */
             // we have copied our Info.plist during before-checkForChanges hook, here we delete it to avoid changes in git
             var destinationInfoPlist = path.join($projectData.appResourcesDirectoryPath, "iOS", "Info.plist");
+            var sourceInfoPlist = path.join($projectData.appResourcesDirectoryPath, "iOS", "Info.plist");
             var sourceInfoPlistProd = path.join($projectData.projectDir, "configurations", "ios", "Info.plist.prod");
             var sourceInfoPlistDev = path.join($projectData.projectDir, "configurations", "ios", "Info.plist.dev");
 
