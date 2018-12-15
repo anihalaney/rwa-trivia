@@ -4,15 +4,15 @@
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white">
                 <StackLayout>
-                    <GridLayout row="auto" columns="auto,*,auto" class="sideStackLayoutHeader" *ngIf="user" paddingTop="10">
+                    <GridLayout row="auto" columns="auto,*,auto" marginRight="5" class="sideStackLayoutHeader" *ngIf="user" paddingTop="10">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
                             width="64" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
                         <StackLayout row="0" col="1" class="Roboto-Regular">
-                            <Label text="You" textWrap="true" class="main-title"></Label>
+                            <Label text="You" textWrap="true" fontSize="18" color="#616161" class="main-title"></Label>
                             <Label text="Score {{correctCount}} | Round {{questionRound}} / {{totalRound}}" textWrap="true"
-                                class="sub-title"></Label>
+                                class="sub-title" color="#8c8c8c"></Label>
                             <StackLayout orientation="vertical" class="Hind-Regular">
-                                <Label text="Playing with other" textWrap="true" class="sub-title"></Label>
+                                <Label text="Playing with other" textWrap="true" color="#616161" class="sub-title"></Label>
                                 <Label *ngIf="otherPlayer?.displayName" text="Playing with {{otherPlayer?.displayName}}"
                                     textWrap="true" class="sub-title" color="#3b5998" fontWeight="500"></Label>
                             </StackLayout>
@@ -51,11 +51,11 @@
 
             <GridLayout margin="0 15" rows="auto" columns="auto,auto,auto" *ngIf="question">
                 <Label row="0" col="0" class="Roboto-Medium" text="Author: " textWrap="true" fontSize="15" fontWeight="500"
-                    horizontalAlignment="left" color="#1b1c1c" paddingTop="5"></Label>
+                    horizontalAlignment="left" color="#1b1c1c" paddingTop="5" verticalAlignment="Center"></Label>
                 <Label row="0" col="1" class="Roboto-Regular" text="{{userDict[question.created_uid]?.displayName}}"
-                    fontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left" paddingTop="5"></Label>
+                    fontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left" verticalAlignment="Center" paddingTop="5"></Label>
                 <Image row="0" col="2" src="{{getImage(question.created_uid)}}" color="#FFFFFF" stretch="aspectFill"
-                    height="44" width="44" marginLeft="10" marginRight="10" borderRadius="50"></Image>
+                    height="33" width="33" marginLeft="10" marginRight="10" borderRadius="50"></Image>
             </GridLayout>
 
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
