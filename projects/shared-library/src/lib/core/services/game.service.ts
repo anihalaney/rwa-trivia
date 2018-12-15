@@ -177,7 +177,7 @@ export class GameService {
 
       return combineLatest(query1, query2)
         .pipe(
-          map((data) => data[0].concat(data[1])),
+          map((data) => data[1].concat(data[0])),
           map(gs => gs.map(g => Game.getViewModel(g))
             .sort((a: any, b: any) => b.turnAt - a.turnAt)
           )

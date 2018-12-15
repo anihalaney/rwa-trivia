@@ -69,6 +69,7 @@ import {
     InviteFriendsDialogComponent
   ],
   entryComponents: [
+    InviteFriendsDialogComponent
   ]
 })
 export class UserModule { }

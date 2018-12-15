@@ -1,8 +1,8 @@
-<ns-action-bar title="Start New Game" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Start New Game" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout >
 
     <ScrollView>
-         <StackLayout class="new-game" backgroundColor="#f1f2f2">
+         <StackLayout class="new-game Roboto-Regular" backgroundColor="#f1f2f2">
             <GridLayout rows="auto,auto" columns="auto,*" padding="10 10 5 10">
                 <Label row="0" col="0" text="Select Player Modes" textWrap="true" class="main-label" color="#616161"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectPlayer ? '&#xf067;' : '&#xf068;' }}"
@@ -155,7 +155,7 @@
             </CardView>
 
             <StackLayout margin="5 10">
-                <Button text="START A NEW GAME" (tap)="startGame()" backgroundColor="#D4493D" color="#ffffff" padding="20 0"></Button>
+                <Button text="START A NEW GAME" class="Roboto-Medium" (tap)="startGame()" backgroundColor="#D4493D" color="#ffffff" padding="20 0"></Button>
             </StackLayout>
         </StackLayout> 
     </ScrollView>

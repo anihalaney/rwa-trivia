@@ -12,7 +12,7 @@
 .sideLabel {
     padding: 20 10;
     font-size: 14;
-    color: #ffffff;
+    color: #d7d7d7;
 }
 
 .sideLightGrayLabel {
@@ -48,6 +48,7 @@
     color:#d7d7d7;
     font-weight: 600;
     font-size: 14;
+    font-family: "Roboto","Roboto-Bold";
   }
 
 .active-menu  .sideLabel{
