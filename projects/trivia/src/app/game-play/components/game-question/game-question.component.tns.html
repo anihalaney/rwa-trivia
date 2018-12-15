@@ -1,7 +1,8 @@
-<GridLayout class="mobile" rows="*,60" backgroundColor="#f1f2f2">
-    <ScrollView row="0">
-        <StackLayout>
-            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+<GridLayout>
+    <ScrollView>
+        <StackLayout backgroundColor="#f1f2f2">
+            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+                backgroundColor="white">
                 <StackLayout>
                     <GridLayout row="auto" columns="auto,*,auto" class="sideStackLayoutHeader" *ngIf="user" paddingTop="10">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
@@ -43,36 +44,39 @@
                 </StackLayout>
             </CardView>
             <StackLayout margin="15" orientation="horizontal">
-                <Label text="Tags: " class="Roboto-Medium"  marginRight="5" fontSize="15" fontWeight="500" textWrap="true" color="#1b1c1c"></Label>
-                <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>                 
+                <Label text="Tags: " class="Roboto-Medium" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"
+                    color="#1b1c1c"></Label>
+                <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
             </StackLayout>
 
             <GridLayout margin="0 15" rows="auto" columns="auto,auto,auto" *ngIf="question">
-                    <Label row="0" col="0" class="Roboto-Medium" text="Author: " textWrap="true" fontSize="15" fontWeight="500" horizontalAlignment="left" color="#1b1c1c" paddingTop="5"></Label>
-                    <Label row="0" col="1" class="Roboto-Regular" text="{{userDict[question.created_uid]?.displayName}}" fontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left" paddingTop="5"></Label>
-                    <Image row="0" col="2" src="{{getImage(question.created_uid)}}" color="#FFFFFF" stretch="aspectFill" height="44" width="44" marginLeft="10" marginRight="10" borderRadius="50" ></Image>
+                <Label row="0" col="0" class="Roboto-Medium" text="Author: " textWrap="true" fontSize="15" fontWeight="500"
+                    horizontalAlignment="left" color="#1b1c1c" paddingTop="5"></Label>
+                <Label row="0" col="1" class="Roboto-Regular" text="{{userDict[question.created_uid]?.displayName}}"
+                    fontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left" paddingTop="5"></Label>
+                <Image row="0" col="2" src="{{getImage(question.created_uid)}}" color="#FFFFFF" stretch="aspectFill"
+                    height="44" width="44" marginLeft="10" marginRight="10" borderRadius="50"></Image>
             </GridLayout>
 
-            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white" margin="15">
+            <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+                backgroundColor="white" margin="15">
                 <StackLayout padding="20 10">
-                    <Label text="{{questionIndex}}. {{question?.questionText}}" class="Roboto-Bold" fontSize="17" fontWeight="700" marginBottom="10" textWrap="true"
-                        color="#1b1c1c" horizontalAlignment="center"></Label>
-                        <StackLayout *ngIf="question">
-                                <StackLayout class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
-                                    [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
-                                    [class.right]="correctAnswerIndex === i" (tap)="answerButtonClicked(answer,i)">
-                                    <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
-                                        marginTop="10" marginBottom="10" textWrap="true" padding="10"></Label>
-                                </StackLayout>
-                            </StackLayout>
-
+                    <Label text="{{questionIndex}}. {{question?.questionText}}" class="Roboto-Bold" fontSize="17"
+                        fontWeight="700" marginBottom="10" textWrap="true" color="#1b1c1c" horizontalAlignment="center"></Label>
+                    <StackLayout *ngIf="question">
+                        <StackLayout class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
+                            [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
+                            [class.right]="correctAnswerIndex === i" (tap)="answerButtonClicked(answer,i)">
+                            <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
+                                marginTop="10" marginBottom="10" textWrap="true" padding="10"></Label>
+                        </StackLayout>
+                    </StackLayout>
                 </StackLayout>
             </CardView>
-    
-            <StackLayout *ngIf="showContinueBtn">
-                    <button backgroundColor="#8ac541" class="Hind-Medium" color="white" margin="10"  (tap)="continueClicked.emit($event)" *ngIf="answeredText!==''"
-            width="100%" height="100%" text="CONTINUE" fontSize="17" padding="15"></button>
-            </StackLayout>
         </StackLayout>
     </ScrollView>
+    <AbsoluteLayout *ngIf="showContinueBtn" verticalAlignment="bottom">
+        <button backgroundColor="#8ac541" class="Hind-Medium" color="white" (tap)="continueClicked.emit($event)" *ngIf="answeredText!==''"
+            width="100%" height="70" text="CONTINUE" fontSize="17"></button>
+    </AbsoluteLayout>
 </GridLayout>

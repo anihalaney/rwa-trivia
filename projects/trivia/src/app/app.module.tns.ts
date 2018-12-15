@@ -30,6 +30,7 @@ export function firebaseFactory() {
 
 // registerElement('CardView', () => CardView);
 registerElement('CardView', () => require('nativescript-cardview').CardView);
+registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
 
 @NgModule({
   declarations: [
