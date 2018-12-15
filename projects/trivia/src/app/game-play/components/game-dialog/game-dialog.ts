@@ -18,6 +18,7 @@ import { appState, categoryDictionary } from '../../../store';
 
 
 export class GameDialog {
+  actionBarStatus: String = 'Play Game';
   user: User;
   gameObs: Observable<Game>;
   game: Game;
@@ -110,6 +111,12 @@ export class GameDialog {
             this.setTurnStatusFlag();
           } else {
             this.resetValues();
+          }
+
+          if (game.GameStatus === GameStatus.COMPLETED) {
+            this.actionBarStatus = 'Game Over';
+          } else {
+            this.actionBarStatus = 'Play Game';
           }
         }
 

@@ -1,10 +1,10 @@
-<StackLayout *ngIf="cardType == 'opponent'" class="mobile">
+<StackLayout *ngIf="cardType == 'opponent'" class="mobile Roboto-Regular">
     <GridLayout rows="*" columns="auto,auto,*">
         <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
             width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
         <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
             <GridLayout rows="*,*,*,*" columns="*">
-                <Label row="0" column="0" text="You" textWrap="true" class="main-title"></Label>
+                <Label row="0" column="0" text="You" fontSize="18" textWrap="true" class="main-title"></Label>
                 <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
                     textWrap="true" class="sub-title"></Label>
                 <Label row="2" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
@@ -35,9 +35,9 @@
     <Button text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center" padding="10" class="btn-wait-opp"></Button>
 </StackLayout>
 
-<StackLayout *ngIf="cardType == 'singlePlayer'" class="mobile">
+<StackLayout *ngIf="cardType == 'singlePlayer'" class="mobile Roboto-Regular">
     <GridLayout rows="*" columns="*,auto">
-        <StackLayout row="0" col="0" [nsRouterLink]="['/game-play', game.gameId]">
+        <StackLayout row="0" col="0" [nsRouterLink]="['/game-play', game.gameId]" clearHistory="true">
             <GridLayout rows="*,*,*" columns="*">
                 <Label row="0" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
                     textWrap="true" class="sub-title"></Label>
@@ -70,13 +70,13 @@
     </GridLayout>
 </StackLayout>
 
-<StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile" [nsRouterLink]="['/game-play', game.gameId]">
+<StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile Roboto-Regular" [nsRouterLink]="['/game-play', game.gameId]" clearHistory="true">
     <GridLayout rows="*" columns="auto,auto,*">
         <Image row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
             stretch="aspectFill" height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
         <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
             <GridLayout rows="*,*" columns="*">
-                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="user-name main-title"></Label>
+                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" fontSize="18" textWrap="true" class="user-name main-title"></Label>
                 <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[otherUserId]?.score}}"
                     textWrap="true" class="sub-title"></Label>
             </GridLayout>
@@ -112,7 +112,7 @@
             width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
         <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
             <GridLayout rows="*,*" columns="*">
-                <Label row="0" column="0" text="You" textWrap="true" class=" main-title"></Label>
+                <Label row="0" column="0" text="You" fontSize="18" textWrap="true" class=" main-title"></Label>
                 <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[user.userId].score}}"
                     textWrap="true" class="sub-title"></Label>
             </GridLayout>
@@ -145,13 +145,13 @@
 
 
 
-<StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile">
+<StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile Roboto-Regular">
     <GridLayout rows="*,*" columns="auto,auto,*" *ngIf="otherUserInfo">
         <Image row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill" height="64"
             width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
         <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
             <GridLayout rows="*,*,*,*" columns="*">
-                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" textWrap="true" class="main-title"></Label>
+                <Label row="0" column="0" text="{{otherUserInfo?.displayName}}" fontSize="18" textWrap="true" class="main-title"></Label>
                 <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[otherUserId]?.score}}"
                     textWrap="true" class="sub-title"></Label>
                 <Label row="2" column="0" text="{{categoryDict[game.gameOptions.categoryIds[randomCategoryId]].categoryName.charAt(0).toUpperCase()
