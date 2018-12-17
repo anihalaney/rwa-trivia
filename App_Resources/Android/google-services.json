@@ -31,6 +31,22 @@
           }
         },
         {
+          "client_id": "701588063269-pr6mmhual0r99ubn79skturtbev335bd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitwiser.trivia.dev",
+            "certificate_hash": "243ff572bae034f604023b6754c510493832f910"
+          }
+        },
+        {
+          "client_id": "701588063269-ca1hk69libc1pitfodtcldvvigvsu7df.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bitwiser.trivia.dev",
+            "certificate_hash": "c3d5d2d323edcbe4e0476d937cf23b85873f0bcf"
+          }
+        },
+        {
           "client_id": "701588063269-mbsga0baongr0s1libf77c6qh43ch0pk.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -52,10 +68,61 @@
               "client_type": 3
             },
             {
-              "client_id": "701588063269-o2olav7bkuqbovcouuqk8lbieu3d7nl1.apps.googleusercontent.com",
+              "client_id": "701588063269-6sjl1peufooil5n00hlkqcs56b7h17bj.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.bitwiser.trivia.dev"
+                "bundle_id": "com.emaxers.bitwiser.dev"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:701588063269:android:f852e63cad494f5f",
+        "android_client_info": {
+          "package_name": "io.bitwiser.trivia.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "701588063269-nuci9amkrmi89s6c36efenpjpgjt1p27.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia.dev",
+            "certificate_hash": "caf155672647e872643a795661234622c7dc1f91"
+          }
+        },
+        {
+          "client_id": "701588063269-mbsga0baongr0s1libf77c6qh43ch0pk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWq_VUyhWQr73n8x1lnUYjZGun6fL4aEQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "701588063269-mbsga0baongr0s1libf77c6qh43ch0pk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "701588063269-6sjl1peufooil5n00hlkqcs56b7h17bj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.emaxers.bitwiser.dev"
               }
             }
           ]
