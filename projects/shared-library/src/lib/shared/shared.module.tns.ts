@@ -10,12 +10,14 @@ import { GameFilterPipe } from './pipe/game-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
+import { AuthorComponent } from './components/author/author.component';
 
 @NgModule({
   declarations: [
     ActionBarComponent,
     DrawerComponent,
     QuestionsTableComponent,
+    AuthorComponent,
     GameFilterPipe
   ],
   imports: [
@@ -47,6 +49,7 @@ import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
     ActionBarComponent,
     DrawerComponent,
     QuestionsTableComponent,
+    AuthorComponent,
     GameFilterPipe]
 })
 export class SharedModule { }
