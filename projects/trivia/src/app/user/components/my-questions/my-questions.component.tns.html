@@ -57,12 +57,13 @@
 
         <app-question-add-update row="0" rowSpan="2" *ngIf="!displayReasonViewer && displayEditQuestion" [editQuestion]="selectedQuestion"
             (hideQuestion)="hideQuestion($event)"></app-question-add-update>
-
-        <Image row="0" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}"
-            src="~/assets/images/mobile/pencil-icon.png" marginTop="360" marginLeft="140" width="60" height="60" (tap)="navigateToSubmitQuestion()"></Image>
-
-
+     
+            <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right">
+                <Image visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}"
+                src="~/assets/images/mobile/pencil-icon.png" marginBottom="50"  width="60" height="60" (tap)="navigateToSubmitQuestion()"></Image> 
+            </StackLayout>
+            
     </GridLayout>
-
+   
 
 </StackLayout>
