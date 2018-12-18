@@ -8,7 +8,7 @@ module.exports = function ($logger, $projectData, hookArgs) {
 
         /* Decide whether to prepare for dev or prod environment */
 
-        var isReleaseBuild = (hookArgs.appFilesUpdaterOptions && hookArgs.appFilesUpdaterOptions.release) ? true : false;
+     //   var isReleaseBuild = (hookArgs.appFilesUpdaterOptions && hookArgs.appFilesUpdaterOptions.release) ? true : false;
         var validProdEnvs = ['prod', 'production'];
         var isProdEnv = false; // building with --env.prod or --env.production flag
 
@@ -18,7 +18,7 @@ module.exports = function ($logger, $projectData, hookArgs) {
             });
         }
 
-        var buildType = isReleaseBuild || isProdEnv ? 'production' : 'development';
+        var buildType =  isProdEnv ? 'production' : 'development';
 
 
         /* Handle preparing of Android xml files */
