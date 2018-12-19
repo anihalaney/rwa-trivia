@@ -20,6 +20,6 @@ export class InviteFriendsComponent extends InviteFriends {
   }
 
   navigateToInvite() {
-    this.routerExtension.navigate(['my/app-invite-friends-dialog'], { clearHistory: true });
+    this.routerExtension.navigate(['my/app-invite-friends-dialog']);
   }
 }

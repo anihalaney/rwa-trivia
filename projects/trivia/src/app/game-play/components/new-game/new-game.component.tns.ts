@@ -51,7 +51,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
+     console.log('master called');
+      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
 

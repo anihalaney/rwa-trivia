@@ -57,7 +57,7 @@ export class DrawerComponent implements OnInit {
 
     leaderBoard(category) {
         this.activeMenu = 'Category Leaderboard';
-        this.routerExtension.navigate(['/stats/leaderboard', category], { clearHistory: true });
+        this.routerExtension.navigate(['/stats/leaderboard', category]);
         this.closeDrawer();
     }
 
@@ -68,7 +68,7 @@ export class DrawerComponent implements OnInit {
     }
 
     login() {
-        this.routerExtension.navigate(['/login'], { clearHistory: true });
+        this.routerExtension.navigate(['/login']);
         this.closeDrawer();
     }
 
@@ -81,25 +81,25 @@ export class DrawerComponent implements OnInit {
 
     recentGame() {
         this.activeMenu = 'Recently Completed Games';
-        this.routerExtension.navigate(['/my/recent-game'], { clearHistory: true });
+        this.routerExtension.navigate(['/my/recent-game']);
         this.closeDrawer();
     }
 
     navigateToProfileSettings() {
         this.activeMenu = 'Profile Settings';
-        this.routerExtension.navigate(['/my/profile', this.user.userId] , { clearHistory: true });
+        this.routerExtension.navigate(['/my/profile', this.user.userId]);
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
         this.activeMenu = 'My Questions';
-        this.routerExtension.navigate(['/my/questions'], { clearHistory: true });
+        this.routerExtension.navigate(['/my/questions']);
         this.closeDrawer();
     }
 
     navigateToFriendList() {
         this.activeMenu = 'Friend List';
-        this.routerExtension.navigate(['/my/invite-friends'], { clearHistory: true });
+        this.routerExtension.navigate(['/my/invite-friends']);
         this.closeDrawer();
     }
 

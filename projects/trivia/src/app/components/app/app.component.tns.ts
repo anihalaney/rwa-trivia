@@ -18,6 +18,7 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<AppState>,
     private routerExtension: RouterExtensions) {
     this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+      console.log('callled ');
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
