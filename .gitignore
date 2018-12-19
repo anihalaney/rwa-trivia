@@ -70,6 +70,7 @@ functions/index.js
 App_Resources/Android/google-services.*
 App_Resources/Android/values/facebooklogin.xml
 App_Resources/iOS/GoogleService-Info.*
+App_Resources/iOS/Info.*
 certificates/*
 configurations/*
 release/*
