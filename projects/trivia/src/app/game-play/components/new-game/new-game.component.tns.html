@@ -84,7 +84,7 @@
                         <StackLayout *ngIf="gameOptions.opponentType == 1" row="1" col="0" colSpan="3" class="hr-light"></StackLayout>
 
                         <StackLayout row="2" col="0" colSpan="3" *ngIf="gameOptions.opponentType == 1" paddingBottom="0">
-                            <RadListView #friendListView [items]="dataItem" height="140">
+                            <RadListView #friendListView [items]="dataItem" ios:height="130">
                                 <ng-template let-item="item">
                                     <StackLayout paddingTop="10" (tap)="selectFriendId(item)">
                                         <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray" stretch="aspectFill"
@@ -95,10 +95,13 @@
                                         <Image visibility="{{ (item === friendUserId) ? 'visible' : 'collapsed'}}" src="~/assets/images/check.png"
                                             height="30" width="30" marginLeft="10" verticalAlignment="center"
                                             marginRight="5"></Image>
-                                  </StackLayout>
+                                    </StackLayout>
                                 </ng-template>
                                 <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal"></ListViewLinearLayout>
                             </RadListView>
+                            <Label *ngIf="noFriendsStatus" margin="15" text="I do not have any friends, invite your friends using link"
+                                textWrap="true"></Label>
+                            <button text="Invite Friends" color="#FFFFFF" backgroundColor="#71b02f" (tap)="navigateToInvite()"></button>
                         </StackLayout>
                     </GridLayout>
                 </StackLayout>
