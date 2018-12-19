@@ -66,9 +66,10 @@ scheduler/package-lock.json
 functions/index.js
 
 #mobile release files
+
+App_Resources/Android/google-services.*
+App_Resources/Android/values/facebooklogin.xml
+App_Resources/iOS/GoogleService-Info.*
 certificates/*
 configurations/*
 release/*
-App_Resources/Android/google-services.*
-App_Resources/iOS/GoogleService-Info.*
-
