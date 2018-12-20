@@ -16,6 +16,7 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
 import { Friends } from '../../../../../../shared-library/src/lib/shared/model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'new-game',
@@ -43,7 +44,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public gameActions: GameActions,
     public utils: Utils,
     private routerExtension: RouterExtensions,
-    public userActions: UserActions) {
+    public userActions: UserActions,
+    private router: Router ) {
     super(store, utils, userActions);
     this.initDataItems();
   }
@@ -51,11 +53,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-     console.log('master called');
+      console.log('master called');
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
-
+    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories.filter(c => c.isSelected = true)));
     this.categories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)];
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
@@ -72,7 +74,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => this.userDict = userDict);
-
+    console.log(this.router.url);
   }
 
   ngOnDestroy() { }
@@ -86,6 +88,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   startGame() {
     this.gameOptions.tags = this.selectedTags;
     this.gameOptions.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
+    console.log(this.gameOptions.categoryIds);
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
       && !this.friendUserId) {
       if (!this.friendUserId) {
@@ -98,7 +101,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   selectCategory(category) {
-    category.isSelected = (!category.isSelected) ? true : false;
+    console.log(category);
+    if (!category.requiredForGamePlay) {
+      category.isSelected = !category.isSelected;
+    }
   }
 
   getSelectedCatName() {

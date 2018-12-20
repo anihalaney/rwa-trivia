@@ -1,10 +1,11 @@
 <ActionBar title="" class="action-bar action-title">
-        <NavigationButton visibility="collapsed"></NavigationButton>
-    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*" android:columns="auto,*" width="100%" >
-        <Label col="0" text="&#xf0c9;" (tap)="openSidebar()"  class="fa text-left padding-back"
-            fontSize="20" verticalAlignment="center"></Label>
-        <Label col="1" [text]="title" class="action-text-title" marginLeft="10" paddingBottom="4" padding="5 10 5 0" verticalAlignment="center" fontSize="18"></Label>
+    <NavigationButton visibility="collapsed"></NavigationButton>
+    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*" android:columns="auto,*" width="100%">
+        <StackLayout col="0" (tap)="openSidebar()" verticalAlignment="center">
+            <Label text="&#xf0c9;" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
+        </StackLayout>
+        <StackLayout col="1" verticalAlignment="center">
+            <Label [text]="title" marginLeft="20" class="action-text-title" fontSize="20"></Label>
+        </StackLayout>
     </GridLayout>
 </ActionBar>
-
-
