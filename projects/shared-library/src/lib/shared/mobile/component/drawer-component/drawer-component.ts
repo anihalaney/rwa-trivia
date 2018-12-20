@@ -10,6 +10,7 @@ import { Utils } from './../../../../core/services';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { Observable } from 'rxjs';
 import { Category } from './../../../model';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -35,7 +36,10 @@ export class DrawerComponent implements OnInit {
         private utils: Utils,
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,
+        private router: Router
     ) {
+        router.events.subscribe((val) => {
+        });
         this.categoriesObs = store.select(coreState).pipe(select(s => s.categories));
         this.categoriesObs.subscribe(categories => {
             this.categories = categories;
@@ -88,12 +92,14 @@ export class DrawerComponent implements OnInit {
     navigateToProfileSettings() {
         this.activeMenu = 'Profile Settings';
         this.routerExtension.navigate(['/my/profile', this.user.userId]);
+        console.log(this.router.url);
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
         this.activeMenu = 'My Questions';
         this.routerExtension.navigate(['/my/questions']);
+        console.log(this.router.url);
         this.closeDrawer();
     }
 

@@ -39,7 +39,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
   }
 
   startNewGame() {
-    this.routerExtension.navigate(['/game-play'], { clearHistory: true });
+    this.routerExtension.navigate(['/game-play']);
   }
 
   filterGame(game: any, gameStatus) {

@@ -12,7 +12,6 @@ import { userState } from '../../user/store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import * as userActions from '../../user/store/actions';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

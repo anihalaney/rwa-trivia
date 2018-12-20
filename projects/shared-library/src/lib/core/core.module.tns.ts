@@ -10,6 +10,8 @@ import {
   WindowRef
 } from './services';
 
+import {NavigationService } from './services/mobile/navigation.service';
+
 import { AuthenticationProvider, AuthInterceptor } from './auth';
 
 import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from './route-guards';
@@ -59,7 +61,7 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
 
     Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
-    GameService, BulkService, UserService, SocialService, StatsService,
+    GameService, BulkService, UserService, SocialService, StatsService, NavigationService,
     WindowRef,
 
     // Actions

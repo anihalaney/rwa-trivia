@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Page } from 'tns-core-modules/ui/page';
+import {LoadingIndicator} from "nativescript-loading-indicator";
+
 
 @Component({
   selector: 'login',
@@ -17,6 +19,7 @@ import { Page } from 'tns-core-modules/ui/page';
 export class LoginComponent extends Login implements OnInit {
 
   title: string;
+  loader = new LoadingIndicator();
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
@@ -56,7 +59,7 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   onSubmit() {
-
+    this.loader.show();
     if (!this.loginForm.valid) {
       return;
     }
@@ -146,6 +149,7 @@ export class LoginComponent extends Login implements OnInit {
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe(() => {
+        this.loader.hide();
         this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
