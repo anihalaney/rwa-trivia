@@ -64,3 +64,8 @@ scheduler/server/
 scheduler/config/
 scheduler/package-lock.json
 functions/index.js
+
+#mobile release files
+
+certificates/*
+release/*
