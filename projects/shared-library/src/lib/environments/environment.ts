@@ -1,19 +1,16 @@
-// The file contents for the current environment will overwrite these during build.
-// The build system defaults to the dev environment which uses `environment.ts`, but if you do
 import { IConfig } from './iconfig';
-
 export const environment = {
-  production: false
+  production: true
 };
 
 export const CONFIG: IConfig = {
   'firebaseConfig': {
-    apiKey: '',
-    authDomain: '',
-    databaseURL: '',
-    projectId: '',
-    storageBucket: '',
-    messagingSenderId: ''
+    apiKey: 'AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y',
+    authDomain: 'bitwiser.io',
+    databaseURL: 'https://rwa-trivia.firebaseio.com',
+    projectId: 'rwa-trivia',
+    storageBucket: 'rwa-trivia.appspot.com',
+    messagingSenderId: '479350787602'
   },
-  'functionsUrl': ''
+  'functionsUrl': 'https://bitwiser.io'
 };
