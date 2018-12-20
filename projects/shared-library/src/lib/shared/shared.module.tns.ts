@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -50,6 +50,7 @@ import { AuthorComponent } from './components/author/author.component';
     DrawerComponent,
     QuestionsTableComponent,
     AuthorComponent,
-    GameFilterPipe]
+    GameFilterPipe],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class SharedModule { }
