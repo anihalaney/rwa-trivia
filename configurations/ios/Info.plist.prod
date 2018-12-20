@@ -2,7 +2,7 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-<key>CFBundleDevelopmentRegion</key>
+	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>${PRODUCT_NAME}</string>
@@ -53,13 +53,13 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.701588063269-o2olav7bkuqbovcouuqk8lbieu3d7nl1</string>
-				<string>fb266820933965932</string>
+				<string>fb1436607329691182</string>
 			</array>
 		</dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>266820933965932</string>
+	<string>1436607329691182</string>
 	<key>FacebookDisplayName</key>
-	<string>bitwiser.io_test</string>
+	<string>bitwiser.io</string>
 </dict>
 </plist>

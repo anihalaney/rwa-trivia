@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -47,6 +47,7 @@ import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
     ActionBarComponent,
     DrawerComponent,
     QuestionsTableComponent,
-    GameFilterPipe]
+    GameFilterPipe],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class SharedModule { }

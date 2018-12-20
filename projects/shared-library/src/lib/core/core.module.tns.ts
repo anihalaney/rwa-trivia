@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -83,7 +83,8 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
     },
     // Route guards
     AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver
-  ]
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class CoreModule {
   constructor() {
