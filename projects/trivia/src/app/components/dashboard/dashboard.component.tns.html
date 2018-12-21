@@ -3,7 +3,7 @@
     <ScrollView>
         <StackLayout>
             <GridLayout rows="*, *, *, *, *, *" columns="*">
-                <Button row="0" col="0" text="START A NEW GAME" class="btn-red Roboto-Medium" (tap)="startNewGame()" margin="10"></Button>
+                <Button row="0" col="0" text="START A NEW GAME" class="btn-red Roboto-Medium" (tap)="startNewGame()" height="70" margin="10"></Button>
                 <StackLayout row="1" col="0" *ngIf="user">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                         <GridLayout rows="auto, auto" columns="*">

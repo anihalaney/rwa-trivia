@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>701588063269-o2olav7bkuqbovcouuqk8lbieu3d7nl1.apps.googleusercontent.com</string>
+	<string>701588063269-dor381go31bk90elf47kfbub5nq8v8pd.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.701588063269-o2olav7bkuqbovcouuqk8lbieu3d7nl1</string>
+	<string>com.googleusercontent.apps.701588063269-dor381go31bk90elf47kfbub5nq8v8pd</string>
 	<key>API_KEY</key>
 	<string>AIzaSyC_sAg9yUS00keGXLkbHYK47osjpQZcsTI</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.bitwiser.trivia.dev</string>
+	<string>io.bitwiser.trivia.dev</string>
 	<key>PROJECT_ID</key>
 	<string>rwa-trivia-dev-e57fc</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:701588063269:ios:be4fc42dbc283be7</string>
+	<string>1:701588063269:ios:f852e63cad494f5f</string>
 	<key>DATABASE_URL</key>
 	<string>https://rwa-trivia-dev-e57fc.firebaseio.com</string>
 </dict>

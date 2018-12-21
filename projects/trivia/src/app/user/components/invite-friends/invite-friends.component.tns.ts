@@ -4,9 +4,7 @@ import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { InviteFriends } from './invite-friends';
-import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterExtensions } from 'nativescript-angular/router';
-registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
 
 @Component({
   selector: 'app-invite-friends',

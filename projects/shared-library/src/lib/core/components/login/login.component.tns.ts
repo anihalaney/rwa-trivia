@@ -73,10 +73,7 @@ export class LoginComponent extends Login implements OnInit {
         ).then((user: any) => {
           // Success
           this.redirectTo();
-        }, (error: Error) => {
-          // Error
-          Toast.makeText(error.message).show();
-        }).catch((error: Error) => {
+        }).catch((error) => {
           Toast.makeText(error.message).show();
         });
         break;
@@ -91,15 +88,12 @@ export class LoginComponent extends Login implements OnInit {
             this.firebaseAuthService.sendEmailVerification(user).then(
               (response) => {
                 this.redirectTo();
-              },
-              (error) => {
-                Toast.makeText(error.message).show();
               }
-            );
+            ).catch((error) => {
+              Toast.makeText(error.message).show();
+            });
           }
-        }, (error: Error) => {
-          Toast.makeText(error.message).show();
-        }).catch((error: Error) => {
+        }).catch((error) => {
           Toast.makeText(error.message).show();
         });
         break;
@@ -112,10 +106,7 @@ export class LoginComponent extends Login implements OnInit {
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
-          }, (error: Error) => {
-            // Error
-            Toast.makeText(error.message).show();
-          }).catch((error: Error) => {
+          }).catch((error) => {
             Toast.makeText(error.message).show();
           });
     }
@@ -126,22 +117,21 @@ export class LoginComponent extends Login implements OnInit {
     this.firebaseAuthService.googleLogin().then(
       (result) => {
         this.redirectTo();
-      },
-      (errorMessage) => {
-        Toast.makeText(errorMessage).show();
       }
-    );
+    ).catch((error) => {
+      Toast.makeText(error).show();
+    });
+
   }
 
   fbLogin() {
     this.firebaseAuthService.facebookLogin().then(
       (result) => {
         this.redirectTo();
-      },
-      (errorMessage) => {
-        Toast.makeText(errorMessage).show();
       }
-    );
+    ).catch((error) => {
+      Toast.makeText(error).show();
+    });
   }
 
   redirectTo() {

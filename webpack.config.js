@@ -9,6 +9,7 @@ const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeScriptWorkerPlugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { AngularCompilerPlugin } = require("@ngtools/webpack");
+const editJsonFile = require("edit-json-file");
 
 module.exports = env => {
     // Add your custom Activities, Services and other Android app components here.
@@ -35,20 +36,43 @@ module.exports = env => {
         appPath = "app",
         appResourcesPath = "app/App_Resources",
 
+
+        //package.json constants
+        packageJsonFileName = "package.json",
+        nativescriptIdField = "nativescript.id",
+
+        //environment files constants
+        envPath = "projects/shared-library/src/lib/environments/",
+        envFileName = "environment.ts",
+        devEnvFileName = "environment.dev.ts",
+        prodEnvFileName = "environment.prod.ts",
+
         // You can provide the following flags when running 'tns run android|ios'
         aot, // --env.aot
         snapshot, // --env.snapshot
         uglify, // --env.uglify
         report, // --env.report
         sourceMap, // --env.sourceMap
+
     } = env;
+
+
 
     const appFullPath = resolve(projectRoot, appPath);
     const appResourcesFullPath = resolve(projectRoot, appResourcesPath);
 
+    const envFullPath = resolve(projectRoot, envPath);
+
     const entryModule = aot ?
         nsWebpack.getAotEntryModule(appFullPath) : `${nsWebpack.getEntryModule(appFullPath)}.ts`;
     const entryPath = `.${sep}${entryModule}`;
+
+    // change package name in package.json file
+    const file = editJsonFile(resolve(projectRoot, packageJsonFileName), {
+        autosave: true
+    });
+
+    file.set(nativescriptIdField, env.package_name);
 
     const config = {
         mode: uglify ? "production" : "development",
@@ -106,7 +130,7 @@ module.exports = env => {
                         test: (module, chunks) => {
                             const moduleName = module.nameForCondition ? module.nameForCondition() : '';
                             return /[\\/]node_modules[\\/]/.test(moduleName) ||
-                                    appComponents.some(comp => comp === moduleName);
+                                appComponents.some(comp => comp === moduleName);
                         },
                         enforce: true,
                     },
@@ -191,12 +215,20 @@ module.exports = env => {
             ],
         },
         plugins: [
+            // Copy environment files.
+            new CopyWebpackPlugin([
+                {
+                    from: (env.prod) ? resolve(envFullPath, prodEnvFileName) : resolve(envFullPath, devEnvFileName),
+                    to: resolve(envFullPath, envFileName),
+                    context: projectRoot
+                },
+            ]),
             // Define useful constants like TNS_WEBPACK
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",
             }),
             // Remove all files from the out dir.
-            new CleanWebpackPlugin([ `${dist}/**/*` ]),
+            new CleanWebpackPlugin([`${dist}/**/*`]),
             // Copy native app resources to out dir.
             new CopyWebpackPlugin([
                 {
@@ -205,6 +237,8 @@ module.exports = env => {
                     context: projectRoot
                 },
             ]),
+
+
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([
                 { from: "fonts/**" },

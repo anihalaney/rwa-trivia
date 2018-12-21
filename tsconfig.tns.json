@@ -6,9 +6,9 @@
     "experimentalDecorators": true,
     "baseUrl": "./",
     "paths": {
-        "shared-library/*": [
-          "./projects/shared-library/src/lib/*"
-        ],
+      "shared-library/*": [
+        "./projects/shared-library/src/lib/*"
+      ],
       "*": [
         "./node_modules/tns-core-modules/*",
         "./node_modules/*"
@@ -20,9 +20,9 @@
     "**/*.android.ts",
     "**/*.ios.ts",
     "app/main.aot.ts",
-    "functions",
+    "./functions/*",
+    "./scheduler/*",
     "**/*.spec.ts",
     "server.ts",
-    "scheduler"
   ]
 }

@@ -1,4 +1,4 @@
-<StackLayout height="100%" backgroundColor="#f1f5f7">
+<GridLayout height="100%" backgroundColor="#f1f5f7">
     <ScrollView>
         <StackLayout>
             <CardView class="cardStyle Roboto-Regular" android:elevation="20" ios:elevation="20" radius="1"
@@ -155,8 +155,6 @@
                     </StackLayout>
                     <StackLayout padding="10" backgroundColor="#f3f3f3">
                         <GridLayout rows="auto,auto" columns="auto,auto,auto" horizontalAlignment="center">
-                                <ActivityIndicator row="0" colSpan="3" *ngIf="disableRematchBtn" busy="true" ios:width="100"
-                                ios:height="50" android:width="50" android:height="50" class="activity-indicator"></ActivityIndicator>
                             <Button row="1" col="0" class="natvigate-button Hind-Medium" text="Share" (tap)="screenshot()"></Button>
                             <button row="1" col="1" class="natvigate-button Hind-Medium" text="Rematch" (tap)="reMatch()"
                                 *ngIf="game.gameOptions.playerMode != PlayerMode.Single"></button>
@@ -213,4 +211,8 @@
         </StackLayout>
 
     </ScrollView>
-</StackLayout>
+    <AbsoluteLayout verticalAlignment="center" horizontalAlignment="center">
+        <ActivityIndicator *ngIf="disableRematchBtn" busy="true" ios:width="100" ios:height="50" android:width="50"
+            android:height="50" class="activity-indicator"></ActivityIndicator>
+    </AbsoluteLayout>
+</GridLayout>

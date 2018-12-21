@@ -20,6 +20,7 @@ export class QuestionComponent {
 
   answeredText: string;
   correctAnswerText: string;
+  doPlay = true;
 
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils) {
     this.answeredText = '';
@@ -39,6 +40,7 @@ export class QuestionComponent {
 
   answerButtonClicked(answer: Answer) {
     this.answeredText = answer.answerText;
+    this.doPlay = false;
     const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
     this.answerClicked.emit(index);
   }
@@ -46,6 +48,7 @@ export class QuestionComponent {
   getNextQuestion() {
     this.answeredText = '';
     this.correctAnswerText = '';
+    this.doPlay = true;
     this.store.dispatch(this.questionAction.getQuestionOfTheDay());
 
   }

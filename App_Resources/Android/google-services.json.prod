@@ -1,0 +1,58 @@
+{
+  "project_info": {
+    "project_number": "479350787602",
+    "firebase_url": "https://rwa-trivia.firebaseio.com",
+    "project_id": "rwa-trivia",
+    "storage_bucket": "rwa-trivia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479350787602:android:e885d2038d356da1",
+        "android_client_info": {
+          "package_name": "io.bitwiser.trivia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479350787602-humkcjbb7rb9fu540oo2l6rvc0tc8kqi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia",
+            "certificate_hash": "667eecf6a00817899604907a77e97e0119691520"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYMskH_fsGB9dFmwAMSKaCslqLpv8uwj0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "479350787602-q0nph7pg3jd72f4tfrgfgc6p0c9la3ku.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "479350787602-sm4nli1gus0f03tala80dpdiovb988kf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.bitwiser.trivia"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

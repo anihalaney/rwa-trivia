@@ -32,7 +32,7 @@ export class DrawerComponent implements OnInit {
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
-        private authProvider: AuthenticationProvider,
+        public authProvider: AuthenticationProvider,
         private utils: Utils,
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,
@@ -92,14 +92,12 @@ export class DrawerComponent implements OnInit {
     navigateToProfileSettings() {
         this.activeMenu = 'Profile Settings';
         this.routerExtension.navigate(['/my/profile', this.user.userId]);
-        console.log(this.router.url);
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
         this.activeMenu = 'My Questions';
         this.routerExtension.navigate(['/my/questions']);
-        console.log(this.router.url);
         this.closeDrawer();
     }
 
