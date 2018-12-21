@@ -3,17 +3,14 @@
         <StackLayout row="0">
             <ScrollView>
                 <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
-                    <GridLayout row="0" columns="auto,auto" class="sideStackLayoutHeader" *ngIf="user">
+                    <GridLayout row="0" columns="auto,*" class="sideStackLayoutHeader" *ngIf="user">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
                             width="64" marginLeft="10" verticalAlignment="center" marginRight="10"></Image>
-                        <StackLayout row="0" col="1" marginTop="27">
-                            <Label text="{{user?.displayName}}" color="#d7d7d7" fontSize="20" width="70%"
-                                verticalAlignment="top"></Label>
-
-                            <Label text="{{user?.location}}" horizontalAlignment="left" color="#d7d7d7" fontSize="10"
-                                width="70%" verticalAlignment="center" class="fa"></Label>
-                            <Label text="&#xf041; {{user?.location}}" horizontalAlignment="left" color="#d7d7d7"
-                                fontSize="15" width="70%" verticalAlignment="bottom" class="fa"></Label>
+                        <StackLayout row="0" col="1" marginTop="27" marginRight="10">
+                            <Label text="{{user?.displayName}}" color="#d7d7d7" horizontalAlignment="left"
+                                verticalAlignment="top" fontSize="20" textWrap="true" marginBottom="10"></Label>
+                            <Label *ngIf="user?.location" text="&#xf041; {{user?.location}}" horizontalAlignment="left" color="#d7d7d7"
+                                fontSize="12" verticalAlignment="bottom" textWrap="true" class="fa"></Label>
                         </StackLayout>
                     </GridLayout>
                     <Label row="1" colSpan="2" text="Home" textWrap="true" [class.active-menu]="activeMenu === 'Home'"
@@ -38,7 +35,7 @@
                                 padding="10">
                             </Label>
                         </StackLayout>
-                    </StackLayout>
+                    </StackLayout>                           
 
                     <Label row="5" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Friend List"
                         [class.active-menu]="activeMenu === 'Friend List'" class="sideLabel sideStackLayout" (tap)="navigateToFriendList()"></Label>

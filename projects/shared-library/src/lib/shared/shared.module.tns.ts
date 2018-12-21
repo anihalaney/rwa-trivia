@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -10,12 +10,14 @@ import { GameFilterPipe } from './pipe/game-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
+import { AuthorComponent } from './components/author/author.component';
 
 @NgModule({
   declarations: [
     ActionBarComponent,
     DrawerComponent,
     QuestionsTableComponent,
+    AuthorComponent,
     GameFilterPipe
   ],
   imports: [
@@ -47,6 +49,8 @@ import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
     ActionBarComponent,
     DrawerComponent,
     QuestionsTableComponent,
-    GameFilterPipe]
+    AuthorComponent,
+    GameFilterPipe],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class SharedModule { }

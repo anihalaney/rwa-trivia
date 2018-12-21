@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -25,6 +25,7 @@ import { StatsRoutingModule } from './routing/stats-routing.module';
   exports: [
     LeaderboardComponent,
     RealtimeStatsComponent
-  ]
+  ],
+  schemas: [NO_ERRORS_SCHEMA]
 })
 export class StatsModule { }

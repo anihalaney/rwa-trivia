@@ -5,6 +5,9 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
+      "shared-library/*": [
+        "./projects/shared-library/src/lib/*"
+      ],
       "*": [
         "./node_modules/tns-core-modules/*",
         "./node_modules/*"
@@ -16,6 +19,16 @@
     "**/*.tns.ts",
     "**/*.android.ts",
     "**/*.ios.ts",
-    "**/*.spec.ts"
+    "./functions/*",
+    "./scheduler/*",
+    "**/*.spec.ts",
+    "server.ts",
+    "./projects/shared-library/src/lib/shared/components/*",
+  ],
+  "include": [
+    "./projects/shared-library/src/lib/shared",
+    "./projects/trivia/src/main.ns.aot.ts",
+    "./projects/trivia/src/app/game-play/game-play.module.ts",
+    "./projects/trivia/src/app/user/user.module.ts"
   ]
 }
