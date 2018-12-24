@@ -68,11 +68,13 @@ module.exports = env => {
     const entryPath = `.${sep}${entryModule}`;
 
     // change package name in package.json file
+    if(env.package_name) {
     const file = editJsonFile(resolve(projectRoot, packageJsonFileName), {
         autosave: true
     });
 
     file.set(nativescriptIdField, env.package_name);
+}
 
     const config = {
         mode: uglify ? "production" : "development",
