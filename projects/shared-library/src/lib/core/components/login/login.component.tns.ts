@@ -74,6 +74,7 @@ export class LoginComponent extends Login implements OnInit {
           // Success
           this.redirectTo();
         }).catch((error) => {
+          this.loader.hide();
           Toast.makeText(error.message).show();
         });
         break;
@@ -90,10 +91,12 @@ export class LoginComponent extends Login implements OnInit {
                 this.redirectTo();
               }
             ).catch((error) => {
+              this.loader.hide();
               Toast.makeText(error.message).show();
             });
           }
         }).catch((error) => {
+          this.loader.hide();
           Toast.makeText(error.message).show();
         });
         break;
@@ -103,10 +106,12 @@ export class LoginComponent extends Login implements OnInit {
           .then((a: any) => {
             this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
             Toast.makeText(this.notificationMsg).show();
+            this.loader.hide();
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
           }).catch((error) => {
+            this.loader.hide();
             Toast.makeText(error.message).show();
           });
     }
@@ -119,6 +124,7 @@ export class LoginComponent extends Login implements OnInit {
         this.redirectTo();
       }
     ).catch((error) => {
+      this.loader.hide();
       Toast.makeText(error).show();
     });
 
@@ -130,6 +136,7 @@ export class LoginComponent extends Login implements OnInit {
         this.redirectTo();
       }
     ).catch((error) => {
+      this.loader.hide();
       Toast.makeText(error).show();
     });
   }

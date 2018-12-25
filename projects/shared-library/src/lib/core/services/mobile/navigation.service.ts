@@ -18,12 +18,16 @@ export class NavigationService {
   back() {
     console.log(this.router.url);
     if (this.router.url === "/my/invite-friends" ||
-    this.router.url === "/my/questions" ||
-    this.router.url === "/my/recent-game" ||
-    this.router.url === "/game-play" ||
-    this.router.url === "/my/profile/tej7Au4YjrM5c5uHx06LT5fIRuF2" ||
-    this.router.url === "/stats/leaderboard/Special") {
-    this.routerExtensions.navigate(['/dashboard']);
+      this.router.url === "/my/questions" ||
+      this.router.url === "/my/recent-game" ||
+      this.router.url.includes('game-play') ||
+      this.router.url.includes('/my/profile/') ||
+      this.router.url.includes('/stats/leaderboard/')) {
+      this.routerExtensions.navigate(['/dashboard']);
+    } else if (
+      this.router.url === "/my/questions/add" ||
+      this.router.url === "/my/app-invite-friends-dialog"
+    ) { this.routerExtensions.back();
     }
   }
 }
