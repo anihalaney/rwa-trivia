@@ -7,7 +7,7 @@ import { Game, Question, RouterStateUrl } from 'shared-library/shared/model';
 import { GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
 import { GamePlayState } from '../reducers';
-
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class GamePlayEffects {
@@ -42,7 +42,7 @@ export class GamePlayEffects {
   @Effect()
   // handle location update
   loadGame2$ = this.actions$
-    .pipe(ofType('ROUTER_NAVIGATION'))
+    .pipe(ofType(ROUTER_NAVIGATION))
     .pipe(
       map((action: any): RouterStateUrl => action.payload.routerState),
       filter((routerState: RouterStateUrl) => {

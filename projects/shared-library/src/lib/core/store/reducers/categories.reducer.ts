@@ -14,9 +14,12 @@ export function categories(state: any = [], action: ActionWithPayload<Category[]
 }
 
 //selectors
-export const getCategoryDictionary = (state: Category[]) =>
-  state.reduce((result, category) => {
+export const getCategoryDictionary = (state: Category[]) => {
+  state = (state) ? state : [];
+  console.log('state--->', state);
+  return state.reduce((result, category) => {
     result[category.id] = category;
     return result;
   }, {});
+};
 

@@ -23,7 +23,14 @@ export class AppComponent implements OnInit {
     });
   }
   ngOnInit() {
-    firebase.init({}).then((instance) => { });
+    firebase.init({}).then(
+      () => {
+        console.log('firebase.init done');
+      },
+      error => {
+        console.log(`firebase.init error: ${error}`);
+      }
+    );
   }
 
 }

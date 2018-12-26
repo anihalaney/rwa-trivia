@@ -44,7 +44,7 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     AppRoutingModule,
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers),
-    StoreRouterConnectingModule,
+    StoreRouterConnectingModule.forRoot(),
     HttpClientModule,
     StatsModule,
     SharedModule,

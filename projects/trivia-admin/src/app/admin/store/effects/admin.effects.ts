@@ -7,6 +7,7 @@ import { SearchResults, Question, RouterStateUrl, SearchCriteria, QuestionStatus
 import { AdminActionTypes } from '../actions';
 import * as adminActions from '../actions/admin.actions';
 import { QuestionService } from 'shared-library/core/services';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class AdminEffects {
@@ -16,7 +17,7 @@ export class AdminEffects {
     @Effect()
     // handle location update
     loadRouteQuestions$ = this.actions$
-        .pipe(ofType('ROUTER_NAVIGATION'))
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -33,7 +34,7 @@ export class AdminEffects {
     @Effect()
     // handle location update
     loadUnpublishedRouteQuestions$ = this.actions$
-        .pipe(ofType('ROUTER_NAVIGATION'))
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>

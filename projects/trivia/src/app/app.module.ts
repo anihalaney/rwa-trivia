@@ -55,7 +55,7 @@ import { GameCardComponent } from './components/game-card/game-card.component';
       maxAge: 20
     }),
     //StoreModule.forRoot(reducers),
-    StoreRouterConnectingModule,
+    StoreRouterConnectingModule.forRoot(),
 
     //rwa modules
     CoreModule,
