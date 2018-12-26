@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
@@ -17,7 +17,7 @@ export class BulkEffects {
     // for get all BulkUploadFileInfo
     @Effect()
     loadBulkUpload$ = this.actions$
-        .ofType(BulkActionTypes.LOAD_BULK_UPLOAD)
+        .pipe(ofType(BulkActionTypes.LOAD_BULK_UPLOAD))
         .pipe(
             switchMap((action: bulkActions.LoadBulkUpload) =>
                 this.bulkService.getBulkUpload(action.payload.user, action.payload.archive).pipe(
@@ -29,7 +29,7 @@ export class BulkEffects {
     // for get BulkUploadFileInfo by User
     @Effect()
     loadUserBulkUpload$ = this.actions$
-        .ofType(BulkActionTypes.LOAD_USER_BULK_UPLOAD)
+        .pipe(ofType(BulkActionTypes.LOAD_USER_BULK_UPLOAD))
         .pipe(
             switchMap((action: bulkActions.LoadUserBulkUpload) =>
                 this.bulkService.getUserBulkUpload(action.payload.user, action.payload.archive).pipe(
@@ -41,7 +41,7 @@ export class BulkEffects {
     // for file PublishedQuestions by BulkUpload Id
     @Effect()
     loadBulkUploadPublishedQuestions$ = this.actions$
-        .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS)
+        .pipe(ofType(BulkActionTypes.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS))
         .pipe(
             switchMap((action: bulkActions.LoadBulkUploadPublishedQuestions) =>
                 this.questionService.getQuestionsForBulkUpload(action.payload.bulkUploadFileInfo, true).pipe(
@@ -53,7 +53,7 @@ export class BulkEffects {
     // for file UnPublishedQuestions by BulkUpload Id
     @Effect()
     loadBulkUploadUnpublishedQuestions$ = this.actions$
-        .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS)
+        .pipe(ofType(BulkActionTypes.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS))
         .pipe(
             switchMap((action: bulkActions.LoadBulkUploadUnpublishedQuestions) =>
                 this.questionService.getQuestionsForBulkUpload(action.payload.bulkUploadFileInfo, false).pipe(
@@ -65,7 +65,7 @@ export class BulkEffects {
     // for update Question
     @Effect()
     updateQuestion$ = this.actions$
-        .ofType(BulkActionTypes.UPDATE_QUESTION)
+        .pipe(ofType(BulkActionTypes.UPDATE_QUESTION))
         .pipe(
             switchMap((action: bulkActions.UpdateQuestion) => {
                 this.questionService.saveQuestion(action.payload.question);
@@ -75,7 +75,7 @@ export class BulkEffects {
 
     @Effect()
     loadBulkUploadFileUrl$ = this.actions$
-        .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL)
+        .pipe(ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL))
         .pipe(
             switchMap((action: bulkActions.LoadBulkUploadFileUrl) =>
                 this.bulkService.getFileByBulkUploadFileUrl(action.payload.bulkUploadFileInfo).pipe(
@@ -87,7 +87,7 @@ export class BulkEffects {
     // for Update BulkUpload
     @Effect()
     updateBulkUpload$ = this.actions$
-        .ofType(BulkActionTypes.UPDATE_BULK_UPLOAD)
+        .pipe(ofType(BulkActionTypes.UPDATE_BULK_UPLOAD))
         .pipe(
             switchMap((action: bulkActions.UpdateBulkUpload) => {
                 this.bulkService.updateBulkUpload(action.payload.bulkUploadFileInfo);
@@ -99,7 +99,7 @@ export class BulkEffects {
     // for add Bulk Questions
     @Effect()
     addBulkQuestions$ = this.actions$
-        .ofType(BulkActionTypes.ADD_BULK_QUESTIONS)
+        .pipe(ofType(BulkActionTypes.ADD_BULK_QUESTIONS))
         .pipe(
             switchMap((action: bulkActions.AddBulkQuestions) => {
                 this.questionService.saveBulkQuestions(action.payload.bulkUpload);
@@ -109,7 +109,7 @@ export class BulkEffects {
     // for add Bulk Questions
     @Effect()
     archiveUserBulkUpload$ = this.actions$
-        .ofType(BulkActionTypes.ARCHIVE_BULK_UPLOAD)
+        .pipe(ofType(BulkActionTypes.ARCHIVE_BULK_UPLOAD))
         .pipe(
             switchMap((action: bulkActions.ArchiveBulkUpload) =>
                 this.bulkService.archiveBulkUpload(action.payload.archiveArray, action.payload.user).then(ref => {
@@ -120,7 +120,7 @@ export class BulkEffects {
     // for get bulk object based on Id
     @Effect()
     getBulkUpload$ = this.actions$
-        .ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE)
+        .pipe(ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE))
         .pipe(
             switchMap((action: bulkActions.LoadBulkUploadFile) =>
                 this.bulkService.getBulkUploadFile(action.payload.bulkId).pipe(

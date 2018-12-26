@@ -42,7 +42,7 @@ import {
     ImageCropperModule,
 
     HttpClientModule,       // for share counts
-    ShareButtonModule.forRoot()
+    ShareButtonModule
   ],
   exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
     CommonModule, HttpClientModule, ReactiveFormsModule,

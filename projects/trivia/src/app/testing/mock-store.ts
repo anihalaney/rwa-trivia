@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { Observable } from 'rxjs';
-import { BehaviorSubject } from 'rxjs';
+import { Observable ,  BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 export class MockStore<T> extends BehaviorSubject<T> {

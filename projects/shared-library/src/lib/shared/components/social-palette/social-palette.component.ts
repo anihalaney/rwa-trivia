@@ -1,12 +1,10 @@
-import { Component, Input, Output, EventEmitter, OnChanges, ChangeDetectionStrategy } from '@angular/core';
-import { ShareButtons } from '@ngx-share/core';
-import { faPinterest, faTwitterSquare, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+
 
 @Component({
   selector: 'social-palette',
   templateUrl: './social-palette.component.html',
-  styleUrls: ['./social-palette.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./social-palette.component.scss']
 })
 export class SocialPaletteComponent implements OnChanges {
   @Input() blogId: number;
@@ -15,7 +13,7 @@ export class SocialPaletteComponent implements OnChanges {
   @Input() isFromBlog: boolean;
   blogUrl = undefined;
 
-  constructor(public share: ShareButtons) {
+  constructor() {
   }
 
   closeSocial() {
