@@ -4,9 +4,7 @@ import { Action } from '@ngrx/store';
 import { User, GameOptions, Game, PlayerQnA, Question, ReportQuestion } from 'shared-library/shared/model';
 
 export enum GamePlayActionTypes {
-  RESET_NEW = '[GamePlay] ResetNew',
   CREATE_NEW = '[GamePlay] CreateNew',
-  CREATE_NEW_SUCCESS = '[GamePlay] CreateNewSuccess',
   LOAD_GAME = '[GamePlay] LoadGame',
   LOAD_SUCCESS = '[GamePlay] LoadSuccess',
   RESET_CURRENT = '[GamePlay] ResetCurrent',
@@ -24,30 +22,30 @@ export enum GamePlayActionTypes {
   UPDATE_GAME_ROUND = '[GamePlay] UpdateGameRound',
 }
 
-export class ResetNewGame implements Action {
-  readonly type = GamePlayActionTypes.RESET_NEW;
-  payload = null;
-}
+// export class ResetNewGame implements Action {
+//   readonly type = GamePlayActionTypes.RESET_NEW;
+//   payload = null;
+// }
 
 export class CreateNewGame implements Action {
   readonly type = GamePlayActionTypes.CREATE_NEW;
   constructor(public payload: { gameOptions: GameOptions, user: User }) { }
 }
 
-export class CreateNewGameSuccess implements Action {
-  readonly type = GamePlayActionTypes.CREATE_NEW_SUCCESS;
-  constructor(public payload: string) { } //gameId
-}
+// export class CreateNewGameSuccess implements Action {
+//   readonly type = GamePlayActionTypes.CREATE_NEW_SUCCESS;
+//   constructor(public payload: string) { } //gameId
+// }
 
 
 export class LoadGame implements Action {
   readonly type = GamePlayActionTypes.LOAD_GAME;
-  constructor(public payload: string) { } //game
+  constructor(public payload: string) { } // game
 }
 
 export class LoadGameSuccess implements Action {
   readonly type = GamePlayActionTypes.LOAD_SUCCESS;
-  constructor(public payload: Game) { } //game
+  constructor(public payload: Game) { } // game
 }
 
 export class ResetCurrentGame implements Action {
@@ -57,12 +55,12 @@ export class ResetCurrentGame implements Action {
 
 export class GetNextQuestion implements Action {
   readonly type = GamePlayActionTypes.GET_NEXT_QUESTION;
-  constructor(public payload: Game) { } //game - change in type for reducer
+  constructor(public payload: Game) { } // game - change in type for reducer
 }
 
 export class GetNextQuestionSuccess implements Action {
   readonly type = GamePlayActionTypes.GET_NEXT_QUESTION_SUCCESS;
-  constructor(public payload: Question) { } //question
+  constructor(public payload: Question) { } // question
 }
 
 export class AddPlayerQnA implements Action {
@@ -92,7 +90,7 @@ export class UpdateGameSuccess implements Action {
 
 export class GetUsersAnsweredQuestion implements Action {
   readonly type = GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION;
-  constructor(public payload: { userId: string, game: Game }) { } //userId
+  constructor(public payload: { userId: string, game: Game }) { } // userId
 }
 export class GetUsersAnsweredQuestionSuccess implements Action {
   readonly type = GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION_SUCCESS;
@@ -113,9 +111,7 @@ export class UpdateGameRound implements Action {
 }
 
 export type GamePlayActions
-  = ResetNewGame
-  | CreateNewGame
-  | CreateNewGameSuccess
+  = CreateNewGame
   | LoadGameSuccess
   | ResetCurrentGame
   | GetNextQuestion

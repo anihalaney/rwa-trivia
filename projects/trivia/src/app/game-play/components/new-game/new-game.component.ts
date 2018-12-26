@@ -49,12 +49,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
   constructor(private fb: FormBuilder,
     public store: Store<AppState>,
-    private gameActions: GameActions,
+    public gameActions: GameActions,
     private windowRef: WindowRef,
     private router: Router,
     public userActions: UserActions,
     public utils: Utils) {
-    super(store, utils, userActions);
+    super(store, utils, gameActions, userActions);
 
   }
 

@@ -12,6 +12,7 @@ import {
   ApplicationEventData, off as applicationOff, on as applicationOn, resumeEvent
 } from "application";
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
+import { coreState } from '../../../../../shared-library/src/lib/core/store';
 
 @Component({
   selector: 'app-root',
@@ -25,7 +26,7 @@ export class AppComponent implements OnInit {
     private navigationService: NavigationService,
     private ngZone: NgZone,
     private routerExtension: RouterExtensions) {
-    this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });

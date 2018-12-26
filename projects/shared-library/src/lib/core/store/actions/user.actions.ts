@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
-import { User, Game, Friends } from '../../../shared/model';
+import { User, Game, Friends, Invitation } from '../../../shared/model';
 
 @Injectable()
 export class UserActions {
@@ -100,6 +100,22 @@ export class UserActions {
     return {
       type: UserActions.LOAD_USER_FRIENDS_SUCCESS,
       payload: friends
+    };
+  }
+
+  static LOAD_FRIEND_INVITATION_SUCCESS = 'LOAD_FRIEND_INVITATION_SUCCESS';
+  LoadUserInvitationsSuccess(invitation: Invitation[]): ActionWithPayload<Invitation[]> {
+    return {
+      type: UserActions.LOAD_FRIEND_INVITATION_SUCCESS,
+      payload: invitation
+    };
+  }
+
+  static UPDATE_INVITATION = 'UPDATE_INVITATION';
+  UpdateInvitation(invitation: Invitation[]): ActionWithPayload<Invitation[]> {
+    return {
+      type: UserActions.UPDATE_INVITATION,
+      payload: invitation
     };
   }
 

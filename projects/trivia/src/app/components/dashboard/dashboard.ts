@@ -6,7 +6,7 @@ import { QuestionActions, GameActions, UserActions } from 'shared-library/core/s
 import * as gamePlayActions from '../../game-play/store/actions';
 import { User, Game, OpponentType, Invitation } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
-import { AppState, appState} from '../../store';
+import { AppState, appState } from '../../store';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 export class Dashboard {
@@ -94,7 +94,8 @@ export class Dashboard {
         this.gameInviteSliceStartIndex = 0;
         this.gameInviteSliceLastIndex = 3;
 
-        this.subs.push(store.select(appState.userState).pipe(select(s => s.friendInvitations)).subscribe(invitations => {
+        this.subs.push(store.select(appState.coreState).pipe(select(s => s.friendInvitations)).subscribe(invitations => {
+            console.log(invitations);
             if (invitations.length > 0) {
                 this.friendInvitations = invitations;
                 invitations.map(invitation => {

@@ -54,11 +54,11 @@ export function getGameResult(state: any = [], action: UserActions):
 }
 
 // Load User Published Question by userId
-export function friendInvitations(state: any = [], action: UserActions): Invitation[] {
-    switch (action.type) {
-        case UserActionTypes.LOAD_FRIEND_INVITATION_SUCCESS:
-            return action.payload;
-        default:
-            return state;
-    }
-}
+// export function friendInvitations(state: any = [], action: UserActions): Invitation[] {
+//     switch (action.type) {
+//         case UserActionTypes.LOAD_FRIEND_INVITATION_SUCCESS:
+//             return action.payload;
+//         default:
+//             return state;
+//     }
+// }
