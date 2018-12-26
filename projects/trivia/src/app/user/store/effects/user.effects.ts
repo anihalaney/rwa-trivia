@@ -10,7 +10,7 @@ import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
 import { AppState } from '../../../store';
 import { UserActions, coreState } from '../../../../../../shared-library/src/lib/core/store';
-
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class UserEffects {
@@ -29,7 +29,7 @@ export class UserEffects {
     // Load User Published Question by userId from router
     @Effect()
     loadUserPublishedRouteQuestions$ = this.actions$
-        .pipe(ofType('ROUTER_NAVIGATION'))
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -52,7 +52,7 @@ export class UserEffects {
     // Load User UnPublished Question by userId from router
     @Effect()
     loadUserUnpublishedQuestions$ = this.actions$
-        .pipe(ofType('ROUTER_NAVIGATION'))
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -121,7 +121,7 @@ export class UserEffects {
     // Load Friend Invitations
     @Effect()
     loadFriendInvitations$ = this.actions$
-        .pipe(ofType('ROUTER_NAVIGATION'))
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>

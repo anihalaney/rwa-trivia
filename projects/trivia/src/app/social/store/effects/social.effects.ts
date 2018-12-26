@@ -8,7 +8,7 @@ import { SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 import { of } from 'rxjs';
-
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class SocialEffects {
@@ -60,7 +60,7 @@ export class SocialEffects {
     // load blogs
     @Effect()
     getBlogs$ = this.actions$
-        .pipe(ofType('ROUTER_NAVIGATION'))
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>

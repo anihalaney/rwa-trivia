@@ -5,6 +5,7 @@ import { QuestionActions } from '../actions';
 import { QuestionService } from '../../services'
 import { switchMap, map, filter, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class QuestionEffects {
@@ -14,7 +15,7 @@ export class QuestionEffects {
     @Effect()
     // handle location update
     loadRouteQuestionOfDay$ = this.actions$
-        .pipe(ofType('ROUTER_NAVIGATION'))
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
