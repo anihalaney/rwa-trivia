@@ -1,4 +1,4 @@
-import { Inject } from '@angular/core';
+import { Inject, NgZone } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
@@ -36,17 +36,24 @@ export class Dashboard {
     friendInvitations: Invitation[] = [];
     friendInviteSliceStartIndex: number;
     friendInviteSliceLastIndex: number;
+    isUserLoggedIn: boolean;
+    ngZone: NgZone;
 
 
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
         private gameActions: GameActions,
         private userActions: UserActions, private windowRef: WindowRef,
-        @Inject(PLATFORM_ID) private platformId: Object) {
+        @Inject(PLATFORM_ID) private platformId: Object,
+        ngZone: NgZone) {
+        this.ngZone = ngZone;
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.user = user;
+            this.ngZone.run(() => {
+                this.user = user;
+
+            });
             this.store.dispatch(this.gameActions.getActiveGames(user));
             this.store.dispatch(this.userActions.loadGameInvites(user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
