@@ -30,7 +30,7 @@ import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { interval } from 'rxjs';
 import { GameCardComponent } from './components/game-card/game-card.component';
-
+import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +42,8 @@ import { GameCardComponent } from './components/game-card/game-card.component';
     HeaderComponent,
     FooterComponent,
     InvitationRedirectionComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    FriendInviteComponent
   ],
   imports: [
     BrowserModule,

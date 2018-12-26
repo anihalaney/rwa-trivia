@@ -80,7 +80,7 @@ function isUserAuthenticated(userId) {
      match /invitations {
       	match /{document=**} {
       	allow create: if isUserAuthenticated(request.resource.data.created_uid);
-        allow read: if resource.data.email == request.auth.token.email
+        allow read,update: if resource.data.email == request.auth.token.email
       	}           
     }   
     

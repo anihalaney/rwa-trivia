@@ -1,9 +1,12 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { User, Invitation, friendInvitationConstants } from 'shared-library/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 import { Store } from '@ngrx/store';
-import { AppState, appState } from '../../../store';
-import * as userActions from '../../../user/store/actions';
+// import { AppState, appState } from '../../../store';
+// import * as userActions from '../../../user/store/actions';
+import { AppState, appState } from '../../store';
+import { UserActions } from 'shared-library/core/store/actions';
+
 
 @Component({
   selector: 'app-friend-invite',
@@ -13,9 +16,10 @@ import * as userActions from '../../../user/store/actions';
 export class FriendInviteComponent implements OnInit {
   @Input() userDict: { [key: string]: User } = {};
   @Input() invitation: Invitation;
+  invitations: Invitation[];
   @Input() user: User;
 
-  constructor(private store: Store<AppState>, private utils: Utils) {
+  constructor(private store: Store<AppState>, private utils: Utils, private userActions: UserActions) {
   }
 
   ngOnInit() {
@@ -26,13 +30,12 @@ export class FriendInviteComponent implements OnInit {
   }
 
   acceptFriendInvitation(): void {
-    this.store.dispatch(new userActions.MakeFriend({ token: this.invitation.id, email: this.user.email, userId: this.user.userId }));
+    this.store.dispatch(this.userActions.makeFriend({ token: this.invitation.id, email: this.user.email, userId: this.user.userId }));
   }
 
   rejectFriendInvitation(): void {
     this.invitation.status = friendInvitationConstants.REJECTED;
-    this.store.dispatch(new userActions.UpdateInvitation(this.invitation));
+    this.store.dispatch(this.userActions.updateInvitation(this.invitation));
   }
-
 
 }

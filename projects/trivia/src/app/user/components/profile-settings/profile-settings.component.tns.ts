@@ -13,6 +13,8 @@ import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
 import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
+import { coreState, UserActions } from 'shared-library/core/store';
+
 
 @Component({
   selector: 'profile-settings',
@@ -43,12 +45,13 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
+    public userAction: UserActions,
     public utils: Utils) {
 
-    super(fb, store, utils);
+    super(fb, store, userAction, utils);
     this.initDataItems();
 
-    this.subs.push(this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         Toast.makeText('Profile is saved successfully').show();
         this.toggleLoader(false);

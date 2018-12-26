@@ -61,18 +61,34 @@ export function gameInvites(state: any = [], action: ActionWithPayload<Game[]>):
 // Load User Published Question by userId
 export function userFriends(state: any = null, action: ActionWithPayload<Friends>): Friends {
   switch (action.type) {
-      case UserActions.LOAD_USER_FRIENDS_SUCCESS:
-          return action.payload;
-      default:
-          return state;
+    case UserActions.LOAD_USER_FRIENDS_SUCCESS:
+      return action.payload;
+    default:
+      return state;
   }
 }
 
 export function friendInvitations(state: any = [], action: ActionWithPayload<Invitation[]>): Invitation[] {
   switch (action.type) {
-      case UserActions.LOAD_FRIEND_INVITATION_SUCCESS:
-          return action.payload;
-      default:
-          return state;
+    case UserActions.LOAD_FRIEND_INVITATION_SUCCESS:
+      return action.payload;
+    default:
+      return state;
   }
 }
+
+  // user Profile Status
+  export function userProfileSaveStatus(state: any = 'NONE', action: ActionWithPayload<String>): String {
+    switch (action.type) {
+      case UserActions.ADD_USER_PROFILE:
+        return 'IN PROCESS';
+      case UserActions.ADD_USER_PROFILE_SUCCESS:
+        return 'SUCCESS';
+      case UserActions.ADD_USER_INVITATION_SUCCESS:
+        return action.payload;
+      case UserActions.MAKE_FRIEND_SUCCESS:
+        return 'MAKE FRIEND SUCCESS';
+      default:
+        return null;
+    }
+  }

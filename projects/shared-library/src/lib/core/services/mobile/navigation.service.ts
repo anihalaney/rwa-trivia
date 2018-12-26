@@ -16,7 +16,6 @@ export class NavigationService {
   }
 
   back() {
-    console.log(this.router.url);
     if (this.router.url === "/my/invite-friends" ||
       this.router.url === "/my/questions" ||
       this.router.url === "/my/recent-game" ||

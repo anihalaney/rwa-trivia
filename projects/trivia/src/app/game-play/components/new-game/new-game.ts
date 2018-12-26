@@ -5,8 +5,7 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
-import * as useractions from 'shared-library/core/store/actions';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
 import { Category, GameOptions, User, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
@@ -65,7 +64,7 @@ export class NewGame {
         this.noFriendsStatus = true;
       }
     }));
-    this.store.dispatch(this.gameActions.ResetNewGame());
+    this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
 
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));

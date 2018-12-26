@@ -6,6 +6,7 @@ import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../../../store';
 import * as userActions from '../../../../../user/store/actions';
 import { userState } from '../../../../../user/store';
+import { coreState, UserActions } from 'shared-library/core/store';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -24,7 +25,7 @@ export class InviteMailFriendsComponent implements OnInit {
   validEmail = [];
   emailCheck: Boolean = false;
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>) {
+  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions) {
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
@@ -32,7 +33,7 @@ export class InviteMailFriendsComponent implements OnInit {
       }
     });
 
-    this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.showSuccessMsg = status;
       }
@@ -91,7 +92,7 @@ export class InviteMailFriendsComponent implements OnInit {
 
       }
       if (this.invalidEmailList.length === 0) {
-        this.store.dispatch(new userActions.AddUserInvitation(
+        this.store.dispatch( this.userAction.addUserInvitation(
           { userId: this.user.userId, emails: this.validEmail }));
       }
     }

@@ -20,7 +20,7 @@ export class GamePlayEffects {
     .pipe(
       switchMap((action: gameplayactions.CreateNewGame) =>
         this.svc.createNewGame(action.payload.gameOptions, action.payload.user).pipe(
-          map((gameId: string) => this.gameActions.CreateNewGameSuccess(gameId))
+          map((gameId: string) => this.gameActions.createNewGameSuccess(gameId))
           // catchError(error => new)
         )
       )

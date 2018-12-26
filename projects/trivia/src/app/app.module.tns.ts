@@ -20,8 +20,9 @@ import { CardView } from 'nativescript-cardview';
 import { StatsModule } from './stats/stats.module';
 import { RouterModule } from '@angular/router';
 import { UserModule } from './user/user.module';
-import { GameInviteComponent} from './user/components';
+import { GameInviteComponent } from './user/components';
 import { GameCardComponent } from './components/game-card/game-card.component';
+import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -36,7 +37,8 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     QuestionComponent,
     DashboardComponent,
     GameInviteComponent,
-    GameCardComponent
+    GameCardComponent,
+    FriendInviteComponent,
   ],
   imports: [
     CoreModule,
