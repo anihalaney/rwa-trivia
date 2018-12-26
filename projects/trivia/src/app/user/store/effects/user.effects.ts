@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { switchMap, map, filter, take, mergeMap } from 'rxjs/operators';
 import { empty } from 'rxjs';
@@ -17,7 +17,7 @@ export class UserEffects {
     // Save user profile
     @Effect()
     addUser$ = this.actions$
-        .ofType(UserActionTypes.ADD_USER_PROFILE)
+        .pipe(ofType(UserActionTypes.ADD_USER_PROFILE))
         .pipe(
             switchMap((action: userActions.AddUserProfile) => {
                 return this.userService.saveUserProfile(action.payload.user).pipe(
@@ -29,7 +29,7 @@ export class UserEffects {
     // Load User Published Question by userId from router
     @Effect()
     loadUserPublishedRouteQuestions$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
+        .pipe(ofType('ROUTER_NAVIGATION'))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -52,7 +52,7 @@ export class UserEffects {
     // Load User UnPublished Question by userId from router
     @Effect()
     loadUserUnpublishedQuestions$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
+        .pipe(ofType('ROUTER_NAVIGATION'))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -76,7 +76,7 @@ export class UserEffects {
     // Add Question
     @Effect()
     addQuestion$ = this.actions$
-        .ofType(UserActionTypes.ADD_QUESTION)
+        .pipe(ofType(UserActionTypes.ADD_QUESTION))
         .pipe(
             switchMap((action: userActions.AddQuestion) => {
                 this.questionService.saveQuestion(action.payload.question);
@@ -87,7 +87,7 @@ export class UserEffects {
     // Save user profile
     @Effect()
     saveInvitation$ = this.actions$
-        .ofType(UserActionTypes.ADD_USER_INVITATION)
+        .pipe(ofType(UserActionTypes.ADD_USER_INVITATION))
         .pipe(
             switchMap((action: userActions.AddUserInvitation) =>
                 this.userService.saveUserInvitations(action.payload).pipe(
@@ -99,7 +99,7 @@ export class UserEffects {
     // Make friend
     @Effect()
     makeFriend$ = this.actions$
-        .ofType(UserActionTypes.MAKE_FRIEND)
+        .pipe(ofType(UserActionTypes.MAKE_FRIEND))
         .pipe(
             switchMap((action: userActions.MakeFriend) =>
                 this.userService.checkInvitationToken(action.payload).pipe(
@@ -110,7 +110,7 @@ export class UserEffects {
     // Get Game list
     @Effect()
     getGameResult$ = this.actions$
-        .ofType(UserActionTypes.GET_GAME_RESULT)
+        .pipe(ofType(UserActionTypes.GET_GAME_RESULT))
         .pipe(
             switchMap((action: userActions.GetGameResult) =>
                 this.gameService.getGameResult(action.payload)
@@ -121,7 +121,7 @@ export class UserEffects {
     // Load Friend Invitations
     @Effect()
     loadFriendInvitations$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
+        .pipe(ofType('ROUTER_NAVIGATION'))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -144,7 +144,7 @@ export class UserEffects {
     // Update Invitation
     @Effect()
     UpdateInvitation$ = this.actions$
-        .ofType(UserActionTypes.UPDATE_INVITATION)
+        .pipe(ofType(UserActionTypes.UPDATE_INVITATION))
         .pipe(
             switchMap((action: userActions.UpdateInvitation) => {
                 this.userService.setInvitation(action.payload);

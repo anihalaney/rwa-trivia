@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map, filter } from 'rxjs/operators';
 import { empty } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class AdminEffects {
     @Effect()
     // handle location update
     loadRouteQuestions$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
+        .pipe(ofType('ROUTER_NAVIGATION'))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -33,7 +33,7 @@ export class AdminEffects {
     @Effect()
     // handle location update
     loadUnpublishedRouteQuestions$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
+        .pipe(ofType('ROUTER_NAVIGATION'))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -53,7 +53,7 @@ export class AdminEffects {
     // Load Question As per Search critearea
     @Effect()
     loadQuestions$ = this.actions$
-        .ofType(AdminActionTypes.LOAD_QUESTIONS)
+        .pipe(ofType(AdminActionTypes.LOAD_QUESTIONS))
         .pipe(
             switchMap((action: adminActions.LoadQuestions) =>
                 this.svc.getQuestions(action.payload.startRow, action.payload.pageSize, action.payload.criteria).pipe(
@@ -65,7 +65,7 @@ export class AdminEffects {
     // Load All Unpublished Question
     @Effect()
     loadUnpublishedQuestions$ = this.actions$
-        .ofType(AdminActionTypes.LOAD_UNPUBLISHED_QUESTIONS)
+        .pipe(ofType(AdminActionTypes.LOAD_UNPUBLISHED_QUESTIONS))
         .pipe(
             switchMap((action: adminActions.LoadUnpublishedQuestions) =>
                 this.svc.getUnpublishedQuestions(action.payload.question_flag, action.payload.filteredStatus).pipe(
@@ -77,7 +77,7 @@ export class AdminEffects {
     // Approve Question
     @Effect()
     approveQuestion$ = this.actions$
-        .ofType(AdminActionTypes.APPROVE_QUESTION)
+        .pipe(ofType(AdminActionTypes.APPROVE_QUESTION))
         .pipe(
             switchMap((action: adminActions.ApproveQuestion) => {
                 this.svc.approveQuestion(action.payload.question);

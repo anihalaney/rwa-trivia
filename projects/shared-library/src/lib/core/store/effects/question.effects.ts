@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Question, RouterStateUrl } from '../../../shared/model';
 import { QuestionActions } from '../actions';
 import { QuestionService } from '../../services'
@@ -14,7 +14,7 @@ export class QuestionEffects {
     @Effect()
     // handle location update
     loadRouteQuestionOfDay$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
+        .pipe(ofType('ROUTER_NAVIGATION'))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
@@ -29,7 +29,7 @@ export class QuestionEffects {
     @Effect()
     // handle location update
     loadNextQuestionOfDay$ = this.actions$
-        .ofType(QuestionActions.GET_QUESTION_OF_THE_DAY)
+        .pipe(ofType(QuestionActions.GET_QUESTION_OF_THE_DAY))
         .pipe(
             switchMap((action) =>
                 this.svc.getQuestionOfTheDay(true)
