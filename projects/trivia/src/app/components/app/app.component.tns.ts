@@ -22,6 +22,7 @@ import { coreState } from '../../../../../shared-library/src/lib/core/store';
 export class AppComponent implements OnInit {
 
   sub3: Subscription;
+  sub4: Subscription;
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -30,6 +31,13 @@ export class AppComponent implements OnInit {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
+
+    this.sub4 = this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+      if (status === 'MAKE FRIEND SUCCESS') {
+        this.routerExtension.navigate(['my/invite-friends']);
+      }
+    });
+
     this.handleBackPress();
   }
   ngOnInit() {

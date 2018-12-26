@@ -15,16 +15,16 @@ import { UserActions, coreState } from '../../../../../../shared-library/src/lib
 @Injectable()
 export class UserEffects {
     // Save user profile
-    @Effect()
-    addUser$ = this.actions$
-        .ofType(UserActionTypes.ADD_USER_PROFILE)
-        .pipe(
-            switchMap((action: userActions.AddUserProfile) => {
-                return this.userService.saveUserProfile(action.payload.user).pipe(
-                    map((status: any) => new userActions.AddUserProfileSuccess())
-                )
-            })
-        );
+    // @Effect()
+    // addUser$ = this.actions$
+    //     .ofType(UserActionTypes.ADD_USER_PROFILE)
+    //     .pipe(
+    //         switchMap((action: userActions.AddUserProfile) => {
+    //             return this.userService.saveUserProfile(action.payload.user).pipe(
+    //                 map((status: any) => new userActions.AddUserProfileSuccess())
+    //             )
+    //         })
+    //     );
 
     // Load User Published Question by userId from router
     @Effect()
@@ -85,27 +85,27 @@ export class UserEffects {
         );
 
     // Save user profile
-    @Effect()
-    saveInvitation$ = this.actions$
-        .ofType(UserActionTypes.ADD_USER_INVITATION)
-        .pipe(
-            switchMap((action: userActions.AddUserInvitation) =>
-                this.userService.saveUserInvitations(action.payload).pipe(
-                    map((statusMessages: any) => new userActions.AddUserInvitationSuccess(statusMessages['messages']))
-                )
-            )
-        );
+    // @Effect()
+    // saveInvitation$ = this.actions$
+    //     .ofType(UserActionTypes.ADD_USER_INVITATION)
+    //     .pipe(
+    //         switchMap((action: userActions.AddUserInvitation) =>
+    //             this.userService.saveUserInvitations(action.payload).pipe(
+    //                 map((statusMessages: any) => new userActions.AddUserInvitationSuccess(statusMessages['messages']))
+    //             )
+    //         )
+    //     );
 
     // Make friend
-    @Effect()
-    makeFriend$ = this.actions$
-        .ofType(UserActionTypes.MAKE_FRIEND)
-        .pipe(
-            switchMap((action: userActions.MakeFriend) =>
-                this.userService.checkInvitationToken(action.payload).pipe(
-                    map((friend: any) => this.userAction.storeInvitationToken('NONE'))
-                ).pipe(map(() => new userActions.MakeFriendSuccess()))
-            ));
+    // @Effect()
+    // makeFriend$ = this.actions$
+    //     .ofType(UserActionTypes.MAKE_FRIEND)
+    //     .pipe(
+    //         switchMap((action: userActions.MakeFriend) =>
+    //             this.userService.checkInvitationToken(action.payload).pipe(
+    //                 map((friend: any) => this.userAction.storeInvitationToken('NONE'))
+    //             ).pipe(map(() => new userActions.MakeFriendSuccess()))
+    //         ));
 
     // Get Game list
     @Effect()
@@ -142,16 +142,16 @@ export class UserEffects {
     //     );
 
     // Update Invitation
-    @Effect()
-    UpdateInvitation$ = this.actions$
-        .ofType(UserActionTypes.UPDATE_INVITATION)
-        .pipe(
-            switchMap((action: userActions.UpdateInvitation) => {
-                this.userService.setInvitation(action.payload);
-                return empty();
-            }
-            )
-        );
+    // @Effect()
+    // UpdateInvitation$ = this.actions$
+    //     .ofType(UserActionTypes.UPDATE_INVITATION)
+    //     .pipe(
+    //         switchMap((action: userActions.UpdateInvitation) => {
+    //             this.userService.setInvitation(action.payload);
+    //             return empty();
+    //         }
+    //         )
+    //     );
 
 
     constructor(

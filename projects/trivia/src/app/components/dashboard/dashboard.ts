@@ -95,7 +95,6 @@ export class Dashboard {
         this.gameInviteSliceLastIndex = 3;
 
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.friendInvitations)).subscribe(invitations => {
-            console.log(invitations);
             if (invitations.length > 0) {
                 this.friendInvitations = invitations;
                 invitations.map(invitation => {

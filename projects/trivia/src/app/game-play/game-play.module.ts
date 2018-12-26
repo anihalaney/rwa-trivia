@@ -11,6 +11,7 @@ import {
 } from './components';
 import { effects, reducer } from './store';
 
+
 @NgModule({
   declarations: [
     NewGameComponent,

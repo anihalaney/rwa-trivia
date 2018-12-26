@@ -6,20 +6,20 @@ import { UserActions, UserActionTypes } from '../actions';
 
 
 // user Profile Status
-export function userProfileSaveStatus(state: any = 'NONE', action: UserActions): String {
-    switch (action.type) {
-        case UserActionTypes.ADD_USER_PROFILE:
-            return 'IN PROCESS';
-        case UserActionTypes.ADD_USER_PROFILE_SUCCESS:
-            return 'SUCCESS';
-        case UserActionTypes.ADD_USER_INVITATION_SUCCESS:
-            return action.payload;
-        case UserActionTypes.MAKE_FRIEND_SUCCESS:
-            return 'MAKE FRIEND SUCCESS';
-        default:
-            return null;
-    }
-}
+// export function userProfileSaveStatus(state: any = 'NONE', action: UserActions): String {
+//     switch (action.type) {
+//         case UserActionTypes.ADD_USER_PROFILE:
+//             return 'IN PROCESS';
+//         case UserActionTypes.ADD_USER_PROFILE_SUCCESS:
+//             return 'SUCCESS';
+//         case UserActionTypes.ADD_USER_INVITATION_SUCCESS:
+//             return action.payload;
+//         case UserActionTypes.MAKE_FRIEND_SUCCESS:
+//             return 'MAKE FRIEND SUCCESS';
+//         default:
+//             return null;
+//     }
+// }
 
 
 // Load User Published Question by userId

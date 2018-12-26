@@ -83,22 +83,55 @@ export class UserEffects {
         .pipe(
             switchMap((email: string) => {
                 return this.svc.loadFriendInvitations(email).pipe(map((invitations: Invitation[]) =>
-                    this.userActions.LoadUserInvitationsSuccess(invitations)
+                    this.userActions.loadUserInvitationsSuccess(invitations)
                 ));
             })
         );
 
     // Update Invitation
-    // @Effect()
-    // UpdateInvitation$ = this.actions$
-    //     .ofType(UserActions.UPDATE_INVITATION)
-    //     .pipe(
-    //         switchMap((action: ActionWithPayload<Invitation>) => {
-    //             this.svc.setInvitation(action.payload);
-    //             return empty();
-    //         }
-    //         )
-    //     );
+    @Effect()
+    UpdateInvitation$ = this.actions$
+        .ofType(UserActions.UPDATE_INVITATION)
+        .pipe(
+            switchMap((action: ActionWithPayload<Invitation>) => {
+                this.svc.setInvitation(action.payload);
+                return empty();
+            }
+            )
+        );
+
+    @Effect()
+    makeFriend$ = this.actions$
+        .ofType(UserActions.MAKE_FRIEND)
+        .pipe(
+            switchMap((action: ActionWithPayload<string>) =>
+                this.svc.checkInvitationToken(action.payload).pipe(
+                    map((friend: any) => this.userActions.storeInvitationToken('NONE'))
+                ).pipe(map(() => this.userActions.makeFriendSuccess()))
+            ));
+
+    @Effect()
+    saveInvitation$ = this.actions$
+        .ofType(UserActions.ADD_USER_INVITATION)
+        .pipe(
+            switchMap((action: ActionWithPayload<string>) =>
+                this.svc.saveUserInvitations(action.payload).pipe(
+                    map((statusMessages: any) => this.userActions.addUserInvitationSuccess(statusMessages['messages']))
+                )
+            )
+        );
+
+    // Save user profile
+    @Effect()
+    addUser$ = this.actions$
+        .ofType(UserActions.ADD_USER_PROFILE)
+        .pipe(
+            switchMap((action: ActionWithPayload<User>) => {
+                return this.svc.saveUserProfile(action.payload).pipe(
+                    map((status: any) =>  this.userActions.addUserProfileSuccess())
+                );
+            })
+        );
 
     constructor(
         private actions$: Actions,

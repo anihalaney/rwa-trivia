@@ -17,6 +17,7 @@ import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
 import { Friends } from '../../../../../../shared-library/src/lib/shared/model';
 import { Router } from '@angular/router';
+import { coreState } from 'shared-library/core/store';
 
 @Component({
   selector: 'new-game',
@@ -45,14 +46,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public utils: Utils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
-    private router: Router ) {
-    super(store, utils, userActions);
+    private router: Router) {
+    super(store, utils, gameActions, userActions);
     this.initDataItems();
   }
 
   ngOnInit() {
 
-    this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       console.log('master called');
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());

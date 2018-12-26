@@ -23,7 +23,7 @@ export class GameActions {
   }
 
   static CREATE_NEW_SUCCESS = 'CREATE_NEW_SUCCESS';
-  CreateNewGameSuccess(gameId): ActionWithPayload<string> {
+  createNewGameSuccess(gameId): ActionWithPayload<string> {
     return {
       type: GameActions.CREATE_NEW_SUCCESS,
       payload: gameId
@@ -31,7 +31,7 @@ export class GameActions {
   }
 
   static RESET_NEW = 'RESET_NEW';
-  ResetNewGame(): ActionWithPayload<string> {
+  resetNewGame(): ActionWithPayload<string> {
     return {
       type: GameActions.RESET_NEW,
       payload: null
