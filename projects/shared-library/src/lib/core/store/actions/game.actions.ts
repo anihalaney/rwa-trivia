@@ -21,4 +21,20 @@ export class GameActions {
       payload: games
     };
   }
+
+  static CREATE_NEW_SUCCESS = 'CREATE_NEW_SUCCESS';
+  CreateNewGameSuccess(gameId): ActionWithPayload<string> {
+    return {
+      type: GameActions.CREATE_NEW_SUCCESS,
+      payload: gameId
+    };
+  }
+
+  static RESET_NEW = 'RESET_NEW';
+  ResetNewGame(): ActionWithPayload<string> {
+    return {
+      type: GameActions.RESET_NEW,
+      payload: null
+    };
+  }
 }

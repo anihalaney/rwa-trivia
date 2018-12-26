@@ -28,16 +28,16 @@ export function currentGameQuestion(state: any = null, action: GamePlayActions):
   }
 }
 
-export function newGameId(state: any = "", action: GamePlayActions): string {
-  switch (action.type) {
-    case GamePlayActionTypes.CREATE_NEW_SUCCESS:
-      return action.payload;
-    case GamePlayActionTypes.RESET_NEW:
-      return "";
-    default:
-      return state;
-  }
-};
+// export function newGameId(state: any = "", action: GamePlayActions): string {
+//   switch (action.type) {
+//     case GamePlayActionTypes.CREATE_NEW_SUCCESS:
+//       return action.payload;
+//     case GamePlayActionTypes.RESET_NEW:
+//       return "";
+//     default:
+//       return state;
+//   }
+// }
 
 export function updateGame(state: any = null, action: GamePlayActions): Game {
   switch (action.type) {

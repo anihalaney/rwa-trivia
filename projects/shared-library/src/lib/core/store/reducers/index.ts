@@ -1,11 +1,11 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
-import { User, Category, Question, Game, Friends} from 'shared-library/shared/model';
-import { user, authInitialized, invitationToken, userDict, gameInvites , userFriends } from './user.reducer';
+import { User, Category, Question, Game, Friends, Invitation} from 'shared-library/shared/model';
+import { user, authInitialized, invitationToken, userDict, gameInvites , userFriends, friendInvitations} from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
-import { activeGames } from './game.reducer';
+import { activeGames, newGameId } from './game.reducer';
 
 export * from './user.reducer';
 export * from './categories.reducer';
@@ -29,6 +29,8 @@ export interface CoreState {
   resetPasswordLogs: string[];
   gameInvites: Game[];
   userFriends: Friends;
+  friendInvitations: Invitation[];
+  newGameId: string;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -44,7 +46,9 @@ export const reducer: ActionReducerMap<CoreState> = {
   invitationToken: invitationToken,
   resetPasswordLogs: resetPasswordLogs,
   gameInvites: gameInvites,
-  userFriends: userFriends
+  userFriends: userFriends,
+  friendInvitations: friendInvitations,
+  newGameId: newGameId,
 };
 
 // Features

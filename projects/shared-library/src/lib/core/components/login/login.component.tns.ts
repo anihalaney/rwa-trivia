@@ -119,6 +119,7 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   googleLogin() {
+    this.loader.show();
     this.firebaseAuthService.googleLogin().then(
       (result) => {
         this.redirectTo();
@@ -131,6 +132,7 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   fbLogin() {
+    this.loader.show();
     this.firebaseAuthService.facebookLogin().then(
       (result) => {
         this.redirectTo();
