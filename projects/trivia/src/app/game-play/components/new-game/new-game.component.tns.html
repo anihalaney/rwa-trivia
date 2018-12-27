@@ -101,7 +101,7 @@
                             </RadListView>
                             <Label *ngIf="noFriendsStatus" margin="15" text="I do not have any friends, invite your friends using link"
                                 textWrap="true"></Label>
-                            <button text="Invite Friends" color="#FFFFFF" backgroundColor="#71b02f" (tap)="navigateToInvite()"></button>
+                            <button *ngIf="noFriendsStatus" text="Invite Friends" color="#FFFFFF" backgroundColor="#71b02f" (tap)="navigateToInvite()"></button>
                         </StackLayout>
                     </GridLayout>
                 </StackLayout>
