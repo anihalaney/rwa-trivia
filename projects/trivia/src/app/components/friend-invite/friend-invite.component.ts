@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { User, Invitation, friendInvitationConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { Store } from '@ngrx/store';
@@ -19,7 +19,10 @@ export class FriendInviteComponent implements OnInit {
   invitations: Invitation[];
   @Input() user: User;
 
-  constructor(private store: Store<AppState>, private utils: Utils, private userActions: UserActions) {
+  constructor(private store: Store<AppState>,
+    private utils: Utils,
+    private userActions: UserActions,
+    private cd: ChangeDetectorRef) {
   }
 
   ngOnInit() {
@@ -36,6 +39,7 @@ export class FriendInviteComponent implements OnInit {
   rejectFriendInvitation(): void {
     this.invitation.status = friendInvitationConstants.REJECTED;
     this.store.dispatch(this.userActions.updateInvitation(this.invitation));
+    this.cd.detectChanges();
   }
 
 }

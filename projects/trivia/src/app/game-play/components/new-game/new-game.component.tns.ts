@@ -159,5 +159,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.listViewComponent.listView.refresh();
   }
 
+  navigateToInvite() {
+    this.router.navigate(['/my/app-invite-friends-dialog']);
+  }
+
 }
 
