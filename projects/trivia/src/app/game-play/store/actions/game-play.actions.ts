@@ -22,21 +22,10 @@ export enum GamePlayActionTypes {
   UPDATE_GAME_ROUND = '[GamePlay] UpdateGameRound',
 }
 
-// export class ResetNewGame implements Action {
-//   readonly type = GamePlayActionTypes.RESET_NEW;
-//   payload = null;
-// }
-
 export class CreateNewGame implements Action {
   readonly type = GamePlayActionTypes.CREATE_NEW;
   constructor(public payload: { gameOptions: GameOptions, user: User }) { }
 }
-
-// export class CreateNewGameSuccess implements Action {
-//   readonly type = GamePlayActionTypes.CREATE_NEW_SUCCESS;
-//   constructor(public payload: string) { } //gameId
-// }
-
 
 export class LoadGame implements Action {
   readonly type = GamePlayActionTypes.LOAD_GAME;
