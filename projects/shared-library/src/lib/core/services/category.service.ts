@@ -12,7 +12,7 @@ export class CategoryService {
   }
 
   getCategories(): Observable<Category[]> {
-    console.log('getCategories--->', 'getCategories');
+   // console.log('getCategories--->', 'getCategories');
     return this.dbService.valueChanges('categories').pipe(take(1));
   }
 }
