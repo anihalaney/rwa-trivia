@@ -37,10 +37,6 @@
             "package_name": "io.bitwiser.trivia",
             "certificate_hash": "ee0906e1527dc87c442f4f07ef560f2b9dffbf9f"
           }
-        },
-        {
-          "client_id": "479350787602-0qm0o71n2u6iq19hrh50cmsrtsoi2v75.apps.googleusercontent.com",
-          "client_type": 3
         }
       ],
       "api_key": [
