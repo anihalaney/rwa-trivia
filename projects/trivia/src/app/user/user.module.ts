@@ -16,7 +16,6 @@ import {
   MyQuestionsComponent,
   QuestionAddUpdateComponent,
   RecentGameCardComponent,
-  FriendInviteComponent
 } from './components';
 import { InviteFriendsComponent } from './components/invite-friends/invite-friends.component';
 import { InviteFriendsDialogComponent } from './components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
@@ -38,7 +37,6 @@ import {
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
     RecentGameCardComponent,
-    FriendInviteComponent,
     InviteFriendsDialogComponent
   ],
   imports: [
@@ -65,7 +63,6 @@ import {
     InviteFriendsComponent,
     InviteMailFriendsComponent,
     RecentGameCardComponent,
-    FriendInviteComponent,
     InviteFriendsDialogComponent
   ],
   entryComponents: [

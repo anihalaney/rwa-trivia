@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Page } from 'tns-core-modules/ui/page';
+import {LoadingIndicator} from "nativescript-loading-indicator";
+
 
 @Component({
   selector: 'login',
@@ -17,6 +19,7 @@ import { Page } from 'tns-core-modules/ui/page';
 export class LoginComponent extends Login implements OnInit {
 
   title: string;
+  loader = new LoadingIndicator();
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
@@ -56,7 +59,7 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   onSubmit() {
-
+    this.loader.show();
     if (!this.loginForm.valid) {
       return;
     }
@@ -71,6 +74,7 @@ export class LoginComponent extends Login implements OnInit {
           // Success
           this.redirectTo();
         }).catch((error) => {
+          this.loader.hide();
           Toast.makeText(error.message).show();
         });
         break;
@@ -87,10 +91,12 @@ export class LoginComponent extends Login implements OnInit {
                 this.redirectTo();
               }
             ).catch((error) => {
+              this.loader.hide();
               Toast.makeText(error.message).show();
             });
           }
         }).catch((error) => {
+          this.loader.hide();
           Toast.makeText(error.message).show();
         });
         break;
@@ -100,10 +106,12 @@ export class LoginComponent extends Login implements OnInit {
           .then((a: any) => {
             this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
             Toast.makeText(this.notificationMsg).show();
+            this.loader.hide();
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
           }).catch((error) => {
+            this.loader.hide();
             Toast.makeText(error.message).show();
           });
     }
@@ -111,22 +119,26 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   googleLogin() {
+    this.loader.show();
     this.firebaseAuthService.googleLogin().then(
       (result) => {
         this.redirectTo();
       }
     ).catch((error) => {
+      this.loader.hide();
       Toast.makeText(error).show();
     });
 
   }
 
   fbLogin() {
+    this.loader.show();
     this.firebaseAuthService.facebookLogin().then(
       (result) => {
         this.redirectTo();
       }
     ).catch((error) => {
+      this.loader.hide();
       Toast.makeText(error).show();
     });
   }
@@ -136,6 +148,7 @@ export class LoginComponent extends Login implements OnInit {
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe(() => {
+        this.loader.hide();
         this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';

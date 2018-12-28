@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, NgZone } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -17,13 +17,15 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     gameActions: GameActions,
     userActions: UserActions, windowRef: WindowRef,
     @Inject(PLATFORM_ID) platformId: Object,
-    private utils: Utils) {
-
+    ngZone: NgZone,
+    private utils: Utils,
+    ) {
     super(store,
       questionActions,
       gameActions,
       userActions, windowRef,
-      platformId);
+      platformId,
+      ngZone);
   }
 
 

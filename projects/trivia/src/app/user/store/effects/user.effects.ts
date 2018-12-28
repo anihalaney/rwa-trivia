@@ -3,7 +3,6 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { switchMap, map, filter, take, mergeMap } from 'rxjs/operators';
 import { empty } from 'rxjs';
-
 import { UserService, QuestionService, GameService } from '../../../../../../shared-library/src/lib/core/services';
 import { Question, RouterStateUrl, Friends, Game, Invitation } from '../../../../../../shared-library/src/lib/shared/model';
 import { UserActionTypes } from '../actions';
@@ -14,17 +13,6 @@ import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class UserEffects {
-    // Save user profile
-    @Effect()
-    addUser$ = this.actions$
-        .pipe(ofType(UserActionTypes.ADD_USER_PROFILE))
-        .pipe(
-            switchMap((action: userActions.AddUserProfile) => {
-                return this.userService.saveUserProfile(action.payload.user).pipe(
-                    map((status: any) => new userActions.AddUserProfileSuccess())
-                )
-            })
-        );
 
     // Load User Published Question by userId from router
     @Effect()
@@ -84,28 +72,7 @@ export class UserEffects {
             })
         );
 
-    // Save user profile
-    @Effect()
-    saveInvitation$ = this.actions$
-        .pipe(ofType(UserActionTypes.ADD_USER_INVITATION))
-        .pipe(
-            switchMap((action: userActions.AddUserInvitation) =>
-                this.userService.saveUserInvitations(action.payload).pipe(
-                    map((statusMessages: any) => new userActions.AddUserInvitationSuccess(statusMessages['messages']))
-                )
-            )
-        );
 
-    // Make friend
-    @Effect()
-    makeFriend$ = this.actions$
-        .pipe(ofType(UserActionTypes.MAKE_FRIEND))
-        .pipe(
-            switchMap((action: userActions.MakeFriend) =>
-                this.userService.checkInvitationToken(action.payload).pipe(
-                    map((friend: any) => this.userAction.storeInvitationToken('NONE'))
-                ).pipe(map(() => new userActions.MakeFriendSuccess()))
-            ));
 
     // Get Game list
     @Effect()
@@ -115,41 +82,6 @@ export class UserEffects {
             switchMap((action: userActions.GetGameResult) =>
                 this.gameService.getGameResult(action.payload)
                     .pipe(map((games: Game[]) => new userActions.GetGameResultSuccess(games)))
-            )
-        );
-
-    // Load Friend Invitations
-    @Effect()
-    loadFriendInvitations$ = this.actions$
-        .pipe(ofType(ROUTER_NAVIGATION))
-        .pipe(
-            map((action: any): RouterStateUrl => action.payload.routerState),
-            filter((routerState: RouterStateUrl) =>
-                routerState.url.toLowerCase().startsWith('/dashboard')),
-            mergeMap((routerState: RouterStateUrl) =>
-                this.store.select(coreState).pipe(
-                    map(s => s.user),
-                    filter(u => !!u),
-                    take(1),
-                    map(user => user.email))
-            ))
-        .pipe(
-            switchMap((email: string) => {
-                return this.userService.loadFriendInvitations(email).pipe(map((invitations: Invitation[]) =>
-                    new userActions.LoadUserInvitationsSuccess(invitations)
-                ));
-            })
-        );
-
-    // Update Invitation
-    @Effect()
-    UpdateInvitation$ = this.actions$
-        .pipe(ofType(UserActionTypes.UPDATE_INVITATION))
-        .pipe(
-            switchMap((action: userActions.UpdateInvitation) => {
-                this.userService.setInvitation(action.payload);
-                return empty();
-            }
             )
         );
 

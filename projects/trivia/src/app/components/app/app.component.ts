@@ -8,10 +8,9 @@ import { User } from 'shared-library/shared/model';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
-import { userState } from '../../user/store';
 import * as gamePlayActions from '../../game-play/store/actions';
-import * as userActions from '../../user/store/actions';
-
+import { UserActions } from 'shared-library/core/store/actions';
+import { coreState } from 'shared-library/core/store';
 
 @Component({
   selector: 'app-root',
@@ -34,6 +33,7 @@ export class AppComponent implements OnInit, OnDestroy {
     public router: Router,
     public snackBar: MatSnackBar,
     private windowRef: WindowRef,
+    private userAction: UserActions,
     private utils: Utils) {
 
     this.sub2 = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy {
         let url: string;
         this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
           if (status !== 'NONE') {
-            this.store.dispatch(new userActions.MakeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }));
+            this.store.dispatch(this.userAction.makeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }));
           }
         });
         this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl);
@@ -56,12 +56,12 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.sub3 = this.store.select(appState.gamePlayState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.sub3 = this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
 
-    this.sub4 = this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.sub4 = this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.router.navigate(['my/invite-friends']);
         this.snackBar.open('You become the friend!', '', { duration: 2000 });

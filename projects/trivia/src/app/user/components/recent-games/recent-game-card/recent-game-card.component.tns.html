@@ -1,10 +1,10 @@
-<StackLayout class="Roboto-Regular" horizontalAlignment="center" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
+<StackLayout class="Roboto-Regular" horizontalAlignment="center" *ngIf="game.gameOptions?.playerMode == PlayerMode.Single">
     <Label text="WON" textWrap="true" class="label-success Roboto-Bold" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId"
         horizontalAlignment="center"></Label>
     <Label text="LOST" textWrap="true" class="label-failed Roboto-Bold" *ngIf="game.winnerPlayerId !== user.userId"
         horizontalAlignment="center"></Label>
-    <Label text="{{categoryDict[game.gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() +
-        categoryDict[game.gameOptions.categoryIds[0]].categoryName.slice(1)}}"
+    <Label text="{{categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.charAt(0)?.toUpperCase() +
+        categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.slice(1)}}"
         textWrap="true" class="label-category" horizontalAlignment="center"></Label>
     <Image *ngIf="user" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
         marginLeft="2" verticalAlignment="center" borderRadius="50" horizontalAlignment="center"></Image>
@@ -34,8 +34,8 @@
             horizontalAlignment="center"></Label>
         <Label text="DRAW" textWrap="true" class="label-failed" *ngIf="!game.winnerPlayerId && game.round === 16"
             horizontalAlignment="center"></Label>
-        <Label class="label-category Roboto-Regular" text="{{categoryDict[game.gameOptions.categoryIds[0]].categoryName.charAt(0).toUpperCase() +
-                categoryDict[game.gameOptions.categoryIds[0]].categoryName.slice(1)}}"
+        <Label class="label-category Roboto-Regular" text="{{categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.charAt(0)?.toUpperCase() +
+                categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.slice(1)}}"
             textWrap="true" horizontalAlignment="center"></Label>
         <StackLayout orientation="horizontal" horizontalAlignment="center" verticalAlignment="center" class="border-left" height="50">
         </StackLayout>
