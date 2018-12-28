@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, HostListener, Inject, ChangeDetectorRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, Inject, NgZone } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -21,14 +21,16 @@ export class DashboardComponent extends Dashboard implements OnInit {
     gameActions: GameActions,
     userActions: UserActions, windowRef: WindowRef,
     @Inject(PLATFORM_ID) platformId: Object,
-    private routerExtension: RouterExtensions
+    ngZone: NgZone,
+    private routerExtension: RouterExtensions,
   ) {
 
     super(store,
       questionActions,
       gameActions,
       userActions, windowRef,
-      platformId);
+      platformId,
+      ngZone);
     this.gameStatus = GameStatus;
 
   }
@@ -39,7 +41,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
   }
 
   startNewGame() {
-    this.routerExtension.navigate(['/game-play'], { clearHistory: true });
+    this.routerExtension.navigate(['/game-play']);
   }
 
   filterGame(game: any, gameStatus) {

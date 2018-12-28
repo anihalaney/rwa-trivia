@@ -1,9 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User, RouterStateUrl, Game, Friends } from '../../../shared/model';
+import { User, RouterStateUrl, Game, Friends, Invitation } from '../../../shared/model';
 import { UserService } from '../../services';
-import { switchMap, map, distinct, mergeMap } from 'rxjs/operators';
+import { switchMap, map, distinct, mergeMap, filter, take } from 'rxjs/operators';
+import { empty } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../../../trivia/src/app/store';
+import { coreState } from '../reducers';
+
 
 @Injectable()
 export class UserEffects {
@@ -26,7 +31,7 @@ export class UserEffects {
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
-    //load invited games
+    // load invited games
     @Effect()
     // handle location update
     loadGameInvites$ = this.actions$
@@ -60,9 +65,78 @@ export class UserEffects {
             )
         );
 
+    // Load Friend Invitations
+    @Effect()
+    loadFriendInvitations$ = this.actions$
+        .ofType('ROUTER_NAVIGATION')
+        .pipe(
+            map((action: any): RouterStateUrl => action.payload.routerState),
+            filter((routerState: RouterStateUrl) =>
+                routerState.url.toLowerCase().startsWith('/dashboard')),
+            mergeMap((routerState: RouterStateUrl) =>
+                this.store.select(coreState).pipe(
+                    map(s => s.user),
+                    filter(u => !!u),
+                    take(1),
+                    map(user => user.email))
+            ))
+        .pipe(
+            switchMap((email: string) => {
+                return this.svc.loadFriendInvitations(email).pipe(map((invitations: Invitation[]) =>
+                    this.userActions.loadUserInvitationsSuccess(invitations)
+                ));
+            })
+        );
+
+    // Update Invitation
+    @Effect()
+    UpdateInvitation$ = this.actions$
+        .ofType(UserActions.UPDATE_INVITATION)
+        .pipe(
+            switchMap((action: ActionWithPayload<Invitation>) => {
+                this.svc.setInvitation(action.payload);
+                return empty();
+            }
+            )
+        );
+
+    @Effect()
+    makeFriend$ = this.actions$
+        .ofType(UserActions.MAKE_FRIEND)
+        .pipe(
+            switchMap((action: ActionWithPayload<string>) =>
+                this.svc.checkInvitationToken(action.payload).pipe(
+                    map((friend: any) => this.userActions.storeInvitationToken('NONE'))
+                ).pipe(map(() => this.userActions.makeFriendSuccess()))
+            ));
+
+    @Effect()
+    saveInvitation$ = this.actions$
+        .ofType(UserActions.ADD_USER_INVITATION)
+        .pipe(
+            switchMap((action: ActionWithPayload<string>) =>
+                this.svc.saveUserInvitations(action.payload).pipe(
+                    map((statusMessages: any) => this.userActions.addUserInvitationSuccess(statusMessages['messages']))
+                )
+            )
+        );
+
+    // Save user profile
+    @Effect()
+    addUser$ = this.actions$
+        .ofType(UserActions.ADD_USER_PROFILE)
+        .pipe(
+            switchMap((action: ActionWithPayload<User>) => {
+                return this.svc.saveUserProfile(action.payload).pipe(
+                    map((status: any) =>  this.userActions.addUserProfileSuccess())
+                );
+            })
+        );
+
     constructor(
         private actions$: Actions,
         private userActions: UserActions,
-        private svc: UserService
+        private svc: UserService,
+        private store: Store<AppState>,
     ) { }
 }

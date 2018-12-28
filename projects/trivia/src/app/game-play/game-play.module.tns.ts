@@ -9,6 +9,7 @@ import {
 } from './components';
 import { effects, reducer } from './store';
 import { NativeScriptFormsModule } from 'nativescript-angular/forms';
+import { CoreModule } from 'shared-library/core/core.module';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { NativeScriptFormsModule } from 'nativescript-angular/forms';
   imports: [
     // rwa modules
     SharedModule,
+    CoreModule,
     GamePlayRoutingModule,
     NativeScriptRouterModule,
     NativeScriptFormsModule,

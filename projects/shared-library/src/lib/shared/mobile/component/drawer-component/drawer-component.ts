@@ -10,6 +10,7 @@ import { Utils } from './../../../../core/services';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { Observable } from 'rxjs';
 import { Category } from './../../../model';
+import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 
 @Component({
     moduleId: module.id,
@@ -35,7 +36,26 @@ export class DrawerComponent implements OnInit {
         private utils: Utils,
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,
+        private router: Router
     ) {
+        router.events.subscribe((val) => {
+            if (val instanceof NavigationEnd) {
+                const nav = val.url;
+                if (nav.includes('/stats/leaderboard')) {
+                    this.activeMenu = 'Category Leaderboard';
+                } else if (nav === '/dashboard') {
+                    this.activeMenu = 'Home';
+                } else if (nav === '/my/recent-game') {
+                    this.activeMenu = 'Recently Completed Games';
+                } else if (nav.includes('/my/profile')) {
+                    this.activeMenu = 'Profile Settings';
+                } else if (nav === '/my/questions') {
+                    this.activeMenu = 'My Questions';
+                } else if (nav === '/my/invite-friends') {
+                    this.activeMenu = 'Friend List';
+                }
+            }
+        });
         this.categoriesObs = store.select(coreState).pipe(select(s => s.categories));
         this.categoriesObs.subscribe(categories => {
             this.categories = categories;
@@ -48,6 +68,7 @@ export class DrawerComponent implements OnInit {
             this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
         });
 
+
     }
 
     closeDrawer() {
@@ -56,19 +77,17 @@ export class DrawerComponent implements OnInit {
     }
 
     leaderBoard(category) {
-        this.activeMenu = 'Category Leaderboard';
-        this.routerExtension.navigate(['/stats/leaderboard', category], { clearHistory: true });
+        this.routerExtension.navigate(['/stats/leaderboard', category]);
         this.closeDrawer();
     }
 
     dashboard() {
-        this.activeMenu = 'Home';
         this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
         this.closeDrawer();
     }
 
     login() {
-        this.routerExtension.navigate(['/login'], { clearHistory: true });
+        this.routerExtension.navigate(['/login']);
         this.closeDrawer();
     }
 
@@ -80,26 +99,22 @@ export class DrawerComponent implements OnInit {
     }
 
     recentGame() {
-        this.activeMenu = 'Recently Completed Games';
-        this.routerExtension.navigate(['/my/recent-game'], { clearHistory: true });
+        this.routerExtension.navigate(['/my/recent-game']);
         this.closeDrawer();
     }
 
     navigateToProfileSettings() {
-        this.activeMenu = 'Profile Settings';
-        this.routerExtension.navigate(['/my/profile', this.user.userId], { clearHistory: true });
+        this.routerExtension.navigate(['/my/profile', this.user.userId]);
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
-        this.activeMenu = 'My Questions';
-        this.routerExtension.navigate(['/my/questions'], { clearHistory: true });
+        this.routerExtension.navigate(['/my/questions']);
         this.closeDrawer();
     }
 
     navigateToFriendList() {
-        this.activeMenu = 'Friend List';
-        this.routerExtension.navigate(['/my/invite-friends'], { clearHistory: true });
+        this.routerExtension.navigate(['/my/invite-friends']);
         this.closeDrawer();
     }
 

@@ -5,11 +5,11 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
-import * as useractions from 'shared-library/core/store/actions';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
 import { Category, GameOptions, User, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
+
 
 export class NewGame {
   categoriesObs: Observable<Category[]>;
@@ -36,6 +36,7 @@ export class NewGame {
   constructor(
     public store: Store<AppState>,
     public utils: Utils,
+    public gameActions: GameActions,
     public userActions: UserActions) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
@@ -63,7 +64,7 @@ export class NewGame {
         this.noFriendsStatus = true;
       }
     }));
-    this.store.dispatch(new gameplayactions.ResetNewGame());
+    this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
 
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
