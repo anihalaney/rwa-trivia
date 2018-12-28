@@ -38,9 +38,10 @@
         <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
           <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let category of userCategories"
             (tap)="selectCategory(category)">
-            <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>
-            <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25"
-              width="25" marginLeft="10" verticalAlignment="center" marginRight="5" *ngIf="category.isSelected"></Image>
+            <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>            
+           <Image row="0" col="2"  checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25"
+                width="25" marginLeft="10" verticalAlignment="center" marginRight="5"  visibility="{{ category.isSelected ? 'visible' : 'hidden' }}"></Image>
+                    
           </GridLayout>
         </StackLayout>
       </StackLayout>
@@ -138,9 +139,9 @@
           <StackLayout>
             <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let profileOption of profileOptions" (tap)="selectProfileOption(profileOption)">
               <Label [text]="profileOption" row="0" col="0" textWrap="true"></Label>
-              <Image *ngIf="user.profileSetting === profileOption" row="0" col="1" checked="true" horizontalAlignment="right"
+              <Image  row="0" col="1" checked="true" horizontalAlignment="right"
                 src="~/assets/images/check.png" height="25" width="25" marginLeft="10" verticalAlignment="center"
-                marginRight="5"></Image>
+                marginRight="5" visibility="{{ user.profileSetting === profileOption ? 'visible' : 'hidden' }}"></Image>
             </GridLayout>
           </StackLayout>
         </StackLayout>
@@ -151,9 +152,9 @@
           <StackLayout>
             <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let locationOption of locationOptions" (tap)="selectLocationOption(locationOption)">
               <Label [text]="locationOption" row="0" col="0" textWrap="true"></Label>
-              <Image *ngIf="user.profileLocationSetting === locationOption" row="0" col="1" checked="true"
+              <Image  row="0" col="1" checked="true"
                 horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25" marginLeft="10"
-                verticalAlignment="center" marginRight="5"></Image>
+                verticalAlignment="center" marginRight="5" visibility="{{ user.profileLocationSetting === locationOption ? 'visible' : 'hidden' }}"></Image>
             </GridLayout>
           </StackLayout>
         </StackLayout>
