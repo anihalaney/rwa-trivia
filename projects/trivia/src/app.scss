@@ -75,6 +75,15 @@ refer to http://docs.nativescript.org/ui/theme.
   font-weight: 300;
 }
 
+.fab-button2 {
+	height: 50;
+	width: 50; /// this is required on iOS - Android does not require width so you might need to adjust styles
+	margin: 15;
+	background-color: #8ac541;
+	horizontal-align: right;
+	vertical-align: bottom;
+}
+
 .fa {
   font-family: "FontAwesome", fontawesome-webfont;
 }

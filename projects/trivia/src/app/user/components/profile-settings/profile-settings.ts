@@ -8,6 +8,7 @@ import { AppState, appState, categoryDictionary, getCategories, getTags } from '
 import { userState } from '../../../user/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
+import { UserActions } from 'shared-library/core/store';
 
 export class ProfileSettings {
     // Properties
@@ -49,6 +50,7 @@ export class ProfileSettings {
 
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
+        public userAction: UserActions,
         public utils: Utils) {
 
         this.toggleLoader(true);
@@ -200,7 +202,7 @@ export class ProfileSettings {
     // store the user object
     saveUser(user: User) {
         this.toggleLoader(true);
-        this.store.dispatch(new userActions.AddUserProfile({ user: user }));
+        this.store.dispatch(this.userAction.addUserProfile(user));
     }
 
 }

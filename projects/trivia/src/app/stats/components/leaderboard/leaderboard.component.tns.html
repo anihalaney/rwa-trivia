@@ -6,7 +6,7 @@
                 <CardView margin="5" android:elevation="20" ios:elevation="40" radius="15" class="gameplay"  *ngIf="categoryDict[cat]?.categoryName == category">
                     <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff" height="100%" margin="15">
                             <StackLayout horizontalAlignment="center" verticalAlignment="center">
-                                <Label text="{{categoryDict[cat]?.categoryName.charAt(0).toUpperCase() + categoryDict[cat]?.categoryName.slice(1)}}" textWrap="true" fontSize="18" class="title Roboto-Bold" verticalAlignment="center" paddingTop="25"></Label>
+                                <Label text="{{categoryDict[cat]?.categoryName?.charAt(0)?.toUpperCase() + categoryDict[cat]?.categoryName?.slice(1)}}" textWrap="true" fontSize="18" class="title Roboto-Bold" verticalAlignment="center" paddingTop="25"></Label>
                             </StackLayout>
                         <StackLayout class="question-answered " marginTop="10" *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:10;let j=index;">
                             <GridLayout rows="*" columns="auto,auto,*,auto" marginTop="10">

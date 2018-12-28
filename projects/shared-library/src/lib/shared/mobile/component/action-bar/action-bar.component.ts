@@ -17,13 +17,6 @@ export class ActionBarComponent implements OnInit {
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
 
     ngOnInit() {
-    //     if (ios) {
-    //         const controller = frameModule.topmost().ios.controller;
-    //         // get the view controller navigation item
-    //         const navigationItem = controller.visibleViewController.navigationItem;
-    //         // hide back button
-    //         navigationItem.setHidesBackButtonAnimated(true, false);
-    // }
     }
 
     openSidebar() {
