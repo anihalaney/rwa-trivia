@@ -31,7 +31,7 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
   declarations: [
     AppComponent,
     QuestionComponent,
-    DashboardComponent,
+    DashboardComponent
     GameCardComponent
   ],
   imports: [
