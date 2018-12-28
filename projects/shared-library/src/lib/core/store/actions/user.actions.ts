@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
-import { User, Game, Friends } from '../../../shared/model';
+import { User, Game, Friends, Invitation } from '../../../shared/model';
 
 @Injectable()
 export class UserActions {
@@ -103,4 +103,67 @@ export class UserActions {
     };
   }
 
+  static LOAD_FRIEND_INVITATION_SUCCESS = 'LOAD_FRIEND_INVITATION_SUCCESS';
+  loadUserInvitationsSuccess(invitation: Invitation[]): ActionWithPayload<Invitation[]> {
+    return {
+      type: UserActions.LOAD_FRIEND_INVITATION_SUCCESS,
+      payload: invitation
+    };
+  }
+
+  static UPDATE_INVITATION = 'UPDATE_INVITATION';
+  updateInvitation(invitation: Invitation): ActionWithPayload<Invitation> {
+    return {
+      type: UserActions.UPDATE_INVITATION,
+      payload: invitation
+    };
+  }
+
+  static MAKE_FRIEND = 'MAKE_FRIEND';
+  makeFriend(makeFriend): ActionWithPayload<String> {
+    return {
+      type: UserActions.MAKE_FRIEND,
+      payload: makeFriend
+    };
+  }
+
+  static MAKE_FRIEND_SUCCESS = 'MAKE_FRIEND_SUCCESS';
+  makeFriendSuccess() {
+    return {
+      type: UserActions.MAKE_FRIEND_SUCCESS,
+      payload: null
+    };
+  }
+
+  static ADD_USER_INVITATION = 'ADD_USER_INVITATION';
+  addUserInvitation(data): ActionWithPayload<any> {
+    return {
+      type: UserActions.ADD_USER_INVITATION,
+      payload: data
+    };
+  }
+
+  static ADD_USER_INVITATION_SUCCESS = 'ADD_USER_INVITATION_SUCCESS';
+  addUserInvitationSuccess(addUserInvitationSuccess): ActionWithPayload<string> {
+    return {
+      type: UserActions.ADD_USER_INVITATION_SUCCESS,
+      payload: addUserInvitationSuccess
+    };
+  }
+
+  static ADD_USER_PROFILE = 'ADD_USER_PROFILE';
+  addUserProfile(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.ADD_USER_PROFILE,
+      payload: user
+    };
+  }
+
+  static ADD_USER_PROFILE_SUCCESS = 'ADD_USER_PROFILE_SUCCESS';
+  addUserProfileSuccess() {
+    return {
+      type: UserActions.ADD_USER_PROFILE_SUCCESS,
+      payload: null
+    };
+  }
 }

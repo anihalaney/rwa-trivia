@@ -4,8 +4,6 @@ import { User, Question, Invitation, Game, Friends } from 'shared-library/shared
 
 export enum UserActionTypes {
 
-    ADD_USER_PROFILE = '[User] AddUserProfile',
-    ADD_USER_PROFILE_SUCCESS = '[User] AddUserProfileSuccess',
     LOAD_USER_PUBLISHED_QUESTIONS = '[User] LoadUserPublishedQuestions',
     LOAD_USER_PUBLISHED_QUESTIONS_SUCCESS = '[User] LoadUserPublishedQuestionsSuccess',
     LOAD_USER_UNPUBLISHED_QUESTIONS = '[User] LoadUserUnpublishedQuestions',
@@ -14,25 +12,8 @@ export enum UserActionTypes {
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
     UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
     ADD_USER_INVITATION = '[User] AddUserInvitation',
-    ADD_USER_INVITATION_SUCCESS = '[User] AddUserInvitationSuccess',
-    MAKE_FRIEND = '[User] MakeFriend',
-    MAKE_FRIEND_SUCCESS = '[User] MakeFriendSuccess',
     GET_GAME_RESULT = '[User] GetGameResult',
     GET_GAME_RESULT_SUCCESS = '[User] GetGameResultSuccess',
-    LOAD_FRIEND_INVITATION_SUCCESS = '[User] loadFriendInvitationsSuccess',
-    UPDATE_INVITATION = '[User] UpdateInvitation'
-}
-
-// Save user profile
-export class AddUserProfile implements Action {
-    readonly type = UserActionTypes.ADD_USER_PROFILE;
-    constructor(public payload: { user: User }) { }
-}
-
-// Save user profile Success
-export class AddUserProfileSuccess implements Action {
-    readonly type = UserActionTypes.ADD_USER_PROFILE_SUCCESS;
-    payload = null;
 }
 
 // Load User Published Question by userId
@@ -71,30 +52,6 @@ export class UpdateUserSuccess implements Action {
     constructor(public payload: User) { }
 }
 
-// Save user invitations
-export class AddUserInvitation implements Action {
-    readonly type = UserActionTypes.ADD_USER_INVITATION;
-    constructor(public payload: any) { }
-}
-
-// Save user invitations success
-export class AddUserInvitationSuccess implements Action {
-    readonly type = UserActionTypes.ADD_USER_INVITATION_SUCCESS;
-    constructor(public payload: string) { }
-}
-
-// Save user invitations success
-export class MakeFriend implements Action {
-    readonly type = UserActionTypes.MAKE_FRIEND;
-    constructor(public payload: any) { }
-}
-
-// Save user invitations success
-export class MakeFriendSuccess implements Action {
-    readonly type = UserActionTypes.MAKE_FRIEND_SUCCESS;
-    payload = null;
-}
-
 // Get User's game result
 export class GetGameResult implements Action {
     readonly type = UserActionTypes.GET_GAME_RESULT;
@@ -107,33 +64,14 @@ export class GetGameResultSuccess implements Action {
     constructor(public payload: Game[]) { }
 }
 
-// Load Friend Invitations
-export class LoadUserInvitationsSuccess implements Action {
-    readonly type = UserActionTypes.LOAD_FRIEND_INVITATION_SUCCESS;
-    constructor(public payload: Invitation[]) { }
-}
-
-// Update Invitation
-export class UpdateInvitation implements Action {
-    readonly type = UserActionTypes.UPDATE_INVITATION;
-    constructor(public payload: Invitation) { }
-}
-
 
 export type UserActions
-    = AddUserProfile
-    | AddUserProfileSuccess
-    | LoadUserPublishedQuestions
+    = LoadUserPublishedQuestions
     | LoadUserPublishedQuestionsSuccess
     | LoadUserUnpublishedQuestions
     | LoadUserUnpublishedQuestionsSuccess
     | AddQuestion
     | UpdateUserSuccess
-    | AddUserInvitation
-    | AddUserInvitationSuccess
-    | MakeFriendSuccess
     | GetGameResult
-    | GetGameResultSuccess
-    | LoadUserInvitationsSuccess
-    | UpdateInvitation;
+    | GetGameResultSuccess;
 

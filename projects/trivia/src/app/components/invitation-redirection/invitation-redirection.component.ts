@@ -1,12 +1,11 @@
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-import { UserActions } from 'shared-library/core/store/actions';
 import { Store, select } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { AppState, appState } from '../../store';
-import * as userActions from '../../user/store/actions';
+import {UserActions} from 'shared-library/core/store/actions';
 
 @Component({
     selector: 'invitation-redirection',
@@ -33,7 +32,7 @@ export class InvitationRedirectionComponent implements OnInit {
             const token = params['token'];
             this.store.dispatch(this.userAction.storeInvitationToken(token));
             if (this.user) {
-                this.store.dispatch(new userActions.MakeFriend({ token: token, email: this.user.email, userId: this.user.authState.uid }))
+                this.store.dispatch(this.userAction.makeFriend({ token: token, email: this.user.email, userId: this.user.authState.uid }))
             } else {
                 this.router.navigate(['/dashboard']);
             }

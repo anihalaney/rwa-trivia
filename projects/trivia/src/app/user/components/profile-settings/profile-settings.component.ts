@@ -7,6 +7,7 @@ import { ProfileSettings } from './profile-settings';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
+import { coreState, UserActions } from 'shared-library/core/store';
 
 
 @Component({
@@ -26,14 +27,15 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     private windowRef: WindowRef,
+    public userAction: UserActions,
     public utils: Utils) {
 
-    super(fb, store, utils);
+    super(fb, store, userAction, utils);
 
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
 
-    this.subs.push(this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.setNotificationMsg('Profile Saved !', false, 100);
       }

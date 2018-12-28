@@ -6,6 +6,7 @@ import { GameService } from './../../../../../../shared-library/src/lib/core/ser
 import { Game, Question, RouterStateUrl } from 'shared-library/shared/model';
 import { GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
+import { GameActions } from '../../../../../../shared-library/src/lib/core/store/actions/game.actions';
 import { GamePlayState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
@@ -19,8 +20,8 @@ export class GamePlayEffects {
     .pipe(
       switchMap((action: gameplayactions.CreateNewGame) =>
         this.svc.createNewGame(action.payload.gameOptions, action.payload.user).pipe(
-          map((gameId: string) => new gameplayactions.CreateNewGameSuccess(gameId))
-          //catchError(error => new)
+          map((gameId: string) => this.gameActions.createNewGameSuccess(gameId))
+          // catchError(error => new)
         )
       )
     );
@@ -38,7 +39,7 @@ export class GamePlayEffects {
       )
     );
 
-  //load from router
+  // load from router
   @Effect()
   // handle location update
   loadGame2$ = this.actions$
@@ -134,7 +135,8 @@ export class GamePlayEffects {
   constructor(
     private actions$: Actions,
     public store: Store<GamePlayState>,
-    private svc: GameService
+    public gameActions: GameActions,
+    private svc: GameService,
   ) { }
 
 }
