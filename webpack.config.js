@@ -75,8 +75,7 @@ module.exports = env => {
         sourceMap: !!sourceMap,
     });
 
-    if(env.package_name) {
-    // change package name in package.json file
+      // change package name in package.json file
     if(env.package_name) {
     const file = editJsonFile(resolve(projectRoot, packageJsonFileName), {
         autosave: true
