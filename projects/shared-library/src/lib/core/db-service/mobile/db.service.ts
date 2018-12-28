@@ -58,7 +58,6 @@ export class TNSDbService extends DbService {
         }
         return Observable.create(observer => {
             const unsubscribe = query.onSnapshot((snapshot: any) => {
-
                 let results = [];
                 if (snapshot && snapshot.forEach) {
                     snapshot.forEach(doc => results.push({

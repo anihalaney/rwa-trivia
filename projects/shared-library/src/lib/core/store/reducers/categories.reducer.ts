@@ -15,7 +15,6 @@ export function categories(state: any = [], action: ActionWithPayload<Category[]
 
 //selectors
 export const getCategoryDictionary = (state: Category[]) => {
-
   return state.reduce((result, category) => {
     result[category.id] = category;
     return result;
