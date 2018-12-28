@@ -12,7 +12,6 @@ export class CategoryService {
   }
 
   getCategories(): Observable<Category[]> {
-
     return this.dbService.valueChanges('categories').pipe(take(1));
   }
 }
