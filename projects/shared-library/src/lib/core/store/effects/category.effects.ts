@@ -23,7 +23,7 @@ export class CategoryEffects {
                 return this.svc.getCategories()
                     .pipe(
                         map((categories: Category[]) => {
-                            console.log('categories--->', categories);
+                          //  console.log('categories--->', categories);
                             return this.categoryActions.loadCategoriesSuccess(categories)
                         })
                     );
