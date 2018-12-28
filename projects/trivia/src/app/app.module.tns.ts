@@ -17,7 +17,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { registerElement } from 'nativescript-angular/element-registry';
 import { StatsModule } from './stats/stats.module';
 import { RouterModule } from '@angular/router';
-import { GameInviteComponent} from './user/components';
 import { GameCardComponent } from './components/game-card/game-card.component';
 
 export function firebaseFactory() {
@@ -33,7 +32,6 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     AppComponent,
     QuestionComponent,
     DashboardComponent,
-    GameInviteComponent,
     GameCardComponent
   ],
   imports: [
