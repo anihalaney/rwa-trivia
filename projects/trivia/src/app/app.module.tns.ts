@@ -9,19 +9,17 @@ import { reducers } from './store';
 import { CoreModule } from 'shared-library/core/core.module';
 import { SharedModule } from 'shared-library/shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { FirebaseService } from 'shared-library/core/db-service/firebase.service';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
 import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens';
 import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angular';
 import { QuestionComponent } from './components/question/question.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { registerElement } from 'nativescript-angular/element-registry';
-import { CardView } from 'nativescript-cardview';
 import { StatsModule } from './stats/stats.module';
 import { RouterModule } from '@angular/router';
-import { UserModule } from './user/user.module';
 import { GameInviteComponent} from './user/components';
 import { GameCardComponent } from './components/game-card/game-card.component';
+
 export function firebaseFactory() {
   return TNSFirebase;
 }
