@@ -56,7 +56,7 @@ import { FriendInviteComponent } from './components/friend-invite/friend-invite.
       maxAge: 20
     }),
     //StoreModule.forRoot(reducers),
-    StoreRouterConnectingModule,
+    StoreRouterConnectingModule.forRoot(),
 
     //rwa modules
     CoreModule,

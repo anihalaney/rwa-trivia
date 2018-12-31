@@ -8,7 +8,7 @@ import {
 } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { PapaParseService } from 'ngx-papaparse';
+import { Papa } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
 
 @Component({
@@ -51,7 +51,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
 
   constructor(private fb: FormBuilder,
-    private store: Store<AppState>, private papa: PapaParseService,
+    private store: Store<AppState>, private papa: Papa,
     private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
@@ -95,7 +95,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   }
 
-  generateQuestions(csvString: string): void {
+  generateQuestions(csvString: any): void {
     this.questionValidationError = false;
     this.fileParseError = false;
     this.fileParseErrorMessage = '';
