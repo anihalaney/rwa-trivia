@@ -1,6 +1,5 @@
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { UserStatsCardComponent } from './user-stats-card/user-stats-card.component';
-import { GameInviteComponent } from './game-invite/game-invite.component';
 import { RecentGamesComponent } from './recent-games/recent-games.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 
@@ -13,7 +12,6 @@ import { InviteFriendsDialogComponent } from './invite-friends/invite-friends-di
 export {
     ProfileCardComponent,
     UserStatsCardComponent,
-    GameInviteComponent,
     RecentGamesComponent,
     ProfileSettingsComponent,
 
@@ -27,7 +25,6 @@ export {
 export default [
     ProfileCardComponent,
     UserStatsCardComponent,
-    GameInviteComponent,
     RecentGamesComponent,
     ProfileSettingsComponent,
 

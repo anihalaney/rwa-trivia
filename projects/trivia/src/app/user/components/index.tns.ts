@@ -1,4 +1,3 @@
-import { GameInviteComponent } from './game-invite/game-invite.component';
 import { RecentGamesComponent } from './recent-games/recent-games.component';
 import { RecentGameCardComponent } from './recent-games/recent-game-card/recent-game-card.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
@@ -10,7 +9,6 @@ import { InviteMailFriendsComponent } from './invite-friends/invite-friends-dial
 
 
 export {
-    GameInviteComponent,
     RecentGamesComponent,
     RecentGameCardComponent,
     ProfileSettingsComponent,
@@ -22,7 +20,6 @@ export {
 };
 
 export default [
-    GameInviteComponent,
     RecentGamesComponent,
     RecentGameCardComponent,
     ProfileSettingsComponent,
