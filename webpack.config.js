@@ -3,6 +3,7 @@ const { join, relative, resolve, sep } = require("path");
 const webpack = require("webpack");
 const nsWebpack = require("nativescript-dev-webpack");
 const nativescriptTarget = require("nativescript-dev-webpack/nativescript-target");
+const { nsReplaceBootstrap } = require("nativescript-dev-webpack/transformers/ns-replace-bootstrap");
 const CleanWebpackPlugin = require("clean-webpack-plugin");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
@@ -35,8 +36,6 @@ module.exports = env => {
         // when bundling with `tns run android|ios --bundle`.
         appPath = "app",
         appResourcesPath = "app/App_Resources",
-
-
         //package.json constants
         packageJsonFileName = "package.json",
         nativescriptIdField = "nativescript.id",
@@ -47,38 +46,47 @@ module.exports = env => {
         devEnvFileName = "environment.dev.ts",
         prodEnvFileName = "environment.prod.ts",
 
+
         // You can provide the following flags when running 'tns run android|ios'
         aot, // --env.aot
         snapshot, // --env.snapshot
         uglify, // --env.uglify
         report, // --env.report
         sourceMap, // --env.sourceMap
-
+        hmr, // --env.hmr,
     } = env;
-
-
+    const externals = (env.externals || []).map((e) => { // --env.externals
+        return new RegExp(e + ".*");
+    });
 
     const appFullPath = resolve(projectRoot, appPath);
     const appResourcesFullPath = resolve(projectRoot, appResourcesPath);
-
     const envFullPath = resolve(projectRoot, envPath);
 
-    const entryModule = aot ?
-        nsWebpack.getAotEntryModule(appFullPath) : `${nsWebpack.getEntryModule(appFullPath)}.ts`;
+    const entryModule = `${nsWebpack.getEntryModule(appFullPath)}.ts`;
     const entryPath = `.${sep}${entryModule}`;
 
-    // change package name in package.json file
+    const ngCompilerPlugin = new AngularCompilerPlugin({
+        hostReplacementPaths: nsWebpack.getResolver([platform, "tns"]),
+        platformTransformers: aot ? [nsReplaceBootstrap(() => ngCompilerPlugin)] : null,
+        mainPath: resolve(appPath, entryModule),
+        tsConfigPath: join(__dirname, aot ? "tsconfig.aot.json" : "tsconfig.tns.json"),
+        skipCodeGeneration: !aot,
+        sourceMap: !!sourceMap,
+    });
+
+      // change package name in package.json file
     if(env.package_name) {
     const file = editJsonFile(resolve(projectRoot, packageJsonFileName), {
         autosave: true
     });
-
     file.set(nativescriptIdField, env.package_name);
-}
-
+    }
+    
     const config = {
         mode: uglify ? "production" : "development",
         context: appFullPath,
+        externals,
         watchOptions: {
             ignored: [
                 appResourcesFullPath,
@@ -141,9 +149,9 @@ module.exports = env => {
             minimize: !!uglify,
             minimizer: [
                 new UglifyJsPlugin({
+                    parallel: true,
+                    cache: true,
                     uglifyOptions: {
-                        parallel: true,
-                        cache: true,
                         output: {
                             comments: false,
                         },
@@ -200,9 +208,9 @@ module.exports = env => {
                 { test: /\.css$/, exclude: /[\/|\\]app\.css$/, use: "raw-loader" },
                 { test: /\.scss$/, exclude: /[\/|\\]app\.scss$/, use: ["raw-loader", "resolve-url-loader", "sass-loader"] },
 
-                // Compile TypeScript files with ahead-of-time compiler.
                 {
-                    test: /.ts$/, use: [
+                    test: /(?:\.ngfactory\.js|\.ngstyle\.js|\.ts)$/,
+                    use: [
                         "nativescript-dev-webpack/moduleid-compat-loader",
                         "@ngtools/webpack",
                     ]
@@ -225,9 +233,11 @@ module.exports = env => {
                     context: projectRoot
                 },
             ]),
+            
             // Define useful constants like TNS_WEBPACK
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",
+                "process": undefined,
             }),
             // Remove all files from the out dir.
             new CleanWebpackPlugin([`${dist}/**/*`]),
@@ -239,14 +249,13 @@ module.exports = env => {
                     context: projectRoot
                 },
             ]),
-
-
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([
-                { from: "fonts/**" },
-                { from: "**/*.jpg" },
-                { from: "**/*.png" },
-                { from: "**/*.gif" },
+                { from: { glob: "fonts/**" } },
+                { from: { glob: "**/*.jpg" } },
+                { from: { glob: "**/*.png" } },
+                { from: { glob: "**/*.gif" } },
+                
             ], { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }),
             // Generate a bundle starter script and activate it in package.json
             new nsWebpack.GenerateBundleStarterPlugin([
@@ -256,18 +265,12 @@ module.exports = env => {
             // For instructions on how to set up workers with webpack
             // check out https://github.com/nativescript/worker-loader
             new NativeScriptWorkerPlugin(),
-
-            new AngularCompilerPlugin({
-                hostReplacementPaths: nsWebpack.getResolver([platform, "tns"]),
-                entryModule: resolve(appPath, "./app/app.module#AppModule"),
-                tsConfigPath: join(__dirname, aot ? "tsconfig.aot.json" : "tsconfig.tns.json"),
-                skipCodeGeneration: !aot,
-                sourceMap: !!sourceMap,
-            }),
+            ngCompilerPlugin,
             // Does IPC communication with the {N} CLI to notify events when running in watch mode.
             new nsWebpack.WatchStateLoggerPlugin(),
         ],
     };
+
 
     if (report) {
         // Generate report files for bundles content
@@ -296,6 +299,10 @@ module.exports = env => {
             projectRoot,
             webpackConfig: config,
         }));
+    }
+
+    if (hmr) {
+        config.plugins.push(new webpack.HotModuleReplacementPlugin());
     }
 
     return config;

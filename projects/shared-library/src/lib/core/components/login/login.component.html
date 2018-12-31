@@ -20,7 +20,7 @@
       <div class="row">
         <div class="col-sm-7 col-xs-12">
           <form (ngSubmit)="onSubmit()" class="sign-in-form" [formGroup]="loginForm" novalidate>
-            <input type="hidden" formControlName="mode" [(ngModel)]="mode" aria-label="hidden">
+            <input type="hidden" formControlName="mode"  aria-label="hidden">
             <div class="heading" [ngSwitch]="mode">
               <span *ngSwitchCase="0">Login to your account</span>
               <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>

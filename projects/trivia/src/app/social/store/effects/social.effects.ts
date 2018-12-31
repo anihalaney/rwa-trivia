@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map, filter, catchError } from 'rxjs/operators';
 
 import { SocialService } from '../../../../../../shared-library/src/lib/core/services';
@@ -8,14 +8,14 @@ import { SocialActionTypes } from '../actions';
 import * as socialActions from '../actions/social.actions';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 import { of } from 'rxjs';
-
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class SocialEffects {
     // Save subscription
     @Effect()
     addSubscription$ = this.actions$
-        .ofType(SocialActionTypes.ADD_SUBSCRIBER)
+        .pipe(ofType(SocialActionTypes.ADD_SUBSCRIBER))
         .pipe(
             switchMap((action: socialActions.AddSubscriber) =>
                 this.socialService.checkSubscription(action.payload.subscription)
@@ -34,7 +34,7 @@ export class SocialEffects {
     // get total subscription
     @Effect()
     getTotalSubscription$ = this.actions$
-        .ofType(SocialActionTypes.TOTAL_SUBSCRIBER)
+        .pipe(ofType(SocialActionTypes.TOTAL_SUBSCRIBER))
         .pipe(
             switchMap((action: socialActions.GetTotalSubscriber) =>
                 this.socialService.getTotalSubscription()
@@ -48,7 +48,7 @@ export class SocialEffects {
     // Load Social Score share url
     @Effect()
     loadSocialScoreShareUrl$ = this.actions$
-        .ofType(SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL)
+        .pipe(ofType(SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL))
         .pipe(
             switchMap((action: socialActions.LoadSocialScoreShareUrl) =>
                 this.socialService.generateScoreShareImage(action.payload.imageBlob, action.payload.userId)
@@ -60,7 +60,7 @@ export class SocialEffects {
     // load blogs
     @Effect()
     getBlogs$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
