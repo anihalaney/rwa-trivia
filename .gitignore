@@ -69,3 +69,5 @@ functions/index.js
 
 certificates/*
 release/*
+/**/*.apk
+/**/*.ipa
