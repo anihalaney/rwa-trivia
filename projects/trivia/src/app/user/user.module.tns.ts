@@ -13,8 +13,7 @@ import {
   InviteFriendsComponent,
   QuestionAddUpdateComponent,
   RecentGamesComponent,
-  RecentGameCardComponent,
-  GameInviteComponent
+  RecentGameCardComponent
 } from './components';
 import { InviteFriendsDialogComponent } from './components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 // tslint:disable-next-line:max-line-length
@@ -30,8 +29,7 @@ import { InviteMailFriendsComponent } from './components/invite-friends/invite-f
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
     RecentGamesComponent,
-    RecentGameCardComponent,
-    GameInviteComponent
+    RecentGameCardComponent
   ],
   imports: [
     // rwa modules
@@ -52,8 +50,7 @@ import { InviteMailFriendsComponent } from './components/invite-friends/invite-f
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent,
-    GameInviteComponent
+    InviteFriendsComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })
