@@ -5,7 +5,7 @@ import {
   User, Game, Category, GameStatus,
   GameInviteConstants, CalenderConstants
 } from 'shared-library/shared/model';
-import { AppState, appState, categoryDictionary } from '../../../store';
+import { AppState,  categoryDictionary } from '../../store';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 @Component({

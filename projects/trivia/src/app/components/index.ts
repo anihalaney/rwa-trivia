@@ -6,6 +6,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { InvitationRedirectionComponent } from './invitation-redirection/invitation-redirection.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { GameInviteComponent } from './game-invite/game-invite.component';
 
 export {
     AppComponent,
@@ -15,7 +16,8 @@ export {
     HeaderComponent,
     FooterComponent,
     InvitationRedirectionComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    GameInviteComponent
 };
 
 export default [
@@ -26,5 +28,6 @@ export default [
     HeaderComponent,
     FooterComponent,
     InvitationRedirectionComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    GameInviteComponent
 ];
