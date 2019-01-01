@@ -18,7 +18,7 @@ return new Promise(function(resolve, reject) {
             });
         }
 
-        var buildType = isProdEnv ? 'production' : 'development';
+        var buildType =  isProdEnv ? 'production' : 'development';
 
         /* Create info file in platforms dir so we can detect changes in environment and force prepare if needed */
 
@@ -42,7 +42,7 @@ return new Promise(function(resolve, reject) {
             var sourceGoogleJsonProd = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json.prod");
             var sourceGoogleJsonDev = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json.dev");
 
-            // ensure we have both dev/prod versions so we never overwrite singlular google-services.json
+            // ensure we have both dev/prod versions so we never overwrite singular google-services.json
             if (fs.existsSync(sourceGoogleJsonProd) && fs.existsSync(sourceGoogleJsonDev)) {
                 if (buildType==='production') { sourceGoogleJson = sourceGoogleJsonProd; } // use prod version
                 else { sourceGoogleJson = sourceGoogleJsonDev; } // use dev version
@@ -62,9 +62,8 @@ return new Promise(function(resolve, reject) {
                 $logger.warn("Unable to copy google-services.json.");
                 reject();
             }
-        } else if (hookArgs.platform.toLowerCase() === 'ios') {
-                      resolve();
-        } else {
+           
+        }  else {
             resolve();
         }
     });

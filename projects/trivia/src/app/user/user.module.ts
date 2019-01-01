@@ -10,7 +10,6 @@ import { effects, reducer } from './store';
 import {
   ProfileCardComponent,
   UserStatsCardComponent,
-  GameInviteComponent,
   RecentGamesComponent,
   ProfileSettingsComponent,
   MyQuestionsComponent,
@@ -28,7 +27,6 @@ import {
   declarations: [
     ProfileCardComponent,
     UserStatsCardComponent,
-    GameInviteComponent,
     RecentGamesComponent,
     ProfileSettingsComponent,
     MyQuestionsComponent,
@@ -55,7 +53,6 @@ import {
   exports: [
     ProfileCardComponent,
     UserStatsCardComponent,
-    GameInviteComponent,
     RecentGamesComponent,
     ProfileSettingsComponent,
     MyQuestionsComponent,
