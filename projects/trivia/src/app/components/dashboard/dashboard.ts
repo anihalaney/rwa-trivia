@@ -8,6 +8,7 @@ import { User, Game, OpponentType, Invitation } from 'shared-library/shared/mode
 import { WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { PlayerMode, GameStatus } from 'shared-library/shared/model';
 
 export class Dashboard {
     user: User;
@@ -38,6 +39,10 @@ export class Dashboard {
     friendInviteSliceLastIndex: number;
     isUserLoggedIn: boolean;
     ngZone: NgZone;
+    singlePlayerCount: number;
+    twoPlayerCount: number;
+    theirTurnCount: number;
+    waitingForOponentCount: number;
 
 
     constructor(public store: Store<AppState>,
@@ -61,6 +66,10 @@ export class Dashboard {
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subs.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
+            this.singlePlayerCount = 0;
+            this.twoPlayerCount = 0;
+            this.theirTurnCount = 0;
+            this.waitingForOponentCount = 0;
             if (games.length > 0) {
                 if (!(isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false)) {
                     this.screenWidth = this.windowRef.nativeWindow.innerWidth;
@@ -68,6 +77,28 @@ export class Dashboard {
                 }
                 this.activeGames.map(game => {
                     const playerIds = game.playerIds;
+
+                    if (Number(game.gameOptions.playerMode) === Number(PlayerMode.Single) && game.playerIds.length === 1) {
+                        this.singlePlayerCount++;
+                    }
+
+                    if (game.nextTurnPlayerId !== this.user.userId &&  game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q) {
+                        this.theirTurnCount++;
+                    }
+
+                    if (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) && game.playerIds.length > 1 &&
+                        !(game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
+                        game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
+                        || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE )) {
+                        this.twoPlayerCount++;
+                    }
+
+                    // tslint:disable-next-line:max-line-length
+                    if (game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
+                        game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
+                        || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) {
+                        this.waitingForOponentCount++;
+                    }
                     playerIds.map(playerId => {
                         if (playerId !== this.user.userId) {
                             if (this.userDict[playerId] === undefined) {

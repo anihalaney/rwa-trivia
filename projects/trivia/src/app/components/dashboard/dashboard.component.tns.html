@@ -3,8 +3,8 @@
     <ScrollView>
         <StackLayout>
             <GridLayout rows="*, *, *, *, *, *, *" columns="*">
-                <Button row="0" col="0" text="START A NEW GAME" class="btn-red Roboto-Medium" (tap)="startNewGame()" height="70" margin="10"></Button>
-                <StackLayout row="1" col="0" *ngIf="user">
+                <Button row="0" col="0" text="{{singlePlayerCount.lenght}} START A NEW GAME {{twoPlayerCount.lenght}}  " class="btn-red Roboto-Medium" (tap)="startNewGame()" height="70" margin="10"></Button>
+                <StackLayout row="1" col="0" *ngIf="user && (twoPlayerCount > 0 || singlePlayerCount > 0)">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                         <GridLayout rows="auto, auto" columns="*">
                             <StackLayout row="0" col="0" *ngIf="activeGames && userDict">
@@ -24,7 +24,7 @@
                         </GridLayout>
                     </CardView>
                 </StackLayout>
-                <StackLayout row="2" col="0" *ngIf="user">
+                <StackLayout row="2" col="0" *ngIf="user && theirTurnCount">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                         <StackLayout *ngIf="activeGames && userDict">
                             <Label text="Their Turn" orientation="horizontal" horizontalAlignment="center" padding="10"
@@ -36,7 +36,7 @@
                         </StackLayout>
                     </CardView>
                 </StackLayout>
-                <StackLayout row="3" col="0" *ngIf="user">
+                <StackLayout row="3" col="0" *ngIf="user && waitingForOponentCount">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                         <StackLayout *ngIf="activeGames && userDict">
                             <Label text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center"
@@ -49,7 +49,7 @@
                     </CardView>
                 </StackLayout>
 
-                <StackLayout row="4" col="0" *ngIf="user">
+                <StackLayout row="4" col="0" *ngIf="user && gameInvites.length">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                         <StackLayout *ngIf="gameInvites">
                             <Label text="Invitation to play games" orientation="horizontal" horizontalAlignment="center"
@@ -64,7 +64,7 @@
 
                 <StackLayout row="5" col="0" *ngIf="user && userDict && friendInvitations.length > 0">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
-                        <StackLayout *ngIf="gameInvites">
+                        <StackLayout *ngIf="friendInvitations">
                             <Label text="Friend Invitations" orientation="horizontal" horizontalAlignment="center"
                                 padding="10" textWrap="true" class="title Roboto-Medium">
                             </Label>
