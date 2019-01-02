@@ -7,6 +7,7 @@ import { WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
+import { User } from 'shared-library/shared/model';
 
 @Component({
   selector: 'dashboard',
@@ -44,21 +45,27 @@ export class DashboardComponent extends Dashboard implements OnInit {
     this.routerExtension.navigate(['/game-play']);
   }
 
-  filterGame(game: any, gameStatus) {
+  filterGame(game: any, gameStatus, user: User) {
     // tslint:disable-next-line:max-line-length
     return game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
   }
 
 
-  filterSinglePlayerGame(game: any, gameStatus) {
+  filterSinglePlayerGame(game: any, gameStatus, user: User) {
     return Number(game.gameOptions.playerMode) === Number(PlayerMode.Single) && game.playerIds.length === 1;
   }
 
-  filterTwoPlyerGame(game: any, gameStatus) {
-    return game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1;
+  filterTwoPlyerGame(game: any, gameStatus, user: User) {
+
+    // tslint:disable-next-line:no-unused-expression
+    return (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) && game.playerIds.length > 1 &&
+                        !(game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
+                        game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
+                        || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ) &&
+                        (game.nextTurnPlayerId === user.userId));
   }
 
-  filterTwoPlyerWaitNextQGame(game: any, gameStatus) {
+  filterTwoPlyerWaitNextQGame(game: any, gameStatus, user: User) {
     return game.GameStatus === gameStatus.WAITING_FOR_NEXT_Q;
   }
 }
