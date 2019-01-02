@@ -15,7 +15,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "479350787602-k9jicn5btj27hfbotth8vjl3o9pmdi9l.apps.googleusercontent.com",
+          "client_id": "479350787602-b3ev3a10c34bgtbf4jlsk8866mpsolug.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.bitwiser.trivia",
@@ -23,7 +23,7 @@
           }
         },
         {
-          "client_id": "479350787602-annp9glbn9c23n2vb56igdaqq566r0kn.apps.googleusercontent.com",
+          "client_id": "479350787602-ppc7vc5m7uafbbivoevg7l5pslq4ujpa.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.bitwiser.trivia",
@@ -31,7 +31,7 @@
           }
         },
         {
-          "client_id": "479350787602-f3n44rquutvgto2hepko8unrl4l8ss8h.apps.googleusercontent.com",
+          "client_id": "479350787602-ep1k6olqc0orgvc3hk6kpg23hri0d4a3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.bitwiser.trivia",

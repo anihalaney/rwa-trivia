@@ -19,7 +19,7 @@ import { StatsModule } from './stats/stats.module';
 import { RouterModule } from '@angular/router';
 import { GameCardComponent } from './components/game-card/game-card.component';
 import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
-import { GameInviteComponent } from './user/components/game-invite/game-invite.component';
+import { GameInviteComponent } from './components/game-invite/game-invite.component';
 export function firebaseFactory() {
   return TNSFirebase;
 }
