@@ -36,7 +36,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnInit() {
 
     if (isAndroid) {
-      this.processTimeInterval = 58;
+      this.processTimeInterval = 57;
     } else {
       this.processTimeInterval = 64;
     }
