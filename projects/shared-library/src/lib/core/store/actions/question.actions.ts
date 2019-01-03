@@ -30,6 +30,14 @@ export class QuestionActions {
     };
   }
 
+  static RESET_QUESTION_SUCCESS = 'RESET_QUESTION_SUCCESS';
+  resetQuestionSuccess(): ActionWithPayload<null> {
+    return {
+      type: QuestionActions.RESET_QUESTION_SUCCESS,
+      payload: null
+    };
+  }
+
   static GET_QUESTION_OF_THE_DAY_ERROR = 'GET_QUESTION_OF_THE_DAY_ERROR';
   getQuestionOfTheDayError(errorObj: any): ActionWithPayload<any> {
     return {

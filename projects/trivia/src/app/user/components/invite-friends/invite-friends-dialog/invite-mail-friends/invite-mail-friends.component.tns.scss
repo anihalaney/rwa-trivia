@@ -1,0 +1,52 @@
+.invite-title{
+    text-align: center;
+    font-size: 18;
+    font-weight: 700;
+    color: #3b5998;
+    margin-bottom: 5;
+}
+.invite-subtitle{
+    text-align: center;
+    font-size: 14;
+    color: #616161;
+    margin-bottom: 30;
+}
+.email-textfield{
+    color: #616161;
+    border-width: 1;
+    border-color: #dfdfdf;
+    padding: 15;
+    placeholder-color:#616161;
+}
+.send-invite-button{
+    color:#FFFFFF;
+    background-color: #71b02f;
+    padding:15;
+    margin-left: 5;
+}
+.border-divide{
+    border-bottom-width: 1;
+    border-bottom-color: #dadcde;
+}
+.email-provide-name{
+    color:#616161;
+    font-weight: 700;
+    margin-left: 10;
+}
+.find-contacts-button{
+    color:#616161;
+    border-width: 1;
+    border-color: #616161;
+    font-weight: 600;
+    padding: 10;
+}
+.error-msg{
+    text-align: center;
+    font-size: 14;
+    color: #fe4f20;
+}
+.success-msg{
+    text-align: center;
+    font-size: 14;
+    color: #1f7b2b;
+}

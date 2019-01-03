@@ -1,31 +1,38 @@
 import { Injectable } from '@angular/core';
-import { map, filter, switchMap } from 'rxjs/operators';
-import { Effect, Actions } from '@ngrx/effects';
+import { map, filter, switchMap, exhaustMap } from 'rxjs/operators';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { CategoryActions } from '../actions';
 import { Category, RouterStateUrl } from '../../../shared/model';
 import { CategoryService } from '../../services';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class CategoryEffects {
-    constructor(
-        private actions$: Actions,
-        private categoryActions: CategoryActions,
-        private svc: CategoryService
-    ) { }
 
     // Load categories based on url
     @Effect()
     // handle location update
     loadRouteCategories$ = this.actions$
-        .ofType('ROUTER_NAVIGATION')
+        .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
                 routerState.url.toLowerCase().startsWith('/')))
         .pipe(
-            switchMap(() =>
-                this.svc.getCategories()
+            switchMap(() => {
+                return this.svc.getCategories()
                     .pipe(
-                        map((categories: Category[]) => this.categoryActions.loadCategoriesSuccess(categories))
-                    )));
+                        map((categories: Category[]) => {
+
+                            return this.categoryActions.loadCategoriesSuccess(categories);
+                        })
+                    );
+            })
+        );
+
+    constructor(
+        private actions$: Actions,
+        private categoryActions: CategoryActions,
+        private svc: CategoryService
+    ) { }
 }

@@ -5,10 +5,10 @@ import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import {
   Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload
-} from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+} from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { PapaParseService } from 'ngx-papaparse';
+import { Papa } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
 
 @Component({
@@ -51,7 +51,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
 
   constructor(private fb: FormBuilder,
-    private store: Store<AppState>, private papa: PapaParseService) {
+    private store: Store<AppState>, private papa: Papa,
+    private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
@@ -72,7 +73,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   filter(val: string): string[] {
-    return this.tags.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
+    return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
 
   onFileChange(event) {
@@ -94,7 +95,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   }
 
-  generateQuestions(csvString: string): void {
+  generateQuestions(csvString: any): void {
     this.questionValidationError = false;
     this.fileParseError = false;
     this.fileParseErrorMessage = '';
@@ -241,7 +242,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
   showUploadSteps() {

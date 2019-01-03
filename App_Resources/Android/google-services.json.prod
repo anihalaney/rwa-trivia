@@ -1,0 +1,74 @@
+{
+  "project_info": {
+    "project_number": "479350787602",
+    "firebase_url": "https://rwa-trivia.firebaseio.com",
+    "project_id": "rwa-trivia",
+    "storage_bucket": "rwa-trivia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:479350787602:android:e885d2038d356da1",
+        "android_client_info": {
+          "package_name": "io.bitwiser.trivia"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "479350787602-b3ev3a10c34bgtbf4jlsk8866mpsolug.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia",
+            "certificate_hash": "627191e1bf6d6560732497e6541db23079857e61"
+          }
+        },
+        {
+          "client_id": "479350787602-ppc7vc5m7uafbbivoevg7l5pslq4ujpa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia",
+            "certificate_hash": "667eecf6a00817899604907a77e97e0119691520"
+          }
+        },
+        {
+          "client_id": "479350787602-ep1k6olqc0orgvc3hk6kpg23hri0d4a3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "io.bitwiser.trivia",
+            "certificate_hash": "ee0906e1527dc87c442f4f07ef560f2b9dffbf9f"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYMskH_fsGB9dFmwAMSKaCslqLpv8uwj0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "479350787602-0qm0o71n2u6iq19hrh50cmsrtsoi2v75.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "479350787602-sm4nli1gus0f03tala80dpdiovb988kf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.bitwiser.trivia"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

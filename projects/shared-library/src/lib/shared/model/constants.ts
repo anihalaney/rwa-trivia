@@ -25,3 +25,53 @@ export enum UserControllerConstants {
     mailTxt = 'Please allow access of bulk upload to below user',
     mailSubject = 'bitwiser.io: Bulk Upload Request',
 }
+
+export enum appConstants {
+    API_PREFIX = 'app'
+}
+
+export enum interceptorConstants {
+    UNAUTHORIZED = 401,
+    TOKEN_EXPIRE = 419,
+    INTERNAL_ERROR = 500,
+    GATEWAY_TIMEOUT = 504,
+    MAXIMUM_RE_REQUEST_LIMIT = 3
+}
+
+
+export enum GameInviteConstants {
+    INVITATION_APPROVAL_TOTAL_DAYS = 8
+}
+
+export enum CalenderConstants {
+    MINUTE_CALCULATIONS = 60 * 1000,
+    HOURS_CALCULATIONS = MINUTE_CALCULATIONS * 60,
+    DAYS_CALCULATIONS = HOURS_CALCULATIONS * 24
+}
+
+export enum LeaderBoardConstants {
+    UNKNOWN = 'Unknown'
+}
+
+export enum DashboardConstants {
+    ADMIN_ROUTE = 'admin/index.html',
+}
+
+export enum profileSettingsConstants {
+    NONE = 'none',
+    PENDING = 'pending',
+    APPROVED = 'approved',
+    BULK_UPLOAD_REQUEST_BTN_TEXT = 'Bulk Upload Request',
+    BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT = 'Send Request Again',
+}
+
+export enum friendInvitationConstants {
+    PENDING = 'pending',
+    APPROVED = 'approved',
+    REJECTED = 'rejected'
+}
+
+export enum gamePlayConstants {
+    GAME_Q_TIMER = 500
+}
+

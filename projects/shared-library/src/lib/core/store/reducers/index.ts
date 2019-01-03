@@ -1,12 +1,11 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
-import { User, Category, Question, Game } from '../../../../../../shared-library/src/public_api';
-import { user, authInitialized, invitationToken, userDict } from './user.reducer';
+import { User, Category, Question, Game, Friends, Invitation} from 'shared-library/shared/model';
+import { user, authInitialized, invitationToken, userDict, gameInvites , userFriends, friendInvitations, userProfileSaveStatus} from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
-import { loginRedirectUrl } from './ui-state.reducer';
-import { activeGames } from './game.reducer';
-import { Observable } from 'rxjs';
+import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
+import { activeGames, newGameId } from './game.reducer';
 
 export * from './user.reducer';
 export * from './categories.reducer';
@@ -27,6 +26,12 @@ export interface CoreState {
   questionSaveStatus: string;
   activeGames: Game[];
   invitationToken: string;
+  resetPasswordLogs: string[];
+  gameInvites: Game[];
+  userFriends: Friends;
+  friendInvitations: Invitation[];
+  newGameId: string;
+  userProfileSaveStatus: String;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -39,7 +44,14 @@ export const reducer: ActionReducerMap<CoreState> = {
   questionSaveStatus: questionSaveStatus,
   loginRedirectUrl: loginRedirectUrl,
   activeGames: activeGames,
-  invitationToken: invitationToken
+  invitationToken: invitationToken,
+  resetPasswordLogs: resetPasswordLogs,
+  gameInvites: gameInvites,
+  userFriends: userFriends,
+  friendInvitations: friendInvitations,
+  newGameId: newGameId,
+  userProfileSaveStatus: userProfileSaveStatus,
+
 };
 
 // Features

@@ -5,7 +5,7 @@ import {
   QuestionAddUpdateComponent,
   InviteFriendsComponent
 } from '../components';
-import { AuthGuard, CategoriesResolver, TagsResolver } from '../../../../../shared-library/src/lib/core/route-guards';
+import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 
 export const userRoutes: Routes = [
   {
@@ -22,7 +22,7 @@ export const userRoutes: Routes = [
     path: 'questions',
     component: MyQuestionsComponent,
     canActivate: [AuthGuard],
-    resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
+    resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
   },
   {
     path: 'questions/add',

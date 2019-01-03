@@ -1,116 +1,54 @@
-import { Component, Input, OnDestroy, ViewChild, ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { map, take, finalize } from 'rxjs/operators';
-import { User, Category } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
-import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
-import { AngularFireStorage } from 'angularfire2/storage';
-import * as cloneDeep from 'lodash.clonedeep';
-import * as userActions from '../../store/actions';
+import { AppState } from '../../../store';
 import { userState } from '../../../user/store';
+import { ProfileSettings } from './profile-settings';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { profileSettingsConstants } from 'shared-library/shared/model';
+import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
+import { coreState, UserActions } from 'shared-library/core/store';
 
 
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./profile-settings.component.scss']
 })
-export class ProfileSettingsComponent implements OnDestroy {
-  @Input() user: User;
+
+export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
+
   @ViewChild('cropper') cropper: ImageCropperComponent;
   // Properties
-  categories: Category[];
-  categoryDict: { [key: number]: Category };
-  categoryDictObs: Observable<{ [key: number]: Category }>;
-  subs: Subscription[] = [];
-  categoriesObs: Observable<Category[]>;
-  userForm: FormGroup;
-  profileOptions: string[] = ['Only with friends', 'General', 'Programming', 'Architecture'];
-
-  userObs: Observable<User>;
-
-  profileImage: { image: any } = { image: '/assets/images/avatarimg.jpg' };
-  basePath = '/profile';
-  profileImagePath = 'avatar';
-  originalImagePath = 'original';
-  profileImageValidation: String;
-  profileImageFile: File;
-
-  userCopyForReset: User;
-
   cropperSettings: CropperSettings;
+  notificationMsg: string;
+  errorStatus: boolean;
 
+  constructor(public fb: FormBuilder,
+    public store: Store<AppState>,
+    private windowRef: WindowRef,
+    public userAction: UserActions,
+    public utils: Utils) {
 
-  sub: Subscription;
+    super(fb, store, userAction, utils);
 
-  tagsObs: Observable<string[]>;
-  tags: string[];
-  tagsAutoComplete: string[];
-  enteredTags: string[] = [];
-  filteredTags$: Observable<string[]>;
-  tagsArrays: String[];
-
-  // tslint:disable-next-line:quotemark
-  linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
-
-  constructor(private fb: FormBuilder,
-    private store: Store<AppState>,
-    private storage: AngularFireStorage,
-    private snackBar: MatSnackBar) {
-
-    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
-      this.user = s.user
-    }));
-    this.categoriesObs = store.select(getCategories);
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.categoryDictObs = store.select(categoryDictionary);
-    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-    this.tagsObs = this.store.select(getTags);
-    this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
     this.setCropperSettings();
+    this.setNotificationMsg('', false, 0);
 
-    this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
-
-    this.subs.push(this.userObs.subscribe(user => {
-      if (user) {
-        this.user = user;
-
-        this.userCopyForReset = cloneDeep(user);
-        this.createForm(this.user);
-
-        this.filteredTags$ = this.userForm.get('tags').valueChanges
-          .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-
-        if (this.user.profilePictureUrl) {
-          this.profileImage.image = this.user.profilePictureUrl;
-        }
-      }
-    }));
-
-    this.subs.push(this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
-        this.snackBar.open('Profile saved!', '', { duration: 2000 });
+        this.setNotificationMsg('Profile Saved !', false, 100);
       }
     }));
   }
 
-  get tagsArray(): FormArray {
-    return this.userForm.get('tagsArray') as FormArray;
+  setNotificationMsg(msg: string, flag: boolean, scrollPosition: number): void {
+    this.notificationMsg = msg;
+    this.errorStatus = flag;
+    if (this.windowRef.nativeWindow.scrollTo) {
+      this.windowRef.nativeWindow.scrollTo(0, scrollPosition);
+    }
   }
-
-  get categoryList(): FormArray {
-    return this.userForm.get('categoryList') as FormArray;
-  }
-
-  get socialAccountList(): FormArray {
-    return this.userForm.get('socialAccountList') as FormArray;
-  }
-
 
 
   private setCropperSettings() {
@@ -130,10 +68,6 @@ export class ProfileSettingsComponent implements OnDestroy {
     this.cropperSettings.cropperDrawSettings.strokeWidth = 2;
   }
 
-  filter(val: string): string[] {
-    return this.tagsAutoComplete.filter(option => new RegExp(Utils.regExpEscape(`${val}`), 'gi').test(option));
-  }
-
   onFileChange($event) {
     this.validateImage($event.target.files);
     if (!this.profileImageValidation) {
@@ -143,6 +77,7 @@ export class ProfileSettingsComponent implements OnDestroy {
       reader.readAsDataURL(this.profileImageFile);
       reader.onloadend = (loadEvent: any) => {
         image.src = loadEvent.target.result;
+        this.user.originalImageUrl = image.src;
         this.cropper.setImage(image);
       };
     }
@@ -171,77 +106,31 @@ export class ProfileSettingsComponent implements OnDestroy {
 
   saveProfileImage() {
     if (!this.profileImageValidation) {
-      const file = this.profileImageFile
-      const imageBlob = Utils.dataURItoBlob(this.profileImage.image);
-      const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
-      this.storage.upload(`${this.basePath}/${this.user.userId}/${this.originalImagePath}/${fileName}`, this.profileImageFile)
-        .then((status) => {
-          if (imageBlob) {
-            const filePath = `${this.basePath}/${this.user.userId}/${this.profileImagePath}/${fileName}`;
-            const fileRef = this.storage.ref(filePath);
-
-            const cropperImageUploadTask = this.storage.upload(filePath, imageBlob);
-
-            cropperImageUploadTask.snapshotChanges().pipe(
-              finalize(() => fileRef.getDownloadURL().subscribe((url) => {
-                this.profileImage.image = url ? url : '/assets/images/avatar.png';
-                this.user.profilePicture = fileName;
-                this.profileImageFile = undefined;
-                this.saveUser(this.user);
-              }))
-            ).subscribe();
-
-          }
-        });
-
+      this.getUserFromFormValue(this.userForm.value);
+      this.assignImageValues();
+      this.saveUser(this.user);
     }
   }
 
-  // create the form based on user object
-  createForm(user: User) {
-    const categoryIds: FormGroup[] = this.categories.map(category => {
-      const status = (user.categoryIds && user.categoryIds.indexOf(category.id) !== -1) ? true : false
-      const fg = new FormGroup({
-        category: new FormControl(category.id),
-        isSelected: new FormControl(status),
-      });
-      return fg;
-    });
+  assignImageValues(): void {
+    const fileName = `${new Date().getTime()}-${this.profileImageFile.name}`;
+    this.user.profilePicture = fileName;
+    this.user.croppedImageUrl = this.profileImage.image;
+    this.user.imageType = this.profileImageFile.type;
+    this.profileImageFile = undefined;
+    this.userForm.get('profilePicture').setValue(fileName);
+    this.userForm.updateValueAndValidity();
+  }
 
-    if (user.tags === undefined) {
-      const a = [];
-      user.tags = a;
+  setBulkUploadRequest(checkStatus: boolean): void {
+    const userForm = this.userForm.value;
+    if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
+      this.setNotificationMsg('Please complete profile settings for bulk upload request', true, 100);
+    } else {
+      this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
+      this.onSubmit();
     }
 
-    let fcs: FormControl[] = user.tags.map(tag => {
-      const fc = new FormControl(tag);
-      return fc;
-    });
-    if (fcs.length === 0) {
-      fcs = [new FormControl('')];
-    }
-    const tagsFA = new FormArray(fcs);
-
-    const categoryFA = new FormArray(categoryIds);
-    this.userForm = this.fb.group({
-      name: [user.name],
-      displayName: [user.displayName, Validators.required],
-      location: [user.location],
-      categoryList: categoryFA,
-      tags: '',
-      tagsArray: tagsFA,
-      facebookUrl: [user.facebookUrl, Validators.pattern(this.linkValidation)],
-      twitterUrl: [user.twitterUrl, Validators.pattern(this.linkValidation)],
-      linkedInUrl: [user.linkedInUrl, Validators.pattern(this.linkValidation)],
-      profileSetting: [(user.profileSetting) ? user.profileSetting :
-        (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
-      profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
-        (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
-      privateProfileSetting: [user.privateProfileSetting],
-      profilePicture: [user.profilePicture],
-      requestForBulkUpload: [user.isRequestedBulkUpload]
-    });
-    this.enteredTags = user.tags;
   }
 
   // tags start
@@ -268,67 +157,32 @@ export class ProfileSettingsComponent implements OnDestroy {
   }
   // tags end
 
-  getUserFromFormValue(formValue: any): void {
-    this.user.name = formValue.name;
-    this.user.displayName = formValue.displayName;
-    this.user.location = formValue.location;
-    this.user.categoryIds = [];
-    for (const obj of formValue.categoryList) {
-      if (obj['isSelected']) {
-        this.user.categoryIds.push(obj['category']);
-      }
-    }
-    this.user.facebookUrl = formValue.facebookUrl;
-    this.user.linkedInUrl = formValue.linkedInUrl;
-    this.user.twitterUrl = formValue.twitterUrl;
-    this.user.tags = [...this.enteredTags];
-    this.user.profileSetting = formValue.profileSetting;
-    this.user.profileLocationSetting = formValue.profileLocationSetting;
-    this.user.privateProfileSetting = formValue.privateProfileSetting;
-    this.user.isRequestedBulkUpload = formValue.requestForBulkUpload;
-    this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
-  }
-
-  setBulkUploadRequest(): void {
-    const userForm = this.userForm.value;
-    if (!userForm.name || !userForm.displayName || !userForm.location || userForm.categoryList.length === 0 ||
-      !userForm.facebookUrl || !userForm.linkedInUrl || !userForm.twitterUrl || this.enteredTags.length === 0 ||
-      !userForm.profileSetting || !userForm.privateProfileSetting || !userForm.profilePicture) {
-      this.userForm.get('requestForBulkUpload').setValue(false);
-      this.snackBar.open('Please complete profile settings for bulk upload request', '', { duration: 2000 });
-    } else {
-      this.userForm.get('requestForBulkUpload').setValue(true);
-    }
-
-  }
-
-  resetUserProfile() {
-    this.user = cloneDeep(this.userCopyForReset);
-    this.createForm(this.user);
-    this.filteredTags$ = this.userForm.get('tags').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-  }
-
   onSubmit() {
     // validations
     this.userForm.updateValueAndValidity();
+
+    if (!this.profileImageFile && !this.user.profilePicture) {
+      this.setNotificationMsg('Please upload the profile picture', true, 100);
+      return;
+    } else if (this.profileImageFile) {
+      this.assignImageValues();
+    }
+
+
     if (this.userForm.invalid) {
+      this.setNotificationMsg('Please fill the mandatory fields', true, 100);
       return;
     }
+
     // get user object from the forms
     this.getUserFromFormValue(this.userForm.value);
     // call saveUser
     this.saveUser(this.user);
+    this.setNotificationMsg('', false, 0);
   }
-
-  // store the user object
-  saveUser(user: User) {
-    this.store.dispatch(new userActions.AddUserProfile({ user: user }));
-  }
-
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

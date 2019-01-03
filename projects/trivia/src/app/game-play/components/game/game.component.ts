@@ -1,12 +1,12 @@
-import { Component, Input, OnInit, OnDestroy, ViewChild, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { GameDialogComponent } from '../game-dialog/game-dialog.component';
-import { User } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { User } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 
@@ -27,7 +27,8 @@ export class GameComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private renderer: Renderer2) {
+    private renderer: Renderer2,
+    private utils: Utils) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -43,8 +44,6 @@ export class GameComponent implements OnInit, OnDestroy {
     // REF: https://github.com/angular/angular/issues/10131
     //TODO: se what's causing the error and fix.
     setTimeout(() => this.openDialog(), 0);
-
-
   }
 
   openDialog() {
@@ -66,6 +65,6 @@ export class GameComponent implements OnInit, OnDestroy {
       this.store.dispatch(new gameplayactions.ResetCurrentGame());
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     }
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

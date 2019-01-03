@@ -1,6 +1,6 @@
-.question-list{ float: left;margin: 0% 0% 0% 4% }
+.question-list{ margin-top : 20px; }
 .question-list li{ margin-bottom: 12px; text-align: center; }
-.question-list li{ width: 45%; margin-right: 4%; float: left;word-break: break-all; }
+.question-list li{ width: 46%; margin-right: 2%; float: left;word-break: break-all; }
 @media screen and ( max-width:767px){
   .rocateicon{margin:0 16px 0 0; }
   .question-list li{ width: 100%; }
@@ -10,7 +10,7 @@
   p{margin-top: 3%}
 }
 
-.gameplay li{ padding: 10px 0; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer;  position: relative;word-break: break-all;}
+.gameplay li{ padding: 10px; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer;  position: relative;word-break: break-all;}
 .gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
 
 .gameplay li.question-answered {cursor: not-allowed;}
@@ -59,4 +59,23 @@
 .question-tags
 {
   margin-top: 1%;
+}
+
+
+.question-answered{
+  border-color: #000;
+  border-width: 1;
+  border-radius: 2;
+}
+
+.gameplay .right{
+  border-color: #71b02f;
+  background-color: #71b02f;
+  color: #fff;
+}
+
+.gameplay .wrong{
+  border-color: #d54937;
+  background-color: #d54937;
+  color: #fff;
 }

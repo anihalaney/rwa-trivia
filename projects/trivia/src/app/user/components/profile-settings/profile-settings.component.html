@@ -6,7 +6,7 @@
   <section id="curentactive" class="card">
     <div class="h1block">
       <h1>My Settings</h1>
-      <p>Control You profile information, both what is says and what other people see</p>
+      <p>Control You profile information, both what it says and what other people see</p>
     </div>
     <div class="optionbox">
       <!-- Prefered Categories -->
@@ -20,16 +20,26 @@
       <!-- Prefered Categories end -->
     </div>
     <form *ngIf="userForm" [formGroup]="userForm" novalidate>
+
       <!-- Profile pik -->
       <div class="enterquestion secondbg">
         <div class="optionbox">
-          <h3>Upload Avatar :-</h3>
+          <div class="row" [ngClass]="{'error':errorStatus, 'success':!errorStatus}">
+            <div class="col-sm-3 col-xs-12">
+            </div>
+            <div class="col-sm-9 col-xs-12">
+              <label>
+                {{notificationMsg}}
+              </label>
+            </div>
+          </div>
+          <h3>Upload Avatar * :-</h3>
           <!-- Upload avatar -->
           <div class="row">
             <div class="col-sm-3 col-xs-12">
               <label for="file-upload" class="custom-file-upload">
-                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight" alt="Avatar"
-                />
+                <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"
+                  alt="Avatar" />
               </label>
               <div>
                 <button *ngIf="profileImageFile && !profileImageValidation" class="btn" (click)="saveProfileImage()">Save</button>
@@ -37,37 +47,45 @@
             </div>
             <div class="col-sm-9 col-xs-12 avatarinput">
               <div>
-                <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide" aria-label="file">
+                <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide"
+                  aria-label="file">
               </div>
               <P *ngIf="profileImageValidation" class="error">
                 {{profileImageValidation}}
               </P>
-              <p *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can adjust the cropped image Recommend
+              <p *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can adjust the cropped image
+                Recommend
                 an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
               <div>
                 <div class="file-upload">
                 </div>
-                <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage" [settings]="cropperSettings"></img-cropper>
+                <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage"
+                  [settings]="cropperSettings"></img-cropper>
                 <br>
               </div>
             </div>
           </div>
           <div class="clearfix namefield">
             <div class="formfield">
-              <label>Name</label>
+              <label>Name *</label>
               <input formControlName="name" type="text" placeholder="Enter Name" class="required" aria-label="name">
               <p>Enter your real name, so people you know and recognize you</p>
+              <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error">Name is
+                required!</p>
             </div>
             <div class="formfield">
-              <label>Display Name</label>
-              <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required" aria-label="display-name">
+              <label>Display Name *</label>
+              <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required"
+                aria-label="display-name">
               <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">Display
                 Name is required!</p>
             </div>
             <div class="formfield">
-              <label>Location</label>
+              <label>Location *</label>
               <input formControlName="location" placeholder="Enter Location" type="text" class="required" aria-label="location">
               <p>Where in the world you are</p>
+              <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">Location
+                is required!</p>
             </div>
           </div>
           <!-- Upload avatar end -->
@@ -106,8 +124,8 @@
                     </mat-basic-chip>
                   </mat-chip-list>
 
-                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags" [matAutocomplete]="tagAuto"
-                    aria-label="tags">
+                  <input matInput class="type-zone margin-bottom-8" contenteditable="true" formControlName="tags"
+                    [matAutocomplete]="tagAuto" aria-label="tags">
                   <mat-autocomplete #tagAuto="matAutocomplete">
                     <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                       {{tag}}
@@ -168,8 +186,8 @@
                   <div class="formfield">
                     <label>Location:</label>
                     <select placeholder="Select Location" formControlName="profileLocationSetting">
-                      <option *ngFor="let profileOption of profileOptions" [value]="profileOption">
-                        {{profileOption}}
+                      <option *ngFor="let locationOption of locationOptions" [value]="locationOption">
+                        {{locationOption}}
                       </option>
                     </select>
                   </div>
@@ -177,7 +195,8 @@
                   <div class="formfield">
                     <label>Privacy:</label>
                     <label>
-                      <input formControlName="privateProfileSetting" type="checkbox"> Keep your profile activity private
+                      <input formControlName="privateProfileSetting" type="checkbox"> Keep your profile activity
+                      private
                     </label>
                     <p>This means no one can invite you or can see you profile.</p>
                   </div>
@@ -193,15 +212,19 @@
                 <div class="col-sm-3">
                   <h3>Access</h3>
                 </div>
-                <div class="col-md-4 col-sm-9">
-                  <div class="formfield">
-                    <label></label>
-                    <label>
-                      <input formControlName="requestForBulkUpload" type="checkbox" (change)="setBulkUploadRequest()"> Bulk
-                      Upload Request
-                    </label>
-                  </div>
-                  <!-- Security Setting end -->
+                <div class="col-md-9 col-sm-9 bulk-upload-request">
+                  <label>
+                    <button *ngIf="(!user.bulkUploadPermissionStatus
+                     || user.bulkUploadPermissionStatus === NONE
+                     || user.bulkUploadPermissionStatus === PENDING)
+                     && !user.isRequestedBulkUpload"
+                      type="button" class="btn" (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
+                    <p *ngIf="user.bulkUploadPermissionStatus === PENDING">Bulk upload requested on
+                      {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}.</p>
+                    <p *ngIf="user.bulkUploadPermissionStatus === APPROVED">User has bulk upload
+                      privilege</p>
+
+                  </label>
                 </div>
               </div>
             </div>
@@ -211,7 +234,7 @@
       </div>
       <!-- Profile pik end -->
       <div class="savebox textcenter">
-        <button type="button" [disabled]="!userForm.valid" class="btn save" (click)="onSubmit()">Save</button>
+        <button type="button" class="btn save" (click)="onSubmit()">Save</button>
         <!-- <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button> -->
       </div>
     </form>

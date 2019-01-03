@@ -1,0 +1,232 @@
+/*
+In NativeScript, the app.css file is where you place CSS rules that
+you would like to apply to your entire application. Check out
+http://docs.nativescript.org/ui/styling for a full list of the CSS
+selectors and properties you can use to style UI components.
+
+/*
+In many cases you may want to use the NativeScript core theme instead
+of writing your own CSS rules. For a full list of class names in the theme
+refer to http://docs.nativescript.org/ui/theme.
+*/
+
+// @import '~@angular/material/theming';
+// @import '~@ngx-share/button/styles/share-buttons';
+// @import '~@ngx-share/button/styles/themes/circles/circles-dark-theme';
+
+
+@import '~nativescript-theme-core/css/core.light.css';
+@import './styles/light.theme.scss';
+@import './styles/styles.scss';
+@import './styles/global.scss';
+
+
+.new-btn{
+    color: map-get($light-theme-text-color , primary-light);
+  }
+
+.material-icon {
+  font-family: "Material Icons", MaterialIcons-Regular;
+}
+
+.Varela-Round-Regular{
+  font-family: "Varela Round", "VarelaRound-Regular";
+  font-weight: 400;
+}
+
+.Roboto-Bold{
+  font-family: "Roboto", "Roboto-Bold";
+  font-weight: 700;
+}
+
+.Roboto-Medium {
+  font-family: "Roboto","Roboto-Medium";
+  font-weight: 500;
+}
+
+.Roboto-Regular {
+  font-family: "Roboto","Roboto-Regular";
+  font-weight: 400;
+}
+
+.Hind-Bold {
+  font-family: "Hind", "Hind-Bold";
+  font-weight: 700;
+}
+
+.Hind-SemiBold {
+  font-family: "Hind","Hind-SemiBold";
+  font-weight: 600;
+}
+
+.Hind-Medium {
+  font-family: "Hind","Hind-Medium";
+  font-weight: 500;
+}
+
+.Hind-Regular {
+  font-family: "Hind","Hind-Regular";
+  font-weight: 400;
+}
+
+.Hind-Light {
+  font-family: "Hind","Hind-Light";
+  font-weight: 300;
+}
+
+.fab-button2 {
+	height: 50;
+	width: 50; /// this is required on iOS - Android does not require width so you might need to adjust styles
+	margin: 15;
+	background-color: #8ac541;
+	horizontal-align: right;
+	vertical-align: bottom;
+}
+
+.fa {
+  font-family: "FontAwesome", fontawesome-webfont;
+}
+.new-btn-s {
+  color: red;
+}
+
+.tns-btn{
+  font-size: 16;
+}
+
+.sprite {
+  background-repeat: no-repeat;
+  background-image: url('~/assets/images/sprite.png');
+  background-size: 1500 1500;
+}
+
+.background {
+	background-image: url('~/assets/images/background-image.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.score2-L {
+  width: 50;
+  height: 52;
+  background-position: -10 -880;
+
+
+}
+
+.score1-L {
+  width: 50;
+  height: 54;
+  background-position: -10 -1110;
+}
+
+.score3-L {
+  width: 50;
+  height: 53;
+  background-position: -160 -1110;
+}
+
+
+.score4-L {
+  width: 50;
+  height: 53;
+  background-position: -5 -1265;
+}
+
+.score5-L {
+  width: 50;
+  height: 53;
+  background-position: -155 -1265;
+}
+
+.score1 {
+  width: 26;
+  height: 26;
+  background-position: -162 -885;
+}
+
+.score2 {
+  width: 26;
+  height: 26;
+  background-position: -232 -885;
+}
+
+.score3 {
+  width: 26;
+  height: 28;
+  background-position: -300 -885;
+}
+
+.score4 {
+  width: 26;
+  height: 26;
+  background-position: -162 -955;
+}
+
+.score5 {
+  width: 26;
+  height: 26;
+  background-position: -232 -955;
+}
+
+.score0 {
+  width: 26;
+  height: 26;
+  background-position: -189 -800;
+}
+
+.thumb-up {
+  width: 42;
+  height: 28;
+  background-position: -255 -785;
+}
+
+.thumb-down {
+  width: 42;
+  height: 28;
+  background-position: -2 -1030;
+}
+
+.mobile {
+	.btn-red{
+		font-size:15; 
+		background-color:#D4493D;
+		color:#ffffff;
+		margin: 20 0 10 0;
+		padding:15 0 15 0;
+  }
+  
+  .title{
+    color:#3B5998;
+    font-weight: bold;
+    line-height: 0.24;
+    font-size: 20;
+  }
+
+  .main-title{
+    color:#616161;
+    font-size: 16;
+    padding:3 0 3 0;
+  }
+  .sub-title{
+    color: #8C8C8C;
+    font-size: 15;
+    padding:2 0 2 0;
+  }
+
+  .timer{
+    color: #949494;
+    font-size: 15;
+    padding:2 0 2 0;
+  }
+
+  .hr-light{
+    background-color: #949494;
+  }
+
+  .btn-wait-opp{
+    background-color:#f1f5f7;
+    color:#949494;
+  }
+}

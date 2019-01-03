@@ -1,0 +1,69 @@
+<ns-action-bar title="My Question" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+
+<StackLayout>
+
+
+    <StackLayout *ngIf="loaderBusy">
+        <ActivityIndicator [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
+    </StackLayout>
+
+
+    <GridLayout row="*,*" col="*">
+
+        <StackLayout row="0" rowSpan="2" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
+            <TabView androidSelectedTabHighlightColor="#ef4545" tabTextFontSize="14" tabTextColor="#3b5998"
+                selectedTabTextColor="#3b5998">
+                <StackLayout *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
+                    <StackLayout>
+                        <question-table [questions]="publishedQuestions" [categoryDictionary]="categoryDictObs | async"
+                            [user]="user" [showApproveButton]="false" [userDict]="userDict">
+                        </question-table>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout *tabItem="{title: 'Pending', textTransform: 'none'}" fontSize="16" fontWeight="600">
+                    <StackLayout>
+                        <question-table [questions]="unpublishedQuestions" [categoryDictionary]="categoryDictObs | async"
+                            [user]="user" [showApproveButton]="false" [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"
+                            (displayReason)="displayReason($event)" (selectedQuestion)="setSelectedQuestion($event)">
+                            <Button class="fa approve-btn" text="&#xf00c;" textWrap="true" top="70" width="90" height="25"
+                                fontSize="16" fontWeight="bold"></Button>
+                        </question-table>
+                    </StackLayout>
+                </StackLayout>
+            </TabView>
+        </StackLayout>
+
+        <StackLayout row="0" rowSpan="2" *ngIf="displayReasonViewer && !displayEditQuestion">
+            <StackLayout>
+                <CardLayout>
+                    <GridLayout row="*" col="*,*" height="80">
+                        <Button col="0" colSpan="2" text="Reason" textWrap="true" fontSize="23" backgroundColor="white"
+                            width="400"></Button>
+                        <Button col="1" class="fa " horizontalAlignment="left" text="&#xf00d;" textWrap="true" fontSize="25"
+                            backgroundColor="white" width="80" (tap)="displayReason(false)"></Button>
+                    </GridLayout>
+                </CardLayout>
+                <StackLayout class="Roboto-Medium" padding="30 20 30 20">
+                    <TextView hint="Reason" [text]="selectedQuestion.reason" class="input" border="none"
+                        borderBottomWidth="1" borderColor="#f3f3f3" [editable]="false"></TextView>
+                    <Label text="Please do the needful edits and resubmit the question." textWrap="true" class="label"
+                        fontWeight="400" color="#989898" marginTop="20"></Label>
+                    <Button text="RESUBMIT" class="Roboto-Regular" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
+                        backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20" fontWeight="bold"
+                        (tap)="showUpdateQuestion(true)"></Button>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+
+        <app-question-add-update row="0" rowSpan="2" *ngIf="!displayReasonViewer && displayEditQuestion" [editQuestion]="selectedQuestion"
+            (hideQuestion)="hideQuestion($event)"></app-question-add-update>
+     
+            <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right">
+                <Image *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy" (tap)="navigateToSubmitQuestion()" src="~/assets/images/mobile/pencil-icon.png"
+                 rippleColor="#f1f1f1"  height="50" width="50"  margin="15"  ></Image>
+            </StackLayout>
+            
+    </GridLayout>
+   
+
+</StackLayout>

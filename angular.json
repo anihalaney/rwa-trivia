@@ -4,9 +4,11 @@
   "newProjectRoot": "projects",
   "projects": {
     "trivia": {
-      "root": "projects/trivia/",
+      "root": "projects/trivia",
       "sourceRoot": "projects/trivia/src",
       "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
@@ -20,7 +22,8 @@
               "projects/trivia/src/assets",
               "projects/trivia/src/favicon.ico",
               "projects/trivia/src/manifest.json",
-              "projects/trivia/src/robots.txt"
+              "projects/trivia/src/robots.txt",
+              "projects/trivia/src/manifest.json"
             ],
             "styles": [
               "projects/trivia/src/styles/rwa-trivia.theme.scss",
@@ -41,6 +44,16 @@
               ]
             },
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/environment.prod.ts"
+                }
+              ],
+              "scripts": [
+                "projects/trivia/src/scripts/google-analytics.js"
+              ],
+              "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -49,14 +62,7 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
-                  "with": "projects/shared-library/src/lib/environments/environment.prod.ts"
-                }
-              ],
-              "serviceWorker": true
+              "buildOptimizer": true
             }
           }
         },
@@ -99,7 +105,8 @@
               "projects/trivia/src/assets",
               "projects/trivia/src/favicon.ico",
               "projects/trivia/src/manifest.json",
-              "projects/trivia/src/robots.txt"
+              "projects/trivia/src/robots.txt",
+              "projects/src/manifest.json"
             ]
           }
         },
@@ -110,7 +117,9 @@
               "projects/trivia/tsconfig.app.json",
               "projects/trivia/tsconfig.spec.json"
             ],
-            "exclude": []
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         },
         "server": {

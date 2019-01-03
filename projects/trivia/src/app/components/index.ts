@@ -5,6 +5,8 @@ import { SideNavComponent } from './side-nav/side-nav.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { InvitationRedirectionComponent } from './invitation-redirection/invitation-redirection.component';
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
+import { GameInviteComponent } from './game-invite/game-invite.component';
 
 export {
     AppComponent,
@@ -13,7 +15,9 @@ export {
     SideNavComponent,
     HeaderComponent,
     FooterComponent,
-    InvitationRedirectionComponent
+    InvitationRedirectionComponent,
+    PrivacyPolicyComponent,
+    GameInviteComponent
 };
 
 export default [
@@ -23,5 +27,7 @@ export default [
     SideNavComponent,
     HeaderComponent,
     FooterComponent,
-    InvitationRedirectionComponent
+    InvitationRedirectionComponent,
+    PrivacyPolicyComponent,
+    GameInviteComponent
 ];

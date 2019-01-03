@@ -2,12 +2,12 @@ import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestro
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { BulkUploadFileInfo, Question, Category } from '../../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
+import { BulkUploadFileInfo, Question, Category } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { MatTableDataSource } from '@angular/material';
 
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 
 import { MatSnackBar } from '@angular/material';
@@ -48,7 +48,8 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
-    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router) {
+    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router,
+    private utils: Utils) {
 
     this.subs.push(this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
       if (status === 'UPDATE') {
@@ -130,7 +131,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 }

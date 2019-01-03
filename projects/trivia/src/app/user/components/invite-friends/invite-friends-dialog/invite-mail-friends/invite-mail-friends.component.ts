@@ -1,19 +1,19 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
-import { User } from '../../../../../../../../shared-library/src/lib/shared/model';
+import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../../../store';
 import * as userActions from '../../../../../user/store/actions';
 import { userState } from '../../../../../user/store';
+import { coreState, UserActions } from 'shared-library/core/store';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 @Component({
   selector: 'app-invite-mail-friends',
   templateUrl: './invite-mail-friends.component.html',
-  styleUrls: ['./invite-mail-friends.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./invite-mail-friends.component.scss']
 })
 export class InviteMailFriendsComponent implements OnInit {
   @Input() user: User;
@@ -21,10 +21,11 @@ export class InviteMailFriendsComponent implements OnInit {
   showErrorMsg = false;
   invalidEmailList = [];
   errorMsg = '';
-  showSuccessMsg = undefined;
+  showSuccessMsg: string;
   validEmail = [];
+  emailCheck: Boolean = false;
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>) {
+  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions) {
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
@@ -32,10 +33,9 @@ export class InviteMailFriendsComponent implements OnInit {
       }
     });
 
-    this.store.select(userState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-
-      if (status === 'INVITATION SUCCESS') {
-        this.showSuccessMsg = 'Your Invitations are send Successfully!!';
+    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.showSuccessMsg = status;
       }
     });
 
@@ -54,6 +54,7 @@ export class InviteMailFriendsComponent implements OnInit {
 
 
   onSubscribe() {
+    this.emailCheck = true;
     if (!this.invitationForm.valid) {
       return;
     } else {
@@ -91,8 +92,8 @@ export class InviteMailFriendsComponent implements OnInit {
 
       }
       if (this.invalidEmailList.length === 0) {
-        this.store.dispatch(new userActions.AddUserInvitation(
-          { created_uid: this.user.userId, emails: this.validEmail, status: 'pending' }));
+        this.store.dispatch( this.userAction.addUserInvitation(
+          { userId: this.user.userId, emails: this.validEmail }));
       }
     }
   }

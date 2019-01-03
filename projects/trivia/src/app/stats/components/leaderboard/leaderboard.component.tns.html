@@ -1,0 +1,35 @@
+<ns-action-bar title="Leaderboard" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<StackLayout backgroundColor="#f1f2f2">
+<ScrollView>
+    <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0">
+            <StackLayout class="question-answered Hind-Regular" *ngFor="let cat of leaderBoardCat">
+                <CardView margin="5" android:elevation="20" ios:elevation="40" radius="15" class="gameplay"  *ngIf="categoryDict[cat]?.categoryName == category">
+                    <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff" height="100%" margin="15">
+                            <StackLayout horizontalAlignment="center" verticalAlignment="center">
+                                <Label text="{{categoryDict[cat]?.categoryName?.charAt(0)?.toUpperCase() + categoryDict[cat]?.categoryName?.slice(1)}}" textWrap="true" fontSize="18" class="title Roboto-Bold" verticalAlignment="center" paddingTop="25"></Label>
+                            </StackLayout>
+                        <StackLayout class="question-answered " marginTop="10" *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:10;let j=index;">
+                            <GridLayout rows="*" columns="auto,auto,*,auto" marginTop="10">
+                                <Label text="#{{j+1}}" row="0" col="0" class="padding-5 text-black Hind-Bold" fontSize="16" verticalAlignment="center" ></Label>
+                                <Image row="0" col="1" [src]="getImageUrl(userDict[user.userId])" backgroundColor="gray" stretch="aspectFill" stretch="aspectFill" height="55" width="55" marginLeft="10"
+                                verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
+                                <GridLayout row="0" col="2" rows="*, *" columns="*" class="padding-10">
+                                    <Label *ngIf="userDict[user.userId]?.displayName" [text]="userDict[user.userId]?.displayName" fontSize="16" row="0" col="0" class="text-black"></Label>
+                                    <Label *ngIf="!userDict[user.userId]?.displayName" [text]="unknown" row="0" col="0" class="text-black" fontSize="16"></Label>
+
+                                    <Label *ngIf="userDict[user.userId]?.location" [text]="userDict[user.userId]?.location" row="1" col="0" class="text-gray" fontSize="14"></Label>
+                                    <Label *ngIf="!userDict[user.userId]?.location" [text]="unknown" row="1" col="0" class="text-gray" fontSize="14"></Label>
+                    
+                                </GridLayout>
+                                <GridLayout  row="0" col="3" rows="*, *" columns="*" class="padding-10">
+                                    <Label [text]="user.score" row="0" col="0" class="text-black" fontSize="16"></Label>
+                                    <Label text="points" row="1" col="0" class="text-gray"  fontSize="14"></Label>
+                                </GridLayout>
+                            </GridLayout>
+                        </StackLayout>
+                    </StackLayout>
+                </CardView>
+            </StackLayout>
+        </StackLayout>
+</ScrollView>
+</StackLayout>

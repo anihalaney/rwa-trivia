@@ -67,6 +67,7 @@ export class NewsletterComponent implements OnInit {
     }
   }
 
+
   onSubscribe() {
     if (!this.subscriptionForm.valid) {
       return;

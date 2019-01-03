@@ -1,17 +1,17 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Category } from '../../shared/model';
+import { DbService } from './../db-service';
 
 @Injectable()
 export class CategoryService {
 
-  constructor(private db: AngularFirestore) {
+  constructor(
+    private dbService: DbService) {
   }
 
   getCategories(): Observable<Category[]> {
-    return this.db.collection<Category>('/categories').valueChanges().pipe(take(1));
+    return this.dbService.valueChanges('categories').pipe(take(1));
   }
-
 }
