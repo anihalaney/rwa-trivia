@@ -89,7 +89,8 @@ export class Dashboard {
                     if (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) && game.playerIds.length > 1 &&
                         !(game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
                         game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
-                        || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE )) {
+                        || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ) &&
+                        (game.nextTurnPlayerId === this.user.userId)) {
                         this.twoPlayerCount++;
                     }
 

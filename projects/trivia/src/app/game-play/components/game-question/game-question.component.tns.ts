@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
 import { Observable } from 'rxjs';
-
+import { isAndroid } from 'tns-core-modules/platform';
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
@@ -18,13 +18,14 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
   answeredIndex: number;
   correctAnswerIndex: number;
-  minutes = 1;
+  minutes = 0.62;
   public progressValue: number;
   stopProcessBar;
   columns;
   doPlay = true;
   photoUrl: String = '~/assets/icons/icon-192x192.png';
   userDict$: Observable<{ [key: string]: User }>;
+  processTimeInterval: number;
 
   constructor(private utils: Utils, public store: Store<GamePlayState>, ) {
     super();
@@ -33,16 +34,26 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnInit() {
+
+    if (isAndroid) {
+      this.processTimeInterval = 58;
+    } else {
+      this.processTimeInterval = 64;
+    }
     this.progressValue = 0;
+    // Created progressbar interval will call each 0.065 second
+    // Increament progress value
     this.stopProcessBar = setInterval(() => {
       if (this.progressValue <= 100 && this.doPlay) {
-        this.progressValue = (this.minutes * 100) / 15;
+        this.progressValue = (this.minutes * 100) / 240;
         this.minutes++;
       } else {
         this.clearProcessBar();
       }
-    }, 1000);
+    }, this.processTimeInterval);
+
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
+
   }
 
 
