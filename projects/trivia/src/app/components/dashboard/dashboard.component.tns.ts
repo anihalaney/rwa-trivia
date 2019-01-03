@@ -55,7 +55,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
     return Number(game.gameOptions.playerMode) === Number(PlayerMode.Single) && game.playerIds.length === 1;
   }
 
-  filterTwoPlyerGame(game: any, gameStatus, user: User) {
+  filterTwoPlayerGame(game: any, gameStatus, user: User) {
 
     // tslint:disable-next-line:no-unused-expression
     return (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) && game.playerIds.length > 1 &&
@@ -65,7 +65,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
                         (game.nextTurnPlayerId === user.userId));
   }
 
-  filterTwoPlyerWaitNextQGame(game: any, gameStatus, user: User) {
+  filterTwoPlayerWaitNextQGame(game: any, gameStatus, user: User) {
     return game.GameStatus === gameStatus.WAITING_FOR_NEXT_Q;
   }
 }
