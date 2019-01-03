@@ -16,7 +16,7 @@
                                 </StackLayout>
                             </StackLayout>
                             <StackLayout row="1" col="0" *ngIf="activeGames && userDict">
-                                <StackLayout *ngFor="let game of activeGames | gamefilter: filterTwoPlyerGame;let last = last;let index = index;">
+                                <StackLayout *ngFor="let game of activeGames | gamefilter: filterTwoPlayerGame;let last = last;let index = index;">
                                     <game-card [game]="game" [cardType]="'twoPlayer'"></game-card>
                                     <StackLayout class="hr-light m-10" *ngIf="!last"></StackLayout>
                                 </StackLayout>
@@ -29,7 +29,7 @@
                         <StackLayout *ngIf="activeGames && userDict">
                             <Label text="Their Turn" orientation="horizontal" horizontalAlignment="center" padding="10"
                                 textWrap="true" class="title Roboto-Bold"> </Label>
-                            <StackLayout *ngFor="let game of activeGames | gamefilter: filterTwoPlyerWaitNextQGame; let last = last;">
+                            <StackLayout *ngFor="let game of activeGames | gamefilter: filterTwoPlayerWaitNextQGame; let last = last;">
                                 <game-card [game]="game" [cardType]="'theirTurn'"></game-card>
                                 <!-- <StackLayout class="hr-light m-10"  *ngIf="!last"></StackLayout> -->
                             </StackLayout>
