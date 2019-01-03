@@ -62,13 +62,10 @@ export class DrawerComponent implements OnInit {
         });
     }
     ngOnInit() {
-
         this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
         });
-
-
     }
 
     closeDrawer() {
