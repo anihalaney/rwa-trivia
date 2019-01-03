@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { CoreState, coreState, UIStateActions } from '../../store';
-import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { CoreState, UIStateActions } from '../../store';
+import { Store } from '@ngrx/store';
 import { Utils } from '../../services';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';

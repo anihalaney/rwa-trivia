@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -8,8 +8,8 @@ import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Page } from 'tns-core-modules/ui/page';
-import {LoadingIndicator} from "nativescript-loading-indicator";
-
+import { LoadingIndicator } from "nativescript-loading-indicator";
+import { isAndroid } from 'tns-core-modules/platform';
 
 @Component({
   selector: 'login',
@@ -24,7 +24,6 @@ export class LoginComponent extends Login implements OnInit {
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
     private uiStateActions: UIStateActions,
-    private cdRef: ChangeDetectorRef,
     private page: Page,
     private firebaseAuthService: FirebaseAuthService) {
     super(fb, store);
@@ -59,10 +58,11 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   onSubmit() {
-    this.loader.show();
+
     if (!this.loginForm.valid) {
       return;
     }
+    this.loader.show();
 
     switch (this.mode) {
       case 0:
@@ -75,7 +75,7 @@ export class LoginComponent extends Login implements OnInit {
           this.redirectTo();
         }).catch((error) => {
           this.loader.hide();
-          Toast.makeText(error.message).show();
+          Toast.makeText(error).show();
         });
         break;
       case 1:
@@ -92,12 +92,12 @@ export class LoginComponent extends Login implements OnInit {
               }
             ).catch((error) => {
               this.loader.hide();
-              Toast.makeText(error.message).show();
+              Toast.makeText(error).show();
             });
           }
         }).catch((error) => {
           this.loader.hide();
-          Toast.makeText(error.message).show();
+          Toast.makeText(error).show();
         });
         break;
       case 2:
@@ -112,14 +112,16 @@ export class LoginComponent extends Login implements OnInit {
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
           }).catch((error) => {
             this.loader.hide();
-            Toast.makeText(error.message).show();
+            Toast.makeText(error).show();
           });
     }
 
   }
 
   googleLogin() {
-    this.loader.show();
+    if (isAndroid) {
+      this.loader.show();
+    }
     this.firebaseAuthService.googleLogin().then(
       (result) => {
         this.redirectTo();
@@ -132,7 +134,9 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   fbLogin() {
-    this.loader.show();
+    if (isAndroid) {
+      this.loader.show();
+    }
     this.firebaseAuthService.facebookLogin().then(
       (result) => {
         this.redirectTo();
