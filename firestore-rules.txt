@@ -14,9 +14,6 @@ service cloud.firestore {
     return isAuthenticated() && request.auth.uid == userId;
   }
   
-function isUserAuthenticated(userId) {
-    return isAuthenticated() && request.auth.uid == userId;
-  }
   
   match /databases/{database}/documents {
 
