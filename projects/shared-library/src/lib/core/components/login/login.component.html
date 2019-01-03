@@ -38,13 +38,13 @@
                 Email!
               </mat-hint>
             </mat-form-field>
-            <mat-form-field [class.hide]="mode === 2" class="full-width required">
+            <mat-form-field *ngIf="mode !== 2" class="full-width required">
               <input type="password" matInput placeholder="Password *" class="required" formControlName="password"
                 aria-label="password">
               <mat-hint align="end" *ngIf="mode !== 2 && (loginForm.controls.password.errors && !loginForm.controls.password.pristine)"
                 class="error">Password must be atleast 6 characters</mat-hint>
             </mat-form-field>
-            <mat-form-field [class.hide]="mode !== 1" class="full-width required">
+            <mat-form-field *ngIf="mode === 1" class="full-width required">
               <input type="password" matInput placeholder="Confirm Password *" class="required" formControlName="confirmPassword"
                 aria-label="confirm-password">
               <mat-hint align="end" *ngIf="loginForm.controls.confirmPassword.errors && !loginForm.controls.confirmPassword.pristine"
@@ -62,21 +62,21 @@
                 <button mat-raised-button class="auth-btn" [ngClass]="{'active-btn': loginForm.valid, 'disabled-btn': !loginForm.valid}"
                   type="submit" [disabled]="!loginForm.valid">Login</button>
                 <div class="row loginlink">
-                  <div class="col-xs-6"><a (click)="this.mode=2" title="Forgot Password?">Forgot Password?</a></div>
-                  <div class="col-xs-6 textrigth"><a (click)="this.mode=1" title="New Signup">New Signup</a></div>
+                  <div class="col-xs-6"><a (click)="this.changeMode(2)" title="Forgot Password?">Forgot Password?</a></div>
+                  <div class="col-xs-6 textrigth"><a (click)="this.changeMode(1)" title="New Signup">New Signup</a></div>
                 </div>
               </ng-container>
               <ng-container *ngSwitchCase="1">
                 <button mat-raised-button class="auth-btn" [ngClass]="{'active-btn': loginForm.valid, 'disabled-btn': !loginForm.valid}"
                   type="submit" [disabled]="!loginForm.valid">Sign Up</button>
                 <div class="signupfree">by clicking "Sign Up" I agree to bitWiser's Terms & Conditions</div>
-                <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">Already have an account?
+                <div class="textcenter loginlink"><a (click)="this.changeMode(0)" title="Login">Already have an account?
                     Login</a></div>
               </ng-container>
               <ng-container *ngSwitchCase="2">
                 <button mat-raised-button class="auth-btn" type="submit" [ngClass]="{'active-btn': loginForm.valid, 'disabled-btn': !loginForm.valid}"
                   [disabled]="!loginForm.valid || validateLogs()">Forgot Password</button>
-                <div class="textcenter loginlink"><a (click)="this.mode=0" title="Login">No. I remember it now!</a></div>
+                <div class="textcenter loginlink"><a (click)="this.changeMode(0)" title="Login">No. I remember it now!</a></div>
               </ng-container>
             </ng-container>
           </form>
