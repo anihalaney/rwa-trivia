@@ -1,7 +1,6 @@
 /* Popup */
 
-.cd-popup-container{border-radius:3px;text-align:center;box-shadow:0 0 20px rgba(0, 0, 0, 0.2);
-  padding-top: 35px}
+.cd-popup-container{border-radius:3px;text-align:center;box-shadow:0 0 20px rgba(0, 0, 0, 0.2);padding-top: 35px}
  
  @media screen and ( min-width:1000px){
   .cd-popup-container{width:960px;}
@@ -83,7 +82,7 @@
   .submitpage .optionbox h2{ margin-bottom: 7px }
   .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
   .submitpage .optionbox{ margin-top: 0; padding: 0 }
-  .secondbg{ padding-top: 35px }
+  //.secondbg{ padding-top: 35px }
   .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
 }
 /*--Game-Option End--*/
@@ -224,4 +223,17 @@ mat-card {
 {
     min-height:502px !important;
     max-height: 610px !important;
+}
+
+.text-center{
+  text-align: center;
+  width:100%;
+}
+
+.circle-loader {
+  border-color: #D2D2D2;
+  border-width: 1;
+  border-style: solid;
+  margin:20;
+  border-radius:83%;
 }

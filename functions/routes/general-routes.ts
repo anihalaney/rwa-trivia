@@ -1,11 +1,12 @@
 
-express = require('express'),
-    router = express.Router();
+import * as express from 'express';
+const router = express.Router();
 
 const generalAuth = require('../middlewares/auth');
 
 
 const generalController = require('../controllers/general.controller');
+const generalQuestionController = require('../controllers/question.controller');
 
 
 router.get('/migrate/:collectionName', generalAuth.adminOnly, generalController.migrateCollections);
@@ -24,5 +25,6 @@ router.post('/question/update/:collectionName', generalAuth.adminOnly, generalCo
 router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsData);
 router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuthUsersInFirestore);
 router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
+router.post('/question/status', generalAuth.adminOnly, generalQuestionController.changeUnpublishedQuestionStatus);
 
 module.exports = router;

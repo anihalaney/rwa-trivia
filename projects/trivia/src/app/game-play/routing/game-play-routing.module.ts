@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
-import { RouterModule  } from '@angular/router';
-
-import { gamePlayRoutes }   from './game-play.route';
+import { RouterModule } from '@angular/router';
+import { gamePlayRoutes } from './game-play.route';
 
 @NgModule({
   imports: [

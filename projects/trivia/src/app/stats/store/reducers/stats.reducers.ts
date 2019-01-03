@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { StatsActions, StatsActionTypes } from '../actions';
-import { SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
+import { SystemStats } from 'shared-library/shared/model';
 
 export function scoreBoard(state: any = null, action: StatsActions): any {
     switch (action.type) {

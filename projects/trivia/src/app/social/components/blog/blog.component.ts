@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 
 @Component({
@@ -14,7 +14,7 @@ export class BlogComponent implements OnDestroy {
   sub: Subscription;
   blogData = [];
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private utils: Utils) {
     this.sub = this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
     });
@@ -25,6 +25,6 @@ export class BlogComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe([this.sub]);
+    this.utils.unsubscribe([this.sub]);
   }
 }

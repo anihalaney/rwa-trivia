@@ -325,7 +325,7 @@ main { display: block; padding: 0 15px; vertical-align: top; }
 main .card{ margin-bottom: 30px; padding: 25px ;  box-shadow: 0 2px 6px rgba(0,0,0,0.12);}
 main h2 span{ font-size: 14px; font-family: 'hindregular';}
 .pageheading{ font-size: 18px; font-family: 'hindbold'; text-transform: uppercase; letter-spacing: 0.22px ;height:46px; line-height:46px;}
-.secondbg{ padding: 35px 0; border-top:1px solid; margin-top: 40px ; position: relative;}
+.secondbg{     margin-left: 0px;margin-right: 0px;padding: 30px 0px 40px 0px; border:1px solid; margin-top: 10px ; position: relative;}
 .secondbg:before{ content: ""; position: absolute; left: 50%; top: 0; transform: translateX(-50%); border-width: 14px; border-style: solid; border-color: #dddddd transparent transparent transparent;}
 .secondbg:after{content:""; position: absolute; left:50%; top: -1px; transform: translateX(-50%); border-width:13px; border-style: solid; border-color: #fff transparent transparent transparent}
 .btnbox{ border-top:1px solid; padding: 20px 0; margin-top: 10px; }
@@ -606,3 +606,21 @@ body.dialog-open .cdk-global-overlay-wrapper {
 }
 
 
+.mat-checkbox-indeterminate.mat-accent .mat-checkbox-background, .mat-checkbox-checked.mat-accent .mat-checkbox-background{
+  background-color: #73af3e ;
+}
+
+.mat-checkbox-layout .mat-checkbox-label {
+  font-size: 20px;
+  font-family: hindregular,sans-serif;
+  cursor: pointer;
+}
+
+.mat-checkbox-background, .mat-checkbox-frame{
+  border-radius: 3px !important;
+}
+
+.mat-checkbox-inner-container{
+  height: 18px !important;
+  width: 18px !important;
+}

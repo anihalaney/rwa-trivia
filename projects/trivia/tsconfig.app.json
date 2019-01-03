@@ -1,22 +1,19 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "sourceMap": true,
-    "declaration": false,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "target": "es5",
-    "lib": [
-      "es2016",
-      "dom"
-    ],
     "outDir": "../out-tsc/app",
     "module": "es2015",
-    "baseUrl": "",
     "types": []
   },
   "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
+    "./src/test.ts",
+    "./src/**/*.spec.ts",
+    "./src/**/*.tns.ts",
+    "./src**/*.android.ts",
+    "./src/**/*.ios.ts",
+    "./src/main.ns.aot.ts",
+    "./src/main.ns.ts",
+    "./src/vendor.ts",
+    "./src/**/mobile"
   ]
 }

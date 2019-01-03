@@ -1,13 +1,14 @@
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, Inject, NgZone } from '@angular/core';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { SharedModule, CoreModule } from '../../../../projects/shared-library/src/public_api';
+import { SharedModule } from 'shared-library/shared/shared.module';
+import { CoreModule } from 'shared-library/core/core.module';
 import { reducers, CustomSerializer } from './store';
 import { RoutingModule } from './routing/routing.module';
 
@@ -19,20 +20,32 @@ import { LazyLoadImagesModule } from 'ngx-lazy-load-images';
 
 import {
   AppComponent, DashboardComponent, QuestionComponent,
-  SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent
+  SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent,
+  PrivacyPolicyComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../../../shared-library/src/lib/environments/environment';
+import { environment } from 'shared-library/environments/environment';
+import { SwUpdate } from '@angular/service-worker';
+import { PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { interval } from 'rxjs';
+import { GameCardComponent } from './components/game-card/game-card.component';
+import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
+import { GameInviteComponent } from './components/game-invite/game-invite.component';
 
 @NgModule({
   declarations: [
+    GameCardComponent,
     AppComponent,
     DashboardComponent,
     QuestionComponent,
     SideNavComponent,
     HeaderComponent,
     FooterComponent,
-    InvitationRedirectionComponent
+    InvitationRedirectionComponent,
+    PrivacyPolicyComponent,
+    FriendInviteComponent,
+    GameInviteComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +58,7 @@ import { environment } from '../../../shared-library/src/lib/environments/enviro
       maxAge: 20
     }),
     //StoreModule.forRoot(reducers),
-    StoreRouterConnectingModule,
+    StoreRouterConnectingModule.forRoot(),
 
     //rwa modules
     CoreModule,
@@ -64,4 +77,24 @@ import { environment } from '../../../shared-library/src/lib/environments/enviro
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(updates: SwUpdate, @Inject(PLATFORM_ID) private platformId: Object, ngZone: NgZone) {
+
+    if (isPlatformBrowser(this.platformId) && environment.production) {
+
+      if (updates.isEnabled) {
+        updates.available.subscribe(() => {
+          alert('New version available. Load New Version?');
+          window.location.reload();
+        });
+      }
+      ngZone.runOutsideAngular(() => {
+        interval(60000).subscribe(() => {
+          ngZone.run(() => updates.checkForUpdate());
+        });
+      });
+    }
+
+  }
+}

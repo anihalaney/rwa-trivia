@@ -25,5 +25,13 @@
   "include": [
     "**/*.spec.ts",
     "**/*.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "platforms",
+    "hooks",
+    "certificates",
+    "configurations",
+    "release"
   ]
 }

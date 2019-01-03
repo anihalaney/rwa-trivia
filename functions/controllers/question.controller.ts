@@ -1,5 +1,5 @@
 import { ESUtils } from '../utils/ESUtils';
-import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode } from '../../projects/shared-library/src/lib/shared/model';
+import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode, QuestionStatus } from '../../projects/shared-library/src/lib/shared/model';
 import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
 const utils: Utils = new Utils();
@@ -148,5 +148,37 @@ exports.getUpdatedQuestion = (req, res) => {
             question.userGivenAnswer = null;
         }
         res.send(question);
-    })
-}
+    });
+};
+
+
+/**
+ * changeUnpublishedQuestionStatus
+ * return status
+ */
+exports.changeUnpublishedQuestionStatus = (req, res) => {
+    questionControllerQuestionService.getQuestion('unpublished_questions').then((questions) => {
+        const questionUpdatePromises = [];
+        questions.docs.map((question) => {
+            const questionObj: Question = question.data();
+            if (questionObj.status === QuestionStatus.SUBMITTED) {
+                questionObj.status = QuestionStatus.PENDING;
+                const dbQuestion = { ...questionObj };
+                console.log('dbQuestion', dbQuestion);
+                questionUpdatePromises.push(questionControllerQuestionService.updateQuestion('unpublished_questions', dbQuestion));
+            }
+
+        });
+        Promise.all(questionUpdatePromises)
+            .then((questionResults) => {
+                res.send('unpublished status changed');
+            })
+            .catch((e) => {
+                console.log('changeUnpublishedQuestionStatus error', e);
+            });
+
+    });
+};
+
+
+

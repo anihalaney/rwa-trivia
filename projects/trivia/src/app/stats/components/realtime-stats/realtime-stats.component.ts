@@ -3,9 +3,9 @@ import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { leaderBoardState } from '../../store';
 import * as StatActions from '../../store/actions';
-import { SystemStats } from '../../../../../../shared-library/src/lib/shared/model';
+import { SystemStats } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'realtime-stats',
@@ -17,7 +17,7 @@ export class RealtimeStatsComponent implements OnDestroy {
   systemStats: SystemStats;
   subs: Subscription[] = [];
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private utils: Utils) {
 
     this.store.dispatch(new StatActions.LoadSystemStat());
 
@@ -29,6 +29,6 @@ export class RealtimeStatsComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 }

@@ -1,32 +1,32 @@
 <!--Header Start Here-->
 <div lazy-load-images>
-<header>
-  <app-header [user]="user" (logoutClicked)="logout()" (loginClicked)="login()" (toggleThemeClicked)="toggleTheme()"></app-header>
-</header>
-<!--Header End-->
+  <header>
+    <app-header [user]="user" (logoutClicked)="logout()" (loginClicked)="login()" (toggleThemeClicked)="toggleTheme()"></app-header>
+  </header>
+  <!--Header End-->
 
-<!-- Page Layout -->
-<div class="container pagelayout">
-  <nav *ngIf="user && !router.url.startsWith('/admin')" id="nav" tabindex="0">
-    <div class="smartphone-menu-trigger" id="nav-icon1" >
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <side-nav [user]="user"></side-nav>
-  </nav>
+  <!-- Page Layout -->
+  <div class="container pagelayout">
+    <nav *ngIf="user && !router.url.startsWith('/admin')" id="nav" tabindex="0">
+      <div class="smartphone-menu-trigger" id="nav-icon1">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <side-nav [user]="user"></side-nav>
+    </nav>
 
-  <main>
-    <router-outlet></router-outlet>
-  </main>
-</div>
-<!-- Page Layout End -->
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  <!-- Page Layout End -->
 
-<!-- Footer -->
-<footer>  
-  <app-footer [user]="user" (logoutClicked)="logout()" (loginClicked)="login()"></app-footer>
-</footer>
-<!-- Footer end -->
+  <!-- Footer -->
+  <footer>
+    <app-footer [user]="user" (logoutClicked)="logout()" (loginClicked)="login()"></app-footer>
+  </footer>
+  <!-- Footer end -->
 </div>
 
 <mat-sidenav-container *ngIf="false">

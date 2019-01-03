@@ -2,10 +2,10 @@ import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { BulkUploadFileInfo, Question, Category, User, QuestionStatus } from '../../../../../../../shared-library/src/lib/shared/model';
+import { BulkUploadFileInfo, Question, Category, User, QuestionStatus } from 'shared-library/shared/model';
 import { MatTableDataSource } from '@angular/material';
-import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { Utils } from 'shared-library/core/services';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 
 import { MatSnackBar } from '@angular/material';
@@ -48,7 +48,8 @@ export class BulkSummaryQuestionComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
-    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router) {
+    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router,
+    private utils: Utils) {
 
     this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
       if (status === 'UPDATE') {
@@ -160,7 +161,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
         this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        Utils.unsubscribe([this.sub]);
+        this.utils.unsubscribe([this.sub]);
       }
     });
   }
@@ -175,7 +176,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
         }
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        Utils.unsubscribe([this.sub]);
+        this.utils.unsubscribe([this.sub]);
       }
     });
   }
@@ -188,7 +189,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
         this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        Utils.unsubscribe([this.sub]);
+        this.utils.unsubscribe([this.sub]);
       }
     });
   }

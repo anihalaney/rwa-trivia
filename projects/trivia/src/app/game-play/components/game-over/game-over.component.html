@@ -60,24 +60,45 @@
       </div>
     </div>
     <div class="div-top-spacing win-icon-div">
-      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score > game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score !== 4)">
+      <div class="win-icon" *ngIf="
+      (game.gameOptions.playerMode != PlayerMode.Single && 
+       game.round < 16 &&
+       game.stats[user.userId].score > game.stats[otherUserId].score)
+      ||
+      (game.gameOptions.playerMode == PlayerMode.Single &&
+       game.playerQnAs.length - game.stats[user.userId].score !== 4)">
         <div class="sprite thumb-up"></div>
         <span class="win-text">{{playerUserName}} Won</span>
       </div>
-      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score < game.stats[otherUserId].score) || (game.gameOptions.playerMode == PlayerMode.Single && game.playerQnAs.length - game.stats[user.userId].score === 4)">
+      <div class="win-icon" *ngIf="
+      (game.gameOptions.playerMode != PlayerMode.Single &&
+       game.round < 16 &&
+       game.stats[user.userId].score < game.stats[otherUserId].score)
+      ||
+      (game.gameOptions.playerMode == PlayerMode.Single &&
+       game.playerQnAs.length - game.stats[user.userId].score === 4)">
         <div class="sprite thumb-down"></div>
         <span class="win-text">{{playerUserName}} Lost</span>
       </div>
-      <div class="win-icon" *ngIf="(game.gameOptions.playerMode != PlayerMode.Single && game.stats[user.userId].score == game.stats[otherUserId].score)">
+      <div class="win-icon" *ngIf="
+      (game.gameOptions.playerMode != PlayerMode.Single &&
+       game.round < 16 &&
+       game.stats[user.userId].score == game.stats[otherUserId].score)">
         <div class="sprite thumb-up"></div>
         <span class="win-text">It's a Tie</span>
+      </div>
+      <div class="win-icon" *ngIf="
+      game.gameOptions.playerMode != PlayerMode.Single &&
+       game.round === 16">
+        <div class="sprite thumb-up"></div>
+        <span class="win-text">It's a Draw</span>
       </div>
     </div>
 
   </mat-card-content>
   <mat-card-content class="textcenter">
     <div class="button-div">
-      <div class="win-icon spacing-bottom" *ngIf="socialFeedData">
+      <div class="win-icon safari-icons spacing-bottom" *ngIf="socialFeedData">
         <social-palette *ngIf="socialFeedData.share_status && !loaderStatus" class="spacing position" [blogData]="socialFeedData"
           (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
         <img *ngIf="loaderStatus" src="/assets/images/ajax-loader.gif" class="share-loaderimage" />

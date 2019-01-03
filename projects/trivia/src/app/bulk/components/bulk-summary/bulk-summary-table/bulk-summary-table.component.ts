@@ -6,14 +6,14 @@ import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { bulkState } from '../../../store';
-import { BulkUploadFileInfo, Category, User } from '../../../../../../../shared-library/src/lib/shared/model';
+import { BulkUploadFileInfo, Category, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
 import { Sort } from '@angular/material';
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 import * as bulkActions from '../../../store/actions';
 import { Router } from '@angular/router';
-import { Utils } from '../../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'bulk-summary-table',
@@ -47,7 +47,8 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private store: Store<AppState>,
-    private storage: AngularFireStorage, private router: Router) {
+    private storage: AngularFireStorage, private router: Router,
+    private utils: Utils) {
     this.categoryDictObs = store.select(categoryDictionary);
 
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
@@ -175,7 +176,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    Utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subs);
   }
 
 

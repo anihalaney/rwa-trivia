@@ -13,4 +13,14 @@ export function activeGames(state: any = [], action: ActionWithPayload<Game[]>):
     default:
       return state;
   }
-};
+}
+export function newGameId(state: any = "", action: ActionWithPayload<string>): string {
+    switch (action.type) {
+      case GameActions.CREATE_NEW_SUCCESS:
+        return action.payload;
+      case GameActions.RESET_NEW:
+        return "";
+      default:
+        return state;
+    }
+  }

@@ -5,10 +5,9 @@ const fs = require('fs');
 const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
-
 import {
     Game, Question, Category, User, UserStatConstants, Invitation,
-    TriggerConstants, PlayerMode, OpponentType
+    TriggerConstants, PlayerMode, OpponentType, friendInvitationConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { ESUtils } from '../utils/ESUtils';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
@@ -42,11 +41,10 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
     if (data) {
         const question: Question = data;
 
-        data.createdOn = new Date(data.createdOn['_seconds'] * 1000);
+        data.createdOn = (data.createdOn && data.createdOn['_seconds']) ? new Date(data.createdOn['_seconds'] * 1000) : new Date();
 
         // add or update
         ESUtils.createOrUpdateIndex(ESUtils.QUESTIONS_INDEX, data.categoryIds['0'], question, context.params.questionId);
-
 
         const userContributionStat: UserContributionStat = new UserContributionStat();
         userContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution).then((userDictResults) => {
@@ -69,9 +67,9 @@ exports.onInvitationWrite = functions.firestore.document('/invitations/{invitati
 
     const beforeEventData = change.before.data();
     const afterEventData = change.after.data();
+    const invitation: Invitation = afterEventData;
 
-    if (afterEventData !== beforeEventData && mailConfig.enableMail) {
-        const invitation: Invitation = afterEventData;
+    if (afterEventData !== beforeEventData && mailConfig.enableMail && invitation.status === friendInvitationConstants.PENDING) {
         const url = `${mailConfig.hosturl}${invitation.id}`;
         const htmlContent = `You have a new invitation request. Click <a href="${url}">Accept Invitation</a> to accept the invitation.`;
         const mail: MailClient = new MailClient(invitation.email, TriggerConstants.invitationMailSubject,

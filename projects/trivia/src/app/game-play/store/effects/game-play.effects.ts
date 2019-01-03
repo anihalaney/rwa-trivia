@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Effect, Actions } from '@ngrx/effects';
-import { switchMap, map, catchError, filter, mergeMap } from 'rxjs/operators';
-
-import { GameService } from '../../../../../../shared-library/src/lib/core/services';
-import { Game, PlayerQnA, GameOptions, User, Question, RouterStateUrl } from '../../../../../../shared-library/src/lib/shared/model';
-import { GamePlayActions, GamePlayActionTypes } from '../actions';
+import { Effect, Actions, ofType } from '@ngrx/effects';
+import { switchMap, map, filter, mergeMap } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { GameService } from './../../../../../../shared-library/src/lib/core/services';
+import { Game, Question, RouterStateUrl } from 'shared-library/shared/model';
+import { GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
-
+import { GameActions } from '../../../../../../shared-library/src/lib/core/store/actions/game.actions';
+import { GamePlayState } from '../reducers';
+import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
 export class GamePlayEffects {
@@ -14,12 +16,12 @@ export class GamePlayEffects {
 
   @Effect()
   startNewGame$ = this.actions$
-    .ofType(GamePlayActionTypes.CREATE_NEW)
+    .pipe(ofType(GamePlayActionTypes.CREATE_NEW))
     .pipe(
       switchMap((action: gameplayactions.CreateNewGame) =>
         this.svc.createNewGame(action.payload.gameOptions, action.payload.user).pipe(
-          map((gameId: string) => new gameplayactions.CreateNewGameSuccess(gameId))
-          //catchError(error => new)
+          map((gameId: string) => this.gameActions.createNewGameSuccess(gameId))
+          // catchError(error => new)
         )
       )
     );
@@ -28,7 +30,7 @@ export class GamePlayEffects {
   @Effect()
   // handle location update
   loadGame$ = this.actions$
-    .ofType(GamePlayActionTypes.LOAD_GAME)
+    .pipe(ofType(GamePlayActionTypes.LOAD_GAME))
     .pipe(
       switchMap((action: gameplayactions.LoadGame) =>
         this.svc.getGame(action.payload).pipe(
@@ -37,40 +39,42 @@ export class GamePlayEffects {
       )
     );
 
-  //load invited games
-  @Effect()
-  // handle location update
-  loadGameInvites$ = this.actions$
-    .ofType(GamePlayActionTypes.LOAD_GAME_INVITES)
-    .pipe(
-      switchMap((action: gameplayactions.LoadGameInvites) =>
-        this.svc.getGameInvites(action.payload).pipe(
-          map((games: Game[]) => new gameplayactions.LoadGameInvitesSuccess(games))
-        )
-      )
-    );
-
-  //load from router
+  // load from router
   @Effect()
   // handle location update
   loadGame2$ = this.actions$
-    .ofType('ROUTER_NAVIGATION')
+    .pipe(ofType(ROUTER_NAVIGATION))
     .pipe(
       map((action: any): RouterStateUrl => action.payload.routerState),
-      filter((routerState: RouterStateUrl) =>
-        routerState.url.toLowerCase().startsWith('/game-play/') &&
-        routerState.params.gameid
+      filter((routerState: RouterStateUrl) => {
+        if (routerState.url.toLowerCase().startsWith('/game-play/') &&
+          routerState.params) {
+          return true;
+        } else if (routerState.url.toLowerCase().startsWith('/game-play/') && routerState['root']) {
+          return true;
+        } else {
+          return false;
+        }
+      }
       ))
     .pipe(
-      switchMap((routerState: RouterStateUrl) =>
-        this.svc.getGame(routerState.params.gameid).pipe(
+      switchMap((routerState: RouterStateUrl) => {
+        let gameid = '';
+        if (routerState.params) {
+          gameid = routerState.params.gameid;
+        } else if (routerState['root'].firstChild.firstChild.params.gameid) {
+          gameid = routerState['root'].firstChild.firstChild.params.gameid;
+        }
+        this.store.dispatch(new gameplayactions.ResetCurrentGame());
+        return this.svc.getGame(gameid).pipe(
           map((game: Game) => new gameplayactions.LoadGameSuccess(game))
-        )
+        );
+      }
       ));
 
   @Effect()
   loadNextQuestion$ = this.actions$
-    .ofType(GamePlayActionTypes.GET_NEXT_QUESTION)
+    .pipe(ofType(GamePlayActionTypes.GET_NEXT_QUESTION))
     .pipe(
       switchMap((action: gameplayactions.GetNextQuestion) =>
         this.svc.getNextQuestion(action.payload).pipe(
@@ -81,7 +85,7 @@ export class GamePlayEffects {
 
   @Effect()
   addPlayerQnA$ = this.actions$
-    .ofType(GamePlayActionTypes.ADD_PLAYER_QNA)
+    .pipe(ofType(GamePlayActionTypes.ADD_PLAYER_QNA))
     .pipe(
       switchMap((action: gameplayactions.AddPlayerQnA) =>
         this.svc.addPlayerQnAToGame(action.payload.gameId, action.payload.playerQnA).pipe(
@@ -91,7 +95,7 @@ export class GamePlayEffects {
 
   @Effect()
   setGameOver$ = this.actions$
-    .ofType(GamePlayActionTypes.SET_GAME_OVER)
+    .pipe(ofType(GamePlayActionTypes.SET_GAME_OVER))
     .pipe(
       switchMap((action: gameplayactions.SetGameOver) =>
         this.svc.setGameOver(action.payload).pipe(
@@ -100,18 +104,8 @@ export class GamePlayEffects {
       ));
 
   @Effect()
-  rejectGameInvitation$ = this.actions$
-    .ofType(GamePlayActionTypes.REJECT_GAME_INVITATION)
-    .pipe(
-      switchMap((action: gameplayactions.RejectGameInvitation) =>
-        this.svc.rejectGameInvitation(action.payload).pipe(
-          map((msg: any) => new gameplayactions.UpdateGameSuccess())
-        )
-      ));
-
-  @Effect()
   getUserAnsweredQuestions$ = this.actions$
-    .ofType(GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION)
+    .pipe(ofType(GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION))
     .pipe(
       switchMap((action: gameplayactions.GetUsersAnsweredQuestion) =>
         this.svc.getUsersAnsweredQuestion(action.payload.userId, action.payload.game).pipe(
@@ -120,7 +114,7 @@ export class GamePlayEffects {
       ));
   @Effect()
   reportQuestion$ = this.actions$
-    .ofType(GamePlayActionTypes.SAVE_REPORT_QUESTION)
+    .pipe(ofType(GamePlayActionTypes.SAVE_REPORT_QUESTION))
     .pipe(
       switchMap((action: gameplayactions.SaveReportQuestion) =>
         this.svc.saveReportQuestion(action.payload.reportQuestion, action.payload.game)
@@ -130,7 +124,7 @@ export class GamePlayEffects {
 
   @Effect()
   UpdateGameRound$ = this.actions$
-    .ofType(GamePlayActionTypes.UPDATE_GAME_ROUND)
+    .pipe(ofType(GamePlayActionTypes.UPDATE_GAME_ROUND))
     .pipe(
       switchMap((action: gameplayactions.UpdateGameRound) =>
         this.svc.updateGameRound(action.payload).pipe(
@@ -140,7 +134,9 @@ export class GamePlayEffects {
 
   constructor(
     private actions$: Actions,
-    private svc: GameService
+    public store: Store<GamePlayState>,
+    public gameActions: GameActions,
+    private svc: GameService,
   ) { }
 
 }

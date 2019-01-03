@@ -1,0 +1,33 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es2015",
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "shared-library/*": [
+        "./projects/shared-library/src/lib/*"
+      ],
+      "*": [
+        "./node_modules/tns-core-modules/*",
+        "./node_modules/*"
+      ]
+    }
+  },
+  "exclude": [
+    "**/*.tns.ts",
+    "**/*.android.ts",
+    "**/*.ios.ts",
+    "./functions/*",
+    "./scheduler/*",
+    "**/*.spec.ts",
+    "server.ts",
+    "./projects/shared-library/src/lib/shared/components/*",
+  ],
+  "include": [
+    "./projects/shared-library/src/lib/shared",
+    "./projects/trivia/src/app/game-play/game-play.module.ts",
+    "./projects/trivia/src/app/user/user.module.ts",
+    "./projects/trivia/src/main.ns.ts"
+  ]
+}

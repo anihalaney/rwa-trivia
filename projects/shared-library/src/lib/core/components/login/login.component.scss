@@ -25,7 +25,7 @@ button {
 .form-group input:focus ~ .bar::before{width:100%;left:0;}
 .logininner .formfield{ padding: 0 }
 .logininner .formfield label{ font-size: 14px; font-family: 'hindmedium' }
-.logininner .btn{ line-height: 16px; display: block; font-size: 18px; font-family: 'hindregular'; padding: 18px 0; color: white;}
+.logininner .auth-btn{ line-height: 16px; display: block; font-size: 18px; font-family: 'hindregular'; padding: 18px 0; color: white;}
 .loginlink > div{ padding: 0; line-height: 1.6}
 .loginlink > div:nth-child(2){ text-align: right; }
 .loginlink a{ display: inline-block; border-bottom: 1px solid; line-height: 15px; font-family: 'hindmedium'}
@@ -42,11 +42,11 @@ button {
 	//.landinginner, .logininner{ position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%); padding:0 }
 	.landinginner img{  height:auto; }
 	.landinginner p{ font-size: 48px; line-height: 58px }
-	.landinginner .btn, .logininner .btn{ width: 217px; margin: 35px 10px; }
+	.landinginner .auth-btn, .logininner .auth-btn{ width: 217px; margin: 35px 10px; }
 	.ladding-copyr{ position: absolute; bottom: 30px; width: 100% }
-	.logininner .btn{ margin: 35px 0 25px; }
+	.logininner .auth-btn{ margin: 35px 0 25px; }
 
-	.signupinner .btn{ display: block; margin: 35px auto 25px;}
+	.signupinner .auth-btn{ display: block; margin: 35px auto 25px;}
 	.heading{ font-size: 30px;}
 }
 @media screen and ( min-width:1000px){
@@ -64,4 +64,93 @@ a {
 }
 .logininner input {
 	background-color: transparent;
+}
+
+.auth-msg{
+	padding-top: 10px;	
+	padding-bottom: 10px;
+}
+
+.error{
+	color: red;
+}
+
+.success{
+	color: #008004;
+}
+
+.disabled-btn{
+	background-color: #dddddd;
+}
+
+.active-btn{
+	background-color: #af3424;
+}
+
+TextField {
+	border: none;
+	border-width: 0;
+	padding:20px;
+  // border-bottom-width: 2;
+	// border-bottom-color:#D3D3D3;
+}
+
+.mobile {
+	.error{
+		margin:5 0 5 0;
+	}
+
+	.btn-primary{
+		font-size:18; 
+		background-color:#3e5b95;
+		color:#ffffff;
+		margin: 20 0 10 0;
+		padding:10 0 10 0;
+	}
+}
+
+.initial-container {
+  margin: 50 20 0 20;
+}
+.initial-label {
+  color: white;
+  horizontal-align: center;
+  margin-bottom: 25;
+}
+.initial-button {
+  // background-color: white;
+	vertical-align: center;
+}
+
+.initial-button-label {
+  horizontal-align: center;
+  font-weight: bold;
+}
+
+.login-button {
+	border-radius: 5;
+  background-color: #71b02f;
+  color: white;
+	height: 45;
+	width: 50%;
+	vertical-align: center;
+}
+.initial-button-label {
+  horizontal-align: center;
+  font-weight: bold;
+}
+
+.forgotScreen{
+	background-color:white; 
+	border-radius:15;
+	padding: 40 30 20 30;
+  margin:0 5 50 5;
+}
+
+.border-field{
+	border-radius: 10 0 0 10;
+}
+
+.text-icon-field{
+	border-radius: 0 10 10 0;
 }

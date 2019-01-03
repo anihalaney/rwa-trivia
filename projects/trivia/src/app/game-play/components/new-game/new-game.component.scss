@@ -2,7 +2,7 @@
 .optionbox input[type="radio"]{ display: none; }
 
 .optionbox{ margin-top: 30px; text-align: left;}
-.optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
+// .optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
 .optionbox h2 span{ font-size: 20px; text-transform: none; letter-spacing: .10px; padding-left: 0; font-family: 'hindmedium' }
 .optionbox .radiobtn{ padding:0 0 46px   }
 .optionbox .radiobtn label{ font-size: 20px; display: inline-block; width: 100%; border-width:1px; border-style: solid; border-radius: 4px; padding: 9px 0; text-align: center; cursor: pointer; transition: 0.3s ease-in-out; position: relative; overflow: hidden;}
@@ -46,15 +46,6 @@
   border-top-style: solid; 
   padding:46px 0 0; 
 }
-.formfield { padding: 8px 15px; }
-.formfield input[type="checkbox"],.enterquestion .formfield input[type="radio"]{  position: relative; height: 18px; width: 18px; vertical-align: -4px; margin-right: 8px;}
-.formfield input[type="checkbox"]:before,.enterquestion .formfield input[type="radio"]:before{ content: ""; position: absolute; left: 0; top: 0; height: 100%; width: 100%; border-radius: 2px; border-width:1px; border-style: solid; cursor: pointer;}
-
-.formfield input[type="checkbox"]:after,.enterquestion .formfield input[type="radio"]:after{ content: ""; position: absolute; top: 3px; right:6px; width: 5px; height: 5px; border-width:0 2px 2px 0; border-style: solid; border-color: transparent;  cursor: pointer;}
-.formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ height: 10px; transform: rotate(45deg); }
-.formfield input[type="checkbox"]:checked:after,.enterquestion .formfield input[type="radio"]:checked:after{ border-color:#fff; }
-
-.formfield label{ font-size: 20px; cursor: pointer;}
 .chancat{ cursor: pointer; transition: 0.3s ease-in-out; margin-top: 10px}
 .chancat span:nth-child(2){ display: inline-block;width: calc(100% - 40px); line-height: 1.1; vertical-align: -2px;}
 .preference{ display: none; margin: 9px -15px 0}
@@ -62,16 +53,82 @@
 .chancat.active span:nth-child(2){vertical-align: middle;}
 .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
 .btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px ;line-height: 1.2; margin:0 auto; color: #fff}
+.no-frd-msg{ color: #1f7b2b;  font-size: 1rem;}
+.frd-err-msg{ color: red;  font-size: 1rem;padding-top:30px;}
 //#curentactive .btnbox{ background: #fff; }
 
+.hide {display: none !important;}
+
+
+.loaderimage{
+  width:30px;
+}
+
+.loaderCenter{
+  text-align: center !important;
+  margin-top: 20px;
+}
+
+.new-game {
+  .selected-player {
+    background-color: #89C24F;
+    color: #fff;
+  }
+
+  .player-type, .label{
+    color:#616161;
+  }
+
+  .two-player-option{
+    border-color: #D2D2D2;
+    border-width: 0 0 1 0;
+    border-style: solid;
+  }
+
+  .singlep-icon-mobile {
+    background-position: -88px -200px;
+    height: 53px;
+    width: 53px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+  }
+
+  .bottom-border{
+    border-color: #D2D2D2;
+    border-width: 0 0 1 0;
+    border-style: solid;
+  }
+
+  .friend-list{
+    border-color: #D2D2D2;
+    border-width:  1 1 0 1;
+    border-style: solid;
+    height: 130;
+  }
+
+  .expand-options{
+    color: #A9A9A9;
+    font-size: 11;
+  }
+  .main-label{
+    color: red;
+  }
+}
+
+.checkbox-group{
+  display: inline-block;
+  padding: 8px 15px;
+}
+
+/*--Game-Option End--*/
 @media (min-width: 767px){
   main h2 span{ display: inline-block; padding-left: 15px; }
-  .optionbox h2{ margin-top: 17px }
-  .optionbox h2 span{ font-size: 22px }
+  // .optionbox h2{ margin-top: 17px }
+  // .optionbox h2 span{ font-size: 22px }
   .optionbox .radiobtn label { width: calc(50% - 17px); margin-right:30px }
   .optionbox .radiobtn label:nth-child(4),.optionbox .radiobtn .twoplayer label:nth-child(6) { margin-right:0; }
 
-  .optionbox .radiobtn .twoplayer label{ width: calc(33.33% - 10px); margin-right: 10px; }
+  .optionbox .radiobtn .twoplayer label{ width: calc(50% - 10px); margin-right: 10px; }
   .optionbox .twoplayer .withfriends label{ width: 100%; margin-right: 0 }
   .formfield, .mysetting .formfield { display: inline-block;}
 }
@@ -81,22 +138,11 @@
   .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
   .chancat{ margin-top: 0 }
   .chancat span:nth-child(2){ vertical-align: -12px; }
-  .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
+  // .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
   .optionbox .pcategories h2{ margin-top: 40px}
   .submitpage .optionbox h2{ margin-bottom: 7px }
   .btn.startg{ width: 216px; margin:0 auto; padding: 20px 0  }  
   .submitpage .optionbox{ margin-top: 0; padding: 0 }
   .secondbg{ padding-top: 35px }
   .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
-}
-.hide {display: none !important;}
-/*--Game-Option End--*/
-
-.loaderimage{
-  width:30px;
-}
-
-.loaderCenter{
-  text-align: center !important;
-  margin-top: 20px;
 }

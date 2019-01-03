@@ -1,9 +1,12 @@
 
+
 const userService = require('../services/user.service');
 const sharp = require('sharp');
-import { User, UserStats, UserControllerConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { User, UserStats, UserControllerConstants, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
+import { Utils } from '../utils/utils';
+const utils: Utils = new Utils();
 
 /**
  * getUserById
@@ -71,11 +74,15 @@ exports.generateUserProfileImage = (req, res) => {
     const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
     const user = req.body.user;
 
-    if (user.profilePicture) {
+    if (user.profilePicture && user.croppedImageUrl && user.originalImageUrl) {
+
         profileImagesGenerator.
-            getStoredImage(user.userId, user.profilePicture).then((status) => {
+            uploadProfileImage(user).then((status) => {
+                delete user.originalImageUrl;
+                delete user.croppedImageUrl;
+                delete user.imageType;
                 setUser(user, res);
-            })
+            });
 
     } else {
         setUser(user, res);
@@ -83,13 +90,16 @@ exports.generateUserProfileImage = (req, res) => {
 };
 
 function setUser(user, res) {
+
+    if (user.bulkUploadPermissionStatus === profileSettingsConstants.NONE) {
+        user.bulkUploadPermissionStatus = profileSettingsConstants.PENDING;
+        user.bulkUploadPermissionStatusUpdateTime = utils.getUTCTimeStamp();
+        const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
+        const mail: MailClient = new MailClient(UserControllerConstants.adminEmail, UserControllerConstants.mailSubject,
+            UserControllerConstants.mailSubject, htmlContent);
+        mail.sendMail();
+    }
     userService.setUser(user).then((ref) => {
-        if (user.isRequestedBulkUpload) {
-            const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
-            const mail: MailClient = new MailClient(UserControllerConstants.adminEmail, UserControllerConstants.mailSubject,
-                UserControllerConstants.mailSubject, htmlContent);
-            mail.sendMail();
-        }
-        res.send({ 'status': 'Profile Data is saved !!' })
+        res.send({ 'status': 'Profile Data is saved !!' });
     });
 }

@@ -9,8 +9,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { reducers, CustomSerializer } from './store';
 
-import { CoreModule } from '../../../../projects/shared-library/src/lib/core/core.module';
-import { SharedModule } from '../../../../projects/shared-library/src/lib/shared/shared.module';
+import { CoreModule } from 'shared-library/core/core.module';
+import { SharedModule } from 'shared-library/shared/shared.module';
 import { RoutingModule } from './routing/routing.module';
 
 import {
@@ -18,7 +18,7 @@ import {
   HeaderComponent, FooterComponent
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../../../../projects/shared-library/src/lib/environments/environment';
+import { environment } from 'shared-library/environments/environment';
 
 
 @NgModule({

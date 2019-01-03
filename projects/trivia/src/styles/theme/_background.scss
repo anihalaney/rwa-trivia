@@ -149,7 +149,7 @@
 		.btn:hover{
 			background: map-get($theme, button-hover-lg);
 		}
-		.btn.signup:hover, .rejected:hover{ 
+		.rejected:hover{ 
 			background: map-get($theme, button-error-hover-lg);
 		}
 		.approval:hover{ 

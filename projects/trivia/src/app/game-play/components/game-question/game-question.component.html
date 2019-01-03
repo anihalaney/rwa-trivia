@@ -1,6 +1,6 @@
 <div class="cd-popup gameplay" id="0" role="alert">
   <div class="cd-popup-container">
-    <div class="header">
+    <div class="row">
       <div class="col-sm-3">
         <span class="col-sm-12 light badge-heading">BADGES</span>
         <div [ngClass]="correctCount < 1?'score0':'score1'" class="sprite"></div>
@@ -10,14 +10,18 @@
         <div [ngClass]="correctCount < 5?'score0':'score5'" class="sprite"></div>
       </div>
       <div class="col-sm-6 category-div-spacing">
-        <h1>{{categoryName}}</h1>
-        <p *ngIf="otherPlayer?.displayName">Playing with
-          <a>{{otherPlayer?.displayName}}</a>
-        </p>
-        <div class="col-xs-12 div-spacing textcenter padding-top-bottom-8">
+        <div class="col-sm-12">
+          <h1>{{categoryName}}</h1>
+        </div>
+        <div class="col-sm-12" *ngIf="otherPlayer?.displayName">
+          <p>Playing with
+            <a>{{otherPlayer?.displayName}}</a>
+          </p>
+        </div>
+        <div class="col-sm-12 textcenter pb-8">
           <span class="light">Round {{questionRound}} / {{totalRound}}</span>
         </div>
-        <div *ngIf="continueNext" class="answer-status">
+        <div *ngIf="continueNext" class="col-sm-12 answer-status">
           <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
           <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
           <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
@@ -40,7 +44,7 @@
     </div>
 
     <ng-container>
-      <div class="secondbg ">
+      <div class="row secondbg">
         <h2>{{questionIndex}}. {{question.questionText}}</h2>
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)"

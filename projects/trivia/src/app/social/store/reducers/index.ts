@@ -1,12 +1,12 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
 
-import { Subscription, Subscribers, Blog } from '../../../../../../shared-library/src/public_api';
+import { Subscription, Subscribers, Blog } from 'shared-library/shared/model';
 import {
     subscriptionSaveStatus, getTotalSubscriptionStatus,
     subscriptionRemoveStatus, checkEmailSubscriptionStatus,
     socialShareImageUrl, blogs
 } from './social.reducer';
-import { UploadTaskSnapshot } from 'angularfire2/storage/interfaces';
+import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 export * from './social.reducer';
 

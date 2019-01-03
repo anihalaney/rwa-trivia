@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <resources>
+    <string name="app_name">Bitwiser</string>
+    <string name="title_activity_kimera">Bitwiser</string>
+    <string name="default_web_client_id" translatable="false">479350787602-0qm0o71n2u6iq19hrh50cmsrtsoi2v75.apps.googleusercontent.com</string>    
+</resources>

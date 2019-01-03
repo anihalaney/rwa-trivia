@@ -1,6 +1,11 @@
 .error{
-  color: red;
+  color: red !important;
 }
+
+.success{
+	color: #008004;
+}
+
 
 .margin-top-10{
   margin-top:10px;
@@ -103,4 +108,8 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   }
 }
 
+.bulk-upload-request label p  {
+  margin-top: 8px;
+  color: #7c7c7c;
+}
 
