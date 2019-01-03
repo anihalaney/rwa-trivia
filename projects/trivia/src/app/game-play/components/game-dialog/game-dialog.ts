@@ -356,5 +356,4 @@ export class GameDialog {
 
     this.genQuestionComponent.disableQuestions(correctAnswerId);
   }
-
 }
