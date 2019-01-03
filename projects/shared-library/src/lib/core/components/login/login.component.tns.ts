@@ -37,19 +37,15 @@ export class LoginComponent extends Login implements OnInit {
         case 1:
           // Sign up
           this.title = 'Get a bit wiser - Sign up';
-          this.cdRef.detectChanges();
           break;
         // no break - fall thru
         case 0:
           // Login or Sign up
           this.title = 'Login';
-          this.cdRef.detectChanges();
           break;
         default:
           // Forgot Password
           this.title = 'Forgot Password';
-          this.cdRef.detectChanges();
-
       }
       this.loginForm.get('password').updateValueAndValidity();
     });
