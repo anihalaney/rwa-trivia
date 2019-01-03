@@ -91,29 +91,7 @@ module.exports = function ($logger, $projectData, hookArgs) {
                 resolve();
             }
 
-        } else if (hookArgs.platform.toLowerCase() === 'ios') {  /* Handle preparing of Ios xml files */
-            // we have copied our Info.plist during before-checkForChanges hook, here we delete it to avoid changes in git
-            var destinationInfoPlist = path.join($projectData.appResourcesDirectoryPath, "iOS", "Info.plist");
-            var sourceInfoPlist = path.join($projectData.appResourcesDirectoryPath, "iOS", "Info.plist");
-            var sourceInfoPlistProd = path.join($projectData.projectDir, "configurations", "ios", "Info.plist.prod");
-            var sourceInfoPlistDev = path.join($projectData.projectDir, "configurations", "ios", "Info.plist.dev");
-
-            // ensure we have both dev/prod versions so we never overwrite singlular Info.plist
-            if (fs.existsSync(sourceInfoPlistProd) && fs.existsSync(sourceInfoPlistDev)) {
-                if (buildType === 'production') { sourceInfoPlist = sourceInfoPlistProd; } // use prod version
-                else { sourceInfoPlist = sourceInfoPlistDev; } // use dev version
-            }
-
-            // copy correct version to destination
-            if (fs.existsSync(sourceInfoPlist) && fs.existsSync(path.dirname(destinationInfoPlist))) {
-                $logger.out("Copy " + sourceInfoPlist + " to " + destinationInfoPlist + ".");
-                fs.writeFileSync(destinationInfoPlist, fs.readFileSync(sourceInfoPlist));
-                resolve();
-            } else {
-                $logger.warn("Unable to copy Info.plist.");
-                reject();
-            }
-        } else {
+        }  else {
             resolve();
         }
     });
