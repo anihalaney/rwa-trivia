@@ -107,16 +107,16 @@
                 </StackLayout>
             </CardView>
 
-            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
+            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5" >
                 <Label row="0" col="0" text="Select Preferred Category" textWrap="true" fontSize="18" class="label"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
                     textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"
                     background="#fff"></Label>
             </GridLayout>
 
-            <CardView margin="5 10" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}" backgroundColor="white">
+            <CardView margin="5 10" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}" backgroundColor="white" >
                 <StackLayout>
-                    <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option" *ngFor="let category of categories"
+                    <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option" *ngFor="let category of filteredCategories"
                         (tap)="selectCategory(category)">
                         <Label [text]="category.categoryName" fontSize="18" row="0" col="0" textWrap="true" padding="8"
                             class="label"></Label>
@@ -127,17 +127,19 @@
                 </StackLayout>
             </CardView>
 
-            <CardView margin="5 10" visibility="{{ showSelectCategory ? 'visible' : 'collapsed' }}" backgroundColor="white">
+            <CardView margin="5 10" visibility="{{ showSelectCategory ? 'visible' : 'collapsed' }}" backgroundColor="white" >
                 <Label padding="15" text="{{getSelectedCatName()}}" textWrap="true" class="label"></Label>
             </CardView>
-            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
+
+
+            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
                 <Label row="0" col="0" text="Tags associated categories" fontSize="18" textWrap="true" class="label"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
                     textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"
                     background="#fff"></Label>
             </GridLayout>
 
-            <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white">
+            <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
                 <StackLayout>
                     <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option label" *ngFor="let tag of selectedTags">
                         <Label [text]="tag" row="0" col="0" textWrap="true" fontSize="18" padding="8"></Label>
@@ -166,7 +168,7 @@
                 </StackLayout>
             </CardView>
             <CardView margin="5 10" visibility="{{ showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"
-                class="label">
+                class="label" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
                 <Label padding="15" [text]="selectedTags.join(', ')" textWrap="true"></Label>
             </CardView>
 

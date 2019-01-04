@@ -1,5 +1,6 @@
 import {UserActions} from './user.actions';
 import {CategoryActions} from './category.actions';
+import {ApplicationSettingsActions} from './appliction-settings.actions';
 import {TagActions} from './tag.actions';
 import {QuestionActions} from './question.actions';
 import {UIStateActions} from './ui-state.actions';
@@ -11,6 +12,7 @@ export {
     ActionWithPayload,
     UserActions,
     CategoryActions,
+    ApplicationSettingsActions,
     TagActions,
     QuestionActions,
     UIStateActions,
@@ -20,6 +22,7 @@ export {
 export default [
     UserActions,
     CategoryActions,
+    ApplicationSettingsActions,
     TagActions,
     QuestionActions,
     UIStateActions,
