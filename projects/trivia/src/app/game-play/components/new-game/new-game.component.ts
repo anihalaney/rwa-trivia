@@ -1,12 +1,10 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
-import * as gameplayactions from '../../store/actions';
-import * as useractions from '../../../user/store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
   Category, GameOptions, GameMode, User, PlayerMode, OpponentType
@@ -61,6 +59,26 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.gameOptions = new GameOptions();
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        this.selectedCategories = [];
+        const filteredCategories = this.categories.filter((category) => {
+          if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+            return category;
+          }
+        });
+        const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+        ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+
+        this.sortedCategories = sortedCategories;
+
+        sortedCategories.map(category => {
+          this.selectedCategories.push(category.id);
+        });
+
+      }
+    }));
     this.newGameForm = this.createForm(this.gameOptions);
 
     const playerModeControl = this.newGameForm.get('playerMode');
@@ -76,18 +94,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         opponentTypeControl.reset();
       }
     });
-
-    /*
-    this.categoriesFA.valueChanges.subscribe(v => {
-      //console.log(v);
-      let categoryValues: any[] = v;
-      if (categoryValues.find(c => (!c.categorySelected && !c.requiredForGamePlay)))
-        this.allCategoriesSelected = false;
-      else {
-        this.allCategoriesSelected = true;
-      }
-    });
-    */
 
     this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
@@ -124,14 +130,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   createForm(gameOptions: GameOptions) {
 
-    const sortedCategories = [...this.categories.filter(c => c.requiredForGamePlay),
-    ...this.categories.filter(c => !c.requiredForGamePlay)];
-
-    this.sortedCategories = sortedCategories;
-
-    sortedCategories.map(category => {
-      this.selectedCategories.push(category.id);
-    });
 
 
     let fcs: FormControl[] = gameOptions.tags.map(tag => {
