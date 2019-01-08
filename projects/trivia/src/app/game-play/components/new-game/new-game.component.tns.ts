@@ -80,11 +80,17 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
-        const filteredCategories = this.categories.filter((category) => {
-          if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-            return category;
-          }
-        });
+        let filteredCategories = [];
+        if (this.applicationSettings) {
+          filteredCategories = this.categories.filter((category) => {
+            if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+              return category;
+            }
+          });
+        } else {
+          filteredCategories = this.categories;
+        }
+
         this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
         ...filteredCategories.filter(c => !c.requiredForGamePlay)];
       }

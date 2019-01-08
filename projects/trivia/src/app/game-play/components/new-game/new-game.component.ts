@@ -53,21 +53,21 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public userActions: UserActions,
     public utils: Utils) {
     super(store, utils, gameActions, userActions);
-
-  }
-
-  ngOnInit() {
-
-    this.gameOptions = new GameOptions();
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.selectedCategories = [];
-        const filteredCategories = this.categories.filter((category) => {
-          if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-            return category;
-          }
-        });
+        let filteredCategories = [];
+        if (this.applicationSettings && this.applicationSettings.game_play_categories) {
+          filteredCategories = this.categories.filter((category) => {
+            if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+              return category;
+            }
+          });
+        } else {
+          filteredCategories = this.categories;
+        }
+
         const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
         ...filteredCategories.filter(c => !c.requiredForGamePlay)];
 
@@ -79,6 +79,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
       }
     }));
+  }
+
+  ngOnInit() {
+
+    this.gameOptions = new GameOptions();
+
     this.newGameForm = this.createForm(this.gameOptions);
 
     const playerModeControl = this.newGameForm.get('playerMode');

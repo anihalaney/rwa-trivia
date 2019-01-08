@@ -18,8 +18,12 @@ export class ApplicationSettingsEffects {
         .pipe(ofType(ROUTER_NAVIGATION))
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
-            filter((routerState: RouterStateUrl) =>
-                routerState.url.toLowerCase().startsWith('/')),
+            filter((routerState: RouterStateUrl) => {
+                const routeFound = ((routerState.url.toLowerCase().startsWith('/')
+                    || routerState.url.toLowerCase().startsWith('/game-play'))
+                ) ? true : false;
+                return routeFound;
+            }),
             mergeMap((routerState: RouterStateUrl) =>
                 this.store.select(coreState).pipe(
                     map(s => s.user),
