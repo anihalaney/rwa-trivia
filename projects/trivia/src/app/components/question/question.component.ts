@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Question, Answer, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../store';
 import { Store, select } from '@ngrx/store';
-import { QuestionActions } from 'shared-library/core/store/actions';
+import { QuestionActions } from '../../../../../shared-library/src/lib/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 
 @Component({
