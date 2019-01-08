@@ -3,9 +3,10 @@
     <ScrollView>
         <StackLayout>
             <GridLayout rows="*, *, *, *, *, *, *" columns="*">
-                <Button row="0" col="0" text="START A NEW GAME" class="btn-red Roboto-Medium" (tap)="startNewGame()" height="70" margin="10"></Button>
+                <Button row="0" col="0" ripple rippleColor="#D4493D"  text="START A NEW GAME" class="btn-red Roboto-Medium" height="70" margin="10" (tap)="startNewGame()"></Button>
                 <StackLayout row="1" col="0" *ngIf="user">
-                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+                        backgroundColor="white">
                         <GridLayout rows="auto, auto" columns="*">
                             <StackLayout row="0" col="0" *ngIf="activeGames && userDict">
                                 <Label text="My Games" orientation="horizontal" horizontalAlignment="center" padding="10"
@@ -25,7 +26,8 @@
                     </CardView>
                 </StackLayout>
                 <StackLayout row="2" col="0" *ngIf="user">
-                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+                        backgroundColor="white">
                         <StackLayout *ngIf="activeGames && userDict">
                             <Label text="Their Turn" orientation="horizontal" horizontalAlignment="center" padding="10"
                                 textWrap="true" class="title Roboto-Bold"> </Label>
@@ -37,7 +39,8 @@
                     </CardView>
                 </StackLayout>
                 <StackLayout row="3" col="0" *ngIf="user">
-                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+                        backgroundColor="white">
                         <StackLayout *ngIf="activeGames && userDict">
                             <Label text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center"
                                 padding="10" textWrap="true" class="title Roboto-Bold"> </Label>
@@ -50,7 +53,8 @@
                 </StackLayout>
 
                 <StackLayout row="4" col="0" *ngIf="user">
-                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+                        backgroundColor="white">
                         <StackLayout *ngIf="gameInvites">
                             <Label text="Invitation to play games" orientation="horizontal" horizontalAlignment="center"
                                 padding="10" textWrap="true" class="title Roboto-Medium">
@@ -63,7 +67,8 @@
                 </StackLayout>
 
                 <StackLayout row="5" col="0" *ngIf="user && userDict && friendInvitations.length > 0">
-                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+                        backgroundColor="white">
                         <StackLayout *ngIf="gameInvites">
                             <Label text="Friend Invitations" orientation="horizontal" horizontalAlignment="center"
                                 padding="10" textWrap="true" class="title Roboto-Medium">
@@ -71,7 +76,8 @@
                             <StackLayout *ngFor="let invitation of friendInvitations | slice:friendInviteSliceStartIndex:friendInviteSliceLastIndex">
                                 <app-friend-invite [userDict]="userDict" [invitation]="invitation" [user]="user"></app-friend-invite>
                             </StackLayout>
-                            <button text="View more" backgroundColor="#8ac541" color="#ffffff" margin="10" (tap)="displayMoreFriendInvites()" *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex"></button>
+                            <Button ripple rippleColor="#8ac541" text="View more" backgroundColor="#8ac541" color="#ffffff" margin="10" (tap)="displayMoreFriendInvites()"
+                                *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex"></Button>
                         </StackLayout>
                     </CardView>
                 </StackLayout>

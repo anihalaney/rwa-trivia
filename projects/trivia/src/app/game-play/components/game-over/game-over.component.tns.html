@@ -155,12 +155,12 @@
                     </StackLayout>
                     <StackLayout padding="10" backgroundColor="#f3f3f3">
                         <GridLayout rows="auto,auto" columns="auto,auto,auto" horizontalAlignment="center">
-                            <Button row="1" col="0" class="natvigate-button Hind-Medium" text="Share" (tap)="screenshot()"></Button>
-                            <button row="1" col="1" class="natvigate-button Hind-Medium" text="Rematch" (tap)="reMatch()"
+                            <Button row="1" col="0" ripple rippleColor="#ffffff" class="natvigate-button Hind-Medium" text="Share" (tap)="screenshot()"></Button>
+                            <button row="1" col="1" ripple rippleColor="#ffffff" class="natvigate-button Hind-Medium" text="Rematch" (tap)="reMatch()"
                                 *ngIf="game.gameOptions?.playerMode != PlayerMode.Single"></button>
-                            <Button row="1" col="1" class="natvigate-button Hind-Medium" text="Play Game" (tap)="reMatch()"
+                            <Button row="1" col="1" ripple rippleColor="#ffffff" class="natvigate-button Hind-Medium" text="Play Game" (tap)="reMatch()"
                                 *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"></Button>
-                            <Button row="1" col="2" class="natvigate-button" text="Home" [nsRouterLink]="['/dashboard']"
+                            <Button row="1" col="2" ripple rippleColor="#ffffff" class="natvigate-button" text="Home" [nsRouterLink]="['/dashboard']"
                                 clearHistory="true"></Button>
                         </GridLayout>
                     </StackLayout>
@@ -198,7 +198,7 @@
                                     <Label text="{{row.userGivenAnswer}}" textWrap="true" style="color:#3b444f"></Label>
                                 </StackLayout>
                             </StackLayout>
-                            <Button col="3" rowSpan="3" verticalAlignment="center" style="color:#3b444f; border-width:2px; border-color:#f3f3f3;"
+                            <Button col="3" rowSpan="3" ripple rippleColor="#ffffff" verticalAlignment="center" style="color:#3b444f; border-width:2px; border-color:#f3f3f3;"
                                 text="Report" marginRight="10" (tap)="openDialog(row)" *ngIf="!game.playerQnAs[i].isReported"></Button>
                             <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center" marginRight="10"
                                 color="red" fontWeight="600" textWrap="true" *ngIf="game.playerQnAs[i]?.isReported"></Label>
