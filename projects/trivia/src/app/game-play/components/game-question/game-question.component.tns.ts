@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
 import { User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
@@ -6,13 +6,12 @@ import { Store, select } from '@ngrx/store';
 import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
 import { Observable } from 'rxjs';
-import { isAndroid } from 'tns-core-modules/platform';
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
   styleUrls: ['./game-question.component.scss']
 })
-export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy {
+export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, OnChanges {
 
   @Input() user: User;
 
@@ -26,7 +25,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   photoUrl: String = '~/assets/icons/icon-192x192.png';
   userDict$: Observable<{ [key: string]: User }>;
   processTimeInterval: number;
-
+  elapsedTime: number;
   constructor(private utils: Utils, public store: Store<GamePlayState>, ) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -34,26 +33,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnInit() {
-
-    if (isAndroid) {
-      this.processTimeInterval = 57;
-    } else {
-      this.processTimeInterval = 64;
-    }
-    this.progressValue = 0;
-    // Created progressbar interval will call each 0.065 second
-    // Increament progress value
-    this.stopProcessBar = setInterval(() => {
-      if (this.progressValue <= 100 && this.doPlay) {
-        this.progressValue = (this.minutes * 100) / 240;
-        this.minutes++;
-      } else {
-        this.clearProcessBar();
-      }
-    }, this.processTimeInterval);
-
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
-
   }
 
 
@@ -71,5 +51,12 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
   getImage(userId) {
     return this.utils.getImageUrl(this.userDict[userId], 44, 40, '44X40');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.timer) {
+      this.timer = 15 - changes.timer.currentValue;
+      this.progressValue = (this.timer * 100) / 15;
+    }
   }
 }
