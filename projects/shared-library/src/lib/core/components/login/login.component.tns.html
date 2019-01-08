@@ -3,7 +3,7 @@
 
   <GridLayout *ngIf="mode === 2" #background class="background"></GridLayout>
   <ScrollView>
-    <StackLayout>
+    <StackLayout class="mobile">
       <GridLayout rows="auto,*">
         <StackLayout [formGroup]="loginForm" row="0" [ngClass]="{'background': this.mode !== 2 }">
           <StackLayout #initialContainer class="initial-container">
@@ -45,7 +45,7 @@
               marginTop="10" text="Must match Password" textWrap="true" class="text-center error"></Label>
               <StackLayout [ngSwitch]="mode">
                 <StackLayout *ngSwitchCase="0">
-                  <Button text="Login" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
+                  <Button ripple rippleColor="#71b02f" text="Login" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
                      class="text-center login-button initial-button-label Roboto-Bold"></Button>
                   <StackLayout>
                     <Label text="Forgot your password?" (tap)="this.mode=2" marginTop="25" class="text-center initial-label Roboto-Regular"
@@ -54,12 +54,12 @@
                   </StackLayout>
                 </StackLayout>
                 <StackLayout *ngSwitchCase="1">
-                  <Button text="Sign Up" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
+                  <Button ripple rippleColor="#71b02f" text="Sign Up" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
                      class="text-center login-button initial-button-label"></Button>
                   <Label text="Already have an account? Login" textWrap="true" marginTop="15" (tap)="this.mode=0" class="text-center initial-label"></Label>
                 </StackLayout>
-                <StackLayout *ngSwitchCase="2">
-                  <Button text="Send Password" width="70%" marginTop="20" (tap)="onSubmit()" class="text-center login-button initial-button-label Roboto-Bold"></Button>
+                <StackLayout *ngSwitchCase="2">   
+                  <Button ripple rippleColor="#71b02f" text="Send Password" width="70%" marginTop="20" (tap)="onSubmit()" class="text-center login-button initial-button-label Roboto-Bold"></Button>
                   <Label text="No. I remember it now!" marginTop="30" textWrap="true" (tap)="this.mode=0" color="black" class="text-center initial-label"></Label>
                 </StackLayout>
               </StackLayout>
