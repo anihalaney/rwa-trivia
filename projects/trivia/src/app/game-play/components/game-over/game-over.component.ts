@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef} from '@angular/core';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
