@@ -46,4 +46,15 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     this.utils.unsubscribe(this.sub);
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
   }
+
+  // Hide menu if question display
+  get isDispayMenu() {
+    if (this.currentQuestion && this.showContinueBtn) {
+      return undefined;
+    }
+    if (this.currentQuestion && !this.showLoader && !this.showBadge) {
+      return true;
+    }
+    return undefined;
+  }
 }
