@@ -21,7 +21,6 @@ import { MatSnackBar } from '@angular/material';
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<ReportGameComponent>;
-  disableFriendInviteBtn = false;
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
@@ -165,18 +164,4 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
   }
-
-  InviteAsFriend() {
-    console.log('Invite as friend', this.user.userId);
-    // console.log('this.play', this.game.playerIds);
-
-    if (!this.disableFriendInviteBtn) {
-      const inviteeUserId = (this.user.userId === this.game.playerIds[0]) ? this.game.playerIds[1] : this.game.playerIds[0];
-      console.log('invitee id', inviteeUserId);
-      this.store.dispatch(this.userActions.addUserInvitation(
-        { userId: this.user.userId, inviteeUserId: inviteeUserId }));
-    }
-
-  }
-
 }
