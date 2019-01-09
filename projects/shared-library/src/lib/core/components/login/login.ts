@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { CoreState, coreState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
@@ -20,13 +20,14 @@ export class Login {
     this.mode = SignInMode.signIn;  // default
     this.notificationMsg = '';
     this.errorStatus = false;
+    // const c = new FormControl('', Validators.required,{updateOn: blur });
 
     this.loginForm = this.fb.group({
       mode: [0],
-      email: ['', Validators.compose([Validators.required, Validators.pattern(this.email_regexp)])],
-      password: ['', Validators.compose([Validators.required, Validators.minLength(6)])],
-      confirmPassword: ['']
-    }, { validator: loginFormValidator }
+      email: new FormControl('', { validators: [Validators.required,  Validators.pattern(this.email_regexp)], updateOn: 'blur' }),
+      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)], updateOn: 'blur'}),
+      confirmPassword: new FormControl('')
+    }, { validator: loginFormValidator , updateOn: 'blur'}
     );
 
     this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
