@@ -1,5 +1,5 @@
 import { Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { User, Game, PlayerMode } from 'shared-library/shared/model';
+import { User, Game, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -9,7 +9,7 @@ import * as gameplayactions from '../../store/actions';
 import * as socialactions from '../../../social/store/actions';
 import { gamePlayState } from '../../store';
 
-export class GameOver implements OnInit{
+export class GameOver implements OnInit {
 
   @Input() correctCount: number;
   @Input() noOfQuestions: number;
@@ -32,7 +32,8 @@ export class GameOver implements OnInit{
   userDict$: Observable<{ [key: string]: User }>;
   loaderStatus = false;
   playerUserName = 'You';
-
+  opponentType = OpponentType;
+  disableFriendInviteBtn = false;
   defaultAvatar = 'assets/images/default-avatar-game-over.png';
   subs: Subscription[] = [];
 
@@ -102,4 +103,11 @@ export class GameOver implements OnInit{
     return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 
+  inviteAsFriend() {
+    if (!this.disableFriendInviteBtn) {
+      const inviteeUserId = (this.user.userId === this.game.playerIds[0]) ? this.game.playerIds[1] : this.game.playerIds[0];
+      this.store.dispatch(this.userActions.addUserInvitation(
+        { userId: this.user.userId, inviteeUserId: inviteeUserId }));
+    }
+  }
 }
