@@ -54,7 +54,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      console.log('master called');
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
@@ -75,7 +74,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => this.userDict = userDict);
-    console.log(this.router.url);
   }
 
   ngOnDestroy() { }
@@ -89,7 +87,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   startGame() {
     this.gameOptions.tags = this.selectedTags;
     this.gameOptions.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
-    console.log(this.gameOptions.categoryIds);
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
       && !this.friendUserId) {
       if (!this.friendUserId) {
@@ -102,7 +99,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   selectCategory(category) {
-    console.log(category);
     if (!category.requiredForGamePlay) {
       category.isSelected = !category.isSelected;
     }

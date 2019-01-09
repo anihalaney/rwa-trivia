@@ -42,11 +42,14 @@ export class Login {
           this.loginForm.get('confirmPassword').clearValidators();
           this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('password').updateValueAndValidity();
+          this.loginForm.get('confirmPassword').updateValueAndValidity();
           break;
         default:
           // Forgot Password
           this.loginForm.get('password').clearValidators();
           this.loginForm.get('confirmPassword').clearValidators();
+          this.loginForm.get('confirmPassword').updateValueAndValidity();
+          this.loginForm.get('password').updateValueAndValidity();
 
       }
       this.loginForm.get('password').updateValueAndValidity();
@@ -57,6 +60,13 @@ export class Login {
     this.subs.push(this.store.select(coreState).pipe(select(s => s.resetPasswordLogs))
       .subscribe(notificationLogs => this.notificationLogs = notificationLogs));
   }
+
+
+  changeMode(mode) {
+    this.mode = mode;
+    this.loginForm.patchValue({mode : this.mode});
+  }
+
 }
 
 export enum SignInMode {
