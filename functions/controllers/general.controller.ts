@@ -13,6 +13,7 @@ import { RSSFeedConstants, Blog, User, profileSettingsConstants } from '../../pr
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
 import { Utils } from '../utils/utils';
+import { PushNotification } from '../utils/push-notifications';
 const utils: Utils = new Utils();
 
 /**
@@ -275,6 +276,19 @@ exports.generateAllUsersProfileImages = (req, res) => {
     const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
     profileImagesGenerator.
         fetchUsers().then((status) => {
+            res.send(status);
+        });
+};
+
+
+/**
+ * sendPushNotifications
+ * return status
+ */
+exports.sendPushNotifications = (req, res) => {
+    const pushNotification: PushNotification = new PushNotification();
+    pushNotification.
+        sendNotification(req.data.token).then((status) => {
             res.send(status);
         });
 };
