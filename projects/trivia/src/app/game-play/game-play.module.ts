@@ -10,7 +10,7 @@ import {
   GameOverComponent, GameDialogComponent, ReportGameComponent
 } from './components';
 import { effects, reducer } from './store';
-
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { effects, reducer } from './store';
     GameQuestionContinueComponent,
     GameOverComponent,
     GameDialogComponent,
-    ReportGameComponent
+    ReportGameComponent,
   ],
   entryComponents: [
     GameDialogComponent,
@@ -30,7 +30,7 @@ import { effects, reducer } from './store';
     //rwa modules
     SharedModule,
     GamePlayRoutingModule,
-
+    MatSnackBarModule,
     //ngrx feature store
     StoreModule.forFeature('gameplay', reducer),
 

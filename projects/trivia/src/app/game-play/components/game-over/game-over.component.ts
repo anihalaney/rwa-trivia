@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef, ViewChild } from '@angular/core';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -9,7 +9,8 @@ import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import * as domtoimage from 'dom-to-image';
 import { GameOver } from './game-over';
-
+import { coreState } from 'shared-library/core/store';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'game-over',
@@ -20,20 +21,36 @@ import { GameOver } from './game-over';
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<ReportGameComponent>;
-
+  disableFriendInviteBtn = false;
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
 
-  constructor(public store: Store<AppState>, public dialog: MatDialog, private renderer: Renderer2, public userActions: UserActions,
-    private windowRef: WindowRef, public utils: Utils) {
+  constructor(public store: Store<AppState>,
+    public dialog: MatDialog,
+    private renderer: Renderer2,
+    public userActions: UserActions,
+    private windowRef: WindowRef,
+    public utils: Utils,
+    public snackBar: MatSnackBar,
+    public viewContainerRef: ViewContainerRef,
+  ) {
     super(store, userActions, utils);
-
     this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       if (state === 'SUCCESS') {
         if ((this.dialogRef)) {
           this.dialogRef.close();
         }
+      }
+    }));
+
+    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.snackBar.open(status, '',  {
+          viewContainerRef: this.viewContainerRef,
+          duration: 2000,
+          });
+        this.disableFriendInviteBtn = true;
       }
     }));
 
@@ -58,7 +75,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
-   }
+  }
 
   reportQuestion(question) {
     setTimeout(() => this.openDialog(question), 0);
@@ -147,6 +164,19 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
+  }
+
+  InviteAsFriend() {
+    console.log('Invite as friend', this.user.userId);
+    // console.log('this.play', this.game.playerIds);
+
+    if (!this.disableFriendInviteBtn) {
+      const inviteeUserId = (this.user.userId === this.game.playerIds[0]) ? this.game.playerIds[1] : this.game.playerIds[0];
+      console.log('invitee id', inviteeUserId);
+      this.store.dispatch(this.userActions.addUserInvitation(
+        { userId: this.user.userId, inviteeUserId: inviteeUserId }));
+    }
+
   }
 
 }

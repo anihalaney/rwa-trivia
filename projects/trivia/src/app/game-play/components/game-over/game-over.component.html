@@ -105,8 +105,8 @@
         <button class="btn-share" type="button" (click)="shareScore()" [disabled]="socialFeedData.share_status"
           [ngClass]="socialFeedData.share_status?'hide-share-btn':'show-share-btn'">Share</button>
         <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">Rematch</button>
-        <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play
-          Again</button>
+        <button class="btn-share" type="button" (click)="reMatch()" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">Play Again</button>
+        <button class="btn-share" [disabled]="disableFriendInviteBtn" type="button" (click)="InviteAsFriend()" *ngIf="game.gameOptions.opponentType == opponentType.Random">Invite as Friend</button>
         <img *ngIf="disableRematchBtn" src="/assets/images/ajax-loader.gif" class="rematch-loaderimage" alt="Loader Image">
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
