@@ -23,14 +23,7 @@ export class ApplicationSettingsEffects {
                     || routerState.url.toLowerCase().startsWith('/game-play'))
                 ) ? true : false;
                 return routeFound;
-            }),
-            mergeMap((routerState: RouterStateUrl) =>
-                this.store.select(coreState).pipe(
-                    map(s => s.user),
-                    filter(u => !!u),
-                    take(1),
-                    map(user => user.userId))
-            ))
+            }))
         .pipe(
             switchMap(() => {
                 return this.svc.getApplicationSettings()
