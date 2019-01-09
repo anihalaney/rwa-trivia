@@ -14,14 +14,11 @@ service cloud.firestore {
     return isAuthenticated() && request.auth.uid == userId;
   }
   
-function isUserAuthenticated(userId) {
-    return isAuthenticated() && request.auth.uid == userId;
-  }
   
   match /databases/{database}/documents {
 
     match /users/{userId} {
-          allow read, write: if isUserAuthenticated(resource.data.created_uid);          
+          allow read, write: if isUserAuthenticated(userId);          
     }
     
 		match /{document=**} {

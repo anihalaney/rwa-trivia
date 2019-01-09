@@ -240,10 +240,12 @@ export class GameDialog {
       this.originalAnswers = Object.assign({}, question.answers);
       this.currentQuestion = question;
       this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);
-      this.categoryName = this.categoryDictionary[question.categoryIds[0]].categoryName;
       if (!this.userDict[this.currentQuestion.created_uid]) {
         this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
       }
+      this.categoryName = question.categoryIds.map(category => {
+        return this.categoryDictionary[category].categoryName;
+      }).join(',');
       if (this.isQuestionAvailable) {
         this.questionIndex++;
         this.timerSub =
@@ -354,5 +356,4 @@ export class GameDialog {
 
     this.genQuestionComponent.disableQuestions(correctAnswerId);
   }
-
 }
