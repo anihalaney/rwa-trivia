@@ -106,12 +106,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   startGame() {
     this.gameOptions.tags = this.selectedTags;
-<<<<<<< HEAD
     this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
-    console.log(this.gameOptions.categoryIds);
-=======
-    this.gameOptions.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
->>>>>>> f785d7a59f9bd6f63bb709f0753abf61a359a74d
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
       && !this.friendUserId) {
       if (!this.friendUserId) {
