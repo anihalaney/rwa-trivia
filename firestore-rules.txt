@@ -18,7 +18,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     match /users/{userId} {
-          allow read, write: if isUserAuthenticated(resource.data.created_uid);          
+          allow read, write: if isUserAuthenticated(userId);          
     }
     
 		match /{document=**} {
