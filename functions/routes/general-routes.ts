@@ -26,5 +26,6 @@ router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsD
 router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuthUsersInFirestore);
 router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
 router.post('/question/status', generalAuth.adminOnly, generalQuestionController.changeUnpublishedQuestionStatus);
+router.post('/send-push', generalController.sendPushNotifications);
 
 module.exports = router;
