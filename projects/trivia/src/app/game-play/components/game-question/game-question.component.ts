@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, SimpleChanges, OnChanges } from '@angular/core';
 import { GameQuestion } from './game-question';
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
   styleUrls: ['./game-question.component.scss']
 })
-export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, AfterViewInit {
+export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @ViewChild('overlay') overlay: ElementRef;
   @ViewChild('loader') loader: ElementRef;
-
+  alpha = 0;
   constructor() {
     super();
   }
@@ -24,7 +24,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     const seconds = 30;
     const loader = this.loader.nativeElement, α = 0;
 
-    this.draw(α, this.doPlay, loader);
+    this.draw(this.alpha, this.doPlay, loader);
   }
 
   draw(α, doPlay, loader) {
@@ -39,7 +39,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
         + x + ' '
         + y + ' z';
 
-
     if (this.doPlay) {
       loader.setAttribute('d', anim);
       setTimeout(() => {
@@ -48,8 +47,24 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     }
   }
 
-
   fillTimer() {
     this.loader.nativeElement.setAttribute('d', 'M 1 1 v -125 A 125 125 1 1 1 0 -125 z');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.timer && changes.timer.firstChange) {
+      const elapsedTime = 16 - changes.timer.currentValue;
+      this.alpha = (360 * elapsedTime) / 16;
+      // const loader = this.loader.nativeElement, α = 0;
+      // let r = (α * Math.PI / 180)
+      //   , x = Math.sin(r) * 125
+      //   , y = Math.cos(r) * -125
+      //   , mid = (α > 180) ? 1 : 1
+      //   , anim = 'M 1 1 v -125 A 125 125 1 '
+      //     + mid + ' 1 '
+      //     + x + ' '
+      //     + y + ' z';
+      // loader.setAttribute('d', anim);
+    }
   }
 }
