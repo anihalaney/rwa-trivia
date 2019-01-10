@@ -13,6 +13,7 @@ import {
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
+import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private ngZone: NgZone,
     private routerExtension: RouterExtensions,
+    private applicationSettingsAction: ApplicationSettingsActions,
     private utils: Utils) {
+
+    this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+
     this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
