@@ -20,28 +20,29 @@ export class Login {
     this.mode = SignInMode.signIn;  // default
     this.notificationMsg = '';
     this.errorStatus = false;
-    // const c = new FormControl('', Validators.required,{updateOn: blur });
 
     this.loginForm = this.fb.group({
       mode: [0],
-      email: new FormControl('', { validators: [Validators.required,  Validators.pattern(this.email_regexp)], updateOn: 'blur' }),
-      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)], updateOn: 'blur'}),
-      confirmPassword: new FormControl('')
-    }, { validator: loginFormValidator , updateOn: 'blur'}
+      email: new FormControl('', { validators: [Validators.required,  Validators.pattern(this.email_regexp)]}),
+      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)]}), // , updateOn: 'blur'
+      confirmPassword: new FormControl('') // {updateOn: 'blur'}
+    }, { validator: loginFormValidator} //  , updateOn: 'blur'
     );
 
     this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
           // Sign up
-          this.loginForm.get('confirmPassword').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
+         // tslint:disable-next-line:max-line-length
+         this.loginForm.get('confirmPassword').setValidators( Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('confirmPassword').updateValueAndValidity();
           break;
         // no break - fall thru
         case 0:
           // Login or Sign up
           this.loginForm.get('confirmPassword').clearValidators();
-          this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
+          this.loginForm.get('password').setValue({ validators: [Validators.required, Validators.minLength(6)], updateOn: 'blur'});
+          // this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('password').updateValueAndValidity();
           this.loginForm.get('confirmPassword').updateValueAndValidity();
           break;

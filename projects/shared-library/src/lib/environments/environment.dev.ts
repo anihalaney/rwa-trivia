@@ -16,4 +16,4 @@ export const CONFIG: IConfig = {
     messagingSenderId: '701588063269'
   },
   'functionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com'
-};
+  };
