@@ -1,5 +1,5 @@
 <GridLayout>
-    <ScrollView>
+    <ScrollView> 
         <StackLayout backgroundColor="#f1f2f2"  [class.m-b-70]="showContinueBtn" >
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white">
@@ -56,8 +56,9 @@
                 </StackLayout>
             </CardView>
 
-            <StackLayout margin="15 0 0 15" orientation="horizontal">
-                <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="17" textWrap="true" color="#1b1c1c"></Label>
+            <StackLayout margin="7 0 0 15" orientation="horizontal">
+                <Label text="Categories:" class="Roboto-Medium" marginRight="5" fontSize="15" textWrap="true"></Label>
+                <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
             </StackLayout>
             <StackLayout margin="15" orientation="horizontal">
                 <Label text="Tags: " class="Roboto-Medium" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"
@@ -78,15 +79,9 @@
                                 marginTop="10" marginBottom="10" textWrap="true" padding="10"></Label>
                         </StackLayout>
                     </StackLayout>
-                    <GridLayout margin="0 15" rows="auto" columns="auto,auto,auto" *ngIf="question" style=" horizontal-align:right;">
-                            <Label row="0" col="0" class="Roboto-Medium" text="Author: " textWrap="true" fontSize="15"
-                                fontWeight="500" horizontalAlignment="left" color="#1b1c1c" paddingTop="5" verticalAlignment="Center"></Label>
-                            <Label row="0" col="1" class="Roboto-Regular" text="{{userDict[question.created_uid]?.displayName}}"
-                                fontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left"
-                                verticalAlignment="Center" paddingTop="5"></Label>
-                            <Image row="0" col="2" src="{{getImage(question.created_uid)}}" color="#FFFFFF" stretch="aspectFill"
-                                height="33" width="33" marginLeft="10" marginRight="10" borderRadius="50"></Image>
-                        </GridLayout>
+                    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;" class="Roboto-Medium">
+                             <author [userDict]="userDict" [userId]="question.created_uid"></author>
+                    </GridLayout>
                 </StackLayout>
             </CardView>
         </StackLayout>

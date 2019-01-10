@@ -38,6 +38,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   categoryIds: number[] = [];
   private tagItems: ObservableArray<TokenModel>;
   sub3: Subscription;
+  filteredCategories: Category[];
+
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView') listViewComponent: RadListViewComponent;
 
@@ -58,7 +60,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories.filter(c => c.isSelected = true)));
-    this.categories = [...this.categories.filter(c => c.requiredForGamePlay), ...this.categories.filter(c => !c.requiredForGamePlay)];
+
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
@@ -74,6 +76,24 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        let filteredCategories = [];
+        if (this.applicationSettings) {
+          filteredCategories = this.categories.filter((category) => {
+            if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+              return category;
+            }
+          });
+        } else {
+          filteredCategories = this.categories;
+        }
+
+        this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+        ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+      }
+    }));
   }
 
   ngOnDestroy() { }
@@ -86,7 +106,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   startGame() {
     this.gameOptions.tags = this.selectedTags;
-    this.gameOptions.categoryIds = this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
+    this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
     if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
       && !this.friendUserId) {
       if (!this.friendUserId) {
@@ -105,7 +125,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   getSelectedCatName() {
-    return this.categories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.categoryName).join(', ');
+    return this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.categoryName).join(', ');
   }
 
   getPlayerMode() {
