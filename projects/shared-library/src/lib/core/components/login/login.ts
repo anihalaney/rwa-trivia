@@ -24,9 +24,9 @@ export class Login {
     this.loginForm = this.fb.group({
       mode: [0],
       email: new FormControl('', { validators: [Validators.required,  Validators.pattern(this.email_regexp)]}),
-      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)]}), // , updateOn: 'blur'
-      confirmPassword: new FormControl('') // {updateOn: 'blur'}
-    }, { validator: loginFormValidator} //  , updateOn: 'blur'
+      password: new FormControl('', { validators: [Validators.required, Validators.minLength(6)]}),
+      confirmPassword: new FormControl('')
+    }, { validator: loginFormValidator}
     );
 
     this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
@@ -41,8 +41,7 @@ export class Login {
         case 0:
           // Login or Sign up
           this.loginForm.get('confirmPassword').clearValidators();
-          this.loginForm.get('password').setValue({ validators: [Validators.required, Validators.minLength(6)], updateOn: 'blur'});
-          // this.loginForm.get('password').setValidators(Validators.compose([Validators.required, Validators.minLength(6)]));
+          this.loginForm.get('password').setValue({ validators: [Validators.required, Validators.minLength(6)]});
           this.loginForm.get('password').updateValueAndValidity();
           this.loginForm.get('confirmPassword').updateValueAndValidity();
           break;
