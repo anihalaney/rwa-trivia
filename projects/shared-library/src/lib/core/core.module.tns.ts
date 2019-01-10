@@ -7,10 +7,10 @@ import {
   Utils,
   CategoryService, TagService, QuestionService,
   GameService, BulkService, UserService, SocialService, StatsService,
-  WindowRef
+  WindowRef, ApplicationSettingsService
 } from './services';
 
-import {NavigationService } from './services/mobile/navigation.service';
+import { NavigationService } from './services/mobile/navigation.service';
 
 import { AuthenticationProvider, AuthInterceptor } from './auth';
 
@@ -20,7 +20,10 @@ import { DbService } from './db-service';
 import { TNSDbService } from './db-service/mobile/db.service';
 import { FirebaseService } from './db-service/firebase.service';
 
-import { UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions } from './store/actions';
+import {
+  UserActions, CategoryActions, TagActions, QuestionActions, UIStateActions, GameActions,
+  ApplicationSettingsActions
+} from './store/actions';
 import { effects } from './store/effects';
 import { reducer } from './store';
 
@@ -62,12 +65,13 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
     Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService, SocialService, StatsService, NavigationService,
-    WindowRef,
+    WindowRef, ApplicationSettingsService,
 
     // Actions
     UserActions, CategoryActions, TagActions, QuestionActions,
     UIStateActions, GameActions,
-    UserActions,
+    UserActions, ApplicationSettingsActions,
+
     TNSDbService,
     FirebaseService,
     {
