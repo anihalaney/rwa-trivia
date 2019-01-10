@@ -5,7 +5,8 @@ import { GameQuestion } from './game-question';
 import { Store, select } from '@ngrx/store';
 import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
-import { Observable } from 'rxjs';
+import { Observable, timer, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
@@ -26,6 +27,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   userDict$: Observable<{ [key: string]: User }>;
   processTimeInterval: number;
   elapsedTime: number;
+  timerSub: Subscription;
   constructor(private utils: Utils, public store: Store<GamePlayState>, ) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -33,6 +35,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnInit() {
+    this.progressValue = 0;
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
   }
 
@@ -46,6 +49,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   fillTimer() {
+    this.progressValue = 100;
     clearInterval(this.stopProcessBar);
   }
 
@@ -56,7 +60,20 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnChanges(changes: SimpleChanges) {
     if (changes.timer) {
       this.timer = 15 - changes.timer.currentValue;
+      if (this.timerSub) {
+        this.timerSub.unsubscribe();
+      }
       this.progressValue = (this.timer * 100) / 15;
+
+      this.timerSub =
+        timer(0, 10).pipe(take(90)).subscribe(t => {
+          this.timer += 0.010;
+          this.progressValue = (this.timer / 15) *  100;
+        },
+          null,
+          () => {
+            this.timerSub.unsubscribe();
+          });
     }
   }
 }
