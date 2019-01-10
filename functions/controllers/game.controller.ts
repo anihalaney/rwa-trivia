@@ -3,12 +3,14 @@ import {
     GameStatus, schedulerConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
+import { PushNotification } from '../utils/push-notifications';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
 const utils: Utils = new Utils();
+const pushNotification: PushNotification = new PushNotification();
 const fs = require('fs');
 const request = require('request');
 const path = require('path');
@@ -78,7 +80,11 @@ exports.updateGame = (req, res) => {
                 const currentPlayerQnAs: PlayerQnA = req.body.playerQnA;
                 const qIndex = game.playerQnAs.findIndex((pastPlayerQnA) => pastPlayerQnA.questionId === currentPlayerQnAs.questionId);
                 game.playerQnAs[qIndex] = currentPlayerQnAs;
+                const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
+                if (currentTurnPlayerId !== game.nextTurnPlayerId) {
+                    pushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play', 'Your turn comes now', {});
+                }
                 game.turnAt = utils.getUTCTimeStamp();
                 game.calculateStat(currentPlayerQnAs.playerId);
 
