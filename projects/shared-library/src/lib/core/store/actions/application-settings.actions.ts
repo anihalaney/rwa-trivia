@@ -6,6 +6,15 @@ import { Category } from '../../../shared/model';
 @Injectable()
 export class ApplicationSettingsActions {
 
+
+  static LOAD_APPLICATION_SETTINGS = 'LOAD_APPLICATION_SETTINGS';
+  loadApplicationSettings(): ActionWithPayload<null> {
+    return {
+      type: ApplicationSettingsActions.LOAD_APPLICATION_SETTINGS,
+      payload: null
+    };
+  }
+
   static LOAD_APPLICATION_SETTINGS_SUCCESS = 'LOAD_APPLICATION_SETTINGS_SUCCESS';
   loadApplicationSettingsSuccess(applicationSettings: any[]): ActionWithPayload<any[]> {
     return {
