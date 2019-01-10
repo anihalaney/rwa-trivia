@@ -14,16 +14,8 @@ export class ApplicationSettingsEffects {
     // Load ApplicationSettings based on url
     @Effect()
     // handle location update
-    loadRouteApplicationSettings$ = this.actions$
-        .pipe(ofType(ROUTER_NAVIGATION))
-        .pipe(
-            map((action: any): RouterStateUrl => action.payload.routerState),
-            filter((routerState: RouterStateUrl) => {
-                const routeFound = ((routerState.url.toLowerCase().startsWith('/')
-                    || routerState.url.toLowerCase().startsWith('/game-play'))
-                ) ? true : false;
-                return routeFound;
-            }))
+    loadApplicationSettings$ = this.actions$
+        .pipe(ofType(ApplicationSettingsActions.LOAD_APPLICATION_SETTINGS))
         .pipe(
             switchMap(() => {
                 return this.svc.getApplicationSettings()
@@ -38,7 +30,6 @@ export class ApplicationSettingsEffects {
     constructor(
         private actions$: Actions,
         private applicationSettingsActions: ApplicationSettingsActions,
-        private svc: ApplicationSettingsService,
-        private store: Store<CoreState>
+        private svc: ApplicationSettingsService
     ) { }
 }
