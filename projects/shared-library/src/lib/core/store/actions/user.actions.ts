@@ -55,6 +55,14 @@ export class UserActions {
     };
   }
 
+  static UPDATE_USER = 'UPDATE_USER';
+  updateUser(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.UPDATE_USER,
+      payload: user
+    };
+  }
+
   static LOAD_GAME_INVITES = 'LOAD_GAME_INVITES';
   loadGameInvites(user: User): ActionWithPayload<User> {
     return {
