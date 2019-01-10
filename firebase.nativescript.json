@@ -6,7 +6,7 @@
     "realtimedb": false,
     "authentication": true,
     "remote_config": false,
-    "messaging": false,
+    "messaging": true,
     "crashlytics": true,
     "crash_reporting": false,
     "storage": false,
