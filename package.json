@@ -170,7 +170,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": ""
+      "pre-push": "npm run test && ng e2e trivia-e2e"
     }
   }
 }
