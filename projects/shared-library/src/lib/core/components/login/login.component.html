@@ -34,7 +34,7 @@
             <mat-form-field class="
               full-width required">
               <input matInput placeholder="Email *" formControlName="email" class="required" aria-label="email">
-              <mat-hint align="end" *ngIf="loginForm.controls.email.errors && !loginForm.controls.email.pristine" class="error">Invalid
+              <mat-hint align="end" *ngIf="loginForm.controls.email.errors && (loginForm.controls.email.dirty)"class="error">Invalid
                 Email!
               </mat-hint>
             </mat-form-field>
