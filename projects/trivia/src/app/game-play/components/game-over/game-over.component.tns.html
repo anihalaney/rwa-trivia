@@ -198,7 +198,7 @@
                                     <Label text="{{row.userGivenAnswer}}" textWrap="true" style="color:#3b444f"></Label>
                                 </StackLayout>
                             </StackLayout>
-                            <Button col="3" rowSpan="3" ripple rippleColor="#ffffff" verticalAlignment="center" style="color:#3b444f; border-width:2px; border-color:#f3f3f3;"
+                            <Button col="3" rowSpan="3" ripple verticalAlignment="center" style="color:#3b444f; border-width:2px; border-color:#f3f3f3;"
                                 text="Report" marginRight="10" (tap)="openDialog(row)" *ngIf="!game.playerQnAs[i].isReported"></Button>
                             <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center" marginRight="10"
                                 color="red" fontWeight="600" textWrap="true" *ngIf="game.playerQnAs[i]?.isReported"></Label>

@@ -1,10 +1,11 @@
 <GridLayout>
-    <ScrollView>
-        <StackLayout backgroundColor="#f1f2f2">
+    <ScrollView> 
+        <StackLayout backgroundColor="#f1f2f2"  [class.m-b-70]="showContinueBtn" >
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white">
                 <StackLayout>
-                    <GridLayout row="auto" columns="auto,*,auto" marginRight="5" class="sideStackLayoutHeader" *ngIf="user" paddingTop="10">
+                    <GridLayout row="auto,*" columns="auto,*,auto" marginRight="5" class="sideStackLayoutHeader" *ngIf="user"
+                        paddingTop="10">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
                             width="64" marginLeft="10" verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
                         <StackLayout row="0" col="1" class="Roboto-Regular">
@@ -36,26 +37,34 @@
                         </StackLayout>
 
                     </GridLayout>
+                    <StackLayout>
+                        <Label visibility="{{ turnFlag && threeConsecutiveAnswer ? 'visible'  : 'collapsed'}}" class="Roboto-Regular"
+                            fontSize="17" marginLeft="15" color="#af3424" text="You have reached the maximum number of correct answers you are allowed to give in the first round."
+                            textWrap="true"></Label>
+                    </StackLayout>
+                    <StackLayout *ngIf="continueNext">
+                            <Label visibility="{{correctAnswerIndex === answeredIndex  ? 'visible'  : 'collapsed' }}" class="correct-text" text="CORRECT" textWrap="true"  style.textAlignment="center"></Label>
 
+                            <Label visibility="{{(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex) ? 'visible'  : 'collapsed' }}" class="incorrect-text" text="INCORRECT" textWrap="true"  style.textAlignment="center"></Label>
+
+                            <Label visibility="{{ !(answeredIndex !== null && answeredIndex !== undefined)  ? 'visible'  : 'collapsed' }}" class="timeout-text" text="TIMEOUT" textWrap="true"  style.textAlignment="center"></Label>
+
+                    </StackLayout>
                     <StackLayout marginTop="10">
                         <Progress [value]="progressValue" maxValue="100"></Progress>
                     </StackLayout>
                 </StackLayout>
             </CardView>
+
+            <StackLayout margin="7 0 0 15" orientation="horizontal">
+                <Label text="Categories:" class="Roboto-Medium" marginRight="5" fontSize="15" textWrap="true"></Label>
+                <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
+            </StackLayout>
             <StackLayout margin="15" orientation="horizontal">
                 <Label text="Tags: " class="Roboto-Medium" marginRight="5" fontSize="15" fontWeight="500" textWrap="true"
                     color="#1b1c1c"></Label>
                 <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
             </StackLayout>
-
-            <GridLayout margin="0 15" rows="auto" columns="auto,auto,auto" *ngIf="question">
-                <Label row="0" col="0" class="Roboto-Medium" text="Author: " textWrap="true" fontSize="15" fontWeight="500"
-                    horizontalAlignment="left" color="#1b1c1c" paddingTop="5" verticalAlignment="Center"></Label>
-                <Label row="0" col="1" class="Roboto-Regular" text="{{userDict[question.created_uid]?.displayName}}"
-                    fontSize="15" textWrap="true" color="#1b1c1c" extWrap="true" horizontalAlignment="left" verticalAlignment="Center" paddingTop="5"></Label>
-                <Image row="0" col="2" src="{{getImage(question.created_uid)}}" color="#FFFFFF" stretch="aspectFill"
-                    height="33" width="33" marginLeft="10" marginRight="10" borderRadius="50"></Image>
-            </GridLayout>
 
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white" margin="15">
@@ -65,11 +74,16 @@
                     <StackLayout *ngIf="question">
                         <StackLayout class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
                             [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
-                            [class.right]="correctAnswerIndex === i" (tap)="answerButtonClicked(answer,i)">
+                            [class.right]="correctAnswerIndex === i">
+                            <Ripple width="100%" (tap)="answerButtonClicked(answer,i)">
                             <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="15" fontWeight="500"
-                                marginTop="10" marginBottom="10" textWrap="true" padding="10"></Label>
+                                marginTop="10" marginBottom="10" textWrap="true" padding="10" width="100%" style="text-align:center;"></Label>
+                            </Ripple>
                         </StackLayout>
                     </StackLayout>
+                    <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;" class="Roboto-Medium">
+                             <author [userDict]="userDict" [userId]="question.created_uid"></author>
+                    </GridLayout>
                 </StackLayout>
             </CardView>
         </StackLayout>
