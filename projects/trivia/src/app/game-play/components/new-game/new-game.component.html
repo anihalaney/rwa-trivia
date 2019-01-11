@@ -64,8 +64,8 @@
                     </div>
                 </div>
                 <!-- Prefered Categories -->
-                <div class="row pcategories">
-                    <div class="col-sm-3">
+                <div class="row pcategories" >
+                    <div class="col-sm-3" >
                         <h2>Preferred
                             <span>Categories</span>
                         </h2>
@@ -74,8 +74,8 @@
                         <div class="row">
                             <div class="col-md-8">
                                 <div class="row">
-                                    <ng-container *ngFor="let category of sortedCategories; let i=index">
-                                        <div class="checkbox-group">
+                                    <ng-container >
+                                        <div class="checkbox-group" *ngFor="let category of sortedCategories; let i=index">
                                             <mat-checkbox [disableRipple]="true" [value]="category.id" [disabled]="category.requiredForGamePlay"
                                                 [checked]="true" (change)="selectCategory($event,category.id)">
                                                 {{category.categoryName}}
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tags">
+                        <div class="tags" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
                             <p>Tags associated categories</p>
                             <div data-tags-input-name="tag" id="tagBox" class="tagging">
                                 <mat-chip-list>

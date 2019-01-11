@@ -23,7 +23,7 @@
               </GridLayout>
               <Label *ngIf="!loginForm.controls.email.pristine && loginForm.controls.email.invalid" text="Invalid Email!"
                 marginTop="10" textWrap="true" class="text-center error"></Label>
-              <GridLayout [visibility]="this.mode === 2 ? 'collapsed' : 'visible'" rows="auto" columns="*,auto" class="initial-button"
+              <GridLayout *ngIf="mode !== 2" rows="auto" columns="*,auto" class="initial-button"
                 marginTop="20" borderRadius="10" >
                 <TextField col="0" formControlName="password" secure="true" hint="Password" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa"
                   padding="17 15 15 15"></TextField>
@@ -32,7 +32,7 @@
               </GridLayout>
               <Label *ngIf="!loginForm.controls.password.pristine && loginForm.controls.password.invalid" text="Password must be atleast 6 characters"
               marginTop="10" textWrap="true" class="text-center error"></Label>
-              <GridLayout [visibility]="this.mode !== 1 ? 'collapsed' : 'visible'" rows="auto" columns="*,auto" class="initial-button"
+              <GridLayout *ngIf="mode === 1" rows="auto" columns="*,auto" class="initial-button"
                 marginTop="20" borderRadius="10" >
                 <TextField col="0" hint="Confirm Password" formControlName="confirmPassword" secure="true" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"
                   backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
@@ -48,15 +48,15 @@
                   <Button ripple rippleColor="#71b02f" text="Login" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
                      class="text-center login-button initial-button-label Roboto-Bold"></Button>
                   <StackLayout>
-                    <Label text="Forgot your password?" (tap)="this.mode=2" marginTop="25" class="text-center initial-label Roboto-Regular"
+                    <Label text="Forgot your password?" (tap)="changeMode(2)" marginTop="25" class="text-center initial-label Roboto-Regular"
                       textWrap="true"></Label>
-                    <Label text="New Signup" textWrap="true" (tap)="this.mode=1" class="text-center initial-label Roboto-Regular"></Label>
+                    <Label text="New Signup" textWrap="true" (tap)="changeMode(1)" class="text-center initial-label Roboto-Regular"></Label>
                   </StackLayout>
                 </StackLayout>
                 <StackLayout *ngSwitchCase="1">
                   <Button ripple rippleColor="#71b02f" text="Sign Up" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
                      class="text-center login-button initial-button-label"></Button>
-                  <Label text="Already have an account? Login" textWrap="true" marginTop="15" (tap)="this.mode=0" class="text-center initial-label"></Label>
+                  <Label text="Already have an account? Login" textWrap="true" marginTop="15" (tap)="changeMode(0)" class="text-center initial-label"></Label>
                 </StackLayout>
                 <StackLayout *ngSwitchCase="2">   
                   <Button ripple rippleColor="#71b02f" text="Send Password" width="70%" marginTop="20" (tap)="onSubmit()" class="text-center login-button initial-button-label Roboto-Bold"></Button>
