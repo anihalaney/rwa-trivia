@@ -10,6 +10,8 @@ import { ReportGameComponent } from './../report-game/report-game.component';
 import { getImage } from 'nativescript-screenshot';
 import * as SocialShare from "nativescript-social-share";
 import { Image } from "tns-core-modules/ui/image";
+import { coreState } from 'shared-library/core/store';
+import * as Toast from 'nativescript-toast';
 
 @Component({
   selector: 'game-over',
@@ -26,6 +28,12 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     super(store, userActions, utils);
 
     this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => { }));
+    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        Toast.makeText(status).show();
+        this.disableFriendInviteBtn = true;
+      }
+    }));
 
     this.subs.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
@@ -80,7 +88,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       img.imageSource = getImage(this.stackLayout);
       const shareImage = img.imageSource;
       SocialShare.shareImage(shareImage);
-      this.playerUserName = "You";
+      this.playerUserName = 'You';
     }, 100);
   }
 }

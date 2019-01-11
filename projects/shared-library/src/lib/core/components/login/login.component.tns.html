@@ -16,6 +16,7 @@
                 marginTop="10" marginBottom="30" color="black" class="text-center Roboto-Regular" textWrap="true"></Label>
               <GridLayout rows="auto" columns="*,auto" class="initial-button">
                 <TextField row="0" col="0" hint="Email" formControlName="email" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
+               
                 <Label *ngIf="mode !== 2" row="0" col="1" android:paddingTop="20" paddingRight="15" fontSize="21" class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa" text="&#xf2bd;"
                   color="gray" textWrap="true"></Label>
                   <Label *ngIf="mode === 2" row="0" col="1" android:paddingTop="20" paddingRight="15" fontSize="21" class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa" text="&#xf0e0;"

@@ -13,7 +13,7 @@ import { Login } from './login';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
-
+  
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     public dialogRef: MatDialogRef<LoginComponent>,
