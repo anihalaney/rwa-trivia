@@ -30,8 +30,6 @@ exports.createInvitations = (req, res) => {
     let emails = req.body.emails;
     const inviteeUserId = req.body.inviteeUserId;
 
-    // res.status(200).send('ddd');
-    // if ((!inviteeUserId || !emails) || !userId) {
     if ((inviteeUserId || emails) && userId) {
         const makeFriends: MakeFriends = new MakeFriends(undefined, userId, undefined);
 
