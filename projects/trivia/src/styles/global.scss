@@ -579,10 +579,10 @@ body.dialog-open {
   overflow: hidden;
 }
 
-body.dialog-open .cdk-overlay-pane {
-  position: relative !important;
-  margin: auto !important;
-}
+// body.dialog-open .cdk-overlay-pane {
+//   position: relative !important;
+//   margin: auto !important;
+// }
 
 body.cdk-overlay-backdrop {
   position: fixed !important;

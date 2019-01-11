@@ -1,4 +1,5 @@
 const friendService = require('../services/friend.service');
+const friendUserService = require('../services/user.service');
 import { Invitation, Friends, FriendsMetadata, friendInvitationConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { Observable } from 'rxjs';
 
@@ -109,5 +110,10 @@ export class MakeFriends {
                 dbInvitation.id = ref.id;
                 return friendService.updateInvitation(dbInvitation).then(dRef => `Invitation is sent on ${dbInvitation.email}`);
             });
+    }
+
+    getUser(userId): Promise<any> {
+        console.log('make frined called');
+        return friendUserService.getUserById(userId);
     }
 }
