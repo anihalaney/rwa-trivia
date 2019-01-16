@@ -18,6 +18,7 @@ import { User } from 'shared-library/shared/model';
 import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
+import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 
 @Component({
   selector: 'app-root',
@@ -36,97 +37,101 @@ export class AppComponent implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     private utils: Utils,
     private userActions: UserActions,
-    private firebaseAuthService: FirebaseAuthService) {
+    private firebaseAuthService: FirebaseAuthService,
+    private applicationSettingsAction: ApplicationSettingsActions) {
+    {
 
-    this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-    });
+      this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
 
-    this.sub4 = this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-      if (status === 'MAKE FRIEND SUCCESS') {
-        this.routerExtension.navigate(['my/invite-friends']);
-      }
-    });
-
-    this.handleBackPress();
-  }
-
-  ngOnInit() {
-
-    firebase.init({
-      onMessageReceivedCallback: (message) => {
-        console.log('message', message);
-        if (message.foreground) {
-          Toast.makeText(message.body).show();
-        }
-        this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
-      },
-      showNotifications: true,
-      showNotificationsWhenInForeground: true
-    }).then(
-      () => {
-        console.log('firebase.init done');
-      },
-      error => {
-        console.log(`firebase.init error: ${error}`);
-      }
-    );
-
-    applicationOn(resumeEvent, (args: ApplicationEventData) => {
-      firebase.getCurrentUser().then((user) => {
-        this.firebaseAuthService.resumeState(user);
+      this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+        this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
+        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
       });
-    });
 
-    this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+      this.sub4 = this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+        if (status === 'MAKE FRIEND SUCCESS') {
+          this.routerExtension.navigate(['my/invite-friends']);
+        }
+      });
 
-      if (user) {
-        firebase.getCurrentPushToken().then((token) => {
-          if (isAndroid) {
-            user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
-            if (user.androidPushTokens.indexOf(token) === -1) {
-              console.log('Android token', token);
-              user.androidPushTokens.push(token);
-              this.updateUser(user);
-            }
-          } else {
-            user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
-            user.iosPushTokens.push(token);
-            if (user.iosPushTokens.indexOf(token) === -1) {
-              console.log('ios token', token);
-              user.iosPushTokens.push(token);
-              this.updateUser(user);
-            }
-          }
-
-        });
-      }
-    });
-  }
-
-
-
-  updateUser(user: User) {
-    this.store.dispatch(this.userActions.updateUser(user));
-  }
-
-  ngOnDestroy() {
-    this.utils.unsubscribe([this.sub3, this.sub4, this.sub5]);
-  }
-
-
-  handleBackPress() {
-    if (!Platform.isAndroid) {
-      return;
+      this.handleBackPress();
     }
-    // every time app resume component is recreated
-    // we want to ensure there is only one event listener in app
-    android.off(AndroidApplication.activityBackPressedEvent);
-    android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
-      console.log(`can go back value${this.navigationService.canGoBack()}`);
-      data.cancel = this.navigationService.canGoBack();
-      this.ngZone.run(() => this.navigationService.back());
-    }, this);
+
+    ngOnInit() {
+
+      firebase.init({
+        onMessageReceivedCallback: (message) => {
+          console.log('message', message);
+          if (message.foreground) {
+            Toast.makeText(message.body).show();
+          }
+          this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
+        },
+        showNotifications: true,
+        showNotificationsWhenInForeground: true
+      }).then(
+        () => {
+          console.log('firebase.init done');
+        },
+        error => {
+          console.log(`firebase.init error: ${error}`);
+        }
+      );
+
+      applicationOn(resumeEvent, (args: ApplicationEventData) => {
+        firebase.getCurrentUser().then((user) => {
+          this.firebaseAuthService.resumeState(user);
+        });
+      });
+
+      this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+
+        if (user) {
+          firebase.getCurrentPushToken().then((token) => {
+            if (isAndroid) {
+              user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
+              if (user.androidPushTokens.indexOf(token) === -1) {
+                console.log('Android token', token);
+                user.androidPushTokens.push(token);
+                this.updateUser(user);
+              }
+            } else {
+              user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
+              user.iosPushTokens.push(token);
+              if (user.iosPushTokens.indexOf(token) === -1) {
+                console.log('ios token', token);
+                user.iosPushTokens.push(token);
+                this.updateUser(user);
+              }
+            }
+
+          });
+        }
+      });
+    }
+
+
+
+    updateUser(user: User) {
+      this.store.dispatch(this.userActions.updateUser(user));
+    }
+
+    ngOnDestroy() {
+      this.utils.unsubscribe([this.sub3, this.sub4, this.sub5]);
+    }
+
+
+    handleBackPress() {
+      if (!Platform.isAndroid) {
+        return;
+      }
+      // every time app resume component is recreated
+      // we want to ensure there is only one event listener in app
+      android.off(AndroidApplication.activityBackPressedEvent);
+      android.on(AndroidApplication.activityBackPressedEvent, (data: AndroidActivityBackPressedEventData) => {
+        console.log(`can go back value${this.navigationService.canGoBack()}`);
+        data.cancel = this.navigationService.canGoBack();
+        this.ngZone.run(() => this.navigationService.back());
+      }, this);
+    }
   }
-}

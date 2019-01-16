@@ -112,6 +112,13 @@ service cloud.firestore {
         allow read,get: if true;  
       }      
     }
+
+    match /application_settings {    
+      match /{document=**} {
+        allow read,get:  if true; 
+      }      
+    }
+    
     
   }
 }
