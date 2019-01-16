@@ -280,14 +280,4 @@ exports.generateAllUsersProfileImages = (req, res) => {
         });
 };
 
-/**
- * sendPushNotifications
- * return status
- */
-exports.sendPushNotifications = (req, res) => {
-    const pushNotification: PushNotification = new PushNotification();
-    pushNotification.
-        sendNotification(req.body.token, req.body.title, req.body.body, req.body.data).then((status) => {
-            res.send(status);
-        });
-};
+
