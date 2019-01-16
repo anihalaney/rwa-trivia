@@ -8,6 +8,7 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { LoginComponent } from './../../components/login/login.component';
 import { WindowRef } from './../../services/windowref.service';
 
+
 @Injectable()
 export class WebFirebaseAuthService implements FirebaseAuthService {
 
@@ -79,5 +80,9 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     public sendPasswordResetEmail(email: string) {
         return firebase.auth().sendPasswordResetEmail(email);
+    }
+
+    public resumeState(user) {
+
     }
 }
