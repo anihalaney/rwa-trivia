@@ -1,5 +1,6 @@
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
+import * as common from 'nativescript-plugin-firebase/firebase-common';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -13,7 +14,10 @@ import { android, AndroidActivityBackPressedEventData, AndroidApplication } from
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
 import { Utils } from 'shared-library/core/services';
-import { User } from 'shared-library/src/lib/shared/model';
+import { User } from 'shared-library/shared/model';
+import * as Toast from 'nativescript-toast';
+import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
+import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
 
 @Component({
   selector: 'app-root',
@@ -31,7 +35,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private routerExtension: RouterExtensions,
     private utils: Utils,
-    private userActions: UserActions) {
+    private userActions: UserActions,
+    private firebaseAuthService: FirebaseAuthService) {
 
     this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
@@ -48,9 +53,14 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     firebase.init({
       onMessageReceivedCallback: (message) => {
         console.log('message', message);
+        if (message.foreground) {
+          Toast.makeText(message.body).show();
+        }
+        this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
       },
       showNotifications: true,
       showNotificationsWhenInForeground: true
@@ -63,6 +73,12 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     );
 
+    applicationOn(resumeEvent, (args: ApplicationEventData) => {
+      firebase.getCurrentUser().then((user) => {
+        this.firebaseAuthService.resumeState(user);
+      });
+    });
+
     this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       if (user) {
@@ -70,6 +86,7 @@ export class AppComponent implements OnInit, OnDestroy {
           if (isAndroid) {
             user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
             if (user.androidPushTokens.indexOf(token) === -1) {
+              console.log('Android token', token);
               user.androidPushTokens.push(token);
               this.updateUser(user);
             }
@@ -77,6 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
             user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
             user.iosPushTokens.push(token);
             if (user.iosPushTokens.indexOf(token) === -1) {
+              console.log('ios token', token);
               user.iosPushTokens.push(token);
               this.updateUser(user);
             }
@@ -86,6 +104,8 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+
 
   updateUser(user: User) {
     this.store.dispatch(this.userActions.updateUser(user));

@@ -1,6 +1,6 @@
 import {
     SearchCriteria, Game, GameOperations, PlayerQnA,
-    GameStatus, schedulerConstants
+    GameStatus, schedulerConstants, pushNotificationRouteConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { PushNotification } from '../utils/push-notifications';
@@ -83,7 +83,12 @@ exports.updateGame = (req, res) => {
                 const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
                 if (currentTurnPlayerId !== game.nextTurnPlayerId) {
-                    pushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play', 'Your turn comes now', {});
+                    const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
+                    pushNotification
+                        .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play', 'Your turn comes now', data)
+                        .then((result) => {
+                            console.log('result', result);
+                        });
                 }
                 game.turnAt = utils.getUTCTimeStamp();
                 game.calculateStat(currentPlayerQnAs.playerId);
@@ -123,7 +128,7 @@ exports.updateGame = (req, res) => {
         gameMechanics.UpdateGame(dbGame).then((id) => {
             res.send({});
         });
-    })
+    });
 };
 
 
@@ -169,6 +174,25 @@ exports.checkGameOver = (req, res) => {
             const millis = utils.getUTCTimeStamp();
             const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
             const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
+            const playedMinutes = Math.floor((noPlayTimeBound) / (1000 * 60));
+            console.log('playedMinutes', playedMinutes);
+            let remainedTime;
+            if (playedMinutes > schedulerConstants.beforeGameExpireDuration) {
+                remainedTime = playedMinutes - schedulerConstants.beforeGameExpireDuration;
+            } else {
+                remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
+            }
+            console.log('RemainedMinutes', remainedTime);
+
+            if ((remainedTime) <= schedulerConstants.notificationInterval) {
+                const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
+                pushNotification
+                    .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
+                        'You have 30 minutes left to play the game', data)
+                    .then((result) => {
+                        console.log('result', result);
+                    });
+            }
 
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
