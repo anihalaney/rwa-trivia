@@ -28,4 +28,5 @@ router.post('/user/profile/image', generalAuth.adminOnly, generalController.gene
 router.post('/question/status', generalAuth.adminOnly, generalQuestionController.changeUnpublishedQuestionStatus);
 router.post('/send-push', generalController.sendPushNotifications);
 
+
 module.exports = router;

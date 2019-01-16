@@ -280,6 +280,7 @@ exports.generateAllUsersProfileImages = (req, res) => {
         });
 };
 
+<<<<<<< HEAD
 /**
  * sendPushNotifications
  * return status
@@ -291,3 +292,6 @@ exports.sendPushNotifications = (req, res) => {
             res.send(status);
         });
 };
+=======
+
+>>>>>>> b8768436edadb87bd409eacb506276489e462f16
