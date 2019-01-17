@@ -1,14 +1,16 @@
 import {
     SearchCriteria, Game, GameOperations, PlayerQnA,
-    GameStatus, schedulerConstants
+    GameStatus, schedulerConstants, pushNotificationRouteConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
+import { PushNotification } from '../utils/push-notifications';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
 const utils: Utils = new Utils();
+const pushNotification: PushNotification = new PushNotification();
 const fs = require('fs');
 const request = require('request');
 const path = require('path');
@@ -78,7 +80,18 @@ exports.updateGame = (req, res) => {
                 const currentPlayerQnAs: PlayerQnA = req.body.playerQnA;
                 const qIndex = game.playerQnAs.findIndex((pastPlayerQnA) => pastPlayerQnA.questionId === currentPlayerQnAs.questionId);
                 game.playerQnAs[qIndex] = currentPlayerQnAs;
+                const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
+                if (currentTurnPlayerId !== game.nextTurnPlayerId) {
+                    const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
+                    pushNotification
+                        .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play', 'Your turn comes now', data)
+                        .then((result) => {
+                            console.log('result', result);
+                        }).catch((err) => {
+                            console.log('Notification Error: ', err);
+                        });
+                }
                 game.turnAt = utils.getUTCTimeStamp();
                 game.calculateStat(currentPlayerQnAs.playerId);
 
@@ -117,7 +130,7 @@ exports.updateGame = (req, res) => {
         gameMechanics.UpdateGame(dbGame).then((id) => {
             res.send({});
         });
-    })
+    });
 };
 
 
@@ -163,6 +176,27 @@ exports.checkGameOver = (req, res) => {
             const millis = utils.getUTCTimeStamp();
             const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
             const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
+            const playedMinutes = Math.floor((noPlayTimeBound) / (1000 * 60));
+
+            let remainedTime;
+            if (playedMinutes > schedulerConstants.beforeGameExpireDuration) {
+                remainedTime = playedMinutes - schedulerConstants.beforeGameExpireDuration;
+            } else {
+                remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
+            }
+
+
+            if ((remainedTime) <= schedulerConstants.notificationInterval) {
+                const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
+                pushNotification
+                    .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
+                        'You have 30 minutes left to play the game', data)
+                    .then((result) => {
+                        console.log('result', result);
+                    }).catch((err) => {
+                        console.log('Notification Error: ', err);
+                    });
+            }
 
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;

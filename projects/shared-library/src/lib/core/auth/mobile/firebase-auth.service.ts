@@ -5,6 +5,7 @@ import * as firebase from 'nativescript-plugin-firebase';
 import { Subject, Observable } from 'rxjs';
 import { RouterExtensions } from 'nativescript-angular/router';
 
+
 @Injectable()
 export class TNSFirebaseAuthService implements FirebaseAuthService {
 
@@ -77,4 +78,8 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     public twitterLogin(): Promise<any> { return new Promise(resolve => resolve()); }
 
     public githubLogin(): Promise<any> { return new Promise(resolve => resolve()); }
+
+    public resumeState(user) {
+        this.userSubject.next(user);
+    }
 }
