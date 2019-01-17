@@ -6,7 +6,6 @@
                 <StackLayout>
                     <StackLayout (onloaded)="stackLoaded($event)" backgroundColor="#ffffff">
                         <StackLayout marginTop="10">
-                            <!-- <Label horizontalAlignment="center" text="GAME OVER" textWrap="true" fontSize="19"></Label> -->
                             <Label class="category" horizontalAlignment="center" text="{{categoryName}}" textWrap="true"></Label>
 
                             <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single">
@@ -154,27 +153,27 @@
                         </StackLayout>
                     </StackLayout>
                     <StackLayout padding="10" backgroundColor="#f3f3f3">
-                        <GridLayout rows="auto,auto" columns="auto,auto,auto" horizontalAlignment="center">
+                        <GridLayout rows="auto,auto" columns="auto,auto,auto,auto" horizontalAlignment="center">
                             <Button row="1" col="0" ripple rippleColor="#ffffff" class="navigate-button Hind-Medium" text="Share" (tap)="screenshot()"></Button>
                             <button row="1" col="1" ripple rippleColor="#ffffff" class="navigate-button Hind-Medium" text="Rematch" (tap)="reMatch()"
                                 *ngIf="game.gameOptions?.playerMode != PlayerMode.Single"></button>
-                            <Button row="1" col="1" ripple rippleColor="#ffffff" class="navigate-button Hind-Medium" text="Play Game" (tap)="reMatch()"
+                            <Button row="1" col="1" ripple rippleColor="#ffffff" class="navigate-button Hind-Medium" text="Play Again" (tap)="reMatch()"
                                 *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"></Button>
-                                <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend" (tap)="inviteAsFriend()"
-                                *ngIf="game.gameOptions.opponentType == opponentType.Random && !disableFriendInviteBtn"></Button>
-                            <Button row="1" col="2" ripple rippleColor="#ffffff" class="navigate-button" text="Home" [nsRouterLink]="['/dashboard']"
+                            <Button row="1" col="2" ripple rippleColor="#ffffff" class="navigate-button Hind-Medium" text="Invite as Friend" (tap)="inviteAsFriend()"
+                            isEnabled="{{!disableFriendInviteBtn}}" *ngIf="game.gameOptions.opponentType == opponentType.Random"></Button>
+                            <Button row="1" col="3" ripple rippleColor="#ffffff" class="navigate-button Hind-Medium" text="Home" [nsRouterLink]="['/dashboard']"></Button>
                         </GridLayout>
                     </StackLayout>
                 </StackLayout>
             </CardView>
             <CardView class="cardStyle" android:elevation="20" ios:elevation="20" radius="1" backgroundColor="white"
                 margin="15">
-                <StackLayout class="Hind-Medium">
+                <StackLayout class="Hind-Medium" >
                     <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5" (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;">
                         <Label row="0" col="0" text="View questions & answers" textWrap="true" color="#000000" fontSize="18"
                             class="label Roboto-Medium"></Label>
                         <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showQuesAndAnswer ? '&#xf067;' : '&#xf068;' }}"
-                            textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" color="#A9A9A9" (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;"
+                            textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" color="#A9A9A9" 
                             background="#fff"></Label>
                     </GridLayout>
                     <ActivityIndicator *ngIf="questionsArray.length == 0 && !showQuesAndAnswer" busy="true" ios:width="100"
@@ -199,9 +198,9 @@
                                     <Label text="{{row.userGivenAnswer}}" textWrap="true" style="color:#3b444f"></Label>
                                 </StackLayout>
                             </StackLayout>
-                            <Button col="3" rowSpan="3" ripple verticalAlignment="center" style="color:#3b444f; border-width:2px; border-color:#f3f3f3;"
+                                <Button col="3" rowSpan="3" ripple rippleColor="#ffffff" verticalAlignment="center" style="color:#3b444f; border-width:2px; border-color:#f3f3f3;"
                                 text="Report" marginRight="10" (tap)="openDialog(row)" *ngIf="!game.playerQnAs[i].isReported"></Button>
-                            <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center" marginRight="10"
+                                <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center" marginRight="10"
                                 color="red" fontWeight="600" textWrap="true" *ngIf="game.playerQnAs[i]?.isReported"></Label>
 
                         </GridLayout>

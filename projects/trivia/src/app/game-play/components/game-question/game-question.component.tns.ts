@@ -42,23 +42,22 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
 
   ngOnDestroy() {
-    this.clearProcessBar();
+    if (this.timerSub) {
+      this.timerSub.unsubscribe();
+    }
   }
 
-  clearProcessBar() {
-    clearInterval(this.stopProcessBar);
-  }
-
-  fillTimer() {
-    this.progressValue = 100;
-    clearInterval(this.stopProcessBar);
-  }
 
   getImage(userId) {
     return this.utils.getImageUrl(this.userDict[userId], 44, 40, '44X40');
   }
 
   ngOnChanges(changes: SimpleChanges) {
+
+    if (!(this.answeredIndex !== null && this.answeredIndex !== undefined)) {
+      this.progressValue = 100;
+    }
+
     if (this.question) {
       if (changes.timer) {
         this.timer = 15 - changes.timer.currentValue;
@@ -68,8 +67,12 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
         this.progressValue = (this.timer * 100) / 15;
         this.timerSub =
           timer(0, 10).pipe(take(90)).subscribe(t => {
-            this.timer += 0.010;
-            this.progressValue = (this.timer / 15) * 100;
+            if (this.answeredIndex === undefined) {
+              this.timer += 0.010;
+              this.progressValue = (this.timer / 15) * 100;
+            } else {
+              this.timerSub.unsubscribe();
+            }
           },
             null,
             () => {
@@ -77,6 +80,5 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
             });
       }
     }
-
   }
 }

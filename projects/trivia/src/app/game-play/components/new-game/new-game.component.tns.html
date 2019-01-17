@@ -12,9 +12,9 @@
 
             <CardView margin="10" android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"  visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
                 <StackLayout orientation="horizontal" >
-                        <Ripple  [class.selected-player]="gameOptions.playerMode === 0"
+                        <Ripple rippleColor="#c2c2c2" [class.selected-player]="gameOptions.playerMode === 0"
                         [class.player-type]="gameOptions.playerMode !== 0"  class="player-type" width="50%" (tap)="gameOptions.playerMode = 0;" height="60">
-                            <StackLayout width="50%" orientation="horizontal">
+                            <StackLayout width="100%" orientation="horizontal">
                                 <Image 
                                 *ngIf="gameOptions.playerMode !== 0" src="~/assets/images/single_player.png" height="30"
                                     width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
@@ -25,9 +25,9 @@
                                 
                             </StackLayout>
                          </Ripple>
-                         <Ripple width="50%" [class.selected-player]="gameOptions.playerMode === 1"
-                         [class.player-type]="gameOptions.playerMode !== 1" (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" height="60">
-                            <StackLayout width="50%" orientation="horizontal">
+                         <Ripple rippleColor="#c2c2c2" width="50%" [class.selected-player]="gameOptions.playerMode === 1"
+                         [class.player-type]="gameOptions.playerMode !== 1" (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" height="60" class="player-type">
+                            <StackLayout width="100%" orientation="horizontal">
                                     <Image *ngIf="gameOptions.playerMode !== 1" src="~/assets/images/two_player.png" height="30"
                             width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
                         <Image *ngIf="gameOptions.playerMode === 1" src="~/assets/images/two_player_white.png" height="30"
@@ -38,36 +38,7 @@
                         </Ripple>
                 </StackLayout>
             </CardView>
-           
-            
-            <!-- <CardView margin="10" android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"
-                visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
-                <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white" fontSize="17">
-                    <StackLayout orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 0"
-                        [class.player-type]="gameOptions.playerMode !== 0" (tap)="gameOptions.playerMode = 0;" width="50%"
-                        height="60">
-                        <Image *ngIf="gameOptions.playerMode !== 0" src="~/assets/images/single_player.png" height="30"
-                            width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
-                        <Image *ngIf="gameOptions.playerMode === 0" src="~/assets/images/single_player_white.png"
-                            height="30" width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
-                        <Label text="SINGLE PLAYER" textWrap="true" height="50" android:padding="15 15 5 5" ios:padding="5 15 5 5"
-                            VerticalAlignment="center"></Label>
-                    </StackLayout>
-
-                    <StackLayout orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 1"
-                        [class.player-type]="gameOptions.playerMode !== 1" (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0"
-                        width="50%">
-
-                        <Image *ngIf="gameOptions.playerMode !== 1" src="~/assets/images/two_player.png" height="30"
-                            width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
-                        <Image *ngIf="gameOptions.playerMode === 1" src="~/assets/images/two_player_white.png" height="30"
-                            width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
-
-                        <Label text="TWO PLAYERS" textWrap="true" height="50" android:padding="15 15 5 5" ios:padding="5 15 5 5"></Label>
-                    </StackLayout>
-                </StackLayout>
-            </CardView>  -->
-
+        
             <CardView margin="10 0" android:elevation="20" ios:elevation="40" radius="1" visibility="{{ showSelectPlayer ? 'visible' : 'collapsed' }}"
                 backgroundColor="white">
                 <StackLayout orientation="horizontal" horizontalAlignment="center" padding="10 0 10 10" class="player-type">
@@ -203,7 +174,7 @@
             </CardView>
 
             <StackLayout margin="5 10">
-                <Button text="START A NEW GAME" ripple rippleColor="#D4493D" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
+                <Button text="START A NEW GAME" ripple rippleColor="#fcecee" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
                     (tap)="startGame()" height="70"></Button>
             </StackLayout>
         </StackLayout>
