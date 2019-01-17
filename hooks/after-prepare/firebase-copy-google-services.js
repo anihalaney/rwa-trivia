@@ -8,7 +8,7 @@ return new Promise(function(resolve, reject) {
 
         /* Decide whether to prepare for dev or prod environment */
 
-        var isReleaseBuild = (hookArgs.appFilesUpdaterOptions && hookArgs.appFilesUpdaterOptions.release) ? true : false;
+       
         var validProdEnvs = ['prod','production'];
         var isProdEnv = false; // building with --env.prod or --env.production flag
 
@@ -62,7 +62,7 @@ return new Promise(function(resolve, reject) {
                 $logger.warn("Unable to copy google-services.json.");
                 reject();
             }
-        } else {
+        }  else {
             resolve();
         }
     });
