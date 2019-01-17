@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 
+
 export abstract class FirebaseAuthService {
     abstract createUserWithEmailAndPassword(email, password);
     abstract authState(): Observable<any>;
@@ -15,4 +16,5 @@ export abstract class FirebaseAuthService {
     abstract facebookLogin(): Promise<any>;
     abstract twitterLogin(): Promise<any>;
     abstract githubLogin(): Promise<any>;
+    abstract resumeState(user);
 }

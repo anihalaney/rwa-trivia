@@ -33,8 +33,14 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
+<<<<<<< HEAD
 	<string>1:479350787602:ios:e885d2038d356da1</string>
 	<key>DATABASE_URL</key>
 	<string>https://rwa-trivia.firebaseio.com</string>
+=======
+	<string>1:701588063269:ios:f852e63cad494f5f</string>
+	<key>DATABASE_URL</key>
+	<string>https://rwa-trivia-dev-e57fc.firebaseio.com</string>
+>>>>>>> 672a0ae80612c77ffabf2119243ba7493979880d
 </dict>
 </plist>

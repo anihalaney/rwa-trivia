@@ -1,6 +1,7 @@
 import { Injectable, ComponentFactoryResolver } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { Router } from '@angular/router';
+import { pushNotificationRouteConstants } from './../../../../lib/shared/model';
 
 @Injectable()
 export class NavigationService {
@@ -29,6 +30,14 @@ export class NavigationService {
       this.router.url === '/my/questions/add' ||
       this.router.url === '/my/app-invite-friends-dialog') {
       this.routerExtensions.back();
+    }
+  }
+
+  redirectPushRoutes(data: any) {
+    switch (data.messageType) {
+      case pushNotificationRouteConstants.GAME_PLAY:
+        this.routerExtensions.navigate(['/dashboard']);
+        break;
     }
   }
 }
