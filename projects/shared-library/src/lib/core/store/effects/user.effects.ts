@@ -32,6 +32,19 @@ export class UserEffects {
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
+
+    // Update User
+    @Effect()
+    UpdateUser$ = this.actions$
+        .pipe(ofType(UserActions.UPDATE_USER))
+        .pipe(
+            switchMap((action: ActionWithPayload<User>) => {
+                this.svc.updateUser(action.payload);
+                return empty();
+            }
+            )
+        );
+
     // load invited games
     @Effect()
     // handle location update
@@ -129,7 +142,7 @@ export class UserEffects {
         .pipe(
             switchMap((action: ActionWithPayload<User>) => {
                 return this.svc.saveUserProfile(action.payload).pipe(
-                    map((status: any) =>  this.userActions.addUserProfileSuccess())
+                    map((status: any) => this.userActions.addUserProfileSuccess())
                 );
             })
         );

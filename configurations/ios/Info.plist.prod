@@ -61,5 +61,9 @@
 	<string>1436607329691182</string>
 	<key>FacebookDisplayName</key>
 	<string>bitwiser.io</string>
+	<key>UIBackgroundModes</key>
+    <array>
+    <string>remote-notification</string>
+    </array>
 </dict>
 </plist>

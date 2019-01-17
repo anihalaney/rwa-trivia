@@ -142,4 +142,9 @@ export class UserService {
                 operation: GameOperations.REJECT_GAME
             });
     }
+
+    updateUser(user: User) {
+        const dbUser = Object.assign({}, user);
+        this.dbService.setDoc('users', dbUser.userId, dbUser);
+    }
 }
