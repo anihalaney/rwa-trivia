@@ -88,6 +88,8 @@ exports.updateGame = (req, res) => {
                         .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play', 'Your turn comes now', data)
                         .then((result) => {
                             console.log('result', result);
+                        }).catch((err) => {
+                            console.log('Notification Error: ', err);
                         });
                 }
                 game.turnAt = utils.getUTCTimeStamp();
@@ -175,14 +177,14 @@ exports.checkGameOver = (req, res) => {
             const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
             const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
             const playedMinutes = Math.floor((noPlayTimeBound) / (1000 * 60));
-            console.log('playedMinutes', playedMinutes);
+
             let remainedTime;
             if (playedMinutes > schedulerConstants.beforeGameExpireDuration) {
                 remainedTime = playedMinutes - schedulerConstants.beforeGameExpireDuration;
             } else {
                 remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
             }
-            console.log('RemainedMinutes', remainedTime);
+
 
             if ((remainedTime) <= schedulerConstants.notificationInterval) {
                 const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
@@ -191,6 +193,8 @@ exports.checkGameOver = (req, res) => {
                         'You have 30 minutes left to play the game', data)
                     .then((result) => {
                         console.log('result', result);
+                    }).catch((err) => {
+                        console.log('Notification Error: ', err);
                     });
             }
 
