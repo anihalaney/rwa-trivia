@@ -43,12 +43,17 @@
                     <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10">
                         <TextView hint="Enter Your Question" formControlName="questionText" class="input" height="150"
                             borderWidth="1" borderRadius="3" borderColor="#a3a3a3" padding="10"></TextView>
-                        <Label *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine"
-                            class="error" textWrap="true" text="Question is required!"></Label>
+                        <StackLayout *ngIf="!questionForm.controls.questionText.pristine && questionForm.controls.questionText.errors">
+                            <Label *ngIf="questionForm.controls.questionText.errors.required" class="error" textWrap="true"
+                                text="Answer required !"></Label>
+                            <Label *ngIf="questionForm.controls.questionText.errors.maxlength" class="error" textWrap="true"
+                                text="256 characters are allowed !"></Label>
+                        </StackLayout>
+
                     </StackLayout>
                     <Label text="Enter your answers" textWrap="true" class="label" padding="10" fontSize="16"
                         fontWeight="400" color="#616161"></Label>
-                    <StackLayout  formArrayName="answers" padding="10">
+                    <StackLayout formArrayName="answers" padding="10">
                         <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
                             <GridLayout rows="auto,auto" columns="auto,*" marginBottom="20">
                                 <CheckBox row="0" col="0" #elem formControlName="correct" class="checkbox" marginRight="10"
@@ -57,8 +62,13 @@
                                     <TextField [hint]="'Enter Option ' + (i+1)" formControlName="answerText" class="input"
                                         borderWidth="1" borderColor="#a3a3a3" borderRadius="3" paddingLeft="10"
                                         ios:padding="10"></TextField>
-                                    <Label *ngIf="answers.controls[i].controls.answerText.errors && !answers.controls[i].controls.answerText.pristine"
-                                        class="error" textWrap="true" text="Answer required !"></Label>
+                                    <StackLayout *ngIf="!answers.controls[i].controls.answerText.pristine && answers.controls[i].controls.answerText.errors">
+                                        <Label *ngIf="answers.controls[i].controls.answerText.errors.required " class="error"
+                                            textWrap="true" text="Answer required !"></Label>
+                                        <Label *ngIf="answers.controls[i].controls.answerText.errors.maxlength " class="error"
+                                            textWrap="true" text="128 characters are allowed !"></Label>
+
+                                    </StackLayout>
                                 </StackLayout>
                             </GridLayout>
                         </StackLayout>
@@ -78,7 +88,8 @@
                     background="#fff"></Label>
             </GridLayout>
 
-            <CardView iosOverflowSafeArea="false" margin="5 10 5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white">
+            <CardView iosOverflowSafeArea="false" margin="5 10 5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}"
+                backgroundColor="white">
                 <StackLayout>
                     <StackLayout *ngIf="enteredTags.length>0" borderBottomWidth="2" borderBottomColor="#686868">
                         <GridLayout rows="auto,auto" columns="auto,*" padding="10" borderBottomWidth="1"
@@ -107,9 +118,9 @@
                                 </SuggestionView>
                             </RadAutoCompleteTextView>
                         </StackLayout>
-                        <Button row="0" col="1" text="Add" class="Roboto-Bold" (tap)="addCustomTag()" android:padding="5" fontSize="16"
-                            android:fontSize="10" ios:padding="10" backgroundColor="#89C24F" color="#ffffff" marginLeft="10"
-                            fontWeight="700" borderRadius="2"></Button>
+                        <Button row="0" col="1" text="Add" class="Roboto-Bold" (tap)="addCustomTag()" android:padding="5"
+                            fontSize="16" android:fontSize="10" ios:padding="10" backgroundColor="#89C24F" color="#ffffff"
+                            marginLeft="10" fontWeight="700" borderRadius="2"></Button>
                     </GridLayout>
                 </StackLayout>
             </CardView>
