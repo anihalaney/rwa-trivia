@@ -20,7 +20,6 @@ export class QuestionService {
     private questionActions: QuestionActions,
     private http: HttpClient,
     private dbService: DbService) {
-      console.log('function url >', CONFIG.functionsUrl);
   }
 
   // Elasticsearch

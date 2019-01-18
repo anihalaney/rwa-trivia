@@ -2,10 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleDevelopmentRegion</key>
+<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Bitwiser</string>
+	<string>Bitwiser Dev</string>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -49,17 +49,21 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.googleusercontent.apps.479350787602-sm4nli1gus0f03tala80dpdiovb988kf</string>
+			<string>com.googleusercontent.apps.701588063269-dor381go31bk90elf47kfbub5nq8v8pd</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.479350787602-sm4nli1gus0f03tala80dpdiovb988kf</string>
-				<string>fb1436607329691182</string>
+				<string>com.googleusercontent.apps.701588063269-dor381go31bk90elf47kfbub5nq8v8pd</string>
+				<string>fb266820933965932</string>
 			</array>
 		</dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>1436607329691182</string>
+	<string>266820933965932</string>
 	<key>FacebookDisplayName</key>
-	<string>bitwiser.io</string>
+	<string>bitwiser.io_test</string>
+	<key>UIBackgroundModes</key>
+    <array>
+    <string>remote-notification</string>
+    </array>
 </dict>
 </plist>
