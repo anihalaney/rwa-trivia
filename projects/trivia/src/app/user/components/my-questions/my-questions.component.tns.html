@@ -48,7 +48,7 @@
                         borderBottomWidth="1" borderColor="#f3f3f3" [editable]="false"></TextView>
                     <Label text="Please do the needful edits and resubmit the question." textWrap="true" class="label"
                         fontWeight="400" color="#989898" marginTop="20"></Label>
-                    <Button ripple rippleColor="#71b02f" ext="RESUBMIT" class="Roboto-Regular" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
+                    <Button ripple rippleColor="#71b02f" text="RESUBMIT" class="Roboto-Regular" *ngIf="getDisplayStatus(selectedQuestion.status)==='REQUIRED_CHANGE'" color="#ffffff"
                         backgroundColor="#71b02f" marginTop="10" padding="20" borderRadius="3" fontSize="20" fontWeight="bold"
                         (tap)="showUpdateQuestion(true)"></Button>
                 </StackLayout>

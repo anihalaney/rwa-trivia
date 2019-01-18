@@ -1,4 +1,3 @@
-
 var path = require("path");
 var fs = require("fs");
 
@@ -18,7 +17,7 @@ module.exports = function($logger, $projectData, hookArgs) {
             });
         }
 
-        var buildType = isProdEnv ? 'production' : 'development';
+        var buildType = isReleaseBuild || isProdEnv ? 'production' : 'development';
 
         /*
             Detect if we have nativescript-plugin-firebase temp file created during after-prepare hook, so we know
@@ -69,7 +68,7 @@ var copyPlist = function(copyPlistOpts) {
 
         // if we have both dev/prod versions, we copy (or overwrite) GoogleService-Info.plist in destination dir
         if (fs.existsSync(sourceGooglePlistProd) && fs.existsSync(sourceGooglePlistDev)) {
-            if (copyPlistOpts.buildType==='production') { // use prod version
+            if (copyPlistOpts.isProdEnv) { // use prod version
                 copyPlistOpts.$logger.out("nativescript-plugin-firebase: copy " + sourceGooglePlistProd + " to " + destinationGooglePlist + ".");
                 fs.writeFileSync(destinationGooglePlist, fs.readFileSync(sourceGooglePlistProd));
                 return true;
@@ -118,4 +117,3 @@ var copyInfoPlist = function(copyPlistOpts) {
 
     } else { return true; }
 }
-
