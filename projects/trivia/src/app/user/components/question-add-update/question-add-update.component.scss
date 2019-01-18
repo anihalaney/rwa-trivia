@@ -76,3 +76,19 @@ mat-card-actions {
 ::ng-deep mat-hint.error, .error {
   color: red;
 }
+
+.show-answer-text{
+visibility: visible;
+}
+
+.hide-answer-text{
+  visibility: hidden;
+}
+
+.left-question{
+  margin-left: 7%;
+}
+
+.right-question{
+  margin-right: 51%;
+}
