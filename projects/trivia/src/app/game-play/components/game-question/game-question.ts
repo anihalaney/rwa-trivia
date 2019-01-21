@@ -20,10 +20,11 @@ export class GameQuestion {
   @Input() turnFlag: boolean;
   @Input() threeConsecutiveAnswer: boolean;
   @Input() userDict: { [key: string]: User };
+  @Input() MAX_TIME_IN_SECONDS: number;
 
   answeredIndex: number;
   correctAnswerIndex: number;
-  MAX_TIME_IN_SECONDS = 32;
+
 
   doPlay = true;
 
@@ -44,5 +45,5 @@ export class GameQuestion {
     this.correctAnswerIndex = correctAnswerIndex;
   }
 
-  fillTimer() {}
+  fillTimer() { }
 }
