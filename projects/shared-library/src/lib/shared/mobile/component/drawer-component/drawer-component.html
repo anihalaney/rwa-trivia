@@ -5,8 +5,8 @@
                 <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
                     <GridLayout row="0" columns="auto,*" class="sideStackLayoutHeader" *ngIf="user">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
-                            width="64" marginLeft="10" verticalAlignment="center" marginRight="10"></Image>
-                        <StackLayout row="0" col="1" marginTop="27" marginRight="10">
+                            width="64" marginLeft="10" verticalAlignment="center" marginRight="10"  iosOverflowSafeArea="false"></Image>
+                        <StackLayout row="0" col="1" marginTop="27" marginRight="10"  iosOverflowSafeArea="false">
                             <Label text="{{user?.displayName}}" color="#d7d7d7" horizontalAlignment="left"
                                 verticalAlignment="top" fontSize="20" textWrap="true" marginBottom="10"></Label>
                             <Label *ngIf="user?.location" text="&#xf041; {{user?.location}}" horizontalAlignment="left" color="#d7d7d7"
