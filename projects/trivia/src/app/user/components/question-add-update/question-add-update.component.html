@@ -38,8 +38,11 @@
           <h2><span>Enter Your Question:</span></h2>
           <textarea class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"
             aria-label="question-area"></textarea>
-          <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
-            is required!</p>
+          <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
+            <p *ngIf="questionForm.controls.questionText.errors.required" class="error">Question is required!</p>
+            <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">{{this.applicationSettings.question_max_length}} characters are allowed</p>
+          </div>
+
 
           <h3>Answers</h3>
           <ng-container formArrayName="answers">
@@ -49,9 +52,21 @@
               </label>
               <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required"
                 aria-label="answer-text">
+              <p *ngIf="(i%2 === 0) " [ngClass]=" 
+                 (!answers.controls[i].controls.answerText.valid
+                 && answers.controls[i].controls.answerText.errors 
+                 &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
+                class="error left-question">
+                {{this.applicationSettings.answer_max_length}} characters are allowed</p>
+              <p *ngIf="(i%2 !== 0) " [ngClass]=" 
+                 (!answers.controls[i].controls.answerText.valid
+                 && answers.controls[i].controls.answerText.errors 
+                 &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
+                class="error right-question">
+                {{this.applicationSettings.answer_max_length}} characters are allowed</p>
             </div>
           </ng-container>
-          <div class="error" *ngIf="!answers.valid && !answers.pristine">
+          <div class="error" *ngIf="!answers.valid && answers.touched">
             All answers required
           </div>
           <div class="error" *ngIf="answers.valid && questionForm.hasError('correctAnswerCountInvalid')">
