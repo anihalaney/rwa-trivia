@@ -3,4 +3,11 @@ export class ApplicationSettings {
     game_play_categories: Array<number>;   // Define categories Id to play game
     game_play_show_tags: boolean;          // Show/Hide  Tags in New game
     question_max_length: number;           // Maximum character allowed for question
+    game_play_timer_loader_ranges: Array<TimerLoader>;  // Contains start range, end  range and seconds
+}
+
+export class TimerLoader {
+    start: number;
+    end: number;
+    seconds: number;
 }
