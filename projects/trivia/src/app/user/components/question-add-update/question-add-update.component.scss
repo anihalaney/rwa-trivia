@@ -10,7 +10,7 @@
 .card .enterquestion h3:before{ display: none;  }
 
 .enterquestion .formfield{ padding: 0; margin-bottom: 32px; }
-.enterquestion .formfield > input{ border-width: 1px; border-style: solid; border-radius: 4px; padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px)}
+.enterquestion .formfield > input{ border-width: 1px; border-style: solid; border-radius: 4px; padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px);}
 .formfield select {  border-width: 1px; border-style: solid; border-radius: 4px; font-size: 18px; display: inline-block; }
 .enterquestion .formfield > label{ width: 30px; display: inline-block; vertical-align: -4px}
 .enterquestion .formfield input[type="radio"]{ display: block;}
@@ -32,7 +32,7 @@
   .formfield, .mysetting .formfield { display: inline-block; }
   .savebox a.btn.startg{ display: inline-block; margin-right: 70px}
   .enterquestion .formfield{ width: calc(50% - 3px) }
-  .enterquestion .formfield:nth-child(2n + 1){ text-align: right; }
+  // .enterquestion .formfield:nth-child(2n + 1){ text-align: right; }
   .enterquestion .formfield > input{width: calc(85%) }
 }
 /*

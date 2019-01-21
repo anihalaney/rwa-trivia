@@ -40,7 +40,7 @@
             aria-label="question-area"></textarea>
           <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
             <p *ngIf="questionForm.controls.questionText.errors.required" class="error">Question is required!</p>
-            <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">256 characters are allowed</p>
+            <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">{{this.applicationSettings.question_max_length}} characters are allowed</p>
           </div>
 
 
@@ -57,13 +57,13 @@
                  && answers.controls[i].controls.answerText.errors 
                  &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
                 class="error left-question">
-                128 characters are allowed</p>
+                {{this.applicationSettings.answer_max_length}} characters are allowed</p>
               <p *ngIf="(i%2 !== 0) " [ngClass]=" 
                  (!answers.controls[i].controls.answerText.valid
                  && answers.controls[i].controls.answerText.errors 
                  &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
                 class="error right-question">
-                128 characters are allowed</p>
+                {{this.applicationSettings.answer_max_length}} characters are allowed</p>
             </div>
           </ng-container>
           <div class="error" *ngIf="!answers.valid && answers.touched">

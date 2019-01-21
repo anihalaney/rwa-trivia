@@ -4,7 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import {
-  Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload
+  Category, User, Question, QuestionStatus, BulkUploadFileInfo, BulkUpload, ApplicationSettings
 } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
@@ -49,6 +49,8 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   showInstructions: Boolean = true;
   myTabIndex: Number = 0;
 
+  // application Settings
+  applicationSettings: ApplicationSettings;
 
   constructor(private fb: FormBuilder,
     private store: Store<AppState>, private papa: Papa,
@@ -70,6 +72,12 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+      }
+    }));
   }
 
   filter(val: string): string[] {
@@ -121,7 +129,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                   { 'id': 2, 'answerText': element['Option 2'], correct: false },
                   { 'id': 3, 'answerText': element['Option 3'], correct: false },
                   { 'id': 4, 'answerText': element['Option 4'], correct: false }
-                ]
+                ];
 
                 if (question.answers[element['Answer Index'] - 1] !== undefined) {
                   question.answers[element['Answer Index'] - 1].correct = true;
@@ -153,6 +161,17 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                 } else if (question.answers.filter(a => !a.answerText || a.answerText.trim() === '').length > 0) {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push('Missing Answer');
+                } else if (question.questionText.length > this.applicationSettings.question_max_length) {
+                  this.questionValidationError = true;
+                  question.validationErrorMessages.push(`${this.applicationSettings.question_max_length}
+                   characters are allowed for Question Text`);
+                } else if (question.answers[0].answerText.trim().length > this.applicationSettings.answer_max_length
+                  || question.answers[1].answerText.trim().length > this.applicationSettings.answer_max_length
+                  || question.answers[2].answerText.trim().length > this.applicationSettings.answer_max_length
+                  || question.answers[2].answerText.trim().length > this.applicationSettings.answer_max_length) {
+                  this.questionValidationError = true;
+                  question.validationErrorMessages.push(`${this.applicationSettings.answer_max_length}
+                   characters are allowed for Answer Text`);
                 } else if (question.tags.length < 3) {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push('Atleast 3 tags required');
