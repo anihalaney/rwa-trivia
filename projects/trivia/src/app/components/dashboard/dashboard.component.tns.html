@@ -3,7 +3,7 @@
     <ScrollView>
         <StackLayout>
             <GridLayout rows="*, *, *, *, *, *, *" columns="*">
-                <Button row="0" col="0" text="START A NEW GAME" class="btn-red Roboto-Medium" (tap)="startNewGame()" height="70" margin="10"></Button>
+                <Button row="0" col="0" ripple rippleColor="#fcecee" text="START A NEW GAME" class="btn-red Roboto-Medium" height="70" margin="10" (tap)="startNewGame()"></Button>
                 <StackLayout row="1" col="0" *ngIf="user && (twoPlayerCount > 0 || singlePlayerCount > 0)">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                         <GridLayout rows="auto, auto" columns="*">
@@ -71,7 +71,8 @@
                             <StackLayout *ngFor="let invitation of friendInvitations | slice:friendInviteSliceStartIndex:friendInviteSliceLastIndex">
                                 <app-friend-invite [userDict]="userDict" [invitation]="invitation" [user]="user"></app-friend-invite>
                             </StackLayout>
-                            <button text="View more" padding="10 0" backgroundColor="#8ac541" color="#ffffff" margin="10" (tap)="displayMoreFriendInvites()" *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex"></button>
+                            <Button ripple rippleColor="#8ac541" text="View more" backgroundColor="#8ac541" color="#ffffff" margin="10" (tap)="displayMoreFriendInvites()"
+                                *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex"></Button>
                         </StackLayout>
                     </CardView>
                 </StackLayout>

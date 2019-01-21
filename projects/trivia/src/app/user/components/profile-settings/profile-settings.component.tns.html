@@ -38,7 +38,7 @@
         <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
           <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let category of userCategories"
             (tap)="selectCategory(category)">
-            <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>            
+          <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>            
            <Image row="0" col="2"  checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25"
                 width="25" marginLeft="10" verticalAlignment="center" marginRight="5"  visibility="{{ category.isSelected ? 'visible' : 'hidden' }}"></Image>
                     
@@ -74,8 +74,10 @@
                 </SuggestionView>
               </RadAutoCompleteTextView>
             </StackLayout>
-            <StackLayout row="1" col="1" horizontalAlignment="right">
-              <Button ios:padding="10" text="Add" class="Roboto-Bold" (tap)="addCustomTag()"></Button>
+            <StackLayout row="1" col="1" marginLeft="10" horizontalAlignment="right">
+              <Ripple padding="10" rippleColor="#dceec6">
+                  <Button ios:padding="10" text="Add" class="Roboto-Bold" ></Button>
+              </Ripple>
             </StackLayout>
           </GridLayout>
         </StackLayout>
@@ -174,12 +176,14 @@
 
       <StackLayout class="profile-buttons">
         <Label text="Bulk upload Request" textWrap="true" padding="8"></Label>
-        <Button *ngIf="(!user.bulkUploadPermissionStatus
-        || user.bulkUploadPermissionStatus === NONE
-        || user.bulkUploadPermissionStatus === PENDING)
-        && !user.isRequestedBulkUpload"
-          [text]="bulkUploadBtnText" (tap)="setBulkUploadRequest()" backgroundColor="#ffffff" color="black" padding="10 0"
-          borderWidth="1" borderRadius="3"></Button>
+        <Ripple rippleColor="#c2c2c2">
+          <Button *ngIf="(!user.bulkUploadPermissionStatus
+          || user.bulkUploadPermissionStatus === NONE
+          || user.bulkUploadPermissionStatus === PENDING)
+          && !user.isRequestedBulkUpload"
+            [text]="bulkUploadBtnText" (tap)="setBulkUploadRequest()" backgroundColor="#ffffff" color="black" padding="10 0"
+            borderWidth="1" borderRadius="3"></Button>
+        </Ripple>
         <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING" text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
           textWrap="true" padding="8"></Label>
         <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED" text="User has bulk upload privilege"
@@ -187,7 +191,9 @@
       </StackLayout>
 
       <StackLayout class="profile-buttons">
-        <Button text="SAVE" (tap)="onSubmit()" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
+        <Ripple rippleColor="#dceec6">
+          <Button text="SAVE" (tap)="onSubmit()" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
+        </Ripple>
       </StackLayout>
 
 
