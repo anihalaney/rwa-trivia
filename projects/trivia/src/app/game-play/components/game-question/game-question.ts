@@ -23,6 +23,7 @@ export class GameQuestion {
 
   answeredIndex: number;
   correctAnswerIndex: number;
+  MAX_TIME_IN_SECONDS = 32;
 
   doPlay = true;
 
