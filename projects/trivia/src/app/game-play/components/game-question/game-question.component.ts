@@ -24,7 +24,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngAfterViewInit() {
     const seconds = 30;
     this.setTimeOutLimit = Math.floor( (this.MAX_TIME_IN_SECONDS / 360) * 1000);
-    console.log(this.setTimeOutLimit);
+   // console.log(this.setTimeOutLimit);
     const loader = this.loader.nativeElement, α = 0;
 
     this.draw(this.alpha, this.doPlay, loader);
