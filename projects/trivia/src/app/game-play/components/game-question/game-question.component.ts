@@ -10,6 +10,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   @ViewChild('overlay') overlay: ElementRef;
   @ViewChild('loader') loader: ElementRef;
   alpha = 0;
+  setTimeOutLimit = 0;
   constructor() {
     super();
   }
@@ -22,6 +23,8 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
   ngAfterViewInit() {
     const seconds = 30;
+    this.setTimeOutLimit = Math.floor( (this.MAX_TIME_IN_SECONDS / 360) * 1000);
+    console.log(this.setTimeOutLimit);
     const loader = this.loader.nativeElement, α = 0;
 
     this.draw(this.alpha, this.doPlay, loader);
@@ -43,7 +46,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
       loader.setAttribute('d', anim);
       setTimeout(() => {
         this.draw(α, this.doPlay, loader);
-      }, 44); // Redraw
+      }, this.setTimeOutLimit); // Redraw
     }
   }
 
@@ -53,18 +56,8 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.timer && changes.timer.firstChange) {
-      const elapsedTime = 16 - changes.timer.currentValue;
-      this.alpha = (360 * elapsedTime) / 16;
-      // const loader = this.loader.nativeElement, α = 0;
-      // let r = (α * Math.PI / 180)
-      //   , x = Math.sin(r) * 125
-      //   , y = Math.cos(r) * -125
-      //   , mid = (α > 180) ? 1 : 1
-      //   , anim = 'M 1 1 v -125 A 125 125 1 '
-      //     + mid + ' 1 '
-      //     + x + ' '
-      //     + y + ' z';
-      // loader.setAttribute('d', anim);
+      const elapsedTime = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
+      this.alpha = (360 * elapsedTime) / this.MAX_TIME_IN_SECONDS;
     }
   }
 }

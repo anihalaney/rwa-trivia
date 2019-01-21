@@ -39,7 +39,7 @@ export class GameDialog {
   gameOver = false;
   PlayerMode = PlayerMode;
 
-  MAX_TIME_IN_SECONDS = 16;
+  MAX_TIME_IN_SECONDS = 32;
   showContinueBtn = false;
   userDict: { [key: string]: User } = {};
   otherPlayer: User;
