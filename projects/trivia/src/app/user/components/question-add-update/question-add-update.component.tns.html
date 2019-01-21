@@ -47,7 +47,7 @@
                             <Label *ngIf="questionForm.controls.questionText.errors.required" class="error" textWrap="true"
                                 text="Answer required !"></Label>
                             <Label *ngIf="questionForm.controls.questionText.errors.maxlength" class="error" textWrap="true"
-                                text="256 characters are allowed !"></Label>
+                                text="{{this.applicationSettings.question_max_length}}  characters are allowed !"></Label>
                         </StackLayout>
 
                     </StackLayout>
@@ -66,7 +66,7 @@
                                         <Label *ngIf="answers.controls[i].controls.answerText.errors.required " class="error"
                                             textWrap="true" text="Answer required !"></Label>
                                         <Label *ngIf="answers.controls[i].controls.answerText.errors.maxlength " class="error"
-                                            textWrap="true" text="128 characters are allowed !"></Label>
+                                            textWrap="true" text="{{this.applicationSettings.answer_max_length}}  characters are allowed !"></Label>
 
                                     </StackLayout>
                                 </StackLayout>
