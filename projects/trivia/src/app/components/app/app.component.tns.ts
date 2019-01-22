@@ -96,7 +96,6 @@ export class AppComponent implements OnInit, OnDestroy {
             }
           } else {
             user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
-            user.iosPushTokens.push(token);
             if (user.iosPushTokens.indexOf(token) === -1) {
               console.log('ios token', token);
               user.iosPushTokens.push(token);
