@@ -8,7 +8,9 @@
             </StackLayout>
             <GridLayout #formDir="ngForm" [formGroup]="invitationForm" margin="30 10 10 10" rows="auto" columns="*,auto">
                 <TextField row="0" col="0" formControlName="email" class="email-textfield Roboto-Regular" hint="Email address"></TextField>
-                <label row="0" col="1" class="send-invite-button Hind-Bold" (tap)="onSubscribe()" text="Send Invite"></label>
+                <Ripple rippleColor="#dceec6" row="0" col="1" (tap)="onSubscribe()">
+                    <label class="send-invite-button Hind-Bold" text="Send Invite"></label>
+                </Ripple>
             </GridLayout>
             <StackLayout marginTop="10" marginBottom="20">
                 <Label class="error-msg" text="Email is required!" textWrap="true" *ngIf="invitationForm.controls.email.invalid && emailCheck"></Label>

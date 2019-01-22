@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
-import { User } from 'shared-library/shared/model';
+import { User, Answer } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
 import { Store, select } from '@ngrx/store';
@@ -7,6 +7,7 @@ import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
 import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
@@ -41,17 +42,11 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
 
   ngOnDestroy() {
-    this.clearProcessBar();
+    if (this.timerSub) {
+      this.timerSub.unsubscribe();
+    }
   }
 
-  clearProcessBar() {
-    clearInterval(this.stopProcessBar);
-  }
-
-  fillTimer() {
-    this.progressValue = 100;
-    clearInterval(this.stopProcessBar);
-  }
 
   getImage(userId) {
     return this.utils.getImageUrl(this.userDict[userId], 44, 40, '44X40');
