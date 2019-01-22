@@ -55,7 +55,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnChanges(changes: SimpleChanges) {
     if (changes.timer) {
       this.timer = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
-      console.log('loader> ', this.timer);
       if (this.timerSub) {
         this.timerSub.unsubscribe();
       }

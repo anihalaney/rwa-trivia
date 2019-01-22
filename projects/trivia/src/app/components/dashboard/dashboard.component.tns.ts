@@ -58,11 +58,9 @@ export class DashboardComponent extends Dashboard implements OnInit {
   filterTwoPlayerGame(game: any, gameStatus, user: User) {
 
     // tslint:disable-next-line:no-unused-expression
-    return (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) && game.playerIds.length > 1 &&
-                        !(game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-                        game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
-                        || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ) &&
-                        (game.nextTurnPlayerId === user.userId));
+
+    return Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) &&
+                        (game.nextTurnPlayerId === user.userId);
   }
 
   filterTwoPlayerWaitNextQGame(game: any, gameStatus, user: User) {
