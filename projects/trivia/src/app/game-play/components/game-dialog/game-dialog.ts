@@ -276,29 +276,30 @@ export class GameDialog {
         remainSecond = this.MAX_TIME_IN_SECONDS;
       }
 
-      if (this.isQuestionAvailable || remainSecond >= 0) {
-        this.questionIndex++;
-        this.timer = remainSecond;
-        this.timerSub =
-          timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
-            this.timer--;
-          },
-            null,
-            () => {
-              // disable all buttons
-              if (this.currentQuestion) {
-                this.afterAnswer();
-                this.genQuestionComponent.fillTimer();
-              }
-            });
-      } else {
-        setTimeout(() => {
-          this.afterAnswer();
+    if (this.isQuestionAvailable || remainSecond >= 0) {
+      this.questionIndex++;
+      this.timer = remainSecond;
+      this.timerSub =
+        timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
+          this.timer--;
           this.genQuestionComponent.fillTimer();
-        }, 1000);
-      }
-    });
-  }
+        },
+          null,
+          () => {
+            // disable all buttons
+            if (this.currentQuestion) {
+              this.afterAnswer();
+              this.genQuestionComponent.fillTimer();
+            }
+          });
+    } else {
+      setTimeout(() => {
+        this.afterAnswer();
+        this.genQuestionComponent.fillTimer();
+      }, 1000);
+    }
+  });
+}
 
   calculateMaxTime(): void {
     this.applicationSettings.game_play_timer_loader_ranges.map((timerLoader) => {

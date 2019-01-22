@@ -13,48 +13,58 @@
                                 fontSize="12" verticalAlignment="bottom" textWrap="true" class="fa"></Label>
                         </StackLayout>
                     </GridLayout>
-                    <Label row="1" colSpan="2" text="Home" textWrap="true" [class.active-menu]="activeMenu === 'Home'"
-                        class="sideLabel" (tap)="dashboard()"></Label>
-
-                    <Label row="2" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Recently Completed Games"
+                    <Ripple rippleColor="#e6eaef" row="1" (tap)="dashboard()" >
+                        <Label colSpan="2" text="Home" textWrap="true" [class.active-menu]="activeMenu === 'Home'"
+                        class="sideLabel"></Label>
+                    </Ripple>
+                    <Ripple rippleColor="#e6eaef" row="2" *ngIf="authProvider.isAuthenticated"  (tap)="recentGame()">
+                        <Label colSpan="2" text="Recently Completed Games"
                         [class.active-menu]="activeMenu === 'Recently Completed Games'" class="sideLabel sideStackLayout"
-                        (tap)="recentGame()"></Label>
-
-                    <GridLayout rows="*" column="*, auto" row="3" colSpan="2" [class.active-menu]="activeMenu === 'Category Leaderboard'"
-                        (tap)="showSelectCategory = !showSelectCategory">
-                        <Label row="0" col="0" text="Category Leaderboard" class="sideLabel sideStackLayout"></Label>
-                        <Label row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
-                            verticalAlignment="center" (tap)="showSelectCategory = !showSelectCategory" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
-                            paddingRight="15"></Label>
-                    </GridLayout>
+                        ></Label>
+                    </Ripple>
+                    <Ripple rippleColor="#e6eaef" row="3" (tap)="showSelectCategory = !showSelectCategory">
+                        <GridLayout rows="*" column="*, auto" row="3" colSpan="2" [class.active-menu]="activeMenu === 'Category Leaderboard'">
+                            <Label row="0" col="0" text="Category Leaderboard" class="sideLabel sideStackLayout"></Label>
+                            <Label row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
+                                verticalAlignment="center" (tap)="showSelectCategory = !showSelectCategory" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
+                                paddingRight="15"></Label>
+                        </GridLayout>
+                    </Ripple>
                     <StackLayout row="4" colSpan="2" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
-                        <StackLayout *ngFor="let category of categories" orientation="horizontal" paddingLeft="10"
-                            (tap)="leaderBoard(category.categoryName)">
-                            <Label col="0" text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
-                            <Label text="{{category.categoryName}}" textWrap="true" class="sideLabel sideStackLayout"
-                                padding="10">
-                            </Label>
+                        <StackLayout *ngFor="let category of categories" orientation="horizontal" paddingLeft="10">
+                            <Ripple rippleColor="#fff000" width="100%" (tap)="leaderBoard(category.categoryName)">
+                                <Label col="0" text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
+                                <Label text="{{category.categoryName}}" textWrap="true" class="sideLabel sideStackLayout"
+                                    padding="10">
+                                </Label>
+                            </Ripple>
                         </StackLayout>
                     </StackLayout>                           
-
-                    <Label row="5" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Friend List"
-                        [class.active-menu]="activeMenu === 'Friend List'" class="sideLabel sideStackLayout" (tap)="navigateToFriendList()"></Label>
-
-                    <Label row="6" colSpan="2" *ngIf="authProvider.isAuthenticated" text="My Questions" class="sideLabel sideStackLayout"
-                    [class.active-menu]="activeMenu === 'My Questions'" (tap)="navigateToMyQuestion()"></Label>
-
-                    <Label row="7" colSpan="2" *ngIf="authProvider.isAuthenticated" text="Profile Settings" textWrap="true"
-                        class="sideLabel" (tap)="navigateToProfileSettings()" [class.active-menu]="activeMenu === 'Profile Settings'"></Label>
-
+                    <Ripple *ngIf="authProvider.isAuthenticated" rippleColor="#e6eaef" row="5" (tap)="navigateToFriendList()">
+                        <Label  colSpan="2"  text="Friend List"
+                        [class.active-menu]="activeMenu === 'Friend List'" class="sideLabel sideStackLayout"></Label>
+                    </Ripple>
+                    <Ripple *ngIf="authProvider.isAuthenticated" rippleColor="#e6eaef" row="6" (tap)="navigateToMyQuestion()">
+                        <Label colSpan="2" text="My Questions" class="sideLabel sideStackLayout"
+                        [class.active-menu]="activeMenu === 'My Questions'" ></Label>
+                    </Ripple>
+                    <Ripple *ngIf="authProvider.isAuthenticated" rippleColor="#e6eaef" row="7" (tap)="navigateToProfileSettings()">
+                    <Label colSpan="2" text="Profile Settings" textWrap="true"
+                        class="sideLabel" [class.active-menu]="activeMenu === 'Profile Settings'"></Label>
+                    </Ripple>
                 </GridLayout>
             </ScrollView>
         </StackLayout>
-        <StackLayout row="1">
-            <Label *ngIf="!authProvider.isAuthenticated" verticalAlignment="bottom" backgroundColor="#39454D"
-                textAlignment="center" fontSize="16" text="Login" class="sideLabel sideStackLayout" (tap)="login()"></Label>
-
-            <Label *ngIf="authProvider.isAuthenticated" verticalAlignment="bottom" backgroundColor="#39454D"
-                textAlignment="center" fontSize="16" text="Logout" class="sideLabel sideStackLayout" (tap)="logout()"></Label>
-        </StackLayout>
+        
+            <StackLayout row="1">
+                <Ripple *ngIf="!authProvider.isAuthenticated" rippleColor="#e6eaef" (tap)="login()">
+                <Label verticalAlignment="bottom" backgroundColor="#39454D"
+                    textAlignment="center" fontSize="16" text="Login" class="sideLabel sideStackLayout"></Label>
+                </Ripple>
+                <Ripple *ngIf="authProvider.isAuthenticated" rippleColor="#e6eaef" (tap)="logout()">
+                <Label verticalAlignment="bottom" backgroundColor="#39454D"
+                    textAlignment="center" fontSize="16" text="Logout" class="sideLabel sideStackLayout"></Label>
+                </Ripple>
+            </StackLayout>
     </GridLayout>
 </StackLayout>

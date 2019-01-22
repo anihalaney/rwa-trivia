@@ -33,6 +33,7 @@ import { GameCardComponent } from './components/game-card/game-card.component';
 import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
 import { GameInviteComponent } from './components/game-invite/game-invite.component';
 
+
 @NgModule({
   declarations: [
     GameCardComponent,

@@ -26,7 +26,7 @@ export class QuestionComponent {
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils) {
     this.answeredText = '';
     this.correctAnswerText = '';
-     this.store.select(categoryDictionary).subscribe(categories => {
+    this.store.select(categoryDictionary).subscribe(categories => {
       this.categoryDictionary = categories;
       this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
@@ -52,10 +52,12 @@ export class QuestionComponent {
   }
 
   answerButtonClicked(answer: Answer) {
-    this.answeredText = answer.answerText;
-    this.doPlay = false;
-    const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
-    this.answerClicked.emit(index);
+    if (this.doPlay) {
+      this.answeredText = answer.answerText;
+      this.doPlay = false;
+      const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
+      this.answerClicked.emit(index);
+    }
   }
 
   getNextQuestion() {
