@@ -13,6 +13,7 @@
                                 <StackLayout *ngFor="let game of activeGames | gamefilter: filterSinglePlayerGame ;let last = last;">
                                     <game-card [game]="game" [cardType]="'singlePlayer'"></game-card>
                                     <StackLayout class="hr-light m-10" *ngIf="!last"></StackLayout>
+                                    <StackLayout class="hr-light m-10" *ngIf="last && twoPlayerCount > 0"></StackLayout>
                                 </StackLayout>
                             </StackLayout>
                             <StackLayout row="1" col="0" *ngIf="activeGames && userDict">
