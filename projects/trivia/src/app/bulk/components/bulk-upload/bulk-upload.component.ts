@@ -165,10 +165,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push(`${this.applicationSettings.question_max_length}
                    characters are allowed for Question Text`);
-                } else if (question.answers[0].answerText.trim().length > this.applicationSettings.answer_max_length
-                  || question.answers[1].answerText.trim().length > this.applicationSettings.answer_max_length
-                  || question.answers[2].answerText.trim().length > this.applicationSettings.answer_max_length
-                  || question.answers[2].answerText.trim().length > this.applicationSettings.answer_max_length) {
+                } else if (question.answers.some((answer) => answer.answerText.length > this.applicationSettings.answer_max_length)) {
                   this.questionValidationError = true;
                   question.validationErrorMessages.push(`${this.applicationSettings.answer_max_length}
                    characters are allowed for Answer Text`);
