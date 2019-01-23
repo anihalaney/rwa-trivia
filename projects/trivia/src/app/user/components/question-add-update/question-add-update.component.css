@@ -1,3 +1,13 @@
 .error {
     color: red;
 }
+
+.show-answer-text{
+    visibility: visible;
+    }
+    
+    .hide-answer-text{
+      visibility: hidden;
+    }
+    
+    
