@@ -51,9 +51,9 @@
     "prod:android": "tns run android --bundle --env.prod --env.aot --env.uglify --env.package_name=io.bitwiser.trivia",
     "prod:ios": "tns run ios --bundle --env.prod --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia",
     "release:dev:android": "sh release/dev-android.sh",
-    "release:dev:ios": "tns prepare ios --bundle --release  --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia.dev",
+    "release:dev:ios": "rm -rf platforms/ios && tns prepare ios --bundle --release  --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia.dev",
     "release:prod:android": "sh release/prod-android.sh",
-    "release:prod:ios": "tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia"
+    "release:prod:ios": "rm -rf platforms/ios && tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia"
   },
   "private": true,
   "dependencies": {
