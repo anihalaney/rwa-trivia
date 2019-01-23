@@ -11,7 +11,7 @@ import { GameQuestionComponent } from '../game-question/game-question.component'
 import { UserActions } from 'shared-library/core/store/actions';
 import {
   Game, PlayerQnA, User, Question, Category, GameStatus,
-  PlayerMode, OpponentType, Answer, gamePlayConstants
+  PlayerMode, OpponentType, Answer, gamePlayConstants, ApplicationSettings
 } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { appState, categoryDictionary } from '../../../store';
@@ -39,7 +39,7 @@ export class GameDialog {
   gameOver = false;
   PlayerMode = PlayerMode;
 
-  MAX_TIME_IN_SECONDS = 16;
+  MAX_TIME_IN_SECONDS: number;
   showContinueBtn = false;
   userDict: { [key: string]: User } = {};
   otherPlayer: User;
@@ -57,6 +57,7 @@ export class GameDialog {
   isGameLoaded: boolean;
   threeConsecutiveAnswer = false;
   currentUTC: number;
+  applicationSettings: ApplicationSettings;
 
   private genQuestionComponent: GameQuestionComponent;
 
@@ -122,6 +123,12 @@ export class GameDialog {
         }
 
       }));
+
+    this.sub.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+      }
+    }));
 
   }
 
@@ -232,7 +239,7 @@ export class GameDialog {
   }
 
   subscribeQuestion() {
-    this.timer = this.MAX_TIME_IN_SECONDS;
+
     this.questionSub = this.gameQuestionObs.subscribe(question => {
       if (!question) {
         this.currentQuestion = undefined;
@@ -240,6 +247,8 @@ export class GameDialog {
       }
       this.originalAnswers = Object.assign({}, question.answers);
       this.currentQuestion = question;
+      this.calculateMaxTime();
+      this.timer = this.MAX_TIME_IN_SECONDS;
       this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);
       if (!this.userDict[this.currentQuestion.created_uid]) {
         this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
@@ -292,91 +301,100 @@ export class GameDialog {
   });
 }
 
-getNextQuestion() {
-  this.store.dispatch(new gameplayactions.GetNextQuestion(this.game));
-}
+  calculateMaxTime(): void {
+    this.applicationSettings.game_play_timer_loader_ranges.map((timerLoader) => {
+      if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength < timerLoader.end) {
+        this.MAX_TIME_IN_SECONDS = timerLoader.seconds;
+      }
+    });
 
-answerClicked($event: number) {
-  // disable all buttons
-  this.afterAnswer($event);
-}
-
-okClick($event) {
-  if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
-    this.gameOver = true;
-  } else {
-    this.continueNext = true;
   }
 
-}
+  getNextQuestion() {
+    this.store.dispatch(new gameplayactions.GetNextQuestion(this.game));
+  }
 
-checkGameOver() {
-  if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
-    && (Number(this.game.gameOptions.opponentType) === OpponentType.Random ||
-      Number(this.game.gameOptions.opponentType) === OpponentType.Friend)) {
-    this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
-    if (this.correctAnswerCount >= 5 ||
-      (this.game.round >= 16)) {
+  answerClicked($event: number) {
+    // disable all buttons
+    this.afterAnswer($event);
+  }
+
+  okClick($event) {
+    if (this.questionIndex >= this.game.gameOptions.maxQuestions) {
+      this.gameOver = true;
+    } else {
+      this.continueNext = true;
+    }
+
+  }
+
+  checkGameOver() {
+    if (Number(this.game.gameOptions.playerMode) === PlayerMode.Opponent
+      && (Number(this.game.gameOptions.opponentType) === OpponentType.Random ||
+        Number(this.game.gameOptions.opponentType) === OpponentType.Friend)) {
+      this.otherPlayerUserId = this.game.playerIds.filter(playerId => playerId !== this.user.userId)[0];
+      if (this.correctAnswerCount >= 5 ||
+        (this.game.round >= 16)) {
+        this.gameOverContinueClicked();
+      }
+    } else if (((this.questionIndex - this.correctAnswerCount) === 4) ||
+      this.correctAnswerCount >= 5 ||
+      this.questionIndex >= this.game.gameOptions.maxQuestions) {
       this.gameOverContinueClicked();
     }
-  } else if (((this.questionIndex - this.correctAnswerCount) === 4) ||
-    this.correctAnswerCount >= 5 ||
-    this.questionIndex >= this.game.gameOptions.maxQuestions) {
-    this.gameOverContinueClicked();
-  }
-}
-
-
-gameOverContinueClicked() {
-  this.currentQuestion = undefined;
-  this.originalAnswers = undefined;
-  this.questionAnswered = false;
-  this.showContinueBtn = false;
-  this.continueNext = false;
-  this.isGameLoaded = false;
-  this.gameOver = true;
-  this.showWinBadge = false;
-  this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
-}
-
-afterAnswer(userAnswerId ?: number) {
-  this.utils.unsubscribe([this.timerSub, this.questionSub]);
-  const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
-  let index;
-  if (userAnswerId === undefined) {
-    index = null;
-  } else {
-    index = userAnswerId.toString();
   }
 
-  if (userAnswerId === correctAnswerId) {
-    this.isCorrectAnswer = true;
-    this.correctAnswerCount++;
+
+  gameOverContinueClicked() {
+    this.currentQuestion = undefined;
+    this.originalAnswers = undefined;
+    this.questionAnswered = false;
+    this.showContinueBtn = false;
+    this.continueNext = false;
+    this.isGameLoaded = false;
+    this.gameOver = true;
+    this.showWinBadge = false;
+    this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
   }
 
-  const seconds = this.MAX_TIME_IN_SECONDS - this.timer;
-  const originalAnswers: Answer[] = [];
-  for (const key of Object.keys(this.originalAnswers)) {
-    const originalAnswer: Answer = this.originalAnswers[key];
-    originalAnswers[key] = originalAnswer;
+  afterAnswer(userAnswerId?: number) {
+    this.utils.unsubscribe([this.timerSub, this.questionSub]);
+    const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
+    let index;
+    if (userAnswerId === undefined) {
+      index = null;
+    } else {
+      index = userAnswerId.toString();
+    }
+
+    if (userAnswerId === correctAnswerId) {
+      this.isCorrectAnswer = true;
+      this.correctAnswerCount++;
+    }
+
+    const seconds = this.MAX_TIME_IN_SECONDS - this.timer;
+    const originalAnswers: Answer[] = [];
+    for (const key of Object.keys(this.originalAnswers)) {
+      const originalAnswer: Answer = this.originalAnswers[key];
+      originalAnswers[key] = originalAnswer;
+    }
+
+    const playerQnA: PlayerQnA = {
+      playerId: this.user.userId,
+      // playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
+      playerAnswerId: (index) ?
+        originalAnswers.findIndex(a => a.answerText === this.currentQuestion.answers[index].answerText).toString() : null,
+      playerAnswerInSeconds: seconds,
+      answerCorrect: (userAnswerId === correctAnswerId),
+      questionId: this.currentQuestion.id,
+      addedOn: this.currentQuestion.addedOn,
+      round: this.currentQuestion.gameRound
+    };
+    this.questionAnswered = true;
+    this.isGameLoaded = false;
+    // dispatch action to push player answer
+    this.store.dispatch(new gameplayactions.AddPlayerQnA({ 'gameId': this.game.gameId, 'playerQnA': playerQnA }));
+
+    this.genQuestionComponent.disableQuestions(correctAnswerId);
   }
-
-  const playerQnA: PlayerQnA = {
-    playerId: this.user.userId,
-    // playerAnswerId: isNaN(userAnswerId) ? null : userAnswerId.toString(),
-    playerAnswerId: (index) ?
-      originalAnswers.findIndex(a => a.answerText === this.currentQuestion.answers[index].answerText).toString() : null,
-    playerAnswerInSeconds: seconds,
-    answerCorrect: (userAnswerId === correctAnswerId),
-    questionId: this.currentQuestion.id,
-    addedOn: this.currentQuestion.addedOn,
-    round: this.currentQuestion.gameRound
-  };
-  this.questionAnswered = true;
-  this.isGameLoaded = false;
-  // dispatch action to push player answer
-  this.store.dispatch(new gameplayactions.AddPlayerQnA({ 'gameId': this.game.gameId, 'playerQnA': playerQnA }));
-
-  this.genQuestionComponent.disableQuestions(correctAnswerId);
-}
 }

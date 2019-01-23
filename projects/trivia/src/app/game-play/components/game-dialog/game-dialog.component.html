@@ -28,7 +28,8 @@
             ?'score2-L':correctAnswerCount === 2
             ?'score3-L':correctAnswerCount === 3
             ?'score4-L':correctAnswerCount === 4
-            ?'score5-L':''" class="sprite circle-image"></div>
+            ?'score5-L':''"
+            class="sprite circle-image"></div>
         </div>
         <div class="text textcenter">
           <span> Give the right answer & with this badge</span>
@@ -46,7 +47,8 @@
           ?'score2-L':correctAnswerCount === 3
           ?'score3-L':correctAnswerCount === 4
           ?'score4-L':correctAnswerCount === 5
-          ?'score5-L':''" class="sprite circle-image">
+          ?'score5-L':''"
+            class="sprite circle-image">
           </div>
         </div>
         <div class="text textcenter">
@@ -56,19 +58,21 @@
     </div>
   </div>
 
-  <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName" [question]="currentQuestion"
-    [questionIndex]="questionIndex" [timer]="timer" [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
-    [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)"
-    (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [questionRound]="game.round"
-    [totalRound]="totalRound" [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer">
+  <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName"
+    [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS"
+    [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn"
+    [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
+    (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [questionRound]="game.round" [totalRound]="totalRound"
+    [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer">
   </game-question>
 
-  <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion" (continueClicked)="continueClicked($event)"
-    (viewQuestionClicked)="viewQuestionClicked($event)">
+  <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion"
+    (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-question-continue>
 
-  <game-over *ngIf="gameOver" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName" [correctCount]="correctAnswerCount"
-    [noOfQuestions]="questionIndex" [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
+  <game-over *ngIf="gameOver" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
+    [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [totalRound]="totalRound"
+    (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-over>
 
 

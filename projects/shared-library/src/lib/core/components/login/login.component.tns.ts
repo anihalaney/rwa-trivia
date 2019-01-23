@@ -71,7 +71,7 @@ export class LoginComponent extends Login implements OnInit {
           this.redirectTo();
         }).catch((error) => {
           this.loader.hide();
-          Toast.makeText(error).show();
+          Toast.makeText(error.message).show();
         });
         break;
       case 1:
