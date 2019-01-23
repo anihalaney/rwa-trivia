@@ -4,7 +4,7 @@ import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
-import { Category, GameOptions, User, PlayerMode, OpponentType } from 'shared-library/shared/model';
+import { Category, GameOptions, User, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 
@@ -17,7 +17,7 @@ export class NewGame {
   userDict$: Observable<{ [key: string]: User }>;
   selectedTags: string[];
   subs: Subscription[] = [];
-  applicationSettings: any;
+  applicationSettings: ApplicationSettings;
   gameOptions: GameOptions;
 
   showUncheckedCategories: Boolean = false;
