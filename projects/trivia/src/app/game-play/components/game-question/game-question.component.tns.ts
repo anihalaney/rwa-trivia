@@ -53,32 +53,22 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnChanges(changes: SimpleChanges) {
-
-    if (!(this.answeredIndex !== null && this.answeredIndex !== undefined)) {
-      this.progressValue = 100;
-    }
-
-    if (this.question) {
-      if (changes.timer) {
-        this.timer = 15 - changes.timer.currentValue;
-        if (this.timerSub) {
-          this.timerSub.unsubscribe();
-        }
-        this.progressValue = (this.timer * 100) / 15;
-        this.timerSub =
-          timer(0, 10).pipe(take(90)).subscribe(t => {
-            if (this.answeredIndex === undefined) {
-              this.timer += 0.010;
-              this.progressValue = (this.timer / 15) * 100;
-            } else {
-              this.timerSub.unsubscribe();
-            }
-          },
-            null,
-            () => {
-              this.timerSub.unsubscribe();
-            });
+    if (changes.timer) {
+      this.timer = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
+      if (this.timerSub) {
+        this.timerSub.unsubscribe();
       }
+      this.progressValue = (this.timer * 100) / this.MAX_TIME_IN_SECONDS;
+
+      this.timerSub =
+        timer(0, 10).pipe(take(90)).subscribe(t => {
+          this.timer += 0.010;
+          this.progressValue = (this.timer / this.MAX_TIME_IN_SECONDS) *  100;
+        },
+          null,
+          () => {
+            this.timerSub.unsubscribe();
+          });
     }
   }
 }

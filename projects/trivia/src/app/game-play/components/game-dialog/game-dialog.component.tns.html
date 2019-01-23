@@ -65,7 +65,7 @@
         <Label text="You Earned" class='text-center' textWrap="true" horizontalAlignment="center" verticalAlignment="center"></Label>
     </StackLayout>
     <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName"
-        [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer" [continueNext]="continueNext"
+        [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS" [continueNext]="continueNext"
         [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn"
         [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)"
         (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict"

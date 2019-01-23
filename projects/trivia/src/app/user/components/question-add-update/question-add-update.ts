@@ -2,7 +2,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@ang
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime, take, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-import { User, Category, Question, QuestionStatus, Answer } from 'shared-library/shared/model';
+import { User, Category, Question, QuestionStatus, Answer, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 
@@ -28,6 +28,7 @@ export class QuestionAddUpdate {
   filteredTags$: Observable<string[]>;
   loaderBusy = false;
   user: User;
+  applicationSettings: ApplicationSettings;
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -48,12 +49,16 @@ export class QuestionAddUpdate {
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
+
+
+
   }
 
   createDefaultForm(question: Question): FormArray {
     const fgs: FormGroup[] = question.answers.map(answer => {
       const fg = new FormGroup({
-        answerText: new FormControl(answer.answerText, Validators.required),
+        answerText: new FormControl(answer.answerText,
+          Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.answer_max_length)])),
         correct: new FormControl(answer.correct),
       });
       return fg;
