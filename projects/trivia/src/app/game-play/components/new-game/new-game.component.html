@@ -77,7 +77,7 @@
                                     <ng-container >
                                         <div class="checkbox-group" *ngFor="let category of sortedCategories; let i=index">
                                             <mat-checkbox [disableRipple]="true" [value]="category.id" [disabled]="category.requiredForGamePlay"
-                                                [checked]="true" (change)="selectCategory($event,category.id)">
+                                                [checked]="isCategorySelected(category.id,category.requiredForGamePlay)" (change)="selectCategory($event,category.id)">
                                                 {{category.categoryName}}
                                             </mat-checkbox>
                                         </div>
