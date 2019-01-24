@@ -2,7 +2,7 @@ import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/s
 import { User, Category, Question, Game, Friends, Invitation } from 'shared-library/shared/model';
 import {
   user, authInitialized, invitationToken, userDict,
-  gameInvites, userFriends, friendInvitations, userProfileSaveStatus
+  gameInvites, userFriends, friendInvitations, userProfileSaveStatus, account
 } from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
@@ -38,6 +38,7 @@ export interface CoreState {
   newGameId: string;
   userProfileSaveStatus: String;
   applicationSettings: any[];
+  account: Account;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -57,7 +58,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   friendInvitations: friendInvitations,
   newGameId: newGameId,
   userProfileSaveStatus: userProfileSaveStatus,
-  applicationSettings: applicationSettings
+  applicationSettings: applicationSettings,
+  account: account
 };
 
 // Features

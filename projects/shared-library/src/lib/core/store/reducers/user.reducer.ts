@@ -77,18 +77,24 @@ export function friendInvitations(state: any = [], action: ActionWithPayload<Inv
   }
 }
 
-  // user Profile Status
-  export function userProfileSaveStatus(state: any = 'NONE', action: ActionWithPayload<String>): String {
-    switch (action.type) {
-      case UserActions.ADD_USER_PROFILE:
-        return 'IN PROCESS';
-      case UserActions.ADD_USER_PROFILE_SUCCESS:
-        return 'SUCCESS';
-      case UserActions.ADD_USER_INVITATION_SUCCESS:
-        return action.payload;
-      case UserActions.MAKE_FRIEND_SUCCESS:
-        return 'MAKE FRIEND SUCCESS';
-      default:
-        return null;
-    }
+// user Profile Status
+export function userProfileSaveStatus(state: any = 'NONE', action: ActionWithPayload<String>): String {
+  switch (action.type) {
+    case UserActions.ADD_USER_PROFILE:
+      return 'IN PROCESS';
+    case UserActions.ADD_USER_PROFILE_SUCCESS:
+      return 'SUCCESS';
+    case UserActions.ADD_USER_INVITATION_SUCCESS:
+      return action.payload;
+    case UserActions.MAKE_FRIEND_SUCCESS:
+      return 'MAKE FRIEND SUCCESS';
+    default:
+      return null;
   }
+}
+export function account(state: any = null, action: ActionWithPayload<any>) {
+  switch (action.type) {
+    case UserActions.LOAD_ACCOUNT_SUCCESS:
+      return action.payload;
+  }
+}
