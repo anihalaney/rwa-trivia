@@ -53,7 +53,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.actionBarTxt = 'Submit Question';
     this.initDataItems();
     this.question = new Question();
-    this.createForm(this.question);
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        this.createForm(this.question);
+      }
+    })
+    );
+
 
     const questionControl = this.questionForm.get('questionText');
 
@@ -76,7 +83,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnChanges() {
-    if (this.editQuestion) {
+    if (this.editQuestion && this.applicationSettings) {
       this.createForm(this.editQuestion);
       this.categoryIds = this.editQuestion.categoryIds;
       this.categories = this.categories.map(categoryObj => {
@@ -89,6 +96,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.submitBtnTxt = 'RESUBMIT';
       this.actionBarTxt = 'Update Question';
     }
+
+
   }
 
   private initDataItems() {
@@ -105,7 +114,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     const answersFA: FormArray = super.createDefaultForm(question);
 
     this.questionForm = this.fb.group({
-      questionText: [question.questionText, Validators.required],
+      questionText: [question.questionText,
+      Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.question_max_length)])],
       tags: '',
       answers: answersFA,
       ordered: [question.ordered],
