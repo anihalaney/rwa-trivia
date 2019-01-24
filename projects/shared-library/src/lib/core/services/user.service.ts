@@ -20,7 +20,6 @@ export class UserService {
     }
 
     loadUserProfile(user: User): Observable<User> {
-
         return this.dbService.valueChanges('users', user.userId)
             .pipe(map(u => {
                 if (u) {
@@ -37,10 +36,13 @@ export class UserService {
                     delete dbUser.profilePictureUrl;
                     this.dbService.setDoc('users', dbUser.userId, dbUser);
                 }
-
                 return user;
             }),
                 mergeMap(u => this.getUserProfileImage(u)));
+    }
+
+    loadAccounts(user): Observable<any> {
+        return this.dbService.valueChanges('accounts', user.userId);
     }
 
     saveUserProfile(user: User): Observable<any> {

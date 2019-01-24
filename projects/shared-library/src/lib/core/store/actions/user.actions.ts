@@ -30,6 +30,14 @@ export class UserActions {
     };
   }
 
+  static LOAD_ACCOUNT_SUCCESS = 'LOAD_ACCOUNT_SUCCESS';
+  loadAccountsSuccess(account: any): ActionWithPayload<any> {
+    return {
+      type: UserActions.LOAD_ACCOUNT_SUCCESS,
+      payload: account
+    };
+  }
+
   static STORE_INVITATION_TOKEN = 'STORE_INVITATION_TOKEN';
   storeInvitationToken(token: string): ActionWithPayload<string> {
     return {
