@@ -120,6 +120,10 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
                 });
             }
 
+            const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
+            systemStatsCalculations.updateSystemStats('active_games').then((stats) => {
+                console.log(stats);
+            });
         }
     }
 });

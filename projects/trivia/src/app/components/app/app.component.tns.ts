@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions) {
 
-    this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+
 
     this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
@@ -71,9 +71,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }).then(
       () => {
         console.log('firebase.init done');
+        this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
       },
       error => {
         console.log(`firebase.init error: ${error}`);
+        this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
       }
     );
 
@@ -96,7 +98,6 @@ export class AppComponent implements OnInit, OnDestroy {
             }
           } else {
             user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
-            user.iosPushTokens.push(token);
             if (user.iosPushTokens.indexOf(token) === -1) {
               console.log('ios token', token);
               user.iosPushTokens.push(token);

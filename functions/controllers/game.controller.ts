@@ -82,7 +82,7 @@ exports.updateGame = (req, res) => {
                 game.playerQnAs[qIndex] = currentPlayerQnAs;
                 const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
-                if (currentTurnPlayerId !== game.nextTurnPlayerId) {
+                if (game.nextTurnPlayerId.trim().length && currentTurnPlayerId !== game.nextTurnPlayerId) {
                     const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
                     pushNotification
                         .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play', 'Your turn comes now', data)

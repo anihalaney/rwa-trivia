@@ -86,14 +86,10 @@ export class Dashboard {
                         this.theirTurnCount++;
                     }
 
-                    if (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) && game.playerIds.length > 1 &&
-                        !(game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-                        game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
-                        || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ) &&
+                    if (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) &&
                         (game.nextTurnPlayerId === this.user.userId)) {
                         this.twoPlayerCount++;
                     }
-
                     // tslint:disable-next-line:max-line-length
                     if (game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
                         game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
