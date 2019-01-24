@@ -55,16 +55,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     if (changes.timer && changes.timer.firstChange) {
       const elapsedTime = 16 - changes.timer.currentValue;
       this.alpha = (360 * elapsedTime) / 16;
-      // const loader = this.loader.nativeElement, α = 0;
-      // let r = (α * Math.PI / 180)
-      //   , x = Math.sin(r) * 125
-      //   , y = Math.cos(r) * -125
-      //   , mid = (α > 180) ? 1 : 1
-      //   , anim = 'M 1 1 v -125 A 125 125 1 '
-      //     + mid + ' 1 '
-      //     + x + ' '
-      //     + y + ' z';
-      // loader.setAttribute('d', anim);
     }
   }
 }

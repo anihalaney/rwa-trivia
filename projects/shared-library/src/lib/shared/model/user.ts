@@ -1,5 +1,5 @@
 import * as firebase from 'firebase/app';
-
+import { GameOptions } from './game-options';
 export class User {
   id?: string;
   userId: string;
@@ -30,6 +30,7 @@ export class User {
   imageType: string;
   androidPushTokens?: string[];
   iosPushTokens?: string[];
+  lastGamePlayOption?: GameOptions;
 
   constructor(authState?: firebase.User & { name: string }) {
     if (authState) {

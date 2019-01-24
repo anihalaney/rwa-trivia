@@ -273,7 +273,6 @@ export class GameDialog {
       this.timerSub =
         timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
           this.timer--;
-          this.genQuestionComponent.fillTimer();
         },
           null,
           () => {
