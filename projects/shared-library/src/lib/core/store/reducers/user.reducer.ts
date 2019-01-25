@@ -96,5 +96,7 @@ export function account(state: any = null, action: ActionWithPayload<any>) {
   switch (action.type) {
     case UserActions.LOAD_ACCOUNT_SUCCESS:
       return action.payload;
+    default:
+      return state;
   }
 }
