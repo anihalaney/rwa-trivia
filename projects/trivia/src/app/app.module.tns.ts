@@ -20,6 +20,7 @@ import { RouterModule } from '@angular/router';
 import { GameCardComponent } from './components/game-card/game-card.component';
 import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
 import { GameInviteComponent } from './components/game-invite/game-invite.component';
+import { isAndroid } from 'platform';
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -28,8 +29,12 @@ export function firebaseFactory() {
 // registerElement('CardView', () => CardView);
 registerElement('CardView', () => require('nativescript-cardview').CardView);
 registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
-registerElement('Ripple', () => require('nativescript-ripple').Ripple);
 
+if (isAndroid) {
+    registerElement('Ripple', () => require('nativescript-ripple').Ripple);
+} else {
+    registerElement('Ripple', () => require('ui/content-view/content-view').ContentView);
+}
 @NgModule({
   declarations: [
     AppComponent,
