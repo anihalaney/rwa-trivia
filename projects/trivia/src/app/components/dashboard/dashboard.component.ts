@@ -17,15 +17,16 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     gameActions: GameActions,
     userActions: UserActions, windowRef: WindowRef,
     @Inject(PLATFORM_ID) platformId: Object,
+    utils: Utils,
     ngZone: NgZone,
-    private utils: Utils,
     ) {
     super(store,
       questionActions,
       gameActions,
       userActions, windowRef,
       platformId,
-      ngZone);
+      ngZone,
+      utils);
   }
 
 
