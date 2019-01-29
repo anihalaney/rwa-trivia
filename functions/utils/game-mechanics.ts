@@ -2,7 +2,7 @@ import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../p
 import { Utils } from './utils';
 const utils: Utils = new Utils();
 const gameService = require('../services/game.service');
-const documentService = require('../services/document.service');
+const accountService = require('../services/account.service');
 export class GameMechanics {
 
     private gameOptions: GameOptions;
@@ -21,8 +21,7 @@ export class GameMechanics {
 
     createNewGame(): Promise<string> {
 
-        // return documentService.updateAccount(this.userId).then(document => {
-        // });
+        return accountService.updateAccount(this.userId).then(account => {
             if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
                 if (this.gameOptions.rematch) {
                     return this.createFriendUserGame(this.gameOptions.friendId, GameStatus.RESTARTED).then((gameId) => { return gameId });
@@ -38,6 +37,7 @@ export class GameMechanics {
                     this.createSingleAndRandomUserGame(GameStatus.RESTARTED).then((gameId) => { return gameId }) :
                     this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
             }
+        });
     }
 
 
@@ -194,5 +194,11 @@ export class GameMechanics {
             }
         }
         return game;
+    }
+
+    public updateLives(userId) {
+        return accountService.increaseLife(userId).then(account => {
+            return account;
+        });
     }
 }

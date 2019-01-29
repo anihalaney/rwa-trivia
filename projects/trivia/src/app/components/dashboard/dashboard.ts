@@ -1,14 +1,14 @@
 import { Inject, NgZone } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, timer } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import * as gamePlayActions from '../../game-play/store/actions';
-import { User, Game, OpponentType, Invitation } from 'shared-library/shared/model';
-import { WindowRef } from 'shared-library/core/services';
+import { User, Game, OpponentType, Invitation, CalenderConstants } from 'shared-library/shared/model';
+import { WindowRef, Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { PlayerMode, GameStatus } from 'shared-library/shared/model';
+import { PlayerMode, GameStatus, Account } from 'shared-library/shared/model';
 
 export class Dashboard {
     user: User;
@@ -43,14 +43,23 @@ export class Dashboard {
     twoPlayerCount: number;
     theirTurnCount: number;
     waitingForOponentCount: number;
-
+    timerSub: Subscription;
+    utils: Utils;
+    account: Account;
+    public remainingHours: string;
+    public remainingMinutes: string;
+    public remaningSeconds: string;
+    public timeoutLive: string;
 
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
         private gameActions: GameActions,
         private userActions: UserActions, private windowRef: WindowRef,
         @Inject(PLATFORM_ID) private platformId: Object,
-        ngZone: NgZone) {
+        ngZone: NgZone,
+        utils: Utils) {
+
+        this.utils = utils;
         this.ngZone = ngZone;
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -63,7 +72,12 @@ export class Dashboard {
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
-            console.log('account final' , account);
+            console.log('account final', account);
+            this.account = account;
+            if (this.timerSub) {
+                this.timerSub.unsubscribe();
+            }
+            this.gameLives();
         }));
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subs.push(this.activeGames$.subscribe(games => {
@@ -84,7 +98,7 @@ export class Dashboard {
                         this.singlePlayerCount++;
                     }
 
-                    if (game.nextTurnPlayerId !== this.user.userId &&  game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q) {
+                    if (game.nextTurnPlayerId !== this.user.userId && game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q) {
                         this.theirTurnCount++;
                     }
 
@@ -182,5 +196,41 @@ export class Dashboard {
 
             }
         }
+    }
+
+    gameLives() {
+        if (this.account) {
+            if (this.account.lives < 4) {
+                console.log('lives reduce');
+                this.timerSub = timer(1000, 1000).subscribe(t => {
+                    const diff = this.utils.getTimeDifference(this.account.livesUpdatedAt);
+                    const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
+                    const second = Math.floor(diff / 1000) % 60;
+                    console.log('minute called', minute);
+                    console.log('diff called', diff);
+                    if (this.remaningSeconds === '00' && this.remaningSeconds === '00') {
+                        console.log('close');
+                        this.timerSub.unsubscribe();
+                    }
+
+                    if (minute > 0) {
+                        this.remainingMinutes = (this.utils.convertIntoDoubleDigit(31 - minute));
+                    } else {
+                        this.remainingMinutes = (this.utils.convertIntoDoubleDigit(31));
+                    }
+                    if (second > 0) {
+                        this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
+                    } else {
+                        this.remaningSeconds = (this.utils.convertIntoDoubleDigit(59 - second));
+                    }
+                    // tslint:disable-next-line:max-line-length
+                    this.timeoutLive = '(' + String(this.account.lives) + ')' + (this.remainingMinutes) + ':' + (this.remaningSeconds);
+                });
+            } else {
+                console.log('all lives exist');
+                this.timeoutLive = '(' + String(this.account.lives) + ')';
+            }
+        }
+
     }
 }

@@ -299,3 +299,13 @@ exports.createSocialImage = (req, res) => {
     });
 };
 
+
+exports.updateLives = (req, res) => {
+    const userId = req.params.userId;
+    if (!userId) {
+        res.status(400).send('Bad Request');
+    }
+    const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
+    return gameMechanics.updateLives(userId);
+    // res.status(403).send('API called >> ' + req.params.userId);
+};

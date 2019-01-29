@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import { PlayerMode, GameStatus } from 'shared-library/shared/model';
-import { WindowRef } from 'shared-library/core/services';
+import { WindowRef, Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -23,6 +23,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
     userActions: UserActions, windowRef: WindowRef,
     @Inject(PLATFORM_ID) platformId: Object,
     ngZone: NgZone,
+    utils: Utils,
     private routerExtension: RouterExtensions,
   ) {
 
@@ -31,7 +32,8 @@ export class DashboardComponent extends Dashboard implements OnInit {
       gameActions,
       userActions, windowRef,
       platformId,
-      ngZone);
+      ngZone,
+      utils);
     this.gameStatus = GameStatus;
 
   }
