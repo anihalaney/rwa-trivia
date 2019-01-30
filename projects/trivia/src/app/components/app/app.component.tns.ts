@@ -1,6 +1,5 @@
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
-import * as common from 'nativescript-plugin-firebase/firebase-common';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -19,6 +18,7 @@ import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
+import { AuthenticationProvider } from 'shared-library/core/auth/authentication.provider';
 
 @Component({
   selector: 'app-root',
@@ -38,8 +38,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private utils: Utils,
     private userActions: UserActions,
     private firebaseAuthService: FirebaseAuthService,
-    private applicationSettingsAction: ApplicationSettingsActions) {
-
+    private applicationSettingsAction: ApplicationSettingsActions,
+    public authProvider: AuthenticationProvider) {
 
 
     this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
@@ -75,7 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
       },
       error => {
         console.log(`firebase.init error: ${error}`);
-        this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+        //  this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
       }
     );
 
@@ -87,7 +87,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
-      if (user) {
+      if (user && user !== null && !user.loggedOut) {
         firebase.getCurrentPushToken().then((token) => {
           if (isAndroid) {
             user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];

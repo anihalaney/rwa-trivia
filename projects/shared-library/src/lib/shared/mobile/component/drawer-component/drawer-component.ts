@@ -2,8 +2,11 @@ import { Component, EventEmitter, OnInit, Output, ViewContainerRef } from '@angu
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import * as app from 'application';
+import * as firebase from 'nativescript-plugin-firebase';
+import { isAndroid } from 'tns-core-modules/platform';
 import { Store, select } from '@ngrx/store';
 import { User } from './../../../../shared/model';
+import { UserActions } from '../../../../core/store/actions';
 import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
 import { Utils } from './../../../../core/services';
@@ -34,6 +37,7 @@ export class DrawerComponent implements OnInit {
         private store: Store<CoreState>,
         public authProvider: AuthenticationProvider,
         private utils: Utils,
+        private userActions: UserActions,
         private modal: ModalDialogService,
         private vcRef: ViewContainerRef,
         private router: Router
@@ -63,8 +67,18 @@ export class DrawerComponent implements OnInit {
     }
     ngOnInit() {
         this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.user = user;
-            this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
+            if (user) {
+                this.user = user;
+                this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
+                if (user.loggedOut) {
+                    this.activeMenu = 'Home';
+                    this.closeDrawer();
+                    setTimeout(() => {
+                        this.authProvider.logout();
+                        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+                    }, 1000);
+                }
+            }
         });
     }
 
@@ -89,10 +103,25 @@ export class DrawerComponent implements OnInit {
     }
 
     logout() {
-        this.activeMenu = 'Home';
-        this.authProvider.logout();
-        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
-        this.closeDrawer();
+        firebase.getCurrentPushToken().then((token) => {
+            if (isAndroid) {
+                if (this.user.androidPushTokens && this.user.androidPushTokens.length > 0) {
+                    this.user.androidPushTokens.splice(this.user.androidPushTokens.indexOf(token), 1);
+                    this.updateUser();
+                }
+            } else {
+                if (this.user.iosPushTokens && this.user.iosPushTokens.length > 0) {
+                    this.user.iosPushTokens.splice(this.user.iosPushTokens.indexOf(token), 1);
+                    this.updateUser();
+                }
+            }
+
+        });
+    }
+
+    updateUser() {
+        this.user.loggedOut = true;
+        this.store.dispatch(this.userActions.updateUser(this.user));
     }
 
     recentGame() {
