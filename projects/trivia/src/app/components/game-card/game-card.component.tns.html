@@ -1,4 +1,3 @@
-<Ripple [nsRouterLink]="['/game-play', game.gameId]" clearHistory="true">
     <StackLayout *ngIf="cardType == 'opponent'" class="mobile Roboto-Regular">
         <GridLayout rows="*" columns="auto,auto,*">
             <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
@@ -33,7 +32,7 @@
 
             </StackLayout>
         </GridLayout>
-        <Button ripple rippleColor="#f1f5f7" text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center"
+        <Button text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center"
             padding="10" class="btn-wait-opp"></Button>
     </StackLayout>
 
@@ -208,4 +207,3 @@
             </StackLayout>
         </GridLayout>
     </StackLayout>
-</Ripple>
