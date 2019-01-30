@@ -17,8 +17,14 @@ service cloud.firestore {
   
   match /databases/{database}/documents {
 
-    match /users/{userId} {
-          allow read, write: if isUserAuthenticated(userId);          
+   match /users/{userId} {
+    // only allow creating user document when no roles specified
+    // only allow updating user document when roles are not altered
+    // upading of user happen via API and rules have no effect on API    
+          allow read: if isUserAuthenticated(userId); 
+          allow create: if isUserAuthenticated(userId) && !request.resource.data.keys().hasAny(['roles']);         
+    			allow update: if isUserAuthenticated(userId) && 
+          (resource.data.roles == request.resource.data.roles);
     }
     
 		match /{document=**} {
@@ -119,6 +125,12 @@ service cloud.firestore {
       }      
     }
     
+    match /accounts/{userId} {    
+      //only allow login user to read and get it
+      // logged in user does not have rights to modify this document
+      // document can only be modified by API , triggers
+        allow read,get:  if isUserAuthenticated(userId);          
+    }    
     
   }
 }
