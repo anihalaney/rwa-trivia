@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
-import { User, RouterStateUrl, Game, Friends, Invitation } from '../../../shared/model';
+import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../../shared/model';
 import { UserService } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take } from 'rxjs/operators';
 import { empty } from 'rxjs';
@@ -21,6 +21,15 @@ export class UserEffects {
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
             switchMap((user: User) => this.svc.loadUserProfile(user)),
             map((user: User) => this.userActions.addUserWithRoles(user)));
+
+
+    // Load users based on url
+    @Effect()
+    loadUserAccounts$ = this.actions$
+        .pipe(ofType(UserActions.LOGIN_SUCCESS))
+        .pipe(map((action: ActionWithPayload<User>) => action.payload),
+            switchMap((account: User) => this.svc.loadAccounts(account)),
+            map((account: Account) => this.userActions.loadAccountsSuccess(account)));
 
 
     @Effect()
