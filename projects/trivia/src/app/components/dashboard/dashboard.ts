@@ -62,6 +62,9 @@ export class Dashboard {
             this.store.dispatch(this.userActions.loadGameInvites(user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
+        this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+            console.log('account final' , account);
+        }));
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subs.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
