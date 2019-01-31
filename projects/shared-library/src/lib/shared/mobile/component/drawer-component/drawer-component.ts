@@ -70,14 +70,6 @@ export class DrawerComponent implements OnInit {
             if (user) {
                 this.user = user;
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
-                if (user.loggedOut) {
-                    this.activeMenu = 'Home';
-                    this.closeDrawer();
-                    setTimeout(() => {
-                        this.authProvider.logout();
-                        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
-                    }, 1000);
-                }
             }
         });
     }
@@ -104,6 +96,7 @@ export class DrawerComponent implements OnInit {
 
     logout() {
         firebase.getCurrentPushToken().then((token) => {
+            delete this.user.idToken;
             if (isAndroid) {
                 if (this.user.androidPushTokens && this.user.androidPushTokens.length > 0) {
                     this.user.androidPushTokens.splice(this.user.androidPushTokens.indexOf(token), 1);
@@ -115,12 +108,13 @@ export class DrawerComponent implements OnInit {
                     this.updateUser();
                 }
             }
-
+            this.activeMenu = 'Home';
+            this.closeDrawer();
+            this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
         });
     }
 
     updateUser() {
-        this.user.loggedOut = true;
         this.store.dispatch(this.userActions.updateUser(this.user));
     }
 
