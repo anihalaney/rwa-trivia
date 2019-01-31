@@ -46,9 +46,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     }
   }
   fillTimer() {
-    console.log('time out called>> ');
     if (!(this.answeredIndex !== null && this.answeredIndex !== undefined)) {
-      console.log('time out called');
       this.progressValue = 100;
     }
 
