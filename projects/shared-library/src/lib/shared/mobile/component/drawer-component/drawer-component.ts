@@ -14,6 +14,7 @@ import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { Observable } from 'rxjs';
 import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
     moduleId: module.id,
@@ -32,6 +33,8 @@ export class DrawerComponent implements OnInit {
     showSelectCategory: Boolean = true;
     activeMenu: String = 'Home';
     version: string;
+    logOut: boolean;
+    pushToken: string;
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
@@ -66,10 +69,35 @@ export class DrawerComponent implements OnInit {
         });
     }
     ngOnInit() {
-        this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
-            if (user) {
-                this.user = user;
+        this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+            if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
+                this.user = user;
+                if (!this.pushToken) {
+                    firebase.getCurrentPushToken().then((token) => {
+                        this.pushToken = token;
+                        if (isAndroid) {
+                            user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
+                            if (user.androidPushTokens.indexOf(token) === -1) {
+                                console.log('Android token', token);
+                                user.androidPushTokens.push(token);
+                                this.updateUser(user);
+                            }
+                        } else {
+                            user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
+                            if (user.iosPushTokens.indexOf(token) === -1) {
+                                console.log('ios token', token);
+                                user.iosPushTokens.push(token);
+                                this.updateUser(user);
+                            }
+                        }
+                        this.user = user;
+                    });
+                }
+            } else if (this.logOut) {
+                setTimeout(() => {
+                    this.resetValues();
+                }, 2000);
             }
         });
     }
@@ -95,27 +123,30 @@ export class DrawerComponent implements OnInit {
     }
 
     logout() {
-        firebase.getCurrentPushToken().then((token) => {
-            delete this.user.idToken;
-            if (isAndroid) {
-                if (this.user.androidPushTokens && this.user.androidPushTokens.length > 0) {
-                    this.user.androidPushTokens.splice(this.user.androidPushTokens.indexOf(token), 1);
-                    this.updateUser();
-                }
-            } else {
-                if (this.user.iosPushTokens && this.user.iosPushTokens.length > 0) {
-                    this.user.iosPushTokens.splice(this.user.iosPushTokens.indexOf(token), 1);
-                    this.updateUser();
-                }
-            }
-            this.activeMenu = 'Home';
-            this.closeDrawer();
-            this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
-        });
+        this.logOut = true;
+        if (isAndroid && this.user.androidPushTokens && this.user.androidPushTokens.indexOf(this.pushToken) > -1) {
+            this.user.androidPushTokens.splice(this.user.androidPushTokens.indexOf(this.pushToken), 1);
+            this.updateUser(this.user);
+        } else if (this.user.iosPushTokens && this.user.iosPushTokens.indexOf(this.pushToken) > -1) {
+            this.user.iosPushTokens.splice(this.user.iosPushTokens.indexOf(this.pushToken), 1);
+            this.updateUser(this.user);
+        } else {
+            this.resetValues();
+        }
+
+        this.activeMenu = 'Home';
+        this.closeDrawer();
+        this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
     }
 
-    updateUser() {
-        this.store.dispatch(this.userActions.updateUser(this.user));
+    resetValues() {
+        this.logOut = false;
+        this.pushToken = undefined;
+        this.authProvider.logout();
+    }
+
+    updateUser(user: User) {
+        this.store.dispatch(this.userActions.updateUser(user));
     }
 
     recentGame() {

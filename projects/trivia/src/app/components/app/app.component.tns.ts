@@ -85,38 +85,38 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+    // this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
 
-      if (user && user.idToken) {
-        firebase.getCurrentPushToken().then((token) => {
-          if (isAndroid) {
-            user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
-            if (user.androidPushTokens.indexOf(token) === -1) {
-              console.log('Android token', token);
-              user.androidPushTokens.push(token);
-              this.updateUser(user);
-            }
-          } else {
-            user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
-            if (user.iosPushTokens.indexOf(token) === -1) {
-              console.log('ios token', token);
-              user.iosPushTokens.push(token);
-              this.updateUser(user);
-            }
-          }
+    //   if (user && user.idToken) {
+    //     firebase.getCurrentPushToken().then((token) => {
+    //       if (isAndroid) {
+    //         user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
+    //         if (user.androidPushTokens.indexOf(token) === -1) {
+    //           console.log('Android token', token);
+    //           user.androidPushTokens.push(token);
+    //           this.updateUser(user);
+    //         }
+    //       } else {
+    //         user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
+    //         if (user.iosPushTokens.indexOf(token) === -1) {
+    //           console.log('ios token', token);
+    //           user.iosPushTokens.push(token);
+    //           this.updateUser(user);
+    //         }
+    //       }
 
-        });
-      } else {
-        this.authProvider.logout();
-      }
-    });
+    //     });
+    //   } else {
+    //     this.authProvider.logout();
+    //   }
+    // });
   }
 
 
 
-  updateUser(user: User) {
-    this.store.dispatch(this.userActions.updateUser(user));
-  }
+  // updateUser(user: User) {
+  //   this.store.dispatch(this.userActions.updateUser(user));
+  // }
 
   ngOnDestroy() {
     this.utils.unsubscribe([this.sub3, this.sub4, this.sub5]);
