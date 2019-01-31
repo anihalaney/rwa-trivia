@@ -21,11 +21,6 @@ export class UserService {
 
     loadUserProfile(user: User): Observable<User> {
 
-        if (user) {
-            user.loggedOut = false;
-            this.updateUser(user);
-        }
-
         return this.dbService.valueChanges('users', user.userId)
             .pipe(map(u => {
                 if (u) {
@@ -147,6 +142,6 @@ export class UserService {
 
     updateUser(user: User) {
         const dbUser = Object.assign({}, user);
-        this.dbService.updateDoc('users', dbUser.userId, dbUser);
+        this.dbService.setDoc('users', dbUser.userId, dbUser);
     }
 }

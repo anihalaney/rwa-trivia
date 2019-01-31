@@ -75,7 +75,7 @@ export class AppComponent implements OnInit, OnDestroy {
       },
       error => {
         console.log(`firebase.init error: ${error}`);
-        //  this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
+        this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
       }
     );
 
@@ -85,9 +85,9 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
 
-      if (user && user !== null && !user.loggedOut) {
+      if (user && user.idToken) {
         firebase.getCurrentPushToken().then((token) => {
           if (isAndroid) {
             user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
@@ -106,6 +106,8 @@ export class AppComponent implements OnInit, OnDestroy {
           }
 
         });
+      } else {
+        this.authProvider.logout();
       }
     });
   }
