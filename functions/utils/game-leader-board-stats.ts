@@ -1,9 +1,10 @@
 const leaderBoardGameService = require('../services/game.service');
 const leaderBoardUserService = require('../services/user.service');
+const leaderBoardAccountService = require('../services/account.service');
 const leaderBoardService = require('../services/leaderboard.service');
 
 import {
-    Game, GameStatus, GameOptions, PlayerMode, OpponentType, Stat, User, UserStats,
+    Game, User, Account,
     LeaderBoardUser, UserStatConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 
@@ -36,6 +37,7 @@ export class GameLeaderBoardStats {
     public getGameUsers(game: Game): Promise<any> {
         const userPromises = [];
         Object.keys(game.stats).map((userId) => {
+            console.log('userId', userId);
             userPromises.push(this.calculateUserStat(userId, game, game.gameOptions.categoryIds));
         });
 
@@ -53,49 +55,50 @@ export class GameLeaderBoardStats {
     private calculateUserStat(userId: string, game: Game, categoryIds: number[]): Promise<string> {
         const score = game.stats[userId].score;
         const avgAnsTime = game.stats[userId].avgAnsTime;
-        return leaderBoardUserService.getUserById(userId).then(userData => {
-            const user: User = userData.data();
-            if (user && user.userId) {
+        return leaderBoardAccountService.getAccountById(userId).then(accountData => {
+            let account: Account = accountData.data();
+            console.log('account', account);
+            if (account && account.id) {
                 categoryIds.map((id) => {
-                    user.stats = (user.stats) ? user.stats : new UserStats();
-                    user.stats.leaderBoardStats[id] = (user.stats.leaderBoardStats[id]) ?
-                        user.stats.leaderBoardStats[id] + score : score;
+                    account = (account) ? account : new Account();
+                    account.leaderBoardStats[id] = (account.leaderBoardStats[id]) ?
+                        account.leaderBoardStats[id] + score : score;
                 });
-                user.stats['leaderBoardStats'] = { ...user.stats.leaderBoardStats };
-                user.stats.gamePlayed = (user.stats.gamePlayed) ? user.stats.gamePlayed + 1 : 1;
-                user.stats.categories = Object.keys(user.stats.leaderBoardStats).length;
+                account['leaderBoardStats'] = { ...account.leaderBoardStats };
+                account.gamePlayed = (account.gamePlayed) ? account.gamePlayed + 1 : 1;
+                account.categories = Object.keys(account.leaderBoardStats).length;
                 if (game.winnerPlayerId) {
                     (game.winnerPlayerId === userId) ?
-                        user.stats.wins = (user.stats.wins) ? user.stats.wins + 1 : 1 :
-                        user.stats.losses = (user.stats.losses) ? user.stats.losses + 1 : 1;
+                        account.wins = (account.wins) ? account.wins + 1 : 1 :
+                        account.losses = (account.losses) ? account.losses + 1 : 1;
                 }
-                user.stats.badges = (user.stats.badges) ? user.stats.badges + score : score;
-                user.stats.avgAnsTime = (user.stats.avgAnsTime) ? Math.floor((user.stats.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
-                user['stats'] = { ...user.stats };
-                return this.updateUser({ ...user }).then((id) => {
-                    return `User ${userId} Stat updated`;
+                account.badges = (account.badges) ? account.badges + score : score;
+                account.avgAnsTime = (account.avgAnsTime) ? Math.floor((account.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
+                console.log('account', account);
+                return this.updateAccount({ ...account }).then((id) => {
+                    return `Account ${userId} Stat updated`;
                 });
             } else {
-                return `User ${userId} Stat updated`;
+                return `Account ${userId} Stat updated`;
             }
         });
     }
 
-    private updateUser(dbUser: any): Promise<string> {
-        return leaderBoardUserService.setUser(dbUser).then(ref => {
-            return dbUser.userId;
+    private updateAccount(dbAccount: any): Promise<string> {
+        return leaderBoardAccountService.setAccount(dbAccount).then(ref => {
+            return dbAccount.id;
         });
     }
 
 
     public calculateGameLeaderBoardStat(): Promise<string> {
 
-        return leaderBoardUserService.getUsers().then(users => {
+        return leaderBoardAccountService.getAccounts().then(accounts => {
             this.getLeaderBoardStat().then((lbsStats) => {
-                users.docs.map(user => {
-                    const userObj: User = user.data();
-                    //   console.log('userId', userObj.userId);
-                    lbsStats = this.calculateLeaderBoardStat(userObj, lbsStats);
+                accounts.docs.map(account => {
+                    const accountObj: Account = account.data();
+                    //   console.log('userId', accountObj.id);
+                    lbsStats = this.calculateLeaderBoardStat(accountObj, lbsStats);
                     //   console.log('lbsStats', lbsStats);
                 });
                 return this.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
@@ -110,25 +113,25 @@ export class GameLeaderBoardStats {
         return leaderBoardService.getLeaderBoardStats().then(lbs => (lbs.data()) ? lbs.data() : {});
     }
 
-    public calculateLeaderBoardStat(userObj: User, lbsStats: { [key: string]: Array<LeaderBoardUser> })
+    public calculateLeaderBoardStat(accountObj: Account, lbsStats: { [key: string]: Array<LeaderBoardUser> })
         : { [key: string]: Array<LeaderBoardUser> } {
-        if (userObj && userObj.userId && userObj.stats) {
-            const leaderBoardStats = userObj.stats.leaderBoardStats;
+        if (accountObj && accountObj.id) {
+            const leaderBoardStats = accountObj.leaderBoardStats;
 
             if (leaderBoardStats) {
                 Object.keys(leaderBoardStats).map((id) => {
                     const leaderBoardUsers: Array<LeaderBoardUser> = (lbsStats[id]) ? lbsStats[id] : [];
                     const filteredUsers: Array<LeaderBoardUser> =
-                        leaderBoardUsers.filter((lbUser) => lbUser.userId === userObj.userId);
+                        leaderBoardUsers.filter((lbUser) => lbUser.userId === accountObj.id);
                     //  console.log('filteredUsers', filteredUsers);
 
                     const leaderBoardUser: LeaderBoardUser = (filteredUsers.length > 0) ?
                         filteredUsers[0] : new LeaderBoardUser();
-                    leaderBoardUser.userId = userObj.userId;
+                    leaderBoardUser.userId = accountObj.id;
                     leaderBoardUser.score = leaderBoardStats[id];
                     const leaderBoardUserObj = { ...leaderBoardUser };
                     (filteredUsers.length > 0) ?
-                        leaderBoardUsers[leaderBoardUsers.findIndex((fUser) => fUser.userId === userObj.userId)] = leaderBoardUserObj
+                        leaderBoardUsers[leaderBoardUsers.findIndex((fUser) => fUser.userId === accountObj.id)] = leaderBoardUserObj
                         : leaderBoardUsers.push(leaderBoardUserObj);
 
                     leaderBoardUsers.sort((a, b) => {
@@ -148,6 +151,12 @@ export class GameLeaderBoardStats {
     public updateLeaderBoard(leaderBoardStat: any): Promise<string> {
         return leaderBoardService.setLeaderBoardStats(leaderBoardStat).then(ref => {
             return leaderBoardStat;
+        });
+    }
+
+    public getAccountById(id: string): Promise<any> {
+        return leaderBoardAccountService.getAccountById(id).then((account) => {
+            return account.data();
         });
     }
 
