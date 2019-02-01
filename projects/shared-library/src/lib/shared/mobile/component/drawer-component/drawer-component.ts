@@ -95,6 +95,7 @@ export class DrawerComponent implements OnInit {
                     });
                 }
             } else if (this.logOut) {
+                 /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
                 setTimeout(() => {
                     this.resetValues();
                 }, 2000);
