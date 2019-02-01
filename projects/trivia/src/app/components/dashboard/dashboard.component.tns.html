@@ -2,8 +2,12 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2">
     <ScrollView>
         <StackLayout>        
+                
             <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
-                <Button row="0" col="0" ripple rippleColor="#fcecee" text="START A NEW GAME" class="btn-red Roboto-Medium" height="70" margin="10" (tap)="startNewGame()"></Button>
+               
+                <Label text="START A NEW GAME {{timeoutLive}}" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true"></Label>
+
+                <!-- <Button row="0" col="0" [enabled]="!gamePlayBtnDisabled" ripple rippleColor="#fcecee" text="START A NEW GAME {{timeoutLive}}" class="btn-red Roboto-Medium" height="70" margin="10" (tap)="startNewGame()"></Button> -->
                 <StackLayout row="1" col="0" *ngIf="user && (twoPlayerCount > 0 || singlePlayerCount > 0)" iosOverflowSafeArea="false">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                         <GridLayout rows="auto, auto" columns="*">

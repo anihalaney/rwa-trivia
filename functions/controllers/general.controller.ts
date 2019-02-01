@@ -3,6 +3,7 @@ const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
 const generalUserService = require('../services/user.service');
 const generalAccountService = require('../services/account.service');
+
 const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
@@ -306,5 +307,31 @@ exports.migrateUserStatToAccounts = (req, res) => {
 };
 
 
+/**
+ * Add default 4 lives to each account
+ * return status
+ */
+exports.addDefaultLives = (req, res) => {
+    const migrationPromises = [];
+    generalUserService.getUsers().then(users => {
+        users.docs.map(user => {
+            const userObj: User = user.data();
+            if (userObj && userObj.userId) {
+                const accountObj: Account =  new Account();
+                accountObj.id = userObj.userId;
+                migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
+            }
+        });
+        Promise.all(migrationPromises).then((migrationResults) => {
+            res.send(migrationResults);
+        })
+            .catch((e) => {
+                res.send(e);
+            });
+    });
+};
 
 
+exports.addLives = (req, res) => {
+    res.send(generalAccountService.addLives());
+};

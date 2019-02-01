@@ -9,6 +9,7 @@ import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
+const generalAccountService = require('../services/account.service');
 const utils: Utils = new Utils();
 const pushNotification: PushNotification = new PushNotification();
 const fs = require('fs');
@@ -35,11 +36,21 @@ exports.createGame = (req, res) => {
         return;
     }
 
-    const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId);
-    gameMechanics.createNewGame().then((gameId) => {
-        console.log('gameId', gameId);
-        res.send({ gameId: gameId });
+    generalAccountService.getAccountById(userId).then((account) => {
+        // console.log('user account id', );
+        account = account.data();
+        if (account.lives > 0) {
+            const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId);
+            gameMechanics.createNewGame().then((gameId) => {
+                console.log('gameId', gameId);
+                res.send({ gameId: gameId });
+            });
+        } else {
+            res.status(403).send('Sorry, don\'t have enough life.');
+            return;
+        }
     });
+
 };
 
 
@@ -297,15 +308,4 @@ exports.createSocialImage = (req, res) => {
         res.setHeader('content-type', 'image/png');
         res.send(social_url)
     });
-};
-
-
-exports.updateLives = (req, res) => {
-    const userId = req.params.userId;
-    if (!userId) {
-        res.status(400).send('Bad Request');
-    }
-    const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
-    return gameMechanics.updateLives(userId);
-    // res.status(403).send('API called >> ' + req.params.userId);
 };

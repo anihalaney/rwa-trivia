@@ -7,7 +7,7 @@ import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
 import { Utils } from '../utils/utils';
 const utils: Utils = new Utils();
-
+const generalAccountService = require('../services/account.service');
 /**
  * getUserById
  * return user
@@ -105,3 +105,14 @@ function setUser(user, res) {
         res.send({ 'status': 'Profile Data is saved !!' });
     });
 }
+
+exports.updateLives = (req, res) => {
+    const userId = req.params.userId;
+    if (!userId) {
+        res.status(400).send('Bad Request');
+    }
+    return generalAccountService.updateLives(userId).then((ref) => {
+        res.send({ 'status': 'Lives added successfully !!' });
+    });
+
+};
