@@ -18,7 +18,7 @@ import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
-import { AuthenticationProvider } from 'shared-library/core/auth/authentication.provider';
+
 
 @Component({
   selector: 'app-root',
@@ -38,8 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private utils: Utils,
     private userActions: UserActions,
     private firebaseAuthService: FirebaseAuthService,
-    private applicationSettingsAction: ApplicationSettingsActions,
-    public authProvider: AuthenticationProvider) {
+    private applicationSettingsAction: ApplicationSettingsActions) {
 
 
     this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
