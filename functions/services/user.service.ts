@@ -45,6 +45,20 @@ exports.getUsers = (): Promise<any> => {
 };
 
 /**
+ * getUsersByEmail
+ * return users
+ */
+exports.getUsersByEmail = (obj: any): Promise<any> => {
+    return userFireStoreClient.collection('users')
+        .where('email', '==', obj.email).get()
+        .then(users => { return users })
+        .catch(error => {
+            console.error(error);
+            return error;
+        });
+};
+
+/**
  * Add/Update Authenticated Users
  * return ref
  */
