@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, NgZone } from '@angular/core';
+import { Component, OnInit, Inject, NgZone } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -11,7 +11,7 @@ import { Dashboard } from './dashboard';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss', './dashboard.scss']
 })
-export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
+export class DashboardComponent extends Dashboard implements OnInit {
   constructor(store: Store<AppState>,
     questionActions: QuestionActions,
     gameActions: GameActions,
@@ -78,11 +78,6 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       }
     }
   }
-
-  ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
-  }
-
 }
 
 

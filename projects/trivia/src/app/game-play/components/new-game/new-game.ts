@@ -30,6 +30,8 @@ export class NewGame {
   friendUserId: string;
   loaderStatus = false;
   errMsg: string;
+  life: number;
+  gameErrorMsg: String = 'Sorry, don\'t have enough life.';
 
   constructor(
     public store: Store<AppState>,

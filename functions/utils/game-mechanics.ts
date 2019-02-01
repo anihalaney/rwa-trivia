@@ -196,9 +196,4 @@ export class GameMechanics {
         return game;
     }
 
-    public updateLives(userId) {
-        return accountService.increaseLife(userId).then(account => {
-            return account;
-        });
-    }
 }

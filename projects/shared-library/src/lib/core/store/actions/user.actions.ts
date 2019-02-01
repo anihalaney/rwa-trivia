@@ -182,4 +182,20 @@ export class UserActions {
       payload: null
     };
   }
+
+  static ADD_USER_LIVES = 'UPDATE_ADD_USER_LIVESUSER';
+  addUserLives(userId: String): ActionWithPayload<String> {
+    return {
+      type: UserActions.ADD_USER_LIVES,
+      payload: userId
+    };
+  }
+
+  static ADD_USER_LIVES_SUCCESS = 'ADD_USER_LIVES_SUCCESS';
+  addUserLivesSuccess() {
+    return {
+      type: UserActions.ADD_USER_LIVES_SUCCESS,
+      payload: null
+    };
+  }
 }

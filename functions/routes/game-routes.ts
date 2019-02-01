@@ -14,6 +14,5 @@ router.get('/update/all', gameAuth.adminOnly, gameController.updateAllGame);
 router.post('/turn/scheduler', gameAuth.authTokenOnly, gameController.changeGameTurn);
 router.get('/social/:userId/:socialId', gameController.createSocialContent);
 router.get('/social-image/:userId/:socialId', gameController.createSocialImage);
-router.get('/update-lives/:userId', gameController.updateLives);
 
 module.exports = router;
