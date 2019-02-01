@@ -189,7 +189,7 @@ exports.checkGameOver = (req, res) => {
                 const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
                 pushNotification
                     .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
-                        'You have 30 minutes left to play the game', data)
+                        'You have 32 minutes remaining to play your turn !', data)
                     .then((result) => {
                         console.log('result', result);
                     }).catch((err) => {
@@ -200,6 +200,11 @@ exports.checkGameOver = (req, res) => {
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
                 game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
+                game.GameStatus = GameStatus.TIME_EXPIRED;
+                if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId);
+                }
                 const dbGame = game.getDbModel();
                 gameControllerService.updateGame(dbGame).then((ref) => {
                     console.log('updated game', dbGame.id);
