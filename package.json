@@ -112,7 +112,6 @@
     "nativescript-ui-autocomplete": "^3.11.0",
     "nativescript-ui-listview": "^5.0.1",
     "nativescript-ui-sidedrawer": "^5.1.0",
-    "nativescript-ripple": "^2.1.0",
     "ngx-img-cropper": "^0.11.0",
     "ngx-lazy-load-images": "^1.3.1",
     "ngx-papaparse": "^3.0.2",

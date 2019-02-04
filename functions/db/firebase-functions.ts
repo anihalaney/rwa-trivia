@@ -155,11 +155,15 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate(
         const userObj: User = afterEventData;
         const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
         gameLeaderBoardStats.getLeaderBoardStat().then((lbsStats) => {
-            lbsStats = gameLeaderBoardStats.calculateLeaderBoardStat(userObj, lbsStats);
-            console.log('lbsStats', lbsStats);
-            gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
-                // console.log('leaderBoardStat', leaderBoardStat);
+            gameLeaderBoardStats.getAccountById(userObj.userId).then((dbAccount) => {
+                const account: Account = dbAccount;
+                lbsStats = gameLeaderBoardStats.calculateLeaderBoardStat(account, lbsStats);
+                console.log('lbsStats', lbsStats);
+                gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
+                    // console.log('leaderBoardStat', leaderBoardStat);
+                });
             });
+
         });
     }
 

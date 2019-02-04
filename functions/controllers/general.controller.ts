@@ -2,6 +2,7 @@
 const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
 const generalUserService = require('../services/user.service');
+const generalAccountService = require('../services/account.service');
 const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
@@ -9,11 +10,10 @@ import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
-import { RSSFeedConstants, Blog, User, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { RSSFeedConstants, Blog, User, profileSettingsConstants, Account } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
 import { Utils } from '../utils/utils';
-import { PushNotification } from '../utils/push-notifications';
 const utils: Utils = new Utils();
 
 /**
@@ -279,5 +279,32 @@ exports.generateAllUsersProfileImages = (req, res) => {
             res.send(status);
         });
 };
+
+
+/**
+ * migrateUserStatToAccounts
+ * return status
+ */
+exports.migrateUserStatToAccounts = (req, res) => {
+    const migrationPromises = [];
+    generalUserService.getUsers().then(users => {
+        users.docs.map(user => {
+            const userObj: User = user.data();
+            if (userObj && userObj.userId) {
+                const accountObj: Account = (userObj.stats) ? userObj.stats : new Account();
+                accountObj.id = userObj.userId;
+                migrationPromises.push(generalAccountService.setAccount({ ...accountObj }));
+            }
+        });
+        Promise.all(migrationPromises).then((migrationResults) => {
+            res.send(migrationResults);
+        })
+            .catch((e) => {
+                res.send(e);
+            });
+    });
+};
+
+
 
 

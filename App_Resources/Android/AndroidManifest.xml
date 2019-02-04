@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="__PACKAGE__"
+<<<<<<< HEAD
 	android:versionCode="10"
+=======
+	android:versionCode="11"
+>>>>>>> 3755a29656edf3965085fea793e611193631cefb
 	android:versionName="1.0">
 
 	<supports-screens

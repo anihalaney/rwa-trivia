@@ -1,7 +1,9 @@
 const friendService = require('../services/friend.service');
 const friendUserService = require('../services/user.service');
-import { Invitation, Friends, FriendsMetadata, friendInvitationConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { Invitation, Friends, FriendsMetadata, friendInvitationConstants, User, pushNotificationRouteConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { Observable } from 'rxjs';
+import { PushNotification } from '../utils/push-notifications';
+const pushNotification: PushNotification = new PushNotification();
 
 export class MakeFriends {
 
@@ -105,10 +107,46 @@ export class MakeFriends {
     }
 
     createInvitation(dbInvitation: any): Promise<string> {
+        this.sendNotification(dbInvitation);
         return friendService.createInvitation(dbInvitation)
             .then(ref => {
                 dbInvitation.id = ref.id;
                 return friendService.updateInvitation(dbInvitation).then(dRef => `Invitation is sent on ${dbInvitation.email}`);
+            });
+    }
+
+    sendNotification(dbInvitation: any) {
+        friendUserService.getUsersByEmail(dbInvitation)
+            .then(snapshots => {
+
+                if (snapshots.empty) {
+                    console.log('user does not exist');
+                } else {
+                    const snapshot = snapshots.docs[0];
+                    if (snapshot.exists) {
+                        const userObj: User = snapshot.data();
+
+                        friendUserService.getUserById(dbInvitation.created_uid).then((user) => {
+                            const otherUser: User = user.data();
+                            const data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
+                            pushNotification
+                                .sendNotificationToDevices(userObj.userId, 'Friend Request',
+                                    `${otherUser.displayName} has sent you a friend request.`, data)
+                                .then((result) => {
+                                    console.log('result', result);
+                                }).catch((err) => {
+                                    console.log('Notification Error: ', err);
+                                });
+                            console.log(`${otherUser.displayName} has sent you a friend request.`);
+                        });
+
+                    } else {
+                        console.log('user does not exist');
+                    }
+
+                }
+            }).catch(error => {
+                console.log('error', error);
             });
     }
 

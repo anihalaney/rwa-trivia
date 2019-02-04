@@ -18,15 +18,13 @@
                 [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
                 [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" (tap)="answerButtonClicked(answer)" [isUserInteractionEnabled] = "doPlay">
 
-                <Ripple rippleColor="#c2c2c2" width="100%" (tap)="answerButtonClicked(answer)" [isUserInteractionEnabled] = "doPlay">
-                    <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="17" fontWeight="500" marginTop="15"
+                    <Label text="{{answer?.answerText}}" (tap)="answerButtonClicked(answer)"horizontalAlignment="center" fontSize="17" fontWeight="500" marginTop="15"
                     marginBottom="15" textWrap="true" width="100%" style="text-align:center;" [isUserInteractionEnabled] = "doPlay"></Label>
-                </Ripple>
             </StackLayout>
         </StackLayout>
         <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10">
             <author [userDict]="userDict" [userId]="question.created_uid"></author>
-            <Button ripple rippleColor="#dceec6" class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (tap)="getNextQuestion()" *ngIf="answeredText!==''"
+            <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (tap)="getNextQuestion()" *ngIf="answeredText!==''"
                 width="100%" text="Try Another" fontSize="17" padding="15"></Button>
         </StackLayout>
     </StackLayout>
