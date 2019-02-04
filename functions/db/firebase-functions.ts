@@ -4,6 +4,9 @@ const functions = require('firebase-functions');
 const fs = require('fs');
 const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+import { AppSettings } from './../services/app-settings.service';
+const appSettings: AppSettings = new AppSettings();
+const generalAccountService = require('../services/account.service');
 
 import {
     Game, Question, Category, User, UserStatConstants, Invitation,
@@ -140,6 +143,15 @@ exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate(
         const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
         systemStatsCalculations.updateSystemStats('total_users').then((stats) => {
             console.log(stats);
+        });
+
+        return appSettings.getAppSettings().then(appSetting => {
+            if (appSetting.lives.enable) {
+                const accountObj: any = {};
+                accountObj.id = data.userId;
+                accountObj.lives = appSetting.lives.max_lives;
+                generalAccountService.setAccount(accountObj);
+            }
         });
     }
 

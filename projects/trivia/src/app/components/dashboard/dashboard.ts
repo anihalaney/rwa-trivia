@@ -78,29 +78,42 @@ export class Dashboard implements OnDestroy {
                     this.timeoutLive = '';
                     this.gamePlayBtnDisabled = false;
                 }
+
+                if(this.user){
+                    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+                        if (appSettings) {
+                            this.applicationSettings = appSettings[0];
+                            if (this.applicationSettings) {
+                                if (this.applicationSettings.lives.enable) {
+                                    this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+                                        this.account = account;
+                                        if (this.account && this.account.lives === 0) {
+                                            this.gamePlayBtnDisabled = true;
+                                        } else {
+                                            this.gamePlayBtnDisabled = false;
+                                        }
+                                        if (this.account && !this.account.enable) {
+                                            this.timeoutLive = '';
+                                        }
+                                        if (this.timerSub) {
+                                            this.timerSub.unsubscribe();
+                                        }
+                                        this.gameLives();
+                                    }));
+                                } else {
+                                    if (this.timerSub) {
+                                         this.timeoutLive = '';
+                                        this.timerSub.unsubscribe();
+                                    }
+                                }
+                            }
+                        }
+                    }));
+                }
             });
             this.store.dispatch(this.gameActions.getActiveGames(user));
             this.store.dispatch(this.userActions.loadGameInvites(user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
-        }));
-        this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-            if (appSettings) {
-                this.applicationSettings = appSettings[0];
-                if (this.applicationSettings) {
-                    if (this.applicationSettings.lives.enable) {
-                        this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
-                            this.account = account;
-                            if (this.account && this.account.lives === 0) {
-                                this.gamePlayBtnDisabled = true;
-                            }
-                            if (this.timerSub) {
-                                this.timerSub.unsubscribe();
-                            }
-                            this.gameLives();
-                        }));
-                    }
-                }
-            }
         }));
 
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -226,7 +239,7 @@ export class Dashboard implements OnDestroy {
 
         const maxMiliSecond = this.utils.convertMilliSIntoMinutes(this.applicationSettings.lives.lives_after_add_millisecond) - 1;
         if (this.account) {
-            if (this.account.lives < this.applicationSettings.lives.max_lives) {
+            if (this.account.lives && this.account.lives < this.applicationSettings.lives.max_lives) {
                 this.timerSub = timer(1000, 1000).subscribe(t => {
                     const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate);
                     const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));

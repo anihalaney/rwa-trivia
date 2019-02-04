@@ -8,6 +8,6 @@ export class Utils {
     }
 
     public addMinutes(time, minutes) {
-        return time + (minutes * 60000);
+        return time + minutes;
     }
 }

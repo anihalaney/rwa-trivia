@@ -214,10 +214,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       }
       return;
     }
-    if (this.applicationSettings.lives.enable && this.life === 0) {
-      this.redirectToDashboard(this.gameErrorMsg);
-      return false;
-    }
+    // if (this.applicationSettings.lives.enable && this.life === 0) {
+    //   this.redirectToDashboard(this.gameErrorMsg);
+    //   return false;
+    // }
     this.startNewGame(gameOptions);
   }
 

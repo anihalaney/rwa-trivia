@@ -15,6 +15,9 @@ import { RSSFeedConstants, Blog, User, profileSettingsConstants, Account } from 
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
 import { Utils } from '../utils/utils';
+import { AppSettings } from '../services/app-settings.service';
+const appSettings: AppSettings = new AppSettings();
+
 const utils: Utils = new Utils();
 
 /**
@@ -309,29 +312,37 @@ exports.migrateUserStatToAccounts = (req, res) => {
 
 /**
  * Add default 4 lives to each account
- * return status
  */
 exports.addDefaultLives = (req, res) => {
-    const migrationPromises = [];
-    generalUserService.getUsers().then(users => {
-        users.docs.map(user => {
-            const userObj: User = user.data();
-            if (userObj && userObj.userId) {
-                const accountObj: Account =  new Account();
-                accountObj.id = userObj.userId;
-                migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
-            }
-        });
-        Promise.all(migrationPromises).then((migrationResults) => {
-            res.send(migrationResults);
-        })
-            .catch((e) => {
-                res.send(e);
+    appSettings.getAppSettings().then(appSetting => {
+        if (appSetting.lives.enable) {
+            const migrationPromises = [];
+            generalUserService.getUsers().then(users => {
+                users.docs.map(user => {
+                    const userObj: User = user.data();
+                    if (userObj && userObj.userId) {
+                        const accountObj: Account = new Account();
+                        accountObj.id = userObj.userId;
+                        migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
+                    }
+                });
+                Promise.all(migrationPromises).then((migrationResults) => {
+                    res.send(migrationResults);
+                })
+                    .catch((e) => {
+                        res.send(e);
+                    });
             });
+        }
     });
+
 };
 
-
+// Schedular for add lives
 exports.addLives = (req, res) => {
-    res.send(generalAccountService.addLives());
+    appSettings.getAppSettings().then(appSetting => {
+        if (appSetting.lives.enable) {
+            res.send(generalAccountService.addLives());
+        }
+    });
 };

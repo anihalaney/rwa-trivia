@@ -6,6 +6,7 @@ import { Utils } from '../utils/utils';
 import { PushNotification } from '../utils/push-notifications';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+import { AppSettings } from '../services/app-settings.service';
 const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
@@ -15,12 +16,13 @@ const pushNotification: PushNotification = new PushNotification();
 const fs = require('fs');
 const request = require('request');
 const path = require('path');
+const appSettings: AppSettings = new AppSettings();
 
 /**
  * createGame
  * return gameId
  */
-exports.createGame = (req, res) => {
+exports.createGame = async (req, res) => {
     const gameOptions = req.body.gameOptions;
     const userId = req.body.userId;
 
@@ -36,19 +38,24 @@ exports.createGame = (req, res) => {
         return;
     }
 
-    generalAccountService.getAccountById(userId).then((account) => {
-        // console.log('user account id', );
-        account = account.data();
-        if (account.lives > 0) {
-            const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId);
-            gameMechanics.createNewGame().then((gameId) => {
-                console.log('gameId', gameId);
-                res.send({ gameId: gameId });
-            });
-        } else {
+    const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId);
+    // Get App Settings
+    const appSetting = await appSettings.getAppSettings();
+
+    if (appSetting.lives.enable) {
+        // Get Account Info
+        const account = await generalAccountService.getAccountById(userId);
+        // if lives is less then or equal to 0 then send with error
+        if (account.data().lives <= 0) {
             res.status(403).send('Sorry, don\'t have enough life.');
             return;
+        } else {
+            // Decrement lives from user account
+            generalAccountService.updateAccount(userId).then(acc => acc);
         }
+    }
+    gameMechanics.createNewGame().then((gameId) => {
+        res.send({ gameId: gameId });
     });
 
 };

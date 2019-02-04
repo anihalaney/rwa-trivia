@@ -1,4 +1,5 @@
 export class Account {
+    enable?: boolean;
     lives?: number;
     lastLiveUpdate?: number;
     nextLiveUpdate?: number;
