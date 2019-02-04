@@ -1,6 +1,6 @@
 import {
     SearchCriteria, Game, GameOperations, PlayerQnA,
-    GameStatus, schedulerConstants, pushNotificationRouteConstants
+    GameStatus, schedulerConstants, pushNotificationRouteConstants, OpponentType
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { PushNotification } from '../utils/push-notifications';
@@ -100,15 +100,10 @@ exports.updateGame = (req, res) => {
                 game.playerQnAs[qIndex] = currentPlayerQnAs;
                 const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
-                if (game.nextTurnPlayerId.trim().length && currentTurnPlayerId !== game.nextTurnPlayerId) {
-                    const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
-                    pushNotification
-                        .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play', 'Your turn comes now', data)
-                        .then((result) => {
-                            console.log('result', result);
-                        }).catch((err) => {
-                            console.log('Notification Error: ', err);
-                        });
+
+                if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
+                    console.log(`change turn`);
+                    pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId);
                 }
                 game.turnAt = utils.getUTCTimeStamp();
                 game.calculateStat(currentPlayerQnAs.playerId);
@@ -119,6 +114,10 @@ exports.updateGame = (req, res) => {
                 game.decideWinner();
                 game.calculateStat(game.nextTurnPlayerId);
                 game.GameStatus = GameStatus.COMPLETED;
+                if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId);
+                }
                 const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
                 systemStatsCalculations.updateSystemStats('game_played').then((stats) => {
                     console.log(stats);
@@ -208,7 +207,7 @@ exports.checkGameOver = (req, res) => {
                 const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
                 pushNotification
                     .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
-                        'You have 30 minutes left to play the game', data)
+                        'You have 32 minutes remaining to play your turn !', data)
                     .then((result) => {
                         console.log('result', result);
                     }).catch((err) => {
@@ -219,6 +218,11 @@ exports.checkGameOver = (req, res) => {
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
                 game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
+                game.GameStatus = GameStatus.TIME_EXPIRED;
+                if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId);
+                }
                 const dbGame = game.getDbModel();
                 gameControllerService.updateGame(dbGame).then((ref) => {
                     console.log('updated game', dbGame.id);
