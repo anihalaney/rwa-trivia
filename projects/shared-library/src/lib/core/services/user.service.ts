@@ -27,9 +27,6 @@ export class UserService {
                     user = u;
                     user.idToken = userInfo.idToken;
                     user.authState = userInfo.authState;
-                    if (u.stats) {
-                        user.stats = u.stats;
-                    }
                 } else {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;

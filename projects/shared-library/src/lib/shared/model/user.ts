@@ -30,6 +30,8 @@ export class User {
   imageType: string;
   androidPushTokens?: string[];
   iosPushTokens?: string[];
+
+
   constructor(authState?: firebase.User & { name: string }) {
     if (authState) {
       this.authState = authState;
