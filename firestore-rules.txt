@@ -17,6 +17,7 @@ service cloud.firestore {
   
   match /databases/{database}/documents {
 
+<<<<<<< HEAD
      match /users/{userId} {
     // only allow creating user document when no roles specified
     // only allow updating user document when roles are not altered
@@ -25,6 +26,16 @@ service cloud.firestore {
           allow create: if isUserAuthenticated(userId) && !request.resource.data.keys().hasAny(['roles']);         
     			allow update: if isUserAuthenticated(userId) && 
           (!request.resource.data.keys().hasAny(['roles']) || (resource.data.roles == request.resource.data.roles));
+=======
+    match /users/{userId} {
+    // only allow creating user document when no roles specified
+    // only allow updating user document when roles are not altered
+    // upading of user happen via API and rules have no effect on API    
+          allow read: if isUserAuthenticated(userId); 
+          allow create: if isUserAuthenticated(userId) && !request.resource.data.keys().hasAny(['roles']);         
+    			allow update: if isUserAuthenticated(userId) && 
+          (resource.data.roles == request.resource.data.roles);
+>>>>>>> ba74c89a8905cc895004ab5ccfac0cd34b722560
     }
     
 		match /{document=**} {
@@ -125,12 +136,21 @@ service cloud.firestore {
       }      
     }
     
+<<<<<<< HEAD
     match /accounts/{userId} {    
       //only allow login user to read and get it
       // logged in user does not have rights to modify this document
       // document can only be modified by API , triggers
         allow read,get:  if isUserAuthenticated(userId);          
     }
+=======
+    match /accounts {    
+      match /{document=**} {
+        allow read,get:  if true; 
+      }      
+    }
+    
+>>>>>>> ba74c89a8905cc895004ab5ccfac0cd34b722560
     
   }
 }
