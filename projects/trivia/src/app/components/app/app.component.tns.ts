@@ -1,6 +1,5 @@
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
-import * as common from 'nativescript-plugin-firebase/firebase-common';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
@@ -19,6 +18,7 @@ import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
+
 
 @Component({
   selector: 'app-root',
@@ -39,7 +39,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private userActions: UserActions,
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions) {
-
 
 
     this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
@@ -85,36 +84,9 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     });
 
-    this.sub5 = this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-
-      if (user) {
-        firebase.getCurrentPushToken().then((token) => {
-          if (isAndroid) {
-            user.androidPushTokens = (user.androidPushTokens) ? user.androidPushTokens : [];
-            if (user.androidPushTokens.indexOf(token) === -1) {
-              console.log('Android token', token);
-              user.androidPushTokens.push(token);
-              this.updateUser(user);
-            }
-          } else {
-            user.iosPushTokens = (user.iosPushTokens) ? user.iosPushTokens : [];
-            if (user.iosPushTokens.indexOf(token) === -1) {
-              console.log('ios token', token);
-              user.iosPushTokens.push(token);
-              this.updateUser(user);
-            }
-          }
-
-        });
-      }
-    });
   }
 
 
-
-  updateUser(user: User) {
-    this.store.dispatch(this.userActions.updateUser(user));
-  }
 
   ngOnDestroy() {
     this.utils.unsubscribe([this.sub3, this.sub4, this.sub5]);
