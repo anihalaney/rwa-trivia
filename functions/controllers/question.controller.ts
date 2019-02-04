@@ -91,6 +91,7 @@ exports.getNextQuestion = (req, res) => {
                         questionId: question.id,
                         addedOn: createdOn
                     }
+
                     if (game.playerQnAs.length > 0) {
                         if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
                             game.round = game.round + 1;

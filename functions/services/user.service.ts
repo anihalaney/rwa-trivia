@@ -23,7 +23,7 @@ exports.getUserById = (userId: string): Promise<any> => {
  * return ref
  */
 exports.setUser = (dbUser: any): Promise<any> => {
-    return userFireStoreClient.doc(`/users/${dbUser.userId}`).set(dbUser).then(ref => { return ref })
+    return userFireStoreClient.doc(`/users/${dbUser.userId}`).update(dbUser).then(ref => { return ref })
         .catch(error => {
             console.error(error);
             return error;
@@ -38,6 +38,20 @@ exports.setUser = (dbUser: any): Promise<any> => {
 exports.getUsers = (): Promise<any> => {
     return userFireStoreClient.collection('users')
         .get().then(users => { return users })
+        .catch(error => {
+            console.error(error);
+            return error;
+        });
+};
+
+/**
+ * getUsersByEmail
+ * return users
+ */
+exports.getUsersByEmail = (obj: any): Promise<any> => {
+    return userFireStoreClient.collection('users')
+        .where('email', '==', obj.email).get()
+        .then(users => { return users })
         .catch(error => {
             console.error(error);
             return error;

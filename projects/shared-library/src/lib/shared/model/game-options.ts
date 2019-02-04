@@ -40,6 +40,7 @@ export enum GameStatus {
   JOINED_GAME = 'joined opponent',
   WAITING_FOR_NEXT_Q = 'waiting for next question',
   COMPLETED = 'completed',
+  TIME_EXPIRED = 'time expired',
   REJECTED = 'rejected',
   INVITATION_TIMEOUT = 'invitation timeout'
 }
