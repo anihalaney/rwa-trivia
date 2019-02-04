@@ -1,12 +1,13 @@
 const friendService = require('../services/friend.service');
 const friendUserService = require('../services/user.service');
-import { Invitation, Friends, FriendsMetadata, friendInvitationConstants, User, pushNotificationRouteConstants } from '../../projects/shared-library/src/lib/shared/model';
-import { Observable } from 'rxjs';
-import { PushNotification } from '../utils/push-notifications';
+import {
+    Invitation, Friends, FriendsMetadata, friendInvitationConstants, User,
+    pushNotificationRouteConstants
+} from '../../projects/shared-library/src/lib/shared/model';
+import { PushNotification } from './push-notifications';
 const pushNotification: PushNotification = new PushNotification();
 
 export class MakeFriends {
-
     constructor(private token?: string, private userId?: string, private email?: string) { }
 
     validateToken(): Promise<string> {
@@ -126,19 +127,8 @@ export class MakeFriends {
                     if (snapshot.exists) {
                         const userObj: User = snapshot.data();
 
-                        friendUserService.getUserById(dbInvitation.created_uid).then((user) => {
-                            const otherUser: User = user.data();
-                            const data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
-                            pushNotification
-                                .sendNotificationToDevices(userObj.userId, 'Friend Request',
-                                    `${otherUser.displayName} has sent you a friend request.`, data)
-                                .then((result) => {
-                                    console.log('result', result);
-                                }).catch((err) => {
-                                    console.log('Notification Error: ', err);
-                                });
-                            console.log(`${otherUser.displayName} has sent you a friend request.`);
-                        });
+                        pushNotification.sendGamePlayPushNotifications(dbInvitation, userObj.userId,
+                            pushNotificationRouteConstants.FRIEND_NOTIFICATIONS);
 
                     } else {
                         console.log('user does not exist');
