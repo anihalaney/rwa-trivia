@@ -3,7 +3,7 @@
         <StackLayout row="0">
             <ScrollView>
                 <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
-                    <GridLayout row="0" columns="auto,*" class="sideStackLayoutHeader" *ngIf="user">
+                    <GridLayout row="0" columns="auto,*" class="sideStackLayoutHeader" *ngIf="authProvider.isAuthenticated">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
                             width="64" marginLeft="10" verticalAlignment="center" marginRight="10" iosOverflowSafeArea="false"></Image>
                         <StackLayout row="0" col="1" marginTop="27" marginRight="10" iosOverflowSafeArea="false">
