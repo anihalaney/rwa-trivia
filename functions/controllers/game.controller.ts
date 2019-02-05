@@ -84,8 +84,8 @@ exports.updateGame = (req, res) => {
                 game.decideNextTurn(currentPlayerQnAs, userId);
 
                 if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
-                    console.log(`change turn`);
-                    pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId);
+                    pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                 }
                 game.turnAt = utils.getUTCTimeStamp();
                 game.calculateStat(currentPlayerQnAs.playerId);
@@ -98,7 +98,8 @@ exports.updateGame = (req, res) => {
                 game.GameStatus = GameStatus.COMPLETED;
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId);
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                 }
                 const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
                 systemStatsCalculations.updateSystemStats('game_played').then((stats) => {
@@ -185,17 +186,14 @@ exports.checkGameOver = (req, res) => {
             }
 
 
-            if ((remainedTime) <= schedulerConstants.notificationInterval) {
-                const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
-                pushNotification
-                    .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
-                        'You have 32 minutes remaining to play your turn !', data)
-                    .then((result) => {
-                        console.log('result', result);
-                    }).catch((err) => {
-                        console.log('Notification Error: ', err);
-                    });
+            if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                if ((remainedTime) <= schedulerConstants.notificationInterval) {
+                    pushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
+                        pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
+                }
             }
+
 
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
@@ -203,7 +201,8 @@ exports.checkGameOver = (req, res) => {
                 game.GameStatus = GameStatus.TIME_EXPIRED;
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId);
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                 }
                 const dbGame = game.getDbModel();
                 gameControllerService.updateGame(dbGame).then((ref) => {
@@ -236,7 +235,7 @@ exports.changeGameTurn = (req, res) => {
             const game: Game = Game.getViewModel(doc.data());
             gameMechanics.changeTheTurn(game).then((status) => {
                 console.log('game update status', status, game.gameId);
-            })
+            });
         });
         res.send('scheduler check is completed');
     });
@@ -299,7 +298,7 @@ exports.createSocialImage = (req, res) => {
     socialGameService.generateSocialUrl(req.params.userId, socialId).then((social_url) => {
         res.setHeader('content-disposition', 'attachment; filename=social_image.png');
         res.setHeader('content-type', 'image/png');
-        res.send(social_url)
+        res.send(social_url);
     });
 };
 
