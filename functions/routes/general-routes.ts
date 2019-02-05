@@ -27,7 +27,7 @@ router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuth
 router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
 router.post('/question/status', generalAuth.adminOnly, generalQuestionController.changeUnpublishedQuestionStatus);
 router.post('/migration/user/stats', generalAuth.adminOnly, generalController.migrateUserStatToAccounts);
-router.get('/addDefaultLives', generalController.addDefaultLives);
+router.get('/add/default/lives', generalController.addDefaultLives);
 router.get('/addLives', generalController.addLives);
 
 module.exports = router;

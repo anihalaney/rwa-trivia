@@ -145,7 +145,7 @@ exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate(
             console.log(stats);
         });
 
-        return appSettings.getAppSettings().then(appSetting => {
+        appSettings.getAppSettings().then(appSetting => {
             if (appSetting.lives.enable) {
                 const accountObj: any = {};
                 accountObj.id = data.userId;

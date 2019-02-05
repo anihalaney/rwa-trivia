@@ -49,12 +49,17 @@ exports.createGame = async (req, res) => {
         if (account.data().lives <= 0) {
             res.status(403).send('Sorry, don\'t have enough life.');
             return;
-        } else {
-            // Decrement lives from user account
-            generalAccountService.updateAccount(userId).then(acc => acc);
         }
     }
     gameMechanics.createNewGame().then((gameId) => {
+        if (appSetting.lives.enable) {
+            // Decrement lives from user account
+            generalAccountService.updateAccount(userId).then(acc => acc);
+            // Decrement Second Player's life
+            if (gameOptions.friendId) {
+                generalAccountService.updateAccount(gameOptions.friendId).then(acc => acc);
+            }
+        }
         res.send({ gameId: gameId });
     });
 
