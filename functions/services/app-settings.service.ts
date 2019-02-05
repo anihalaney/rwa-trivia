@@ -24,12 +24,9 @@ export class AppSettings {
     }
 
     public getAppSettings(): Promise<any> {
-        console.log('app completed > ');
         if (this.appSettings) {
-            console.log('app settings called');
             return this.appSettings;
         } else {
-            console.log('app settings 24');
             return this.loadAppSetttings();
         }
     }

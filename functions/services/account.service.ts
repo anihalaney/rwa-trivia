@@ -46,6 +46,10 @@ exports.getAccounts = (): Promise<any> => {
         });
 };
 
+/**
+ * updated account
+ * return ref
+ */
 exports.updateAccount = (userId): Promise<any> => {
     return appSettings.getAppSettings().then(appSetting => {
         if (appSetting.lives.enable) {
@@ -74,7 +78,10 @@ exports.updateAccount = (userId): Promise<any> => {
 };
 
 
-
+/**
+ * incrase number of lives set in appSettings
+ * return ref
+ */
 exports.increaseLives = (userId): Promise<any> => {
     return appSettings.getAppSettings().then(appSetting => {
         if (appSetting.lives.enable) {
@@ -106,10 +113,12 @@ exports.increaseLives = (userId): Promise<any> => {
                 });
         }
     });
-
 };
 
-
+/**
+ * add default number of lives into account
+ * return ref
+ */
 exports.addDefaultLives = (user: any): Promise<any> => {
     return appSettings.getAppSettings().then(appSetting => {
         if (appSetting.lives.enable) {
@@ -121,10 +130,11 @@ exports.addDefaultLives = (user: any): Promise<any> => {
                         const lives = ref.data();
                         if (!lives.lives) {
                             lives.lives = maxLives;
+                            lives.id = user.id;
                             docRef.update(lives);
                         }
                     } else {
-                        docRef.set({ lives: maxLives });
+                        docRef.set({ lives: maxLives, id: user.id });
                     }
                     return docRef;
                 }).catch(function (error) {
@@ -133,6 +143,11 @@ exports.addDefaultLives = (user: any): Promise<any> => {
         }
     });
 };
+
+/**
+ * add number of lives into account(Schedular)
+ * return ref
+ */
 
 exports.addLives = (): Promise<any> => {
 
@@ -146,7 +161,7 @@ exports.addLives = (): Promise<any> => {
                 .where('nextLiveUpdate', '<=', timestamp)
                 .get()
                 .then(accounts => {
-                    accounts = accounts.docs.filter(d => d.data().lives < 4);
+                    accounts = accounts.docs.filter(d => d.data().lives < maxLives);
                     accounts.map(account => {
                         timestamp = utils.getUTCTimeStamp();
                         const userAccount = account.data();
@@ -159,6 +174,7 @@ exports.addLives = (): Promise<any> => {
                                     if (lives.lives > maxLives) {
                                         lives.lives = maxLives;
                                     } else {
+                                        // Update nextLiveUpdate
                                         lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
                                     }
                                     lives.lastLiveUpdate = timestamp;

@@ -311,7 +311,7 @@ exports.migrateUserStatToAccounts = (req, res) => {
 
 
 /**
- * Add default 4 lives to each account
+ * Add default number of lives to each account
  */
 exports.addDefaultLives = (req, res) => {
     appSettings.getAppSettings().then(appSetting => {
