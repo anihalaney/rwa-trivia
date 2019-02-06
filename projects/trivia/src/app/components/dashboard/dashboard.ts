@@ -68,9 +68,6 @@ export class Dashboard implements OnDestroy {
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.ngZone.run(() => {
                 this.user = user;
-                // if (this.user) {
-                //     this.store.dispatch(this.userActions.addUserLives(this.user.userId));
-                // }
                 if (!this.user && this.timerSub) {
                     this.timerSub.unsubscribe();
                 }
@@ -79,7 +76,7 @@ export class Dashboard implements OnDestroy {
                     this.gamePlayBtnDisabled = false;
                 }
 
-                if(this.user){
+                if (this.user) {
                     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
                         if (appSettings) {
                             this.applicationSettings = appSettings[0];
@@ -102,7 +99,7 @@ export class Dashboard implements OnDestroy {
                                     }));
                                 } else {
                                     if (this.timerSub) {
-                                         this.timeoutLive = '';
+                                        this.timeoutLive = '';
                                         this.timerSub.unsubscribe();
                                     }
                                 }
