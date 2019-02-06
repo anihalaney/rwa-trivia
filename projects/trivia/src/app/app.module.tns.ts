@@ -1,6 +1,6 @@
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { NativeScriptModule } from 'nativescript-angular/nativescript.module';
-import { AppRoutingModule } from '../app/routing/app-routing.module.tns';
+import { AppRoutingModule } from '../app/routing/app-routing.module';
 import { AppComponent } from './../app/components/app/app.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
@@ -23,6 +23,7 @@ import { GameInviteComponent } from './components/game-invite/game-invite.compon
 export function firebaseFactory() {
   return TNSFirebase;
 }
+
 
 // registerElement('CardView', () => CardView);
 registerElement('CardView', () => require('nativescript-cardview').CardView);

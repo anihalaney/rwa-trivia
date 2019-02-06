@@ -57,11 +57,13 @@ export class Dashboard {
         this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.ngZone.run(() => {
                 this.user = user;
-
             });
             this.store.dispatch(this.gameActions.getActiveGames(user));
             this.store.dispatch(this.userActions.loadGameInvites(user));
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
+        }));
+        this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+            console.log('account final' , account);
         }));
         this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subs.push(this.activeGames$.subscribe(games => {
@@ -86,14 +88,10 @@ export class Dashboard {
                         this.theirTurnCount++;
                     }
 
-                    if (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) && game.playerIds.length > 1 &&
-                        !(game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-                        game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
-                        || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ) &&
+                    if (Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) &&
                         (game.nextTurnPlayerId === this.user.userId)) {
                         this.twoPlayerCount++;
                     }
-
                     // tslint:disable-next-line:max-line-length
                     if (game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
                         game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE

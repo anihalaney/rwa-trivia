@@ -1,6 +1,6 @@
 import { Component, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { User } from 'shared-library/shared/model';
+import { Account } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { Observable, Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
@@ -11,14 +11,13 @@ import { Utils } from 'shared-library/core/services';
   styleUrls: ['./user-stats-card.component.scss']
 })
 export class UserStatsCardComponent implements OnDestroy {
-  user: User;
+  account: Account;
   subs: Subscription[] = [];
 
   constructor(private store: Store<AppState>, private utils: Utils) {
-    this.subs.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-      this.user = user
-      if (user) {
-        this.user = user;
+    this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+      if (account) {
+        this.account = account;
       }
     }));
   }

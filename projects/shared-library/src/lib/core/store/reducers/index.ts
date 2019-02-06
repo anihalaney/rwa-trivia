@@ -1,11 +1,15 @@
 import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/store';
-import { User, Category, Question, Game, Friends, Invitation} from 'shared-library/shared/model';
-import { user, authInitialized, invitationToken, userDict, gameInvites , userFriends, friendInvitations, userProfileSaveStatus} from './user.reducer';
+import { User, Category, Question, Game, Friends, Invitation } from 'shared-library/shared/model';
+import {
+  user, authInitialized, invitationToken, userDict,
+  gameInvites, userFriends, friendInvitations, userProfileSaveStatus, account
+} from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
 import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import { activeGames, newGameId } from './game.reducer';
+import { applicationSettings } from './application-settings.reducer';
 
 export * from './user.reducer';
 export * from './categories.reducer';
@@ -13,6 +17,7 @@ export * from './tags.reducer';
 export * from './questions.reducer';
 export * from './ui-state.reducer';
 export * from './game.reducer';
+export * from './application-settings.reducer';
 
 
 export interface CoreState {
@@ -32,6 +37,8 @@ export interface CoreState {
   friendInvitations: Invitation[];
   newGameId: string;
   userProfileSaveStatus: String;
+  applicationSettings: any[];
+  account: Account;
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -51,7 +58,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   friendInvitations: friendInvitations,
   newGameId: newGameId,
   userProfileSaveStatus: userProfileSaveStatus,
-
+  applicationSettings: applicationSettings,
+  account: account
 };
 
 // Features

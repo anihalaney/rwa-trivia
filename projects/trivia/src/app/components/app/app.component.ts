@@ -9,7 +9,7 @@ import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
-import { UserActions } from 'shared-library/core/store/actions';
+import { UserActions, ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { coreState } from 'shared-library/core/store';
 
 @Component({
@@ -34,7 +34,10 @@ export class AppComponent implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     private windowRef: WindowRef,
     private userAction: UserActions,
+    private applicationSettingsAction: ApplicationSettingsActions,
     private utils: Utils) {
+
+    this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
 
     this.sub2 = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;

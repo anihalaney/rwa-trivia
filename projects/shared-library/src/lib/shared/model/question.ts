@@ -23,6 +23,9 @@ export class Question {
   userGivenAnswer?: string;
   addedOn?: number;
   gameRound?: number;
+  totalQALength?: number;
+
+
 
   static getViewModelFromDb(db: any): Question {
     const question: Question = new Question();
@@ -41,6 +44,7 @@ export class Question {
     question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
     question.reason = db.reason ? db.reason : '';
     question.createdOn = db.createdOn ? db.createdOn : new Date();
+    question.totalQALength = this.countQALength(db);
     return question;
   }
 
@@ -57,8 +61,16 @@ export class Question {
     question.status = source.status;
     question.tags = source.tags;
     question.created_uid = source.created_uid;
-
+    question.totalQALength = this.countQALength(source);
     return question;
+  }
+
+  static countQALength(question: any) {
+    return question.questionText.length
+      + question.answers[0].answerText.length
+      + question.answers[1].answerText.length
+      + question.answers[2].answerText.length
+      + question.answers[3].answerText.length;
   }
 
   constructor() {
@@ -72,7 +84,11 @@ export class Question {
     this.status = QuestionStatus.SAVED;
     this.validationErrorMessages = [];
   }
+
+
+
 }
+
 
 export class Answer {
   id: number;

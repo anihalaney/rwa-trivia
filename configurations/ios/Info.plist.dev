@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>1.0</string>
+	<string>11.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
@@ -61,5 +61,9 @@
 	<string>266820933965932</string>
 	<key>FacebookDisplayName</key>
 	<string>bitwiser.io_test</string>
+	<key>UIBackgroundModes</key>
+    <array>
+    <string>remote-notification</string>
+    </array>
 </dict>
 </plist>

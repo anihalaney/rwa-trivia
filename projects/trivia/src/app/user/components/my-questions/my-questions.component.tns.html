@@ -59,8 +59,8 @@
             (hideQuestion)="hideQuestion($event)"></app-question-add-update>
      
             <StackLayout row="0" verticalAlignment="bottom" horizontalAlignment="right">
-                <Image *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy" (tap)="navigateToSubmitQuestion()" src="~/assets/images/mobile/pencil-icon.png"
-                 rippleColor="#f1f1f1"  height="50" width="50"  margin="15"  ></Image>
+                 <FAB *ngIf="!displayReasonViewer && !displayEditQuestion && !loaderBusy" (tap)="navigateToSubmitQuestion()" icon="~/assets/images/mobile/pencil-icon.png" class="fab-button1"></FAB>
+
             </StackLayout>
             
     </GridLayout>

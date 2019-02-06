@@ -1,9 +1,13 @@
 const friendService = require('../services/friend.service');
-import { Invitation, Friends, FriendsMetadata, friendInvitationConstants } from '../../projects/shared-library/src/lib/shared/model';
-import { Observable } from 'rxjs';
+const friendUserService = require('../services/user.service');
+import {
+    Invitation, Friends, FriendsMetadata, friendInvitationConstants, User,
+    pushNotificationRouteConstants
+} from '../../projects/shared-library/src/lib/shared/model';
+import { PushNotification } from './push-notifications';
+const pushNotification: PushNotification = new PushNotification();
 
 export class MakeFriends {
-
     constructor(private token?: string, private userId?: string, private email?: string) { }
 
     validateToken(): Promise<string> {
@@ -104,10 +108,40 @@ export class MakeFriends {
     }
 
     createInvitation(dbInvitation: any): Promise<string> {
+        this.sendNotification(dbInvitation);
         return friendService.createInvitation(dbInvitation)
             .then(ref => {
                 dbInvitation.id = ref.id;
                 return friendService.updateInvitation(dbInvitation).then(dRef => `Invitation is sent on ${dbInvitation.email}`);
             });
+    }
+
+    sendNotification(dbInvitation: any) {
+        friendUserService.getUsersByEmail(dbInvitation)
+            .then(snapshots => {
+
+                if (snapshots.empty) {
+                    console.log('user does not exist');
+                } else {
+                    const snapshot = snapshots.docs[0];
+                    if (snapshot.exists) {
+                        const userObj: User = snapshot.data();
+
+                        pushNotification.sendGamePlayPushNotifications(dbInvitation, userObj.userId,
+                            pushNotificationRouteConstants.FRIEND_NOTIFICATIONS);
+
+                    } else {
+                        console.log('user does not exist');
+                    }
+
+                }
+            }).catch(error => {
+                console.log('error', error);
+            });
+    }
+
+    getUser(userId): Promise<any> {
+        console.log('make frined called');
+        return friendUserService.getUserById(userId);
     }
 }
