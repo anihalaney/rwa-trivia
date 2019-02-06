@@ -3,6 +3,7 @@ const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
 const generalUserService = require('../services/user.service');
 const generalAccountService = require('../services/account.service');
+const generalQuestionService = require('../services/question.service');
 const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
@@ -10,7 +11,7 @@ import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
-import { RSSFeedConstants, Blog, User, profileSettingsConstants, Account } from '../../projects/shared-library/src/lib/shared/model';
+import { RSSFeedConstants, Blog, User, profileSettingsConstants, Account, Question } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
 import { Utils } from '../utils/utils';
@@ -298,6 +299,58 @@ exports.migrateUserStatToAccounts = (req, res) => {
         });
         Promise.all(migrationPromises).then((migrationResults) => {
             res.send(migrationResults);
+        })
+            .catch((e) => {
+                res.send(e);
+            });
+    });
+};
+
+
+/**
+ * flushLeaderBoardFromAccount
+ * return status
+ */
+exports.flushLeaderBoardFromUser = (req, res) => {
+    const updatePromises = [];
+    generalAccountService.getAccounts().then(accounts => {
+        accounts.docs.map(account => {
+            const accountObj: Account = account.data();
+            const dbAccountObj = { ...accountObj };
+            delete dbAccountObj['leaderBoardStats'];
+            console.log('dbAccountObj', dbAccountObj);
+            updatePromises.push(generalAccountService.setAccount(dbAccountObj));
+        });
+        Promise.all(updatePromises).then((updateResults) => {
+            res.send(updateResults);
+        })
+            .catch((e) => {
+                res.send(e);
+            });
+    });
+};
+
+
+/**
+ * changeQuestionCategoryIdType
+ * return status
+ */
+exports.changeQuestionCategoryIdType = (req, res) => {
+    const updatePromises = [];
+    generalQuestionService.getAllQuestions().then(questions => {
+        questions.docs.map(question => {
+            const questionObj: Question = question.data();
+            console.log('questionObj.categoryIds', questionObj.categoryIds);
+            const categoryId = questionObj.categoryIds[0];
+            const updatedCategory = [];
+            updatedCategory.push(Number(categoryId));
+            questionObj.categoryIds = updatedCategory;
+            console.log('updatedCategory', updatedCategory);
+            const dbQuestionObj = { ...questionObj };
+            updatePromises.push(generalQuestionService.updateQuestion('questions', dbQuestionObj));
+        });
+        Promise.all(updatePromises).then((updateResults) => {
+            res.send(updateResults);
         })
             .catch((e) => {
                 res.send(e);

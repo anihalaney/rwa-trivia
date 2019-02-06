@@ -108,9 +108,12 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
         if (game.gameOver) {
 
             const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-            gameLeaderBoardStats.getGameUsers(game).then((status) => {
-                console.log('status', status);
-            });
+            gameLeaderBoardStats.loadQuestionDictionary().then(questionDict => {
+                gameLeaderBoardStats.getGameUsers(game, questionDict).then((status) => {
+                    console.log('status', status);
+                });
+            })
+
 
             if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                 Number(game.gameOptions.opponentType) === OpponentType.Friend) {
