@@ -32,7 +32,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   constructor(private utils: Utils, public store: Store<GamePlayState>, ) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-
   }
 
   ngOnInit() {
@@ -46,6 +45,12 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
       this.timerSub.unsubscribe();
     }
   }
+  fillTimer() {
+    if (!(this.answeredIndex !== null && this.answeredIndex !== undefined)) {
+      this.progressValue = 100;
+    }
+
+  }
 
 
   getImage(userId) {
@@ -53,6 +58,9 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    if ((this.continueNext) && !(this.answeredIndex !== null && this.answeredIndex !== undefined)) {
+      this.progressValue = 100;
+    }
     if (changes.timer) {
       this.timer = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
       if (this.timerSub) {
@@ -63,7 +71,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
       this.timerSub =
         timer(0, 10).pipe(take(90)).subscribe(t => {
           this.timer += 0.010;
-          this.progressValue = (this.timer / this.MAX_TIME_IN_SECONDS) *  100;
+          this.progressValue = (this.timer / this.MAX_TIME_IN_SECONDS) * 100;
         },
           null,
           () => {

@@ -20,7 +20,6 @@ export class UserService {
     }
 
     loadUserProfile(user: User): Observable<User> {
-
         return this.dbService.valueChanges('users', user.userId)
             .pipe(map(u => {
                 if (u) {
@@ -28,19 +27,19 @@ export class UserService {
                     user = u;
                     user.idToken = userInfo.idToken;
                     user.authState = userInfo.authState;
-                    if (u.stats) {
-                        user.stats = u.stats;
-                    }
                 } else {
                     const dbUser = Object.assign({}, user); // object to be saved
                     delete dbUser.authState;
                     delete dbUser.profilePictureUrl;
                     this.dbService.setDoc('users', dbUser.userId, dbUser);
                 }
-
                 return user;
             }),
                 mergeMap(u => this.getUserProfileImage(u)));
+    }
+
+    loadAccounts(user): Observable<any> {
+        return this.dbService.valueChanges('accounts', user.userId);
     }
 
     saveUserProfile(user: User): Observable<any> {

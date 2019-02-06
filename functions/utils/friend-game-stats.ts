@@ -1,8 +1,7 @@
 const friendGameStatService = require('../services/friend.service');
 
 import {
-    Game, GameStatus, GameOptions, PlayerMode, OpponentType, Stat, User, UserStats,
-    LeaderBoardUser, UserStatConstants, Friends, FriendsMetadata
+    Game, Friends, FriendsMetadata
 } from '../../projects/shared-library/src/lib/shared/model';
 
 

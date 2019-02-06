@@ -1,11 +1,11 @@
 <ActionBar title="" class="action-bar action-title">
     <NavigationButton visibility="collapsed"></NavigationButton>
     <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*" android:columns="auto,*" width="100%">
-        <Ripple col="0" (tap)="openSidebar()" rippleColor="#13284F">
-            <StackLayout  verticalAlignment="center" width="45">
-                <Label *ngIf="!hideMenu" text="&#xf0c9;" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
-            </StackLayout>
-        </Ripple>
+
+        <StackLayout  verticalAlignment="center" width="45" col="0" (tap)="openSidebar()">
+            <Label *ngIf="!hideMenu" text="&#xf0c9;" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
+        </StackLayout>
+
         <StackLayout col="1" verticalAlignment="center">
             <Label [text]="title" marginLeft="20" class="action-text-title" fontSize="20"></Label>
         </StackLayout>
