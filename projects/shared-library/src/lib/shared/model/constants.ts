@@ -1,5 +1,7 @@
 export enum schedulerConstants {
     gamePlayDuration = 32,  // 32 hours
+    beforeGameExpireDuration = 1890,  // 31 hours 30 minutes
+    notificationInterval = 32, // 32 Minutes
     gameInvitationDuration = 192   // 8 days
 }
 
@@ -74,4 +76,14 @@ export enum friendInvitationConstants {
 export enum gamePlayConstants {
     GAME_Q_TIMER = 500
 }
+
+export enum pushNotificationRouteConstants {
+    GAME_PLAY = 'game-play',
+    FRIEND_REQUEST = 'friend-request',
+    GAME_PLAY_NOTIFICATIONS = 'game-play-notifications',
+    GAME_REMAINING_TIME_NOTIFICATIONS = 'game-play-time-notifications',
+    FRIEND_NOTIFICATIONS = 'friend-notifications'
+}
+
+
 

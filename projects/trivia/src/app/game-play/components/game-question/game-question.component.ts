@@ -1,15 +1,16 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, SimpleChanges, OnChanges } from '@angular/core';
 import { GameQuestion } from './game-question';
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
   styleUrls: ['./game-question.component.scss']
 })
-export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, AfterViewInit {
+export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
   @ViewChild('overlay') overlay: ElementRef;
   @ViewChild('loader') loader: ElementRef;
-
+  alpha = 0;
+  setTimeOutLimit = 0;
   constructor() {
     super();
   }
@@ -22,9 +23,11 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
   ngAfterViewInit() {
     const seconds = 30;
+    this.setTimeOutLimit = Math.floor( (this.MAX_TIME_IN_SECONDS / 360) * 1000);
+   // console.log(this.setTimeOutLimit);
     const loader = this.loader.nativeElement, α = 0;
 
-    this.draw(α, this.doPlay, loader);
+    this.draw(this.alpha, this.doPlay, loader);
   }
 
   draw(α, doPlay, loader) {
@@ -39,17 +42,22 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
         + x + ' '
         + y + ' z';
 
-
     if (this.doPlay) {
       loader.setAttribute('d', anim);
       setTimeout(() => {
         this.draw(α, this.doPlay, loader);
-      }, 44); // Redraw
+      }, this.setTimeOutLimit); // Redraw
     }
   }
 
-
   fillTimer() {
     this.loader.nativeElement.setAttribute('d', 'M 1 1 v -125 A 125 125 1 1 1 0 -125 z');
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.timer && changes.timer.firstChange) {
+      const elapsedTime = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
+      this.alpha = (360 * elapsedTime) / this.MAX_TIME_IN_SECONDS;
+    }
   }
 }

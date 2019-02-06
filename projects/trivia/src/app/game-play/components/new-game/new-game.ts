@@ -1,12 +1,10 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import * as gameplayactions from '../../store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
-import { Category, GameOptions, User, PlayerMode, OpponentType } from 'shared-library/shared/model';
+import { Category, GameOptions, User, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 
@@ -19,7 +17,7 @@ export class NewGame {
   userDict$: Observable<{ [key: string]: User }>;
   selectedTags: string[];
   subs: Subscription[] = [];
-
+  applicationSettings: ApplicationSettings;
   gameOptions: GameOptions;
 
   showUncheckedCategories: Boolean = false;
@@ -70,6 +68,8 @@ export class NewGame {
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
     this.gameOptions = new GameOptions();
+
+
 
   }
 

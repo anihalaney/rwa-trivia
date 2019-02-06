@@ -3,6 +3,7 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 const userContributionQuestionService = require('../services/question.service');
 const userContributionUserService = require('../services/user.service');
+const userContributionAccountService = require('../services/account.service');
 
 export class UserContributionStat {
 
@@ -37,16 +38,18 @@ export class UserContributionStat {
 
     }
 
-    public getUser(userId: string, count: number): Promise<string> {
-        return userContributionUserService.getUserById(userId).then((user) => {
-            const dbUser = user.data();
-            dbUser.stats.contribution = (dbUser.stats.contribution) ? dbUser.stats.contribution + count : count;
-            return this.updateUser({ ...dbUser }).then((id) => { return id });
-        })
+    public getUser(id: string, count: number): Promise<string> {
+        return userContributionAccountService.getAccountById(id).then((account) => {
+            const dbAccount = account.data();
+            dbAccount.contribution = (dbAccount.contribution) ? dbAccount.contribution + count : count;
+            return this.updateAccount({ ...dbAccount }).then((accountId) => { return accountId });
+        });
     }
 
-    private updateUser(dbUser: any): Promise<string> {
-        return userContributionUserService.setUser(dbUser).then(ref => { return dbUser.userId });
+    private updateAccount(dbAccount: any): Promise<string> {
+        return userContributionAccountService.setAccount(dbAccount).then(ref => { return dbAccount.id });
     }
+
+
 
 }

@@ -34,10 +34,10 @@
     font-size: 22;
     color:#000000;
 }
-.natvigate-button{
+.navigate-button{
     color:#000000; 
     background-color: #ffffff; 
-    padding:10 18 10 18; 
+    padding:10 10 10 10; 
     margin: 0 3 0 3;
 }
 .question-grid{
@@ -56,4 +56,8 @@
 .answer-tag{
     vertical-align: top; 
     color:#3b444f
+}
+
+.navigate-button:disabled {
+    color:gainsboro;
 }

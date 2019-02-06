@@ -33,7 +33,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     super(fb, store, utils, questionAction);
 
     this.question = new Question();
-    this.createForm(this.question);
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        this.createForm(this.question);
+      }
+    }));
+
 
     const questionControl = this.questionForm.get('questionText');
 
@@ -54,6 +60,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
 
+
   createForm(question: Question) {
 
     const answersFA: FormArray = super.createDefaultForm(question);
@@ -70,7 +77,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     this.questionForm = this.fb.group({
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
-      questionText: [question.questionText, Validators.required],
+      questionText: [question.questionText,
+      Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.question_max_length)])],
       tags: '',
       tagsArray: tagsFA,
       answers: answersFA,

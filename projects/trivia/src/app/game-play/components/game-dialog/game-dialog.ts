@@ -11,7 +11,7 @@ import { GameQuestionComponent } from '../game-question/game-question.component'
 import { UserActions } from 'shared-library/core/store/actions';
 import {
   Game, PlayerQnA, User, Question, Category, GameStatus,
-  PlayerMode, OpponentType, Answer, gamePlayConstants
+  PlayerMode, OpponentType, Answer, gamePlayConstants, ApplicationSettings
 } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { appState, categoryDictionary } from '../../../store';
@@ -39,7 +39,7 @@ export class GameDialog {
   gameOver = false;
   PlayerMode = PlayerMode;
 
-  MAX_TIME_IN_SECONDS = 16;
+  MAX_TIME_IN_SECONDS: number;
   showContinueBtn = false;
   userDict: { [key: string]: User } = {};
   otherPlayer: User;
@@ -56,6 +56,8 @@ export class GameDialog {
   isQuestionAvailable = true;
   isGameLoaded: boolean;
   threeConsecutiveAnswer = false;
+  currentUTC: number;
+  applicationSettings: ApplicationSettings;
 
   private genQuestionComponent: GameQuestionComponent;
 
@@ -121,6 +123,12 @@ export class GameDialog {
         }
 
       }));
+
+    this.sub.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+      }
+    }));
 
   }
 
@@ -231,7 +239,7 @@ export class GameDialog {
   }
 
   subscribeQuestion() {
-    this.timer = this.MAX_TIME_IN_SECONDS;
+
     this.questionSub = this.gameQuestionObs.subscribe(question => {
       if (!question) {
         this.currentQuestion = undefined;
@@ -239,6 +247,8 @@ export class GameDialog {
       }
       this.originalAnswers = Object.assign({}, question.answers);
       this.currentQuestion = question;
+      this.calculateMaxTime();
+      this.timer = this.MAX_TIME_IN_SECONDS;
       this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);
       if (!this.userDict[this.currentQuestion.created_uid]) {
         this.store.dispatch(this.userActions.loadOtherUserProfile(this.currentQuestion.created_uid));
@@ -246,27 +256,57 @@ export class GameDialog {
       this.categoryName = question.categoryIds.map(category => {
         return this.categoryDictionary[category].categoryName;
       }).join(',');
-      if (this.isQuestionAvailable) {
-        this.questionIndex++;
-        this.timerSub =
-          timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
-            this.timer--;
-          },
-            null,
-            () => {
-              // disable all buttons
-              if (this.currentQuestion) {
-                this.afterAnswer();
-                this.genQuestionComponent.fillTimer();
-              }
-            });
+
+      let remainSecond = -1;
+      this.currentUTC = (new Date()).getTime();
+      if (this.game.playerQnAs.length > 0) {
+        const lastQuestionId = this.game.playerQnAs[this.game.playerQnAs.length - 1].questionId;
+        if (lastQuestionId === this.currentQuestion.id) {
+          const addedOn = this.game.playerQnAs[this.game.playerQnAs.length - 1].addedOn;
+          if (addedOn) {
+            const currentUTC = (new Date()).getTime();
+            remainSecond = (this.MAX_TIME_IN_SECONDS + 1) - Math.floor((currentUTC - addedOn) / 1000);
+          } else {
+            remainSecond = this.MAX_TIME_IN_SECONDS;
+          }
+        } else {
+          remainSecond = this.MAX_TIME_IN_SECONDS;
+        }
       } else {
-        setTimeout(() => {
-          this.afterAnswer();
-          this.genQuestionComponent.fillTimer();
-        }, 1000);
+        remainSecond = this.MAX_TIME_IN_SECONDS;
+      }
+
+    if (this.isQuestionAvailable || remainSecond >= 0) {
+      this.questionIndex++;
+      this.timer = remainSecond;
+      this.timerSub =
+        timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
+          this.timer--;
+        },
+          null,
+          () => {
+            // disable all buttons
+            if (this.currentQuestion) {
+              this.afterAnswer();
+              this.genQuestionComponent.fillTimer();
+            }
+          });
+    } else {
+      setTimeout(() => {
+        this.afterAnswer();
+        this.genQuestionComponent.fillTimer();
+      }, 1000);
+    }
+  });
+}
+
+  calculateMaxTime(): void {
+    this.applicationSettings.game_play_timer_loader_ranges.map((timerLoader) => {
+      if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength < timerLoader.end) {
+        this.MAX_TIME_IN_SECONDS = timerLoader.seconds;
       }
     });
+
   }
 
   getNextQuestion() {

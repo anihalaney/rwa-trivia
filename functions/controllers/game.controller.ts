@@ -1,14 +1,16 @@
 import {
     SearchCriteria, Game, GameOperations, PlayerQnA,
-    GameStatus, schedulerConstants
+    GameStatus, schedulerConstants, pushNotificationRouteConstants, OpponentType
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
+import { PushNotification } from '../utils/push-notifications';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
 const utils: Utils = new Utils();
+const pushNotification: PushNotification = new PushNotification();
 const fs = require('fs');
 const request = require('request');
 const path = require('path');
@@ -78,7 +80,13 @@ exports.updateGame = (req, res) => {
                 const currentPlayerQnAs: PlayerQnA = req.body.playerQnA;
                 const qIndex = game.playerQnAs.findIndex((pastPlayerQnA) => pastPlayerQnA.questionId === currentPlayerQnAs.questionId);
                 game.playerQnAs[qIndex] = currentPlayerQnAs;
+                const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
+
+                if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
+                    pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
+                }
                 game.turnAt = utils.getUTCTimeStamp();
                 game.calculateStat(currentPlayerQnAs.playerId);
 
@@ -88,6 +96,11 @@ exports.updateGame = (req, res) => {
                 game.decideWinner();
                 game.calculateStat(game.nextTurnPlayerId);
                 game.GameStatus = GameStatus.COMPLETED;
+                if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
+                }
                 const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
                 systemStatsCalculations.updateSystemStats('game_played').then((stats) => {
                     console.log(stats);
@@ -117,7 +130,7 @@ exports.updateGame = (req, res) => {
         gameMechanics.UpdateGame(dbGame).then((id) => {
             res.send({});
         });
-    })
+    });
 };
 
 
@@ -163,10 +176,34 @@ exports.checkGameOver = (req, res) => {
             const millis = utils.getUTCTimeStamp();
             const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
             const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
+            const playedMinutes = Math.floor((noPlayTimeBound) / (1000 * 60));
+
+            let remainedTime;
+            if (playedMinutes > schedulerConstants.beforeGameExpireDuration) {
+                remainedTime = playedMinutes - schedulerConstants.beforeGameExpireDuration;
+            } else {
+                remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
+            }
+
+
+            if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                if ((remainedTime) <= schedulerConstants.notificationInterval) {
+                    pushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
+                        pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
+                }
+            }
+
 
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
                 game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
+                game.GameStatus = GameStatus.TIME_EXPIRED;
+                if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
+                }
                 const dbGame = game.getDbModel();
                 gameControllerService.updateGame(dbGame).then((ref) => {
                     console.log('updated game', dbGame.id);
@@ -198,7 +235,7 @@ exports.changeGameTurn = (req, res) => {
             const game: Game = Game.getViewModel(doc.data());
             gameMechanics.changeTheTurn(game).then((status) => {
                 console.log('game update status', status, game.gameId);
-            })
+            });
         });
         res.send('scheduler check is completed');
     });
@@ -261,7 +298,7 @@ exports.createSocialImage = (req, res) => {
     socialGameService.generateSocialUrl(req.params.userId, socialId).then((social_url) => {
         res.setHeader('content-disposition', 'attachment; filename=social_image.png');
         res.setHeader('content-type', 'image/png');
-        res.send(social_url)
+        res.send(social_url);
     });
 };
 
