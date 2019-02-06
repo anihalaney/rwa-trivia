@@ -30,6 +30,17 @@ exports.setAccount = (dbAccount: any): Promise<any> => {
         });
 };
 
+/**
+ * updateAccount
+ * return ref
+ */
+exports.updateAccount = (dbAccount: any): Promise<any> => {
+    return accountFireStoreClient.doc(`/accounts/${dbAccount.id}`).update(dbAccount).then(ref => { return ref })
+        .catch(error => {
+            console.error(error);
+            return error;
+        });
+};
 
 /**
  * getAccounts

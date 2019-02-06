@@ -16,9 +16,9 @@ router.get('/hello', generalAuth.adminOnly, generalController.helloOperation);
 router.get('/question', generalAuth.adminOnly, generalController.getTestQuestion);
 router.get('/game/question', generalAuth.adminOnly, generalController.getGameQuestionTest);
 router.get('/es/check', generalAuth.adminOnly, generalController.testES);
-router.get('/user/stat', generalAuth.adminOnly, generalController.generateUsersStat);
-router.get('/leaderboard/stat', generalAuth.adminOnly, generalController.generateLeaderBoardStat);
-router.get('/user/contribution/stat', generalAuth.adminOnly, generalController.generateUserContributionStat);
+router.get('/user/stat', generalController.generateUsersStat);
+router.get('/leaderboard/stat', generalController.generateLeaderBoardStat);
+router.get('/user/contribution/stat',  generalController.generateUserContributionStat);
 router.post('/stat/system', generalAuth.adminOnly, generalController.generateSystemStat);
 router.get('/bulkupload/update', generalAuth.adminOnly, generalController.updateBulkUploadCollection);
 router.post('/question/update/:collectionName', generalAuth.adminOnly, generalController.updateQuestionCollection);
@@ -27,6 +27,8 @@ router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuth
 router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
 router.post('/question/status', generalAuth.adminOnly, generalQuestionController.changeUnpublishedQuestionStatus);
 router.post('/migration/user/stats', generalAuth.adminOnly, generalController.migrateUserStatToAccounts);
+router.post('/account/flushleaderboard', generalController.flushLeaderBoardFromUser);
+router.post('/question/update', generalController.changeQuestionCategoryIdType);
 
 
 
