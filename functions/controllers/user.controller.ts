@@ -99,6 +99,8 @@ function setUser(user, res) {
             UserControllerConstants.mailSubject, htmlContent);
         mail.sendMail();
     }
+
+    delete user['roles'];
     userService.setUser(user).then((ref) => {
         res.send({ 'status': 'Profile Data is saved !!' });
     });

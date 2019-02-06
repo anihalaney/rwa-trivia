@@ -32,6 +32,7 @@ export class User {
   iosPushTokens?: string[];
   lastGamePlayOption?: GameOptions;
 
+
   constructor(authState?: firebase.User & { name: string }) {
     if (authState) {
       this.authState = authState;
