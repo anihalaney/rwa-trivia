@@ -134,7 +134,7 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
 
 
 // update stats based on user creation
-exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate((snap, context) => {
+exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate(async (snap, context) => {
 
     const data = snap.data();
 
@@ -145,14 +145,21 @@ exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate(
             console.log(stats);
         });
 
-        appSettings.getAppSettings().then(appSetting => {
-            if (appSetting.lives.enable) {
-                const accountObj: any = {};
-                accountObj.id = data.userId;
-                accountObj.lives = appSetting.lives.max_lives;
-                generalAccountService.setAccount(accountObj);
-            }
-        });
+        const appSetting = await appSettings.getAppSettings();
+        if (appSetting.lives.enable) {
+            const accountObj: any = {};
+            accountObj.id = data.userId;
+            accountObj.lives = appSetting.lives.max_lives;
+            generalAccountService.setAccount(accountObj);
+        }
+        // appSettings.getAppSettings().then(appSetting => {
+        //     if (appSetting.lives.enable) {
+        //         const accountObj: any = {};
+        //         accountObj.id = data.userId;
+        //         accountObj.lives = appSetting.lives.max_lives;
+        //         generalAccountService.setAccount(accountObj);
+        //     }
+        // });
     }
 
 });
