@@ -16,6 +16,7 @@ import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
 import { Utils } from '../utils/utils';
 import { AppSettings } from '../services/app-settings.service';
+
 const appSettings: AppSettings = new AppSettings();
 
 const utils: Utils = new Utils();
@@ -313,36 +314,38 @@ exports.migrateUserStatToAccounts = (req, res) => {
 /**
  * Add default number of lives to each account
  */
-exports.addDefaultLives = (req, res) => {
-    appSettings.getAppSettings().then(appSetting => {
-        if (appSetting.lives.enable) {
-            const migrationPromises = [];
-            generalUserService.getUsers().then(users => {
-                users.docs.map(user => {
-                    const userObj: User = user.data();
-                    if (userObj && userObj.userId) {
-                        const accountObj: Account = new Account();
-                        accountObj.id = userObj.userId;
-                        migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
-                    }
-                });
-                Promise.all(migrationPromises).then((migrationResults) => {
-                    res.send(migrationResults);
-                })
-                    .catch((e) => {
-                        res.send(e);
-                    });
-            });
-        }
-    });
+exports.addDefaultLives = async (req, res) => {
 
+    const appSetting = await appSettings.getAppSettings();
+    // Lives setting is enable then add default number of lives into user's account
+    if (appSetting.lives.enable) {
+        const migrationPromises = [];
+
+        const usersRef = generalUserService.getUsers();
+        usersRef.then(users => {
+            users.docs.map(user => {
+                const userObj: User = user.data();
+                if (userObj && userObj.userId) {
+                    const accountObj: Account = new Account();
+                    accountObj.id = userObj.userId;
+                    migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
+                }
+            });
+        });
+
+        Promise.all(migrationPromises).then((migrationResults) => {
+            res.send(migrationResults);
+        }).catch((e) => {
+            res.send(e);
+        });
+    }
 };
 
 // Schedular for add lives
-exports.addLives = (req, res) => {
-    appSettings.getAppSettings().then(appSetting => {
-        if (appSetting.lives.enable) {
-            res.send(generalAccountService.addLives());
-        }
-    });
+exports.addLives = async (req, res) => {
+    const appSetting = await appSettings.getAppSettings();
+    if (appSetting.lives.enable) {
+        res.send(generalAccountService.addLives());
+    }
+    return Promise.reject();
 };
