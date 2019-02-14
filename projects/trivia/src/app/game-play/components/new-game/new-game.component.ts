@@ -73,6 +73,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         this.sortedCategories = sortedCategories;
 
         sortedCategories.map(category => {
+          category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay)
           if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
             this.selectedCategories.push(category.id);
           }
