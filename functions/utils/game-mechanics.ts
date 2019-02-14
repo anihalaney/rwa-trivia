@@ -2,7 +2,7 @@ import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../p
 import { Utils } from './utils';
 const utils: Utils = new Utils();
 const gameService = require('../services/game.service');
-const documentService = require('../services/document.service');
+const userService = require('../services/user.service');
 export class GameMechanics {
 
     private gameOptions: GameOptions;
@@ -20,9 +20,7 @@ export class GameMechanics {
 
 
     createNewGame(): Promise<string> {
-
-        // return documentService.updateAccount(this.userId).then(document => {
-        // });
+        return this.updateUser(this.userId, this.gameOptions).then((userId) => {
             if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
                 if (this.gameOptions.rematch) {
                     return this.createFriendUserGame(this.gameOptions.friendId, GameStatus.RESTARTED).then((gameId) => { return gameId });
@@ -38,6 +36,7 @@ export class GameMechanics {
                     this.createSingleAndRandomUserGame(GameStatus.RESTARTED).then((gameId) => { return gameId }) :
                     this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
             }
+        });
     }
 
 
@@ -194,5 +193,13 @@ export class GameMechanics {
             }
         }
         return game;
+    }
+    // Add lastGamePlayOption when new game create
+    private updateUser(userId: string, gameOptions: any): Promise<string> {
+        return userService.getUserById(userId).then((user) => {
+            const dbUser = user.data();
+            dbUser.lastGamePlayOption = gameOptions;
+            return userService.setUser(dbUser).then(ref => dbUser.userId);
+        });
     }
 }

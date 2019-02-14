@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
   Category, GameOptions, GameMode, User, PlayerMode, OpponentType
@@ -74,9 +73,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         this.sortedCategories = sortedCategories;
 
         sortedCategories.map(category => {
-          this.selectedCategories.push(category.id);
+          category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay)
+          if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
+            this.selectedCategories.push(category.id);
+          }
         });
-
       }
     }));
   }
@@ -216,5 +217,17 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
+  }
+
+  isCategorySelected(categoryId: number, requiredForGamePlay: boolean) {
+    if (requiredForGamePlay) {
+      return true;
+    }
+    if (this.user.categoryIds && this.user.categoryIds.length > 0) {
+      return this.user.categoryIds.includes(categoryId);
+    } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
+      return this.user.lastGamePlayOption.categoryIds.includes(categoryId);
+    }
+    return true;
   }
 }

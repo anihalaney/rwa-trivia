@@ -15,7 +15,6 @@ import { filter } from 'rxjs/operators';
 import { UserActions } from 'shared-library/core/store/actions';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
-import { Friends } from '../../../../../../shared-library/src/lib/shared/model';
 import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
 
@@ -59,7 +58,21 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories.filter(c => c.isSelected = true)));
+
+    this.subs.push(this.categoriesObs.subscribe(categories => {
+     categories.map(category => {
+        if (this.user.categoryIds && this.user.categoryIds.length > 0) {
+          category.isSelected =  this.user.categoryIds.includes(category.id);
+        } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
+          category.isSelected = this.user.lastGamePlayOption.categoryIds.includes(category.id);
+        } else {
+          category.isSelected = true;
+        }
+        return category;
+      });
+      return categories;
+
+    }));
 
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
