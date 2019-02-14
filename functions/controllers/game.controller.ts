@@ -54,10 +54,10 @@ exports.createGame = async (req, res) => {
     gameMechanics.createNewGame().then((gameId) => {
         if (appSetting.lives.enable) {
             // Decrement lives from user account
-            generalAccountService.updateAccount(userId).then(acc => acc);
+            generalAccountService.updateAccount(userId);
             // Decrement Second Player's life
             if (gameOptions.friendId) {
-                generalAccountService.updateAccount(gameOptions.friendId).then(acc => acc);
+                generalAccountService.updateAccount(gameOptions.friendId);
             }
         }
         res.send({ gameId: gameId });

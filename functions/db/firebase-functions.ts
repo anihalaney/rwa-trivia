@@ -152,14 +152,6 @@ exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate(
             accountObj.lives = appSetting.lives.max_lives;
             generalAccountService.setAccount(accountObj);
         }
-        // appSettings.getAppSettings().then(appSetting => {
-        //     if (appSetting.lives.enable) {
-        //         const accountObj: any = {};
-        //         accountObj.id = data.userId;
-        //         accountObj.lives = appSetting.lives.max_lives;
-        //         generalAccountService.setAccount(accountObj);
-        //     }
-        // });
     }
 
 });

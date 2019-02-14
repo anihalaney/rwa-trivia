@@ -113,6 +113,8 @@ exports.updateLives = (req, res) => {
     }
     return generalAccountService.updateLives(userId).then((ref) => {
         res.send({ 'status': 'Lives added successfully !!' });
+    }, error => {
+        res.status(500).send(error);
     });
 
 };
