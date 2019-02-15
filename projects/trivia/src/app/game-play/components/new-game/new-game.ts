@@ -71,8 +71,6 @@ export class NewGame {
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
     this.gameOptions = new GameOptions();
 
-
-
   }
 
 
