@@ -74,4 +74,14 @@ export class Utils {
     return diff;
   }
 
+  public getUTCTimeStamp() {
+    const date = new Date(new Date().toUTCString());
+    const millis = date.getTime();
+    return millis;
+  }
+
+  public convertMilliSIntoMinutes(millis) {
+    return millis / 60000;
+  }
+
 }

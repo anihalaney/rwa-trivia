@@ -4,10 +4,18 @@ export class ApplicationSettings {
     game_play_show_tags: boolean;          // Show/Hide  Tags in New game
     question_max_length: number;           // Maximum character allowed for question
     game_play_timer_loader_ranges: Array<TimerLoader>;  // Contains start range, end  range and seconds
+    lives: Lives;
 }
 
 export class TimerLoader {
     start: number;
     end: number;
     seconds: number;
+}
+
+export class Lives {
+    enable: boolean;
+    lives_add: number;
+    lives_after_add_millisecond: number;
+    max_lives: number;
 }

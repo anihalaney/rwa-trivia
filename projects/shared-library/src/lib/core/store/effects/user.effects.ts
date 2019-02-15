@@ -155,6 +155,17 @@ export class UserEffects {
                 );
             })
         );
+ // Add User lives
+ @Effect()
+    AddUserLives$ = this.actions$
+     .pipe(ofType(UserActions.ADD_USER_LIVES))
+     .pipe(
+         switchMap((action: ActionWithPayload<string>) => {
+             return this.svc.addUserLives(action.payload).pipe(
+                 map(() => this.userActions.addUserLivesSuccess()));
+         }
+         )
+     );
 
     constructor(
         private actions$: Actions,
