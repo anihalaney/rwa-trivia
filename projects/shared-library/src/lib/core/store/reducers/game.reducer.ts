@@ -24,3 +24,13 @@ export function newGameId(state: any = "", action: ActionWithPayload<string>): s
         return state;
     }
   }
+
+  // Game Create Status
+export function gameCreateStatus(state: any = '', action: ActionWithPayload<String>): String {
+  switch (action.type) {
+    case GameActions.CREATE_NEW_GAME_ERROR:
+      return action.payload;
+    default:
+      return null;
+  }
+}
