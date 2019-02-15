@@ -131,20 +131,19 @@
                 <Label padding="15" text="{{getSelectedCatName()}}" textWrap="true" class="label"></Label>
             </CardView>
 
-
             <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
                 <Label row="0" col="0" text="Tags associated categories" fontSize="18" textWrap="true" class="label"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
                     textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"
                     background="#fff"></Label>
             </GridLayout>
-
-            <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
+            
+            <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"  iosOverflowSafeArea="false" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
                 <StackLayout>
-                    <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option label" *ngFor="let tag of selectedTags">
-                        <Label [text]="tag" row="0" col="0" textWrap="true" fontSize="18" padding="8"></Label>
+                    <GridLayout rows="auto,auto" columns="auto,*" padding="10" class="two-player-option label" *ngFor="let tag of selectedTags" iosOverflowSafeArea="false">
+                        <Label [text]="tag" row="0" col="0" textWrap="true" fontSize="18" padding="8" iosOverflowSafeArea="false"></Label>
                         <Label row="0" col="1" class="fa" text="&#xf00d;" fontSize="18" textWrap="true" padding="8"
-                            horizontalAlignment="right" (tap)="removeEnteredTag(tag)"></Label>
+                            horizontalAlignment="right" (tap)="removeEnteredTag(tag)" iosOverflowSafeArea="false"></Label>
                     </GridLayout>
                     <GridLayout rows="auto,auto" columns="*,auto" padding="10" class="two-player-option">
                         <Label row="0" col="0" text="Add Tags" fontSize="18" textWrap="true" class="label" padding="2 0"></Label>

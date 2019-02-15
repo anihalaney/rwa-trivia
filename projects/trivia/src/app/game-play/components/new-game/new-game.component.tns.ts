@@ -57,7 +57,21 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories.filter(c => c.isSelected = true)));
+
+    this.subs.push(this.categoriesObs.subscribe(categories => {
+     categories.map(category => {
+        if (this.user.categoryIds && this.user.categoryIds.length > 0) {
+          category.isSelected =  this.user.categoryIds.includes(category.id);
+        } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
+          category.isSelected = this.user.lastGamePlayOption.categoryIds.includes(category.id);
+        } else {
+          category.isSelected = true;
+        }
+        return category;
+      });
+      return categories;
+
+    }));
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
