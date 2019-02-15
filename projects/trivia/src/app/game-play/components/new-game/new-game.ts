@@ -1,13 +1,11 @@
 import { Observable, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
 import * as gameplayactions from '../../store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
 import { Category, GameOptions, User, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-
 
 export class NewGame {
   categoriesObs: Observable<Category[]>;
@@ -26,7 +24,7 @@ export class NewGame {
   userDict: { [key: string]: User } = {};
   noFriendsStatus: boolean;
   filteredTags$: Observable<string[]>;
-
+  user: User;
   friendUserId: string;
   loaderStatus = false;
   errMsg: string;
@@ -43,9 +41,18 @@ export class NewGame {
     this.selectedTags = [];
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.userDict$.subscribe(userDict => this.userDict = userDict);
-
+    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
+        this.user = user;
+        if (this.user.tags && this.user.tags.length > 0) {
+          this.selectedTags = this.user.tags;
+        } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
+          this.selectedTags = this.user.lastGamePlayOption.tags;
+        } else {
+          this.selectedTags = this.tags;
+        }
         this.store.dispatch(this.userActions.loadUserFriends(user.userId));
       }
     }));
@@ -66,9 +73,6 @@ export class NewGame {
     }));
     this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
-
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
     this.gameOptions = new GameOptions();
 
   }
