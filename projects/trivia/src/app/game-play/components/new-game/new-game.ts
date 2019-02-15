@@ -75,8 +75,6 @@ export class NewGame {
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.gameOptions = new GameOptions();
 
-
-
   }
 
 

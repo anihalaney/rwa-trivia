@@ -2,7 +2,7 @@ const accountFireBaseClient = require('../db/firebase-client');
 const accountFireStoreClient = accountFireBaseClient.firestore();
 import { AppSettings } from './app-settings.service';
 import { Utils } from '../utils/utils';
-import { async } from 'rxjs/internal/scheduler/async';
+
 const utils: Utils = new Utils();
 const appSettings: AppSettings = new AppSettings();
 
@@ -10,14 +10,13 @@ const appSettings: AppSettings = new AppSettings();
  * getAccountById
  * return account
  */
-exports.getAccountById = (id: string): Promise<any> => {
-    return accountFireStoreClient.doc(`/accounts/${id}`)
-        .get()
-        .then(u => u)
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
+exports.getAccountById = async (id: string): Promise<any> => {
+    try {
+        return await accountFireStoreClient.doc(`/accounts/${id}`).get();
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 
@@ -25,12 +24,15 @@ exports.getAccountById = (id: string): Promise<any> => {
  * setAccount
  * return ref
  */
-exports.setAccount = (dbAccount: any): Promise<any> => {
-    return accountFireStoreClient.doc(`/accounts/${dbAccount.id}`).set(dbAccount).then(ref => ref)
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
+exports.setAccount = async (dbAccount: any): Promise<any> => {
+    try {
+        return await accountFireStoreClient.doc(`/accounts/${dbAccount.id}`)
+            .set(dbAccount);
+
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 
@@ -38,13 +40,13 @@ exports.setAccount = (dbAccount: any): Promise<any> => {
  * getAccounts
  * return accounts
  */
-exports.getAccounts = (): Promise<any> => {
-    return accountFireStoreClient.collection('accounts')
-        .get().then(accounts => accounts)
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
+exports.getAccounts = async (): Promise<any> => {
+    try {
+        return await accountFireStoreClient.collection('accounts').get();
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 /**
@@ -57,30 +59,25 @@ exports.updateAccount = async (userId): Promise<any> => {
         if (appSetting.lives.enable) {
             const maxLives = appSetting.lives.max_lives;
             const livesMillis = appSetting.lives.lives_after_add_millisecond;
-            const docRef = await accountFireStoreClient.collection(`accounts`).doc(userId);
-
-            return docRef.get().then(ref => {
-                const timestamp = utils.getUTCTimeStamp();
-                if (ref.exists) {
-                    const lives = ref.data();
-                    if (lives.lives === maxLives || !lives.lastLiveUpdate) {
-                        lives.lastLiveUpdate = timestamp;
-                        lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
-                    }
-                    if (lives.lives > 0) {
-                        lives.lives += -1;
-                    }
-                    docRef.update(lives);
+            const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
+            const docRef = await accountRef.get();
+            const timestamp = utils.getUTCTimeStamp();
+            if (docRef.exists) {
+                const lives = docRef.data();
+                if (lives.lives === maxLives || !lives.lastLiveUpdate) {
+                    lives.lastLiveUpdate = timestamp;
+                    lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
                 }
-            }).catch((error) => {
-                return error;
-            });
+                if (lives.lives > 0) {
+                    lives.lives += -1;
+                }
+                accountRef.update(lives);
+            }
         }
     } catch (error) {
+        console.error(error);
         return error;
     }
-
-    Promise.resolve();
 };
 
 
@@ -95,35 +92,29 @@ exports.increaseLives = async (userId): Promise<any> => {
             const maxLives = appSetting.lives.max_lives;
             const livesAdd = appSetting.lives.lives_add;
             const livesMillis = appSetting.lives.lives_after_add_millisecond;
-            const docRef = await accountFireStoreClient.collection(`accounts`).doc(userId);
-            return docRef.get().then(ref => {
-                const timestamp = utils.getUTCTimeStamp();
-                if (ref.exists) {
-                    const lives = ref.data();
-                    if (lives.lives < maxLives) {
-                        lives.lives += livesAdd;
-                        if (lives.lives > maxLives) {
-                            lives.lives = maxLives;
-                        } else {
-                            lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
-                        }
-                        lives.lastLiveUpdate = timestamp;
-                        docRef.update(lives);
+            const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
+            const docRef = await accountRef.get();
+            const timestamp = utils.getUTCTimeStamp();
+            if (docRef.exists) {
+                const lives = docRef.data();
+                if (lives.lives < maxLives && lives.nextLiveUpdate <= timestamp) {
+                    lives.lives += livesAdd;
+                    if (lives.lives > maxLives) {
+                        lives.lives = maxLives;
+                    } else {
+                        lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
                     }
-
-                } else {
-                    docRef.set({ lives: maxLives });
+                    lives.lastLiveUpdate = timestamp;
+                    accountRef.update(lives);
                 }
-                return docRef;
-            }).catch(function (error) {
-                console.log(error.message);
-                return error;
-            });
+            } else {
+                accountRef.set({ lives: maxLives, id: userId });
+            }
         }
     } catch (error) {
+        console.error(error);
         return error;
     }
-
 };
 
 /**
@@ -135,26 +126,21 @@ exports.addDefaultLives = async (user: any): Promise<any> => {
         const appSetting = await appSettings.getAppSettings();
         if (appSetting.lives.enable) {
             const maxLives = appSetting.lives.max_lives;
-            const docRef = await accountFireStoreClient.doc(`/accounts/${user.id}`);
-            return docRef
-                .get().then(ref => {
-                    if (ref.exists) {
-                        const lives = ref.data();
-                        if (!lives.lives) {
-                            lives.lives = maxLives;
-                            lives.id = user.id;
-                            docRef.update(lives);
-                        }
-                    } else {
-                        docRef.set({ lives: maxLives, id: user.id });
-                    }
-                    return docRef;
-                }).catch(function (error) {
-                    return error;
-                });
+            const accountRef = accountFireStoreClient.collection(`accounts`).doc(user.id);
+            const docRef = await accountRef.get();
+            if (docRef.exists) {
+                const lives = docRef.data();
+                if (!lives.lives) {
+                    lives.lives = maxLives;
+                    lives.id = user.id;
+                    accountRef.update(lives);
+                }
+            } else {
+                accountRef.set({ lives: maxLives, id: user.id });
+            }
         }
-        return;
     } catch (error) {
+        console.error(error);
         return error;
     }
 };
@@ -172,38 +158,32 @@ exports.addLives = async (): Promise<any> => {
             const livesAdd = appSetting.lives.lives_add;
             const livesMillis = appSetting.lives.lives_after_add_millisecond;
             let timestamp = utils.getUTCTimeStamp();
-            const accountdocRef = accountFireStoreClient.collection('accounts')
+            const accountCollRef = accountFireStoreClient.collection('accounts')
                 .where('nextLiveUpdate', '<=', timestamp);
+            const accounts = await accountCollRef.get();
+            const accountsNotHavingMaxLives = accounts.docs.filter(d => d.data().lives < maxLives);
+            for (const account of accountsNotHavingMaxLives) {
+                timestamp = utils.getUTCTimeStamp();
+                const userAccount = account.data();
+                const accountRef = accountFireStoreClient.collection(`accounts`).doc(userAccount.id);
+                const docRef = await accountRef.get();
 
-            return accountdocRef.get().then((accounts) => {
-                accounts = accounts.docs.filter(d => d.data().lives < maxLives);
-                accounts.map(account => {
-                    timestamp = utils.getUTCTimeStamp();
-                    const userAccount = account.data();
-                    const docRef = accountFireStoreClient.collection(`accounts`).doc(userAccount.id);
-                    docRef.get()
-                        .then(ref => {
-                            const lives = ref.data();
-                            if (lives.lives < maxLives && lives.nextLiveUpdate <= timestamp) {
-                                lives.lives += livesAdd;
-                                if (lives.lives > maxLives) {
-                                    lives.lives = maxLives;
-                                } else {
-                                    // Update nextLiveUpdate
-                                    lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
-                                }
-                                lives.lastLiveUpdate = timestamp;
-                                docRef.update(lives);
-                            }
-                        }).catch(function (error) {
-                            console.log(error.message);
-                        });
-                });
-                return accounts;
-            });
+                const lives = docRef.data();
+                if (lives.lives < maxLives && lives.nextLiveUpdate <= timestamp) {
+                    lives.lives += livesAdd;
+                    if (lives.lives > maxLives) {
+                        lives.lives = maxLives;
+                    } else {
+                        // Update nextLiveUpdate
+                        lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
+                    }
+                    lives.lastLiveUpdate = timestamp;
+                    accountRef.update(lives);
+                }
+            }
         }
-        return;
     } catch (error) {
+        console.error(error);
         return error;
     }
 };

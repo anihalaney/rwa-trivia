@@ -1,5 +1,6 @@
 import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from './utils';
+import { async } from '@angular/core/testing';
 const utils: Utils = new Utils();
 const gameService = require('../services/game.service');
 const userService = require('../services/user.service');
