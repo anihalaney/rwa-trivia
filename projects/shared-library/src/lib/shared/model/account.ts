@@ -1,6 +1,8 @@
 export class Account {
+    enable?: boolean;
     lives?: number;
-    livesUpdatedAt?: number;
+    lastLiveUpdate?: number;
+    nextLiveUpdate?: number;
     leaderBoardStats?: { [key: number]: number };
     gamePlayed?: number;
     categories?: number;

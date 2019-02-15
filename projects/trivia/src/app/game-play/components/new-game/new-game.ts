@@ -28,6 +28,8 @@ export class NewGame {
   friendUserId: string;
   loaderStatus = false;
   errMsg: string;
+  life: number;
+  gameErrorMsg: String = 'Sorry, don\'t have enough life.';
 
   constructor(
     public store: Store<AppState>,
@@ -72,8 +74,6 @@ export class NewGame {
     this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.gameOptions = new GameOptions();
-
-
 
   }
 

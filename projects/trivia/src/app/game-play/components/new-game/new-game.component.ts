@@ -12,6 +12,9 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
+import { MatSnackBar } from '@angular/material';
+
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -39,7 +42,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   friendUserId: string;
   loaderStatus = false;
-  errMsg: string;
+
 
   get categoriesFA(): FormArray {
     return this.newGameForm.get('categoriesFA') as FormArray;
@@ -50,8 +53,16 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private windowRef: WindowRef,
     private router: Router,
     public userActions: UserActions,
-    public utils: Utils) {
+    public utils: Utils,
+    public snackBar: MatSnackBar) {
     super(store, utils, gameActions, userActions);
+
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+      if (gameCreateStatus) {
+        this.redirectToDashboard(gameCreateStatus);
+      }
+    }));
+
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
@@ -65,6 +76,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           });
         } else {
           filteredCategories = this.categories;
+        }
+
+        if (this.applicationSettings && this.applicationSettings.lives.enable) {
+          this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+            if (account) {
+              this.life = account.lives;
+            }
+          }));
         }
 
         const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
@@ -196,7 +215,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       }
       return;
     }
-
+    // if (this.applicationSettings.lives.enable && this.life === 0) {
+    //   this.redirectToDashboard(this.gameErrorMsg);
+    //   return false;
+    // }
     this.startNewGame(gameOptions);
   }
 
@@ -214,7 +236,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return gameOptions;
   }
 
-
+  redirectToDashboard(msg) {
+    this.router.navigate(['/dashboard']);
+    this.snackBar.open(String(msg), '', {
+      duration: 2000,
+    });
+  }
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
   }

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="pageheading col-md-6 col-xs-12 hidden-xs">Dashboard</div>
     <div class="col-md-6 col-xs-12 align-right">
-      <a [routerLink]="['/game-play']" class="startgame">Start New Game</a>
+      <button [disabled] = "gamePlayBtnDisabled" class="startgame" [routerLink]="['/game-play']"> Start New Game {{timeoutLive}} </button>
     </div>
   </div>
 
