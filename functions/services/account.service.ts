@@ -97,7 +97,7 @@ exports.increaseLives = async (userId): Promise<any> => {
             const timestamp = utils.getUTCTimeStamp();
             if (docRef.exists) {
                 const lives = docRef.data();
-                if (lives.lives < maxLives) {
+                if (lives.lives < maxLives && lives.nextLiveUpdate <= timestamp) {
                     lives.lives += livesAdd;
                     if (lives.lives > maxLives) {
                         lives.lives = maxLives;
@@ -160,15 +160,13 @@ exports.addLives = async (): Promise<any> => {
             let timestamp = utils.getUTCTimeStamp();
             const accountCollRef = accountFireStoreClient.collection('accounts')
                 .where('nextLiveUpdate', '<=', timestamp);
-
             const accounts = await accountCollRef.get();
             const accountsNotHavingMaxLives = accounts.docs.filter(d => d.data().lives < maxLives);
-
             for (const account of accountsNotHavingMaxLives) {
                 timestamp = utils.getUTCTimeStamp();
                 const userAccount = account.data();
                 const accountRef = accountFireStoreClient.collection(`accounts`).doc(userAccount.id);
-                const docRef = accountRef.get();
+                const docRef = await accountRef.get();
 
                 const lives = docRef.data();
                 if (lives.lives < maxLives && lives.nextLiveUpdate <= timestamp) {
