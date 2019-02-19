@@ -48,9 +48,14 @@ export class DashboardComponent extends Dashboard implements OnInit {
   }
 
   startNewGame() {
-    if (this.account.lives > 0) {
+    if (this.applicationSettings.lives.enable) {
+      if (this.account.lives > 0) {
+        this.routerExtension.navigate(['/game-play']);
+      }
+    } else {
       this.routerExtension.navigate(['/game-play']);
     }
+
   }
 
   filterGame(game: any, gameStatus, user: User) {
