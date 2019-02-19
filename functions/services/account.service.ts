@@ -191,3 +191,56 @@ exports.addLives = async (): Promise<any> => {
 exports.updateLives = (userId): Promise<any> => {
     return this.increaseLives(userId);
 };
+
+/**
+ * set number of bits into account
+ */
+exports.setBits = async (userId: any): Promise<any> => {
+    try {
+        const appSetting = await appSettings.getAppSettings();
+        if (appSetting.tokens.enable) {
+            const bits = appSetting.tokens.earn_bits;
+            console.log('not bits', bits);
+            const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
+            const docRef = await accountRef.get();
+
+            if (docRef.exists) {
+                const account = docRef.data();
+                account.bits = (account.bits) ? (account.bits + bits) : bits;
+                account.id = userId;
+                accountRef.update(account);
+            } else {
+                accountRef.set({ bits: bits, id: userId });
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+};
+
+/**
+ * set number of bits into account
+ */
+exports.setBytes = async (userId: any): Promise<any> => {
+    try {
+        const appSetting = await appSettings.getAppSettings();
+        if (appSetting.tokens.enable) {
+            const bytes = appSetting.tokens.earn_bytes;
+            const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
+            const docRef = await accountRef.get();
+
+            if (docRef.exists) {
+                const account = docRef.data();
+                account.bytes = (account.bytes) ? (account.bytes + bytes) : bytes;
+                account.id = userId;
+                accountRef.update(account);
+            } else {
+                accountRef.set({ bytes: bytes, id: userId });
+            }
+        }
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+};

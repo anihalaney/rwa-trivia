@@ -82,8 +82,8 @@ export class Dashboard implements OnDestroy {
                             this.applicationSettings = appSettings[0];
                             if (this.applicationSettings) {
                                 if (this.applicationSettings.lives.enable) {
-                                    this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
-                                        this.account = account;
+                                        this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+                                            this.account = account;
                                         if (this.account && this.account.lives === 0) {
                                             this.gamePlayBtnDisabled = true;
                                         } else {
