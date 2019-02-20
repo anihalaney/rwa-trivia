@@ -90,6 +90,19 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   .namefield .formfield{ width: 100% }
   .namefield .formfield > input{ width: 55% }
   .custom-file-upload:hover{ box-shadow: 0 2px 5px rgba(0,0,0,.30)}
+  .social-profile{
+    font-size: 16px;
+    padding: 5px;
+    margin-left: 10px;
+  }
+  .social-url{
+    font-size: 16px;
+  }
+  .social-profile-name{
+    margin: 0 !important;
+    font-size: 18px !important;
+    font-family: 'hindmedium';
+  }
 }
 .save
 {
@@ -100,6 +113,21 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
 {
   padding: 10px 25px;
   font-size: 16px;
+}
+
+.social-profile{
+  font-size: 16px;
+  padding: 5px;
+  margin-left: 10px;
+}
+.social-url{
+  font-size: 16px;
+}
+.social-profile-name{
+  margin: 0;
+  font-size: 20px;
+  font-family: 'hindmedium';
+  text-transform: none !important;
 }
 @media(max-width: 600px) {
   .btn
