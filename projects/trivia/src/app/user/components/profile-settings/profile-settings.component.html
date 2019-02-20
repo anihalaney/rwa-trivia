@@ -165,46 +165,6 @@
               </div>
 
             </div>
-
-            <div class="col-xs-12">
-
-              <div class="row">
-                <!-- Security Setting -->
-                <div class="col-sm-3">
-                  <h3>Security Setting </h3>
-                </div>
-                <div class="col-md-9 col-sm-9">
-                  <div class="formfield">
-                    <label>Profile:</label>
-                    <select placeholder="Select Profile" formControlName="profileSetting">
-                      <option *ngFor="let profileOption of profileOptions" [value]="profileOption">
-                        {{profileOption}}
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="formfield">
-                    <label>Location:</label>
-                    <select placeholder="Select Location" formControlName="profileLocationSetting">
-                      <option *ngFor="let locationOption of locationOptions" [value]="locationOption">
-                        {{locationOption}}
-                      </option>
-                    </select>
-                  </div>
-
-                  <div class="formfield">
-                    <label>Privacy:</label>
-                    <label>
-                      <input formControlName="privateProfileSetting" type="checkbox"> Keep your profile activity
-                      private
-                    </label>
-                    <p>This means no one can invite you or can see you profile.</p>
-                  </div>
-                  <!-- Security Setting end -->
-                </div>
-              </div>
-            </div>
-
             <div class="col-xs-12">
 
               <div class="row">

@@ -162,11 +162,6 @@ export class ProfileSettings {
             twitterUrl: [user.twitterUrl, Validators.pattern(this.linkValidation)],
             linkedInUrlStatus: [true],
             linkedInUrl: [user.linkedInUrl, Validators.pattern(this.linkValidation)],
-            profileSetting: [(user.profileSetting) ? user.profileSetting :
-                (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
-            profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
-                (this.locationOptions.length > 0 ? this.locationOptions[0] : '')],
-            privateProfileSetting: [user.privateProfileSetting],
             profilePicture: [user.profilePicture, Validators.required]
         });
         this.enteredTags = user.tags;
@@ -186,9 +181,6 @@ export class ProfileSettings {
         this.user.linkedInUrl = formValue.linkedInUrl;
         this.user.twitterUrl = formValue.twitterUrl;
         this.user.tags = [...this.enteredTags];
-        this.user.profileSetting = formValue.profileSetting;
-        this.user.profileLocationSetting = formValue.profileLocationSetting;
-        this.user.privateProfileSetting = formValue.privateProfileSetting;
         this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
     }
 
