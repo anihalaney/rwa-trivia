@@ -129,6 +129,9 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   font-family: 'hindmedium';
   text-transform: none !important;
 }
+.show-more{
+  cursor: pointer;
+}
 @media(max-width: 600px) {
   .btn
   {
