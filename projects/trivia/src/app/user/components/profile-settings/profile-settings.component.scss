@@ -90,10 +90,11 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   .namefield .formfield{ width: 100% }
   .namefield .formfield > input{ width: 55% }
   .custom-file-upload:hover{ box-shadow: 0 2px 5px rgba(0,0,0,.30)}
+  
   .social-profile{
     font-size: 16px;
     padding: 5px;
-    margin-left: 10px;
+    border-radius: 4px;
   }
   .social-url{
     font-size: 16px;
@@ -103,7 +104,20 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
     font-size: 18px !important;
     font-family: 'hindmedium';
   }
+  .social-input-field{
+    display: flex;
+    background-color: #FFFFFF;
+    border-radius:4px;
+  }
+  .social-url-contain{
+    padding: 10px;
+    background-color: #e9e9e9;
+    border: 1px solid #dcdcdc;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
 }
+
 .save
 {
   width: 20%;
@@ -118,7 +132,7 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
 .social-profile{
   font-size: 16px;
   padding: 5px;
-  margin-left: 10px;
+  border-radius: 4px;
 }
 .social-url{
   font-size: 16px;
@@ -128,6 +142,18 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   font-size: 20px;
   font-family: 'hindmedium';
   text-transform: none !important;
+}
+.social-input-field{
+  display: flex;
+  background-color: #FFF;
+  border-radius:4px;
+}
+.social-url-contain{
+  padding: 10px;
+  background-color: #e9e9e9;
+  border: 1px solid #dcdcdc;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
 }
 .show-more{
   cursor: pointer;
