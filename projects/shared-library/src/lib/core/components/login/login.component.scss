@@ -154,3 +154,8 @@ TextField {
 .text-icon-field{
 	border-radius: 0 10 10 0;
 }
+
+.hide-hint{
+	display: none;
+	visibility: collapsed;
+}
