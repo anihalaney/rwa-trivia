@@ -154,9 +154,11 @@
               <div *ngFor="let profiles of socialProfileSettings; let i=index">
                 <div class="formfield" *ngIf="profiles.enable && i <= socialProfileShowLimit">
                   <h2 class="social-profile-name">{{profiles.display}}</h2>
-                  <div>
-                    <span class="social-url">{{profiles.url}}</span>
-                    <input class="social-profile" [formControlName]="profiles.social_name">
+                  <div class="social-input-field">
+                    <div class="social-url-contain">
+                      <span class="social-url">{{profiles.url}}</span>
+                    </div>
+                    <input class="social-profile col-md-6" [formControlName]="profiles.social_name">
                   </div>
                 </div>
               </div>

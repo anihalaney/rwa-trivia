@@ -151,3 +151,20 @@
     background-color: #009fe8;
     color: #ffffff;
 }
+
+.label-link{
+    color: #b7b7b7;
+}
+
+.input-border{
+    margin-top: 8;
+    border-width: 1;
+    border-color: #D3D3D3;
+    border-radius: 3;
+    padding: 15;
+}
+
+.social-section StackLayout{
+    padding: 0;
+    margin:0;
+}
