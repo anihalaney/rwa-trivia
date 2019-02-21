@@ -38,7 +38,6 @@ export class GameMechanics {
                     this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
             }
         });
-
     }
 
 
