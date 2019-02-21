@@ -1,23 +1,12 @@
 <!-- My setting -->
 <div class="mainpage submitpage mysetting" *ngIf="user">
   <div class="row hidden-xs">
-    <div class="pageheading col-sm-6 col-xs-12">My Settings</div>
+    <div class="pageheading col-sm-6 col-xs-12">My Profile</div>
   </div>
   <section id="curentactive" class="card">
     <div class="h1block">
-      <h1>My Settings</h1>
-      <p>Control You profile information, both what it says and what other people see</p>
-    </div>
-    <div class="optionbox">
-      <!-- Prefered Categories -->
-      <div class="pcategories row">
-        <div class="col-sm-6 col-xs-12">
-          <h2>
-            <span>{{user.displayName}}</span>
-          </h2>
-        </div>
-      </div>
-      <!-- Prefered Categories end -->
+      <h1>{{user.displayName}}</h1>
+      <p>View / change your public profile</p>
     </div>
     <form *ngIf="userForm" [formGroup]="userForm" novalidate>
 
@@ -33,13 +22,13 @@
               </label>
             </div>
           </div>
-          <h3>Upload Avatar * :-</h3>
+          <h3>Upload Avatar *</h3>
           <!-- Upload avatar -->
           <div class="row">
             <div class="col-sm-3 col-xs-12">
               <label for="file-upload" class="custom-file-upload">
                 <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"
-                  alt="Avatar" />
+                 alt="Avatar" />
               </label>
               <div>
                 <button *ngIf="profileImageFile && !profileImageValidation" class="btn" (click)="saveProfileImage()">Save</button>
@@ -92,8 +81,8 @@
 
           <!-- Categories -->
           <div class="row pcategories">
-            <div class="col-sm-3">
-              <h3>Categories</h3>
+            <div class="col-sm-3 add-space">
+              <h3>Preferred Categories</h3>
             </div>
             <div class="col-sm-9" formArrayName="categoryList">
               <div class="formfield" *ngFor="let category of categoryList.controls; let i=index" [formGroupName]="i">
@@ -107,12 +96,11 @@
 
           <!-- Tags -->
           <div class="row pcategories">
-            <div class="col-sm-3">
-              <h3>Tags</h3>
+            <div class="col-sm-3 add-space">
+              <h3 >Preferred Tags</h3>
             </div>
             <div class="col-sm-9">
               <div class="tags">
-                <p>Tags associated categories</p>
                 <div data-tags-input-name="tag" id="tagBox" class="tagging">
                   <mat-chip-list>
                     <mat-basic-chip *ngFor="let tag of autoTags" class="tag">
@@ -131,8 +119,8 @@
                       {{tag}}
                     </mat-option>
                   </mat-autocomplete>
-                  <button mat-button class="add-tag-button matHeader margin-top-10" color="primary" [disabled]="userForm.controls.tags.value==''"
-                    (click)="addTag()">ADD</button>
+                  <button mat-button class="add-tag-button matHeader margin-top-10" color="primary" [disabled]="userForm.controls.tags.value==''" 
+                  (click)="addTag()">ADD</button>
                 </div>
               </div>
             </div>
@@ -178,7 +166,7 @@
                      || user.bulkUploadPermissionStatus === NONE
                      || user.bulkUploadPermissionStatus === PENDING)
                      && !user.isRequestedBulkUpload"
-                      type="button" class="btn" (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
+                     type="button" class="btn" (click)="setBulkUploadRequest()">{{bulkUploadBtnText}}</button>
                     <p *ngIf="user.bulkUploadPermissionStatus === PENDING">Bulk upload requested on
                       {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}.</p>
                     <p *ngIf="user.bulkUploadPermissionStatus === APPROVED">User has bulk upload

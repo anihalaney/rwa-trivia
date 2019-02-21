@@ -84,13 +84,15 @@ export class Dashboard implements OnDestroy {
                                 if (this.applicationSettings.lives.enable) {
                                     this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
                                         this.account = account;
-                                        if (this.account && this.account.lives === 0) {
-                                            this.gamePlayBtnDisabled = true;
-                                        } else {
-                                            this.gamePlayBtnDisabled = false;
-                                        }
                                         if (this.account && !this.account.enable) {
                                             this.timeoutLive = '';
+                                            if (this.account && this.account.lives === 0) {
+                                                this.gamePlayBtnDisabled = true;
+                                            } else {
+                                                this.gamePlayBtnDisabled = false;
+                                            }
+                                        } else {
+                                            this.gamePlayBtnDisabled = false;
                                         }
                                         if (this.timerSub) {
                                             this.timerSub.unsubscribe();
@@ -98,6 +100,7 @@ export class Dashboard implements OnDestroy {
                                         this.gameLives();
                                     }));
                                 } else {
+                                    this.gamePlayBtnDisabled = false;
                                     if (this.timerSub) {
                                         this.timeoutLive = '';
                                         this.timerSub.unsubscribe();
