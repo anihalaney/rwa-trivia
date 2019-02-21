@@ -6,11 +6,13 @@ import { Utils } from '../utils/utils';
 import { PushNotification } from '../utils/push-notifications';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+
 import { AppSettings } from '../services/app-settings.service';
 const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
 const generalAccountService = require('../services/account.service');
+
 const utils: Utils = new Utils();
 const pushNotification: PushNotification = new PushNotification();
 const fs = require('fs');
@@ -106,6 +108,9 @@ exports.updateGame = (req, res) => {
                 const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
 
+                if (currentPlayerQnAs.answerCorrect) {
+                    generalAccountService.setBits(userId);
+                }
                 if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
                     pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
                         pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
@@ -119,6 +124,7 @@ exports.updateGame = (req, res) => {
                 game.decideWinner();
                 game.calculateStat(game.nextTurnPlayerId);
                 game.GameStatus = GameStatus.COMPLETED;
+                generalAccountService.setBytes(game.winnerPlayerId);
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
                     pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
