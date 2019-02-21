@@ -5,6 +5,7 @@ export class ApplicationSettings {
     question_max_length: number;           // Maximum character allowed for question
     game_play_timer_loader_ranges: Array<TimerLoader>;  // Contains start range, end  range and seconds
     lives: Lives;
+    tokens: Tokens;
 }
 
 export class TimerLoader {
@@ -18,4 +19,10 @@ export class Lives {
     lives_add: number;
     lives_after_add_millisecond: number;
     max_lives: number;
+}
+
+export class Tokens {
+    enable: boolean;
+    earn_bits: number;
+    earn_bytes: number;
 }

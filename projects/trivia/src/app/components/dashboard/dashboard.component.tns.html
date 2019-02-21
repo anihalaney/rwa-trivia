@@ -2,8 +2,11 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2">
     <ScrollView>
         <StackLayout>        
-                
+                <Label margin="5 10"  *ngIf="account?.bits" text=" Bits: {{account?.bits}} " textWrap="true"></Label>
+                <Label margin="2 10"  *ngIf="account?.bytes" text=" Bytes: {{account?.bytes}} " textWrap="true"></Label>
+
             <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
+                
                 <Label text="START A NEW GAME {{timeoutLive}}" android:paddingTop="22" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true"></Label>
 
                     <StackLayout row="1" col="0" *ngIf="user && (twoPlayerCount > 0 || singlePlayerCount > 0)" iosOverflowSafeArea="false">
