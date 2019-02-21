@@ -1,5 +1,4 @@
-import { Directive, ElementRef, Input, OnInit,
-   Renderer2, HostListener, AfterViewInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Directive, Input, Renderer2, HostListener, AfterViewInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Directive({
@@ -9,15 +8,15 @@ export class ShowHintWhenFocusOutDirective implements AfterViewInit {
 
   controlRef: FormControl;
   hintRef: any;
-  focusOut = false;
+  lostFocus = false;
   removeClass: string;
 
   @Input() stlShowHintWhenFocusOut: any;
 
   @HostListener('blur', ['$event'])
-  isFocusedOut(event) {
-      if (this.controlRef && this.controlRef.value !== '' && this.focusOut === false) {
-        this.focusOut = true;
+  onBlur(event) {
+      if (this.controlRef && this.controlRef.value !== '' && this.lostFocus === false) {
+        this.lostFocus = true;
         this.displayError();
       }
     }
