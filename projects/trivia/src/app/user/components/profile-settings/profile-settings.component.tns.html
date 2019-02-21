@@ -1,4 +1,4 @@
-<ns-action-bar title="Profile Settings" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Profile" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout>
   <ActivityIndicator *ngIf="loaderBusy" [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
   <ScrollView *ngIf="!loaderBusy">
@@ -31,7 +31,7 @@
 
       <StackLayout class="list-view" iosOverflowSafeArea="false">
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
-          <Label class="grid-label-text" row="0" col="0" text="CATEGORIES" textWrap="true" iosOverflowSafeArea="false"></Label>
+          <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true" iosOverflowSafeArea="false"></Label>
           <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
             textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" iosOverflowSafeArea="false"></Label>
         </GridLayout>
@@ -49,7 +49,7 @@
       <StackLayout class="list-view" iosOverflowSafeArea="false">
 
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*">
-          <Label row="0" col="0" text="TAGS" textWrap="true"></Label>
+          <Label row="0" col="0" text="PREFERRED TAGS" textWrap="true"></Label>
           <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
             textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
         </GridLayout>
