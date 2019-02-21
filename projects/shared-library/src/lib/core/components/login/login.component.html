@@ -34,23 +34,26 @@
             <mat-form-field class="
               full-width required">
               <input [stlShowHintWhenFocusOut]="{hintRef: emailHint, controlRef:loginForm.controls.email, removeClass: 'error'}"  matInput placeholder="Email *" formControlName="email" class="required" aria-label="email">
-              <mat-hint  #emailHint  [class.hide-hint]="!(loginForm.controls.email.errors && (loginForm.controls.email.dirty))" align="end" class="error">Invalid
+              <mat-hint  #emailHint align="end" class="error">Invalid
                 Email!
               </mat-hint>
             </mat-form-field>
             <mat-form-field *ngIf="mode !== 2" class="full-width required">
               <input [stlShowHintWhenFocusOut]="{hintRef: passwordHint, controlRef:loginForm.controls.password, removeClass: 'error'}" type="password" matInput placeholder="Password *" class="required" formControlName="password"
                 aria-label="password">
-              <mat-hint #passwordHint align="end" [class.hide-hint]="!(loginForm.controls.password.errors && !loginForm.controls.password.pristine)"
+              <mat-hint #passwordHint align="end"
                 class="error">Password must be atleast 6 characters</mat-hint>
             </mat-form-field>
             <mat-form-field *ngIf="mode === 1" class="full-width required">
               <input [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword, removeClass: 'error'}"  type="password" matInput placeholder="Confirm Password *" class="required" formControlName="confirmPassword"
                 aria-label="confirm-password">
-              <mat-hint #confPasswordHint align="end" [class.hide-hint]="(!loginForm.controls.confirmPassword.errors || loginForm.controls.confirmPassword.pristine) && !(loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch'))"
-                class="error">
-                {{ loginForm.controls.confirmPassword.errors ? 'Confirm Password must be atleast 6 characters' : 'Must match Password'  }}
+              <mat-hint #confPasswordHint
+                class="error" [align]="end">
+                Confirm Password must be atleast 6 characters
               </mat-hint>
+              <mat-hint class="error" [align]="end" *ngIf="loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch')">
+                  Must match Password
+             </mat-hint>
             </mat-form-field>
             <ng-container [ngSwitch]="mode">
               <ng-container *ngSwitchCase="0">
