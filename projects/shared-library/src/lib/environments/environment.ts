@@ -3,7 +3,7 @@
 import { IConfig } from './iconfig';
 
 export const environment = {
-  production: true
+  production: false
 };
 
 export const CONFIG: IConfig = {
