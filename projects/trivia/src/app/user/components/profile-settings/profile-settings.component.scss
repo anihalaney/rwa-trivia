@@ -96,7 +96,40 @@ form .tags{padding-top:5px;}
   .namefield .formfield{ width: 100% }
   .namefield .formfield > input{ width: 55% }
   .custom-file-upload:hover{ box-shadow: 0 2px 5px rgba(0,0,0,.30)}
+  
+  .social-profile{
+    font-size: 16px;
+    padding: 5px 5px 5px 0;
+    border-radius: 4px;
+  }
+  .social-url{
+    font-size: 16px;
+    color: #888888;
+  }
+  .social-profile-name{
+    margin: 0 !important;
+    font-size: 18px !important;
+    font-family: 'hindmedium';
+  }
+  .social-input-field{
+    display: flex;
+    background-color: #FFFFFF;
+    border-radius:4px;
+  }
+  .social-url-contain{
+    padding: 10px 0 10px 10px;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+  }
+  .social-profile-error{
+    color: #ff0000;
+    margin-top: 10px;
+  }
+  .show-more{
+    cursor: pointer;
+  }
 }
+
 .save
 {
   width: 20%;
@@ -106,6 +139,39 @@ form .tags{padding-top:5px;}
 {
   padding: 10px 25px;
   font-size: 16px;
+}
+
+.social-profile{
+  font-size: 16px;
+  padding: 5px 5px 5px 0;
+  border-radius: 4px;
+}
+.social-url{
+  font-size: 16px;
+  color: #888888;
+}
+.social-profile-name{
+  margin: 0;
+  font-size: 20px;
+  font-family: 'hindmedium';
+  text-transform: none !important;
+}
+.social-input-field{
+  display: flex;
+  background-color: #FFF;
+  border-radius:4px;
+}
+.social-url-contain{
+  padding: 10px 0 10px 10px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.social-profile-error{
+  color: #ff0000;
+  margin-top: 10px;
+}
+.show-more{
+  cursor: pointer;
 }
 @media(max-width: 600px) {
   .btn

@@ -1,4 +1,3 @@
-
 import * as express from 'express';
 const router = express.Router();
 
@@ -29,5 +28,6 @@ router.post('/question/status', generalAuth.adminOnly, generalQuestionController
 router.post('/migration/user/stats', generalAuth.adminOnly, generalController.migrateUserStatToAccounts);
 router.get('/add/default/lives', generalAuth.adminOnly, generalController.addDefaultLives);
 router.get('/addLives', generalAuth.adminOnly, generalController.addLives);
+router.get('/remove/social/profile', generalAuth.adminOnly, generalController.removeSocialProfile);
 
 module.exports = router;

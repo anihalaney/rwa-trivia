@@ -31,7 +31,8 @@
                  alt="Avatar" />
               </label>
               <div>
-                <button *ngIf="profileImageFile && !profileImageValidation" class="btn" (click)="saveProfileImage()">Save</button>
+                <button *ngIf="profileImageFile && !profileImageValidation" class="btn"
+                  (click)="saveProfileImage()">Save</button>
               </div>
             </div>
             <div class="col-sm-9 col-xs-12 avatarinput">
@@ -66,14 +67,17 @@
               <label>Display Name *</label>
               <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required"
                 aria-label="display-name">
-              <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">Display
+              <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">
+                Display
                 Name is required!</p>
             </div>
             <div class="formfield">
               <label>Location *</label>
-              <input formControlName="location" placeholder="Enter Location" type="text" class="required" aria-label="location">
+              <input formControlName="location" placeholder="Enter Location" type="text" class="required"
+                aria-label="location">
               <p>Where in the world you are</p>
-              <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">Location
+              <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">
+                Location
                 is required!</p>
             </div>
           </div>
@@ -87,7 +91,8 @@
             <div class="col-sm-9" formArrayName="categoryList">
               <div class="formfield" *ngFor="let category of categoryList.controls; let i=index" [formGroupName]="i">
                 <label>
-                  <input formControlName="isSelected" type="checkbox" name="">{{categoryDict[category.value['category']].categoryName}}
+                  <input formControlName="isSelected" type="checkbox"
+                    name="">{{categoryDict[category.value['category']].categoryName}}
                 </label>
               </div>
             </div>
@@ -131,27 +136,26 @@
           <!-- Social Accounts -->
           <div class="row pcategories saccount">
             <div class="col-sm-3">
-              <h3>Social Accounts </h3>
+              <h3>Social Profile </h3>
             </div>
-            <div class="col-md-6 col-sm-9">
-              <div class="formfield">
-                <input type="url" formControlName="facebookUrl" placeholder="Facebook" aria-label="facebook-url">
-                <p *ngIf="userForm.controls.facebookUrl.errors && !userForm.controls.facebookUrl.pristine" class="error">Invalid
-                  facebook url</p>
+            <div class="col-md-9 col-sm-9" *ngIf="socialProfileSettings">
+              <div *ngFor="let profiles of socialProfileSettings; let i=index">
+                <div class="formfield" *ngIf="profiles.enable && i <= socialProfileShowLimit">
+                  <h2 class="social-profile-name">{{profiles.display}}</h2>
+                  <div class="social-input-field">
+                    <div class="social-url-contain" (click)="onSocialProfileInputFocus(i)">
+                      <span class="social-url">{{profiles.url}}</span>
+                    </div>
+                    <input #myInput class="social-profile col-md-6"
+                      [formControlName]="profiles.social_name">
+                  </div>
+                  <p *ngIf="userForm.get(profiles.social_name).errors" class="social-profile-error">Please enter valid profile id</p>
+                </div>
               </div>
-
-              <div class="formfield">
-                <input formControlName="twitterUrl" placeholder="Twitter" aria-label="twitter-url">
-                <p *ngIf="userForm.controls.twitterUrl.errors && !userForm.controls.twitterUrl.pristine" class="error">Invalid
-                  twitter url</p>
+              <div>
+                <a *ngIf="enableSocialProfile > socialProfileShowLimit + 1" class="viewall show-more"
+                  (click)="showMoreSocialProfile()">Show more</a>
               </div>
-
-              <div class="formfield">
-                <input formControlName="linkedInUrl" placeholder="Linkedin" aria-label="linkedin-url">
-                <p *ngIf="userForm.controls.linkedInUrl.errors && !userForm.controls.linkedInUrl.pristine" class="error">Invalid
-                  linkedin url</p>
-              </div>
-
             </div>
             <div class="col-xs-12">
 

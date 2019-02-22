@@ -80,6 +80,14 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     this.stackLayout = args.object;
   }
 
+  reMatchGame() {
+    if (this.applicationSettings.lives.enable && this.account.lives === 0) {
+      Toast.makeText(this.liveErrorMsg).show();
+    } else {
+      this.reMatch();
+    }
+  }
+
   screenshot() {
     this.playerUserName = this.user.displayName;
     // we need to put setTimeout because to change username before screenshot.

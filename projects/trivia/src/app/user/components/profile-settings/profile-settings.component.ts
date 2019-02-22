@@ -23,6 +23,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   cropperSettings: CropperSettings;
   notificationMsg: string;
   errorStatus: boolean;
+  pastedDataUrl: String;
+  arrayString;
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
@@ -155,6 +157,21 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.tagsArray.controls = [];
     this.enteredTags.forEach(tag => this.tagsArray.push(new FormControl(tag)));
   }
+
+  onSocialProfileIdPaste(e, i) {
+    this.pastedDataUrl = e.clipboardData.getData('text/plain');
+    if (this.pastedDataUrl.includes('http') || this.pastedDataUrl.includes('www')) {
+        if (this.pastedDataUrl.endsWith('/')) {
+            const newDataUrl = this.pastedDataUrl.slice(0, -1);
+            this.arrayString = newDataUrl.split('/');
+        } else {
+            this.arrayString = this.pastedDataUrl.split('/');
+        }
+        setTimeout(() => {
+            this.inputEl.toArray()[i].nativeElement.value = this.arrayString[this.arrayString.length - 1].trim();
+        }, 0);
+    }
+}
   // tags end
 
   onSubmit() {
