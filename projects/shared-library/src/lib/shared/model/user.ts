@@ -10,9 +10,6 @@ export class User {
   facebookUrl?: string;
   twitterUrl?: string;
   linkedInUrl?: string;
-  profileSetting?: string;
-  profileLocationSetting?: string;
-  privateProfileSetting?: boolean;
   profilePicture?: String;
   email: string;
   idToken?: string;

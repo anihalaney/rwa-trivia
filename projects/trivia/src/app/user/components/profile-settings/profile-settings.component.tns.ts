@@ -134,15 +134,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
   }
 
-  selectProfileOption(profileOption) {
-    this.user.profileSetting = profileOption;
-    this.userForm.controls['profileSetting'].setValue(profileOption);
-  }
-
-  selectLocationOption(locationOption) {
-    this.user.profileLocationSetting = locationOption;
-    this.userForm.controls['profileLocationSetting'].setValue(locationOption);
-  }
 
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
