@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef } from '@angular/core';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -45,10 +45,10 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
     this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
-        this.snackBar.open(status, '',  {
+        this.snackBar.open(status, '', {
           viewContainerRef: this.viewContainerRef,
           duration: 2000,
-          });
+        });
         this.disableFriendInviteBtn = true;
       }
     }));
@@ -159,6 +159,17 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   onNotify(info: any) {
     this.socialFeedData.share_status = info.share_status;
+  }
+
+  reMatchGame() {
+    if (this.applicationSettings.lives.enable && this.account.lives === 0) {
+      this.snackBar.open(this.liveErrorMsg, '', {
+        viewContainerRef: this.viewContainerRef,
+        duration: 2000,
+      });
+    } else {
+      this.reMatch();
+    }
   }
 
   ngOnDestroy() {
