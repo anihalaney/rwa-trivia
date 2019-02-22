@@ -1,14 +1,16 @@
 <ns-action-bar title="Profile Settings" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout>
-  <ActivityIndicator *ngIf="loaderBusy" [busy]="loaderBusy" width="100" height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
+  <ActivityIndicator *ngIf="loaderBusy" [busy]="loaderBusy" width="100" height="100" marginTop="225"
+    class="activity-indicator"></ActivityIndicator>
   <ScrollView *ngIf="!loaderBusy">
     <StackLayout [formGroup]="userForm" class="profile-settings Roboto-Regular">
 
       <StackLayout class="input-field ">
         <AbsoluteLayout>
-          <Image [src]="profileImage.image" backgroundColor="gray" stretch="aspectFill" height="110" width="110" left="130"
-            right="130" top="10" verticalAlignment="center" borderRadius="55" (tap)="onTakePhoto()"></Image>
-          <Image src="~/assets/images/mobile/profile-image-icon.png" left="170" right="170" top="50" width="30" height="30"></Image>
+          <Image [src]="profileImage.image" backgroundColor="gray" stretch="aspectFill" height="110" width="110"
+            left="130" right="130" top="10" verticalAlignment="center" borderRadius="55" (tap)="onTakePhoto()"></Image>
+          <Image src="~/assets/images/mobile/profile-image-icon.png" left="170" right="170" top="50" width="30"
+            height="30"></Image>
         </AbsoluteLayout>
       </StackLayout>
 
@@ -24,24 +26,27 @@
           textWrap="true" text="Display Name is required!"></Label>
 
         <TextField hint="Location" formControlName="location" class="input"></TextField>
-        <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error" textWrap="true"
-          text="Location is required!"></Label>
+        <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error"
+          textWrap="true" text="Location is required!"></Label>
 
       </StackLayout>
 
       <StackLayout class="list-view" iosOverflowSafeArea="false">
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
-          <Label class="grid-label-text" row="0" col="0" text="CATEGORIES" textWrap="true" iosOverflowSafeArea="false"></Label>
-          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
-            textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" iosOverflowSafeArea="false"></Label>
+          <Label class="grid-label-text" row="0" col="0" text="CATEGORIES" textWrap="true"
+            iosOverflowSafeArea="false"></Label>
+          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
+            text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4" borderWidth="2"
+            borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" iosOverflowSafeArea="false"></Label>
         </GridLayout>
         <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
-          <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let category of userCategories"
-            (tap)="selectCategory(category)">
-          <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>            
-           <Image row="0" col="2"  checked="true" horizontalAlignment="right" src="~/assets/images/check.png" height="25"
-                width="25" marginLeft="10" verticalAlignment="center" marginRight="5"  visibility="{{ category.isSelected ? 'visible' : 'hidden' }}"></Image>
-                    
+          <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option"
+            *ngFor="let category of userCategories" (tap)="selectCategory(category)">
+            <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>
+            <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
+              height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
+              visibility="{{ category.isSelected ? 'visible' : 'hidden' }}"></Image>
+
           </GridLayout>
         </StackLayout>
       </StackLayout>
@@ -50,21 +55,23 @@
 
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*">
           <Label row="0" col="0" text="TAGS" textWrap="true"></Label>
-          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
-            textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
+          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
+            text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4" borderWidth="2"
+            borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
         </GridLayout>
         <StackLayout visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
-          <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let tag of enteredTags" iosOverflowSafeArea="false">
+          <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let tag of enteredTags"
+            iosOverflowSafeArea="false">
             <Label [text]="tag" row="0" col="0" textWrap="true" iosOverflowSafeArea="false"></Label>
-            <Label id="cross-button" row="0" col="1" class="fa" text="&#xf00d;" textWrap="true" horizontalAlignment="right"
-              (tap)="removeEnteredTag(tag)" iosOverflowSafeArea="false"></Label>
+            <Label id="cross-button" row="0" col="1" class="fa" text="&#xf00d;" textWrap="true"
+              horizontalAlignment="right" (tap)="removeEnteredTag(tag)" iosOverflowSafeArea="false"></Label>
           </GridLayout>
           <GridLayout rows="auto,auto" columns="*,auto" class="two-player-option" iosOverflowSafeArea="false">
             <Label class="input-label" row="0" col="0" text="Add Tags" textWrap="true"></Label>
             <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff">
               <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
-                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
-                border="none" ios:backgroundColor="#ffffff">
+                showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)"
+                (textChanged)="onTextChanged($event)" border="none" ios:backgroundColor="#ffffff">
                 <SuggestionView tkAutoCompleteSuggestionView>
                   <ng-template tkSuggestionItemTemplate let-item="item">
                     <StackLayout orientation="vertical" padding="10">
@@ -76,7 +83,7 @@
             </StackLayout>
             <StackLayout row="1" col="1" marginLeft="10" horizontalAlignment="right">
               <Ripple padding="10" rippleColor="#dceec6">
-                  <Button ios:padding="10" text="Add" class="Roboto-Bold" (tap)="addCustomTag()"></Button>
+                <Button ios:padding="10" text="Add" class="Roboto-Bold" (tap)="addCustomTag()"></Button>
               </Ripple>
             </StackLayout>
           </GridLayout>
@@ -87,14 +94,20 @@
         <StackLayout class="grid-label p-15">
           <Label textWrap="true" text="CONNECT YOUR SOCIAL ACCOUNT"></Label>
         </StackLayout>
-          <StackLayout class="input-field" *ngFor="let profiles of socialProfileSettings; let i=index" iosOverflowSafeArea="false">
-            <GridLayout rows="auto,auto,auto" columns="*" *ngIf="profiles.enable && i <= socialProfileShowLimit" iosOverflowSafeArea="false">
-              <Label class="grid-label-text" [text]="profiles.display" row="0" col="0" textWrap="true"></Label>
-              <Label class="label-link" [text]="profiles.url" textWrap="true" row="1" col="0"></Label>
-              <TextField hint="Enter Profile ID" [formControlName]="profiles.social_name" class="input-border" row="2" col="0"></TextField>
-            </GridLayout>
-          </StackLayout>
-          <button class="p-15 showMore" horizontalAlignment="center" *ngIf="enableSocialProfile > socialProfileShowLimit + 1" text="Show more" (tap)="showMoreSocialProfile()"></button>
+        <StackLayout class="input-field" *ngFor="let profiles of socialProfileSettings; let i=index"
+          iosOverflowSafeArea="false">
+          <GridLayout rows="auto,*" columns="*" *ngIf="profiles.enable && i <= socialProfileShowLimit"
+            iosOverflowSafeArea="false">
+            <Label class="grid-label-text" [text]="profiles.display" row="0" col="0" textWrap="true"></Label>
+            <StackLayout class="text-box" row="1" col="0" orientation="horizontal">
+              <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profiles.url" fontSize="14" textWrap="true"></Label>
+              <TextField #myInput verticalAlignment="center" hint="Enter Profile ID" [formControlName]="profiles.social_name" class="input-box"></TextField>
+            </StackLayout>
+          </GridLayout>
+        </StackLayout>
+        <button class="p-15 showMore" horizontalAlignment="center"
+          *ngIf="enableSocialProfile > socialProfileShowLimit + 1" text="Show more"
+          (tap)="showMoreSocialProfile()"></button>
       </StackLayout>
 
       <StackLayout class="list-view">
@@ -106,11 +119,12 @@
             <Label textWrap="true" text="Profile"></Label>
           </StackLayout>
           <StackLayout>
-            <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let profileOption of profileOptions" (tap)="selectProfileOption(profileOption)">
+            <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let profileOption of profileOptions"
+              (tap)="selectProfileOption(profileOption)">
               <Label [text]="profileOption" row="0" col="0" textWrap="true"></Label>
-              <Image  row="0" col="1" checked="true" horizontalAlignment="right"
-                src="~/assets/images/check.png" height="25" width="25" marginLeft="10" verticalAlignment="center"
-                marginRight="5" visibility="{{ user.profileSetting === profileOption ? 'visible' : 'hidden' }}"></Image>
+              <Image row="0" col="1" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
+                height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
+                visibility="{{ user.profileSetting === profileOption ? 'visible' : 'hidden' }}"></Image>
             </GridLayout>
           </StackLayout>
         </StackLayout>
@@ -119,11 +133,12 @@
             <Label textWrap="true" text="Location"></Label>
           </StackLayout>
           <StackLayout>
-            <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let locationOption of locationOptions" (tap)="selectLocationOption(locationOption)">
+            <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let locationOption of locationOptions"
+              (tap)="selectLocationOption(locationOption)">
               <Label [text]="locationOption" row="0" col="0" textWrap="true"></Label>
-              <Image  row="0" col="1" checked="true"
-                horizontalAlignment="right" src="~/assets/images/check.png" height="25" width="25" marginLeft="10"
-                verticalAlignment="center" marginRight="5" visibility="{{ user.profileLocationSetting === locationOption ? 'visible' : 'hidden' }}"></Image>
+              <Image row="0" col="1" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
+                height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
+                visibility="{{ user.profileLocationSetting === locationOption ? 'visible' : 'hidden' }}"></Image>
             </GridLayout>
           </StackLayout>
         </StackLayout>
@@ -146,17 +161,18 @@
         <Button *ngIf="(!user.bulkUploadPermissionStatus
         || user.bulkUploadPermissionStatus === NONE
         || user.bulkUploadPermissionStatus === PENDING)
-        && !user.isRequestedBulkUpload"
-          [text]="bulkUploadBtnText" (tap)="setBulkUploadRequest()" backgroundColor="#ffffff" color="black" padding="10 0"
-          borderWidth="1" borderRadius="3"></Button>
-        <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING" text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
+        && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText" (tap)="setBulkUploadRequest()"
+          backgroundColor="#ffffff" color="black" padding="10 0" borderWidth="1" borderRadius="3"></Button>
+        <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING"
+          text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
           textWrap="true" padding="8"></Label>
-        <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED" text="User has bulk upload privilege"
-          textWrap="true" padding="8"></Label>
+        <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED"
+          text="User has bulk upload privilege" textWrap="true" padding="8"></Label>
       </StackLayout>
 
       <StackLayout class="profile-buttons">
-          <Button text="SAVE" (tap)="onSubmit()" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff" padding="20 0"></Button>
+        <Button text="SAVE" (tap)="onSubmit()" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff"
+          padding="20 0"></Button>
       </StackLayout>
 
 
