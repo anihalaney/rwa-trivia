@@ -14,8 +14,6 @@ import { ViewChildren, QueryList, HostListener } from '@angular/core';
 export class ProfileSettings {
     @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
-    pastedDataUrl: String;
-    arrayString;
     user: User;
     fb: FormBuilder;
     categories: Category[];
@@ -228,20 +226,5 @@ export class ProfileSettings {
 
     onSocialProfileInputFocus(i) {
         this.inputEl.toArray()[i].nativeElement.focus();
-    }
-
-    onSocialProfileIdPaste(e, i) {
-        this.pastedDataUrl = e.clipboardData.getData('text/plain');
-        if (this.pastedDataUrl.includes('http') || this.pastedDataUrl.includes('www')) {
-            if (this.pastedDataUrl.endsWith('/')) {
-                const newDataUrl = this.pastedDataUrl.slice(0, -1);
-                this.arrayString = newDataUrl.split('/');
-            } else {
-                this.arrayString = this.pastedDataUrl.split('/');
-            }
-            setTimeout(() => {
-                this.inputEl.toArray()[i].nativeElement.value = this.arrayString[this.arrayString.length - 1];
-            }, 0);
-        }
     }
 }

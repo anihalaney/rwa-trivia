@@ -167,6 +167,10 @@
     padding: 0;
 }
 
+.social-profile-error{
+    color: #ff0000;
+  }
+
 .profile-settings>.social-section StackLayout>GridLayout{
     padding-left: 0;
     padding-top: 15;
