@@ -1,4 +1,3 @@
-
 const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
 const generalUserService = require('../services/user.service');
@@ -348,3 +347,8 @@ exports.addLives = async (req, res) => {
     }
     res.status(200).send('live feature is not enabled');
 };
+
+exports.removeSocialProfile = async (req, res) => {
+    res.status(200).send(await generalUserService.removeSocialProfile());
+};
+

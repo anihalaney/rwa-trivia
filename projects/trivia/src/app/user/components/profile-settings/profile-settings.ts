@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -9,9 +9,13 @@ import { userState } from '../../../user/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { UserActions } from 'shared-library/core/store';
+import { ViewChildren, QueryList, HostListener } from '@angular/core';
 
 export class ProfileSettings {
+    @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
+    pastedDataUrl: String;
+    arrayString;
     user: User;
     fb: FormBuilder;
     categories: Category[];
@@ -115,6 +119,13 @@ export class ProfileSettings {
         return this.userForm.get('socialAccountList') as FormArray;
     }
 
+    ValidateUrl(control: AbstractControl) {
+        if (control.value.startsWith('https') || control.value.includes('www')) {
+            return { validUrl: true };
+        }
+        return null;
+    }
+
     filter(val: string): string[] {
         return this.tagsAutoComplete.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
     }
@@ -178,7 +189,7 @@ export class ProfileSettings {
         this.socialProfileSettings.map(res => {
             if (res.enable) {
                 const socialName = this.user[res.social_name] ? this.user[res.social_name] : '';
-                this.userForm.addControl(res.social_name, new FormControl(socialName));
+                this.userForm.addControl(res.social_name, new FormControl(socialName, this.ValidateUrl));
             }
         });
         this.socialProfileSettings.sort((a, b) => a.position - b.position);
@@ -223,4 +234,22 @@ export class ProfileSettings {
         this.store.dispatch(this.userAction.addUserProfile(user));
     }
 
+    onSocialProfileInputFocus(i) {
+        this.inputEl.toArray()[i].nativeElement.focus();
+    }
+
+    onSocialProfileIdPaste(e, i) {
+        this.pastedDataUrl = e.clipboardData.getData('text/plain');
+        if (this.pastedDataUrl.includes('http') || this.pastedDataUrl.includes('www')) {
+            if (this.pastedDataUrl.endsWith('/')) {
+                const newDataUrl = this.pastedDataUrl.slice(0, -1);
+                this.arrayString = newDataUrl.split('/');
+            } else {
+                this.arrayString = this.pastedDataUrl.split('/');
+            }
+            setTimeout(() => {
+                this.inputEl.toArray()[i].nativeElement.value = this.arrayString[this.arrayString.length - 1];
+            }, 0);
+        }
+    }
 }

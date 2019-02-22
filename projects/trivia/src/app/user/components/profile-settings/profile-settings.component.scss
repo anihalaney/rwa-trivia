@@ -93,12 +93,12 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   
   .social-profile{
     font-size: 16px;
-    padding: 5px;
+    padding: 5px 5px 5px 0;
     border-radius: 4px;
   }
   .social-url{
     font-size: 16px;
-    color: #FFFFFF;
+    color: #888888;
   }
   .social-profile-name{
     margin: 0 !important;
@@ -111,11 +111,15 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
     border-radius:4px;
   }
   .social-url-contain{
-    padding: 10px;
-    background-color: #71b02f;
-    border: 1px solid #71d803;
+    padding: 10px 0 10px 10px;
     border-bottom-left-radius: 3px;
     border-top-left-radius: 3px;
+  }
+  .social-profile-error{
+    color: #ff0000;
+  }
+  .show-more{
+    cursor: pointer;
   }
 }
 
@@ -132,12 +136,12 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
 
 .social-profile{
   font-size: 16px;
-  padding: 5px;
+  padding: 5px 5px 5px 0;
   border-radius: 4px;
 }
 .social-url{
   font-size: 16px;
-  color: #FFFFFF;
+  color: #888888;
 }
 .social-profile-name{
   margin: 0;
@@ -151,11 +155,12 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   border-radius:4px;
 }
 .social-url-contain{
-  padding: 10px;
-  background-color: #71b02f;
-  border: 1px solid #71d803;
+  padding: 10px 0 10px 10px;
   border-bottom-left-radius: 3px;
   border-top-left-radius: 3px;
+}
+.social-profile-error{
+  color: #ff0000;
 }
 .show-more{
   cursor: pointer;

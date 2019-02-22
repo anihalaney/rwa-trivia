@@ -154,16 +154,19 @@
               <div *ngFor="let profiles of socialProfileSettings; let i=index">
                 <div class="formfield" *ngIf="profiles.enable && i <= socialProfileShowLimit">
                   <h2 class="social-profile-name">{{profiles.display}}</h2>
+                  <span *ngIf="userForm.get(profiles.social_name).errors" class="social-profile-error">Please enter valid profile id</span>
                   <div class="social-input-field">
-                    <div class="social-url-contain">
+                    <div class="social-url-contain" (click)="onSocialProfileInputFocus(i)">
                       <span class="social-url">{{profiles.url}}</span>
                     </div>
-                    <input class="social-profile col-md-6" [formControlName]="profiles.social_name">
+                    <input #myInput class="social-profile col-md-6" (paste)="onSocialProfileIdPaste($event,i)"
+                      [formControlName]="profiles.social_name">
                   </div>
                 </div>
               </div>
               <div>
-                <a *ngIf="enableSocialProfile > socialProfileShowLimit + 1" class="viewall show-more" (click)="showMoreSocialProfile()">Show more</a>
+                <a *ngIf="enableSocialProfile > socialProfileShowLimit + 1" class="viewall show-more"
+                  (click)="showMoreSocialProfile()">Show more</a>
               </div>
             </div>
 
