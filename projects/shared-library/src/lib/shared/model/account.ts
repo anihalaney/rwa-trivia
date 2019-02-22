@@ -12,6 +12,8 @@ export class Account {
     avgAnsTime?: number;
     contribution?: number;
     id?: string;
+    bits?: number;
+    bytes?: number;
 
     constructor() {
         this.leaderBoardStats = {};

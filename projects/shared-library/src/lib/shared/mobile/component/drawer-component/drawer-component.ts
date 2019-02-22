@@ -55,7 +55,7 @@ export class DrawerComponent implements OnInit {
                 } else if (nav === '/my/recent-game') {
                     this.activeMenu = 'Recently Completed Games';
                 } else if (nav.includes('/my/profile')) {
-                    this.activeMenu = 'Profile Settings';
+                    this.activeMenu = 'Profile';
                 } else if (nav === '/my/questions') {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/my/invite-friends') {

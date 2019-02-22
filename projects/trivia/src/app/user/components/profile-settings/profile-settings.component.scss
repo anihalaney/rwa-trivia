@@ -18,7 +18,7 @@
 .optionbox{ margin-top: 30px; text-align: left;}
 .optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
 .optionbox h2 span{ font-size: 20px; text-transform: none; letter-spacing: .10px; padding-left: 0; font-family: 'hindmedium' }
-.card .enterquestion h3{ font-size: 18px; margin: 30px 0 16px}
+.card .enterquestion h3{ font-size: 18px; margin: 16px 0 16px}
 .card .enterquestion h3:before{ display: none;  }
 
 .enterquestion .formfield > input, .formfield select{padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px)}
@@ -50,6 +50,12 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
 .namefield .formfield > label{ text-align: left; font-size: 18px; font-family: 'hindmedium' }
 .namefield .formfield > p{ margin-top: 5px }
 .hide{ display: none !important; }
+.tagging input { line-height: 24px;padding: 7px 17px;border-radius: 3px;display: block;width: 61%;box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06); }
+.add-space{padding-top:48px;}
+form .tags{padding-top:5px;}
+@media screen and (max-width:767px){
+  .tagging input{ line-height: 24px;padding: 4px 10px;border-radius: 3px;display: block; width: calc(100% - 34px);}
+}
 /*Custom File Upload End*/
 @media screen and ( min-width:767px){
   .optionbox h2{ margin-top: 17px }
@@ -65,7 +71,7 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
   .saccount .formfield label + p{ padding-left:90px; }
   .savebox a.btn.startg{ display: inline-block; margin-right: 70px}
   #file-name{min-width: 280px;}
-  .card .enterquestion h3{margin-top: 40px}
+  .card .enterquestion h3{margin-top: 0px}
   .card .saccount h3{ margin-top: 53px }
   .custom-file-upload { display: inline-block;}
   .namefield .formfield > label{ width: 25% }
