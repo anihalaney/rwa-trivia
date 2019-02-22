@@ -168,7 +168,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
             this.arrayString = this.pastedDataUrl.split('/');
         }
         setTimeout(() => {
-            this.inputEl.toArray()[i].nativeElement.value = this.arrayString[this.arrayString.length - 1];
+            this.inputEl.toArray()[i].nativeElement.value = this.arrayString[this.arrayString.length - 1].trim();
         }, 0);
     }
 }
