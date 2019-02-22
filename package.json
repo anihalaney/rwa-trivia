@@ -102,7 +102,6 @@
     "nativescript-camera": "^4.1.1",
     "nativescript-cardview": "^3.1.1",
     "nativescript-checkbox": "^3.0.3",
-    "nativescript-clipboard": "^1.1.7",
     "nativescript-floatingactionbutton": "^5.0.0",
     "nativescript-loading-indicator": "^2.4.0",
     "nativescript-plugin-firebase": "^7.6.0",
@@ -177,4 +176,4 @@
       "pre-push": "npm run test && ng e2e trivia-e2e"
     }
   }
-} 
+}
