@@ -6,6 +6,7 @@ export class ApplicationSettings {
     game_play_timer_loader_ranges: Array<TimerLoader>;  // Contains start range, end  range and seconds
     lives: Lives;
     social_profile: SocialProfile;
+    tokens: Tokens;
 }
 
 export class TimerLoader {
@@ -27,4 +28,9 @@ export class SocialProfile {
     position: Number;
     social_name: String;
     url: String;
+}
+export class Tokens {
+    enable: boolean;
+    earn_bits: number;
+    earn_bytes: number;
 }

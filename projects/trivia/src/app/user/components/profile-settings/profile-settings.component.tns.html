@@ -1,4 +1,4 @@
-<ns-action-bar title="Profile Settings" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<ns-action-bar title="Profile" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout>
   <ActivityIndicator *ngIf="loaderBusy" [busy]="loaderBusy" width="100" height="100" marginTop="225"
     class="activity-indicator"></ActivityIndicator>
@@ -33,11 +33,9 @@
 
       <StackLayout class="list-view" iosOverflowSafeArea="false">
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
-          <Label class="grid-label-text" row="0" col="0" text="CATEGORIES" textWrap="true"
-            iosOverflowSafeArea="false"></Label>
-          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-            text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4" borderWidth="2"
-            borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" iosOverflowSafeArea="false"></Label>
+          <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true" iosOverflowSafeArea="false"></Label>
+          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
+            textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" iosOverflowSafeArea="false"></Label>
         </GridLayout>
         <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
           <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option"
@@ -54,10 +52,9 @@
       <StackLayout class="list-view" iosOverflowSafeArea="false">
 
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*">
-          <Label row="0" col="0" text="TAGS" textWrap="true"></Label>
-          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-            text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4" borderWidth="2"
-            borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
+          <Label row="0" col="0" text="PREFERRED TAGS" textWrap="true"></Label>
+          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
+            textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
         </GridLayout>
         <StackLayout visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
           <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let tag of enteredTags"
@@ -109,52 +106,6 @@
           *ngIf="enableSocialProfile > socialProfileShowLimit + 1" text="Show more"
           (tap)="showMoreSocialProfile()"></button>
       </StackLayout>
-
-      <StackLayout class="list-view">
-        <StackLayout class="grid-label">
-          <Label textWrap="true" text="SECURITY SETTING"></Label>
-        </StackLayout>
-        <StackLayout class="sub-list-view">
-          <StackLayout class="sub-list-label">
-            <Label textWrap="true" text="Profile"></Label>
-          </StackLayout>
-          <StackLayout>
-            <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let profileOption of profileOptions"
-              (tap)="selectProfileOption(profileOption)">
-              <Label [text]="profileOption" row="0" col="0" textWrap="true"></Label>
-              <Image row="0" col="1" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
-                height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
-                visibility="{{ user.profileSetting === profileOption ? 'visible' : 'hidden' }}"></Image>
-            </GridLayout>
-          </StackLayout>
-        </StackLayout>
-        <StackLayout class="sub-list-view">
-          <StackLayout class="sub-list-label">
-            <Label textWrap="true" text="Location"></Label>
-          </StackLayout>
-          <StackLayout>
-            <GridLayout rows="auto,auto" columns="auto,*" *ngFor="let locationOption of locationOptions"
-              (tap)="selectLocationOption(locationOption)">
-              <Label [text]="locationOption" row="0" col="0" textWrap="true"></Label>
-              <Image row="0" col="1" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
-                height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
-                visibility="{{ user.profileLocationSetting === locationOption ? 'visible' : 'hidden' }}"></Image>
-            </GridLayout>
-          </StackLayout>
-        </StackLayout>
-      </StackLayout>
-
-      <StackLayout class="privacy-area">
-        <GridLayout rows="auto,auto" columns="auto,*">
-          <Label text="Keep your profile activity private" row="0" col="0" textWrap="true"></Label>
-          <CheckBox row="0" col="1" formControlName="privateProfileSetting" horizontalAlignment="right"
-            android:fillColor="#89C24F" ios:fillColor="#ffffff" ios:backgroundColor="#ffffff"></CheckBox>
-        </GridLayout>
-        <StackLayout class="sub-text">
-          <Label text="This means no one can invite you or can see you profile." textWrap="true"></Label>
-        </StackLayout>
-      </StackLayout>
-
 
       <StackLayout class="profile-buttons">
         <Label text="Bulk upload Request" textWrap="true" padding="8"></Label>
