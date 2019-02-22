@@ -96,11 +96,13 @@
           <GridLayout rows="auto,auto,*" columns="*" *ngIf="profiles.enable && i <= socialProfileShowLimit"
             iosOverflowSafeArea="false">
             <Label class="grid-label-text" [text]="profiles.display" row="0" col="0" textWrap="true"></Label>
-            <Label *ngIf="userForm.get(profiles.social_name).errors" class="social-profile-error" text="Please enter valid profile id" row="1" col="0" textWrap="true"></Label>
-            <StackLayout class="text-box" row="2" col="0" orientation="horizontal">
+            
+            <StackLayout class="text-box" row="1" col="0" orientation="horizontal">
               <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profiles.url" fontSize="14" textWrap="true"></Label>
               <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID" [formControlName]="profiles.social_name" class="input-box"></TextField>
+            
             </StackLayout>
+            <Label *ngIf="userForm.get(profiles.social_name).errors" class="error" text="Please enter valid profile id" row="2" col="0" textWrap="true"></Label>
           </GridLayout>
         </StackLayout>
         <button class="p-15 showMore" horizontalAlignment="center"

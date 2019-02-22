@@ -118,9 +118,9 @@ export class ProfileSettings {
     }
 
     ValidateUrl(control: AbstractControl) {
-        if (control.value.startsWith('https') || control.value.includes('www')) {
-            return { validUrl: true };
-        }
+            if (control.value.toLowerCase().includes('http') || control.value.toLowerCase().includes('www')) {
+                return { validUrl: true };
+            }
         return null;
     }
 
