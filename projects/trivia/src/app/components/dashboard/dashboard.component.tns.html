@@ -2,8 +2,8 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2">
     <ScrollView>
         <StackLayout>        
-                <Label margin="5 10"  *ngIf="account?.bits" text=" Bits: {{account?.bits}} " textWrap="true"></Label>
-                <Label margin="2 10"  *ngIf="account?.bytes" text=" Bytes: {{account?.bytes}} " textWrap="true"></Label>
+                <Label margin="5 10"  *ngIf="account?.bits && user" text=" Bits: {{account?.bits}} " textWrap="true"></Label>
+                <Label margin="2 10"  *ngIf="account?.bytes && user" text=" Bytes: {{account?.bytes}} " textWrap="true"></Label>
 
             <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
                 
