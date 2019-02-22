@@ -13,6 +13,7 @@ import {
   QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
   QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent
 } from './components';
+import { ShowHintWhenFocusOutDirective } from './directive';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import {
     QuestionFormComponent,
     RejectedQuestionContentComponent,
     SocialPaletteComponent,
-    AuthorComponent
+    AuthorComponent,
+    ShowHintWhenFocusOutDirective
   ],
   imports: [
     CommonModule,
@@ -48,6 +50,6 @@ import {
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
-    ImageCropperModule, HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent]
+    ImageCropperModule, HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective]
 })
 export class SharedModule { }
