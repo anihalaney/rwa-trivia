@@ -14,6 +14,9 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
+import * as Clipboard from 'nativescript-clipboard';
+import { Page, EventData } from 'tns-core-modules/ui/page/page';
+import { TextField } from 'tns-core-modules/ui/text-field';
 
 
 @Component({
@@ -28,6 +31,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   showSelectCategory = false;
   showSelectTag = false;
   dataItem;
+  pastedDataUrl: String;
+  arrayString;
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
   private facebookUrlStatus = true;
@@ -41,11 +46,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public width = 300;
   public height = 300;
 
+
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
+
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
+    private page: Page,
     public utils: Utils) {
 
     super(fb, store, userAction, utils);
@@ -57,8 +65,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.toggleLoader(false);
       }
     }));
-  }
 
+  }
 
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
@@ -144,6 +152,27 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.onSubmit();
     }
 
+  }
+
+
+  onSocialProfileIdPaste($event, i) {
+    console.log($event);
+    Clipboard.getText().then((content) => {
+      this.pastedDataUrl = content;
+      if (this.pastedDataUrl.includes('http') || this.pastedDataUrl.includes('www')) {
+        if (this.pastedDataUrl.endsWith('/')) {
+          const newDataUrl = this.pastedDataUrl.slice(0, -1);
+          this.arrayString = newDataUrl.split('/');
+        } else {
+          this.arrayString = this.pastedDataUrl.split('/');
+        }
+        setTimeout(() => {
+          // const page = <Page>args.object;
+          const textField = <TextField>this.page.getViewById('myInput');
+          textField.text = this.arrayString[this.arrayString.length - 1];
+        }, 1);
+      }
+    });
   }
 
 
