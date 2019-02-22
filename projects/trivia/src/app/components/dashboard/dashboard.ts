@@ -239,7 +239,7 @@ export class Dashboard implements OnDestroy {
 
         const maxMiliSecond = this.utils.convertMilliSIntoMinutes(this.applicationSettings.lives.lives_after_add_millisecond) - 1;
         if (this.account) {
-            if (this.account.lives && this.account.lives < this.applicationSettings.lives.max_lives) {
+            if (this.account.lives <= this.applicationSettings.lives.max_lives) {
                 this.timerSub = timer(1000, 1000).subscribe(t => {
                     const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate);
                     const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
@@ -264,9 +264,12 @@ export class Dashboard implements OnDestroy {
                             this.store.dispatch(this.userActions.addUserLives(this.user.userId));
                         }
                     } else {
-                        this.timeoutLive = '(' + String(this.account.lives) + ')' + (this.remainingMinutes) + ':' + (this.remaningSeconds);
+                        let timeOut = '';
+                        if (this.account.lives !== this.applicationSettings.lives.max_lives) {
+                            timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
+                        }
+                        this.timeoutLive = '(' + String(this.account.lives) + ')' + timeOut;
                     }
-                    // tslint:disable-next-line:max-line-length
                 });
             } else {
                 this.timeoutLive = '(' + String(this.account.lives) + ')';
