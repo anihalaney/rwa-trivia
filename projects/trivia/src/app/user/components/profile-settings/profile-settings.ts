@@ -1,4 +1,4 @@
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -9,8 +9,10 @@ import { userState } from '../../../user/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { UserActions } from 'shared-library/core/store';
+import { ViewChildren, QueryList, HostListener } from '@angular/core';
 
 export class ProfileSettings {
+    @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
     user: User;
     fb: FormBuilder;
@@ -24,12 +26,13 @@ export class ProfileSettings {
     userObs: Observable<User>;
     profileOptions: string[] = ['Only with friends', 'With EveryOne'];
     locationOptions: string[] = ['Only with friends', 'With EveryOne'];
-
-
+    socialProfileSettings;
+    enableSocialProfile;
     profileImage: { image: any } = { image: '/assets/images/avatarimg.jpg' };
     profileImageValidation: String;
     profileImageFile: File;
     userCopyForReset: User;
+    socialProfileShowLimit = 3;
 
     tagsObs: Observable<string[]>;
     tags: string[];
@@ -56,6 +59,11 @@ export class ProfileSettings {
         this.toggleLoader(true);
 
         this.fb = formBuilder;
+
+        this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+            this.socialProfileSettings = appSettings[0].social_profile;
+            this.enableSocialProfile = this.socialProfileSettings.filter(res => res.enable).length;
+        }));
 
         this.categoriesObs = store.select(getCategories);
         this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
@@ -109,6 +117,13 @@ export class ProfileSettings {
         return this.userForm.get('socialAccountList') as FormArray;
     }
 
+    ValidateUrl(control: AbstractControl) {
+            if (control.value.toLowerCase().includes('http') || control.value.toLowerCase().includes('www')) {
+                return { validUrl: true };
+            }
+        return null;
+    }
+
     filter(val: string): string[] {
         return this.tagsAutoComplete.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
     }
@@ -149,6 +164,7 @@ export class ProfileSettings {
         const tagsFA = new FormArray(fcs);
 
         const categoryFA = new FormArray(categoryIds);
+
         this.userForm = this.fb.group({
             name: [user.name, Validators.required],
             displayName: [user.displayName, Validators.required],
@@ -156,20 +172,20 @@ export class ProfileSettings {
             categoryList: categoryFA,
             tags: '',
             tagsArray: tagsFA,
-            facebookUrlStatus: [true],
-            facebookUrl: [user.facebookUrl, Validators.pattern(this.linkValidation)],
-            twitterUrlStatus: [true],
-            twitterUrl: [user.twitterUrl, Validators.pattern(this.linkValidation)],
-            linkedInUrlStatus: [true],
-            linkedInUrl: [user.linkedInUrl, Validators.pattern(this.linkValidation)],
-            profileSetting: [(user.profileSetting) ? user.profileSetting :
-                (this.profileOptions.length > 0 ? this.profileOptions[0] : '')],
-            profileLocationSetting: [(user.profileLocationSetting) ? user.profileLocationSetting :
-                (this.locationOptions.length > 0 ? this.locationOptions[0] : '')],
-            privateProfileSetting: [user.privateProfileSetting],
             profilePicture: [user.profilePicture, Validators.required]
         });
         this.enteredTags = user.tags;
+        this.afterFormCreate();
+    }
+
+    afterFormCreate() {
+        this.socialProfileSettings.map(res => {
+            if (res.enable) {
+                const socialName = this.user[res.social_name] ? this.user[res.social_name] : '';
+                this.userForm.addControl(res.social_name, new FormControl(socialName, this.ValidateUrl));
+            }
+        });
+        this.socialProfileSettings.sort((a, b) => a.position - b.position);
     }
 
     getUserFromFormValue(formValue: any): void {
@@ -182,14 +198,17 @@ export class ProfileSettings {
                 this.user.categoryIds.push(obj['category']);
             }
         }
-        this.user.facebookUrl = formValue.facebookUrl;
-        this.user.linkedInUrl = formValue.linkedInUrl;
-        this.user.twitterUrl = formValue.twitterUrl;
+        this.socialProfileSettings.map(res => {
+            if (res.enable) {
+                this.user[res.social_name] = formValue[res.social_name];
+            }
+        });
         this.user.tags = [...this.enteredTags];
-        this.user.profileSetting = formValue.profileSetting;
-        this.user.profileLocationSetting = formValue.profileLocationSetting;
-        this.user.privateProfileSetting = formValue.privateProfileSetting;
         this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
+    }
+
+    showMoreSocialProfile() {
+        this.socialProfileShowLimit = this.enableSocialProfile;
     }
 
     resetUserProfile() {
@@ -205,4 +224,7 @@ export class ProfileSettings {
         this.store.dispatch(this.userAction.addUserProfile(user));
     }
 
+    onSocialProfileInputFocus(i) {
+        this.inputEl.toArray()[i].nativeElement.focus();
+    }
 }
