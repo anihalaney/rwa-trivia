@@ -112,7 +112,7 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
                 gameLeaderBoardStats.getGameUsers(game, questionDict).then((status) => {
                     console.log('status', status);
                 });
-            })
+            });
 
 
             if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
@@ -164,6 +164,8 @@ exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate(
                 console.log('lbsStats', lbsStats);
                 gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
                     // console.log('leaderBoardStat', leaderBoardStat);
+                }, error => {
+                    console.log('leaderBoardStat error', error);
                 });
             });
 

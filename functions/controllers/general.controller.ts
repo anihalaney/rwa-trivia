@@ -127,8 +127,10 @@ exports.testES = (req, res) => {
  */
 exports.generateUsersStat = (req, res) => {
     const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-    gameLeaderBoardStats.generateGameStats().then((gameResults) => {
+    return gameLeaderBoardStats.generateGameStats().then((gameResults) => {
         res.send('updated stats');
+    }, error => {
+        res.status(500).send(error);
     });
 };
 
@@ -139,8 +141,10 @@ exports.generateUsersStat = (req, res) => {
  */
 exports.generateLeaderBoardStat = (req, res) => {
     const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-    gameLeaderBoardStats.calculateGameLeaderBoardStat().then((gameResults) => {
+    return gameLeaderBoardStats.calculateGameLeaderBoardStat().then((gameResults) => {
         res.send('updated stats');
+    }, error => {
+        res.status(500).send(error);
     });
 };
 
@@ -306,29 +310,6 @@ exports.migrateUserStatToAccounts = (req, res) => {
     });
 };
 
-
-/**
- * flushLeaderBoardFromAccount
- * return status
- */
-exports.flushLeaderBoardFromUser = (req, res) => {
-    const updatePromises = [];
-    generalAccountService.getAccounts().then(accounts => {
-        accounts.docs.map(account => {
-            const accountObj: Account = account.data();
-            const dbAccountObj = { ...accountObj };
-            delete dbAccountObj['leaderBoardStats'];
-            console.log('dbAccountObj', dbAccountObj);
-            updatePromises.push(generalAccountService.setAccount(dbAccountObj));
-        });
-        Promise.all(updatePromises).then((updateResults) => {
-            res.send(updateResults);
-        })
-            .catch((e) => {
-                res.send(e);
-            });
-    });
-};
 
 
 /**
