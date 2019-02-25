@@ -141,7 +141,6 @@ export class MakeFriends {
     }
 
     getUser(userId): Promise<any> {
-        console.log('make frined called');
         return friendUserService.getUserById(userId);
     }
 }

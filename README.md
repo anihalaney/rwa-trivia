@@ -60,6 +60,8 @@ See it in action (still a work in progress) - https://bitwiser.io
 
 [Part 24: Angular workspace](https://blog.realworldfullstack.io/real-world-app-part-24-angular-workspace-69345d32e00e)
 
+[Part 25-a: NativeScript, Angular and Firebase](https://blog.realworldfullstack.io/real-world-app-part-25-a-nativescript-and-angular-e9ff4b102e9b)
+
 ## Quick Installation Instructions
 
 * Install cli globally (version should match the one in package.json)

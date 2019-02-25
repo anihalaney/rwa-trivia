@@ -1,4 +1,3 @@
-
 import * as express from 'express';
 const router = express.Router();
 
@@ -23,6 +22,8 @@ router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsD
 router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuthUsersInFirestore);
 router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
 router.post('/question/status', generalAuth.adminOnly, generalQuestionController.changeUnpublishedQuestionStatus);
-
+router.get('/add/default/lives', generalAuth.adminOnly, generalController.addDefaultLives);
+router.get('/addLives', generalAuth.adminOnly, generalController.addLives);
+router.get('/remove/social/profile', generalAuth.adminOnly, generalController.removeSocialProfile);
 
 module.exports = router;

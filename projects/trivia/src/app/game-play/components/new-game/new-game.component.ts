@@ -1,10 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
   Category, GameOptions, GameMode, User, PlayerMode, OpponentType
@@ -13,6 +12,9 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
+import { MatSnackBar } from '@angular/material';
+
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -40,7 +42,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   friendUserId: string;
   loaderStatus = false;
-  errMsg: string;
+
 
   get categoriesFA(): FormArray {
     return this.newGameForm.get('categoriesFA') as FormArray;
@@ -51,8 +53,16 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private windowRef: WindowRef,
     private router: Router,
     public userActions: UserActions,
-    public utils: Utils) {
+    public utils: Utils,
+    public snackBar: MatSnackBar) {
     super(store, utils, gameActions, userActions);
+
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+      if (gameCreateStatus) {
+        this.redirectToDashboard(gameCreateStatus);
+      }
+    }));
+
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
@@ -68,15 +78,25 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           filteredCategories = this.categories;
         }
 
+        if (this.applicationSettings && this.applicationSettings.lives.enable) {
+          this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+            if (account) {
+              this.life = account.lives;
+            }
+          }));
+        }
+
         const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
         ...filteredCategories.filter(c => !c.requiredForGamePlay)];
 
         this.sortedCategories = sortedCategories;
 
         sortedCategories.map(category => {
-          this.selectedCategories.push(category.id);
+          category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay)
+          if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
+            this.selectedCategories.push(category.id);
+          }
         });
-
       }
     }));
   }
@@ -195,7 +215,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       }
       return;
     }
-
+    // if (this.applicationSettings.lives.enable && this.life === 0) {
+    //   this.redirectToDashboard(this.gameErrorMsg);
+    //   return false;
+    // }
     this.startNewGame(gameOptions);
   }
 
@@ -213,8 +236,25 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return gameOptions;
   }
 
-
+  redirectToDashboard(msg) {
+    this.router.navigate(['/dashboard']);
+    this.snackBar.open(String(msg), '', {
+      duration: 2000,
+    });
+  }
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
+  }
+
+  isCategorySelected(categoryId: number, requiredForGamePlay: boolean) {
+    if (requiredForGamePlay) {
+      return true;
+    }
+    if (this.user.categoryIds && this.user.categoryIds.length > 0) {
+      return this.user.categoryIds.includes(categoryId);
+    } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
+      return this.user.lastGamePlayOption.categoryIds.includes(categoryId);
+    }
+    return true;
   }
 }
