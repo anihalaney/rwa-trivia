@@ -6,8 +6,7 @@ import { UserService } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../../../trivia/src/app/store';
-import { coreState } from '../reducers';
+import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 
@@ -171,6 +170,6 @@ export class UserEffects {
         private actions$: Actions,
         private userActions: UserActions,
         private svc: UserService,
-        private store: Store<AppState>,
+        private store: Store<CoreState>,
     ) { }
 }
