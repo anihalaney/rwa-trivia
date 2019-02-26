@@ -168,10 +168,10 @@ exports.onAccountUpdate = functions.firestore.document('/accounts/{accountId}').
     if (afterEventData !== beforeEventData) {
         const account: Account = afterEventData;
         const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-        gameLeaderBoardStats.getLeaderBoardStat().then((lbsStats) => {
+        return gameLeaderBoardStats.getLeaderBoardStat().then((lbsStats) => {
             lbsStats = gameLeaderBoardStats.calculateLeaderBoardStat(account, lbsStats);
             // console.log('lbsStats', lbsStats);
-            gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
+            return gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
                 console.log('updated leaderboardstats');
                 return leaderBoardStat;
             }, error => {
