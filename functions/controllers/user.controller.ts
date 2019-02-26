@@ -51,8 +51,7 @@ exports.getUserImages = (req, res) => {
 
     if (!userId) {
         // Game Option is not added
-        res.status(403).send('userId is not available');
-        return;
+        return res.status(403).send('userId is not available');
     }
 
     userService.getUserById(userId).then((u) => {
@@ -107,9 +106,12 @@ function setUser(user, res) {
 }
 
 exports.updateLives = (req, res) => {
-    const userId = req.params.userId;
+    const userId = req.body.userId;
     if (!userId) {
-        res.status(400).send('Bad Request');
+        return res.status(400).send('Bad Request');
+    }
+    if (req.user.user_id !== userId) {
+        return res.status(401).send('Unauthorized');
     }
     return generalAccountService.updateLives(userId).then((ref) => {
         res.send({ 'status': 'Lives added successfully !!' });
