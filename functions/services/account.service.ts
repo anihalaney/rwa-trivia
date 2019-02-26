@@ -41,7 +41,7 @@ exports.setAccount = async (dbAccount: any): Promise<any> => {
  * updateAccount
  * return ref
  */
-exports.updateAccount = async (dbAccount: any): Promise<any> => {
+exports.updateAccountData = async (dbAccount: any): Promise<any> => {
     try {
         return await accountFireStoreClient.doc(`/accounts/${dbAccount.id}`).update(dbAccount);
     } catch (error) {
