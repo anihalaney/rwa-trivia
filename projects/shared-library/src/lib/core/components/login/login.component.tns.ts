@@ -20,6 +20,11 @@ export class LoginComponent extends Login implements OnInit {
 
   title: string;
   loader = new LoadingIndicator();
+  message = {
+    show: false,
+    type: '',
+    text: ''
+  };
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
@@ -59,7 +64,7 @@ export class LoginComponent extends Login implements OnInit {
       return;
     }
     this.loader.show();
-
+    this.removeMessage();
     switch (this.mode) {
       case 0:
         // Login
@@ -71,7 +76,9 @@ export class LoginComponent extends Login implements OnInit {
           this.redirectTo();
         }).catch((error) => {
           this.loader.hide();
-          Toast.makeText(error.message).show();
+          const singInError = error.message.split(':');
+          this.showMessage('error', singInError[1] || error.message);
+          // Toast.makeText(error.message).show();
         });
         break;
       case 1:
@@ -88,12 +95,16 @@ export class LoginComponent extends Login implements OnInit {
               }
             ).catch((error) => {
               this.loader.hide();
-              Toast.makeText(error).show();
+              const verificationError = error.split(':');
+              this.showMessage('error', verificationError[1] || error);
+              // Toast.makeText(error).show();
             });
           }
         }).catch((error) => {
           this.loader.hide();
-          Toast.makeText(error).show();
+          const singUpError = error.split(':');
+          this.showMessage('error', singUpError[1] ||  error);
+          // Toast.makeText(error).show();
         });
         break;
       case 2:
@@ -101,20 +112,23 @@ export class LoginComponent extends Login implements OnInit {
         this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.value.email)
           .then((a: any) => {
             this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
-            Toast.makeText(this.notificationMsg).show();
+            this.showMessage('success', this.notificationMsg);
+            // Toast.makeText(this.notificationMsg).show();
             this.loader.hide();
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
           }).catch((error) => {
             this.loader.hide();
-            Toast.makeText(error).show();
+            this.showMessage('error', error);
+            // Toast.makeText(error).show();
           });
     }
 
   }
 
   googleLogin() {
+    this.removeMessage();
     if (isAndroid) {
       this.loader.show();
     }
@@ -124,12 +138,14 @@ export class LoginComponent extends Login implements OnInit {
       }
     ).catch((error) => {
       this.loader.hide();
-      Toast.makeText(error).show();
+      this.showMessage('error', error);
+      // Toast.makeText(error).show();
     });
 
   }
 
   fbLogin() {
+    this.removeMessage();
     if (isAndroid) {
       this.loader.show();
     }
@@ -139,7 +155,8 @@ export class LoginComponent extends Login implements OnInit {
       }
     ).catch((error) => {
       this.loader.hide();
-      Toast.makeText(error).show();
+      this.showMessage('error', error);
+      // Toast.makeText(error).show();
     });
   }
 
@@ -157,6 +174,22 @@ export class LoginComponent extends Login implements OnInit {
           });
       }
       );
+  }
+
+  showMessage(type: string, text: string) {
+    this.message = {
+      show: true,
+      type: type,
+      text: text
+    };
+  }
+
+  removeMessage() {
+    this.message = {
+      show: false,
+      type: '',
+      text: ''
+    };
   }
 
 }
