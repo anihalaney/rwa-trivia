@@ -344,8 +344,7 @@ exports.addDefaultLives = async (req, res) => {
 exports.addLives = async (req, res) => {
     const appSetting = await appSettings.getAppSettings();
     if (appSetting.lives.enable) {
-        res.send(generalAccountService.addLives());
-        return;
+        return res.send(generalAccountService.addLives());
     }
     res.status(200).send('live feature is not enabled');
 };

@@ -40,13 +40,6 @@ module.exports = env => {
         packageJsonFileName = "package.json",
         nativescriptIdField = "nativescript.id",
 
-        //environment files constants
-        envPath = "projects/shared-library/src/lib/environments/",
-        envFileName = "environment.ts",
-        devEnvFileName = "environment.dev.ts",
-        prodEnvFileName = "environment.prod.ts",
-
-
         // You can provide the following flags when running 'tns run android|ios'
         aot, // --env.aot
         snapshot, // --env.snapshot
@@ -61,13 +54,17 @@ module.exports = env => {
 
     const appFullPath = resolve(projectRoot, appPath);
     const appResourcesFullPath = resolve(projectRoot, appResourcesPath);
-    const envFullPath = resolve(projectRoot, envPath);
 
     const entryModule = `${nsWebpack.getEntryModule(appFullPath)}.ts`;
     const entryPath = `.${sep}${entryModule}`;
 
+    // This to create extension for enviornment file based on
+    // deployment enviornement, copywebpackplugin was creating problem on Android
+    // hostReplacementPath work like file replacement in angular.json
+    const envFullPath = (env.prod) ? "prod" : "dev";
+
     const ngCompilerPlugin = new AngularCompilerPlugin({
-        hostReplacementPaths: nsWebpack.getResolver([platform, "tns"]),
+        hostReplacementPaths: nsWebpack.getResolver([platform, "tns", envFullPath]),
         platformTransformers: aot ? [nsReplaceBootstrap(() => ngCompilerPlugin)] : null,
         mainPath: resolve(appPath, entryModule),
         tsConfigPath: join(__dirname, aot ? "tsconfig.aot.json" : "tsconfig.tns.json"),
@@ -75,14 +72,14 @@ module.exports = env => {
         sourceMap: !!sourceMap,
     });
 
-      // change package name in package.json file
-    if(env.package_name) {
-    const file = editJsonFile(resolve(projectRoot, packageJsonFileName), {
-        autosave: true
-    });
-    file.set(nativescriptIdField, env.package_name);
+    // change package name in package.json file
+    if (env.package_name) {
+        const file = editJsonFile(resolve(projectRoot, packageJsonFileName), {
+            autosave: true
+        });
+        file.set(nativescriptIdField, env.package_name);
     }
-    
+
     const config = {
         mode: uglify ? "production" : "development",
         context: appFullPath,
@@ -225,15 +222,6 @@ module.exports = env => {
             ],
         },
         plugins: [
-            // Copy environment files.
-            new CopyWebpackPlugin([
-                {
-                    from: (env.prod) ? resolve(envFullPath, prodEnvFileName) : resolve(envFullPath, devEnvFileName),
-                    to: resolve(envFullPath, envFileName),
-                    context: projectRoot
-                },
-            ]),
-            
             // Define useful constants like TNS_WEBPACK
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",
@@ -255,7 +243,7 @@ module.exports = env => {
                 { from: { glob: "**/*.jpg" } },
                 { from: { glob: "**/*.png" } },
                 { from: { glob: "**/*.gif" } },
-                
+
             ], { ignore: [`${relative(appPath, appResourcesFullPath)}/**`] }),
             // Generate a bundle starter script and activate it in package.json
             new nsWebpack.GenerateBundleStarterPlugin([
