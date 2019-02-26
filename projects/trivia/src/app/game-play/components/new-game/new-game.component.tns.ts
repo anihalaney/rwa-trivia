@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { GameActions } from 'shared-library/core/store/actions';
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
@@ -12,10 +12,8 @@ import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/a
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
 import { filter } from 'rxjs/operators';
-import { UserActions } from 'shared-library/core/store/actions';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
-import { Friends } from '../../../../../../shared-library/src/lib/shared/model';
 import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
 
@@ -59,8 +57,27 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories.filter(c => c.isSelected = true)));
 
+    this.subs.push(this.categoriesObs.subscribe(categories => {
+     categories.map(category => {
+        if (this.user.categoryIds && this.user.categoryIds.length > 0) {
+          category.isSelected =  this.user.categoryIds.includes(category.id);
+        } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
+          category.isSelected = this.user.lastGamePlayOption.categoryIds.includes(category.id);
+        } else {
+          category.isSelected = true;
+        }
+        return category;
+      });
+      return categories;
+
+    }));
+
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+      if (gameCreateStatus) {
+        this.redirectToDashboard(gameCreateStatus);
+      }
+    }));
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
@@ -86,6 +103,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
               return category;
             }
           });
+          if (this.applicationSettings && this.applicationSettings.lives.enable) {
+            this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+              if (account) {
+                this.life = account.lives;
+              }
+            }));
+          }
         } else {
           filteredCategories = this.categories;
         }
@@ -115,6 +139,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       }
       return;
     }
+    if (this.applicationSettings.lives.enable && this.life === 0) {
+      this.redirectToDashboard(this.gameErrorMsg);
+      return false;
+    }
+
     this.startNewGame(this.gameOptions);
   }
 
@@ -179,5 +208,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.router.navigate(['/my/app-invite-friends-dialog']);
   }
 
+  redirectToDashboard(msg) {
+    this.router.navigate(['/dashboard']);
+    Toast.makeText(msg).show();
+  }
 }
 

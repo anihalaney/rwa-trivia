@@ -6,20 +6,25 @@ import { Utils } from '../utils/utils';
 import { PushNotification } from '../utils/push-notifications';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+
+import { AppSettings } from '../services/app-settings.service';
 const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
+const generalAccountService = require('../services/account.service');
+
 const utils: Utils = new Utils();
 const pushNotification: PushNotification = new PushNotification();
 const fs = require('fs');
 const request = require('request');
 const path = require('path');
+const appSettings: AppSettings = new AppSettings();
 
 /**
  * createGame
  * return gameId
  */
-exports.createGame = (req, res) => {
+exports.createGame = async (req, res) => {
     const gameOptions = req.body.gameOptions;
     const userId = req.body.userId;
 
@@ -36,10 +41,30 @@ exports.createGame = (req, res) => {
     }
 
     const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId);
+    // Get App Settings
+    const appSetting = await appSettings.getAppSettings();
+
+    if (appSetting.lives.enable) {
+        // Get Account Info
+        const account = await generalAccountService.getAccountById(userId);
+        // if lives is less then or equal to 0 then send with error
+        if (account.data().lives <= 0) {
+            res.status(403).send('Sorry, don\'t have enough life.');
+            return;
+        }
+    }
     gameMechanics.createNewGame().then((gameId) => {
-        console.log('gameId', gameId);
+        if (appSetting.lives.enable) {
+            // Decrement lives from user account
+            generalAccountService.updateAccount(userId);
+            // Decrement Second Player's life
+            if (gameOptions.friendId) {
+                generalAccountService.updateAccount(gameOptions.friendId);
+            }
+        }
         res.send({ gameId: gameId });
     });
+
 };
 
 
@@ -83,9 +108,12 @@ exports.updateGame = (req, res) => {
                 const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
 
+                if (currentPlayerQnAs.answerCorrect) {
+                    generalAccountService.setBits(userId);
+                }
                 if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
-                    console.log(`change turn`);
-                    pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId);
+                    pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                 }
                 game.turnAt = utils.getUTCTimeStamp();
                 game.calculateStat(currentPlayerQnAs.playerId);
@@ -96,9 +124,11 @@ exports.updateGame = (req, res) => {
                 game.decideWinner();
                 game.calculateStat(game.nextTurnPlayerId);
                 game.GameStatus = GameStatus.COMPLETED;
+                generalAccountService.setBytes(game.winnerPlayerId);
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId);
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                 }
                 const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
                 systemStatsCalculations.updateSystemStats('game_played').then((stats) => {
@@ -185,17 +215,14 @@ exports.checkGameOver = (req, res) => {
             }
 
 
-            if ((remainedTime) <= schedulerConstants.notificationInterval) {
-                const data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
-                pushNotification
-                    .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
-                        'You have 32 minutes remaining to play your turn !', data)
-                    .then((result) => {
-                        console.log('result', result);
-                    }).catch((err) => {
-                        console.log('Notification Error: ', err);
-                    });
+            if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                if ((remainedTime) <= schedulerConstants.notificationInterval) {
+                    pushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
+                        pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
+                }
             }
+
 
             if (playedHours >= schedulerConstants.gamePlayDuration) {
                 game.gameOver = true;
@@ -203,7 +230,8 @@ exports.checkGameOver = (req, res) => {
                 game.GameStatus = GameStatus.TIME_EXPIRED;
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId);
+                    pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                 }
                 const dbGame = game.getDbModel();
                 gameControllerService.updateGame(dbGame).then((ref) => {
@@ -236,7 +264,7 @@ exports.changeGameTurn = (req, res) => {
             const game: Game = Game.getViewModel(doc.data());
             gameMechanics.changeTheTurn(game).then((status) => {
                 console.log('game update status', status, game.gameId);
-            })
+            });
         });
         res.send('scheduler check is completed');
     });
@@ -299,7 +327,6 @@ exports.createSocialImage = (req, res) => {
     socialGameService.generateSocialUrl(req.params.userId, socialId).then((social_url) => {
         res.setHeader('content-disposition', 'attachment; filename=social_image.png');
         res.setHeader('content-type', 'image/png');
-        res.send(social_url)
+        res.send(social_url);
     });
 };
-

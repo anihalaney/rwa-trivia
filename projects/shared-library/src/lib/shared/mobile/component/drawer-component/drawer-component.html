@@ -39,7 +39,7 @@
                         class="sideLabel sideStackLayout" [class.active-menu]="activeMenu === 'My Questions'"></Label>
 
                     <Label *ngIf="authProvider.isAuthenticated" row="7" (tap)="navigateToProfileSettings()" colSpan="2"
-                        text="Profile Settings" textWrap="true" class="sideLabel" [class.active-menu]="activeMenu === 'Profile Settings'"></Label>
+                        text="Profile" textWrap="true" class="sideLabel" [class.active-menu]="activeMenu === 'Profile'"></Label>
                 </GridLayout>
             </ScrollView>
         </StackLayout>

@@ -1,8 +1,8 @@
-
 const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
 const generalUserService = require('../services/user.service');
 const generalAccountService = require('../services/account.service');
+
 const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
@@ -14,6 +14,10 @@ import { RSSFeedConstants, Blog, User, profileSettingsConstants, Account } from 
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
 import { Utils } from '../utils/utils';
+import { AppSettings } from '../services/app-settings.service';
+
+const appSettings: AppSettings = new AppSettings();
+
 const utils: Utils = new Utils();
 
 /**
@@ -306,5 +310,45 @@ exports.migrateUserStatToAccounts = (req, res) => {
 };
 
 
+/**
+ * Add default number of lives to each account
+ */
+exports.addDefaultLives = async (req, res) => {
+    try {
+        const appSetting = await appSettings.getAppSettings();
+        // Lives setting is enable then add default number of lives into user's account
+        if (appSetting.lives.enable) {
+            const users = await generalUserService.getUsers();
+            const migrationPromises = users.docs.map(user => {
+                const userObj: User = user.data();
+                if (userObj && userObj.userId) {
+                    const accountObj: Account = new Account();
+                    accountObj.id = userObj.userId;
+                    return generalAccountService.addDefaultLives({ ...accountObj });
+                }
+            });
+            const migrationResults = await Promise.all(migrationPromises);
+            res.status(200).send(migrationResults);
 
+        } else {
+            res.status(200).send('live feature is not enabled');
+        }
+    } catch (error) {
+        res.status(500).send(error);
+    }
+};
+
+// Schedular for add lives
+exports.addLives = async (req, res) => {
+    const appSetting = await appSettings.getAppSettings();
+    if (appSetting.lives.enable) {
+        res.send(generalAccountService.addLives());
+        return;
+    }
+    res.status(200).send('live feature is not enabled');
+};
+
+exports.removeSocialProfile = async (req, res) => {
+    res.status(200).send(await generalUserService.removeSocialProfile());
+};
 

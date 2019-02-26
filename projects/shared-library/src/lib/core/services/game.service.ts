@@ -274,6 +274,5 @@ export class GameService {
       operation: GameOperations.REPORT_STATUS
     };
     return this.http.put<any>(url, payload);
-
   }
 }

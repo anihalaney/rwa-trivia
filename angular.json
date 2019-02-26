@@ -41,7 +41,17 @@
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
                 }
-              ]
+              ],
+              "serviceWorker": true,
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
             },
             "production": {
               "fileReplacements": [
@@ -197,7 +207,16 @@
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/environment.dev.ts"
                 }
-              ]
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
             },
             "production": {
               "fileReplacements": [
