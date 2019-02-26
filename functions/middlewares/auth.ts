@@ -23,7 +23,7 @@ exports.validateFirebaseIdToken = (req, res, next) => {
         console.log('Found "Authorization" header');
         // Read the ID Token from the Authorization header.
         idToken = req.headers.authorization.split('Bearer ')[1];
-    } else if (req.headers.token) {
+    } else if (req.headers.token || req.body.token) {
         console.log('token', req.headers.token);
         return next();
     } else {
@@ -48,6 +48,10 @@ exports.validateFirebaseIdToken = (req, res, next) => {
 
 // middleware to check for authorized users
 exports.authTokenOnly = (req, res, next) => {
+    const token = req.headers.token || req.body.token;
+    if (!token) {
+        return res.status(401).send('Unauthorized');
+    }
     authFireBaseClient.firestore().collection('scheduler_auth_tokens').where('token', '==', req.headers.token)
         .get()
         .then(snapshot => {

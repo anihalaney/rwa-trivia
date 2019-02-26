@@ -89,7 +89,7 @@
 
       <StackLayout class="list-view social-section" iosOverflowSafeArea="false">
         <StackLayout class="grid-label p-15">
-          <Label textWrap="true" text="CONNECT YOUR SOCIAL ACCOUNT"></Label>
+          <Label textWrap="true" text="SOCIAL PROFILE"></Label>
         </StackLayout>
         <StackLayout class="input-field" *ngFor="let profiles of socialProfileSettings; let i=index"
           iosOverflowSafeArea="false">
@@ -100,7 +100,6 @@
             <StackLayout class="text-box" row="1" col="0" orientation="horizontal">
               <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profiles.url" fontSize="14" textWrap="true"></Label>
               <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID" [formControlName]="profiles.social_name" class="input-box"></TextField>
-            
             </StackLayout>
             <Label *ngIf="userForm.get(profiles.social_name).errors" class="error" text="Please enter valid profile id" row="2" col="0" textWrap="true"></Label>
           </GridLayout>
