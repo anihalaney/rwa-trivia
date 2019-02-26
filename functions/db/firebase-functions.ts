@@ -128,6 +128,7 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
 
             const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
             systemStatsCalculations.updateSystemStats('active_games').then((stats) => {
+                return stats;
                 console.log(stats);
             });
         }
@@ -159,27 +160,29 @@ exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate(
 
 });
 
-exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate((change, context) => {
+exports.onAccountUpdate = functions.firestore.document('/accounts/{accountId}').onUpdate((change, context) => {
 
     const beforeEventData = change.before.data();
     const afterEventData = change.after.data();
 
     if (afterEventData !== beforeEventData) {
-        console.log('data changed');
-        const userObj: User = afterEventData;
+        const account: Account = afterEventData;
         const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
         gameLeaderBoardStats.getLeaderBoardStat().then((lbsStats) => {
-            gameLeaderBoardStats.getAccountById(userObj.userId).then((dbAccount) => {
-                const account: Account = dbAccount;
-                lbsStats = gameLeaderBoardStats.calculateLeaderBoardStat(account, lbsStats);
-                console.log('lbsStats', lbsStats);
-                gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
-                    // console.log('leaderBoardStat', leaderBoardStat);
-                }, error => {
-                    console.log('leaderBoardStat error', error);
-                });
+            lbsStats = gameLeaderBoardStats.calculateLeaderBoardStat(account, lbsStats);
+            // console.log('lbsStats', lbsStats);
+            gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
+                console.log('updated leaderboardstats');
+                return leaderBoardStat;
+            }, error => {
+                console.log('leaderBoardStat error', error);
+                return error;
             });
 
+
+        }, error => {
+            console.log('leaderBoardStat error', error);
+            return error;
         });
     }
 

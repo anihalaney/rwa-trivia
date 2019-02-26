@@ -362,9 +362,11 @@ exports.changeQuestionCategoryIdType = (req, res) => {
         questions.docs.map(question => {
             const questionObj: Question = question.data();
             console.log('questionObj.categoryIds', questionObj.categoryIds);
-            const categoryId = questionObj.categoryIds[0];
+            const categoryIds = questionObj.categoryIds;
             const updatedCategory = [];
-            updatedCategory.push(Number(categoryId));
+            categoryIds.map((categoryId) => {
+                updatedCategory.push(Number(categoryId));
+            });
             questionObj.categoryIds = updatedCategory;
             console.log('updatedCategory', updatedCategory);
             const dbQuestionObj = { ...questionObj };

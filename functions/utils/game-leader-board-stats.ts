@@ -4,8 +4,8 @@ const leaderBoardAccountService = require('../services/account.service');
 const leaderBoardService = require('../services/leaderboard.service');
 
 import {
-    Game, User, Account,
-    LeaderBoardUser, UserStatConstants, Question, PlayerQnA
+    Game, Account,
+    LeaderBoardUser, Question
 } from '../../projects/shared-library/src/lib/shared/model';
 
 
@@ -30,6 +30,8 @@ export class GameLeaderBoardStats {
                         });
                     });
 
+
+
                     Object.keys(this.accountDict).map((userId) => {
                         const account: Account = this.accountDict[userId];
                         account.id = userId;
@@ -44,13 +46,15 @@ export class GameLeaderBoardStats {
                         .catch((e) => {
                             console.log('user update promise error', e);
                         });
+                }).catch((e) => {
+                    console.log('user update promise error', e);
                 });
 
             });
     }
 
-    public async loadQuestionDictionary(): Promise<{ [key: string]: number }> {
-        const questionDict: { [key: string]: number } = {};
+    public async loadQuestionDictionary(): Promise<{ [key: string]: Array<number> }> {
+        const questionDict: { [key: string]: Array<number> } = {};
         return leaderBoardQuestionService.getAllQuestions()
             .then(snapshots => {
 
@@ -59,10 +63,9 @@ export class GameLeaderBoardStats {
                 } else {
                     snapshots.docs.map((snapshot) => {
                         const question: Question = snapshot.data();
-                        // console.log('question', question);
-                        if (question.categoryIds.length > 0 && question.categoryIds[0]) {
-                            // console.log('question.categoryIds[0]', question.categoryIds[0]);
-                            questionDict[question.id] = Number(question.categoryIds[0]);
+
+                        if (question.categoryIds.length > 0) {
+                            questionDict[question.id] = question.categoryIds;
                         }
                     });
                     return questionDict;
@@ -79,7 +82,7 @@ export class GameLeaderBoardStats {
     }
 
 
-    public async  getGameUsers(game: Game, questionDict: { [key: string]: number }): Promise<any> {
+    public async  getGameUsers(game: Game, questionDict: { [key: string]: Array<number> }): Promise<any> {
         const userPromises = [];
 
         Object.keys(game.stats).map((userId) => {
@@ -97,13 +100,17 @@ export class GameLeaderBoardStats {
 
     }
 
-    private getGameQuestionCategories(game: Game, questionDict: { [key: string]: number }): Array<number> {
+    private getGameQuestionCategories(game: Game, questionDict: { [key: string]: Array<number> }): Array<number> {
         const questionCategories: Array<number> = [];
 
         game.playerQnAs.map((playerQnA) => {
-            const categoryId = questionDict[playerQnA.questionId];
-            if (categoryId && questionCategories.indexOf(categoryId) === -1) {
-                questionCategories.push(categoryId);
+            const categoryIds: Array<number> = questionDict[playerQnA.questionId];
+            if (categoryIds) {
+                categoryIds.map((categoryId) => {
+                    if (categoryId && questionCategories.indexOf(categoryId) === -1) {
+                        questionCategories.push(categoryId);
+                    }
+                });
             }
         });
 
@@ -130,7 +137,7 @@ export class GameLeaderBoardStats {
 
 
     private async updateAccount(dbAccount: any): Promise<string> {
-        return leaderBoardAccountService.updateAccount(dbAccount).then(ref => {
+        return leaderBoardAccountService.updateAccountData(dbAccount).then(ref => {
             return dbAccount.id;
         });
     }
