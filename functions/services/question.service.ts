@@ -6,10 +6,13 @@ const questionFireStoreClient = questionFireBaseClient.firestore();
  * getAllQuestions
  * return questions
  */
-exports.getAllQuestions = (): Promise<any> => {
-    return questionFireStoreClient.collection('questions')
-        .get()
-        .then(questions => { return questions });
+exports.getAllQuestions = async (): Promise<any> => {
+    try {
+        return await questionFireStoreClient.collection('questions').get();
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
 };
 
 
@@ -17,10 +20,13 @@ exports.getAllQuestions = (): Promise<any> => {
  * getQuestionById
  * return question
  */
-exports.getQuestionById = (questionId): Promise<any> => {
-    return questionFireStoreClient.doc(`/questions/${questionId}`)
-        .get()
-        .then((qs) => { return qs });
+exports.getQuestionById = async (questionId): Promise<any> => {
+    try {
+        return await questionFireStoreClient.doc(`/questions/${questionId}`).get();
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
 };
 
 /**

@@ -7,13 +7,13 @@ const leaderBoardFireStoreClient = leaderBoardFireBaseClient.firestore();
  * getLeaderBoardStats
  * return leaderoardstat
  */
-exports.getLeaderBoardStats = (userId: string): Promise<any> => {
-    return leaderBoardFireStoreClient.doc('leader_board_stats/categories')
-        .get().then(lbs => { return lbs })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
+exports.getLeaderBoardStats = async (userId: string): Promise<any> => {
+    try {
+        return await leaderBoardFireStoreClient.doc('leader_board_stats/categories').get();
+    } catch (error) {
+        console.error(error);
+        return Promise.reject(error);
+    }
 };
 
 
@@ -26,7 +26,7 @@ exports.setLeaderBoardStats = async (leaderBoardStat: any): Promise<any> => {
         return await leaderBoardFireStoreClient.doc('/leader_board_stats/categories').set(leaderBoardStat);
     } catch (error) {
         console.error(error);
-        return error;
+        return Promise.reject(error);
     }
 
 };
