@@ -315,6 +315,7 @@ exports.migrateUserStatToAccounts = (req, res) => {
  */
 exports.addDefaultLives = async (req, res) => {
     try {
+        res.setHeader('Content-Type', 'application/json');
         const appSetting = await appSettings.getAppSettings();
         // Lives setting is enable then add default number of lives into user's account
         if (appSetting.lives.enable) {
@@ -325,13 +326,13 @@ exports.addDefaultLives = async (req, res) => {
                 if (userObj && userObj.userId) {
                     const accountObj: Account = new Account();
                     accountObj.id = userObj.userId;
-                    console.log('Default lives is added for user : ', accountObj.id);
                     migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
+                    res.write(JSON.stringify({ status: 'updated'}));
                 }
             }
             const migrationResults = await Promise.all(migrationPromises);
-            res.status(200).send(migrationResults);
-
+            console.log('Default lives added successfully');
+            return res.end(JSON.stringify({ message: 'Default life added successfully'}));
         } else {
             res.status(200).send('live feature is not enabled');
         }
