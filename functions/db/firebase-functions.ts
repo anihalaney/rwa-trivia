@@ -7,6 +7,7 @@ const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../
 import { AppSettings } from './../services/app-settings.service';
 const appSettings: AppSettings = new AppSettings();
 const generalAccountService = require('../services/account.service');
+const generalleaderBoardService = require('../services/leaderboard.service');
 
 import {
     Game, Question, Category, User, UserStatConstants, Invitation,
@@ -111,10 +112,9 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
         if (game.gameOver) {
 
             const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-            gameLeaderBoardStats.loadQuestionDictionary().then(questionDict => {
-                gameLeaderBoardStats.getGameUsers(game, questionDict).then((status) => {
-                    console.log('status', status);
-                });
+
+            gameLeaderBoardStats.getGameUsers(game).then((status) => {
+                console.log('status', status);
             });
 
 
@@ -127,9 +127,9 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
             }
 
             const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-            systemStatsCalculations.updateSystemStats('active_games').then((stats) => {
-                return stats;
+            return systemStatsCalculations.updateSystemStats('active_games').then((stats) => {
                 console.log(stats);
+                return stats;
             });
         }
     }
@@ -167,11 +167,12 @@ exports.onAccountUpdate = functions.firestore.document('/accounts/{accountId}').
 
     if (afterEventData !== beforeEventData) {
         const account: Account = afterEventData;
-        const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-        return gameLeaderBoardStats.getLeaderBoardStat().then((lbsStats) => {
-            lbsStats = gameLeaderBoardStats.calculateLeaderBoardStat(account, lbsStats);
+
+        return generalleaderBoardService.getLeaderBoardStats().then((lbsStats) => {
+            lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
+            lbsStats = generalleaderBoardService.calculateLeaderBoardStats(account, lbsStats);
             // console.log('lbsStats', lbsStats);
-            return gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
+            return generalleaderBoardService.setLeaderBoardStats({ ...lbsStats }).then((leaderBoardStat) => {
                 console.log('updated leaderboardstats');
                 return leaderBoardStat;
             }, error => {
