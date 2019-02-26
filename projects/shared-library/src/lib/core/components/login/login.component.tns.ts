@@ -185,8 +185,8 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   changeMode(mode: number){
-    this.removeMessage();
     super.changeMode(mode);
+    this.removeMessage();
   }
 
   removeMessage() {
