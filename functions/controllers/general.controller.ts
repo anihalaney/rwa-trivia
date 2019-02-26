@@ -327,13 +327,15 @@ exports.addDefaultLives = async (req, res) => {
                     const accountObj: Account = new Account();
                     accountObj.id = userObj.userId;
                     migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
-                    console.log('Added default lives for user : ', accountObj.id);
-                    res.write('Added lifes for user: ', accountObj.id);
+                    const successMessage = `Added default lives for user :  ${accountObj.id}`;
+                    console.log(successMessage);
+                    res.write(successMessage);
                 }
             }
             await Promise.all(migrationPromises);
-            console.log('Default lives added successfully');
-            return res.end('Default lives added successfully');
+            const msg = 'Default lives added successfully';
+            console.log(msg);
+            return res.end(msg);
         } else {
             res.status(200).send('live feature is not enabled');
         }
