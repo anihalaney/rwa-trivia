@@ -14,6 +14,7 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
+import { Page, EventData } from 'tns-core-modules/ui/page/page';
 
 
 @Component({
@@ -41,11 +42,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public width = 300;
   public height = 300;
 
+
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
+
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
+    private page: Page,
     public utils: Utils) {
 
     super(fb, store, userAction, utils);
@@ -57,8 +61,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.toggleLoader(false);
       }
     }));
-  }
 
+  }
 
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
@@ -134,15 +138,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
   }
 
-  selectProfileOption(profileOption) {
-    this.user.profileSetting = profileOption;
-    this.userForm.controls['profileSetting'].setValue(profileOption);
-  }
-
-  selectLocationOption(locationOption) {
-    this.user.profileLocationSetting = locationOption;
-    this.userForm.controls['profileLocationSetting'].setValue(locationOption);
-  }
 
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
@@ -154,7 +149,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
   }
-
 
   onSubmit() {
     // validations
