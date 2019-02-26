@@ -52,7 +52,7 @@ exports.authTokenOnly = (req, res, next) => {
     if (!token) {
         return res.status(401).send('Unauthorized');
     }
-    authFireBaseClient.firestore().collection('scheduler_auth_tokens').where('token', '==', req.headers.token)
+    authFireBaseClient.firestore().collection('scheduler_auth_tokens').where('token', '==', token)
         .get()
         .then(snapshot => {
             if (snapshot.size > 0) {
