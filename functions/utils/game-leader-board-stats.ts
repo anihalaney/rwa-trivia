@@ -44,7 +44,6 @@ export class GameLeaderBoardStats {
             return Promise.resolve(userResults);
         } catch (err) {
             console.log('err', err);
-            // return Promise.reject(err);
         }
     }
 
