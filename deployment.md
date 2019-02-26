@@ -6,6 +6,11 @@ How to deploy Firebase functions ?
 
         Dev Env : npm run deploy-trivia-functions
         Prod Env : npm run prod:deploy-trivia-functions
+        
+    3) Run below command to start scheduler  
+
+        Dev Env : npm run run-scheduler-dev
+        Prod Env : npm run run-scheduler-prod
 
 
 How to deploy Android app on Google play store? 
@@ -103,59 +108,21 @@ Assumption : Ios app deployment will require MAC system and xcode 10 and app dev
 
        6) Click on All under Devices option and add uuid of ios devices.
 
-       -> Steps to create certificate request from user's pc.
-
-       7) Click on Development option under Certificates and click on + button .
-       8) Now, Open Keychain Access Tool on MAC and select keychain Access menu from menubar.
-       9) Select Create Assistant submenu from it and create certificate request file using it.
-       10) Select Development option from Certificates and click on + button.
-
-       -> Steps to create development certificate.
-
-       11) Select iOS App Development option, Upload certificate request file and Generate the         development      certificate and click on + button.
-       12) Download the certificate and double click on the file.
-
-       -> Steps to create production certificate.
-
-       13) Select Production option from Certificates and click on + button.
-       14) Select App Store and Ad Hoc option, Upload certificate request file and Generate the production      certificate.       
-       15) Download the certificate and double click on the file.
-
-       -> Steps to create development provisional certificate.
-
-       16) Select Development option from Provisioning Profiles and click on + button.
-       17) Select iOS App Development option , select specific app id, select created development certificates ,  select devices and give proper name to certificate.
-       18) Download the certificate and double click on the file.
-
-       -> Steps to create distribution provisional certificate.
-       19) Select Distribution option from Provisioning Profiles and click on + button.
-       20) Select App Store option , select specific app id,select production certificate ,          select devices  and give proper name to certificate.
-       21) Download the certificate and double click on the file.
-
        -> Steps to create Push Notification certificate.
 
-       22) Select All option from Keys and click + button.
-       23) Give name to certificate , select APN service and generate certificate.
-       24) Download the certificate and double click on the file.
-
-       -> Steps to create Development Push Notification certificate.
-
-       25) Select App IDs option from Identifiers and edit existing app id.
-       26) Edit the Information and enable push notification service.
-       27) Now, Select Create Certificate for Development and name the certificate.
-       28) Select Create Certificate for Production and name the certificate.
-       29) Download the certificate and double click on the file.
-
+       7) Select All option from Keys and click + button.
+       8) Give name to certificate , select APN service and generate certificate.
+       9) Download the certificate and double click on the file.
 
        Note : create certificates for Dev and production environment. 
 
        -> Steps to create App on App store.
 
-       30) Open https://appstoreconnect.apple.com url in browser .
-       31) Click on + button and Fill the New App Information, select bundle id and submit the form.
+       10) Open https://appstoreconnect.apple.com url in browser .
+       11) Click on + button and Fill the New App Information, select bundle id and submit the form.
 
    6) Now, we have certificates and  app on app store.
-   7) From Xcode unselect Automatically manage signing option from General configuration.
+   7) From Xcode select Automatically manage signing option from General configuration.
    8) Select Development Provisional certificate from dropdown in Signing(Debug) section.
    9) Select Distribution Provisional certificate from dropdown in Signing(Release) section.
    10) Select Capabilities tab from tabs.
