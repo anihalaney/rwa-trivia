@@ -78,7 +78,6 @@ export class LoginComponent extends Login implements OnInit {
           this.loader.hide();
           const singInError = error.message.split(':');
           this.showMessage('error', singInError[1] || error.message);
-          // Toast.makeText(error.message).show();
         });
         break;
       case 1:
@@ -97,14 +96,12 @@ export class LoginComponent extends Login implements OnInit {
               this.loader.hide();
               const verificationError = error.split(':');
               this.showMessage('error', verificationError[1] || error);
-              // Toast.makeText(error).show();
             });
           }
         }).catch((error) => {
           this.loader.hide();
           const singUpError = error.split(':');
           this.showMessage('error', singUpError[1] ||  error);
-          // Toast.makeText(error).show();
         });
         break;
       case 2:
@@ -113,7 +110,6 @@ export class LoginComponent extends Login implements OnInit {
           .then((a: any) => {
             this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
             this.showMessage('success', this.notificationMsg);
-            // Toast.makeText(this.notificationMsg).show();
             this.loader.hide();
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
@@ -121,7 +117,6 @@ export class LoginComponent extends Login implements OnInit {
           }).catch((error) => {
             this.loader.hide();
             this.showMessage('error', error);
-            // Toast.makeText(error).show();
           });
     }
 
@@ -139,7 +134,6 @@ export class LoginComponent extends Login implements OnInit {
     ).catch((error) => {
       this.loader.hide();
       this.showMessage('error', error);
-      // Toast.makeText(error).show();
     });
 
   }
@@ -156,7 +150,6 @@ export class LoginComponent extends Login implements OnInit {
     ).catch((error) => {
       this.loader.hide();
       this.showMessage('error', error);
-      // Toast.makeText(error).show();
     });
   }
 
