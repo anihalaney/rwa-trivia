@@ -33,9 +33,11 @@
 
       <StackLayout class="list-view" iosOverflowSafeArea="false">
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
-          <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true" iosOverflowSafeArea="false"></Label>
-          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
-            textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" iosOverflowSafeArea="false"></Label>
+          <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true"
+            iosOverflowSafeArea="false"></Label>
+          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
+            text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4" borderWidth="2"
+            borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory" iosOverflowSafeArea="false"></Label>
         </GridLayout>
         <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">
           <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option"
@@ -53,8 +55,9 @@
 
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*">
           <Label row="0" col="0" text="PREFERRED TAGS" textWrap="true"></Label>
-          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
-            textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
+          <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
+            text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4" borderWidth="2"
+            borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
         </GridLayout>
         <StackLayout visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
           <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let tag of enteredTags"
@@ -96,13 +99,16 @@
           <GridLayout rows="auto,auto,*" columns="*" *ngIf="profiles.enable && i <= socialProfileShowLimit"
             iosOverflowSafeArea="false">
             <Label class="grid-label-text" [text]="profiles.display" row="0" col="0" textWrap="true"></Label>
-            
+
             <StackLayout class="text-box" row="1" col="0" orientation="horizontal">
-              <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profiles.url" fontSize="14" textWrap="true"></Label>
-              <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID" [formControlName]="profiles.social_name" class="input-box"></TextField>
-            
+              <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
+                [text]="profiles.url" fontSize="14" textWrap="true"></Label>
+              <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID"
+                [formControlName]="profiles.social_name" class="input-box"></TextField>
+
             </StackLayout>
-            <Label *ngIf="userForm.get(profiles.social_name).errors" class="error" text="Please enter valid profile id" row="2" col="0" textWrap="true"></Label>
+            <Label *ngIf="userForm.get(profiles.social_name).errors" class="error" text="Please enter valid profile id"
+              row="2" col="0" textWrap="true"></Label>
           </GridLayout>
         </StackLayout>
         <button class="p-15 showMore" horizontalAlignment="center"
