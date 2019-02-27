@@ -95,10 +95,10 @@ exports.calcualteAccountStat = (account: Account, game: Game, categoryIds: Array
 };
 
 /**
- * updated account
+ * decrease life
  * return ref
  */
-exports.updateAccount = async (userId): Promise<any> => {
+exports.decreaseLife = async (userId): Promise<any> => {
     try {
         const appSetting = await appSettings.getAppSettings();
         if (appSetting.lives.enable) {
@@ -108,15 +108,15 @@ exports.updateAccount = async (userId): Promise<any> => {
             const docRef = await accountRef.get();
             const timestamp = utils.getUTCTimeStamp();
             if (docRef.exists) {
-                const lives = docRef.data();
-                if (lives.lives === maxLives || !lives.lastLiveUpdate) {
-                    lives.lastLiveUpdate = timestamp;
-                    lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
+                const account = docRef.data();
+                if (account.lives === maxLives || !account.lastLiveUpdate) {
+                    account.lastLiveUpdate = timestamp;
+                    account.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
                 }
-                if (lives.lives > 0) {
-                    lives.lives += -1;
+                if (account.lives > 0) {
+                    account.lives += -1;
                 }
-                accountRef.update(lives);
+                accountRef.update(account);
             }
         }
     } catch (error) {
@@ -134,27 +134,7 @@ exports.increaseLives = async (userId): Promise<any> => {
     try {
         const appSetting = await appSettings.getAppSettings();
         if (appSetting.lives.enable) {
-            const maxLives = appSetting.lives.max_lives;
-            const livesAdd = appSetting.lives.lives_add;
-            const livesMillis = appSetting.lives.lives_after_add_millisecond;
-            const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
-            const docRef = await accountRef.get();
-            const timestamp = utils.getUTCTimeStamp();
-            if (docRef.exists) {
-                const lives = docRef.data();
-                if (lives.lives < maxLives && lives.nextLiveUpdate <= timestamp) {
-                    lives.lives += livesAdd;
-                    if (lives.lives > maxLives) {
-                        lives.lives = maxLives;
-                    } else {
-                        lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
-                    }
-                    lives.lastLiveUpdate = timestamp;
-                    accountRef.update(lives);
-                }
-            } else {
-                accountRef.set({ lives: maxLives, id: userId });
-            }
+            await this.addLife(userId, appSetting);
         }
     } catch (error) {
         console.error(error);
@@ -174,11 +154,11 @@ exports.addDefaultLives = async (user: any): Promise<any> => {
             const accountRef = accountFireStoreClient.collection(`accounts`).doc(user.id);
             const docRef = await accountRef.get();
             if (docRef.exists) {
-                const lives = docRef.data();
-                if (!lives.lives) {
-                    lives.lives = maxLives;
-                    lives.id = user.id;
-                    accountRef.update(lives);
+                const account = docRef.data();
+                if (!account.lives) {
+                    account.lives = maxLives;
+                    account.id = user.id;
+                    accountRef.update(account);
                 }
             } else {
                 accountRef.set({ lives: maxLives, id: user.id });
@@ -200,8 +180,6 @@ exports.addLives = async (): Promise<any> => {
         const appSetting = await appSettings.getAppSettings();
         if (appSetting.lives.enable) {
             const maxLives = appSetting.lives.max_lives;
-            const livesAdd = appSetting.lives.lives_add;
-            const livesMillis = appSetting.lives.lives_after_add_millisecond;
             let timestamp = utils.getUTCTimeStamp();
             const accountCollRef = accountFireStoreClient.collection('accounts')
                 .where('nextLiveUpdate', '<=', timestamp);
@@ -210,22 +188,36 @@ exports.addLives = async (): Promise<any> => {
             for (const account of accountsNotHavingMaxLives) {
                 timestamp = utils.getUTCTimeStamp();
                 const userAccount = account.data();
-                const accountRef = accountFireStoreClient.collection(`accounts`).doc(userAccount.id);
-                const docRef = await accountRef.get();
-
-                const lives = docRef.data();
-                if (lives.lives < maxLives && lives.nextLiveUpdate <= timestamp) {
-                    lives.lives += livesAdd;
-                    if (lives.lives > maxLives) {
-                        lives.lives = maxLives;
-                    } else {
-                        // Update nextLiveUpdate
-                        lives.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
-                    }
-                    lives.lastLiveUpdate = timestamp;
-                    accountRef.update(lives);
-                }
+                await this.addLife(userAccount.id, appSetting);
             }
+        }
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+};
+
+// add life to account
+exports.addLife = async (userId: String, appSetting): Promise<any> => {
+    try {
+        const timestamp = utils.getUTCTimeStamp();
+        const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
+        const docRef = await accountRef.get();
+        const account = docRef.data();
+        if (docRef.exists) {
+            if (account.lives < appSetting.lives.maxLives && account.nextLiveUpdate <= timestamp) {
+                account.lives += appSetting.lives.livesAdd;
+                if (account.lives > appSetting.lives.maxLives) {
+                    account.lives = appSetting.lives.maxLives;
+                } else {
+                    // Update nextLiveUpdate
+                    account.nextLiveUpdate = utils.addMinutes(timestamp, appSetting.lives.livesMillis);
+                }
+                account.lastLiveUpdate = timestamp;
+                accountRef.update(account);
+            }
+        } else {
+            accountRef.set({ lives: appSetting.lives.maxLives, id: userId });
         }
     } catch (error) {
         console.error(error);
