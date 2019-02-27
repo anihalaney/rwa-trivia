@@ -1,11 +1,14 @@
 const subscriptionFireBaseClient = require('../db/firebase-client');
 const subscriptionFireStoreClient = subscriptionFireBaseClient.firestore();
-import { User } from '../../projects/shared-library/src/lib/shared/model';
-
 /**
  * getSubscriptions
  * return subscription
  */
-exports.getSubscriptions = (): Promise<any> => {
-    return subscriptionFireStoreClient.collection('subscription').get().then((snapshot) => { return snapshot });
+exports.getSubscriptions = async(): Promise<any> => {
+    try {
+        return await subscriptionFireStoreClient.collection('subscription').get();
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };

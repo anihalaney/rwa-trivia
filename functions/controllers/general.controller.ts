@@ -314,27 +314,45 @@ exports.migrateUserStatToAccounts = (req, res) => {
  * Add default number of lives to each account
  */
 exports.addDefaultLives = async (req, res) => {
+    let isStreaming = false;
     try {
         const appSetting = await appSettings.getAppSettings();
         // Lives setting is enable then add default number of lives into user's account
         if (appSetting.lives.enable) {
+            isStreaming = true;
+            res.setHeader('Content-Type', 'text/plain');
             const users = await generalUserService.getUsers();
-            const migrationPromises = users.docs.map(user => {
+            const migrationPromises = [];
+            for (const user of users.docs) {
                 const userObj: User = user.data();
                 if (userObj && userObj.userId) {
                     const accountObj: Account = new Account();
                     accountObj.id = userObj.userId;
-                    return generalAccountService.addDefaultLives({ ...accountObj });
+                    migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
+                    const successMessage = `Added default lives for user :  ${accountObj.id}`;
+                    console.log(successMessage);
+                    res.write(successMessage);
                 }
-            });
-            const migrationResults = await Promise.all(migrationPromises);
-            res.status(200).send(migrationResults);
+            }
+
+            await Promise.all(migrationPromises);
+            const msg = 'Default lives added successfully';
+            console.log(msg);
+            return res.end(msg);
 
         } else {
             res.status(200).send('live feature is not enabled');
         }
     } catch (error) {
-        res.status(500).send(error);
+        if (isStreaming) {
+            console.log('Error while adding default lives ', error.toString());
+            return res.end(error.toString());
+
+        } else {
+            return res.status(500).send(error);
+        }
+
+
     }
 };
 
@@ -342,8 +360,7 @@ exports.addDefaultLives = async (req, res) => {
 exports.addLives = async (req, res) => {
     const appSetting = await appSettings.getAppSettings();
     if (appSetting.lives.enable) {
-        res.send(generalAccountService.addLives());
-        return;
+        return res.send(generalAccountService.addLives());
     }
     res.status(200).send('live feature is not enabled');
 };
