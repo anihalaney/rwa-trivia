@@ -166,7 +166,7 @@ export class Dashboard implements OnDestroy {
         this.gameSliceStartIndex = 0;
         this.gameSliceLastIndex = 8;
 
-        store.select(appState.coreState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
+        this.subs.push(store.select(appState.coreState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
             this.gameInvites = iGames;
             this.friendCount = 0;
             this.randomPlayerCount = 0;
@@ -178,7 +178,7 @@ export class Dashboard implements OnDestroy {
                 }
                 this.store.dispatch(this.userActions.loadOtherUserProfile(iGame.playerIds[0]));
             });
-        });
+        }));
         this.gameInviteSliceStartIndex = 0;
         this.gameInviteSliceLastIndex = 3;
 
