@@ -1,20 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {
     ReportQuestion, User, Game, QuestionMetadata, Category, Question
 } from 'shared-library/shared/model';
 import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import * as Toast from 'nativescript-toast';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
     styleUrls: ['./report-game.component.scss']
 })
-export class ReportGameComponent implements OnInit {
+export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
     reportQuestion: ReportQuestion;
@@ -29,12 +30,13 @@ export class ReportGameComponent implements OnInit {
     reportOptions?: Array<ReportOption>;
     selectedOption: string = null;
     otherReason: string = null;
+    subs: Subscription[] = [];
 
-    constructor(private store: Store<AppState>, private params: ModalDialogParams) {
+    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils) {
         this.categoryDict$ = store.select(categoryDictionary);
-        this.categoryDict$.subscribe(categoryDict => {
+        this.subs.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
-        });
+        }));
 
         this.question = params.context.question;
         this.user = params.context.user;
@@ -119,6 +121,10 @@ export class ReportGameComponent implements OnInit {
 
     onClose(): void {
         this.params.closeCallback();
+    }
+
+    ngOnDestroy() {
+        this.utils.unsubscribe(this.subs);
     }
 
 }
