@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -17,7 +17,7 @@ import { isAndroid } from 'tns-core-modules/platform';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent extends Login implements OnInit {
-
+  @ViewChildren('textField') textField : QueryList<ElementRef>;
   title: string;
   loader = new LoadingIndicator();
   constructor(public fb: FormBuilder,
@@ -54,7 +54,7 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   onSubmit() {
-
+    this.hideKeyboard();
     if (!this.loginForm.valid) {
       return;
     }
@@ -159,5 +159,14 @@ export class LoginComponent extends Login implements OnInit {
       );
   }
 
+  hideKeyboard() {
+    this.textField
+    .toArray()
+    .map((el) => {
+      if ( isAndroid ) {
+        el.nativeElement.android.clearFocus();
+      }
+      return el.nativeElement.dismissSoftInput(); });
+  }
 }
 

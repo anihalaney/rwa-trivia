@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, QueryList, ViewChildren } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
@@ -24,6 +24,8 @@ export class InviteMailFriendsComponent implements OnInit {
   showSuccessMsg: string;
   validEmail = [];
   emailCheck: Boolean = false;
+  @ViewChildren('textField') textField: QueryList<ElementRef>;
+
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions) {
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -96,6 +98,16 @@ export class InviteMailFriendsComponent implements OnInit {
           { userId: this.user.userId, emails: this.validEmail }));
       }
     }
+  }
+
+  hideKeyboard() {
+    this.textField
+    .toArray()
+    .map((el) => {
+      if ( el.nativeElement && el.nativeElement.android ) {
+        el.nativeElement.android.clearFocus();
+      }
+      return el.nativeElement.dismissSoftInput(); });
   }
 }
 

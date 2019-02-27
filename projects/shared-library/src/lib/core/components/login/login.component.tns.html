@@ -3,7 +3,7 @@
 
   <GridLayout *ngIf="mode === 2" #background class="background"></GridLayout>
   <ScrollView>
-    <StackLayout class="mobile">
+    <StackLayout  (tap)="hideKeyboard()" class="mobile">
       <GridLayout rows="auto,*">
         <StackLayout [formGroup]="loginForm" row="0" [ngClass]="{'background': this.mode !== 2 }">
           <StackLayout #initialContainer class="initial-container">
@@ -15,7 +15,7 @@
               <Label *ngIf="mode === 2" text="Enter your email below to receive your password reset instructions."
                 marginTop="10" marginBottom="30" color="black" class="text-center Roboto-Regular" textWrap="true"></Label>
               <GridLayout rows="auto" columns="*,auto" class="initial-button">
-                <TextField  [stlShowHintWhenFocusOut]="{hintRef: emailHint, controlRef:loginForm.controls.email}"  row="0" col="0" hint="Email" formControlName="email" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
+                <TextField #textField [stlShowHintWhenFocusOut]="{hintRef: emailHint, controlRef:loginForm.controls.email}"  row="0" col="0" hint="Email" formControlName="email" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
                
                 <Label *ngIf="mode !== 2" row="0" col="1" android:paddingTop="20" paddingRight="15" fontSize="21" class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa" text="&#xf2bd;"
                   color="gray" textWrap="true"></Label>
@@ -26,7 +26,7 @@
                 marginTop="10" textWrap="true" class="text-center error"></Label>
               <GridLayout *ngIf="mode !== 2" rows="auto,auto" columns="*,auto" class="initial-button"
                 marginTop="20" borderRadius="10" >
-                <TextField row="0" [stlShowHintWhenFocusOut]="{hintRef: passwordHint, controlRef:loginForm.controls.password}"  col="0"  formControlName="password" secure="true" hint="Password" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa"
+                <TextField #textField row="0" [stlShowHintWhenFocusOut]="{hintRef: passwordHint, controlRef:loginForm.controls.password}"  col="0"  formControlName="password" secure="true" hint="Password" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1" backgroundColor="#f7f8fa"
                   padding="17 15 15 15"></TextField>
                 <Label  row="0" col="1" android:paddingTop="20" paddingRight="18" fontSize="21" class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" text="&#xf023;" backgroundColor="#f7f8fa"
                   color="gray" textWrap="true"></Label>
@@ -37,7 +37,7 @@
               
               <GridLayout *ngIf="mode === 1" rows="auto,auto" columns="*,auto" class="initial-button"
                 marginTop="20" borderRadius="10" >
-                <TextField [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword}"  col="0" hint="Confirm Password" formControlName="confirmPassword" secure="true" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"
+                <TextField #textField [stlShowHintWhenFocusOut]="{hintRef: confPasswordHint, controlRef:loginForm.controls.confirmPassword}"  col="0" hint="Confirm Password" formControlName="confirmPassword" secure="true" class="border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"
                   backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>
                 <Label col="1" android:paddingTop="20" paddingRight="18" fontSize="21" class="fa text-icon-field" ios:borderColor="#f7f8fa" ios:borderWidth="1" text="&#xf023;" color="gray" backgroundColor="#f7f8fa"
                   textWrap="true"></Label>

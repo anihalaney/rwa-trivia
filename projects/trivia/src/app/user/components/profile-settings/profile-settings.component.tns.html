@@ -3,7 +3,7 @@
   <ActivityIndicator *ngIf="loaderBusy" [busy]="loaderBusy" width="100" height="100" marginTop="225"
     class="activity-indicator"></ActivityIndicator>
   <ScrollView *ngIf="!loaderBusy">
-    <StackLayout [formGroup]="userForm" class="profile-settings Roboto-Regular">
+    <StackLayout  (tap)="hideKeyboard()"  [formGroup]="userForm" class="profile-settings Roboto-Regular">
 
       <StackLayout class="input-field ">
         <AbsoluteLayout>
@@ -17,15 +17,15 @@
       <StackLayout class="input-field">
 
         <Label [text]="user.displayName" class="input title" textWrap="true"></Label>
-        <TextField hint="@username" formControlName="name" class="input"></TextField>
+        <TextField #textField hint="@username" formControlName="name" class="input"></TextField>
         <Label *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error" textWrap="true"
           text="Name is required!"></Label>
 
-        <TextField hint="Display Name" formControlName="displayName" class="input"></TextField>
+        <TextField #textField hint="Display Name" formControlName="displayName" class="input"></TextField>
         <Label *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class=" error"
           textWrap="true" text="Display Name is required!"></Label>
 
-        <TextField hint="Location" formControlName="location" class="input"></TextField>
+        <TextField #textField hint="Location" formControlName="location" class="input"></TextField>
         <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error"
           textWrap="true" text="Location is required!"></Label>
 
