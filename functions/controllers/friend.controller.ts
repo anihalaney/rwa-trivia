@@ -1,22 +1,18 @@
 import { MakeFriends } from '../utils/make-friends';
-const userService = require('../services/user.service');
-
 
 /**
  * getSubscriptionCount
  * return count
  */
-exports.createFriends = (req, res) => {
+exports.createFriends = async (req, res): Promise<any> => {
     const token = req.body.token;
     const userId = req.body.userId;
     const email = req.body.email;
 
 
     const makeFriends: MakeFriends = new MakeFriends(token, userId, email);
-    makeFriends.validateToken().then((invitee) => {
-        console.log('invitee', invitee);
-        res.send({ created_uid: invitee });
-    });
+    const invitee = await makeFriends.validateToken();
+    res.send({ created_uid: invitee });
 };
 
 
@@ -24,7 +20,7 @@ exports.createFriends = (req, res) => {
  * createInvitations
  * return string
  */
-exports.createInvitations = (req, res) => {
+exports.createInvitations = async (req, res): Promise<any> => {
 
     const userId = req.body.userId;
     let emails = req.body.emails;
@@ -34,19 +30,16 @@ exports.createInvitations = (req, res) => {
         const makeFriends: MakeFriends = new MakeFriends(undefined, userId, undefined);
 
         if (inviteeUserId) {
-            makeFriends.getUser(inviteeUserId).then(userData => {
-                const user = userData.data();
-                if (inviteeUserId && user) {
-                    emails = [user.email];
-                    makeFriends.createInvitations(emails).then((status: string[]) => {
-                        res.send({ messages: status.join('<br />') });
-                    });
-                }
-            });
-        } else {
-            makeFriends.createInvitations(emails).then((status: string[]) => {
+            const userData = await makeFriends.getUser(inviteeUserId);
+            const user = userData.data();
+            if (inviteeUserId && user) {
+                emails = [user.email];
+                const status: any = await makeFriends.createInvitations(emails);
                 res.send({ messages: status.join('<br />') });
-            });
+            }
+        } else {
+            const status: any = await makeFriends.createInvitations(emails);
+                res.send({ messages: status.join('<br />') });
         }
     } else {
         res.status(400).send('Bad Request');
