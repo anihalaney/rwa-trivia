@@ -70,6 +70,9 @@ exports.getUserImages = (req, res) => {
  * return status
  */
 exports.generateUserProfileImage = (req, res) => {
+    if (req.body.user.userId === req.user.uid) {
+        return res.status(401).send('Unauthorized');
+    }
     const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
     const user = req.body.user;
 
