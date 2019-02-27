@@ -117,6 +117,13 @@ TextField {
   horizontal-align: center;
   margin-bottom: 25;
 }
+
+.message-label{
+	margin-bottom: 25px;
+	height: auto;
+	width: 100%;
+	overflow: visible;
+}
 .initial-button {
   // background-color: white;
 	vertical-align: center;
