@@ -1,5 +1,5 @@
-const statsFireBaseClient = require('../db/firebase-client');
-const statsFireStoreClient = statsFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const statsFireStoreClient = admin.firestore();
 
 /**
  * getSystemStats

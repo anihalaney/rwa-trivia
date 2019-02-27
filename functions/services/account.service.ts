@@ -1,5 +1,5 @@
-const accountFireBaseClient = require('../db/firebase-client');
-const accountFireStoreClient = accountFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const accountFireStoreClient = admin.firestore();
 import { AppSettings } from './app-settings.service';
 import { Utils } from '../utils/utils';
 

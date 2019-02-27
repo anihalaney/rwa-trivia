@@ -1,21 +1,33 @@
-const userFireBaseClient = require('../db/firebase-client');
-const userFireStoreClient = userFireBaseClient.firestore();
-const bucket = userFireBaseClient.storage().bucket();
+import admin from '../db/firebase.client';
+const userFireStoreClient = admin.firestore();
+const bucket = admin.storage().bucket();
 const stream = require('stream');
 import { User } from '../../projects/shared-library/src/lib/shared/model';
-/**
- * getUserById
- * return user
- */
-exports.getUserById = (userId: string): Promise<any> => {
-    return userFireStoreClient.doc(`/users/${userId}`)
-        .get()
-        .then(u => { return u })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+
+export class UserService {
+
+    fireStoreClient: any;
+
+    constructor() {
+        this.fireStoreClient = admin.firestore();
+    }
+
+    /**
+     * getUserById
+     * return user
+    */
+   public async getUserById(userId: string): Promise<any> {
+        return userFireStoreClient.doc(`/users/${userId}`)
+            .get()
+            .then(u => { return u })
+            .catch(error => {
+                console.error(error);
+                return error;
+            });
+    }
+}
+
+
 
 
 /**
@@ -141,7 +153,7 @@ exports.removeSocialProfile = async (): Promise<any> => {
 
     const migrationPromises = users.docs.map(user => {
         const userObj: User = user.data();
-         userObj.facebookUrl = null;
+        userObj.facebookUrl = null;
         userObj.linkedInUrl = null;
         userObj.twitterUrl = null;
         return this.setUser(userObj);

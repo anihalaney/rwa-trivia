@@ -1,5 +1,5 @@
-const socialFireBaseClient = require('../db/firebase-client');
-const bucket = socialFireBaseClient.storage().bucket();
+import admin from '../db/firebase.client';
+const bucket = admin.storage().bucket();
 
 
 /**

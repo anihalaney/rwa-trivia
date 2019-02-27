@@ -1,5 +1,5 @@
-const questionFireBaseClient = require('../db/firebase-client');
-const questionFireStoreClient = questionFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const questionFireStoreClient = admin.firestore();
 
 
 /**

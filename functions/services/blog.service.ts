@@ -1,5 +1,5 @@
-const blogFireBaseClient = require('../db/firebase-client');
-const blogFireStoreClient = blogFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const blogFireStoreClient = admin.firestore();
 import { Blog } from '../../projects/shared-library/src/lib/shared/model';
 
 /**

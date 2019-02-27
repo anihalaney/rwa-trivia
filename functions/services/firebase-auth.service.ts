@@ -1,5 +1,5 @@
-const fireBaseClient = require('../db/firebase-client');
-const fireBaseAuthClient = fireBaseClient.auth();
+import admin from '../db/firebase.client';
+const fireBaseAuthClient = admin.auth();
 
 
 /**
