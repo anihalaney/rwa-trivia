@@ -16,14 +16,14 @@ export class UserService {
      * getUserById
      * return user
     */
-   public async getUserById(userId: string): Promise<any> {
-        return userFireStoreClient.doc(`/users/${userId}`)
-            .get()
-            .then(u => { return u })
-            .catch(error => {
-                console.error(error);
-                return error;
-            });
+    public async getUserById(userId: string): Promise<any> {
+        try {
+            return await userFireStoreClient.doc(`/users/${userId}`).get();
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 }
 
