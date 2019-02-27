@@ -1,5 +1,5 @@
-const generalFireBaseClient = require('../db/firebase-client');
-const generalFireStoreClient = generalFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const generalFireStoreClient = admin.firestore();
 const functions = require('firebase-functions');
 import { ESUtils } from '../utils/ESUtils';
 import { Question } from '../../projects/shared-library/src/lib/shared/model';
@@ -25,7 +25,7 @@ exports.migrateCollection = (collectionName): Promise<any> => {
         'messagingSenderId': targetAppConfig.messagingsenderid
     }
     // console.log('targetAppConfig', targetAppConfig);
-    const targetDB = generalFireBaseClient.initializeApp(config, 'targetApp').firestore();
+    const targetDB = admin.initializeApp(config, 'targetApp').firestore();
     return sourceDB.collection(collectionName).get()
         .then((snapshot) => {
             snapshot.forEach((doc) => {
@@ -75,7 +75,7 @@ exports.rebuildQuestionIndex = (): Promise<any> => {
  * return status
  */
 exports.getTestQuestion = (): Promise<any> => {
-    return generalFireBaseClient.database().ref('/questions/published').orderByKey().limitToLast(1).once('value').then(qs => {
+    return admin.database().ref('/questions/published').orderByKey().limitToLast(1).once('value').then(qs => {
         qs.forEach(q => {
             console.log(q.key);
             console.log(q.val());

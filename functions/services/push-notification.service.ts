@@ -1,5 +1,5 @@
-const pushNotificationFireBaseClient = require('../db/firebase-client');
-const pushNotificationMessagingClient = pushNotificationFireBaseClient.messaging();
+import admin from '../db/firebase.client';
+const pushNotificationMessagingClient = admin.messaging();
 
 /**
  * sendPush

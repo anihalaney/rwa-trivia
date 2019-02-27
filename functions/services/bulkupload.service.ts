@@ -1,5 +1,5 @@
-const bulkUploadFireBaseClient = require('../db/firebase-client');
-const bulkUploadFireStoreClient = bulkUploadFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const bulkUploadFireStoreClient = admin.firestore();
 
 /**
  * getBulkUpload

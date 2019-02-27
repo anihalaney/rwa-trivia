@@ -1,11 +1,12 @@
 import { Game, Question, Category, SearchResults, SearchCriteria } from '../../projects/shared-library/src/lib/shared/model';
-const migrateFireBaseClient = require('../db/firebase-client');
+
+import admin from '../db/firebase.client';
 
 export class FirestoreMigration {
 
 
   migrateCategories = new Promise<Category[]>((resolve, reject) => {
-    const admin = migrateFireBaseClient;
+    // const admin = admin;
     const categories: Category[] = [];
     const catRef = admin.database().ref('/categories');
     catRef.once('value', function (cs) {
@@ -39,7 +40,7 @@ export class FirestoreMigration {
   migrateTags = new Promise<string[]>((resolve, reject) => {
 
     // const promise = new Promise<string[]>(resolve, reject);
-    const admin = migrateFireBaseClient;
+   // const admin = migrateFireBaseClient;
     const tags: string[] = [];
     const tagRef = admin.database().ref('/tagList');
     tagRef.once('value', (ts) => {
@@ -63,7 +64,7 @@ export class FirestoreMigration {
 
   migrateQuestions(sourceList, destinationCollection) {
     return new Promise<number>((resolve, reject) => {
-      const admin = migrateFireBaseClient;
+     // const admin = migrateFireBaseClient;
       const questions: Question[] = [];
       const qRef = admin.database().ref(sourceList);
       qRef.once('value', function (qs) {
@@ -86,7 +87,7 @@ export class FirestoreMigration {
 
   migrateGames(sourceList, destinationCollection) {
     return new Promise<number>((resolve, reject) => {
-      const admin = migrateFireBaseClient;
+     // const admin = migrateFireBaseClient;
       const games: Game[] = [];
       const gRef = admin.database().ref(sourceList);
       gRef.once('value', function (gs) {

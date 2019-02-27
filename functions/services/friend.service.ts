@@ -1,5 +1,5 @@
-const friendFireBaseClient = require('../db/firebase-client');
-const friendFireStoreClient = friendFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const friendFireStoreClient = admin.firestore();
 
 
 /**

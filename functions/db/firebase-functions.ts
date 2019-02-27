@@ -1,5 +1,4 @@
-const functionFireBaseClient = require('../db/firebase-client');
-const functionFireStoreClient = functionFireBaseClient.firestore();
+import admin from '../db/firebase.client';
 const functions = require('firebase-functions');
 const fs = require('fs');
 const path = require('path');
@@ -29,7 +28,7 @@ exports.addMessage = (firebaseFunctions: any) => {
 
         const original = req.query.text;
         // Push it into the Realtime Database then send a response
-        functionFireBaseClient.database().ref('/messages').push({ original: original }).then(snapshot => {
+        admin.database().ref('/messages').push({ original: original }).then(snapshot => {
             // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
             res.redirect(303, snapshot.ref);
         });

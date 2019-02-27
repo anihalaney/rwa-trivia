@@ -1,5 +1,5 @@
-const gameFireBaseClient = require('../db/firebase-client');
-const gameFireStoreClient = gameFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const gameFireStoreClient = admin.firestore();
 import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../projects/shared-library/src/lib/shared/model';
 
 

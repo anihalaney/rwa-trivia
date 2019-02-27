@@ -1,5 +1,5 @@
-const leaderBoardFireBaseClient = require('../db/firebase-client');
-const leaderBoardFireStoreClient = leaderBoardFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const leaderBoardFireStoreClient = admin.firestore();
 
 /**
  * getLeaderBoardStats

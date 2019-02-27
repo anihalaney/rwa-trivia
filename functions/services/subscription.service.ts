@@ -1,5 +1,5 @@
-const subscriptionFireBaseClient = require('../db/firebase-client');
-const subscriptionFireStoreClient = subscriptionFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+const subscriptionFireStoreClient = admin.firestore();
 /**
  * getSubscriptions
  * return subscription

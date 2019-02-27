@@ -1,5 +1,4 @@
-const authFireBaseClient = require('../db/firebase-client');
-
+import admin from '../db/firebase.client';
 
 // authorization middlewares
 exports.validateFirebaseIdToken = (req, res, next) => {
@@ -33,7 +32,7 @@ exports.validateFirebaseIdToken = (req, res, next) => {
     }
 
     if (idToken) {
-        authFireBaseClient.auth().verifyIdToken(idToken).then(decodedIdToken => {
+        admin.auth().verifyIdToken(idToken).then(decodedIdToken => {
             console.log('ID Token correctly decoded', decodedIdToken);
             req.user = decodedIdToken;
             return next();
@@ -52,7 +51,7 @@ exports.authTokenOnly = (req, res, next) => {
     if (!token) {
         return res.status(401).send('Unauthorized');
     }
-    authFireBaseClient.firestore().collection('scheduler_auth_tokens').where('token', '==', token)
+    admin.firestore().collection('scheduler_auth_tokens').where('token', '==', token)
         .get()
         .then(snapshot => {
             if (snapshot.size > 0) {
@@ -86,7 +85,7 @@ exports.adminOnly = (req, res, next) => {
         res.status(401).send('Unauthenticated');
     }
 
-    authFireBaseClient.firestore().doc(`/users/${req.user.uid}`)
+    admin.firestore().doc(`/users/${req.user.uid}`)
         .get()
         .then(u => {
             const user = u.data();
