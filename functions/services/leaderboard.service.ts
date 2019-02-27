@@ -12,7 +12,7 @@ exports.getLeaderBoardStats = async (userId: string): Promise<any> => {
         return await leaderBoardFireStoreClient.doc('leader_board_stats/categories').get();
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 
@@ -26,7 +26,7 @@ exports.setLeaderBoardStats = async (leaderBoardStat: any): Promise<any> => {
         return await leaderBoardFireStoreClient.doc('/leader_board_stats/categories').set(leaderBoardStat);
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 
 };
