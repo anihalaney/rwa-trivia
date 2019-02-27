@@ -149,7 +149,7 @@ export class UserService {
     }
 
     addUserLives(userId: string) {
-        const url = `${CONFIG.functionsUrl}/app/user/update-lives/${userId}`;
-        return this.http.get<any>(url);
+        const url = `${CONFIG.functionsUrl}/app/user/update-lives`;
+        return this.http.post<any>(url, { userId: userId });
     }
 }

@@ -6,40 +6,56 @@ const friendFireStoreClient = friendFireBaseClient.firestore();
  * createInvitation
  * return ref
  */
-exports.createInvitation = (dbInvitation: any): Promise<any> => {
-    return friendFireStoreClient.collection('invitations').add(dbInvitation).then(ref => ref);
+exports.createInvitation = async (dbInvitation: any): Promise<any> => {
+    try {
+        return await friendFireStoreClient.collection('invitations').add(dbInvitation);
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 /**
  * getInvitationByToken
  * return invitation
  */
-exports.getInvitationByToken = (token: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/invitations/${token}`)
-        .get()
-        .then(invitation => { return invitation });
+exports.getInvitationByToken = async (token: any): Promise<any> => {
+    try {
+        return await friendFireStoreClient.doc(`/invitations/${token}`).get();
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 /**
  * checkInvitation
  * return invitation
  */
-exports.checkInvitation = (email: string, userId: string): Promise<any> => {
-    return friendFireStoreClient.collection('invitations')
-        .where('created_uid', '==', userId)
-        .where('email', '==', email)
-        .get()
-        .then(snapshot => snapshot);
+exports.checkInvitation = async (email: string, userId: string): Promise<any> => {
+    try {
+        return await friendFireStoreClient.collection('invitations')
+            .where('created_uid', '==', userId)
+            .where('email', '==', email)
+            .get();
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 /**
  * updateInvitation
  * return userId
  */
-exports.updateInvitation = (invitation: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/invitations/${invitation.id}`)
-        .update(invitation)
-        .then(ref => { return invitation.created_uid });
+exports.updateInvitation = async (invitation: any): Promise<any> => {
+    try {
+        return await friendFireStoreClient.doc(`/invitations/${invitation.id}`)
+            .update(invitation);
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 
@@ -48,10 +64,13 @@ exports.updateInvitation = (invitation: any): Promise<any> => {
  * getFriendByInvitee
  * return friend
  */
-exports.getFriendByInvitee = (invitee: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/friends/${invitee}`)
-        .get()
-        .then(friend => { return friend });
+exports.getFriendByInvitee = async (invitee: any): Promise<any> => {
+    try {
+        return await friendFireStoreClient.doc(`/friends/${invitee}`).get();
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 
@@ -59,10 +78,14 @@ exports.getFriendByInvitee = (invitee: any): Promise<any> => {
  * updateFriend
  * return ref
  */
-exports.updateFriend = (myFriends: any, invitee: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/friends/${invitee}`)
-        .update({ myFriends: myFriends })
-        .then(ref => { return ref });
+exports.updateFriend = async (myFriends: any, invitee: any): Promise<any> => {
+    try {
+        return await friendFireStoreClient.doc(`/friends/${invitee}`)
+            .update({ myFriends: myFriends });
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
 
@@ -70,9 +93,13 @@ exports.updateFriend = (myFriends: any, invitee: any): Promise<any> => {
  * setFriend
  * return ref
  */
-exports.setFriend = (dbUser: any, invitee: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/friends/${invitee}`)
-        .set(dbUser)
-        .then(ref => { return ref });
+exports.setFriend = async (dbUser: any, invitee: any): Promise<any> => {
+    try {
+        return await friendFireStoreClient.doc(`/friends/${invitee}`)
+            .set(dbUser);
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
 };
 
