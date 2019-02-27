@@ -16,7 +16,7 @@ exports.getAccountById = async (id: string): Promise<any> => {
         return await accountFireStoreClient.doc(`/accounts/${id}`).get();
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 
 };
@@ -33,7 +33,7 @@ exports.setAccount = async (dbAccount: any): Promise<any> => {
 
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 
@@ -46,7 +46,7 @@ exports.updateAccountData = async (dbAccount: any): Promise<any> => {
         return await accountFireStoreClient.doc(`/accounts/${dbAccount.id}`).update(dbAccount);
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 
 };
@@ -60,7 +60,7 @@ exports.getAccounts = async (): Promise<any> => {
         return await accountFireStoreClient.collection('accounts').get();
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 
@@ -121,7 +121,7 @@ exports.updateAccount = async (userId): Promise<any> => {
         }
     } catch (error) {
         console.error(error);
-        return error;
+        throw error;
     }
 };
 
@@ -158,7 +158,7 @@ exports.increaseLives = async (userId): Promise<any> => {
         }
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 
@@ -186,7 +186,7 @@ exports.addDefaultLives = async (user: any): Promise<any> => {
         }
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 
@@ -229,7 +229,7 @@ exports.addLives = async (): Promise<any> => {
         }
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 
@@ -260,7 +260,7 @@ exports.setBits = async (userId: any): Promise<any> => {
         }
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 
@@ -286,6 +286,6 @@ exports.setBytes = async (userId: any): Promise<any> => {
         }
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };

@@ -11,7 +11,7 @@ exports.getAllQuestions = async (): Promise<any> => {
         return await questionFireStoreClient.collection('questions').get();
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 
@@ -25,7 +25,7 @@ exports.getQuestionById = async (questionId): Promise<any> => {
         return await questionFireStoreClient.doc(`/questions/${questionId}`).get();
     } catch (error) {
         console.error(error);
-        return Promise.reject(error);
+        throw error;
     }
 };
 

@@ -26,22 +26,22 @@ export class GameLeaderBoardStats {
 
             const questionDict = await this.loadQuestionDictionary();
 
-            games.map(game => {
-                Object.keys(game.stats).map((userId) => {
+            for (const game of games) {
+                for (const userId of Object.keys(game.stats)) {
                     this.calculateAllGameUsersStat(userId, game, this.getGameQuestionCategories(game, questionDict));
-                });
-            });
+                }
+            }
 
-            Object.keys(this.accountDict).map((userId) => {
+            for (const userId of Object.keys(this.accountDict)) {
                 const account: Account = this.accountDict[userId];
                 account.id = userId;
                 userPromises.push(leaderBoardAccountService.updateAccountData({ ...account }));
-            });
+            }
 
             const userResults = await Promise.all(userPromises);
             this.accountDict = {};
 
-            return Promise.resolve(userResults);
+            return userResults;
         } catch (err) {
             console.log('err', err);
         }
@@ -56,19 +56,19 @@ export class GameLeaderBoardStats {
                 console.log('questions do not exist');
                 return Promise.reject(snapshots);
             } else {
-                snapshots.docs.map((snapshot) => {
+                for (const snapshot of snapshots.docs) {
                     const question: Question = snapshot.data();
 
                     if (question.categoryIds.length > 0) {
                         questionDict[question.id] = question.categoryIds;
                     }
-                });
-                return Promise.resolve(questionDict);
+                }
+                return questionDict;
 
             }
         } catch (err) {
             console.log('err', err);
-            return Promise.reject(err);
+            throw err;
         }
 
     }
@@ -76,17 +76,16 @@ export class GameLeaderBoardStats {
 
     private getGameQuestionCategories(game: Game, questionDict: { [key: string]: Array<number> }): Array<number> {
         const questionCategories: Array<number> = [];
-
-        game.playerQnAs.map((playerQnA) => {
+        for (const playerQnA of game.playerQnAs) {
             const categoryIds: Array<number> = questionDict[playerQnA.questionId];
             if (categoryIds) {
-                categoryIds.map((categoryId) => {
+                for (const categoryId of categoryIds) {
                     if (categoryId && questionCategories.indexOf(categoryId) === -1) {
                         questionCategories.push(categoryId);
                     }
-                });
+                }
             }
-        });
+        }
 
         return questionCategories;
     }
@@ -102,34 +101,34 @@ export class GameLeaderBoardStats {
         const questionPromises = [];
         const categoryIds = [];
 
-        game.playerQnAs.map((playerQnA) => {
+        for (const playerQnA of game.playerQnAs) {
             questionPromises.push(leaderBoardQuestionService.getQuestionById(playerQnA.questionId));
-        });
+        }
 
         try {
 
             const questionResults = await Promise.all(questionPromises);
 
-            questionResults.map((questionResult) => {
+            for (const questionResult of questionResults) {
                 if (questionResult) {
                     const question = Question.getViewModelFromDb(questionResult.data());
-                    question.categoryIds.map((categoryId) => {
+                    for (const categoryId of question.categoryIds) {
                         if (categoryId && categoryIds.indexOf(categoryId) === -1) {
                             categoryIds.push(categoryId);
                         }
-                    });
+                    }
                 }
-            });
+            }
 
-            Object.keys(game.stats).map((userId) => {
+            for (const userId of Object.keys(game.stats)) {
                 userPromises.push(this.calculateUserStat(userId, game, categoryIds));
-            });
+            }
 
             const userResults = await Promise.all(userPromises);
-            return Promise.resolve(userResults);
+            return userResults;
         } catch (err) {
             console.log('err', err);
-            return Promise.reject(err);
+            throw err;
         }
 
     }
@@ -141,11 +140,11 @@ export class GameLeaderBoardStats {
             if (account && account.id) {
                 const updateStatus = await leaderBoardAccountService.updateAccountData(
                     leaderBoardAccountService.calcualteAccountStat(account, game, categoryIds, userId));
-                return Promise.resolve(updateStatus);
+                return updateStatus;
             }
         } catch (err) {
             console.log('err', err);
-            return Promise.reject(err);
+            throw err;
         }
 
     }
@@ -157,16 +156,16 @@ export class GameLeaderBoardStats {
             let lbsStats = await leaderBoardService.getLeaderBoardStats();
             lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
             console.log('lbsStats', lbsStats);
-            accounts.docs.map(account => {
+            for (const account of accounts.docs) {
                 const accountObj: Account = account.data();
                 lbsStats = leaderBoardService.calculateLeaderBoardStats(accountObj, lbsStats);
-            });
+            }
 
             const updateLBSStatResult = await leaderBoardService.setLeaderBoardStats({ ...lbsStats });
-            return Promise.resolve(updateLBSStatResult);
+            return updateLBSStatResult;
         } catch (err) {
             console.log('err', err);
-            return Promise.reject(err);
+            return err;
         }
 
     }
