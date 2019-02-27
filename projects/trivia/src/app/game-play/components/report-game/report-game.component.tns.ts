@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import {
     ReportQuestion, User, Game, QuestionMetadata, Category, Question
 } from 'shared-library/shared/model';
@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import * as Toast from 'nativescript-toast';
+import { isAndroid } from 'tns-core-modules/ui/page/page';
 
 @Component({
     selector: 'report-game',
@@ -29,6 +30,7 @@ export class ReportGameComponent implements OnInit {
     reportOptions?: Array<ReportOption>;
     selectedOption: string = null;
     otherReason: string = null;
+    @ViewChildren('textField') textField : QueryList<ElementRef>;
 
     constructor(private store: Store<AppState>, private params: ModalDialogParams) {
         this.categoryDict$ = store.select(categoryDictionary);
@@ -57,6 +59,7 @@ export class ReportGameComponent implements OnInit {
     }
 
     saveReportQuestion() {
+        this.hideKeyboard();
         if (this.selectedOption == null) {
             Toast.makeText('Select issue!').show();
             return;
@@ -120,6 +123,16 @@ export class ReportGameComponent implements OnInit {
     onClose(): void {
         this.params.closeCallback();
     }
+
+    hideKeyboard() {
+        this.textField
+        .toArray()
+        .map((el) => {
+          if ( isAndroid ) {
+            el.nativeElement.android.clearFocus();
+          }
+          return el.nativeElement.dismissSoftInput(); });
+      }
 
 }
 

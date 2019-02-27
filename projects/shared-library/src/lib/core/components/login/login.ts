@@ -41,7 +41,7 @@ export class Login {
         case 0:
           // Login or Sign up
           this.loginForm.get('confirmPassword').clearValidators();
-          this.loginForm.get('password').setValue({ validators: [Validators.required, Validators.minLength(6)]});
+          this.loginForm.get('password').setValidators( Validators.compose([Validators.required, Validators.minLength(6)]));
           this.loginForm.get('password').updateValueAndValidity();
           this.loginForm.get('confirmPassword').updateValueAndValidity();
           break;
