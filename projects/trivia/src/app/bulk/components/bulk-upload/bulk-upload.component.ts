@@ -57,7 +57,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
+    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
   }
 
   ngOnInit() {
