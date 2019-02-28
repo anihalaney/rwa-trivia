@@ -179,7 +179,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     question.questionText = formValue.questionText;
     question.answers = formValue.answers;
     question.categoryIds = this.questionForm.get('category').value;
-    question.tags = [...this.autoTags, ...this.enteredTags]
+    question.tags = [...this.autoTags, ...this.enteredTags];
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
     return question;
@@ -193,11 +193,11 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   questionFormValidator(fg: FormGroup): { [key: string]: boolean } {
     const answers: Answer[] = fg.get('answers').value;
     if (answers.filter(answer => answer.correct).length !== 1) {
-      return { 'correctAnswerCountInvalid': true }
+      return { 'correctAnswerCountInvalid': true };
     }
     const tags: string[] = fg.get('tagsArray').value;
     if (tags.length < 3) {
-      return { 'tagCountInvalid': true }
+      return { 'tagCountInvalid': true };
     }
     return null;
   }

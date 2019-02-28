@@ -32,7 +32,7 @@ export class QuestionsComponent implements OnInit, OnDestroy, OnChanges {
     return QuestionStatus[status];
   }
   approveButtonClicked(question: Question) {
-    this.approveClicked.emit(question)
+    this.approveClicked.emit(question);
   }
   showReason(row, index) {
     if (this.viewReasonArray[index] === undefined) {
