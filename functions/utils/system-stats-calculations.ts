@@ -1,7 +1,7 @@
 const statService = require('../services/stats.service');
 
 import { UserService } from '../services/user.service';
-const statUserService: UserService = new UserService();
+// const statUserService: UserService = new UserService();
 const statQuestionService = require('../services/question.service');
 const statGameService = require('../services/game.service');
 
@@ -15,7 +15,7 @@ export class SystemStatsCalculations {
             .then((systemStat) => {
                 const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
                 const systemStatPromises = [];
-                systemStatPromises.push(statUserService.getUsers());
+                systemStatPromises.push(UserService.getUsers());
                 systemStatPromises.push(statQuestionService.getAllQuestions());
                 systemStatPromises.push(statGameService.getLiveGames());
                 systemStatPromises.push(statGameService.getCompletedGames());

@@ -41,8 +41,11 @@ exports.createGame = async (req, res) => {
     }
 
     const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId);
+
+
     // Get App Settings
     const appSetting = await appSettings.getAppSettings();
+
 
     if (appSetting.lives.enable) {
         // Get Account Info
@@ -53,7 +56,9 @@ exports.createGame = async (req, res) => {
             return;
         }
     }
+
     gameMechanics.createNewGame().then((gameId) => {
+
         if (appSetting.lives.enable) {
             // Decrement lives from user account
             generalAccountService.decreaseLife(userId);
