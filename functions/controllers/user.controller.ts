@@ -2,22 +2,21 @@
 
 import { UserService } from '../services/user.service';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
-const userService: UserService = new UserService();
+import { MailClient } from '../utils/mail-client';
+import { UserControllerConstants, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { Utils } from '../utils/utils';
+
 const generalAccountService = require('../services/account.service');
+const utils: Utils = new Utils();
 
 export class UserController {
 
-    userService: UserService;
-
-    constructor() {
-       // this.userService = new UserService();
-    }
 
     /**
      * getUserById
      * return user
      */
-    public async getUserById(req, res) {
+    public static async getUserById(req, res) {
 
         const userId = req.params.userId;
 
@@ -26,7 +25,7 @@ export class UserController {
             return res.status(400).send('Bad Request');
         }
         try {
-            res.status(200).send(await userService.getUserProfile(userId));
+            res.status(200).send(await UserService.getUserProfile(userId));
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server error');
@@ -38,7 +37,7 @@ export class UserController {
      * getUserImages
      * return user
      */
-    public async getUserImages(req, res) {
+    public static async getUserImages(req, res) {
         const userId = req.params.userId;
         const width = req.params.width;
         const height = req.params.height;
@@ -61,7 +60,7 @@ export class UserController {
 
 
         try {
-            const stream = await userService.getUserProfileImage(userId, width, height);
+            const stream = await UserService.getUserProfileImage(userId, width, height);
             res.setHeader('content-disposition', 'attachment; filename=profile_image.png');
             res.setHeader('content-type', 'image/jpeg');
             res.send(stream);
@@ -77,26 +76,44 @@ export class UserController {
      * generateUserProfileImage
      * return status
      */
-    public async generateUserProfileImage(req, res) {
-        if (req.body.user.userId === req.user.uid) {
+    public static async generateUserProfileImage(req, res) {
+        if (req.body.user.userId !== req.user.uid) {
             return res.status(401).send('Unauthorized');
         }
 
-        const user = req.body.user;
+        let user = req.body.user;
 
         const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
 
         try {
             if (user.profilePicture && user.croppedImageUrl && user.originalImageUrl) {
 
-                await profileImagesGenerator.uploadProfileImage(user);
+                user = await profileImagesGenerator.uploadProfileImage(user);
 
                 delete user.originalImageUrl;
                 delete user.croppedImageUrl;
                 delete user.imageType;
             }
 
-            await userService.updateUser(user);
+            if (user.bulkUploadPermissionStatus === profileSettingsConstants.NONE) {
+                user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
+                user.bulkUploadPermissionStatusUpdateTime = utils.getUTCTimeStamp();
+                const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
+                try {
+                    const mail: MailClient = new MailClient(UserControllerConstants.adminEmail, UserControllerConstants.mailSubject,
+                        UserControllerConstants.mailSubject, htmlContent);
+                    await mail.sendMail();
+                } catch (error) {
+                    console.error('mail error', error);
+                }
+            }
+
+            user.bulkUploadPermissionStatus =
+                (user.bulkUploadPermissionStatus) ? user.bulkUploadPermissionStatus : profileSettingsConstants.NONE;
+
+            delete user['roles'];
+
+            await UserService.updateUser({ ...user });
             res.status(200).send({ 'status': 'Profile Data is saved !!' });
 
         } catch (error) {
@@ -109,7 +126,7 @@ export class UserController {
      * updateLives
      * return status
      */
-    public async updateLives(req, res) {
+    public static async updateLives(req, res) {
         const userId = req.body.userId;
         if (!userId) {
             return res.status(400).send('Bad Request');

@@ -5,11 +5,9 @@ const router = express.Router();
 const userAuth = require('../middlewares/auth');
 
 
-const userController: UserController = new UserController();
-
-router.get('/:userId', userController.getUserById);
-router.get('/profile/:userId/:imageName/:width/:height', userController.getUserImages);
-router.post('/profile', userAuth.authorizedOnly, userController.generateUserProfileImage);
-router.post('/update-lives', userAuth.authorizedOnly, userController.updateLives);
+router.get('/:userId', UserController.getUserById);
+router.get('/profile/:userId/:imageName/:width/:height', UserController.getUserImages);
+router.post('/profile', userAuth.authorizedOnly, UserController.generateUserProfileImage);
+router.post('/update-lives', userAuth.authorizedOnly, UserController.updateLives);
 
 module.exports = router;

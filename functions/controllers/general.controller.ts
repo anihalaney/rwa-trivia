@@ -2,7 +2,7 @@ const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
 
 import { UserService } from '../services/user.service';
-const generalUserService: UserService = new UserService();
+
 const generalAccountService = require('../services/account.service');
 
 const Feed = require('feed-to-json');
@@ -267,7 +267,7 @@ exports.dumpAuthUsersInFirestore = (req, res) => {
     const authUser: AuthUser = new AuthUser()
     authUser.getUsers(authUsers).then((users) => {
         console.log('users', users);
-        generalUserService.addUpdateAuthUsersToFireStore(users).then((ref) => {
+        UserService.addUpdateAuthUsersToFireStore(users).then((ref) => {
             res.send('dumped all the users');
         });
     })
@@ -293,7 +293,7 @@ exports.generateAllUsersProfileImages = (req, res) => {
  */
 exports.migrateUserStatToAccounts = (req, res) => {
     const migrationPromises = [];
-    generalUserService.getUsers().then(users => {
+    UserService.getUsers().then(users => {
         users.docs.map(user => {
             const userObj: User = user.data();
             if (userObj && userObj.userId) {
@@ -323,7 +323,7 @@ exports.addDefaultLives = async (req, res) => {
         if (appSetting.lives.enable) {
             isStreaming = true;
             res.setHeader('Content-Type', 'text/plain');
-            const users = await generalUserService.getUsers();
+            const users = await UserService.getUsers();
             const migrationPromises = [];
             for (const user of users.docs) {
                 const userObj: User = user.data();
@@ -368,6 +368,6 @@ exports.addLives = async (req, res) => {
 };
 
 exports.removeSocialProfile = async (req, res) => {
-    res.status(200).send(await generalUserService.removeSocialProfile());
+    res.status(200).send(await UserService.removeSocialProfile());
 };
 

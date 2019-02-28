@@ -5,7 +5,7 @@ const utils: Utils = new Utils();
 const gameService = require('../services/game.service');
 
 import { UserService } from '../services/user.service';
-const userService: UserService = new UserService();
+// const UserService: UserService = new UserService();
 export class GameMechanics {
 
     private gameOptions: GameOptions;
@@ -199,10 +199,10 @@ export class GameMechanics {
     }
     // Add lastGamePlayOption when new game create
     private updateUser(userId: string, gameOptions: any): Promise<string> {
-        return userService.getUserById(userId).then((user) => {
+        return UserService.getUserById(userId).then((user) => {
             const dbUser = user.data();
             dbUser.lastGamePlayOption = gameOptions;
-            return userService.updateUser(dbUser).then(ref => dbUser.userId);
+            return UserService.updateUser(dbUser).then(ref => dbUser.userId);
         });
     }
 }
