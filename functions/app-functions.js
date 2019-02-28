@@ -4,4 +4,4 @@ exports.onFirestoreInvitationWrite = require('./server/functions/db/firebase-fun
 exports.onFirestoreGameCreate = require('./server/functions/db/firebase-functions').onGameCreate;
 exports.onFirestoreGameUpdate = require('./server/functions/db/firebase-functions').onGameUpdate;
 exports.onFirestoreUserCreate = require('./server/functions/db/firebase-functions').onUserCreate;
-exports.onFirestoreUserUpdate = require('./server/functions/db/firebase-functions').onUserUpdate;
+exports.onFirestoreAccountUpdate = require('./server/functions/db/firebase-functions').onAccountUpdate;

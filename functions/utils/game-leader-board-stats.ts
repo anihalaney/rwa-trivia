@@ -1,163 +1,173 @@
 const leaderBoardGameService = require('../services/game.service');
+const leaderBoardQuestionService = require('../services/question.service');
 const leaderBoardAccountService = require('../services/account.service');
 const leaderBoardService = require('../services/leaderboard.service');
 
 import {
-    Game, User, Account,
-    LeaderBoardUser, UserStatConstants
+    Game, Account, Question
 } from '../../projects/shared-library/src/lib/shared/model';
 
 
 export class GameLeaderBoardStats {
 
+    accountDict: { [key: string]: Account };
 
-    generateGameStats(): Promise<any> {
-        return leaderBoardGameService.getCompletedGames()
-            .then(games => games.docs.map(game => Game.getViewModel(game.data())))
-            .then(games => {
-                const gamePromises = [];
-                games.map(game => {
-                    gamePromises.push(this.getGameUsers(game));
-                });
-
-                Promise.all(gamePromises)
-                    .then((gameResults) => {
-                        return gameResults;
-                        // console.log('All game stats are updates', gameResults);
-                    })
-                    .catch((e) => {
-                        //  console.log('game promise error', e);
-                    });
-            });
-
-
+    constructor() {
+        this.accountDict = {};
     }
 
-    public getGameUsers(game: Game): Promise<any> {
+    public async generateGameStats(): Promise<any> {
         const userPromises = [];
-        Object.keys(game.stats).map((userId) => {
-            console.log('userId', userId);
-            userPromises.push(this.calculateUserStat(userId, game, game.gameOptions.categoryIds));
-        });
+        let games;
+        try {
+            games = await leaderBoardGameService.getCompletedGames();
 
-        return Promise.all(userPromises)
-            .then((userResults) => {
-                //  console.log('All Users stats are updated', userResults);
-                return userResults;
-            })
-            .catch((e) => {
-                //  console.log('game promise error', e);
-            });
+            games = games.docs.map(game => Game.getViewModel(game.data()));
 
-    }
+            const questionDict = await this.loadQuestionDictionary();
 
-    private calculateUserStat(userId: string, game: Game, categoryIds: number[]): Promise<string> {
-        const score = game.stats[userId].score;
-        const avgAnsTime = game.stats[userId].avgAnsTime;
-        return leaderBoardAccountService.getAccountById(userId).then(accountData => {
-            let account: Account = accountData.data();
-            console.log('account', account);
-            if (account && account.id) {
-                categoryIds.map((id) => {
-                    account = (account) ? account : new Account();
-                    account.leaderBoardStats[id] = (account.leaderBoardStats[id]) ?
-                        account.leaderBoardStats[id] + score : score;
-                });
-                account['leaderBoardStats'] = { ...account.leaderBoardStats };
-                account.gamePlayed = (account.gamePlayed) ? account.gamePlayed + 1 : 1;
-                account.categories = Object.keys(account.leaderBoardStats).length;
-                if (game.winnerPlayerId) {
-                    (game.winnerPlayerId === userId) ?
-                        account.wins = (account.wins) ? account.wins + 1 : 1 :
-                        account.losses = (account.losses) ? account.losses + 1 : 1;
+            for (const game of games) {
+                for (const userId of Object.keys(game.stats)) {
+                    this.calculateAllGameUsersStat(userId, game, this.getGameQuestionCategories(game, questionDict));
                 }
-                account.badges = (account.badges) ? account.badges + score : score;
-                account.avgAnsTime = (account.avgAnsTime) ? Math.floor((account.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
-                console.log('account', account);
-                return this.updateAccount({ ...account }).then((id) => {
-                    return `Account ${userId} Stat updated`;
-                });
-            } else {
-                return `Account ${userId} Stat updated`;
             }
-        });
+
+            for (const userId of Object.keys(this.accountDict)) {
+                const account: Account = this.accountDict[userId];
+                account.id = userId;
+                userPromises.push(leaderBoardAccountService.updateAccountData({ ...account }));
+            }
+
+            const userResults = await Promise.all(userPromises);
+            this.accountDict = {};
+
+            return userResults;
+        } catch (err) {
+            console.log('err', err);
+        }
     }
 
-    private updateAccount(dbAccount: any): Promise<string> {
-        return leaderBoardAccountService.setAccount(dbAccount).then(ref => {
-            return dbAccount.id;
-        });
+    public async loadQuestionDictionary(): Promise<{ [key: string]: Array<number> }> {
+        const questionDict: { [key: string]: Array<number> } = {};
+
+        try {
+            const snapshots = await leaderBoardQuestionService.getAllQuestions();
+            if (snapshots.empty) {
+                console.log('questions do not exist');
+                return Promise.reject(snapshots);
+            } else {
+                for (const snapshot of snapshots.docs) {
+                    const question: Question = snapshot.data();
+
+                    if (question.categoryIds.length > 0) {
+                        questionDict[question.id] = question.categoryIds;
+                    }
+                }
+                return questionDict;
+
+            }
+        } catch (err) {
+            console.log('err', err);
+            throw err;
+        }
+
     }
 
 
-    public calculateGameLeaderBoardStat(): Promise<string> {
-
-        return leaderBoardAccountService.getAccounts().then(accounts => {
-            this.getLeaderBoardStat().then((lbsStats) => {
-                accounts.docs.map(account => {
-                    const accountObj: Account = account.data();
-                    //   console.log('userId', accountObj.id);
-                    lbsStats = this.calculateLeaderBoardStat(accountObj, lbsStats);
-                    //   console.log('lbsStats', lbsStats);
-                });
-                return this.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
-                    return leaderBoardStat;
-                });
-            });
-        });
-
-    }
-
-    public getLeaderBoardStat(): Promise<{ [key: string]: Array<LeaderBoardUser> }> {
-        return leaderBoardService.getLeaderBoardStats().then(lbs => (lbs.data()) ? lbs.data() : {});
-    }
-
-    public calculateLeaderBoardStat(accountObj: Account, lbsStats: { [key: string]: Array<LeaderBoardUser> })
-        : { [key: string]: Array<LeaderBoardUser> } {
-        if (accountObj && accountObj.id) {
-            const leaderBoardStats = accountObj.leaderBoardStats;
-
-            if (leaderBoardStats) {
-                Object.keys(leaderBoardStats).map((id) => {
-                    const leaderBoardUsers: Array<LeaderBoardUser> = (lbsStats[id]) ? lbsStats[id] : [];
-                    const filteredUsers: Array<LeaderBoardUser> =
-                        leaderBoardUsers.filter((lbUser) => lbUser.userId === accountObj.id);
-                    //  console.log('filteredUsers', filteredUsers);
-
-                    const leaderBoardUser: LeaderBoardUser = (filteredUsers.length > 0) ?
-                        filteredUsers[0] : new LeaderBoardUser();
-                    leaderBoardUser.userId = accountObj.id;
-                    leaderBoardUser.score = leaderBoardStats[id];
-                    const leaderBoardUserObj = { ...leaderBoardUser };
-                    (filteredUsers.length > 0) ?
-                        leaderBoardUsers[leaderBoardUsers.findIndex((fUser) => fUser.userId === accountObj.id)] = leaderBoardUserObj
-                        : leaderBoardUsers.push(leaderBoardUserObj);
-
-                    leaderBoardUsers.sort((a, b) => {
-                        return b.score - a.score;
-                    });
-                    //  console.log('leaderBoardUsers', leaderBoardUsers);
-                    (leaderBoardUsers.length > UserStatConstants.maxUsers) ?
-                        leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1) : '';
-
-                    lbsStats[id] = leaderBoardUsers;
-                });
+    private getGameQuestionCategories(game: Game, questionDict: { [key: string]: Array<number> }): Array<number> {
+        const questionCategories: Array<number> = [];
+        for (const playerQnA of game.playerQnAs) {
+            const categoryIds: Array<number> = questionDict[playerQnA.questionId];
+            if (categoryIds) {
+                for (const categoryId of categoryIds) {
+                    if (categoryId && questionCategories.indexOf(categoryId) === -1) {
+                        questionCategories.push(categoryId);
+                    }
+                }
             }
         }
-        return lbsStats;
+
+        return questionCategories;
     }
 
-    public updateLeaderBoard(leaderBoardStat: any): Promise<string> {
-        return leaderBoardService.setLeaderBoardStats(leaderBoardStat).then(ref => {
-            return leaderBoardStat;
-        });
+    private calculateAllGameUsersStat(userId: string, game: Game, categoryIds: Array<number>): void {
+        const account: Account = (this.accountDict[userId]) ? this.accountDict[userId] : new Account();
+        this.accountDict[userId] = leaderBoardAccountService.calcualteAccountStat(account, game, categoryIds, userId);
     }
 
-    public getAccountById(id: string): Promise<any> {
-        return leaderBoardAccountService.getAccountById(id).then((account) => {
-            return account.data();
-        });
+
+    public async  getGameUsers(game: Game): Promise<any> {
+        const userPromises = [];
+        const questionPromises = [];
+        const categoryIds = [];
+
+        for (const playerQnA of game.playerQnAs) {
+            questionPromises.push(leaderBoardQuestionService.getQuestionById(playerQnA.questionId));
+        }
+
+        try {
+
+            const questionResults = await Promise.all(questionPromises);
+
+            for (const questionResult of questionResults) {
+                if (questionResult) {
+                    const question = Question.getViewModelFromDb(questionResult.data());
+                    for (const categoryId of question.categoryIds) {
+                        if (categoryId && categoryIds.indexOf(categoryId) === -1) {
+                            categoryIds.push(categoryId);
+                        }
+                    }
+                }
+            }
+
+            for (const userId of Object.keys(game.stats)) {
+                userPromises.push(this.calculateUserStat(userId, game, categoryIds));
+            }
+
+            const userResults = await Promise.all(userPromises);
+            return userResults;
+        } catch (err) {
+            console.log('err', err);
+            throw err;
+        }
+
     }
 
+    private async  calculateUserStat(userId: string, game: Game, categoryIds: Array<number>): Promise<string> {
+        try {
+            const accountData = await leaderBoardAccountService.getAccountById(userId);
+            const account: Account = accountData.data();
+            if (account && account.id) {
+                const updateStatus = await leaderBoardAccountService.updateAccountData(
+                    leaderBoardAccountService.calcualteAccountStat(account, game, categoryIds, userId));
+                return updateStatus;
+            }
+        } catch (err) {
+            console.log('err', err);
+            throw err;
+        }
+
+    }
+
+
+    public async calculateGameLeaderBoardStat(): Promise<string> {
+        try {
+            const accounts = await leaderBoardAccountService.getAccounts();
+            let lbsStats = await leaderBoardService.getLeaderBoardStats();
+            lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
+            console.log('lbsStats', lbsStats);
+            for (const account of accounts.docs) {
+                const accountObj: Account = account.data();
+                lbsStats = leaderBoardService.calculateLeaderBoardStats(accountObj, lbsStats);
+            }
+
+            const updateLBSStatResult = await leaderBoardService.setLeaderBoardStats({ ...lbsStats });
+            return updateLBSStatResult;
+        } catch (err) {
+            console.log('err', err);
+            return err;
+        }
+
+    }
 
 }

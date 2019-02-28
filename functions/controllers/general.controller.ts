@@ -4,7 +4,7 @@ const blogService = require('../services/blog.service');
 import { UserService } from '../services/user.service';
 
 const generalAccountService = require('../services/account.service');
-
+const generalQuestionService = require('../services/question.service');
 const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
@@ -12,7 +12,7 @@ import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
-import { RSSFeedConstants, Blog, User, profileSettingsConstants, Account } from '../../projects/shared-library/src/lib/shared/model';
+import { RSSFeedConstants, Blog, User, Account, Question } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
 import { Utils } from '../utils/utils';
@@ -132,8 +132,10 @@ exports.testES = (req, res) => {
  */
 exports.generateUsersStat = (req, res) => {
     const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-    gameLeaderBoardStats.generateGameStats().then((gameResults) => {
+    return gameLeaderBoardStats.generateGameStats().then((gameResults) => {
         res.send('updated stats');
+    }, error => {
+        res.status(500).send(error);
     });
 };
 
@@ -144,8 +146,10 @@ exports.generateUsersStat = (req, res) => {
  */
 exports.generateLeaderBoardStat = (req, res) => {
     const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-    gameLeaderBoardStats.calculateGameLeaderBoardStat().then((gameResults) => {
+    return gameLeaderBoardStats.calculateGameLeaderBoardStat().then((gameResults) => {
         res.send('updated stats');
+    }, error => {
+        res.status(500).send(error);
     });
 };
 
@@ -366,6 +370,37 @@ exports.addLives = async (req, res) => {
     }
     res.status(200).send('live feature is not enabled');
 };
+
+/**
+ * changeQuestionCategoryIdType
+ * return status
+ */
+exports.changeQuestionCategoryIdType = (req, res) => {
+    const updatePromises = [];
+    generalQuestionService.getAllQuestions().then(questions => {
+        questions.docs.map(question => {
+            const questionObj: Question = question.data();
+            console.log('questionObj.categoryIds', questionObj.categoryIds);
+            const categoryIds = questionObj.categoryIds;
+            const updatedCategory = [];
+            categoryIds.map((categoryId) => {
+                updatedCategory.push(Number(categoryId));
+            });
+            questionObj.categoryIds = updatedCategory;
+            console.log('updatedCategory', updatedCategory);
+            const dbQuestionObj = { ...questionObj };
+            updatePromises.push(generalQuestionService.updateQuestion('questions', dbQuestionObj));
+        });
+        Promise.all(updatePromises).then((updateResults) => {
+            res.send(updateResults);
+        })
+            .catch((e) => {
+                res.send(e);
+            });
+    });
+};
+
+
 
 exports.removeSocialProfile = async (req, res) => {
     res.status(200).send(await UserService.removeSocialProfile());
