@@ -33,7 +33,7 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
 
     constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
         this.categoryDictObs = store.select(categoryDictionary);
-        this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+        this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
     }
 
     ngOnInit(): void {

@@ -47,13 +47,13 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => {
+    this.subs.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       if (this.game) {
         this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
         this.otherUserInfo = this.userDict[this.otherUserId];
       }
-    });
+    }));
 
     this.categoryDict$ = store.select(categoryDictionary);
     this.subs.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
@@ -61,14 +61,14 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user;
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
       if (this.myTurn) {
         this.updateRemainingTime();
       }
-    });
+    }));
   }
 
   ngOnChanges() {
@@ -85,6 +85,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.subs.push(this.timerSub);
     this.utils.unsubscribe(this.subs);
   }
 
