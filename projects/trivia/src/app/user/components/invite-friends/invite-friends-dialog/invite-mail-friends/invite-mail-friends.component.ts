@@ -1,12 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
 import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../../../store';
-import * as userActions from '../../../../../user/store/actions';
-import { userState } from '../../../../../user/store';
 import { coreState, UserActions } from 'shared-library/core/store';
+import { Subscription } from 'rxjs';
+import { Utils } from 'shared-library/core/services';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -15,7 +15,8 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
   templateUrl: './invite-mail-friends.component.html',
   styleUrls: ['./invite-mail-friends.component.scss']
 })
-export class InviteMailFriendsComponent implements OnInit {
+export class InviteMailFriendsComponent implements OnInit, OnDestroy {
+
   @Input() user: User;
   invitationForm: FormGroup;
   showErrorMsg = false;
@@ -24,20 +25,22 @@ export class InviteMailFriendsComponent implements OnInit {
   showSuccessMsg: string;
   validEmail = [];
   emailCheck: Boolean = false;
+  sub: Subscription[] = [];
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions) {
-    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, 
+              private utils: Utils) {
+    this.sub.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
         this.user = user;
       }
-    });
+    }));
 
-    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.sub.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.showSuccessMsg = status;
       }
-    });
+    }));
 
   }
 
@@ -97,5 +100,10 @@ export class InviteMailFriendsComponent implements OnInit {
       }
     }
   }
+
+  ngOnDestroy(): void {
+    this.utils.unsubscribe(this.sub);
+  }
+
 }
 
