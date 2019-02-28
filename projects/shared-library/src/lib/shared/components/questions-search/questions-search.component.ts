@@ -53,7 +53,7 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
     return QuestionStatus[status];
   }
   approveButtonClicked(question: Question) {
-    this.approveClicked.emit(question)
+    this.approveClicked.emit(question);
   }
   pageChanged(pageEvent: PageEvent) {
     this.onPageChanged.emit(pageEvent);

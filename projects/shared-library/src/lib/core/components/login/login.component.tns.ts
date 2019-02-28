@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -10,13 +10,14 @@ import { Login } from './login';
 import { Page } from 'tns-core-modules/ui/page';
 import { LoadingIndicator } from "nativescript-loading-indicator";
 import { isAndroid } from 'tns-core-modules/platform';
+import { Utils } from '../../services';
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent extends Login implements OnInit {
+export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   title: string;
   loader = new LoadingIndicator();
@@ -25,12 +26,14 @@ export class LoginComponent extends Login implements OnInit {
     type: '',
     text: ''
   };
+
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
     private uiStateActions: UIStateActions,
     private page: Page,
-    private firebaseAuthService: FirebaseAuthService) {
+    private firebaseAuthService: FirebaseAuthService,
+    private utils: Utils) {
     super(fb, store);
     this.page.actionBarHidden = true;
   }
@@ -101,7 +104,7 @@ export class LoginComponent extends Login implements OnInit {
         }).catch((error) => {
           this.loader.hide();
           const singUpError = error.split(':');
-          this.showMessage('error', singUpError[1] ||  error);
+          this.showMessage('error', singUpError[1] || error);
         });
         break;
       case 2:
@@ -154,19 +157,19 @@ export class LoginComponent extends Login implements OnInit {
   }
 
   redirectTo() {
-    this.store.select(coreState).pipe(
+    this.subs.push(this.store.select(coreState).pipe(
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe(() => {
         this.loader.hide();
-        this.store.select(coreState).pipe(
+        this.subs.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
             Toast.makeText('You have been successfully logged in').show();
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
-          });
+          }));
       }
-      );
+      ));
   }
 
   showMessage(type: string, text: string) {
@@ -177,7 +180,7 @@ export class LoginComponent extends Login implements OnInit {
     };
   }
 
-  changeMode(mode: number){
+  changeMode(mode: number) {
     super.changeMode(mode);
     this.removeMessage();
   }
@@ -188,6 +191,10 @@ export class LoginComponent extends Login implements OnInit {
       type: '',
       text: ''
     };
+  }
+
+  ngOnDestroy() {
+    this.utils.unsubscribe(this.subs);
   }
 
 }
