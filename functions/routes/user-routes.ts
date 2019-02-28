@@ -1,10 +1,11 @@
 
 import * as express from 'express';
+import { UserController } from '../controllers/user.controller';
 const router = express.Router();
 const userAuth = require('../middlewares/auth');
 
 
-const userController = require('../controllers/user.controller');
+const userController: UserController = new UserController();
 
 router.get('/:userId', userController.getUserById);
 router.get('/profile/:userId/:imageName/:width/:height', userController.getUserImages);

@@ -1,5 +1,7 @@
 const statService = require('../services/stats.service');
-const statUserService = require('../services/user.service');
+
+import { UserService } from '../services/user.service';
+const statUserService: UserService = new UserService();
 const statQuestionService = require('../services/question.service');
 const statGameService = require('../services/game.service');
 

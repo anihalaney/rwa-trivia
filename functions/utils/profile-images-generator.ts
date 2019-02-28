@@ -1,7 +1,9 @@
 import {
     User
 } from '../../projects/shared-library/src/lib/shared/model';
-const profileImagesUserService = require('../services/user.service');
+
+import { UserService } from '../services/user.service';
+const profileImagesUserService: UserService = new UserService();
 const stream = require('stream');
 const sharp = require('sharp');
 
@@ -35,68 +37,63 @@ export class ProfileImagesGenerator {
             });
     }
 
-    public uploadProfileImage(user: User): Promise<string> {
+    public async uploadProfileImage(user: User): Promise<any> {
 
         let filePath = `${this.basePath}/${user.userId}/${this.originalImagePath}/${user.profilePicture}`;
         user.originalImageUrl = user.originalImageUrl.replace(/^data:image\/\w+;base64,/, '');
         let bufferStream = new Buffer(user.originalImageUrl, 'base64');
 
-        return profileImagesUserService
-            .uploadProfileImage(bufferStream, user.imageType, filePath).then((orgImageUploadStatus) => {
-                console.log('orgImageUploadStatus', orgImageUploadStatus);
-                filePath = `${this.basePath}/${user.userId}/${this.profileImagePath}/${user.profilePicture}`;
-                user.croppedImageUrl = user.croppedImageUrl.replace(/^data:image\/\w+;base64,/, '');
-                bufferStream = new Buffer(user.originalImageUrl, 'base64');
-                return profileImagesUserService
-                    .uploadProfileImage(bufferStream, user.imageType, filePath).then((croppedImageStatus) => {
-                        console.log('croppedImageStatus', croppedImageStatus);
-                        return this.getStoredImage(user.userId, user.profilePicture, user.imageType)
-                            .then((uploadStatus) => uploadStatus).catch((e) => {
-                                console.log('images generator error', e);
-                            });
-                    }).catch((e) => {
-                        console.log('images generator error', e);
-                    });
-            }).catch((e) => {
-                console.log('images generator error', e);
-            });
+        try {
+
+            await profileImagesUserService.uploadProfileImage(bufferStream, user.imageType, filePath);
+
+            filePath = `${this.basePath}/${user.userId}/${this.profileImagePath}/${user.profilePicture}`;
+            user.croppedImageUrl = user.croppedImageUrl.replace(/^data:image\/\w+;base64,/, '');
+            bufferStream = new Buffer(user.originalImageUrl, 'base64');
+
+            await profileImagesUserService.uploadProfileImage(bufferStream, user.imageType, filePath);
+
+            return await this.getStoredImage(user.userId, user.profilePicture, user.imageType);
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+
     }
 
-    public getStoredImage(userId: string, profileImagePath: String, croppedImageType: string): Promise<string> {
+    public async getStoredImage(userId: string, profileImagePath: string, croppedImageType: string): Promise<any> {
         const imagesPromises = [];
-        return profileImagesUserService.generateProfileImage(userId, profileImagePath).then((dataStream) => {
+        try {
+            const dataStream = await profileImagesUserService.generateProfileImage(userId, profileImagePath);
             imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 263, 263));
             imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 70, 60));
             imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 44, 40));
-            return Promise.all(imagesPromises)
-                .then((imagesResults) => imagesResults)
-                .catch((e) => {
-                    console.log('images generator error', e);
-                });
-        });
+
+            return await Promise.all(imagesPromises);
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
-    private resizeImage(userId: string, profileImagePath: String,
+    private async resizeImage(userId: string, profileImagePath: String,
         dataStream: any, croppedImageType: string, width: Number, height: Number): Promise<string> {
 
         const filePath = `${this.basePath}/${userId}/${this.profileImagePath}/${width}*${height}/${profileImagePath}`;
 
         croppedImageType = (croppedImageType) ? croppedImageType : dataStream.mimetype;
+        try {
 
-        return sharp(dataStream)
-            .resize(width, height)
-            .toBuffer()
-            .then(data => {
+            const data = await sharp(dataStream).resize(width, height).toBuffer();
 
-                return profileImagesUserService
-                    .uploadProfileImage(data, croppedImageType, filePath).then((file) => {
-                        return `${userId} with dimensions ${width}*${height} file is uploaded successfully`;
-                    });
-            })
-            .catch(err => {
-                console.log('error-->', err);
-                return err;
-            });
+            return await profileImagesUserService.uploadProfileImage(data, croppedImageType, filePath);
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
 }

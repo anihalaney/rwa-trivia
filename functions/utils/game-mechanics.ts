@@ -1,9 +1,11 @@
 import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from './utils';
-import { async } from '@angular/core/testing';
+
 const utils: Utils = new Utils();
 const gameService = require('../services/game.service');
-const userService = require('../services/user.service');
+
+import { UserService } from '../services/user.service';
+const userService: UserService = new UserService();
 export class GameMechanics {
 
     private gameOptions: GameOptions;
@@ -200,7 +202,7 @@ export class GameMechanics {
         return userService.getUserById(userId).then((user) => {
             const dbUser = user.data();
             dbUser.lastGamePlayOption = gameOptions;
-            return userService.setUser(dbUser).then(ref => dbUser.userId);
+            return userService.updateUser(dbUser).then(ref => dbUser.userId);
         });
     }
 }
