@@ -1,16 +1,21 @@
 const pushNotificationService = require('../services/push-notification.service');
 const pushNotificationUserService = require('../services/user.service');
+import { UserService } from '../services/user.service';
+
 import {
     User, Game, GameStatus, pushNotificationRouteConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 
 
 export class PushNotification {
+    pushNotificationUserService: UserService;
 
+    constructor() {
+        this.pushNotificationUserService = new UserService();
+    }
 
-
-    public sendNotificationToDevices(userId: string, title: string, body: string, data: any): Promise<string> {
-        return pushNotificationUserService.getUserById(userId).then((user) => {
+    public sendNotificationToDevices(userId: string, title: string, body: string, data: any): Promise<any> {
+        return this.pushNotificationUserService.getUserById(userId).then((user) => {
             const dbUser: User = user.data();
             const notificationPromises = [];
             if (dbUser.androidPushTokens) {
@@ -50,7 +55,7 @@ export class PushNotification {
     public sendGamePlayPushNotifications(data: any, currentTurnPlayerId: string, pushType: string) {
         let looserPlayerId;
         let msg_data;
-        pushNotificationUserService.getUserById(currentTurnPlayerId).then((user) => {
+        this.pushNotificationUserService.getUserById(currentTurnPlayerId).then((user) => {
             let dbUser: User = user.data();
             switch (pushType) {
                 case pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS:
@@ -107,7 +112,7 @@ export class PushNotification {
                                 }).catch((err) => {
                                     console.log('Notification Error: ', err);
                                 });
-                            pushNotificationUserService.getUserById(looserPlayerId).then((userData) => {
+                            this.pushNotificationUserService.getUserById(looserPlayerId).then((userData) => {
                                 dbUser = userData.data();
                                 this.sendNotificationToDevices(currentTurnPlayerId, 'Bitwiser Game Play',
                                     `${dbUser.displayName} did not answer in time. You win!`, msg_data)
@@ -124,7 +129,7 @@ export class PushNotification {
 
                 case pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS:
                     msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
-                    pushNotificationUserService
+                    this
                         .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
                             'You have 32 minutes remaining to play your turn !', msg_data)
                         .then((result) => {
@@ -137,7 +142,7 @@ export class PushNotification {
 
                 case pushNotificationRouteConstants.FRIEND_NOTIFICATIONS:
                     msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
-                    pushNotificationUserService.getUserById(data.created_uid).then((userObj) => {
+                    this.pushNotificationUserService.getUserById(data.created_uid).then((userObj) => {
                         const otherUser: User = userObj.data();
                         msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
 

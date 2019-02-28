@@ -1,5 +1,7 @@
 const friendService = require('../services/friend.service');
-const friendUserService = require('../services/user.service');
+
+import { UserService } from '../services/user.service';
+const friendUserService: UserService = new UserService();
 import {
     Invitation, Friends, FriendsMetadata, friendInvitationConstants, User,
     pushNotificationRouteConstants

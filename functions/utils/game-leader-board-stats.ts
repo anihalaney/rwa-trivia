@@ -1,5 +1,4 @@
 const leaderBoardGameService = require('../services/game.service');
-const leaderBoardUserService = require('../services/user.service');
 const leaderBoardAccountService = require('../services/account.service');
 const leaderBoardService = require('../services/leaderboard.service');
 

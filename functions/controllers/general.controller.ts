@@ -1,6 +1,8 @@
 const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
-const generalUserService = require('../services/user.service');
+
+import { UserService } from '../services/user.service';
+const generalUserService: UserService = new UserService();
 const generalAccountService = require('../services/account.service');
 
 const Feed = require('feed-to-json');

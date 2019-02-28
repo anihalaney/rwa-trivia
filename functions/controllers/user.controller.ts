@@ -1,125 +1,140 @@
 
 
-const userService = require('../services/user.service');
-const sharp = require('sharp');
-import { User, UserStats, UserControllerConstants, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { UserService } from '../services/user.service';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
-import { MailClient } from '../utils/mail-client';
-import { Utils } from '../utils/utils';
-const utils: Utils = new Utils();
+const userService: UserService = new UserService();
 const generalAccountService = require('../services/account.service');
-/**
- * getUserById
- * return user
- */
-exports.getUserById = (req, res) => {
-    // console.log('body---->', req.body);
-    const userId = req.params.userId;
 
+export class UserController {
 
-    if (!userId) {
-        // Game Option is not added
-        res.status(403).send('userId is not available');
-        return;
+    userService: UserService;
+
+    constructor() {
+       // this.userService = new UserService();
     }
 
-    userService.getUserById(userId).then((u) => {
-        const dbUser = u.data();
-        console.log('user--->', dbUser);
-        const user = new User();
-        user.displayName = (dbUser && dbUser.displayName) ? dbUser.displayName : '';
-        user.location = (dbUser && dbUser.location) ? dbUser.location : '';
-        user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
-        user.userId = userId;
+    /**
+     * getUserById
+     * return user
+     */
+    public async getUserById(req, res) {
 
-        console.log('userinfo--->', user);
-        res.send(user);
-    });
-};
+        const userId = req.params.userId;
 
-
-/**
- * getUserImages
- * return user
- */
-exports.getUserImages = (req, res) => {
-    // console.log('body---->', req.body);
-    const userId = req.params.userId;
-    const width = req.params.width;
-    const height = req.params.height;
-
-
-    if (!userId) {
-        // Game Option is not added
-        return res.status(403).send('userId is not available');
+        if (!userId) {
+            // userId is not available
+            return res.status(400).send('Bad Request');
+        }
+        try {
+            res.status(200).send(await userService.getUserProfile(userId));
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server error');
+            return error;
+        }
     }
 
-    userService.getUserById(userId).then((u) => {
-        const dbUser = u.data();
-        userService.generateProfileImage(userId, dbUser.profilePicture, `${width}*${height}`).then((stream) => {
+    /**
+     * getUserImages
+     * return user
+     */
+    public async getUserImages(req, res) {
+        const userId = req.params.userId;
+        const width = req.params.width;
+        const height = req.params.height;
+
+
+        if (!userId) {
+            // userId is not available
+            return res.status(400).send('Bad Request');
+        }
+
+        if (!width) {
+            // width is not available
+            return res.status(400).send('Bad Request');
+        }
+
+        if (!height) {
+            // height is not available
+            return res.status(400).send('Bad Request');
+        }
+
+
+        try {
+            const stream = await userService.getUserProfileImage(userId, width, height);
             res.setHeader('content-disposition', 'attachment; filename=profile_image.png');
             res.setHeader('content-type', 'image/jpeg');
             res.send(stream);
-        });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server error');
+            return error;
+        }
 
-    });
-};
-
-/**
- * generateUserProfileImage
- * return status
- */
-exports.generateUserProfileImage = (req, res) => {
-    if (req.body.user.userId === req.user.uid) {
-        return res.status(401).send('Unauthorized');
     }
-    const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
-    const user = req.body.user;
 
-    if (user.profilePicture && user.croppedImageUrl && user.originalImageUrl) {
+    /**
+     * generateUserProfileImage
+     * return status
+     */
+    public async generateUserProfileImage(req, res) {
+        if (req.body.user.userId === req.user.uid) {
+            return res.status(401).send('Unauthorized');
+        }
 
-        profileImagesGenerator.
-            uploadProfileImage(user).then((status) => {
+        const user = req.body.user;
+
+        const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
+
+        try {
+            if (user.profilePicture && user.croppedImageUrl && user.originalImageUrl) {
+
+                await profileImagesGenerator.uploadProfileImage(user);
+
                 delete user.originalImageUrl;
                 delete user.croppedImageUrl;
                 delete user.imageType;
-                setUser(user, res);
-            });
+            }
 
-    } else {
-        setUser(user, res);
-    }
-};
+            await userService.updateUser(user);
+            res.status(200).send({ 'status': 'Profile Data is saved !!' });
 
-function setUser(user, res) {
-
-    if (user.bulkUploadPermissionStatus === profileSettingsConstants.NONE) {
-        user.bulkUploadPermissionStatus = profileSettingsConstants.PENDING;
-        user.bulkUploadPermissionStatusUpdateTime = utils.getUTCTimeStamp();
-        const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
-        const mail: MailClient = new MailClient(UserControllerConstants.adminEmail, UserControllerConstants.mailSubject,
-            UserControllerConstants.mailSubject, htmlContent);
-        mail.sendMail();
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server error');
+        }
     }
 
-    delete user['roles'];
-    userService.setUser(user).then((ref) => {
-        res.send({ 'status': 'Profile Data is saved !!' });
-    });
+    /**
+     * updateLives
+     * return status
+     */
+    public async updateLives(req, res) {
+        const userId = req.body.userId;
+        if (!userId) {
+            return res.status(400).send('Bad Request');
+        }
+        if (req.user.user_id !== userId) {
+            return res.status(401).send('Unauthorized');
+        }
+
+        try {
+            await generalAccountService.updateLives(userId);
+            res.status(200).send({ 'status': 'Lives added successfully !!' });
+        } catch (error) {
+            console.error(error);
+            res.status(500).send('Internal Server error');
+        }
+
+    }
+
 }
 
-exports.updateLives = (req, res) => {
-    const userId = req.body.userId;
-    if (!userId) {
-        return res.status(400).send('Bad Request');
-    }
-    if (req.user.user_id !== userId) {
-        return res.status(401).send('Unauthorized');
-    }
-    return generalAccountService.updateLives(userId).then((ref) => {
-        res.send({ 'status': 'Lives added successfully !!' });
-    }, error => {
-        res.status(500).send(error);
-    });
 
-};
+
+
+
+
+
+
+
