@@ -47,7 +47,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
   }
 
   startNewGame() {
-    if (this.applicationSettings.lives.enable) {
+    if (this.applicationSettings && this.applicationSettings.lives.enable) {
       if (this.account.lives > 0) {
         this.routerExtension.navigate(['/game-play']);
       }
