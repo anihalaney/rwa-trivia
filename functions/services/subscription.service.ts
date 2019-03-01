@@ -1,14 +1,22 @@
 import admin from '../db/firebase.client';
-const subscriptionFireStoreClient = admin.firestore();
 /**
  * getSubscriptions
  * return subscription
  */
-exports.getSubscriptions = async(): Promise<any> => {
-    try {
-        return await subscriptionFireStoreClient.collection('subscription').get();
-    } catch (error) {
-        console.error(error);
-        return error;
+export class SubscriptionService {
+
+    fireStoreClient: any;
+
+    constructor() {
+        this.fireStoreClient = admin.firestore();
     }
-};
+
+    public async getSubscriptions(): Promise<any> {
+        try {
+            return await this.fireStoreClient.collection('subscription').get();
+        } catch (error) {
+            return error;
+        }
+    }
+}
+

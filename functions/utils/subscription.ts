@@ -1,16 +1,18 @@
 import { Subscribers } from '../../projects/shared-library/src/lib/shared/model';
-const subscriptionService = require('../services/subscription.service');
-
+import { SubscriptionService } from '../services/subscription.service';
 export class Subscription {
 
+    subscriptionService: SubscriptionService = new SubscriptionService();
+    constructor() {}
 
-    public getTotalSubscription(): Promise<Subscribers> {
-
-        return subscriptionService.getSubscriptions()
-            .then(snapshot => {
-                const subscribers: Subscribers = new Subscribers();
-                subscribers.count = snapshot.size;
-                return subscribers;
-            })
+    public async getTotalSubscription(): Promise<Subscribers> {
+        try {
+            const subscribers: Subscribers = new Subscribers();
+            const snapshot = await this.subscriptionService.getSubscriptions();
+            subscribers.count = snapshot.size;
+            return subscribers;
+        } catch (error) {
+            return error;
+        }
     }
 }
