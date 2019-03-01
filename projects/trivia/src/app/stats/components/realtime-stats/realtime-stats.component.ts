@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, AfterViewChecked } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { leaderBoardState } from '../../store';
@@ -12,7 +12,7 @@ import { Utils } from 'shared-library/core/services';
   templateUrl: './realtime-stats.component.html',
   styleUrls: ['./realtime-stats.component.scss']
 })
-export class RealtimeStatsComponent implements OnDestroy {
+export class RealtimeStatsComponent implements OnDestroy, AfterViewChecked {
 
   systemStats: SystemStats;
   subs: Subscription[] = [];
@@ -21,6 +21,9 @@ export class RealtimeStatsComponent implements OnDestroy {
 
     this.store.dispatch(new StatActions.LoadSystemStat());
 
+  }
+
+  ngAfterViewChecked(): void {
     this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.systemStat)).subscribe(systemStats => {
       if (systemStats !== null) {
         this.systemStats = systemStats;
