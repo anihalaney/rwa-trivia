@@ -1,5 +1,4 @@
 const pushNotificationService = require('../services/push-notification.service');
-const pushNotificationUserService = require('../services/user.service');
 import { UserService } from '../services/user.service';
 
 import {
@@ -15,7 +14,7 @@ export class PushNotification {
     }
 
     public sendNotificationToDevices(userId: string, title: string, body: string, data: any): Promise<any> {
-        return this.pushNotificationUserService.getUserById(userId).then((user) => {
+        return UserService.getUserById(userId).then((user) => {
             const dbUser: User = user.data();
             const notificationPromises = [];
             if (dbUser.androidPushTokens) {
@@ -55,7 +54,7 @@ export class PushNotification {
     public sendGamePlayPushNotifications(data: any, currentTurnPlayerId: string, pushType: string) {
         let looserPlayerId;
         let msg_data;
-        this.pushNotificationUserService.getUserById(currentTurnPlayerId).then((user) => {
+        UserService.getUserById(currentTurnPlayerId).then((user) => {
             let dbUser: User = user.data();
             switch (pushType) {
                 case pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS:
@@ -112,7 +111,7 @@ export class PushNotification {
                                 }).catch((err) => {
                                     console.log('Notification Error: ', err);
                                 });
-                            this.pushNotificationUserService.getUserById(looserPlayerId).then((userData) => {
+                                UserService.getUserById(looserPlayerId).then((userData) => {
                                 dbUser = userData.data();
                                 this.sendNotificationToDevices(currentTurnPlayerId, 'Bitwiser Game Play',
                                     `${dbUser.displayName} did not answer in time. You win!`, msg_data)
@@ -142,7 +141,7 @@ export class PushNotification {
 
                 case pushNotificationRouteConstants.FRIEND_NOTIFICATIONS:
                     msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
-                    this.pushNotificationUserService.getUserById(data.created_uid).then((userObj) => {
+                    UserService.getUserById(data.created_uid).then((userObj) => {
                         const otherUser: User = userObj.data();
                         msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
 

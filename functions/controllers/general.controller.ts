@@ -2,9 +2,9 @@ const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
 
 import { UserService } from '../services/user.service';
-const generalUserService: UserService = new UserService();
-const generalAccountService = require('../services/account.service');
 
+const generalAccountService = require('../services/account.service');
+const generalQuestionService = require('../services/question.service');
 const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
@@ -12,7 +12,7 @@ import { UserContributionStat } from '../utils/user-contribution-stat';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
-import { RSSFeedConstants, Blog, User, profileSettingsConstants, Account } from '../../projects/shared-library/src/lib/shared/model';
+import { RSSFeedConstants, Blog, User, Account, Question } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
 import { Utils } from '../utils/utils';
@@ -132,8 +132,10 @@ exports.testES = (req, res) => {
  */
 exports.generateUsersStat = (req, res) => {
     const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-    gameLeaderBoardStats.generateGameStats().then((gameResults) => {
+    return gameLeaderBoardStats.generateGameStats().then((gameResults) => {
         res.send('updated stats');
+    }, error => {
+        res.status(500).send(error);
     });
 };
 
@@ -144,8 +146,10 @@ exports.generateUsersStat = (req, res) => {
  */
 exports.generateLeaderBoardStat = (req, res) => {
     const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-    gameLeaderBoardStats.calculateGameLeaderBoardStat().then((gameResults) => {
+    return gameLeaderBoardStats.calculateGameLeaderBoardStat().then((gameResults) => {
         res.send('updated stats');
+    }, error => {
+        res.status(500).send(error);
     });
 };
 
@@ -267,7 +271,7 @@ exports.dumpAuthUsersInFirestore = (req, res) => {
     const authUser: AuthUser = new AuthUser()
     authUser.getUsers(authUsers).then((users) => {
         console.log('users', users);
-        generalUserService.addUpdateAuthUsersToFireStore(users).then((ref) => {
+        UserService.addUpdateAuthUsersToFireStore(users).then((ref) => {
             res.send('dumped all the users');
         });
     })
@@ -293,7 +297,7 @@ exports.generateAllUsersProfileImages = (req, res) => {
  */
 exports.migrateUserStatToAccounts = (req, res) => {
     const migrationPromises = [];
-    generalUserService.getUsers().then(users => {
+    UserService.getUsers().then(users => {
         users.docs.map(user => {
             const userObj: User = user.data();
             if (userObj && userObj.userId) {
@@ -323,7 +327,7 @@ exports.addDefaultLives = async (req, res) => {
         if (appSetting.lives.enable) {
             isStreaming = true;
             res.setHeader('Content-Type', 'text/plain');
-            const users = await generalUserService.getUsers();
+            const users = await UserService.getUsers();
             const migrationPromises = [];
             for (const user of users.docs) {
                 const userObj: User = user.data();
@@ -367,7 +371,38 @@ exports.addLives = async (req, res) => {
     res.status(200).send('live feature is not enabled');
 };
 
+/**
+ * changeQuestionCategoryIdType
+ * return status
+ */
+exports.changeQuestionCategoryIdType = (req, res) => {
+    const updatePromises = [];
+    generalQuestionService.getAllQuestions().then(questions => {
+        questions.docs.map(question => {
+            const questionObj: Question = question.data();
+            console.log('questionObj.categoryIds', questionObj.categoryIds);
+            const categoryIds = questionObj.categoryIds;
+            const updatedCategory = [];
+            categoryIds.map((categoryId) => {
+                updatedCategory.push(Number(categoryId));
+            });
+            questionObj.categoryIds = updatedCategory;
+            console.log('updatedCategory', updatedCategory);
+            const dbQuestionObj = { ...questionObj };
+            updatePromises.push(generalQuestionService.updateQuestion('questions', dbQuestionObj));
+        });
+        Promise.all(updatePromises).then((updateResults) => {
+            res.send(updateResults);
+        })
+            .catch((e) => {
+                res.send(e);
+            });
+    });
+};
+
+
+
 exports.removeSocialProfile = async (req, res) => {
-    res.status(200).send(await generalUserService.removeSocialProfile());
+    res.status(200).send(await UserService.removeSocialProfile());
 };
 
