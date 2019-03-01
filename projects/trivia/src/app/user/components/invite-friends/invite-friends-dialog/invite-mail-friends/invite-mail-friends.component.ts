@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Input, OnDestroy, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
 import { User } from 'shared-library/shared/model';
@@ -26,6 +26,8 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   validEmail = [];
   emailCheck: Boolean = false;
   sub: Subscription[] = [];
+  @ViewChildren('textField') textField: QueryList<ElementRef>;
+
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, 
               private utils: Utils) {
@@ -105,5 +107,14 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
     this.utils.unsubscribe(this.sub);
   }
 
+  hideKeyboard() {
+    this.textField
+    .toArray()
+    .map((el) => {
+      if ( el.nativeElement && el.nativeElement.android ) {
+        el.nativeElement.android.clearFocus();
+      }
+      return el.nativeElement.dismissSoftInput(); });
+  }
 }
 

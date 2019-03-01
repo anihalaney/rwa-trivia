@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -17,8 +17,9 @@ import { Utils } from '../../services';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent extends Login implements OnInit, OnDestroy {
 
+export class LoginComponent extends Login implements OnInit, OnDestroy {
+  @ViewChildren('textField') textField : QueryList<ElementRef>;
   title: string;
   loader = new LoadingIndicator();
   message = {
@@ -62,7 +63,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-
+    this.hideKeyboard();
     if (!this.loginForm.valid) {
       return;
     }
@@ -197,5 +198,14 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     this.utils.unsubscribe(this.subs);
   }
 
+  hideKeyboard() {
+    this.textField
+    .toArray()
+    .map((el) => {
+      if ( isAndroid ) {
+        el.nativeElement.android.clearFocus();
+      }
+      return el.nativeElement.dismissSoftInput(); });
+  }
 }
 
