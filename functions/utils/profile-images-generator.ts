@@ -3,24 +3,23 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 
 import { UserService } from '../services/user.service';
-const profileImagesUserService: UserService = new UserService();
+
 const stream = require('stream');
 const sharp = require('sharp');
 
 export class ProfileImagesGenerator {
 
 
-    private userDict: { [key: string]: number };
     basePath = '/profile';
     profileImagePath = 'avatar';
     originalImagePath = 'original';
 
     constructor() {
-        this.userDict = {};
+
     }
 
     public fetchUsers(): Promise<any> {
-        return profileImagesUserService.getUsers()
+        return UserService.getUsers()
             .then(users => {
                 const userImagesPromises = [];
                 users.docs.map(user => {
@@ -45,15 +44,16 @@ export class ProfileImagesGenerator {
 
         try {
 
-            await profileImagesUserService.uploadProfileImage(bufferStream, user.imageType, filePath);
+            await UserService.uploadProfileImage(bufferStream, user.imageType, filePath);
 
             filePath = `${this.basePath}/${user.userId}/${this.profileImagePath}/${user.profilePicture}`;
             user.croppedImageUrl = user.croppedImageUrl.replace(/^data:image\/\w+;base64,/, '');
             bufferStream = new Buffer(user.originalImageUrl, 'base64');
 
-            await profileImagesUserService.uploadProfileImage(bufferStream, user.imageType, filePath);
+            await UserService.uploadProfileImage(bufferStream, user.imageType, filePath);
+            await this.getStoredImage(user.userId, user.profilePicture, user.imageType);
 
-            return await this.getStoredImage(user.userId, user.profilePicture, user.imageType);
+            return user;
 
         } catch (error) {
             console.error(error);
@@ -65,12 +65,12 @@ export class ProfileImagesGenerator {
     public async getStoredImage(userId: string, profileImagePath: string, croppedImageType: string): Promise<any> {
         const imagesPromises = [];
         try {
-            const dataStream = await profileImagesUserService.generateProfileImage(userId, profileImagePath);
+            const dataStream = await UserService.generateProfileImage(userId, profileImagePath);
             imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 263, 263));
             imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 70, 60));
             imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 44, 40));
-
-            return await Promise.all(imagesPromises);
+            const userResults = await Promise.all(imagesPromises);
+            return userResults;
 
         } catch (error) {
             console.error(error);
@@ -87,8 +87,8 @@ export class ProfileImagesGenerator {
         try {
 
             const data = await sharp(dataStream).resize(width, height).toBuffer();
-
-            return await profileImagesUserService.uploadProfileImage(data, croppedImageType, filePath);
+            const result = await UserService.uploadProfileImage(data, croppedImageType, filePath);
+            return result;
 
         } catch (error) {
             console.error(error);

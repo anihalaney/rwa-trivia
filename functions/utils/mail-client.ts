@@ -33,15 +33,16 @@ export class MailClient {
 
     }
 
-    sendMail() {
+    async sendMail(): Promise<any> {
 
-        // send mail with defined transport object
-        this.transporter.sendMail(this.mailOptions, (error, info) => {
-            if (error) {
-                return console.log(error);
-            }
-            console.log('Message sent: %s', info.messageId);
-        });
+        try {
+            // send mail with defined transport object
+            const result = await this.transporter.sendMail(this.mailOptions);
+            return result;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
 
     }
 }

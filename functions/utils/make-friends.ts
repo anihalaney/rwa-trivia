@@ -1,7 +1,7 @@
 const friendService = require('../services/friend.service');
 
 import { UserService } from '../services/user.service';
-const friendUserService: UserService = new UserService();
+
 import {
     Invitation, Friends, FriendsMetadata, friendInvitationConstants, User,
     pushNotificationRouteConstants
@@ -119,7 +119,7 @@ export class MakeFriends {
     }
 
     sendNotification(dbInvitation: any) {
-        friendUserService.getUsersByEmail(dbInvitation)
+        UserService.getUsersByEmail(dbInvitation)
             .then(snapshots => {
 
                 if (snapshots.empty) {
@@ -143,6 +143,6 @@ export class MakeFriends {
     }
 
     getUser(userId): Promise<any> {
-        return friendUserService.getUserById(userId);
+        return UserService.getUserById(userId);
     }
 }
