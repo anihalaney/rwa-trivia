@@ -40,7 +40,7 @@ export class NewGame {
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
     this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -85,7 +85,7 @@ export class NewGame {
 
   startNewGame(gameOptions: GameOptions) {
     let user: User;
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user); // logged in user
+    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user)); // logged in user
     gameOptions.friendId = this.friendUserId;
     this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }

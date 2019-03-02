@@ -53,15 +53,15 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.subs.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-    });
+    }));
 
     this.subs.push(this.categoriesObs.subscribe(categories => {
-     categories.map(category => {
+      categories.map(category => {
         if (this.user.categoryIds && this.user.categoryIds.length > 0) {
-          category.isSelected =  this.user.categoryIds.includes(category.id);
+          category.isSelected = this.user.categoryIds.includes(category.id);
         } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
           category.isSelected = this.user.lastGamePlayOption.categoryIds.includes(category.id);
         } else {
@@ -92,7 +92,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       }
     }));
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
@@ -120,7 +120,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this.utils.unsubscribe(this.subs);
+  }
 
   addCustomTag() {
     this.selectedTags.push(this.customTag);

@@ -1,9 +1,7 @@
-import { PLATFORM_ID, APP_ID, Component, OnInit, Inject } from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, AfterViewInit} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
-import { User, Subscription } from '../../../../../../shared-library/src/lib/shared/model';
+import { User, Subscription } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import * as socialActions from '../../../social/store/actions';
 import { socialState } from '../../store';
@@ -17,7 +15,7 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
   templateUrl: './newsletter.component.html',
   styleUrls: ['./newsletter.component.scss']
 })
-export class NewsletterComponent implements OnInit {
+export class NewsletterComponent implements OnInit, AfterViewInit {
 
   subscriptionForm: FormGroup;
   user: User;
@@ -31,6 +29,15 @@ export class NewsletterComponent implements OnInit {
     this.subscriptionForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
+  }
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.store.dispatch(new socialActions.GetTotalSubscriber());
+    }
+  }
+
+  ngAfterViewInit(): void {
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       this.user = user;
@@ -61,13 +68,6 @@ export class NewsletterComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.store.dispatch(new socialActions.GetTotalSubscriber());
-    }
-  }
-
-
   onSubscribe() {
     if (!this.subscriptionForm.valid) {
       return;
@@ -80,4 +80,5 @@ export class NewsletterComponent implements OnInit {
       this.store.dispatch(new socialActions.AddSubscriber({ subscription }));
     }
   }
+
 }

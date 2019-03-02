@@ -58,11 +58,11 @@ export class GameOver implements OnInit {
     }));
 
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.user$.subscribe(user => {
+    this.subs.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
-    });
+    }));
 
     this.socialFeedData = {
       blogNo: 0,

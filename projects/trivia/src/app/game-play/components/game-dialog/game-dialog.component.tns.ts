@@ -42,7 +42,10 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe([this.timerSub]);
+    if (this.timerSub) {
+      this.utils.unsubscribe([this.timerSub]);
+    }
+
     this.utils.unsubscribe(this.sub);
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
   }

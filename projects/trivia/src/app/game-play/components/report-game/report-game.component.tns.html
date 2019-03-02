@@ -1,6 +1,6 @@
 <StackLayout>
     <ScrollView>
-        <StackLayout class="Roboto-Regular">
+        <StackLayout  (tap)="hideKeyboard()" class="Roboto-Regular">
             <GridLayout rows="auto" columns="auto,*" backgroundColor="#3e5b95" padding="15">
                 <Label row="0" col="0" text="Report an issue" horizontalAlignment="left" color="#ffffff" fontSize="20"
                     textWrap="true"></Label>
@@ -43,7 +43,7 @@
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>
-                <TextView hint="Other" class="textbox" [(ngModel)]="otherReason" height="100"></TextView>
+                <TextView hint="Other" #textField class="textbox" [(ngModel)]="otherReason" height="100"></TextView>
             </StackLayout>
             <Label class="extra-content" text="Thanks for taking the time to submit a issue. We will be in touch with you for more details as we investigate."
                 textWrap="true"></Label>
