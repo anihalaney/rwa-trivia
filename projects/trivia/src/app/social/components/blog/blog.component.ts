@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, AfterViewInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
@@ -9,7 +9,7 @@ import { AppState, appState } from '../../../store';
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.scss']
 })
-export class BlogComponent implements OnDestroy {
+export class BlogComponent implements OnDestroy , AfterViewInit{
   @Input() blogId: number;
   sub: Subscription;
   blogData = [];
@@ -26,5 +26,10 @@ export class BlogComponent implements OnDestroy {
 
   ngOnDestroy() {
     this.utils.unsubscribe([this.sub]);
+  }
+  ngAfterViewInit(): void {
+    this.sub = this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+      this.blogData = blogs;
+    });
   }
 }
