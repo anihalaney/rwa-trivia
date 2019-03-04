@@ -2,8 +2,10 @@ import { ESUtils } from '../utils/ESUtils';
 import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode, QuestionStatus } from '../../projects/shared-library/src/lib/shared/model';
 import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
+import { GameService } from '../services/game.service';
+
+
 const utils: Utils = new Utils();
-const questionControllerGameService = require('../services/game.service');
 const questionControllerQuestionService = require('../services/question.service');
 
 /**
@@ -48,7 +50,7 @@ exports.getNextQuestion = (req, res) => {
     const gameId = req.params.gameId;
 
 
-    questionControllerGameService.getGameById(gameId).then((g) => {
+    GameService.getGameById(gameId).then((g) => {
         if (!g.exists) {
             // game not found
             res.status(404).send('Game not found');
@@ -90,7 +92,8 @@ exports.getNextQuestion = (req, res) => {
                         playerId: userId,
                         questionId: question.id,
                         addedOn: createdOn
-                    }
+                    };
+
 
                     if (game.playerQnAs.length > 0) {
                         if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
