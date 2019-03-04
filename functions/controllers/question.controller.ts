@@ -6,7 +6,7 @@ import { QuestionService } from '../services/question.service';
 import { GameService } from '../services/game.service';
 
 export class QuestionController {
-    private static utils: Utils = new Utils();
+
     /**
      * getQuestionOfDay
      * return question of the day
@@ -87,16 +87,14 @@ export class QuestionController {
 
             console.log('game---->', game);
 
-            const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
-
-            const status = await gameMechanics.changeTheTurn(game);
+            const status = await GameMechanics.changeTheTurn(game);
             if (status) {
                 const questionIds = [];
                 for (const questionObj of game.playerQnAs) {
                     questionIds.push(questionObj.questionId);
                 }
                 const question = await ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds);
-                const createdOn = this.utils.getUTCTimeStamp();
+                const createdOn = Utils.getUTCTimeStamp();
                 const playerQnA: PlayerQnA = {
                     playerId: userId,
                     questionId: question.id,
@@ -115,7 +113,7 @@ export class QuestionController {
                 game.playerQnAs.push(playerQnA);
                 const dbGame = game.getDbModel();
                 //  console.log('update the question ---->', question);
-                await gameMechanics.UpdateGame(dbGame);
+                await GameMechanics.UpdateGame(dbGame);
                 res.send(question);
             } else {
                 const newQuestion = await ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId);
