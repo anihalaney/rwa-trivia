@@ -1,22 +1,15 @@
 
 import { Subscription } from '../utils/subscription';
 
+export class SubscriptionController {
 /**
  * getSubscriptionCount
  * return count
  */
-
-
-export class SubscriptionController {
-
-    constructor() {
-    }
-
-    public async getSubscriptionCount(req, res): Promise<any> {
-        const subscription: Subscription = new Subscription();
+    public static async getSubscriptionCount(req, res): Promise<any> {
         try {
-            const subscribers = await subscription.getTotalSubscription();
-            res.status(200).send(subscribers);
+            const subscribers = await Subscription.getTotalSubscription();
+            return res.status(200).send(subscribers);
         } catch (error) {
             res.status(500).send('Internal Server error');
             return error;
