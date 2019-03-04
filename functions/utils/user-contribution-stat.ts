@@ -1,7 +1,8 @@
 import {
     User, Question, UserStatConstants
 } from '../../projects/shared-library/src/lib/shared/model';
-const userContributionQuestionService = require('../services/question.service');
+import { QuestionService } from '../services/question.service';
+
 const userContributionAccountService = require('../services/account.service');
 
 export class UserContributionStat {
@@ -14,7 +15,7 @@ export class UserContributionStat {
     }
 
     generateGameStats(): Promise<any> {
-        return userContributionQuestionService.getAllQuestions()
+        return QuestionService.getAllQuestions()
             .then(questions =>
                 questions.docs.map(question =>
                     this.userDict[question.data().created_uid] = (this.userDict[question.data().created_uid]) ?

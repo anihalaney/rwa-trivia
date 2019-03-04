@@ -1,10 +1,10 @@
-const statQuestionService = require('../services/question.service');
 import { Question } from '../../projects/shared-library/src/lib/shared/model';
+import { QuestionService } from '../services/question.service';
 
 export class QuestionBifurcation {
     getQuestionList(collectionName) {
         const userObs: { [key: string]: any } = {};
-        return statQuestionService.getQuestion(collectionName).then(questionData => {
+        return QuestionService.getQuestion(collectionName).then(questionData => {
             questionData.docs.map((question, index) => {
 
                 const questionObj: Question = question.data();
@@ -13,7 +13,7 @@ export class QuestionBifurcation {
                 } else {
                     questionObj['source'] = 'question';
                 }
-                statQuestionService.updateQuestion(collectionName, questionObj).then(ref => {
+                QuestionService.updateQuestion(collectionName, questionObj).then(ref => {
                     return questionObj.id;
                 });
             });
