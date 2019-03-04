@@ -3,21 +3,21 @@ import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode, QuestionStatus }
 import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
 import { QuestionService } from '../services/question.service';
-const utils: Utils = new Utils();
 const questionControllerGameService = require('../services/game.service');
 
 export class QuestionController {
-
+    private static utils: Utils = new Utils();
     /**
      * getQuestionOfDay
      * return question of the day
      */
-    public static async getQuestionOfDay(req, res): Promise<any> {
+    static async getQuestionOfDay(req, res): Promise<any> {
 
         try {
             const isNextQuestion = (req.params.nextQ && req.params.nextQ === 'next') ? true : false;
             res.status(200).send(await ESUtils.getRandomQuestionOfTheDay(isNextQuestion));
         } catch (error) {
+            console.error(error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -27,7 +27,7 @@ export class QuestionController {
      * getQuestions
      * return questions
      */
-    public static async getQuestions(req, res): Promise<any> {
+    static async getQuestions(req, res): Promise<any> {
         try {
             // Admins can get all Qs, while authorized users can only get Qs created by them
             // TODO: For now restricting it to admins only till we add security
@@ -37,6 +37,7 @@ export class QuestionController {
             console.log(criteria);
             res.status(200).send(await ESUtils.getQuestions(start, size, criteria));
         } catch (error) {
+            console.error(error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -49,7 +50,7 @@ export class QuestionController {
      * getNextQuestion
      * return question
      */
-    public static async getNextQuestion(req, res): Promise<any> {
+    static async getNextQuestion(req, res): Promise<any> {
         // console.log(req.user.uid);
         // console.log(req.params.gameId);
         try {
@@ -95,7 +96,7 @@ export class QuestionController {
                     questionIds.push(questionObj.questionId);
                 }
                 const question = await ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds);
-                    const createdOn = utils.getUTCTimeStamp();
+                    const createdOn = this.utils.getUTCTimeStamp();
                     const playerQnA: PlayerQnA = {
                         playerId: userId,
                         questionId: question.id,
@@ -122,6 +123,7 @@ export class QuestionController {
                 res.send(newQuestion);
             }
         } catch (error) {
+            console.error(error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -133,7 +135,7 @@ export class QuestionController {
      * getUpdatedQuestion
      * return question
      */
-    public static async getUpdatedQuestion(req, res): Promise<any> {
+    static async getUpdatedQuestion(req, res): Promise<any> {
 
         try {
             const questionId = req.params.questionId;
@@ -153,6 +155,7 @@ export class QuestionController {
             }
             res.send(question);
         } catch (error) {
+            console.error(error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -165,7 +168,7 @@ export class QuestionController {
      * changeUnpublishedQuestionStatus
      * return status
      */
-    public static async changeUnpublishedQuestionStatus(req, res): Promise<any> {
+    static async changeUnpublishedQuestionStatus(req, res): Promise<any> {
 
         try {
             const questions =  await QuestionService.getQuestion('unpublished_questions');
@@ -182,6 +185,7 @@ export class QuestionController {
                await Promise.all(questionUpdatePromises);
                res.send('unpublished status changed');
         } catch (error) {
+            console.error(error);
             res.status(500).send('Internal Server error');
             return error;
         }

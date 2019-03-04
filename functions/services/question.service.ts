@@ -1,19 +1,16 @@
 import admin from '../db/firebase.client';
-const questionFireStoreClient = admin.firestore();
 
+export class QuestionService {
+
+    private static fireStoreClient = admin.firestore();
 
 /**
  * getAllQuestions
  * return questions
  */
-
-export class QuestionService {
-
-    static fireStoreClient = admin.firestore();
-
-    public static async getAllQuestions(): Promise<any> {
+    static async getAllQuestions(): Promise<any> {
         try {
-            return await questionFireStoreClient.collection('questions').get();
+            return await this.fireStoreClient.collection('questions').get();
         } catch (error) {
             console.error(error);
             throw error;
@@ -25,9 +22,9 @@ export class QuestionService {
  * getQuestionById
  * return question
  */
-    public static async getQuestionById(questionId): Promise<any> {
+    static async getQuestionById(questionId): Promise<any> {
         try {
-            return await questionFireStoreClient.doc(`/questions/${questionId}`).get();
+            return await this.fireStoreClient.doc(`/questions/${questionId}`).get();
         } catch (error) {
             console.error(error);
             throw error;
@@ -38,9 +35,9 @@ export class QuestionService {
  * getAllUnpublishedQuestions
  * return questions
  */
-    public static async getQuestion(collectionName): Promise<any> {
+    static async getQuestion(collectionName): Promise<any> {
         try {
-            return await questionFireStoreClient.collection(`${collectionName}`).get();
+            return await this.fireStoreClient.collection(`${collectionName}`).get();
         } catch (error) {
             console.error(error);
             throw error;
@@ -51,9 +48,9 @@ export class QuestionService {
  * setQuestion
  * return ref
  */
-    public static async updateQuestion (collectionName: string, question: any): Promise<any> {
+    static async updateQuestion (collectionName: string, question: any): Promise<any> {
         try {
-            return await questionFireStoreClient.doc(`/${collectionName}/${question.id}`).set(question);
+            return await this.fireStoreClient.doc(`/${collectionName}/${question.id}`).set(question);
         } catch (error) {
             console.error(error);
             throw error;
