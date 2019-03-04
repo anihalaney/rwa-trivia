@@ -1,8 +1,6 @@
 
 import * as express from 'express';
 import { SubscriptionController } from '../controllers/subscription.controller';
-const router = express.Router();
+export const subscriptionRoutes = express.Router();
 
-router.get('/count', SubscriptionController.getSubscriptionCount);
-
-module.exports = router;
+subscriptionRoutes.get('/count', SubscriptionController.getSubscriptionCount);

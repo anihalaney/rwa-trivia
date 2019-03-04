@@ -5,12 +5,13 @@ import admin from '../db/firebase.client';
  */
 export class SubscriptionService {
 
-    static fireStoreClient = admin.firestore();
+    private static fireStoreClient = admin.firestore();
 
-    public static async getSubscriptions(): Promise<any> {
+    static async getSubscriptions(): Promise<any> {
         try {
             return await this.fireStoreClient.collection('subscription').get();
         } catch (error) {
+            console.error(error);
             throw error;
         }
     }
