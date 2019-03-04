@@ -1,11 +1,11 @@
 
 import { appConstants } from '../../projects/shared-library/src/lib/shared/model';
 import * as express from 'express';
-const router = express.Router();
+import { questionRoutes } from './question-routes';
+import { subscriptionRoutes } from './subscription-routes';
 
-const questionRoutes = require('./question-routes');
+const router = express.Router();
 const gameRoutes = require('./game-routes');
-const subscriptionRoutes = require('./subscription-routes');
 const generalRoutes = require('./general-routes');
 const migrationRoutes = require('./migration-routes');
 const friendRoutes = require('./friend-routes');

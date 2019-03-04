@@ -1,11 +1,10 @@
 import * as express from 'express';
 const router = express.Router();
-
+import { QuestionController } from '../controllers/question.controller';
 const generalAuth = require('../middlewares/auth');
 
 
 const generalController = require('../controllers/general.controller');
-const generalQuestionController = require('../controllers/question.controller');
 
 
 router.get('/migrate/:collectionName', generalAuth.adminOnly, generalController.migrateCollections);
@@ -21,7 +20,7 @@ router.post('/question/update/:collectionName', generalAuth.adminOnly, generalCo
 router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsData);
 router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuthUsersInFirestore);
 router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
-router.post('/question/status', generalAuth.adminOnly, generalQuestionController.changeUnpublishedQuestionStatus);
+router.post('/question/status', generalAuth.adminOnly, QuestionController.changeUnpublishedQuestionStatus);
 router.get('/add/default/lives', generalAuth.adminOnly, generalController.addDefaultLives);
 router.get('/addLives', generalAuth.adminOnly, generalController.addLives);
 router.get('/remove/social/profile', generalAuth.adminOnly, generalController.removeSocialProfile);
