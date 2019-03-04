@@ -2,9 +2,8 @@ const generalService = require('../services/general.service');
 const blogService = require('../services/blog.service');
 
 import { UserService } from '../services/user.service';
-
+import { QuestionService } from '../services/question.service';
 const generalAccountService = require('../services/account.service');
-const generalQuestionService = require('../services/question.service');
 const Feed = require('feed-to-json');
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
@@ -377,7 +376,7 @@ exports.addLives = async (req, res) => {
  */
 exports.changeQuestionCategoryIdType = (req, res) => {
     const updatePromises = [];
-    generalQuestionService.getAllQuestions().then(questions => {
+    QuestionService.getAllQuestions().then(questions => {
         questions.docs.map(question => {
             const questionObj: Question = question.data();
             console.log('questionObj.categoryIds', questionObj.categoryIds);
@@ -389,7 +388,7 @@ exports.changeQuestionCategoryIdType = (req, res) => {
             questionObj.categoryIds = updatedCategory;
             console.log('updatedCategory', updatedCategory);
             const dbQuestionObj = { ...questionObj };
-            updatePromises.push(generalQuestionService.updateQuestion('questions', dbQuestionObj));
+            updatePromises.push(QuestionService.updateQuestion('questions', dbQuestionObj));
         });
         Promise.all(updatePromises).then((updateResults) => {
             res.send(updateResults);

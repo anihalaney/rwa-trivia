@@ -1,5 +1,6 @@
+import { QuestionService } from '../services/question.service';
+
 const leaderBoardGameService = require('../services/game.service');
-const leaderBoardQuestionService = require('../services/question.service');
 const leaderBoardAccountService = require('../services/account.service');
 const leaderBoardService = require('../services/leaderboard.service');
 
@@ -51,7 +52,7 @@ export class GameLeaderBoardStats {
         const questionDict: { [key: string]: Array<number> } = {};
 
         try {
-            const snapshots = await leaderBoardQuestionService.getAllQuestions();
+            const snapshots = await QuestionService.getAllQuestions();
             if (snapshots.empty) {
                 console.log('questions do not exist');
                 return Promise.reject(snapshots);
@@ -102,7 +103,7 @@ export class GameLeaderBoardStats {
         const categoryIds = [];
 
         for (const playerQnA of game.playerQnAs) {
-            questionPromises.push(leaderBoardQuestionService.getQuestionById(playerQnA.questionId));
+            questionPromises.push(QuestionService.getQuestionById(playerQnA.questionId));
         }
 
         try {
