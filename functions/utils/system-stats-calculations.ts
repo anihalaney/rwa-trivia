@@ -1,12 +1,8 @@
-const statService = require('../services/stats.service');
-
+import { QuestionService } from '../services/question.service';
 import { UserService } from '../services/user.service';
-// const statUserService: UserService = new UserService();
-const statQuestionService = require('../services/question.service');
-
 import { SystemStats } from '../../projects/shared-library/src/lib/shared/model';
 import { GameService } from '../services/game.service';
-
+const statService = require('../services/stats.service');
 
 export class SystemStatsCalculations {
 
@@ -16,7 +12,7 @@ export class SystemStatsCalculations {
                 const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
                 const systemStatPromises = [];
                 systemStatPromises.push(UserService.getUsers());
-                systemStatPromises.push(statQuestionService.getAllQuestions());
+                systemStatPromises.push(QuestionService.getAllQuestions());
                 systemStatPromises.push(GameService.getLiveGames());
                 systemStatPromises.push(GameService.getCompletedGames());
 

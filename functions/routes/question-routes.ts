@@ -1,18 +1,13 @@
 
 
 import * as express from 'express';
-const router = express.Router();
+import { QuestionController } from '../controllers/question.controller';
+export const questionRoutes = express.Router();
 
 const questionAuth = require('../middlewares/auth');
 
-const questionController = require('../controllers/question.controller');
-
-
-router.get('/day/:nextQ', questionController.getQuestionOfDay);
-router.get('/next/:gameId', questionAuth.authorizedOnly, questionController.getNextQuestion);
-router.get('/game/:gameId', questionAuth.authorizedOnly, questionController.getQuestions);
-router.post('/:start/:size', questionAuth.adminOnly, questionController.getQuestions);
-router.post('/:questionId', questionAuth.authorizedOnly, questionController.getUpdatedQuestion);
-
-
-module.exports = router;
+questionRoutes.get('/day/:nextQ', QuestionController.getQuestionOfDay);
+questionRoutes.get('/next/:gameId', questionAuth.authorizedOnly, QuestionController.getNextQuestion);
+questionRoutes.get('/game/:gameId', questionAuth.authorizedOnly, QuestionController.getQuestions);
+questionRoutes.post('/:start/:size', questionAuth.adminOnly, QuestionController.getQuestions);
+questionRoutes.post('/:questionId', questionAuth.authorizedOnly, QuestionController.getUpdatedQuestion);
