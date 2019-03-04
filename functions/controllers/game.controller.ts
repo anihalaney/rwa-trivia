@@ -14,15 +14,14 @@ const generalAccountService = require('../services/account.service');
 
 export class GameController {
 
-    static utils: Utils = new Utils();
-    static pushNotification: PushNotification = new PushNotification();
-    static appSettings: AppSettings = new AppSettings();
+    private static pushNotification: PushNotification = new PushNotification();
+    private static appSettings: AppSettings = new AppSettings();
 
     /**
      * createGame
      * return gameId
      */
-    public static async createGame(req, res) {
+    static async createGame(req, res) {
         try {
             const gameOptions = req.body.gameOptions;
             const userId = req.body.userId;
@@ -39,8 +38,6 @@ export class GameController {
                 return;
             }
 
-            const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId);
-
 
             // Get App Settings
             const appSetting = await this.appSettings.getAppSettings();
@@ -55,7 +52,7 @@ export class GameController {
                 }
             }
 
-            const gameId = await gameMechanics.createNewGame();
+            const gameId = await GameMechanics.createNewGame(gameOptions, userId);
 
             if (appSetting.lives.enable) {
                 // Decrement lives from user account
@@ -78,7 +75,7 @@ export class GameController {
      * updateGame
      * return
      */
-    public static async updateGame(req, res) {
+    static async updateGame(req, res) {
         const gameId = req.params.gameId;
         let dbGame = '';
         const operation = req.body.operation;
@@ -94,11 +91,10 @@ export class GameController {
             res.status(400).send('operation is not added in request');
             return;
         }
-        const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
 
         try {
 
-            let game = await gameMechanics.getGameById(gameId);
+            let game = await GameMechanics.getGameById(gameId);
 
             if (game.playerIds.indexOf(req.user.uid) === -1) {
                 // operation
@@ -123,7 +119,7 @@ export class GameController {
                         this.pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
-                    game.turnAt = this.utils.getUTCTimeStamp();
+                    game.turnAt = Utils.getUTCTimeStamp();
                     game.calculateStat(currentPlayerQnAs.playerId);
 
                     break;
@@ -159,12 +155,12 @@ export class GameController {
                     });
                     break;
                 case GameOperations.UPDATE_ROUND:
-                    game = gameMechanics.updateRound(game, userId);
+                    game = GameMechanics.updateRound(game, userId);
                     break;
             }
             dbGame = game.getDbModel();
 
-            await gameMechanics.UpdateGame(dbGame);
+            await GameMechanics.UpdateGame(dbGame);
             return res.status(200).send({});
 
         } catch (error) {
@@ -178,7 +174,7 @@ export class GameController {
      * updateAllGame
      * return status
      */
-    public static async updateAllGame(req, res) {
+    static async updateAllGame(req, res) {
         try {
 
             const snapshot = await GameService.getLiveGames();
@@ -212,13 +208,13 @@ export class GameController {
      * checkGameOver
      * return status
      */
-    public static async checkGameOver(req, res) {
+    static async checkGameOver(req, res) {
         try {
             const snapshot = await GameService.checkGameOver();
             for (const doc of snapshot) {
 
                 const game: Game = Game.getViewModel(doc.data());
-                const millis = this.utils.getUTCTimeStamp();
+                const millis = Utils.getUTCTimeStamp();
                 const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
                 const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
                 const playedMinutes = Math.floor((noPlayTimeBound) / (1000 * 60));
@@ -273,13 +269,12 @@ export class GameController {
      * checkGameTurn
      * return status
      */
-    public static async changeGameTurn(req, res) {
-        const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
+    static async changeGameTurn(req, res) {
         try {
             const snapshot = await GameService.checkGameOver();
             for (const doc of snapshot) {
                 const game: Game = Game.getViewModel(doc.data());
-                const status = await gameMechanics.changeTheTurn(game);
+                const status = await GameMechanics.changeTheTurn(game);
                 console.log('game update status', status, game.gameId);
             }
             return res.status(200).send('scheduler check is completed');
@@ -294,7 +289,7 @@ export class GameController {
      * createSocialContent
      * return htmlcontent
      */
-    public static async createSocialContent(req, res) {
+    static async createSocialContent(req, res) {
 
         let websiteUrl = `https://`;
 
@@ -339,7 +334,7 @@ export class GameController {
      * createSocialImage
      * return file
      */
-    public static async createSocialImage(req, res) {
+    static async createSocialImage(req, res) {
         try {
             const socialId = req.params.socialId;
             const social_url = await socialGameService.generateSocialUrl(req.params.userId, socialId);

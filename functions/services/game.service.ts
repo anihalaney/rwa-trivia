@@ -4,13 +4,13 @@ import admin from '../db/firebase.client';
 
 export class GameService {
 
-    static gameFireStoreClient = admin.firestore();
+    private static gameFireStoreClient = admin.firestore();
 
     /**
      * getAvailableGames
      * return games
      */
-    public static async getAvailableGames(): Promise<any> {
+    static async getAvailableGames(): Promise<any> {
         try {
             return await this.gameFireStoreClient.collection('games').where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT)
                 .where('gameOver', '==', false)
@@ -25,7 +25,7 @@ export class GameService {
      * getLiveGames
      * return games
      */
-    public static async getLiveGames(): Promise<any> {
+    static async getLiveGames(): Promise<any> {
         try {
             return await this.gameFireStoreClient.collection('games')
                 .where('gameOver', '==', false)
@@ -40,7 +40,7 @@ export class GameService {
      * createGame
      * return ref
      */
-    public static async createGame(dbGame: any): Promise<any> {
+    static async createGame(dbGame: any): Promise<any> {
         try {
             return await this.gameFireStoreClient.collection('games').add(dbGame);
         } catch (error) {
@@ -53,7 +53,7 @@ export class GameService {
      * getGameById
      * return game
      */
-    public static async getGameById(gameId: string): Promise<any> {
+    static async getGameById(gameId: string): Promise<any> {
         try {
             return await this.gameFireStoreClient.doc(`games/${gameId}`).get();
         } catch (error) {
@@ -66,7 +66,7 @@ export class GameService {
      * setGame
      * return ref
      */
-    public static async setGame(dbGame: any): Promise<any> {
+    static async setGame(dbGame: any): Promise<any> {
         try {
             return await this.gameFireStoreClient.doc('/games/' + dbGame.id).set(dbGame);
         } catch (error) {
@@ -79,7 +79,7 @@ export class GameService {
      * updateGame
      * return ref
      */
-    public static async updateGame(dbGame: any): Promise<any> {
+    static async updateGame(dbGame: any): Promise<any> {
         try {
             return await this.gameFireStoreClient.doc('/games/' + dbGame.id).update(dbGame);
         } catch (error) {
@@ -92,7 +92,7 @@ export class GameService {
      * checkGameOver
      * return status
      */
-    public static async checkGameOver(): Promise<any> {
+    static async checkGameOver(): Promise<any> {
         try {
             return await this.gameFireStoreClient.collection('/games').where('gameOver', '==', false).get();
         } catch (error) {
@@ -105,7 +105,7 @@ export class GameService {
      * getCompletedGames
      * return games
      */
-    public static async getCompletedGames(): Promise<any> {
+    static async getCompletedGames(): Promise<any> {
         try {
             return await this.gameFireStoreClient.collection('/games').where('gameOver', '==', true).get();
         } catch (error) {
