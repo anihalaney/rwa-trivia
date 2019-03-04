@@ -2,9 +2,9 @@ import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../p
 import { Utils } from './utils';
 
 const utils: Utils = new Utils();
-const gameService = require('../services/game.service');
 
 import { UserService } from '../services/user.service';
+import { GameService } from '../services/game.service';
 // const UserService: UserService = new UserService();
 export class GameMechanics {
 
@@ -45,7 +45,7 @@ export class GameMechanics {
 
     private joinGame(): Promise<string> {
         //  console.log('joinGame');
-        return gameService.getAvailableGames().then(games => {
+        return GameService.getAvailableGames().then(games => {
             const gameArr = [];
 
             games.forEach(game => {
@@ -112,7 +112,7 @@ export class GameMechanics {
     private createGame(game: Game): Promise<string> {
         game.generateDefaultStat();
         const dbGame = game.getDbModel(); // object to be saved
-        return gameService.createGame(dbGame).then(ref => {
+        return GameService.createGame(dbGame).then(ref => {
             dbGame.id = ref.id;
             return this.setGame(dbGame).then((gameId) => { return gameId });
         });
@@ -120,13 +120,13 @@ export class GameMechanics {
     }
 
     public getGameById(gameId: string): Promise<Game> {
-        return gameService.getGameById(gameId).then(game => { return Game.getViewModel(game.data()) });
+        return GameService.getGameById(gameId).then(game => { return Game.getViewModel(game.data()) });
     }
 
     public setGame(dbGame: any): Promise<string> {
         // Use the set method of the doc instead of the add method on the collection,
         // so the id field of the data matches the id of the document
-        return gameService.setGame(dbGame).then(ref => {
+        return GameService.setGame(dbGame).then(ref => {
             return dbGame.id;
         });
     }
@@ -134,7 +134,7 @@ export class GameMechanics {
     public UpdateGame(dbGame: any): Promise<string> {
         // Use the set method of the doc instead of the add method on the collection,
         // so the id field of the data matches the id of the document
-        return gameService.updateGame(dbGame).then(ref => {
+        return GameService.updateGame(dbGame).then(ref => {
 
             return dbGame.id;
         });

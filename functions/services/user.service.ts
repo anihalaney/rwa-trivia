@@ -14,7 +14,7 @@ export class UserService {
         try {
             return await this.fireStoreClient.collection('users').get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -28,7 +28,7 @@ export class UserService {
         try {
             return await this.fireStoreClient.doc(`/users/${userId}`).get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -42,7 +42,7 @@ export class UserService {
         try {
             return await this.fireStoreClient.doc(`/users/${dbUser.userId}`).update(dbUser);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -56,7 +56,7 @@ export class UserService {
         try {
             return await this.fireStoreClient.collection('users').where('email', '==', obj.email).get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -77,7 +77,7 @@ export class UserService {
             user.userId = userId;
             return user;
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -92,7 +92,7 @@ export class UserService {
             const dbUser = userData.data();
             return await this.generateProfileImage(userId, dbUser.profilePicture, `${width}*${height}`);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -141,7 +141,7 @@ export class UserService {
             const results = await Promise.all(promises);
             return results;
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -169,9 +169,9 @@ export class UserService {
                     }
                 }
             }))
-                .on('error', function (err) {
-                    console.log('error', err);
-                    reject(err);
+                .on('error', function (error) {
+                    console.error('Error : ', error);
+                    reject(error);
                 })
                 .on('finish', function () {
                     resolve('upload finished');
