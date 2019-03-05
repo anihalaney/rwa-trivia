@@ -1,105 +1,107 @@
 import admin from '../db/firebase.client';
-const friendFireStoreClient = admin.firestore();
+
+export class FriendService {
+
+    private static friendFireStoreClient = admin.firestore();
+
+    /**
+     * createInvitation
+     * return ref
+     */
+    static async createInvitation(dbInvitation: any): Promise<any> {
+        try {
+            return await this.friendFireStoreClient.collection('invitations').add(dbInvitation);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    /**
+     * getInvitationByToken
+     * return invitation
+     */
+    static async getInvitationByToken(token: any): Promise<any> {
+        try {
+            return await this.friendFireStoreClient.doc(`/invitations/${token}`).get();
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    /**
+     * checkInvitation
+     * return invitation
+     */
+    static async  checkInvitation(email: string, userId: string): Promise<any> {
+        try {
+            return await this.friendFireStoreClient.collection('invitations')
+                .where('created_uid', '==', userId)
+                .where('email', '==', email)
+                .get();
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+
+    /**
+     * updateInvitation
+     * return userId
+     */
+    static async updateInvitation(invitation: any) {
+        try {
+            return await this.friendFireStoreClient.doc(`/invitations/${invitation.id}`)
+                .update(invitation);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
 
 
-/**
- * createInvitation
- * return ref
- */
-exports.createInvitation = async (dbInvitation: any): Promise<any> => {
-    try {
-        return await friendFireStoreClient.collection('invitations').add(dbInvitation);
-    } catch (error) {
-        console.error(error);
-        return error;
-    }
-};
 
-/**
- * getInvitationByToken
- * return invitation
- */
-exports.getInvitationByToken = async (token: any): Promise<any> => {
-    try {
-        return await friendFireStoreClient.doc(`/invitations/${token}`).get();
-    } catch (error) {
-        console.error(error);
-        return error;
-    }
-};
-
-/**
- * checkInvitation
- * return invitation
- */
-exports.checkInvitation = async (email: string, userId: string): Promise<any> => {
-    try {
-        return await friendFireStoreClient.collection('invitations')
-            .where('created_uid', '==', userId)
-            .where('email', '==', email)
-            .get();
-    } catch (error) {
-        console.error(error);
-        return error;
-    }
-};
-
-/**
- * updateInvitation
- * return userId
- */
-exports.updateInvitation = async (invitation: any): Promise<any> => {
-    try {
-        return await friendFireStoreClient.doc(`/invitations/${invitation.id}`)
-            .update(invitation);
-    } catch (error) {
-        console.error(error);
-        return error;
-    }
-};
+    /**
+     * getFriendByInvitee
+     * return friend
+     */
+    static async getFriendByInvitee(invitee: any): Promise<any> {
+        try {
+            return await this.friendFireStoreClient.doc(`/friends/${invitee}`).get();
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
 
 
-
-/**
- * getFriendByInvitee
- * return friend
- */
-exports.getFriendByInvitee = async (invitee: any): Promise<any> => {
-    try {
-        return await friendFireStoreClient.doc(`/friends/${invitee}`).get();
-    } catch (error) {
-        console.error(error);
-        return error;
-    }
-};
-
-
-/**
- * updateFriend
- * return ref
- */
-exports.updateFriend = async (myFriends: any, invitee: any): Promise<any> => {
-    try {
-        return await friendFireStoreClient.doc(`/friends/${invitee}`)
-            .update({ myFriends: myFriends });
-    } catch (error) {
-        console.error(error);
-        return error;
-    }
-};
+    /**
+     * updateFriend
+     * return ref
+     */
+    static async updateFriend(myFriends: any, invitee: any): Promise<any> {
+        try {
+            return await this.friendFireStoreClient.doc(`/friends/${invitee}`)
+                .update({ myFriends: myFriends });
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
 
 
-/**
- * setFriend
- * return ref
- */
-exports.setFriend = async (dbUser: any, invitee: any): Promise<any> => {
-    try {
-        return await friendFireStoreClient.doc(`/friends/${invitee}`)
-            .set(dbUser);
-    } catch (error) {
-        console.error(error);
-        return error;
-    }
-};
-
+    /**
+     * setFriend
+     * return ref
+     */
+    static async setFriend(dbUser: any, invitee: any): Promise<any> {
+        try {
+            return await this.friendFireStoreClient.doc(`/friends/${invitee}`)
+                .set(dbUser);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+}

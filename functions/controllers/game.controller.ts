@@ -2,10 +2,9 @@ import { Game, GameOperations, PlayerQnA } from '../../projects/shared-library/s
 import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
-
+import { AccountService } from '../services/account.service';
+import { SocialService } from '../services/social.service';
 const functions = require('firebase-functions');
-const socialGameService = require('../services/social.service');
-const generalAccountService = require('../services/account.service');
 
 export class GameController {
 
@@ -37,7 +36,7 @@ export class GameController {
 
             if (appSetting.lives.enable) {
                 // Get Account Info
-                const account = await generalAccountService.getAccountById(userId);
+                const account = await AccountService.getAccountById(userId);
                 // if lives is less then or equal to 0 then send with error
                 if (account.data().lives <= 0) {
                     res.status(403).send('Sorry, don\'t have enough life.');
@@ -49,10 +48,10 @@ export class GameController {
 
             if (appSetting.lives.enable) {
                 // Decrement lives from user account
-                generalAccountService.decreaseLife(userId);
+                AccountService.decreaseLife(userId);
                 // Decrement Second Player's life
                 if (gameOptions.friendId) {
-                    generalAccountService.decreaseLife(gameOptions.friendId);
+                    AccountService.decreaseLife(gameOptions.friendId);
                 }
             }
             return res.status(200).send({ gameId: gameId });
@@ -221,7 +220,7 @@ export class GameController {
     static async createSocialImage(req, res) {
         try {
             const socialId = req.params.socialId;
-            const social_url = await socialGameService.generateSocialUrl(req.params.userId, socialId);
+            const social_url = await SocialService.generateSocialUrl(req.params.userId, socialId);
             res.setHeader('content-disposition', 'attachment; filename=social_image.png');
             res.setHeader('content-type', 'image/png');
             return res.status(200).send(social_url);

@@ -2,21 +2,28 @@ import { Question } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionService } from '../services/question.service';
 
 export class QuestionBifurcation {
-    getQuestionList(collectionName) {
-        const userObs: { [key: string]: any } = {};
-        return QuestionService.getQuestion(collectionName).then(questionData => {
-            questionData.docs.map((question, index) => {
-
+    async getQuestionList(collectionName) {
+        try {
+            const userObs: { [key: string]: any } = {};
+            const questionData = await QuestionService.getQuestion(collectionName);
+            for (const question of questionData.docs) {
                 const questionObj: Question = question.data();
                 if (questionObj.bulkUploadId) {
                     questionObj['source'] = 'bulk-question';
                 } else {
                     questionObj['source'] = 'question';
                 }
-                QuestionService.updateQuestion(collectionName, questionObj).then(ref => {
+                const ref = await QuestionService.updateQuestion(collectionName, questionObj);
+
+                if (ref) {
                     return questionObj.id;
-                });
-            });
-        })
+                } else {
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 }

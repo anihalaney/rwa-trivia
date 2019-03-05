@@ -2,7 +2,7 @@ import admin from '../db/firebase.client';
 // const accountFireStoreClient = admin.firestore();
 import { ApplicationSettings } from '../../projects/shared-library/src/lib/shared/model';
 export class AppSettings {
-    appSettings: ApplicationSettings;
+    private appSettings: ApplicationSettings;
 
     constructor() {
         admin.firestore().doc('application_settings/settings')
@@ -11,21 +11,20 @@ export class AppSettings {
             });
     }
 
-    private loadAppSetttings(): Promise<any> {
-        return admin.firestore().doc('application_settings/settings')
-            .get()
-            .then(u => {
-                this.appSettings = u.data();
-                return this.appSettings;
-            })
-            .catch(error => {
-                return error;
-            });
+    async loadAppSetttings(): Promise<any> {
+        try {
+            const response = await admin.firestore().doc('application_settings/settings').get();
+            this.appSettings = response.data();
+            return this.appSettings;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
-    public getAppSettings(): Promise<ApplicationSettings> {
+    async getAppSettings(): Promise<ApplicationSettings> {
         if (this.appSettings) {
-            return Promise.resolve(this.appSettings);
+            return await Promise.resolve(this.appSettings);
         } else {
             return this.loadAppSetttings();
         }
