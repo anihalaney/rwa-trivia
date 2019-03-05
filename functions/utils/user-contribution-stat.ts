@@ -2,8 +2,7 @@ import {
     User, Question, UserStatConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionService } from '../services/question.service';
-
-const userContributionAccountService = require('../services/account.service');
+import { AccountService as userContributionAccountService } from '../services/account.service';
 
 export class UserContributionStat {
 

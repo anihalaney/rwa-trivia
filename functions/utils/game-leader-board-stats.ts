@@ -1,6 +1,6 @@
 import { QuestionService } from '../services/question.service';
-const leaderBoardAccountService = require('../services/account.service');
-const leaderBoardService = require('../services/leaderboard.service');
+import { AccountService as leaderBoardAccountService } from '../services/account.service';
+import { LeaderBoardService } from '../services/leaderboard.service';
 
 import {
     Game, Account, Question
@@ -153,15 +153,15 @@ export class GameLeaderBoardStats {
     public async calculateGameLeaderBoardStat(): Promise<string> {
         try {
             const accounts = await leaderBoardAccountService.getAccounts();
-            let lbsStats = await leaderBoardService.getLeaderBoardStats();
+            let lbsStats = await LeaderBoardService.getLeaderBoardStats();
             lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
             console.log('lbsStats', lbsStats);
             for (const account of accounts.docs) {
                 const accountObj: Account = account.data();
-                lbsStats = leaderBoardService.calculateLeaderBoardStats(accountObj, lbsStats);
+                lbsStats = LeaderBoardService.calculateLeaderBoardStats(accountObj, lbsStats);
             }
 
-            const updateLBSStatResult = await leaderBoardService.setLeaderBoardStats({ ...lbsStats });
+            const updateLBSStatResult = await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
             return updateLBSStatResult;
         } catch (err) {
             console.log('err', err);

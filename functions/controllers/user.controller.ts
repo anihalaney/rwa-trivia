@@ -5,8 +5,7 @@ import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
 import { UserControllerConstants, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
-
-const generalAccountService = require('../services/account.service');
+import { AccountService as generalAccountService } from '../services/account.service';
 
 export class UserController {
 
@@ -15,7 +14,6 @@ export class UserController {
      * return user
      */
     static async getUserById(req, res) {
-
         const userId = req.params.userId;
 
         if (!userId) {
