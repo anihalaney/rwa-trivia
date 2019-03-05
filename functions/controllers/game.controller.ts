@@ -1,12 +1,7 @@
-import {
-    Game, GameOperations, GameStatus, OpponentType, PlayerQnA, pushNotificationRouteConstants, schedulerConstants
-} from '../../projects/shared-library/src/lib/shared/model';
+import { Game, GameOperations, PlayerQnA } from '../../projects/shared-library/src/lib/shared/model';
 import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
-import { PushNotification } from '../utils/push-notifications';
-import { SystemStatsCalculations } from '../utils/system-stats-calculations';
-import { Utils } from '../utils/utils';
 
 const functions = require('firebase-functions');
 const socialGameService = require('../services/social.service');
@@ -14,14 +9,12 @@ const generalAccountService = require('../services/account.service');
 
 export class GameController {
 
-    private static pushNotification: PushNotification = new PushNotification();
-    private static appSettings: AppSettings = new AppSettings();
-
     /**
      * createGame
      * return gameId
      */
     static async createGame(req, res) {
+        const appSettings: AppSettings = new AppSettings();
         try {
             const gameOptions = req.body.gameOptions;
             const userId = req.body.userId;
@@ -40,7 +33,7 @@ export class GameController {
 
 
             // Get App Settings
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
 
             if (appSetting.lives.enable) {
                 // Get Account Info
@@ -52,7 +45,7 @@ export class GameController {
                 }
             }
 
-            const gameId = await GameMechanics.createNewGame(gameOptions, userId);
+            const gameId = await GameMechanics.createNewGame(userId, gameOptions);
 
             if (appSetting.lives.enable) {
                 // Decrement lives from user account
@@ -77,8 +70,10 @@ export class GameController {
      */
     static async updateGame(req, res) {
         const gameId = req.params.gameId;
-        let dbGame = '';
+
         const operation = req.body.operation;
+        const playerQnA: PlayerQnA = req.body.playerQnA;
+        const userId = req.user.uid;
 
         if (!gameId) {
             // gameId
@@ -94,7 +89,15 @@ export class GameController {
 
         try {
 
-            let game = await GameMechanics.getGameById(gameId);
+            const g = await GameService.getGameById(gameId);
+
+            if (!g) {
+                // game not found
+                res.status(400).send('Game not found');
+                return;
+            }
+
+            const game: Game = g;
 
             if (game.playerIds.indexOf(req.user.uid) === -1) {
                 // operation
@@ -102,65 +105,14 @@ export class GameController {
                 return;
             }
 
-            const userId = req.user.uid;
-
-            switch (operation) {
-                case GameOperations.CALCULATE_SCORE:
-                    const currentPlayerQnAs: PlayerQnA = req.body.playerQnA;
-                    const qIndex = game.playerQnAs.findIndex((pastPlayerQnA) => pastPlayerQnA.questionId === currentPlayerQnAs.questionId);
-                    game.playerQnAs[qIndex] = currentPlayerQnAs;
-                    const currentTurnPlayerId = game.nextTurnPlayerId;
-                    game.decideNextTurn(currentPlayerQnAs, userId);
-
-                    if (currentPlayerQnAs.answerCorrect) {
-                        generalAccountService.setBits(userId);
-                    }
-                    if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
-                        this.pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
-                    }
-                    game.turnAt = Utils.getUTCTimeStamp();
-                    game.calculateStat(currentPlayerQnAs.playerId);
-
-                    break;
-                case GameOperations.GAME_OVER:
-                    game.gameOver = true;
-                    game.decideWinner();
-                    game.calculateStat(game.nextTurnPlayerId);
-                    game.GameStatus = GameStatus.COMPLETED;
-                    generalAccountService.setBytes(game.winnerPlayerId);
-                    if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
-                        (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                        this.pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
-                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
-                    }
-                    const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-                    systemStatsCalculations.updateSystemStats('game_played').then((stats) => {
-                        console.log(stats);
-                    });
-                    break;
-                case GameOperations.REPORT_STATUS:
-                    const playerQnA: PlayerQnA = req.body.playerQnA;
-                    const index = game.playerQnAs.findIndex(
-                        playerInfo => playerInfo.questionId === playerQnA.questionId
-                    );
-                    game.playerQnAs[index] = playerQnA;
-                    break;
-                case GameOperations.REJECT_GAME:
-                    game.gameOver = true;
-                    game.GameStatus = GameStatus.REJECTED;
-                    const sysStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-                    sysStatsCalculations.updateSystemStats('game_played').then((stats) => {
-                        console.log(stats);
-                    });
-                    break;
-                case GameOperations.UPDATE_ROUND:
-                    game = GameMechanics.updateRound(game, userId);
-                    break;
+            if ((operation === GameOperations.CALCULATE_SCORE || operation === GameOperations.REPORT_STATUS) && !playerQnA) {
+                // playerQnA
+                res.status(400).send('playerQnA not found');
+                return;
             }
-            dbGame = game.getDbModel();
 
-            await GameMechanics.UpdateGame(dbGame);
+            await GameMechanics.doGameOperations(userId, playerQnA, game, operation);
+
             return res.status(200).send({});
 
         } catch (error) {
@@ -176,25 +128,7 @@ export class GameController {
      */
     static async updateAllGame(req, res) {
         try {
-
-            const snapshot = await GameService.getLiveGames();
-            for (const doc of snapshot) {
-
-                const game = Game.getViewModel(doc.data());
-
-                game.playerIds.forEach((playerId) => {
-                    game.calculateStat(playerId);
-                });
-
-                const date = new Date(new Date().toUTCString());
-                const millis = date.getTime() + (date.getTimezoneOffset() * 60000);
-                game.turnAt = millis;
-
-                const dbGame = game.getDbModel();
-                dbGame.id = doc.id;
-
-                await GameService.setGame(dbGame);
-            }
+            await GameService.updateStats();
             return res.status(200).send('loaded data');
 
         } catch (error) {
@@ -210,59 +144,11 @@ export class GameController {
      */
     static async checkGameOver(req, res) {
         try {
-            const snapshot = await GameService.checkGameOver();
-            for (const doc of snapshot) {
-
-                const game: Game = Game.getViewModel(doc.data());
-                const millis = Utils.getUTCTimeStamp();
-                const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
-                const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
-                const playedMinutes = Math.floor((noPlayTimeBound) / (1000 * 60));
-
-                let remainedTime;
-                if (playedMinutes > schedulerConstants.beforeGameExpireDuration) {
-                    remainedTime = playedMinutes - schedulerConstants.beforeGameExpireDuration;
-                } else {
-                    remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
-                }
-
-                if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
-                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                    if ((remainedTime) <= schedulerConstants.notificationInterval) {
-                        this.pushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
-                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
-                    }
-                }
-
-                if (playedHours >= schedulerConstants.gamePlayDuration) {
-                    game.gameOver = true;
-                    game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
-                    game.GameStatus = GameStatus.TIME_EXPIRED;
-                    if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
-                        (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                        this.pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
-                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
-                    }
-                    const dbGame = game.getDbModel();
-                    await GameService.updateGame(dbGame);
-                    console.log('updated game', dbGame.id);
-                } else if (playedHours >= schedulerConstants.gameInvitationDuration
-                    && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-                        game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)) {
-                    game.gameOver = true;
-                    game.GameStatus = GameStatus.INVITATION_TIMEOUT;
-                    const dbGame = game.getDbModel();
-                    await GameService.updateGame(dbGame);
-                    console.log('invitation expires', dbGame.id);
-                }
-            }
-
-            return res.status(200).send('scheduler check is completed');
+            await GameMechanics.doGameOverOperations();
         } catch (error) {
             console.error('Error : ', error);
-            res.status(200).send('Internal Server error');
-            return error;
         }
+        return res.status(200).send('scheduler check is completed');
     }
 
     /**
@@ -271,18 +157,16 @@ export class GameController {
      */
     static async changeGameTurn(req, res) {
         try {
-            const snapshot = await GameService.checkGameOver();
-            for (const doc of snapshot) {
-                const game: Game = Game.getViewModel(doc.data());
-                const status = await GameMechanics.changeTheTurn(game);
-                console.log('game update status', status, game.gameId);
+            const games: Game[] = await GameService.checkGameOver();
+            const promises = [];
+            for (const game of games) {
+                promises.push(GameMechanics.changeTheTurn(game));
             }
-            return res.status(200).send('scheduler check is completed');
+            await Promise.all(promises);
         } catch (error) {
             console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
         }
+        return res.status(200).send('scheduler check is completed');
     }
 
     /**
