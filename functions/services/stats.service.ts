@@ -1,29 +1,33 @@
 import admin from '../db/firebase.client';
 const statsFireStoreClient = admin.firestore();
 
-/**
- * getSystemStats
- * return systemstat
- */
-exports.getSystemStats = (statName: string): Promise<any> => {
-    return statsFireStoreClient.doc(`stats/${statName}`)
-        .get().then(ss => { return ss })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+export class StatsService {
 
-
-/**
- * setSystemStats
- * return ref
- */
-exports.setSystemStats = (statName: string, SystemStat: any): Promise<any> => {
-    return statsFireStoreClient.doc(`stats/${statName}`).set(SystemStat).then(ref => { return ref })
-        .catch(error => {
+    /**
+     * getSystemStats
+     * return systemstat
+     */
+    static async getSystemStats(statName: string): Promise<any> {
+        try {
+            return await statsFireStoreClient.doc(`stats/${statName}`).get();
+        } catch (error) {
             console.error(error);
-            return error;
-        });
-};
+            throw error;
+        }
+    };
+
+    /**
+     * setSystemStats
+     * return ref
+     */
+    static async setSystemStats(statName: string, SystemStat: any): Promise<any> {
+        try {
+            return await statsFireStoreClient.doc(`stats/${statName}`).set(SystemStat);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+
+    };
+}
 
