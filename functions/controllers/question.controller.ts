@@ -58,13 +58,13 @@ export class QuestionController {
             const gameId = req.params.gameId;
             const g = await GameService.getGameById(gameId);
 
-            if (!g.exists) {
+            if (!g) {
                 // game not found
                 res.status(404).send('Game not found');
                 return;
             }
 
-            const game: Game = Game.getViewModel(g.data());
+            const game: Game = g;
             // console.log(game);
 
             if (game.playerIds.indexOf(userId) < 0) {
@@ -113,7 +113,7 @@ export class QuestionController {
                 game.playerQnAs.push(playerQnA);
                 const dbGame = game.getDbModel();
                 //  console.log('update the question ---->', question);
-                await GameMechanics.UpdateGame(dbGame);
+                await GameService.updateGame(dbGame);
                 res.send(question);
             } else {
                 const newQuestion = await ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId);

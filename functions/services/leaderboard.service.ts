@@ -44,7 +44,7 @@ export class LeaderBoardService {
             const leaderBoardStats = accountObj.leaderBoardStats;
 
             if (leaderBoardStats) {
-                Object.keys(leaderBoardStats).map((id) => {
+                for (const id of Object.keys(leaderBoardStats)) {
                     const leaderBoardUsers: Array<LeaderBoardUser> = (lbsStats[id]) ? lbsStats[id] : [];
                     const filteredUsers: Array<LeaderBoardUser> =
                         leaderBoardUsers.filter((lbUser) => lbUser.userId === accountObj.id);
@@ -67,7 +67,7 @@ export class LeaderBoardService {
                         leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1) : '';
 
                     lbsStats[id] = leaderBoardUsers;
-                });
+                }
             }
         }
         return lbsStats;
