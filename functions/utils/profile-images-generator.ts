@@ -18,22 +18,21 @@ export class ProfileImagesGenerator {
 
     }
 
-    public fetchUsers(): Promise<any> {
-        return UserService.getUsers()
-            .then(users => {
-                const userImagesPromises = [];
-                users.docs.map(user => {
-                    const userObj: User = user.data();
-                    if (userObj.userId && userObj.profilePicture) {
-                        userImagesPromises.push(this.getStoredImage(userObj.userId, userObj.profilePicture, undefined));
-                    }
-                });
-                return Promise.all(userImagesPromises)
-                    .then((userImagesResults) => userImagesResults)
-                    .catch((e) => {
-                        console.log('user images generator error', e);
-                    });
-            });
+    public async fetchUsers(): Promise<any> {
+        try {
+            const users = await UserService.getUsers();
+            const userImagesPromises = [];
+            for (const user of users.docs) {
+                const userObj: User = user.data();
+                if (userObj.userId && userObj.profilePicture) {
+                    userImagesPromises.push(this.getStoredImage(userObj.userId, userObj.profilePicture, undefined));
+                }
+            }
+            return await Promise.all(userImagesPromises);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
     public async uploadProfileImage(user: User): Promise<any> {
