@@ -1,12 +1,8 @@
 import { QuestionService } from '../services/question.service';
 import { UserService } from '../services/user.service';
-
-// const statUserService: UserService = new UserService();
-const statService = require('../services/stats.service');
-const statGameService = require('../services/game.service');
-
 import { SystemStats } from '../../projects/shared-library/src/lib/shared/model';
-
+import { GameService } from '../services/game.service';
+const statService = require('../services/stats.service');
 
 export class SystemStatsCalculations {
 
@@ -17,8 +13,8 @@ export class SystemStatsCalculations {
                 const systemStatPromises = [];
                 systemStatPromises.push(UserService.getUsers());
                 systemStatPromises.push(QuestionService.getAllQuestions());
-                systemStatPromises.push(statGameService.getLiveGames());
-                systemStatPromises.push(statGameService.getCompletedGames());
+                systemStatPromises.push(GameService.getLiveGames());
+                systemStatPromises.push(GameService.getCompletedGames());
 
                 return Promise.all(systemStatPromises)
                     .then((statResults) => {
@@ -49,7 +45,7 @@ export class SystemStatsCalculations {
                         return status;
                     });
                 } else if (entity === 'active_games') {
-                    return statGameService.getLiveGames()
+                    return GameService.getLiveGames()
                         .then((active_games) => {
                             systemStatObj.active_games = active_games.size;
                             return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
@@ -57,7 +53,7 @@ export class SystemStatsCalculations {
                             });
                         });
                 } else if (entity === 'game_played') {
-                    return statGameService.getCompletedGames()
+                    return GameService.getCompletedGames()
                         .then((total_games) => {
                             systemStatObj.game_played = total_games.size;
                             return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {

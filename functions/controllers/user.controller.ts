@@ -7,16 +7,14 @@ import { UserControllerConstants, profileSettingsConstants } from '../../project
 import { Utils } from '../utils/utils';
 
 const generalAccountService = require('../services/account.service');
-const utils: Utils = new Utils();
 
 export class UserController {
-
 
     /**
      * getUserById
      * return user
      */
-    public static async getUserById(req, res) {
+    static async getUserById(req, res) {
 
         const userId = req.params.userId;
 
@@ -37,7 +35,7 @@ export class UserController {
      * getUserImages
      * return user
      */
-    public static async getUserImages(req, res) {
+    static async getUserImages(req, res) {
         const userId = req.params.userId;
         const width = req.params.width;
         const height = req.params.height;
@@ -76,7 +74,7 @@ export class UserController {
      * generateUserProfileImage
      * return status
      */
-    public static async generateUserProfileImage(req, res) {
+    static async generateUserProfileImage(req, res) {
         if (req.body.user.userId !== req.user.uid) {
             return res.status(401).send('Unauthorized');
         }
@@ -97,7 +95,7 @@ export class UserController {
 
             if (user.bulkUploadPermissionStatus === profileSettingsConstants.NONE) {
                 user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
-                user.bulkUploadPermissionStatusUpdateTime = utils.getUTCTimeStamp();
+                user.bulkUploadPermissionStatusUpdateTime = Utils.getUTCTimeStamp();
                 const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
                 try {
                     const mail: MailClient = new MailClient(UserControllerConstants.adminEmail, UserControllerConstants.mailSubject,
@@ -126,7 +124,7 @@ export class UserController {
      * updateLives
      * return status
      */
-    public static async updateLives(req, res) {
+    static async updateLives(req, res) {
         const userId = req.body.userId;
         if (!userId) {
             return res.status(400).send('Bad Request');

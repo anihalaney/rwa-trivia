@@ -1,13 +1,13 @@
 
 export class Utils {
 
-    public getUTCTimeStamp() {
+    static getUTCTimeStamp() {
         const date = new Date(new Date().toUTCString());
         const millis = date.getTime();
         return millis;
     }
 
-    public addMinutes(time, minutes) {
+    static addMinutes(time, minutes) {
         return time + minutes;
     }
 }
