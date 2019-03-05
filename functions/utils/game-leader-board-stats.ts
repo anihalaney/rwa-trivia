@@ -1,5 +1,5 @@
 import { QuestionService } from '../services/question.service';
-import { AccountService as leaderBoardAccountService } from '../services/account.service';
+import { AccountService } from '../services/account.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
 
 import {
@@ -35,7 +35,7 @@ export class GameLeaderBoardStats {
             for (const userId of Object.keys(this.accountDict)) {
                 const account: Account = this.accountDict[userId];
                 account.id = userId;
-                userPromises.push(leaderBoardAccountService.updateAccountData({ ...account }));
+                userPromises.push(AccountService.updateAccountData({ ...account }));
             }
 
             const userResults = await Promise.all(userPromises);
@@ -92,7 +92,7 @@ export class GameLeaderBoardStats {
 
     private calculateAllGameUsersStat(userId: string, game: Game, categoryIds: Array<number>): void {
         const account: Account = (this.accountDict[userId]) ? this.accountDict[userId] : new Account();
-        this.accountDict[userId] = leaderBoardAccountService.calcualteAccountStat(account, game, categoryIds, userId);
+        this.accountDict[userId] = AccountService.calculateAccountStat(account, game, categoryIds, userId);
     }
 
 
@@ -135,11 +135,11 @@ export class GameLeaderBoardStats {
 
     private async  calculateUserStat(userId: string, game: Game, categoryIds: Array<number>): Promise<string> {
         try {
-            const accountData = await leaderBoardAccountService.getAccountById(userId);
+            const accountData = await AccountService.getAccountById(userId);
             const account: Account = accountData.data();
             if (account && account.id) {
-                const updateStatus = await leaderBoardAccountService.updateAccountData(
-                    leaderBoardAccountService.calcualteAccountStat(account, game, categoryIds, userId));
+                const updateStatus = await AccountService.updateAccountData(
+                    AccountService.calculateAccountStat(account, game, categoryIds, userId));
                 return updateStatus;
             }
         } catch (err) {
@@ -152,7 +152,7 @@ export class GameLeaderBoardStats {
 
     public async calculateGameLeaderBoardStat(): Promise<string> {
         try {
-            const accounts = await leaderBoardAccountService.getAccounts();
+            const accounts = await AccountService.getAccounts();
             let lbsStats = await LeaderBoardService.getLeaderBoardStats();
             lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
             console.log('lbsStats', lbsStats);
