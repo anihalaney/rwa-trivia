@@ -19,15 +19,18 @@ class MigrationRoutes {
         // generate leaderboard stat from all the accounts
         this.migrationRoutes.post('/leaderboard/stat', AuthMiddleware.authTokenOnly, MigrationController.generateLeaderBoardStat);
         // generate user contribution stat from created questions
-        this.migrationRoutes.post('/user/contribution/stat', AuthMiddleware.authTokenOnly, MigrationController.generateUserContributionStat);
+        this.migrationRoutes.post('/user/contribution/stat',
+            AuthMiddleware.authTokenOnly, MigrationController.generateUserContributionStat);
         // update question category datatype from string to Number
         this.migrationRoutes.post('/question/update', AuthMiddleware.authTokenOnly, MigrationController.changeQuestionCategoryIdType);
         this.migrationRoutes.post('/migrate/:collectionName', AuthMiddleware.authTokenOnly, MigrationController.migrateCollections);
-        this.migrationRoutes.post('/migrate/prod/dev/:collectionName', AuthMiddleware.authTokenOnly, MigrationController.migrateProdCollectionsToDev);
+        this.migrationRoutes.post('/migrate/prod/dev/:collectionName',
+            AuthMiddleware.authTokenOnly, MigrationController.migrateProdCollectionsToDev);
         this.migrationRoutes.post('/rebuild/question/index', AuthMiddleware.authTokenOnly, MigrationController.rebuildQuestionIndex);
         this.migrationRoutes.post('/stat/system', AuthMiddleware.authTokenOnly, MigrationController.generateSystemStat);
         this.migrationRoutes.post('/bulkupload/update', AuthMiddleware.authTokenOnly, MigrationController.updateBulkUploadCollection);
-        this.migrationRoutes.post('/question/update/:collectionName', AuthMiddleware.authTokenOnly, MigrationController.updateQuestionCollection);
+        this.migrationRoutes.post('/question/update/:collectionName',
+            AuthMiddleware.authTokenOnly, MigrationController.updateQuestionCollection);
         this.migrationRoutes.post('/auth-users', AuthMiddleware.authTokenOnly, MigrationController.dumpAuthUsersInFirestore);
         this.migrationRoutes.post('/user/profile/image', AuthMiddleware.authTokenOnly, MigrationController.generateAllUsersProfileImages);
         this.migrationRoutes.post('/question/status', AuthMiddleware.authTokenOnly, QuestionController.changeUnpublishedQuestionStatus);
