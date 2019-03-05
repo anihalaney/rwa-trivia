@@ -1,5 +1,5 @@
 import {
-    User, Question, UserStatConstants
+    UserStatConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionService } from '../services/question.service';
 import { AccountService as userContributionAccountService } from '../services/account.service';
