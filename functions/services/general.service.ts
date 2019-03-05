@@ -67,7 +67,7 @@ export class GeneralService {
                     questions.push(question);
                 }
 
-                await ESUtils.rebuildIndex(ESUtils.QUESTIONS_INDEX, questions);
+                await ESUtils.rebuildIndex(questions);
                 return 'Questions indexed';
         } catch (error) {
                 console.log(error);

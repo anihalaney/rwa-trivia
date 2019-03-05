@@ -38,12 +38,12 @@ export class GeneralController {
                 case 'categories':
                     // Migrate categories
                     console.log('Migrating categories ...');
-                    res.send(await migration.migrateCategories);
+                    res.send(await migration.migrateCategories());
                     break;
                 case 'tags':
                     // Migrate Tags
                     console.log('Migrating tags ...');
-                    res.send(await migration.migrateTags);
+                    res.send(await migration.migrateTags());
                     break;
                 case 'games':
                     // Migrate games
