@@ -176,7 +176,6 @@ export class UserService {
                     resolve('upload finished');
                 });
         });
-
     }
 
     /**
@@ -185,17 +184,22 @@ export class UserService {
      */
     static async removeSocialProfile(): Promise<any> {
         const users = await this.getUsers();
+        let migrationPromises: Promise<any>[];
 
-        const migrationPromises = users.docs.map(user => {
+        for (const user of users) {
             const userObj: User = user.data();
             delete userObj.facebookUrl;
             delete userObj.linkedInUrl;
             delete userObj.twitterUrl;
-            return this.updateUser(userObj);
-        });
-
-        const migrationResults = await Promise.all(migrationPromises);
-        return migrationResults;
+            migrationPromises.push(this.updateUser(userObj));
+        }
+        
+        try {
+            return await Promise.all(migrationPromises);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 }
 

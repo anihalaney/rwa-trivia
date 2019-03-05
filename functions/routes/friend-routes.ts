@@ -1,7 +1,7 @@
 import * as express from 'express';
-export const friendRoutes = express.Router();
 import { FriendController } from '../controllers/friend.controller';
-const friendAuth = require('../middlewares/auth');
+import { AuthMiddleware} from "../middlewares/auth";
 
+export const friendRoutes = express.Router();
 friendRoutes.post('/', FriendController.createFriends);
-friendRoutes.post('/invitation', friendAuth.authorizedOnly, FriendController.createInvitations);
+friendRoutes.post('/invitation', AuthMiddleware.authorizedOnly, FriendController.createInvitations);

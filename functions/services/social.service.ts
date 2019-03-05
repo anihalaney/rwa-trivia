@@ -1,18 +1,23 @@
 import admin from '../db/firebase.client';
-const bucket = admin.storage().bucket();
 
 
-/**
- * generateSocialUrl
- * return ref
- */
-exports.generateSocialUrl = (userId: string, social_share_id: string): Promise<any> => {
-    const fileName = `social_share/${userId}/score_images/${social_share_id}`;
-    const file = bucket.file(fileName);
-    return file.download().then(signedUrls => {
-        return signedUrls[0];
-    }).catch(error => {
-        console.log('error', error);
-        return error;
-    })
-};
+export class SocialService {
+    private static bucket = admin.storage().bucket();
+    
+    /**
+     * generateSocialUrl
+     * return ref
+     */
+    static async generateSocialUrl(userId: string, social_share_id: string): Promise<any> {
+        const fileName = `social_share/${userId}/score_images/${social_share_id}`;
+        const file = this.bucket.file(fileName);
+        try {
+            const signedUrls = await file.download();
+            return signedUrls[0];
+        } catch (error) {
+            console.log('error', error);
+            throw error;
+        }
+    };
+
+}

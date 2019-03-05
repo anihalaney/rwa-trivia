@@ -1,23 +1,21 @@
 import admin from '../db/firebase.client';
 const pushNotificationMessagingClient = admin.messaging();
 
-/**
- * sendPush
- * return PushResponse
- */
-exports.sendPush = (message: any): Promise<any> => {
-    // Send a message to the device corresponding to the provided
-    // registration token.
-    return pushNotificationMessagingClient.send(message)
-        .then((response) => {
-            // Response is a message ID string.
+export class PushNotificationService {
+
+    /**
+     * sendPush
+     * return PushResponse
+     */
+    static async sendPush(message: any): Promise<any> {
+        try {
+            const response = await pushNotificationMessagingClient.send(message);
             console.log('Successfully sent message:', response);
             return response;
-        })
-        .catch((error) => {
+        } catch (error) {
             console.log('Error sending message:', error);
-            return error;
-        });
-};
-
+            throw error;
+        }
+    };
+}
 
