@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 import { UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
+=======
+import {
+    UserStatConstants
+} from '../../projects/shared-library/src/lib/shared/model';
+>>>>>>> 373360aa47213c1992bec8ef6691e5d80a5dd362
 import { QuestionService } from '../services/question.service';
 
 export class UserContributionStat {

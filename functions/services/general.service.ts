@@ -4,10 +4,7 @@ import admin from '../db/firebase.client';
 import * as functions from 'firebase-functions';
 
 export class GeneralService {
-    /**
-     * migrateCollection
-     * return status
-     */
+
     private static generalFireStoreClient = admin.firestore();
 
     static async migrateCollection(collectionName): Promise<any> {

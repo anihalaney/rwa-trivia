@@ -1,9 +1,7 @@
 import admin from '../db/firebase.client';
 
 export class FirebaseAuthService {
-
     private static fireBaseAuthClient = admin.auth();
-
     /**
      * getUsers
      * return users

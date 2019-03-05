@@ -1,9 +1,7 @@
 import admin from '../db/firebase.client';
-
 export class BulkUploadService {
 
     private static bulkUploadFireStoreClient = admin.firestore();
-
     /**
      * getBulkUpload
      * return bulkData

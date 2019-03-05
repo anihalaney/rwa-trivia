@@ -189,7 +189,6 @@ export class UserService {
             delete userObj.twitterUrl;
             migrationPromises.push(this.updateUser(userObj));
         }
-
         try {
             return await Promise.all(migrationPromises);
         } catch (error) {

@@ -1,9 +1,7 @@
 import admin from '../db/firebase.client';
 
 export class StatsService {
-
     private static statsFireStoreClient = admin.firestore();
-
     /**
      * getSystemStats
      * return systemstat
