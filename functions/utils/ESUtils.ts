@@ -39,7 +39,8 @@ export class ESUtils {
     return prefix + index;
   }
 
-  static async createOrUpdateIndex(index: string, type: string, data: Question, key: string): Promise<any> {
+  static async createOrUpdateIndex(type: string, data: Question, key: string): Promise<any> {
+    let index = this.QUESTIONS_INDEX;
     try {
       const client: ElasticSearch.Client = this.getElasticSearchClient();
       index = this.getIndex(index);
@@ -61,7 +62,8 @@ export class ESUtils {
   }
 
 
-  static async removeIndex(index, key): Promise<any> {
+  static async removeIndex(key): Promise<any> {
+    let index = this.QUESTIONS_INDEX;
     try {
       const client: ElasticSearch.Client = this.getElasticSearchClient();
       index = this.getIndex(index);
@@ -126,38 +128,39 @@ export class ESUtils {
     }
   }
 
-  static async rebuildIndex(index: string, data: { 'id': string, 'type': string, 'source': any }[]): Promise<any> {
+  static async rebuildIndex(data: { 'id': string, 'type': string, 'source': any }[]): Promise<any> {
+    let index = this.QUESTIONS_INDEX;
     const client: ElasticSearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
     try {
-       // delete entire index
+      // delete entire index
       await this.deleteIndex(index);
       // TODO: build bulk index in batches (maybe 1000 at a time)
       const arrayLength = data.length;
       const batchSize = 500;
       const batches = [];
-  
+
       for (let i = 0; i < arrayLength; i += batchSize) {
         let batchData = data.slice(i, i + batchSize);
-        const body = [];          
+        const body = [];
         batchData.forEach(d => {
           body.push({ index: { _index: index, _type: d.type, _id: d.id } });
           body.push(d.source);
         });
         batches.push(client.bulk({ 'body': body }));
-      }     
+      }
       await Promise.all(batches);
       console.log('All items indexed');
-    }catch(error){
+    } catch (error) {
       console.log(`Error in checking for index${error}`);
-      throw error;  
-    } 
-   
+      throw error;
+    }
+
   }
 
   static async getQuestions(start: number, size: number, criteria: SearchCriteria): Promise<SearchResults> {
-  
+
     const results = await this.getSearchResults(this.QUESTIONS_INDEX, start, size, criteria)
     const searchResults: SearchResults = new SearchResults();
     searchResults.totalCount = results.hits.total;
