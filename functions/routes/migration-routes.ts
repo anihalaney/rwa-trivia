@@ -1,21 +1,18 @@
 
 import * as express from 'express';
-const router = express.Router();
-
+import { GeneralController } from '../controllers/general.controller';
 const migrationAuth = require('../middlewares/auth');
+export const migrationRoutes = express.Router();
 
-const migrationController = require('../controllers/general.controller');
 
 // migrate user stat to account stat
-router.post('/account/stats', migrationAuth.authTokenOnly, migrationController.migrateUserStatToAccounts);
+migrationRoutes.post('/account/stats', migrationAuth.authTokenOnly, GeneralController.migrateUserStatToAccounts);
 // generate account stat from all the games
-router.post('/user/stat', migrationAuth.authTokenOnly, migrationController.generateUsersStat);
+migrationRoutes.post('/user/stat', migrationAuth.authTokenOnly, GeneralController.generateUsersStat);
 // generate leaderboard stat from all the accounts
-router.post('/leaderboard/stat', migrationAuth.authTokenOnly, migrationController.generateLeaderBoardStat);
+migrationRoutes.post('/leaderboard/stat', migrationAuth.authTokenOnly, GeneralController.generateLeaderBoardStat);
 // generate user contribution stat from created questions
-router.post('/user/contribution/stat', migrationAuth.authTokenOnly, migrationController.generateUserContributionStat);
+migrationRoutes.post('/user/contribution/stat', migrationAuth.authTokenOnly, GeneralController.generateUserContributionStat);
 // update question category datatype from string to Number
-router.post('/question/update', migrationAuth.authTokenOnly, migrationController.changeQuestionCategoryIdType);
+migrationRoutes.post('/question/update', migrationAuth.authTokenOnly, GeneralController.changeQuestionCategoryIdType);
 
-
-module.exports = router;
