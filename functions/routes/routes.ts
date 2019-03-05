@@ -5,6 +5,7 @@ import questionRoutes from './question-routes';
 import subscriptionRoutes from './subscription-routes';
 import generalRoutes from './general-routes';
 import migrationRoutes from './migration-routes';
+import schedulerRoutes from './migration-routes';
 import friendRoutes from './friend-routes';
 import gameRoutes from './game-routes';
 import userRoutes from './user-routes';
@@ -20,6 +21,7 @@ class Router {
         this.router.use(`/${appConstants.API_PREFIX}/game`, gameRoutes);
         this.router.use(`/${appConstants.API_PREFIX}/general`, generalRoutes);
         this.router.use(`/${appConstants.API_PREFIX}/migration`, migrationRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/scheduler`, schedulerRoutes);
         this.router.use(`/${appConstants.API_PREFIX}/friend`, friendRoutes);
         this.router.use(`/${appConstants.API_PREFIX}/user`, userRoutes);
     }
