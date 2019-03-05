@@ -51,7 +51,7 @@ export class FirebaseFunctions {
                 data.createdOn = (data.createdOn && data.createdOn['_seconds']) ? new Date(data.createdOn['_seconds'] * 1000) : new Date();
 
                 // add or update
-                await ESUtils.createOrUpdateIndex(ESUtils.QUESTIONS_INDEX, data.categoryIds['0'], question, context.params.questionId);
+                await ESUtils.createOrUpdateIndex(data.categoryIds['0'], question, context.params.questionId);
 
                 const userContributionStat: UserContributionStat = new UserContributionStat();
                 await userContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution);
@@ -61,7 +61,7 @@ export class FirebaseFunctions {
 
             } else {
                 // delete
-                ESUtils.removeIndex(ESUtils.QUESTIONS_INDEX, context.params.questionId);
+                await ESUtils.removeIndex(context.params.questionId);
             }
             return true;
         } catch (error) {
