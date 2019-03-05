@@ -2,9 +2,10 @@ import { appConstants } from '../projects/shared-library/src/lib/shared/model';
 import * as express from 'express';
 import { AuthMiddleware as auth} from './middlewares/auth';
 import * as functions from 'firebase-functions';
-import * as cookieParser from 'cookie-parser';  
+import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
+import { router } from './routes/routes';
 require('./db/firebase-functions').addMessage(functions);
 
 const app = express();
@@ -29,6 +30,6 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use(require('./routes/routes'));
+app.use(router);
 
 exports.app = functions.https.onRequest(app);
