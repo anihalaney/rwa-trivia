@@ -5,10 +5,9 @@ import { questionRoutes } from './question-routes';
 import { subscriptionRoutes } from './subscription-routes';
 import { generalRoutes } from './general-routes';
 import { migrationRoutes } from './migration-routes';
-
+import { friendRoutes } from './friend-routes';
 const router = express.Router();
 const gameRoutes = require('./game-routes');
-const friendRoutes = require('./friend-routes');
 const userRoutes = require('./user-routes');
 
 

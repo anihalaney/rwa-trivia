@@ -1,95 +1,118 @@
+import { GameStatus } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
-const gameFireStoreClient = admin.firestore();
-import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../projects/shared-library/src/lib/shared/model';
 
 
-/**
- * getAvailableGames
- * return games
- */
-exports.getAvailableGames = (): Promise<any> => {
-    return gameFireStoreClient.collection('games').where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT)
-        .where('gameOver', '==', false)
-        .get().then(games => { return games });
-};
+export class GameService {
 
-/**
- * getLiveGames
- * return games
- */
-exports.getLiveGames = (): Promise<any> => {
-    return gameFireStoreClient.collection('games')
-        .where('gameOver', '==', false)
-        .get().then(games => { return games });
-};
+    private static gameFireStoreClient = admin.firestore();
 
+    /**
+     * getAvailableGames
+     * return games
+     */
+    static async getAvailableGames(): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.collection('games').where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT)
+                .where('gameOver', '==', false)
+                .get();
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
 
-/**
- * createGame
- * return ref
- */
-exports.createGame = (dbGame: any): Promise<any> => {
-    return gameFireStoreClient.collection('games').add(dbGame).then(ref => { return ref });
-};
+    /**
+     * getLiveGames
+     * return games
+     */
+    static async getLiveGames(): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.collection('games')
+                .where('gameOver', '==', false)
+                .get();
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
 
+    /**
+     * createGame
+     * return ref
+     */
+    static async createGame(dbGame: any): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.collection('games').add(dbGame);
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
 
-/**
- * getGameById
- * return game
- */
-exports.getGameById = (gameId: string): Promise<any> => {
-    return gameFireStoreClient.doc(`games/${gameId}`).get().then((game) => { return game });
-};
+    /**
+     * getGameById
+     * return game
+     */
+    static async getGameById(gameId: string): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.doc(`games/${gameId}`).get();
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
 
+    /**
+     * setGame
+     * return ref
+     */
+    static async setGame(dbGame: any): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.doc('/games/' + dbGame.id).set(dbGame);
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
 
-/**
- * setGame
- * return ref
- */
-exports.setGame = (dbGame: any): Promise<any> => {
-    return gameFireStoreClient.doc('/games/' + dbGame.id).set(dbGame).then((ref) => { return ref });
-};
+    /**
+     * updateGame
+     * return ref
+     */
+    static async updateGame(dbGame: any): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.doc('/games/' + dbGame.id).update(dbGame);
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
 
+    /**
+     * checkGameOver
+     * return status
+     */
+    static async checkGameOver(): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.collection('/games').where('gameOver', '==', false).get();
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
 
-/**
- * updateGame
- * return ref
- */
-exports.updateGame = (dbGame: any): Promise<any> => {
-    return gameFireStoreClient.doc('/games/' + dbGame.id).update(dbGame).then((ref) => { return ref });
-};
+    /**
+     * getCompletedGames
+     * return games
+     */
+    static async getCompletedGames(): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.collection('/games').where('gameOver', '==', true).get();
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
 
-
-/**
- * checkGameOver
- * return status
- */
-exports.checkGameOver = (): Promise<any> => {
-
-    return gameFireStoreClient.collection('/games').where('gameOver', '==', false)
-        .get()
-        .then((snapshot) => { return snapshot })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            return err
-        });
-
-};
-
-/**
- * getCompletedGames
- * return games
- */
-exports.getCompletedGames = (): Promise<any> => {
-    // console.log('completed games');
-    return gameFireStoreClient.collection('/games')
-        .where('gameOver', '==', true)
-        .get()
-        .then((games) => { return games })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            return err
-        });
-};
-
+}
 
