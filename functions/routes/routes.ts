@@ -16,6 +16,7 @@ router.use(`/${appConstants.API_PREFIX}/subscription`, subscriptionRoutes);
 router.use(`/${appConstants.API_PREFIX}/game`, gameRoutes);
 router.use(`/${appConstants.API_PREFIX}/general`, generalRoutes);
 router.use(`/${appConstants.API_PREFIX}/migration`, migrationRoutes);
+router.use(`/${appConstants.API_PREFIX}/scheduler`, migrationRoutes);
 router.use(`/${appConstants.API_PREFIX}/friend`, friendRoutes);
 router.use(`/${appConstants.API_PREFIX}/user`, userRoutes);
 
