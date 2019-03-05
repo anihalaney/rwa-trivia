@@ -32,12 +32,12 @@ export class MigrationController {
                 case 'categories':
                     // Migrate categories
                     console.log('Migrating categories ...');
-                    res.send(await migration.migrateCategories);
+                    res.send(await migration.migrateCategories());
                     break;
                 case 'tags':
                     // Migrate Tags
                     console.log('Migrating tags ...');
-                    res.send(await migration.migrateTags);
+                    res.send(await migration.migrateTags());
                     break;
                 case 'games':
                     // Migrate games
@@ -94,8 +94,7 @@ export class MigrationController {
             res.status(500).send('Internal Server error');
             return error;
         }
-    }
-
+    } 
     /**
      * generateUsersStat
      * return status

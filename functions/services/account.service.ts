@@ -71,11 +71,12 @@ export class AccountService {
         const avgAnsTime = game.stats[userId].avgAnsTime;
         // console.log('categoryIds', categoryIds);
         account = (account) ? account : new Account();
-        categoryIds.map((id) => {
+
+        for (const id of categoryIds) {
             account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
             account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
                 account.leaderBoardStats[id] + score : score;
-        });
+        }
         account['leaderBoardStats'] = { ...account.leaderBoardStats };
         account.gamePlayed = (account.gamePlayed) ? account.gamePlayed + 1 : 1;
         account.categories = Object.keys(account.leaderBoardStats).length;

@@ -15,7 +15,7 @@ export class FriendService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * getInvitationByToken
@@ -28,7 +28,7 @@ export class FriendService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * checkInvitation
@@ -44,7 +44,7 @@ export class FriendService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * updateInvitation
@@ -58,7 +58,7 @@ export class FriendService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
 
 
@@ -73,7 +73,7 @@ export class FriendService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
 
     /**
@@ -88,7 +88,7 @@ export class FriendService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
 
     /**
@@ -103,5 +103,5 @@ export class FriendService {
             console.error(error);
             throw error;
         }
-    };
+    }
 }

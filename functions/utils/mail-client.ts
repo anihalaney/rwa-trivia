@@ -37,8 +37,7 @@ export class MailClient {
 
         try {
             // send mail with defined transport object
-            const result = await this.transporter.sendMail(this.mailOptions);
-            return result;
+            return await this.transporter.sendMail(this.mailOptions);
         } catch (error) {
             console.error(error);
             throw error;
