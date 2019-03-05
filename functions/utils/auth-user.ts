@@ -3,7 +3,7 @@ import { User } from '../../projects/shared-library/src/lib/shared/model';
 
 export class AuthUser {
 
-    async getUsers (authUsers: User[], pageToken?: string): Promise<User[]> {
+    static async getUsers(authUsers: User[], pageToken?: string): Promise<User[]> {
         try {
             const listUsersResult = await FirebaseAuthService.getAuthUsers(pageToken);
             for (const afUser of listUsersResult.users) {
@@ -17,7 +17,7 @@ export class AuthUser {
                 return authUsers;
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }

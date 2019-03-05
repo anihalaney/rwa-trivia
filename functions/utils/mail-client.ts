@@ -39,7 +39,7 @@ export class MailClient {
             // send mail with defined transport object
             return await this.transporter.sendMail(this.mailOptions);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
 

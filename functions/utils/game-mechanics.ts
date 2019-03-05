@@ -1,17 +1,16 @@
 import {
-    Game, GameStatus, GameOptions, PlayerMode,
-    OpponentType, PlayerQnA, GameOperations, pushNotificationRouteConstants, schedulerConstants
+    Game, GameOperations, GameOptions, GameStatus,
+    OpponentType, PlayerMode, PlayerQnA,
+    pushNotificationRouteConstants, schedulerConstants
 } from '../../projects/shared-library/src/lib/shared/model';
-import { Utils } from './utils';
-import { UserService } from '../services/user.service';
+import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
+import { UserService } from '../services/user.service';
 import { PushNotification } from '../utils/push-notifications';
 import { SystemStatsCalculations } from './system-stats-calculations';
-const gameAccountService = require('../services/account.service');
+import { Utils } from './utils';
 
 export class GameMechanics {
-
-    private static pushNotification: PushNotification = new PushNotification();
 
     static async doGameOperations(userId: string, playerQnA: PlayerQnA, game: Game, operation: string): Promise<boolean> {
         try {
@@ -23,10 +22,10 @@ export class GameMechanics {
                     game.decideNextTurn(playerQnA, userId);
 
                     if (playerQnA.answerCorrect) {
-                        gameAccountService.setBits(userId);
+                        AccountService.setBits(userId);
                     }
                     if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
-                        this.pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
+                        PushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
                     game.turnAt = Utils.getUTCTimeStamp();
@@ -38,14 +37,13 @@ export class GameMechanics {
                     game.decideWinner();
                     game.calculateStat(game.nextTurnPlayerId);
                     game.GameStatus = GameStatus.COMPLETED;
-                    gameAccountService.setBytes(game.winnerPlayerId);
+                    AccountService.setBytes(game.winnerPlayerId);
                     if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                         (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                        this.pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
-                    const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-                    systemStatsCalculations.updateSystemStats('game_played');
+                    SystemStatsCalculations.updateSystemStats('game_played');
                     break;
                 case GameOperations.REPORT_STATUS:
                     const index = game.playerQnAs.findIndex(
@@ -56,8 +54,7 @@ export class GameMechanics {
                 case GameOperations.REJECT_GAME:
                     game.gameOver = true;
                     game.GameStatus = GameStatus.REJECTED;
-                    const sysStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-                    sysStatsCalculations.updateSystemStats('game_played');
+                    SystemStatsCalculations.updateSystemStats('game_played');
                     break;
                 case GameOperations.UPDATE_ROUND:
                     game = GameMechanics.updateRound(game, userId);
@@ -91,7 +88,7 @@ export class GameMechanics {
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
                     if ((remainedTime) <= schedulerConstants.notificationInterval) {
-                        this.pushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
+                        PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
                             pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
                     }
                 }
@@ -102,7 +99,7 @@ export class GameMechanics {
                     game.GameStatus = GameStatus.TIME_EXPIRED;
                     if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                         (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
-                        this.pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                        PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
                     const dbGame = game.getDbModel();

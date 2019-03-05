@@ -1,28 +1,24 @@
+import { Account, Blog, Question, RSSFeedConstants, User } from '../../projects/shared-library/src/lib/shared/model';
+import { AccountService } from '../services/account.service';
+import { AppSettings } from '../services/app-settings.service';
 import { GeneralService } from '../services/general.service';
-const blogService = require('../services/blog.service');
-
-import { UserService } from '../services/user.service';
 import { QuestionService } from '../services/question.service';
-const generalAccountService = require('../services/account.service');
-const Feed = require('feed-to-json');
+import { UserService } from '../services/user.service';
+import { AuthUser } from '../utils/auth-user';
+import { BulkUploadUpdate } from '../utils/bulk-upload-update';
 import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
-import { UserContributionStat } from '../utils/user-contribution-stat';
-import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
-import { BulkUploadUpdate } from '../utils/bulk-upload-update';
-import { RSSFeedConstants, Blog, User, Account, Question } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
-import { AuthUser } from '../utils/auth-user';
-import { Utils } from '../utils/utils';
-import { AppSettings } from '../services/app-settings.service';
+import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+import { UserContributionStat } from '../utils/user-contribution-stat';
+import { BlogService } from '../services/blog.service';
+const Feed = require('feed-to-json');
 
 
 export class GeneralController {
 
     private static appSettings: AppSettings = new AppSettings();
-
-    private static utils: Utils = new Utils();
 
     /**
      * migrateCollections
@@ -32,40 +28,40 @@ export class GeneralController {
 
         try {
             console.log(req.params.collectionName);
-            const migration = new FirestoreMigration();
 
             switch (req.params.collectionName) {
                 case 'categories':
                     // Migrate categories
                     console.log('Migrating categories ...');
-                    res.send(await migration.migrateCategories());
+                    res.send(await FirestoreMigration.migrateCategories());
                     break;
                 case 'tags':
                     // Migrate Tags
                     console.log('Migrating tags ...');
-                    res.send(await migration.migrateTags());
+                    res.send(await FirestoreMigration.migrateTags());
                     break;
                 case 'games':
                     // Migrate games
                     console.log('Migrating games ...');
-                    res.send('Game Count: ' + await migration.migrateGames('/games', 'games'));
+                    res.send('Game Count: ' + await FirestoreMigration.migrateGames('/games', 'games'));
                     break;
                 case 'questions':
                     // Migrate questions
                     console.log('Migrating questions ...');
-                    res.send('Question Count: ' + await migration.migrateQuestions('/questions/published', 'questions'));
+                    res.send('Question Count: ' + await FirestoreMigration.migrateQuestions('/questions/published', 'questions'));
                     break;
                 case 'unpublished_questions':
                     // Migrate unpublished questions
                     console.log('Migrating unpublished questions ...');
-                    res.send('Question Count: ' + await migration.migrateQuestions('/questions/unpublished', 'unpublished_questions'));
+                    res.send('Question Count: ' +
+                        await FirestoreMigration.migrateQuestions('/questions/unpublished', 'unpublished_questions'));
                     break;
             }
 
-            res.send('Check firestore db for migration details');
+            res.status(200).send('Check firestore db for migration details');
 
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -79,9 +75,9 @@ export class GeneralController {
     static async migrateProdCollectionsToDev(req, res): Promise<any> {
         try {
             console.log(req.params.collectionName);
-            res.send( await GeneralService.migrateCollection(req.params.collectionName));
+            res.status(200).send(await GeneralService.migrateCollection(req.params.collectionName));
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -94,9 +90,9 @@ export class GeneralController {
      */
     static async rebuildQuestionIndex(req, res): Promise<any> {
         try {
-            res.send(await GeneralService.rebuildQuestionIndex());
+            res.status(200).send(await GeneralService.rebuildQuestionIndex());
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -108,7 +104,7 @@ export class GeneralController {
      * return status
      */
     static helloOperation(req, res) {
-        res.send(`Hello ${req.user.email}`);
+        res.status(200).send(`Hello ${req.user.email}`);
     }
 
 
@@ -116,11 +112,11 @@ export class GeneralController {
      * getTestQuestion
      * return status
      */
-    static async getTestQuestion (req, res): Promise<any> {
+    static async getTestQuestion(req, res): Promise<any> {
         try {
-            res.send(await  GeneralService.getTestQuestion());
+            res.status(200).send(await GeneralService.getTestQuestion());
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -134,9 +130,9 @@ export class GeneralController {
      */
     static async getGameQuestionTest(req, res): Promise<any> {
         try {
-            res.send(await  GeneralService.getGameQuestionTest());
+            res.status(200).send(await GeneralService.getGameQuestionTest());
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -147,7 +143,7 @@ export class GeneralController {
      * getGameQuestionTest
      * return status
      */
-    static testES (req, res) {
+    static testES(req, res) {
         GeneralService.testES(res);
     }
 
@@ -159,11 +155,10 @@ export class GeneralController {
     static async generateUsersStat(req, res): Promise<any> {
 
         try {
-            const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-            await gameLeaderBoardStats.generateGameStats();
-            res.send('updated stats');
+            await GameLeaderBoardStats.generateGameStats();
+            res.status(200).send('updated stats');
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send(error);
             return error;
         }
@@ -178,11 +173,10 @@ export class GeneralController {
     static async generateLeaderBoardStat(req, res): Promise<any> {
 
         try {
-            const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-            await gameLeaderBoardStats.calculateGameLeaderBoardStat();
-            res.send('updated stats');
+            await GameLeaderBoardStats.calculateGameLeaderBoardStat();
+            res.status(200).send('updated stats');
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -197,11 +191,10 @@ export class GeneralController {
     static async generateUserContributionStat(req, res): Promise<any> {
 
         try {
-            const userContributionStat: UserContributionStat = new UserContributionStat();
-            await userContributionStat.generateGameStats();
-            res.send('updated user category stat');
+            await UserContributionStat.generateGameStats();
+            res.status(200).send('updated user category stat');
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -214,11 +207,10 @@ export class GeneralController {
      */
     static async generateSystemStat(req, res): Promise<any> {
         try {
-            const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-            await systemStatsCalculations.generateSystemStats();
-            res.send('updated system stat');
+            await SystemStatsCalculations.generateSystemStats();
+            res.status(200).send('updated system stat');
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -232,11 +224,10 @@ export class GeneralController {
     static async updateBulkUploadCollection(req, res): Promise<any> {
 
         try {
-            const bulkUploadUpdate: BulkUploadUpdate = new BulkUploadUpdate();
-            await bulkUploadUpdate.getUserList();
-            res.send('updated bulk upload collection');
+            await BulkUploadUpdate.getUserList();
+            res.status(200).send('updated bulk upload collection');
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -250,7 +241,7 @@ export class GeneralController {
         try {
             const blogs: Array<Blog> = [];
 
-            Feed.load(RSSFeedConstants.feedURL, function (err, rss) {
+            Feed.load(RSSFeedConstants.feedURL, async (err, rss) => {
 
                 let index = 0;
                 let viewCount = 100;
@@ -266,12 +257,12 @@ export class GeneralController {
                     blog.viewCount = viewCount;
                     blog.share_status = false;
                     delete blog['description'];
-                    const result = blog.content.match(/<p>(.*?)<\/p>/g).map(function (val) {
+                    const result = blog.content.match(/<p>(.*?)<\/p>/g).map((val) => {
                         return val.replace(/<\/?p>/g, '');
                     });
                     let subtitle = result[0];
                     if (subtitle.includes('<em>')) {
-                        const result1 = subtitle.match(/<em>(.*?)<\/em>/g).map(function (val) {
+                        const result1 = subtitle.match(/<em>(.*?)<\/em>/g).map((val) => {
                             return val.replace(/<\/?em>/g, '');
                         });
                         subtitle = result1[0];
@@ -285,15 +276,15 @@ export class GeneralController {
                 }
                 console.log('blogs', blogs);
 
-                const ref1 = blogService.setBlog(blogs);
+                const ref1 = await BlogService.setBlog(blogs);
                 if (ref1) {
-                    res.send('created feed blogs');
+                    res.status(200).send('created feed blogs');
                 } else {
                     res.status(500).send('Internal Server error');
                 }
             });
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -307,22 +298,22 @@ export class GeneralController {
 
         try {
             console.log(req.params.collectionName);
-            const questionBifurcation: QuestionBifurcation = new QuestionBifurcation();
+
             switch (req.params.collectionName) {
                 case 'questions':
                     console.log('Updating questions ...');
-                    await questionBifurcation.getQuestionList(req.params.collectionName);
-                    res.send('updated question collection');
+                    await QuestionBifurcation.getQuestionList(req.params.collectionName);
+                    res.status(200).send('updated question collection');
                     break;
                 case 'unpublished_questions':
                     console.log('Updating unpublished questions ...');
-                    await questionBifurcation.getQuestionList(req.params.collectionName);
-                    res.send('updated unpublished question collection');
+                    await QuestionBifurcation.getQuestionList(req.params.collectionName);
+                    res.status(200).send('updated unpublished question collection');
                     break;
             }
 
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -338,14 +329,13 @@ export class GeneralController {
 
         try {
             const authUsers: User[] = [];
-            const authUser: AuthUser = new AuthUser();
-            const users = await authUser.getUsers(authUsers);
-                console.log('users', users);
+            const users = await AuthUser.getUsers(authUsers);
+            console.log('users', users);
             await UserService.addUpdateAuthUsersToFireStore(users);
-            res.send('dumped all the users');
+            res.status(200).send('dumped all the users');
 
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -358,10 +348,9 @@ export class GeneralController {
      */
     static async generateAllUsersProfileImages(req, res): Promise<any> {
         try {
-            const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
-            res.send(await profileImagesGenerator.fetchUsers());
+            res.status(200).send(await ProfileImagesGenerator.fetchUsers());
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -382,12 +371,12 @@ export class GeneralController {
                 if (userObj && userObj.userId) {
                     const accountObj: Account = (userObj.stats) ? userObj.stats : new Account();
                     accountObj.id = userObj.userId;
-                    migrationPromises.push(generalAccountService.setAccount({ ...accountObj }));
+                    migrationPromises.push(AccountService.setAccount({ ...accountObj }));
                 }
             }
-            res.send(await Promise.all(migrationPromises));
+            res.status(200).send(await Promise.all(migrationPromises));
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send(error);
             return error;
         }
@@ -413,7 +402,7 @@ export class GeneralController {
                     if (userObj && userObj.userId) {
                         const accountObj: Account = new Account();
                         accountObj.id = userObj.userId;
-                        migrationPromises.push(generalAccountService.addDefaultLives({ ...accountObj }));
+                        migrationPromises.push(AccountService.addDefaultLives({ ...accountObj }));
                         const successMessage = `Added default lives for user :  ${accountObj.id}`;
                         console.log(successMessage);
                         res.write(successMessage);
@@ -423,7 +412,7 @@ export class GeneralController {
                 await Promise.all(migrationPromises);
                 const msg = 'Default lives added successfully';
                 console.log(msg);
-                return res.end(msg);
+                return res.status(200).send(msg);
 
             } else {
                 res.status(200).send('live feature is not enabled');
@@ -446,11 +435,11 @@ export class GeneralController {
         try {
             const appSetting = await this.appSettings.getAppSettings();
             if (appSetting.lives.enable) {
-                return res.send(generalAccountService.addLives());
+                return res.status(200).send(AccountService.addLives());
             }
             res.status(200).send('live feature is not enabled');
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -479,9 +468,9 @@ export class GeneralController {
                 const dbQuestionObj = { ...questionObj };
                 updatePromises.push(QuestionService.updateQuestion('questions', dbQuestionObj));
             }
-            res.send(await Promise.all(updatePromises));
+            res.status(200).send(await Promise.all(updatePromises));
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -491,7 +480,7 @@ export class GeneralController {
         try {
             res.status(200).send(await UserService.removeSocialProfile());
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }

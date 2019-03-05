@@ -6,7 +6,7 @@ import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
 import router from './routes/routes';
-import { FirebaseFunctions } from './db/firebase-functions';
+import { FirebaseFunctions } from './db/firebase.functions';
 
 
 

@@ -1,8 +1,7 @@
-import admin from '../db/firebase.client';
-const functions = require('firebase-functions');
 import { ESUtils } from '../utils/ESUtils';
 import { Question } from '../../projects/shared-library/src/lib/shared/model';
-
+import admin from '../db/firebase.client';
+import * as functions from 'firebase-functions';
 
 export class GeneralService {
     /**
@@ -32,12 +31,13 @@ export class GeneralService {
             };
             // console.log('targetAppConfig', targetAppConfig);
             const targetDB = admin.initializeApp(config, 'targetApp').firestore();
-            const snapshot = await sourceDB.collection(collectionName).get();
-            for (const doc of snapshot) {
+            const snapshots = await sourceDB.collection(collectionName).get();
+            for (const doc of snapshots.docs) {
                 targetDB.collection(collectionName).doc(doc.id).set(doc.data());
             }
             return 'migrated collection';
         } catch (error) {
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -52,26 +52,26 @@ export class GeneralService {
 
             const questions = [];
             const qs = await this.generalFireStoreClient.collection('/questions').orderBy('id').get();
-                // admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
-                // console.log("Questions Count: " + qs.length);
-                for (const q of qs) {
-                    // console.log(q.key);
-                    console.log(q.data());
+            // admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
+            // console.log("Questions Count: " + qs.length);
+            for (const q of qs) {
+                // console.log(q.key);
+                console.log(q.data());
 
-                    const data = q.data();
-                    const question: { 'id': string, 'type': string, 'source': any } = {
-                        'id': data.id,
-                        'type': data.categoryIds['0'],
-                        'source': data
-                    };
-                    questions.push(question);
-                }
+                const data = q.data();
+                const question: { 'id': string, 'type': string, 'source': any } = {
+                    'id': data.id,
+                    'type': data.categoryIds['0'],
+                    'source': data
+                };
+                questions.push(question);
+            }
 
-                await ESUtils.rebuildIndex(questions);
-                return 'Questions indexed';
+            await ESUtils.rebuildIndex(questions);
+            return 'Questions indexed';
         } catch (error) {
-                console.log(error);
-                throw error;
+            console.error('Error : ', error);
+            throw error;
         }
     }
 
@@ -84,15 +84,12 @@ export class GeneralService {
         try {
             const qs = await admin.database().ref('/questions/published').orderByKey().limitToLast(1).once('value');
             for (const q of qs) {
-                console.log(q.key);
-                console.log(q.val());
-
                 const question: Question = q.val();
                 question.id = q.key;
                 return question;
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
 
@@ -108,7 +105,7 @@ export class GeneralService {
         try {
             await ESUtils.getRandomGameQuestion([2, 4, 5, 6], []);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -137,7 +134,7 @@ export class GeneralService {
             });
 
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }

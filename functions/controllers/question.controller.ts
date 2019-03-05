@@ -17,7 +17,7 @@ export class QuestionController {
             const isNextQuestion = (req.params.nextQ && req.params.nextQ === 'next') ? true : false;
             res.status(200).send(await ESUtils.getRandomQuestionOfTheDay(isNextQuestion));
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -37,7 +37,7 @@ export class QuestionController {
             console.log(criteria);
             res.status(200).send(await ESUtils.getQuestions(start, size, criteria));
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -114,14 +114,14 @@ export class QuestionController {
                 const dbGame = game.getDbModel();
                 //  console.log('update the question ---->', question);
                 await GameService.updateGame(dbGame);
-                res.send(question);
+                res.status(200).send(question);
             } else {
                 const newQuestion = await ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId);
                 newQuestion.gameRound = game.round;
-                res.send(newQuestion);
+                res.status(200).send(newQuestion);
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -151,9 +151,9 @@ export class QuestionController {
             } else {
                 question.userGivenAnswer = null;
             }
-            res.send(question);
+            res.status(200).send(question);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -181,9 +181,9 @@ export class QuestionController {
                 }
             });
             await Promise.all(questionUpdatePromises);
-            res.send('unpublished status changed');
+            res.status(200).send('unpublished status changed');
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }

@@ -1,12 +1,13 @@
-import admin from '../db/firebase.client';
 import { Account, Game } from '../../projects/shared-library/src/lib/shared/model';
 import { AppSettings } from './app-settings.service';
 import { Utils } from '../utils/utils';
+import admin from '../db/firebase.client';
 
 export class AccountService {
 
     private static accountFireStoreClient = admin.firestore();
     private static appSettings: AppSettings = new AppSettings();
+
     /**
      * getAccountById
      * return account
@@ -15,7 +16,7 @@ export class AccountService {
         try {
             return await this.accountFireStoreClient.doc(`/accounts/${id}`).get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -30,7 +31,7 @@ export class AccountService {
                 .set(dbAccount);
 
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -43,7 +44,7 @@ export class AccountService {
         try {
             return await this.accountFireStoreClient.doc(`/accounts/${dbAccount.id}`).update(dbAccount);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
 
@@ -57,16 +58,16 @@ export class AccountService {
         try {
             return await this.accountFireStoreClient.collection('accounts').get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
 
     /**
-     * calcualteAccountStat
+     * calculateAccountStat
      * return account
      */
-    static calcualteAccountStat(account: Account, game: Game, categoryIds: Array<number>, userId: string): Account {
+    static calculateAccountStat(account: Account, game: Game, categoryIds: Array<number>, userId: string): Account {
         const score = game.stats[userId].score;
         const avgAnsTime = game.stats[userId].avgAnsTime;
         // console.log('categoryIds', categoryIds);
@@ -117,7 +118,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -133,7 +134,7 @@ export class AccountService {
                 await this.addLife(userId, appSetting);
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -161,7 +162,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -187,7 +188,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             return error;
         }
     }
@@ -217,7 +218,7 @@ export class AccountService {
                 accountRef.set({ lives: appSetting.lives.maxLives, id: userId });
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -226,7 +227,7 @@ export class AccountService {
         try {
             return await this.increaseLives(userId);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -253,7 +254,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -279,7 +280,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }

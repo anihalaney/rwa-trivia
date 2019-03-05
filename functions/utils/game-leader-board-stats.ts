@@ -1,22 +1,16 @@
-import { QuestionService } from '../services/question.service';
-import { AccountService as leaderBoardAccountService } from '../services/account.service';
-import { LeaderBoardService } from '../services/leaderboard.service';
-
-import {
-    Game, Account, Question
-} from '../../projects/shared-library/src/lib/shared/model';
+import { Account, Game, Question } from '../../projects/shared-library/src/lib/shared/model';
+import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
+import { LeaderBoardService } from '../services/leaderboard.service';
+import { QuestionService } from '../services/question.service';
 
 
 export class GameLeaderBoardStats {
 
-    accountDict: { [key: string]: Account };
+    static accountDict: { [key: string]: Account } = {};
 
-    constructor() {
-        this.accountDict = {};
-    }
 
-    public async generateGameStats(): Promise<any> {
+    static async generateGameStats(): Promise<any> {
         const userPromises = [];
         let games;
         try {
@@ -35,19 +29,20 @@ export class GameLeaderBoardStats {
             for (const userId of Object.keys(this.accountDict)) {
                 const account: Account = this.accountDict[userId];
                 account.id = userId;
-                userPromises.push(leaderBoardAccountService.updateAccountData({ ...account }));
+                userPromises.push(AccountService.updateAccountData({ ...account }));
             }
 
             const userResults = await Promise.all(userPromises);
             this.accountDict = {};
 
             return userResults;
-        } catch (err) {
-            console.log('err', err);
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
         }
     }
 
-    public async loadQuestionDictionary(): Promise<{ [key: string]: Array<number> }> {
+    static async loadQuestionDictionary(): Promise<{ [key: string]: Array<number> }> {
         const questionDict: { [key: string]: Array<number> } = {};
 
         try {
@@ -66,15 +61,14 @@ export class GameLeaderBoardStats {
                 return questionDict;
 
             }
-        } catch (err) {
-            console.log('err', err);
-            throw err;
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
         }
-
     }
 
 
-    private getGameQuestionCategories(game: Game, questionDict: { [key: string]: Array<number> }): Array<number> {
+    private static getGameQuestionCategories(game: Game, questionDict: { [key: string]: Array<number> }): Array<number> {
         const questionCategories: Array<number> = [];
         for (const playerQnA of game.playerQnAs) {
             const categoryIds: Array<number> = questionDict[playerQnA.questionId];
@@ -90,13 +84,13 @@ export class GameLeaderBoardStats {
         return questionCategories;
     }
 
-    private calculateAllGameUsersStat(userId: string, game: Game, categoryIds: Array<number>): void {
+    private static calculateAllGameUsersStat(userId: string, game: Game, categoryIds: Array<number>): void {
         const account: Account = (this.accountDict[userId]) ? this.accountDict[userId] : new Account();
-        this.accountDict[userId] = leaderBoardAccountService.calcualteAccountStat(account, game, categoryIds, userId);
+        this.accountDict[userId] = AccountService.calculateAccountStat(account, game, categoryIds, userId);
     }
 
 
-    public async  getGameUsers(game: Game): Promise<any> {
+    static async  getGameUsers(game: Game): Promise<any> {
         const userPromises = [];
         const questionPromises = [];
         const categoryIds = [];
@@ -124,38 +118,38 @@ export class GameLeaderBoardStats {
                 userPromises.push(this.calculateUserStat(userId, game, categoryIds));
             }
 
-            const userResults = await Promise.all(userPromises);
-            return userResults;
-        } catch (err) {
-            console.log('err', err);
-            throw err;
+            return await Promise.all(userPromises);
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
         }
 
     }
 
-    private async  calculateUserStat(userId: string, game: Game, categoryIds: Array<number>): Promise<string> {
+    private static async calculateUserStat(userId: string, game: Game, categoryIds: Array<number>): Promise<string> {
         try {
-            const accountData = await leaderBoardAccountService.getAccountById(userId);
+            const accountData = await AccountService.getAccountById(userId);
             const account: Account = accountData.data();
             if (account && account.id) {
-                const updateStatus = await leaderBoardAccountService.updateAccountData(
-                    leaderBoardAccountService.calcualteAccountStat(account, game, categoryIds, userId));
-                return updateStatus;
+
+                return await AccountService.updateAccountData(
+                    AccountService.calculateAccountStat(account, game, categoryIds, userId));
             }
-        } catch (err) {
-            console.log('err', err);
-            throw err;
+            return 'account does not exist';
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
         }
 
     }
 
 
-    public async calculateGameLeaderBoardStat(): Promise<string> {
+    static async calculateGameLeaderBoardStat(): Promise<string> {
         try {
-            const accounts = await leaderBoardAccountService.getAccounts();
+            const accounts = await AccountService.getAccounts();
             let lbsStats = await LeaderBoardService.getLeaderBoardStats();
             lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
-            console.log('lbsStats', lbsStats);
+
             for (const account of accounts.docs) {
                 const accountObj: Account = account.data();
                 lbsStats = LeaderBoardService.calculateLeaderBoardStats(accountObj, lbsStats);
@@ -163,9 +157,9 @@ export class GameLeaderBoardStats {
 
             const updateLBSStatResult = await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
             return updateLBSStatResult;
-        } catch (err) {
-            console.log('err', err);
-            return err;
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
         }
 
     }

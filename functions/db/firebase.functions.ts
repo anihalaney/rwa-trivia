@@ -1,27 +1,26 @@
-import admin from '../db/firebase.client';
-const functions = require('firebase-functions');
+import * as functions from 'firebase-functions';
+import {
+    friendInvitationConstants, Game, Invitation, OpponentType,
+    PlayerMode, Question, TriggerConstants, UserStatConstants
+} from '../../projects/shared-library/src/lib/shared/model';
+import { AccountService } from '../services/account.service';
+import { AppSettings } from '../services/app-settings.service';
+import { LeaderBoardService } from '../services/leaderboard.service';
+import { ESUtils } from '../utils/ESUtils';
+import { FriendGameStats } from '../utils/friend-game-stats';
+import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
+import { MailClient } from '../utils/mail-client';
+import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+import { UserContributionStat } from '../utils/user-contribution-stat';
+import admin from './firebase.client';
 const fs = require('fs');
 const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
-import { AppSettings } from './../services/app-settings.service';
-import { LeaderBoardService as generalleaderBoardService } from '../services/leaderboard.service';
-const appSettings: AppSettings = new AppSettings();
-const generalAccountService = require('../services/account.service');
 
-import {
-    Game, Question, Category, User, UserStatConstants, Invitation,
-    TriggerConstants, PlayerMode, OpponentType, friendInvitationConstants
-} from '../../projects/shared-library/src/lib/shared/model';
-import { ESUtils } from '../utils/ESUtils';
-import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
-import { UserContributionStat } from '../utils/user-contribution-stat';
-import { FriendGameStats } from '../utils/friend-game-stats';
-import { MailClient } from '../utils/mail-client';
-import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 
 
 export class FirebaseFunctions {
-
+    static appSettings: AppSettings = new AppSettings();
     // Take the text parameter passed to this HTTP endpoint and insert it into the
     // Realtime Database under the path /messages/:pushId/original
     static async  addMessage(firebaseFunctions: any): Promise<any> {
@@ -53,11 +52,9 @@ export class FirebaseFunctions {
                 // add or update
                 await ESUtils.createOrUpdateIndex(data.categoryIds['0'], question, context.params.questionId);
 
-                const userContributionStat: UserContributionStat = new UserContributionStat();
-                await userContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution);
+                await UserContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution);
 
-                const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-                await systemStatsCalculations.updateSystemStats('total_questions');
+                await SystemStatsCalculations.updateSystemStats('total_questions');
 
             } else {
                 // delete
@@ -101,8 +98,8 @@ export class FirebaseFunctions {
             const data = snap.data();
 
             if (data) {
-                const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-                await systemStatsCalculations.updateSystemStats('active_games');
+
+                await SystemStatsCalculations.updateSystemStats('active_games');
             }
 
             return true;
@@ -122,18 +119,15 @@ export class FirebaseFunctions {
                 const game: Game = Game.getViewModel(afterEventData);
                 if (game.gameOver) {
 
-                    const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-
-                    await gameLeaderBoardStats.getGameUsers(game);
+                    await GameLeaderBoardStats.getGameUsers(game);
 
                     if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                         Number(game.gameOptions.opponentType) === OpponentType.Friend) {
-                        const friendGameStats: FriendGameStats = new FriendGameStats();
-                        await friendGameStats.calculateFriendsGameState(game);
+                        await FriendGameStats.calculateFriendsGameState(game);
                     }
 
-                    const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-                    await systemStatsCalculations.updateSystemStats('active_games');
+
+                    await SystemStatsCalculations.updateSystemStats('active_games');
                 }
             }
 
@@ -149,15 +143,15 @@ export class FirebaseFunctions {
             const data = snap.data();
 
             if (data) {
-                const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-                await systemStatsCalculations.updateSystemStats('total_users');
 
-                const appSetting = await appSettings.getAppSettings();
+                await SystemStatsCalculations.updateSystemStats('total_users');
+
+                const appSetting = await this.appSettings.getAppSettings();
                 if (appSetting.lives.enable) {
                     const accountObj: any = {};
                     accountObj.id = data.userId;
                     accountObj.lives = appSetting.lives.max_lives;
-                    await generalAccountService.setAccount(accountObj);
+                    await AccountService.setAccount(accountObj);
                 }
             }
             return true;
@@ -175,12 +169,12 @@ export class FirebaseFunctions {
             if (afterEventData !== beforeEventData) {
                 const account: Account = afterEventData;
 
-                let lbsStats = await generalleaderBoardService.getLeaderBoardStats();
+                let lbsStats = await LeaderBoardService.getLeaderBoardStats();
 
                 lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
-                lbsStats = generalleaderBoardService.calculateLeaderBoardStats(account, lbsStats);
+                lbsStats = LeaderBoardService.calculateLeaderBoardStats(account, lbsStats);
 
-                await generalleaderBoardService.setLeaderBoardStats({ ...lbsStats });
+                await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
             }
             return true;
 

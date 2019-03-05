@@ -1,6 +1,6 @@
-import admin from '../db/firebase.client';
-// const accountFireStoreClient = admin.firestore();
 import { ApplicationSettings } from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
+
 export class AppSettings {
     private appSettings: ApplicationSettings;
 
@@ -11,22 +11,22 @@ export class AppSettings {
             });
     }
 
-    async loadAppSetttings(): Promise<any> {
+    async loadAppSettings(): Promise<any> {
         try {
             const response = await admin.firestore().doc('application_settings/settings').get();
             this.appSettings = response.data();
             return this.appSettings;
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
 
     async getAppSettings(): Promise<ApplicationSettings> {
         if (this.appSettings) {
-            return await Promise.resolve(this.appSettings);
+            return await this.appSettings;
         } else {
-            return this.loadAppSetttings();
+            return this.loadAppSettings();
         }
     }
 }

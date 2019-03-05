@@ -12,10 +12,10 @@ export class FriendService {
         try {
             return await this.friendFireStoreClient.collection('invitations').add(dbInvitation);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 
     /**
      * getInvitationByToken
@@ -25,10 +25,10 @@ export class FriendService {
         try {
             return await this.friendFireStoreClient.doc(`/invitations/${token}`).get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 
     /**
      * checkInvitation
@@ -41,10 +41,10 @@ export class FriendService {
                 .where('email', '==', email)
                 .get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 
     /**
      * updateInvitation
@@ -55,10 +55,10 @@ export class FriendService {
             return await this.friendFireStoreClient.doc(`/invitations/${invitation.id}`)
                 .update(invitation);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 
 
 
@@ -70,10 +70,10 @@ export class FriendService {
         try {
             return await this.friendFireStoreClient.doc(`/friends/${invitee}`).get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 
 
     /**
@@ -85,10 +85,10 @@ export class FriendService {
             return await this.friendFireStoreClient.doc(`/friends/${invitee}`)
                 .update({ myFriends: myFriends });
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 
 
     /**
@@ -100,8 +100,8 @@ export class FriendService {
             return await this.friendFireStoreClient.doc(`/friends/${invitee}`)
                 .set(dbUser);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 }

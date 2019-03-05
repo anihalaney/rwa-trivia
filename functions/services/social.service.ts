@@ -1,9 +1,8 @@
 import admin from '../db/firebase.client';
 
-
 export class SocialService {
     private static bucket = admin.storage().bucket();
-    
+
     /**
      * generateSocialUrl
      * return ref
@@ -15,9 +14,8 @@ export class SocialService {
             const signedUrls = await file.download();
             return signedUrls[0];
         } catch (error) {
-            console.log('error', error);
+            console.log('Error : ', error);
             throw error;
         }
-    };
-
+    }
 }

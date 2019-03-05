@@ -63,7 +63,7 @@ export class AuthMiddleware {
             }
 
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(401).send('Unauthorized');
         }
     }
@@ -100,7 +100,7 @@ export class AuthMiddleware {
             }
 
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(403).send('Unauthorized');
         }
     }

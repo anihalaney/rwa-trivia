@@ -17,7 +17,7 @@ export class ESUtils {
       this.searchClient = new ElasticSearch.Client(Object.assign({}, elasticSearchConfig));
     }
     return this.searchClient;
-  };
+  }
 
   static getIndex(index: string): string {
     // set required prefix for different deployment environments(firebase project) using following command
@@ -142,7 +142,7 @@ export class ESUtils {
       const batches = [];
 
       for (let i = 0; i < arrayLength; i += batchSize) {
-        let batchData = data.slice(i, i + batchSize);
+        const batchData = data.slice(i, i + batchSize);
         const body = [];
         batchData.forEach(d => {
           body.push({ index: { _index: index, _type: d.type, _id: d.id } });
@@ -256,7 +256,7 @@ export class ESUtils {
       });
 
     } catch (error) {
-      console.error(error);
+      console.error('Error : ', error);
       throw error;
     }
   }
@@ -284,7 +284,7 @@ export class ESUtils {
         }
       });
     } catch (error) {
-      console.error(error);
+      console.error('Error : ', error);
       throw error;
     }
   }
@@ -324,7 +324,7 @@ export class ESUtils {
         }
       });
     } catch (error) {
-      console.error(error);
+      console.error('Error : ', error);
       throw error;
     }
   }
@@ -353,7 +353,7 @@ export class ESUtils {
       });
       return (body.hits.hits);
     } catch (error) {
-      console.error(error);
+      console.error('Error : ', error);
       throw error;
     }
   }
