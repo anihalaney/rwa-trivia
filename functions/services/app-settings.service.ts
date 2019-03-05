@@ -11,7 +11,7 @@ export class AppSettings {
             });
     }
 
-    async loadAppSetttings(): Promise<any> {
+    async loadAppSettings(): Promise<any> {
         try {
             const response = await admin.firestore().doc('application_settings/settings').get();
             this.appSettings = response.data();
@@ -26,7 +26,7 @@ export class AppSettings {
         if (this.appSettings) {
             return await Promise.resolve(this.appSettings);
         } else {
-            return this.loadAppSetttings();
+            return this.loadAppSettings();
         }
     }
 }

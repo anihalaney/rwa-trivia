@@ -1,5 +1,5 @@
 import admin from '../db/firebase.client';
-const functions = require('firebase-functions');
+import * as functions from 'firebase-functions'
 import { ESUtils } from '../utils/ESUtils';
 import { Question } from '../../projects/shared-library/src/lib/shared/model';
 

@@ -2,16 +2,23 @@ import { BulkUploadService as bulkUploadUserService } from '../services/bulkuplo
 import { User, BulkUploadFileInfo } from '../../projects/shared-library/src/lib/shared/model';
 
 export class BulkUploadUpdate {
-    getUserList() {
-        return bulkUploadUserService.getBulkUpload().then(bulkData => {
-            bulkData.docs.map((bulkUploadFileInfo, index) => {
+    getUserList = async (): Promise<any> => {
+        try {
+            const bulkData = await bulkUploadUserService.getBulkUpload();
+            for (const bulkUploadFileInfo of bulkData.docs) {
                 const bulkObj: BulkUploadFileInfo = bulkUploadFileInfo.data();
                 bulkObj['isAdminArchived'] = false;
                 bulkObj['isUserArchived'] = false;
-                bulkUploadUserService.setBulkUpload(bulkObj).then(ref => {
+                const ref = await bulkUploadUserService.setBulkUpload(bulkObj);
+                if (ref) {
                     return bulkObj.id;
-                });
-            });
-        })
+                } else {
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 }
