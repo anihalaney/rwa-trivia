@@ -1,4 +1,4 @@
-const friendGameStatService = require('../services/friend.service');
+import {  FriendService } from '../services/friend.service';
 
 import {
     Game, Friends, FriendsMetadata
@@ -27,7 +27,7 @@ export class FriendGameStats {
 
     private calculateFriendStat(userId: string, otherUserId: string, game: Game): Promise<string> {
 
-        return friendGameStatService.getFriendByInvitee(userId).then(friendData => {
+        return FriendService.getFriendByInvitee(userId).then(friendData => {
             const friends: Friends = friendData.data();
             if (friends) {
                 let index = 0;
@@ -57,7 +57,7 @@ export class FriendGameStats {
                 friendsMetadataMap[otherUserId] = { ...friendsMetadata };
                 friends.myFriends[matchedIndex] = friendsMetadataMap;
                 //  console.log('friends', friends);
-                return friendGameStatService.setFriend({ ...friends }, userId).then((id) => {
+                return FriendService.setFriend({ ...friends }, userId).then((id) => {
                     return `Friend ${userId} Stat updated`;
                 });
             } else {

@@ -7,7 +7,8 @@ import { UserService } from '../services/user.service';
 import { GameService } from '../services/game.service';
 import { PushNotification } from '../utils/push-notifications';
 import { SystemStatsCalculations } from './system-stats-calculations';
-const gameAccountService = require('../services/account.service');
+import { AccountService} from '../services/account.service'
+
 
 export class GameMechanics {
 
@@ -23,7 +24,7 @@ export class GameMechanics {
                     game.decideNextTurn(playerQnA, userId);
 
                     if (playerQnA.answerCorrect) {
-                        gameAccountService.setBits(userId);
+                        AccountService.setBits(userId);
                     }
                     if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
                         this.pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
@@ -38,7 +39,7 @@ export class GameMechanics {
                     game.decideWinner();
                     game.calculateStat(game.nextTurnPlayerId);
                     game.GameStatus = GameStatus.COMPLETED;
-                    gameAccountService.setBytes(game.winnerPlayerId);
+                    AccountService.setBytes(game.winnerPlayerId);
                     if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                         (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
                         this.pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,

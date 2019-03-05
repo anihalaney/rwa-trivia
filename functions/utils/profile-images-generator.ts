@@ -3,9 +3,8 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 
 import { UserService } from '../services/user.service';
+import * as sharp from 'sharp';
 
-const stream = require('stream');
-const sharp = require('sharp');
 
 export class ProfileImagesGenerator {
 

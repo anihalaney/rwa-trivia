@@ -1,5 +1,5 @@
 import { BulkUploadService as bulkUploadUserService } from '../services/bulkupload.service';
-import { User, BulkUploadFileInfo } from '../../projects/shared-library/src/lib/shared/model';
+import { BulkUploadFileInfo } from '../../projects/shared-library/src/lib/shared/model';
 
 export class BulkUploadUpdate {
     getUserList = async (): Promise<any> => {

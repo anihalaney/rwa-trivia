@@ -1,15 +1,14 @@
 import admin from '../db/firebase.client';
-const functions = require('firebase-functions');
-const fs = require('fs');
-const path = require('path');
-const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+import * as functions from 'firebase-functions';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import { AppSettings } from './../services/app-settings.service';
-import { LeaderBoardService as generalleaderBoardService } from '../services/leaderboard.service';
-const appSettings: AppSettings = new AppSettings();
-const generalAccountService = require('../services/account.service');
+import { LeaderBoardService } from '../services/leaderboard.service';
+import { AccountService } from '../services/account.service';
+
 
 import {
-    Game, Question, Category, User, UserStatConstants, Invitation,
+    Game, Question, UserStatConstants, Invitation,
     TriggerConstants, PlayerMode, OpponentType, friendInvitationConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { ESUtils } from '../utils/ESUtils';
@@ -19,7 +18,8 @@ import { FriendGameStats } from '../utils/friend-game-stats';
 import { MailClient } from '../utils/mail-client';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 
-
+const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+const appSettings: AppSettings = new AppSettings();
 export class FirebaseFunctions {
 
     // Take the text parameter passed to this HTTP endpoint and insert it into the
@@ -157,7 +157,7 @@ export class FirebaseFunctions {
                     const accountObj: any = {};
                     accountObj.id = data.userId;
                     accountObj.lives = appSetting.lives.max_lives;
-                    await generalAccountService.setAccount(accountObj);
+                    await AccountService.setAccount(accountObj);
                 }
             }
             return true;
@@ -175,12 +175,12 @@ export class FirebaseFunctions {
             if (afterEventData !== beforeEventData) {
                 const account: Account = afterEventData;
 
-                let lbsStats = await generalleaderBoardService.getLeaderBoardStats();
+                let lbsStats = await LeaderBoardService.getLeaderBoardStats();
 
                 lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
-                lbsStats = generalleaderBoardService.calculateLeaderBoardStats(account, lbsStats);
+                lbsStats = LeaderBoardService.calculateLeaderBoardStats(account, lbsStats);
 
-                await generalleaderBoardService.setLeaderBoardStats({ ...lbsStats });
+                await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
             }
             return true;
 

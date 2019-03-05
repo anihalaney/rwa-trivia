@@ -13,7 +13,7 @@ export class ESUtils {
 
   static getElasticSearchClient(): ElasticSearch.Client {
     if (!this.searchClient) {
-      // cloning config object to avoid resuing the same object (same object causes error)
+      // cloning config object to avoid reusing the same object (same object causes error)
       this.searchClient = new ElasticSearch.Client(Object.assign({}, elasticSearchConfig));
     }
     return this.searchClient;
