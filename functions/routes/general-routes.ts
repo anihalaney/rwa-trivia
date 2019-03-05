@@ -1,28 +1,24 @@
 import * as express from 'express';
-const router = express.Router();
 import { QuestionController } from '../controllers/question.controller';
+import { GeneralController } from '../controllers/general.controller';
 const generalAuth = require('../middlewares/auth');
+export const generalRoutes = express.Router();
 
 
-const generalController = require('../controllers/general.controller');
-
-
-router.get('/migrate/:collectionName', generalAuth.adminOnly, generalController.migrateCollections);
-router.get('/migrate/prod/dev/:collectionName', generalAuth.adminOnly, generalController.migrateProdCollectionsToDev);
-router.get('/rebuild/question/index', generalAuth.adminOnly, generalController.rebuildQuestionIndex);
-router.get('/hello', generalAuth.adminOnly, generalController.helloOperation);
-router.get('/question', generalAuth.adminOnly, generalController.getTestQuestion);
-router.get('/game/question', generalAuth.adminOnly, generalController.getGameQuestionTest);
-router.get('/es/check', generalAuth.adminOnly, generalController.testES);
-router.post('/stat/system', generalAuth.adminOnly, generalController.generateSystemStat);
-router.get('/bulkupload/update', generalAuth.adminOnly, generalController.updateBulkUploadCollection);
-router.post('/question/update/:collectionName', generalAuth.adminOnly, generalController.updateQuestionCollection);
-router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsData);
-router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuthUsersInFirestore);
-router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
-router.post('/question/status', generalAuth.adminOnly, QuestionController.changeUnpublishedQuestionStatus);
-router.get('/add/default/lives', generalAuth.adminOnly, generalController.addDefaultLives);
-router.get('/addLives', generalAuth.adminOnly, generalController.addLives);
-router.get('/remove/social/profile', generalAuth.adminOnly, generalController.removeSocialProfile);
-
-module.exports = router;
+generalRoutes.get('/migrate/:collectionName', generalAuth.adminOnly, GeneralController.migrateCollections);
+generalRoutes.get('/migrate/prod/dev/:collectionName', generalAuth.adminOnly, GeneralController.migrateProdCollectionsToDev);
+generalRoutes.get('/rebuild/question/index', generalAuth.adminOnly, GeneralController.rebuildQuestionIndex);
+generalRoutes.get('/hello', generalAuth.adminOnly, GeneralController.helloOperation);
+generalRoutes.get('/question', generalAuth.adminOnly, GeneralController.getTestQuestion);
+generalRoutes.get('/game/question', generalAuth.adminOnly, GeneralController.getGameQuestionTest);
+generalRoutes.get('/es/check', generalAuth.adminOnly, GeneralController.testES);
+generalRoutes.post('/stat/system', generalAuth.adminOnly, GeneralController.generateSystemStat);
+generalRoutes.get('/bulkupload/update', generalAuth.adminOnly, GeneralController.updateBulkUploadCollection);
+generalRoutes.post('/question/update/:collectionName', generalAuth.adminOnly, GeneralController.updateQuestionCollection);
+generalRoutes.post('/blog', generalAuth.authTokenOnly, GeneralController.generateBlogsData);
+generalRoutes.post('/auth-users', generalAuth.authTokenOnly, GeneralController.dumpAuthUsersInFirestore);
+generalRoutes.post('/user/profile/image', generalAuth.adminOnly, GeneralController.generateAllUsersProfileImages);
+generalRoutes.post('/question/status', generalAuth.adminOnly, QuestionController.changeUnpublishedQuestionStatus);
+generalRoutes.get('/add/default/lives', generalAuth.adminOnly, GeneralController.addDefaultLives);
+generalRoutes.get('/addLives', generalAuth.adminOnly, GeneralController.addLives);
+generalRoutes.get('/remove/social/profile', generalAuth.adminOnly, GeneralController.removeSocialProfile);
