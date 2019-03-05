@@ -47,7 +47,7 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
         data.createdOn = (data.createdOn && data.createdOn['_seconds']) ? new Date(data.createdOn['_seconds'] * 1000) : new Date();
 
         // add or update
-        ESUtils.createOrUpdateIndex(ESUtils.QUESTIONS_INDEX, data.categoryIds['0'], question, context.params.questionId);
+        ESUtils.createOrUpdateIndex(data.categoryIds['0'], question, context.params.questionId);
 
         const userContributionStat: UserContributionStat = new UserContributionStat();
         userContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution).then((userDictResults) => {
@@ -59,7 +59,7 @@ exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}'
         });
     } else {
         // delete
-        ESUtils.removeIndex(ESUtils.QUESTIONS_INDEX, context.params.questionId);
+        ESUtils.removeIndex(context.params.questionId);
     }
 
 });
