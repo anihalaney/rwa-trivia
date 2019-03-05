@@ -1,4 +1,4 @@
-import { MigrationService } from '../services/migration.service';
+import { GeneralService } from '../services/general.service';
 import { UserService } from '../services/user.service';
 import { QuestionService } from '../services/question.service';
 import { AccountService } from '../services/account.service';
@@ -73,7 +73,7 @@ export class MigrationController {
     static async migrateProdCollectionsToDev(req, res): Promise<any> {
         try {
             console.log(req.params.collectionName);
-            res.send( await MigrationService.migrateCollection(req.params.collectionName));
+            res.send( await GeneralService.migrateCollection(req.params.collectionName));
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server error');
@@ -88,7 +88,7 @@ export class MigrationController {
      */
     static async rebuildQuestionIndex(req, res): Promise<any> {
         try {
-            res.send(await MigrationService.rebuildQuestionIndex());
+            res.send(await GeneralService.rebuildQuestionIndex());
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server error');
@@ -327,21 +327,7 @@ export class MigrationController {
         }
     }
 
-    // Schedular for add lives
-    static async addLives(req, res): Promise<any> {
-        try {
-            const appSetting = await this.appSettings.getAppSettings();
-            if (appSetting.lives.enable) {
-                return res.send(AccountService.addLives());
-            }
-            res.status(200).send('live feature is not enabled');
-        } catch (error) {
-            console.error(error);
-            res.status(500).send('Internal Server error');
-            return error;
-        }
 
-    }
 
     /**
      * changeQuestionCategoryIdType

@@ -32,7 +32,6 @@ class MigrationRoutes {
         this.migrationRoutes.post('/user/profile/image', AuthMiddleware.authTokenOnly, MigrationController.generateAllUsersProfileImages);
         this.migrationRoutes.post('/question/status', AuthMiddleware.authTokenOnly, QuestionController.changeUnpublishedQuestionStatus);
         this.migrationRoutes.post('/add/default/lives', AuthMiddleware.authTokenOnly, MigrationController.addDefaultLives);
-        this.migrationRoutes.post('/addLives', AuthMiddleware.authTokenOnly, MigrationController.addLives);
         this.migrationRoutes.post('/remove/social/profile', AuthMiddleware.authTokenOnly, MigrationController.removeSocialProfile);
     }
 }
