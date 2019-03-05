@@ -112,6 +112,20 @@ export class GameService {
         }
     }
 
+
+    /**
+     * getCompletedGames
+     * return games
+     */
+    static async getCompletedGames(): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.collection('/games').where('gameOver', '==', true).get();
+        } catch (error) {
+            console.error('Error : ', error);
+            throw error;
+        }
+    }
+
     /**
      * updateGame
      * return ref
@@ -132,19 +146,6 @@ export class GameService {
     static async checkGameOver(): Promise<any> {
         try {
             return this.getGames(await this.gameFireStoreClient.collection('/games').where('gameOver', '==', false).get());
-        } catch (error) {
-            console.error('Error : ', error);
-            throw error;
-        }
-    }
-
-    /**
-     * getCompletedGames
-     * return games
-     */
-    static async getCompletedGames(): Promise<any> {
-        try {
-            return await this.gameFireStoreClient.collection('/games').where('gameOver', '==', true).get();
         } catch (error) {
             console.error('Error : ', error);
             throw error;

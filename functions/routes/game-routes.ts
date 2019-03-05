@@ -12,9 +12,7 @@ class GameRoutes {
 
         this.gameRoutes.post('/', AuthMiddleware.authorizedOnly, GameController.createGame);
         this.gameRoutes.put('/:gameId', AuthMiddleware.authorizedOnly, GameController.updateGame);
-        this.gameRoutes.post('/game-over/scheduler', AuthMiddleware.authTokenOnly, GameController.checkGameOver);
         this.gameRoutes.get('/update/all', AuthMiddleware.adminOnly, GameController.updateAllGame);
-        this.gameRoutes.post('/turn/scheduler', AuthMiddleware.authTokenOnly, GameController.changeGameTurn);
         this.gameRoutes.get('/social/:userId/:socialId', GameController.createSocialContent);
         this.gameRoutes.get('/social-image/:userId/:socialId', GameController.createSocialImage);
     }
