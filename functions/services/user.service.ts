@@ -184,7 +184,7 @@ export class UserService {
      */
     static async removeSocialProfile(): Promise<any> {
         const users = await this.getUsers();
-        let migrationPromises: Promise<any>[];
+        const migrationPromises: Promise<any>[] = [];
 
         for (const user of users) {
             const userObj: User = user.data();
@@ -193,7 +193,6 @@ export class UserService {
             delete userObj.twitterUrl;
             migrationPromises.push(this.updateUser(userObj));
         }
-        
         try {
             return await Promise.all(migrationPromises);
         } catch (error) {
