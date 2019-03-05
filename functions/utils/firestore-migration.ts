@@ -32,7 +32,7 @@ export class FirestoreMigration {
 
             // const catCollection = admin.firestore().collection('categories');
           }
-          console.log('Commiting categories batch');
+          console.log('Committing categories batch');
           batch.commit();
           return categories;
         });
@@ -59,7 +59,7 @@ export class FirestoreMigration {
           const doc = admin.firestore().doc('lists/tags');
           console.log(doc);
           batch.set(doc, { 'tagList': tags });
-          console.log('Commiting Tags batch');
+          console.log('Committing Tags batch');
           batch.commit();
           return tags;
         });
@@ -141,7 +141,7 @@ async function firestoreBatchWrite(collection: string, dataItems: any[], idField
       console.log(doc);
       batch.set(doc, item);
     }
-    console.log('Commiting questions batch: ' + start);
+    console.log('Committing questions batch: ' + start);
     await batch.commit();
     return await firestoreBatchWrite(collection, dataItems, idField, start + BATCH_SIZE, firestore);
   } catch (error) {
