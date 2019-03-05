@@ -3,8 +3,8 @@ import { User } from '../../projects/shared-library/src/lib/shared/model';
 
 export class AuthUser {
 
-    getUsers(authUsers: User[], pageToken?: string): Promise<User[]> {
-        return firebaseAuthService.getAuthUsers(pageToken).then((listUsersResult) => {
+    async getUsers(authUsers: User[], pageToken?: string): Promise<User[]> {
+        const listUsersResult = await firebaseAuthService.getAuthUsers(pageToken);
             listUsersResult.users.map((afUser) => {
                 const user = new User(afUser);
                 delete user['authState'];
@@ -15,7 +15,6 @@ export class AuthUser {
             } else {
                 return authUsers;
             }
-        });
     }
 }
 

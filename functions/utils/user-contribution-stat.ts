@@ -14,40 +14,53 @@ export class UserContributionStat {
         this.userDict = {};
     }
 
-    generateGameStats(): Promise<any> {
-        return QuestionService.getAllQuestions()
-            .then(questions =>
-                questions.docs.map(question =>
+    async generateGameStats(): Promise<any> {
+        try {
+            const questions = await QuestionService.getAllQuestions();
+
+            for (const question of questions.docs) {
                     this.userDict[question.data().created_uid] = (this.userDict[question.data().created_uid]) ?
                         this.userDict[question.data().created_uid] + UserStatConstants.initialContribution :
-                        UserStatConstants.initialContribution
-                )
-            )
-            .then(userDict => {
-                const userDictPromises = [];
-                Object.keys(this.userDict).map(userId => {
-                    userDictPromises.push(this.getUser(userId, this.userDict[userId]))
-                });
+                        UserStatConstants.initialContribution;
+            }
 
-                return Promise.all(userDictPromises)
-                    .then((userDictResults) => userDictResults)
-                    .catch((e) => {
-                        console.log('user categories stats promise error', e);
-                    });
-            });
+            const userDictPromises = [];
+            for (const userId of Object.keys(this.userDict)) {
+                userDictPromises.push(this.getUser(userId, this.userDict[userId]));
+            }
 
+            return  await Promise.all(userDictPromises);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
-    public getUser(id: string, count: number): Promise<string> {
-        return userContributionAccountService.getAccountById(id).then((account) => {
+    async getUser(id: string, count: number): Promise<string> {
+        try {
+            const account = await userContributionAccountService.getAccountById(id);
             const dbAccount = account.data();
             dbAccount.contribution = (dbAccount.contribution) ? dbAccount.contribution + count : count;
-            return this.updateAccount({ ...dbAccount }).then((accountId) => { return accountId });
-        });
+            return await this.updateAccount({ ...dbAccount });
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
-    private updateAccount(dbAccount: any): Promise<string> {
-        return userContributionAccountService.setAccount(dbAccount).then(ref => { return dbAccount.id });
+    private async updateAccount(dbAccount: any): Promise<string> {
+        try {
+            const ref =  await userContributionAccountService.setAccount(dbAccount);
+            if (ref) {
+                return dbAccount.id;
+            } else {
+                return;
+            }
+
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     }
 
 
