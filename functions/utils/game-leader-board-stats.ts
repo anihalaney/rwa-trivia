@@ -1,12 +1,11 @@
 import { QuestionService } from '../services/question.service';
-
-const leaderBoardGameService = require('../services/game.service');
 const leaderBoardAccountService = require('../services/account.service');
 const leaderBoardService = require('../services/leaderboard.service');
 
 import {
     Game, Account, Question
 } from '../../projects/shared-library/src/lib/shared/model';
+import { GameService } from '../services/game.service';
 
 
 export class GameLeaderBoardStats {
@@ -21,7 +20,7 @@ export class GameLeaderBoardStats {
         const userPromises = [];
         let games;
         try {
-            games = await leaderBoardGameService.getCompletedGames();
+            games = await GameService.getCompletedGames();
 
             games = games.docs.map(game => Game.getViewModel(game.data()));
 
