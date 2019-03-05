@@ -2,7 +2,8 @@ import {
     User
 } from '../../projects/shared-library/src/lib/shared/model';
 import { UserService } from '../services/user.service';
-const sharp = require('sharp');
+import * as sharp from 'sharp';
+
 
 export class ProfileImagesGenerator {
 

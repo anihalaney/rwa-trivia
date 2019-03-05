@@ -1,4 +1,7 @@
+
 import * as functions from 'firebase-functions';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 import {
     friendInvitationConstants, Game, Invitation, OpponentType,
     PlayerMode, Question, TriggerConstants, UserStatConstants
@@ -13,11 +16,7 @@ import { MailClient } from '../utils/mail-client';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
-const fs = require('fs');
-const path = require('path');
-const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
-
-
+const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
     static appSettings: AppSettings = new AppSettings();

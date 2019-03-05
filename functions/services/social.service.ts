@@ -2,7 +2,6 @@ import admin from '../db/firebase.client';
 
 export class SocialService {
     private static bucket = admin.storage().bucket();
-
     /**
      * generateSocialUrl
      * return ref

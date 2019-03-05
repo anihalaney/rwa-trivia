@@ -101,7 +101,7 @@ export class AccountService {
             const appSetting = await this.appSettings.getAppSettings();
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
-                const livesMillis = appSetting.lives.lives_after_add_millisecond;
+                const livesMilles = appSetting.lives.lives_after_add_millisecond;
                 const accountRef = this.accountFireStoreClient.collection(`accounts`).doc(userId);
                 const docRef = await accountRef.get();
                 const timestamp = Utils.getUTCTimeStamp();
@@ -109,7 +109,7 @@ export class AccountService {
                     const account = docRef.data();
                     if (account.lives === maxLives || !account.lastLiveUpdate) {
                         account.lastLiveUpdate = timestamp;
-                        account.nextLiveUpdate = Utils.addMinutes(timestamp, livesMillis);
+                        account.nextLiveUpdate = Utils.addMinutes(timestamp, livesMilles);
                     }
                     if (account.lives > 0) {
                         account.lives += -1;
@@ -124,7 +124,7 @@ export class AccountService {
     }
 
     /**
-     * incrase number of lives set in appSettings
+     * increase number of lives set in appSettings
      * return ref
      */
     static async increaseLives(userId): Promise<any> {

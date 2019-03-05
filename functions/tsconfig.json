@@ -13,7 +13,7 @@
       "node_modules/@types"
     ],
     "module": "commonjs",
-    "types": ["node", "csv-parse", "elasticsearch"]
+    "types": ["node", "elasticsearch"]
   },
   "exclude": [
     "node_modules",

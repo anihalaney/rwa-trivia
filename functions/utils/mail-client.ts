@@ -1,9 +1,10 @@
-const nodemailer = require('nodemailer');
-const fs = require('fs');
-const path = require('path');
-const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+import * as nodemailer from 'nodemailer';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
 import { TriggerConstants } from '../../projects/shared-library/src/lib/shared/model';
 
+const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 export class MailClient {
 
     transporter: any;

@@ -13,7 +13,7 @@ export class ESUtils {
 
   static getElasticSearchClient(): ElasticSearch.Client {
     if (!this.searchClient) {
-      // cloning config object to avoid resuing the same object (same object causes error)
+      // cloning config object to avoid reusing the same object (same object causes error)
       this.searchClient = new ElasticSearch.Client(Object.assign({}, elasticSearchConfig));
     }
     return this.searchClient;
@@ -255,6 +255,8 @@ export class ESUtils {
         'body': body
       });
 
+      return response;
+
     } catch (error) {
       console.error('Error : ', error);
       throw error;
@@ -266,7 +268,7 @@ export class ESUtils {
       const client: ElasticSearch.Client = this.getElasticSearchClient();
       index = this.getIndex(index);
 
-      const body = await client.search({
+      const body:Elasticsearch.SearchResponse<any>  = await client.search({
         'index': index,
         'size': size,
         'body': {
@@ -283,6 +285,7 @@ export class ESUtils {
           }
         }
       });
+      return body.hits.hits;
     } catch (error) {
       console.error('Error : ', error);
       throw error;
@@ -301,7 +304,7 @@ export class ESUtils {
     }
 
     try {
-      const body = await client.search({
+      const body: Elasticsearch.SearchResponse<any> = await client.search({
         'index': index,
         'size': size,
         'body': {
@@ -323,6 +326,7 @@ export class ESUtils {
           }
         }
       });
+      return body.hits.hits;
     } catch (error) {
       console.error('Error : ', error);
       throw error;
@@ -351,7 +355,7 @@ export class ESUtils {
           }
         }
       });
-      return (body.hits.hits);
+      return body.hits.hits;
     } catch (error) {
       console.error('Error : ', error);
       throw error;

@@ -47,7 +47,6 @@ export class LeaderBoardService {
                     const leaderBoardUsers: Array<LeaderBoardUser> = (lbsStats[id]) ? lbsStats[id] : [];
                     const filteredUsers: Array<LeaderBoardUser> =
                         leaderBoardUsers.filter((lbUser) => lbUser.userId === accountObj.id);
-                    //  console.log('filteredUsers', filteredUsers);
 
                     const leaderBoardUser: LeaderBoardUser = (filteredUsers.length > 0) ?
                         filteredUsers[0] : new LeaderBoardUser();
@@ -63,9 +62,8 @@ export class LeaderBoardService {
                     });
                     //  console.log('leaderBoardUsers', leaderBoardUsers);
                     if (leaderBoardUsers.length > UserStatConstants.maxUsers) {
-                        leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1)
+                        leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1);
                     }
-
                     lbsStats[id] = leaderBoardUsers;
                 }
             }
