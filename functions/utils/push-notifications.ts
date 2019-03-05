@@ -25,8 +25,8 @@ export class PushNotification {
             }
 
             if (dbUser.iosPushTokens) {
-                for (const tokenIo of dbUser.iosPushTokens) {
-                    notificationPromises.push(this.sendNotification(tokenIo, title, body, data));
+                for (const token of dbUser.iosPushTokens) {
+                    notificationPromises.push(this.sendNotification(token, title, body, data));
                 }
             }
 
