@@ -4,7 +4,6 @@ import { Account, Game } from '../../projects/shared-library/src/lib/shared/mode
 import { AppSettings } from './app-settings.service';
 import { Utils } from '../utils/utils';
 
-const utils: Utils = new Utils();
 const appSettings: AppSettings = new AppSettings();
 
 /**
@@ -106,12 +105,12 @@ exports.decreaseLife = async (userId): Promise<any> => {
             const livesMillis = appSetting.lives.lives_after_add_millisecond;
             const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
             const docRef = await accountRef.get();
-            const timestamp = utils.getUTCTimeStamp();
+            const timestamp = Utils.getUTCTimeStamp();
             if (docRef.exists) {
                 const account = docRef.data();
                 if (account.lives === maxLives || !account.lastLiveUpdate) {
                     account.lastLiveUpdate = timestamp;
-                    account.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
+                    account.nextLiveUpdate = Utils.addMinutes(timestamp, livesMillis);
                 }
                 if (account.lives > 0) {
                     account.lives += -1;
@@ -180,13 +179,13 @@ exports.addLives = async (): Promise<any> => {
         const appSetting = await appSettings.getAppSettings();
         if (appSetting.lives.enable) {
             const maxLives = appSetting.lives.max_lives;
-            let timestamp = utils.getUTCTimeStamp();
+            let timestamp = Utils.getUTCTimeStamp();
             const accountCollRef = accountFireStoreClient.collection('accounts')
                 .where('nextLiveUpdate', '<=', timestamp);
             const accounts = await accountCollRef.get();
             const accountsNotHavingMaxLives = accounts.docs.filter(d => d.data().lives < maxLives);
             for (const account of accountsNotHavingMaxLives) {
-                timestamp = utils.getUTCTimeStamp();
+                timestamp = Utils.getUTCTimeStamp();
                 const userAccount = account.data();
                 await this.addLife(userAccount.id, appSetting);
             }
@@ -200,7 +199,7 @@ exports.addLives = async (): Promise<any> => {
 // add life to account
 exports.addLife = async (userId: String, appSetting): Promise<any> => {
     try {
-        const timestamp = utils.getUTCTimeStamp();
+        const timestamp = Utils.getUTCTimeStamp();
         const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
         const docRef = await accountRef.get();
         const account = docRef.data();
@@ -211,7 +210,7 @@ exports.addLife = async (userId: String, appSetting): Promise<any> => {
                     account.lives = appSetting.lives.maxLives;
                 } else {
                     // Update nextLiveUpdate
-                    account.nextLiveUpdate = utils.addMinutes(timestamp, appSetting.lives.livesMillis);
+                    account.nextLiveUpdate = Utils.addMinutes(timestamp, appSetting.lives.livesMillis);
                 }
                 account.lastLiveUpdate = timestamp;
                 accountRef.update(account);
