@@ -3,12 +3,12 @@ import { appConstants } from '../../projects/shared-library/src/lib/shared/model
 import * as express from 'express';
 import { questionRoutes } from './question-routes';
 import { subscriptionRoutes } from './subscription-routes';
+import { friendRoutes } from './friend-routes';
 
 const router = express.Router();
 const gameRoutes = require('./game-routes');
 const generalRoutes = require('./general-routes');
 const migrationRoutes = require('./migration-routes');
-const friendRoutes = require('./friend-routes');
 const userRoutes = require('./user-routes');
 
 
