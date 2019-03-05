@@ -12,7 +12,7 @@ export class SocialService {
         const fileName = `social_share/${userId}/score_images/${social_share_id}`;
         const file = this.bucket.file(fileName);
         try {
-            let signedUrls = await file.download();
+            const signedUrls = await file.download();
             return signedUrls[0];
         } catch (error) {
             console.log('error', error);

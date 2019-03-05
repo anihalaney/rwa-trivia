@@ -285,9 +285,12 @@ export class GeneralController {
                 }
                 console.log('blogs', blogs);
 
-                blogService.setBlog(blogs).then((ref1) => {
+                const ref1 = blogService.setBlog(blogs);
+                if (ref1) {
                     res.send('created feed blogs');
-                });
+                } else {
+                    res.status(500).send('Internal Server error');
+                }
             });
         } catch (error) {
             console.error(error);
