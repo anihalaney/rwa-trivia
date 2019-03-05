@@ -9,7 +9,7 @@ export class PushNotificationService {
      */
     static async sendPush(message: any): Promise<any> {
         try {
-            let response = await pushNotificationMessagingClient.send(message);
+            const response = await pushNotificationMessagingClient.send(message);
             console.log('Successfully sent message:', response);
             return response;
         } catch (error) {
