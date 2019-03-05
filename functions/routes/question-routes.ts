@@ -2,11 +2,22 @@
 
 import * as express from 'express';
 import { QuestionController } from '../controllers/question.controller';
-import { AuthMiddleware} from "../middlewares/auth";
-export const questionRoutes = express.Router();
+import { AuthMiddleware } from '../middlewares/auth';
 
-questionRoutes.get('/day/:nextQ', QuestionController.getQuestionOfDay);
-questionRoutes.get('/next/:gameId', AuthMiddleware.authorizedOnly, QuestionController.getNextQuestion);
-questionRoutes.get('/game/:gameId', AuthMiddleware.authorizedOnly, QuestionController.getQuestions);
-questionRoutes.post('/:start/:size', AuthMiddleware.adminOnly, QuestionController.getQuestions);
-questionRoutes.post('/:questionId', AuthMiddleware.authorizedOnly, QuestionController.getUpdatedQuestion);
+class QuestionRoutes {
+
+    public questionRoutes: any;
+
+    constructor() {
+        this.questionRoutes = express.Router();
+
+        this.questionRoutes.get('/day/:nextQ', QuestionController.getQuestionOfDay);
+        this.questionRoutes.get('/next/:gameId', AuthMiddleware.authorizedOnly, QuestionController.getNextQuestion);
+        this.questionRoutes.get('/game/:gameId', AuthMiddleware.authorizedOnly, QuestionController.getQuestions);
+        this.questionRoutes.post('/:start/:size', AuthMiddleware.adminOnly, QuestionController.getQuestions);
+        this.questionRoutes.post('/:questionId', AuthMiddleware.authorizedOnly, QuestionController.getUpdatedQuestion);
+    }
+}
+
+export default new QuestionRoutes().questionRoutes;
+
