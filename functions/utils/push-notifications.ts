@@ -1,4 +1,4 @@
-const pushNotificationService = require('../services/push-notification.service');
+import { PushNotificationService } from '../services/push-notification.service';
 import { UserService } from '../services/user.service';
 
 import {
@@ -47,7 +47,7 @@ export class PushNotification {
             data: data,
             token: registrationToken
         };
-        return pushNotificationService.sendPush(message);
+        return PushNotificationService.sendPush(message);
     }
 
 
