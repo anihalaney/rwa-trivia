@@ -14,7 +14,7 @@ export class MakeFriends {
 
     async validateToken(): Promise<string> {
         try {
-            let invitation = await FriendService.getInvitationByToken(this.token);
+            const invitation = await FriendService.getInvitationByToken(this.token);
             if (invitation.data().email === this.email) {
                 const invitationObj: Invitation = invitation.data();
                 invitationObj.status = friendInvitationConstants.APPROVED;
@@ -31,7 +31,7 @@ export class MakeFriends {
 
     async updateFriendsList(inviter: string, invitee: string): Promise<string> {
         try {
-            let friend = await FriendService.getFriendByInvitee(invitee);
+            const friend = await FriendService.getFriendByInvitee(invitee);
             return this.makeFriends(friend.data(), inviter, invitee);
         } catch (error) {
             console.error(error);
@@ -52,7 +52,7 @@ export class MakeFriends {
                     obj[inviter] = { ...metaInfo };
                     const dbObj = { ...obj };
                     myFriends.push(dbObj);
-                    let ref = await FriendService.updateFriend(myFriends, invitee);
+                    const ref = await FriendService.updateFriend(myFriends, invitee);
                     if (ref) {
                         return inviter;
                     }
@@ -73,7 +73,7 @@ export class MakeFriends {
                 obj[inviter] = { ...metaInfo };
                 friends.myFriends.push({ ...obj });
                 const dbUser = { ...friends };
-                let ref = await FriendService.setFriend(dbUser, invitee)
+                const ref = await FriendService.setFriend(dbUser, invitee)
                 if (ref) {
                     return inviter;
                 }
@@ -101,7 +101,7 @@ export class MakeFriends {
 
     async checkAndUpdateToken(email: string): Promise<string> {
         try {
-            let snapshot = await FriendService.checkInvitation(email, this.userId);
+            const snapshot = await FriendService.checkInvitation(email, this.userId);
 
             const invitationNewObj: Invitation = new Invitation();
             invitationNewObj.created_uid = this.userId;
@@ -133,9 +133,9 @@ export class MakeFriends {
         this.sendNotification(dbInvitation);
 
         try {
-            let ref = await FriendService.createInvitation(dbInvitation);
+            const ref = await FriendService.createInvitation(dbInvitation);
             dbInvitation.id = ref.id;
-            let dref = await FriendService.updateInvitation(dbInvitation)
+            const dref = await FriendService.updateInvitation(dbInvitation)
             return `Invitation is sent on ${dbInvitation.email}`
         } catch (error) {
             console.error(error);
@@ -145,7 +145,7 @@ export class MakeFriends {
 
     async sendNotification(dbInvitation: any) {
         try {
-            let snapshots = await UserService.getUsersByEmail(dbInvitation);
+            const snapshots = await UserService.getUsersByEmail(dbInvitation);
             if (snapshots.empty) {
                 console.log('user does not exist');
             } else {
