@@ -34,27 +34,27 @@ exports.migrateCollections = (req, res) => {
         case 'categories':
             // Migrate categories
             console.log('Migrating categories ...');
-            migration.migrateCategories.then(cats => { res.send(cats) });
+            migration.migrateCategories().then(cats => { res.send(cats); });
             break;
         case 'tags':
             // Migrate Tags
             console.log('Migrating tags ...');
-            migration.migrateTags.then(tags => { res.send(tags) });
+            migration.migrateTags().then(tags => { res.send(tags); });
             break;
         case 'games':
             // Migrate games
             console.log('Migrating games ...');
-            migration.migrateGames('/games', 'games').then(q => { res.send('Game Count: ' + q) });
+            migration.migrateGames('/games', 'games').then(q => { res.send('Game Count: ' + q); });
             break;
         case 'questions':
             // Migrate questions
             console.log('Migrating questions ...');
-            migration.migrateQuestions('/questions/published', 'questions').then(q => { res.send('Question Count: ' + q) });
+            migration.migrateQuestions('/questions/published', 'questions').then(q => { res.send('Question Count: ' + q); });
             break;
         case 'unpublished_questions':
             // Migrate unpublished questions
             console.log('Migrating unpublished questions ...');
-            migration.migrateQuestions('/questions/unpublished', 'unpublished_questions').then(q => { res.send('Question Count: ' + q) });
+            migration.migrateQuestions('/questions/unpublished', 'unpublished_questions').then(q => { res.send('Question Count: ' + q); });
             break;
     }
 
@@ -186,7 +186,7 @@ exports.updateBulkUploadCollection = (req, res) => {
         res.send('updated bulk upload collection');
     });
 
-}
+};
 
 /**
  * generateBlogsData
@@ -201,7 +201,7 @@ exports.generateBlogsData = (req, res) => {
         let viewCount = 100;
         let commentCount = 5;
         let items = rss.items.sort((itemA: Blog, itemB: Blog) => {
-            return new Date(itemB.pubDate).getTime() - new Date(itemA.pubDate).getTime()
+            return new Date(itemB.pubDate).getTime() - new Date(itemA.pubDate).getTime();
         });
         items = items.slice(0, 3);
         items.map((item) => {
@@ -258,7 +258,7 @@ exports.updateQuestionCollection = (req, res) => {
             break;
     }
 
-}
+};
 
 
 /**
@@ -267,13 +267,13 @@ exports.updateQuestionCollection = (req, res) => {
  */
 exports.dumpAuthUsersInFirestore = (req, res) => {
     const authUsers: User[] = [];
-    const authUser: AuthUser = new AuthUser()
+    const authUser: AuthUser = new AuthUser();
     authUser.getUsers(authUsers).then((users) => {
         console.log('users', users);
         UserService.addUpdateAuthUsersToFireStore(users).then((ref) => {
             res.send('dumped all the users');
         });
-    })
+    });
 };
 
 
