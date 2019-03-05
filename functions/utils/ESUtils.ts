@@ -55,7 +55,7 @@ export class ESUtils {
     } catch (error) {
       console.log();
       console.log(`Error in indexing:${error}`);
-      throw (error);
+      throw error;
     }
 
   }
@@ -95,11 +95,11 @@ export class ESUtils {
 
       } catch (error) {
         console.log(`Error in removing from index${error}`);
-        throw (error);
+        throw error;
       }
     } catch (error) {
       console.log(`Error in finding item in the index${error}`);
-      throw (error);
+      throw error;
     }
   }
 
@@ -118,48 +118,46 @@ export class ESUtils {
       } catch (error) {
         console.log(`Error in deleting index${error}`);
 
-        throw (error);
+        throw error;
       }
     } catch (error) {
       console.log(`Error in checking for index${error}`);
-      throw (error);
+      throw error;
     }
   }
 
-  static rebuildIndex(index: string, data: { 'id': string, 'type': string, 'source': any }[]): Promise<any> {
+  static async rebuildIndex(index: string, data: { 'id': string, 'type': string, 'source': any }[]): Promise<any> {
     const client: ElasticSearch.Client = this.getElasticSearchClient();
     index = this.getIndex(index);
 
-    // delete entire index
-    return this.deleteIndex(index)
-      .then((response) => {
-        const body = [];
-        // TODO: build bulk index in batches (maybe 1000 at a time)
-        let arrayLength = data.length
-        const batchSize = 500;
-        for (let i = 0; i < arrayLength; i += batchSize) {
-          let batchData = data.slice(i, i + batchSize);
-          batchData.forEach(d => {
-            body.push({ index: { _index: index, _type: d.type, _id: d.id } });
-            body.push(d.source);
-          });
-          client.bulk({ 'body': body }).then(resp => {
-            console.log('All items indexed');
-          })
-            .catch((error) => {
-              console.log(error);
-              throw (error);
-            });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        throw (error);
-      });
+    try {
+       // delete entire index
+      await this.deleteIndex(index);
+      // TODO: build bulk index in batches (maybe 1000 at a time)
+      const arrayLength = data.length;
+      const batchSize = 500;
+      const batches = [];
+  
+      for (let i = 0; i < arrayLength; i += batchSize) {
+        let batchData = data.slice(i, i + batchSize);
+        const body = [];          
+        batchData.forEach(d => {
+          body.push({ index: { _index: index, _type: d.type, _id: d.id } });
+          body.push(d.source);
+        });
+        batches.push(client.bulk({ 'body': body }));
+      }     
+      await Promise.all(batches);
+      console.log('All items indexed');
+    }catch(error){
+      console.log(`Error in checking for index${error}`);
+      throw error;  
+    } 
+   
   }
 
   static async getQuestions(start: number, size: number, criteria: SearchCriteria): Promise<SearchResults> {
-    const date = new Date();
+  
     const results = await this.getSearchResults(this.QUESTIONS_INDEX, start, size, criteria)
     const searchResults: SearchResults = new SearchResults();
     searchResults.totalCount = results.hits.total;
@@ -256,7 +254,7 @@ export class ESUtils {
 
     } catch (error) {
       console.error(error);
-      throw (error);
+      throw error;
     }
   }
 
@@ -284,7 +282,7 @@ export class ESUtils {
       });
     } catch (error) {
       console.error(error);
-      throw (error);
+      throw error;
     }
   }
 
@@ -324,7 +322,7 @@ export class ESUtils {
       });
     } catch (error) {
       console.error(error);
-      throw (error);
+      throw error;
     }
   }
 
@@ -353,7 +351,7 @@ export class ESUtils {
       return (body.hits.hits);
     } catch (error) {
       console.error(error);
-      throw (error);
+      throw error;
     }
   }
 }
