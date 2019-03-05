@@ -7,10 +7,9 @@ import { GameMechanics } from '../utils/game-mechanics';
 import { PushNotification } from '../utils/push-notifications';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { Utils } from '../utils/utils';
-
+import { AccountService as generalAccountService } from '../services/account.service';
+import { SocialService as socialGameService } from '../services/social.service';
 const functions = require('firebase-functions');
-const socialGameService = require('../services/social.service');
-const generalAccountService = require('../services/account.service');
 
 export class GameController {
 
