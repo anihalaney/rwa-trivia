@@ -3,6 +3,7 @@ import { Utils } from './utils';
 
 import { UserService } from '../services/user.service';
 import { GameService } from '../services/game.service';
+import { SchedulerService } from '../services/scheduler.service';
 
 export class GameMechanics {
 
@@ -157,7 +158,7 @@ export class GameMechanics {
         // Use the set method of the doc instead of the add method on the collection,
         // so the id field of the data matches the id of the document
         try {
-            await GameService.updateGame(dbGame);
+            await SchedulerService.updateGame(dbGame);
             return dbGame.id;
         } catch (error) {
             console.error('Error : ' + error);

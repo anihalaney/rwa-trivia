@@ -18,7 +18,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * setAccount
@@ -33,7 +33,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * updateAccount
@@ -47,7 +47,7 @@ export class AccountService {
             throw error;
         }
 
-    };
+    }
 
     /**
      * getAccounts
@@ -60,7 +60,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * calcualteAccountStat
@@ -88,7 +88,7 @@ export class AccountService {
         account.avgAnsTime = (account.avgAnsTime) ? Math.floor((account.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
 
         return account;
-    };
+    }
 
     /**
      * decrease life
@@ -119,7 +119,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * incrase number of lives set in appSettings
@@ -135,7 +135,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * add default number of lives into account
@@ -163,7 +163,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * add number of lives into account(Schedular)
@@ -189,7 +189,7 @@ export class AccountService {
             console.error(error);
             return error;
         }
-    };
+    }
 
     /**
      * Add life to account
@@ -219,7 +219,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     static async updateLives(userId): Promise<any> {
         try {
@@ -228,7 +228,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * set number of bits into account
@@ -255,7 +255,7 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 
     /**
      * set number of bits into account
@@ -281,5 +281,5 @@ export class AccountService {
             console.error(error);
             throw error;
         }
-    };
+    }
 }
