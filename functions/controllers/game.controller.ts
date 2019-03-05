@@ -4,7 +4,7 @@ import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
 import { AccountService } from '../services/account.service';
 import { SocialService } from '../services/social.service';
-const functions = require('firebase-functions');
+import * as functions from 'firebase-functions';
 
 export class GameController {
 

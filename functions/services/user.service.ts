@@ -1,5 +1,5 @@
-import admin from '../db/firebase.client';
 import { User } from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
 
 export class UserService {
 
@@ -19,7 +19,6 @@ export class UserService {
         }
     }
 
-
     /**
      * getUserById
      * return user
@@ -38,7 +37,6 @@ export class UserService {
      * return ref
      */
     static async updateUser(dbUser: any): Promise<any> {
-
         try {
             return await this.fireStoreClient.doc(`/users/${dbUser.userId}`).update(dbUser);
         } catch (error) {
@@ -108,7 +106,7 @@ export class UserService {
             const streamData = await file.download();
             return streamData[0];
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -144,8 +142,6 @@ export class UserService {
             throw error;
         }
     }
-
-
 
     /**
      * uploadProfileImage
@@ -184,7 +180,7 @@ export class UserService {
      */
     static async removeSocialProfile(): Promise<any> {
         const users = await this.getUsers();
-        let migrationPromises: Promise<any>[];
+        const migrationPromises: Promise<any>[] = [];
 
         for (const user of users) {
             const userObj: User = user.data();
@@ -193,29 +189,12 @@ export class UserService {
             delete userObj.twitterUrl;
             migrationPromises.push(this.updateUser(userObj));
         }
-        
+
         try {
             return await Promise.all(migrationPromises);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,36 +1,35 @@
-import admin from '../db/firebase.client';
-const leaderBoardFireStoreClient = admin.firestore();
 import { LeaderBoardUser, Account, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
 
 export class LeaderBoardService {
+
+    private static leaderBoardFireStoreClient = admin.firestore();
 
     /**
      * getLeaderBoardStats
      * return leaderoardstat
      */
-    static async getLeaderBoardStats(): Promise<any>{
+    static async getLeaderBoardStats(): Promise<any> {
         try {
-            return await leaderBoardFireStoreClient.doc('leader_board_stats/categories').get();
+            return await this.leaderBoardFireStoreClient.doc('leader_board_stats/categories').get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
-
+    }
 
     /**
      * setLeaderBoardStats
      * return ref
      */
-    static async setLeaderBoardStats(leaderBoardStat: any): Promise<any>{
+    static async setLeaderBoardStats(leaderBoardStat: any): Promise<any> {
         try {
-            return await leaderBoardFireStoreClient.doc('/leader_board_stats/categories').set(leaderBoardStat);
+            return await this.leaderBoardFireStoreClient.doc('/leader_board_stats/categories').set(leaderBoardStat);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-
-    };
+    }
 
 
     /**
@@ -38,7 +37,7 @@ export class LeaderBoardService {
      * return lbsstat
      */
     static calculateLeaderBoardStats(accountObj: Account, lbsStats: { [key: string]: Array<LeaderBoardUser> })
-        : { [key: string]: Array<LeaderBoardUser> }{
+        : { [key: string]: Array<LeaderBoardUser> } {
 
         if (accountObj && accountObj.id) {
             const leaderBoardStats = accountObj.leaderBoardStats;
@@ -63,15 +62,14 @@ export class LeaderBoardService {
                         return b.score - a.score;
                     });
                     //  console.log('leaderBoardUsers', leaderBoardUsers);
-                    (leaderBoardUsers.length > UserStatConstants.maxUsers) ?
-                        leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1) : '';
+                    if (leaderBoardUsers.length > UserStatConstants.maxUsers) {
+                        leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1)
+                    }
 
                     lbsStats[id] = leaderBoardUsers;
                 }
             }
         }
         return lbsStats;
-    };
+    }
 }
-
-

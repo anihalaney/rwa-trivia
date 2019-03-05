@@ -5,11 +5,18 @@ import {
     pushNotificationRouteConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { PushNotification } from './push-notifications';
-const pushNotification: PushNotification = new PushNotification();
+
 
 export class MakeFriends {
 
-    constructor(private token?: string, private userId?: string, private email?: string) {
+    token: string;
+    userId: string;
+    email: string;
+
+    constructor(token?: string, userId?: string, email?: string) {
+        this.token = token;
+        this.userId = userId;
+        this.email = email;
     }
 
     async validateToken(): Promise<string> {
@@ -24,7 +31,7 @@ export class MakeFriends {
                 return this.userId;
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -34,7 +41,7 @@ export class MakeFriends {
             const friend = await FriendService.getFriendByInvitee(invitee);
             return this.makeFriends(friend.data(), inviter, invitee);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -52,10 +59,7 @@ export class MakeFriends {
                     obj[inviter] = { ...metaInfo };
                     const dbObj = { ...obj };
                     myFriends.push(dbObj);
-                    const ref = await FriendService.updateFriend(myFriends, invitee);
-                    if (ref) {
-                        return inviter;
-                    }
+                    return await FriendService.updateFriend(myFriends, invitee);
                 }
             } else {
                 const friends = new Friends();
@@ -73,13 +77,10 @@ export class MakeFriends {
                 obj[inviter] = { ...metaInfo };
                 friends.myFriends.push({ ...obj });
                 const dbUser = { ...friends };
-                const ref = await FriendService.setFriend(dbUser, invitee)
-                if (ref) {
-                    return inviter;
-                }
+                return await FriendService.setFriend(dbUser, invitee);
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -92,9 +93,9 @@ export class MakeFriends {
         });
 
         try {
-            return await Promise.all(invitationPromises)
+            return await Promise.all(invitationPromises);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -124,7 +125,7 @@ export class MakeFriends {
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -135,10 +136,10 @@ export class MakeFriends {
         try {
             const ref = await FriendService.createInvitation(dbInvitation);
             dbInvitation.id = ref.id;
-            const dref = await FriendService.updateInvitation(dbInvitation)
-            return `Invitation is sent on ${dbInvitation.email}`
+            await FriendService.updateInvitation(dbInvitation);
+            return `Invitation is sent on ${dbInvitation.email}`;
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
@@ -153,14 +154,14 @@ export class MakeFriends {
                 if (snapshot.exists) {
                     const userObj: User = snapshot.data();
 
-                    pushNotification.sendGamePlayPushNotifications(dbInvitation, userObj.userId,
+                    PushNotification.sendGamePlayPushNotifications(dbInvitation, userObj.userId,
                         pushNotificationRouteConstants.FRIEND_NOTIFICATIONS);
                 } else {
                     console.log('user does not exist');
                 }
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
 
@@ -168,9 +169,9 @@ export class MakeFriends {
 
     async getUser(userId): Promise<any> {
         try {
-            return await UserService.getUserById(userId); 
+            return await UserService.getUserById(userId);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }

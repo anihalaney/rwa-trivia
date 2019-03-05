@@ -1,7 +1,8 @@
 import admin from '../db/firebase.client';
-const pushNotificationMessagingClient = admin.messaging();
 
 export class PushNotificationService {
+
+    private static pushNotificationMessagingClient = admin.messaging();
 
     /**
      * sendPush
@@ -9,13 +10,11 @@ export class PushNotificationService {
      */
     static async sendPush(message: any): Promise<any> {
         try {
-            const response = await pushNotificationMessagingClient.send(message);
-            console.log('Successfully sent message:', response);
+            const response = await this.pushNotificationMessagingClient.send(message);
             return response;
         } catch (error) {
-            console.log('Error sending message:', error);
+            console.log('Error : ', error);
             throw error;
         }
-    };
+    }
 }
-

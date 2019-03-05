@@ -1,7 +1,7 @@
 import { MakeFriends } from '../utils/make-friends';
 
 export class FriendController {
-    
+
     /**
      * getSubscriptionCount
      * return count
@@ -11,16 +11,17 @@ export class FriendController {
         const userId = req.body.userId;
         const email = req.body.email;
 
+
         try {
             const makeFriends: MakeFriends = new MakeFriends(token, userId, email);
             const invitee = await makeFriends.validateToken();
-            res.send({ created_uid: invitee });
+            res.status(200).send({ created_uid: invitee });
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
-    };
+    }
 
 
     /**
@@ -42,19 +43,19 @@ export class FriendController {
                     if (inviteeUserId && user) {
                         emails = [user.email];
                         const status: any = await makeFriends.createInvitations(emails);
-                        res.send({ messages: status.join('<br />') });
+                        res.status(200).send({ messages: status.join('<br />') });
                     }
                 } else {
                     const status: any = await makeFriends.createInvitations(emails);
-                    res.send({ messages: status.join('<br />') });
+                    res.status(200).send({ messages: status.join('<br />') });
                 }
             } catch (error) {
-                console.error(error);
+                console.error('Error : ', error);
                 res.status(500).send('Internal Server error');
                 return error;
             }
         } else {
             res.status(400).send('Bad Request');
         }
-    };
+    }
 }

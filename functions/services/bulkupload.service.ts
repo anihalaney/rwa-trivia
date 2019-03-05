@@ -12,10 +12,10 @@ export class BulkUploadService {
         try {
             return await this.bulkUploadFireStoreClient.collection('bulk_uploads').get();
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 
     /**
      * setBulkUpload
@@ -25,8 +25,8 @@ export class BulkUploadService {
         try {
             return await this.bulkUploadFireStoreClient.doc(`/bulk_uploads/${dbBulkUpload.id}`).set(dbBulkUpload);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
-    };
+    }
 }

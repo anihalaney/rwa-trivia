@@ -1,19 +1,14 @@
 import { PushNotificationService } from '../services/push-notification.service';
 import { UserService } from '../services/user.service';
-
 import {
     User, Game, GameStatus, pushNotificationRouteConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 
 
 export class PushNotification {
-    pushNotificationUserService: UserService;
 
-    constructor() {
-        this.pushNotificationUserService = new UserService();
-    }
 
-    async sendNotificationToDevices(userId: string, title: string, body: string, data: any): Promise<any> {
+    static async sendNotificationToDevices(userId: string, title: string, body: string, data: any): Promise<any> {
         try {
             const user = await UserService.getUserById(userId);
             const dbUser: User = user.data();
@@ -32,13 +27,13 @@ export class PushNotification {
 
             return await Promise.all(notificationPromises);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
 
     }
 
-    sendNotification(registrationToken: string, title: string, body: string, data: any): Promise<String> {
+    static sendNotification(registrationToken: string, title: string, body: string, data: any): Promise<String> {
         const message = {
             notification: {
                 title: title,
@@ -51,7 +46,7 @@ export class PushNotification {
     }
 
 
-    async sendGamePlayPushNotifications(data: any, currentTurnPlayerId: string, pushType: string) {
+    static async sendGamePlayPushNotifications(data: any, currentTurnPlayerId: string, pushType: string) {
         try {
             let looserPlayerId;
             let msg_data;
@@ -66,8 +61,8 @@ export class PushNotification {
                         case GameStatus.WAITING_FOR_NEXT_Q:
                             result = await this.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
                                 `${dbUser.displayName} did not answer correctly. It's your turn to play!`, msg_data);
-                                console.log('result', result);
-                                console.log(`${dbUser.displayName} did not answer correctly. It's your turn to play!`);
+                            console.log('result', result);
+                            console.log(`${dbUser.displayName} did not answer correctly. It's your turn to play!`);
                             break;
                         case GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE:
                             result = await this.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
@@ -91,7 +86,7 @@ export class PushNotification {
                         case GameStatus.TIME_EXPIRED:
                             looserPlayerId = game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0];
                             result = await this.sendNotificationToDevices(looserPlayerId, 'Bitwiser Game Play',
-                            `Your time has expired. ${dbUser.displayName} has won the game.`, msg_data);
+                                `Your time has expired. ${dbUser.displayName} has won the game.`, msg_data);
                             console.log('result', result);
                             const userData = await UserService.getUserById(looserPlayerId);
                             dbUser = userData.data();
@@ -108,26 +103,26 @@ export class PushNotification {
                     result = await this
                         .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
                             'You have 32 minutes remaining to play your turn !', msg_data);
-                        console.log('result', result);
-                        console.log(`You have 32 minutes remaining to play your turn !`);
+                    console.log('result', result);
+                    console.log(`You have 32 minutes remaining to play your turn !`);
                     break;
 
                 case pushNotificationRouteConstants.FRIEND_NOTIFICATIONS:
                     msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
                     const userObj = await UserService.getUserById(data.created_uid);
-                        const otherUser: User = userObj.data();
-                        msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
+                    const otherUser: User = userObj.data();
+                    msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
 
-                        result = await this
-                            .sendNotificationToDevices(currentTurnPlayerId, 'Friend Request',
-                                `${otherUser.displayName} has sent you a friend request.`, data);
-                        console.log('result', result);
-                        console.log(`${otherUser.displayName} has sent you a friend request.`);
+                    result = await this
+                        .sendNotificationToDevices(currentTurnPlayerId, 'Friend Request',
+                            `${otherUser.displayName} has sent you a friend request.`, data);
+                    console.log('result', result);
+                    console.log(`${otherUser.displayName} has sent you a friend request.`);
                     break;
 
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }

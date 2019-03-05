@@ -1,26 +1,21 @@
-import {
-    User, Question, UserStatConstants
-} from '../../projects/shared-library/src/lib/shared/model';
+import { UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { AccountService } from '../services/account.service';
 import { QuestionService } from '../services/question.service';
-import { AccountService as userContributionAccountService } from '../services/account.service';
 
 export class UserContributionStat {
 
 
-    private userDict: { [key: string]: number };
+    private static userDict: { [key: string]: number } = {};
 
-    constructor() {
-        this.userDict = {};
-    }
-
-    async generateGameStats(): Promise<any> {
+    static async generateGameStats(): Promise<any> {
         try {
             const questions = await QuestionService.getAllQuestions();
 
             for (const question of questions.docs) {
-                    this.userDict[question.data().created_uid] = (this.userDict[question.data().created_uid]) ?
-                        this.userDict[question.data().created_uid] + UserStatConstants.initialContribution :
-                        UserStatConstants.initialContribution;
+                const created_uid = question.data().created_uid;
+                this.userDict[created_uid] = (this.userDict[created_uid]) ?
+                    this.userDict[created_uid] + UserStatConstants.initialContribution :
+                    UserStatConstants.initialContribution;
             }
 
             const userDictPromises = [];
@@ -28,40 +23,24 @@ export class UserContributionStat {
                 userDictPromises.push(this.getUser(userId, this.userDict[userId]));
             }
 
-            return  await Promise.all(userDictPromises);
+            return await Promise.all(userDictPromises);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
 
-    async getUser(id: string, count: number): Promise<string> {
+    static async getUser(id: string, count: number): Promise<string> {
         try {
-            const account = await userContributionAccountService.getAccountById(id);
+            const account = await AccountService.getAccountById(id);
             const dbAccount = account.data();
             dbAccount.contribution = (dbAccount.contribution) ? dbAccount.contribution + count : count;
-            return await this.updateAccount({ ...dbAccount });
+            return await AccountService.setAccount({ ...dbAccount });
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
-
-    private async updateAccount(dbAccount: any): Promise<string> {
-        try {
-            const ref =  await userContributionAccountService.setAccount(dbAccount);
-            if (ref) {
-                return dbAccount.id;
-            } else {
-                return;
-            }
-
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
-    }
-
 
 
 }

@@ -1,8 +1,8 @@
 import admin from '../db/firebase.client';
-const fireBaseAuthClient = admin.auth();
-
 
 export class FirebaseAuthService {
+
+    private static fireBaseAuthClient = admin.auth();
 
     /**
      * getUsers
@@ -10,10 +10,10 @@ export class FirebaseAuthService {
      */
     static async getAuthUsers(nextPageToken?: string): Promise<any> {
         try {
-            return await fireBaseAuthClient.listUsers(1000, nextPageToken);
+            return await this.fireBaseAuthClient.listUsers(1000, nextPageToken);
         } catch (error) {
-            console.log('Error listing users:', error);
+            console.log('Error : ', error);
             throw error;
         }
-    };
+    }
 }

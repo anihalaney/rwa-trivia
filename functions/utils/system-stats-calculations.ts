@@ -7,7 +7,7 @@ import { StatsService } from '../services/stats.service';
 
 export class SystemStatsCalculations {
 
-    async generateSystemStats(): Promise<any> {
+    static async generateSystemStats(): Promise<any> {
         try {
             const systemStat = await StatsService.getSystemStats('system');
             const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
@@ -22,24 +22,24 @@ export class SystemStatsCalculations {
             systemStatObj.total_questions = statResults[1].size;
             systemStatObj.active_games = statResults[2].size;
             systemStatObj.game_played = statResults[3].size;
-            return await  StatsService.setSystemStats('system', { ...systemStatObj });
+            return await StatsService.setSystemStats('system', { ...systemStatObj });
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
     }
 
-    async updateSystemStats(entity: string): Promise<any> {
+    static async updateSystemStats(entity: string): Promise<any> {
         try {
             const systemStat = await StatsService.getSystemStats('system');
             const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
             if (entity === 'total_users') {
                 systemStatObj.total_users = (systemStatObj.total_users) ? systemStatObj.total_users + 1 : 1;
-                return StatsService.setSystemStats('system', { ...systemStatObj }).then((status) => status);
+                return await StatsService.setSystemStats('system', { ...systemStatObj });
             } else if (entity === 'total_questions') {
                 systemStatObj.total_questions = (systemStatObj.total_questions)
                     ? systemStatObj.total_questions + 1 : 1;
-                return StatsService.setSystemStats('system', { ...systemStatObj }).then((status) => status);
+                return await StatsService.setSystemStats('system', { ...systemStatObj });
             } else if (entity === 'active_games') {
                 const active_games = await GameService.getLiveGames();
                 systemStatObj.active_games = active_games.size;
@@ -50,7 +50,7 @@ export class SystemStatsCalculations {
                 return await StatsService.setSystemStats('system', { ...systemStatObj });
             }
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             throw error;
         }
 

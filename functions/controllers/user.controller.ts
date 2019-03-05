@@ -5,7 +5,7 @@ import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
 import { UserControllerConstants, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
-import { AccountService as generalAccountService } from '../services/account.service';
+import { AccountService } from '../services/account.service';
 
 export class UserController {
 
@@ -23,7 +23,7 @@ export class UserController {
         try {
             res.status(200).send(await UserService.getUserProfile(userId));
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -59,9 +59,9 @@ export class UserController {
             const stream = await UserService.getUserProfileImage(userId, width, height);
             res.setHeader('content-disposition', 'attachment; filename=profile_image.png');
             res.setHeader('content-type', 'image/jpeg');
-            res.send(stream);
+            res.status(200).send(stream);
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
             return error;
         }
@@ -79,12 +79,10 @@ export class UserController {
 
         let user = req.body.user;
 
-        const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
-
         try {
             if (user.profilePicture && user.croppedImageUrl && user.originalImageUrl) {
 
-                user = await profileImagesGenerator.uploadProfileImage(user);
+                user = await ProfileImagesGenerator.uploadProfileImage(user);
 
                 delete user.originalImageUrl;
                 delete user.croppedImageUrl;
@@ -113,7 +111,7 @@ export class UserController {
             res.status(200).send({ 'status': 'Profile Data is saved !!' });
 
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
         }
     }
@@ -132,10 +130,10 @@ export class UserController {
         }
 
         try {
-            await generalAccountService.updateLives(userId);
+            await AccountService.updateLives(userId);
             res.status(200).send({ 'status': 'Lives added successfully !!' });
         } catch (error) {
-            console.error(error);
+            console.error('Error : ', error);
             res.status(500).send('Internal Server error');
         }
 
