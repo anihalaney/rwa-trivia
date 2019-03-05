@@ -6,10 +6,10 @@ import { subscriptionRoutes } from './subscription-routes';
 import { generalRoutes } from './general-routes';
 import { migrationRoutes } from './migration-routes';
 import { friendRoutes } from './friend-routes';
-const router = express.Router();
-const gameRoutes = require('./game-routes');
-const userRoutes = require('./user-routes');
+import { gameRoutes } from './game-routes';
+import { userRoutes} from './user-routes';
 
+export const router = express.Router();
 
 router.use(`/${appConstants.API_PREFIX}/question`, questionRoutes);
 router.use(`/${appConstants.API_PREFIX}/subscription`, subscriptionRoutes);
@@ -19,6 +19,3 @@ router.use(`/${appConstants.API_PREFIX}/migration`, migrationRoutes);
 router.use(`/${appConstants.API_PREFIX}/friend`, friendRoutes);
 router.use(`/${appConstants.API_PREFIX}/user`, userRoutes);
 
-
-
-module.exports = router;
