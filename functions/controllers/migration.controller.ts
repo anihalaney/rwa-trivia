@@ -26,33 +26,33 @@ export class MigrationController {
 
         try {
             console.log(req.params.collectionName);
-            const migration = new FirestoreMigration();
 
             switch (req.params.collectionName) {
                 case 'categories':
                     // Migrate categories
                     console.log('Migrating categories ...');
-                    res.send(await migration.migrateCategories());
+                    res.send(await FirestoreMigration.migrateCategories());
                     break;
                 case 'tags':
                     // Migrate Tags
                     console.log('Migrating tags ...');
-                    res.send(await migration.migrateTags());
+                    res.send(await FirestoreMigration.migrateTags());
                     break;
                 case 'games':
                     // Migrate games
                     console.log('Migrating games ...');
-                    res.send('Game Count: ' + await migration.migrateGames('/games', 'games'));
+                    res.send('Game Count: ' + await FirestoreMigration.migrateGames('/games', 'games'));
                     break;
                 case 'questions':
                     // Migrate questions
                     console.log('Migrating questions ...');
-                    res.send('Question Count: ' + await migration.migrateQuestions('/questions/published', 'questions'));
+                    res.send('Question Count: ' + await FirestoreMigration.migrateQuestions('/questions/published', 'questions'));
                     break;
                 case 'unpublished_questions':
                     // Migrate unpublished questions
                     console.log('Migrating unpublished questions ...');
-                    res.send('Question Count: ' + await migration.migrateQuestions('/questions/unpublished', 'unpublished_questions'));
+                    res.send('Question Count: ' +
+                        await FirestoreMigration.migrateQuestions('/questions/unpublished', 'unpublished_questions'));
                     break;
             }
 
@@ -73,7 +73,7 @@ export class MigrationController {
     static async migrateProdCollectionsToDev(req, res): Promise<any> {
         try {
             console.log(req.params.collectionName);
-            res.send( await GeneralService.migrateCollection(req.params.collectionName));
+            res.send(await GeneralService.migrateCollection(req.params.collectionName));
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server error');
@@ -94,7 +94,7 @@ export class MigrationController {
             res.status(500).send('Internal Server error');
             return error;
         }
-    } 
+    }
     /**
      * generateUsersStat
      * return status
@@ -102,8 +102,7 @@ export class MigrationController {
     static async generateUsersStat(req, res): Promise<any> {
 
         try {
-            const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-            await gameLeaderBoardStats.generateGameStats();
+            await GameLeaderBoardStats.generateGameStats();
             res.send('updated stats');
         } catch (error) {
             console.error(error);
@@ -119,10 +118,8 @@ export class MigrationController {
      * return status
      */
     static async generateLeaderBoardStat(req, res): Promise<any> {
-
         try {
-            const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-            await gameLeaderBoardStats.calculateGameLeaderBoardStat();
+            await GameLeaderBoardStats.calculateGameLeaderBoardStat();
             res.send('updated stats');
         } catch (error) {
             console.error(error);
@@ -140,8 +137,7 @@ export class MigrationController {
     static async generateUserContributionStat(req, res): Promise<any> {
 
         try {
-            const userContributionStat: UserContributionStat = new UserContributionStat();
-            await userContributionStat.generateGameStats();
+            await UserContributionStat.generateGameStats();
             res.send('updated user category stat');
         } catch (error) {
             console.error(error);
@@ -157,8 +153,7 @@ export class MigrationController {
      */
     static async generateSystemStat(req, res): Promise<any> {
         try {
-            const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-            await systemStatsCalculations.generateSystemStats();
+            await SystemStatsCalculations.generateSystemStats();
             res.send('updated system stat');
         } catch (error) {
             console.error(error);
@@ -175,8 +170,7 @@ export class MigrationController {
     static async updateBulkUploadCollection(req, res): Promise<any> {
 
         try {
-            const bulkUploadUpdate: BulkUploadUpdate = new BulkUploadUpdate();
-            await bulkUploadUpdate.getUserList();
+            await BulkUploadUpdate.getUserList();
             res.send('updated bulk upload collection');
         } catch (error) {
             console.error(error);
@@ -193,16 +187,16 @@ export class MigrationController {
 
         try {
             console.log(req.params.collectionName);
-            const questionBifurcation: QuestionBifurcation = new QuestionBifurcation();
+
             switch (req.params.collectionName) {
                 case 'questions':
                     console.log('Updating questions ...');
-                    await questionBifurcation.getQuestionList(req.params.collectionName);
+                    await QuestionBifurcation.getQuestionList(req.params.collectionName);
                     res.send('updated question collection');
                     break;
                 case 'unpublished_questions':
                     console.log('Updating unpublished questions ...');
-                    await questionBifurcation.getQuestionList(req.params.collectionName);
+                    await QuestionBifurcation.getQuestionList(req.params.collectionName);
                     res.send('updated unpublished question collection');
                     break;
             }
@@ -224,9 +218,9 @@ export class MigrationController {
 
         try {
             const authUsers: User[] = [];
-            const authUser: AuthUser = new AuthUser();
-            const users = await authUser.getUsers(authUsers);
-                console.log('users', users);
+
+            const users = await AuthUser.getUsers(authUsers);
+            console.log('users', users);
             await UserService.addUpdateAuthUsersToFireStore(users);
             res.send('dumped all the users');
 
@@ -244,8 +238,8 @@ export class MigrationController {
      */
     static async generateAllUsersProfileImages(req, res): Promise<any> {
         try {
-            const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
-            res.send(await profileImagesGenerator.fetchUsers());
+
+            res.send(await ProfileImagesGenerator.fetchUsers());
         } catch (error) {
             console.error(error);
             res.status(500).send('Internal Server error');
