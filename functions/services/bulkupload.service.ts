@@ -1,27 +1,32 @@
 import admin from '../db/firebase.client';
-const bulkUploadFireStoreClient = admin.firestore();
 
-/**
- * getBulkUpload
- * return bulkData
- */
-exports.getBulkUpload = (): Promise<any> => {
-    return bulkUploadFireStoreClient.collection('bulk_uploads')
-        .get().then(bulkData => { return bulkData })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+export class BulkUploadService {
 
-/**
- * setBulkUpload
- * return ref
- */
-exports.setBulkUpload = (dbBulkUpload: any): Promise<any> => {
-    return bulkUploadFireStoreClient.doc(`/bulk_uploads/${dbBulkUpload.id}`).set(dbBulkUpload).then(ref => { return ref })
-        .catch(error => {
+    private static bulkUploadFireStoreClient = admin.firestore();
+
+    /**
+     * getBulkUpload
+     * return bulkData
+     */
+    static async getBulkUpload(): Promise<any> {
+        try {
+            return await this.bulkUploadFireStoreClient.collection('bulk_uploads').get();
+        } catch (error) {
             console.error(error);
-            return error;
-        });
-};
+            throw error;
+        }
+    };
+
+    /**
+     * setBulkUpload
+     * return ref
+     */
+    static async setBulkUpload(dbBulkUpload: any): Promise<any> {
+        try {
+            return await this.bulkUploadFireStoreClient.doc(`/bulk_uploads/${dbBulkUpload.id}`).set(dbBulkUpload);
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    };
+}

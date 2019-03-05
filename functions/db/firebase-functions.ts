@@ -4,9 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 import { AppSettings } from './../services/app-settings.service';
+import { LeaderBoardService as generalleaderBoardService } from '../services/leaderboard.service';
 const appSettings: AppSettings = new AppSettings();
 const generalAccountService = require('../services/account.service');
-const generalleaderBoardService = require('../services/leaderboard.service');
 
 import {
     Game, Question, Category, User, UserStatConstants, Invitation,
