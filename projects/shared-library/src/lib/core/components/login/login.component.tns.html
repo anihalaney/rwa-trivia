@@ -7,7 +7,8 @@
       <GridLayout rows="auto,*">
         <StackLayout [formGroup]="loginForm" row="0" [ngClass]="{'background': this.mode !== 2 }">
           <StackLayout #initialContainer class="initial-container">
-            <Label text="bit wiser" fontSize="40" class="initial-label Varela-Round-Regular"></Label>
+            <!-- <Label text="bit wiser" fontSize="40" class="initial-label Varela-Round-Regular"></Label> -->
+            <Image width="60%" margin="0 0 10 0" src="~/assets/images/logo.png"></Image>
             <TextField visibility="collapsed" formControlName="mode" ></TextField>
             <StackLayout [ngClass]="{'forgotScreen':mode === 2}">
               <Label *ngIf="mode === 2" text="Forgot your password?" class="text-center Roboto-Regular" color="black" ios:fontSize="25" android:fontSize="22"
