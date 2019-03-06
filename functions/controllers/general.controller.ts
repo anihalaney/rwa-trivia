@@ -1,4 +1,6 @@
 import { GeneralService } from '../services/general.service';
+import { Utils } from '../utils/utils';
+import { interceptorConstants } from 'shared-library/shared/model';
 
 export class GeneralController {
     /**
@@ -6,7 +8,7 @@ export class GeneralController {
          * return status
          */
     static helloOperation(req, res) {
-        res.status(200).send(`Hello ${req.user.email}`);
+        Utils.sendResponse(res, interceptorConstants.SUCCESS, `Hello ${req.user.email}`);
     }
 
 
@@ -16,11 +18,9 @@ export class GeneralController {
      */
     static async getTestQuestion(req, res): Promise<any> {
         try {
-            res.status(200).send(await GeneralService.getTestQuestion());
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await GeneralService.getTestQuestion());
         } catch (error) {
-            console.error('Error', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
 
     }
@@ -32,11 +32,9 @@ export class GeneralController {
      */
     static async getGameQuestionTest(req, res): Promise<any> {
         try {
-            res.status(200).send(await GeneralService.getGameQuestionTest());
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await GeneralService.getGameQuestionTest());
         } catch (error) {
-            console.error('Error', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 

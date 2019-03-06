@@ -1,5 +1,6 @@
-import { User } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, GeneralConstants, User, UserConstants } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 export class UserService {
 
@@ -12,10 +13,9 @@ export class UserService {
     */
     static async getUsers(): Promise<any> {
         try {
-            return await this.fireStoreClient.collection('users').get();
+            return Utils.getObjectValues(await this.fireStoreClient.collection(CollectionConstants.USERS).get());
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -25,10 +25,12 @@ export class UserService {
     */
     static async getUserById(userId: string): Promise<any> {
         try {
-            return await this.fireStoreClient.doc(`/users/${userId}`).get();
+            const userData = await this.fireStoreClient
+                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.USERS}${GeneralConstants.FORWARD_SLASH}${userId}`)
+                .get();
+            return userData.data();
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -38,13 +40,13 @@ export class UserService {
      */
     static async updateUser(dbUser: any): Promise<any> {
         try {
-            return await this.fireStoreClient.doc(`/users/${dbUser.userId}`).update(dbUser);
+            return await this.fireStoreClient
+                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.USERS}${GeneralConstants.FORWARD_SLASH}${dbUser.userId}`)
+                .update(dbUser);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
-
 
     /**
      * getUsersByEmail
@@ -52,13 +54,16 @@ export class UserService {
      */
     static async getUsersByEmail(obj: any): Promise<any> {
         try {
-            return await this.fireStoreClient.collection('users').where('email', '==', obj.email).get();
+            return Utils.getObjectValues(
+                await this.fireStoreClient
+                    .collection(CollectionConstants.USERS)
+                    .where(GeneralConstants.EMAIL, GeneralConstants.DOUBLE_EQUAL, obj.email)
+                    .get()
+            );
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
-
 
     /**
      * getUserProfile
@@ -66,8 +71,7 @@ export class UserService {
     */
     static async getUserProfile(userId: string): Promise<any> {
         try {
-            const userData = await this.getUserById(userId);
-            const dbUser = userData.data();
+            const dbUser: User = await this.getUserById(userId);
             const user = new User();
             user.displayName = (dbUser && dbUser.displayName) ? dbUser.displayName : '';
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
@@ -75,8 +79,7 @@ export class UserService {
             user.userId = userId;
             return user;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -86,12 +89,10 @@ export class UserService {
   */
     static async getUserProfileImage(userId: string, width: string, height: string): Promise<any> {
         try {
-            const userData = await this.getUserById(userId);
-            const dbUser = userData.data();
+            const dbUser: User = await this.getUserById(userId);
             return await this.generateProfileImage(userId, dbUser.profilePicture, `${width}*${height}`);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -100,14 +101,14 @@ export class UserService {
      * return stream
      */
     static async generateProfileImage(userId: string, profilePicture: string, size?: string): Promise<string> {
-        const fileName = (size) ? `profile/${userId}/avatar/${size}/${profilePicture}` : `profile/${userId}/avatar/${profilePicture}`;
+        const fileName = (size) ? `${UserConstants.PROFILE}${GeneralConstants.FORWARD_SLASH}${userId}${GeneralConstants.FORWARD_SLASH}${UserConstants.AVATAR}${GeneralConstants.FORWARD_SLASH}${size}${GeneralConstants.FORWARD_SLASH}${profilePicture}`
+            : `${UserConstants.PROFILE}${GeneralConstants.FORWARD_SLASH}${userId}${GeneralConstants.FORWARD_SLASH}${UserConstants.AVATAR}${GeneralConstants.FORWARD_SLASH}${profilePicture}`;
         const file = this.bucket.file(fileName);
         try {
             const streamData = await file.download();
             return streamData[0];
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -128,7 +129,7 @@ export class UserService {
             for (const user of chunk) {
                 const batch = this.fireStoreClient.batch();
                 Object.keys(user).forEach(key => user[key] === undefined && delete user[key]);
-                const userInstance = this.fireStoreClient.collection('users').doc(user.userId);
+                const userInstance = this.fireStoreClient.collection(CollectionConstants.USERS).doc(user.userId);
                 batch.set(userInstance, { ...user }, { merge: true });
 
                 promises.push(batch.commit());
@@ -138,8 +139,7 @@ export class UserService {
             const results = await Promise.all(promises);
             return results;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -160,16 +160,15 @@ export class UserService {
                 metadata: {
                     contentType: mimeType,
                     metadata: {
-                        custom: 'metadata'
+                        custom: UserConstants.META_DATA
                     }
                 }
             }))
-                .on('error', function (error) {
-                    console.error('Error : ', error);
-                    reject(error);
+                .on(GeneralConstants.ERROR, (error) => {
+                    return Utils.throwError(error);
                 })
-                .on('finish', function () {
-                    resolve('upload finished');
+                .on(GeneralConstants.FINISH, () => {
+                    resolve(UserConstants.UPLOAD_FINISHED);
                 });
         });
     }
@@ -192,8 +191,8 @@ export class UserService {
         try {
             return await Promise.all(migrationPromises);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
+
 }

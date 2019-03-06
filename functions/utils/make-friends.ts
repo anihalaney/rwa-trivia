@@ -5,6 +5,7 @@ import {
     pushNotificationRouteConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { PushNotification } from './push-notifications';
+import { Utils } from './utils';
 
 
 export class MakeFriends {
@@ -21,9 +22,9 @@ export class MakeFriends {
 
     async validateToken(): Promise<string> {
         try {
-            const invitation = await FriendService.getInvitationByToken(this.token);
-            if (invitation.data().email === this.email) {
-                const invitationObj: Invitation = invitation.data();
+            const invitationObj: Invitation = await FriendService.getInvitationByToken(this.token);
+
+            if (invitationObj.email === this.email) {
                 invitationObj.status = friendInvitationConstants.APPROVED;
                 await this.updateFriendsList(invitationObj.created_uid, this.userId);
                 await this.updateFriendsList(this.userId, invitationObj.created_uid);
@@ -31,18 +32,16 @@ export class MakeFriends {
                 return this.userId;
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
     async updateFriendsList(inviter: string, invitee: string): Promise<string> {
         try {
-            const friend = await FriendService.getFriendByInvitee(invitee);
-            return this.makeFriends(friend.data(), inviter, invitee);
+            const friend: Friends = await FriendService.getFriendByInvitee(invitee);
+            return this.makeFriends(friend, inviter, invitee);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -80,8 +79,7 @@ export class MakeFriends {
                 return await FriendService.setFriend(dbUser, invitee);
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -95,38 +93,31 @@ export class MakeFriends {
         try {
             return await Promise.all(invitationPromises);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
     async checkAndUpdateToken(email: string): Promise<string> {
         try {
-            const snapshot = await FriendService.checkInvitation(email, this.userId);
+            const invitations: Invitation[] = await FriendService.checkInvitation(email, this.userId);
 
             const invitationNewObj: Invitation = new Invitation();
             invitationNewObj.created_uid = this.userId;
             invitationNewObj.email = email;
             invitationNewObj.status = friendInvitationConstants.PENDING;
-            if (snapshot.empty) {
+            if (invitations.length <= 0) {
                 return this.createInvitation({ ...invitationNewObj });
             } else {
-                const invitation = snapshot.docs[0];
-                if (invitation.exists) {
-                    const invitationObj: Invitation = invitation.data();
-                    if (invitationObj.status === friendInvitationConstants.APPROVED ||
-                        invitationObj.status === friendInvitationConstants.REJECTED) {
-                        return `User with email as ${email} is already friend`;
-                    } else {
-                        return this.createInvitation({ ...invitationObj });
-                    }
+                const invitationObj = invitations[0];
+                if (invitationObj.status === friendInvitationConstants.APPROVED ||
+                    invitationObj.status === friendInvitationConstants.REJECTED) {
+                    return `User with email as ${email} is already friend`;
                 } else {
-                    return this.createInvitation({ ...invitationNewObj });
+                    return this.createInvitation({ ...invitationObj });
                 }
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -139,30 +130,22 @@ export class MakeFriends {
             await FriendService.updateInvitation(dbInvitation);
             return `Invitation is sent on ${dbInvitation.email}`;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
     async sendNotification(dbInvitation: any) {
         try {
-            const snapshots = await UserService.getUsersByEmail(dbInvitation);
-            if (snapshots.empty) {
+            const users: User[] = await UserService.getUsersByEmail(dbInvitation);
+            if (users.length <= 0) {
                 console.log('user does not exist');
             } else {
-                const snapshot = snapshots.docs[0];
-                if (snapshot.exists) {
-                    const userObj: User = snapshot.data();
-
-                    PushNotification.sendGamePlayPushNotifications(dbInvitation, userObj.userId,
-                        pushNotificationRouteConstants.FRIEND_NOTIFICATIONS);
-                } else {
-                    console.log('user does not exist');
-                }
+                const userObj = users[0];
+                PushNotification.sendGamePlayPushNotifications(dbInvitation, userObj.userId,
+                    pushNotificationRouteConstants.FRIEND_NOTIFICATIONS);
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
 
     }
@@ -171,8 +154,7 @@ export class MakeFriends {
         try {
             return await UserService.getUserById(userId);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 }

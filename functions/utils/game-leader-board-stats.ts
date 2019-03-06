@@ -1,9 +1,9 @@
-import { Account, Game, Question } from '../../projects/shared-library/src/lib/shared/model';
+import { Account, Game, Question, AccountConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
 import { QuestionService } from '../services/question.service';
-
+import { Utils } from '../utils/utils';
 
 export class GameLeaderBoardStats {
 
@@ -12,11 +12,8 @@ export class GameLeaderBoardStats {
 
     static async generateGameStats(): Promise<any> {
         const userPromises = [];
-        let games;
         try {
-            games = await GameService.getCompletedGames();
-
-            games = games.docs.map(game => Game.getViewModel(game.data()));
+            const games: Game[] = await GameService.getCompletedGames();
 
             const questionDict = await this.loadQuestionDictionary();
 
@@ -37,8 +34,7 @@ export class GameLeaderBoardStats {
 
             return userResults;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -46,24 +42,17 @@ export class GameLeaderBoardStats {
         const questionDict: { [key: string]: Array<number> } = {};
 
         try {
-            const snapshots = await QuestionService.getAllQuestions();
-            if (snapshots.empty) {
-                console.log('questions do not exist');
-                return Promise.reject(snapshots);
-            } else {
-                for (const snapshot of snapshots.docs) {
-                    const question: Question = snapshot.data();
+            const questions: Question[] = await QuestionService.getAllQuestions();
 
-                    if (question.categoryIds.length > 0) {
-                        questionDict[question.id] = question.categoryIds;
-                    }
+            for (const question of questions) {
+                if (question.categoryIds.length > 0) {
+                    questionDict[question.id] = question.categoryIds;
                 }
-                return questionDict;
-
             }
+            return questionDict;
+
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -100,45 +89,37 @@ export class GameLeaderBoardStats {
         }
 
         try {
-
-            const questionResults = await Promise.all(questionPromises);
-
-            for (const questionResult of questionResults) {
-                if (questionResult) {
-                    const question = Question.getViewModelFromDb(questionResult.data());
-                    for (const categoryId of question.categoryIds) {
-                        if (categoryId && categoryIds.indexOf(categoryId) === -1) {
-                            categoryIds.push(categoryId);
-                        }
+            const questionResults: Question[] = await Promise.all(questionPromises);
+            for (const question of questionResults) {
+                for (const categoryId of question.categoryIds) {
+                    if (categoryId && categoryIds.indexOf(categoryId) === -1) {
+                        categoryIds.push(categoryId);
                     }
                 }
             }
-
             for (const userId of Object.keys(game.stats)) {
                 userPromises.push(this.calculateUserStat(userId, game, categoryIds));
             }
 
             return await Promise.all(userPromises);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
 
     }
 
     private static async calculateUserStat(userId: string, game: Game, categoryIds: Array<number>): Promise<string> {
         try {
-            const accountData = await AccountService.getAccountById(userId);
-            const account: Account = accountData.data();
+            const account: Account = await AccountService.getAccountById(userId);
+
             if (account && account.id) {
 
                 return await AccountService.updateAccountData(
                     AccountService.calculateAccountStat(account, game, categoryIds, userId));
             }
-            return 'account does not exist';
+            return AccountConstants.ACCOUNT_DOES_NOT_EXIST;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
 
     }
@@ -146,20 +127,17 @@ export class GameLeaderBoardStats {
 
     static async calculateGameLeaderBoardStat(): Promise<string> {
         try {
-            const accounts = await AccountService.getAccounts();
+            const accounts: Account[] = await AccountService.getAccounts();
             let lbsStats = await LeaderBoardService.getLeaderBoardStats();
-            lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
 
-            for (const account of accounts.docs) {
-                const accountObj: Account = account.data();
-                lbsStats = LeaderBoardService.calculateLeaderBoardStats(accountObj, lbsStats);
+            for (const account of accounts) {
+                lbsStats = LeaderBoardService.calculateLeaderBoardStats(account, lbsStats);
             }
 
             const updateLBSStatResult = await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
             return updateLBSStatResult;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
 
     }

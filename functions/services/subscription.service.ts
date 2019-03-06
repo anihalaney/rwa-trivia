@@ -1,4 +1,6 @@
+import { CollectionConstants } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 export class SubscriptionService {
 
@@ -10,10 +12,9 @@ export class SubscriptionService {
     */
     static async getSubscriptions(): Promise<any> {
         try {
-            return await this.fireStoreClient.collection('subscription').get();
+            return await this.fireStoreClient.collection(CollectionConstants.SUBSCRIPTION).get();
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 }

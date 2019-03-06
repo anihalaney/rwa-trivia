@@ -170,7 +170,6 @@ export class FirebaseFunctions {
 
                 let lbsStats = await LeaderBoardService.getLeaderBoardStats();
 
-                lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
                 lbsStats = LeaderBoardService.calculateLeaderBoardStats(account, lbsStats);
 
                 await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });

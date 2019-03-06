@@ -12,7 +12,6 @@ class GameRoutes {
 
         this.gameRoutes.post('/', AuthMiddleware.authorizedOnly, GameController.createGame);
         this.gameRoutes.put('/:gameId', AuthMiddleware.authorizedOnly, GameController.updateGame);
-        this.gameRoutes.get('/update/all', AuthMiddleware.adminOnly, GameController.updateAllGame);
         this.gameRoutes.get('/social/:userId/:socialId', GameController.createSocialContent);
         this.gameRoutes.get('/social-image/:userId/:socialId', GameController.createSocialImage);
     }

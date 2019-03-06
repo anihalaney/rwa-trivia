@@ -1,6 +1,7 @@
-import { UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { UserStatConstants, Account, Question } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { QuestionService } from '../services/question.service';
+import { Utils } from './utils';
 
 export class UserContributionStat {
 
@@ -9,10 +10,10 @@ export class UserContributionStat {
 
     static async generateGameStats(): Promise<any> {
         try {
-            const questions = await QuestionService.getAllQuestions();
+            const questions: Question[] = await QuestionService.getAllQuestions();
 
-            for (const question of questions.docs) {
-                const created_uid = question.data().created_uid;
+            for (const question of questions) {
+                const created_uid = question.created_uid;
                 this.userDict[created_uid] = (this.userDict[created_uid]) ?
                     this.userDict[created_uid] + UserStatConstants.initialContribution :
                     UserStatConstants.initialContribution;
@@ -25,20 +26,17 @@ export class UserContributionStat {
 
             return await Promise.all(userDictPromises);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
     static async getUser(id: string, count: number): Promise<string> {
         try {
-            const account = await AccountService.getAccountById(id);
-            const dbAccount = account.data();
-            dbAccount.contribution = (dbAccount.contribution) ? dbAccount.contribution + count : count;
-            return await AccountService.setAccount({ ...dbAccount });
+            const account: Account = await AccountService.getAccountById(id);
+            account.contribution = (account.contribution) ? account.contribution + count : count;
+            return await AccountService.setAccount({ ...account });
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 

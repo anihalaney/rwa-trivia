@@ -1,6 +1,6 @@
-import { Game, Question, Category, SearchResults, SearchCriteria } from '../../projects/shared-library/src/lib/shared/model';
-
+import { Category, Game, Question, CollectionConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 export class FirestoreMigration {
 
@@ -9,15 +9,15 @@ export class FirestoreMigration {
     try {
       // const admin = admin;
       const categories: Category[] = [];
-      const catRef = admin.database().ref('/categories');
-      return catRef.once('value', (cs) => {
+      const catRef = admin.database().ref(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.CATEGORIES}`);
+      return catRef.once(GeneralConstants.VALUE, (cs) => {
         for (const c of cs) {
           // console.log(c.key);
           console.log(c.val());
           const category: Category = {
-            'id': c.val()['id'],
-            'categoryName': c.val()['categoryName'],
-            'requiredForGamePlay': (c.val()['requiredForGamePlay']) ? true : false
+            'id': c.val()[GeneralConstants.ID],
+            'categoryName': c.val()[GeneralConstants.CATEGORY_NAME],
+            'requiredForGamePlay': (c.val()[GeneralConstants.Required_For_Game_Play]) ? true : false
           };
           categories.push(category);
         }
@@ -26,7 +26,7 @@ export class FirestoreMigration {
 
         const batch = admin.firestore().batch();
         for (const category of categories) {
-          const doc = admin.firestore().doc('categories/' + category.id);
+          const doc = admin.firestore().doc(`${CollectionConstants.CATEGORIES}${GeneralConstants.FORWARD_SLASH}${category.id}`);
           console.log(doc);
           batch.set(doc, category);
 
@@ -37,8 +37,7 @@ export class FirestoreMigration {
         return categories;
       });
     } catch (error) {
-      console.error('Error : ', error);
-      throw error;
+      return Utils.throwError(error);
     }
   }
 
@@ -47,8 +46,8 @@ export class FirestoreMigration {
       // const promise = new Promise<string[]>(resolve, reject);
       // const admin = migrateFireBaseClient;
       const tags: string[] = [];
-      const tagRef = admin.database().ref('/tagList');
-      return tagRef.once('value', (ts) => {
+      const tagRef = admin.database().ref(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.TAG_LIST}`);
+      return tagRef.once(GeneralConstants.VALUE, (ts) => {
         for (const t of ts) {
           // console.log(c.key);
           console.log(t.val());
@@ -56,7 +55,7 @@ export class FirestoreMigration {
         }
         console.log(tags);
         const batch = admin.firestore().batch();
-        const doc = admin.firestore().doc('lists/tags');
+        const doc = admin.firestore().doc(CollectionConstants.LISTS_FORWARD_SLASH_TAGS);
         console.log(doc);
         batch.set(doc, { 'tagList': tags });
         console.log('Commiting Tags batch');
@@ -64,8 +63,7 @@ export class FirestoreMigration {
         return tags;
       });
     } catch (error) {
-      console.error('Error : ', error);
-      throw error;
+      return Utils.throwError(error);
     }
   }
 
@@ -74,7 +72,7 @@ export class FirestoreMigration {
       // const admin = migrateFireBaseClient;
       const questions: Question[] = [];
       const qRef = admin.database().ref(sourceList);
-      return qRef.once('value', async (qs) => {
+      return qRef.once(GeneralConstants.VALUE, async (qs) => {
         for (const q of qs) {
           // console.log(c.key);
           console.log(q.val());
@@ -85,12 +83,11 @@ export class FirestoreMigration {
 
         console.log(questions[0]);
 
-        const l = await this.firestoreBatchWrite(destinationCollection, questions, 'id', 0, admin.firestore());
+        const l = await this.firestoreBatchWrite(destinationCollection, questions, GeneralConstants.ID, 0, admin.firestore());
         return l;
       });
     } catch (error) {
-      console.error('Error : ', error);
-      throw error;
+      return Utils.throwError(error);
     }
   }
 
@@ -99,13 +96,13 @@ export class FirestoreMigration {
       // const admin = migrateFireBaseClient;
       const games: Game[] = [];
       const gRef = admin.database().ref(sourceList);
-      return gRef.once('value', async (gs) => {
+      return gRef.once(GeneralConstants.VALUE, async (gs) => {
         for (const g of gs) {
           // console.log(c.key);
           const game = { 'id': g.key, ...g.val() };
           for (let i = 0; i < game.playerIds.length; i++) {
             // array to map as firestore cannot query arrays yet
-            game['playerId_' + i] = game.playerIds[i];
+            game[`${GeneralConstants.PLAYER_ID_}${i}`] = game.playerIds[i];
           }
           game.gameOver = (game.gameOver) ? true : false;
           console.log(game);
@@ -114,12 +111,11 @@ export class FirestoreMigration {
 
         console.log(games[0]);
 
-        const l = await this.firestoreBatchWrite(destinationCollection, games, 'id', 0, admin.firestore());
+        const l = await this.firestoreBatchWrite(destinationCollection, games, GeneralConstants.ID, 0, admin.firestore());
         return l;
       });
     } catch (error) {
-      console.error('Error : ', error);
-      throw error;
+      return Utils.throwError(error);
     }
   }
 
@@ -135,7 +131,7 @@ export class FirestoreMigration {
 
       const batch = await firestore.batch();
       for (const item of arr) {
-        const doc = await firestore.doc(collection + '/' + item[idField]);
+        const doc = await firestore.doc(`${collection}${GeneralConstants.FORWARD_SLASH}${item[idField]}`);
         console.log(doc);
         batch.set(doc, item);
       }
@@ -143,8 +139,7 @@ export class FirestoreMigration {
       await batch.commit();
       return await this.firestoreBatchWrite(collection, dataItems, idField, start + BATCH_SIZE, firestore);
     } catch (error) {
-      console.error('Error : ', error);
-      throw error;
+      return Utils.throwError(error);
     }
 
   }

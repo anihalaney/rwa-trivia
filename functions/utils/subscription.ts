@@ -1,5 +1,6 @@
 import { Subscribers } from '../../projects/shared-library/src/lib/shared/model';
 import { SubscriptionService } from '../services/subscription.service';
+import { Utils } from './utils';
 
 export class Subscription {
     static async getTotalSubscription(): Promise<Subscribers> {
@@ -9,8 +10,7 @@ export class Subscription {
             subscribers.count = snapshot.size;
             return subscribers;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 }

@@ -1,5 +1,7 @@
 
 import { Subscription } from '../utils/subscription';
+import { Utils } from '../utils/utils';
+import { interceptorConstants } from 'shared-library/shared/model';
 
 export class SubscriptionController {
     /**
@@ -9,11 +11,9 @@ export class SubscriptionController {
     static async getSubscriptionCount(req, res): Promise<any> {
         try {
             const subscribers = await Subscription.getTotalSubscription();
-            return res.status(200).send(subscribers);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, subscribers);
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 }

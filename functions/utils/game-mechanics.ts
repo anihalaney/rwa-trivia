@@ -1,7 +1,7 @@
 import {
     Game, GameOperations, GameOptions, GameStatus,
     OpponentType, PlayerMode, PlayerQnA,
-    pushNotificationRouteConstants, schedulerConstants
+    pushNotificationRouteConstants, schedulerConstants, User, SystemStatConstants, GeneralConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
@@ -43,7 +43,7 @@ export class GameMechanics {
                         PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
-                    SystemStatsCalculations.updateSystemStats('game_played');
+                    SystemStatsCalculations.updateSystemStats(SystemStatConstants.GAME_PLAYED);
                     break;
                 case GameOperations.REPORT_STATUS:
                     const index = game.playerQnAs.findIndex(
@@ -54,7 +54,7 @@ export class GameMechanics {
                 case GameOperations.REJECT_GAME:
                     game.gameOver = true;
                     game.GameStatus = GameStatus.REJECTED;
-                    SystemStatsCalculations.updateSystemStats('game_played');
+                    SystemStatsCalculations.updateSystemStats(SystemStatConstants.GAME_PLAYED);
                     break;
                 case GameOperations.UPDATE_ROUND:
                     game = GameMechanics.updateRound(game, userId);
@@ -63,8 +63,7 @@ export class GameMechanics {
             await GameService.updateGame(game.getDbModel());
             return true;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -104,7 +103,7 @@ export class GameMechanics {
                     }
                     const dbGame = game.getDbModel();
                     await GameService.updateGame(dbGame);
-                    console.log('updated game', dbGame.id);
+
                 } else if (playedHours >= schedulerConstants.gameInvitationDuration
                     && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
                         game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)) {
@@ -112,15 +111,14 @@ export class GameMechanics {
                     game.GameStatus = GameStatus.INVITATION_TIMEOUT;
                     const dbGame = game.getDbModel();
                     await GameService.updateGame(dbGame);
-                    console.log('invitation expires', dbGame.id);
+
                 }
             }
 
             return true;
 
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -146,8 +144,7 @@ export class GameMechanics {
             }
             return gameId;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -163,8 +160,7 @@ export class GameMechanics {
                 return await this.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -194,8 +190,7 @@ export class GameMechanics {
                 return await this.pickRandomGame(queriedItems, totalGames, userId, gameOptions);
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -207,8 +202,7 @@ export class GameMechanics {
                 gameStatus, timestamp, timestamp);
             return await this.createGame(game);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -219,8 +213,7 @@ export class GameMechanics {
                 gameStatus, timestamp, timestamp);
             return await this.createGame(game);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -233,8 +226,7 @@ export class GameMechanics {
             dbGame.id = ref.id;
             return await this.setGame(dbGame);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -245,8 +237,7 @@ export class GameMechanics {
             await GameService.setGame(dbGame);
             return dbGame.id;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -275,14 +266,13 @@ export class GameMechanics {
                 return Promise.resolve(true);
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
     static updateRound(game: Game, userId: string): Game {
         if (game.playerQnAs.length > 0) {
-            game.round = (game.round) ? game.round : game.stats[userId]['round'];
+            game.round = (game.round) ? game.round : game.stats[userId][GeneralConstants.ROUND];
             const otherPlayerUserId = game.playerIds.filter(playerId => playerId !== userId)[0];
             const currentUserQuestions = game.playerQnAs.filter((pastPlayerQnA) =>
                 pastPlayerQnA.playerId === userId);
@@ -307,17 +297,14 @@ export class GameMechanics {
     // Add lastGamePlayOption when new game create
     private static async updateUser(userId: string, gameOptions: any): Promise<string> {
         try {
-            const user = await UserService.getUserById(userId);
-
-            const dbUser = user.data();
+            const dbUser: User = await UserService.getUserById(userId);
             dbUser.lastGamePlayOption = gameOptions;
 
             await UserService.updateUser(dbUser);
             return dbUser.userId;
 
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 

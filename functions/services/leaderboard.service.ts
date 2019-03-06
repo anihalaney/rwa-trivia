@@ -1,5 +1,8 @@
-import { LeaderBoardUser, Account, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    LeaderBoardUser, Account, UserStatConstants, CollectionConstants, GeneralConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 export class LeaderBoardService {
 
@@ -11,10 +14,12 @@ export class LeaderBoardService {
      */
     static async getLeaderBoardStats(): Promise<any> {
         try {
-            return await this.leaderBoardFireStoreClient.doc('leader_board_stats/categories').get();
+            const lbsStats = await this.leaderBoardFireStoreClient.
+                doc(CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES).
+                get();
+            return (lbsStats.data()) ? lbsStats.data() : {};
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -24,10 +29,11 @@ export class LeaderBoardService {
      */
     static async setLeaderBoardStats(leaderBoardStat: any): Promise<any> {
         try {
-            return await this.leaderBoardFireStoreClient.doc('/leader_board_stats/categories').set(leaderBoardStat);
+            return await this.leaderBoardFireStoreClient
+                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES}`)
+                .set(leaderBoardStat);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -60,7 +66,6 @@ export class LeaderBoardService {
                     leaderBoardUsers.sort((a, b) => {
                         return b.score - a.score;
                     });
-                    //  console.log('leaderBoardUsers', leaderBoardUsers);
                     if (leaderBoardUsers.length > UserStatConstants.maxUsers) {
                         leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1);
                     }

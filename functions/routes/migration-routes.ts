@@ -36,6 +36,7 @@ class MigrationRoutes {
         this.migrationRoutes.post('/question/status', AuthMiddleware.authTokenOnly, QuestionController.changeUnpublishedQuestionStatus);
         this.migrationRoutes.post('/add/default/lives', AuthMiddleware.authTokenOnly, MigrationController.addDefaultLives);
         this.migrationRoutes.post('/remove/social/profile', AuthMiddleware.authTokenOnly, MigrationController.removeSocialProfile);
+        this.migrationRoutes.get('/update/all', AuthMiddleware.adminOnly, MigrationController.updateAllGame);
     }
 }
 

@@ -1,9 +1,13 @@
 import { ESUtils } from '../utils/ESUtils';
-import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode, QuestionStatus } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    SearchCriteria, Game, PlayerQnA, Question,
+    PlayerMode, QuestionStatus, interceptorConstants, ResponseMessagesConstants, CollectionConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
 import { QuestionService } from '../services/question.service';
 import { GameService } from '../services/game.service';
+
 
 export class QuestionController {
 
@@ -15,11 +19,9 @@ export class QuestionController {
 
         try {
             const isNextQuestion = (req.params.nextQ && req.params.nextQ === 'next') ? true : false;
-            res.status(200).send(await ESUtils.getRandomQuestionOfTheDay(isNextQuestion));
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await ESUtils.getRandomQuestionOfTheDay(isNextQuestion));
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 
@@ -35,11 +37,9 @@ export class QuestionController {
             const size = req.params.size;
             const criteria: SearchCriteria = req.body;
             console.log(criteria);
-            res.status(200).send(await ESUtils.getQuestions(start, size, criteria));
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await ESUtils.getQuestions(start, size, criteria));
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
 
 
@@ -60,8 +60,7 @@ export class QuestionController {
 
             if (!g) {
                 // game not found
-                res.status(404).send('Game not found');
-                return;
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.GAME_NOT_FOUND);
             }
 
             const game: Game = g;
@@ -69,23 +68,23 @@ export class QuestionController {
 
             if (game.playerIds.indexOf(userId) < 0) {
                 // user not part of this game
-                res.status(403).send('User not part of this game');
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_NOT_PART_OF_GAME);
                 return;
             }
 
             if (game.gameOver) {
                 // gameOver
-                res.status(403).send('Game over. No more Questions');
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.GAME_OVER);
                 return;
             }
 
             if (game.gameOptions.gameMode !== 0) {
                 // Multiplayer mode - check whose turn it is. Not yet implemented
-                res.status(501).send('Wait for your turn. Not yet implemented.');
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.WAIT_FOR_YOUR_TURN);
                 return;
             }
 
-            console.log('game---->', game);
+
 
             const status = await GameMechanics.changeTheTurn(game);
             if (status) {
@@ -118,12 +117,10 @@ export class QuestionController {
             } else {
                 const newQuestion = await ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId);
                 newQuestion.gameRound = game.round;
-                res.status(200).send(newQuestion);
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, newQuestion);
             }
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
 
     }
@@ -140,22 +137,18 @@ export class QuestionController {
             const playerQnA = req.body.playerQnA;
 
             if (!questionId) {
-                res.status(404).send('questionId is not available');
-                return;
+                Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.QUESTION_ID_IS_NOT_AVAILABLE);
             }
-            const qs = await QuestionService.getQuestionById(questionId);
-            const question = Question.getViewModelFromDb(qs.data());
+            const question: Question = await QuestionService.getQuestionById(questionId);
             if (playerQnA.playerAnswerId && playerQnA.playerAnswerId !== null) {
                 const answerObj = question.answers[playerQnA.playerAnswerId];
                 question.userGivenAnswer = answerObj.answerText;
             } else {
                 question.userGivenAnswer = null;
             }
-            res.status(200).send(question);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, question);
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
 
 
@@ -169,23 +162,21 @@ export class QuestionController {
     static async changeUnpublishedQuestionStatus(req, res): Promise<any> {
 
         try {
-            const questions = await QuestionService.getQuestion('unpublished_questions');
+            const questions: Question[] = await QuestionService.getQuestion(CollectionConstants.UNPUBLISHED_QUESTIONS);
+
             const questionUpdatePromises = [];
-            questions.docs.map((question) => {
-                const questionObj: Question = question.data();
+            for (const questionObj of questions) {
                 if (questionObj.status === QuestionStatus.SUBMITTED) {
                     questionObj.status = QuestionStatus.PENDING;
                     const dbQuestion = { ...questionObj };
-                    console.log('dbQuestion', dbQuestion);
-                    questionUpdatePromises.push(QuestionService.updateQuestion('unpublished_questions', dbQuestion));
+
+                    questionUpdatePromises.push(QuestionService.updateQuestion(CollectionConstants.UNPUBLISHED_QUESTIONS, dbQuestion));
                 }
-            });
+            }
             await Promise.all(questionUpdatePromises);
-            res.status(200).send('unpublished status changed');
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UNPUBLISHED_STATUS_CHANGED);
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
 
     }

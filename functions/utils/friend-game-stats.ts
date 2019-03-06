@@ -2,7 +2,7 @@ import {
     Game, Friends, FriendsMetadata
 } from '../../projects/shared-library/src/lib/shared/model';
 import { FriendService } from '../services/friend.service';
-
+import { Utils } from '../utils/utils';
 
 export class FriendGameStats {
 
@@ -16,16 +16,14 @@ export class FriendGameStats {
 
             return await Promise.all(friendPromises);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
 
     }
 
     static async calculateFriendStat(userId: string, otherUserId: string, game: Game): Promise<string> {
         try {
-            const friendData = await FriendService.getFriendByInvitee(userId);
-            const friends: Friends = friendData.data();
+            const friends: Friends = await FriendService.getFriendByInvitee(userId);
             if (friends) {
                 let index = 0;
                 let matchedIndex: number;
@@ -56,8 +54,7 @@ export class FriendGameStats {
                 return `Friend ${userId} Stat updated`;
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
