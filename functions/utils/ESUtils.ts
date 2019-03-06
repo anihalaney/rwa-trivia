@@ -161,7 +161,7 @@ export class ESUtils {
 
   static async getQuestions(start: number, size: number, criteria: SearchCriteria): Promise<SearchResults> {
 
-    const results = await this.getSearchResults(this.QUESTIONS_INDEX, start, size, criteria)
+    const results = await this.getSearchResults(this.QUESTIONS_INDEX, start, size, criteria);
     const searchResults: SearchResults = new SearchResults();
     searchResults.totalCount = results.hits.total;
     searchResults.categoryAggregation = {};
@@ -268,7 +268,7 @@ export class ESUtils {
       const client: ElasticSearch.Client = this.getElasticSearchClient();
       index = this.getIndex(index);
 
-      const body:Elasticsearch.SearchResponse<any>  = await client.search({
+      const body: Elasticsearch.SearchResponse<any>  = await client.search({
         'index': index,
         'size': size,
         'body': {

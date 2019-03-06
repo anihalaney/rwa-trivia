@@ -290,13 +290,13 @@ export class GameMechanics {
             );
             if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                 currentUserQuestions.length > 0 && otherUserQuestions.length > 0) {
-                const lastcurrentUserQuestion = currentUserQuestions[currentUserQuestions.length - 1];
-                const lastotherUserQuestions = otherUserQuestions[otherUserQuestions.length - 1];
-                lastcurrentUserQuestion.round = (lastcurrentUserQuestion.round) ? lastcurrentUserQuestion.round : game.round;
-                lastotherUserQuestions.round = (lastotherUserQuestions.round) ? lastotherUserQuestions.round : game.round;
-                if (lastcurrentUserQuestion.round === lastotherUserQuestions.round
-                    && !lastcurrentUserQuestion.answerCorrect
-                    && !lastotherUserQuestions.answerCorrect) {
+                const lastCurrentUserQuestion = currentUserQuestions[currentUserQuestions.length - 1];
+                const lastOtherUserQuestions = otherUserQuestions[otherUserQuestions.length - 1];
+                lastCurrentUserQuestion.round = (lastCurrentUserQuestion.round) ? lastCurrentUserQuestion.round : game.round;
+                lastOtherUserQuestions.round = (lastOtherUserQuestions.round) ? lastOtherUserQuestions.round : game.round;
+                if (lastCurrentUserQuestion.round === lastOtherUserQuestions.round
+                    && !lastCurrentUserQuestion.answerCorrect
+                    && !lastOtherUserQuestions.answerCorrect) {
                     game.round = game.round + 1;
                 }
             }

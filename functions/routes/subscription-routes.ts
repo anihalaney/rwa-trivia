@@ -9,7 +9,6 @@ class SubscriptionRoutes {
 
     constructor() {
         this.subscriptionRoutes = express.Router();
-
         this.subscriptionRoutes.get('/count', SubscriptionController.getSubscriptionCount);
     }
 }
