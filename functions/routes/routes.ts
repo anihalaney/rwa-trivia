@@ -5,7 +5,7 @@ import questionRoutes from './question-routes';
 import subscriptionRoutes from './subscription-routes';
 import generalRoutes from './general-routes';
 import migrationRoutes from './migration-routes';
-import schedulerRoutes from './migration-routes';
+import schedulerRoutes from './scheduler-routes';
 import friendRoutes from './friend-routes';
 import gameRoutes from './game-routes';
 import userRoutes from './user-routes';
