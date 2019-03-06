@@ -136,3 +136,18 @@ exports.uploadProfileImage = (data: any, mimeType: any, filePath: string, ): Pro
 
 };
 
+exports.removeSocialProfile = async (): Promise<any> => {
+    const users = await this.getUsers();
+
+    const migrationPromises = users.docs.map(user => {
+        const userObj: User = user.data();
+         userObj.facebookUrl = null;
+        userObj.linkedInUrl = null;
+        userObj.twitterUrl = null;
+        return this.setUser(userObj);
+    });
+
+    const migrationResults = await Promise.all(migrationPromises);
+    return migrationResults;
+};
+

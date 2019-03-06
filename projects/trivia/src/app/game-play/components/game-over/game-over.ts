@@ -1,5 +1,5 @@
 import { Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { User, Game, PlayerMode, OpponentType } from 'shared-library/shared/model';
+import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -36,7 +36,9 @@ export class GameOver implements OnInit {
   disableFriendInviteBtn = false;
   defaultAvatar = 'assets/images/default-avatar-game-over.png';
   subs: Subscription[] = [];
-
+  account: Account;
+  applicationSettings: ApplicationSettings;
+  liveErrorMsg = 'Sorry, don\'t have enough life.';
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
@@ -45,12 +47,22 @@ export class GameOver implements OnInit {
   constructor(public store: Store<AppState>, public userActions: UserActions,
     public utils: Utils) {
 
+    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+      }
+    }));
+
+    this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+      this.account = account;
+    }));
+
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.user$.subscribe(user => {
+    this.subs.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
-    });
+    }));
 
     this.socialFeedData = {
       blogNo: 0,

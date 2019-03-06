@@ -37,4 +37,13 @@ export class GameActions {
       payload: null
     };
   }
+
+  static CREATE_NEW_GAME_ERROR = 'CREATE_NEW_GAME_ERROR';
+  createNewGameError(error): ActionWithPayload<string> {
+    return {
+      type: GameActions.CREATE_NEW_GAME_ERROR,
+      payload: error
+    };
+  }
+
 }

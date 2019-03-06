@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -14,6 +14,8 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
+import { Page, EventData } from 'tns-core-modules/ui/page/page';
+import { isAndroid } from 'tns-core-modules/platform';
 
 
 @Component({
@@ -34,6 +36,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   private twitterUrlStatus = true;
   private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
+  @ViewChildren('textField') textField: QueryList<ElementRef>;
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -41,11 +44,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public width = 300;
   public height = 300;
 
+
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
+
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
+    private page: Page,
     public utils: Utils) {
 
     super(fb, store, userAction, utils);
@@ -57,8 +63,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.toggleLoader(false);
       }
     }));
-  }
 
+  }
 
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
@@ -105,6 +111,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
 
   addCustomTag() {
+    this.hideKeyboard();
     this.enteredTags.push(this.customTag);
     this.customTag = '';
     this.autocomplete.autoCompleteTextView.resetAutocomplete();
@@ -134,15 +141,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
   }
 
-  selectProfileOption(profileOption) {
-    this.user.profileSetting = profileOption;
-    this.userForm.controls['profileSetting'].setValue(profileOption);
-  }
-
-  selectLocationOption(locationOption) {
-    this.user.profileLocationSetting = locationOption;
-    this.userForm.controls['profileLocationSetting'].setValue(locationOption);
-  }
 
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
@@ -154,7 +152,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
   }
-
 
   onSubmit() {
     // validations
@@ -179,6 +176,16 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     // call saveUser
     this.saveUser(this.user);
 
+  }
+
+  hideKeyboard() {
+    this.textField
+    .toArray()
+    .map((el) => {
+      if ( isAndroid ) {
+        el.nativeElement.android.clearFocus();
+      }
+      return el.nativeElement.dismissSoftInput(); });
   }
 
   ngOnDestroy() {

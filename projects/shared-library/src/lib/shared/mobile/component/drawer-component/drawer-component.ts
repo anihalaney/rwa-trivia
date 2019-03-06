@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewContainerRef, OnDestroy } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import * as app from 'application';
@@ -10,8 +10,7 @@ import { UserActions } from '../../../../core/store/actions';
 import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
 import { Utils } from './../../../../core/services';
-import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -23,7 +22,8 @@ import { filter } from 'rxjs/operators';
     styleUrls: ['drawer-component.css']
 
 })
-export class DrawerComponent implements OnInit {
+export class DrawerComponent implements OnInit, OnDestroy {
+
     @Output() output = new EventEmitter();
     photoUrl = '~/assets/icons/icon-192x192.png';
     currentState;
@@ -35,17 +35,16 @@ export class DrawerComponent implements OnInit {
     version: string;
     logOut: boolean;
     pushToken: string;
+    subs: Subscription[] = [];
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
         public authProvider: AuthenticationProvider,
         private utils: Utils,
         private userActions: UserActions,
-        private modal: ModalDialogService,
-        private vcRef: ViewContainerRef,
         private router: Router
     ) {
-        router.events.subscribe((val) => {
+        this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
                 const nav = val.url;
                 if (nav.includes('/stats/leaderboard')) {
@@ -55,7 +54,7 @@ export class DrawerComponent implements OnInit {
                 } else if (nav === '/my/recent-game') {
                     this.activeMenu = 'Recently Completed Games';
                 } else if (nav.includes('/my/profile')) {
-                    this.activeMenu = 'Profile Settings';
+                    this.activeMenu = 'Profile';
                 } else if (nav === '/my/questions') {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/my/invite-friends') {
@@ -64,12 +63,12 @@ export class DrawerComponent implements OnInit {
             }
         });
         this.categoriesObs = store.select(coreState).pipe(select(s => s.categories));
-        this.categoriesObs.subscribe(categories => {
+        this.subs.push(this.categoriesObs.subscribe(categories => {
             this.categories = categories;
-        });
+        }));
     }
     ngOnInit() {
-        this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+        this.subs.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
                 this.user = user;
@@ -100,7 +99,7 @@ export class DrawerComponent implements OnInit {
                     this.resetValues();
                 }, 2000);
             }
-        });
+        }));
     }
 
     closeDrawer() {
@@ -170,4 +169,7 @@ export class DrawerComponent implements OnInit {
         this.closeDrawer();
     }
 
+    ngOnDestroy(): void {
+        this.utils.unsubscribe(this.subs);
+    }
 }

@@ -54,7 +54,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
     this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
 
     this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
-      this.user = s.user
+      this.user = s.user;
     }));
 
     this.subs.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
@@ -121,7 +121,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
     this.bulkUploadObs = this.store.select(bulkState).pipe(select((this.bulkSummaryDetailPath.includes('admin'))
       ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos));
 
-    this.bulkUploadObs.subscribe(bulkUploadFileInfos => {
+      this.subs.push(this.bulkUploadObs.subscribe(bulkUploadFileInfos => {
       if (bulkUploadFileInfos && bulkUploadFileInfos.length !== 0) {
         for (const key in bulkUploadFileInfos) {
           if (bulkUploadFileInfos[key]) {
@@ -133,16 +133,16 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
       }
       this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
       this.setPaginatorAndSort();
-    });
+    }));
 
     // add conditional columns in table
     if (this.isAdminUrl) {
       if (this.displayedColumns.indexOf('created') === -1) {
-        this.displayedColumns.push('created')
+        this.displayedColumns.push('created');
       }
     }
     if (this.displayedColumns.indexOf('download') === -1) {
-      this.displayedColumns.push('download')
+      this.displayedColumns.push('download');
     }
   }
 
