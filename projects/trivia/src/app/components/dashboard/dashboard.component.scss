@@ -72,3 +72,22 @@ mat-card>:first-child{
   background-color: #3489db;
   color: #fff;
 }
+
+.startgame:disabled {
+  background: silver;
+}
+
+.disabled-btn{
+  background: silver;
+}
+.text-center{
+  text-align:center;
+  vertical-align: middle;
+}
+
+.bits {
+  color: #3b5998;
+  font-weight: bold;
+  font-size: 16;
+  padding:10 0;
+}

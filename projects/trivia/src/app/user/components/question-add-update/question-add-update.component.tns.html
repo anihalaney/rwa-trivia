@@ -6,7 +6,7 @@
 
 <StackLayout *ngIf="!loaderBusy">
     <ScrollView>
-        <StackLayout class="new-game Roboto-Regular" backgroundColor="#f1f2f2" [formGroup]="questionForm">
+        <StackLayout  (tap)="hideKeyboard()"  class="new-game Roboto-Regular" backgroundColor="#f1f2f2" [formGroup]="questionForm">
 
             <GridLayout iosOverflowSafeArea="false" rows="auto,auto" columns="auto,*" padding="10" marginTop="5">
                 <Label row="0" col="0" text="Select Preferred Category" textWrap="true" class="label" fontSize="18"
@@ -41,7 +41,7 @@
             <CardView iosOverflowSafeArea="false" margin="5 10 5 10" backgroundColor="white">
                 <StackLayout>
                     <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10">
-                        <TextView hint="Enter Your Question" formControlName="questionText" class="input" height="150"
+                        <TextView  #textField  hint="Enter Your Question" formControlName="questionText" class="input" height="150"
                             borderWidth="1" borderRadius="3" borderColor="#a3a3a3" padding="10"></TextView>
                         <StackLayout *ngIf="!questionForm.controls.questionText.pristine && questionForm.controls.questionText.errors">
                             <Label *ngIf="questionForm.controls.questionText.errors.required" class="error" textWrap="true"
@@ -59,7 +59,7 @@
                                 <CheckBox row="0" col="0" #elem formControlName="correct" class="checkbox" marginRight="10"
                                     fillColor="#71b02f" ios:marginTop="10"></CheckBox>
                                 <StackLayout row="0" col="1">
-                                    <TextField [hint]="'Enter Option ' + (i+1)" formControlName="answerText" class="input"
+                                    <TextField  #textField  [hint]="'Enter Option ' + (i+1)" formControlName="answerText" class="input"
                                         borderWidth="1" borderColor="#a3a3a3" borderRadius="3" paddingLeft="10"
                                         ios:padding="10"></TextField>
                                     <StackLayout *ngIf="!answers.controls[i].controls.answerText.pristine && answers.controls[i].controls.answerText.errors">

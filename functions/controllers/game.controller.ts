@@ -6,20 +6,25 @@ import { Utils } from '../utils/utils';
 import { PushNotification } from '../utils/push-notifications';
 import { GameMechanics } from '../utils/game-mechanics';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+
+import { AppSettings } from '../services/app-settings.service';
 const functions = require('firebase-functions');
 const gameControllerService = require('../services/game.service');
 const socialGameService = require('../services/social.service');
+const generalAccountService = require('../services/account.service');
+
 const utils: Utils = new Utils();
 const pushNotification: PushNotification = new PushNotification();
 const fs = require('fs');
 const request = require('request');
 const path = require('path');
+const appSettings: AppSettings = new AppSettings();
 
 /**
  * createGame
  * return gameId
  */
-exports.createGame = (req, res) => {
+exports.createGame = async (req, res) => {
     const gameOptions = req.body.gameOptions;
     const userId = req.body.userId;
 
@@ -36,10 +41,30 @@ exports.createGame = (req, res) => {
     }
 
     const gameMechanics: GameMechanics = new GameMechanics(gameOptions, userId);
+    // Get App Settings
+    const appSetting = await appSettings.getAppSettings();
+
+    if (appSetting.lives.enable) {
+        // Get Account Info
+        const account = await generalAccountService.getAccountById(userId);
+        // if lives is less then or equal to 0 then send with error
+        if (account.data().lives <= 0) {
+            res.status(403).send('Sorry, don\'t have enough life.');
+            return;
+        }
+    }
     gameMechanics.createNewGame().then((gameId) => {
-        console.log('gameId', gameId);
+        if (appSetting.lives.enable) {
+            // Decrement lives from user account
+            generalAccountService.decreaseLife(userId);
+            // Decrement Second Player's life
+            if (gameOptions.friendId) {
+                generalAccountService.decreaseLife(gameOptions.friendId);
+            }
+        }
         res.send({ gameId: gameId });
     });
+
 };
 
 
@@ -83,6 +108,9 @@ exports.updateGame = (req, res) => {
                 const currentTurnPlayerId = game.nextTurnPlayerId;
                 game.decideNextTurn(currentPlayerQnAs, userId);
 
+                if (currentPlayerQnAs.answerCorrect) {
+                    generalAccountService.setBits(userId);
+                }
                 if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
                     pushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
                         pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
@@ -96,6 +124,7 @@ exports.updateGame = (req, res) => {
                 game.decideWinner();
                 game.calculateStat(game.nextTurnPlayerId);
                 game.GameStatus = GameStatus.COMPLETED;
+                generalAccountService.setBytes(game.winnerPlayerId);
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
                     pushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
@@ -301,4 +330,3 @@ exports.createSocialImage = (req, res) => {
         res.send(social_url);
     });
 };
-

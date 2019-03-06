@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
-import { switchMap, map, filter, mergeMap } from 'rxjs/operators';
+import { switchMap, map, filter, mergeMap, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { GameService } from './../../../../../../shared-library/src/lib/core/services';
 import { Game, Question, RouterStateUrl } from 'shared-library/shared/model';
@@ -9,6 +9,7 @@ import * as gameplayactions from '../actions/game-play.actions';
 import { GameActions } from '../../../../../../shared-library/src/lib/core/store/actions/game.actions';
 import { GamePlayState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
+import { of } from 'rxjs';
 
 @Injectable()
 export class GamePlayEffects {
@@ -20,9 +21,11 @@ export class GamePlayEffects {
     .pipe(
       switchMap((action: gameplayactions.CreateNewGame) =>
         this.svc.createNewGame(action.payload.gameOptions, action.payload.user).pipe(
-          map((gameId: string) => this.gameActions.createNewGameSuccess(gameId))
-          // catchError(error => new)
-        )
+          map((gameId: string) => this.gameActions.createNewGameSuccess(gameId)),
+          catchError((error) => {
+            return of(this.gameActions.createNewGameError(error.error));
+          })
+        ),
       )
     );
 

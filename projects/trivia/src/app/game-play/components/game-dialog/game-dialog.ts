@@ -67,9 +67,9 @@ export class GameDialog {
 
   constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils) {
 
-    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
+ // this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+    // this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.sub.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.sub.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;

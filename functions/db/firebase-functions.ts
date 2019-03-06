@@ -4,6 +4,10 @@ const functions = require('firebase-functions');
 const fs = require('fs');
 const path = require('path');
 const mailConfig = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+import { AppSettings } from './../services/app-settings.service';
+const appSettings: AppSettings = new AppSettings();
+const generalAccountService = require('../services/account.service');
+const generalleaderBoardService = require('../services/leaderboard.service');
 
 import {
     Game, Question, Category, User, UserStatConstants, Invitation,
@@ -108,9 +112,11 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
         if (game.gameOver) {
 
             const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
+
             gameLeaderBoardStats.getGameUsers(game).then((status) => {
                 console.log('status', status);
             });
+
 
             if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                 Number(game.gameOptions.opponentType) === OpponentType.Friend) {
@@ -121,8 +127,9 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
             }
 
             const systemStatsCalculations: SystemStatsCalculations = new SystemStatsCalculations();
-            systemStatsCalculations.updateSystemStats('active_games').then((stats) => {
+            return systemStatsCalculations.updateSystemStats('active_games').then((stats) => {
                 console.log(stats);
+                return stats;
             });
         }
     }
@@ -131,7 +138,7 @@ exports.onGameUpdate = functions.firestore.document('/games/{gameId}').onUpdate(
 
 
 // update stats based on user creation
-exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate((snap, context) => {
+exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate(async (snap, context) => {
 
     const data = snap.data();
 
@@ -141,29 +148,42 @@ exports.onUserCreate = functions.firestore.document('/users/{userId}').onCreate(
         systemStatsCalculations.updateSystemStats('total_users').then((stats) => {
             console.log(stats);
         });
+
+        const appSetting = await appSettings.getAppSettings();
+        if (appSetting.lives.enable) {
+            const accountObj: any = {};
+            accountObj.id = data.userId;
+            accountObj.lives = appSetting.lives.max_lives;
+            generalAccountService.setAccount(accountObj);
+        }
     }
 
 });
 
-exports.onUserUpdate = functions.firestore.document('/users/{userId}').onUpdate((change, context) => {
+exports.onAccountUpdate = functions.firestore.document('/accounts/{accountId}').onUpdate((change, context) => {
 
     const beforeEventData = change.before.data();
     const afterEventData = change.after.data();
 
     if (afterEventData !== beforeEventData) {
-        console.log('data changed');
-        const userObj: User = afterEventData;
-        const gameLeaderBoardStats: GameLeaderBoardStats = new GameLeaderBoardStats();
-        gameLeaderBoardStats.getLeaderBoardStat().then((lbsStats) => {
-            gameLeaderBoardStats.getAccountById(userObj.userId).then((dbAccount) => {
-                const account: Account = dbAccount;
-                lbsStats = gameLeaderBoardStats.calculateLeaderBoardStat(account, lbsStats);
-                console.log('lbsStats', lbsStats);
-                gameLeaderBoardStats.updateLeaderBoard({ ...lbsStats }).then((leaderBoardStat) => {
-                    // console.log('leaderBoardStat', leaderBoardStat);
-                });
+        const account: Account = afterEventData;
+
+        return generalleaderBoardService.getLeaderBoardStats().then((lbsStats) => {
+            lbsStats = (lbsStats.data()) ? lbsStats.data() : {};
+            lbsStats = generalleaderBoardService.calculateLeaderBoardStats(account, lbsStats);
+            // console.log('lbsStats', lbsStats);
+            return generalleaderBoardService.setLeaderBoardStats({ ...lbsStats }).then((leaderBoardStat) => {
+                console.log('updated leaderboardstats');
+                return leaderBoardStat;
+            }, error => {
+                console.log('leaderBoardStat error', error);
+                return error;
             });
 
+
+        }, error => {
+            console.log('leaderBoardStat error', error);
+            return error;
         });
     }
 

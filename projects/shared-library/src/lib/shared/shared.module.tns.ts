@@ -11,6 +11,7 @@ import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import { AuthorComponent } from './components/author/author.component';
+import { ShowHintWhenFocusOutDirective } from './directive';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { AuthorComponent } from './components/author/author.component';
     DrawerComponent,
     QuestionsTableComponent,
     AuthorComponent,
-    GameFilterPipe
+    GameFilterPipe,
+    ShowHintWhenFocusOutDirective
   ],
   imports: [
     CommonModule,
@@ -50,7 +52,8 @@ import { AuthorComponent } from './components/author/author.component';
     DrawerComponent,
     QuestionsTableComponent,
     AuthorComponent,
-    GameFilterPipe],
+    GameFilterPipe,
+    ShowHintWhenFocusOutDirective],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class SharedModule { }

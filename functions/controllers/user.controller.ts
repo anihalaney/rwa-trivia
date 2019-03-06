@@ -7,7 +7,7 @@ import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
 import { Utils } from '../utils/utils';
 const utils: Utils = new Utils();
-
+const generalAccountService = require('../services/account.service');
 /**
  * getUserById
  * return user
@@ -51,8 +51,7 @@ exports.getUserImages = (req, res) => {
 
     if (!userId) {
         // Game Option is not added
-        res.status(403).send('userId is not available');
-        return;
+        return res.status(403).send('userId is not available');
     }
 
     userService.getUserById(userId).then((u) => {
@@ -71,6 +70,9 @@ exports.getUserImages = (req, res) => {
  * return status
  */
 exports.generateUserProfileImage = (req, res) => {
+    if (req.body.user.userId === req.user.uid) {
+        return res.status(401).send('Unauthorized');
+    }
     const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
     const user = req.body.user;
 
@@ -105,3 +107,19 @@ function setUser(user, res) {
         res.send({ 'status': 'Profile Data is saved !!' });
     });
 }
+
+exports.updateLives = (req, res) => {
+    const userId = req.body.userId;
+    if (!userId) {
+        return res.status(400).send('Bad Request');
+    }
+    if (req.user.user_id !== userId) {
+        return res.status(401).send('Unauthorized');
+    }
+    return generalAccountService.updateLives(userId).then((ref) => {
+        res.send({ 'status': 'Lives added successfully !!' });
+    }, error => {
+        res.status(500).send(error);
+    });
+
+};
