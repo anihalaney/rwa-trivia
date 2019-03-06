@@ -1,8 +1,8 @@
-import { Question, SearchResults, SearchCriteria } from '../../projects/shared-library/src/lib/shared/model';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import * as ElasticSearch from 'elasticsearch';
 import * as functions from 'firebase-functions';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
 
 
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
@@ -268,7 +268,7 @@ export class ESUtils {
       const client: ElasticSearch.Client = this.getElasticSearchClient();
       index = this.getIndex(index);
 
-      const body: Elasticsearch.SearchResponse<any>  = await client.search({
+      const body: Elasticsearch.SearchResponse<any> = await client.search({
         'index': index,
         'size': size,
         'body': {
@@ -362,3 +362,4 @@ export class ESUtils {
     }
   }
 }
+

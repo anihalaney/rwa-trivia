@@ -1,9 +1,9 @@
 import {
-    User
+    User, GeneralConstants, UserConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { UserService } from '../services/user.service';
 import * as sharp from 'sharp';
-
+import { Utils } from './utils';
 
 export class ProfileImagesGenerator {
 
@@ -13,18 +13,16 @@ export class ProfileImagesGenerator {
 
     static async fetchUsers(): Promise<any> {
         try {
-            const users = await UserService.getUsers();
+            const users: User[] = await UserService.getUsers();
             const userImagesPromises = [];
-            for (const user of users.docs) {
-                const userObj: User = user.data();
-                if (userObj.userId && userObj.profilePicture) {
-                    userImagesPromises.push(this.getStoredImage(userObj.userId, userObj.profilePicture, undefined));
+            for (const user of users) {
+                if (user.userId && user.profilePicture) {
+                    userImagesPromises.push(this.getStoredImage(user.userId, user.profilePicture, undefined));
                 }
             }
             return await Promise.all(userImagesPromises);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -32,7 +30,7 @@ export class ProfileImagesGenerator {
 
         let filePath = `${this.basePath}/${user.userId}/${this.originalImagePath}/${user.profilePicture}`;
         user.originalImageUrl = user.originalImageUrl.replace(/^data:image\/\w+;base64,/, '');
-        let bufferStream = new Buffer(user.originalImageUrl, 'base64');
+        let bufferStream = new Buffer(user.originalImageUrl, GeneralConstants.BASE64);
 
         try {
 
@@ -40,7 +38,7 @@ export class ProfileImagesGenerator {
 
             filePath = `${this.basePath}/${user.userId}/${this.profileImagePath}/${user.profilePicture}`;
             user.croppedImageUrl = user.croppedImageUrl.replace(/^data:image\/\w+;base64,/, '');
-            bufferStream = new Buffer(user.originalImageUrl, 'base64');
+            bufferStream = new Buffer(user.originalImageUrl, GeneralConstants.BASE64);
 
             await UserService.uploadProfileImage(bufferStream, user.imageType, filePath);
             await this.getStoredImage(user.userId, user.profilePicture, user.imageType);
@@ -48,8 +46,7 @@ export class ProfileImagesGenerator {
             return user;
 
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
 
     }
@@ -58,22 +55,24 @@ export class ProfileImagesGenerator {
         const imagesPromises = [];
         try {
             const dataStream = await UserService.generateProfileImage(userId, profileImagePath);
-            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 263, 263));
-            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 70, 60));
-            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType, 44, 40));
+            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
+                UserConstants.IMG_263, UserConstants.IMG_263));
+            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
+                UserConstants.IMG_70, UserConstants.IMG_60));
+            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
+                UserConstants.IMG_44, UserConstants.IMG_40));
             const userResults = await Promise.all(imagesPromises);
             return userResults;
 
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
     private static async resizeImage(userId: string, profileImagePath: String,
         dataStream: any, croppedImageType: string, width: Number, height: Number): Promise<string> {
 
-        const filePath = `${this.basePath}/${userId}/${this.profileImagePath}/${width}*${height}/${profileImagePath}`;
+        const filePath = `${this.basePath}${GeneralConstants.FORWARD_SLASH}${userId}${GeneralConstants.FORWARD_SLASH}${this.profileImagePath}${GeneralConstants.FORWARD_SLASH}${width}*${height}${GeneralConstants.FORWARD_SLASH}${profileImagePath}`;
 
         croppedImageType = (croppedImageType) ? croppedImageType : dataStream.mimetype;
         try {
@@ -82,8 +81,7 @@ export class ProfileImagesGenerator {
             return await UserService.uploadProfileImage(data, croppedImageType, filePath);
 
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 

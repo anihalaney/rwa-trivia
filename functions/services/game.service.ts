@@ -1,5 +1,6 @@
-import { GameStatus, Game } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, Game, GameConstants, GameStatus, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 
 export class GameService {
@@ -13,12 +14,13 @@ export class GameService {
     static async getAvailableGames(): Promise<any> {
         try {
             return this.getGames(
-                await this.gameFireStoreClient.collection('games').where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT)
-                    .where('gameOver', '==', false)
+                await this.gameFireStoreClient
+                    .collection(CollectionConstants.GAMES)
+                    .where(GameConstants.GAME_STATUS, GeneralConstants.DOUBLE_EQUAL, GameStatus.AVAILABLE_FOR_OPPONENT)
+                    .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                     .get());
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -28,12 +30,11 @@ export class GameService {
      */
     static async getLiveGames(): Promise<any> {
         try {
-            return await this.gameFireStoreClient.collection('games')
-                .where('gameOver', '==', false)
+            return await this.gameFireStoreClient.collection(CollectionConstants.GAMES)
+                .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                 .get();
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -62,8 +63,7 @@ export class GameService {
             }
             return await Promise.all(promises);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -74,10 +74,9 @@ export class GameService {
      */
     static async createGame(dbGame: any): Promise<any> {
         try {
-            return await this.gameFireStoreClient.collection('games').add(dbGame);
+            return await this.gameFireStoreClient.collection(CollectionConstants.GAMES).add(dbGame);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -87,15 +86,16 @@ export class GameService {
      */
     static async getGameById(gameId: string): Promise<any> {
         try {
-            const gameData = await this.gameFireStoreClient.doc(`games/${gameId}`).get();
+            const gameData = await this.gameFireStoreClient
+                .doc(`${CollectionConstants.GAMES}${GeneralConstants.FORWARD_SLASH}${gameId}`)
+                .get();
             if (!gameData.exists) {
                 // game not found
                 return;
             }
             return Game.getViewModel(gameData.data());
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -105,10 +105,11 @@ export class GameService {
      */
     static async setGame(dbGame: any): Promise<any> {
         try {
-            return await this.gameFireStoreClient.doc('/games/' + dbGame.id).set(dbGame);
+            return await this.gameFireStoreClient
+                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}${GeneralConstants.FORWARD_SLASH}${dbGame.id}`)
+                .set(dbGame);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -119,10 +120,14 @@ export class GameService {
      */
     static async getCompletedGames(): Promise<any> {
         try {
-            return await this.gameFireStoreClient.collection('/games').where('gameOver', '==', true).get();
+            return this.getGames(
+                await this.gameFireStoreClient
+                    .collection(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}`)
+                    .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, true)
+                    .get()
+            );
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -132,10 +137,11 @@ export class GameService {
      */
     static async updateGame(dbGame: any): Promise<any> {
         try {
-            return await this.gameFireStoreClient.doc('/games/' + dbGame.id).update(dbGame);
+            return await this.gameFireStoreClient
+                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}${GeneralConstants.FORWARD_SLASH}${dbGame.id}`)
+                .update(dbGame);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -145,10 +151,14 @@ export class GameService {
      */
     static async checkGameOver(): Promise<any> {
         try {
-            return this.getGames(await this.gameFireStoreClient.collection('/games').where('gameOver', '==', false).get());
+            return this.getGames(
+                await this.gameFireStoreClient
+                    .collection(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}`)
+                    .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
+                    .get()
+            );
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -156,10 +166,12 @@ export class GameService {
      * getGames
      * return Game[]
      */
-    static getGames(snapshots): Game[] {
+    static getGames(snapshots: any): Game[] {
         const games: Game[] = [];
-        for (const snapshot of snapshots.docs) {
-            games.push(Game.getViewModel(snapshot.data()));
+        if (snapshots.exists) {
+            for (const snapshot of snapshots.docs) {
+                games.push(Game.getViewModel(snapshot.data()));
+            }
         }
         return games;
     }

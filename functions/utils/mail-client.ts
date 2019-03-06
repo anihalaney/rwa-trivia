@@ -1,10 +1,10 @@
 import * as nodemailer from 'nodemailer';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-
 import { TriggerConstants } from '../../projects/shared-library/src/lib/shared/model';
-
+import { Utils } from './utils';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
+
 export class MailClient {
 
     transporter: any;
@@ -35,13 +35,11 @@ export class MailClient {
     }
 
     async sendMail(): Promise<any> {
-
         try {
             // send mail with defined transport object
             return await this.transporter.sendMail(this.mailOptions);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
 
     }

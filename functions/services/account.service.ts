@@ -1,7 +1,10 @@
-import { Account, Game } from '../../projects/shared-library/src/lib/shared/model';
-import { AppSettings } from './app-settings.service';
-import { Utils } from '../utils/utils';
+import {
+    Account, Game, CollectionConstants,
+    GeneralConstants, LeaderBoardConstants, AccountConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
+import { AppSettings } from './app-settings.service';
 
 export class AccountService {
 
@@ -14,10 +17,11 @@ export class AccountService {
      */
     static async getAccountById(id: string): Promise<any> {
         try {
-            return await this.accountFireStoreClient.doc(`/accounts/${id}`).get();
+            const accountData = await this.accountFireStoreClient.
+                doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.ACCOUNTS}${GeneralConstants.FORWARD_SLASH}${id}`).get();
+            return accountData.data();
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -27,12 +31,12 @@ export class AccountService {
      */
     static async setAccount(dbAccount: any): Promise<any> {
         try {
-            return await this.accountFireStoreClient.doc(`/accounts/${dbAccount.id}`)
+            return await this.accountFireStoreClient
+                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.ACCOUNTS}${GeneralConstants.FORWARD_SLASH}${dbAccount.id}`)
                 .set(dbAccount);
 
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -42,12 +46,12 @@ export class AccountService {
      */
     static async updateAccountData(dbAccount: any): Promise<any> {
         try {
-            return await this.accountFireStoreClient.doc(`/accounts/${dbAccount.id}`).update(dbAccount);
+            return await this.accountFireStoreClient
+                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.ACCOUNTS}${GeneralConstants.FORWARD_SLASH}${dbAccount.id}`)
+                .update(dbAccount);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
-
     }
 
     /**
@@ -56,10 +60,9 @@ export class AccountService {
      */
     static async getAccounts(): Promise<any> {
         try {
-            return await this.accountFireStoreClient.collection('accounts').get();
+            return Utils.getObjectValues(await this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).get());
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -68,9 +71,9 @@ export class AccountService {
      * return account
      */
     static calculateAccountStat(account: Account, game: Game, categoryIds: Array<number>, userId: string): Account {
+
         const score = game.stats[userId].score;
         const avgAnsTime = game.stats[userId].avgAnsTime;
-        // console.log('categoryIds', categoryIds);
         account = (account) ? account : new Account();
 
         for (const id of categoryIds) {
@@ -78,14 +81,17 @@ export class AccountService {
             account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
                 account.leaderBoardStats[id] + score : score;
         }
-        account['leaderBoardStats'] = { ...account.leaderBoardStats };
+
+        account[LeaderBoardConstants.LEADER_BOARD_STATS] = { ...account.leaderBoardStats };
         account.gamePlayed = (account.gamePlayed) ? account.gamePlayed + 1 : 1;
         account.categories = Object.keys(account.leaderBoardStats).length;
+
         if (game.winnerPlayerId) {
             (game.winnerPlayerId === userId) ?
                 account.wins = (account.wins) ? account.wins + 1 : 1 :
                 account.losses = (account.losses) ? account.losses + 1 : 1;
         }
+
         account.badges = (account.badges) ? account.badges + score : score;
         account.avgAnsTime = (account.avgAnsTime) ? Math.floor((account.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
 
@@ -102,7 +108,7 @@ export class AccountService {
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
                 const livesMilles = appSetting.lives.lives_after_add_millisecond;
-                const accountRef = this.accountFireStoreClient.collection(`accounts`).doc(userId);
+                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
                 const docRef = await accountRef.get();
                 const timestamp = Utils.getUTCTimeStamp();
                 if (docRef.exists) {
@@ -118,8 +124,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -134,8 +139,7 @@ export class AccountService {
                 await this.addLife(userId, appSetting);
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -148,7 +152,7 @@ export class AccountService {
             const appSetting = await this.appSettings.getAppSettings();
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
-                const accountRef = this.accountFireStoreClient.collection(`accounts`).doc(user.id);
+                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(user.id);
                 const docRef = await accountRef.get();
                 if (docRef.exists) {
                     const account = docRef.data();
@@ -162,8 +166,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -177,8 +180,9 @@ export class AccountService {
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
                 let timestamp = Utils.getUTCTimeStamp();
-                const accountCollRef = this.accountFireStoreClient.collection('accounts')
-                    .where('nextLiveUpdate', '<=', timestamp);
+                const accountCollRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS)
+                    .where(AccountConstants.NEXT_LIVE_UPDATE,
+                        GeneralConstants.LESS_THAN_OR_EQUAL, timestamp);
                 const accounts = await accountCollRef.get();
                 const accountsNotHavingMaxLives = accounts.docs.filter(d => d.data().lives < maxLives);
                 for (const account of accountsNotHavingMaxLives) {
@@ -188,8 +192,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error('Error : ', error);
-            return error;
+            return Utils.throwError(error);
         }
     }
 
@@ -199,7 +202,7 @@ export class AccountService {
     static async addLife(userId: String, appSetting): Promise<any> {
         try {
             const timestamp = Utils.getUTCTimeStamp();
-            const accountRef = this.accountFireStoreClient.collection(`accounts`).doc(userId);
+            const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
             const docRef = await accountRef.get();
             const account = docRef.data();
             if (docRef.exists) {
@@ -218,8 +221,7 @@ export class AccountService {
                 accountRef.set({ lives: appSetting.lives.maxLives, id: userId });
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -227,8 +229,7 @@ export class AccountService {
         try {
             return await this.increaseLives(userId);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -240,8 +241,8 @@ export class AccountService {
             const appSetting = await this.appSettings.getAppSettings();
             if (appSetting.tokens.enable) {
                 const bits = appSetting.tokens.earn_bits;
-                console.log('not bits', bits);
-                const accountRef = this.accountFireStoreClient.collection(`accounts`).doc(userId);
+
+                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
                 const docRef = await accountRef.get();
 
                 if (docRef.exists) {
@@ -254,8 +255,7 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -267,7 +267,7 @@ export class AccountService {
             const appSetting = await this.appSettings.getAppSettings();
             if (appSetting.tokens.enable) {
                 const bytes = appSetting.tokens.earn_bytes;
-                const accountRef = this.accountFireStoreClient.collection(`accounts`).doc(userId);
+                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
                 const docRef = await accountRef.get();
 
                 if (docRef.exists) {
@@ -280,8 +280,8 @@ export class AccountService {
                 }
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
+
 }

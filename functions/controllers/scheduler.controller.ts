@@ -1,12 +1,14 @@
 import {
-    Game, Blog, RSSFeedConstants
+    Game, Blog, RSSFeedConstants, interceptorConstants, ResponseMessagesConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { BlogService } from '../services/blog.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
 import { AppSettings } from '../services/app-settings.service';
 import { AccountService } from '../services/account.service';
+import { Utils } from '../utils/utils';
 const Feed = require('feed-to-json');
+
 export class SchedulerController {
 
     private static appSettings: AppSettings = new AppSettings();
@@ -16,11 +18,10 @@ export class SchedulerController {
     static async checkGameOver(req, res) {
         try {
             await GameMechanics.doGameOverOperations();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.SCHEDULER_CHECK_GAME_OVER_IS_COMPLETED);
         } catch (error) {
-            console.error('Error', error);
-            return res.status(500).send('There was error running Game OVer scheduler');
+            Utils.sendErr(res, error);
         }
-        return res.status(200).send('scheduler check game over is completed');
     }
 
     /**
@@ -35,11 +36,11 @@ export class SchedulerController {
                 promises.push(GameMechanics.changeTheTurn(game));
             }
             await Promise.all(promises);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.SCHEDULER_CHANGE_GAME_TURN_IS_COMPLETED);
+
         } catch (error) {
-            console.error('Error', error);
-            return res.status(500).send('There was error running change turn scheduler');
+            Utils.sendErr(res, error);
         }
-        return res.status(200).send('scheduler change game turn is completed');
     }
 
     // Schedular for add lives
@@ -49,11 +50,9 @@ export class SchedulerController {
             if (appSetting.lives.enable) {
                 return res.status(200).send(AccountService.addLives());
             }
-            res.status(200).send('live feature is not enabled');
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.LIVE_FEATURES_IS_NOT_ENABLED);
         } catch (error) {
-            console.error('Error', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 
@@ -102,15 +101,13 @@ export class SchedulerController {
 
                 const ref1 = await BlogService.setBlog(blogs);
                 if (ref1) {
-                    res.status(200).send('created feed blogs');
+                    Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.CREATED_FEED_BLOGS);
                 } else {
-                    res.status(500).send('Internal Server error');
+                    Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.BLOGS_NOT_AVAILABLE);
                 }
             });
         } catch (error) {
-            console.error('Error', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 }

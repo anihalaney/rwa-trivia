@@ -1,4 +1,5 @@
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 export class FirebaseAuthService {
     private static fireBaseAuthClient = admin.auth();
@@ -10,8 +11,7 @@ export class FirebaseAuthService {
         try {
             return await this.fireBaseAuthClient.listUsers(1000, nextPageToken);
         } catch (error) {
-            console.log('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 }

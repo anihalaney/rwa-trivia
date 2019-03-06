@@ -37,6 +37,9 @@ export enum interceptorConstants {
     TOKEN_EXPIRE = 419,
     INTERNAL_ERROR = 500,
     GATEWAY_TIMEOUT = 504,
+    SUCCESS = 200,
+    BAD_REQUEST = 400,
+    FORBIDDEN = 403,
     MAXIMUM_RE_REQUEST_LIMIT = 3
 }
 
@@ -84,6 +87,161 @@ export enum pushNotificationRouteConstants {
     GAME_REMAINING_TIME_NOTIFICATIONS = 'game-play-time-notifications',
     FRIEND_NOTIFICATIONS = 'friend-notifications'
 }
+
+
+/* Api constants */
+
+export enum CollectionConstants {
+    ACCOUNTS = 'accounts',
+    APPLICATION_SETTINGS_FORWARD_SLASH_SETTINGS = 'application_settings/settings',
+    BLOGS = 'blogs',
+    BULK_UPLOADS = 'bulk_uploads',
+    INVITATIONS = 'invitations',
+    FRIENDS = 'friends',
+    GAMES = 'games',
+    LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES = 'leader_board_stats/categories',
+    QUESTIONS = 'questions',
+    UNPUBLISHED_QUESTIONS = 'unpublished_questions',
+    STATS = 'stats',
+    SUBSCRIPTION = 'subscription',
+    USERS = 'users',
+    PUBLISHED = 'published',
+    UNPUBLISHED = 'unpublished',
+    CATEGORIES = 'categories',
+    TAG_LIST = '/tagList',
+    LISTS_FORWARD_SLASH_TAGS = 'lists/tags',
+    STATS_SYSTEM = 'system',
+}
+
+export enum UserConstants {
+    PROFILE = 'profile',
+    AVATAR = 'avatar',
+    META_DATA = 'metadata',
+    UPLOAD_FINISHED = 'upload finished',
+    AUTH_STATE = 'authState',
+    IMG_263 = 263,
+    IMG_70 = 70,
+    IMG_60 = 60,
+    IMG_44 = 44,
+    IMG_40 = 40
+}
+
+export enum GeneralConstants {
+    FORWARD_SLASH = '/',
+    LESS_THAN_OR_EQUAL = '<=',
+    CREATED_UID = 'created_uid',
+    DOUBLE_EQUAL = '==',
+    EMAIL = 'email',
+    FINISH = 'finish',
+    ERROR = 'error',
+    API_KEY = 'apiKey',
+    AUTH_DOMAIN = 'authDomain',
+    DATABASE_URL = 'databaseURL',
+    PROJECT_ID = 'projectId',
+    STORAGE_BUCKET = 'storageBucket',
+    MESSAGING_SENDER_ID = 'messagingSenderId',
+    TARGET_APP = 'targetApp',
+    ID = 'id',
+    TYPE = 'type',
+    SOURCE = 'source',
+    VALUE = 'value',
+    CATEGORY_NAME = 'categoryName',
+    Required_For_Game_Play = 'requiredForGamePlay',
+    PLAYER_ID_ = 'playerId_',
+    ROUND = 'round',
+    BASE64 = 'base64'
+}
+
+export enum ResponseResultConstants {
+    MIGRATED_COLLECTION = 'migrated collection',
+    QUESTIONS_INDEXED = 'Questions indexed',
+    ELASTIC_SEARCH_CLUSTER_IS_DOWN = 'elasticsearch cluster is down!',
+    HELLO_ES_IS_UP = 'Hello. ES is up',
+}
+
+export enum SocialShareConstants {
+    SOCIAL_SHARE = 'social_share',
+    SCORE_IMAGES = 'score_images',
+}
+
+export enum GameConstants {
+    GAME_STATUS = 'GameStatus',
+    GAME_OVER = 'gameOver'
+}
+
+export enum AccountConstants {
+    NEXT_LIVE_UPDATE = 'nextLiveUpdate',
+    ACCOUNT_DOES_NOT_EXIST = 'account does not exist',
+}
+
+export enum LeaderBoardConstants {
+    LEADER_BOARD_STATS = 'leaderBoardStats'
+}
+
+export enum BulkUploadConstants {
+    IS_ADMIN_ARCHIVED = 'isAdminArchived',
+    IS_USER_ARCHIVED = 'isUserArchived1'
+}
+
+export enum ESConstants {
+    DEV = 'dev:'
+}
+
+export enum SystemStatConstants {
+    GAME_PLAYED = 'game_played',
+    TOTAL_USERS = 'total_users',
+    TOTAL_QUESTIONS = 'total_questions',
+    ACTIVE_GAMES = 'active_games',
+}
+
+export enum QuestionsConstants {
+    SOURCE = 'source',
+    BULK_QUESTION = 'bulk-question',
+    QUESTION = 'question',
+    NEXT = 'next',
+}
+
+export enum ResponseMessagesConstants {
+    INTERNAL_SERVER_ERROR = 'Internal Server error',
+    BAD_REQUEST = 'Bad Request',
+    GAME_OPTION_NOT_FOUND = 'Game Option is not added in request',
+    USER_ID_NOT_FOUND = 'userId is not added in request',
+    NOT_ENOUGH_LIFE = 'Sorry, don\'t have enough life.',
+    GAME_ID_NOT_FOUND = 'gameId is not added in request',
+    OPERATION_NOT_FOUND = 'operation is not added in request',
+    GAME_NOT_FOUND = 'Game not found',
+    UNAUTHORIZED = 'Unauthorized',
+    PLAYER_QNA_NOT_FOUND = 'playerQnA not found',
+    UPDATED_STATS = 'updated stats',
+    UPDATED_USER_CATEGORY_STAT = 'updated user category stat',
+    UPDATED_SYSTEM_STAT = 'updated system stat',
+    UPDATED_BULK_UPLOAD_COLLECTION = 'updated bulk upload collection',
+    UPDATED_QUESTION_COLLECTION = 'updated question collection',
+    UPDATED_UNPUBLISHED_QUESTION_COLLECTION = 'updated unpublished question collection',
+    DUMPED_ALL_USERS = 'dumped all the users',
+    DEFAULT_LIVES_ADDED = 'Default lives added successfully',
+    LIVE_FEATURES_IS_NOT_ENABLED = 'live feature is not enabled',
+    LOADED_DATA = 'loaded data',
+    USER_NOT_PART_OF_GAME = 'User not part of this game',
+    GAME_OVER = 'Game over. No more Questions',
+    WAIT_FOR_YOUR_TURN = 'Wait for your turn. Not yet implemented.',
+    QUESTION_ID_IS_NOT_AVAILABLE = 'questionId is not available',
+    UNPUBLISHED_STATUS_CHANGED = 'unpublished status changed',
+    SCHEDULER_CHECK_GAME_OVER_IS_COMPLETED = 'scheduler check game over is completed',
+    SCHEDULER_CHANGE_GAME_TURN_IS_COMPLETED = 'scheduler change game turn is completed',
+    LIVE_FEATURE_IS_NOT_ENABLED = 'live feature is not enabled',
+    CREATED_FEED_BLOGS = 'created feed blogs',
+    BLOGS_NOT_AVAILABLE = 'blogs not available',
+    WIDTH_NOT_FOUND = 'width is not added in request',
+    HEIGHT_NOT_FOUND = 'height is not added in request',
+    PROFILE_DATA_IS_SAVED = 'Profile Data is saved !!',
+    LIVES_ADDED = 'Lives added successfully !!'
+}
+
+export enum FriendConstants {
+    BR_HTML = '<br />',
+}
+
 
 
 

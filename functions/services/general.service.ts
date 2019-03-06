@@ -1,7 +1,10 @@
-import { ESUtils } from '../utils/ESUtils';
-import { Question } from '../../projects/shared-library/src/lib/shared/model';
-import admin from '../db/firebase.client';
 import * as functions from 'firebase-functions';
+import {
+    CollectionConstants, GeneralConstants, Question, ResponseResultConstants, interceptorConstants
+} from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
+import { ESUtils } from '../utils/ESUtils';
+import { Utils } from '../utils/utils';
 
 export class GeneralService {
 
@@ -10,7 +13,6 @@ export class GeneralService {
     static async migrateCollection(collectionName): Promise<any> {
 
         try {
-
             const sourceDB = this.generalFireStoreClient;
             // set required dev configuration parameters for different deployment environments(firebase project) using following command
             // default project in firebase is development deployment
@@ -18,24 +20,24 @@ export class GeneralService {
             // After setting config variable do not forget to deploy functions
             // to see set environments firebase -P production functions:config:get
             const targetAppConfig = functions.config().devconfig;
-            const config = {
-                'apiKey': targetAppConfig.apikey,
-                'authDomain': targetAppConfig.authdomain,
-                'databaseURL': targetAppConfig.databaseurl,
-                'projectId': targetAppConfig.projectid,
-                'storageBucket': targetAppConfig.storagebucket,
-                'messagingSenderId': targetAppConfig.messagingsenderid
-            };
-            // console.log('targetAppConfig', targetAppConfig);
-            const targetDB = admin.initializeApp(config, 'targetApp').firestore();
+            const config = {};
+
+            config[GeneralConstants.API_KEY] = targetAppConfig.apikey;
+            config[GeneralConstants.AUTH_DOMAIN] = targetAppConfig.authdomain;
+            config[GeneralConstants.DATABASE_URL] = targetAppConfig.databaseurl;
+            config[GeneralConstants.PROJECT_ID] = targetAppConfig.projectid;
+            config[GeneralConstants.STORAGE_BUCKET] = targetAppConfig.storagebucket;
+            config[GeneralConstants.MESSAGING_SENDER_ID] = targetAppConfig.messagingsenderid;
+
+
+            const targetDB = admin.initializeApp(config, GeneralConstants.TARGET_APP).firestore();
             const snapshots = await sourceDB.collection(collectionName).get();
             for (const doc of snapshots.docs) {
                 targetDB.collection(collectionName).doc(doc.id).set(doc.data());
             }
-            return 'migrated collection';
+            return ResponseResultConstants.MIGRATED_COLLECTION;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -46,29 +48,24 @@ export class GeneralService {
     static async rebuildQuestionIndex(): Promise<any> {
 
         try {
-
             const questions = [];
-            const qs = await this.generalFireStoreClient.collection('/questions').orderBy('id').get();
-            // admin.database().ref("/questions/published").orderByKey().once("value").then(qs => {
-            // console.log("Questions Count: " + qs.length);
+            const qs = await this.generalFireStoreClient
+                .collection(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.QUESTIONS}`)
+                .orderBy(GeneralConstants.ID)
+                .get();
             for (const q of qs) {
-                // console.log(q.key);
-                console.log(q.data());
-
                 const data = q.data();
-                const question: { 'id': string, 'type': string, 'source': any } = {
-                    'id': data.id,
-                    'type': data.categoryIds['0'],
-                    'source': data
-                };
+                const question = {};
+
+                question[GeneralConstants.ID] = data.id;
+                question[GeneralConstants.TYPE] = data.categoryIds['0'];
+                question[GeneralConstants.SOURCE] = data;
                 questions.push(question);
             }
-
             await ESUtils.rebuildIndex(questions);
-            return 'Questions indexed';
+            return ResponseResultConstants.QUESTIONS_INDEXED;
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -77,22 +74,20 @@ export class GeneralService {
      * return status
      */
     static async getTestQuestion(): Promise<any> {
-
         try {
-            const qs = await admin.database().ref('/questions/published').orderByKey().limitToLast(1).once('value');
+            const qs = await admin.database()
+                .ref(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.QUESTIONS}
+                    ${GeneralConstants.FORWARD_SLASH}${CollectionConstants.PUBLISHED}`)
+                .orderByKey().limitToLast(1).once(GeneralConstants.VALUE);
             for (const q of qs) {
                 const question: Question = q.val();
                 question.id = q.key;
                 return question;
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
-
-
     }
-
 
     /**
      * getGameQuestionTest
@@ -102,37 +97,28 @@ export class GeneralService {
         try {
             await ESUtils.getRandomGameQuestion([2, 4, 5, 6], []);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
-
-
     /**
-     * getGameQuestionTest
+     * testES
      * return status
      */
     static async testES(res): Promise<any> {
         try {
-
             const client = ESUtils.getElasticSearchClient();
-
             client.ping({
                 requestTimeout: 10000,
             }, (error) => {
                 if (error) {
-                    console.error('elasticsearch cluster is down!');
-                    res.send('elasticsearch cluster is down!');
+                    Utils.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseResultConstants.ELASTIC_SEARCH_CLUSTER_IS_DOWN);
                 } else {
-                    console.log('All is well');
-                    res.send(`Hello. ES is up`);
+                    Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseResultConstants.HELLO_ES_IS_UP);
                 }
             });
-
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 

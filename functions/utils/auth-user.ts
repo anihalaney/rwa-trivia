@@ -1,5 +1,6 @@
 import { FirebaseAuthService } from '../services/firebase-auth.service';
-import { User } from '../../projects/shared-library/src/lib/shared/model';
+import { User, UserConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { Utils } from '../utils/utils';
 
 export class AuthUser {
 
@@ -8,7 +9,7 @@ export class AuthUser {
             const listUsersResult = await FirebaseAuthService.getAuthUsers(pageToken);
             for (const afUser of listUsersResult.users) {
                 const user = new User(afUser);
-                delete user['authState'];
+                delete user[UserConstants.AUTH_STATE];
                 authUsers.push(user);
             }
             if (listUsersResult.pageToken) {
@@ -17,8 +18,7 @@ export class AuthUser {
                 return authUsers;
             }
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 }

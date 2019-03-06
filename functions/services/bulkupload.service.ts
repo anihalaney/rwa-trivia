@@ -1,4 +1,6 @@
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
+import { CollectionConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 export class BulkUploadService {
 
     private static bulkUploadFireStoreClient = admin.firestore();
@@ -8,10 +10,9 @@ export class BulkUploadService {
      */
     static async getBulkUpload(): Promise<any> {
         try {
-            return await this.bulkUploadFireStoreClient.collection('bulk_uploads').get();
+            return Utils.getObjectValues(await this.bulkUploadFireStoreClient.collection(CollectionConstants.BULK_UPLOADS).get());
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -21,10 +22,12 @@ export class BulkUploadService {
      */
     static async setBulkUpload(dbBulkUpload: any): Promise<any> {
         try {
-            return await this.bulkUploadFireStoreClient.doc(`/bulk_uploads/${dbBulkUpload.id}`).set(dbBulkUpload);
+            return await this.bulkUploadFireStoreClient.
+                doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.BULK_UPLOADS}${GeneralConstants.FORWARD_SLASH}${dbBulkUpload.id}`).
+                set(dbBulkUpload);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
+
 }

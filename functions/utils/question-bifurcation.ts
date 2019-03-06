@@ -1,24 +1,23 @@
-import { Question } from '../../projects/shared-library/src/lib/shared/model';
+import { Question, QuestionsConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionService } from '../services/question.service';
+import { Utils } from './utils';
 
 export class QuestionBifurcation {
     static async getQuestionList(collectionName) {
         try {
-            const questionData = await QuestionService.getQuestion(collectionName);
+            const questions: Question[] = await QuestionService.getQuestion(collectionName);
             const promises = [];
-            for (const question of questionData.docs) {
-                const questionObj: Question = question.data();
+            for (const questionObj of questions) {
                 if (questionObj.bulkUploadId) {
-                    questionObj['source'] = 'bulk-question';
+                    questionObj[QuestionsConstants.SOURCE] = QuestionsConstants.BULK_QUESTION;
                 } else {
-                    questionObj['source'] = 'question';
+                    questionObj[QuestionsConstants.SOURCE] = QuestionsConstants.QUESTION;
                 }
                 promises.push(QuestionService.updateQuestion(collectionName, questionObj));
             }
             return await Promise.all(promises);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 }

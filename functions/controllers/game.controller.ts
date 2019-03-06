@@ -1,10 +1,11 @@
-import { Game, GameOperations, PlayerQnA } from '../../projects/shared-library/src/lib/shared/model';
+import { Game, GameOperations, PlayerQnA, Account, ResponseMessagesConstants, interceptorConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
 import { AccountService } from '../services/account.service';
 import { SocialService } from '../services/social.service';
 import * as functions from 'firebase-functions';
+import { Utils } from '../utils/utils';
 
 export class GameController {
 
@@ -20,14 +21,12 @@ export class GameController {
 
             if (!gameOptions) {
                 // Game Option is not added
-                res.status(400).send('Game Option is not added in request');
-                return;
+                Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.GAME_OPTION_NOT_FOUND);
             }
 
             if (!userId) {
-                // userId
-                res.status(400).send('userId is not added in request');
-                return;
+                // userId is not added
+                Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
             }
 
 
@@ -36,11 +35,10 @@ export class GameController {
 
             if (appSetting.lives.enable) {
                 // Get Account Info
-                const account = await AccountService.getAccountById(userId);
+                const account: Account = await AccountService.getAccountById(userId);
                 // if lives is less then or equal to 0 then send with error
-                if (account.data().lives <= 0) {
-                    res.status(403).send('Sorry, don\'t have enough life.');
-                    return;
+                if (account.lives <= 0) {
+                    Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.NOT_ENOUGH_LIFE);
                 }
             }
 
@@ -54,12 +52,9 @@ export class GameController {
                     AccountService.decreaseLife(gameOptions.friendId);
                 }
             }
-            return res.status(200).send({ gameId: gameId });
-
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { gameId: gameId });
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 
@@ -76,14 +71,12 @@ export class GameController {
 
         if (!gameId) {
             // gameId
-            res.status(400).send('gameId is not added in request');
-            return;
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.GAME_ID_NOT_FOUND);
         }
 
         if (!operation) {
             // operation
-            res.status(400).send('operation is not added in request');
-            return;
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.OPERATION_NOT_FOUND);
         }
 
         try {
@@ -92,48 +85,29 @@ export class GameController {
 
             if (!g) {
                 // game not found
-                res.status(400).send('Game not found');
-                return;
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.GAME_NOT_FOUND);
             }
 
             const game: Game = g;
 
             if (game.playerIds.indexOf(req.user.uid) === -1) {
                 // operation
-                res.status(403).send('Unauthorized');
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.UNAUTHORIZED);
                 return;
             }
 
             if ((operation === GameOperations.CALCULATE_SCORE || operation === GameOperations.REPORT_STATUS) && !playerQnA) {
                 // playerQnA
-                res.status(400).send('playerQnA not found');
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.PLAYER_QNA_NOT_FOUND);
                 return;
             }
 
             await GameMechanics.doGameOperations(userId, playerQnA, game, operation);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, {});
 
-            return res.status(200).send({});
-
-        } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
-        }
-    }
-
-    /**
-     * updateAllGame
-     * return status
-     */
-    static async updateAllGame(req, res) {
-        try {
-            await GameService.updateStats();
-            return res.status(200).send('loaded data');
 
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 
@@ -179,7 +153,7 @@ export class GameController {
                               </html>`;
 
         res.setHeader('content-type', 'text/html');
-        return res.status(200).send(htmlContent);
+        Utils.sendResponse(res, interceptorConstants.SUCCESS, htmlContent);
     }
 
     /**
@@ -192,11 +166,9 @@ export class GameController {
             const social_url = await SocialService.generateSocialUrl(req.params.userId, socialId);
             res.setHeader('content-disposition', 'attachment; filename=social_image.png');
             res.setHeader('content-type', 'image/png');
-            return res.status(200).send(social_url);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, social_url);
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(200, 'Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 

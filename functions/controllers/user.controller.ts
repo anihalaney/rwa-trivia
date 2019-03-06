@@ -3,7 +3,11 @@
 import { UserService } from '../services/user.service';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
-import { UserControllerConstants, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    UserControllerConstants, profileSettingsConstants,
+    interceptorConstants,
+    ResponseMessagesConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { AccountService } from '../services/account.service';
 
@@ -18,14 +22,12 @@ export class UserController {
 
         if (!userId) {
             // userId is not available
-            return res.status(400).send('Bad Request');
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
         }
         try {
-            res.status(200).send(await UserService.getUserProfile(userId));
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await UserService.getUserProfile(userId));
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 
@@ -41,17 +43,17 @@ export class UserController {
 
         if (!userId) {
             // userId is not available
-            return res.status(400).send('Bad Request');
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
         }
 
         if (!width) {
             // width is not available
-            return res.status(400).send('Bad Request');
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.GAME_NOT_FOUND);
         }
 
         if (!height) {
             // height is not available
-            return res.status(400).send('Bad Request');
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.GAME_NOT_FOUND);
         }
 
 
@@ -59,11 +61,9 @@ export class UserController {
             const stream = await UserService.getUserProfileImage(userId, width, height);
             res.setHeader('content-disposition', 'attachment; filename=profile_image.png');
             res.setHeader('content-type', 'image/jpeg');
-            res.status(200).send(stream);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, stream);
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
 
     }
@@ -74,7 +74,7 @@ export class UserController {
      */
     static async generateUserProfileImage(req, res) {
         if (req.body.user.userId !== req.user.uid) {
-            return res.status(401).send('Unauthorized');
+            Utils.sendResponse(res, interceptorConstants.UNAUTHORIZED, ResponseMessagesConstants.UNAUTHORIZED);
         }
 
         let user = req.body.user;
@@ -108,11 +108,10 @@ export class UserController {
             delete user['roles'];
 
             await UserService.updateUser({ ...user });
-            res.status(200).send({ 'status': 'Profile Data is saved !!' });
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.PROFILE_DATA_IS_SAVED });
 
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
+            Utils.sendErr(res, error);
         }
     }
 
@@ -123,18 +122,17 @@ export class UserController {
     static async updateLives(req, res) {
         const userId = req.body.userId;
         if (!userId) {
-            return res.status(400).send('Bad Request');
+            Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_ID_NOT_FOUND);
         }
         if (req.user.user_id !== userId) {
-            return res.status(401).send('Unauthorized');
+            Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.UNAUTHORIZED);
         }
 
         try {
             await AccountService.updateLives(userId);
-            res.status(200).send({ 'status': 'Lives added successfully !!' });
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.LIVES_ADDED });
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
+            Utils.sendErr(res, error);
         }
 
     }

@@ -1,17 +1,23 @@
+import { CollectionConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 export class StatsService {
+
     private static statsFireStoreClient = admin.firestore();
+
     /**
      * getSystemStats
      * return systemstat
      */
     static async getSystemStats(statName: string): Promise<any> {
         try {
-            return await this.statsFireStoreClient.doc(`stats/${statName}`).get();
+            const systemStat = await this.statsFireStoreClient
+                .doc(`${CollectionConstants.STATS}${GeneralConstants.FORWARD_SLASH}${statName}`)
+                .get();
+            return systemStat.data();
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 
@@ -21,11 +27,11 @@ export class StatsService {
      */
     static async setSystemStats(statName: string, SystemStat: any): Promise<any> {
         try {
-            return await this.statsFireStoreClient.doc(`stats/${statName}`).set(SystemStat);
+            return await this.statsFireStoreClient
+                .doc(`${CollectionConstants.STATS}${GeneralConstants.FORWARD_SLASH}${statName}`)
+                .set(SystemStat);
         } catch (error) {
-            console.error('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
-
     }
 }

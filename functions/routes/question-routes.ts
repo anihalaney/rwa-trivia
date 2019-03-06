@@ -12,7 +12,7 @@ class QuestionRoutes {
         this.questionRoutes = express.Router();
 
         this.questionRoutes.get('/day/:nextQ', QuestionController.getQuestionOfDay);
-        this.questionRoutes.get('/next/:gameId', AuthMiddleware.authorizedOnly, QuestionController.getNextQuestion);
+        this.questionRoutes.post('/next/:gameId', AuthMiddleware.authorizedOnly, QuestionController.getNextQuestion);
         this.questionRoutes.get('/game/:gameId', AuthMiddleware.authorizedOnly, QuestionController.getQuestions);
         this.questionRoutes.post('/:start/:size', AuthMiddleware.adminOnly, QuestionController.getQuestions);
         this.questionRoutes.post('/:questionId', AuthMiddleware.authorizedOnly, QuestionController.getUpdatedQuestion);

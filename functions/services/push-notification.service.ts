@@ -1,4 +1,5 @@
 import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 export class PushNotificationService {
 
@@ -12,8 +13,7 @@ export class PushNotificationService {
         try {
             return await this.pushNotificationMessagingClient.send(message);
         } catch (error) {
-            console.log('Error : ', error);
-            throw error;
+            return Utils.throwError(error);
         }
     }
 }

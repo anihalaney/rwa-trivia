@@ -1,4 +1,6 @@
 import { MakeFriends } from '../utils/make-friends';
+import { Utils } from '../utils/utils';
+import { interceptorConstants, ResponseMessagesConstants, FriendConstants } from 'shared-library/shared/model';
 
 export class FriendController {
 
@@ -15,11 +17,9 @@ export class FriendController {
         try {
             const makeFriends: MakeFriends = new MakeFriends(token, userId, email);
             const invitee = await makeFriends.validateToken();
-            res.status(200).send({ created_uid: invitee });
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { created_uid: invitee });
         } catch (error) {
-            console.error('Error : ', error);
-            res.status(500).send('Internal Server error');
-            return error;
+            Utils.sendErr(res, error);
         }
     }
 
@@ -43,19 +43,17 @@ export class FriendController {
                     if (inviteeUserId && user) {
                         emails = [user.email];
                         const status: any = await makeFriends.createInvitations(emails);
-                        res.status(200).send({ messages: status.join('<br />') });
+                        Utils.sendResponse(res, interceptorConstants.SUCCESS, { messages: status.join(FriendConstants.BR_HTML) });
                     }
                 } else {
                     const status: any = await makeFriends.createInvitations(emails);
-                    res.status(200).send({ messages: status.join('<br />') });
+                    Utils.sendResponse(res, interceptorConstants.SUCCESS, { messages: status.join(FriendConstants.BR_HTML) });
                 }
             } catch (error) {
-                console.error('Error : ', error);
-                res.status(500).send('Internal Server error');
-                return error;
+                Utils.sendErr(res, error);
             }
         } else {
-            res.status(400).send('Bad Request');
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.BAD_REQUEST);
         }
     }
 }
