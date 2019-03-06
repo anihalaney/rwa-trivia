@@ -9,10 +9,10 @@ class SchedulerRoutes {
 
     constructor() {
         this.schedulerRoutes = express.Router();
-        this.schedulerRoutes.post('/game-over/scheduler', AuthMiddleware.authTokenOnly, SchedulerController.checkGameOver);
-        this.schedulerRoutes.post('/turn/scheduler', AuthMiddleware.authTokenOnly, SchedulerController.changeGameTurn);
+        this.schedulerRoutes.post('/game-over', AuthMiddleware.authTokenOnly, SchedulerController.checkGameOver);
+        this.schedulerRoutes.post('/turn', AuthMiddleware.authTokenOnly, SchedulerController.changeGameTurn);
         this.schedulerRoutes.post('/addLives', AuthMiddleware.authTokenOnly, SchedulerController.addLives);
-
+        this.schedulerRoutes.post('/blog', AuthMiddleware.authTokenOnly, SchedulerController.generateBlogsData);
     }
 }
 
