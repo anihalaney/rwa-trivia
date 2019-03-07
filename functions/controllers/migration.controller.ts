@@ -14,13 +14,11 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
-import { AppSettings } from '../services/app-settings.service';
+import { appSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { Utils } from '../utils/utils';
 
 export class MigrationController {
-
-    private static appSettings: AppSettings = new AppSettings();
 
     /**
      * migrateCollections
@@ -265,7 +263,7 @@ export class MigrationController {
     static async addDefaultLives(req, res): Promise<any> {
         let isStreaming = false;
         try {
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
             // Lives setting is enable then add default number of lives into user's account
             if (appSetting.lives.enable) {
                 isStreaming = true;
