@@ -1,4 +1,4 @@
-import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, AfterViewInit} from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { User, Subscription } from 'shared-library/shared/model';
@@ -24,6 +24,7 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
   message = '';
 
   constructor(private fb: FormBuilder, private store: Store<AppState>,
+    private cd: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(APP_ID) private appId: string) {
     this.subscriptionForm = this.fb.group({
@@ -65,6 +66,9 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
     });
     this.store.select(socialState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
+      if (!this.cd['destroyed']) {
+        this.cd.detectChanges();
+      }
     });
   }
 

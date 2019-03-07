@@ -6,13 +6,15 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { userState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
     selector: 'recent-game-card',
     templateUrl: './recent-game-card.component.html',
     styleUrls: ['./recent-game-card.component.scss']
 })
+
+@AutoUnsubscribe()
 export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     @Input() game: Game;
     // @Input() userDict: { [key: string]: User };
@@ -27,28 +29,31 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     categoryDict: { [key: number]: Category };
     otherUserId: string;
     userProfileImageUrl: string;
-    subs: Subscription[] = [];
     GameStatus = GameStatus;
 
 
     constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
         this.categoryDictObs = store.select(categoryDictionary);
-        this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+        this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
     }
 
     ngOnInit(): void {
         this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-        this.subs.push(this.userDict$.subscribe(userDict => {
-        this.userDict = userDict;
-            this.cd.detectChanges();
-        }));
+        this.userDict$.subscribe(userDict => {
+            this.userDict = userDict;
+            if (!this.cd['destroyed']) {
+                this.cd.detectChanges();
+            }
+        });
 
         if (this.game) {
             this.otherUserId = this.getOpponentId(this.game);
             if (this.otherUserId !== undefined) {
                 if (this.userDict[this.otherUserId] === undefined) {
                     this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
-                    this.cd.detectChanges();
+                    if (!this.cd['destroyed']) {
+                        this.cd.detectChanges();
+                    }
                 }
             }
             this.userProfileImageUrl = this.getImageUrl(this.user);
@@ -77,6 +82,5 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnDestroy() {
         // this.cd.detach();
-        this.utils.unsubscribe(this.subs);
     }
 }

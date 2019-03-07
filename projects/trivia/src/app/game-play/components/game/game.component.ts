@@ -6,11 +6,11 @@ import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { User } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
-
+@AutoUnsubscribe()
 @Component({
   selector: 'game',
   templateUrl: './game.component.html',
@@ -18,7 +18,6 @@ import * as gameplayactions from '../../store/actions';
 })
 export class GameComponent implements OnInit, OnDestroy {
   user: User;
-  subs: Subscription[] = [];
   dialogRef: MatDialogRef<GameDialogComponent>;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
@@ -27,16 +26,15 @@ export class GameComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private renderer: Renderer2,
-    private utils: Utils) {
+    private renderer: Renderer2) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.userDict$.subscribe(userDict => this.userDict = userDict);
 
   }
 
   ngOnInit() {
-    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user)); //logged in user
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user); //logged in user
     //use the setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
     //The error happens as bindings change after change detection has run. using setTimeout runs another round of CD
     // REF: https://github.com/angular/angular/issues/6005
@@ -65,6 +63,5 @@ export class GameComponent implements OnInit, OnDestroy {
       this.store.dispatch(new gameplayactions.ResetCurrentGame());
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
     }
-    this.utils.unsubscribe(this.subs);
   }
 }

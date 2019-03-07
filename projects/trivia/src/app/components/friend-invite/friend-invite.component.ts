@@ -39,7 +39,9 @@ export class FriendInviteComponent implements OnInit {
   rejectFriendInvitation(): void {
     this.invitation.status = friendInvitationConstants.REJECTED;
     this.store.dispatch(this.userActions.updateInvitation(this.invitation));
-    this.cd.detectChanges();
+    if (!this.cd['destroyed']) {
+      this.cd.detectChanges();
+    }
   }
 
 }

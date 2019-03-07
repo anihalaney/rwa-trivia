@@ -6,7 +6,6 @@ import { BulkUploadFileInfo, Question, Category } from 'shared-library/shared/mo
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { MatTableDataSource } from '@angular/material';
-
 import { AngularFireStorage } from '@angular/fire/storage';
 
 
@@ -15,6 +14,7 @@ import { MatSnackBar } from '@angular/material';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 
 
@@ -23,6 +23,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
   templateUrl: './bulk-summary-question.component.html',
   styleUrls: ['./bulk-summary-question.component.scss']
 })
+
+@AutoUnsubscribe()
 export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
 
   unPublishedQuestions: Question[];
@@ -43,66 +45,64 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl: boolean;
 
-  subs: Subscription[] = [];
-
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
     private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router,
     private utils: Utils) {
 
-    this.subs.push(this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
-      if (status === 'UPDATE') {
-        this.snackBar.open('Question Updated!', '', { duration: 1500 });
-      }
-    }));
-
-    this.subs.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
-      if (url) {
-        const link = document.createElement('a');
-        document.body.appendChild(link);
-        link.href = url;
-        link.click();
-        this.store.dispatch(new bulkActions.LoadBulkUploadFileUrlSuccess(undefined));
-      }
-    }));
-
-    this.subs.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
-      if (obj) {
-        this.bulkUploadFileInfo = obj;
-        this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([obj]);
-
-        // get published question by BulkUpload Id
-        this.publishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadPublishedQuestions));
-        this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-        this.subs.push(this.publishedQuestionObs.subscribe((questions) => {
-          if (questions) {
-            this.publishedCount = questions.length;
-            this.publishedQuestions = questions;
-          }
-        }));
-
-        // get unpublished question by BulkUpload Id
-        this.unPublishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadUnpublishedQuestions));
-        this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-        this.subs.push(this.unPublishedQuestionObs.subscribe((questions) => {
-          if (questions) {
-            this.unPublishedCount = questions.length;
-            this.unPublishedQuestions = questions;
-          }
-        }));
-
-        // get the download file url
-        // tslint:disable-next-line:max-line-length
-        const filePath = `bulk_upload/${this.bulkUploadFileInfo.created_uid}/${this.bulkUploadFileInfo.id}-${this.bulkUploadFileInfo.fileName}`;
-        const ref = this.storage.ref(filePath);
-        this.downloadUrl = ref.getDownloadURL();
-        ref.getDownloadURL().subscribe(res => {
-          this.downloadUrl = res;
-        });
-      }
-    }));
-
+      this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
+        if (status === 'UPDATE') {
+          this.snackBar.open('Question Updated!', '', { duration: 1500 });
+        }
+      });
+  
+     this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
+        if (url) {
+          const link = document.createElement('a');
+          document.body.appendChild(link);
+          link.href = url;
+          link.click();
+          this.store.dispatch(new bulkActions.LoadBulkUploadFileUrlSuccess(undefined));
+        }
+      });
+  
+      this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+        if (obj) {
+          this.bulkUploadFileInfo = obj;
+          this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([obj]);
+  
+          // get published question by BulkUpload Id
+          this.publishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadPublishedQuestions));
+          this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+          this.publishedQuestionObs.subscribe((questions) => {
+            if (questions) {
+              this.publishedCount = questions.length;
+              this.publishedQuestions = questions;
+            }
+          });
+  
+          // get unpublished question by BulkUpload Id
+          this.unPublishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadUnpublishedQuestions));
+          this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
+          this.unPublishedQuestionObs.subscribe((questions) => {
+            if (questions) {
+              this.unPublishedCount = questions.length;
+              this.unPublishedQuestions = questions;
+            }
+          });
+  
+          // get the download file url
+          // tslint:disable-next-line:max-line-length
+          const filePath = `bulk_upload/${this.bulkUploadFileInfo.created_uid}/${this.bulkUploadFileInfo.id}-${this.bulkUploadFileInfo.fileName}`;
+          const ref = this.storage.ref(filePath);
+          this.downloadUrl = ref.getDownloadURL();
+          ref.getDownloadURL().subscribe(res => {
+            this.downloadUrl = res;
+          });
+        }
+      });
+  
   }
 
   ngOnInit() {
@@ -113,13 +113,13 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
       this.isAdminUrl = false;
     }
     this.categoryDictObs = this.store.select(categoryDictionary);
-    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
     // subscribe to router event
-    this.subs.push(this.activatedRoute.params.subscribe((params: Params) => {
+    this.activatedRoute.params.subscribe((params: Params) => {
       const bulkId = params['bulkid'];
       this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: bulkId }));
 
-    }));
+    });
   }
 
   downloadFile() {
@@ -131,7 +131,6 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
   }
 
 }

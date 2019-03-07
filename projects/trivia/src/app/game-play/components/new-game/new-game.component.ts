@@ -13,13 +13,15 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { MatSnackBar } from '@angular/material';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
   styleUrls: ['./new-game.component.scss']
 })
+
+@AutoUnsubscribe()
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
@@ -28,7 +30,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   tags: string[];
 
   selectedTags: string[];
-  subs: Subscription[] = [];
   selectedCategories = [];
 
   newGameForm: FormGroup;
@@ -57,13 +58,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public snackBar: MatSnackBar) {
     super(store, utils, gameActions, userActions);
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+    this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
         this.redirectToDashboard(gameCreateStatus);
       }
-    }));
+    });
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.selectedCategories = [];
@@ -79,11 +80,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         }
 
         if (this.applicationSettings && this.applicationSettings.lives.enable) {
-          this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+          store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
             if (account) {
               this.life = account.lives;
             }
-          }));
+          });
         }
 
         const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
@@ -98,7 +99,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           }
         });
       }
-    }));
+    });
   }
 
   ngOnInit() {
@@ -243,7 +244,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
   }
 
   isCategorySelected(categoryId: number, requiredForGamePlay: boolean) {

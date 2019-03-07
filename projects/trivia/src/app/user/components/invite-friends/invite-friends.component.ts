@@ -9,12 +9,15 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Observable, Subscription } from 'rxjs';
 import { UserActions } from 'shared-library/core/store/actions';
 import { InviteFriends } from './invite-friends';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-invite-friends',
   templateUrl: './invite-friends.component.html',
   styleUrls: ['./invite-friends.component.scss']
 })
+
+@AutoUnsubscribe()
 export class InviteFriendsComponent extends InviteFriends implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<InviteFriendsDialogComponent>;
@@ -22,7 +25,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     'won', 'lost'];
   uFriends: Array<any>;
   dataSource: any;
-  subs: Subscription[] = [];
+
   defaultAvatar = 'assets/images/default-avatar.png';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -36,7 +39,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   }
 
   ngOnInit() {
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
         uFriends.myFriends.map((friend, index) => {
@@ -48,7 +51,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
 
       this.dataSource = new MatTableDataSource<any>(this.uFriends);
       this.setPaginatorAndSort();
-    }));
+    });
   }
 
   setPaginatorAndSort() {
@@ -77,7 +80,6 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     if (this.dialogRef) {
       this.dialogRef.close();
     }
-    this.utils.unsubscribe(this.subs);
   }
 
 }

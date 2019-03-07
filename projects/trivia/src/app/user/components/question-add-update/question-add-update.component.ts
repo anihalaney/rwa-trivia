@@ -9,12 +9,14 @@ import { QuestionActions } from 'shared-library/core/store/actions/question.acti
 import { QuestionAddUpdate } from './question-add-update';
 import { Question, Answer } from 'shared-library/shared/model';
 import { debounceTime, map } from 'rxjs/operators';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 @Component({
   templateUrl: './question-add-update.component.html',
   styleUrls: ['./question-add-update.component.scss']
 })
 
+
+@AutoUnsubscribe()
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy {
 
   get tagsArray(): FormArray {
@@ -33,12 +35,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     super(fb, store, utils, questionAction);
 
     this.question = new Question();
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.createForm(this.question);
       }
-    }));
+    });
 
 
     const questionControl = this.questionForm.get('questionText');
@@ -50,13 +52,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.filteredTags$ = this.questionForm.get('tags').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
-    this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+    store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.snackBar.open('Question saved!', '', { duration: 2000 });
         this.router.navigate(['/my/questions']);
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
       }
-    }));
+    });
   }
 
 
@@ -130,7 +132,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 }
 

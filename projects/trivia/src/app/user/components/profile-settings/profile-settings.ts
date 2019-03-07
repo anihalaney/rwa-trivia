@@ -20,7 +20,6 @@ export class ProfileSettings {
     userCategories: Category[];
     categoryDict: { [key: number]: Category };
     categoryDictObs: Observable<{ [key: number]: Category }>;
-    subs: Subscription[] = [];
     categoriesObs: Observable<Category[]>;
     userForm: FormGroup;
     userObs: Observable<User>;
@@ -60,23 +59,23 @@ export class ProfileSettings {
 
         this.fb = formBuilder;
 
-        this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+        this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             this.socialProfileSettings = appSettings[0].social_profile;
             this.enableSocialProfile = this.socialProfileSettings.filter(res => res.enable).length;
-        }));
+        });
 
         this.categoriesObs = store.select(getCategories);
-        this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+        this.categoriesObs.subscribe(categories => this.categories = categories);
 
         this.categoryDictObs = store.select(categoryDictionary);
-        this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+        this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
 
         this.tagsObs = this.store.select(getTags);
-        this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
+        this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete);
 
         this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
-        this.subs.push(this.userObs.subscribe(user => {
+        this.userObs.subscribe(user => {
             if (user) {
                 this.user = user;
 
@@ -102,7 +101,7 @@ export class ProfileSettings {
 
                 this.toggleLoader(false);
             }
-        }));
+        });
     }
 
     get tagsArray(): FormArray {

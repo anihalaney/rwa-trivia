@@ -5,12 +5,15 @@ import { Store, select } from '@ngrx/store';
 import { QuestionActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'question',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.scss']
 })
+
+@AutoUnsubscribe()
 export class QuestionComponent implements OnDestroy {
 
   question: Question;
@@ -24,22 +27,23 @@ export class QuestionComponent implements OnDestroy {
   correctAnswerText: string;
   doPlay = true;
   categoryDictionary: any;
-  subs: Subscription[] = [];
 
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils) {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.subs.push(this.store.select(categoryDictionary).subscribe(categories => {
+    this.store.select(categoryDictionary).subscribe(categories => {
       this.categoryDictionary = categories;
-      this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+      this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
-          this.question.answers.forEach((item, index) => {
-            if (item.correct === true) {
-              this.correctAnswerText = item.answerText;
-            }
-          });
+          if ( this.question.answers) {
+            this.question.answers.forEach((item, index) => {
+              if (item.correct === true) {
+                this.correctAnswerText = item.answerText;
+              }
+            });
+          }
           this.categoryName = this.question.categoryIds.map(category => {
             if (this.categoryDictionary[category]) {
               return this.categoryDictionary[category].categoryName;
@@ -48,8 +52,8 @@ export class QuestionComponent implements OnDestroy {
             }
           }).join(',');
         }
-      }));
-    }));
+      });
+    });
 
 
   }
@@ -72,7 +76,7 @@ export class QuestionComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.utils.unsubscribe(this.subs);
+
   }
 
 }

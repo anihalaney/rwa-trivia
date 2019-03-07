@@ -5,16 +5,16 @@ import { Store, select } from '@ngrx/store';
 import { User, Category, Question, QuestionStatus, Answer, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
+import { OnDestroy } from '@angular/core';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
-export class QuestionAddUpdate {
+@AutoUnsubscribe()
+export class QuestionAddUpdate implements OnDestroy {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
-
-  subs: Subscription[] = [];
 
   // Properties
   categories: Category[];
@@ -46,11 +46,8 @@ export class QuestionAddUpdate {
 
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
 
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
-
-
-
+    this.categoriesObs.subscribe(categories => this.categories = categories);
+    this.tagsObs.subscribe(tags => this.tags = tags);
 
   }
 
@@ -143,6 +140,9 @@ export class QuestionAddUpdate {
     this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
+  ngOnDestroy() {
+
+  }
 }
 
 

@@ -11,20 +11,18 @@ import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { UserActions, ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { coreState } from 'shared-library/core/store';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
+@AutoUnsubscribe()
 export class AppComponent implements OnInit, OnDestroy {
   title = 'trivia!';
   user: User;
-  sub: Subscription;
-  sub2: Subscription;
-  sub3: Subscription;
-  sub4: Subscription;
-  sub5: Subscription;
 
   theme = '';
   constructor(private renderer: Renderer2,
@@ -39,7 +37,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
 
-    this.sub2 = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
+    store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
         let url: string;
@@ -59,12 +57,12 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.sub3 = this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
 
-    this.sub4 = this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.router.navigate(['my/invite-friends']);
         this.snackBar.open('You become the friend!', '', { duration: 2000 });
@@ -91,7 +89,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4]);
+   
   }
 
   login() {
