@@ -12,41 +12,36 @@ import { isAndroid } from 'tns-core-modules/platform';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'application';
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
-import { Utils } from 'shared-library/core/services';
 import { User } from 'shared-library/shared/model';
 import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
 
+@AutoUnsubscribe()
 export class AppComponent implements OnInit, OnDestroy {
-
-  sub3: Subscription;
-  sub4: Subscription;
-  sub5: Subscription;
 
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
     private routerExtension: RouterExtensions,
-    private utils: Utils,
     private userActions: UserActions,
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions) {
 
 
-    this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
 
-    this.sub4 = this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.routerExtension.navigate(['my/invite-friends']);
       }
@@ -89,7 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    this.utils.unsubscribe([this.sub3, this.sub4, this.sub5]);
+   
   }
 
 

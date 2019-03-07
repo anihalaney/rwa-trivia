@@ -7,12 +7,15 @@ import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
 import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
   styleUrls: ['./game-question.component.scss']
 })
+
+@AutoUnsubscribe()
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, OnChanges {
 
   @Input() user: User;
@@ -41,10 +44,9 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
 
   ngOnDestroy() {
-    if (this.timerSub) {
-      this.timerSub.unsubscribe();
-    }
+
   }
+
   fillTimer() {
     if (!(this.answeredIndex !== null && this.answeredIndex !== undefined)) {
       this.progressValue = 100;

@@ -6,14 +6,16 @@ import { GamePlayState } from '../../store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { GameDialog } from './game-dialog';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'game-dialog',
   templateUrl: './game-dialog.component.html',
   styleUrls: ['./game-dialog.component.scss']
 })
-export class GameDialogComponent extends GameDialog implements OnDestroy {
 
+@AutoUnsubscribe()
+export class GameDialogComponent extends GameDialog implements OnDestroy {
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils) {
     super(store, userActions, utils);
@@ -42,11 +44,6 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.timerSub) {
-      this.utils.unsubscribe([this.timerSub]);
-    }
-
-    this.utils.unsubscribe(this.sub);
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
   }
 

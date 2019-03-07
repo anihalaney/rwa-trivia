@@ -14,6 +14,7 @@ import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import * as Toast from 'nativescript-toast';
 import { Page, isAndroid } from 'tns-core-modules/ui/page';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-question-add-update',
@@ -21,6 +22,7 @@ import { Page, isAndroid } from 'tns-core-modules/ui/page';
   styleUrls: ['./question-add-update.component.css']
 })
 
+@AutoUnsubscribe()
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy, OnChanges {
 
   showSelectCategory = false;
@@ -55,13 +57,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.actionBarTxt = 'Submit Question';
     this.initDataItems();
     this.question = new Question();
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.createForm(this.question);
       }
     })
-    );
 
 
     const questionControl = this.questionForm.get('questionText');
@@ -69,7 +70,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
     this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
 
-    this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+    store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
         Toast.makeText('Question saved!').show();
@@ -80,7 +81,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
           this.toggleLoader(false);
         }, 0);
       }
-    }));
+    });
 
   }
 
@@ -176,7 +177,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+    
   }
 }
 
