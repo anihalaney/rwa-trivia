@@ -41,17 +41,17 @@ export class RecentGamesComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
       this.subs.push(this.recentGames$.subscribe((recentGames) => {
       this.recentGames = recentGames;
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     }));
   }
 
   getMoreCard() {
     this.nextIndex = (this.recentGames.length > (this.maxIndex)) ?
       this.maxIndex : this.recentGames.length;
+      this.cd.markForCheck();
   }
 
   ngOnDestroy() {
-
     this.utils.unsubscribe(this.subs);
   }
 

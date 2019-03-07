@@ -1,4 +1,4 @@
-import { PLATFORM_ID, APP_ID, Component, OnInit, Inject } from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -15,7 +15,8 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 @Component({
   selector: 'newsletter',
   templateUrl: './newsletter.component.html',
-  styleUrls: ['./newsletter.component.scss']
+  styleUrls: ['./newsletter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewsletterComponent implements OnInit {
 
