@@ -4,14 +4,12 @@ import {
 import { BlogService } from '../services/blog.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
-import { AppSettings } from '../services/app-settings.service';
+import { appSettings } from '../services/app-settings.service';
 import { AccountService } from '../services/account.service';
 import { Utils } from '../utils/utils';
 const Feed = require('feed-to-json');
 
 export class SchedulerController {
-
-    private static appSettings: AppSettings;
 
     /* checkGameOver
     * return status
@@ -46,9 +44,9 @@ export class SchedulerController {
 
     // Schedular for add lives
     static async addLives(req, res): Promise<any> {
-        SchedulerController.appSettings = new AppSettings();
+
         try {
-            const appSetting = await SchedulerController.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
             if (appSetting.lives.enable) {
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, await AccountService.addLives());
             } else {

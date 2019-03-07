@@ -1,7 +1,9 @@
 import {
-    Game, GameOperations, PlayerQnA, Account, ResponseMessagesConstants, interceptorConstants, HeaderConstants, GeneralConstants
+    Game, GameOperations, PlayerQnA, Account,
+    ResponseMessagesConstants, interceptorConstants,
+    HeaderConstants, GeneralConstants
 } from '../../projects/shared-library/src/lib/shared/model';
-import { AppSettings } from '../services/app-settings.service';
+import { appSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
 import { AccountService } from '../services/account.service';
@@ -16,7 +18,6 @@ export class GameController {
      * return gameId
      */
     static async createGame(req, res) {
-        const appSettings: AppSettings = new AppSettings();
         try {
             const gameOptions = req.body.gameOptions;
             const userId = req.body.userId;
