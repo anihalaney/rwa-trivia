@@ -4,12 +4,11 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
-import { AppSettings } from './app-settings.service';
+import { appSettings } from './app-settings.service';
 
 export class AccountService {
 
     private static accountFireStoreClient = admin.firestore();
-    private static appSettings: AppSettings = new AppSettings();
 
     private static FS = GeneralConstants.FORWARD_SLASH;
 
@@ -106,7 +105,7 @@ export class AccountService {
      */
     static async decreaseLife(userId) {
         try {
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
                 const livesMilles = appSetting.lives.lives_after_add_millisecond;
@@ -136,7 +135,7 @@ export class AccountService {
      */
     static async increaseLives(userId): Promise<any> {
         try {
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
             if (appSetting.lives.enable) {
                 await this.addLife(userId, appSetting);
             }
@@ -151,7 +150,7 @@ export class AccountService {
      */
     static async addDefaultLives(user: any): Promise<any> {
         try {
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
                 const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(user.id);
@@ -178,8 +177,8 @@ export class AccountService {
      */
     static async addLives(): Promise<any> {
         try {
-            const appSetting = await this.appSettings.getAppSettings();
             const promises = [];
+            const appSetting = await appSettings.getAppSettings();
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
                 let timestamp = Utils.getUTCTimeStamp();
@@ -242,7 +241,7 @@ export class AccountService {
      */
     static async setBits(userId: any): Promise<any> {
         try {
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
             if (appSetting.tokens.enable) {
                 const bits = appSetting.tokens.earn_bits;
 
@@ -268,7 +267,7 @@ export class AccountService {
      */
     static async setBytes(userId: any): Promise<any> {
         try {
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
             if (appSetting.tokens.enable) {
                 const bytes = appSetting.tokens.earn_bytes;
                 const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);

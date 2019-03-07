@@ -14,13 +14,12 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
-import { AppSettings } from '../services/app-settings.service';
+import { appSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { Utils } from '../utils/utils';
 
 export class MigrationController {
 
-    private static appSettings: AppSettings;
 
     private static FS = GeneralConstants.FORWARD_SLASH;
     private static QC = CollectionConstants.QUESTIONS;
@@ -264,9 +263,8 @@ export class MigrationController {
      * Add default number of lives to each account
      */
     static async addDefaultLives(req, res): Promise<any> {
-        MigrationController.appSettings = new AppSettings();
         try {
-            const appSetting = await MigrationController.appSettings.getAppSettings();
+            const appSetting = await appSettings.getAppSettings();
             // Lives setting is enable then add default number of lives into user's account
             if (appSetting.lives.enable) {
 

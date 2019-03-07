@@ -2,7 +2,7 @@ import { ApplicationSettings, CollectionConstants } from '../../projects/shared-
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 
-export class AppSettings {
+class AppSettings {
 
     private appSettings: ApplicationSettings;
 
@@ -13,7 +13,7 @@ export class AppSettings {
             });
     }
 
-    async loadAppSettings(): Promise<any> {
+    private async loadAppSettings(): Promise<any> {
         try {
             const response = await admin.firestore().doc(CollectionConstants.APPLICATION_SETTINGS_FORWARD_SLASH_SETTINGS).get();
             this.appSettings = response.data();
@@ -31,3 +31,5 @@ export class AppSettings {
         }
     }
 }
+
+export const appSettings: AppSettings = new AppSettings();

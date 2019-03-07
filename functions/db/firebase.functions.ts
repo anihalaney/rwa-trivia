@@ -7,7 +7,6 @@ import {
     PlayerMode, Question, TriggerConstants, UserStatConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
-import { AppSettings } from '../services/app-settings.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
 import { ESUtils } from '../utils/ESUtils';
 import { FriendGameStats } from '../utils/friend-game-stats';
@@ -16,10 +15,11 @@ import { MailClient } from '../utils/mail-client';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
+import { appSettings } from '../services/app-settings.service';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
-    static appSettings: AppSettings = new AppSettings();
+
     // Take the text parameter passed to this HTTP endpoint and insert it into the
     // Realtime Database under the path /messages/:pushId/original
     static async  addMessage(firebaseFunctions: any): Promise<any> {
@@ -145,7 +145,7 @@ export class FirebaseFunctions {
 
                 await SystemStatsCalculations.updateSystemStats('total_users');
 
-                const appSetting = await this.appSettings.getAppSettings();
+                const appSetting = await appSettings.getAppSettings();
                 if (appSetting.lives.enable) {
                     const accountObj: any = {};
                     accountObj.id = data.userId;
