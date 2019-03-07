@@ -10,7 +10,7 @@ import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
 import {
     User, Account, Question, interceptorConstants,
-    GeneralConstants, CollectionConstants, ResponseMessagesConstants
+    GeneralConstants, CollectionConstants, ResponseMessagesConstants, MigrationConstants, HeaderConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
@@ -20,7 +20,10 @@ import { Utils } from '../utils/utils';
 
 export class MigrationController {
 
-    private static appSettings: AppSettings = new AppSettings();
+    private static appSettings: AppSettings;
+
+    private static FS = GeneralConstants.FORWARD_SLASH;
+    private static QC = CollectionConstants.QUESTIONS;
 
     /**
      * migrateCollections
@@ -32,42 +35,44 @@ export class MigrationController {
             console.log(req.params.collectionName);
 
             switch (req.params.collectionName) {
-                case 'categories':
+                case MigrationConstants.CATEGORIES:
                     // Migrate categories
                     console.log('Migrating categories ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS, await FirestoreMigration.migrateCategories());
                     break;
-                case 'tags':
+                case MigrationConstants.TAGS:
                     // Migrate Tags
                     console.log('Migrating tags ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS, await FirestoreMigration.migrateTags());
                     break;
-                case 'games':
+                case MigrationConstants.GAMES:
                     // Migrate games
                     console.log('Migrating games ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
                         'Game Count: ' + await FirestoreMigration.
-                            migrateGames(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}`, CollectionConstants.GAMES));
+                            migrateGames(`${this.FS}${CollectionConstants.GAMES}`, CollectionConstants.GAMES));
                     break;
-                case 'questions':
+                case MigrationConstants.QUESTIONS:
                     // Migrate questions
                     console.log('Migrating questions ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
                         await FirestoreMigration.
-                            migrateQuestions(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.QUESTIONS}${GeneralConstants.FORWARD_SLASH}${CollectionConstants.PUBLISHED}`, CollectionConstants.QUESTIONS));
+                            migrateQuestions(`${this.FS}${this.QC}${this.FS}${CollectionConstants.PUBLISHED}`,
+                                this.QC));
                     break;
-                case 'unpublished_questions':
+                case MigrationConstants.UNPUBLISHED_QUESTIONS:
                     // Migrate unpublished questions
                     console.log('Migrating unpublished questions ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
-                        await FirestoreMigration.migrateQuestions(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.QUESTIONS}${GeneralConstants.FORWARD_SLASH}${CollectionConstants.UNPUBLISHED}`, CollectionConstants.UNPUBLISHED_QUESTIONS));
+                        await FirestoreMigration.migrateQuestions(`${this.FS}${this.QC}${this.FS}${CollectionConstants.UNPUBLISHED}`,
+                            CollectionConstants.UNPUBLISHED_QUESTIONS));
                     break;
             }
 
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, 'Check firestore db for migration details');
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.CHECK_FIRESTORE_DB_FOR_MIGRATION_DETAILS);
 
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -80,7 +85,7 @@ export class MigrationController {
         try {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await GeneralService.migrateCollection(req.params.collectionName));
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -93,7 +98,7 @@ export class MigrationController {
         try {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await GeneralService.rebuildQuestionIndex());
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
     /**
@@ -123,7 +128,7 @@ export class MigrationController {
             await GameLeaderBoardStats.calculateGameLeaderBoardStat();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UPDATED_STATS);
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
 
     }
@@ -134,12 +139,11 @@ export class MigrationController {
      * return status
      */
     static async generateUserContributionStat(req, res): Promise<any> {
-
         try {
             await UserContributionStat.generateGameStats();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UPDATED_USER_CATEGORY_STAT);
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -153,7 +157,7 @@ export class MigrationController {
             await SystemStatsCalculations.generateSystemStats();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UPDATED_SYSTEM_STAT);
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
 
     }
@@ -168,7 +172,7 @@ export class MigrationController {
             await BulkUploadUpdate.getUserList();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UPDATED_BULK_UPLOAD_COLLECTION);
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -180,23 +184,21 @@ export class MigrationController {
 
         try {
             console.log(req.params.collectionName);
-
             switch (req.params.collectionName) {
-                case 'questions':
+                case MigrationConstants.QUESTIONS:
                     console.log('Updating questions ...');
                     await QuestionBifurcation.getQuestionList(req.params.collectionName);
                     Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UPDATED_QUESTION_COLLECTION);
                     break;
-                case 'unpublished_questions':
+                case MigrationConstants.UNPUBLISHED_QUESTIONS:
                     console.log('Updating unpublished questions ...');
                     await QuestionBifurcation.getQuestionList(req.params.collectionName);
                     Utils.
                         sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UPDATED_UNPUBLISHED_QUESTION_COLLECTION);
                     break;
             }
-
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
 
     }
@@ -210,14 +212,13 @@ export class MigrationController {
 
         try {
             const authUsers: User[] = [];
-
             const users = await AuthUser.getUsers(authUsers);
             console.log('users', users);
             await UserService.addUpdateAuthUsersToFireStore(users);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.DUMPED_ALL_USERS);
 
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -230,7 +231,7 @@ export class MigrationController {
         try {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await ProfileImagesGenerator.fetchUsers());
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -253,7 +254,7 @@ export class MigrationController {
             }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await Promise.all(migrationPromises));
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
 
     }
@@ -263,13 +264,13 @@ export class MigrationController {
      * Add default number of lives to each account
      */
     static async addDefaultLives(req, res): Promise<any> {
-        let isStreaming = false;
+        MigrationController.appSettings = new AppSettings();
         try {
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await MigrationController.appSettings.getAppSettings();
             // Lives setting is enable then add default number of lives into user's account
             if (appSetting.lives.enable) {
-                isStreaming = true;
-                res.setHeader('Content-Type', 'text/plain');
+
+                res.setHeader(HeaderConstants.CONTENT_DASH_TYPE, HeaderConstants.TEXT_FORWARD_SLASH_PLAIN);
                 const users: User[] = await UserService.getUsers();
                 const migrationPromises = [];
                 for (const user of users) {
@@ -277,9 +278,6 @@ export class MigrationController {
                         const accountObj: Account = new Account();
                         accountObj.id = user.userId;
                         migrationPromises.push(AccountService.addDefaultLives({ ...accountObj }));
-                        const successMessage = `Added default lives for user :  ${accountObj.id}`;
-                        console.log(successMessage);
-                        res.write(successMessage);
                     }
                 }
 
@@ -290,7 +288,7 @@ export class MigrationController {
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.LIVE_FEATURES_IS_NOT_ENABLED);
             }
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -306,20 +304,20 @@ export class MigrationController {
             const questions: Question[] = await QuestionService.getAllQuestions();
 
             for (const question of questions) {
-                console.log('questionObj.categoryIds', question.categoryIds);
+
                 const categoryIds = question.categoryIds;
                 const updatedCategory = [];
                 for (const categoryId of categoryIds) {
                     updatedCategory.push(Number(categoryId));
                 }
                 question.categoryIds = updatedCategory;
-                console.log('updatedCategory', updatedCategory);
+
                 const dbQuestionObj = { ...question };
-                updatePromises.push(QuestionService.updateQuestion('questions', dbQuestionObj));
+                updatePromises.push(QuestionService.updateQuestion(MigrationConstants.QUESTIONS, dbQuestionObj));
             }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await Promise.all(updatePromises));
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -327,7 +325,7 @@ export class MigrationController {
         try {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await UserService.removeSocialProfile());
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -341,7 +339,7 @@ export class MigrationController {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.LOADED_DATA);
 
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 }

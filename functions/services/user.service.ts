@@ -6,6 +6,7 @@ export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
     private static bucket: any = admin.storage().bucket();
+    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
     * getUsers
@@ -13,7 +14,7 @@ export class UserService {
     */
     static async getUsers(): Promise<any> {
         try {
-            return Utils.getObjectValues(await this.fireStoreClient.collection(CollectionConstants.USERS).get());
+            return Utils.getValesFromFirebaseSnapshot(await this.fireStoreClient.collection(CollectionConstants.USERS).get());
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -26,7 +27,7 @@ export class UserService {
     static async getUserById(userId: string): Promise<any> {
         try {
             const userData = await this.fireStoreClient
-                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.USERS}${GeneralConstants.FORWARD_SLASH}${userId}`)
+                .doc(`${this.FS}${CollectionConstants.USERS}${this.FS}${userId}`)
                 .get();
             return userData.data();
         } catch (error) {
@@ -41,7 +42,7 @@ export class UserService {
     static async updateUser(dbUser: any): Promise<any> {
         try {
             return await this.fireStoreClient
-                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.USERS}${GeneralConstants.FORWARD_SLASH}${dbUser.userId}`)
+                .doc(`${this.FS}${CollectionConstants.USERS}${this.FS}${dbUser.userId}`)
                 .update(dbUser);
         } catch (error) {
             return Utils.throwError(error);
@@ -54,7 +55,7 @@ export class UserService {
      */
     static async getUsersByEmail(obj: any): Promise<any> {
         try {
-            return Utils.getObjectValues(
+            return Utils.getValesFromFirebaseSnapshot(
                 await this.fireStoreClient
                     .collection(CollectionConstants.USERS)
                     .where(GeneralConstants.EMAIL, GeneralConstants.DOUBLE_EQUAL, obj.email)
@@ -101,8 +102,9 @@ export class UserService {
      * return stream
      */
     static async generateProfileImage(userId: string, profilePicture: string, size?: string): Promise<string> {
-        const fileName = (size) ? `${UserConstants.PROFILE}${GeneralConstants.FORWARD_SLASH}${userId}${GeneralConstants.FORWARD_SLASH}${UserConstants.AVATAR}${GeneralConstants.FORWARD_SLASH}${size}${GeneralConstants.FORWARD_SLASH}${profilePicture}`
-            : `${UserConstants.PROFILE}${GeneralConstants.FORWARD_SLASH}${userId}${GeneralConstants.FORWARD_SLASH}${UserConstants.AVATAR}${GeneralConstants.FORWARD_SLASH}${profilePicture}`;
+        const fileName = (size) ?
+            `${UserConstants.PROFILE}${this.FS}${userId}${this.FS}${UserConstants.AVATAR}${this.FS}${size}${this.FS}${profilePicture}`
+            : `${UserConstants.PROFILE}${this.FS}${userId}${this.FS}${UserConstants.AVATAR}${this.FS}${profilePicture}`;
         const file = this.bucket.file(fileName);
         try {
             const streamData = await file.download();
@@ -136,8 +138,7 @@ export class UserService {
             }
         }
         try {
-            const results = await Promise.all(promises);
-            return results;
+            return await Promise.all(promises);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -165,7 +166,7 @@ export class UserService {
                 }
             }))
                 .on(GeneralConstants.ERROR, (error) => {
-                    return Utils.throwError(error);
+                    Utils.throwError(error);
                 })
                 .on(GeneralConstants.FINISH, () => {
                     resolve(UserConstants.UPLOAD_FINISHED);
@@ -178,15 +179,17 @@ export class UserService {
      * return status
      */
     static async removeSocialProfile(): Promise<any> {
-        const users = await this.getUsers();
+        const users: User[] = await this.getUsers();
+
         const migrationPromises: Promise<any>[] = [];
 
         for (const user of users) {
-            const userObj: User = user.data();
-            delete userObj.facebookUrl;
-            delete userObj.linkedInUrl;
-            delete userObj.twitterUrl;
-            migrationPromises.push(this.updateUser(userObj));
+            if (user && user.userId) {
+                delete user.facebookUrl;
+                delete user.linkedInUrl;
+                delete user.twitterUrl;
+                migrationPromises.push(this.updateUser({ ...user }));
+            }
         }
         try {
             return await Promise.all(migrationPromises);

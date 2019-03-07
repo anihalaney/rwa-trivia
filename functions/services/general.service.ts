@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import {
-    CollectionConstants, GeneralConstants, Question, ResponseResultConstants, interceptorConstants
+    CollectionConstants, GeneralConstants, Question, ResponseMessagesConstants, interceptorConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { ESUtils } from '../utils/ESUtils';
@@ -9,7 +9,8 @@ import { Utils } from '../utils/utils';
 export class GeneralService {
 
     private static generalFireStoreClient = admin.firestore();
-
+    private static FS = GeneralConstants.FORWARD_SLASH;
+    private static QC = CollectionConstants.QUESTIONS;
     static async migrateCollection(collectionName): Promise<any> {
 
         try {
@@ -35,7 +36,7 @@ export class GeneralService {
             for (const doc of snapshots.docs) {
                 targetDB.collection(collectionName).doc(doc.id).set(doc.data());
             }
-            return ResponseResultConstants.MIGRATED_COLLECTION;
+            return ResponseMessagesConstants.MIGRATED_COLLECTION;
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -50,7 +51,7 @@ export class GeneralService {
         try {
             const questions = [];
             const qs = await this.generalFireStoreClient
-                .collection(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.QUESTIONS}`)
+                .collection(`${this.FS}${this.QC}`)
                 .orderBy(GeneralConstants.ID)
                 .get();
             for (const q of qs) {
@@ -63,7 +64,7 @@ export class GeneralService {
                 questions.push(question);
             }
             await ESUtils.rebuildIndex(questions);
-            return ResponseResultConstants.QUESTIONS_INDEXED;
+            return ResponseMessagesConstants.QUESTIONS_INDEXED;
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -76,14 +77,15 @@ export class GeneralService {
     static async getTestQuestion(): Promise<any> {
         try {
             const qs = await admin.database()
-                .ref(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.QUESTIONS}
-                    ${GeneralConstants.FORWARD_SLASH}${CollectionConstants.PUBLISHED}`)
+                .ref(`${this.FS}${this.QC}${this.FS}${CollectionConstants.PUBLISHED}`)
                 .orderByKey().limitToLast(1).once(GeneralConstants.VALUE);
-            for (const q of qs) {
+
+            qs.forEach((q) => {
                 const question: Question = q.val();
                 question.id = q.key;
                 return question;
-            }
+            });
+
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -95,7 +97,7 @@ export class GeneralService {
      */
     static async getGameQuestionTest(): Promise<any> {
         try {
-            await ESUtils.getRandomGameQuestion([2, 4, 5, 6], []);
+            return await ESUtils.getRandomGameQuestion([2, 4, 5, 6], []);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -112,9 +114,9 @@ export class GeneralService {
                 requestTimeout: 10000,
             }, (error) => {
                 if (error) {
-                    Utils.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseResultConstants.ELASTIC_SEARCH_CLUSTER_IS_DOWN);
+                    Utils.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseMessagesConstants.ELASTIC_SEARCH_CLUSTER_IS_DOWN);
                 } else {
-                    Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseResultConstants.HELLO_ES_IS_UP);
+                    Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.HELLO_ES_IS_UP);
                 }
             });
         } catch (error) {

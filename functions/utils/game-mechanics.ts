@@ -175,9 +175,10 @@ export class GameMechanics {
                 game.nextTurnPlayerId = userId;
                 game.GameStatus = GameStatus.JOINED_GAME;
                 game.addPlayer(userId);
-                game.playerIds.map((playerId) => {
+
+                for (const playerId of game.playerIds) {
                     game.calculateStat(playerId);
-                });
+                }
 
                 const dbGame = game.getDbModel();
                 //   console.log('dbGame', dbGame);
@@ -260,10 +261,10 @@ export class GameMechanics {
                     await GameService.updateGame(game.getDbModel());
                     return false;
                 } else {
-                    return Promise.resolve(true);
+                    return true;
                 }
             } else {
-                return Promise.resolve(true);
+                return true;
             }
         } catch (error) {
             return Utils.throwError(error);

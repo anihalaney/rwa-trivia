@@ -1,12 +1,12 @@
-
-
 import { UserService } from '../services/user.service';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
 import {
     UserControllerConstants, profileSettingsConstants,
     interceptorConstants,
-    ResponseMessagesConstants
+    ResponseMessagesConstants,
+    UserConstants,
+    HeaderConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { AccountService } from '../services/account.service';
@@ -27,7 +27,7 @@ export class UserController {
         try {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await UserService.getUserProfile(userId));
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -48,22 +48,23 @@ export class UserController {
 
         if (!width) {
             // width is not available
-            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.GAME_NOT_FOUND);
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.WIDTH_NOT_FOUND);
         }
 
         if (!height) {
             // height is not available
-            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.GAME_NOT_FOUND);
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.HEIGHT_NOT_FOUND);
         }
 
 
         try {
             const stream = await UserService.getUserProfileImage(userId, width, height);
-            res.setHeader('content-disposition', 'attachment; filename=profile_image.png');
-            res.setHeader('content-type', 'image/jpeg');
+            res.setHeader(HeaderConstants.CONTENT_DASH_DISPOSITION,
+                HeaderConstants.ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_PROFILE_UNDER_SCORE_IMAGE_DOT_PNG);
+            res.setHeader(HeaderConstants.CONTENT_DASH_TYPE, HeaderConstants.IMAGE_FORWARD_SLASH_JPEG);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, stream);
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
 
     }
@@ -90,7 +91,7 @@ export class UserController {
             }
 
             if (user.bulkUploadPermissionStatus === profileSettingsConstants.NONE) {
-                user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
+                user.bulkUploadPermissionStatus = profileSettingsConstants.PENDING;
                 user.bulkUploadPermissionStatusUpdateTime = Utils.getUTCTimeStamp();
                 const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
                 try {
@@ -105,13 +106,14 @@ export class UserController {
             user.bulkUploadPermissionStatus =
                 (user.bulkUploadPermissionStatus) ? user.bulkUploadPermissionStatus : profileSettingsConstants.NONE;
 
-            delete user['roles'];
+            delete user[UserConstants.ROLES];
 
             await UserService.updateUser({ ...user });
+
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.PROFILE_DATA_IS_SAVED });
 
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -121,9 +123,11 @@ export class UserController {
      */
     static async updateLives(req, res) {
         const userId = req.body.userId;
+
         if (!userId) {
             Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_ID_NOT_FOUND);
         }
+
         if (req.user.user_id !== userId) {
             Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.UNAUTHORIZED);
         }
@@ -131,19 +135,11 @@ export class UserController {
         try {
             await AccountService.updateLives(userId);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.LIVES_ADDED });
+
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
 
     }
 
 }
-
-
-
-
-
-
-
-
-

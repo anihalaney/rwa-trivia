@@ -11,6 +11,8 @@ export class AccountService {
     private static accountFireStoreClient = admin.firestore();
     private static appSettings: AppSettings = new AppSettings();
 
+    private static FS = GeneralConstants.FORWARD_SLASH;
+
     /**
      * getAccountById
      * return account
@@ -18,7 +20,7 @@ export class AccountService {
     static async getAccountById(id: string): Promise<any> {
         try {
             const accountData = await this.accountFireStoreClient.
-                doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.ACCOUNTS}${GeneralConstants.FORWARD_SLASH}${id}`).get();
+                doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${id}`).get();
             return accountData.data();
         } catch (error) {
             return Utils.throwError(error);
@@ -32,7 +34,7 @@ export class AccountService {
     static async setAccount(dbAccount: any): Promise<any> {
         try {
             return await this.accountFireStoreClient
-                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.ACCOUNTS}${GeneralConstants.FORWARD_SLASH}${dbAccount.id}`)
+                .doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${dbAccount.id}`)
                 .set(dbAccount);
 
         } catch (error) {
@@ -47,7 +49,7 @@ export class AccountService {
     static async updateAccountData(dbAccount: any): Promise<any> {
         try {
             return await this.accountFireStoreClient
-                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.ACCOUNTS}${GeneralConstants.FORWARD_SLASH}${dbAccount.id}`)
+                .doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${dbAccount.id}`)
                 .update(dbAccount);
         } catch (error) {
             return Utils.throwError(error);
@@ -60,7 +62,7 @@ export class AccountService {
      */
     static async getAccounts(): Promise<any> {
         try {
-            return Utils.getObjectValues(await this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).get());
+            return Utils.getValesFromFirebaseSnapshot(await this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).get());
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -177,6 +179,7 @@ export class AccountService {
     static async addLives(): Promise<any> {
         try {
             const appSetting = await this.appSettings.getAppSettings();
+            const promises = [];
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
                 let timestamp = Utils.getUTCTimeStamp();
@@ -188,9 +191,10 @@ export class AccountService {
                 for (const account of accountsNotHavingMaxLives) {
                     timestamp = Utils.getUTCTimeStamp();
                     const userAccount = account.data();
-                    await this.addLife(userAccount.id, appSetting);
+                    promises.push(this.addLife(userAccount.id, appSetting));
                 }
             }
+            return await Promise.all(promises);
         } catch (error) {
             return Utils.throwError(error);
         }

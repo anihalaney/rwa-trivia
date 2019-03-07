@@ -1,4 +1,4 @@
-import { interceptorConstants, ResponseMessagesConstants } from "shared-library/shared/model";
+import { interceptorConstants, ResponseMessagesConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 
 export class Utils {
 
@@ -12,19 +12,19 @@ export class Utils {
         return time + minutes;
     }
 
+    static getValesFromFirebaseSnapshot(snapshots: any): any[] {
 
-    static getObjectValues(snapshots: any): any[] {
         const values: any[] = [];
-        if (snapshots.exists) {
-            for (const snapshot of snapshots.docs) {
-                values.push(snapshot.data());
-            }
+
+        for (const snapshot of snapshots.docs) {
+            values.push(snapshot.data());
         }
+
         return values;
     }
 
     static throwError(error): Promise<any> {
-        console.error('Error : ', error);
+        console.error(GeneralConstants.Error_Message, error);
         throw error;
     }
 
@@ -32,8 +32,8 @@ export class Utils {
         return res.status(status).send(responseObj);
     }
 
-    static sendErr(res: any, error: any): void {
-        console.error('Error : ', error);
+    static sendError(res: any, error: any): void {
+        console.error(GeneralConstants.Error_Message, error);
         this.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseMessagesConstants.INTERNAL_SERVER_ERROR);
     }
 

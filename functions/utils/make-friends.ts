@@ -86,9 +86,9 @@ export class MakeFriends {
 
     async createInvitations(emails: string[]) {
         const invitationPromises = [];
-        emails.map((email) => {
+        for (const email of emails) {
             invitationPromises.push(this.checkAndUpdateToken(email));
-        });
+        }
 
         try {
             return await Promise.all(invitationPromises);

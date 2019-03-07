@@ -1,16 +1,16 @@
 import { GeneralService } from '../services/general.service';
 import { Utils } from '../utils/utils';
-import { interceptorConstants } from 'shared-library/shared/model';
+import { interceptorConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 
 export class GeneralController {
-    /**
-         * helloOperation
-         * return status
-         */
-    static helloOperation(req, res) {
-        Utils.sendResponse(res, interceptorConstants.SUCCESS, `Hello ${req.user.email}`);
-    }
 
+    /**
+     * helloOperation
+     * return status
+     */
+    static helloOperation(req, res) {
+        Utils.sendResponse(res, interceptorConstants.SUCCESS, `${GeneralConstants.HELLO} ${req.user.email}`);
+    }
 
     /**
      * getTestQuestion
@@ -20,11 +20,9 @@ export class GeneralController {
         try {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await GeneralService.getTestQuestion());
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
-
     }
-
 
     /**
      * getGameQuestionTest
@@ -34,10 +32,9 @@ export class GeneralController {
         try {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await GeneralService.getGameQuestionTest());
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
-
 
     /**
      * getGameQuestionTest
@@ -46,4 +43,5 @@ export class GeneralController {
     static testES(req, res) {
         GeneralService.testES(res);
     }
+
 }

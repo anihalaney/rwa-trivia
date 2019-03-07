@@ -1,4 +1,6 @@
-import { Game, GameOperations, PlayerQnA, Account, ResponseMessagesConstants, interceptorConstants } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    Game, GameOperations, PlayerQnA, Account, ResponseMessagesConstants, interceptorConstants, HeaderConstants, GeneralConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
@@ -54,7 +56,7 @@ export class GameController {
             }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { gameId: gameId });
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -93,21 +95,17 @@ export class GameController {
             if (game.playerIds.indexOf(req.user.uid) === -1) {
                 // operation
                 Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.UNAUTHORIZED);
-                return;
             }
 
             if ((operation === GameOperations.CALCULATE_SCORE || operation === GameOperations.REPORT_STATUS) && !playerQnA) {
                 // playerQnA
                 Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.PLAYER_QNA_NOT_FOUND);
-                return;
             }
 
             await GameMechanics.doGameOperations(userId, playerQnA, game, operation);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, {});
-
-
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -122,7 +120,7 @@ export class GameController {
         if (functions.config().elasticsearch &&
             functions.config().elasticsearch.index &&
             functions.config().elasticsearch.index.production &&
-            functions.config().elasticsearch.index.production === 'true') {
+            functions.config().elasticsearch.index.production === GeneralConstants.TRUE) {
             websiteUrl += 'bitwiser.io';
         } else {
             websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
@@ -152,7 +150,7 @@ export class GameController {
                                 </body>
                               </html>`;
 
-        res.setHeader('content-type', 'text/html');
+        res.setHeader(HeaderConstants.CONTENT_DASH_TYPE, HeaderConstants.TEXT_FORWARD_SLASH_HTML);
         Utils.sendResponse(res, interceptorConstants.SUCCESS, htmlContent);
     }
 
@@ -164,11 +162,12 @@ export class GameController {
         try {
             const socialId = req.params.socialId;
             const social_url = await SocialService.generateSocialUrl(req.params.userId, socialId);
-            res.setHeader('content-disposition', 'attachment; filename=social_image.png');
-            res.setHeader('content-type', 'image/png');
+            res.setHeader(HeaderConstants.CONTENT_DASH_DISPOSITION,
+                HeaderConstants.ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_SOCIAL_UNDER_SCORE_IMAGE_DOT_PNG);
+            res.setHeader(HeaderConstants.CONTENT_DASH_TYPE, HeaderConstants.IMAGE_FORWARD_SLASH_PNG);
             Utils.sendResponse(res, interceptorConstants.SUCCESS, social_url);
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 

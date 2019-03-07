@@ -2,7 +2,8 @@ export enum schedulerConstants {
     gamePlayDuration = 32,  // 32 hours
     beforeGameExpireDuration = 1890,  // 31 hours 30 minutes
     notificationInterval = 32, // 32 Minutes
-    gameInvitationDuration = 192   // 8 days
+    gameInvitationDuration = 192,   // 8 days
+    DESCRIPTION = 'description',
 }
 
 
@@ -123,11 +124,14 @@ export enum UserConstants {
     IMG_70 = 70,
     IMG_60 = 60,
     IMG_44 = 44,
-    IMG_40 = 40
+    IMG_40 = 40,
+    ROLES = 'roles',
+    ORIGINAL = 'original',
 }
 
 export enum GeneralConstants {
     FORWARD_SLASH = '/',
+    COLON = ':',
     LESS_THAN_OR_EQUAL = '<=',
     CREATED_UID = 'created_uid',
     DOUBLE_EQUAL = '==',
@@ -149,14 +153,10 @@ export enum GeneralConstants {
     Required_For_Game_Play = 'requiredForGamePlay',
     PLAYER_ID_ = 'playerId_',
     ROUND = 'round',
-    BASE64 = 'base64'
-}
-
-export enum ResponseResultConstants {
-    MIGRATED_COLLECTION = 'migrated collection',
-    QUESTIONS_INDEXED = 'Questions indexed',
-    ELASTIC_SEARCH_CLUSTER_IS_DOWN = 'elasticsearch cluster is down!',
-    HELLO_ES_IS_UP = 'Hello. ES is up',
+    BASE64 = 'base64',
+    HELLO = 'Hello',
+    TRUE = 'true',
+    Error_Message = 'Error : '
 }
 
 export enum SocialShareConstants {
@@ -202,6 +202,10 @@ export enum QuestionsConstants {
 }
 
 export enum ResponseMessagesConstants {
+    MIGRATED_COLLECTION = 'migrated collection',
+    QUESTIONS_INDEXED = 'Questions indexed',
+    ELASTIC_SEARCH_CLUSTER_IS_DOWN = 'elasticsearch cluster is down!',
+    HELLO_ES_IS_UP = 'Hello. ES is up',
     INTERNAL_SERVER_ERROR = 'Internal Server error',
     BAD_REQUEST = 'Bad Request',
     GAME_OPTION_NOT_FOUND = 'Game Option is not added in request',
@@ -235,13 +239,89 @@ export enum ResponseMessagesConstants {
     WIDTH_NOT_FOUND = 'width is not added in request',
     HEIGHT_NOT_FOUND = 'height is not added in request',
     PROFILE_DATA_IS_SAVED = 'Profile Data is saved !!',
-    LIVES_ADDED = 'Lives added successfully !!'
+    LIVES_ADDED = 'Lives added successfully !!',
+    CHECK_FIRESTORE_DB_FOR_MIGRATION_DETAILS = 'Check firestore db for migration details',
+
 }
 
 export enum FriendConstants {
     BR_HTML = '<br />',
 }
 
+export enum MigrationConstants {
+    CATEGORIES = 'categories',
+    TAGS = 'tags',
+    GAMES = 'games',
+    QUESTIONS = 'questions',
+    UNPUBLISHED_QUESTIONS = 'unpublished_questions',
+    ADDED_DEFAULT_LIVES_FOR_USERS_COLON = 'Added default lives for user :  '
+}
 
+export enum HeaderConstants {
+    CONTENT_DASH_TYPE = 'content-type',
+    TEXT_FORWARD_SLASH_HTML = 'text/html',
+    CONTENT_DASH_DISPOSITION = 'content-disposition',
+    ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_SOCIAL_UNDER_SCORE_IMAGE_DOT_PNG = 'attachment; filename=social_image.png',
+    ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_PROFILE_UNDER_SCORE_IMAGE_DOT_PNG = 'attachment; filename=profile_image.png',
+    IMAGE_FORWARD_SLASH_PNG = 'image/png',
+    TEXT_FORWARD_SLASH_PLAIN = 'text/plain',
+    IMAGE_FORWARD_SLASH_JPEG = 'image/jpeg',
+}
 
-
+export enum RoutesConstants {
+    INVITATION = 'invitation',
+    GAME_ID = 'gameId',
+    SOCIAL = 'social',
+    USER_ID = 'userId',
+    SOCIAL_ID = 'socialId',
+    SOCIAL_DASH_IMAGE = 'social-image',
+    HELLO = 'hello',
+    QUESTION = 'question',
+    GAME = 'game',
+    ES = 'es',
+    CHECK = 'check',
+    ACCOUNT = 'account',
+    STAT = 'stat',
+    USER = 'user',
+    LEADERBOARD = 'leaderboard',
+    CONTRIBUTION = 'contribution',
+    UPDATE = 'update',
+    MIGRATE = 'migrate',
+    COLLECTION_NAME = 'collectionName',
+    PROD = 'prod',
+    DEV = 'dev',
+    REBUILD = 'rebuild',
+    INDEX = 'index',
+    SYSTEM = 'system',
+    BULK_UPLOAD = 'bulkupload',
+    AUTH_DASH_USERS = 'auth-users',
+    PROFILE = 'profile',
+    IMAGE = 'image',
+    STATUS = 'status',
+    ADD = 'add',
+    DEFAULT = 'default',
+    LIVES = 'lives',
+    REMOVE = 'remove',
+    ALL = 'all',
+    DAY = 'day',
+    NEXT_Q = 'nextQ',
+    NEXT = 'next',
+    START = 'start',
+    SIZE = 'size',
+    QUESTION_ID = 'questionId',
+    SUBSCRIPTION = 'subscription',
+    GAME_ROUTES = 'gameRoutes',
+    GENERAL = 'general',
+    MIGRATION = 'migration',
+    SCHEDULER = 'scheduler',
+    FRIEND = 'friend',
+    GAME_DASH_OVER = 'game-over',
+    TURN = 'turn',
+    ADD_LIVES = 'add-lives',
+    BLOG = 'blog',
+    UPDATE_DASH_LIVES = 'update-lives',
+    IMAGE_NAME = 'imageName',
+    WIDTH = 'width',
+    HEIGHT = 'height',
+    COUNT = 'count',
+}

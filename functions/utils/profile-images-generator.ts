@@ -7,9 +7,10 @@ import { Utils } from './utils';
 
 export class ProfileImagesGenerator {
 
-    static basePath = '/profile';
-    static profileImagePath = 'avatar';
-    static originalImagePath = 'original';
+    static basePath = `${GeneralConstants.FORWARD_SLASH}${UserConstants.PROFILE}`;
+    static profileImagePath = UserConstants.AVATAR;
+    static originalImagePath = UserConstants.ORIGINAL;
+    private static FS = GeneralConstants.FORWARD_SLASH;
 
     static async fetchUsers(): Promise<any> {
         try {
@@ -72,7 +73,8 @@ export class ProfileImagesGenerator {
     private static async resizeImage(userId: string, profileImagePath: String,
         dataStream: any, croppedImageType: string, width: Number, height: Number): Promise<string> {
 
-        const filePath = `${this.basePath}${GeneralConstants.FORWARD_SLASH}${userId}${GeneralConstants.FORWARD_SLASH}${this.profileImagePath}${GeneralConstants.FORWARD_SLASH}${width}*${height}${GeneralConstants.FORWARD_SLASH}${profileImagePath}`;
+        const filePath =
+            `${this.basePath}${this.FS}${userId}${this.FS}${this.profileImagePath}${this.FS}${width}*${height}${this.FS}${profileImagePath}`;
 
         croppedImageType = (croppedImageType) ? croppedImageType : dataStream.mimetype;
         try {

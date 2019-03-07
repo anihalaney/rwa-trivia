@@ -1,6 +1,6 @@
 import { MakeFriends } from '../utils/make-friends';
 import { Utils } from '../utils/utils';
-import { interceptorConstants, ResponseMessagesConstants, FriendConstants } from 'shared-library/shared/model';
+import { interceptorConstants, FriendConstants, ResponseMessagesConstants, User } from '../../projects/shared-library/src/lib/shared/model';
 
 export class FriendController {
 
@@ -9,18 +9,19 @@ export class FriendController {
      * return count
      */
     static async createFriends(req, res): Promise<any> {
+
         const token = req.body.token;
         const userId = req.body.userId;
         const email = req.body.email;
-
 
         try {
             const makeFriends: MakeFriends = new MakeFriends(token, userId, email);
             const invitee = await makeFriends.validateToken();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, { created_uid: invitee });
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
+
     }
 
 
@@ -38,8 +39,7 @@ export class FriendController {
             const makeFriends: MakeFriends = new MakeFriends(undefined, userId, undefined);
             try {
                 if (inviteeUserId) {
-                    const userData = await makeFriends.getUser(inviteeUserId);
-                    const user = userData.data();
+                    const user: User = await makeFriends.getUser(inviteeUserId);
                     if (inviteeUserId && user) {
                         emails = [user.email];
                         const status: any = await makeFriends.createInvitations(emails);
@@ -50,7 +50,7 @@ export class FriendController {
                     Utils.sendResponse(res, interceptorConstants.SUCCESS, { messages: status.join(FriendConstants.BR_HTML) });
                 }
             } catch (error) {
-                Utils.sendErr(res, error);
+                Utils.sendError(res, error);
             }
         } else {
             Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.BAD_REQUEST);

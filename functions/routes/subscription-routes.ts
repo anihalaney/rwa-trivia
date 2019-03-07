@@ -1,15 +1,21 @@
 
 import * as express from 'express';
 import { SubscriptionController } from '../controllers/subscription.controller';
+import { GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 
 
 class SubscriptionRoutes {
 
+    private FS = GeneralConstants.FORWARD_SLASH;
     public subscriptionRoutes: any;
 
     constructor() {
+
         this.subscriptionRoutes = express.Router();
-        this.subscriptionRoutes.get('/count', SubscriptionController.getSubscriptionCount);
+
+        //  '/count'
+        this.subscriptionRoutes.get(`${this.FS}${RoutesConstants.COUNT}`, SubscriptionController.getSubscriptionCount);
+
     }
 }
 
