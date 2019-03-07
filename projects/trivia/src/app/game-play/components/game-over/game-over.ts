@@ -35,7 +35,6 @@ export class GameOver implements OnInit {
   opponentType = OpponentType;
   disableFriendInviteBtn = false;
   defaultAvatar = 'assets/images/default-avatar-game-over.png';
-  subs: Subscription[] = [];
   account: Account;
   applicationSettings: ApplicationSettings;
   liveErrorMsg = 'Sorry, don\'t have enough life.';
@@ -47,22 +46,22 @@ export class GameOver implements OnInit {
   constructor(public store: Store<AppState>, public userActions: UserActions,
     public utils: Utils) {
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
-    }));
+    });
 
-    this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+    store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
       this.account = account;
-    }));
+    });
 
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.subs.push(this.user$.subscribe(user => {
+    this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
-    }));
+    });
 
     this.socialFeedData = {
       blogNo: 0,
@@ -72,11 +71,11 @@ export class GameOver implements OnInit {
     this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => {
+    this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
-    }));
+    });
 
-    this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
+    this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
         this.questionsArray.map((question) => {
@@ -85,7 +84,7 @@ export class GameOver implements OnInit {
           }
         });
       }
-    }));
+    });
   }
 
   ngOnInit() {

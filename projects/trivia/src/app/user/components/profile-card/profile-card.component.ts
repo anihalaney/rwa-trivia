@@ -7,7 +7,7 @@ import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'profile-card',
@@ -15,23 +15,24 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./profile-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe()
 export class ProfileCardComponent implements OnDestroy {
   @Input() user: User;
   userObs: Observable<User>;
   location = 'unknown';
   userProfileImageUrl: string;
-  subs: Subscription[] = [];
 
   constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
     this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
-    this.subs.push(this.userObs.subscribe(user => {
+    this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
         (this.user.location) ? this.location = this.user.location : '';
         this.userProfileImageUrl = this.getImageUrl(this.user);
       }
-    }));
+    });
   }
 
   navigateToProfile() {
@@ -43,7 +44,7 @@ export class ProfileCardComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
 }

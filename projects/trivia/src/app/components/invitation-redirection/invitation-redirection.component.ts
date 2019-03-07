@@ -5,9 +5,9 @@ import { Store, select } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { AppState, appState } from '../../store';
-import {UserActions} from 'shared-library/core/store/actions';
-import { Utils } from 'shared-library/core/services';
+import { UserActions } from 'shared-library/core/store/actions';
 import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
     selector: 'invitation-redirection',
@@ -15,24 +15,25 @@ import { Subscription } from 'rxjs';
     styleUrls: ['./invitation-redirection.component.scss', './invitation-redirection.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe()
 export class InvitationRedirectionComponent implements OnInit, OnDestroy {
 
     @Input() user: User;
-    subs: Subscription[] = [];
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
-        private userAction: UserActions, private utils: Utils ) {
-            this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+        private userAction: UserActions) {
+        this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             if (user) {
                 this.user = user;
             }
-        }));
+        });
     }
 
     ngOnInit() {
         // subscribe to router event
-       this.activatedRoute.params.subscribe((params: Params) => {
+        this.activatedRoute.params.subscribe((params: Params) => {
             const token = params['token'];
             this.store.dispatch(this.userAction.storeInvitationToken(token));
             if (this.user) {
@@ -45,7 +46,6 @@ export class InvitationRedirectionComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.utils.unsubscribe(this.subs);
     }
 
 }

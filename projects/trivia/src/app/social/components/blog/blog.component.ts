@@ -1,21 +1,22 @@
 import { Component, Input, OnDestroy, AfterViewInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'blog',
   templateUrl: './blog.component.html',
   styleUrls: ['./blog.component.scss']
 })
+
+@AutoUnsubscribe()
 export class BlogComponent implements OnDestroy , AfterViewInit{
   @Input() blogId: number;
-  sub: Subscription;
   blogData = [];
 
-  constructor(private store: Store<AppState>, private utils: Utils) {
-    this.sub = this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+  constructor(private store: Store<AppState>) {
+    this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
     });
   }
@@ -25,10 +26,10 @@ export class BlogComponent implements OnDestroy , AfterViewInit{
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe([this.sub]);
   }
+
   ngAfterViewInit(): void {
-    this.sub = this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+    this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
     });
   }

@@ -11,6 +11,7 @@ import * as domtoimage from 'dom-to-image';
 import { GameOver } from './game-over';
 import { coreState } from 'shared-library/core/store';
 import { MatSnackBar } from '@angular/material';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'game-over',
@@ -18,6 +19,7 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./game-over.component.scss']
 })
 
+@AutoUnsubscribe()
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<ReportGameComponent>;
@@ -35,15 +37,15 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public viewContainerRef: ViewContainerRef,
   ) {
     super(store, userActions, utils);
-    this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
+    this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       if (state === 'SUCCESS') {
         if ((this.dialogRef)) {
           this.dialogRef.close();
         }
       }
-    }));
+    });
 
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.snackBar.open(status, '', {
           viewContainerRef: this.viewContainerRef,
@@ -51,9 +53,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         });
         this.disableFriendInviteBtn = true;
       }
-    }));
+    });
 
-    this.subs.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -67,7 +69,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         this.socialFeedData.share_status = false;
         this.loaderStatus = false;
       }
-    }));
+    });
   }
   ngOnInit() {
     if (this.game) {
@@ -173,7 +175,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+    
   }
 
 }

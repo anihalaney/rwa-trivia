@@ -17,11 +17,11 @@ export class Utils {
   }
 
   unsubscribe(subs: Subscription[]) {
-    subs.forEach(sub => {
-      if (sub && sub instanceof Subscription) {
-        sub.unsubscribe();
-      }
-    });
+    // subs.forEach(sub => {
+    //   if (sub && sub instanceof Subscription) {
+    //     sub.unsubscribe();
+    //   }
+    // });
   }
 
   getRandomInt(min, max) {

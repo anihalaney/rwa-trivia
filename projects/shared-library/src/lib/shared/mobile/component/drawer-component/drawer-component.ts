@@ -14,6 +14,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators/autoUnsubscribe';
 
 @Component({
     moduleId: module.id,
@@ -22,6 +23,8 @@ import { filter } from 'rxjs/operators';
     styleUrls: ['drawer-component.css']
 
 })
+
+@AutoUnsubscribe()
 export class DrawerComponent implements OnInit, OnDestroy {
 
     @Output() output = new EventEmitter();
@@ -35,7 +38,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
     version: string;
     logOut: boolean;
     pushToken: string;
-    subs: Subscription[] = [];
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
@@ -63,12 +65,12 @@ export class DrawerComponent implements OnInit, OnDestroy {
             }
         });
         this.categoriesObs = store.select(coreState).pipe(select(s => s.categories));
-        this.subs.push(this.categoriesObs.subscribe(categories => {
+        this.categoriesObs.subscribe(categories => {
             this.categories = categories;
-        }));
+        });
     }
     ngOnInit() {
-        this.subs.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+        this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
                 this.user = user;
@@ -99,7 +101,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.resetValues();
                 }, 2000);
             }
-        }));
+        });
     }
 
     closeDrawer() {
@@ -170,6 +172,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.utils.unsubscribe(this.subs);
+
     }
 }

@@ -28,7 +28,6 @@ export class GameDialog {
   correctAnswerCount: number;
   totalRound: number;
   questionIndex: number;
-  sub: Subscription[] = [];
   timerSub: Subscription;
   questionSub: Subscription;
   timer: number;
@@ -69,19 +68,18 @@ export class GameDialog {
 
  // this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     // this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.sub.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.sub.push(this.userDict$.subscribe(userDict => {
+    this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
-    }));
+    });
 
     this.resetValues();
     this.gameObs = store.select(gamePlayState).pipe(select(s => s.currentGame), filter(g => g != null));
     this.gameQuestionObs = store.select(gamePlayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.sub.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
-    this.sub.push(
+    this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c);
       this.gameObs.subscribe(game => {
         this.game = game;
         this.threeConsecutiveAnswer = false;
@@ -122,13 +120,13 @@ export class GameDialog {
           }
         }
 
-      }));
+      });
 
-    this.sub.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
-    }));
+    });
 
   }
 
@@ -200,7 +198,6 @@ export class GameDialog {
       },
         null,
         () => {
-          this.utils.unsubscribe([this.timerSub]);
           this.showWinBadge = false;
           this.isCorrectAnswer = false;
           this.showBadgeScreen();
@@ -221,7 +218,6 @@ export class GameDialog {
       null,
       () => {
         // Show badge screen
-        this.utils.unsubscribe([this.timerSub]);
         this.showLoader = false;
         this.showBadge = true;
         this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
@@ -231,7 +227,6 @@ export class GameDialog {
           null,
           () => {
             // load question screen timer
-            this.utils.unsubscribe([this.timerSub]);
             this.showBadge = false;
             this.subscribeQuestion();
           });
@@ -357,7 +352,6 @@ export class GameDialog {
   }
 
   afterAnswer(userAnswerId?: number) {
-    this.utils.unsubscribe([this.timerSub, this.questionSub]);
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
     let index;
     if (userAnswerId === undefined) {

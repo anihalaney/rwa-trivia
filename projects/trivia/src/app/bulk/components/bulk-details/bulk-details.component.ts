@@ -7,7 +7,7 @@ import { bulkState } from '../../store';
 import { User, Category, Question, BulkUploadFileInfo } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import * as bulkActions from '../../store/actions';
-import { Utils } from 'shared-library/core/services';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'bulk-details',
@@ -15,6 +15,8 @@ import { Utils } from 'shared-library/core/services';
   styleUrls: ['./bulk-details.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe()
 export class BulkDetailsComponent implements OnChanges, OnInit, OnDestroy {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
@@ -23,14 +25,13 @@ export class BulkDetailsComponent implements OnChanges, OnInit, OnDestroy {
   questions: Question[];
   totalCount: number;
   user: User;
-  subs: Subscription[] = [];
+
 
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
 
   constructor(private store: Store<AppState>,
-    private utils: Utils,
     private router: Router) {
     this.categoryDictObs = store.select(categoryDictionary);
   }
@@ -42,13 +43,12 @@ export class BulkDetailsComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+   this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
     this.categoriesObs = this.store.select(getCategories);
     this.tagsObs = this.store.select(getTags);
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
   }
 
 }

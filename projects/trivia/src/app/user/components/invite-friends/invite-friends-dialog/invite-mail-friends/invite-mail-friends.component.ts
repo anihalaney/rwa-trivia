@@ -7,6 +7,7 @@ import { AppState, appState } from '../../../../../store';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -15,6 +16,8 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
   templateUrl: './invite-mail-friends.component.html',
   styleUrls: ['./invite-mail-friends.component.scss']
 })
+
+@AutoUnsubscribe()
 export class InviteMailFriendsComponent implements OnInit, OnDestroy {
 
   @Input() user: User;
@@ -25,24 +28,23 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   showSuccessMsg: string;
   validEmail = [];
   emailCheck: Boolean = false;
-  sub: Subscription[] = [];
   @ViewChildren('textField') textField: QueryList<ElementRef>;
 
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, 
               private utils: Utils) {
-    this.sub.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
         this.user = user;
       }
-    }));
+    });
 
-    this.sub.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.showSuccessMsg = status;
       }
-    }));
+    });
 
   }
 
@@ -104,7 +106,7 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.utils.unsubscribe(this.sub);
+
   }
 
   hideKeyboard() {

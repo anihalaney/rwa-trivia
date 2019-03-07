@@ -1,4 +1,4 @@
-import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef} from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
@@ -10,19 +10,20 @@ import { leaderBoardState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
 import { ActivatedRoute } from '@angular/router';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe()
 export class LeaderboardComponent implements OnDestroy, AfterViewInit {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User };
   leaderBoardStatDict: { [key: string]: Array<LeaderBoardUser> };
-  subs: Subscription[] = [];
   leaderBoardCat: Array<string>;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -58,19 +59,19 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.userDict$.subscribe(userDict => this.userDict = userDict);
 
     this.categoryDict$ = this.store.select(categoryDictionary);
 
-    this.subs.push(this.categoryDict$.subscribe(categoryDict => {
+    this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
-    }));
+    });
 
-    this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
+    this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
-        this.cd.detectChanges();
+
         if (this.leaderBoardCat.length > 0) {
           this.leaderBoardCat.map((cat) => {
             this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
@@ -86,7 +87,10 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
           this.lbsUsersSliceLastIndex = 3;
         }
       }
-    }));
+      if (!this.cd['destroyed']) {
+        this.cd.detectChanges();
+      }
+    });
   }
 
   displayMore(): void {
@@ -98,6 +102,6 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 }
