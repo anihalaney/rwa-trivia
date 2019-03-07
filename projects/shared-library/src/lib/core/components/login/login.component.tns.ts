@@ -11,6 +11,7 @@ import { Page } from 'tns-core-modules/ui/page';
 import { LoadingIndicator } from "nativescript-loading-indicator";
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from '../../services';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'login',
@@ -18,6 +19,7 @@ import { Utils } from '../../services';
   styleUrls: ['./login.component.scss']
 })
 
+@AutoUnsubscribe()
 export class LoginComponent extends Login implements OnInit, OnDestroy {
   @ViewChildren('textField') textField : QueryList<ElementRef>;
   title: string;
@@ -158,19 +160,19 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   redirectTo() {
-    this.subs.push(this.store.select(coreState).pipe(
+    this.store.select(coreState).pipe(
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe(() => {
         this.loader.hide();
-        this.subs.push(this.store.select(coreState).pipe(
+        this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
             Toast.makeText('You have been successfully logged in').show();
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
-          }));
+          });
       }
-      ));
+      );
   }
 
   showMessage(type: string, text: string) {
@@ -195,7 +197,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+    
   }
 
   hideKeyboard() {

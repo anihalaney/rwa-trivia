@@ -16,7 +16,7 @@ import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { Page, EventData } from 'tns-core-modules/ui/page/page';
 import { isAndroid } from 'tns-core-modules/platform';
-
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'profile-settings',
@@ -24,6 +24,7 @@ import { isAndroid } from 'tns-core-modules/platform';
   styleUrls: ['./profile-settings.component.css']
 })
 
+@AutoUnsubscribe()
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   // Properties
@@ -57,12 +58,12 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     super(fb, store, userAction, utils);
     this.initDataItems();
 
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         Toast.makeText('Profile is saved successfully').show();
         this.toggleLoader(false);
       }
-    }));
+    });
 
   }
 
@@ -108,7 +109,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.userForm.get('profilePicture').setValue(fileName);
     this.userForm.updateValueAndValidity();
   }
-
 
   addCustomTag() {
     this.hideKeyboard();
@@ -189,7 +189,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+   
   }
 
 }

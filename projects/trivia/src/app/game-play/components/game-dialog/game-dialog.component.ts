@@ -5,9 +5,9 @@ import { Store } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import { GamePlayState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { Utils } from 'shared-library/core/services';
 import { GameDialog } from './game-dialog';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'game-dialog',

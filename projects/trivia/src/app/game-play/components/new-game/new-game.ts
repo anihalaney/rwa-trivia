@@ -6,8 +6,12 @@ import { GameActions, UserActions } from 'shared-library/core/store/actions/inde
 import { Category, GameOptions, User, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { OnDestroy } from '@angular/core';
 
-export class NewGame {
+
+@AutoUnsubscribe()
+export class NewGame implements OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
   tagsObs: Observable<string[]>;
@@ -100,5 +104,9 @@ export class NewGame {
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
     this.errMsg = undefined;
+  }
+
+  ngOnDestroy() {
+
   }
 }

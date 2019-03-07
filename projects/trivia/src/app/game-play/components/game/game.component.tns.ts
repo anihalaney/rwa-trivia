@@ -5,15 +5,17 @@ import { User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { Game } from './game';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
+
+@AutoUnsubscribe()
 export class GameComponent extends Game implements OnInit, OnDestroy {
   user: User;
-  subs: Subscription[] = [];
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   displayQuestion = false;
@@ -27,6 +29,6 @@ export class GameComponent extends Game implements OnInit, OnDestroy {
 
   }
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 }

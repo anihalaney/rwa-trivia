@@ -1,13 +1,12 @@
 import { Component, OnInit, OnDestroy, Renderer2, Inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
 import { map, skip, take, filter } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
-import { Utils } from 'shared-library/core/services';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { User } from 'shared-library/shared/model';
 import { Location } from '@angular/common';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 
 @Component({
@@ -15,10 +14,11 @@ import { Location } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
+@AutoUnsubscribe()
 export class AppComponent implements OnInit, OnDestroy {
   title = 'trivia!';
   user: User;
-  sub: Subscription;
 
 
   theme = '';
@@ -27,11 +27,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public router: Router,
     private location: Location,
-    private utils: Utils) {
+   ) {
 
 
 
-    this.sub = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
+    store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
         let url: string;
@@ -52,7 +52,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe([this.sub]);
   }
 
   login() {

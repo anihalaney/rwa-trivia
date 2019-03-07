@@ -1,23 +1,26 @@
-import { Component, OnInit, Inject, NgZone } from '@angular/core';
+import { Component, OnInit, Inject, NgZone, OnDestroy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import { PlayerMode, GameStatus } from 'shared-library/shared/model';
-import { WindowRef, Utils } from 'shared-library/core/services';
+import { WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { User } from 'shared-library/shared/model';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { Utils } from '../../../../../shared-library/src/lib/core/services';
 
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss', './dashboard.scss']
 })
-export class DashboardComponent extends Dashboard implements OnInit {
+
+@AutoUnsubscribe()
+export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   gameStatus: any;
-
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
     gameActions: GameActions,
@@ -42,7 +45,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
   ngOnInit() {
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; }));
+    this.userDict$.subscribe(userDict => { this.userDict = userDict; });
 
   }
 
@@ -77,6 +80,9 @@ export class DashboardComponent extends Dashboard implements OnInit {
 
   filterTwoPlayerWaitNextQGame(game: any, gameStatus, user: User) {
     return game.GameStatus === gameStatus.WAITING_FOR_NEXT_Q;
+  }
+
+  ngOnDestroy(): void {
   }
 }
 

@@ -10,12 +10,14 @@ import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
-@AutoUnsubscribe()
+
 @Component({
   selector: 'game',
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
+
+@AutoUnsubscribe()
 export class GameComponent implements OnInit, OnDestroy {
   user: User;
   dialogRef: MatDialogRef<GameDialogComponent>;

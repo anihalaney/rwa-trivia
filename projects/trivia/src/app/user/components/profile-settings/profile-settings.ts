@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { User, Category, profileSettingsConstants } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
@@ -9,9 +9,12 @@ import { userState } from '../../../user/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { UserActions } from 'shared-library/core/store';
-import { ViewChildren, QueryList, HostListener } from '@angular/core';
+import { ViewChildren, QueryList, HostListener, OnDestroy } from '@angular/core';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
-export class ProfileSettings {
+
+@AutoUnsubscribe()
+export class ProfileSettings implements OnDestroy {
     @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
     user: User;
@@ -117,9 +120,9 @@ export class ProfileSettings {
     }
 
     ValidateUrl(control: AbstractControl) {
-            if (control.value.toLowerCase().includes('http') || control.value.toLowerCase().includes('www')) {
-                return { validUrl: true };
-            }
+        if (control.value.toLowerCase().includes('http') || control.value.toLowerCase().includes('www')) {
+            return { validUrl: true };
+        }
         return null;
     }
 
@@ -225,5 +228,9 @@ export class ProfileSettings {
 
     onSocialProfileInputFocus(i) {
         this.inputEl.toArray()[i].nativeElement.focus();
+    }
+
+    ngOnDestroy() {
+
     }
 }

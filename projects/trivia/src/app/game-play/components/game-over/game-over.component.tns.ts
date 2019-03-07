@@ -12,12 +12,15 @@ import * as SocialShare from "nativescript-social-share";
 import { Image } from "tns-core-modules/ui/image";
 import { coreState } from 'shared-library/core/store';
 import * as Toast from 'nativescript-toast';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'game-over',
   templateUrl: './game-over.component.html',
   styleUrls: ['./game-over.component.scss']
 })
+
+@AutoUnsubscribe()
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   stackLayout;
@@ -27,15 +30,15 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     private modal: ModalDialogService, private vcRef: ViewContainerRef) {
     super(store, userActions, utils);
 
-    this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => { }));
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => { });
+    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         Toast.makeText(status).show();
         this.disableFriendInviteBtn = true;
       }
-    }));
+    });
 
-    this.subs.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -49,7 +52,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         this.socialFeedData.share_status = false;
         this.loaderStatus = false;
       }
-    }));
+    });
   }
   ngOnInit() {
     if (this.game) {
@@ -64,7 +67,6 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
   }
 
   openDialog(question) {

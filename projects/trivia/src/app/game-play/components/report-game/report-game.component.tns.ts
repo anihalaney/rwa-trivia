@@ -10,12 +10,15 @@ import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import * as Toast from 'nativescript-toast';
 import { Utils } from 'shared-library/core/services';
 import { isAndroid } from 'tns-core-modules/ui/page/page';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
     styleUrls: ['./report-game.component.scss']
 })
+
+@AutoUnsubscribe()
 export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
@@ -31,14 +34,13 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     reportOptions?: Array<ReportOption>;
     selectedOption: string = null;
     otherReason: string = null;
-    subs: Subscription[] = [];
     @ViewChildren('textField') textField : QueryList<ElementRef>;
 
     constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils) {
         this.categoryDict$ = store.select(categoryDictionary);
-        this.subs.push(this.categoryDict$.subscribe(categoryDict => {
+        this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
-        }));
+        });
 
         this.question = params.context.question;
         this.user = params.context.user;
@@ -127,7 +129,6 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.utils.unsubscribe(this.subs);
     }
 
     hideKeyboard() {

@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestroy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -13,13 +13,16 @@ import { AppState, appState, categoryDictionary, getCategories, getTags } from '
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'app-bulk-summary-questions',
   templateUrl: './bulk-summary-question.component.html',
   styleUrls: ['./bulk-summary-question.component.scss']
 })
-export class BulkSummaryQuestionComponent implements OnInit {
+
+@AutoUnsubscribe()
+export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
 
   unPublishedQuestions: Question[];
   publishedQuestions: Question[];
@@ -40,7 +43,6 @@ export class BulkSummaryQuestionComponent implements OnInit {
   isAdminUrl: boolean;
   user: User;
 
-  sub: Subscription;
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
@@ -152,7 +154,7 @@ export class BulkSummaryQuestionComponent implements OnInit {
 
   updateBulkUploadedApprovedQuestionStatus(question: Question) {
     this.loadBulkUploadById(question);
-    this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
       if (obj) {
         this.bulkUploadFileInfo = obj;
         if (question.status === QuestionStatus.REJECTED) {
@@ -161,14 +163,13 @@ export class BulkSummaryQuestionComponent implements OnInit {
         this.bulkUploadFileInfo.approved = this.bulkUploadFileInfo.approved + 1;
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        this.utils.unsubscribe([this.sub]);
       }
     });
   }
 
   updateBulkUploadedRequestToChangeQuestionStatus(question: Question) {
     this.loadBulkUploadById(question);
-    this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
       if (obj) {
         this.bulkUploadFileInfo = obj;
         if (this.bulkUploadFileInfo.rejected > 0) {
@@ -176,24 +177,26 @@ export class BulkSummaryQuestionComponent implements OnInit {
         }
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        this.utils.unsubscribe([this.sub]);
       }
     });
   }
 
   updateBulkUploadedRejectQuestionStatus(question: Question) {
     this.loadBulkUploadById(question);
-    this.sub = this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
       if (obj) {
         this.bulkUploadFileInfo = obj;
         this.bulkUploadFileInfo.rejected = this.bulkUploadFileInfo.rejected + 1;
         this.updateBulkUpload(this.bulkUploadFileInfo);
         this.bulkUploadFileInfo = undefined;
-        this.utils.unsubscribe([this.sub]);
       }
     });
   }
 
+
+  ngOnDestroy() {
+
+  }
 }
 
 
