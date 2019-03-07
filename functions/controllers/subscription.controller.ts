@@ -1,9 +1,10 @@
 
 import { Subscription } from '../utils/subscription';
 import { Utils } from '../utils/utils';
-import { interceptorConstants } from 'shared-library/shared/model';
+import { interceptorConstants } from '../../projects/shared-library/src/lib/shared/model';
 
 export class SubscriptionController {
+
     /**
      * getSubscriptionCount
      * return count
@@ -13,7 +14,8 @@ export class SubscriptionController {
             const subscribers = await Subscription.getTotalSubscription();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, subscribers);
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
+
 }

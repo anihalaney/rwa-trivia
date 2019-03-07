@@ -72,7 +72,8 @@ export class QuestionService {
     const queryObservables = [];
 
     if (filterStatus && filterStatus.length > 0) {
-      filterStatus.map((status) => {
+
+      for (const status of filterStatus) {
         queryParams.condition = [];
         let queryParam = new QueryParam('source', '==', question_source);
         queryParams.condition.push(queryParam);
@@ -80,7 +81,7 @@ export class QuestionService {
         queryParams.condition.push(queryParam);
 
         queryObservables.push(this.dbService.valueChanges('unpublished_questions', '', { ...queryParams }));
-      });
+      }
     } else {
       queryParams.condition = [];
       queryObservables.push(this.dbService.valueChanges('unpublished_questions', '', queryParams));

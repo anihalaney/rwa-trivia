@@ -7,6 +7,7 @@ import { Utils } from '../utils/utils';
 export class LeaderBoardService {
 
     private static leaderBoardFireStoreClient = admin.firestore();
+    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
      * getLeaderBoardStats
@@ -30,7 +31,7 @@ export class LeaderBoardService {
     static async setLeaderBoardStats(leaderBoardStat: any): Promise<any> {
         try {
             return await this.leaderBoardFireStoreClient
-                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES}`)
+                .doc(`${this.FS}${CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES}`)
                 .set(leaderBoardStat);
         } catch (error) {
             return Utils.throwError(error);

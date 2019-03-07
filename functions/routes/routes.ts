@@ -1,5 +1,5 @@
 
-import { appConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { appConstants, GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 import * as express from 'express';
 import questionRoutes from './question-routes';
 import subscriptionRoutes from './subscription-routes';
@@ -11,19 +11,37 @@ import gameRoutes from './game-routes';
 import userRoutes from './user-routes';
 
 class Router {
-
+    private FS = GeneralConstants.FORWARD_SLASH;
     public router: any;
 
     constructor() {
+
         this.router = express.Router();
-        this.router.use(`/${appConstants.API_PREFIX}/question`, questionRoutes);
-        this.router.use(`/${appConstants.API_PREFIX}/subscription`, subscriptionRoutes);
-        this.router.use(`/${appConstants.API_PREFIX}/game`, gameRoutes);
-        this.router.use(`/${appConstants.API_PREFIX}/general`, generalRoutes);
-        this.router.use(`/${appConstants.API_PREFIX}/migration`, migrationRoutes);
-        this.router.use(`/${appConstants.API_PREFIX}/scheduler`, schedulerRoutes);
-        this.router.use(`/${appConstants.API_PREFIX}/friend`, friendRoutes);
-        this.router.use(`/${appConstants.API_PREFIX}/user`, userRoutes);
+
+        //  '/app/question'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.QUESTION}`, questionRoutes);
+
+        //  '/app/subscription'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
+
+        //  '/app/game'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.GAME}`, gameRoutes);
+
+        //  '/app/general'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.GENERAL}`, generalRoutes);
+
+        //  '/app/migration'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.MIGRATION}`, migrationRoutes);
+
+        //  '/app/scheduler'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.SCHEDULER}`, schedulerRoutes);
+
+        //  '/app/friend'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.FRIEND}`, friendRoutes);
+
+        //  '/app/user'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.USER}`, userRoutes);
+
     }
 }
 

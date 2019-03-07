@@ -1,5 +1,5 @@
 import {
-    Game, Blog, RSSFeedConstants, interceptorConstants, ResponseMessagesConstants
+    Game, Blog, RSSFeedConstants, interceptorConstants, ResponseMessagesConstants, schedulerConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { BlogService } from '../services/blog.service';
 import { GameService } from '../services/game.service';
@@ -11,7 +11,8 @@ const Feed = require('feed-to-json');
 
 export class SchedulerController {
 
-    private static appSettings: AppSettings = new AppSettings();
+    private static appSettings: AppSettings;
+
     /* checkGameOver
     * return status
     */
@@ -20,7 +21,7 @@ export class SchedulerController {
             await GameMechanics.doGameOverOperations();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.SCHEDULER_CHECK_GAME_OVER_IS_COMPLETED);
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -39,20 +40,23 @@ export class SchedulerController {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.SCHEDULER_CHANGE_GAME_TURN_IS_COMPLETED);
 
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
     // Schedular for add lives
     static async addLives(req, res): Promise<any> {
+        SchedulerController.appSettings = new AppSettings();
         try {
-            const appSetting = await this.appSettings.getAppSettings();
+            const appSetting = await SchedulerController.appSettings.getAppSettings();
             if (appSetting.lives.enable) {
-                return res.status(200).send(AccountService.addLives());
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, await AccountService.addLives());
+            } else {
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.LIVE_FEATURES_IS_NOT_ENABLED);
             }
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.LIVE_FEATURES_IS_NOT_ENABLED);
+
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 
@@ -79,7 +83,7 @@ export class SchedulerController {
                     blog.commentCount = commentCount;
                     blog.viewCount = viewCount;
                     blog.share_status = false;
-                    delete blog['description'];
+                    delete blog[schedulerConstants.DESCRIPTION];
                     const result = blog.content.match(/<p>(.*?)<\/p>/g).map((val) => {
                         return val.replace(/<\/?p>/g, '');
                     });
@@ -107,7 +111,7 @@ export class SchedulerController {
                 }
             });
         } catch (error) {
-            Utils.sendErr(res, error);
+            Utils.sendError(res, error);
         }
     }
 }

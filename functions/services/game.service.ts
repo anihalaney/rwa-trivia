@@ -6,6 +6,7 @@ import { Utils } from '../utils/utils';
 export class GameService {
 
     private static gameFireStoreClient = admin.firestore();
+    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
      * getAvailableGames
@@ -87,7 +88,7 @@ export class GameService {
     static async getGameById(gameId: string): Promise<any> {
         try {
             const gameData = await this.gameFireStoreClient
-                .doc(`${CollectionConstants.GAMES}${GeneralConstants.FORWARD_SLASH}${gameId}`)
+                .doc(`${CollectionConstants.GAMES}${this.FS}${gameId}`)
                 .get();
             if (!gameData.exists) {
                 // game not found
@@ -106,7 +107,7 @@ export class GameService {
     static async setGame(dbGame: any): Promise<any> {
         try {
             return await this.gameFireStoreClient
-                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}${GeneralConstants.FORWARD_SLASH}${dbGame.id}`)
+                .doc(`${this.FS}${CollectionConstants.GAMES}${this.FS}${dbGame.id}`)
                 .set(dbGame);
         } catch (error) {
             return Utils.throwError(error);
@@ -122,7 +123,7 @@ export class GameService {
         try {
             return this.getGames(
                 await this.gameFireStoreClient
-                    .collection(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}`)
+                    .collection(`${this.FS}${CollectionConstants.GAMES}`)
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, true)
                     .get()
             );
@@ -138,7 +139,7 @@ export class GameService {
     static async updateGame(dbGame: any): Promise<any> {
         try {
             return await this.gameFireStoreClient
-                .doc(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}${GeneralConstants.FORWARD_SLASH}${dbGame.id}`)
+                .doc(`${this.FS}${CollectionConstants.GAMES}${this.FS}${dbGame.id}`)
                 .update(dbGame);
         } catch (error) {
             return Utils.throwError(error);
@@ -153,7 +154,7 @@ export class GameService {
         try {
             return this.getGames(
                 await this.gameFireStoreClient
-                    .collection(`${GeneralConstants.FORWARD_SLASH}${CollectionConstants.GAMES}`)
+                    .collection(`${this.FS}${CollectionConstants.GAMES}`)
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                     .get()
             );
