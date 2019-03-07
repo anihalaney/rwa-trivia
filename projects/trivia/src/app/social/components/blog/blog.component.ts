@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
@@ -7,16 +7,18 @@ import { AppState, appState } from '../../../store';
 @Component({
   selector: 'blog',
   templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.scss']
+  styleUrls: ['./blog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BlogComponent implements OnDestroy {
   @Input() blogId: number;
   sub: Subscription;
   blogData = [];
 
-  constructor(private store: Store<AppState>, private utils: Utils) {
+  constructor(private store: Store<AppState>, private utils: Utils, private cd: ChangeDetectorRef) {
     this.sub = this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
+      this.cd.markForCheck();
     });
   }
 
