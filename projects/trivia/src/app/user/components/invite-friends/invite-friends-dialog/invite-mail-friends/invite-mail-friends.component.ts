@@ -30,7 +30,8 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   @ViewChildren('textField') textField: QueryList<ElementRef>;
 
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef) {
+  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef,
+    private utils: Utils) {
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {

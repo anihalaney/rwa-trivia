@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
@@ -10,7 +10,7 @@ import { AppState, appState } from '../../../store';
   styleUrls: ['./blog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BlogComponent implements OnDestroy , AfterViewInit{
+export class BlogComponent implements OnDestroy , AfterViewInit {
   @Input() blogId: number;
   sub: Subscription;
   blogData = [];
