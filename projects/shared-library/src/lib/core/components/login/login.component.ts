@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { CoreState, UIStateActions } from '../../store';
@@ -10,16 +10,18 @@ import { Login } from './login';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
-  
+
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     public dialogRef: MatDialogRef<LoginComponent>,
     private uiStateActions: UIStateActions,
     private utils: Utils,
-    private firebaseAuthService: FirebaseAuthService) {
+    private firebaseAuthService: FirebaseAuthService,
+    private cd: ChangeDetectorRef) {
     super(fb, store);
   }
 
@@ -45,6 +47,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         }).catch((error: Error) => {
           this.notificationMsg = error.message;
           this.errorStatus = true;
+        },
+       ).finally( () => {
+          this.cd.detectChanges();
         });
         break;
       case 1:
@@ -72,6 +77,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         }).catch((error: Error) => {
           this.notificationMsg = error.message;
           this.errorStatus = true;
+        }).finally( () => {
+          this.cd.detectChanges();
         });
         break;
       case 2:
@@ -82,13 +89,16 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs(this.notificationLogs));
+            this.cd.detectChanges();
           }, (error: Error) => {
             // Error
             this.notificationMsg = error.message;
             this.errorStatus = true;
+            this.cd.detectChanges();
           }).catch((error: Error) => {
             this.notificationMsg = error.message;
             this.errorStatus = true;
+            this.cd.detectChanges();
           });
     }
   }
