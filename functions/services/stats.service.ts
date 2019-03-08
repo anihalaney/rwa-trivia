@@ -13,8 +13,8 @@ export class StatsService {
      */
     static async getSystemStats(statName: string): Promise<any> {
         try {
-            const systemStat = await this.statsFireStoreClient
-                .doc(`${CollectionConstants.STATS}${this.FS}${statName}`)
+            const systemStat = await StatsService.statsFireStoreClient
+                .doc(`${CollectionConstants.STATS}${StatsService.FS}${statName}`)
                 .get();
             return systemStat.data();
         } catch (error) {
@@ -28,8 +28,8 @@ export class StatsService {
      */
     static async setSystemStats(statName: string, SystemStat: any): Promise<any> {
         try {
-            return await this.statsFireStoreClient
-                .doc(`${CollectionConstants.STATS}${this.FS}${statName}`)
+            return await StatsService.statsFireStoreClient
+                .doc(`${CollectionConstants.STATS}${StatsService.FS}${statName}`)
                 .set(SystemStat);
         } catch (error) {
             return Utils.throwError(error);

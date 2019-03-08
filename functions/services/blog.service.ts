@@ -12,11 +12,11 @@ export class BlogService {
      */
     static async setBlog(blogs: Array<Blog>): Promise<any> {
         try {
-            const batch = this.blogFireStoreClient.batch();
+            const batch = BlogService.blogFireStoreClient.batch();
             for (const blog of blogs) {
                 const pub_date = new Date(blog.pubDate).getTime() + '';
                 blog.id = Number(pub_date);
-                const blogInstance = this.blogFireStoreClient.collection(CollectionConstants.BLOGS).doc(pub_date);
+                const blogInstance = BlogService.blogFireStoreClient.collection(CollectionConstants.BLOGS).doc(pub_date);
                 batch.set(blogInstance, blog);
             }
             return await batch.commit();

@@ -15,7 +15,7 @@ export class LeaderBoardService {
      */
     static async getLeaderBoardStats(): Promise<any> {
         try {
-            const lbsStats = await this.leaderBoardFireStoreClient.
+            const lbsStats = await LeaderBoardService.leaderBoardFireStoreClient.
                 doc(CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES).
                 get();
             return (lbsStats.data()) ? lbsStats.data() : {};
@@ -30,8 +30,8 @@ export class LeaderBoardService {
      */
     static async setLeaderBoardStats(leaderBoardStat: any): Promise<any> {
         try {
-            return await this.leaderBoardFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES}`)
+            return await LeaderBoardService.leaderBoardFireStoreClient
+                .doc(`${LeaderBoardService.FS}${CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES}`)
                 .set(leaderBoardStat);
         } catch (error) {
             return Utils.throwError(error);

@@ -3,7 +3,7 @@ import {
     ResponseMessagesConstants, interceptorConstants,
     HeaderConstants, GeneralConstants
 } from '../../projects/shared-library/src/lib/shared/model';
-import { appSettings } from '../services/app-settings.service';
+import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
 import { AccountService } from '../services/account.service';
@@ -34,7 +34,7 @@ export class GameController {
 
 
             // Get App Settings
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
 
             if (appSetting.lives.enable) {
                 // Get Account Info

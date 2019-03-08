@@ -13,7 +13,11 @@ export class BulkUploadService {
      */
     static async getBulkUpload(): Promise<any> {
         try {
-            return Utils.getValesFromFirebaseSnapshot(await this.bulkUploadFireStoreClient.collection(this.BS).get());
+            return Utils.getValesFromFirebaseSnapshot(
+                await BulkUploadService.bulkUploadFireStoreClient
+                    .collection(BulkUploadService.BS)
+                    .get()
+            );
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -25,8 +29,8 @@ export class BulkUploadService {
      */
     static async setBulkUpload(dbBulkUpload: any): Promise<any> {
         try {
-            return await this.bulkUploadFireStoreClient.
-                doc(`${this.FS}${CollectionConstants.BULK_UPLOADS}${this.FS}${dbBulkUpload.id}`).
+            return await BulkUploadService.bulkUploadFireStoreClient.
+                doc(`${BulkUploadService.FS}${CollectionConstants.BULK_UPLOADS}${BulkUploadService.FS}${dbBulkUpload.id}`).
                 set(dbBulkUpload);
         } catch (error) {
             return Utils.throwError(error);

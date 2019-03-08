@@ -13,7 +13,7 @@ export class FriendService {
      */
     static async createInvitation(dbInvitation: any): Promise<any> {
         try {
-            return await this.friendFireStoreClient.collection(CollectionConstants.INVITATIONS).add(dbInvitation);
+            return await FriendService.friendFireStoreClient.collection(CollectionConstants.INVITATIONS).add(dbInvitation);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -25,8 +25,8 @@ export class FriendService {
      */
     static async getInvitationByToken(token: any): Promise<any> {
         try {
-            const invitationData = await this.friendFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.INVITATIONS}${this.FS}${token}`)
+            const invitationData = await FriendService.friendFireStoreClient
+                .doc(`${FriendService.FS}${CollectionConstants.INVITATIONS}${FriendService.FS}${token}`)
                 .get();
             return invitationData.data();
         } catch (error) {
@@ -41,7 +41,7 @@ export class FriendService {
     static async checkInvitation(email: string, userId: string): Promise<any> {
         try {
             return Utils.getValesFromFirebaseSnapshot(
-                await this.friendFireStoreClient
+                await FriendService.friendFireStoreClient
                     .collection(CollectionConstants.INVITATIONS)
                     .where(GeneralConstants.CREATED_UID, GeneralConstants.DOUBLE_EQUAL, userId)
                     .where(GeneralConstants.EMAIL, GeneralConstants.DOUBLE_EQUAL, email)
@@ -58,8 +58,8 @@ export class FriendService {
      */
     static async updateInvitation(invitation: any) {
         try {
-            return await this.friendFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.INVITATIONS}${this.FS}${invitation.id}`)
+            return await FriendService.friendFireStoreClient
+                .doc(`${FriendService.FS}${CollectionConstants.INVITATIONS}${FriendService.FS}${invitation.id}`)
                 .update(invitation);
         } catch (error) {
             return Utils.throwError(error);
@@ -72,8 +72,8 @@ export class FriendService {
      */
     static async getFriendByInvitee(invitee: any): Promise<any> {
         try {
-            const friends = await this.friendFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.FRIENDS}${this.FS}${invitee}`)
+            const friends = await FriendService.friendFireStoreClient
+                .doc(`${FriendService.FS}${CollectionConstants.FRIENDS}${FriendService.FS}${invitee}`)
                 .get();
             return friends.data();
         } catch (error) {
@@ -87,8 +87,8 @@ export class FriendService {
      */
     static async updateFriend(myFriends: any, invitee: any): Promise<any> {
         try {
-            return await this.friendFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.FRIENDS}${this.FS}${invitee}`)
+            return await FriendService.friendFireStoreClient
+                .doc(`${FriendService.FS}${CollectionConstants.FRIENDS}${FriendService.FS}${invitee}`)
                 .update({ myFriends: myFriends });
         } catch (error) {
             return Utils.throwError(error);
@@ -101,8 +101,8 @@ export class FriendService {
      */
     static async setFriend(dbUser: any, invitee: any): Promise<any> {
         try {
-            return await this.friendFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.FRIENDS}${this.FS}${invitee}`)
+            return await FriendService.friendFireStoreClient
+                .doc(`${FriendService.FS}${CollectionConstants.FRIENDS}${FriendService.FS}${invitee}`)
                 .set(dbUser);
         } catch (error) {
             return Utils.throwError(error);

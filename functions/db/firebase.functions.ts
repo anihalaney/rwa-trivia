@@ -15,7 +15,7 @@ import { MailClient } from '../utils/mail-client';
 import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
-import { appSettings } from '../services/app-settings.service';
+import { AppSettings } from '../services/app-settings.service';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -145,7 +145,7 @@ export class FirebaseFunctions {
 
                 await SystemStatsCalculations.updateSystemStats('total_users');
 
-                const appSetting = await appSettings.getAppSettings();
+                const appSetting = await AppSettings.Instance.getAppSettings();
                 if (appSetting.lives.enable) {
                     const accountObj: any = {};
                     accountObj.id = data.userId;

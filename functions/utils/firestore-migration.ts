@@ -10,7 +10,7 @@ export class FirestoreMigration {
     try {
       // const admin = admin;
       const categories: Category[] = [];
-      const catRef = admin.database().ref(`${this.FS}${CollectionConstants.CATEGORIES}`);
+      const catRef = admin.database().ref(`${FirestoreMigration.FS}${CollectionConstants.CATEGORIES}`);
       return catRef.once(GeneralConstants.VALUE, (cs) => {
         for (const c of cs) {
           // console.log(c.key);
@@ -27,7 +27,7 @@ export class FirestoreMigration {
 
         const batch = admin.firestore().batch();
         for (const category of categories) {
-          const doc = admin.firestore().doc(`${CollectionConstants.CATEGORIES}${this.FS}${category.id}`);
+          const doc = admin.firestore().doc(`${CollectionConstants.CATEGORIES}${FirestoreMigration.FS}${category.id}`);
           console.log(doc);
           batch.set(doc, category);
 
@@ -47,7 +47,7 @@ export class FirestoreMigration {
       // const promise = new Promise<string[]>(resolve, reject);
       // const admin = migrateFireBaseClient;
       const tags: string[] = [];
-      const tagRef = admin.database().ref(`${this.FS}${CollectionConstants.TAG_LIST}`);
+      const tagRef = admin.database().ref(`${FirestoreMigration.FS}${CollectionConstants.TAG_LIST}`);
       return tagRef.once(GeneralConstants.VALUE, (ts) => {
         for (const t of ts) {
           // console.log(c.key);
@@ -84,7 +84,7 @@ export class FirestoreMigration {
 
         console.log(questions[0]);
 
-        const l = await this.firestoreBatchWrite(destinationCollection, questions, GeneralConstants.ID, 0, admin.firestore());
+        const l = await FirestoreMigration.firestoreBatchWrite(destinationCollection, questions, GeneralConstants.ID, 0, admin.firestore());
         return l;
       });
     } catch (error) {
@@ -112,7 +112,7 @@ export class FirestoreMigration {
 
         console.log(games[0]);
 
-        return await this.firestoreBatchWrite(destinationCollection, games, GeneralConstants.ID, 0, admin.firestore());
+        return await FirestoreMigration.firestoreBatchWrite(destinationCollection, games, GeneralConstants.ID, 0, admin.firestore());
 
       });
     } catch (error) {
@@ -132,13 +132,13 @@ export class FirestoreMigration {
 
       const batch = await firestore.batch();
       for (const item of arr) {
-        const doc = await firestore.doc(`${collection}${this.FS}${item[idField]}`);
+        const doc = await firestore.doc(`${collection}${FirestoreMigration.FS}${item[idField]}`);
         console.log(doc);
         batch.set(doc, item);
       }
       console.log('Commiting questions batch: ' + start);
       await batch.commit();
-      return await this.firestoreBatchWrite(collection, dataItems, idField, start + BATCH_SIZE, firestore);
+      return await FirestoreMigration.firestoreBatchWrite(collection, dataItems, idField, start + BATCH_SIZE, firestore);
     } catch (error) {
       return Utils.throwError(error);
     }
