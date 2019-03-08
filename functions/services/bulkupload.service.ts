@@ -4,7 +4,6 @@ import { CollectionConstants, GeneralConstants } from '../../projects/shared-lib
 export class BulkUploadService {
 
     private static bulkUploadFireStoreClient = admin.firestore();
-    private static FS = GeneralConstants.FORWARD_SLASH;
     private static BS = CollectionConstants.BULK_UPLOADS;
 
     /**
@@ -30,7 +29,7 @@ export class BulkUploadService {
     static async setBulkUpload(dbBulkUpload: any): Promise<any> {
         try {
             return await BulkUploadService.bulkUploadFireStoreClient.
-                doc(`${BulkUploadService.FS}${CollectionConstants.BULK_UPLOADS}${BulkUploadService.FS}${dbBulkUpload.id}`).
+                doc(`/${CollectionConstants.BULK_UPLOADS}/${dbBulkUpload.id}`).
                 set(dbBulkUpload);
         } catch (error) {
             return Utils.throwError(error);

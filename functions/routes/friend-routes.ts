@@ -5,7 +5,6 @@ import { GeneralConstants, RoutesConstants } from '../../projects/shared-library
 
 class FriendRoutes {
 
-    private FS = GeneralConstants.FORWARD_SLASH;
     public friendRoutes: any;
 
     constructor() {
@@ -13,10 +12,10 @@ class FriendRoutes {
         this.friendRoutes = express.Router();
 
         //  '/'
-        this.friendRoutes.post(this.FS, FriendController.createFriends);
+        this.friendRoutes.post('/', FriendController.createFriends);
 
         //  '/invitation'
-        this.friendRoutes.post(`${this.FS}${RoutesConstants.INVITATION}`,
+        this.friendRoutes.post(`/${RoutesConstants.INVITATION}`,
             AuthMiddleware.authorizedOnly, FriendController.createInvitations);
 
     }

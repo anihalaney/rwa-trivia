@@ -5,7 +5,6 @@ import { CollectionConstants, GeneralConstants } from '../../projects/shared-lib
 export class FriendService {
 
     private static friendFireStoreClient = admin.firestore();
-    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
      * createInvitation
@@ -26,7 +25,7 @@ export class FriendService {
     static async getInvitationByToken(token: any): Promise<any> {
         try {
             const invitationData = await FriendService.friendFireStoreClient
-                .doc(`${FriendService.FS}${CollectionConstants.INVITATIONS}${FriendService.FS}${token}`)
+                .doc(`/${CollectionConstants.INVITATIONS}/${token}`)
                 .get();
             return invitationData.data();
         } catch (error) {
@@ -59,7 +58,7 @@ export class FriendService {
     static async updateInvitation(invitation: any) {
         try {
             return await FriendService.friendFireStoreClient
-                .doc(`${FriendService.FS}${CollectionConstants.INVITATIONS}${FriendService.FS}${invitation.id}`)
+                .doc(`/${CollectionConstants.INVITATIONS}/${invitation.id}`)
                 .update(invitation);
         } catch (error) {
             return Utils.throwError(error);
@@ -73,7 +72,7 @@ export class FriendService {
     static async getFriendByInvitee(invitee: any): Promise<any> {
         try {
             const friends = await FriendService.friendFireStoreClient
-                .doc(`${FriendService.FS}${CollectionConstants.FRIENDS}${FriendService.FS}${invitee}`)
+                .doc(`/${CollectionConstants.FRIENDS}/${invitee}`)
                 .get();
             return friends.data();
         } catch (error) {
@@ -88,7 +87,7 @@ export class FriendService {
     static async updateFriend(myFriends: any, invitee: any): Promise<any> {
         try {
             return await FriendService.friendFireStoreClient
-                .doc(`${FriendService.FS}${CollectionConstants.FRIENDS}${FriendService.FS}${invitee}`)
+                .doc(`/${CollectionConstants.FRIENDS}/${invitee}`)
                 .update({ myFriends: myFriends });
         } catch (error) {
             return Utils.throwError(error);
@@ -102,7 +101,7 @@ export class FriendService {
     static async setFriend(dbUser: any, invitee: any): Promise<any> {
         try {
             return await FriendService.friendFireStoreClient
-                .doc(`${FriendService.FS}${CollectionConstants.FRIENDS}${FriendService.FS}${invitee}`)
+                .doc(`/${CollectionConstants.FRIENDS}/${invitee}`)
                 .set(dbUser);
         } catch (error) {
             return Utils.throwError(error);

@@ -6,7 +6,6 @@ import { GeneralConstants, RoutesConstants } from '../../projects/shared-library
 
 class SubscriptionRoutes {
 
-    private FS = GeneralConstants.FORWARD_SLASH;
     public subscriptionRoutes: any;
 
     constructor() {
@@ -14,7 +13,7 @@ class SubscriptionRoutes {
         this.subscriptionRoutes = express.Router();
 
         //  '/count'
-        this.subscriptionRoutes.get(`${this.FS}${RoutesConstants.COUNT}`, SubscriptionController.getSubscriptionCount);
+        this.subscriptionRoutes.get(`/${RoutesConstants.COUNT}`, SubscriptionController.getSubscriptionCount);
 
     }
 }

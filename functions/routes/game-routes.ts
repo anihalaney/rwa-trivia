@@ -6,8 +6,6 @@ import { GeneralConstants, RoutesConstants } from '../../projects/shared-library
 
 class GameRoutes {
 
-    private FS = GeneralConstants.FORWARD_SLASH;
-    private CL = GeneralConstants.COLON;
     private UID = RoutesConstants.USER_ID;
     private SID = RoutesConstants.SOCIAL_ID;
     public gameRoutes: any;
@@ -17,18 +15,18 @@ class GameRoutes {
         this.gameRoutes = express.Router();
 
         //  '/'
-        this.gameRoutes.post(this.FS, AuthMiddleware.authorizedOnly, GameController.createGame);
+        this.gameRoutes.post('/', AuthMiddleware.authorizedOnly, GameController.createGame);
 
         //  '/:gameId'
-        this.gameRoutes.put(`${this.FS}${this.CL}${RoutesConstants.GAME_ID}`,
+        this.gameRoutes.put(`/:${RoutesConstants.GAME_ID}`,
             AuthMiddleware.authorizedOnly, GameController.updateGame);
 
         //  '/social/:userId/:socialId'
-        this.gameRoutes.get(`${this.FS}${RoutesConstants.SOCIAL}${this.FS}${this.CL}${this.UID}${this.FS}${this.CL}${this.SID}`,
+        this.gameRoutes.get(`/${RoutesConstants.SOCIAL}/:${this.UID}/:${this.SID}`,
             GameController.createSocialContent);
 
         //  '/social-image/:userId/:socialId'
-        this.gameRoutes.get(`${this.FS}${RoutesConstants.SOCIAL_DASH_IMAGE}${this.FS}${this.CL}${this.UID}${this.FS}${this.CL}${this.SID}`,
+        this.gameRoutes.get(`/${RoutesConstants.SOCIAL_DASH_IMAGE}/:${this.UID}/:${this.SID}`,
             GameController.createSocialImage);
 
     }
