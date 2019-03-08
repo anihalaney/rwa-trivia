@@ -28,7 +28,8 @@ export class ProfileImagesGenerator {
 
     static async uploadProfileImage(user: User): Promise<any> {
 
-        let filePath = `${ProfileImagesGenerator.basePath}/${user.userId}/${ProfileImagesGenerator.originalImagePath}/${user.profilePicture}`;
+        let filePath =
+            `${ProfileImagesGenerator.basePath}/${user.userId}/${ProfileImagesGenerator.originalImagePath}/${user.profilePicture}`;
         user.originalImageUrl = user.originalImageUrl.replace(/^data:image\/\w+;base64,/, '');
         let bufferStream = new Buffer(user.originalImageUrl, GeneralConstants.BASE64);
 
@@ -36,7 +37,8 @@ export class ProfileImagesGenerator {
 
             await UserService.uploadProfileImage(bufferStream, user.imageType, filePath);
 
-            filePath = `${ProfileImagesGenerator.basePath}/${user.userId}/${ProfileImagesGenerator.profileImagePath}/${user.profilePicture}`;
+            filePath =
+                `${ProfileImagesGenerator.basePath}/${user.userId}/${ProfileImagesGenerator.profileImagePath}/${user.profilePicture}`;
             user.croppedImageUrl = user.croppedImageUrl.replace(/^data:image\/\w+;base64,/, '');
             bufferStream = new Buffer(user.originalImageUrl, GeneralConstants.BASE64);
 
