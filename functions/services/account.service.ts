@@ -1,283 +1,290 @@
-const accountFireBaseClient = require('../db/firebase-client');
-const accountFireStoreClient = accountFireBaseClient.firestore();
-import { Account, Game } from '../../projects/shared-library/src/lib/shared/model';
-import { AppSettings } from './app-settings.service';
+import {
+    Account, Game, CollectionConstants,
+    GeneralConstants, LeaderBoardConstants, AccountConstants
+} from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
+import { appSettings } from './app-settings.service';
 
-const utils: Utils = new Utils();
-const appSettings: AppSettings = new AppSettings();
+export class AccountService {
 
-/**
- * getAccountById
- * return account
- */
-exports.getAccountById = async (id: string): Promise<any> => {
-    try {
-        return await accountFireStoreClient.doc(`/accounts/${id}`).get();
-    } catch (error) {
-        console.error(error);
-        throw error;
+    private static accountFireStoreClient = admin.firestore();
+
+    private static FS = GeneralConstants.FORWARD_SLASH;
+
+    /**
+     * getAccountById
+     * return account
+     */
+    static async getAccountById(id: string): Promise<any> {
+        try {
+            const accountData = await this.accountFireStoreClient.
+                doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${id}`).get();
+            return accountData.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
-};
+    /**
+     * setAccount
+     * return ref
+     */
+    static async setAccount(dbAccount: any): Promise<any> {
+        try {
+            return await this.accountFireStoreClient
+                .doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${dbAccount.id}`)
+                .set(dbAccount);
 
-
-/**
- * setAccount
- * return ref
- */
-exports.setAccount = async (dbAccount: any): Promise<any> => {
-    try {
-        return await accountFireStoreClient.doc(`/accounts/${dbAccount.id}`)
-            .set(dbAccount);
-
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-};
-
-/**
- * updateAccount
- * return ref
- */
-exports.updateAccountData = async (dbAccount: any): Promise<any> => {
-    try {
-        return await accountFireStoreClient.doc(`/accounts/${dbAccount.id}`).update(dbAccount);
-    } catch (error) {
-        console.error(error);
-        throw error;
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
-};
-
-/**
- * getAccounts
- * return accounts
- */
-exports.getAccounts = async (): Promise<any> => {
-    try {
-        return await accountFireStoreClient.collection('accounts').get();
-    } catch (error) {
-        console.error(error);
-        throw error;
+    /**
+     * updateAccount
+     * return ref
+     */
+    static async updateAccountData(dbAccount: any): Promise<any> {
+        try {
+            return await this.accountFireStoreClient
+                .doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${dbAccount.id}`)
+                .update(dbAccount);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
-};
 
-
-
-/**
- * calcualteAccountStat
- * return account
- */
-exports.calcualteAccountStat = (account: Account, game: Game, categoryIds: Array<number>, userId: string): Account => {
-    const score = game.stats[userId].score;
-    const avgAnsTime = game.stats[userId].avgAnsTime;
-    // console.log('categoryIds', categoryIds);
-    account = (account) ? account : new Account();
-    categoryIds.map((id) => {
-        account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
-        account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
-            account.leaderBoardStats[id] + score : score;
-    });
-    account['leaderBoardStats'] = { ...account.leaderBoardStats };
-    account.gamePlayed = (account.gamePlayed) ? account.gamePlayed + 1 : 1;
-    account.categories = Object.keys(account.leaderBoardStats).length;
-    if (game.winnerPlayerId) {
-        (game.winnerPlayerId === userId) ?
-            account.wins = (account.wins) ? account.wins + 1 : 1 :
-            account.losses = (account.losses) ? account.losses + 1 : 1;
+    /**
+     * getAccounts
+     * return accounts
+     */
+    static async getAccounts(): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(await this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).get());
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
-    account.badges = (account.badges) ? account.badges + score : score;
-    account.avgAnsTime = (account.avgAnsTime) ? Math.floor((account.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
 
-    return account;
-};
+    /**
+     * calculateAccountStat
+     * return account
+     */
+    static calculateAccountStat(account: Account, game: Game, categoryIds: Array<number>, userId: string): Account {
 
-/**
- * decrease life
- * return ref
- */
-exports.decreaseLife = async (userId): Promise<any> => {
-    try {
-        const appSetting = await appSettings.getAppSettings();
-        if (appSetting.lives.enable) {
-            const maxLives = appSetting.lives.max_lives;
-            const livesMillis = appSetting.lives.lives_after_add_millisecond;
-            const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
-            const docRef = await accountRef.get();
-            const timestamp = utils.getUTCTimeStamp();
-            if (docRef.exists) {
-                const account = docRef.data();
-                if (account.lives === maxLives || !account.lastLiveUpdate) {
-                    account.lastLiveUpdate = timestamp;
-                    account.nextLiveUpdate = utils.addMinutes(timestamp, livesMillis);
+        const score = game.stats[userId].score;
+        const avgAnsTime = game.stats[userId].avgAnsTime;
+        account = (account) ? account : new Account();
+
+        for (const id of categoryIds) {
+            account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
+            account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
+                account.leaderBoardStats[id] + score : score;
+        }
+
+        account[LeaderBoardConstants.LEADER_BOARD_STATS] = { ...account.leaderBoardStats };
+        account.gamePlayed = (account.gamePlayed) ? account.gamePlayed + 1 : 1;
+        account.categories = Object.keys(account.leaderBoardStats).length;
+
+        if (game.winnerPlayerId) {
+            (game.winnerPlayerId === userId) ?
+                account.wins = (account.wins) ? account.wins + 1 : 1 :
+                account.losses = (account.losses) ? account.losses + 1 : 1;
+        }
+
+        account.badges = (account.badges) ? account.badges + score : score;
+        account.avgAnsTime = (account.avgAnsTime) ? Math.floor((account.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
+
+        return account;
+    }
+
+    /**
+     * decrease life
+     * return ref
+     */
+    static async decreaseLife(userId) {
+        try {
+            const appSetting = await appSettings.getAppSettings();
+            if (appSetting.lives.enable) {
+                const maxLives = appSetting.lives.max_lives;
+                const livesMilles = appSetting.lives.lives_after_add_millisecond;
+                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
+                const docRef = await accountRef.get();
+                const timestamp = Utils.getUTCTimeStamp();
+                if (docRef.exists) {
+                    const account = docRef.data();
+                    if (account.lives === maxLives || !account.lastLiveUpdate) {
+                        account.lastLiveUpdate = timestamp;
+                        account.nextLiveUpdate = Utils.addMinutes(timestamp, livesMilles);
+                    }
+                    if (account.lives > 0) {
+                        account.lives += -1;
+                    }
+                    accountRef.update(account);
                 }
-                if (account.lives > 0) {
-                    account.lives += -1;
-                }
-                accountRef.update(account);
             }
+        } catch (error) {
+            return Utils.throwError(error);
         }
-    } catch (error) {
-        console.error(error);
-        throw error;
     }
-};
 
-
-/**
- * incrase number of lives set in appSettings
- * return ref
- */
-exports.increaseLives = async (userId): Promise<any> => {
-    try {
-        const appSetting = await appSettings.getAppSettings();
-        if (appSetting.lives.enable) {
-            await this.addLife(userId, appSetting);
+    /**
+     * increase number of lives set in appSettings
+     * return ref
+     */
+    static async increaseLives(userId): Promise<any> {
+        try {
+            const appSetting = await appSettings.getAppSettings();
+            if (appSetting.lives.enable) {
+                await this.addLife(userId, appSetting);
+            }
+        } catch (error) {
+            return Utils.throwError(error);
         }
-    } catch (error) {
-        console.error(error);
-        throw error;
     }
-};
 
-/**
- * add default number of lives into account
- * return ref
- */
-exports.addDefaultLives = async (user: any): Promise<any> => {
-    try {
-        const appSetting = await appSettings.getAppSettings();
-        if (appSetting.lives.enable) {
-            const maxLives = appSetting.lives.max_lives;
-            const accountRef = accountFireStoreClient.collection(`accounts`).doc(user.id);
+    /**
+     * add default number of lives into account
+     * return ref
+     */
+    static async addDefaultLives(user: any): Promise<any> {
+        try {
+            const appSetting = await appSettings.getAppSettings();
+            if (appSetting.lives.enable) {
+                const maxLives = appSetting.lives.max_lives;
+                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(user.id);
+                const docRef = await accountRef.get();
+                if (docRef.exists) {
+                    const account = docRef.data();
+                    if (!account.lives) {
+                        account.lives = maxLives;
+                        account.id = user.id;
+                        accountRef.update(account);
+                    }
+                } else {
+                    accountRef.set({ lives: maxLives, id: user.id });
+                }
+            }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * add number of lives into account(Schedular)
+     * return ref
+     */
+    static async addLives(): Promise<any> {
+        try {
+            const promises = [];
+            const appSetting = await appSettings.getAppSettings();
+            if (appSetting.lives.enable) {
+                const maxLives = appSetting.lives.max_lives;
+                let timestamp = Utils.getUTCTimeStamp();
+                const accountCollRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS)
+                    .where(AccountConstants.NEXT_LIVE_UPDATE,
+                        GeneralConstants.LESS_THAN_OR_EQUAL, timestamp);
+                const accounts = await accountCollRef.get();
+                const accountsNotHavingMaxLives = accounts.docs.filter(d => d.data().lives < maxLives);
+                for (const account of accountsNotHavingMaxLives) {
+                    timestamp = Utils.getUTCTimeStamp();
+                    const userAccount = account.data();
+                    promises.push(this.addLife(userAccount.id, appSetting));
+                }
+            }
+            return await Promise.all(promises);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * Add life to account
+     */
+    static async addLife(userId: String, appSetting): Promise<any> {
+        try {
+            const timestamp = Utils.getUTCTimeStamp();
+            const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
             const docRef = await accountRef.get();
+            const account = docRef.data();
             if (docRef.exists) {
-                const account = docRef.data();
-                if (!account.lives) {
-                    account.lives = maxLives;
-                    account.id = user.id;
+                if (account.lives < appSetting.lives.maxLives && account.nextLiveUpdate <= timestamp) {
+                    account.lives += appSetting.lives.livesAdd;
+                    if (account.lives > appSetting.lives.maxLives) {
+                        account.lives = appSetting.lives.maxLives;
+                    } else {
+                        // Update nextLiveUpdate
+                        account.nextLiveUpdate = Utils.addMinutes(timestamp, appSetting.lives.livesMillis);
+                    }
+                    account.lastLiveUpdate = timestamp;
                     accountRef.update(account);
                 }
             } else {
-                accountRef.set({ lives: maxLives, id: user.id });
+                accountRef.set({ lives: appSetting.lives.maxLives, id: userId });
             }
+        } catch (error) {
+            return Utils.throwError(error);
         }
-    } catch (error) {
-        console.error(error);
-        throw error;
     }
-};
 
-/**
- * add number of lives into account(Schedular)
- * return ref
- */
-
-exports.addLives = async (): Promise<any> => {
-    try {
-        const appSetting = await appSettings.getAppSettings();
-        if (appSetting.lives.enable) {
-            const maxLives = appSetting.lives.max_lives;
-            let timestamp = utils.getUTCTimeStamp();
-            const accountCollRef = accountFireStoreClient.collection('accounts')
-                .where('nextLiveUpdate', '<=', timestamp);
-            const accounts = await accountCollRef.get();
-            const accountsNotHavingMaxLives = accounts.docs.filter(d => d.data().lives < maxLives);
-            for (const account of accountsNotHavingMaxLives) {
-                timestamp = utils.getUTCTimeStamp();
-                const userAccount = account.data();
-                await this.addLife(userAccount.id, appSetting);
-            }
+    static async updateLives(userId): Promise<any> {
+        try {
+            return await this.increaseLives(userId);
+        } catch (error) {
+            return Utils.throwError(error);
         }
-    } catch (error) {
-        console.error(error);
-        return error;
     }
-};
 
-// add life to account
-exports.addLife = async (userId: String, appSetting): Promise<any> => {
-    try {
-        const timestamp = utils.getUTCTimeStamp();
-        const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
-        const docRef = await accountRef.get();
-        const account = docRef.data();
-        if (docRef.exists) {
-            if (account.lives < appSetting.lives.maxLives && account.nextLiveUpdate <= timestamp) {
-                account.lives += appSetting.lives.livesAdd;
-                if (account.lives > appSetting.lives.maxLives) {
-                    account.lives = appSetting.lives.maxLives;
+    /**
+     * set number of bits into account
+     */
+    static async setBits(userId: any): Promise<any> {
+        try {
+            const appSetting = await appSettings.getAppSettings();
+            if (appSetting.tokens.enable) {
+                const bits = appSetting.tokens.earn_bits;
+
+                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
+                const docRef = await accountRef.get();
+
+                if (docRef.exists) {
+                    const account = docRef.data();
+                    account.bits = (account.bits) ? (account.bits + bits) : bits;
+                    account.id = userId;
+                    accountRef.update(account);
                 } else {
-                    // Update nextLiveUpdate
-                    account.nextLiveUpdate = utils.addMinutes(timestamp, appSetting.lives.livesMillis);
+                    accountRef.set({ bits: bits, id: userId });
                 }
-                account.lastLiveUpdate = timestamp;
-                accountRef.update(account);
             }
-        } else {
-            accountRef.set({ lives: appSetting.lives.maxLives, id: userId });
+        } catch (error) {
+            return Utils.throwError(error);
         }
-    } catch (error) {
-        console.error(error);
-        throw error;
     }
-};
 
-exports.updateLives = (userId): Promise<any> => {
-    return this.increaseLives(userId);
-};
+    /**
+     * set number of bits into account
+     */
+    static async setBytes(userId: any): Promise<any> {
+        try {
+            const appSetting = await appSettings.getAppSettings();
+            if (appSetting.tokens.enable) {
+                const bytes = appSetting.tokens.earn_bytes;
+                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
+                const docRef = await accountRef.get();
 
-/**
- * set number of bits into account
- */
-exports.setBits = async (userId: any): Promise<any> => {
-    try {
-        const appSetting = await appSettings.getAppSettings();
-        if (appSetting.tokens.enable) {
-            const bits = appSetting.tokens.earn_bits;
-            console.log('not bits', bits);
-            const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
-            const docRef = await accountRef.get();
-
-            if (docRef.exists) {
-                const account = docRef.data();
-                account.bits = (account.bits) ? (account.bits + bits) : bits;
-                account.id = userId;
-                accountRef.update(account);
-            } else {
-                accountRef.set({ bits: bits, id: userId });
+                if (docRef.exists) {
+                    const account = docRef.data();
+                    account.bytes = (account.bytes) ? (account.bytes + bytes) : bytes;
+                    account.id = userId;
+                    accountRef.update(account);
+                } else {
+                    accountRef.set({ bytes: bytes, id: userId });
+                }
             }
+        } catch (error) {
+            return Utils.throwError(error);
         }
-    } catch (error) {
-        console.error(error);
-        throw error;
     }
-};
 
-/**
- * set number of bits into account
- */
-exports.setBytes = async (userId: any): Promise<any> => {
-    try {
-        const appSetting = await appSettings.getAppSettings();
-        if (appSetting.tokens.enable) {
-            const bytes = appSetting.tokens.earn_bytes;
-            const accountRef = accountFireStoreClient.collection(`accounts`).doc(userId);
-            const docRef = await accountRef.get();
-
-            if (docRef.exists) {
-                const account = docRef.data();
-                account.bytes = (account.bytes) ? (account.bytes + bytes) : bytes;
-                account.id = userId;
-                accountRef.update(account);
-            } else {
-                accountRef.set({ bytes: bytes, id: userId });
-            }
-        }
-    } catch (error) {
-        console.error(error);
-        throw error;
-    }
-};
+}

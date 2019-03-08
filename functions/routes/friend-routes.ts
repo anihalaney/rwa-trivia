@@ -1,12 +1,25 @@
 import * as express from 'express';
-const router = express.Router();
+import { FriendController } from '../controllers/friend.controller';
+import { AuthMiddleware } from '../middlewares/auth';
+import { GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 
+class FriendRoutes {
 
-const friendController = require('../controllers/friend.controller');
-const friendAuth = require('../middlewares/auth');
+    private FS = GeneralConstants.FORWARD_SLASH;
+    public friendRoutes: any;
 
-router.post('/', friendController.createFriends);
-router.post('/invitation', friendAuth.authorizedOnly, friendController.createInvitations);
+    constructor() {
 
+        this.friendRoutes = express.Router();
 
-module.exports = router;
+        //  '/'
+        this.friendRoutes.post(this.FS, FriendController.createFriends);
+
+        //  '/invitation'
+        this.friendRoutes.post(`${this.FS}${RoutesConstants.INVITATION}`,
+            AuthMiddleware.authorizedOnly, FriendController.createInvitations);
+
+    }
+}
+
+export default new FriendRoutes().friendRoutes;

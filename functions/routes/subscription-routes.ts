@@ -1,10 +1,23 @@
 
 import * as express from 'express';
-const router = express.Router();
-
-const subscriptionController = require('../controllers/subscription.controller');
-
-router.get('/count', subscriptionController.getSubscriptionCount);
+import { SubscriptionController } from '../controllers/subscription.controller';
+import { GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 
 
-module.exports = router;
+class SubscriptionRoutes {
+
+    private FS = GeneralConstants.FORWARD_SLASH;
+    public subscriptionRoutes: any;
+
+    constructor() {
+
+        this.subscriptionRoutes = express.Router();
+
+        //  '/count'
+        this.subscriptionRoutes.get(`${this.FS}${RoutesConstants.COUNT}`, SubscriptionController.getSubscriptionCount);
+
+    }
+}
+
+export default new SubscriptionRoutes().subscriptionRoutes;
+
