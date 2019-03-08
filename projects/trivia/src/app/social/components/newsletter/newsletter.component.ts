@@ -1,4 +1,4 @@
-import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { User, Subscription } from 'shared-library/shared/model';
@@ -16,7 +16,7 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
   styleUrls: ['./newsletter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NewsletterComponent implements OnInit, AfterViewInit {
+export class NewsletterComponent implements OnInit {
 
   subscriptionForm: FormGroup;
   user: User;
@@ -26,20 +26,11 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: FormBuilder, private store: Store<AppState>,
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(APP_ID) private appId: string,
-    private cd: ChangeDetectorRef) {
+    @Inject(APP_ID) private appId: string, private cd: ChangeDetectorRef) {
     this.subscriptionForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
-  }
 
-  ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.store.dispatch(new socialActions.GetTotalSubscriber());
-    }
-  }
-
-  ngAfterViewInit(): void {
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       this.user = user;
@@ -67,8 +58,14 @@ export class NewsletterComponent implements OnInit, AfterViewInit {
     });
     this.store.select(socialState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
-      this.cd.detectChanges();
+      this.cd.markForCheck();
     });
+  }
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.store.dispatch(new socialActions.GetTotalSubscriber());
+    }
   }
 
   onSubscribe() {

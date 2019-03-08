@@ -53,10 +53,6 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
     // }
     this.maxLeaderBoardDisplay = 10;
 
-  }
-
-  ngAfterViewInit(): void {
-
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
@@ -70,7 +66,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
-        this.cd.detectChanges();
+        // this.cd.detectChanges();
         if (this.leaderBoardCat.length > 0) {
           this.leaderBoardCat.map((cat) => {
             this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
@@ -87,6 +83,11 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
         }
       }
     }));
+
+  }
+
+  ngAfterViewInit(): void {
+
   }
 
   displayMore(): void {
