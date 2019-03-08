@@ -1,153 +1,201 @@
-const userFireBaseClient = require('../db/firebase-client');
-const userFireStoreClient = userFireBaseClient.firestore();
-const bucket = userFireBaseClient.storage().bucket();
-const stream = require('stream');
-import { User } from '../../projects/shared-library/src/lib/shared/model';
-/**
- * getUserById
- * return user
- */
-exports.getUserById = (userId: string): Promise<any> => {
-    return userFireStoreClient.doc(`/users/${userId}`)
-        .get()
-        .then(u => { return u })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+import { CollectionConstants, GeneralConstants, User, UserConstants } from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
+export class UserService {
 
-/**
- * setUser
- * return ref
- */
-exports.setUser = (dbUser: any): Promise<any> => {
-    return userFireStoreClient.doc(`/users/${dbUser.userId}`).update(dbUser).then(ref => { return ref })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+    private static fireStoreClient: any = admin.firestore();
+    private static bucket: any = admin.storage().bucket();
+    private static FS = GeneralConstants.FORWARD_SLASH;
 
-
-/**
- * getUsers
- * return users
- */
-exports.getUsers = (): Promise<any> => {
-    return userFireStoreClient.collection('users')
-        .get().then(users => { return users })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
-
-/**
- * getUsersByEmail
- * return users
- */
-exports.getUsersByEmail = (obj: any): Promise<any> => {
-    return userFireStoreClient.collection('users')
-        .where('email', '==', obj.email).get()
-        .then(users => { return users })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
-
-/**
- * Add/Update Authenticated Users
- * return ref
- */
-exports.addUpdateAuthUsersToFireStore = (users: Array<User>): Promise<any> => {
-    const BATCH_SIZE = 500;
-    const chunks: User[][] = [];
-
-    for (let i = 0; i < users.length; i += BATCH_SIZE) {
-        chunks.push(users.slice(i, i + BATCH_SIZE));
+    /**
+    * getUsers
+    * return users
+    */
+    static async getUsers(): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(await this.fireStoreClient.collection(CollectionConstants.USERS).get());
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
-    let promises: Promise<any>[];
-    chunks.map((chunk) => {
-        console.log(chunk);
-        promises = chunk.map((user) => {
-            const batch = userFireStoreClient.batch();
-            Object.keys(user).forEach(key => user[key] === undefined && delete user[key]);
-            const userInstance = userFireStoreClient.collection('users').doc(user.userId);
-            batch.set(userInstance, { ...user }, { merge: true });
-            return batch.commit().then((ref) => {
-                return ref;
-            });
-        });
-    });
+    /**
+     * getUserById
+     * return user
+    */
+    static async getUserById(userId: string): Promise<any> {
+        try {
+            const userData = await this.fireStoreClient
+                .doc(`${this.FS}${CollectionConstants.USERS}${this.FS}${userId}`)
+                .get();
+            return userData.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-    return Promise.all(promises);
-};
+    /**
+     * updateUser
+     * return ref
+     */
+    static async updateUser(dbUser: any): Promise<any> {
+        try {
+            return await this.fireStoreClient
+                .doc(`${this.FS}${CollectionConstants.USERS}${this.FS}${dbUser.userId}`)
+                .update(dbUser);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    /**
+     * getUsersByEmail
+     * return users
+     */
+    static async getUsersByEmail(obj: any): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await this.fireStoreClient
+                    .collection(CollectionConstants.USERS)
+                    .where(GeneralConstants.EMAIL, GeneralConstants.DOUBLE_EQUAL, obj.email)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-/**
- * generateProfileImage
- * return stream
- */
-exports.generateProfileImage = (userId: string, profilePicture: string, size: string): Promise<string> => {
-    const fileName = (size) ? `profile/${userId}/avatar/${size}/${profilePicture}` : `profile/${userId}/avatar/${profilePicture}`;
-    const file = bucket.file(fileName);
-    return file.download().then(streamData => {
-        return streamData[0];
-    }).catch(error => {
-        console.log('error', error);
-        return error;
-    })
-};
+    /**
+     * getUserProfile
+     * return user
+    */
+    static async getUserProfile(userId: string): Promise<any> {
+        try {
+            const dbUser: User = await this.getUserById(userId);
+            const user = new User();
+            user.displayName = (dbUser && dbUser.displayName) ? dbUser.displayName : '';
+            user.location = (dbUser && dbUser.location) ? dbUser.location : '';
+            user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
+            user.userId = userId;
+            return user;
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    /**
+   * getUserProfileImage
+   * return stream;
+  */
+    static async getUserProfileImage(userId: string, width: string, height: string): Promise<any> {
+        try {
+            const dbUser: User = await this.getUserById(userId);
+            return await this.generateProfileImage(userId, dbUser.profilePicture, `${width}*${height}`);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-/**
- * uploadProfileImage
- * return status
- */
-exports.uploadProfileImage = (data: any, mimeType: any, filePath: string, ): Promise<string> => {
+    /**
+     * generateProfileImage
+     * return stream
+     */
+    static async generateProfileImage(userId: string, profilePicture: string, size?: string): Promise<string> {
+        const fileName = (size) ?
+            `${UserConstants.PROFILE}${this.FS}${userId}${this.FS}${UserConstants.AVATAR}${this.FS}${size}${this.FS}${profilePicture}`
+            : `${UserConstants.PROFILE}${this.FS}${userId}${this.FS}${UserConstants.AVATAR}${this.FS}${profilePicture}`;
+        const file = this.bucket.file(fileName);
+        try {
+            const streamData = await file.download();
+            return streamData[0];
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-    const file = bucket.file(filePath);
-    const dataStream = new stream.PassThrough();
-    dataStream.push(data);
-    dataStream.push(null);
-    mimeType = (mimeType) ? mimeType : dataStream.mimetype;
+    /**
+     * Add/Update Authenticated Users
+     * return ref
+     */
+    static async addUpdateAuthUsersToFireStore(users: Array<User>): Promise<any> {
+        const BATCH_SIZE = 500;
+        const chunks: User[][] = [];
 
-    return new Promise((resolve, reject) => {
-        dataStream.pipe(file.createWriteStream({
-            metadata: {
-                contentType: mimeType,
-                metadata: {
-                    custom: 'metadata'
-                }
+        for (let i = 0; i < users.length; i += BATCH_SIZE) {
+            chunks.push(users.slice(i, i + BATCH_SIZE));
+        }
+
+        const promises: Promise<any>[] = [];
+        for (const chunk of chunks) {
+            for (const user of chunk) {
+                const batch = this.fireStoreClient.batch();
+                Object.keys(user).forEach(key => user[key] === undefined && delete user[key]);
+                const userInstance = this.fireStoreClient.collection(CollectionConstants.USERS).doc(user.userId);
+                batch.set(userInstance, { ...user }, { merge: true });
+
+                promises.push(batch.commit());
             }
-        }))
-            .on('error', function (err) {
-                console.log('error', err);
-                reject(err);
-            })
-            .on('finish', function () {
-                resolve('upload finished');
-            });
-    });
+        }
+        try {
+            return await Promise.all(promises);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-};
+    /**
+     * uploadProfileImage
+     * return status
+    */
+    static async uploadProfileImage(data: any, mimeType: any, filePath: string, ): Promise<any> {
+        const stream = require('stream');
+        const file = this.bucket.file(filePath);
+        const dataStream = new stream.PassThrough();
+        dataStream.push(data);
+        dataStream.push(null);
+        mimeType = (mimeType) ? mimeType : dataStream.mimetype;
 
-exports.removeSocialProfile = async (): Promise<any> => {
-    const users = await this.getUsers();
+        return new Promise((resolve, reject) => {
+            dataStream.pipe(file.createWriteStream({
+                metadata: {
+                    contentType: mimeType,
+                    metadata: {
+                        custom: UserConstants.META_DATA
+                    }
+                }
+            }))
+                .on(GeneralConstants.ERROR, (error) => {
+                    Utils.throwError(error);
+                })
+                .on(GeneralConstants.FINISH, () => {
+                    resolve(UserConstants.UPLOAD_FINISHED);
+                });
+        });
+    }
 
-    const migrationPromises = users.docs.map(user => {
-        const userObj: User = user.data();
-         userObj.facebookUrl = null;
-        userObj.linkedInUrl = null;
-        userObj.twitterUrl = null;
-        return this.setUser(userObj);
-    });
+    /**
+     * uploadProfileImage
+     * return status
+     */
+    static async removeSocialProfile(): Promise<any> {
+        const users: User[] = await this.getUsers();
 
-    const migrationResults = await Promise.all(migrationPromises);
-    return migrationResults;
-};
+        const migrationPromises: Promise<any>[] = [];
 
+        for (const user of users) {
+            if (user && user.userId) {
+                delete user.facebookUrl;
+                delete user.linkedInUrl;
+                delete user.twitterUrl;
+                migrationPromises.push(this.updateUser({ ...user }));
+            }
+        }
+        try {
+            return await Promise.all(migrationPromises);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+}

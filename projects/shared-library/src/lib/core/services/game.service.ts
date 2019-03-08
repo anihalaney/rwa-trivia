@@ -116,7 +116,7 @@ export class GameService {
 
   getNextQuestion(game: Game): Observable<Question> {
     const url: string = CONFIG.functionsUrl + '/app/question/next/';
-    return this.http.get<Question>(url + game.gameId);
+    return this.http.post<Question>(url + game.gameId, {});
   }
 
 
@@ -231,12 +231,12 @@ export class GameService {
   getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
     const observables = [];
 
-    game.playerQnAs.map(playerQnA => {
+    for (const playerQnA of game.playerQnAs) {
       if (playerQnA.playerId === userId) {
         observables.push(this.checkUserQuestion(playerQnA));
       }
+    }
 
-    });
     return forkJoin(observables);
   }
 

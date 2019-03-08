@@ -112,10 +112,10 @@ export class BulkService {
 
     const fireStoreInstance = this.dbService.getFireStore().firestore;
     const upload = fireStoreInstance.batch();
-    archiveArray.map((bulkInfo) => {
+    for (const bulkInfo of archiveArray) {
       const itemDoc = fireStoreInstance.collection('bulk_uploads').doc(bulkInfo.id);
       upload.update(itemDoc, obj);
-    });
+    }
     return upload.commit();
     // return of(true);
   }
