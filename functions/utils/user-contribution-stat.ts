@@ -1,55 +1,44 @@
-import {
-    User, Question, UserStatConstants
-} from '../../projects/shared-library/src/lib/shared/model';
-const userContributionQuestionService = require('../services/question.service');
-const userContributionUserService = require('../services/user.service');
-const userContributionAccountService = require('../services/account.service');
+import { UserStatConstants, Account, Question, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { AccountService } from '../services/account.service';
+import { QuestionService } from '../services/question.service';
+import { Utils } from './utils';
 
 export class UserContributionStat {
 
 
-    private userDict: { [key: string]: number };
+    private static userDict: { [key: string]: number } = {};
 
-    constructor() {
-        this.userDict = {};
+    static async generateGameStats(): Promise<any> {
+        try {
+            const questions: Question[] = await QuestionService.getAllQuestions();
+
+            for (const question of questions) {
+                const created_uid = question.created_uid;
+                this.userDict[created_uid] = (this.userDict[created_uid]) ?
+                    this.userDict[created_uid] + UserStatConstants.initialContribution :
+                    UserStatConstants.initialContribution;
+            }
+
+            const userDictPromises = [];
+            for (const userId of Object.keys(this.userDict)) {
+                userDictPromises.push(this.getUser(userId, this.userDict[userId]));
+            }
+
+            return await Promise.all(userDictPromises);
+        } catch (error) {
+            console.error(GeneralConstants.Error_Message, error);
+        }
     }
 
-    generateGameStats(): Promise<any> {
-        return userContributionQuestionService.getAllQuestions()
-            .then(questions =>
-                questions.docs.map(question =>
-                    this.userDict[question.data().created_uid] = (this.userDict[question.data().created_uid]) ?
-                        this.userDict[question.data().created_uid] + UserStatConstants.initialContribution :
-                        UserStatConstants.initialContribution
-                )
-            )
-            .then(userDict => {
-                const userDictPromises = [];
-                Object.keys(this.userDict).map(userId => {
-                    userDictPromises.push(this.getUser(userId, this.userDict[userId]))
-                });
-
-                return Promise.all(userDictPromises)
-                    .then((userDictResults) => userDictResults)
-                    .catch((e) => {
-                        console.log('user categories stats promise error', e);
-                    });
-            });
-
+    static async getUser(id: string, count: number): Promise<string> {
+        try {
+            const account: Account = await AccountService.getAccountById(id);
+            account.contribution = count;
+            return await AccountService.setAccount({ ...account });
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
-
-    public getUser(id: string, count: number): Promise<string> {
-        return userContributionAccountService.getAccountById(id).then((account) => {
-            const dbAccount = account.data();
-            dbAccount.contribution = (dbAccount.contribution) ? dbAccount.contribution + count : count;
-            return this.updateAccount({ ...dbAccount }).then((accountId) => { return accountId });
-        });
-    }
-
-    private updateAccount(dbAccount: any): Promise<string> {
-        return userContributionAccountService.setAccount(dbAccount).then(ref => { return dbAccount.id });
-    }
-
 
 
 }
