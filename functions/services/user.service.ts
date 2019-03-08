@@ -105,7 +105,7 @@ export class UserService {
         const fileName = (size) ?
             `${UserConstants.PROFILE}${UserService.FS}${userId}${UserService.FS}${UserConstants.AVATAR}${UserService.FS}${size}${UserService.FS}${profilePicture}`
             : `${UserConstants.PROFILE}${UserService.FS}${userId}${UserService.FS}${UserConstants.AVATAR}${UserService.FS}${profilePicture}`;
-        UserService.bucket = admin.storage().bucket();
+        UserService.bucket = admin.storage().bucket('rwa-trivia-dev-e57fc.appspot.com');
         const file = UserService.bucket.file(fileName);
         try {
             const streamData = await file.download();
@@ -151,7 +151,7 @@ export class UserService {
     */
     static async uploadProfileImage(data: any, mimeType: any, filePath: string, ): Promise<any> {
         const stream = require('stream');
-        UserService.bucket = admin.storage().bucket();
+        UserService.bucket = admin.storage().bucket('rwa-trivia-dev-e57fc.appspot.com');
         const file = UserService.bucket.file(filePath);
         const dataStream = new stream.PassThrough();
         dataStream.push(data);
