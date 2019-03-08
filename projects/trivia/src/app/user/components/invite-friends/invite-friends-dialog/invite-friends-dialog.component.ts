@@ -19,7 +19,7 @@ export class InviteFriendsDialogComponent implements OnInit, OnDestroy {
   ref: any;
   subs: Subscription[] = [];
 
-  constructor(private store: Store<AppState>, private renderer: Renderer2) {
+  constructor(private store: Store<AppState>, private renderer: Renderer2, private utils: Utils) {
     this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
   }
 
