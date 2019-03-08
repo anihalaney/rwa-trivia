@@ -1,17 +1,21 @@
 
 import { Subscription } from '../utils/subscription';
+import { Utils } from '../utils/utils';
+import { interceptorConstants } from '../../projects/shared-library/src/lib/shared/model';
 
-/**
- * getSubscriptionCount
- * return count
- */
-exports.getSubscriptionCount = async (req, res): Promise<any> => {
-    const subscription: Subscription = new Subscription();
-    try {
-        const subscribers = await subscription.getTotalSubscription();
-    } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server error');
-        return error;
+export class SubscriptionController {
+
+    /**
+     * getSubscriptionCount
+     * return count
+     */
+    static async getSubscriptionCount(req, res): Promise<any> {
+        try {
+            const subscribers = await Subscription.getTotalSubscription();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, subscribers);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
     }
-};
+
+}

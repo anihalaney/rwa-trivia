@@ -1,125 +1,145 @@
-
-
-const userService = require('../services/user.service');
-const sharp = require('sharp');
-import { User, UserStats, UserControllerConstants, profileSettingsConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { UserService } from '../services/user.service';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { MailClient } from '../utils/mail-client';
+import {
+    UserControllerConstants, profileSettingsConstants,
+    interceptorConstants,
+    ResponseMessagesConstants,
+    UserConstants,
+    HeaderConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
-const utils: Utils = new Utils();
-const generalAccountService = require('../services/account.service');
-/**
- * getUserById
- * return user
- */
-exports.getUserById = (req, res) => {
-    // console.log('body---->', req.body);
-    const userId = req.params.userId;
+import { AccountService } from '../services/account.service';
 
+export class UserController {
 
-    if (!userId) {
-        // Game Option is not added
-        res.status(403).send('userId is not available');
-        return;
+    /**
+     * getUserById
+     * return user
+     */
+    static async getUserById(req, res) {
+        const userId = req.params.userId;
+
+        if (!userId) {
+            // userId is not available
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
+        }
+        try {
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await UserService.getUserProfile(userId));
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
     }
 
-    userService.getUserById(userId).then((u) => {
-        const dbUser = u.data();
-        console.log('user--->', dbUser);
-        const user = new User();
-        user.displayName = (dbUser && dbUser.displayName) ? dbUser.displayName : '';
-        user.location = (dbUser && dbUser.location) ? dbUser.location : '';
-        user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
-        user.userId = userId;
-
-        console.log('userinfo--->', user);
-        res.send(user);
-    });
-};
+    /**
+     * getUserImages
+     * return user
+     */
+    static async getUserImages(req, res) {
+        const userId = req.params.userId;
+        const width = req.params.width;
+        const height = req.params.height;
 
 
-/**
- * getUserImages
- * return user
- */
-exports.getUserImages = (req, res) => {
-    // console.log('body---->', req.body);
-    const userId = req.params.userId;
-    const width = req.params.width;
-    const height = req.params.height;
+        if (!userId) {
+            // userId is not available
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
+        }
+
+        if (!width) {
+            // width is not available
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.WIDTH_NOT_FOUND);
+        }
+
+        if (!height) {
+            // height is not available
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.HEIGHT_NOT_FOUND);
+        }
 
 
-    if (!userId) {
-        // Game Option is not added
-        return res.status(403).send('userId is not available');
+        try {
+            const stream = await UserService.getUserProfileImage(userId, width, height);
+            res.setHeader(HeaderConstants.CONTENT_DASH_DISPOSITION,
+                HeaderConstants.ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_PROFILE_UNDER_SCORE_IMAGE_DOT_PNG);
+            res.setHeader(HeaderConstants.CONTENT_DASH_TYPE, HeaderConstants.IMAGE_FORWARD_SLASH_JPEG);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, stream);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+
     }
 
-    userService.getUserById(userId).then((u) => {
-        const dbUser = u.data();
-        userService.generateProfileImage(userId, dbUser.profilePicture, `${width}*${height}`).then((stream) => {
-            res.setHeader('content-disposition', 'attachment; filename=profile_image.png');
-            res.setHeader('content-type', 'image/jpeg');
-            res.send(stream);
-        });
+    /**
+     * generateUserProfileImage
+     * return status
+     */
+    static async generateUserProfileImage(req, res) {
+        if (req.body.user.userId !== req.user.uid) {
+            Utils.sendResponse(res, interceptorConstants.UNAUTHORIZED, ResponseMessagesConstants.UNAUTHORIZED);
+        }
 
-    });
-};
+        let user = req.body.user;
 
-/**
- * generateUserProfileImage
- * return status
- */
-exports.generateUserProfileImage = (req, res) => {
-    if (req.body.user.userId === req.user.uid) {
-        return res.status(401).send('Unauthorized');
-    }
-    const profileImagesGenerator: ProfileImagesGenerator = new ProfileImagesGenerator();
-    const user = req.body.user;
+        try {
+            if (user.profilePicture && user.croppedImageUrl && user.originalImageUrl) {
 
-    if (user.profilePicture && user.croppedImageUrl && user.originalImageUrl) {
+                user = await ProfileImagesGenerator.uploadProfileImage(user);
 
-        profileImagesGenerator.
-            uploadProfileImage(user).then((status) => {
                 delete user.originalImageUrl;
                 delete user.croppedImageUrl;
                 delete user.imageType;
-                setUser(user, res);
-            });
+            }
 
-    } else {
-        setUser(user, res);
+            if (user.bulkUploadPermissionStatus === profileSettingsConstants.NONE) {
+                user.bulkUploadPermissionStatus = profileSettingsConstants.PENDING;
+                user.bulkUploadPermissionStatusUpdateTime = Utils.getUTCTimeStamp();
+                const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
+                try {
+                    const mail: MailClient = new MailClient(UserControllerConstants.adminEmail, UserControllerConstants.mailSubject,
+                        UserControllerConstants.mailSubject, htmlContent);
+                    await mail.sendMail();
+                } catch (error) {
+                    console.error('mail error', error);
+                }
+            }
+
+            user.bulkUploadPermissionStatus =
+                (user.bulkUploadPermissionStatus) ? user.bulkUploadPermissionStatus : profileSettingsConstants.NONE;
+
+            delete user[UserConstants.ROLES];
+
+            await UserService.updateUser({ ...user });
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.PROFILE_DATA_IS_SAVED });
+
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
     }
-};
 
-function setUser(user, res) {
+    /**
+     * updateLives
+     * return status
+     */
+    static async updateLives(req, res) {
+        const userId = req.body.userId;
 
-    if (user.bulkUploadPermissionStatus === profileSettingsConstants.NONE) {
-        user.bulkUploadPermissionStatus = profileSettingsConstants.PENDING;
-        user.bulkUploadPermissionStatusUpdateTime = utils.getUTCTimeStamp();
-        const htmlContent = `<b>${user.displayName}</b> user with id <b>${user.userId}</b> has requested bulk upload access.`;
-        const mail: MailClient = new MailClient(UserControllerConstants.adminEmail, UserControllerConstants.mailSubject,
-            UserControllerConstants.mailSubject, htmlContent);
-        mail.sendMail();
+        if (!userId) {
+            Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_ID_NOT_FOUND);
+        }
+
+        if (req.user.user_id !== userId) {
+            Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.UNAUTHORIZED);
+        }
+
+        try {
+            await AccountService.updateLives(userId);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { 'status': ResponseMessagesConstants.LIVES_ADDED });
+
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+
     }
 
-    delete user['roles'];
-    userService.setUser(user).then((ref) => {
-        res.send({ 'status': 'Profile Data is saved !!' });
-    });
 }
-
-exports.updateLives = (req, res) => {
-    const userId = req.body.userId;
-    if (!userId) {
-        return res.status(400).send('Bad Request');
-    }
-    if (req.user.user_id !== userId) {
-        return res.status(401).send('Unauthorized');
-    }
-    return generalAccountService.updateLives(userId).then((ref) => {
-        res.send({ 'status': 'Lives added successfully !!' });
-    }, error => {
-        res.status(500).send(error);
-    });
-
-};

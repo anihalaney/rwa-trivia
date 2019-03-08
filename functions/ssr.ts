@@ -1,7 +1,6 @@
 // These are important and needed before anything else
 
 
-
 const ssrFunction = require('firebase-functions');
 const server = require('./server');
 

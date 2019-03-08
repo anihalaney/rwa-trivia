@@ -25,7 +25,7 @@ export class QuestionService {
   // Elasticsearch
   getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
     let url: string = CONFIG.functionsUrl + '/app/question/day';
-    url = (isNextQuestion) ? `${url}/next` : `${url}/current`
+    url = (isNextQuestion) ? `${url}/next` : `${url}/current`;
     return this.http.get<Question>(url);
   }
 
@@ -72,7 +72,8 @@ export class QuestionService {
     const queryObservables = [];
 
     if (filterStatus && filterStatus.length > 0) {
-      filterStatus.map((status) => {
+
+      for (const status of filterStatus) {
         queryParams.condition = [];
         let queryParam = new QueryParam('source', '==', question_source);
         queryParams.condition.push(queryParam);
@@ -80,7 +81,7 @@ export class QuestionService {
         queryParams.condition.push(queryParam);
 
         queryObservables.push(this.dbService.valueChanges('unpublished_questions', '', { ...queryParams }));
-      });
+      }
     } else {
       queryParams.condition = [];
       queryObservables.push(this.dbService.valueChanges('unpublished_questions', '', queryParams));
@@ -120,7 +121,7 @@ export class QuestionService {
     const dbQuestions: Array<any> = [];
     const bulkUploadFileInfo = bulkUpload.bulkUploadFileInfo;
     const questions = bulkUpload.questions;
-    const bulkUploadId = this.dbService.createId(); //this.db.createId();
+    const bulkUploadId = this.dbService.createId(); // this.db.createId();
     // store file in file storage
     // Not written any code monitor progress or error
     this.dbService.upload(`bulk_upload/${bulkUploadFileInfo.created_uid}/${bulkUploadId}-${bulkUpload.file.name}`, bulkUpload.file)
