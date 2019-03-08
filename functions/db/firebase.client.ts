@@ -1,17 +1,17 @@
 
 import * as admin from 'firebase-admin';
 
-admin.initializeApp();
-// class FirebaseClient {
 
-//     public admin: any;
+class FirebaseClient {
 
-//     constructor() {
-//         this.admin = admin.initializeApp();
-//     }
-// }
+    public admin: any;
 
-export default admin;
+    constructor() {
+        this.admin = admin.initializeApp();
+    }
+}
+
+export default new FirebaseClient().admin;
 
 
 
