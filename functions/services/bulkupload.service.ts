@@ -1,27 +1,36 @@
-const bulkUploadFireBaseClient = require('../db/firebase-client');
-const bulkUploadFireStoreClient = bulkUploadFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
+import { CollectionConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+export class BulkUploadService {
 
-/**
- * getBulkUpload
- * return bulkData
- */
-exports.getBulkUpload = (): Promise<any> => {
-    return bulkUploadFireStoreClient.collection('bulk_uploads')
-        .get().then(bulkData => { return bulkData })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+    private static bulkUploadFireStoreClient = admin.firestore();
+    private static FS = GeneralConstants.FORWARD_SLASH;
+    private static BS = CollectionConstants.BULK_UPLOADS;
 
-/**
- * setBulkUpload
- * return ref
- */
-exports.setBulkUpload = (dbBulkUpload: any): Promise<any> => {
-    return bulkUploadFireStoreClient.doc(`/bulk_uploads/${dbBulkUpload.id}`).set(dbBulkUpload).then(ref => { return ref })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+    /**
+     * getBulkUpload
+     * return bulkData
+     */
+    static async getBulkUpload(): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(await this.bulkUploadFireStoreClient.collection(this.BS).get());
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * setBulkUpload
+     * return ref
+     */
+    static async setBulkUpload(dbBulkUpload: any): Promise<any> {
+        try {
+            return await this.bulkUploadFireStoreClient.
+                doc(`${this.FS}${CollectionConstants.BULK_UPLOADS}${this.FS}${dbBulkUpload.id}`).
+                set(dbBulkUpload);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+}
