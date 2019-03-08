@@ -130,8 +130,6 @@ export enum UserConstants {
 }
 
 export enum GeneralConstants {
-    FORWARD_SLASH = '/',
-    COLON = ':',
     LESS_THAN_OR_EQUAL = '<=',
     CREATED_UID = 'created_uid',
     DOUBLE_EQUAL = '==',

@@ -20,8 +20,6 @@ import { Utils } from '../utils/utils';
 
 export class MigrationController {
 
-
-    private static FS = GeneralConstants.FORWARD_SLASH;
     private static QC = CollectionConstants.QUESTIONS;
 
     /**
@@ -49,14 +47,14 @@ export class MigrationController {
                     console.log('Migrating games ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
                         'Game Count: ' + await FirestoreMigration.
-                            migrateGames(`${MigrationController.FS}${CollectionConstants.GAMES}`, CollectionConstants.GAMES));
+                            migrateGames(`/${CollectionConstants.GAMES}`, CollectionConstants.GAMES));
                     break;
                 case MigrationConstants.QUESTIONS:
                     // Migrate questions
                     console.log('Migrating questions ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
                         await FirestoreMigration.
-                            migrateQuestions(`${MigrationController.FS}${MigrationController.QC}${MigrationController.FS}${CollectionConstants.PUBLISHED}`,
+                            migrateQuestions(`/${MigrationController.QC}/${CollectionConstants.PUBLISHED}`,
                                 MigrationController.QC));
                     break;
                 case MigrationConstants.UNPUBLISHED_QUESTIONS:
@@ -64,7 +62,7 @@ export class MigrationController {
                     console.log('Migrating unpublished questions ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
                         await FirestoreMigration.
-                            migrateQuestions(`${MigrationController.FS}${MigrationController.QC}${MigrationController.FS}${CollectionConstants.UNPUBLISHED}`,
+                            migrateQuestions(`/${MigrationController.QC}/${CollectionConstants.UNPUBLISHED}`,
                                 CollectionConstants.UNPUBLISHED_QUESTIONS));
                     break;
             }

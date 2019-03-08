@@ -5,7 +5,6 @@ import { Utils } from '../utils/utils';
 export class QuestionService {
 
     private static fireStoreClient = admin.firestore();
-    private static FS = GeneralConstants.FORWARD_SLASH;
     private static QC = CollectionConstants.QUESTIONS;
 
     /**
@@ -27,7 +26,7 @@ export class QuestionService {
     static async getQuestionById(questionId): Promise<any> {
         try {
             const questionResult = await QuestionService.fireStoreClient
-                .doc(`${QuestionService.FS}${QuestionService.QC}${QuestionService.FS}${questionId}`)
+                .doc(`/${QuestionService.QC}/${questionId}`)
                 .get();
             return Question.getViewModelFromDb(questionResult.data());
         } catch (error) {
@@ -54,7 +53,7 @@ export class QuestionService {
     static async updateQuestion(collectionName: string, question: any): Promise<any> {
         try {
             return await QuestionService.fireStoreClient
-                .doc(`${QuestionService.FS}${collectionName}${QuestionService.FS}${question.id}`)
+                .doc(`/${collectionName}/${question.id}`)
                 .set(question);
         } catch (error) {
             return Utils.throwError(error);
