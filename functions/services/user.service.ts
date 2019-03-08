@@ -6,7 +6,6 @@ export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
     private static bucket: any = Utils.getFireStorageBucket(admin);
-    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
     * getUsers
@@ -27,7 +26,7 @@ export class UserService {
     static async getUserById(userId: string): Promise<any> {
         try {
             const userData = await UserService.fireStoreClient
-                .doc(`${UserService.FS}${CollectionConstants.USERS}${UserService.FS}${userId}`)
+                .doc(`/${CollectionConstants.USERS}/${userId}`)
                 .get();
             return userData.data();
         } catch (error) {
@@ -42,7 +41,7 @@ export class UserService {
     static async updateUser(dbUser: any): Promise<any> {
         try {
             return await UserService.fireStoreClient
-                .doc(`${UserService.FS}${CollectionConstants.USERS}${UserService.FS}${dbUser.userId}`)
+                .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
                 .update(dbUser);
         } catch (error) {
             return Utils.throwError(error);
@@ -103,8 +102,8 @@ export class UserService {
      */
     static async generateProfileImage(userId: string, profilePicture: string, size?: string): Promise<string> {
         const fileName = (size) ?
-            `${UserConstants.PROFILE}${UserService.FS}${userId}${UserService.FS}${UserConstants.AVATAR}${UserService.FS}${size}${UserService.FS}${profilePicture}`
-            : `${UserConstants.PROFILE}${UserService.FS}${userId}${UserService.FS}${UserConstants.AVATAR}${UserService.FS}${profilePicture}`;
+            `${UserConstants.PROFILE}/${userId}/${UserConstants.AVATAR}/${size}/${profilePicture}`
+            : `${UserConstants.PROFILE}/${userId}/${UserConstants.AVATAR}/${profilePicture}`;
 
         const file = UserService.bucket.file(fileName);
         try {

@@ -9,7 +9,6 @@ import { Utils } from '../utils/utils';
 export class GeneralService {
 
     private static generalFireStoreClient = admin.firestore();
-    private static FS = GeneralConstants.FORWARD_SLASH;
     private static QC = CollectionConstants.QUESTIONS;
     static async migrateCollection(collectionName): Promise<any> {
 
@@ -51,7 +50,7 @@ export class GeneralService {
         try {
             const questions = [];
             const qs = await GeneralService.generalFireStoreClient
-                .collection(`${GeneralService.FS}${GeneralService.QC}`)
+                .collection(`/${GeneralService.QC}`)
                 .orderBy(GeneralConstants.ID)
                 .get();
             for (const q of qs) {
@@ -77,7 +76,7 @@ export class GeneralService {
     static async getTestQuestion(): Promise<any> {
         try {
             const qs = await admin.database()
-                .ref(`${GeneralService.FS}${GeneralService.QC}${GeneralService.FS}${CollectionConstants.PUBLISHED}`)
+                .ref(`/${GeneralService.QC}/${CollectionConstants.PUBLISHED}`)
                 .orderByKey().limitToLast(1).once(GeneralConstants.VALUE);
 
             qs.forEach((q) => {

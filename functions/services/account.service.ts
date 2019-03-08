@@ -10,8 +10,6 @@ export class AccountService {
 
     private static accountFireStoreClient = admin.firestore();
 
-    private static FS = GeneralConstants.FORWARD_SLASH;
-
     /**
      * getAccountById
      * return account
@@ -19,7 +17,7 @@ export class AccountService {
     static async getAccountById(id: string): Promise<any> {
         try {
             const accountData = await AccountService.accountFireStoreClient.
-                doc(`${AccountService.FS}${CollectionConstants.ACCOUNTS}${AccountService.FS}${id}`).get();
+                doc(`/${CollectionConstants.ACCOUNTS}/${id}`).get();
             return accountData.data();
         } catch (error) {
             return Utils.throwError(error);
@@ -33,7 +31,7 @@ export class AccountService {
     static async setAccount(dbAccount: any): Promise<any> {
         try {
             return await AccountService.accountFireStoreClient
-                .doc(`${AccountService.FS}${CollectionConstants.ACCOUNTS}${AccountService.FS}${dbAccount.id}`)
+                .doc(`/${CollectionConstants.ACCOUNTS}/${dbAccount.id}`)
                 .set(dbAccount);
 
         } catch (error) {
@@ -48,7 +46,7 @@ export class AccountService {
     static async updateAccountData(dbAccount: any): Promise<any> {
         try {
             return await AccountService.accountFireStoreClient
-                .doc(`${AccountService.FS}${CollectionConstants.ACCOUNTS}${AccountService.FS}${dbAccount.id}`)
+                .doc(`/${CollectionConstants.ACCOUNTS}/${dbAccount.id}`)
                 .update(dbAccount);
         } catch (error) {
             return Utils.throwError(error);

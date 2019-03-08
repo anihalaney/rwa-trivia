@@ -6,7 +6,6 @@ import { Utils } from '../utils/utils';
 export class GameService {
 
     private static gameFireStoreClient = admin.firestore();
-    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
      * getAvailableGames
@@ -88,7 +87,7 @@ export class GameService {
     static async getGameById(gameId: string): Promise<any> {
         try {
             const gameData = await GameService.gameFireStoreClient
-                .doc(`${CollectionConstants.GAMES}${GameService.FS}${gameId}`)
+                .doc(`${CollectionConstants.GAMES}/${gameId}`)
                 .get();
             if (!gameData.exists) {
                 // game not found
@@ -107,7 +106,7 @@ export class GameService {
     static async setGame(dbGame: any): Promise<any> {
         try {
             return await GameService.gameFireStoreClient
-                .doc(`${GameService.FS}${CollectionConstants.GAMES}${GameService.FS}${dbGame.id}`)
+                .doc(`/${CollectionConstants.GAMES}/${dbGame.id}`)
                 .set(dbGame);
         } catch (error) {
             return Utils.throwError(error);
@@ -123,7 +122,7 @@ export class GameService {
         try {
             return GameService.getGames(
                 await GameService.gameFireStoreClient
-                    .collection(`${GameService.FS}${CollectionConstants.GAMES}`)
+                    .collection(`/${CollectionConstants.GAMES}`)
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, true)
                     .get()
             );
@@ -139,7 +138,7 @@ export class GameService {
     static async updateGame(dbGame: any): Promise<any> {
         try {
             return await GameService.gameFireStoreClient
-                .doc(`${GameService.FS}${CollectionConstants.GAMES}${GameService.FS}${dbGame.id}`)
+                .doc(`/${CollectionConstants.GAMES}/${dbGame.id}`)
                 .update(dbGame);
         } catch (error) {
             return Utils.throwError(error);
@@ -154,7 +153,7 @@ export class GameService {
         try {
             return GameService.getGames(
                 await GameService.gameFireStoreClient
-                    .collection(`${GameService.FS}${CollectionConstants.GAMES}`)
+                    .collection(`/${CollectionConstants.GAMES}`)
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                     .get()
             );
