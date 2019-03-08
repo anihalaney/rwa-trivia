@@ -1,18 +1,36 @@
 
 
 import * as express from 'express';
-const router = express.Router();
+import { QuestionController } from '../controllers/question.controller';
+import { AuthMiddleware } from '../middlewares/auth';
+import { GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 
-const questionAuth = require('../middlewares/auth');
+class QuestionRoutes {
 
-const questionController = require('../controllers/question.controller');
+    public questionRoutes: any;
 
+    constructor() {
 
-router.get('/day/:nextQ', questionController.getQuestionOfDay);
-router.get('/next/:gameId', questionAuth.authorizedOnly, questionController.getNextQuestion);
-router.get('/game/:gameId', questionAuth.authorizedOnly, questionController.getQuestions);
-router.post('/:start/:size', questionAuth.adminOnly, questionController.getQuestions);
-router.post('/:questionId', questionAuth.authorizedOnly, questionController.getUpdatedQuestion);
+        this.questionRoutes = express.Router();
 
+        //  '/day/:nextQ'
+        this.questionRoutes.get(`/${RoutesConstants.DAY}/:${RoutesConstants.NEXT_Q}`,
+            QuestionController.getQuestionOfDay);
 
-module.exports = router;
+        //  '/next/:gameId'
+        this.questionRoutes.post(`/${RoutesConstants.NEXT}/:${RoutesConstants.GAME_ID}`,
+            AuthMiddleware.authorizedOnly, QuestionController.getNextQuestion);
+
+        //  '/:start/:size'
+        this.questionRoutes.post(`/:${RoutesConstants.START}/:${RoutesConstants.SIZE}`,
+            AuthMiddleware.adminOnly, QuestionController.getQuestions);
+
+        //  '/:questionId'
+        this.questionRoutes.post(`/:${RoutesConstants.QUESTION_ID}`,
+            AuthMiddleware.authorizedOnly, QuestionController.getUpdatedQuestion);
+
+    }
+}
+
+export default new QuestionRoutes().questionRoutes;
+
