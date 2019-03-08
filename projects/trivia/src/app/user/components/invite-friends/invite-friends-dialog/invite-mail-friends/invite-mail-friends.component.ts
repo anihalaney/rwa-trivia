@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, ElementRef, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy , ChangeDetectorRef, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
@@ -13,7 +13,8 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 @Component({
   selector: 'app-invite-mail-friends',
   templateUrl: './invite-mail-friends.component.html',
-  styleUrls: ['./invite-mail-friends.component.scss']
+  styleUrls: ['./invite-mail-friends.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InviteMailFriendsComponent implements OnInit, OnDestroy {
 
@@ -29,18 +30,19 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   @ViewChildren('textField') textField: QueryList<ElementRef>;
 
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, 
-              private utils: Utils) {
-    this.sub.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef,
+    private utils: Utils) {
+    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
         this.user = user;
       }
-    }));
+    });
 
     this.sub.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.showSuccessMsg = status;
+        this.cd.detectChanges();
       }
     }));
 
