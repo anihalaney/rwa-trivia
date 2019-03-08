@@ -1,95 +1,181 @@
-const gameFireBaseClient = require('../db/firebase-client');
-const gameFireStoreClient = gameFireBaseClient.firestore();
-import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, Game, GameConstants, GameStatus, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
 
-/**
- * getAvailableGames
- * return games
- */
-exports.getAvailableGames = (): Promise<any> => {
-    return gameFireStoreClient.collection('games').where('GameStatus', '==', GameStatus.AVAILABLE_FOR_OPPONENT)
-        .where('gameOver', '==', false)
-        .get().then(games => { return games });
-};
+export class GameService {
 
-/**
- * getLiveGames
- * return games
- */
-exports.getLiveGames = (): Promise<any> => {
-    return gameFireStoreClient.collection('games')
-        .where('gameOver', '==', false)
-        .get().then(games => { return games });
-};
+    private static gameFireStoreClient = admin.firestore();
+    private static FS = GeneralConstants.FORWARD_SLASH;
+
+    /**
+     * getAvailableGames
+     * return games
+     */
+    static async getAvailableGames(): Promise<any> {
+        try {
+            return this.getGames(
+                await this.gameFireStoreClient
+                    .collection(CollectionConstants.GAMES)
+                    .where(GameConstants.GAME_STATUS, GeneralConstants.DOUBLE_EQUAL, GameStatus.AVAILABLE_FOR_OPPONENT)
+                    .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
+                    .get());
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * getLiveGames
+     * return games
+     */
+    static async getLiveGames(): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.collection(CollectionConstants.GAMES)
+                .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
+                .get();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * updateStats
+     * return games
+     */
+    static async updateStats(): Promise<any> {
+        try {
+            const snapshot = await this.getLiveGames();
+            const promises = [];
+            for (const doc of snapshot.docs) {
+
+                const game = Game.getViewModel(doc.data());
+                for (const playerId of game.playerIds) {
+                    game.calculateStat(playerId);
+                }
+
+                const date = new Date(new Date().toUTCString());
+                game.turnAt = date.getTime() + (date.getTimezoneOffset() * 60000);
+
+                const dbGame = game.getDbModel();
+                dbGame.id = doc.id;
+
+                promises.push(this.setGame(dbGame));
+            }
+            return await Promise.all(promises);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
 
-/**
- * createGame
- * return ref
- */
-exports.createGame = (dbGame: any): Promise<any> => {
-    return gameFireStoreClient.collection('games').add(dbGame).then(ref => { return ref });
-};
+    /**
+     * createGame
+     * return ref
+     */
+    static async createGame(dbGame: any): Promise<any> {
+        try {
+            return await this.gameFireStoreClient.collection(CollectionConstants.GAMES).add(dbGame);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * getGameById
+     * return game
+     */
+    static async getGameById(gameId: string): Promise<any> {
+        try {
+            const gameData = await this.gameFireStoreClient
+                .doc(`${CollectionConstants.GAMES}${this.FS}${gameId}`)
+                .get();
+            if (!gameData.exists) {
+                // game not found
+                return;
+            }
+            return Game.getViewModel(gameData.data());
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * setGame
+     * return ref
+     */
+    static async setGame(dbGame: any): Promise<any> {
+        try {
+            return await this.gameFireStoreClient
+                .doc(`${this.FS}${CollectionConstants.GAMES}${this.FS}${dbGame.id}`)
+                .set(dbGame);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
 
-/**
- * getGameById
- * return game
- */
-exports.getGameById = (gameId: string): Promise<any> => {
-    return gameFireStoreClient.doc(`games/${gameId}`).get().then((game) => { return game });
-};
+    /**
+     * getCompletedGames
+     * return games
+     */
+    static async getCompletedGames(): Promise<any> {
+        try {
+            return this.getGames(
+                await this.gameFireStoreClient
+                    .collection(`${this.FS}${CollectionConstants.GAMES}`)
+                    .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, true)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    /**
+     * updateGame
+     * return ref
+     */
+    static async updateGame(dbGame: any): Promise<any> {
+        try {
+            return await this.gameFireStoreClient
+                .doc(`${this.FS}${CollectionConstants.GAMES}${this.FS}${dbGame.id}`)
+                .update(dbGame);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-/**
- * setGame
- * return ref
- */
-exports.setGame = (dbGame: any): Promise<any> => {
-    return gameFireStoreClient.doc('/games/' + dbGame.id).set(dbGame).then((ref) => { return ref });
-};
+    /**
+     * checkGameOver
+     * return status
+     */
+    static async checkGameOver(): Promise<any> {
+        try {
+            return this.getGames(
+                await this.gameFireStoreClient
+                    .collection(`${this.FS}${CollectionConstants.GAMES}`)
+                    .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    /**
+     * getGames
+     * return Game[]
+     */
+    static getGames(snapshots: any): Game[] {
+        const games: Game[] = [];
+        if (snapshots.exists) {
+            for (const snapshot of snapshots.docs) {
+                games.push(Game.getViewModel(snapshot.data()));
+            }
+        }
+        return games;
+    }
 
-/**
- * updateGame
- * return ref
- */
-exports.updateGame = (dbGame: any): Promise<any> => {
-    return gameFireStoreClient.doc('/games/' + dbGame.id).update(dbGame).then((ref) => { return ref });
-};
-
-
-/**
- * checkGameOver
- * return status
- */
-exports.checkGameOver = (): Promise<any> => {
-
-    return gameFireStoreClient.collection('/games').where('gameOver', '==', false)
-        .get()
-        .then((snapshot) => { return snapshot })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            return err
-        });
-
-};
-
-/**
- * getCompletedGames
- * return games
- */
-exports.getCompletedGames = (): Promise<any> => {
-    // console.log('completed games');
-    return gameFireStoreClient.collection('/games')
-        .where('gameOver', '==', true)
-        .get()
-        .then((games) => { return games })
-        .catch((err) => {
-            console.log('Error getting documents', err);
-            return err
-        });
-};
-
+}
 

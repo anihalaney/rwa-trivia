@@ -1,25 +1,48 @@
 
-import { appConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { appConstants, GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 import * as express from 'express';
-const router = express.Router();
+import questionRoutes from './question-routes';
+import subscriptionRoutes from './subscription-routes';
+import generalRoutes from './general-routes';
+import migrationRoutes from './migration-routes';
+import schedulerRoutes from './scheduler-routes';
+import friendRoutes from './friend-routes';
+import gameRoutes from './game-routes';
+import userRoutes from './user-routes';
 
-const questionRoutes = require('./question-routes');
-const gameRoutes = require('./game-routes');
-const subscriptionRoutes = require('./subscription-routes');
-const generalRoutes = require('./general-routes');
-const migrationRoutes = require('./migration-routes');
-const friendRoutes = require('./friend-routes');
-const userRoutes = require('./user-routes');
+class Router {
+    private FS = GeneralConstants.FORWARD_SLASH;
+    public router: any;
 
+    constructor() {
 
-router.use(`/${appConstants.API_PREFIX}/question`, questionRoutes);
-router.use(`/${appConstants.API_PREFIX}/subscription`, subscriptionRoutes);
-router.use(`/${appConstants.API_PREFIX}/game`, gameRoutes);
-router.use(`/${appConstants.API_PREFIX}/general`, generalRoutes);
-router.use(`/${appConstants.API_PREFIX}/migration`, migrationRoutes);
-router.use(`/${appConstants.API_PREFIX}/friend`, friendRoutes);
-router.use(`/${appConstants.API_PREFIX}/user`, userRoutes);
+        this.router = express.Router();
 
+        //  '/app/question'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.QUESTION}`, questionRoutes);
 
+        //  '/app/subscription'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
 
-module.exports = router;
+        //  '/app/game'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.GAME}`, gameRoutes);
+
+        //  '/app/general'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.GENERAL}`, generalRoutes);
+
+        //  '/app/migration'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.MIGRATION}`, migrationRoutes);
+
+        //  '/app/scheduler'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.SCHEDULER}`, schedulerRoutes);
+
+        //  '/app/friend'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.FRIEND}`, friendRoutes);
+
+        //  '/app/user'
+        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.USER}`, userRoutes);
+
+    }
+}
+
+export default new Router().router;

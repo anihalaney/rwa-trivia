@@ -1,185 +1,165 @@
 import { ESUtils } from '../utils/ESUtils';
-import { SearchCriteria, Game, PlayerQnA, Question, PlayerMode, QuestionStatus } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    SearchCriteria, Game, PlayerQnA, Question,
+    PlayerMode, QuestionStatus, interceptorConstants, ResponseMessagesConstants, CollectionConstants, QuestionsConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
-const utils: Utils = new Utils();
-const questionControllerGameService = require('../services/game.service');
-const questionControllerQuestionService = require('../services/question.service');
+import { QuestionService } from '../services/question.service';
+import { GameService } from '../services/game.service';
 
-/**
- * getQuestionOfDay
- * return question of the day
- */
-exports.getQuestionOfDay = (req, res) => {
-    const isNextQuestion = (req.params.nextQ && req.params.nextQ === 'next') ? true : false
-    ESUtils.getRandomQuestionOfTheDay(isNextQuestion).then((question) => {
-        res.send(question);
-    });
-};
+export class QuestionController {
 
-
-/**
- * getQuestions
- * return questions
- */
-exports.getQuestions = (req, res) => {
-    // Admins can get all Qs, while authorized users can only get Qs created by them
-    // TODO: For now restricting it to admins only till we add security
-    const start = req.params.start;
-    const size = req.params.size;
-    const criteria: SearchCriteria = req.body;
-    console.log(criteria);
-
-    ESUtils.getQuestions(start, size, criteria).then((results) => {
-        res.send(results);
-    });
-};
-
-
-/**
- * getNextQuestion
- * return question
- */
-exports.getNextQuestion = (req, res) => {
-    // console.log(req.user.uid);
-    // console.log(req.params.gameId);
-
-    const userId = req.user.uid;
-    const gameId = req.params.gameId;
-
-
-    questionControllerGameService.getGameById(gameId).then((g) => {
-        if (!g.exists) {
-            // game not found
-            res.status(404).send('Game not found');
-            return;
+    /**
+     * getQuestionOfDay
+     * return question of the day
+     */
+    static async getQuestionOfDay(req, res): Promise<any> {
+        try {
+            const isNextQuestion = (req.params.nextQ && req.params.nextQ === QuestionsConstants.NEXT) ? true : false;
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await ESUtils.getRandomQuestionOfTheDay(isNextQuestion));
+        } catch (error) {
+            Utils.sendError(res, error);
         }
-        const game: Game = Game.getViewModel(g.data());
-        // console.log(game);
+    }
 
-
-        if (game.playerIds.indexOf(userId) < 0) {
-            // user not part of this game
-            res.status(403).send('User not part of this game');
-            return;
+    /**
+     * getQuestions
+     * return questions
+     */
+    static async getQuestions(req, res): Promise<any> {
+        try {
+            // Admins can get all Qs, while authorized users can only get Qs created by them
+            // TODO: For now restricting it to admins only till we add security
+            const start = req.params.start;
+            const size = req.params.size;
+            const criteria: SearchCriteria = req.body;
+            console.log(criteria);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await ESUtils.getQuestions(start, size, criteria));
+        } catch (error) {
+            Utils.sendError(res, error);
         }
+    }
 
-        if (game.gameOver) {
-            // gameOver
-            res.status(403).send('Game over. No more Questions');
-            return;
-        }
 
-        if (game.gameOptions.gameMode !== 0) {
-            // Multiplayer mode - check whose turn it is. Not yet implemented
-            res.status(501).send('Wait for your turn. Not yet implemented.');
-            return;
-        }
+    /**
+     * getNextQuestion
+     * return question
+     */
+    static async getNextQuestion(req, res): Promise<any> {
 
-        console.log('game---->', game);
+        try {
+            const userId = req.user.uid;
+            const gameId = req.params.gameId;
+            const g = await GameService.getGameById(gameId);
 
-        const gameMechanics: GameMechanics = new GameMechanics(undefined, undefined);
+            if (!g) {
+                // game not found
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.GAME_NOT_FOUND);
+            }
 
-        gameMechanics.changeTheTurn(game).then((status) => {
+            const game: Game = g;
+            // console.log(game);
+
+            if (game.playerIds.indexOf(userId) < 0) {
+                // user not part of this game
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.USER_NOT_PART_OF_GAME);
+            }
+
+            if (game.gameOver) {
+                // gameOver
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.GAME_OVER);
+            }
+
+            if (game.gameOptions.gameMode !== 0) {
+                // Multiplayer mode - check whose turn it is. Not yet implemented
+                Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.WAIT_FOR_YOUR_TURN);
+            }
+
+            const status = await GameMechanics.changeTheTurn(game);
             if (status) {
                 const questionIds = [];
-                game.playerQnAs.map((question) => questionIds.push(question.questionId));
-                ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds).then((question) => {
-                    const createdOn = utils.getUTCTimeStamp();
-                    const playerQnA: PlayerQnA = {
-                        playerId: userId,
-                        questionId: question.id,
-                        addedOn: createdOn
-                    }
+                for (const questionObj of game.playerQnAs) {
+                    questionIds.push(questionObj.questionId);
+                }
+                const question = await ESUtils.getRandomGameQuestion(game.gameOptions.categoryIds, questionIds);
+                const createdOn = Utils.getUTCTimeStamp();
+                const playerQnA: PlayerQnA = {
+                    playerId: userId,
+                    questionId: question.id,
+                    addedOn: createdOn
+                };
 
-                    if (game.playerQnAs.length > 0) {
-                        if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
-                            game.round = game.round + 1;
-                        }
+                if (game.playerQnAs.length > 0) {
+                    if (Number(game.gameOptions.playerMode) === PlayerMode.Single) {
+                        game.round = game.round + 1;
                     }
+                }
 
-                    playerQnA.round = game.round;
-                    question.gameRound = game.round;
-                    question.addedOn = createdOn;
-                    game.playerQnAs.push(playerQnA);
-                    const dbGame = game.getDbModel();
-                    //  console.log('update the question ---->', question);
-                    gameMechanics.UpdateGame(dbGame).then((id) => {
-                        res.send(question);
-                    });
-                }).catch(error => {
-                    console.log('error', error);
-                    res.status(500).send('Failed to get Q');
-                    return;
-                });
+                playerQnA.round = game.round;
+                question.gameRound = game.round;
+                question.addedOn = createdOn;
+                game.playerQnAs.push(playerQnA);
+                const dbGame = game.getDbModel();
+                await GameService.updateGame(dbGame);
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, question);
             } else {
-                ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId).then((question) => {
-                    question.gameRound = game.round;
-                    res.send(question);
-                });
+                const newQuestion = await ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId);
+                newQuestion.gameRound = game.round;
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, newQuestion);
             }
-        });
-
-    }).catch(error => {
-        res.status(500).send('Uncaught Error');
-        return;
-    });
-
-};
-
-
-/**
- * getUpdatedQuestion
- * return question
- */
-exports.getUpdatedQuestion = (req, res) => {
-    const questionId = req.params.questionId;
-    const playerQnA = req.body.playerQnA;
-
-    if (!questionId) {
-        res.status(404).send('questionId is not available');
-        return;
-    }
-    questionControllerQuestionService.getQuestionById(questionId).then((qs) => {
-        const question = Question.getViewModelFromDb(qs.data());
-        if (playerQnA.playerAnswerId && playerQnA.playerAnswerId !== null) {
-            const answerObj = question.answers[playerQnA.playerAnswerId];
-            question.userGivenAnswer = answerObj.answerText;
-        } else {
-            question.userGivenAnswer = null;
+        } catch (error) {
+            Utils.sendError(res, error);
         }
-        res.send(question);
-    });
-};
+    }
 
+    /**
+     * getUpdatedQuestion
+     * return question
+     */
+    static async getUpdatedQuestion(req, res): Promise<any> {
 
-/**
- * changeUnpublishedQuestionStatus
- * return status
- */
-exports.changeUnpublishedQuestionStatus = (req, res) => {
-    questionControllerQuestionService.getQuestion('unpublished_questions').then((questions) => {
-        const questionUpdatePromises = [];
-        questions.docs.map((question) => {
-            const questionObj: Question = question.data();
-            if (questionObj.status === QuestionStatus.SUBMITTED) {
-                questionObj.status = QuestionStatus.PENDING;
-                const dbQuestion = { ...questionObj };
-                console.log('dbQuestion', dbQuestion);
-                questionUpdatePromises.push(questionControllerQuestionService.updateQuestion('unpublished_questions', dbQuestion));
+        try {
+            const questionId = req.params.questionId;
+            const playerQnA = req.body.playerQnA;
+            if (!questionId) {
+                Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.QUESTION_ID_IS_NOT_AVAILABLE);
             }
+            const question: Question = await QuestionService.getQuestionById(questionId);
+            if (playerQnA.playerAnswerId && playerQnA.playerAnswerId !== null) {
+                const answerObj = question.answers[playerQnA.playerAnswerId];
+                question.userGivenAnswer = answerObj.answerText;
+            } else {
+                question.userGivenAnswer = null;
+            }
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, question);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
 
-        });
-        Promise.all(questionUpdatePromises)
-            .then((questionResults) => {
-                res.send('unpublished status changed');
-            })
-            .catch((e) => {
-                console.log('changeUnpublishedQuestionStatus error', e);
-            });
 
-    });
-};
+    /**
+     * changeUnpublishedQuestionStatus
+     * return status
+     */
+    static async changeUnpublishedQuestionStatus(req, res): Promise<any> {
 
+        try {
+            const questions: Question[] = await QuestionService.getQuestion(CollectionConstants.UNPUBLISHED_QUESTIONS);
+            const questionUpdatePromises = [];
+            for (const questionObj of questions) {
+                if (questionObj.status === QuestionStatus.SUBMITTED) {
+                    questionObj.status = QuestionStatus.PENDING;
+                    const dbQuestion = { ...questionObj };
+                    questionUpdatePromises.push(QuestionService.updateQuestion(CollectionConstants.UNPUBLISHED_QUESTIONS, dbQuestion));
+                }
+            }
+            await Promise.all(questionUpdatePromises);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UNPUBLISHED_STATUS_CHANGED);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
 
-
+}
