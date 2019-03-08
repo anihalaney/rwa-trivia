@@ -13,7 +13,7 @@ export class AuthUser {
                 authUsers.push(user);
             }
             if (listUsersResult.pageToken) {
-                return this.getUsers(authUsers, listUsersResult.pageToken);
+                return AuthUser.getUsers(authUsers, listUsersResult.pageToken);
             } else {
                 return authUsers;
             }

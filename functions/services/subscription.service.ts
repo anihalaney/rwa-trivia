@@ -12,7 +12,7 @@ export class SubscriptionService {
     */
     static async getSubscriptions(): Promise<any> {
         try {
-            return await this.fireStoreClient.collection(CollectionConstants.SUBSCRIPTION).get();
+            return await SubscriptionService.fireStoreClient.collection(CollectionConstants.SUBSCRIPTION).get();
         } catch (error) {
             return Utils.throwError(error);
         }

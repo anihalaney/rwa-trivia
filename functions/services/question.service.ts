@@ -14,7 +14,7 @@ export class QuestionService {
      */
     static async getAllQuestions(): Promise<any> {
         try {
-            return Utils.getValesFromFirebaseSnapshot(await this.fireStoreClient.collection(this.QC).get());
+            return Utils.getValesFromFirebaseSnapshot(await QuestionService.fireStoreClient.collection(QuestionService.QC).get());
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -26,8 +26,8 @@ export class QuestionService {
      */
     static async getQuestionById(questionId): Promise<any> {
         try {
-            const questionResult = await this.fireStoreClient
-                .doc(`${this.FS}${this.QC}${this.FS}${questionId}`)
+            const questionResult = await QuestionService.fireStoreClient
+                .doc(`${QuestionService.FS}${QuestionService.QC}${QuestionService.FS}${questionId}`)
                 .get();
             return Question.getViewModelFromDb(questionResult.data());
         } catch (error) {
@@ -41,7 +41,7 @@ export class QuestionService {
      */
     static async getQuestion(collectionName): Promise<any> {
         try {
-            return Utils.getValesFromFirebaseSnapshot(await this.fireStoreClient.collection(`${collectionName}`).get());
+            return Utils.getValesFromFirebaseSnapshot(await QuestionService.fireStoreClient.collection(`${collectionName}`).get());
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -53,8 +53,8 @@ export class QuestionService {
      */
     static async updateQuestion(collectionName: string, question: any): Promise<any> {
         try {
-            return await this.fireStoreClient
-                .doc(`${this.FS}${collectionName}${this.FS}${question.id}`)
+            return await QuestionService.fireStoreClient
+                .doc(`${QuestionService.FS}${collectionName}${QuestionService.FS}${question.id}`)
                 .set(question);
         } catch (error) {
             return Utils.throwError(error);

@@ -14,14 +14,14 @@ export class UserContributionStat {
 
             for (const question of questions) {
                 const created_uid = question.created_uid;
-                this.userDict[created_uid] = (this.userDict[created_uid]) ?
-                    this.userDict[created_uid] + UserStatConstants.initialContribution :
+                UserContributionStat.userDict[created_uid] = (UserContributionStat.userDict[created_uid]) ?
+                    UserContributionStat.userDict[created_uid] + UserStatConstants.initialContribution :
                     UserStatConstants.initialContribution;
             }
 
             const userDictPromises = [];
-            for (const userId of Object.keys(this.userDict)) {
-                userDictPromises.push(this.getUser(userId, this.userDict[userId]));
+            for (const userId of Object.keys(UserContributionStat.userDict)) {
+                userDictPromises.push(UserContributionStat.getUser(userId, UserContributionStat.userDict[userId]));
             }
 
             return await Promise.all(userDictPromises);

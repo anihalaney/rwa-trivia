@@ -4,7 +4,7 @@ import {
 import { BlogService } from '../services/blog.service';
 import { GameService } from '../services/game.service';
 import { GameMechanics } from '../utils/game-mechanics';
-import { appSettings } from '../services/app-settings.service';
+import { AppSettings } from '../services/app-settings.service';
 import { AccountService } from '../services/account.service';
 import { Utils } from '../utils/utils';
 const Feed = require('feed-to-json');
@@ -46,7 +46,7 @@ export class SchedulerController {
     static async addLives(req, res): Promise<any> {
 
         try {
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (appSetting.lives.enable) {
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, await AccountService.addLives());
             } else {

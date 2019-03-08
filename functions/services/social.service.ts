@@ -4,7 +4,7 @@ import { SocialShareConstants, GeneralConstants } from '../../projects/shared-li
 
 export class SocialService {
 
-    private static bucket = admin.storage().bucket();
+    private static bucket: any;
     private static FS = GeneralConstants.FORWARD_SLASH;
     private static SI = SocialShareConstants.SCORE_IMAGES;
     private static SS = SocialShareConstants.SOCIAL_SHARE;
@@ -14,8 +14,9 @@ export class SocialService {
      * return ref
      */
     static async generateSocialUrl(userId: string, social_share_id: string): Promise<any> {
-        const fileName = `${this.SS}${this.FS}${userId}${this.FS}${this.SI}${this.FS}${social_share_id}`;
-        const file = this.bucket.file(fileName);
+        const fileName = `${SocialService.SS}${SocialService.FS}${userId}${SocialService.FS}${SocialService.SI}${SocialService.FS}${social_share_id}`;
+        SocialService.bucket = admin.storage().bucket();
+        const file = SocialService.bucket.file(fileName);
         try {
             const signedUrls = await file.download();
             return signedUrls[0];
