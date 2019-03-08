@@ -18,7 +18,8 @@ class UserRoutes {
             UserController.getUserById);
 
         //  '/profile/:userId/:imageName/:width/:height'
-        this.userRoutes.get(`/${RoutesConstants.PROFILE}/:${this.UID}/:${RoutesConstants.IMAGE_NAME}/:${RoutesConstants.WIDTH}/:${RoutesConstants.HEIGHT}`,
+        this.userRoutes.get(
+            `/${RoutesConstants.PROFILE}/:${this.UID}/:${RoutesConstants.IMAGE_NAME}/:${RoutesConstants.WIDTH}/:${RoutesConstants.HEIGHT}`,
             UserController.getUserImages);
 
         //  '/profile'
