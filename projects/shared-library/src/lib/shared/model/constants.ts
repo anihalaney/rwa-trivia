@@ -156,7 +156,9 @@ export enum GeneralConstants {
     BASE64 = 'base64',
     HELLO = 'Hello',
     TRUE = 'true',
-    Error_Message = 'Error : '
+    Error_Message = 'Error : ',
+    BIT_WISER_DEV_STORAGE_BUCKET_NAME = 'rwa-trivia-dev-e57fc.appspot.com',
+    BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com'
 }
 
 export enum SocialShareConstants {

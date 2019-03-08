@@ -1,4 +1,5 @@
 import { interceptorConstants, ResponseMessagesConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+import * as functions from 'firebase-functions';
 
 export class Utils {
 
@@ -35,6 +36,17 @@ export class Utils {
     static sendError(res: any, error: any): void {
         console.error(GeneralConstants.Error_Message, error);
         Utils.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseMessagesConstants.INTERNAL_SERVER_ERROR);
+    }
+
+    static getFireStorageBucket(admin: any): any {
+        if (functions.config().elasticsearch &&
+            functions.config().elasticsearch.index &&
+            functions.config().elasticsearch.index.production &&
+            functions.config().elasticsearch.index.production === GeneralConstants.TRUE) {
+            return  admin.storage().bucket(GeneralConstants.BIT_WISER_PROD_STORAGE_BUCKET_NAME);
+        } else {
+            return admin.storage().bucket(GeneralConstants.BIT_WISER_DEV_STORAGE_BUCKET_NAME);
+        }
     }
 
 }
