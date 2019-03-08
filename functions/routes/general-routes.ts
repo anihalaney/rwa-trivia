@@ -6,7 +6,6 @@ import { GeneralConstants, RoutesConstants } from '../../projects/shared-library
 
 class GeneralRoutes {
 
-    private FS = GeneralConstants.FORWARD_SLASH;
     public generalRoutes: any;
 
     constructor() {
@@ -14,17 +13,17 @@ class GeneralRoutes {
         this.generalRoutes = express.Router();
 
         //  '/hello'
-        this.generalRoutes.get(`${this.FS}${RoutesConstants.HELLO}`, AuthMiddleware.adminOnly, GeneralController.helloOperation);
+        this.generalRoutes.get(`/${RoutesConstants.HELLO}`, AuthMiddleware.adminOnly, GeneralController.helloOperation);
 
         //  '/question'
-        this.generalRoutes.get(`${this.FS}${RoutesConstants.QUESTION}`, AuthMiddleware.adminOnly, GeneralController.getTestQuestion);
+        this.generalRoutes.get(`/${RoutesConstants.QUESTION}`, AuthMiddleware.adminOnly, GeneralController.getTestQuestion);
 
         //  '/game/question'
-        this.generalRoutes.get(`${this.FS}${RoutesConstants.GAME}${this.FS}${RoutesConstants.QUESTION}`,
+        this.generalRoutes.get(`/${RoutesConstants.GAME}/${RoutesConstants.QUESTION}`,
             AuthMiddleware.adminOnly, GeneralController.getGameQuestionTest);
 
         //  '/es/check'
-        this.generalRoutes.get(`${this.FS}${RoutesConstants.ES}${this.FS}${RoutesConstants.CHECK}`,
+        this.generalRoutes.get(`/${RoutesConstants.ES}/${RoutesConstants.CHECK}`,
             AuthMiddleware.adminOnly, GeneralController.testES);
 
     }

@@ -4,13 +4,11 @@ import { Utils } from '../utils/utils';
 
 export class FirestoreMigration {
 
-  private static FS = GeneralConstants.FORWARD_SLASH;
-
   static async migrateCategories(): Promise<Category[]> {
     try {
       // const admin = admin;
       const categories: Category[] = [];
-      const catRef = admin.database().ref(`${FirestoreMigration.FS}${CollectionConstants.CATEGORIES}`);
+      const catRef = admin.database().ref(`/${CollectionConstants.CATEGORIES}`);
       return catRef.once(GeneralConstants.VALUE, (cs) => {
         for (const c of cs) {
           // console.log(c.key);
@@ -27,7 +25,7 @@ export class FirestoreMigration {
 
         const batch = admin.firestore().batch();
         for (const category of categories) {
-          const doc = admin.firestore().doc(`${CollectionConstants.CATEGORIES}${FirestoreMigration.FS}${category.id}`);
+          const doc = admin.firestore().doc(`${CollectionConstants.CATEGORIES}/${category.id}`);
           console.log(doc);
           batch.set(doc, category);
 
@@ -47,7 +45,7 @@ export class FirestoreMigration {
       // const promise = new Promise<string[]>(resolve, reject);
       // const admin = migrateFireBaseClient;
       const tags: string[] = [];
-      const tagRef = admin.database().ref(`${FirestoreMigration.FS}${CollectionConstants.TAG_LIST}`);
+      const tagRef = admin.database().ref(`/${CollectionConstants.TAG_LIST}`);
       return tagRef.once(GeneralConstants.VALUE, (ts) => {
         for (const t of ts) {
           // console.log(c.key);
@@ -132,7 +130,7 @@ export class FirestoreMigration {
 
       const batch = await firestore.batch();
       for (const item of arr) {
-        const doc = await firestore.doc(`${collection}${FirestoreMigration.FS}${item[idField]}`);
+        const doc = await firestore.doc(`${collection}/${item[idField]}`);
         console.log(doc);
         batch.set(doc, item);
       }

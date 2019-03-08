@@ -7,10 +7,9 @@ import { Utils } from './utils';
 
 export class ProfileImagesGenerator {
 
-    static basePath = `${GeneralConstants.FORWARD_SLASH}${UserConstants.PROFILE}`;
+    static basePath = `/${UserConstants.PROFILE}`;
     static profileImagePath = UserConstants.AVATAR;
     static originalImagePath = UserConstants.ORIGINAL;
-    private static FS = GeneralConstants.FORWARD_SLASH;
 
     static async fetchUsers(): Promise<any> {
         try {
@@ -74,7 +73,7 @@ export class ProfileImagesGenerator {
         dataStream: any, croppedImageType: string, width: Number, height: Number): Promise<string> {
 
         const filePath =
-            `${ProfileImagesGenerator.basePath}${ProfileImagesGenerator.FS}${userId}${ProfileImagesGenerator.FS}${ProfileImagesGenerator.profileImagePath}${ProfileImagesGenerator.FS}${width}*${height}${ProfileImagesGenerator.FS}${profileImagePath}`;
+            `${ProfileImagesGenerator.basePath}/${userId}/${ProfileImagesGenerator.profileImagePath}/${width}*${height}/${profileImagePath}`;
 
         croppedImageType = (croppedImageType) ? croppedImageType : dataStream.mimetype;
         try {

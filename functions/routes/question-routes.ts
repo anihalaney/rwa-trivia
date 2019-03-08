@@ -7,9 +7,6 @@ import { GeneralConstants, RoutesConstants } from '../../projects/shared-library
 
 class QuestionRoutes {
 
-    private FS = GeneralConstants.FORWARD_SLASH;
-    private CL = GeneralConstants.COLON;
-
     public questionRoutes: any;
 
     constructor() {
@@ -17,19 +14,19 @@ class QuestionRoutes {
         this.questionRoutes = express.Router();
 
         //  '/day/:nextQ'
-        this.questionRoutes.get(`${this.FS}${RoutesConstants.DAY}${this.FS}${this.CL}${RoutesConstants.NEXT_Q}`,
+        this.questionRoutes.get(`/${RoutesConstants.DAY}/:${RoutesConstants.NEXT_Q}`,
             QuestionController.getQuestionOfDay);
 
         //  '/next/:gameId'
-        this.questionRoutes.post(`${this.FS}${RoutesConstants.NEXT}${this.FS}${this.CL}${RoutesConstants.GAME_ID}`,
+        this.questionRoutes.post(`/${RoutesConstants.NEXT}/:${RoutesConstants.GAME_ID}`,
             AuthMiddleware.authorizedOnly, QuestionController.getNextQuestion);
 
         //  '/:start/:size'
-        this.questionRoutes.post(`${this.FS}${this.CL}${RoutesConstants.START}${this.FS}${this.CL}${RoutesConstants.SIZE}`,
+        this.questionRoutes.post(`/:${RoutesConstants.START}/:${RoutesConstants.SIZE}`,
             AuthMiddleware.adminOnly, QuestionController.getQuestions);
 
         //  '/:questionId'
-        this.questionRoutes.post(`${this.FS}${this.CL}${RoutesConstants.QUESTION_ID}`,
+        this.questionRoutes.post(`/:${RoutesConstants.QUESTION_ID}`,
             AuthMiddleware.authorizedOnly, QuestionController.getUpdatedQuestion);
 
     }
