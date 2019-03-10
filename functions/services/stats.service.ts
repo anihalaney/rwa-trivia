@@ -5,7 +5,6 @@ import { Utils } from '../utils/utils';
 export class StatsService {
 
     private static statsFireStoreClient = admin.firestore();
-    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
      * getSystemStats
@@ -13,8 +12,8 @@ export class StatsService {
      */
     static async getSystemStats(statName: string): Promise<any> {
         try {
-            const systemStat = await this.statsFireStoreClient
-                .doc(`${CollectionConstants.STATS}${this.FS}${statName}`)
+            const systemStat = await StatsService.statsFireStoreClient
+                .doc(`${CollectionConstants.STATS}/${statName}`)
                 .get();
             return systemStat.data();
         } catch (error) {
@@ -28,8 +27,8 @@ export class StatsService {
      */
     static async setSystemStats(statName: string, SystemStat: any): Promise<any> {
         try {
-            return await this.statsFireStoreClient
-                .doc(`${CollectionConstants.STATS}${this.FS}${statName}`)
+            return await StatsService.statsFireStoreClient
+                .doc(`${CollectionConstants.STATS}/${statName}`)
                 .set(SystemStat);
         } catch (error) {
             return Utils.throwError(error);

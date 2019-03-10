@@ -5,8 +5,7 @@ import { Utils } from '../utils/utils';
 export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
-    private static bucket: any = admin.storage().bucket();
-    private static FS = GeneralConstants.FORWARD_SLASH;
+    private static bucket: any = Utils.getFireStorageBucket(admin);
 
     /**
     * getUsers
@@ -14,7 +13,7 @@ export class UserService {
     */
     static async getUsers(): Promise<any> {
         try {
-            return Utils.getValesFromFirebaseSnapshot(await this.fireStoreClient.collection(CollectionConstants.USERS).get());
+            return Utils.getValesFromFirebaseSnapshot(await UserService.fireStoreClient.collection(CollectionConstants.USERS).get());
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -26,8 +25,8 @@ export class UserService {
     */
     static async getUserById(userId: string): Promise<any> {
         try {
-            const userData = await this.fireStoreClient
-                .doc(`${this.FS}${CollectionConstants.USERS}${this.FS}${userId}`)
+            const userData = await UserService.fireStoreClient
+                .doc(`/${CollectionConstants.USERS}/${userId}`)
                 .get();
             return userData.data();
         } catch (error) {
@@ -41,8 +40,8 @@ export class UserService {
      */
     static async updateUser(dbUser: any): Promise<any> {
         try {
-            return await this.fireStoreClient
-                .doc(`${this.FS}${CollectionConstants.USERS}${this.FS}${dbUser.userId}`)
+            return await UserService.fireStoreClient
+                .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
                 .update(dbUser);
         } catch (error) {
             return Utils.throwError(error);
@@ -56,7 +55,7 @@ export class UserService {
     static async getUsersByEmail(obj: any): Promise<any> {
         try {
             return Utils.getValesFromFirebaseSnapshot(
-                await this.fireStoreClient
+                await UserService.fireStoreClient
                     .collection(CollectionConstants.USERS)
                     .where(GeneralConstants.EMAIL, GeneralConstants.DOUBLE_EQUAL, obj.email)
                     .get()
@@ -72,7 +71,7 @@ export class UserService {
     */
     static async getUserProfile(userId: string): Promise<any> {
         try {
-            const dbUser: User = await this.getUserById(userId);
+            const dbUser: User = await UserService.getUserById(userId);
             const user = new User();
             user.displayName = (dbUser && dbUser.displayName) ? dbUser.displayName : '';
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
@@ -90,8 +89,8 @@ export class UserService {
   */
     static async getUserProfileImage(userId: string, width: string, height: string): Promise<any> {
         try {
-            const dbUser: User = await this.getUserById(userId);
-            return await this.generateProfileImage(userId, dbUser.profilePicture, `${width}*${height}`);
+            const dbUser: User = await UserService.getUserById(userId);
+            return await UserService.generateProfileImage(userId, dbUser.profilePicture, `${width}*${height}`);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -103,9 +102,10 @@ export class UserService {
      */
     static async generateProfileImage(userId: string, profilePicture: string, size?: string): Promise<string> {
         const fileName = (size) ?
-            `${UserConstants.PROFILE}${this.FS}${userId}${this.FS}${UserConstants.AVATAR}${this.FS}${size}${this.FS}${profilePicture}`
-            : `${UserConstants.PROFILE}${this.FS}${userId}${this.FS}${UserConstants.AVATAR}${this.FS}${profilePicture}`;
-        const file = this.bucket.file(fileName);
+            `${UserConstants.PROFILE}/${userId}/${UserConstants.AVATAR}/${size}/${profilePicture}`
+            : `${UserConstants.PROFILE}/${userId}/${UserConstants.AVATAR}/${profilePicture}`;
+
+        const file = UserService.bucket.file(fileName);
         try {
             const streamData = await file.download();
             return streamData[0];
@@ -129,9 +129,9 @@ export class UserService {
         const promises: Promise<any>[] = [];
         for (const chunk of chunks) {
             for (const user of chunk) {
-                const batch = this.fireStoreClient.batch();
+                const batch = UserService.fireStoreClient.batch();
                 Object.keys(user).forEach(key => user[key] === undefined && delete user[key]);
-                const userInstance = this.fireStoreClient.collection(CollectionConstants.USERS).doc(user.userId);
+                const userInstance = UserService.fireStoreClient.collection(CollectionConstants.USERS).doc(user.userId);
                 batch.set(userInstance, { ...user }, { merge: true });
 
                 promises.push(batch.commit());
@@ -150,7 +150,8 @@ export class UserService {
     */
     static async uploadProfileImage(data: any, mimeType: any, filePath: string, ): Promise<any> {
         const stream = require('stream');
-        const file = this.bucket.file(filePath);
+
+        const file = UserService.bucket.file(filePath);
         const dataStream = new stream.PassThrough();
         dataStream.push(data);
         dataStream.push(null);
@@ -179,7 +180,7 @@ export class UserService {
      * return status
      */
     static async removeSocialProfile(): Promise<any> {
-        const users: User[] = await this.getUsers();
+        const users: User[] = await UserService.getUsers();
 
         const migrationPromises: Promise<any>[] = [];
 
@@ -188,7 +189,7 @@ export class UserService {
                 delete user.facebookUrl;
                 delete user.linkedInUrl;
                 delete user.twitterUrl;
-                migrationPromises.push(this.updateUser({ ...user }));
+                migrationPromises.push(UserService.updateUser({ ...user }));
             }
         }
         try {

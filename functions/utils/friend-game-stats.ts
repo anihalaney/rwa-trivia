@@ -11,8 +11,8 @@ export class FriendGameStats {
         const friendPromises = [];
 
         try {
-            friendPromises.push(this.calculateFriendStat(game.playerIds[0], game.playerIds[1], game));
-            friendPromises.push(this.calculateFriendStat(game.playerIds[1], game.playerIds[0], game));
+            friendPromises.push(FriendGameStats.calculateFriendStat(game.playerIds[0], game.playerIds[1], game));
+            friendPromises.push(FriendGameStats.calculateFriendStat(game.playerIds[1], game.playerIds[0], game));
 
             return await Promise.all(friendPromises);
         } catch (error) {

@@ -125,22 +125,22 @@ export class GameMechanics {
     static async createNewGame(userId: string, gameOptions: GameOptions): Promise<string> {
         let gameId;
         try {
-            await this.updateUser(userId, gameOptions);
+            await GameMechanics.updateUser(userId, gameOptions);
 
             if (Number(gameOptions.playerMode) === PlayerMode.Opponent) {
                 if (gameOptions.rematch) {
-                    gameId = await this.createFriendUserGame(gameOptions.friendId, GameStatus.RESTARTED, userId, gameOptions);
+                    gameId = await GameMechanics.createFriendUserGame(gameOptions.friendId, GameStatus.RESTARTED, userId, gameOptions);
                 } else {
                     if (Number(gameOptions.opponentType) === OpponentType.Random) {
-                        gameId = await this.joinGame(userId, gameOptions);
+                        gameId = await GameMechanics.joinGame(userId, gameOptions);
                     } else if (Number(gameOptions.opponentType) === OpponentType.Friend) {
-                        gameId = await this.createFriendUserGame(gameOptions.friendId, GameStatus.STARTED, userId, gameOptions);
+                        gameId = await GameMechanics.createFriendUserGame(gameOptions.friendId, GameStatus.STARTED, userId, gameOptions);
                     }
                 }
             } else {
                 gameId = (gameOptions.rematch) ?
-                    await this.createSingleAndRandomUserGame(GameStatus.RESTARTED, userId, gameOptions) :
-                    await this.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
+                    await GameMechanics.createSingleAndRandomUserGame(GameStatus.RESTARTED, userId, gameOptions) :
+                    await GameMechanics.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
             }
             return gameId;
         } catch (error) {
@@ -155,9 +155,9 @@ export class GameMechanics {
             const totalGames = games.length;
 
             if (totalGames > 0) {
-                return this.pickRandomGame(games, totalGames, userId, gameOptions);
+                return GameMechanics.pickRandomGame(games, totalGames, userId, gameOptions);
             } else {
-                return await this.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
+                return await GameMechanics.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
             }
         } catch (error) {
             return Utils.throwError(error);
@@ -182,13 +182,13 @@ export class GameMechanics {
 
                 const dbGame = game.getDbModel();
                 //   console.log('dbGame', dbGame);
-                return await this.setGame(dbGame);
+                return await GameMechanics.setGame(dbGame);
             } else if (totalGames === 1) {
-                return await this.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
+                return await GameMechanics.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
             } else {
                 totalGames--;
                 queriedItems.splice(randomGameNo, 1);
-                return await this.pickRandomGame(queriedItems, totalGames, userId, gameOptions);
+                return await GameMechanics.pickRandomGame(queriedItems, totalGames, userId, gameOptions);
             }
         } catch (error) {
             return Utils.throwError(error);
@@ -201,7 +201,7 @@ export class GameMechanics {
         try {
             const game = new Game(gameOptions, userId, undefined, undefined, false, userId, undefined, undefined,
                 gameStatus, timestamp, timestamp);
-            return await this.createGame(game);
+            return await GameMechanics.createGame(game);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -212,7 +212,7 @@ export class GameMechanics {
         try {
             const game = new Game(gameOptions, userId, undefined, undefined, false, userId, friendId, undefined,
                 gameStatus, timestamp, timestamp);
-            return await this.createGame(game);
+            return await GameMechanics.createGame(game);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -225,7 +225,7 @@ export class GameMechanics {
         try {
             const ref = await GameService.createGame(dbGame);
             dbGame.id = ref.id;
-            return await this.setGame(dbGame);
+            return await GameMechanics.setGame(dbGame);
         } catch (error) {
             return Utils.throwError(error);
         }

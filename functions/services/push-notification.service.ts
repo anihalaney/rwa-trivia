@@ -11,7 +11,7 @@ export class PushNotificationService {
      */
     static async sendPush(message: any): Promise<any> {
         try {
-            return await this.pushNotificationMessagingClient.send(message);
+            return await PushNotificationService.pushNotificationMessagingClient.send(message);
         } catch (error) {
             return Utils.throwError(error);
         }

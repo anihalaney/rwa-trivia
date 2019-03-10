@@ -11,7 +11,7 @@ import gameRoutes from './game-routes';
 import userRoutes from './user-routes';
 
 class Router {
-    private FS = GeneralConstants.FORWARD_SLASH;
+
     public router: any;
 
     constructor() {
@@ -19,28 +19,28 @@ class Router {
         this.router = express.Router();
 
         //  '/app/question'
-        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.QUESTION}`, questionRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.QUESTION}`, questionRoutes);
 
         //  '/app/subscription'
-        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
 
         //  '/app/game'
-        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.GAME}`, gameRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.GAME}`, gameRoutes);
 
         //  '/app/general'
-        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.GENERAL}`, generalRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.GENERAL}`, generalRoutes);
 
         //  '/app/migration'
-        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.MIGRATION}`, migrationRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.MIGRATION}`, migrationRoutes);
 
         //  '/app/scheduler'
-        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.SCHEDULER}`, schedulerRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.SCHEDULER}`, schedulerRoutes);
 
         //  '/app/friend'
-        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.FRIEND}`, friendRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.FRIEND}`, friendRoutes);
 
         //  '/app/user'
-        this.router.use(`${this.FS}${appConstants.API_PREFIX}${this.FS}${RoutesConstants.USER}`, userRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.USER}`, userRoutes);
 
     }
 }

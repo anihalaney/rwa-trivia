@@ -7,10 +7,9 @@ import { Utils } from './utils';
 
 export class ProfileImagesGenerator {
 
-    static basePath = `${GeneralConstants.FORWARD_SLASH}${UserConstants.PROFILE}`;
+    static basePath = `/${UserConstants.PROFILE}`;
     static profileImagePath = UserConstants.AVATAR;
     static originalImagePath = UserConstants.ORIGINAL;
-    private static FS = GeneralConstants.FORWARD_SLASH;
 
     static async fetchUsers(): Promise<any> {
         try {
@@ -18,7 +17,7 @@ export class ProfileImagesGenerator {
             const userImagesPromises = [];
             for (const user of users) {
                 if (user.userId && user.profilePicture) {
-                    userImagesPromises.push(this.getStoredImage(user.userId, user.profilePicture, undefined));
+                    userImagesPromises.push(ProfileImagesGenerator.getStoredImage(user.userId, user.profilePicture, undefined));
                 }
             }
             return await Promise.all(userImagesPromises);
@@ -29,7 +28,8 @@ export class ProfileImagesGenerator {
 
     static async uploadProfileImage(user: User): Promise<any> {
 
-        let filePath = `${this.basePath}/${user.userId}/${this.originalImagePath}/${user.profilePicture}`;
+        let filePath =
+            `${ProfileImagesGenerator.basePath}/${user.userId}/${ProfileImagesGenerator.originalImagePath}/${user.profilePicture}`;
         user.originalImageUrl = user.originalImageUrl.replace(/^data:image\/\w+;base64,/, '');
         let bufferStream = new Buffer(user.originalImageUrl, GeneralConstants.BASE64);
 
@@ -37,12 +37,13 @@ export class ProfileImagesGenerator {
 
             await UserService.uploadProfileImage(bufferStream, user.imageType, filePath);
 
-            filePath = `${this.basePath}/${user.userId}/${this.profileImagePath}/${user.profilePicture}`;
+            filePath =
+                `${ProfileImagesGenerator.basePath}/${user.userId}/${ProfileImagesGenerator.profileImagePath}/${user.profilePicture}`;
             user.croppedImageUrl = user.croppedImageUrl.replace(/^data:image\/\w+;base64,/, '');
             bufferStream = new Buffer(user.originalImageUrl, GeneralConstants.BASE64);
 
             await UserService.uploadProfileImage(bufferStream, user.imageType, filePath);
-            await this.getStoredImage(user.userId, user.profilePicture, user.imageType);
+            await ProfileImagesGenerator.getStoredImage(user.userId, user.profilePicture, user.imageType);
 
             return user;
 
@@ -56,11 +57,11 @@ export class ProfileImagesGenerator {
         const imagesPromises = [];
         try {
             const dataStream = await UserService.generateProfileImage(userId, profileImagePath);
-            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
+            imagesPromises.push(ProfileImagesGenerator.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
                 UserConstants.IMG_263, UserConstants.IMG_263));
-            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
+            imagesPromises.push(ProfileImagesGenerator.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
                 UserConstants.IMG_70, UserConstants.IMG_60));
-            imagesPromises.push(this.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
+            imagesPromises.push(ProfileImagesGenerator.resizeImage(userId, profileImagePath, dataStream, croppedImageType,
                 UserConstants.IMG_44, UserConstants.IMG_40));
             const userResults = await Promise.all(imagesPromises);
             return userResults;
@@ -74,7 +75,7 @@ export class ProfileImagesGenerator {
         dataStream: any, croppedImageType: string, width: Number, height: Number): Promise<string> {
 
         const filePath =
-            `${this.basePath}${this.FS}${userId}${this.FS}${this.profileImagePath}${this.FS}${width}*${height}${this.FS}${profileImagePath}`;
+            `${ProfileImagesGenerator.basePath}/${userId}/${ProfileImagesGenerator.profileImagePath}/${width}*${height}/${profileImagePath}`;
 
         croppedImageType = (croppedImageType) ? croppedImageType : dataStream.mimetype;
         try {

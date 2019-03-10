@@ -15,22 +15,24 @@ export class GameLeaderBoardStats {
         try {
             const games: Game[] = await GameService.getCompletedGames();
 
-            const questionDict = await this.loadQuestionDictionary();
+            const questionDict = await GameLeaderBoardStats.loadQuestionDictionary();
 
             for (const game of games) {
                 for (const userId of Object.keys(game.stats)) {
-                    this.calculateAllGameUsersStat(userId, game, this.getGameQuestionCategories(game, questionDict));
+                    GameLeaderBoardStats.calculateAllGameUsersStat(
+                        userId, game, GameLeaderBoardStats.getGameQuestionCategories(game, questionDict)
+                    );
                 }
             }
 
-            for (const userId of Object.keys(this.accountDict)) {
-                const account: Account = this.accountDict[userId];
+            for (const userId of Object.keys(GameLeaderBoardStats.accountDict)) {
+                const account: Account = GameLeaderBoardStats.accountDict[userId];
                 account.id = userId;
                 userPromises.push(AccountService.updateAccountData({ ...account }));
             }
 
             const userResults = await Promise.all(userPromises);
-            this.accountDict = {};
+            GameLeaderBoardStats.accountDict = {};
 
             return userResults;
         } catch (error) {
@@ -74,8 +76,8 @@ export class GameLeaderBoardStats {
     }
 
     private static calculateAllGameUsersStat(userId: string, game: Game, categoryIds: Array<number>): void {
-        const account: Account = (this.accountDict[userId]) ? this.accountDict[userId] : new Account();
-        this.accountDict[userId] = AccountService.calculateAccountStat(account, game, categoryIds, userId);
+        const account: Account = (GameLeaderBoardStats.accountDict[userId]) ? GameLeaderBoardStats.accountDict[userId] : new Account();
+        GameLeaderBoardStats.accountDict[userId] = AccountService.calculateAccountStat(account, game, categoryIds, userId);
     }
 
 
@@ -98,7 +100,7 @@ export class GameLeaderBoardStats {
                 }
             }
             for (const userId of Object.keys(game.stats)) {
-                userPromises.push(this.calculateUserStat(userId, game, categoryIds));
+                userPromises.push(GameLeaderBoardStats.calculateUserStat(userId, game, categoryIds));
             }
 
             return await Promise.all(userPromises);

@@ -9,7 +9,7 @@ export class FirebaseAuthService {
      */
     static async getAuthUsers(nextPageToken?: string): Promise<any> {
         try {
-            return await this.fireBaseAuthClient.listUsers(1000, nextPageToken);
+            return await FirebaseAuthService.fireBaseAuthClient.listUsers(1000, nextPageToken);
         } catch (error) {
             return Utils.throwError(error);
         }

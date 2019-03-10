@@ -9,12 +9,11 @@ import { Utils } from '../utils/utils';
 export class GeneralService {
 
     private static generalFireStoreClient = admin.firestore();
-    private static FS = GeneralConstants.FORWARD_SLASH;
     private static QC = CollectionConstants.QUESTIONS;
     static async migrateCollection(collectionName): Promise<any> {
 
         try {
-            const sourceDB = this.generalFireStoreClient;
+            const sourceDB = GeneralService.generalFireStoreClient;
             // set required dev configuration parameters for different deployment environments(firebase project) using following command
             // default project in firebase is development deployment
             // firebase -P production functions:config:set devconfig.param1=value
@@ -50,8 +49,8 @@ export class GeneralService {
 
         try {
             const questions = [];
-            const qs = await this.generalFireStoreClient
-                .collection(`${this.FS}${this.QC}`)
+            const qs = await GeneralService.generalFireStoreClient
+                .collection(`/${GeneralService.QC}`)
                 .orderBy(GeneralConstants.ID)
                 .get();
             for (const q of qs) {
@@ -77,7 +76,7 @@ export class GeneralService {
     static async getTestQuestion(): Promise<any> {
         try {
             const qs = await admin.database()
-                .ref(`${this.FS}${this.QC}${this.FS}${CollectionConstants.PUBLISHED}`)
+                .ref(`/${GeneralService.QC}/${CollectionConstants.PUBLISHED}`)
                 .orderByKey().limitToLast(1).once(GeneralConstants.VALUE);
 
             qs.forEach((q) => {
