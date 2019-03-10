@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -21,7 +21,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 @Component({
   selector: 'app-bulk-summary-questions',
   templateUrl: './bulk-summary-question.component.html',
-  styleUrls: ['./bulk-summary-question.component.scss']
+  styleUrls: ['./bulk-summary-question.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
 
