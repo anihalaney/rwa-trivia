@@ -6,7 +6,6 @@ import { Utils } from '../utils/utils';
 export class GameService {
 
     private static gameFireStoreClient = admin.firestore();
-    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
      * getAvailableGames
@@ -14,8 +13,8 @@ export class GameService {
      */
     static async getAvailableGames(): Promise<any> {
         try {
-            return this.getGames(
-                await this.gameFireStoreClient
+            return GameService.getGames(
+                await GameService.gameFireStoreClient
                     .collection(CollectionConstants.GAMES)
                     .where(GameConstants.GAME_STATUS, GeneralConstants.DOUBLE_EQUAL, GameStatus.AVAILABLE_FOR_OPPONENT)
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
@@ -31,7 +30,7 @@ export class GameService {
      */
     static async getLiveGames(): Promise<any> {
         try {
-            return await this.gameFireStoreClient.collection(CollectionConstants.GAMES)
+            return await GameService.gameFireStoreClient.collection(CollectionConstants.GAMES)
                 .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                 .get();
         } catch (error) {
@@ -45,7 +44,7 @@ export class GameService {
      */
     static async updateStats(): Promise<any> {
         try {
-            const snapshot = await this.getLiveGames();
+            const snapshot = await GameService.getLiveGames();
             const promises = [];
             for (const doc of snapshot.docs) {
 
@@ -60,7 +59,7 @@ export class GameService {
                 const dbGame = game.getDbModel();
                 dbGame.id = doc.id;
 
-                promises.push(this.setGame(dbGame));
+                promises.push(GameService.setGame(dbGame));
             }
             return await Promise.all(promises);
         } catch (error) {
@@ -75,7 +74,7 @@ export class GameService {
      */
     static async createGame(dbGame: any): Promise<any> {
         try {
-            return await this.gameFireStoreClient.collection(CollectionConstants.GAMES).add(dbGame);
+            return await GameService.gameFireStoreClient.collection(CollectionConstants.GAMES).add(dbGame);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -87,8 +86,8 @@ export class GameService {
      */
     static async getGameById(gameId: string): Promise<any> {
         try {
-            const gameData = await this.gameFireStoreClient
-                .doc(`${CollectionConstants.GAMES}${this.FS}${gameId}`)
+            const gameData = await GameService.gameFireStoreClient
+                .doc(`${CollectionConstants.GAMES}/${gameId}`)
                 .get();
             if (!gameData.exists) {
                 // game not found
@@ -106,8 +105,8 @@ export class GameService {
      */
     static async setGame(dbGame: any): Promise<any> {
         try {
-            return await this.gameFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.GAMES}${this.FS}${dbGame.id}`)
+            return await GameService.gameFireStoreClient
+                .doc(`/${CollectionConstants.GAMES}/${dbGame.id}`)
                 .set(dbGame);
         } catch (error) {
             return Utils.throwError(error);
@@ -121,9 +120,9 @@ export class GameService {
      */
     static async getCompletedGames(): Promise<any> {
         try {
-            return this.getGames(
-                await this.gameFireStoreClient
-                    .collection(`${this.FS}${CollectionConstants.GAMES}`)
+            return GameService.getGames(
+                await GameService.gameFireStoreClient
+                    .collection(`/${CollectionConstants.GAMES}`)
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, true)
                     .get()
             );
@@ -138,8 +137,8 @@ export class GameService {
      */
     static async updateGame(dbGame: any): Promise<any> {
         try {
-            return await this.gameFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.GAMES}${this.FS}${dbGame.id}`)
+            return await GameService.gameFireStoreClient
+                .doc(`/${CollectionConstants.GAMES}/${dbGame.id}`)
                 .update(dbGame);
         } catch (error) {
             return Utils.throwError(error);
@@ -152,9 +151,9 @@ export class GameService {
      */
     static async checkGameOver(): Promise<any> {
         try {
-            return this.getGames(
-                await this.gameFireStoreClient
-                    .collection(`${this.FS}${CollectionConstants.GAMES}`)
+            return GameService.getGames(
+                await GameService.gameFireStoreClient
+                    .collection(`/${CollectionConstants.GAMES}`)
                     .where(GameConstants.GAME_OVER, GeneralConstants.DOUBLE_EQUAL, false)
                     .get()
             );

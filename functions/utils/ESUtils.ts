@@ -12,11 +12,11 @@ export class ESUtils {
   private static searchClient: ElasticSearch.Client;
 
   static getElasticSearchClient(): ElasticSearch.Client {
-    if (!this.searchClient) {
+    if (!ESUtils.searchClient) {
       // cloning config object to avoid reusing the same object (same object causes error)
-      this.searchClient = new ElasticSearch.Client(Object.assign({}, elasticSearchConfig));
+      ESUtils.searchClient = new ElasticSearch.Client(Object.assign({}, elasticSearchConfig));
     }
-    return this.searchClient;
+    return ESUtils.searchClient;
   }
 
   static getIndex(index: string): string {
@@ -40,10 +40,10 @@ export class ESUtils {
   }
 
   static async createOrUpdateIndex(type: string, data: Question, key: string): Promise<any> {
-    let index = this.QUESTIONS_INDEX;
+    let index = ESUtils.QUESTIONS_INDEX;
     try {
-      const client: ElasticSearch.Client = this.getElasticSearchClient();
-      index = this.getIndex(index);
+      const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+      index = ESUtils.getIndex(index);
       data.createdOn = new Date(data.createdOn['_seconds'] * 1000);
       await client.index({
         index: index,
@@ -63,10 +63,10 @@ export class ESUtils {
 
 
   static async removeIndex(key): Promise<any> {
-    let index = this.QUESTIONS_INDEX;
+    let index = ESUtils.QUESTIONS_INDEX;
     try {
-      const client: ElasticSearch.Client = this.getElasticSearchClient();
-      index = this.getIndex(index);
+      const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+      index = ESUtils.getIndex(index);
 
       const body = await client.search({
         'index': index,
@@ -107,7 +107,7 @@ export class ESUtils {
 
   static async deleteIndex(index): Promise<any> {
     try {
-      const client: ElasticSearch.Client = this.getElasticSearchClient();
+      const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
       const indexFound = await client.indices.exists({ 'index': index });
 
       if (!indexFound) {
@@ -129,13 +129,13 @@ export class ESUtils {
   }
 
   static async rebuildIndex(data: { 'id': string, 'type': string, 'source': any }[]): Promise<any> {
-    let index = this.QUESTIONS_INDEX;
-    const client: ElasticSearch.Client = this.getElasticSearchClient();
-    index = this.getIndex(index);
+    let index = ESUtils.QUESTIONS_INDEX;
+    const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+    index = ESUtils.getIndex(index);
 
     try {
       // delete entire index
-      await this.deleteIndex(index);
+      await ESUtils.deleteIndex(index);
       // TODO: build bulk index in batches (maybe 1000 at a time)
       const arrayLength = data.length;
       const batchSize = 500;
@@ -161,7 +161,7 @@ export class ESUtils {
 
   static async getQuestions(start: number, size: number, criteria: SearchCriteria): Promise<SearchResults> {
 
-    const results = await this.getSearchResults(this.QUESTIONS_INDEX, start, size, criteria);
+    const results = await ESUtils.getSearchResults(ESUtils.QUESTIONS_INDEX, start, size, criteria);
     const searchResults: SearchResults = new SearchResults();
     searchResults.totalCount = results.hits.total;
     searchResults.categoryAggregation = {};
@@ -183,19 +183,19 @@ export class ESUtils {
   static async getRandomQuestionOfTheDay(isNextQuestion: boolean): Promise<Question> {
     const date = new Date();
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
-    const hits = await this.getRandomItems(this.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed);
+    const hits = await ESUtils.getRandomItems(ESUtils.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed);
     // convert hit to Question
     return Question.getViewModelFromES(hits[0]);
   }
 
   static async getRandomGameQuestion(gameCategories: Array<number>, excludedQId: Array<string>): Promise<Question> {
-    const hits = await this.getRandomQuestionES(this.QUESTIONS_INDEX, 1, '', gameCategories, [], excludedQId);
+    const hits = await ESUtils.getRandomQuestionES(ESUtils.QUESTIONS_INDEX, 1, '', gameCategories, [], excludedQId);
     return Question.getViewModelFromES(hits[0]);
   }
 
   static async getSearchResults(index: string, start: number, size: number, criteria: SearchCriteria): Promise<any> {
-    const client: ElasticSearch.Client = this.getElasticSearchClient();
-    index = this.getIndex(index);
+    const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+    index = ESUtils.getIndex(index);
 
     const body = {
       'aggregations': {
@@ -265,8 +265,8 @@ export class ESUtils {
 
   static async getRandomItems(index: string, size: number, seed: string): Promise<any> {
     try {
-      const client: ElasticSearch.Client = this.getElasticSearchClient();
-      index = this.getIndex(index);
+      const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+      index = ESUtils.getIndex(index);
 
       const body: Elasticsearch.SearchResponse<any> = await client.search({
         'index': index,
@@ -294,8 +294,8 @@ export class ESUtils {
 
   static async getRandomQuestionES(index: string, size: number, seed: string,
     categories: number[], tags: string[], excludeIds: string[]): Promise<any> {
-    const client: ElasticSearch.Client = this.getElasticSearchClient();
-    index = this.getIndex(index);
+    const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+    index = ESUtils.getIndex(index);
 
     let filter = null;
     const randomSeed = (seed === '') ? null : seed;
@@ -334,14 +334,14 @@ export class ESUtils {
   }
 
   static async getQuestionById(questionId: string): Promise<Question> {
-    const hits = await this.getQuestionES(this.QUESTIONS_INDEX, questionId);
+    const hits = await ESUtils.getQuestionES(ESUtils.QUESTIONS_INDEX, questionId);
     // convert hit to Question
     return Question.getViewModelFromES(hits[0]);
   }
 
   static async getQuestionES(index: string, questionId: string): Promise<any> {
-    const client: ElasticSearch.Client = this.getElasticSearchClient();
-    index = this.getIndex(index);
+    const client: ElasticSearch.Client = ESUtils.getElasticSearchClient();
+    index = ESUtils.getIndex(index);
 
     try {
       const body = await client.search({

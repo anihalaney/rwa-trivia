@@ -6,8 +6,6 @@ import { GeneralConstants, RoutesConstants } from '../../projects/shared-library
 
 class SchedulerRoutes {
 
-    private FS = GeneralConstants.FORWARD_SLASH;
-
     public schedulerRoutes: any;
 
     constructor() {
@@ -15,19 +13,19 @@ class SchedulerRoutes {
         this.schedulerRoutes = express.Router();
 
         //  '/game-over'
-        this.schedulerRoutes.post(`${this.FS}${RoutesConstants.GAME_DASH_OVER}`,
+        this.schedulerRoutes.post(`/${RoutesConstants.GAME_DASH_OVER}`,
             AuthMiddleware.authTokenOnly, SchedulerController.checkGameOver);
 
         //  '/turn'
-        this.schedulerRoutes.post(`${this.FS}${RoutesConstants.TURN}`,
+        this.schedulerRoutes.post(`/${RoutesConstants.TURN}`,
             AuthMiddleware.authTokenOnly, SchedulerController.changeGameTurn);
 
         //  '/add-lives'
-        this.schedulerRoutes.post(`${this.FS}${RoutesConstants.ADD_LIVES}`,
+        this.schedulerRoutes.post(`/${RoutesConstants.ADD_LIVES}`,
             AuthMiddleware.authTokenOnly, SchedulerController.addLives);
 
         //  '/blog'
-        this.schedulerRoutes.post(`${this.FS}${RoutesConstants.BLOG}`,
+        this.schedulerRoutes.post(`/${RoutesConstants.BLOG}`,
             AuthMiddleware.authTokenOnly, SchedulerController.generateBlogsData);
 
     }

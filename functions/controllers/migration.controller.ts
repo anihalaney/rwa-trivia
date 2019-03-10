@@ -14,14 +14,12 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { AuthUser } from '../utils/auth-user';
-import { appSettings } from '../services/app-settings.service';
+import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { Utils } from '../utils/utils';
 
 export class MigrationController {
 
-
-    private static FS = GeneralConstants.FORWARD_SLASH;
     private static QC = CollectionConstants.QUESTIONS;
 
     /**
@@ -49,22 +47,23 @@ export class MigrationController {
                     console.log('Migrating games ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
                         'Game Count: ' + await FirestoreMigration.
-                            migrateGames(`${this.FS}${CollectionConstants.GAMES}`, CollectionConstants.GAMES));
+                            migrateGames(`/${CollectionConstants.GAMES}`, CollectionConstants.GAMES));
                     break;
                 case MigrationConstants.QUESTIONS:
                     // Migrate questions
                     console.log('Migrating questions ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
                         await FirestoreMigration.
-                            migrateQuestions(`${this.FS}${this.QC}${this.FS}${CollectionConstants.PUBLISHED}`,
-                                this.QC));
+                            migrateQuestions(`/${MigrationController.QC}/${CollectionConstants.PUBLISHED}`,
+                                MigrationController.QC));
                     break;
                 case MigrationConstants.UNPUBLISHED_QUESTIONS:
                     // Migrate unpublished questions
                     console.log('Migrating unpublished questions ...');
                     Utils.sendResponse(res, interceptorConstants.SUCCESS,
-                        await FirestoreMigration.migrateQuestions(`${this.FS}${this.QC}${this.FS}${CollectionConstants.UNPUBLISHED}`,
-                            CollectionConstants.UNPUBLISHED_QUESTIONS));
+                        await FirestoreMigration.
+                            migrateQuestions(`/${MigrationController.QC}/${CollectionConstants.UNPUBLISHED}`,
+                                CollectionConstants.UNPUBLISHED_QUESTIONS));
                     break;
             }
 
@@ -264,7 +263,7 @@ export class MigrationController {
      */
     static async addDefaultLives(req, res): Promise<any> {
         try {
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             // Lives setting is enable then add default number of lives into user's account
             if (appSetting.lives.enable) {
 

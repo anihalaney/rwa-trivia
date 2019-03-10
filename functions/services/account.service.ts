@@ -4,13 +4,11 @@ import {
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
-import { appSettings } from './app-settings.service';
+import { AppSettings } from './app-settings.service';
 
 export class AccountService {
 
     private static accountFireStoreClient = admin.firestore();
-
-    private static FS = GeneralConstants.FORWARD_SLASH;
 
     /**
      * getAccountById
@@ -18,8 +16,8 @@ export class AccountService {
      */
     static async getAccountById(id: string): Promise<any> {
         try {
-            const accountData = await this.accountFireStoreClient.
-                doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${id}`).get();
+            const accountData = await AccountService.accountFireStoreClient.
+                doc(`/${CollectionConstants.ACCOUNTS}/${id}`).get();
             return accountData.data();
         } catch (error) {
             return Utils.throwError(error);
@@ -32,8 +30,8 @@ export class AccountService {
      */
     static async setAccount(dbAccount: any): Promise<any> {
         try {
-            return await this.accountFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${dbAccount.id}`)
+            return await AccountService.accountFireStoreClient
+                .doc(`/${CollectionConstants.ACCOUNTS}/${dbAccount.id}`)
                 .set(dbAccount);
 
         } catch (error) {
@@ -47,8 +45,8 @@ export class AccountService {
      */
     static async updateAccountData(dbAccount: any): Promise<any> {
         try {
-            return await this.accountFireStoreClient
-                .doc(`${this.FS}${CollectionConstants.ACCOUNTS}${this.FS}${dbAccount.id}`)
+            return await AccountService.accountFireStoreClient
+                .doc(`/${CollectionConstants.ACCOUNTS}/${dbAccount.id}`)
                 .update(dbAccount);
         } catch (error) {
             return Utils.throwError(error);
@@ -61,7 +59,10 @@ export class AccountService {
      */
     static async getAccounts(): Promise<any> {
         try {
-            return Utils.getValesFromFirebaseSnapshot(await this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).get());
+            return Utils.getValesFromFirebaseSnapshot(
+                await AccountService.accountFireStoreClient
+                    .collection(CollectionConstants.ACCOUNTS).get()
+            );
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -105,11 +106,11 @@ export class AccountService {
      */
     static async decreaseLife(userId) {
         try {
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
                 const livesMilles = appSetting.lives.lives_after_add_millisecond;
-                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
+                const accountRef = AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
                 const docRef = await accountRef.get();
                 const timestamp = Utils.getUTCTimeStamp();
                 if (docRef.exists) {
@@ -135,9 +136,9 @@ export class AccountService {
      */
     static async increaseLives(userId): Promise<any> {
         try {
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (appSetting.lives.enable) {
-                await this.addLife(userId, appSetting);
+                await AccountService.addLife(userId, appSetting);
             }
         } catch (error) {
             return Utils.throwError(error);
@@ -150,10 +151,10 @@ export class AccountService {
      */
     static async addDefaultLives(user: any): Promise<any> {
         try {
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
-                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(user.id);
+                const accountRef = AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(user.id);
                 const docRef = await accountRef.get();
                 if (docRef.exists) {
                     const account = docRef.data();
@@ -178,11 +179,11 @@ export class AccountService {
     static async addLives(): Promise<any> {
         try {
             const promises = [];
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (appSetting.lives.enable) {
                 const maxLives = appSetting.lives.max_lives;
                 let timestamp = Utils.getUTCTimeStamp();
-                const accountCollRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS)
+                const accountCollRef = AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS)
                     .where(AccountConstants.NEXT_LIVE_UPDATE,
                         GeneralConstants.LESS_THAN_OR_EQUAL, timestamp);
                 const accounts = await accountCollRef.get();
@@ -190,7 +191,7 @@ export class AccountService {
                 for (const account of accountsNotHavingMaxLives) {
                     timestamp = Utils.getUTCTimeStamp();
                     const userAccount = account.data();
-                    promises.push(this.addLife(userAccount.id, appSetting));
+                    promises.push(AccountService.addLife(userAccount.id, appSetting));
                 }
             }
             return await Promise.all(promises);
@@ -205,7 +206,7 @@ export class AccountService {
     static async addLife(userId: String, appSetting): Promise<any> {
         try {
             const timestamp = Utils.getUTCTimeStamp();
-            const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
+            const accountRef = AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
             const docRef = await accountRef.get();
             const account = docRef.data();
             if (docRef.exists) {
@@ -230,7 +231,7 @@ export class AccountService {
 
     static async updateLives(userId): Promise<any> {
         try {
-            return await this.increaseLives(userId);
+            return await AccountService.increaseLives(userId);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -241,11 +242,11 @@ export class AccountService {
      */
     static async setBits(userId: any): Promise<any> {
         try {
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (appSetting.tokens.enable) {
                 const bits = appSetting.tokens.earn_bits;
 
-                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
+                const accountRef = AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
                 const docRef = await accountRef.get();
 
                 if (docRef.exists) {
@@ -267,10 +268,10 @@ export class AccountService {
      */
     static async setBytes(userId: any): Promise<any> {
         try {
-            const appSetting = await appSettings.getAppSettings();
+            const appSetting = await AppSettings.Instance.getAppSettings();
             if (appSetting.tokens.enable) {
                 const bytes = appSetting.tokens.earn_bytes;
-                const accountRef = this.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
+                const accountRef = AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
                 const docRef = await accountRef.get();
 
                 if (docRef.exists) {

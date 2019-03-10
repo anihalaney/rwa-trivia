@@ -14,13 +14,13 @@ export class PushNotification {
             const notificationPromises = [];
             if (dbUser.androidPushTokens) {
                 for (const token of dbUser.androidPushTokens) {
-                    notificationPromises.push(this.sendNotification(token, title, body, data));
+                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data));
                 }
             }
 
             if (dbUser.iosPushTokens) {
                 for (const token of dbUser.iosPushTokens) {
-                    notificationPromises.push(this.sendNotification(token, title, body, data));
+                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data));
                 }
             }
 
@@ -56,37 +56,37 @@ export class PushNotification {
                     msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
                     switch (game.GameStatus) {
                         case GameStatus.WAITING_FOR_NEXT_Q:
-                            result = await this.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
+                            result = await PushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
                                 `${dbUser.displayName} did not answer correctly. It's your turn to play!`, msg_data);
                             console.log('result', result);
                             console.log(`${dbUser.displayName} did not answer correctly. It's your turn to play!`);
                             break;
                         case GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE:
-                            result = await this.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
+                            result = await PushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
                                 `${dbUser.displayName} has invited you to a new game. It's your turn to play!`, msg_data);
                             console.log('result', result);
                             console.log(`${dbUser.displayName} has invited you to a new game. It's your turn to play!`);
                             break;
                         case GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE:
-                            result = await this.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
+                            result = await PushNotification.sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
                                 `${dbUser.displayName} has invited you to a new game. It's your turn to play!`, msg_data);
                             console.log('result', result);
                             console.log(`${dbUser.displayName} has invited you to a new game. It's your turn to play!`);
                             break;
                         case GameStatus.COMPLETED:
                             looserPlayerId = game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0];
-                            result = await this.sendNotificationToDevices(looserPlayerId, 'Bitwiser Game Play',
+                            result = await PushNotification.sendNotificationToDevices(looserPlayerId, 'Bitwiser Game Play',
                                 `${dbUser.displayName} won the game.`, msg_data);
                             console.log('result', result);
                             console.log(`${dbUser.displayName} won the game.`);
                             break;
                         case GameStatus.TIME_EXPIRED:
                             looserPlayerId = game.playerIds.filter((playerId) => playerId !== currentTurnPlayerId)[0];
-                            result = await this.sendNotificationToDevices(looserPlayerId, 'Bitwiser Game Play',
+                            result = await PushNotification.sendNotificationToDevices(looserPlayerId, 'Bitwiser Game Play',
                                 `Your time has expired. ${dbUser.displayName} has won the game.`, msg_data);
                             console.log('result', result);
                             dbUser = await UserService.getUserById(looserPlayerId);
-                            result = await this.sendNotificationToDevices(currentTurnPlayerId, 'Bitwiser Game Play',
+                            result = await PushNotification.sendNotificationToDevices(currentTurnPlayerId, 'Bitwiser Game Play',
                                 `${dbUser.displayName} did not answer in time. You win!`, msg_data);
                             console.log('result', result);
                             console.log(`Your time has expired. ${dbUser.displayName} has won the game.`);
@@ -96,7 +96,7 @@ export class PushNotification {
 
                 case pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS:
                     msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
-                    result = await this
+                    result = await PushNotification
                         .sendNotificationToDevices(game.nextTurnPlayerId, 'Bitwiser Game Play',
                             'You have 32 minutes remaining to play your turn !', msg_data);
                     console.log('result', result);
@@ -108,7 +108,7 @@ export class PushNotification {
                     const otherUser: User = await UserService.getUserById(data.created_uid);
                     msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
 
-                    result = await this
+                    result = await PushNotification
                         .sendNotificationToDevices(currentTurnPlayerId, 'Friend Request',
                             `${otherUser.displayName} has sent you a friend request.`, data);
                     console.log('result', result);
