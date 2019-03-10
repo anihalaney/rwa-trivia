@@ -1,10 +1,11 @@
-import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges , ChangeDetectionStrategy } from '@angular/core';
 
 
 @Component({
   selector: 'social-palette',
   templateUrl: './social-palette.component.html',
-  styleUrls: ['./social-palette.component.scss']
+  styleUrls: ['./social-palette.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SocialPaletteComponent implements OnChanges {
   @Input() blogId: number;

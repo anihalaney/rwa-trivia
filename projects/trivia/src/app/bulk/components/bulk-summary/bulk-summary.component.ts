@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -10,7 +10,8 @@ import { Utils } from 'shared-library/core/services';
 @Component({
   selector: 'app-bulk-summary',
   templateUrl: './bulk-summary.component.html',
-  styleUrls: ['./bulk-summary.component.scss']
+  styleUrls: ['./bulk-summary.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
