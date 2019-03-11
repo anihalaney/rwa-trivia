@@ -6,7 +6,7 @@ import { AppState, appState } from '../../store';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { User } from 'shared-library/shared/model';
 import { Location } from '@angular/common';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
 @Component({
@@ -15,11 +15,11 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./app.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'trivia!';
   user: User;
-
+  subscription = [];
 
   theme = '';
   constructor(private renderer: Renderer2,
@@ -27,11 +27,11 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public router: Router,
     private location: Location,
-   ) {
+  ) {
 
 
 
-    store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
+    this.subscription.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
         let url: string;
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
         // if user logs out then redirect to home page
         this.router.navigate(['/']);
       }
-    });
+    }));
 
   }
 
@@ -52,6 +52,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.subscription) {
+      console.log(this.subscription, 'app closed');
+    }
   }
 
   login() {

@@ -10,7 +10,7 @@ import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import * as Toast from 'nativescript-toast';
 import { Utils } from 'shared-library/core/services';
 import { isAndroid } from 'tns-core-modules/ui/page/page';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'report-game',
@@ -18,7 +18,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
     styleUrls: ['./report-game.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
@@ -34,13 +34,15 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     reportOptions?: Array<ReportOption>;
     selectedOption: string = null;
     otherReason: string = null;
-    @ViewChildren('textField') textField : QueryList<ElementRef>;
+    subscription = [];
+
+    @ViewChildren('textField') textField: QueryList<ElementRef>;
 
     constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils) {
         this.categoryDict$ = store.select(categoryDictionary);
-        this.categoryDict$.subscribe(categoryDict => {
+        this.subscription.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
-        });
+        }));
 
         this.question = params.context.question;
         this.user = params.context.user;

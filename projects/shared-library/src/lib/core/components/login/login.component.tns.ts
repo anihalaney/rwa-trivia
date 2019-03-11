@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -11,7 +11,8 @@ import { Page } from 'tns-core-modules/ui/page';
 import { LoadingIndicator } from "nativescript-loading-indicator";
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from '../../services';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+
 
 @Component({
   selector: 'login',
@@ -19,9 +20,9 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./login.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
-  @ViewChildren('textField') textField : QueryList<ElementRef>;
+  @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = new LoadingIndicator();
   message = {
@@ -29,7 +30,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     type: '',
     text: ''
   };
-
+  subscription = [];
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
@@ -43,7 +44,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.title = 'Login';
-    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
+    this.subscription.push(this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
           // Sign up
@@ -59,7 +60,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           this.title = 'Forgot Password';
       }
       this.loginForm.get('password').updateValueAndValidity();
-    });
+    }));
 
 
   }
@@ -160,54 +161,55 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   redirectTo() {
-    this.store.select(coreState).pipe(
+    this.subscription.push(this.store.select(coreState).pipe(
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe(() => {
         this.loader.hide();
-        this.store.select(coreState).pipe(
+        this.subscription.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
             Toast.makeText('You have been successfully logged in').show();
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
-          });
+          }));
       }
-      );
-  }
+      ));
+}
 
-  showMessage(type: string, text: string) {
-    this.message = {
-      show: true,
-      type: type,
-      text: text
-    };
-  }
+showMessage(type: string, text: string) {
+  this.message = {
+    show: true,
+    type: type,
+    text: text
+  };
+}
 
-  changeMode(mode: number) {
-    super.changeMode(mode);
-    this.removeMessage();
-  }
+changeMode(mode: number) {
+  super.changeMode(mode);
+  this.removeMessage();
+}
 
-  removeMessage() {
-    this.message = {
-      show: false,
-      type: '',
-      text: ''
-    };
-  }
+removeMessage() {
+  this.message = {
+    show: false,
+    type: '',
+    text: ''
+  };
+}
 
-  ngOnDestroy() {
-    
-  }
+ngOnDestroy() {
 
-  hideKeyboard() {
-    this.textField
+}
+
+hideKeyboard() {
+  this.textField
     .toArray()
     .map((el) => {
-      if ( isAndroid ) {
+      if (isAndroid) {
         el.nativeElement.android.clearFocus();
       }
-      return el.nativeElement.dismissSoftInput(); });
-  }
+      return el.nativeElement.dismissSoftInput();
+    });
+}
 }
 

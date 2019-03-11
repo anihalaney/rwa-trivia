@@ -8,8 +8,9 @@ import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { User } from 'shared-library/shared/model';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils } from '../../../../../shared-library/src/lib/core/services';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'dashboard',
@@ -17,10 +18,12 @@ import { Utils } from '../../../../../shared-library/src/lib/core/services';
   styleUrls: ['./dashboard.component.scss', './dashboard.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   gameStatus: any;
+  subscription = [];
+
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
     gameActions: GameActions,
@@ -45,7 +48,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => { this.userDict = userDict; });
+    this.subscription.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; }));
 
   }
 

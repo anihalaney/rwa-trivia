@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, AfterViewInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState, appState } from '../../../store';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'blog',
@@ -10,15 +10,15 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./blog.component.scss']
 })
 
-@AutoUnsubscribe()
-export class BlogComponent implements OnDestroy , AfterViewInit{
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
+export class BlogComponent implements OnDestroy, AfterViewInit {
   @Input() blogId: number;
   blogData = [];
-
+  subscription = [];
   constructor(private store: Store<AppState>) {
-    this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+    this.subscription.push(this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
-    });
+    }));
   }
 
   onNotify(info: any) {
@@ -29,8 +29,8 @@ export class BlogComponent implements OnDestroy , AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+    this.subscription.push(this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
-    });
+    }));
   }
 }

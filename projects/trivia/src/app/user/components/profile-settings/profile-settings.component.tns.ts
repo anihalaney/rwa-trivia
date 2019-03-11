@@ -16,7 +16,7 @@ import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { Page, EventData } from 'tns-core-modules/ui/page/page';
 import { isAndroid } from 'tns-core-modules/platform';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'profile-settings',
@@ -24,7 +24,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./profile-settings.component.css']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   // Properties
@@ -38,6 +38,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
+  subscription = [];
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -58,12 +59,12 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     super(fb, store, userAction, utils);
     this.initDataItems();
 
-    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         Toast.makeText('Profile is saved successfully').show();
         this.toggleLoader(false);
       }
-    });
+    }));
 
   }
 
@@ -180,16 +181,17 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   hideKeyboard() {
     this.textField
-    .toArray()
-    .map((el) => {
-      if ( isAndroid ) {
-        el.nativeElement.android.clearFocus();
-      }
-      return el.nativeElement.dismissSoftInput(); });
+      .toArray()
+      .map((el) => {
+        if (isAndroid) {
+          el.nativeElement.android.clearFocus();
+        }
+        return el.nativeElement.dismissSoftInput();
+      });
   }
 
   ngOnDestroy() {
-   
+
   }
 
 }

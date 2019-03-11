@@ -9,7 +9,7 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Observable, Subscription } from 'rxjs';
 import { UserActions } from 'shared-library/core/store/actions';
 import { InviteFriends } from './invite-friends';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-invite-friends',
@@ -17,7 +17,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./invite-friends.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class InviteFriendsComponent extends InviteFriends implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<InviteFriendsDialogComponent>;
@@ -25,7 +25,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     'won', 'lost'];
   uFriends: Array<any>;
   dataSource: any;
-
+  subscription = [];
   defaultAvatar = 'assets/images/default-avatar.png';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -39,7 +39,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   }
 
   ngOnInit() {
-    this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
         uFriends.myFriends.map((friend, index) => {
@@ -51,7 +51,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
 
       this.dataSource = new MatTableDataSource<any>(this.uFriends);
       this.setPaginatorAndSort();
-    });
+    }));
   }
 
   setPaginatorAndSort() {
@@ -68,12 +68,12 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     });
     this.dialogRef.componentInstance.ref = this.dialogRef;
 
-    this.dialogRef.afterOpen().subscribe(x => {
+    this.subscription.push(this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
-    });
-    this.dialogRef.afterClosed().subscribe(x => {
+    }));
+    this.subscription.push(this.dialogRef.afterClosed().subscribe(x => {
       this.renderer.removeClass(document.body, 'dialog-open');
-    });
+    }));
   }
 
   ngOnDestroy() {

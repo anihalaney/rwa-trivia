@@ -1,5 +1,7 @@
-import { Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
-  ViewChildren, QueryList, ElementRef } from '@angular/core';
+import {
+  Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
+  ViewChildren, QueryList, ElementRef
+} from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -14,7 +16,7 @@ import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import * as Toast from 'nativescript-toast';
 import { Page, isAndroid } from 'tns-core-modules/ui/page';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-question-add-update',
@@ -22,7 +24,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./question-add-update.component.css']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy, OnChanges {
 
   showSelectCategory = false;
@@ -33,6 +35,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   categoryIds: any[];
   submitBtnTxt: string;
   actionBarTxt: string;
+  subscription = [];
   @Input() editQuestion: Question;
   @Output() hideQuestion = new EventEmitter<boolean>();
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
@@ -57,20 +60,20 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.actionBarTxt = 'Submit Question';
     this.initDataItems();
     this.question = new Question();
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.createForm(this.question);
       }
-    })
+    }));
 
 
     const questionControl = this.questionForm.get('questionText');
 
-    questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
-    this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
+    this.subscription.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscription.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
 
-    store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+    this.subscription.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
         Toast.makeText('Question saved!').show();
@@ -81,8 +84,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
           this.toggleLoader(false);
         }, 0);
       }
-    });
-
+    }));
   }
 
   ngOnChanges() {
@@ -168,16 +170,17 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   hideKeyboard() {
     this.textField
-    .toArray()
-    .map((el) => {
-      if ( isAndroid ) {
-        el.nativeElement.android.clearFocus();
-      }
-      return el.nativeElement.dismissSoftInput(); });
+      .toArray()
+      .map((el) => {
+        if (isAndroid) {
+          el.nativeElement.android.clearFocus();
+        }
+        return el.nativeElement.dismissSoftInput();
+      });
   }
 
   ngOnDestroy() {
-    
+
   }
 }
 

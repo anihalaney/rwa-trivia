@@ -8,7 +8,7 @@ import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import * as gameplayactions from '../../store/actions';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
 @Component({
@@ -17,12 +17,13 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./game.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class GameComponent implements OnInit, OnDestroy {
   user: User;
   dialogRef: MatDialogRef<GameDialogComponent>;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
+  subscription = [];
 
   constructor(private store: Store<AppState>,
     public dialog: MatDialog,
@@ -31,7 +32,7 @@ export class GameComponent implements OnInit, OnDestroy {
     private renderer: Renderer2) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
   }
 
@@ -52,14 +53,15 @@ export class GameComponent implements OnInit, OnDestroy {
       data: { 'user': this.user, 'userDict': this.userDict }
     });
 
-    this.dialogRef.afterOpen().subscribe(x => {
+    this.subscription.push(this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
-    });
-    this.dialogRef.afterClosed().subscribe(x => {
+    }));
+    this.subscription.push(this.dialogRef.afterClosed().subscribe(x => {
       this.renderer.removeClass(document.body, 'dialog-open');
-    });
+    }));
   }
   ngOnDestroy() {
+
     if (this.dialogRef) {
       this.dialogRef.close();
       this.store.dispatch(new gameplayactions.ResetCurrentGame());

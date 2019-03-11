@@ -6,11 +6,11 @@ import { GameActions, UserActions } from 'shared-library/core/store/actions/inde
 import { Category, GameOptions, User, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { OnDestroy } from '@angular/core';
 
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class NewGame implements OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
@@ -20,7 +20,7 @@ export class NewGame implements OnDestroy {
   selectedTags: string[];
   applicationSettings: ApplicationSettings;
   gameOptions: GameOptions;
-
+  subscription = [];
   showUncheckedCategories: Boolean = false;
   allCategoriesSelected: Boolean = true;
   uFriends: Array<string>;
@@ -43,10 +43,10 @@ export class NewGame implements OnDestroy {
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.categoriesObs.subscribe(categories => this.categories = categories);
-    this.tagsObs.subscribe(tags => this.tags = tags);
-    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.subscription.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscription.push(this.tagsObs.subscribe(tags => this.tags = tags));
+    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
         this.user = user;
         if (this.user.tags && this.user.tags.length > 0) {
@@ -58,9 +58,9 @@ export class NewGame implements OnDestroy {
         }
         this.store.dispatch(this.userActions.loadUserFriends(user.userId));
       }
-    });
+    }));
 
-    this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
@@ -73,7 +73,7 @@ export class NewGame implements OnDestroy {
       } else {
         this.noFriendsStatus = true;
       }
-    });
+    }));
     this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.gameOptions = new GameOptions();
@@ -88,7 +88,7 @@ export class NewGame implements OnDestroy {
 
   startNewGame(gameOptions: GameOptions) {
     let user: User;
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user); // logged in user
+    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user)); // logged in user
     gameOptions.friendId = this.friendUserId;
     this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }

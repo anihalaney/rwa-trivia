@@ -6,8 +6,7 @@ import { User } from 'shared-library/shared/model';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { AppState, appState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'invitation-redirection',
@@ -16,19 +15,20 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class InvitationRedirectionComponent implements OnInit, OnDestroy {
 
     @Input() user: User;
+    subscription = [];
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
         private userAction: UserActions) {
-        this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+        this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             if (user) {
                 this.user = user;
             }
-        });
+        }));
     }
 
     ngOnInit() {

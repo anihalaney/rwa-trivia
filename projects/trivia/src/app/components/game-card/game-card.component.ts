@@ -5,7 +5,7 @@ import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants } from 
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../store';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'game-card',
@@ -13,7 +13,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./game-card.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() game: Game;
@@ -37,39 +37,41 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   gameStatus: any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
   userDict$: Observable<{ [key: string]: User }>;
+  subscription = [];
+
   constructor(public store: Store<AppState>, public utils: Utils) {
 
     this.gameStatus = GameStatus;
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.user$.subscribe(user => {
+    this.subscription.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
-    });
+    }));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => {
+    this.subscription.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       if (this.game) {
         this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
         this.otherUserInfo = this.userDict[this.otherUserId];
       }
-    });
+    }));
 
     this.categoryDict$ = store.select(categoryDictionary);
-    this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict);
+    this.subscription.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
 
   }
 
   ngOnInit() {
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user;
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
       if (this.myTurn) {
         this.updateRemainingTime();
       }
-    });
+    }));
   }
 
   ngOnChanges() {
@@ -107,5 +109,6 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
         }
       }
     });
+    this.subscription.push(this.timerSub);
   }
 }

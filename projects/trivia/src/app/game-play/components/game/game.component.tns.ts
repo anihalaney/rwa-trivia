@@ -5,7 +5,6 @@ import { User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { Game } from './game';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'game',
@@ -13,7 +12,6 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./game.component.scss']
 })
 
-@AutoUnsubscribe()
 export class GameComponent extends Game implements OnInit, OnDestroy {
   user: User;
   userDict$: Observable<{ [key: string]: User }>;
@@ -29,6 +27,6 @@ export class GameComponent extends Game implements OnInit, OnDestroy {
 
   }
   ngOnDestroy() {
-
+   
   }
 }

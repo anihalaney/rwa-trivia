@@ -6,7 +6,7 @@ import { Store, select } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'side-nav',
@@ -15,16 +15,17 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class SideNavComponent implements OnDestroy {
   @Input() user: User;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   blogUrl = 'https://bitwiser.io';
+  subscription = [];
 
   constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
   }
 
   ngOnDestroy() {

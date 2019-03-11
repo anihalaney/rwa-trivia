@@ -5,10 +5,10 @@ import {
   User, Game, Category, GameStatus,
   GameInviteConstants, CalenderConstants
 } from 'shared-library/shared/model';
-import { AppState,  categoryDictionary } from '../../store';
+import { AppState, categoryDictionary } from '../../store';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'game-invite',
@@ -17,7 +17,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class GameInviteComponent implements OnChanges, OnDestroy {
 
   @Input() userDict: { [key: string]: User } = {};
@@ -27,11 +27,12 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   randomCategoryId = 0;
   gameStatus;
   remainingDays: number;
+  subscription = [];
 
 
   constructor(private store: Store<AppState>, private utils: Utils, private userActions: UserActions) {
     this.categoryDict$ = store.select(categoryDictionary);
-    this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict);
+    this.subscription.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
   }
 
   ngOnChanges() {

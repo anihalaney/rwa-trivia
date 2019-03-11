@@ -6,7 +6,6 @@ import * as gameplayactions from '../../store/actions';
 import { GamePlayState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { GameDialog } from './game-dialog';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 import { Utils } from 'shared-library/core/services';
 
 @Component({
@@ -15,9 +14,8 @@ import { Utils } from 'shared-library/core/services';
   styleUrls: ['./game-dialog.component.scss']
 })
 
-@AutoUnsubscribe()
 export class GameDialogComponent extends GameDialog implements OnDestroy {
-
+  
   constructor(public store: Store<GamePlayState>, private router: Router,
     public userActions: UserActions,
     @Inject(MAT_DIALOG_DATA) public data: any, public utils: Utils) {
