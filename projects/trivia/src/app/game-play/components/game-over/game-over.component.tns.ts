@@ -26,7 +26,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
-    private cd: ChangeDetectorRef) {
+    public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
 
     this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
