@@ -1,4 +1,4 @@
-import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -21,7 +21,8 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 @Component({
   selector: 'app-bulk-summary-questions',
   templateUrl: './bulk-summary-question.component.html',
-  styleUrls: ['./bulk-summary-question.component.scss']
+  styleUrls: ['./bulk-summary-question.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
 
@@ -75,22 +76,22 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
         // get published question by BulkUpload Id
         this.publishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadPublishedQuestions));
         this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-        this.publishedQuestionObs.subscribe((questions) => {
+        this.subs.push(this.publishedQuestionObs.subscribe((questions) => {
           if (questions) {
             this.publishedCount = questions.length;
             this.publishedQuestions = questions;
           }
-        });
+        }));
 
         // get unpublished question by BulkUpload Id
         this.unPublishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadUnpublishedQuestions));
         this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-        this.unPublishedQuestionObs.subscribe((questions) => {
+        this.subs.push(this.unPublishedQuestionObs.subscribe((questions) => {
           if (questions) {
             this.unPublishedCount = questions.length;
             this.unPublishedQuestions = questions;
           }
-        });
+        }));
 
         // get the download file url
         // tslint:disable-next-line:max-line-length
@@ -113,13 +114,13 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
       this.isAdminUrl = false;
     }
     this.categoryDictObs = this.store.select(categoryDictionary);
-    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+    this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
     // subscribe to router event
-    this.activatedRoute.params.subscribe((params: Params) => {
+    this.subs.push(this.activatedRoute.params.subscribe((params: Params) => {
       const bulkId = params['bulkid'];
       this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: bulkId }));
 
-    });
+    }));
   }
 
   downloadFile() {

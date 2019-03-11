@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -15,6 +15,7 @@ import { takePicture, requestPermissions, isAvailable } from 'nativescript-camer
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { Page, EventData } from 'tns-core-modules/ui/page/page';
+import { isAndroid } from 'tns-core-modules/platform';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   private twitterUrlStatus = true;
   private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
+  @ViewChildren('textField') textField: QueryList<ElementRef>;
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -109,6 +111,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
 
   addCustomTag() {
+    this.hideKeyboard();
     this.enteredTags.push(this.customTag);
     this.customTag = '';
     this.autocomplete.autoCompleteTextView.resetAutocomplete();
@@ -173,6 +176,16 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     // call saveUser
     this.saveUser(this.user);
 
+  }
+
+  hideKeyboard() {
+    this.textField
+    .toArray()
+    .map((el) => {
+      if ( isAndroid ) {
+        el.nativeElement.android.clearFocus();
+      }
+      return el.nativeElement.dismissSoftInput(); });
   }
 
   ngOnDestroy() {

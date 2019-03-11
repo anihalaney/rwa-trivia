@@ -1,5 +1,5 @@
 <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" backgroundColor="white">
-    <StackLayout>
+    <StackLayout (tap)="hideKeyboard()">
         <StackLayout>
             <StackLayout marginTop="25" horizontalAlignment="center">
                 <Label class="Lato invite-title Roboto-Bold" text="Invite your friends by Email" textWrap="true"></Label>
@@ -7,7 +7,7 @@
                 <Image src="~/assets/images/mail-icon-invite.png" width="70" height="70"></Image>
             </StackLayout>
             <GridLayout #formDir="ngForm" [formGroup]="invitationForm" margin="30 10 10 10" rows="auto" columns="*,auto">
-                <TextField row="0" col="0" formControlName="email" class="email-textfield Roboto-Regular" hint="Email address"></TextField>
+                <TextField #textField  row="0" col="0" formControlName="email" class="email-textfield Roboto-Regular" hint="Email address"></TextField>
                 <label row="0" col="1" (tap)="onSubscribe()" class="send-invite-button Hind-Bold" text="Send Invite"></label>
             </GridLayout>
             <StackLayout marginTop="10" marginBottom="20">

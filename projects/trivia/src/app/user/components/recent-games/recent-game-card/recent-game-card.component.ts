@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus } from 'shared-library/shared/model';
@@ -11,7 +11,8 @@ import { UserActions } from 'shared-library/core/store/actions';
 @Component({
     selector: 'recent-game-card',
     templateUrl: './recent-game-card.component.html',
-    styleUrls: ['./recent-game-card.component.scss']
+    styleUrls: ['./recent-game-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     @Input() game: Game;
@@ -33,14 +34,14 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
 
     constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
         this.categoryDictObs = store.select(categoryDictionary);
-        this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+        this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
     }
 
     ngOnInit(): void {
         this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
         this.subs.push(this.userDict$.subscribe(userDict => {
         this.userDict = userDict;
-            this.cd.detectChanges();
+            this.cd.markForCheck();
         }));
 
         if (this.game) {
@@ -48,7 +49,7 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
             if (this.otherUserId !== undefined) {
                 if (this.userDict[this.otherUserId] === undefined) {
                     this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
-                    this.cd.detectChanges();
+                    this.cd.markForCheck();
                 }
             }
             this.userProfileImageUrl = this.getImageUrl(this.user);
