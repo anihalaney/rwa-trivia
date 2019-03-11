@@ -9,8 +9,7 @@ import { Dashboard } from './dashboard';
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss', './dashboard.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./dashboard.component.scss', './dashboard.scss']
 })
 export class DashboardComponent extends Dashboard implements OnInit {
   constructor(store: Store<AppState>,
