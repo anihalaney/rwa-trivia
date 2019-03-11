@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef} from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import * as userActions from '../../../user/store/actions';
 import { User, GameStatus, Game } from 'shared-library/shared/model';
@@ -13,7 +13,7 @@ import { Utils } from 'shared-library/core/services';
   styleUrls: ['./recent-games.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RecentGamesComponent implements OnInit, OnDestroy {
+export class RecentGamesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   user: User;
   recentGames: Game[] = [];
@@ -27,8 +27,8 @@ export class RecentGamesComponent implements OnInit, OnDestroy {
   userDict: { [key: string]: User } = {};
 
   constructor(private store: Store<AppState>,
-              private utils: Utils,
-              private cd: ChangeDetectorRef) {
+    private utils: Utils,
+    private cd: ChangeDetectorRef) {
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
@@ -39,20 +39,22 @@ export class RecentGamesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-      this.subs.push(this.recentGames$.subscribe((recentGames) => {
-      this.recentGames = recentGames;
-      this.cd.detectChanges();
-    }));
   }
 
   getMoreCard() {
     this.nextIndex = (this.recentGames.length > (this.maxIndex)) ?
       this.maxIndex : this.recentGames.length;
+      this.cd.markForCheck();
   }
 
   ngOnDestroy() {
-
     this.utils.unsubscribe(this.subs);
   }
 
+  ngAfterViewInit() {
+    this.subs.push(this.recentGames$.subscribe((recentGames) => {
+      this.recentGames = recentGames;
+      this.cd.markForCheck();
+    }));
+  }
 }

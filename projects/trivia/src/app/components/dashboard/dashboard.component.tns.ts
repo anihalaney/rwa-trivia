@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, NgZone, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Inject, NgZone } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -8,7 +8,6 @@ import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { User } from 'shared-library/shared/model';
-import { timer } from 'rxjs';
 
 @Component({
   selector: 'dashboard',
@@ -48,7 +47,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
   }
 
   startNewGame() {
-    if (this.applicationSettings.lives.enable) {
+    if (this.applicationSettings && this.applicationSettings.lives.enable) {
       if (this.account.lives > 0) {
         this.routerExtension.navigate(['/game-play']);
       }

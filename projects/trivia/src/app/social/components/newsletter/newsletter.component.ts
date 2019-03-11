@@ -1,9 +1,7 @@
-import { PLATFORM_ID, APP_ID, Component, OnInit, Inject } from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
-
-import { User, Subscription } from '../../../../../../shared-library/src/lib/shared/model';
+import { User, Subscription } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import * as socialActions from '../../../social/store/actions';
 import { socialState } from '../../store';
@@ -15,7 +13,8 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 @Component({
   selector: 'newsletter',
   templateUrl: './newsletter.component.html',
-  styleUrls: ['./newsletter.component.scss']
+  styleUrls: ['./newsletter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewsletterComponent implements OnInit {
 
@@ -27,10 +26,11 @@ export class NewsletterComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private store: Store<AppState>,
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(APP_ID) private appId: string) {
+    @Inject(APP_ID) private appId: string, private cd: ChangeDetectorRef) {
     this.subscriptionForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
+
     this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       this.user = user;
@@ -58,6 +58,7 @@ export class NewsletterComponent implements OnInit {
     });
     this.store.select(socialState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
+      this.cd.markForCheck();
     });
   }
 
@@ -66,7 +67,6 @@ export class NewsletterComponent implements OnInit {
       this.store.dispatch(new socialActions.GetTotalSubscriber());
     }
   }
-
 
   onSubscribe() {
     if (!this.subscriptionForm.valid) {
@@ -80,4 +80,5 @@ export class NewsletterComponent implements OnInit {
       this.store.dispatch(new socialActions.AddSubscriber({ subscription }));
     }
   }
+
 }

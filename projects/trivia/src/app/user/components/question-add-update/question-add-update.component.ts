@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -12,7 +12,8 @@ import { debounceTime, map } from 'rxjs/operators';
 
 @Component({
   templateUrl: './question-add-update.component.html',
-  styleUrls: ['./question-add-update.component.scss']
+  styleUrls: ['./question-add-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy {

@@ -1,15 +1,14 @@
-import { Component, Input, OnDestroy, ChangeDetectionStrategy, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef} from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
 
-import { Category, User, LeaderBoardUser, LeaderBoardConstants } from '../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Category, User, LeaderBoardUser, LeaderBoardConstants } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { leaderBoardState } from '../../store';
-import { UserActions } from '../../../../../../shared-library/src/lib/core/store/actions';
+import { UserActions } from 'shared-library/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -18,7 +17,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./leaderboard.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LeaderboardComponent implements OnDestroy {
+export class LeaderboardComponent implements OnDestroy, AfterViewInit {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User };
@@ -42,29 +41,32 @@ export class LeaderboardComponent implements OnDestroy {
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
     private utils: Utils,
-    public route: ActivatedRoute) {
+    public route: ActivatedRoute,
+    private cd: ChangeDetectorRef) {
 
     this.route.params.subscribe((params) => {
       this.category = params['category'];
     });
-    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
-
-    this.categoryDict$ = store.select(categoryDictionary);
-
-    this.subs.push(this.categoryDict$.subscribe(categoryDict => {
-      this.categoryDict = categoryDict;
-    }));
 
     // if (isPlatformBrowser(this.platformId)) {
     this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
     // }
     this.maxLeaderBoardDisplay = 10;
 
+    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+
+    this.categoryDict$ = this.store.select(categoryDictionary);
+
+    this.subs.push(this.categoryDict$.subscribe(categoryDict => {
+      this.categoryDict = categoryDict;
+    }));
+
     this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
+        // this.cd.detectChanges();
         if (this.leaderBoardCat.length > 0) {
           this.leaderBoardCat.map((cat) => {
             this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
@@ -81,6 +83,11 @@ export class LeaderboardComponent implements OnDestroy {
         }
       }
     }));
+
+  }
+
+  ngAfterViewInit(): void {
+
   }
 
   displayMore(): void {
