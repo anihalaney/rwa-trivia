@@ -9,8 +9,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 @Component({
   selector: 'app-invite-friends',
   templateUrl: './invite-friends.component.html',
-  styleUrls: ['./invite-friends.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./invite-friends.component.scss']
 })
 export class InviteFriendsComponent extends InviteFriends {
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
