@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -9,7 +9,8 @@ import { RouterExtensions } from 'nativescript-angular/router';
 @Component({
   selector: 'app-invite-friends',
   templateUrl: './invite-friends.component.html',
-  styleUrls: ['./invite-friends.component.scss']
+  styleUrls: ['./invite-friends.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InviteFriendsComponent extends InviteFriends {
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
