@@ -1,14 +1,37 @@
 
 import * as express from 'express';
-const router = express.Router();
-const userAuth = require('../middlewares/auth');
+import { UserController } from '../controllers/user.controller';
+import { AuthMiddleware } from '../middlewares/auth';
+import { GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 
+class UserRoutes {
 
-const userController = require('../controllers/user.controller');
+    private UID = RoutesConstants.USER_ID;
 
-router.get('/:userId', userController.getUserById);
-router.get('/profile/:userId/:imageName/:width/:height', userController.getUserImages);
-router.post('/profile', userAuth.authorizedOnly, userController.generateUserProfileImage);
-router.post('/update-lives', userAuth.authorizedOnly, userController.updateLives);
+    public userRoutes: any;
 
-module.exports = router;
+    constructor() {
+        this.userRoutes = express.Router();
+
+        //  '/:userId'
+        this.userRoutes.get(`/:${this.UID}`,
+            UserController.getUserById);
+
+        //  '/profile/:userId/:imageName/:width/:height'
+        this.userRoutes.get(
+            `/${RoutesConstants.PROFILE}/:${this.UID}/:${RoutesConstants.IMAGE_NAME}/:${RoutesConstants.WIDTH}/:${RoutesConstants.HEIGHT}`,
+            UserController.getUserImages);
+
+        //  '/profile'
+        this.userRoutes.post(`/${RoutesConstants.PROFILE}`,
+            AuthMiddleware.authorizedOnly, UserController.generateUserProfileImage);
+
+        //  '/update-lives'
+        this.userRoutes.post(`/${RoutesConstants.UPDATE_DASH_LIVES}`,
+            AuthMiddleware.authorizedOnly, UserController.updateLives);
+
+    }
+}
+
+export default new UserRoutes().userRoutes;
+

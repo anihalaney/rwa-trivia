@@ -231,12 +231,12 @@ export class GameService {
   getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
     const observables = [];
 
-    game.playerQnAs.map(playerQnA => {
+    for (const playerQnA of game.playerQnAs) {
       if (playerQnA.playerId === userId) {
         observables.push(this.checkUserQuestion(playerQnA));
       }
+    }
 
-    });
     return forkJoin(observables);
   }
 

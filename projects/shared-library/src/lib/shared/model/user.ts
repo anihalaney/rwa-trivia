@@ -10,7 +10,7 @@ export class User {
   facebookUrl?: string;
   twitterUrl?: string;
   linkedInUrl?: string;
-  profilePicture?: String;
+  profilePicture?: string;
   email: string;
   idToken?: string;
   authState: firebase.User;

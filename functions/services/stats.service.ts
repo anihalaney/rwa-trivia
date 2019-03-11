@@ -1,29 +1,37 @@
-const statsFireBaseClient = require('../db/firebase-client');
-const statsFireStoreClient = statsFireBaseClient.firestore();
+import { CollectionConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
-/**
- * getSystemStats
- * return systemstat
- */
-exports.getSystemStats = (statName: string): Promise<any> => {
-    return statsFireStoreClient.doc(`stats/${statName}`)
-        .get().then(ss => { return ss })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+export class StatsService {
 
+    private static statsFireStoreClient = admin.firestore();
 
-/**
- * setSystemStats
- * return ref
- */
-exports.setSystemStats = (statName: string, SystemStat: any): Promise<any> => {
-    return statsFireStoreClient.doc(`stats/${statName}`).set(SystemStat).then(ref => { return ref })
-        .catch(error => {
-            console.error(error);
-            return error;
-        });
-};
+    /**
+     * getSystemStats
+     * return systemstat
+     */
+    static async getSystemStats(statName: string): Promise<any> {
+        try {
+            const systemStat = await StatsService.statsFireStoreClient
+                .doc(`${CollectionConstants.STATS}/${statName}`)
+                .get();
+            return systemStat.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    /**
+     * setSystemStats
+     * return ref
+     */
+    static async setSystemStats(statName: string, SystemStat: any): Promise<any> {
+        try {
+            return await StatsService.statsFireStoreClient
+                .doc(`${CollectionConstants.STATS}/${statName}`)
+                .set(SystemStat);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+}

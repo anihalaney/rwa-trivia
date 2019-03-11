@@ -1,4 +1,4 @@
-import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { User, Subscription } from 'shared-library/shared/model';
@@ -13,11 +13,12 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
 @Component({
   selector: 'newsletter',
   templateUrl: './newsletter.component.html',
-  styleUrls: ['./newsletter.component.scss']
+  styleUrls: ['./newsletter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
-export class NewsletterComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NewsletterComponent implements OnInit {
 
   subscriptionForm: FormGroup;
   user: User;
@@ -27,22 +28,14 @@ export class NewsletterComponent implements OnInit, AfterViewInit, OnDestroy {
   subscription = [];
 
   constructor(private fb: FormBuilder, private store: Store<AppState>,
-    private cd: ChangeDetectorRef,
     @Inject(PLATFORM_ID) private platformId: Object,
-    @Inject(APP_ID) private appId: string) {
+    @Inject(APP_ID) private appId: string, private cd: ChangeDetectorRef) {
     this.subscriptionForm = this.fb.group({
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
-  }
 
-  ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.store.dispatch(new socialActions.GetTotalSubscriber());
-    }
-  }
-
-  ngAfterViewInit(): void {
     this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+
       this.user = user;
       if (user) {
         this.user = user;
@@ -67,10 +60,14 @@ export class NewsletterComponent implements OnInit, AfterViewInit, OnDestroy {
     }));
     this.subscription.push(this.store.select(socialState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
-      if (!this.cd['destroyed']) {
-        this.cd.detectChanges();
-      }
+      this.cd.markForCheck();
     }));
+  }
+
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.store.dispatch(new socialActions.GetTotalSubscriber());
+    }
   }
 
   onSubscribe() {

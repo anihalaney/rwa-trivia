@@ -39,24 +39,21 @@ export class RecentGamesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-
   }
 
   getMoreCard() {
     this.nextIndex = (this.recentGames.length > (this.maxIndex)) ?
       this.maxIndex : this.recentGames.length;
+      this.cd.markForCheck();
   }
 
   ngOnDestroy() {
-
   }
 
   ngAfterViewInit() {
     this.subscription.push(this.recentGames$.subscribe((recentGames) => {
       this.recentGames = recentGames;
-      if (!this.cd['destroyed']) {
-        this.cd.detectChanges();
-      }
+      this.cd.markForCheck();
     }));
   }
 }
