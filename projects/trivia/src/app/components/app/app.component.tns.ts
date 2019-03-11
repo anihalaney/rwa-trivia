@@ -17,16 +17,16 @@ import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
 
-@AutoUnsubscribe()
+// @AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class AppComponent implements OnInit, OnDestroy {
-
+  subscription = [];
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -36,16 +36,16 @@ export class AppComponent implements OnInit, OnDestroy {
     private applicationSettingsAction: ApplicationSettingsActions) {
 
 
-    this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.subscription.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-    });
+    }));
 
-    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.routerExtension.navigate(['my/invite-friends']);
       }
-    });
+    }));
 
     this.handleBackPress();
   }
@@ -84,7 +84,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-   
+
   }
 
 

@@ -10,7 +10,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { Papa } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'bulk-upload',
@@ -18,7 +18,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./bulk-upload.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class BulkUploadComponent implements OnInit, OnDestroy {
 
   primaryTag;
@@ -50,7 +50,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   // Show Instruction Card
   showInstructions: Boolean = true;
   myTabIndex: Number = 0;
-
+  subscription = [];
   // application Settings
   applicationSettings: ApplicationSettings;
 
@@ -59,12 +59,12 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     private utils: Utils) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
+    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
   }
 
   ngOnInit() {
-    this.categoriesObs.subscribe(categories => this.categories = categories);
-   this.tagsObs.subscribe(tags => this.tags = tags);
+    this.subscription.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscription.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
     this.uploadFormGroup = this.fb.group({
       category: ['', Validators.required],
@@ -75,11 +75,11 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
-      this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-        if (appSettings) {
-          this.applicationSettings = appSettings[0];
-        }
-      });
+    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+      }
+    }));
   }
 
   filter(val: string): string[] {
@@ -261,6 +261,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+
   }
 
   showUploadSteps() {

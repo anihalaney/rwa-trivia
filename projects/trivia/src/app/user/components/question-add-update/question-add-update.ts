@@ -8,9 +8,9 @@ import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { OnDestroy } from '@angular/core';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class QuestionAddUpdate implements OnDestroy {
 
   tagsObs: Observable<string[]>;
@@ -29,6 +29,7 @@ export class QuestionAddUpdate implements OnDestroy {
   loaderBusy = false;
   user: User;
   applicationSettings: ApplicationSettings;
+  subscription = [];
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -44,10 +45,9 @@ export class QuestionAddUpdate implements OnDestroy {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
 
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
-
-    this.categoriesObs.subscribe(categories => this.categories = categories);
-    this.tagsObs.subscribe(tags => this.tags = tags);
+    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.subscription.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscription.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
   }
 
@@ -141,7 +141,6 @@ export class QuestionAddUpdate implements OnDestroy {
   }
 
   ngOnDestroy() {
-
   }
 }
 

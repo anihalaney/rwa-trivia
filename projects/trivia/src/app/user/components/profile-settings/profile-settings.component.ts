@@ -5,10 +5,10 @@ import { AppState } from '../../../store';
 import { userState } from '../../../user/store';
 import { ProfileSettings } from './profile-settings';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { profileSettingsConstants } from 'shared-library/shared/model';
+import { profileSettingsConstants, Subscription } from 'shared-library/shared/model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'profile-settings',
@@ -16,7 +16,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./profile-settings.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({'arrayName': 'subscription'})
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   @ViewChild('cropper') cropper: ImageCropperComponent;
@@ -24,7 +24,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   cropperSettings: CropperSettings;
   notificationMsg: string;
   errorStatus: boolean;
-
+  subscription = [];
+  
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     private windowRef: WindowRef,
@@ -36,11 +37,11 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
 
-    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.setNotificationMsg('Profile Saved !', false, 100);
       }
-    });
+    }));
   }
 
   setNotificationMsg(msg: string, flag: boolean, scrollPosition: number): void {
@@ -183,7 +184,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   ngOnDestroy() {
-    
+
   }
 
 }

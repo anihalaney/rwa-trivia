@@ -10,7 +10,7 @@ import { leaderBoardState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
 import { ActivatedRoute } from '@angular/router';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
@@ -18,7 +18,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class LeaderboardComponent implements OnDestroy, AfterViewInit {
 
   userDict$: Observable<{ [key: string]: User }>;
@@ -38,6 +38,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   defaultAvatar = 'assets/images/default-avatar-small.png';
   unknown = LeaderBoardConstants.UNKNOWN;
   category: string;
+  subscription = [];
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
@@ -59,15 +60,15 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   ngAfterViewInit(): void {
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
     this.categoryDict$ = this.store.select(categoryDictionary);
 
-    this.categoryDict$.subscribe(categoryDict => {
+    this.subscription.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
-    });
+    }));
 
-    this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
+    this.subscription.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
@@ -90,7 +91,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
       if (!this.cd['destroyed']) {
         this.cd.detectChanges();
       }
-    });
+    }));
   }
 
   displayMore(): void {

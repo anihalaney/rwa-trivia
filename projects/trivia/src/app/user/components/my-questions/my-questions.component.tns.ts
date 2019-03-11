@@ -8,7 +8,7 @@ import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
 import { TabView } from 'tns-core-modules/ui/tab-view';
 import { Page } from 'tns-core-modules/ui/page';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
 @Component({
@@ -17,7 +17,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./my-questions.component.css']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
   userDict$: Observable<{ [key: string]: User }>;
@@ -26,6 +26,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   displayEditQuestion = false;
   selectedQuestion: Question;
   tabIndex = 0;
+  subscription = [];
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -33,7 +34,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     private page: Page) {
     super(store, questionActions);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
   }
 
   navigateToSubmitQuestion() {

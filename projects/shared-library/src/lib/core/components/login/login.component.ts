@@ -5,7 +5,7 @@ import { CoreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+
 
 @Component({
   selector: 'login',
@@ -13,7 +13,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./login.component.scss']
 })
 
-@AutoUnsubscribe()
+
 export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   constructor(public fb: FormBuilder,

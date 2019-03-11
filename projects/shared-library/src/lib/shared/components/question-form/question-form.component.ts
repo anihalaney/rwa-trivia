@@ -4,7 +4,7 @@ import { Question, QuestionStatus, Category, User, Answer } from '../../model';
 import { Utils } from '../../../core/services';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
 @Component({
@@ -14,7 +14,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() editQuestion: Question;
@@ -31,6 +31,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
   user: User;
+  subscription = [];
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -55,11 +56,10 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
     const questionControl = this.questionForm.get('questionText');
 
-    questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
-    this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
-
-    this.categoriesObs.subscribe(categories => this.categories = categories);
-    this.tagsObs.subscribe(tags => this.tags = tags);
+    this.subscription.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscription.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscription.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscription.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
   }
 
@@ -210,7 +210,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    
+
   }
 
 }

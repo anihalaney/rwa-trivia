@@ -5,7 +5,7 @@ import { Store, select } from '@ngrx/store';
 import { QuestionActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { Subscription } from 'rxjs';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'question',
@@ -13,7 +13,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./question.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class QuestionComponent implements OnDestroy {
 
   question: Question;
@@ -27,33 +27,37 @@ export class QuestionComponent implements OnDestroy {
   correctAnswerText: string;
   doPlay = true;
   categoryDictionary: any;
+  subscription = [];
 
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils) {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.store.select(categoryDictionary).subscribe(categories => {
+    this.subscription.push(this.store.select(categoryDictionary).subscribe(categories => {
       this.categoryDictionary = categories;
       this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
-          if ( this.question.answers) {
+          if (this.question.answers) {
             this.question.answers.forEach((item, index) => {
               if (item.correct === true) {
                 this.correctAnswerText = item.answerText;
               }
             });
           }
-          this.categoryName = this.question.categoryIds.map(category => {
-            if (this.categoryDictionary[category]) {
-              return this.categoryDictionary[category].categoryName;
-            } else {
-              return '';
-            }
-          }).join(',');
+
+          if (this.question.categoryIds) {
+            this.categoryName = this.question.categoryIds.map(category => {
+              if (this.categoryDictionary[category]) {
+                return this.categoryDictionary[category].categoryName;
+              } else {
+                return '';
+              }
+            }).join(',');
+          }
         }
       });
-    });
+    }));
 
 
   }

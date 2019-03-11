@@ -6,15 +6,18 @@ import { User, Question, QuestionStatus, Category } from 'shared-library/shared/
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { userState } from '../../../user/store';
 import * as userActions from '../../store/actions';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { OnDestroy } from '@angular/core';
 
-export class MyQuestions {
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
+export class MyQuestions implements OnDestroy{
 
   publishedQuestions: Question[];
   unpublishedQuestions: Question[];
   categoryDictObs: Observable<{ [key: number]: Category }>;
   user: User;
   loaderBusy = false;
-
+  subscription = [];
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -23,17 +26,17 @@ export class MyQuestions {
     this.loaderBusy = true;
     this.categoryDictObs = store.select(categoryDictionary);
 
-    this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
+    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user;
-    });
-    this.store.select(userState).pipe(select(s => s.userPublishedQuestions)).subscribe((questions) => {
+    }));
+    this.subscription.push(this.store.select(userState).pipe(select(s => s.userPublishedQuestions)).subscribe((questions) => {
       this.publishedQuestions = questions;
       this.hideLoader();
-    });
-    this.store.select(userState).pipe(select(s => s.userUnpublishedQuestions)).subscribe((questions) => {
+    }));
+    this.subscription.push(this.store.select(userState).pipe(select(s => s.userUnpublishedQuestions)).subscribe((questions) => {
       this.unpublishedQuestions = questions;
       this.hideLoader();
-    });
+    }));
   }
 
   hideLoader() {
@@ -44,6 +47,9 @@ export class MyQuestions {
     }
   }
 
+  ngOnDestroy(){
+
+  }
 
   toggleLoader(flag: boolean) {
     this.loaderBusy = flag;

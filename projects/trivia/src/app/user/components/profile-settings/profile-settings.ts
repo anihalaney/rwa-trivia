@@ -1,6 +1,6 @@
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { User, Category, profileSettingsConstants } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
@@ -10,10 +10,10 @@ import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { UserActions } from 'shared-library/core/store';
 import { ViewChildren, QueryList, HostListener, OnDestroy } from '@angular/core';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class ProfileSettings implements OnDestroy {
     @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
@@ -47,6 +47,7 @@ export class ProfileSettings implements OnDestroy {
     APPROVED = profileSettingsConstants.APPROVED;
     bulkUploadBtnText: string;
     loaderBusy = false;
+    subscription = [];
 
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
@@ -62,23 +63,23 @@ export class ProfileSettings implements OnDestroy {
 
         this.fb = formBuilder;
 
-        this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+        this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             this.socialProfileSettings = appSettings[0].social_profile;
             this.enableSocialProfile = this.socialProfileSettings.filter(res => res.enable).length;
-        });
+        }));
 
         this.categoriesObs = store.select(getCategories);
-        this.categoriesObs.subscribe(categories => this.categories = categories);
+        this.subscription.push(this.categoriesObs.subscribe(categories => this.categories = categories));
 
         this.categoryDictObs = store.select(categoryDictionary);
-        this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+        this.subscription.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
 
         this.tagsObs = this.store.select(getTags);
-        this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete);
+        this.subscription.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
 
         this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
-        this.userObs.subscribe(user => {
+        this.subscription.push(this.userObs.subscribe(user => {
             if (user) {
                 this.user = user;
 
@@ -104,7 +105,7 @@ export class ProfileSettings implements OnDestroy {
 
                 this.toggleLoader(false);
             }
-        });
+        }));
     }
 
     get tagsArray(): FormArray {

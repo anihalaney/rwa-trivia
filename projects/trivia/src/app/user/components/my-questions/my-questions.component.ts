@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { QuestionActions } from 'shared-library/core/store';
 import { AppState } from '../../../store';
 import { MyQuestions } from './my-questions';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
 
 @Component({
   selector: 'my-questions',
@@ -11,9 +10,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./my-questions.component.scss']
 })
 
-@AutoUnsubscribe()
 export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
-
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -22,7 +19,6 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   }
 
   ngOnDestroy() {
-
   }
 
 }

@@ -14,7 +14,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators/autoUnsubscribe';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     moduleId: module.id,
@@ -24,7 +24,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators/autoUnsubscrib
 
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class DrawerComponent implements OnInit, OnDestroy {
 
     @Output() output = new EventEmitter();
@@ -38,6 +38,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     version: string;
     logOut: boolean;
     pushToken: string;
+    subscription = [];
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
@@ -68,9 +69,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.categoriesObs.subscribe(categories => {
             this.categories = categories;
         });
+        this.subscription.push(this.categoriesObs);
     }
     ngOnInit() {
-        this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+        this.subscription.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
                 this.user = user;
@@ -96,12 +98,12 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     });
                 }
             } else if (this.logOut) {
-                 /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
+                /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
                 setTimeout(() => {
                     this.resetValues();
                 }, 2000);
             }
-        });
+        }));
     }
 
     closeDrawer() {

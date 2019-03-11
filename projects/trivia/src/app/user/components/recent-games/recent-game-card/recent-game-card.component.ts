@@ -6,7 +6,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { userState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'recent-game-card',
@@ -14,7 +14,7 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
     styleUrls: ['./recent-game-card.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     @Input() game: Game;
     // @Input() userDict: { [key: string]: User };
@@ -30,21 +30,22 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     otherUserId: string;
     userProfileImageUrl: string;
     GameStatus = GameStatus;
+    subscription = [];
 
 
     constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
         this.categoryDictObs = store.select(categoryDictionary);
-        this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
+        this.subscription.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
     }
 
     ngOnInit(): void {
         this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-        this.userDict$.subscribe(userDict => {
+        this.subscription.push(this.userDict$.subscribe(userDict => {
             this.userDict = userDict;
             if (!this.cd['destroyed']) {
                 this.cd.detectChanges();
             }
-        });
+        }));
 
         if (this.game) {
             this.otherUserId = this.getOpponentId(this.game);

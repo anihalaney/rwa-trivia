@@ -7,7 +7,7 @@ import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
 import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { AutoUnsubscribe } from 'shared-library/shared/decorators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'game-question',
@@ -15,11 +15,11 @@ import { AutoUnsubscribe } from 'shared-library/shared/decorators';
   styleUrls: ['./game-question.component.scss']
 })
 
-@AutoUnsubscribe()
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, OnChanges {
 
   @Input() user: User;
-
+  subscription = [];
   answeredIndex: number;
   correctAnswerIndex: number;
   minutes = 0.62;
@@ -79,6 +79,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
           () => {
             this.timerSub.unsubscribe();
           });
+      this.subscription.push(this.timerSub);
     }
   }
 }
