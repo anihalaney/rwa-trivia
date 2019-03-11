@@ -15,8 +15,7 @@ import { Page } from 'tns-core-modules/ui/page';
 @Component({
   selector: 'my-questions',
   templateUrl: './my-questions.component.html',
-  styleUrls: ['./my-questions.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./my-questions.component.css']
 })
 export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
