@@ -4,7 +4,6 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
 
-
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
 export class ESUtils {
@@ -27,11 +26,11 @@ export class ESUtils {
     // to see set environments firebase -P production functions:config:get
     let prefix = 'dev:';
 
-    if (functions.config().ElasticSearch &&
-      functions.config().ElasticSearch.index &&
-      functions.config().ElasticSearch.index.production &&
+    if (functions.config().elasticsearch &&
+      functions.config().elasticsearch.index &&
+      functions.config().elasticsearch.index.production &&
       // tslint:disable-next-line:triple-equals
-      functions.config().ElasticSearch.index.production == 'true') {
+      functions.config().elasticsearch.index.production == 'true') {
 
       prefix = '';
     }
