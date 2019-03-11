@@ -1,29 +1,33 @@
 import * as express from 'express';
-const router = express.Router();
-
-const generalAuth = require('../middlewares/auth');
-
-
-const generalController = require('../controllers/general.controller');
-const generalQuestionController = require('../controllers/question.controller');
+import { GeneralController } from '../controllers/general.controller';
+import { AuthMiddleware } from '../middlewares/auth';
+import { GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 
 
-router.get('/migrate/:collectionName', generalAuth.adminOnly, generalController.migrateCollections);
-router.get('/migrate/prod/dev/:collectionName', generalAuth.adminOnly, generalController.migrateProdCollectionsToDev);
-router.get('/rebuild/question/index', generalAuth.adminOnly, generalController.rebuildQuestionIndex);
-router.get('/hello', generalAuth.adminOnly, generalController.helloOperation);
-router.get('/question', generalAuth.adminOnly, generalController.getTestQuestion);
-router.get('/game/question', generalAuth.adminOnly, generalController.getGameQuestionTest);
-router.get('/es/check', generalAuth.adminOnly, generalController.testES);
-router.post('/stat/system', generalAuth.adminOnly, generalController.generateSystemStat);
-router.get('/bulkupload/update', generalAuth.adminOnly, generalController.updateBulkUploadCollection);
-router.post('/question/update/:collectionName', generalAuth.adminOnly, generalController.updateQuestionCollection);
-router.post('/blog', generalAuth.authTokenOnly, generalController.generateBlogsData);
-router.post('/auth-users', generalAuth.authTokenOnly, generalController.dumpAuthUsersInFirestore);
-router.post('/user/profile/image', generalAuth.adminOnly, generalController.generateAllUsersProfileImages);
-router.post('/question/status', generalAuth.adminOnly, generalQuestionController.changeUnpublishedQuestionStatus);
-router.get('/add/default/lives', generalAuth.adminOnly, generalController.addDefaultLives);
-router.get('/addLives', generalAuth.adminOnly, generalController.addLives);
-router.get('/remove/social/profile', generalAuth.adminOnly, generalController.removeSocialProfile);
+class GeneralRoutes {
 
-module.exports = router;
+    public generalRoutes: any;
+
+    constructor() {
+
+        this.generalRoutes = express.Router();
+
+        //  '/hello'
+        this.generalRoutes.get(`/${RoutesConstants.HELLO}`, AuthMiddleware.adminOnly, GeneralController.helloOperation);
+
+        //  '/question'
+        this.generalRoutes.get(`/${RoutesConstants.QUESTION}`, AuthMiddleware.adminOnly, GeneralController.getTestQuestion);
+
+        //  '/game/question'
+        this.generalRoutes.get(`/${RoutesConstants.GAME}/${RoutesConstants.QUESTION}`,
+            AuthMiddleware.adminOnly, GeneralController.getGameQuestionTest);
+
+        //  '/es/check'
+        this.generalRoutes.get(`/${RoutesConstants.ES}/${RoutesConstants.CHECK}`,
+            AuthMiddleware.adminOnly, GeneralController.testES);
+
+    }
+}
+
+export default new GeneralRoutes().generalRoutes;
+

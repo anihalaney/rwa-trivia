@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus } from 'shared-library/shared/model';
@@ -11,7 +11,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
     selector: 'recent-game-card',
     templateUrl: './recent-game-card.component.html',
-    styleUrls: ['./recent-game-card.component.scss']
+    styleUrls: ['./recent-game-card.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -41,10 +42,8 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     ngOnInit(): void {
         this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
         this.subscription.push(this.userDict$.subscribe(userDict => {
-            this.userDict = userDict;
-            if (!this.cd['destroyed']) {
-                this.cd.detectChanges();
-            }
+        this.userDict = userDict;
+            this.cd.markForCheck();
         }));
 
         if (this.game) {
@@ -52,9 +51,7 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
             if (this.otherUserId !== undefined) {
                 if (this.userDict[this.otherUserId] === undefined) {
                     this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
-                    if (!this.cd['destroyed']) {
-                        this.cd.detectChanges();
-                    }
+                    this.cd.markForCheck();
                 }
             }
             this.userProfileImageUrl = this.getImageUrl(this.user);

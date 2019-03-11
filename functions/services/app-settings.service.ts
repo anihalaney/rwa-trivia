@@ -1,33 +1,41 @@
-const accountFireBaseClient = require('../db/firebase-client');
-const accountFireStoreClient = accountFireBaseClient.firestore();
-import { ApplicationSettings } from '../../projects/shared-library/src/lib/shared/model';
+import { ApplicationSettings, CollectionConstants } from '../../projects/shared-library/src/lib/shared/model';
+import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
+
 export class AppSettings {
-    appSettings: ApplicationSettings;
+
+    private static _instance: AppSettings;
+    public appSettings: ApplicationSettings;
 
     constructor() {
-        accountFireStoreClient.doc('application_settings/settings')
+        admin.firestore().doc(CollectionConstants.APPLICATION_SETTINGS_FORWARD_SLASH_SETTINGS)
             .onSnapshot((querySnapshot) => {
                 this.appSettings = querySnapshot.data();
             });
     }
 
-    private loadAppSetttings(): Promise<any> {
-        return accountFireStoreClient.doc('application_settings/settings')
-            .get()
-            .then(u => {
-                this.appSettings = u.data();
-                return this.appSettings;
-            })
-            .catch(error => {
-                return error;
-            });
+    public static get Instance() {
+        // Do you need arguments? Make it a regular method instead.
+        return this._instance || (this._instance = new this());
     }
 
-    public getAppSettings(): Promise<ApplicationSettings> {
+    private async loadAppSettings(): Promise<any> {
+        try {
+            const response = await admin.firestore().doc(CollectionConstants.APPLICATION_SETTINGS_FORWARD_SLASH_SETTINGS).get();
+            this.appSettings = response.data();
+            return this.appSettings;
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    async getAppSettings(): Promise<ApplicationSettings> {
         if (this.appSettings) {
-            return Promise.resolve(this.appSettings);
+            return await this.appSettings;
         } else {
-            return this.loadAppSetttings();
+            return this.loadAppSettings();
         }
     }
 }
+
+

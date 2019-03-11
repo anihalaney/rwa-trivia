@@ -1,71 +1,62 @@
-const statService = require('../services/stats.service');
-const statUserService = require('../services/user.service');
-const statQuestionService = require('../services/question.service');
-const statGameService = require('../services/game.service');
-
-import { SystemStats } from '../../projects/shared-library/src/lib/shared/model';
-
+import { QuestionService } from '../services/question.service';
+import { UserService } from '../services/user.service';
+import {
+    SystemStats, User, Game, Question,
+    CollectionConstants, SystemStatConstants
+} from '../../projects/shared-library/src/lib/shared/model';
+import { GameService } from '../services/game.service';
+import { StatsService } from '../services/stats.service';
+import { Utils } from './utils';
 
 export class SystemStatsCalculations {
 
-    public generateSystemStats(): Promise<any> {
-        return statService.getSystemStats('system')
-            .then((systemStat) => {
-                const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
-                const systemStatPromises = [];
-                systemStatPromises.push(statUserService.getUsers());
-                systemStatPromises.push(statQuestionService.getAllQuestions());
-                systemStatPromises.push(statGameService.getLiveGames());
-                systemStatPromises.push(statGameService.getCompletedGames());
+    static async generateSystemStats(): Promise<any> {
+        try {
+            let systemStatObj: SystemStats = await StatsService.getSystemStats(CollectionConstants.STATS_SYSTEM);
+            systemStatObj = (systemStatObj) ? systemStatObj : new SystemStats();
 
-                return Promise.all(systemStatPromises)
-                    .then((statResults) => {
-                        systemStatObj.total_users = statResults[0].size;
-                        systemStatObj.total_questions = statResults[1].size;
-                        systemStatObj.active_games = statResults[2].size;
-                        systemStatObj.game_played = statResults[3].size;
-                        return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
-                            return status;
-                        });
-                    });
-            });
+            const systemStatPromises = [];
+            const users: User[] = await UserService.getUsers();
+            const questions: Question[] = await QuestionService.getAllQuestions();
+            const games: Game[] = await GameService.getCompletedGames();
+
+            systemStatPromises.push(GameService.getLiveGames());
+            const statResults = await Promise.all(systemStatPromises);
+
+            systemStatObj.active_games = statResults[0].size;
+            systemStatObj.total_users = users.length;
+            systemStatObj.total_questions = questions.length;
+            systemStatObj.game_played = games.length;
+            return await StatsService.setSystemStats(CollectionConstants.STATS_SYSTEM, { ...systemStatObj });
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
-    public updateSystemStats(entity: string): Promise<any> {
-        return statService.getSystemStats('system')
-            .then((systemStat) => {
-                const systemStatObj: SystemStats = (systemStat.data()) ? systemStat.data() : new SystemStats();
-                if (entity === 'total_users') {
-                    systemStatObj.total_users = (systemStatObj.total_users) ? systemStatObj.total_users + 1 : 1;
-                    return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
-                        return status;
-                    });
-                } else if (entity === 'total_questions') {
-                    systemStatObj.total_questions = (systemStatObj.total_questions)
-                        ? systemStatObj.total_questions + 1 : 1;
-                    return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
-                        return status;
-                    });
-                } else if (entity === 'active_games') {
-                    return statGameService.getLiveGames()
-                        .then((active_games) => {
-                            systemStatObj.active_games = active_games.size;
-                            return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
-                                return status;
-                            });
-                        });
-                } else if (entity === 'game_played') {
-                    return statGameService.getCompletedGames()
-                        .then((total_games) => {
-                            systemStatObj.game_played = total_games.size;
-                            return statService.setSystemStats('system', { ...systemStatObj }).then((status) => {
-                                return status;
-                            });
-                        });
-                }
+    static async updateSystemStats(entity: string): Promise<any> {
+        try {
+            let systemStatObj: SystemStats = await StatsService.getSystemStats(CollectionConstants.STATS_SYSTEM);
+            systemStatObj = (systemStatObj) ? systemStatObj : new SystemStats();
+            if (entity === SystemStatConstants.TOTAL_USERS) {
+                systemStatObj.total_users = (systemStatObj.total_users) ? systemStatObj.total_users + 1 : 1;
+                return await StatsService.setSystemStats(CollectionConstants.STATS_SYSTEM, { ...systemStatObj });
+            } else if (entity === SystemStatConstants.TOTAL_QUESTIONS) {
+                systemStatObj.total_questions = (systemStatObj.total_questions)
+                    ? systemStatObj.total_questions + 1 : 1;
+                return await StatsService.setSystemStats(CollectionConstants.STATS_SYSTEM, { ...systemStatObj });
+            } else if (entity === SystemStatConstants.ACTIVE_GAMES) {
+                const active_games = await GameService.getLiveGames();
+                systemStatObj.active_games = active_games.size;
+                return await StatsService.setSystemStats(CollectionConstants.STATS_SYSTEM, { ...systemStatObj });
+            } else if (entity === SystemStatConstants.GAME_PLAYED) {
+                const games: Game[] = await GameService.getCompletedGames();
+                systemStatObj.game_played = games.length;
+                return await StatsService.setSystemStats(CollectionConstants.STATS_SYSTEM, { ...systemStatObj });
+            }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
 
-
-            });
     }
 
 
