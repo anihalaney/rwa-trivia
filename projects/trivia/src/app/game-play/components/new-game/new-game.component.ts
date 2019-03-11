@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
@@ -18,7 +18,8 @@ import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
-  styleUrls: ['./new-game.component.scss']
+  styleUrls: ['./new-game.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
@@ -54,13 +55,15 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private router: Router,
     public userActions: UserActions,
     public utils: Utils,
-    public snackBar: MatSnackBar) {
+    public snackBar: MatSnackBar,
+    private cd: ChangeDetectorRef) {
     super(store, utils, gameActions, userActions);
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
         this.redirectToDashboard(gameCreateStatus);
       }
+      this.cd.markForCheck();
     }));
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
@@ -83,6 +86,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             if (account) {
               this.life = account.lives;
             }
+            this.cd.markForCheck();
           }));
         }
 
@@ -97,6 +101,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             this.selectedCategories.push(category.id);
           }
         });
+        this.cd.markForCheck();
+       // this.cd.detectChanges();
       }
     }));
   }
