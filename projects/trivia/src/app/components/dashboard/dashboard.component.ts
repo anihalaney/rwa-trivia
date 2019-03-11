@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, NgZone } from '@angular/core';
+import { Component, OnInit, Inject, NgZone, ChangeDetectionStrategy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -9,7 +9,8 @@ import { Dashboard } from './dashboard';
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss', './dashboard.scss']
+  styleUrls: ['./dashboard.component.scss', './dashboard.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent extends Dashboard implements OnInit {
   constructor(store: Store<AppState>,
