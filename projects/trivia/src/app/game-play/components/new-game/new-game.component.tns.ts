@@ -56,6 +56,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   ngOnInit() {
 
     this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+      this.ngOnDestroy();
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     });
@@ -96,7 +97,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this.utils.unsubscribe(this.subs);
+  }
 
   addCustomTag() {
     this.selectedTags.push(this.customTag);
@@ -176,6 +179,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   navigateToInvite() {
+    this.ngOnDestroy();
     this.router.navigate(['/my/app-invite-friends-dialog']);
   }
 
