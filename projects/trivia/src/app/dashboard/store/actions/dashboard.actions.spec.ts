@@ -2,8 +2,8 @@ import { Subscription, User, Subscribers, Blog } from '../../../../../../shared-
 import {
     AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess,
     LoadBlogs, LoadBlogsSuccess
-} from './social.actions'
-import { SocialActionTypes } from './social.actions';
+} from './dashboard.actions';
+import { DashboardActionTypes } from './dashboard.actions';
 import { TEST_DATA } from '../../../testing/test.data';
 
 describe('AddSubscriber for normal user', () => {
@@ -11,7 +11,7 @@ describe('AddSubscriber for normal user', () => {
         const obj = new Subscription();
         obj.email = 'test@test.com';
         const action = new AddSubscriber({ subscription: obj });
-        expect(action.type).toEqual(SocialActionTypes.ADD_SUBSCRIBER);
+        expect(action.type).toEqual(DashboardActionTypes.ADD_SUBSCRIBER);
         expect(action.payload.subscription).toEqual(obj);
     });
 });
@@ -23,7 +23,7 @@ describe('AddSubscriber for logged in user', () => {
         obj.email = user.email;
         obj.userId = user.userId;
         const action = new AddSubscriber({ subscription: obj });
-        expect(action.type).toEqual(SocialActionTypes.ADD_SUBSCRIBER);
+        expect(action.type).toEqual(DashboardActionTypes.ADD_SUBSCRIBER);
         expect(action.payload.subscription).toEqual(obj);
     });
 });
@@ -31,7 +31,7 @@ describe('AddSubscriber for logged in user', () => {
 describe('AddSubscriberSuccess', async () => {
     it('should create an action', () => {
         const action = new AddSubscriberSuccess();
-        expect(action.type).toEqual(SocialActionTypes.ADD_SUBSCRIBER_SUCCESS);
+        expect(action.type).toEqual(DashboardActionTypes.ADD_SUBSCRIBER_SUCCESS);
         expect(action.payload).toEqual(null);
     });
 });
@@ -39,7 +39,7 @@ describe('AddSubscriberSuccess', async () => {
 describe('GetTotalSubscriber', async () => {
     it('should create an action', () => {
         const action = new GetTotalSubscriber();
-        expect(action.type).toEqual(SocialActionTypes.TOTAL_SUBSCRIBER);
+        expect(action.type).toEqual(DashboardActionTypes.TOTAL_SUBSCRIBER);
         expect(action.payload).toEqual(null);
     });
 });
@@ -49,7 +49,7 @@ describe('GetTotalSubscriberSuccess', async () => {
         const subscribers = new Subscribers();
         subscribers.count = 3;
         const action = new GetTotalSubscriberSuccess(subscribers);
-        expect(action.type).toEqual(SocialActionTypes.TOTAL_SUBSCRIBER_SUCCESS);
+        expect(action.type).toEqual(DashboardActionTypes.TOTAL_SUBSCRIBER_SUCCESS);
         expect(action.payload).toEqual(subscribers);
     });
 });
@@ -57,7 +57,7 @@ describe('GetTotalSubscriberSuccess', async () => {
 describe('LoadBlogs', async () => {
     it('should create an action', () => {
         const action = new LoadBlogs();
-        expect(action.type).toEqual(SocialActionTypes.LOAD_BLOGS);
+        expect(action.type).toEqual(DashboardActionTypes.LOAD_BLOGS);
         expect(action.payload).toEqual(null);
     });
 });
@@ -66,7 +66,7 @@ describe('LoadBlogsSuccess', async () => {
     it('should create an action', () => {
         const blog: Blog[] = TEST_DATA.blog;
         const action = new LoadBlogsSuccess(blog);
-        expect(action.type).toEqual(SocialActionTypes.LOAD_BLOGS_SUCCESS);
+        expect(action.type).toEqual(DashboardActionTypes.LOAD_BLOGS_SUCCESS);
         expect(action.payload).toEqual(blog);
     });
 });

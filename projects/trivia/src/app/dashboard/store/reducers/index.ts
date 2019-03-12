@@ -5,12 +5,12 @@ import {
     subscriptionSaveStatus, getTotalSubscriptionStatus,
     subscriptionRemoveStatus, checkEmailSubscriptionStatus,
     socialShareImageUrl, blogs
-} from './social.reducer';
+} from './dashboard.reducer';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
-export * from './social.reducer';
+export * from './dashboard.reducer';
 
-export interface SocialState {
+export interface DashboardState {
     subscriptionSaveStatus: String;
     getTotalSubscriptionStatus: Subscribers;
     subscriptionRemoveStatus: String;
@@ -19,7 +19,7 @@ export interface SocialState {
     blogs: any;
 }
 
-export const reducer: ActionReducerMap<SocialState> = {
+export const reducer: ActionReducerMap<DashboardState> = {
     subscriptionSaveStatus: subscriptionSaveStatus,
     getTotalSubscriptionStatus: getTotalSubscriptionStatus,
     subscriptionRemoveStatus: subscriptionRemoveStatus,
@@ -28,4 +28,4 @@ export const reducer: ActionReducerMap<SocialState> = {
     blogs: blogs
 };
 
-export const socialState = createFeatureSelector<SocialState>('social');
+export const dashboardState = createFeatureSelector<DashboardState>('dashboard');

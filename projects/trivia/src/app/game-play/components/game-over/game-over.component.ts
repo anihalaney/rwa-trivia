@@ -3,7 +3,7 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { Store, select } from '@ngrx/store';
-import * as socialactions from '../../../social/store/actions';
+import * as dashboardactions from '../../../dashboard/store/actions';
 import { gamePlayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -53,7 +53,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       }
     }));
 
-    this.subs.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.subs.push(this.store.select(appState.dashboardState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -103,7 +103,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       const node = document.getElementById('share-content');
       domtoimage.toPng(node)
         .then((dataUrl) => {
-          this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
+          this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrl({
             imageBlob: this.utils.dataURItoBlob(dataUrl),
             userId: this.user.userId
           }));

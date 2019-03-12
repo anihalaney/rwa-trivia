@@ -16,7 +16,7 @@ export class BlogComponent implements OnDestroy , AfterViewInit {
   blogData = [];
 
   constructor(private store: Store<AppState>, private utils: Utils, private cd: ChangeDetectorRef) {
-    this.sub = this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+    this.sub = this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
       this.cd.markForCheck();
     });
@@ -30,7 +30,7 @@ export class BlogComponent implements OnDestroy , AfterViewInit {
     this.utils.unsubscribe([this.sub]);
   }
   ngAfterViewInit(): void {
-    this.sub = this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+    this.sub = this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
     });
   }

@@ -13,7 +13,6 @@ import { reducers, CustomSerializer } from './store';
 import { RoutingModule } from './routing/routing.module';
 
 import { GamePlayModule } from './game-play/game-play.module';
-import { SocialModule } from './social/social.module';
 import { UserModule } from './user/user.module';
 import { StatsModule } from './stats/stats.module';
 import { LazyLoadImagesModule } from 'ngx-lazy-load-images';
@@ -32,6 +31,7 @@ import { interval } from 'rxjs';
 import { GameCardComponent } from './components/game-card/game-card.component';
 import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
 import { GameInviteComponent } from './components/game-invite/game-invite.component';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 
 @NgModule({
@@ -66,7 +66,7 @@ import { GameInviteComponent } from './components/game-invite/game-invite.compon
     SharedModule,
     RoutingModule,
     GamePlayModule,
-    SocialModule,
+    DashboardModule,
     UserModule,
     StatsModule,
     BrowserModule.withServerTransition({ appId: 'trivia' }),

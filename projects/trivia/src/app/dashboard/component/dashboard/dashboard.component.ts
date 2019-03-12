@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState } from '../../store';
+import { AppState } from '../../../store';
 import { Dashboard } from './dashboard';
 
 @Component({
