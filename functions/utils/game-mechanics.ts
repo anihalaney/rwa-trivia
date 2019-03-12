@@ -24,7 +24,7 @@ export class GameMechanics {
                     if (playerQnA.answerCorrect) {
                         AccountService.setBits(userId);
                     }
-                    if (game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
+                    if (game.nextTurnPlayerId && game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
                         PushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
@@ -37,7 +37,9 @@ export class GameMechanics {
                     game.decideWinner();
                     game.calculateStat(game.nextTurnPlayerId);
                     game.GameStatus = GameStatus.COMPLETED;
-                    AccountService.setBytes(game.winnerPlayerId);
+                    if (game.winnerPlayerId) {
+                        AccountService.setBytes(game.winnerPlayerId);
+                    }
                     if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                         (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
                         PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
