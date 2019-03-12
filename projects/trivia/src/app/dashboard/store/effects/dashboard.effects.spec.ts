@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { cold, hot, getTestScheduler } from 'jasmine-marbles';
 import { Actions } from '@ngrx/effects';
 import { TEST_DATA } from '../../../testing/test.data';
-import { SocialEffects } from './social.effects';
+import { DashboardEffects } from './dashboard.effects';
 import {
     AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess, CheckSubscriptionStatus,
     AddSubscriberError, LoadBlogs, LoadBlogsSuccess, LoadBlogsError
@@ -27,7 +27,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 
 describe('Effects: SocialEffects', () => {
-    let effects: SocialEffects;
+    let effects: DashboardEffects;
     let actions$: Observable<any>;
     let socialService: any;
     beforeEach(() => {
@@ -36,7 +36,7 @@ describe('Effects: SocialEffects', () => {
                 AngularFirestoreModule, AngularFirestoreModule, HttpClientModule, AngularFireStorageModule],
             providers: [
                 AngularFirestore,
-                SocialEffects,
+                DashboardEffects,
                 {
                     provide: SocialService,
                     useValue: {
@@ -54,7 +54,7 @@ describe('Effects: SocialEffects', () => {
             ],
         });
 
-        effects = TestBed.get(SocialEffects);
+        effects = TestBed.get(DashboardEffects);
         socialService = TestBed.get(SocialService);
         actions$ = TestBed.get(Actions);
     });

@@ -2,44 +2,44 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map, filter, catchError } from 'rxjs/operators';
 
-import { SocialService } from '../../../../../../shared-library/src/lib/core/services';
-import { Subscribers, Blog, RouterStateUrl } from '../../../../../../shared-library/src/lib/shared/model';
-import { SocialActionTypes } from '../actions';
-import * as socialActions from '../actions/social.actions';
+import { SocialService } from 'shared-library/core/services';
+import { Subscribers, Blog, RouterStateUrl } from 'shared-library/shared/model';
+import { DashboardActionTypes } from '../actions';
+import * as dashboardActions from '../actions/dashboard.actions';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 import { of } from 'rxjs';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()
-export class SocialEffects {
+export class DashboardEffects {
     // Save subscription
     @Effect()
     addSubscription$ = this.actions$
-        .pipe(ofType(SocialActionTypes.ADD_SUBSCRIBER))
+        .pipe(ofType(DashboardActionTypes.ADD_SUBSCRIBER))
         .pipe(
-            switchMap((action: socialActions.AddSubscriber) =>
+            switchMap((action: dashboardActions.AddSubscriber) =>
                 this.socialService.checkSubscription(action.payload.subscription)
                     .pipe(
                         map(isSubscribed => {
                             if (isSubscribed) {
-                                return new socialActions.CheckSubscriptionStatus(true);
+                                return new dashboardActions.CheckSubscriptionStatus(true);
                             } else {
-                                this.socialService.saveSubscription(action.payload.subscription)
-                                return new socialActions.CheckSubscriptionStatus(false);
+                                this.socialService.saveSubscription(action.payload.subscription);
+                                return new dashboardActions.CheckSubscriptionStatus(false);
                             }
-                        }), catchError(err => of(new socialActions.AddSubscriberError(err))))
+                        }), catchError(err => of(new dashboardActions.AddSubscriberError(err))))
 
             ));
 
     // get total subscription
     @Effect()
     getTotalSubscription$ = this.actions$
-        .pipe(ofType(SocialActionTypes.TOTAL_SUBSCRIBER))
+        .pipe(ofType(DashboardActionTypes.TOTAL_SUBSCRIBER))
         .pipe(
-            switchMap((action: socialActions.GetTotalSubscriber) =>
+            switchMap((action: dashboardActions.GetTotalSubscriber) =>
                 this.socialService.getTotalSubscription()
                     .pipe(
-                        map((totalCount: Subscribers) => new socialActions.GetTotalSubscriberSuccess(totalCount))
+                        map((totalCount: Subscribers) => new dashboardActions.GetTotalSubscriberSuccess(totalCount))
                     )
             )
         );
@@ -48,12 +48,12 @@ export class SocialEffects {
     // Load Social Score share url
     @Effect()
     loadSocialScoreShareUrl$ = this.actions$
-        .pipe(ofType(SocialActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL))
+        .pipe(ofType(DashboardActionTypes.LOAD_SOCIAL_SCORE_SHARE_URL))
         .pipe(
-            switchMap((action: socialActions.LoadSocialScoreShareUrl) =>
+            switchMap((action: dashboardActions.LoadSocialScoreShareUrl) =>
                 this.socialService.generateScoreShareImage(action.payload.imageBlob, action.payload.userId)
                     .pipe(
-                        map((imageUrl: UploadTaskSnapshot) => new socialActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
+                        map((imageUrl: UploadTaskSnapshot) => new dashboardActions.LoadSocialScoreShareUrlSuccess(imageUrl)))
             ));
 
 
@@ -69,8 +69,8 @@ export class SocialEffects {
             switchMap(() =>
                 this.socialService.loadBlogs()
                     .pipe(
-                        map((blogs: Blog[]) => new socialActions.LoadBlogsSuccess(blogs)),
-                        catchError(err => of(new socialActions.LoadBlogsError(err)))
+                        map((blogs: Blog[]) => new dashboardActions.LoadBlogsSuccess(blogs)),
+                        catchError(err => of(new dashboardActions.LoadBlogsError(err)))
                     )
             )
         );

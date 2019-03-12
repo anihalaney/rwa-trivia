@@ -6,7 +6,7 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
-import * as socialactions from '../../../social/store/actions';
+import * as dashboardactions from '../../../dashboard/store/actions';
 import { gamePlayState } from '../../store';
 
 export class GameOver implements OnInit {
@@ -69,7 +69,7 @@ export class GameOver implements OnInit {
       share_status: false,
       link: this.imageUrl
     };
-    this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
+    this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => {

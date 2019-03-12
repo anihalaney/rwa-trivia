@@ -3,8 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { User, Subscription } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
-import * as socialActions from '../../../social/store/actions';
-import { socialState } from '../../store';
+import * as dashboardActions from '../../store/actions';
+import { dashboardState } from '../../store';
 import { isPlatformBrowser } from '@angular/common';
 
 // tslint:disable-next-line:max-line-length
@@ -45,18 +45,18 @@ export class NewsletterComponent implements OnInit {
         }
       }
     });
-    this.store.select(socialState).pipe(select(s => s.checkEmailSubscriptionStatus)).subscribe(status => {
+    this.store.select(dashboardState).pipe(select(s => s.checkEmailSubscriptionStatus)).subscribe(status => {
 
       if (status === true) {
         this.isSubscribed = true;
         this.message = 'This EmailId is already Subscribed!!';
       } else if (status === false) {
         this.isSubscribed = true;
-        this.store.dispatch(new socialActions.GetTotalSubscriber());
+        this.store.dispatch(new dashboardActions.GetTotalSubscriber());
         this.message = 'Your EmailId is Successfully Subscribed!!';
       }
     });
-    this.store.select(socialState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
+    this.store.select(dashboardState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
       this.cd.markForCheck();
     });
@@ -64,7 +64,7 @@ export class NewsletterComponent implements OnInit {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      this.store.dispatch(new socialActions.GetTotalSubscriber());
+      this.store.dispatch(new dashboardActions.GetTotalSubscriber());
     }
   }
 
@@ -77,7 +77,7 @@ export class NewsletterComponent implements OnInit {
       if (this.user) {
         subscription.userId = this.user.userId;
       }
-      this.store.dispatch(new socialActions.AddSubscriber({ subscription }));
+      this.store.dispatch(new dashboardActions.AddSubscriber({ subscription }));
     }
   }
 
