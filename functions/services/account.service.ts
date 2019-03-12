@@ -210,19 +210,19 @@ export class AccountService {
             const docRef = await accountRef.get();
             const account = docRef.data();
             if (docRef.exists) {
-                if (account.lives < appSetting.lives.maxLives && account.nextLiveUpdate <= timestamp) {
-                    account.lives += appSetting.lives.livesAdd;
-                    if (account.lives > appSetting.lives.maxLives) {
-                        account.lives = appSetting.lives.maxLives;
+                if (account.lives < appSetting.lives.max_lives && account.nextLiveUpdate <= timestamp) {
+                    account.lives += appSetting.lives.lives_add;
+                    if (account.lives > appSetting.lives.max_lives) {
+                        account.lives = appSetting.lives.max_lives;
                     } else {
                         // Update nextLiveUpdate
-                        account.nextLiveUpdate = Utils.addMinutes(timestamp, appSetting.lives.livesMillis);
+                        account.nextLiveUpdate = Utils.addMinutes(timestamp, appSetting.lives.lives_after_add_millisecond);
                     }
                     account.lastLiveUpdate = timestamp;
                     accountRef.update(account);
                 }
             } else {
-                accountRef.set({ lives: appSetting.lives.maxLives, id: userId });
+                accountRef.set({ lives: appSetting.lives.max_lives, id: userId });
             }
         } catch (error) {
             return Utils.throwError(error);
