@@ -1,0 +1,93 @@
+mat-card {
+  margin: 15px;
+}
+.dash-card {
+  width: 400px;
+  min-width: 350px;
+}
+mat-card>:last-child{
+  margin-bottom: 15px;
+}
+mat-card>:first-child{
+  margin-top: 15px;
+}
+.card-spacing
+{
+  margin-right: 3%;
+}
+.no-card
+{
+  height: 415px;
+  border-style: dashed;
+  border-width: 2px;
+  display: table;
+  width: 100%;
+  border-radius: 4px;
+}
+.no-card p
+{
+  font-family: 'hindmedium';
+  font-size: 14px;
+  text-align:center; 
+  vertical-align: middle;
+  display: table-cell;  
+   
+}
+.subtext
+{
+  line-height: 2;
+}
+.invitation-title span
+{
+  padding-left: 0px;
+}
+
+.title {
+  color: #3b5998;
+  font-weight: bold;
+  font-size: 16;
+  padding:10 0;
+}
+
+.padding-10 {
+  padding: 10;
+}
+
+.text-black {
+  color:black;
+}
+
+.text-gray {
+  color:gray;
+}
+
+.border-bottom{
+  border-color: #333;
+  border-width: 0 0 1 0;
+  border-style: solid;
+  width: 95%;
+}
+
+.cardStyle {
+  background-color: #3489db;
+  color: #fff;
+}
+
+.startgame:disabled {
+  background: silver;
+}
+
+.disabled-btn{
+  background: silver;
+}
+.text-center{
+  text-align:center;
+  vertical-align: middle;
+}
+
+.bits {
+  color: #3b5998;
+  font-weight: bold;
+  font-size: 16;
+  padding:10 0;
+}

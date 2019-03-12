@@ -8,9 +8,13 @@ export const routes: Routes = [
     redirectTo: '/dashboard',
     pathMatch: 'full'
   },
+  // {
+  //   path: 'dashboard',
+  //   component: DashboardComponent
+  // },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    loadChildren: '../dashboard/dashboard.module#DashboardModule',
   },
   {
     path: 'privacy-policy',

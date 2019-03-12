@@ -38,7 +38,7 @@ import { GameInviteComponent } from './components/game-invite/game-invite.compon
   declarations: [
     GameCardComponent,
     AppComponent,
-    DashboardComponent,
+    // DashboardComponent,
     QuestionComponent,
     SideNavComponent,
     HeaderComponent,

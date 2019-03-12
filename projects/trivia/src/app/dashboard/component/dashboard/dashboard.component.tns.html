@@ -1,0 +1,92 @@
+<ns-action-bar title="Dashboard" class="Roboto-Regular" showAdd="true"></ns-action-bar>
+<StackLayout class="mobile" backgroundColor="#f1f2f2">
+    <ScrollView>
+        <StackLayout>        
+                <Label margin="5 10"  *ngIf="account?.bits && user" text=" Bits: {{account?.bits}} " textWrap="true"></Label>
+                <Label margin="2 10"  *ngIf="account?.bytes && user" text=" Bytes: {{account?.bytes}} " textWrap="true"></Label>
+
+            <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
+                
+                <Label text="START A NEW GAME {{timeoutLive}}" android:paddingTop="22" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true"></Label>
+
+                    <StackLayout row="1" col="0" *ngIf="user && (twoPlayerCount > 0 || singlePlayerCount > 0)" iosOverflowSafeArea="false">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                        <GridLayout rows="auto, auto" columns="*">
+                            <StackLayout row="0" col="0" *ngIf="activeGames && userDict">
+                                <Label text="My Games" orientation="horizontal" horizontalAlignment="center" padding="10"
+                                    textWrap="true" class="title Roboto-Bold"> </Label>
+                                <StackLayout *ngFor="let game of activeGames | gamefilter: filterSinglePlayerGame ;let last = last;">
+                                    <game-card [game]="game" [cardType]="'singlePlayer'"></game-card>
+                                    <StackLayout class="hr-light m-10" *ngIf="!last"></StackLayout>
+                                    <StackLayout class="hr-light m-10" *ngIf="last && twoPlayerCount > 0"></StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                            <StackLayout row="1" col="0" *ngIf="activeGames && userDict">
+                                <StackLayout *ngFor="let game of activeGames | gamefilter: filterTwoPlayerGame;let last = last;let index = index;">
+                                    <game-card [game]="game" [cardType]="'twoPlayer'"></game-card>
+                                    <StackLayout class="hr-light m-10" *ngIf="!last"></StackLayout>
+                                </StackLayout>
+                            </StackLayout>
+                        </GridLayout>
+                    </CardView>
+                </StackLayout>
+                <StackLayout row="2" col="0" *ngIf="user && theirTurnCount">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                        <StackLayout *ngIf="activeGames && userDict">
+                            <Label text="Their Turn" orientation="horizontal" horizontalAlignment="center" padding="10"
+                                textWrap="true" class="title Roboto-Bold"> </Label>
+                            <StackLayout *ngFor="let game of activeGames | gamefilter: filterTwoPlayerWaitNextQGame; let last = last;">
+                                <game-card [game]="game" [cardType]="'theirTurn'"></game-card>
+                                <!-- <StackLayout class="hr-light m-10"  *ngIf="!last"></StackLayout> -->
+                            </StackLayout>
+                        </StackLayout>
+                    </CardView>
+                </StackLayout>
+                <StackLayout row="3" col="0" *ngIf="user && waitingForOponentCount">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                        <StackLayout *ngIf="activeGames && userDict">
+                            <Label text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center"
+                                padding="10" textWrap="true" class="title Roboto-Bold"> </Label>
+                            <StackLayout *ngFor="let game of activeGames | gamefilter: filterGame; let last = last;">
+                                <game-card [game]="game" [cardType]="'opponent'"></game-card>
+                                <StackLayout class="hr-light m-10" *ngIf="!last"></StackLayout>
+                            </StackLayout>
+                        </StackLayout>
+                    </CardView>
+                </StackLayout>
+
+                <StackLayout row="4" col="0" *ngIf="user && gameInvites.length">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                        <StackLayout *ngIf="gameInvites">
+                            <Label text="Invitation to play games" orientation="horizontal" horizontalAlignment="center"
+                                padding="10" textWrap="true" class="title Roboto-Medium">
+                            </Label>
+                            <StackLayout *ngFor="let game of gameInvites">
+                                <game-invite [userDict]="userDict" [game]="game"></game-invite>
+                            </StackLayout>
+                        </StackLayout>
+                    </CardView>
+                </StackLayout>
+
+                <StackLayout row="5" col="0" *ngIf="user && userDict && friendInvitations.length > 0"  iosOverflowSafeArea="false">
+                    <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
+                        <StackLayout *ngIf="friendInvitations">
+                            <Label text="Friend Invitations" orientation="horizontal" horizontalAlignment="center"
+                                padding="10" textWrap="true" class="title Roboto-Medium">
+                            </Label>
+                            <StackLayout *ngFor="let invitation of friendInvitations | slice:friendInviteSliceStartIndex:friendInviteSliceLastIndex"  iosOverflowSafeArea="false">
+                                <app-friend-invite [userDict]="userDict" [invitation]="invitation" [user]="user"></app-friend-invite>
+                            </StackLayout>
+                            <Button text="View more" backgroundColor="#8ac541" color="#ffffff" margin="10" (tap)="displayMoreFriendInvites()"
+                                *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex"></Button>
+                        </StackLayout>
+                    </CardView>
+                </StackLayout>
+
+                <StackLayout row="6" col="0"  iosOverflowSafeArea="false">
+                    <question [userDict]="userDict"></question>
+                </StackLayout>
+            </GridLayout>
+        </StackLayout>
+    </ScrollView>
+</StackLayout>
