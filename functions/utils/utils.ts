@@ -39,14 +39,18 @@ export class Utils {
     }
 
     static getFireStorageBucket(admin: any): any {
-        if (functions.config().elasticsearch &&
-            functions.config().elasticsearch.index &&
-            functions.config().elasticsearch.index.production &&
-            functions.config().elasticsearch.index.production === GeneralConstants.TRUE) {
+        if (Utils.isEnvProduction()) {
             return  admin.storage().bucket(GeneralConstants.BIT_WISER_PROD_STORAGE_BUCKET_NAME);
         } else {
             return admin.storage().bucket(GeneralConstants.BIT_WISER_DEV_STORAGE_BUCKET_NAME);
         }
+    }
+
+    static isEnvProduction(): boolean {
+        return ( functions.config().elasticsearch &&
+            functions.config().elasticsearch.index &&
+            functions.config().elasticsearch.index.production &&
+            functions.config().elasticsearch.index.production === GeneralConstants.TRUE ) ? true : false;
     }
 
 }

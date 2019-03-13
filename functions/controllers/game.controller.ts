@@ -118,10 +118,7 @@ export class GameController {
 
         let websiteUrl = `https://`;
 
-        if (functions.config().elasticsearch &&
-            functions.config().elasticsearch.index &&
-            functions.config().elasticsearch.index.production &&
-            functions.config().elasticsearch.index.production === GeneralConstants.TRUE) {
+        if (Utils.isEnvProduction()) {
             websiteUrl += 'bitwiser.io';
         } else {
             websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
