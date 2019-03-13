@@ -70,3 +70,23 @@ export function blogs(state: any = null, action: DashboardActions): any {
     }
 }
 
+export function scoreBoard(state: any = null, action: DashboardActions): any {
+    switch (action.type) {
+        case DashboardActionTypes.LOAD_LEADERBOARD_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+
+export function systemStat(state: any = null, action: DashboardActions): any {
+    switch (action.type) {
+        case DashboardActionTypes.LOAD_SYSTEM_STAT_SUCCESS:
+            return action.payload;
+        case DashboardActionTypes.LOAD_SYSTEM_STAT_ERROR:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+

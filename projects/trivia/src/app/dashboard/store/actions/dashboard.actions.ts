@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Subscription, Subscribers, Blog } from 'shared-library/shared/model';
+import { Subscription, Subscribers, Blog, SystemStats } from 'shared-library/shared/model';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 export enum DashboardActionTypes {
@@ -18,7 +18,12 @@ export enum DashboardActionTypes {
     LOAD_BLOGS = '[Social] LoadBlogs',
     LOAD_BLOGS_SUCCESS = '[Social] LoadBlogsSuccess',
     ADD_SUBSCRIBER_ERROR = '[Social] AddSubscriberError',
-    LOAD_BLOGS_ERROR = '[Social] LoadBlogsError'
+    LOAD_BLOGS_ERROR = '[Social] LoadBlogsError',
+    LOAD_LEADERBOARD = '[Stats] LoadLeaderBoard',
+    LOAD_LEADERBOARD_SUCCESS = '[Stats] LoadLeaderBoardSuccess',
+    LOAD_SYSTEM_STAT = '[Stats] LoadSystemStat',
+    LOAD_SYSTEM_STAT_SUCCESS = '[Stats] LoadSystemStatSuccess',
+    LOAD_SYSTEM_STAT_ERROR = '[Stats] LoadSystemStatError'
 }
 
 // Save subscriber
@@ -99,6 +104,36 @@ export class LoadBlogsError implements Action {
     constructor(public payload: string) { }
 }
 
+// Load Score
+export class LoadLeaderBoard implements Action {
+    readonly type = DashboardActionTypes.LOAD_LEADERBOARD;
+    constructor() { }
+}
+
+// Load Score
+export class LoadLeaderBoardSuccess implements Action {
+    readonly type = DashboardActionTypes.LOAD_LEADERBOARD_SUCCESS;
+    constructor(public payload: any) { }
+}
+
+// Load System Stat
+export class LoadSystemStat implements Action {
+    readonly type = DashboardActionTypes.LOAD_SYSTEM_STAT;
+    constructor() { }
+}
+
+// Load System Stat
+export class LoadSystemStatSuccess implements Action {
+    readonly type = DashboardActionTypes.LOAD_SYSTEM_STAT_SUCCESS;
+    constructor(public payload: SystemStats) { }
+}
+
+// Load System Stat error
+export class LoadSystemStatError implements Action {
+    readonly type = DashboardActionTypes.LOAD_SYSTEM_STAT_ERROR;
+    constructor(public payload: string) { }
+}
+
 
 
 export type DashboardActions
@@ -114,5 +149,10 @@ export type DashboardActions
     | RemoveSubscriberSuccess
     | CheckSubscriptionStatus
     | AddSubscriberError
-    | LoadBlogsError;
+    | LoadBlogsError
+    | LoadLeaderBoard
+    | LoadLeaderBoardSuccess
+    | LoadSystemStat
+    | LoadSystemStatSuccess
+    | LoadSystemStatError;
 

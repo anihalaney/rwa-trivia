@@ -4,7 +4,7 @@ import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
 import { PlayerMode, GameStatus } from 'shared-library/shared/model';
 import { WindowRef, Utils } from 'shared-library/core/services';
-import { AppState, appState } from '../../store';
+import { AppState, appState } from '../../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { User } from 'shared-library/shared/model';

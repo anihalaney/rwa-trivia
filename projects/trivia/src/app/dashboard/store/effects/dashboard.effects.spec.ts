@@ -7,7 +7,8 @@ import { TEST_DATA } from '../../../testing/test.data';
 import { DashboardEffects } from './dashboard.effects';
 import {
     AddSubscriber, AddSubscriberSuccess, GetTotalSubscriber, GetTotalSubscriberSuccess, CheckSubscriptionStatus,
-    AddSubscriberError, LoadBlogs, LoadBlogsSuccess, LoadBlogsError
+    AddSubscriberError, LoadBlogs, LoadBlogsSuccess, LoadBlogsError, LoadLeaderBoard,
+    LoadLeaderBoardSuccess, LoadSystemStat, LoadSystemStatSuccess
 } from '../actions';
 import { Subscription, User, Subscribers, Blog, RouterStateUrl } from '../../../../../../shared-library/src/lib/shared/model';
 import { StoreModule, Store } from '@ngrx/store';
@@ -18,7 +19,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthenticationProvider, AuthInterceptor } from '../../../../../../shared-library/src/lib/core/auth';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireStorageModule } from '@angular/fire/storage';
-import { UserService, SocialService } from '../../../../../../shared-library/src/lib/core/services';
+import { UserService, SocialService, StatsService } from '../../../../../../shared-library/src/lib/core/services';
 import { UserActions } from '../../../../../../shared-library/src/lib/core/store';
 import { RouterNavigationPayload, RouterNavigationAction, ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { RoutesRecognized } from '@angular/router';
@@ -26,10 +27,12 @@ import { RoutesRecognized } from '@angular/router';
 export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
 
 
-describe('Effects: SocialEffects', () => {
+describe('Effects: DashboardEffects', () => {
     let effects: DashboardEffects;
     let actions$: Observable<any>;
     let socialService: any;
+    let statsService: any;
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [StoreModule.forRoot({}), AngularFireModule.initializeApp(firebaseConfig),
@@ -44,6 +47,10 @@ describe('Effects: SocialEffects', () => {
                         LoadBlogsSuccess: jest.fn()
                     },
                 },
+                {
+                    provide: StatsService,
+                    useValue: { loadSystemStat: jest.fn(), loadLeaderBoardStat: jest.fn() },
+                },
                 UserActions,
                 UserService,
                 provideMockActions(() => actions$),
@@ -56,6 +63,7 @@ describe('Effects: SocialEffects', () => {
 
         effects = TestBed.get(DashboardEffects);
         socialService = TestBed.get(SocialService);
+        statsService = TestBed.get(StatsService);
         actions$ = TestBed.get(Actions);
     });
 
@@ -180,5 +188,28 @@ describe('Effects: SocialEffects', () => {
         socialService.loadBlogs = jest.fn(() => response);
 
         expect(effects.getBlogs$).toBeObservable(expected);
+    });
+
+    it('LoadLeaderBoardInfo', () => {
+        const data = [];
+        data[0] = { '1': [{ 'score': 123, userId: '9K3sL9eHEZYXFZ68oRrW7a6wUmV2' }] };
+        const action = new LoadLeaderBoard();
+        const completion = new LoadLeaderBoardSuccess(data);
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: data });
+        const expected = cold('--b', { b: completion });
+        statsService.loadLeaderBoardStat = jest.fn(() => response);
+        expect(effects.LoadLeaderBoardInfo$).toBeObservable(expected);
+    });
+
+    it('LoadSystemStat', () => {
+        const data = TEST_DATA.realTimeStats;
+        const action = new LoadSystemStat();
+        const completion = new LoadSystemStatSuccess(data);
+        actions$ = hot('-a---', { a: action });
+        const response = cold('-a|', { a: data });
+        const expected = cold('--b', { b: completion });
+        statsService.loadSystemStat = jest.fn(() => response);
+        expect(effects.LoadSystemStat$).toBeObservable(expected);
     });
 });

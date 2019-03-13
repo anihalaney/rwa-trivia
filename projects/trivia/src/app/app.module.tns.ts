@@ -12,14 +12,10 @@ import { HttpClientModule } from '@angular/common/http';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
 import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens';
 import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angular';
-import { QuestionComponent } from './components/question/question.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { registerElement } from 'nativescript-angular/element-registry';
-import { StatsModule } from './stats/stats.module';
 import { RouterModule } from '@angular/router';
-import { GameCardComponent } from './components/game-card/game-card.component';
-import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
-import { GameInviteComponent } from './components/game-invite/game-invite.component';
+import { DashboardModule } from './dashboard/dashboard.module';
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -32,11 +28,7 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
 @NgModule({
   declarations: [
     AppComponent,
-    QuestionComponent,
     DashboardComponent,
-    GameCardComponent,
-    FriendInviteComponent,
-    GameInviteComponent
   ],
   imports: [
     CoreModule,
@@ -46,8 +38,8 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     StoreModule.forRoot(reducers),
     StoreRouterConnectingModule.forRoot(),
     HttpClientModule,
-    StatsModule,
     SharedModule,
+    DashboardModule,
     NativeScriptUISideDrawerModule,
     RouterModule
   ],

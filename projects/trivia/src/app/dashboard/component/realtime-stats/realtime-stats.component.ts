@@ -1,7 +1,7 @@
 import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { leaderBoardState } from '../../store';
+import { dashboardState } from '../../store';
 import * as StatActions from '../../store/actions';
 import { SystemStats } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
@@ -22,7 +22,7 @@ export class RealtimeStatsComponent implements OnDestroy {
 
     this.store.dispatch(new StatActions.LoadSystemStat());
 
-    this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.systemStat)).subscribe(systemStats => {
+    this.subs.push(this.store.select(dashboardState).pipe(select(s => s.systemStat)).subscribe(systemStats => {
       if (systemStats !== null) {
         this.systemStats = systemStats;
         this.cd.markForCheck();

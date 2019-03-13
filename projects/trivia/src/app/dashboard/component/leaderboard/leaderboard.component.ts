@@ -6,7 +6,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Category, User, LeaderBoardUser, LeaderBoardConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
-import { leaderBoardState } from '../../store';
+import { dashboardState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
 import { ActivatedRoute } from '@angular/router';
@@ -62,7 +62,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
       this.categoryDict = categoryDict;
     }));
 
-    this.subs.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
+    this.subs.push(this.store.select(dashboardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);

@@ -2,10 +2,8 @@ import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { User, Invitation, friendInvitationConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { Store } from '@ngrx/store';
-// import { AppState, appState } from '../../../store';
-// import * as userActions from '../../../user/store/actions';
-import { AppState, appState } from '../../store';
 import { UserActions } from 'shared-library/core/store/actions';
+import { AppState } from '../../../store';
 
 
 @Component({

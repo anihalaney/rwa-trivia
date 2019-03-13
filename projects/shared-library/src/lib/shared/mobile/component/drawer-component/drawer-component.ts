@@ -108,7 +108,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     leaderBoard(category) {
-        this.routerExtension.navigate(['/stats/leaderboard', category]);
+        this.routerExtension.navigate(['/dashboard/leaderboard', category]);
         this.closeDrawer();
     }
 
