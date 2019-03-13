@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map, filter, catchError } from 'rxjs/operators';
-
-import { SocialService, StatsService } from 'shared-library/core/services';
+import { SocialService, StatsService } from '../../../../../../shared-library/src/lib/core/services';
 import { Subscribers, Blog, RouterStateUrl, SystemStats } from 'shared-library/shared/model';
 import { DashboardActionTypes } from '../actions';
 import * as dashboardActions from '../actions/dashboard.actions';

@@ -2,12 +2,11 @@ import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef} from '@angular/
 import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
-
-import { Category, User, LeaderBoardUser, LeaderBoardConstants } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
+import { Category, User, LeaderBoardUser, LeaderBoardConstants } from './../../../../../../shared-library/src/lib/shared/model';
+import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { dashboardState } from '../../store';
-import { UserActions } from 'shared-library/core/store/actions';
+import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
 import { ActivatedRoute } from '@angular/router';
 

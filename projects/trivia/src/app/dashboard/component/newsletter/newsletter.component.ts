@@ -1,7 +1,7 @@
 import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-import { User, Subscription } from 'shared-library/shared/model';
+import { User, Subscription } from './../../../../../../shared-library/src/lib/shared/model';
 import { AppState, appState } from '../../../store';
 import * as dashboardActions from '../../store/actions';
 import { dashboardState } from '../../store';
