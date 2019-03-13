@@ -168,10 +168,8 @@ export class GameService {
      */
     static getGames(snapshots: any): Game[] {
         const games: Game[] = [];
-        if (snapshots.exists) {
-            for (const snapshot of snapshots.docs) {
-                games.push(Game.getViewModel(snapshot.data()));
-            }
+        for (const snapshot of snapshots.docs) {
+            games.push(Game.getViewModel(snapshot.data()));
         }
         return games;
     }
