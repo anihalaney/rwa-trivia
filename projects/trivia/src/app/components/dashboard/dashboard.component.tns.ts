@@ -8,6 +8,7 @@ import { AppState, appState } from '../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { User } from 'shared-library/shared/model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'dashboard',
@@ -26,6 +27,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
     ngZone: NgZone,
     utils: Utils,
     private routerExtension: RouterExtensions,
+    private router: Router
   ) {
 
     super(store,
@@ -49,10 +51,10 @@ export class DashboardComponent extends Dashboard implements OnInit {
   startNewGame() {
     if (this.applicationSettings && this.applicationSettings.lives.enable) {
       if (this.account.lives > 0) {
-        this.routerExtension.navigate(['/game-play']);
+        this.router.navigate(['/game-play']);
       }
     } else {
-      this.routerExtension.navigate(['/game-play']);
+      this.router.navigate(['/game-play']);
     }
 
   }
