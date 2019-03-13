@@ -107,7 +107,7 @@
                 </StackLayout>
             </CardView>
 
-            <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5" >
+            <!-- <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5" >
                 <Label row="0" col="0" text="Select Preferred Category" textWrap="true" fontSize="18" class="label"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
                     textWrap="true" padding="7" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"
@@ -169,7 +169,7 @@
             <CardView margin="5 10" visibility="{{ showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"
                 class="label" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
                 <Label padding="15" [text]="selectedTags.join(', ')" textWrap="true"></Label>
-            </CardView>
+            </CardView> -->
 
             <StackLayout margin="5 10">
                 <Button text="START A NEW GAME" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"

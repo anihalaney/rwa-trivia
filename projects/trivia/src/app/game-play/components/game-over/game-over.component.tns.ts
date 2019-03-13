@@ -12,6 +12,7 @@ import * as SocialShare from "nativescript-social-share";
 import { Image } from "tns-core-modules/ui/image";
 import { coreState } from 'shared-library/core/store';
 import * as Toast from 'nativescript-toast';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'game-over',
@@ -24,7 +25,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
-    private modal: ModalDialogService, private vcRef: ViewContainerRef) {
+    private modal: ModalDialogService, private vcRef: ViewContainerRef,
+    private router: Router) {
     super(store, userActions, utils);
 
     this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => { }));
@@ -98,5 +100,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       SocialShare.shareImage(shareImage);
       this.playerUserName = 'You';
     }, 100);
+  }
+
+  gotoDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 }
