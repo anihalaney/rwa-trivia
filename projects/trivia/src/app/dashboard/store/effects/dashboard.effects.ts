@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map, filter, catchError } from 'rxjs/operators';
 
-import { SocialService } from 'shared-library/core/services';
-import { Subscribers, Blog, RouterStateUrl } from 'shared-library/shared/model';
+import { SocialService, StatsService } from 'shared-library/core/services';
+import { Subscribers, Blog, RouterStateUrl, SystemStats } from 'shared-library/shared/model';
 import { DashboardActionTypes } from '../actions';
 import * as dashboardActions from '../actions/dashboard.actions';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
@@ -75,8 +75,34 @@ export class DashboardEffects {
             )
         );
 
+        // Load Score
+        @Effect()
+        LoadLeaderBoardInfo$ = this.actions$
+            .pipe(ofType(DashboardActionTypes.LOAD_LEADERBOARD))
+            .pipe(
+                switchMap((action: dashboardActions.LoadLeaderBoard) =>
+                    this.statsService.loadLeaderBoardStat().pipe(
+                        map((score: any) => {
+                            return new dashboardActions.LoadLeaderBoardSuccess(score);
+                        }
+                        )
+                    )));
+
+        // Load System Stat
+        @Effect()
+        LoadSystemStat$ = this.actions$
+            .pipe(ofType(DashboardActionTypes.LOAD_SYSTEM_STAT))
+            .pipe(
+                switchMap((action: dashboardActions.LoadSystemStat) =>
+                    this.statsService.loadSystemStat().pipe(
+                        map((stat: SystemStats) =>
+                            new dashboardActions.LoadSystemStatSuccess(stat)
+                        ), catchError(err => of(new dashboardActions.LoadSystemStatError(err)))
+                    )));
+
     constructor(
         private actions$: Actions,
-        private socialService: SocialService
+        private socialService: SocialService,
+        private statsService: StatsService
     ) { }
 }

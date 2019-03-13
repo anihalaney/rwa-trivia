@@ -116,11 +116,7 @@ export class Dashboard implements OnDestroy {
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
 
-        this.subs.push(this.userDict$.subscribe(userDict => { 
-            this.userDict = userDict;
-            console.log('dd');
-            }
-            ));
+        this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subs.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
             this.singlePlayerCount = 0;

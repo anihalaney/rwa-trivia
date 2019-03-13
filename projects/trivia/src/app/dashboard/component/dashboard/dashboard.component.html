@@ -67,9 +67,9 @@
 
     <ul class="invitationlist">
       
-      <!-- <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
+      <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
         <game-invite [userDict]="userDict" [game]="game"></game-invite>
-      </li> -->
+      </li>
     </ul>
 
     <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="gameInvites && gameInvites.length > 3 && gameInvites.length!=gameInviteSliceLastIndex">
@@ -85,15 +85,15 @@
         <h2>Friend Invitations</h2>
       </div>
     </div>
-    <!-- <ul class="invitationlist">
+    <ul class="invitationlist">
       <li *ngFor="let invitation of friendInvitations | slice:friendInviteSliceStartIndex:friendInviteSliceLastIndex">
         <app-friend-invite [userDict]="userDict" [invitation]="invitation" [user]="user"></app-friend-invite>
       </li>
-    </ul> -->
+    </ul>
 
-    <!-- <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex">
+    <div class="col-sm-12 col-xs-12 view-all-btn" *ngIf="friendInvitations && friendInvitations.length > 3 && friendInvitations.length!=friendInviteSliceLastIndex">
       <a class="viewall" (click)="displayMoreFriendInvites()">view more</a>
-    </div> -->
+    </div>
 
   </section>
   <!-- Friend Invitation end-->
@@ -101,7 +101,7 @@
   <div class="row">
     <!-- Question of the day -->
     <div [ngClass]="showNewsCard?'col-lg-7 col-md-12 col-sm-12':'col-lg-12 col-md-12 col-sm-12' ">
-      <!-- <question [userDict]="userDict"></question> -->
+      <question [userDict]="userDict"></question>
     </div>
     <!-- Question of the day end -->
 
@@ -119,7 +119,7 @@
         <h2>Leaderboard</h2>
       </div>
     </div>
-    <!-- <leaderboard *ngIf="userDict"></leaderboard> -->
+    <leaderboard *ngIf="userDict"></leaderboard>
   </section>
   <!-- Category leaderboard end-->
 
@@ -133,7 +133,7 @@
 
   <!-- Real-time System Stats -->
   <div class="card hidden-xs">
-    <!-- <realtime-stats></realtime-stats> -->
+    <realtime-stats></realtime-stats>
   </div>
   <!-- Real-time System Stats end -->
 
