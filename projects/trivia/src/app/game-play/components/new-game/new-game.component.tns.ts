@@ -16,6 +16,7 @@ import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
 import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
+import { ListViewEventData } from 'nativescript-ui-listview';
 
 @Component({
   selector: 'new-game',
@@ -168,7 +169,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.startNewGame(this.gameOptions);
   }
 
-  selectCategory(category) {
+  selectCategory(args: ListViewEventData) {
+    const category: Category = this.filteredCategories[args.index];
     if (!category.requiredForGamePlay) {
       category.isSelected = !category.isSelected;
     }
