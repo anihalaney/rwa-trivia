@@ -3,6 +3,7 @@ import * as functions from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
+import { Utils } from './utils';
 
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
@@ -26,11 +27,7 @@ export class ESUtils {
     // to see set environments firebase -P production functions:config:get
     let prefix = 'dev:';
 
-    if (functions.config().elasticsearch &&
-      functions.config().elasticsearch.index &&
-      functions.config().elasticsearch.index.production &&
-      // tslint:disable-next-line:triple-equals
-      functions.config().elasticsearch.index.production == 'true') {
+    if (Utils.isEnvProduction()) {
 
       prefix = '';
     }
