@@ -50,12 +50,16 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     super(store, utils, gameActions, userActions);
     this.initDataItems();
   }
-
   ngOnInit() {
 
     this.subs.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+      if (gameObj && gameObj['gameId']) {
+
+        //   console.log(' this.user ', this.user);
+        this.router.navigate(['/game-play', gameObj['gameId']]);
+        this.ngOnDestroy();
+        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+      }
     }));
 
     this.subs.push(this.categoriesObs.subscribe(categories => {
@@ -69,8 +73,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         }
         return category;
       });
-      return categories;
-
     }));
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
@@ -79,20 +81,21 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       }
     }));
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
-      if (uFriends) {
-        this.uFriends = [];
-        uFriends.myFriends.map(friend => {
-          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
-        });
-        this.dataItem = this.uFriends;
-        this.noFriendsStatus = false;
-      } else {
-        this.noFriendsStatus = true;
-      }
-    }));
-    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    // this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    //   if (uFriends) {
+    //     this.uFriends = [];
+    //     uFriends.myFriends.map(friend => {
+    //       this.uFriends = [...this.uFriends, ...Object.keys(friend)];
+    //     });
+    //     this.dataItem = this.uFriends;
+    //     this.noFriendsStatus = false;
+    //   } else {
+    //     this.noFriendsStatus = true;
+    //   }
+    // }));
+    //  this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
+    //   this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
@@ -122,6 +125,22 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
+
+    this.playerMode = undefined;
+    this.showSelectPlayer = undefined;
+    this.showSelectCategory = undefined;
+    this.showSelectTag = undefined;
+    this.dataItem = undefined;
+    this.categoriesObs = undefined;
+    this.categories = [];
+    this.subs = [];
+    this.customTag = undefined;
+    this.categoryIds = [];
+    this.tagItems = undefined;
+  //  this.sub3.unsubscribe();
+    this.filteredCategories = [];
+
+    this.destroy();
   }
 
   addCustomTag() {
@@ -207,6 +226,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   navigateToInvite() {
+    this.ngOnDestroy();
     this.router.navigate(['/my/app-invite-friends-dialog']);
   }
 

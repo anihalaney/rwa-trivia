@@ -98,6 +98,16 @@ export class NewGame {
     this.selectedTags = this.selectedTags.filter(t => t !== tag);
   }
 
+  destroy() {
+    this.userDict = {};
+    this.categories = [];
+    this.tags = [];
+    // this.user = undefined;
+    this.selectedTags = [];
+    this.uFriends = [];
+    // this.gameOptions = undefined;
+  }
+
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
     this.errMsg = undefined;
