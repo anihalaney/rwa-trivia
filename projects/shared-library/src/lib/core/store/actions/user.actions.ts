@@ -198,4 +198,20 @@ export class UserActions {
       payload: null
     };
   }
+
+  static GET_GAME_RESULT = 'GET_GAME_RESULT';
+  getGameResult(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.GET_GAME_RESULT,
+      payload: user
+    };
+  }
+
+  static GET_GAME_RESULT_SUCCESS = 'GET_GAME_RESULT_SUCCESS';
+  getGameResultSuccess(games: Game[]): ActionWithPayload<Game[]> {
+    return {
+      type: UserActions.GET_GAME_RESULT_SUCCESS,
+      payload: games
+    };
+  }
 }

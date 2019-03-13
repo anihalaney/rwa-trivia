@@ -12,10 +12,10 @@ import { HttpClientModule } from '@angular/common/http';
 import * as TNSFirebase from 'nativescript-plugin-firebase';
 import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens';
 import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angular';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterModule } from '@angular/router';
 import { DashboardModule } from './dashboard/dashboard.module';
+import { RecentGameCardComponent, RecentGamesComponent } from './components';
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -28,7 +28,8 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
+    RecentGameCardComponent,
+    RecentGamesComponent
   ],
   imports: [
     CoreModule,

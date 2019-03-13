@@ -3,8 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
-import { AppState, appState, categoryDictionary } from '../../../../store';
-import { userState } from '../../../store';
+import { AppState, appState, categoryDictionary } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 
 

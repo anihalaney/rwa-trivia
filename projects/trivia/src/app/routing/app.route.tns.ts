@@ -1,8 +1,6 @@
-import { Routes, RouterModule } from '@angular/router';
-import { NgModule } from '@angular/core';
-import { NativeScriptRouterModule } from 'nativescript-angular/router';
-import { DashboardComponent } from '../components/dashboard/dashboard.component';
-import { AuthGuard, CategoriesResolver, TagsResolver } from '../../../../shared-library/src/lib/core/route-guards';
+import { Routes } from '@angular/router';
+import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
+import { RecentGamesComponent } from './../components/recent-games/recent-games.component';
 
 export const routes: Routes = [
 
@@ -22,6 +20,11 @@ export const routes: Routes = [
         loadChildren: './../user/user.module#UserModule',
         canActivate: [AuthGuard],
         resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
+    },
+    {
+        path: 'recent-game',
+        component: RecentGamesComponent,
+        canActivate: [AuthGuard]
     },
 
 ];

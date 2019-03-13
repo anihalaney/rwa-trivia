@@ -60,7 +60,6 @@ export class Dashboard implements OnDestroy {
         @Inject(PLATFORM_ID) private platformId: Object,
         ngZone: NgZone,
         utils: Utils) {
-            console.log('user controoller');
         this.utils = utils;
         this.ngZone = ngZone;
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));

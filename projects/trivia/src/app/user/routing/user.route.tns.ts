@@ -5,7 +5,6 @@ import {
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
     InviteFriendsComponent,
-    RecentGamesComponent
 } from '../components';
 import { InviteFriendsDialogComponent } from '../components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 
@@ -34,11 +33,6 @@ export const userRoutes: Routes = [
     {
         path: 'app-invite-friends-dialog',
         component: InviteFriendsDialogComponent,
-        canActivate: [AuthGuard]
-    },
-    {
-        path: 'recent-game',
-        component: RecentGamesComponent,
         canActivate: [AuthGuard]
     },
 ];

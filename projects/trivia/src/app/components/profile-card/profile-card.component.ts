@@ -1,13 +1,10 @@
 import { Component, Input, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-
 import { User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
+import { AppState, appState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-
 
 @Component({
   selector: 'profile-card',

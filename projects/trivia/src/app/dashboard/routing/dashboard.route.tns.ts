@@ -6,7 +6,6 @@ export const dashboardRoutes: Routes = [
     {
         path: '',
         component: DashboardComponent,
-        // canActivate: [AuthGuard]
       },
 
       {
