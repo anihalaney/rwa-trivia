@@ -47,11 +47,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
                 const nav = val.url;
-                if (nav.includes('/stats/leaderboard')) {
+                if (nav.includes('/dashboard/leaderboard')) {
                     this.activeMenu = 'Category Leaderboard';
                 } else if (nav === '/dashboard') {
                     this.activeMenu = 'Home';
-                } else if (nav === '/my/recent-game') {
+                } else if (nav === '/recent-game') {
                     this.activeMenu = 'Recently Completed Games';
                 } else if (nav.includes('/my/profile')) {
                     this.activeMenu = 'Profile';
@@ -150,7 +150,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     recentGame() {
-        this.routerExtension.navigate(['/my/recent-game']);
+        this.routerExtension.navigate(['/recent-game']);
         this.closeDrawer();
     }
 

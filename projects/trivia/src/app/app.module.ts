@@ -11,15 +11,13 @@ import { SharedModule } from 'shared-library/shared/shared.module';
 import { CoreModule } from 'shared-library/core/core.module';
 import { reducers, CustomSerializer } from './store';
 import { RoutingModule } from './routing/routing.module';
-import { GamePlayModule } from './game-play/game-play.module';
-import { UserModule } from './user/user.module';
 
 import { LazyLoadImagesModule } from 'ngx-lazy-load-images';
 
 import {
   AppComponent,
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent,
-  PrivacyPolicyComponent
+  PrivacyPolicyComponent, UserStatsCardComponent, RecentGameCardComponent, RecentGamesComponent, ProfileCardComponent,
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'shared-library/environments/environment';
@@ -40,6 +38,10 @@ import { DashboardModule } from './dashboard/dashboard.module';
     FooterComponent,
     InvitationRedirectionComponent,
     PrivacyPolicyComponent,
+    ProfileCardComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent,
+    UserStatsCardComponent
   ],
   imports: [
     BrowserModule,
@@ -58,9 +60,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     CoreModule,
     SharedModule,
     RoutingModule,
-    GamePlayModule,
     DashboardModule,
-    UserModule,
     BrowserModule.withServerTransition({ appId: 'trivia' }),
     //BrowserTransferStateModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })

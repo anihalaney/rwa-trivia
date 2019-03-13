@@ -1,11 +1,10 @@
 import { Component, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import * as userActions from '../../../user/store/actions';
 import { User, GameStatus, Game } from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
-import { userState } from '../../store';
+import { AppState, appState } from '../../store';
 import { Subscription, Observable } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
+import { UserActions } from 'shared-library/core/store/actions';
 
 @Component({
   selector: 'recent-games',
@@ -28,14 +27,14 @@ export class RecentGamesComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(private store: Store<AppState>,
     private utils: Utils,
-    private cd: ChangeDetectorRef) {
-
+    private cd: ChangeDetectorRef,
+    private userActions: UserActions) {
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
-      this.store.dispatch(new userActions.GetGameResult(user));
+      this.store.dispatch(this.userActions.getGameResult(user));
     }));
 
-    this.recentGames$ = this.store.select(userState).pipe(select(s => s.getGameResult));
+    this.recentGames$ = this.store.select(appState.coreState).pipe(select(s => s.getGameResult));
   }
 
   ngOnInit(): void {

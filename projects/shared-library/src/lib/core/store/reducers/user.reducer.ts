@@ -100,3 +100,14 @@ export function account(state: any = null, action: ActionWithPayload<any>) {
       return state;
   }
 }
+
+export function getGameResult(state: any = [], action: ActionWithPayload<any>):
+    Game[] {
+    switch (action.type) {
+        case UserActions.GET_GAME_RESULT_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}
+

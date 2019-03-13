@@ -1,7 +1,7 @@
 import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Account } from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
+import { AppState, appState } from '../../store';
 import { Observable, Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 
