@@ -1,4 +1,4 @@
-import { Inject, NgZone, OnDestroy } from '@angular/core';
+import { Inject, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
@@ -59,7 +59,8 @@ export class Dashboard implements OnDestroy {
         private userActions: UserActions, private windowRef: WindowRef,
         @Inject(PLATFORM_ID) private platformId: Object,
         ngZone: NgZone,
-        utils: Utils) {
+        utils: Utils,
+        cd: ChangeDetectorRef) {
         this.utils = utils;
         this.ngZone = ngZone;
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
@@ -70,6 +71,8 @@ export class Dashboard implements OnDestroy {
                 if (!this.user && this.timerSub) {
                     this.timerSub.unsubscribe();
                 }
+                cd.markForCheck();
+
                 if (this.user === null) {
                     this.timeoutLive = '';
                     this.gamePlayBtnDisabled = false;
