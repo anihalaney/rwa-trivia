@@ -1,5 +1,5 @@
-import { Component, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { QuestionActions } from 'shared-library/core/store';
@@ -31,10 +31,13 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
     private routerExtension: RouterExtensions,
-    private page: Page) {
+    private page: Page, private cd: ChangeDetectorRef) {
     super(store, questionActions);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.subscription.push(this.userDict$.subscribe(userDict => {
+      this.userDict = userDict;
+      this.cd.markForCheck();
+    }));
   }
 
   navigateToSubmitQuestion() {

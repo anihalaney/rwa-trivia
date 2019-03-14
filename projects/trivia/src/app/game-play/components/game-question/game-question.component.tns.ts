@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { User, Answer } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
@@ -12,7 +12,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
-  styleUrls: ['./game-question.component.scss']
+  styleUrls: ['./game-question.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -32,7 +33,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   processTimeInterval: number;
   elapsedTime: number;
   timerSub: Subscription;
-  constructor(private utils: Utils, public store: Store<GamePlayState>, ) {
+  constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef ) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
   }
@@ -74,6 +75,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
         timer(0, 10).pipe(take(90)).subscribe(t => {
           this.timer += 0.010;
           this.progressValue = (this.timer / this.MAX_TIME_IN_SECONDS) * 100;
+          this.cd.markForCheck();
         },
           null,
           () => {

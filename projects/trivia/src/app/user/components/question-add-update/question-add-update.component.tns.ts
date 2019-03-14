@@ -1,7 +1,5 @@
-import {
-  Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
-  ViewChildren, QueryList, ElementRef
-} from '@angular/core';
+import { Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
+  ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -21,7 +19,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'app-question-add-update',
   templateUrl: './question-add-update.component.html',
-  styleUrls: ['./question-add-update.component.css']
+  styleUrls: ['./question-add-update.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -52,7 +51,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     public utils: Utils,
     public questionAction: QuestionActions,
     private routerExtension: RouterExtensions,
-    private page: Page) {
+    private page: Page, private cd: ChangeDetectorRef) {
 
     super(fb, store, utils, questionAction);
 
@@ -65,7 +64,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         this.applicationSettings = appSettings[0];
         this.createForm(this.question);
       }
-    }));
+      this.cd.markForCheck();
+    })
+    );
 
 
     const questionControl = this.questionForm.get('questionText');
@@ -84,6 +85,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
           this.toggleLoader(false);
         }, 0);
       }
+      this.cd.markForCheck();
     }));
   }
 

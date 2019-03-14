@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -17,7 +17,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'game-over',
   templateUrl: './game-over.component.html',
-  styleUrls: ['./game-over.component.scss']
+  styleUrls: ['./game-over.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -36,14 +37,16 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public utils: Utils,
     public snackBar: MatSnackBar,
     public viewContainerRef: ViewContainerRef,
+    public cd: ChangeDetectorRef
   ) {
-    super(store, userActions, utils);
+    super(store, userActions, utils, cd);
     this.subscription.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       if (state === 'SUCCESS') {
         if ((this.dialogRef)) {
           this.dialogRef.close();
         }
       }
+      this.cd.markForCheck();
     }));
 
     this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
@@ -54,6 +57,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         });
         this.disableFriendInviteBtn = true;
       }
+      this.cd.markForCheck();
     }));
 
     this.subscription.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
@@ -70,6 +74,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         this.socialFeedData.share_status = false;
         this.loaderStatus = false;
       }
+      this.cd.markForCheck();
     }));
   }
   ngOnInit() {

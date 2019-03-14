@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -21,7 +21,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
-  styleUrls: ['./new-game.component.scss']
+  styleUrls: ['./new-game.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -48,7 +49,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public utils: Utils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
-    private router: Router) {
+    private router: Router,
+    private cd: ChangeDetectorRef) {
     super(store, utils, gameActions, userActions);
     this.initDataItems();
   }
@@ -58,6 +60,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.subscription.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+      this.cd.markForCheck();
     }));
 
     this.subscription.push(this.categoriesObs.subscribe(categories => {
@@ -69,8 +72,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         } else {
           category.isSelected = true;
         }
+        this.cd.markForCheck();
         return category;
       });
+      this.cd.markForCheck();
       return categories;
 
     }));
@@ -79,6 +84,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       if (gameCreateStatus) {
         this.redirectToDashboard(gameCreateStatus);
       }
+      this.cd.markForCheck();
     }));
 
     this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
@@ -92,9 +98,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       } else {
         this.noFriendsStatus = true;
       }
+      this.cd.markForCheck();
     }));
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.subscription.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
     this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
@@ -110,6 +117,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
               if (account) {
                 this.life = account.lives;
               }
+              this.cd.markForCheck();
             }));
           }
         } else {
@@ -119,6 +127,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
         ...filteredCategories.filter(c => !c.requiredForGamePlay)];
       }
+      this.cd.markForCheck();
     }));
   }
 

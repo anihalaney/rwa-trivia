@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -21,7 +21,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.css']
+  styleUrls: ['./profile-settings.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -54,7 +55,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public store: Store<AppState>,
     public userAction: UserActions,
     private page: Page,
-    public utils: Utils) {
+    public utils: Utils,
+    private cd: ChangeDetectorRef) {
 
     super(fb, store, userAction, utils);
     this.initDataItems();
@@ -64,6 +66,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         Toast.makeText('Profile is saved successfully').show();
         this.toggleLoader(false);
       }
+      this.cd.markForCheck();
     }));
 
   }

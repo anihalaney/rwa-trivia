@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { User, Invitation, friendInvitationConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { Store } from '@ngrx/store';
@@ -11,7 +11,8 @@ import { UserActions } from 'shared-library/core/store/actions';
 @Component({
   selector: 'app-friend-invite',
   templateUrl: './friend-invite.component.html',
-  styleUrls: ['./friend-invite.component.scss']
+  styleUrls: ['./friend-invite.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FriendInviteComponent implements OnInit {
   @Input() userDict: { [key: string]: User } = {};

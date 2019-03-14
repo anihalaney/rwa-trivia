@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
@@ -15,7 +15,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'bulk-upload',
   templateUrl: './bulk-upload.component.html',
-  styleUrls: ['./bulk-upload.component.scss']
+  styleUrls: ['./bulk-upload.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -56,15 +57,24 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder,
     private store: Store<AppState>, private papa: Papa,
-    private utils: Utils) {
+    private utils: Utils, private cd: ChangeDetectorRef) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
-    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+       this.user = s.user;
+       this.cd.markForCheck();
+    }));
   }
 
   ngOnInit() {
-    this.subscription.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subscription.push(this.tagsObs.subscribe(tags => this.tags = tags));
+    this.subscription.push(this.categoriesObs.subscribe(categories => {
+      this.categories = categories;
+      this.cd.markForCheck();
+    }));
+    this.subscription.push(this.tagsObs.subscribe(tags => {
+     this.tags = tags;
+     this.cd.markForCheck();
+    }));
 
     this.uploadFormGroup = this.fb.group({
       category: ['', Validators.required],
@@ -79,6 +89,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
+      this.cd.markForCheck();
     }));
   }
 
