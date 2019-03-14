@@ -1,4 +1,4 @@
-import { Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
 import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
@@ -45,7 +45,7 @@ export class GameOver implements OnInit {
   }
 
   constructor(public store: Store<AppState>, public userActions: UserActions,
-    public utils: Utils) {
+    public utils: Utils, public cd: ChangeDetectorRef) {
 
     this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
@@ -84,6 +84,7 @@ export class GameOver implements OnInit {
             this.store.dispatch(this.userActions.loadOtherUserProfile(question.created_uid));
           }
         });
+        this.cd.detectChanges();
       }
     }));
   }
@@ -112,6 +113,9 @@ export class GameOver implements OnInit {
   }
 
   getImageUrl(user: User) {
+    setTimeout(() => {
+      this.cd.markForCheck();
+    }, 0);
     return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 

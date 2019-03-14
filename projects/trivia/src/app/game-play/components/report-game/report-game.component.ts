@@ -1,4 +1,4 @@
-import { Component, Input, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {
@@ -14,7 +14,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
-    styleUrls: ['./report-game.component.scss']
+    styleUrls: ['./report-game.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -32,7 +33,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     subscription = [];
 
     constructor(private fb: FormBuilder, private store: Store<AppState>,
-        @Inject(MAT_DIALOG_DATA) public data: any, public utils: Utils) {
+        @Inject(MAT_DIALOG_DATA) public data: any , public utils: Utils, private cd: ChangeDetectorRef) {
         this.question = data.question;
         this.user = data.user;
         this.game = data.game;
@@ -41,6 +42,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
         this.categoryDict$ = store.select(categoryDictionary);
         this.subscription.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
+            this.cd.markForCheck();
         }));
 
     }

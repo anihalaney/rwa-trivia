@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Renderer2, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -14,7 +14,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'game',
   templateUrl: './game.component.html',
-  styleUrls: ['./game.component.scss']
+  styleUrls: ['./game.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -29,7 +30,8 @@ export class GameComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
-    private renderer: Renderer2) {
+    private renderer: Renderer2,
+    private cd: ChangeDetectorRef) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
@@ -37,7 +39,7 @@ export class GameComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user); //logged in user
+    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => { this.user = s.user; this.cd.detectChanges(); })); //logged in user
     //use the setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
     //The error happens as bindings change after change detection has run. using setTimeout runs another round of CD
     // REF: https://github.com/angular/angular/issues/6005
@@ -54,6 +56,7 @@ export class GameComponent implements OnInit, OnDestroy {
     });
 
     this.subscription.push(this.dialogRef.afterOpen().subscribe(x => {
+      this.cd.detectChanges();
       this.renderer.addClass(document.body, 'dialog-open');
     }));
     this.subscription.push(this.dialogRef.afterClosed().subscribe(x => {

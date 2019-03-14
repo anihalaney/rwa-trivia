@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Question, Answer, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../store';
 import { Store, select } from '@ngrx/store';
@@ -10,7 +10,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'question',
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss']
+  styleUrls: ['./question.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -29,7 +30,8 @@ export class QuestionComponent implements OnDestroy {
   categoryDictionary: any;
   subscription = [];
 
-  constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils) {
+  constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils,
+    private cd: ChangeDetectorRef) {
     this.answeredText = '';
     this.correctAnswerText = '';
     this.subscription.push(this.store.select(categoryDictionary).subscribe(categories => {
@@ -57,6 +59,7 @@ export class QuestionComponent implements OnDestroy {
           }
         }
       });
+      this.cd.markForCheck();
     }));
 
 

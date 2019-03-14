@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Observable, Subscription, timer, interval } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants } from 'shared-library/shared/model';
@@ -10,7 +10,8 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'game-card',
   templateUrl: './game-card.component.html',
-  styleUrls: ['./game-card.component.scss']
+  styleUrls: ['./game-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
@@ -38,8 +39,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   defaultAvatar = 'assets/images/default-avatar-small.png';
   userDict$: Observable<{ [key: string]: User }>;
   subscription = [];
-
-  constructor(public store: Store<AppState>, public utils: Utils) {
+  constructor(public store: Store<AppState>, public utils: Utils, private cd: ChangeDetectorRef) {
 
     this.gameStatus = GameStatus;
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
@@ -47,6 +47,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
       if (user !== null) {
         this.user = user;
       }
+      this.cd.markForCheck();
     }));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -56,10 +57,14 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
         this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
         this.otherUserInfo = this.userDict[this.otherUserId];
       }
+      this.cd.markForCheck();
     }));
 
     this.categoryDict$ = store.select(categoryDictionary);
-    this.subscription.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.subscription.push(this.categoryDict$.subscribe(categoryDict => {
+      this.categoryDict = categoryDict;
+      this.cd.markForCheck();
+    }));
 
   }
 
@@ -71,6 +76,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
       if (this.myTurn) {
         this.updateRemainingTime();
       }
+      this.cd.markForCheck();
     }));
   }
 
@@ -108,6 +114,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
           this.remainingMinutes = this.utils.convertIntoDoubleDigit(0);
         }
       }
+      this.cd.markForCheck();
     });
     this.subscription.push(this.timerSub);
   }

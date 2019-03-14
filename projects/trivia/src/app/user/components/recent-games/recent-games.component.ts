@@ -14,7 +14,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
-export class RecentGamesComponent implements OnInit, OnDestroy, AfterViewInit {
+export class RecentGamesComponent implements OnInit, OnDestroy {
 
   user: User;
   recentGames: Game[] = [];
@@ -36,6 +36,11 @@ export class RecentGamesComponent implements OnInit, OnDestroy, AfterViewInit {
     }));
 
     this.recentGames$ = this.store.select(userState).pipe(select(s => s.getGameResult));
+
+    this.subscription.push(this.recentGames$.subscribe((recentGames) => {
+      this.recentGames = recentGames;
+      this.cd.markForCheck();
+    }));
   }
 
   ngOnInit(): void {
@@ -50,10 +55,4 @@ export class RecentGamesComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
   }
 
-  ngAfterViewInit() {
-    this.subscription.push(this.recentGames$.subscribe((recentGames) => {
-      this.recentGames = recentGames;
-      this.cd.markForCheck();
-    }));
-  }
 }
