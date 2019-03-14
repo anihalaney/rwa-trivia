@@ -1,5 +1,5 @@
-import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { Question, Answer, User } from './../../../../../../shared-library/src/lib/shared/model';
+import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Question, Answer, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { QuestionActions } from './../../../../../../shared-library/src/lib/core/store/actions';
@@ -9,7 +9,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'question',
   templateUrl: './question.component.html',
-  styleUrls: ['./question.component.scss']
+  styleUrls: ['./question.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class QuestionComponent implements OnDestroy {
 
@@ -26,7 +27,8 @@ export class QuestionComponent implements OnDestroy {
   categoryDictionary: any;
   subs: Subscription[] = [];
 
-  constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils) {
+  constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils,
+    private cd: ChangeDetectorRef) {
     this.answeredText = '';
     this.correctAnswerText = '';
     this.subs.push(this.store.select(categoryDictionary).subscribe(categories => {
@@ -48,6 +50,8 @@ export class QuestionComponent implements OnDestroy {
             }
           }).join(',');
         }
+
+        this.cd.markForCheck();
       }));
     }));
 
