@@ -6,6 +6,7 @@ import { GamePlayState } from '../../store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { GameDialog } from './game-dialog';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'game-dialog',
@@ -13,7 +14,7 @@ import { GameDialog } from './game-dialog';
   styleUrls: ['./game-dialog.component.scss']
 })
 
-
+@AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class GameDialogComponent extends GameDialog implements OnDestroy {
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils) {
