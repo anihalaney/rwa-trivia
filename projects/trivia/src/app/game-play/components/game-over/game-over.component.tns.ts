@@ -23,7 +23,6 @@ import { Subscription } from 'rxjs';
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
-  subscription = [];
   stackLayout;
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,

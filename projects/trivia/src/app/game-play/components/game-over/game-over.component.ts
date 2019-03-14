@@ -22,7 +22,6 @@ import { Subscription } from 'rxjs';
 
 @AutoUnsubscribe({ 'arrayName': 'subscription' })
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
-  subscription = [];
 
   dialogRef: MatDialogRef<ReportGameComponent>;
   continueButtonClicked(event: any) {
