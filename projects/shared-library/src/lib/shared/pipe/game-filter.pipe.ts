@@ -1,14 +1,14 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import { Game } from 'shared-library/shared/model';
+import { Game, User } from 'shared-library/shared/model';
 @Pipe({
     name: 'gameFilter',
     pure: false
 })
 export class GameFilterPipe implements PipeTransform {
-    transform(items: any[], gameFilter: (item: Game) => boolean): any {
-        if (!items || !gameFilter) {
-            return items;
+    transform(games: Game[], gameFilter: (game: Game, user?: User) => boolean, user?: User): Game[] {
+        if (!games || !gameFilter) {
+            return games;
         }
-        return items.filter(item => gameFilter(item));
+        return games.filter(game => gameFilter(game, user));
     }
 }
