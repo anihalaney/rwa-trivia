@@ -18,15 +18,11 @@ export class NewGame {
   applicationSettings: ApplicationSettings;
   gameOptions: GameOptions;
 
-  showUncheckedCategories: Boolean = false;
-  allCategoriesSelected: Boolean = true;
   uFriends: Array<string>;
   userDict: { [key: string]: User } = {};
   noFriendsStatus: boolean;
-  filteredTags$: Observable<string[]>;
   user: User;
   friendUserId: string;
-  loaderStatus = false;
   errMsg: string;
   life: number;
   gameErrorMsg: String = 'Sorry, don\'t have enough life.';
@@ -102,10 +98,16 @@ export class NewGame {
     this.userDict = {};
     this.categories = [];
     this.tags = [];
-    // this.user = undefined;
     this.selectedTags = [];
     this.uFriends = [];
-    // this.gameOptions = undefined;
+    this.tagsObs = undefined;
+    this.applicationSettings = undefined;
+    this.gameOptions = undefined;
+    this.noFriendsStatus = undefined;
+    this.user = undefined;
+    this.friendUserId = undefined;
+    this.errMsg = undefined;
+    this.life = undefined;
   }
 
   selectFriendId(friendId: string) {

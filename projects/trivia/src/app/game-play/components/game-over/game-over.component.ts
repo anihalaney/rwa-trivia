@@ -127,7 +127,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       }
     }
 
-    for (let src in sources) {
+    for (const src in sources) {
       if (sources.hasOwnProperty(src)) {
         images[src] = new Image();
         images[src].onload = () => {
@@ -174,6 +174,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
+    this.destroy();
   }
 
 }

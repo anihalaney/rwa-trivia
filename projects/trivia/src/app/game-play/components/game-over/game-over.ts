@@ -122,4 +122,23 @@ export class GameOver implements OnInit {
         { userId: this.user.userId, inviteeUserId: inviteeUserId }));
     }
   }
+
+  destroy() {
+    this.user$ = undefined;
+    this.user = undefined;
+    this.otherUserId = undefined;
+    this.otherUserInfo = undefined;
+    this.questionsArray = [];
+    this.socialFeedData = undefined;
+    this.imageUrl = undefined;
+    this.disableRematchBtn = undefined;
+    this.PlayerMode = undefined;
+    this.loaderStatus = undefined;
+    this.opponentType = undefined;
+    this.disableFriendInviteBtn = undefined;
+    this.subs = [];
+    this.account = undefined;
+    this.applicationSettings = undefined;
+  }
+
 }

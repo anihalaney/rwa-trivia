@@ -47,5 +47,6 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     this.utils.unsubscribe([this.timerSub]);
     this.utils.unsubscribe(this.sub);
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
+    this.destroy();
   }
 }

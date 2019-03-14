@@ -1,19 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { select, Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import {
-  Category, GameOptions, GameMode, User, PlayerMode, OpponentType
-} from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
-
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { Category, GameMode, GameOptions, OpponentType, PlayerMode } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
-import { MatSnackBar } from '@angular/material';
-
 
 @Component({
   selector: 'new-game',
@@ -21,10 +17,8 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./new-game.component.scss']
 })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
-  categoriesObs: Observable<Category[]>;
   categories: Category[];
   sortedCategories: Category[];
-  tagsObs: Observable<string[]>;
   tags: string[];
 
   selectedTags: string[];
@@ -34,10 +28,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   newGameForm: FormGroup;
   gameOptions: GameOptions;
 
-  showUncheckedCategories: boolean = false;
-  allCategoriesSelected: boolean = true;
-
-  noFriendsStatus: boolean;
+  showUncheckedCategories = false;
   filteredTags$: Observable<string[]>;
 
   friendUserId: string;
@@ -92,7 +83,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         this.sortedCategories = sortedCategories;
 
         sortedCategories.map(category => {
-          category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay)
+          category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
           if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
             this.selectedCategories.push(category.id);
           }
@@ -156,13 +147,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   createForm(gameOptions: GameOptions) {
 
-
-
     let fcs: FormControl[] = gameOptions.tags.map(tag => {
       const fc = new FormControl(tag);
       return fc;
     });
-    if (fcs.length == 0) {
+    if (fcs.length === 0) {
       fcs = [new FormControl('')];
     }
 
