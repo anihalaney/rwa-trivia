@@ -22,7 +22,7 @@
                                 </StackLayout>
                             </StackLayout>
                             <StackLayout row="1" col="0" *ngIf="activeGames && userDict">
-                                <StackLayout *ngFor="let game of activeGames | gameFilter: filterTwoPlayerGame;let last = last;let index = index;">
+                                <StackLayout *ngFor="let game of activeGames | gameFilter: filterTwoPlayerGame: user;let last = last;let index = index;">
                                     <game-card [game]="game" [cardType]="'twoPlayer'"></game-card>
                                     <StackLayout class="hr-light m-10" *ngIf="!last"></StackLayout>
                                 </StackLayout>
