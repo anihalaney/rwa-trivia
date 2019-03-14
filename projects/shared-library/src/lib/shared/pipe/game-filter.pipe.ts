@@ -5,10 +5,10 @@ import { Game, User } from 'shared-library/shared/model';
     pure: false
 })
 export class GameFilterPipe implements PipeTransform {
-    transform(games: Game[], gameFilter: (game: Game, user?: User) => boolean, user?: User): Game[] {
+    transform(games: Game[], gameFilter: (game: Game) => boolean): Game[] {
         if (!games || !gameFilter) {
             return games;
         }
-        return games.filter(game => gameFilter(game, user));
+        return games.filter(game => gameFilter(game));
     }
 }
