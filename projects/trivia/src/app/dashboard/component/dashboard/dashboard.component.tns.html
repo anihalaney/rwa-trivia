@@ -37,7 +37,7 @@
                                 textWrap="true" class="title Roboto-Bold"> </Label>
                             <StackLayout *ngFor="let game of activeGames | gamefilter: filterTwoPlayerWaitNextQGame; let last = last;">
                                 <game-card [game]="game" [cardType]="'theirTurn'"></game-card>
-                                <!-- <StackLayout class="hr-light m-10"  *ngIf="!last"></StackLayout> -->
+                                <StackLayout class="hr-light m-10"  *ngIf="!last"></StackLayout>
                             </StackLayout>
                         </StackLayout>
                     </CardView>
