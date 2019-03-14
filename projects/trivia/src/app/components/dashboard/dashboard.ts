@@ -43,7 +43,7 @@ export class Dashboard implements OnDestroy {
     singlePlayerCount: number;
     twoPlayerCount: number;
     theirTurnCount: number;
-    waitingForOponentCount: number;
+    waitingForOpponentCount: number;
     timerSub: Subscription;
     utils: Utils;
     account: Account;
@@ -124,7 +124,7 @@ export class Dashboard implements OnDestroy {
             this.singlePlayerCount = 0;
             this.twoPlayerCount = 0;
             this.theirTurnCount = 0;
-            this.waitingForOponentCount = 0;
+            this.waitingForOpponentCount = 0;
             if (games.length > 0) {
                 if (!(isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false)) {
                     this.screenWidth = this.windowRef.nativeWindow.innerWidth;
@@ -149,7 +149,7 @@ export class Dashboard implements OnDestroy {
                     if (game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
                         game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
                         || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) {
-                        this.waitingForOponentCount++;
+                        this.waitingForOpponentCount++;
                     }
                     playerIds.map(playerId => {
                         if (playerId !== this.user.userId) {
