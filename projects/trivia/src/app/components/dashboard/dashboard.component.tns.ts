@@ -63,23 +63,23 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   }
 
-  filterGame(game: Game) {
+  filterGame(game: Game): boolean {
     return game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
     game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
     || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
   }
 
 
-  filterSinglePlayerGame(game: Game) {
+  filterSinglePlayerGame(game: Game): boolean {
     return Number(game.gameOptions.playerMode) === Number(PlayerMode.Single) && game.playerIds.length === 1;
   }
 
-  filterTwoPlayerGame(game: Game, user: User) {
+  filterTwoPlayerGame = (game: Game): boolean => {
     return Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) &&
-      (game.nextTurnPlayerId === user.userId);
+      (game.nextTurnPlayerId === this.user.userId);
   }
 
-  filterTwoPlayerWaitNextQGame(game: Game) {
+  filterTwoPlayerWaitNextQGame(game: Game): boolean {
     return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q;
   }
 
