@@ -51,10 +51,10 @@ export class DashboardComponent extends Dashboard implements OnInit {
   startNewGame() {
     if (this.applicationSettings && this.applicationSettings.lives.enable) {
       if (this.account.lives > 0) {
-        this.router.navigate(['/game-play']);
+        this.routerExtension.navigate(['/game-play'], { clearHistory: true });
       }
     } else {
-      this.router.navigate(['/game-play']);
+      this.routerExtension.navigate(['/game-play'], { clearHistory: true });
     }
 
   }
