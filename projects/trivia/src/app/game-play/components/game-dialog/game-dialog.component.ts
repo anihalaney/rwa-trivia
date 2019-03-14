@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy } from '@angular/core';
+import { Component, Inject, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Store } from '@ngrx/store';
@@ -11,14 +11,15 @@ import { GameDialog } from './game-dialog';
 @Component({
   selector: 'game-dialog',
   templateUrl: './game-dialog.component.html',
-  styleUrls: ['./game-dialog.component.scss']
+  styleUrls: ['./game-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   constructor(public store: Store<GamePlayState>, private router: Router,
     public userActions: UserActions,
-    @Inject(MAT_DIALOG_DATA) public data: any, public utils: Utils) {
-    super(store, userActions, utils);
+    @Inject(MAT_DIALOG_DATA) public data: any, public utils: Utils, public cd: ChangeDetectorRef) {
+    super(store, userActions, utils, cd);
   }
 
   continueClicked($event) {
@@ -39,6 +40,9 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
       if (!this.gameOver) {
         this.getLoader();
         this.getNextQuestion();
+      }
+      if (this.showLoader) {
+        this.cd.markForCheck();
       }
     }
   }

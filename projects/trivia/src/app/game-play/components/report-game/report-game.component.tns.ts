@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import {
     ReportQuestion, User, Game, QuestionMetadata, Category, Question
 } from 'shared-library/shared/model';
@@ -14,7 +14,8 @@ import { isAndroid } from 'tns-core-modules/ui/page/page';
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
-    styleUrls: ['./report-game.component.scss']
+    styleUrls: ['./report-game.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ReportGameComponent implements OnInit, OnDestroy {
 
@@ -34,10 +35,12 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     subs: Subscription[] = [];
     @ViewChildren('textField') textField : QueryList<ElementRef>;
 
-    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils) {
+    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils,
+        private cd: ChangeDetectorRef) {
         this.categoryDict$ = store.select(categoryDictionary);
         this.subs.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
+            this.cd.markForCheck();
         }));
 
         this.question = params.context.question;
