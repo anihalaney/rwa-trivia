@@ -55,8 +55,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     this.subs.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       if (gameObj && gameObj['gameId']) {
-
-        //   console.log(' this.user ', this.user);
         this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
         this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
       }
@@ -80,21 +78,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         this.redirectToDashboard(gameCreateStatus);
       }
     }));
-
-    // this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
-    //   if (uFriends) {
-    //     this.uFriends = [];
-    //     uFriends.myFriends.map(friend => {
-    //       this.uFriends = [...this.uFriends, ...Object.keys(friend)];
-    //     });
-    //     this.dataItem = this.uFriends;
-    //     this.noFriendsStatus = false;
-    //   } else {
-    //     this.noFriendsStatus = true;
-    //   }
-    // }));
-    //  this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    //   this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
@@ -125,7 +108,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   ngOnDestroy() {
 
-
     this.utils.unsubscribe(this.subs);
 
     this.playerMode = undefined;
@@ -139,7 +121,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.customTag = undefined;
     this.categoryIds = [];
     this.tagItems = undefined;
-    //  this.sub3.unsubscribe();
     this.filteredCategories = [];
 
     this.destroy();

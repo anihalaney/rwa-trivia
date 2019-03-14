@@ -1,19 +1,18 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
-import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
-import { UserActions } from 'shared-library/core/store/actions';
-import { Store, select } from '@ngrx/store';
-import { gamePlayState } from '../../store';
-import { GameOver } from './game-over';
+import { Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
-import { ReportGameComponent } from './../report-game/report-game.component';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { getImage } from 'nativescript-screenshot';
 import * as SocialShare from "nativescript-social-share";
-import { Image } from "tns-core-modules/ui/image";
-import { coreState } from 'shared-library/core/store';
 import * as Toast from 'nativescript-toast';
-import { RouterExtensions } from 'nativescript-angular/router';
-import { Router } from '@angular/router';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { coreState } from 'shared-library/core/store';
+import { UserActions } from 'shared-library/core/store/actions';
+import { Image } from "tns-core-modules/ui/image";
+import { AppState, appState } from '../../../store';
+import { gamePlayState } from '../../store';
+import { ReportGameComponent } from './../report-game/report-game.component';
+import { GameOver } from './game-over';
 
 @Component({
   selector: 'game-over',
@@ -68,6 +67,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.utils.unsubscribe(this.subs);
+
+    this.destroy();
   }
 
   openDialog(question) {
