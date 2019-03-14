@@ -1,4 +1,5 @@
 import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
 import { User, Answer } from '../../shared/model';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
@@ -15,6 +16,13 @@ export class Utils {
       replace(/\x08/g, '\\x08');
   }
 
+  unsubscribe(subs: Subscription[]) {
+    subs.forEach(sub => {
+      if (sub && sub instanceof Subscription) {
+        sub.unsubscribe();
+      }
+    });
+  }
 
   getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;

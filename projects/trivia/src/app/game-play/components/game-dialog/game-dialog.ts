@@ -28,6 +28,7 @@ export class GameDialog {
   correctAnswerCount: number;
   totalRound: number;
   questionIndex: number;
+  subscription: Subscription[] = [];
   timerSub: Subscription;
   questionSub: Subscription;
   timer: number;
@@ -66,67 +67,68 @@ export class GameDialog {
 
   constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils) {
 
-    // this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
+ // this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     // this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
+    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => {
+    this.subscription.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
-    });
+    }));
 
     this.resetValues();
     this.gameObs = store.select(gamePlayState).pipe(select(s => s.currentGame), filter(g => g != null));
     this.gameQuestionObs = store.select(gamePlayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c);
-    this.gameObs.subscribe(game => {
-      this.game = game;
-      this.threeConsecutiveAnswer = false;
-      if (game !== null && game.playerQnAs.length === 3) {
-        let consecutiveCount = 0;
-        this.game.playerQnAs.map((playerQnA) => {
-          consecutiveCount = (playerQnA.answerCorrect) ? ++consecutiveCount : consecutiveCount;
-        });
-        this.threeConsecutiveAnswer = (consecutiveCount === 3) ? true : false;
-      }
-      if (game !== null && !this.isGameLoaded) {
-        this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
-          this.game.GameStatus === GameStatus.RESTARTED ||
-          ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
-            this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
-            this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
-            this.game.GameStatus === GameStatus.JOINED_GAME)
-            && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
-        this.gameOver = game.gameOver;
+    this.subscription.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
+    this.subscription.push(
+      this.gameObs.subscribe(game => {
+        this.game = game;
+        this.threeConsecutiveAnswer = false;
+        if (game !== null && game.playerQnAs.length === 3) {
+          let consecutiveCount = 0;
+          this.game.playerQnAs.map((playerQnA) => {
+            consecutiveCount = (playerQnA.answerCorrect) ? ++consecutiveCount : consecutiveCount;
+          });
+          this.threeConsecutiveAnswer = (consecutiveCount === 3) ? true : false;
+        }
+        if (game !== null && !this.isGameLoaded) {
+          this.turnFlag = (this.game.GameStatus === GameStatus.STARTED ||
+            this.game.GameStatus === GameStatus.RESTARTED ||
+            ((this.game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+              this.game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q ||
+              this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE ||
+              this.game.GameStatus === GameStatus.JOINED_GAME)
+              && this.game.nextTurnPlayerId === this.user.userId)) ? false : true;
+          this.gameOver = game.gameOver;
 
-        if (!this.turnFlag) {
-          this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
-          this.correctAnswerCount = this.game.stats[this.user.userId].score;
+          if (!this.turnFlag) {
+            this.questionIndex = this.game.playerQnAs.filter((p) => p.playerId === this.user.userId).length;
+            this.correctAnswerCount = this.game.stats[this.user.userId].score;
+          }
+
+          this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
+
+          if (!game.gameOver) {
+            this.setTurnStatusFlag();
+          } else {
+            this.resetValues();
+          }
+
+          if (game.GameStatus === GameStatus.COMPLETED) {
+            this.actionBarStatus = 'Game Over';
+          } else {
+            this.actionBarStatus = 'Play Game';
+          }
         }
 
-        this.totalRound = (Number(this.game.gameOptions.playerMode) === PlayerMode.Single) ? 8 : 16;
+      }));
 
-        if (!game.gameOver) {
-          this.setTurnStatusFlag();
-        } else {
-          this.resetValues();
-        }
-
-        if (game.GameStatus === GameStatus.COMPLETED) {
-          this.actionBarStatus = 'Game Over';
-        } else {
-          this.actionBarStatus = 'Play Game';
-        }
-      }
-
-    });
-
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
-    });
+    }));
 
   }
 
@@ -198,6 +200,7 @@ export class GameDialog {
       },
         null,
         () => {
+          this.utils.unsubscribe([this.timerSub]);
           this.showWinBadge = false;
           this.isCorrectAnswer = false;
           this.showBadgeScreen();
@@ -218,6 +221,7 @@ export class GameDialog {
       null,
       () => {
         // Show badge screen
+        this.utils.unsubscribe([this.timerSub]);
         this.showLoader = false;
         this.showBadge = true;
         this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
@@ -227,6 +231,7 @@ export class GameDialog {
           null,
           () => {
             // load question screen timer
+            this.utils.unsubscribe([this.timerSub]);
             this.showBadge = false;
             this.subscribeQuestion();
           });
@@ -271,33 +276,29 @@ export class GameDialog {
         remainSecond = this.MAX_TIME_IN_SECONDS;
       }
 
-      if (this.isQuestionAvailable || remainSecond >= 0) {
-        this.questionIndex++;
-        this.timer = remainSecond;
-        this.timerSub =
-          timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
-            this.timer--;
-          },
-            null,
-            () => {
-              // disable all buttons
-              if (this.currentQuestion) {
-                this.afterAnswer();
-                if (this.genQuestionComponent) {
-                  this.genQuestionComponent.fillTimer();
-                }
-              }
-            });
-      } else {
-        setTimeout(() => {
-          this.afterAnswer();
-          if (this.genQuestionComponent) {
-            this.genQuestionComponent.fillTimer();
-          }
-        }, 1000);
-      }
-    });
-  }
+    if (this.isQuestionAvailable || remainSecond >= 0) {
+      this.questionIndex++;
+      this.timer = remainSecond;
+      this.timerSub =
+        timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
+          this.timer--;
+        },
+          null,
+          () => {
+            // disable all buttons
+            if (this.currentQuestion) {
+              this.afterAnswer();
+              this.genQuestionComponent.fillTimer();
+            }
+          });
+    } else {
+      setTimeout(() => {
+        this.afterAnswer();
+        this.genQuestionComponent.fillTimer();
+      }, 1000);
+    }
+  });
+}
 
   calculateMaxTime(): void {
     this.applicationSettings.game_play_timer_loader_ranges.map((timerLoader) => {
@@ -356,6 +357,7 @@ export class GameDialog {
   }
 
   afterAnswer(userAnswerId?: number) {
+    this.utils.unsubscribe([this.timerSub, this.questionSub]);
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
     let index;
     if (userAnswerId === undefined) {
@@ -391,8 +393,7 @@ export class GameDialog {
     this.isGameLoaded = false;
     // dispatch action to push player answer
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ 'gameId': this.game.gameId, 'playerQnA': playerQnA }));
-    if (this.genQuestionComponent) {
-      this.genQuestionComponent.disableQuestions(correctAnswerId);
-    }
+
+    this.genQuestionComponent.disableQuestions(correctAnswerId);
   }
 }
