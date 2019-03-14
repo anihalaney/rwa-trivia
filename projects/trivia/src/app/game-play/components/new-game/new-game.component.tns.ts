@@ -57,8 +57,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       if (gameObj && gameObj['gameId']) {
 
         //   console.log(' this.user ', this.user);
-        this.router.navigate(['/game-play', gameObj['gameId']]);
-        this.ngOnDestroy();
+        this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
         this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
       }
     }));
@@ -125,6 +124,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+
+
     this.utils.unsubscribe(this.subs);
 
     this.playerMode = undefined;
@@ -138,7 +139,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.customTag = undefined;
     this.categoryIds = [];
     this.tagItems = undefined;
-  //  this.sub3.unsubscribe();
+    //  this.sub3.unsubscribe();
     this.filteredCategories = [];
 
     this.destroy();
