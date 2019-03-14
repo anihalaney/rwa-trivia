@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, NgZone } from '@angular/core';
+import { Component, OnInit, Inject, NgZone, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -12,7 +12,8 @@ import { User } from 'shared-library/shared/model';
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss', './dashboard.scss']
+  styleUrls: ['./dashboard.component.scss', './dashboard.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardComponent extends Dashboard implements OnInit {
 
@@ -26,6 +27,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
     ngZone: NgZone,
     utils: Utils,
     private routerExtension: RouterExtensions,
+    private cd: ChangeDetectorRef
   ) {
 
     super(store,
@@ -42,7 +44,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
   ngOnInit() {
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; }));
+    this.subs.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
 
   }
 

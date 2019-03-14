@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';

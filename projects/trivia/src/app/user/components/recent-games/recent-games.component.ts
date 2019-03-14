@@ -36,6 +36,11 @@ export class RecentGamesComponent implements OnInit, OnDestroy, AfterViewInit {
     }));
 
     this.recentGames$ = this.store.select(userState).pipe(select(s => s.getGameResult));
+
+    this.subs.push(this.recentGames$.subscribe((recentGames) => {
+      this.recentGames = recentGames;
+      this.cd.markForCheck();
+    }));
   }
 
   ngOnInit(): void {
@@ -52,9 +57,6 @@ export class RecentGamesComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.subs.push(this.recentGames$.subscribe((recentGames) => {
-      this.recentGames = recentGames;
-      this.cd.markForCheck();
-    }));
+
   }
 }
