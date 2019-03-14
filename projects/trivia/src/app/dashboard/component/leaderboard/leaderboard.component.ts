@@ -1,4 +1,4 @@
-import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef} from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LeaderboardComponent implements OnDestroy, AfterViewInit {
 
@@ -53,12 +53,16 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
     this.maxLeaderBoardDisplay = 10;
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.subs.push(this.userDict$.subscribe(userDict => {
+      this.userDict = userDict;
+      this.cd.markForCheck();
+    }));
 
     this.categoryDict$ = this.store.select(categoryDictionary);
 
     this.subs.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
+      this.cd.markForCheck();
     }));
 
     this.subs.push(this.store.select(dashboardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
@@ -81,6 +85,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
           this.lbsUsersSliceLastIndex = 3;
         }
       }
+      this.cd.markForCheck();
     }));
 
   }
@@ -91,6 +96,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
 
   displayMore(): void {
     this.lbsUsersSliceLastIndex = this.lbsUsersSliceLastIndex + 7;
+    this.cd.markForCheck();
   }
 
   getImageUrl(user: User) {
