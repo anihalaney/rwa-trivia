@@ -59,9 +59,9 @@ export class GameComponent implements OnInit, OnDestroy {
       this.cd.detectChanges();
       this.renderer.addClass(document.body, 'dialog-open');
     }));
-    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
+    this.dialogRef.afterClosed().subscribe(x => {
       this.renderer.removeClass(document.body, 'dialog-open');
-    }));
+    });
   }
   ngOnDestroy() {
 

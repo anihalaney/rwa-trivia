@@ -39,6 +39,7 @@ export class QuestionComponent implements OnDestroy {
       this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
+          this.cd.markForCheck();
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
           if (this.question.answers) {
             this.question.answers.forEach((item, index) => {
