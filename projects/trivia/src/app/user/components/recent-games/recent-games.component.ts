@@ -13,7 +13,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class RecentGamesComponent implements OnInit, OnDestroy {
 
   user: User;
@@ -25,19 +25,19 @@ export class RecentGamesComponent implements OnInit, OnDestroy {
   recentGames$: Observable<Game[]>;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>,
     private cd: ChangeDetectorRef) {
 
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       this.store.dispatch(new userActions.GetGameResult(user));
     }));
 
     this.recentGames$ = this.store.select(userState).pipe(select(s => s.getGameResult));
 
-    this.subscription.push(this.recentGames$.subscribe((recentGames) => {
+    this.subscriptions.push(this.recentGames$.subscribe((recentGames) => {
       this.recentGames = recentGames;
       this.cd.markForCheck();
     }));

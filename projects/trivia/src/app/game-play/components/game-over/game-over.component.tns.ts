@@ -22,7 +22,7 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   stackLayout;
   showQuesAndAnswer: Boolean = true;
@@ -32,10 +32,10 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
 
-    this.subscription.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
+    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
     }));
-    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         Toast.makeText(status).show();
         this.disableFriendInviteBtn = true;
@@ -43,7 +43,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.subscription.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.subscriptions.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');

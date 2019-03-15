@@ -14,7 +14,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionComponent implements OnDestroy {
 
   question: Question;
@@ -28,13 +28,13 @@ export class QuestionComponent implements OnDestroy {
   correctAnswerText: string;
   doPlay = true;
   categoryDictionary: any;
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils,
     private cd: ChangeDetectorRef) {
     this.answeredText = '';
     this.correctAnswerText = '';
-    this.subscription.push(this.store.select(categoryDictionary).subscribe(categories => {
+    this.subscriptions.push(this.store.select(categoryDictionary).subscribe(categories => {
       this.categoryDictionary = categories;
       this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {

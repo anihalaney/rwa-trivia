@@ -15,17 +15,17 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class SideNavComponent implements OnDestroy {
   @Input() user: User;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   blogUrl = 'https://bitwiser.io';
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
   }
 
   ngOnDestroy() {

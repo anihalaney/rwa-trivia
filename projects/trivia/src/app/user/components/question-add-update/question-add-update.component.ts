@@ -17,13 +17,13 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy {
 
   get tagsArray(): FormArray {
     return this.questionForm.get('tagsArray') as FormArray;
   }
-  subscription = [];
+  subscriptions = [];
 
 
   // Constructor
@@ -37,7 +37,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     super(fb, store, utils, questionAction);
 
     this.question = new Question();
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.createForm(this.question);
@@ -46,14 +46,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     const questionControl = this.questionForm.get('questionText');
 
-    this.subscription.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
-    this.subscription.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
 
 
     this.filteredTags$ = this.questionForm.get('tags').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
-    this.subscription.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.snackBar.open('Question saved!', '', { duration: 2000 });
         this.router.navigate(['/my/questions']);

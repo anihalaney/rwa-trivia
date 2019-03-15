@@ -19,7 +19,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class BulkUploadComponent implements OnInit, OnDestroy {
 
   primaryTag;
@@ -51,7 +51,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   // Show Instruction Card
   showInstructions: Boolean = true;
   myTabIndex: Number = 0;
-  subscription = [];
+  subscriptions = [];
   // application Settings
   applicationSettings: ApplicationSettings;
 
@@ -60,18 +60,18 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     private utils: Utils, private cd: ChangeDetectorRef) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
-    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
        this.user = s.user;
        this.cd.markForCheck();
     }));
   }
 
   ngOnInit() {
-    this.subscription.push(this.categoriesObs.subscribe(categories => {
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => {
       this.categories = categories;
       this.cd.markForCheck();
     }));
-    this.subscription.push(this.tagsObs.subscribe(tags => {
+    this.subscriptions.push(this.tagsObs.subscribe(tags => {
      this.tags = tags;
      this.cd.markForCheck();
     }));
@@ -85,7 +85,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }

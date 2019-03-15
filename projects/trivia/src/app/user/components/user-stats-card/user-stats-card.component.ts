@@ -12,13 +12,13 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class UserStatsCardComponent implements OnDestroy {
   account: Account;
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private utils: Utils, private cd: ChangeDetectorRef) {
-    this.subscription.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
       if (account) {
         this.account = account;
         this.cd.detectChanges();

@@ -24,9 +24,9 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   templateUrl: './app.component.html',
 })
 
-// @AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
-  subscription = [];
+  subscriptions = [];
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -36,12 +36,12 @@ export class AppComponent implements OnInit, OnDestroy {
     private applicationSettingsAction: ApplicationSettingsActions) {
 
 
-    this.subscription.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     }));
 
-    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.routerExtension.navigate(['my/invite-friends']);
       }

@@ -19,7 +19,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
@@ -35,14 +35,14 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     reportOptions?: Array<ReportOption>;
     selectedOption: string = null;
     otherReason: string = null;
-    subscription = [];
+    subscriptions = [];
 
     @ViewChildren('textField') textField: QueryList<ElementRef>;
 
     constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils,
         private cd: ChangeDetectorRef) {
         this.categoryDict$ = store.select(categoryDictionary);
-        this.subscription.push(this.categoryDict$.subscribe(categoryDict => {
+        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
             this.cd.markForCheck();
         }));

@@ -15,15 +15,15 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InvitationRedirectionComponent implements OnInit, OnDestroy {
 
     @Input() user: User;
-    subscription = [];
+    subscriptions = [];
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
         private userAction: UserActions) {
-        this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             if (user) {
                 this.user = user;

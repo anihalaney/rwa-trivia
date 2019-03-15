@@ -17,7 +17,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   styleUrls: ['./my-questions.component.css']
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
   userDict$: Observable<{ [key: string]: User }>;
@@ -26,7 +26,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   displayEditQuestion = false;
   selectedQuestion: Question;
   tabIndex = 0;
-  subscription = [];
+  subscriptions = [];
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -34,7 +34,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     private page: Page, private cd: ChangeDetectorRef) {
     super(store, questionActions);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       this.cd.markForCheck();
     }));

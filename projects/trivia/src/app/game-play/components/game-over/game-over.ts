@@ -38,7 +38,7 @@ export class GameOver implements OnInit {
   account: Account;
   applicationSettings: ApplicationSettings;
   liveErrorMsg = 'Sorry, don\'t have enough life.';
-  subscription = [];
+  subscriptions = [];
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
@@ -47,18 +47,18 @@ export class GameOver implements OnInit {
   constructor(public store: Store<AppState>, public userActions: UserActions,
     public utils: Utils, public cd: ChangeDetectorRef) {
 
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
     }));
 
-    this.subscription.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
       this.account = account;
     }));
 
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.subscription.push(this.user$.subscribe(user => {
+    this.subscriptions.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
@@ -72,11 +72,11 @@ export class GameOver implements OnInit {
     this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
     }));
 
-    this.subscription.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
+    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
         this.questionsArray.map((question) => {

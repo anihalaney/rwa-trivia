@@ -16,18 +16,18 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ProfileCardComponent implements OnDestroy {
   @Input() user: User;
   userObs: Observable<User>;
   location = 'unknown';
   userProfileImageUrl: string;
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
     this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
-    this.subscription.push(this.userObs.subscribe(user => {
+    this.subscriptions.push(this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
         (this.user.location) ? this.location = this.user.location : '';

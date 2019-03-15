@@ -25,7 +25,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
 
   unPublishedQuestions: Question[];
@@ -45,7 +45,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
 
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl: boolean;
-  subscription = [];
+  subscriptions = [];
 
   constructor(
     private store: Store<AppState>,
@@ -53,13 +53,13 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
     private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router,
     private utils: Utils) {
 
-    this.subscription.push(this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
       if (status === 'UPDATE') {
         this.snackBar.open('Question Updated!', '', { duration: 1500 });
       }
     }));
 
-    this.subscription.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
       if (url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
@@ -69,7 +69,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.subscription.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
       if (obj) {
         this.bulkUploadFileInfo = obj;
         this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([obj]);
@@ -78,7 +78,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
         this.publishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadPublishedQuestions));
         this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
 
-        this.subscription.push(this.publishedQuestionObs.subscribe((questions) => {
+        this.subscriptions.push(this.publishedQuestionObs.subscribe((questions) => {
           if (questions) {
             this.publishedCount = questions.length;
             this.publishedQuestions = questions;
@@ -87,7 +87,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
         // get unpublished question by BulkUpload Id
         this.unPublishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadUnpublishedQuestions));
         this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-        this.subscription.push(this.unPublishedQuestionObs.subscribe((questions) => {
+        this.subscriptions.push(this.unPublishedQuestionObs.subscribe((questions) => {
           if (questions) {
             this.unPublishedCount = questions.length;
             this.unPublishedQuestions = questions;
@@ -115,7 +115,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
       this.isAdminUrl = false;
     }
     this.categoryDictObs = this.store.select(categoryDictionary);
-    this.subscription.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
     // subscribe to router event
     this.activatedRoute.params.subscribe((params: Params) => {
       const bulkId = params['bulkid'];

@@ -18,13 +18,13 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameComponent implements OnInit, OnDestroy {
   user: User;
   dialogRef: MatDialogRef<GameDialogComponent>;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>,
     public dialog: MatDialog,
@@ -34,12 +34,12 @@ export class GameComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
   }
 
   ngOnInit() {
-    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => { this.user = s.user; this.cd.detectChanges(); })); //logged in user
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => { this.user = s.user; this.cd.detectChanges(); })); //logged in user
     //use the setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
     //The error happens as bindings change after change detection has run. using setTimeout runs another round of CD
     // REF: https://github.com/angular/angular/issues/6005
@@ -55,11 +55,11 @@ export class GameComponent implements OnInit, OnDestroy {
       data: { 'user': this.user, 'userDict': this.userDict }
     });
 
-    this.subscription.push(this.dialogRef.afterOpen().subscribe(x => {
+    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
       this.cd.detectChanges();
       this.renderer.addClass(document.body, 'dialog-open');
     }));
-    this.subscription.push(this.dialogRef.afterClosed().subscribe(x => {
+    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
       this.renderer.removeClass(document.body, 'dialog-open');
     }));
   }

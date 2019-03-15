@@ -22,7 +22,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
@@ -32,7 +32,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     type: '',
     text: ''
   };
-  subscription = [];
+  subscriptions = [];
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
@@ -47,7 +47,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.title = 'Login';
-    this.subscription.push(this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
+    this.subscriptions.push(this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
           // Sign up
@@ -170,12 +170,12 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   redirectTo() {
-    this.subscription.push(this.store.select(coreState).pipe(
+    this.subscriptions.push(this.store.select(coreState).pipe(
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe(() => {
         this.loader.hide();
-        this.subscription.push(this.store.select(coreState).pipe(
+        this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
             Toast.makeText('You have been successfully logged in').show();

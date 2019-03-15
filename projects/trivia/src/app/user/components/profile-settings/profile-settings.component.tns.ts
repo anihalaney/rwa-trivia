@@ -25,7 +25,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   // Properties
@@ -39,7 +39,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
-  subscription = [];
+  subscriptions = [];
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -61,7 +61,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     super(fb, store, userAction, utils);
     this.initDataItems();
 
-    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         Toast.makeText('Profile is saved successfully').show();
         this.toggleLoader(false);

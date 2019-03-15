@@ -15,7 +15,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameDialogComponent extends GameDialog implements OnDestroy {
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
