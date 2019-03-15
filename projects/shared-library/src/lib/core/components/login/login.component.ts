@@ -5,7 +5,7 @@ import { CoreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'login',
@@ -14,7 +14,7 @@ import { Login } from './login';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   constructor(public fb: FormBuilder,

@@ -67,7 +67,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     if (changes.timer) {
       this.timer = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
       if (this.timerSub) {
-        this.timerSub.unsubscribe();
+        this.utils.unsubscribe([this.timerSub]);
       }
       this.progressValue = (this.timer * 100) / this.MAX_TIME_IN_SECONDS;
 
@@ -79,7 +79,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
         },
           null,
           () => {
-            this.timerSub.unsubscribe();
+            this.utils.unsubscribe([this.timerSub]);
           });
       this.subscriptions.push(this.timerSub);
     }

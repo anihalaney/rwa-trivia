@@ -8,7 +8,7 @@ export class Login {
   loginForm: FormGroup;
   notificationMsg: string;
   errorStatus: boolean;
-  subs: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   notificationLogs: string[];
 
   // tslint:disable-next-line:max-line-length
@@ -29,7 +29,7 @@ export class Login {
     }, { validator: loginFormValidator}
     );
 
-    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
+    this.subscriptions.push(this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
           // Sign up
@@ -56,9 +56,9 @@ export class Login {
       this.loginForm.get('password').updateValueAndValidity();
       this.notificationMsg = '';
       this.errorStatus = false;
-    });
+    }));
 
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.resetPasswordLogs))
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.resetPasswordLogs))
       .subscribe(notificationLogs => this.notificationLogs = notificationLogs));
   }
 

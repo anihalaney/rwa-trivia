@@ -6,11 +6,7 @@ import { User, Question, QuestionStatus, Category } from 'shared-library/shared/
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { userState } from '../../../user/store';
 import * as userActions from '../../store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { OnDestroy } from '@angular/core';
-
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class MyQuestions implements OnDestroy{
+export class MyQuestions {
 
   publishedQuestions: Question[];
   unpublishedQuestions: Question[];
@@ -47,9 +43,6 @@ export class MyQuestions implements OnDestroy{
     }
   }
 
-  ngOnDestroy(){
-
-  }
 
   toggleLoader(flag: boolean) {
     this.loaderBusy = flag;
