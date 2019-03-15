@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Inject, NgZone, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -19,6 +19,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
     @Inject(PLATFORM_ID) platformId: Object,
     utils: Utils,
     ngZone: NgZone,
+    cd: ChangeDetectorRef
     ) {
     super(store,
       questionActions,
@@ -26,7 +27,8 @@ export class DashboardComponent extends Dashboard implements OnInit {
       userActions, windowRef,
       platformId,
       ngZone,
-      utils);
+      utils,
+      cd);
   }
 
 
