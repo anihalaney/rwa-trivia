@@ -1,4 +1,4 @@
-import { Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
 import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
@@ -6,7 +6,7 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
-import * as socialactions from '../../../social/store/actions';
+import * as dashboardactions from '../../../dashboard/store/actions';
 import { gamePlayState } from '../../store';
 
 export class GameOver implements OnInit {
@@ -45,7 +45,7 @@ export class GameOver implements OnInit {
   }
 
   constructor(public store: Store<AppState>, public userActions: UserActions,
-    public utils: Utils) {
+    public utils: Utils, public cd: ChangeDetectorRef) {
 
     this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
@@ -69,7 +69,7 @@ export class GameOver implements OnInit {
       share_status: false,
       link: this.imageUrl
     };
-    this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
+    this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subs.push(this.userDict$.subscribe(userDict => {
@@ -84,6 +84,7 @@ export class GameOver implements OnInit {
             this.store.dispatch(this.userActions.loadOtherUserProfile(question.created_uid));
           }
         });
+        this.cd.detectChanges();
       }
     }));
   }
@@ -112,6 +113,9 @@ export class GameOver implements OnInit {
   }
 
   getImageUrl(user: User) {
+    setTimeout(() => {
+      this.cd.markForCheck();
+    }, 0);
     return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 

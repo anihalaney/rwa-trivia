@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -15,7 +15,8 @@ import { Utils } from '../../services';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class LoginComponent extends Login implements OnInit, OnDestroy {
@@ -34,7 +35,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     private uiStateActions: UIStateActions,
     private page: Page,
     private firebaseAuthService: FirebaseAuthService,
-    private utils: Utils) {
+    private utils: Utils,
+    public cd: ChangeDetectorRef) {
     super(fb, store);
     this.page.actionBarHidden = true;
   }
@@ -82,6 +84,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           this.loader.hide();
           const singInError = error.message.split(':');
           this.showMessage('error', singInError[1] || error.message);
+        }).finally( () => {
+          this.cd.markForCheck();
         });
         break;
       case 1:
@@ -106,6 +110,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           this.loader.hide();
           const singUpError = error.split(':');
           this.showMessage('error', singUpError[1] || error);
+        }).finally( () => {
+          this.cd.markForCheck();
         });
         break;
       case 2:
@@ -118,9 +124,11 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
+            this.cd.markForCheck();
           }).catch((error) => {
             this.loader.hide();
             this.showMessage('error', error);
+            this.cd.markForCheck();
           });
     }
 

@@ -1,9 +1,9 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { Store, select } from '@ngrx/store';
-import * as socialactions from '../../../social/store/actions';
+import * as dashboardactions from '../../../dashboard/store/actions';
 import { gamePlayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { MatDialog, MatDialogRef } from '@angular/material';
@@ -15,7 +15,8 @@ import { MatSnackBar } from '@angular/material';
 @Component({
   selector: 'game-over',
   templateUrl: './game-over.component.html',
-  styleUrls: ['./game-over.component.scss']
+  styleUrls: ['./game-over.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
@@ -33,14 +34,16 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public utils: Utils,
     public snackBar: MatSnackBar,
     public viewContainerRef: ViewContainerRef,
+    public cd: ChangeDetectorRef
   ) {
-    super(store, userActions, utils);
+    super(store, userActions, utils, cd);
     this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       if (state === 'SUCCESS') {
         if ((this.dialogRef)) {
           this.dialogRef.close();
         }
       }
+      this.cd.markForCheck();
     }));
 
     this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
@@ -51,9 +54,10 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         });
         this.disableFriendInviteBtn = true;
       }
+      this.cd.markForCheck();
     }));
 
-    this.subs.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.subs.push(this.store.select(appState.dashboardState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -67,6 +71,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         this.socialFeedData.share_status = false;
         this.loaderStatus = false;
       }
+      this.cd.markForCheck();
     }));
   }
   ngOnInit() {
@@ -103,7 +108,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       const node = document.getElementById('share-content');
       domtoimage.toPng(node)
         .then((dataUrl) => {
-          this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
+          this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrl({
             imageBlob: this.utils.dataURItoBlob(dataUrl),
             userId: this.user.userId
           }));

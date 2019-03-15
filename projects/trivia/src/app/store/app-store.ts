@@ -2,9 +2,8 @@ import * as rootStoreReducers from './reducers';
 import * as gamePlayStore from '../game-play/store';
 import * as userStore from '../user/store';
 import * as bulkStore from '../bulk/store';
-import * as leaderBoardStore from '../stats/store';
 import * as coreStore from '../../../../shared-library/src/lib/core/store';
-import * as socialStore from '../social/store';
+import * as dashboardStore from '../dashboard/store';
 
 
 
@@ -15,8 +14,7 @@ export interface AppState {
   bulkState: bulkStore.BulkState;
   coreState: coreStore.CoreState;
   rootState: rootStoreReducers.State;
-  leaderBoardState: leaderBoardStore.LeaderBoardState;
-  socialState: socialStore.SocialState;
+  dashboardState: dashboardStore.DashboardState;
 }
 
 export const appState = {
@@ -25,8 +23,7 @@ export const appState = {
   bulkState: bulkStore.bulkState,
   coreState: coreStore.coreState,
   rootState: rootStoreReducers.rootState,
-  leaderBoardState: leaderBoardStore.leaderBoardState,
-  socialState: socialStore.socialState
+  dashboardState: dashboardStore.dashboardState
 };
 
 

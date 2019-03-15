@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
@@ -10,13 +10,14 @@ import { GameDialog } from './game-dialog';
 @Component({
   selector: 'game-dialog',
   templateUrl: './game-dialog.component.html',
-  styleUrls: ['./game-dialog.component.scss']
+  styleUrls: ['./game-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
-    public userActions: UserActions, public utils: Utils) {
-    super(store, userActions, utils);
+    public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
+    super(store, userActions, utils, cd);
   }
 
   continueClicked($event) {
@@ -39,6 +40,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
         this.getNextQuestion();
       }
     }
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {

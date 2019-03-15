@@ -1,5 +1,5 @@
-import { Routes, RouterModule } from '@angular/router';
-import { DashboardComponent, PrivacyPolicyComponent, InvitationRedirectionComponent } from '../components/index';
+import { Routes } from '@angular/router';
+import { PrivacyPolicyComponent, InvitationRedirectionComponent } from '../components/index';
 import { AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 
 export const routes: Routes = [
@@ -10,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
-    component: DashboardComponent
+    loadChildren: '../dashboard/dashboard.module#DashboardModule',
   },
   {
     path: 'privacy-policy',
