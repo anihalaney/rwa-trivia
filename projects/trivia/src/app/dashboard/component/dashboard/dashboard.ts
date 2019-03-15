@@ -82,12 +82,14 @@ export class Dashboard implements OnDestroy {
                 }
 
                 if (this.user) {
-                    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+                    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+                    .subscribe(appSettings => {
                         if (appSettings) {
                             this.applicationSettings = appSettings[0];
                             if (this.applicationSettings) {
                                 if (this.applicationSettings.lives.enable) {
-                                    store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+                                    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
+                                    .subscribe(account => {
                                         this.account = account;
                                         this.cd.markForCheck();
                                         if (this.account && !this.account.enable) {
@@ -104,7 +106,7 @@ export class Dashboard implements OnDestroy {
                                             this.timerSub.unsubscribe();
                                         }
                                         this.gameLives();
-                                    });
+                                    }));
                                 } else {
                                     this.gamePlayBtnDisabled = false;
                                     if (this.timerSub) {
@@ -114,7 +116,7 @@ export class Dashboard implements OnDestroy {
                                 }
                             }
                         }
-                    });
+                    }));
                 }
             });
             this.store.dispatch(this.gameActions.getActiveGames(user));

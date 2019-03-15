@@ -17,7 +17,7 @@ export class Game implements OnDestroy {
   constructor(public store: Store<AppState>) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
   }
 

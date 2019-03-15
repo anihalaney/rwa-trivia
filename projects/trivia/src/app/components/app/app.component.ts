@@ -72,7 +72,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.router.events.subscribe((evt) => {
+    this.subscriptions.push(this.router.events.subscribe((evt) => {
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
@@ -85,7 +85,7 @@ export class AppComponent implements OnInit, OnDestroy {
           this.windowRef.nativeWindow.scrollTo(0, 0);
         }
       }
-    });
+    }));
   }
 
   ngOnDestroy() {
