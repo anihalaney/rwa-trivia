@@ -1,5 +1,3 @@
-import { RecentGamesComponent } from './recent-games/recent-games.component';
-import { RecentGameCardComponent } from './recent-games/recent-game-card/recent-game-card.component';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { InviteFriendsComponent } from './invite-friends/invite-friends.component';
 import { QuestionAddUpdateComponent } from './question-add-update/question-add-update.component';
@@ -9,8 +7,6 @@ import { InviteMailFriendsComponent } from './invite-friends/invite-friends-dial
 
 
 export {
-    RecentGamesComponent,
-    RecentGameCardComponent,
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
@@ -20,8 +16,6 @@ export {
 };
 
 export default [
-    RecentGamesComponent,
-    RecentGameCardComponent,
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
