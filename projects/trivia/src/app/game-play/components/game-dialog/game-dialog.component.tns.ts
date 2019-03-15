@@ -47,6 +47,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
+    this.destroy();
   }
 
   // Hide menu if question display

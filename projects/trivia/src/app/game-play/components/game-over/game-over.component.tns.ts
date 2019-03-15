@@ -1,19 +1,19 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
-import { UserActions } from 'shared-library/core/store/actions';
-import { Store, select } from '@ngrx/store';
-import { gamePlayState } from '../../store';
-import { GameOver } from './game-over';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
-import { ReportGameComponent } from './../report-game/report-game.component';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { getImage } from 'nativescript-screenshot';
 import * as SocialShare from "nativescript-social-share";
-import { Image } from "tns-core-modules/ui/image";
-import { coreState } from 'shared-library/core/store';
 import * as Toast from 'nativescript-toast';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Subscription } from 'rxjs';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { coreState } from 'shared-library/core/store';
+import { UserActions } from 'shared-library/core/store/actions';
+import { AppState, appState } from '../../../store';
+import { gamePlayState } from '../../store';
+import { GameOver } from './game-over';
+import { ReportGameComponent } from './../report-game/report-game.component';
+import { Image } from "tns-core-modules/ui/image";
 
 @Component({
   selector: 'game-over',
@@ -29,8 +29,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
-    public cd: ChangeDetectorRef) {
+    public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
     super(store, userActions, utils, cd);
+
 
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
@@ -73,6 +74,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.utils.unsubscribe(this.subscriptions);
+    this.destroy();
   }
 
   openDialog(question) {
@@ -106,5 +109,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       SocialShare.shareImage(shareImage);
       this.playerUserName = 'You';
     }, 100);
+  }
+
+  gotoDashboard() {
+    this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
   }
 }
