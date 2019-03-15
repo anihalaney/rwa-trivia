@@ -1,4 +1,4 @@
-import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { User, Subscription } from './../../../../../../shared-library/src/lib/shared/model';
@@ -6,7 +6,7 @@ import { AppState, appState } from '../../../store';
 import * as dashboardActions from '../../store/actions';
 import { dashboardState } from '../../store';
 import { isPlatformBrowser } from '@angular/common';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 // tslint:disable-next-line:max-line-length
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -16,13 +16,16 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
   styleUrls: ['./newsletter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NewsletterComponent implements OnInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class NewsletterComponent implements OnInit, OnDestroy {
 
   subscriptionForm: FormGroup;
   user: User;
   isSubscribed: Boolean = false;
   totalCount: Number = 0;
   message = '';
+  subscriptions = [];
 
   constructor(private fb: FormBuilder, private store: Store<AppState>,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -31,7 +34,7 @@ export class NewsletterComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
 
-    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       this.user = user;
       if (user) {
@@ -44,9 +47,8 @@ export class NewsletterComponent implements OnInit {
           this.isSubscribed = false;
         }
       }
-    });
-    this.store.select(dashboardState).pipe(select(s => s.checkEmailSubscriptionStatus)).subscribe(status => {
-
+    }));
+    this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.checkEmailSubscriptionStatus)).subscribe(status => {
       if (status === true) {
         this.isSubscribed = true;
         this.message = 'This EmailId is already Subscribed!!';
@@ -55,11 +57,11 @@ export class NewsletterComponent implements OnInit {
         this.store.dispatch(new dashboardActions.GetTotalSubscriber());
         this.message = 'Your EmailId is Successfully Subscribed!!';
       }
-    });
-    this.store.select(dashboardState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
+    }));
+    this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
       this.cd.markForCheck();
-    });
+    }));
   }
 
   ngOnInit() {
@@ -81,4 +83,7 @@ export class NewsletterComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+
+  }
 }

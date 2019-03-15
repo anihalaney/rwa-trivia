@@ -5,6 +5,7 @@ import { AppState, appState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'profile-card',
@@ -12,17 +13,19 @@ import { Observable, Subscription } from 'rxjs';
   styleUrls: ['./profile-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ProfileCardComponent implements OnDestroy {
   @Input() user: User;
   userObs: Observable<User>;
   location = 'unknown';
   userProfileImageUrl: string;
-  subs: Subscription[] = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
     this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
-    this.subs.push(this.userObs.subscribe(user => {
+    this.subscriptions.push(this.userObs.subscribe(user => {
       if (user !== null) {
         this.user = user;
         (this.user.location) ? this.location = this.user.location : '';
@@ -40,7 +43,7 @@ export class ProfileCardComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
 }

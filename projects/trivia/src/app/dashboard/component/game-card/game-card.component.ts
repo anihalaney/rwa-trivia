@@ -1,17 +1,20 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy } from '@angular/core';
-import { Observable, Subscription, timer, interval } from 'rxjs';
+import { Component, Input, OnInit, OnChanges, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Observable, Subscription, timer } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { User, Game, Category, PlayerMode, GameStatus, CalenderConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { take } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'game-card',
   templateUrl: './game-card.component.html',
-  styleUrls: ['./game-card.component.scss']
+  styleUrls: ['./game-card.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() game: Game;
@@ -26,7 +29,6 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   otherUserInfo: User;
   public remainingHours: string;
   public remainingMinutes: string;
-  subs: Subscription[] = [];
   timerSub: Subscription;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -36,38 +38,45 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   gameStatus: any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
   userDict$: Observable<{ [key: string]: User }>;
-  constructor(public store: Store<AppState>, public utils: Utils) {
+  subscriptions = [];
+  constructor(public store: Store<AppState>, public utils: Utils, private cd: ChangeDetectorRef) {
 
     this.gameStatus = GameStatus;
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.subs.push(this.user$.subscribe(user => {
+    this.subscriptions.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
+      this.cd.markForCheck();
     }));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       if (this.game) {
         this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
         this.otherUserInfo = this.userDict[this.otherUserId];
       }
+      this.cd.markForCheck();
     }));
 
     this.categoryDict$ = store.select(categoryDictionary);
-    this.subs.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
+      this.categoryDict = categoryDict;
+      this.cd.markForCheck();
+    }));
 
   }
 
   ngOnInit() {
-    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user;
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
       if (this.myTurn) {
         this.updateRemainingTime();
       }
+      this.cd.markForCheck();
     }));
   }
 
@@ -85,8 +94,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.subs.push(this.timerSub);
-    this.utils.unsubscribe(this.subs);
+
   }
 
   updateRemainingTime() {
@@ -106,6 +114,8 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
           this.remainingMinutes = this.utils.convertIntoDoubleDigit(0);
         }
       }
+      this.cd.markForCheck();
     });
+    this.subscriptions.push(this.timerSub);
   }
 }

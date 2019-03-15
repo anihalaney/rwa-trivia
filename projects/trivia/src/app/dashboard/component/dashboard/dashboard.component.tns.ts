@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, NgZone, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Inject, NgZone, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -7,7 +7,10 @@ import { WindowRef, Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { User } from 'shared-library/shared/model';
+import { User, Game } from 'shared-library/shared/model';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+
+
 
 @Component({
   selector: 'dashboard',
@@ -15,9 +18,12 @@ import { User } from 'shared-library/shared/model';
   styleUrls: ['./dashboard.component.scss', './dashboard.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent extends Dashboard implements OnInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   gameStatus: any;
+  subscriptions = [];
 
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
@@ -45,7 +51,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
   ngOnInit() {
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
 
   }
 
@@ -60,26 +66,27 @@ export class DashboardComponent extends Dashboard implements OnInit {
 
   }
 
-  filterGame(game: any, gameStatus, user: User) {
-    // tslint:disable-next-line:max-line-length
-    return game.GameStatus === gameStatus.AVAILABLE_FOR_OPPONENT || game.GameStatus === gameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE || game.GameStatus === gameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
+  filterGame(game: Game): boolean {
+    return game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
+    game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
+    || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
   }
 
 
-  filterSinglePlayerGame(game: any, gameStatus, user: User) {
+  filterSinglePlayerGame(game: Game): boolean {
     return Number(game.gameOptions.playerMode) === Number(PlayerMode.Single) && game.playerIds.length === 1;
   }
 
-  filterTwoPlayerGame(game: any, gameStatus, user: User) {
-
-    // tslint:disable-next-line:no-unused-expression
-
+  filterTwoPlayerGame = (game: Game): boolean => {
     return Number(game.gameOptions.playerMode) === Number(PlayerMode.Opponent) &&
-      (game.nextTurnPlayerId === user.userId);
+      (game.nextTurnPlayerId === this.user.userId);
   }
 
-  filterTwoPlayerWaitNextQGame(game: any, gameStatus, user: User) {
-    return game.GameStatus === gameStatus.WAITING_FOR_NEXT_Q;
+  filterTwoPlayerWaitNextQGame(game: Game): boolean {
+    return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q;
+  }
+
+  ngOnDestroy(): void {
   }
 }
 

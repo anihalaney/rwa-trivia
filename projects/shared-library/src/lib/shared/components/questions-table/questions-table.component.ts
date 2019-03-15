@@ -7,7 +7,7 @@ import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
 import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../model';
 import { Utils } from '../../../core/services';
-import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
+import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 
@@ -66,7 +66,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
 
 
   viewReasonArray = [];
-  sub: Subscription;
 
   constructor(
     private fb: FormBuilder) {

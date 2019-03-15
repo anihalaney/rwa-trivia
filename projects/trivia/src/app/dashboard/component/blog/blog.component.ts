@@ -1,8 +1,8 @@
 import { Component, Input, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'blog',
@@ -10,16 +10,18 @@ import { AppState, appState } from '../../../store';
   styleUrls: ['./blog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BlogComponent implements OnDestroy , AfterViewInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class BlogComponent implements OnDestroy, AfterViewInit {
   @Input() blogId: number;
-  sub: Subscription;
   blogData = [];
 
-  constructor(private store: Store<AppState>, private utils: Utils, private cd: ChangeDetectorRef) {
-    this.sub = this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
+  subscriptions = [];
+  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef) {
+    this.subscriptions.push(this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
       this.cd.markForCheck();
-    });
+    }));
   }
 
   onNotify(info: any) {
@@ -27,11 +29,11 @@ export class BlogComponent implements OnDestroy , AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe([this.sub]);
   }
+
   ngAfterViewInit(): void {
-    this.sub = this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
+    this.subscriptions.push(this.store.select(appState.dashboardState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
-    });
+    }));
   }
 }

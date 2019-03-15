@@ -5,24 +5,24 @@ import { dashboardState } from '../../store';
 import * as StatActions from '../../store/actions';
 import { SystemStats } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
-import { Utils } from 'shared-library/core/services';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'realtime-stats',
   templateUrl: './realtime-stats.component.html',
   styleUrls: ['./realtime-stats.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class RealtimeStatsComponent implements OnDestroy {
 
   systemStats: SystemStats;
-  subs: Subscription[] = [];
+  subscriptions = [];
 
-  constructor(private store: Store<AppState>, private utils: Utils, private cd: ChangeDetectorRef) {
+  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef) {
 
     this.store.dispatch(new StatActions.LoadSystemStat());
 
-    this.subs.push(this.store.select(dashboardState).pipe(select(s => s.systemStat)).subscribe(systemStats => {
+    this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.systemStat)).subscribe(systemStats => {
       if (systemStats !== null) {
         this.systemStats = systemStats;
         this.cd.markForCheck();
@@ -31,6 +31,6 @@ export class RealtimeStatsComponent implements OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 }

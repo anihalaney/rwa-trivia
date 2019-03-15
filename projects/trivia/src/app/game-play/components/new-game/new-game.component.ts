@@ -13,7 +13,7 @@ import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { MatSnackBar } from '@angular/material';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'new-game',
@@ -21,15 +21,16 @@ import { MatSnackBar } from '@angular/material';
   styleUrls: ['./new-game.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
   sortedCategories: Category[];
   tagsObs: Observable<string[]>;
   tags: string[];
-
+  subscriptions = [];
   selectedTags: string[];
-  subs: Subscription[] = [];
   selectedCategories = [];
 
   newGameForm: FormGroup;
@@ -59,14 +60,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef) {
     super(store, utils, gameActions, userActions);
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
         this.redirectToDashboard(gameCreateStatus);
       }
       this.cd.markForCheck();
     }));
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.selectedCategories = [];
@@ -82,7 +83,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         }
 
         if (this.applicationSettings && this.applicationSettings.lives.enable) {
-          this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+          this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
             if (account) {
               this.life = account.lives;
             }
@@ -117,7 +118,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     playerModeControl.setValue('0');
     const opponentTypeControl = this.newGameForm.get('opponentType');
 
-    playerModeControl.valueChanges.subscribe(v => {
+    this.subscriptions.push(playerModeControl.valueChanges.subscribe(v => {
       if (v === '1') {
         opponentTypeControl.enable();
         opponentTypeControl.setValue('0');
@@ -125,7 +126,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         opponentTypeControl.disable();
         opponentTypeControl.reset();
       }
-    });
+    }));
 
     this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
@@ -249,7 +250,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
   }
 
   isCategorySelected(categoryId: number, requiredForGamePlay: boolean) {

@@ -16,6 +16,7 @@ import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
 import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'new-game',
@@ -23,6 +24,8 @@ import { coreState } from 'shared-library/core/store';
   styleUrls: ['./new-game.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   playerMode = 0;
@@ -32,12 +35,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   dataItem;
   categoriesObs: Observable<Category[]>;
   categories: Category[];
-  subs: Subscription[] = [];
   customTag: string;
   categoryIds: number[] = [];
   private tagItems: ObservableArray<TokenModel>;
-  sub3: Subscription;
   filteredCategories: Category[];
+  subscriptions = [];
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView') listViewComponent: RadListViewComponent;
@@ -55,13 +57,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
       this.cd.markForCheck();
     }));
 
-    this.subs.push(this.categoriesObs.subscribe(categories => {
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => {
       categories.map(category => {
         if (this.user.categoryIds && this.user.categoryIds.length > 0) {
           category.isSelected = this.user.categoryIds.includes(category.id);
@@ -78,14 +80,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     }));
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
         this.redirectToDashboard(gameCreateStatus);
       }
       this.cd.markForCheck();
     }));
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
@@ -99,8 +101,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         let filteredCategories = [];
@@ -111,7 +113,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             }
           });
           if (this.applicationSettings && this.applicationSettings.lives.enable) {
-            this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+            this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
               if (account) {
                 this.life = account.lives;
               }
@@ -130,7 +132,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
   addCustomTag() {

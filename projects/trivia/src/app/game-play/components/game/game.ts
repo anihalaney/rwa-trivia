@@ -3,19 +3,25 @@ import { take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { OnDestroy } from '@angular/core';
 
-export class Game {
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class Game implements OnDestroy {
   user: User;
-  subs: Subscription[] = [];
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
+  subscriptions = [];
 
   constructor(public store: Store<AppState>) {
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
-    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.userDict$.subscribe(userDict => this.userDict = userDict);
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+  }
+
+  ngOnDestroy() {
 
   }
 }
