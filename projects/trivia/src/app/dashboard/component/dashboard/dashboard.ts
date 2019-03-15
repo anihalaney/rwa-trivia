@@ -54,6 +54,7 @@ export class Dashboard implements OnDestroy {
     gamePlayBtnDisabled = true;
     applicationSettings: ApplicationSettings;
     subscriptions = [];
+    cd: ChangeDetectorRef;
 
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
@@ -65,17 +66,16 @@ export class Dashboard implements OnDestroy {
         cd: ChangeDetectorRef) {
         this.utils = utils;
         this.ngZone = ngZone;
+        this.cd = cd;
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
         this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.ngZone.run(() => {
                 this.user = user;
-                cd.markForCheck();
+                this.cd.markForCheck();
                 if (!this.user && this.timerSub) {
                     this.timerSub.unsubscribe();
                 }
-                cd.markForCheck();
-
                 if (this.user === null) {
                     this.timeoutLive = '';
                     this.gamePlayBtnDisabled = false;
@@ -89,6 +89,7 @@ export class Dashboard implements OnDestroy {
                                 if (this.applicationSettings.lives.enable) {
                                     store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
                                         this.account = account;
+                                        this.cd.markForCheck();
                                         if (this.account && !this.account.enable) {
                                             this.timeoutLive = '';
                                             if (this.account && this.account.lives === 0) {
@@ -264,6 +265,7 @@ export class Dashboard implements OnDestroy {
                     if (timeStamp >= this.account.nextLiveUpdate) {
                         this.timerSub.unsubscribe();
                         this.timeoutLive = '(' + String(this.account.lives) + ')';
+                        this.cd.markForCheck();
                         if (this.user) {
                             this.store.dispatch(this.userActions.addUserLives(this.user.userId));
                         }
@@ -273,12 +275,15 @@ export class Dashboard implements OnDestroy {
                             timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
                         }
                         this.timeoutLive = '(' + String(this.account.lives) + ')' + timeOut;
+                        this.cd.markForCheck();
                     }
                 });
                 this.subscriptions.push(this.timerSub);
             } else {
                 this.timeoutLive = '(' + String(this.account.lives) + ')';
+                this.cd.markForCheck();
             }
+            this.cd.markForCheck();
         }
 
     }
