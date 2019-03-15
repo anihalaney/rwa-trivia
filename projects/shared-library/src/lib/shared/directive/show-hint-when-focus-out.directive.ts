@@ -2,18 +2,22 @@ import { Directive, Input, Renderer2, HostListener, AfterViewInit, OnDestroy } f
 import { FormControl } from '@angular/forms';
 import { Utils } from './../../core/services' ;
 import { Subscription } from 'rxjs';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Directive({
   selector: '[stlShowHintWhenFocusOut]'
 })
+
+
+@AutoUnsubscribe({'arrayName': 'subscriptions'})
 export class ShowHintWhenFocusOutDirective implements AfterViewInit, OnDestroy {
 
   controlRef: FormControl;
   hintRef: any;
   lostFocus = false;
   removeClass: string;
-  subs: Subscription[] = [];
-
+  subscriptions = [];
+  
   @Input() stlShowHintWhenFocusOut: any;
 
   @HostListener('blur', ['$event'])
@@ -29,7 +33,7 @@ export class ShowHintWhenFocusOutDirective implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.controlRef = this.stlShowHintWhenFocusOut.controlRef;
-    this.subs.push(this.controlRef.valueChanges.subscribe(res => {
+    this.subscriptions.push(this.controlRef.valueChanges.subscribe(res => {
       if (this.lostFocus) {
         if (this.controlRef.invalid) {
           this.hintRef.style.visibility = 'visible';
@@ -60,7 +64,7 @@ export class ShowHintWhenFocusOutDirective implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
 }

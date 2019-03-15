@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import {
     ReportQuestion, User, Game, QuestionMetadata, Category, Question
 } from 'shared-library/shared/model';
@@ -10,12 +10,16 @@ import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import * as Toast from 'nativescript-toast';
 import { Utils } from 'shared-library/core/services';
 import { isAndroid } from 'tns-core-modules/ui/page/page';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
-    styleUrls: ['./report-game.component.scss']
+    styleUrls: ['./report-game.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
@@ -31,13 +35,16 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     reportOptions?: Array<ReportOption>;
     selectedOption: string = null;
     otherReason: string = null;
-    subs: Subscription[] = [];
-    @ViewChildren('textField') textField : QueryList<ElementRef>;
+    subscriptions = [];
 
-    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils) {
+    @ViewChildren('textField') textField: QueryList<ElementRef>;
+
+    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils,
+        private cd: ChangeDetectorRef) {
         this.categoryDict$ = store.select(categoryDictionary);
-        this.subs.push(this.categoryDict$.subscribe(categoryDict => {
+        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
+            this.cd.markForCheck();
         }));
 
         this.question = params.context.question;
@@ -127,7 +134,6 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.utils.unsubscribe(this.subs);
     }
 
     hideKeyboard() {

@@ -1,9 +1,10 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { GameQuestion } from './game-question';
 @Component({
   selector: 'game-question',
   templateUrl: './game-question.component.html',
-  styleUrls: ['./game-question.component.scss']
+  styleUrls: ['./game-question.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, AfterViewInit, OnChanges {
 
@@ -11,7 +12,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   @ViewChild('loader') loader: ElementRef;
   alpha = 0;
   setTimeOutLimit = 0;
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
     super();
   }
 
@@ -22,7 +23,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   }
 
   ngAfterViewInit() {
-    this.setTimeOutLimit = Math.floor( (this.MAX_TIME_IN_SECONDS / 360) * 1000);
+    this.setTimeOutLimit = Math.floor((this.MAX_TIME_IN_SECONDS / 360) * 1000);
     const loader = this.loader.nativeElement, α = 0;
     this.draw(this.alpha, this.doPlay, loader);
   }
@@ -49,6 +50,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
 
   fillTimer() {
     this.loader.nativeElement.setAttribute('d', 'M 1 1 v -125 A 125 125 1 1 1 0 -125 z');
+    this.cd.markForCheck();
   }
 
   ngOnChanges(changes: SimpleChanges) {

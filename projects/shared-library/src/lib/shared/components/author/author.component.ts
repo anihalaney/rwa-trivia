@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnChanges, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { User } from '../../model';
 import { Utils } from '../../../core/services';
 import { Store } from '@ngrx/store';
@@ -19,7 +19,7 @@ export class AuthorComponent implements OnChanges {
     @Input() userId;
     userProfileImageUrl;
 
-    constructor(private store: Store<CoreState>, private userActions: UserActions, private utils: Utils) {
+    constructor(private store: Store<CoreState>, private userActions: UserActions, private utils: Utils, private cd: ChangeDetectorRef) {
 
     }
 
@@ -29,6 +29,7 @@ export class AuthorComponent implements OnChanges {
                 this.store.dispatch(this.userActions.loadOtherUserProfile(this.userId));
             } else {
                 this.userProfileImageUrl = this.utils.getImageUrl(this.userDict[this.userId], 44, 40, '44X40');
+                this.cd.markForCheck();
             }
         }
     }

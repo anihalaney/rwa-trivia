@@ -20,7 +20,6 @@ export class ProfileSettings {
     userCategories: Category[];
     categoryDict: { [key: number]: Category };
     categoryDictObs: Observable<{ [key: number]: Category }>;
-    subs: Subscription[] = [];
     categoriesObs: Observable<Category[]>;
     userForm: FormGroup;
     userObs: Observable<User>;
@@ -45,6 +44,7 @@ export class ProfileSettings {
     APPROVED = profileSettingsConstants.APPROVED;
     bulkUploadBtnText: string;
     loaderBusy = false;
+    subscriptions = [];
 
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
@@ -60,23 +60,23 @@ export class ProfileSettings {
 
         this.fb = formBuilder;
 
-        this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             this.socialProfileSettings = appSettings[0].social_profile;
             this.enableSocialProfile = this.socialProfileSettings.filter(res => res.enable).length;
         }));
 
         this.categoriesObs = store.select(getCategories);
-        this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+        this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
 
         this.categoryDictObs = store.select(categoryDictionary);
-        this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+        this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
 
         this.tagsObs = this.store.select(getTags);
-        this.subs.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
+        this.subscriptions.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
 
         this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
-        this.subs.push(this.userObs.subscribe(user => {
+        this.subscriptions.push(this.userObs.subscribe(user => {
             if (user) {
                 this.user = user;
 
@@ -118,9 +118,9 @@ export class ProfileSettings {
     }
 
     ValidateUrl(control: AbstractControl) {
-            if (control.value.toLowerCase().includes('http') || control.value.toLowerCase().includes('www')) {
-                return { validUrl: true };
-            }
+        if (control.value.toLowerCase().includes('http') || control.value.toLowerCase().includes('www')) {
+            return { validUrl: true };
+        }
         return null;
     }
 
@@ -227,4 +227,5 @@ export class ProfileSettings {
     onSocialProfileInputFocus(i) {
         this.inputEl.toArray()[i].nativeElement.focus();
     }
+
 }
