@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule , NO_ERRORS_SCHEMA } from '@angular/core';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { SharedModule } from 'shared-library/shared/shared.module';
@@ -38,7 +38,8 @@ import { NativeScriptRouterModule } from 'nativescript-angular/router';
     providers: [],
     exports: [],
     entryComponents: [
-    ]
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
 })
 /*
 Pass your application module to the bootstrapModule function located in main.ts to start your app
