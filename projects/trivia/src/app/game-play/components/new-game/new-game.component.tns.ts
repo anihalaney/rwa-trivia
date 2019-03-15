@@ -79,7 +79,33 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         return category;
       });
       this.cd.markForCheck();
-      return categories;
+      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+          let filteredCategories = [];
+          if (this.applicationSettings) {
+            filteredCategories = this.categories.filter((category) => {
+              if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+                return category;
+              }
+            });
+            if (this.applicationSettings && this.applicationSettings.lives.enable) {
+              this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+                if (account) {
+                  this.life = account.lives;
+                }
+                this.cd.markForCheck();
+              }));
+            }
+          } else {
+            filteredCategories = this.categories;
+          }
+
+          this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+          ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+        }
+        this.cd.markForCheck();
+      }));
 
     }));
 
@@ -103,35 +129,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       }
       this.cd.markForCheck();
     }));
-    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-      if (appSettings) {
-        this.applicationSettings = appSettings[0];
-        let filteredCategories = [];
-        if (this.applicationSettings) {
-          filteredCategories = this.categories.filter((category) => {
-            if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-              return category;
-            }
-          });
-          if (this.applicationSettings && this.applicationSettings.lives.enable) {
-            this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
-              if (account) {
-                this.life = account.lives;
-              }
-              this.cd.markForCheck();
-            }));
-          }
-        } else {
-          filteredCategories = this.categories;
-        }
 
-        this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-        ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-      }
-      this.cd.markForCheck();
-    }));
   }
 
   ngOnDestroy() {
