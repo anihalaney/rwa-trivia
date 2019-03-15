@@ -17,7 +17,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameInviteComponent implements OnChanges, OnDestroy {
 
   @Input() userDict: { [key: string]: User } = {};
@@ -27,12 +27,12 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   randomCategoryId = 0;
   gameStatus;
   remainingDays: number;
-  subscription = [];
+  subscriptions = [];
 
 
   constructor(private store: Store<AppState>, private utils: Utils, private userActions: UserActions) {
     this.categoryDict$ = store.select(categoryDictionary);
-    this.subscription.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => this.categoryDict = categoryDict));
   }
 
   ngOnChanges() {

@@ -18,7 +18,7 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteMailFriendsComponent implements OnInit, OnDestroy {
 
   @Input() user: User;
@@ -30,19 +30,19 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   validEmail = [];
   emailCheck: Boolean = false;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
-  subscription = [];
+  subscriptions = [];
 
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef,
     private utils: Utils) {
-      this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
         this.user = user;
       }
     }));
 
-    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.showSuccessMsg = status;
         this.cd.detectChanges();

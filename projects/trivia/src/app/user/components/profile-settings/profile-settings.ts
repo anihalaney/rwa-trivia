@@ -13,7 +13,7 @@ import { ViewChildren, QueryList, HostListener, OnDestroy } from '@angular/core'
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ProfileSettings implements OnDestroy {
     @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
@@ -47,7 +47,7 @@ export class ProfileSettings implements OnDestroy {
     APPROVED = profileSettingsConstants.APPROVED;
     bulkUploadBtnText: string;
     loaderBusy = false;
-    subscription = [];
+    subscriptions = [];
 
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
@@ -63,23 +63,23 @@ export class ProfileSettings implements OnDestroy {
 
         this.fb = formBuilder;
 
-        this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             this.socialProfileSettings = appSettings[0].social_profile;
             this.enableSocialProfile = this.socialProfileSettings.filter(res => res.enable).length;
         }));
 
         this.categoriesObs = store.select(getCategories);
-        this.subscription.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+        this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
 
         this.categoryDictObs = store.select(categoryDictionary);
-        this.subscription.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+        this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
 
         this.tagsObs = this.store.select(getTags);
-        this.subscription.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
+        this.subscriptions.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
 
         this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
-        this.subscription.push(this.userObs.subscribe(user => {
+        this.subscriptions.push(this.userObs.subscribe(user => {
             if (user) {
                 this.user = user;
 

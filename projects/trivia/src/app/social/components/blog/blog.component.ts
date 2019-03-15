@@ -11,13 +11,13 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class BlogComponent implements OnDestroy, AfterViewInit {
   @Input() blogId: number;
   blogData = [];
-  subscription = [];
+  subscriptions = [];
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef) {
-    this.subscription.push(this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+    this.subscriptions.push(this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
       this.cd.markForCheck();
     }));
@@ -31,7 +31,7 @@ export class BlogComponent implements OnDestroy, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.subscription.push(this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
+    this.subscriptions.push(this.store.select(appState.socialState).pipe(select(s => s.blogs)).subscribe(blogs => {
       this.blogData = blogs;
     }));
   }

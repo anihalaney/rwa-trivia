@@ -16,7 +16,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class BulkDetailsComponent implements OnChanges, OnInit, OnDestroy {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
@@ -25,7 +25,7 @@ export class BulkDetailsComponent implements OnChanges, OnInit, OnDestroy {
   questions: Question[];
   totalCount: number;
   user: User;
-  subscription = [];
+  subscriptions = [];
 
 
   tagsObs: Observable<string[]>;
@@ -43,7 +43,7 @@ export class BulkDetailsComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.categoriesObs = this.store.select(getCategories);
     this.tagsObs = this.store.select(getTags);
   }

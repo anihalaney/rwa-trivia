@@ -24,7 +24,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class DrawerComponent implements OnInit, OnDestroy {
 
     @Output() output = new EventEmitter();
@@ -38,7 +38,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     version: string;
     logOut: boolean;
     pushToken: string;
-    subscription = [];
+    subscriptions = [];
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
@@ -69,10 +69,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.categoriesObs.subscribe(categories => {
             this.categories = categories;
         });
-        this.subscription.push(this.categoriesObs);
+        this.subscriptions.push(this.categoriesObs);
     }
     ngOnInit() {
-        this.subscription.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
                 this.user = user;

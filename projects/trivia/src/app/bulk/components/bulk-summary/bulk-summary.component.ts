@@ -15,7 +15,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   public bulkSummaryDetailPath = '/';
@@ -24,17 +24,17 @@ export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
   isArchive: boolean;
   isArchiveBtnClicked: boolean;
   toggleValue: boolean;
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private utils: Utils) {
-    this.subscription.push(this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;
       } else {
         this.toggleValue = false;
       }
     }));
-    this.subscription.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.isArchive = true;
       } else {

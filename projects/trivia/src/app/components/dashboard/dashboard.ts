@@ -10,7 +10,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { PlayerMode, GameStatus, Account } from 'shared-library/shared/model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
 
     user: User;
@@ -53,7 +53,7 @@ export class Dashboard implements OnDestroy {
     public timeoutLive: string;
     gamePlayBtnDisabled = true;
     applicationSettings: ApplicationSettings;
-    subscription = [];
+    subscriptions = [];
 
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
@@ -68,7 +68,7 @@ export class Dashboard implements OnDestroy {
         this.ngZone = ngZone;
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-        this.subscription.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.ngZone.run(() => {
                 this.user = user;
                 cd.markForCheck();
@@ -120,8 +120,8 @@ export class Dashboard implements OnDestroy {
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
 
-        this.subscription.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
-        this.subscription.push(this.activeGames$.subscribe(games => {
+        this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+        this.subscriptions.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
             this.singlePlayerCount = 0;
             this.twoPlayerCount = 0;
@@ -169,7 +169,7 @@ export class Dashboard implements OnDestroy {
         this.gameSliceStartIndex = 0;
         this.gameSliceLastIndex = 8;
 
-        this.subscription.push(store.select(appState.coreState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
+        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.gameInvites)).subscribe(iGames => {
             this.gameInvites = iGames;
             this.friendCount = 0;
             this.randomPlayerCount = 0;
@@ -185,7 +185,7 @@ export class Dashboard implements OnDestroy {
         this.gameInviteSliceStartIndex = 0;
         this.gameInviteSliceLastIndex = 3;
 
-        this.subscription.push(store.select(appState.coreState).pipe(select(s => s.friendInvitations)).subscribe(invitations => {
+        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.friendInvitations)).subscribe(invitations => {
             if (invitations.length > 0) {
                 this.friendInvitations = invitations;
                 invitations.map(invitation => {
@@ -274,7 +274,7 @@ export class Dashboard implements OnDestroy {
                         this.timeoutLive = '(' + String(this.account.lives) + ')' + timeOut;
                     }
                 });
-                this.subscription.push(this.timerSub);
+                this.subscriptions.push(this.timerSub);
             } else {
                 this.timeoutLive = '(' + String(this.account.lives) + ')';
             }

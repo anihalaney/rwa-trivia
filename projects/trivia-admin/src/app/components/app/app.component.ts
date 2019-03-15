@@ -15,11 +15,11 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   styleUrls: ['./app.component.scss']
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'trivia!';
   user: User;
-  subscription = [];
+  subscriptions = [];
 
   theme = '';
   constructor(private renderer: Renderer2,
@@ -31,7 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
 
-    this.subscription.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
         let url: string;
@@ -52,9 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.subscription) {
-      console.log(this.subscription, 'app closed');
-    }
+
   }
 
   login() {

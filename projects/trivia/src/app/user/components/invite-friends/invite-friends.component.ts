@@ -18,7 +18,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteFriendsComponent extends InviteFriends implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<InviteFriendsDialogComponent>;
@@ -26,7 +26,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     'won', 'lost'];
   uFriends: Array<any>;
   dataSource: any;
-  subscription = [];
+  subscriptions = [];
   defaultAvatar = 'assets/images/default-avatar.png';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -40,7 +40,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   }
 
   ngOnInit() {
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
         uFriends.myFriends.map((friend, index) => {
@@ -69,10 +69,10 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     });
     this.dialogRef.componentInstance.ref = this.dialogRef;
 
-    this.subscription.push(this.dialogRef.afterOpen().subscribe(x => {
+    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
     }));
-    this.subscription.push(this.dialogRef.afterClosed().subscribe(x => {
+    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
       this.renderer.removeClass(document.body, 'dialog-open');
     }));
   }

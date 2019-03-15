@@ -18,7 +18,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LeaderboardComponent implements OnDestroy, AfterViewInit {
 
   userDict$: Observable<{ [key: string]: User }>;
@@ -38,7 +38,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   defaultAvatar = 'assets/images/default-avatar-small.png';
   unknown = LeaderBoardConstants.UNKNOWN;
   category: string;
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
@@ -56,19 +56,19 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
     this.maxLeaderBoardDisplay = 10;
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       this.cd.markForCheck();
     }));
 
     this.categoryDict$ = this.store.select(categoryDictionary);
 
-    this.subscription.push(this.categoryDict$.subscribe(categoryDict => {
+    this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
       this.cd.markForCheck();
     }));
 
-    this.subscription.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
+    this.subscriptions.push(this.store.select(leaderBoardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);

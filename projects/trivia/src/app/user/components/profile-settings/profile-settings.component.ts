@@ -17,7 +17,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({'arrayName': 'subscription'})
+@AutoUnsubscribe({'arrayName': 'subscriptions'})
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   @ViewChild('cropper') cropper: ImageCropperComponent;
@@ -25,7 +25,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   cropperSettings: CropperSettings;
   notificationMsg: string;
   errorStatus: boolean;
-  subscription = [];
+  subscriptions = [];
   
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
@@ -39,7 +39,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
 
-    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.setNotificationMsg('Profile Saved !', false, 100);
         this.cd.markForCheck();

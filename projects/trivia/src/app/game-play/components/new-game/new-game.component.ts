@@ -22,14 +22,14 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
   sortedCategories: Category[];
   tagsObs: Observable<string[]>;
   tags: string[];
-  subscription = [];
+  subscriptions = [];
   selectedTags: string[];
   selectedCategories = [];
 
@@ -60,14 +60,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef) {
     super(store, utils, gameActions, userActions);
 
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
         this.redirectToDashboard(gameCreateStatus);
       }
       this.cd.markForCheck();
     }));
 
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.selectedCategories = [];
@@ -83,7 +83,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         }
 
         if (this.applicationSettings && this.applicationSettings.lives.enable) {
-          this.subscription.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+          this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
             if (account) {
               this.life = account.lives;
             }
@@ -118,7 +118,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     playerModeControl.setValue('0');
     const opponentTypeControl = this.newGameForm.get('opponentType');
 
-    this.subscription.push(playerModeControl.valueChanges.subscribe(v => {
+    this.subscriptions.push(playerModeControl.valueChanges.subscribe(v => {
       if (v === '1') {
         opponentTypeControl.enable();
         opponentTypeControl.setValue('0');

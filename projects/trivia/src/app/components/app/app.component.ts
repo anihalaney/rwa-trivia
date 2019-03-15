@@ -19,11 +19,11 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   styleUrls: ['./app.component.scss']
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'trivia!';
   user: User;
-  subscription = [];
+  subscriptions = [];
   theme = '';
   constructor(private renderer: Renderer2,
     private authService: AuthenticationProvider,
@@ -37,16 +37,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
 
-    this.subscription.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
         let url: string;
-        this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
           if (status !== 'NONE') {
             this.store.dispatch(this.userAction.makeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }));
           }
         }));
-        this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl));
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl));
         if (url) {
           this.router.navigate([url]);
         }
@@ -57,12 +57,12 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
     }));
 
-    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.router.navigate(['my/invite-friends']);
         this.snackBar.open('You become the friend!', '', { duration: 2000 });

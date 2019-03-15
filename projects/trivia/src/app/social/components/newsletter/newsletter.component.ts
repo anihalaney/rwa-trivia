@@ -1,4 +1,4 @@
-import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { PLATFORM_ID, APP_ID, Component, OnInit, Inject, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { User, Subscription } from 'shared-library/shared/model';
@@ -17,15 +17,15 @@ const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
-export class NewsletterComponent implements OnInit {
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class NewsletterComponent implements OnInit, OnDestroy {
 
   subscriptionForm: FormGroup;
   user: User;
   isSubscribed: Boolean = false;
   totalCount: Number = 0;
   message = '';
-  subscription = [];
+  subscriptions = [];
 
   constructor(private fb: FormBuilder, private store: Store<AppState>,
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -34,7 +34,7 @@ export class NewsletterComponent implements OnInit {
       email: ['', Validators.compose([Validators.required, Validators.pattern(EMAIL_REGEXP)])]
     });
 
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
 
       this.user = user;
       if (user) {
@@ -48,7 +48,7 @@ export class NewsletterComponent implements OnInit {
         }
       }
     }));
-    this.subscription.push(this.store.select(socialState).pipe(select(s => s.checkEmailSubscriptionStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(socialState).pipe(select(s => s.checkEmailSubscriptionStatus)).subscribe(status => {
       if (status === true) {
         this.isSubscribed = true;
         this.message = 'This EmailId is already Subscribed!!';
@@ -58,7 +58,7 @@ export class NewsletterComponent implements OnInit {
         this.message = 'Your EmailId is Successfully Subscribed!!';
       }
     }));
-    this.subscription.push(this.store.select(socialState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
+    this.subscriptions.push(this.store.select(socialState).pipe(select(s => s.getTotalSubscriptionStatus)).subscribe(subscribers => {
       this.totalCount = subscribers['count'];
       this.cd.markForCheck();
     }));

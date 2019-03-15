@@ -21,7 +21,7 @@ import { Subscription } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<ReportGameComponent>;
@@ -40,7 +40,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef
   ) {
     super(store, userActions, utils, cd);
-    this.subscription.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
+    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       if (state === 'SUCCESS') {
         if ((this.dialogRef)) {
           this.dialogRef.close();
@@ -49,7 +49,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.subscription.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.snackBar.open(status, '', {
           viewContainerRef: this.viewContainerRef,
@@ -60,7 +60,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.subscription.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.subscriptions.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -96,10 +96,10 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
     this.dialogRef.componentInstance.ref = this.dialogRef;
 
-    this.subscription.push(this.dialogRef.afterOpen().subscribe(x => {
+    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
     }));
-    this.subscription.push(this.dialogRef.afterClosed().subscribe(x => {
+    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
       this.dialogRef = null;
     }));
   }

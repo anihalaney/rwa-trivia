@@ -9,14 +9,14 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 
-@AutoUnsubscribe({'arrayName': 'subscription'})
+@AutoUnsubscribe({'arrayName': 'subscriptions'})
 export class ShowHintWhenFocusOutDirective implements AfterViewInit, OnDestroy {
 
   controlRef: FormControl;
   hintRef: any;
   lostFocus = false;
   removeClass: string;
-  subscription = [];
+  subscriptions = [];
   
   @Input() stlShowHintWhenFocusOut: any;
 
@@ -33,7 +33,7 @@ export class ShowHintWhenFocusOutDirective implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     this.controlRef = this.stlShowHintWhenFocusOut.controlRef;
-    this.subscription.push(this.controlRef.valueChanges.subscribe(res => {
+    this.subscriptions.push(this.controlRef.valueChanges.subscribe(res => {
       if (this.lostFocus) {
         if (this.controlRef.invalid) {
           this.hintRef.style.visibility = 'visible';

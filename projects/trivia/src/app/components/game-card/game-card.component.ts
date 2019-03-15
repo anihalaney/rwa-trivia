@@ -14,7 +14,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() game: Game;
@@ -38,12 +38,12 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   gameStatus: any;
   defaultAvatar = 'assets/images/default-avatar-small.png';
   userDict$: Observable<{ [key: string]: User }>;
-  subscription = [];
+  subscriptions = [];
   constructor(public store: Store<AppState>, public utils: Utils, private cd: ChangeDetectorRef) {
 
     this.gameStatus = GameStatus;
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.subscription.push(this.user$.subscribe(user => {
+    this.subscriptions.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
@@ -51,7 +51,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       if (this.game) {
         this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
@@ -61,7 +61,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
     }));
 
     this.categoryDict$ = store.select(categoryDictionary);
-    this.subscription.push(this.categoryDict$.subscribe(categoryDict => {
+    this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
       this.cd.markForCheck();
     }));
@@ -69,7 +69,7 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
       this.user = s.user;
       this.myTurn = this.game.nextTurnPlayerId === this.user.userId;
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
@@ -116,6 +116,6 @@ export class GameCardComponent implements OnInit, OnChanges, OnDestroy {
       }
       this.cd.markForCheck();
     });
-    this.subscription.push(this.timerSub);
+    this.subscriptions.push(this.timerSub);
   }
 }

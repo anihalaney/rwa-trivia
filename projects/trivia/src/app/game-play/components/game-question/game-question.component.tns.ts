@@ -16,11 +16,11 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, OnChanges {
 
   @Input() user: User;
-  subscription = [];
+  subscriptions = [];
   answeredIndex: number;
   correctAnswerIndex: number;
   minutes = 0.62;
@@ -81,7 +81,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
           () => {
             this.timerSub.unsubscribe();
           });
-      this.subscription.push(this.timerSub);
+      this.subscriptions.push(this.timerSub);
     }
   }
 }

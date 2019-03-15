@@ -28,7 +28,7 @@ export class GameDialog {
   correctAnswerCount: number;
   totalRound: number;
   questionIndex: number;
-  subscription: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   timerSub: Subscription;
   questionSub: Subscription;
   timer: number;
@@ -69,9 +69,9 @@ export class GameDialog {
 
  // this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     // this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscription.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       // this.cd.detectChanges();
     }));
@@ -81,8 +81,8 @@ export class GameDialog {
     this.gameQuestionObs = store.select(gamePlayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.subscription.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
-    this.subscription.push(
+    this.subscriptions.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
+    this.subscriptions.push(
       this.gameObs.subscribe(game => {
         this.game = game;
         this.threeConsecutiveAnswer = false;
@@ -125,7 +125,7 @@ export class GameDialog {
 
       }));
 
-    this.subscription.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }

@@ -12,17 +12,17 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   styleUrls: ['./realtime-stats.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class RealtimeStatsComponent implements OnDestroy {
 
   systemStats: SystemStats;
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef) {
 
     this.store.dispatch(new StatActions.LoadSystemStat());
 
-    this.subscription.push(this.store.select(leaderBoardState).pipe(select(s => s.systemStat)).subscribe(systemStats => {
+    this.subscriptions.push(this.store.select(leaderBoardState).pipe(select(s => s.systemStat)).subscribe(systemStats => {
       if (systemStats !== null) {
         this.systemStats = systemStats;
         this.cd.markForCheck();

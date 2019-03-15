@@ -14,16 +14,16 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscription' })
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteFriendsDialogComponent implements OnInit, OnDestroy {
 
   user: User;
   navLinks = [];
   ref: any;
-  subscription = [];
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private renderer: Renderer2, private utils: Utils) {
-    this.subscription.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
   }
 
   ngOnInit() {
