@@ -42,7 +42,7 @@
                         </StackLayout>
                     </CardView>
                 </StackLayout>
-                <StackLayout row="3" col="0" *ngIf="user && waitingForOponentCount">
+                <StackLayout row="3" col="0" *ngIf="user && waitingForOpponentCount">
                     <CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white">
                         <StackLayout *ngIf="activeGames && userDict">
                             <Label text="Waiting for Opponent" orientation="horizontal" horizontalAlignment="center"
