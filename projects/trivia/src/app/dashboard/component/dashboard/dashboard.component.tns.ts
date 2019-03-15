@@ -58,18 +58,18 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   startNewGame() {
     if (this.applicationSettings && this.applicationSettings.lives.enable) {
       if (this.account.lives > 0) {
-        this.routerExtension.navigate(['/game-play']);
+        this.routerExtension.navigate(['/game-play'], { clearHistory: true });
       }
     } else {
-      this.routerExtension.navigate(['/game-play']);
+      this.routerExtension.navigate(['/game-play'], { clearHistory: true });
     }
 
   }
 
   filterGame(game: Game): boolean {
     return game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-    game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
-    || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
+      game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
+      || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
   }
 
 

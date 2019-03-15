@@ -1,18 +1,16 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewContainerRef } from '@angular/core';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
+import { select, Store } from '@ngrx/store';
+import * as domtoimage from 'dom-to-image';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
+import { coreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { Store, select } from '@ngrx/store';
 import * as dashboardactions from '../../../dashboard/store/actions';
+import { AppState, appState } from '../../../store';
 import { gamePlayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import * as domtoimage from 'dom-to-image';
 import { GameOver } from './game-over';
-import { coreState } from 'shared-library/core/store';
-import { MatSnackBar } from '@angular/material';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'game-over',
@@ -135,7 +133,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       }
     }
 
-    for (let src in sources) {
+    for (const src in sources) {
       if (sources.hasOwnProperty(src)) {
         images[src] = new Image();
         images[src].onload = () => {
@@ -181,7 +179,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
+    this.utils.unsubscribe(this.subscriptions);
+    this.destroy();
   }
 
 }
