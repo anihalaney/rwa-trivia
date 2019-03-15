@@ -42,7 +42,8 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       userActions, windowRef,
       platformId,
       ngZone,
-      utils);
+      utils,
+      cd);
     this.gameStatus = GameStatus;
 
   }
