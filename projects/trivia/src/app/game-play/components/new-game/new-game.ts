@@ -26,10 +26,8 @@ export class NewGame implements OnDestroy {
   uFriends: Array<string>;
   userDict: { [key: string]: User } = {};
   noFriendsStatus: boolean;
-  filteredTags$: Observable<string[]>;
   user: User;
   friendUserId: string;
-  loaderStatus = false;
   errMsg: string;
   life: number;
   gameErrorMsg: String = 'Sorry, don\'t have enough life.';
@@ -99,6 +97,22 @@ export class NewGame implements OnDestroy {
 
   removeEnteredTag(tag) {
     this.selectedTags = this.selectedTags.filter(t => t !== tag);
+  }
+
+  destroy() {
+    this.userDict = {};
+    this.categories = [];
+    this.tags = [];
+    this.selectedTags = [];
+    this.uFriends = [];
+    this.tagsObs = undefined;
+    this.applicationSettings = undefined;
+    this.gameOptions = undefined;
+    this.noFriendsStatus = undefined;
+    this.user = undefined;
+    this.friendUserId = undefined;
+    this.errMsg = undefined;
+    this.life = undefined;
   }
 
   selectFriendId(friendId: string) {

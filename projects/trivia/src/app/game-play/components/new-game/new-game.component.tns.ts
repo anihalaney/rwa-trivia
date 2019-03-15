@@ -17,6 +17,7 @@ import * as Toast from 'nativescript-toast';
 import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ListViewEventData } from 'nativescript-ui-listview';
 
 @Component({
   selector: 'new-game',
@@ -54,13 +55,15 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     super(store, utils, gameActions, userActions);
     this.initDataItems();
   }
-
   ngOnInit() {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-      this.cd.markForCheck();
+      if (gameObj && gameObj['gameId']) {
+        this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
+        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+        this.cd.markForCheck();
+      }
+
     }));
 
     this.subscriptions.push(this.categoriesObs.subscribe(categories => {
@@ -133,6 +136,22 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   ngOnDestroy() {
 
+    this.utils.unsubscribe(this.subscriptions);
+
+    this.playerMode = undefined;
+    this.showSelectPlayer = undefined;
+    this.showSelectCategory = undefined;
+    this.showSelectTag = undefined;
+    this.dataItem = undefined;
+    this.categoriesObs = undefined;
+    this.categories = [];
+    this.subscriptions = [];
+    this.customTag = undefined;
+    this.categoryIds = [];
+    this.tagItems = undefined;
+    this.filteredCategories = [];
+
+    this.destroy();
   }
 
   addCustomTag() {
@@ -160,7 +179,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.startNewGame(this.gameOptions);
   }
 
-  selectCategory(category) {
+  selectCategory(args: ListViewEventData) {
+    const category: Category = this.filteredCategories[args.index];
     if (!category.requiredForGamePlay) {
       category.isSelected = !category.isSelected;
     }
@@ -218,6 +238,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   navigateToInvite() {
+    this.ngOnDestroy();
     this.router.navigate(['/my/app-invite-friends-dialog']);
   }
 

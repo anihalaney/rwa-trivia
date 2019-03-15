@@ -43,7 +43,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
   }
 
-
   ngOnDestroy() {
 
   }
@@ -54,7 +53,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     }
 
   }
-
 
   getImage(userId) {
     return this.utils.getImageUrl(this.userDict[userId], 44, 40, '44X40');
