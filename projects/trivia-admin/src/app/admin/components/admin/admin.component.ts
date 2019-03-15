@@ -5,12 +5,15 @@ import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 import { User } from 'shared-library/shared/model';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'admin-dashboard',
   templateUrl: './admin.component.html',
   styleUrls: ['./admin.component.scss']
 })
+
+@AutoUnsubscribe()
 export class AdminComponent implements OnInit, OnDestroy {
   user: User;
   sub: any;
@@ -31,9 +34,6 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
 
   }
 }

@@ -92,6 +92,8 @@ export class AccountService {
             (game.winnerPlayerId === userId) ?
                 account.wins = (account.wins) ? account.wins + 1 : 1 :
                 account.losses = (account.losses) ? account.losses + 1 : 1;
+        } else {
+            account.losses = (account.losses) ? account.losses + 1 : 1;
         }
 
         account.badges = (account.badges) ? account.badges + score : score;

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
-  ViewChildren, QueryList, ElementRef } from '@angular/core';
+  ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -14,13 +14,16 @@ import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import * as Toast from 'nativescript-toast';
 import { Page, isAndroid } from 'tns-core-modules/ui/page';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-question-add-update',
   templateUrl: './question-add-update.component.html',
-  styleUrls: ['./question-add-update.component.css']
+  styleUrls: ['./question-add-update.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy, OnChanges {
 
   showSelectCategory = false;
@@ -31,6 +34,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   categoryIds: any[];
   submitBtnTxt: string;
   actionBarTxt: string;
+  subscriptions = [];
   @Input() editQuestion: Question;
   @Output() hideQuestion = new EventEmitter<boolean>();
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
@@ -47,7 +51,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     public utils: Utils,
     public questionAction: QuestionActions,
     private routerExtension: RouterExtensions,
-    private page: Page) {
+    private page: Page, private cd: ChangeDetectorRef) {
 
     super(fb, store, utils, questionAction);
 
@@ -55,21 +59,22 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.actionBarTxt = 'Submit Question';
     this.initDataItems();
     this.question = new Question();
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.createForm(this.question);
       }
+      this.cd.markForCheck();
     })
     );
 
 
     const questionControl = this.questionForm.get('questionText');
 
-    questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
-    this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
+    this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
 
-    this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
         Toast.makeText('Question saved!').show();
@@ -80,8 +85,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
           this.toggleLoader(false);
         }, 0);
       }
+      this.cd.markForCheck();
     }));
-
   }
 
   ngOnChanges() {
@@ -167,16 +172,17 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   hideKeyboard() {
     this.textField
-    .toArray()
-    .map((el) => {
-      if ( isAndroid ) {
-        el.nativeElement.android.clearFocus();
-      }
-      return el.nativeElement.dismissSoftInput(); });
+      .toArray()
+      .map((el) => {
+        if (isAndroid) {
+          el.nativeElement.android.clearFocus();
+        }
+        return el.nativeElement.dismissSoftInput();
+      });
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 }
 

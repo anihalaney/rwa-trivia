@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
@@ -6,17 +6,20 @@ import { GamePlayState } from '../../store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { GameDialog } from './game-dialog';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'game-dialog',
   templateUrl: './game-dialog.component.html',
-  styleUrls: ['./game-dialog.component.scss']
+  styleUrls: ['./game-dialog.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameDialogComponent extends GameDialog implements OnDestroy {
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class GameDialogComponent extends GameDialog implements OnDestroy {
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
-    public userActions: UserActions, public utils: Utils) {
-    super(store, userActions, utils);
+    public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
+    super(store, userActions, utils, cd);
   }
 
   continueClicked($event) {
@@ -39,15 +42,12 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
         this.getNextQuestion();
       }
     }
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
-    if (this.timerSub) {
-      this.utils.unsubscribe([this.timerSub]);
-    }
-
-    this.utils.unsubscribe(this.sub);
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
+    this.destroy();
   }
 
   // Hide menu if question display

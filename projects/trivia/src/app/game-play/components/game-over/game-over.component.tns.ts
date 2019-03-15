@@ -1,41 +1,50 @@
-import { Component, OnInit, OnDestroy, ViewContainerRef } from '@angular/core';
-import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
-import { UserActions } from 'shared-library/core/store/actions';
-import { Store, select } from '@ngrx/store';
-import { gamePlayState } from '../../store';
-import { GameOver } from './game-over';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
-import { ReportGameComponent } from './../report-game/report-game.component';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { getImage } from 'nativescript-screenshot';
 import * as SocialShare from "nativescript-social-share";
-import { Image } from "tns-core-modules/ui/image";
-import { coreState } from 'shared-library/core/store';
 import * as Toast from 'nativescript-toast';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { coreState } from 'shared-library/core/store';
+import { UserActions } from 'shared-library/core/store/actions';
+import { AppState, appState } from '../../../store';
+import { gamePlayState } from '../../store';
+import { GameOver } from './game-over';
+import { ReportGameComponent } from './../report-game/report-game.component';
+import { Image } from "tns-core-modules/ui/image";
 
 @Component({
   selector: 'game-over',
   templateUrl: './game-over.component.html',
-  styleUrls: ['./game-over.component.scss']
+  styleUrls: ['./game-over.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   stackLayout;
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
     private windowRef: WindowRef, public utils: Utils,
-    private modal: ModalDialogService, private vcRef: ViewContainerRef) {
-    super(store, userActions, utils);
+    private modal: ModalDialogService, private vcRef: ViewContainerRef,
+    public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
+    super(store, userActions, utils, cd);
 
-    this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => { }));
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+
+    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
+      this.cd.markForCheck();
+    }));
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         Toast.makeText(status).show();
         this.disableFriendInviteBtn = true;
       }
+      this.cd.markForCheck();
     }));
 
-    this.subs.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.subscriptions.push(this.store.select(appState.dashboardState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -49,6 +58,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         this.socialFeedData.share_status = false;
         this.loaderStatus = false;
       }
+      this.cd.markForCheck();
     }));
   }
   ngOnInit() {
@@ -64,7 +74,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subscriptions);
+    this.destroy();
   }
 
   openDialog(question) {
@@ -98,5 +109,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       SocialShare.shareImage(shareImage);
       this.playerUserName = 'You';
     }, 100);
+  }
+
+  gotoDashboard() {
+    this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
   }
 }

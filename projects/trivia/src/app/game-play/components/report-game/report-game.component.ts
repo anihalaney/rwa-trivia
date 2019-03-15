@@ -1,4 +1,4 @@
-import { Component, Input, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, Inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import {
@@ -9,12 +9,16 @@ import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
-    styleUrls: ['./report-game.component.scss']
+    styleUrls: ['./report-game.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
@@ -26,18 +30,19 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     userDict: { [key: string]: User };
     categoryDict$: Observable<{ [key: number]: Category }>;
     categoryDict: { [key: number]: Category };
-    subs: Subscription[] = [];
+    subscriptions = [];
 
     constructor(private fb: FormBuilder, private store: Store<AppState>,
-        @Inject(MAT_DIALOG_DATA) public data: any , public utils: Utils) {
+        @Inject(MAT_DIALOG_DATA) public data: any , public utils: Utils, private cd: ChangeDetectorRef) {
         this.question = data.question;
         this.user = data.user;
         this.game = data.game;
         this.userDict = data.userDict;
 
         this.categoryDict$ = store.select(categoryDictionary);
-        this.subs.push(this.categoryDict$.subscribe(categoryDict => {
+        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
+            this.cd.markForCheck();
         }));
 
     }
@@ -79,7 +84,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.utils.unsubscribe(this.subs);
+
     }
 }
 

@@ -4,6 +4,7 @@ import { Question, QuestionStatus, Category, User, Answer } from '../../model';
 import { Utils } from '../../../core/services';
 import { Observable, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
 @Component({
@@ -12,6 +13,8 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./question-form.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() editQuestion: Question;
@@ -21,10 +24,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
 
   questionForm: FormGroup;
-
-
-  subs: Subscription[] = [];
-
   // Properties
   categories: Category[];
   tags: string[];
@@ -32,6 +31,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   autoTags: string[] = []; // auto computed based on match within Q/A
   enteredTags: string[] = [];
   user: User;
+  subscriptions = [];
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -56,11 +56,10 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
     const questionControl = this.questionForm.get('questionText');
 
-    questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
-    this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
-
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
+    this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
   }
 
@@ -211,7 +210,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
 }

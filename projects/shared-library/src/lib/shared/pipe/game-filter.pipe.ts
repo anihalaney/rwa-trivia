@@ -1,26 +1,14 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import { GameStatus, User } from 'shared-library/shared/model';
-import { CoreState, coreState } from './../../core/store';
-import { Store, select } from '@ngrx/store';
+import { Game, User } from 'shared-library/shared/model';
 @Pipe({
-    name: 'gamefilter',
+    name: 'gameFilter',
     pure: false
 })
 export class GameFilterPipe implements PipeTransform {
-    gameStatus: any = GameStatus;
-    user: User;
-    constructor(public store: Store<CoreState>) {
-
-        this.store.select(coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.user = user;
-
-        });
-
-    }
-    transform(items: any[], gamefilter: (item: any, gameStatus, user) => boolean): any {
-        if (!items || !gamefilter) {
-            return items;
+    transform(games: Game[], gameFilter: (game: Game) => boolean): Game[] {
+        if (!games || !gameFilter) {
+            return games;
         }
-        return items.filter(item => gamefilter(item, this.gameStatus, this.user));
+        return games.filter(game => gameFilter(game));
     }
 }
