@@ -12,6 +12,8 @@ import * as SocialShare from "nativescript-social-share";
 import { Image } from "tns-core-modules/ui/image";
 import { coreState } from 'shared-library/core/store';
 import * as Toast from 'nativescript-toast';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'game-over',
@@ -19,8 +21,9 @@ import * as Toast from 'nativescript-toast';
   styleUrls: ['./game-over.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   stackLayout;
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
@@ -29,10 +32,10 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
 
-    this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
+    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
     }));
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         Toast.makeText(status).show();
         this.disableFriendInviteBtn = true;
@@ -40,7 +43,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.subs.push(this.store.select(appState.dashboardState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.subscriptions.push(this.store.select(appState.dashboardState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -70,7 +73,6 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
   }
 
   openDialog(question) {

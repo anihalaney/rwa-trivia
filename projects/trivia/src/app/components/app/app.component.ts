@@ -11,21 +11,19 @@ import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { UserActions, ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { coreState } from 'shared-library/core/store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'trivia!';
   user: User;
-  sub: Subscription;
-  sub2: Subscription;
-  sub3: Subscription;
-  sub4: Subscription;
-  sub5: Subscription;
-
+  subscriptions = [];
   theme = '';
   constructor(private renderer: Renderer2,
     private authService: AuthenticationProvider,
@@ -39,16 +37,16 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
 
-    this.sub2 = store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
         let url: string;
-        this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.invitationToken)).subscribe(status => {
           if (status !== 'NONE') {
             this.store.dispatch(this.userAction.makeFriend({ token: status, email: this.user.email, userId: this.user.authState.uid }));
           }
-        });
-        this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl);
+        }));
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => url = s.loginRedirectUrl));
         if (url) {
           this.router.navigate([url]);
         }
@@ -57,19 +55,19 @@ export class AppComponent implements OnInit, OnDestroy {
         // if user logs out then redirect to home page
         this.router.navigate(['/']);
       }
-    });
+    }));
 
-    this.sub3 = this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.router.navigate(['/game-play', gameObj['gameId']]);
       this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-    });
+    }));
 
-    this.sub4 = this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
         this.router.navigate(['my/invite-friends']);
         this.snackBar.open('You become the friend!', '', { duration: 2000 });
       }
-    });
+    }));
 
   }
 
@@ -91,7 +89,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe([this.sub, this.sub2, this.sub3, this.sub4]);
+
   }
 
   login() {

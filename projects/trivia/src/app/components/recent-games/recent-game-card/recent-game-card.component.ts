@@ -5,7 +5,7 @@ import { User, Game, Category, PlayerMode, GameStatus } from 'shared-library/sha
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'recent-game-card',
@@ -13,6 +13,8 @@ import { UserActions } from 'shared-library/core/store/actions';
     styleUrls: ['./recent-game-card.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     @Input() game: Game;
     // @Input() userDict: { [key: string]: User };
@@ -27,18 +29,18 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
     categoryDict: { [key: number]: Category };
     otherUserId: string;
     userProfileImageUrl: string;
-    subs: Subscription[] = [];
     GameStatus = GameStatus;
+    subscriptions = [];
 
 
     constructor(private store: Store<AppState>, private userActions: UserActions, public utils: Utils, private cd: ChangeDetectorRef) {
         this.categoryDictObs = store.select(categoryDictionary);
-        this.subs.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+        this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
     }
 
     ngOnInit(): void {
         this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-        this.subs.push(this.userDict$.subscribe(userDict => {
+        this.subscriptions.push(this.userDict$.subscribe(userDict => {
         this.userDict = userDict;
             this.cd.markForCheck();
         }));
@@ -77,6 +79,5 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnDestroy() {
         // this.cd.detach();
-        this.utils.unsubscribe(this.subs);
     }
 }

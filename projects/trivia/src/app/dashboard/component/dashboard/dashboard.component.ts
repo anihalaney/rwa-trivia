@@ -20,7 +20,7 @@ export class DashboardComponent extends Dashboard implements OnInit {
     @Inject(PLATFORM_ID) platformId: Object,
     utils: Utils,
     ngZone: NgZone,
-    cd: ChangeDetectorRef,
+    cd: ChangeDetectorRef
     ) {
     super(store,
       questionActions,

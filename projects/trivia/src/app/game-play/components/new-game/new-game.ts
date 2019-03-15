@@ -6,18 +6,21 @@ import { GameActions, UserActions } from 'shared-library/core/store/actions/inde
 import { Category, GameOptions, User, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { OnDestroy } from '@angular/core';
 
-export class NewGame {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class NewGame implements OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
   tagsObs: Observable<string[]>;
   tags: string[];
   userDict$: Observable<{ [key: string]: User }>;
   selectedTags: string[];
-  subs: Subscription[] = [];
   applicationSettings: ApplicationSettings;
   gameOptions: GameOptions;
-
+  subscriptions = [];
   showUncheckedCategories: Boolean = false;
   allCategoriesSelected: Boolean = true;
   uFriends: Array<string>;
@@ -40,10 +43,10 @@ export class NewGame {
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
         this.user = user;
         if (this.user.tags && this.user.tags.length > 0) {
@@ -57,7 +60,7 @@ export class NewGame {
       }
     }));
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
@@ -85,7 +88,7 @@ export class NewGame {
 
   startNewGame(gameOptions: GameOptions) {
     let user: User;
-    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user)); // logged in user
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => user = s.user)); // logged in user
     gameOptions.friendId = this.friendUserId;
     this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }
@@ -101,5 +104,9 @@ export class NewGame {
   selectFriendId(friendId: string) {
     this.friendUserId = friendId;
     this.errMsg = undefined;
+  }
+
+  ngOnDestroy() {
+
   }
 }

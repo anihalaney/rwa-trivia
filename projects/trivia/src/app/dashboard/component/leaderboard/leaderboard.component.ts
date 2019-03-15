@@ -9,19 +9,20 @@ import { dashboardState } from '../../store';
 import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
 import { ActivatedRoute } from '@angular/router';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
   styleUrls: ['./leaderboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LeaderboardComponent implements OnDestroy, AfterViewInit {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User };
   leaderBoardStatDict: { [key: string]: Array<LeaderBoardUser> };
-  subs: Subscription[] = [];
   leaderBoardCat: Array<string>;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -36,6 +37,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   defaultAvatar = 'assets/images/default-avatar-small.png';
   unknown = LeaderBoardConstants.UNKNOWN;
   category: string;
+  subscriptions = [];
 
   constructor(private store: Store<AppState>,
     private userActions: UserActions,
@@ -53,23 +55,23 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
     this.maxLeaderBoardDisplay = 10;
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       this.cd.markForCheck();
     }));
 
     this.categoryDict$ = this.store.select(categoryDictionary);
 
-    this.subs.push(this.categoryDict$.subscribe(categoryDict => {
+    this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
       this.categoryDict = categoryDict;
       this.cd.markForCheck();
     }));
 
-    this.subs.push(this.store.select(dashboardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
+    this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
-        // this.cd.detectChanges();
+      //  this.cd.detectChanges();
         if (this.leaderBoardCat.length > 0) {
           this.leaderBoardCat.map((cat) => {
             this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
@@ -104,6 +106,6 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 }
