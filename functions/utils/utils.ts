@@ -40,17 +40,41 @@ export class Utils {
 
     static getFireStorageBucket(admin: any): any {
         if (Utils.isEnvProduction()) {
-            return  admin.storage().bucket(GeneralConstants.BIT_WISER_PROD_STORAGE_BUCKET_NAME);
+            return admin.storage().bucket(GeneralConstants.BIT_WISER_PROD_STORAGE_BUCKET_NAME);
         } else {
             return admin.storage().bucket(GeneralConstants.BIT_WISER_DEV_STORAGE_BUCKET_NAME);
         }
     }
 
     static isEnvProduction(): boolean {
-        return ( functions.config().elasticsearch &&
+        return (functions.config().elasticsearch &&
             functions.config().elasticsearch.index &&
             functions.config().elasticsearch.index.production &&
-            functions.config().elasticsearch.index.production === GeneralConstants.TRUE ) ? true : false;
+            functions.config().elasticsearch.index.production === GeneralConstants.TRUE) ? true : false;
     }
 
+    static getESPrefix(): string {
+        // set required prefix for different deployment environments(firebase project) using following command
+        // default project in firebase is development deployment
+        // firebase -P production functions:config:set elasticsearch.index.production=true
+        // After setting config variable do not forget to deploy functions
+        // to see set environments firebase -P production functions:config:get
+        let prefix = 'dev:';
+        if (Utils.isEnvProduction()) {
+            prefix = '';
+        }
+        return prefix;
+    }
+
+    static getWebsiteUrl(): string {
+        let websiteUrl = `https://`;
+        if (Utils.isEnvProduction()) {
+            websiteUrl += 'bitwiser.io';
+        } else {
+            websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
+        }
+
+        return websiteUrl;
+
+    }
 }

@@ -20,17 +20,7 @@ export class ESUtils {
   }
 
   static getIndex(index: string): string {
-    // set required prefix for different deployment environments(firebase project) using following command
-    // default project in firebase is development deployment
-    // firebase -P production functions:config:set ElasticSearch.index.production=true
-    // After setting config variable do not forget to deploy functions
-    // to see set environments firebase -P production functions:config:get
-    let prefix = 'dev:';
-
-    if (Utils.isEnvProduction()) {
-
-      prefix = '';
-    }
+    const prefix = Utils.getESPrefix();
     console.log(`index prefix is "${prefix}"`);
     return prefix + index;
   }

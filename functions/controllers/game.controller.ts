@@ -116,14 +116,7 @@ export class GameController {
      */
     static async createSocialContent(req, res) {
 
-        let websiteUrl = `https://`;
-
-        if (Utils.isEnvProduction()) {
-            websiteUrl += 'bitwiser.io';
-        } else {
-            websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
-        }
-
+        const websiteUrl = Utils.getWebsiteUrl();
         const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;
 
         const htmlContent = `<!DOCTYPE html>
