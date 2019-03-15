@@ -7,11 +7,9 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
-import { OnDestroy } from '@angular/core';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class QuestionAddUpdate implements OnDestroy {
+
+export class QuestionAddUpdate {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
@@ -140,8 +138,6 @@ export class QuestionAddUpdate implements OnDestroy {
     this.store.dispatch(new userActions.AddQuestion({ question: question }));
   }
 
-  ngOnDestroy() {
-  }
 }
 
 

@@ -9,12 +9,9 @@ import { userState } from '../../../user/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { UserActions } from 'shared-library/core/store';
-import { ViewChildren, QueryList, HostListener, OnDestroy } from '@angular/core';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ViewChildren, QueryList, HostListener } from '@angular/core';
 
-
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ProfileSettings implements OnDestroy {
+export class ProfileSettings {
     @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
     user: User;
@@ -231,7 +228,4 @@ export class ProfileSettings implements OnDestroy {
         this.inputEl.toArray()[i].nativeElement.focus();
     }
 
-    ngOnDestroy() {
-
-    }
 }
