@@ -36,7 +36,7 @@ export class QuestionComponent implements OnDestroy {
     this.correctAnswerText = '';
     this.subscriptions.push(this.store.select(categoryDictionary).subscribe(categories => {
       this.categoryDictionary = categories;
-      this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
@@ -57,8 +57,9 @@ export class QuestionComponent implements OnDestroy {
               }
             }).join(',');
           }
+          this.cd.markForCheck();
         }
-      });
+      }));
       this.cd.markForCheck();
     }));
 
