@@ -161,7 +161,7 @@
                                 *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"></Button>
                             <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend" (tap)="inviteAsFriend()"
                             isEnabled="{{!disableFriendInviteBtn}}" *ngIf="game.gameOptions.opponentType == opponentType.Random"></Button>
-                            <Button row="1" col="3" class="navigate-button Hind-Medium" text="Home" [nsRouterLink]="['/dashboard']"></Button>
+                            <Button row="1" col="3" class="navigate-button Hind-Medium" text="Home" (tap)="gotoDashboard()"></Button>
                         </GridLayout>
                     </StackLayout>
                 </StackLayout>

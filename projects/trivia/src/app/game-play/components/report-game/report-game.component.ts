@@ -9,6 +9,7 @@ import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'report-game',
@@ -16,6 +17,8 @@ import { Utils } from 'shared-library/core/services';
     styleUrls: ['./report-game.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
@@ -27,7 +30,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     userDict: { [key: string]: User };
     categoryDict$: Observable<{ [key: number]: Category }>;
     categoryDict: { [key: number]: Category };
-    subs: Subscription[] = [];
+    subscriptions = [];
 
     constructor(private fb: FormBuilder, private store: Store<AppState>,
         @Inject(MAT_DIALOG_DATA) public data: any , public utils: Utils, private cd: ChangeDetectorRef) {
@@ -37,7 +40,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
         this.userDict = data.userDict;
 
         this.categoryDict$ = store.select(categoryDictionary);
-        this.subs.push(this.categoryDict$.subscribe(categoryDict => {
+        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
             this.cd.markForCheck();
         }));
@@ -81,7 +84,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.utils.unsubscribe(this.subs);
+
     }
 }
 

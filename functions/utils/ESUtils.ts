@@ -3,6 +3,7 @@ import * as functions from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
+import { Utils } from './utils';
 
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
@@ -19,21 +20,7 @@ export class ESUtils {
   }
 
   static getIndex(index: string): string {
-    // set required prefix for different deployment environments(firebase project) using following command
-    // default project in firebase is development deployment
-    // firebase -P production functions:config:set ElasticSearch.index.production=true
-    // After setting config variable do not forget to deploy functions
-    // to see set environments firebase -P production functions:config:get
-    let prefix = 'dev:';
-
-    if (functions.config().elasticsearch &&
-      functions.config().elasticsearch.index &&
-      functions.config().elasticsearch.index.production &&
-      // tslint:disable-next-line:triple-equals
-      functions.config().elasticsearch.index.production == 'true') {
-
-      prefix = '';
-    }
+    const prefix = Utils.getESPrefix();
     console.log(`index prefix is "${prefix}"`);
     return prefix + index;
   }

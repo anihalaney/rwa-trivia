@@ -6,7 +6,7 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
-import * as socialactions from '../../../social/store/actions';
+import * as dashboardactions from '../../../dashboard/store/actions';
 import { gamePlayState } from '../../store';
 
 export class GameOver implements OnInit {
@@ -35,10 +35,10 @@ export class GameOver implements OnInit {
   opponentType = OpponentType;
   disableFriendInviteBtn = false;
   defaultAvatar = 'assets/images/default-avatar-game-over.png';
-  subs: Subscription[] = [];
   account: Account;
   applicationSettings: ApplicationSettings;
   liveErrorMsg = 'Sorry, don\'t have enough life.';
+  subscriptions = [];
 
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
@@ -47,18 +47,18 @@ export class GameOver implements OnInit {
   constructor(public store: Store<AppState>, public userActions: UserActions,
     public utils: Utils, public cd: ChangeDetectorRef) {
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
     }));
 
-    this.subs.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
       this.account = account;
     }));
 
     this.user$ = this.store.select(appState.coreState).pipe(select(s => s.user));
-    this.subs.push(this.user$.subscribe(user => {
+    this.subscriptions.push(this.user$.subscribe(user => {
       if (user !== null) {
         this.user = user;
       }
@@ -69,14 +69,14 @@ export class GameOver implements OnInit {
       share_status: false,
       link: this.imageUrl
     };
-    this.store.dispatch(new socialactions.LoadSocialScoreShareUrlSuccess(null));
+    this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrlSuccess(null));
 
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subs.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
     }));
 
-    this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
+    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
         this.questionsArray = stats;
         this.questionsArray.map((question) => {
@@ -126,4 +126,23 @@ export class GameOver implements OnInit {
         { userId: this.user.userId, inviteeUserId: inviteeUserId }));
     }
   }
+
+  destroy() {
+    this.user$ = undefined;
+    this.user = undefined;
+    this.otherUserId = undefined;
+    this.otherUserInfo = undefined;
+    this.questionsArray = [];
+    this.socialFeedData = undefined;
+    this.imageUrl = undefined;
+    this.disableRematchBtn = undefined;
+    this.PlayerMode = undefined;
+    this.loaderStatus = undefined;
+    this.opponentType = undefined;
+    this.disableFriendInviteBtn = undefined;
+    this.subscriptions = [];
+    this.account = undefined;
+    this.applicationSettings = undefined;
+  }
+
 }

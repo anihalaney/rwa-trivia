@@ -6,12 +6,15 @@ import { Store, select } from '@ngrx/store';
 
 import { AppState, appState } from '../../../store';
 import { Category } from 'shared-library/shared/model';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'category-list',
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
+
+@AutoUnsubscribe()
 export class CategoriesComponent implements OnInit, OnDestroy {
   categoriesObs: Observable<Category[]>;
   categories: Category[];
@@ -26,7 +29,5 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.sub)
-      this.sub.unsubscribe();
   }
 }

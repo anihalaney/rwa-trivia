@@ -10,6 +10,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { Papa } from 'ngx-papaparse';
 import * as bulkActions from '../../../bulk/store/actions';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'bulk-upload',
@@ -17,6 +18,8 @@ import * as bulkActions from '../../../bulk/store/actions';
   styleUrls: ['./bulk-upload.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class BulkUploadComponent implements OnInit, OnDestroy {
 
   primaryTag;
@@ -34,7 +37,6 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
 
   // Properties
   categories: Category[];
-  subs: Subscription[] = [];
 
   tags: string[];
   filteredTags$: Observable<string[]>;
@@ -49,7 +51,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   // Show Instruction Card
   showInstructions: Boolean = true;
   myTabIndex: Number = 0;
-
+  subscriptions = [];
   // application Settings
   applicationSettings: ApplicationSettings;
 
@@ -58,18 +60,18 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     private utils: Utils, private cd: ChangeDetectorRef) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
-    this.subs.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => {
        this.user = s.user;
        this.cd.markForCheck();
     }));
   }
 
   ngOnInit() {
-    this.subs.push(this.categoriesObs.subscribe(categories => {
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => {
       this.categories = categories;
       this.cd.markForCheck();
     }));
-    this.subs.push(this.tagsObs.subscribe(tags => {
+    this.subscriptions.push(this.tagsObs.subscribe(tags => {
      this.tags = tags;
      this.cd.markForCheck();
     }));
@@ -83,7 +85,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
     this.filteredTags$ = this.uploadFormGroup.get('tagControl').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
@@ -270,7 +272,7 @@ export class BulkUploadComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
   showUploadSteps() {

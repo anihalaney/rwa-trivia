@@ -14,6 +14,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     moduleId: module.id,
@@ -22,6 +23,8 @@ import { filter } from 'rxjs/operators';
     styleUrls: ['drawer-component.css']
 
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class DrawerComponent implements OnInit, OnDestroy {
 
     @Output() output = new EventEmitter();
@@ -35,7 +38,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     version: string;
     logOut: boolean;
     pushToken: string;
-    subs: Subscription[] = [];
+    subscriptions = [];
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
@@ -47,11 +50,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
                 const nav = val.url;
-                if (nav.includes('/stats/leaderboard')) {
+                if (nav.includes('/dashboard/leaderboard')) {
                     this.activeMenu = 'Category Leaderboard';
                 } else if (nav === '/dashboard') {
                     this.activeMenu = 'Home';
-                } else if (nav === '/my/recent-game') {
+                } else if (nav === '/recent-game') {
                     this.activeMenu = 'Recently Completed Games';
                 } else if (nav.includes('/my/profile')) {
                     this.activeMenu = 'Profile';
@@ -63,12 +66,13 @@ export class DrawerComponent implements OnInit, OnDestroy {
             }
         });
         this.categoriesObs = store.select(coreState).pipe(select(s => s.categories));
-        this.subs.push(this.categoriesObs.subscribe(categories => {
+        this.categoriesObs.subscribe(categories => {
             this.categories = categories;
-        }));
+        });
+        this.subscriptions.push(this.categoriesObs);
     }
     ngOnInit() {
-        this.subs.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
                 this.user = user;
@@ -94,7 +98,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     });
                 }
             } else if (this.logOut) {
-                 /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
+                /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
                 setTimeout(() => {
                     this.resetValues();
                 }, 2000);
@@ -108,7 +112,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     leaderBoard(category) {
-        this.routerExtension.navigate(['/stats/leaderboard', category]);
+        this.routerExtension.navigate(['/dashboard/leaderboard', category]);
         this.closeDrawer();
     }
 
@@ -150,7 +154,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     recentGame() {
-        this.routerExtension.navigate(['/my/recent-game']);
+        this.routerExtension.navigate(['/recent-game']);
         this.closeDrawer();
     }
 
@@ -170,6 +174,6 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-        this.utils.unsubscribe(this.subs);
+
     }
 }

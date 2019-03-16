@@ -11,9 +11,9 @@ import { Game } from './game';
   templateUrl: './game.component.html',
   styleUrls: ['./game.component.scss']
 })
+
 export class GameComponent extends Game implements OnInit, OnDestroy {
   user: User;
-  subs: Subscription[] = [];
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   displayQuestion = false;
@@ -27,6 +27,6 @@ export class GameComponent extends Game implements OnInit, OnDestroy {
 
   }
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+   
   }
 }
