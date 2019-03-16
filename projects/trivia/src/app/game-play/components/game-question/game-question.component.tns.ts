@@ -7,6 +7,7 @@ import { GamePlayState } from '../../store';
 import { appState } from '../../../store';
 import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'game-question',
@@ -14,10 +15,12 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./game-question.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameQuestionComponent extends GameQuestion implements OnInit, OnDestroy, OnChanges {
 
   @Input() user: User;
-
+  subscriptions = [];
   answeredIndex: number;
   correctAnswerIndex: number;
   minutes = 0.62;
@@ -40,19 +43,16 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
   }
 
-
   ngOnDestroy() {
-    if (this.timerSub) {
-      this.timerSub.unsubscribe();
-    }
+
   }
+
   fillTimer() {
     if (!(this.answeredIndex !== null && this.answeredIndex !== undefined)) {
       this.progressValue = 100;
     }
 
   }
-
 
   getImage(userId) {
     return this.utils.getImageUrl(this.userDict[userId], 44, 40, '44X40');
@@ -65,7 +65,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
     if (changes.timer) {
       this.timer = this.MAX_TIME_IN_SECONDS - changes.timer.currentValue;
       if (this.timerSub) {
-        this.timerSub.unsubscribe();
+        this.utils.unsubscribe([this.timerSub]);
       }
       this.progressValue = (this.timer * 100) / this.MAX_TIME_IN_SECONDS;
 
@@ -77,8 +77,9 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
         },
           null,
           () => {
-            this.timerSub.unsubscribe();
+            this.utils.unsubscribe([this.timerSub]);
           });
+      this.subscriptions.push(this.timerSub);
     }
   }
 }

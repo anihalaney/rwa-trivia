@@ -28,7 +28,7 @@ export class GameDialog {
   correctAnswerCount: number;
   totalRound: number;
   questionIndex: number;
-  sub: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   timerSub: Subscription;
   questionSub: Subscription;
   timer: number;
@@ -67,11 +67,9 @@ export class GameDialog {
 
   constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
 
- // this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    // this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.sub.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.sub.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
       // this.cd.detectChanges();
     }));
@@ -81,8 +79,8 @@ export class GameDialog {
     this.gameQuestionObs = store.select(gamePlayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.sub.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
-    this.sub.push(
+    this.subscriptions.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
+    this.subscriptions.push(
       this.gameObs.subscribe(game => {
         this.game = game;
         this.threeConsecutiveAnswer = false;
@@ -125,7 +123,7 @@ export class GameDialog {
 
       }));
 
-    this.sub.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
@@ -288,33 +286,33 @@ export class GameDialog {
         remainSecond = this.MAX_TIME_IN_SECONDS;
       }
       this.cd.markForCheck();
-    if (this.isQuestionAvailable || remainSecond >= 0) {
-      this.questionIndex++;
-      this.timer = remainSecond;
-      this.timerSub =
-        timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
-          this.timer--;
+      if (this.isQuestionAvailable || remainSecond >= 0) {
+        this.questionIndex++;
+        this.timer = remainSecond;
+        this.timerSub =
+          timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
+            this.timer--;
+            this.cd.markForCheck();
+          },
+            null,
+            () => {
+              // disable all buttons
+              if (this.currentQuestion) {
+                this.afterAnswer();
+                this.genQuestionComponent.fillTimer();
+                this.cd.markForCheck();
+              }
+            });
+      } else {
+        setTimeout(() => {
+          this.afterAnswer();
+          this.genQuestionComponent.fillTimer();
+          // this.cd.detectChanges();
           this.cd.markForCheck();
-        },
-          null,
-          () => {
-            // disable all buttons
-            if (this.currentQuestion) {
-              this.afterAnswer();
-              this.genQuestionComponent.fillTimer();
-              this.cd.markForCheck();
-            }
-          });
-    } else {
-      setTimeout(() => {
-        this.afterAnswer();
-        this.genQuestionComponent.fillTimer();
-        // this.cd.detectChanges();
-        this.cd.markForCheck();
-      }, 1000);
-    }
-  });
-}
+        }, 1000);
+      }
+    });
+  }
 
   calculateMaxTime(): void {
     this.applicationSettings.game_play_timer_loader_ranges.map((timerLoader) => {
@@ -418,4 +416,45 @@ export class GameDialog {
       this.cd.markForCheck();
     }, 0);
   }
+
+  destroy() {
+    this.user = undefined;
+    this.gameObs = undefined;
+    this.game = undefined;
+    this.gameQuestionObs = undefined;
+    this.currentQuestion = undefined;
+    this.originalAnswers = [];
+    this.correctAnswerCount = undefined;
+    this.totalRound = undefined;
+    this.questionIndex = undefined;
+    this.timerSub = undefined;
+    this.questionSub = undefined;
+    this.timer = undefined;
+    this.categoryName = undefined;
+    this.continueNext = undefined;
+    this.questionAnswered = undefined;
+    this.gameOver = undefined;
+    this.PlayerMode = undefined;
+
+    this.MAX_TIME_IN_SECONDS = undefined;
+    this.showContinueBtn = undefined;
+    this.otherPlayer = undefined;
+    this.otherPlayerUserId = undefined;
+    this.showBadge = undefined;
+    this.MAX_TIME_IN_SECONDS_LOADER = undefined;
+    this.MAX_TIME_IN_SECONDS_BADGE = undefined;
+    this.showLoader = undefined;
+    this.showWinBadge = undefined;
+    this.isCorrectAnswer = undefined;
+    this.turnFlag = undefined;
+
+    this.isQuestionAvailable = undefined;
+    this.isGameLoaded = undefined;
+    this.threeConsecutiveAnswer = undefined;
+    this.currentUTC = undefined;
+    this.applicationSettings = undefined;
+
+    this.genQuestionComponent = undefined;
+  }
+
 }

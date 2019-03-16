@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { User, Question, Invitation, Game, Friends } from 'shared-library/shared/model';
+import { User, Question } from 'shared-library/shared/model';
 
 export enum UserActionTypes {
 
@@ -12,8 +11,6 @@ export enum UserActionTypes {
     ADD_QUESTION_SUCCESS = '[User] AddQuestionsSuccess',
     UPDATE_USER_SUCCESS = '[User] UpdateUserSuccess',
     ADD_USER_INVITATION = '[User] AddUserInvitation',
-    GET_GAME_RESULT = '[User] GetGameResult',
-    GET_GAME_RESULT_SUCCESS = '[User] GetGameResultSuccess',
 }
 
 // Load User Published Question by userId
@@ -52,18 +49,6 @@ export class UpdateUserSuccess implements Action {
     constructor(public payload: User) { }
 }
 
-// Get User's game result
-export class GetGameResult implements Action {
-    readonly type = UserActionTypes.GET_GAME_RESULT;
-    constructor(public payload: User) { }
-}
-
-// Get User's game result Success
-export class GetGameResultSuccess implements Action {
-    readonly type = UserActionTypes.GET_GAME_RESULT_SUCCESS;
-    constructor(public payload: Game[]) { }
-}
-
 
 export type UserActions
     = LoadUserPublishedQuestions
@@ -71,7 +56,4 @@ export type UserActions
     | LoadUserUnpublishedQuestions
     | LoadUserUnpublishedQuestionsSuccess
     | AddQuestion
-    | UpdateUserSuccess
-    | GetGameResult
-    | GetGameResultSuccess;
-
+    | UpdateUserSuccess;

@@ -5,16 +5,14 @@ import { Store, select } from '@ngrx/store';
 import { User, Category, Question, QuestionStatus, Answer, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
+
 
 export class QuestionAddUpdate {
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
-
-  subs: Subscription[] = [];
 
   // Properties
   categories: Category[];
@@ -29,6 +27,7 @@ export class QuestionAddUpdate {
   loaderBusy = false;
   user: User;
   applicationSettings: ApplicationSettings;
+  subscriptions = [];
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -44,13 +43,9 @@ export class QuestionAddUpdate {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
 
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
-
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subs.push(this.tagsObs.subscribe(tags => this.tags = tags));
-
-
-
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
 
   }
 

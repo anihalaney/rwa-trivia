@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map, mergeMap } from 'rxjs/operators';
+import { catchError, mergeMap, take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { coreState, CoreState, authorizationHeader } from '../store';
+import { CoreState, authorizationHeader } from '../store';
 import { AuthenticationProvider } from './authentication.provider';
 import { Router } from '@angular/router';
 import { interceptorConstants } from '../../shared/model';
@@ -15,7 +15,7 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     // Get the auth header from the service.
     let authHeader;
-    this.store.select(authorizationHeader).subscribe(ah => {
+    this.store.select(authorizationHeader).pipe(take(1)).subscribe(ah => {
       authHeader = ah;
     }
     );
@@ -57,7 +57,7 @@ export class AuthInterceptor implements HttpInterceptor {
           }
         }
 
-        //return all others errors 
+        // return all others errors
         return throwError(error);
 
       })) as any;

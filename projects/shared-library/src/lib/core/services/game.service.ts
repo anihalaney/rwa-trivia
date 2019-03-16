@@ -116,7 +116,7 @@ export class GameService {
 
   getNextQuestion(game: Game): Observable<Question> {
     const url: string = CONFIG.functionsUrl + '/app/question/next/';
-    return this.http.post<Question>(url + game.gameId, {});
+    return this.http.post<Question>(url + game.gameId,{});
   }
 
 

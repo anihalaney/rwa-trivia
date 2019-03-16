@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../../shared/model';
-import { UserService } from '../../services';
+import { UserService, GameService } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -154,21 +154,32 @@ export class UserEffects {
                 );
             })
         );
- // Add User lives
- @Effect()
+    // Add User lives
+    @Effect()
     AddUserLives$ = this.actions$
-     .pipe(ofType(UserActions.ADD_USER_LIVES))
-     .pipe(
-         switchMap((action: ActionWithPayload<string>) => {
-             return this.svc.addUserLives(action.payload).pipe(
-                 map(() => this.userActions.addUserLivesSuccess()));
-         }
-         )
-     );
+        .pipe(ofType(UserActions.ADD_USER_LIVES))
+        .pipe(
+            switchMap((action: ActionWithPayload<string>) => {
+                return this.svc.addUserLives(action.payload).pipe(
+                    map(() => this.userActions.addUserLivesSuccess()));
+            }
+            )
+        );
+
+    @Effect()
+    GetGameResult$ = this.actions$
+        .pipe(ofType(UserActions.GET_GAME_RESULT))
+        .pipe(
+            switchMap((action: ActionWithPayload<User>) =>
+                this.gameService.getGameResult(action.payload)
+                    .pipe(map((games: Game[]) => this.userActions.getGameResultSuccess(games)))
+            )
+        );
 
     constructor(
         private actions$: Actions,
         private userActions: UserActions,
+        private gameService: GameService,
         private svc: UserService,
         private store: Store<CoreState>,
     ) { }

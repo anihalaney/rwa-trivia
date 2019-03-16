@@ -10,6 +10,7 @@ import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import * as Toast from 'nativescript-toast';
 import { Utils } from 'shared-library/core/services';
 import { isAndroid } from 'tns-core-modules/ui/page/page';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'report-game',
@@ -17,6 +18,8 @@ import { isAndroid } from 'tns-core-modules/ui/page/page';
     styleUrls: ['./report-game.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
@@ -32,13 +35,14 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     reportOptions?: Array<ReportOption>;
     selectedOption: string = null;
     otherReason: string = null;
-    subs: Subscription[] = [];
-    @ViewChildren('textField') textField : QueryList<ElementRef>;
+    subscriptions = [];
+
+    @ViewChildren('textField') textField: QueryList<ElementRef>;
 
     constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils,
         private cd: ChangeDetectorRef) {
         this.categoryDict$ = store.select(categoryDictionary);
-        this.subs.push(this.categoryDict$.subscribe(categoryDict => {
+        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
             this.cd.markForCheck();
         }));
@@ -130,7 +134,6 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.utils.unsubscribe(this.subs);
     }
 
     hideKeyboard() {

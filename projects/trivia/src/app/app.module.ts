@@ -12,16 +12,12 @@ import { CoreModule } from 'shared-library/core/core.module';
 import { reducers, CustomSerializer } from './store';
 import { RoutingModule } from './routing/routing.module';
 
-import { GamePlayModule } from './game-play/game-play.module';
-import { SocialModule } from './social/social.module';
-import { UserModule } from './user/user.module';
-import { StatsModule } from './stats/stats.module';
 import { LazyLoadImagesModule } from 'ngx-lazy-load-images';
 
 import {
-  AppComponent, DashboardComponent, QuestionComponent,
+  AppComponent,
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent,
-  PrivacyPolicyComponent
+  PrivacyPolicyComponent, UserStatsCardComponent, RecentGameCardComponent, RecentGamesComponent, ProfileCardComponent,
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'shared-library/environments/environment';
@@ -30,23 +26,22 @@ import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { interval } from 'rxjs';
 import { GameCardComponent } from './components/game-card/game-card.component';
-import { FriendInviteComponent } from './components/friend-invite/friend-invite.component';
-import { GameInviteComponent } from './components/game-invite/game-invite.component';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 
 @NgModule({
   declarations: [
     GameCardComponent,
     AppComponent,
-    DashboardComponent,
-    QuestionComponent,
     SideNavComponent,
     HeaderComponent,
     FooterComponent,
     InvitationRedirectionComponent,
     PrivacyPolicyComponent,
-    FriendInviteComponent,
-    GameInviteComponent
+    ProfileCardComponent,
+    RecentGamesComponent,
+    RecentGameCardComponent,
+    UserStatsCardComponent
   ],
   imports: [
     BrowserModule,
@@ -65,10 +60,7 @@ import { GameInviteComponent } from './components/game-invite/game-invite.compon
     CoreModule,
     SharedModule,
     RoutingModule,
-    GamePlayModule,
-    SocialModule,
-    UserModule,
-    StatsModule,
+    DashboardModule,
     BrowserModule.withServerTransition({ appId: 'trivia' }),
     //BrowserTransferStateModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })

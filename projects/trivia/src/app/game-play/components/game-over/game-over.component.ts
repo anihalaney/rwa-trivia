@@ -1,16 +1,16 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, Renderer2, ViewContainerRef } from '@angular/core';
+import { MatDialog, MatDialogRef, MatSnackBar } from '@angular/material';
+import { select, Store } from '@ngrx/store';
+import * as domtoimage from 'dom-to-image';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
+import { coreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { Store, select } from '@ngrx/store';
-import * as socialactions from '../../../social/store/actions';
+import * as dashboardactions from '../../../dashboard/store/actions';
+import { AppState, appState } from '../../../store';
 import { gamePlayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import * as domtoimage from 'dom-to-image';
 import { GameOver } from './game-over';
-import { coreState } from 'shared-library/core/store';
-import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'game-over',
@@ -19,6 +19,7 @@ import { MatSnackBar } from '@angular/material';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<ReportGameComponent>;
@@ -37,7 +38,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef
   ) {
     super(store, userActions, utils, cd);
-    this.subs.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
+    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       if (state === 'SUCCESS') {
         if ((this.dialogRef)) {
           this.dialogRef.close();
@@ -46,7 +47,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.snackBar.open(status, '', {
           viewContainerRef: this.viewContainerRef,
@@ -57,7 +58,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.subs.push(this.store.select(appState.socialState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
+    this.subscriptions.push(this.store.select(appState.dashboardState).pipe(select(s => s.socialShareImageUrl)).subscribe(uploadTask => {
       if (uploadTask != null) {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
@@ -93,12 +94,12 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
     this.dialogRef.componentInstance.ref = this.dialogRef;
 
-    this.dialogRef.afterOpen().subscribe(x => {
+    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
-    });
-    this.dialogRef.afterClosed().subscribe(x => {
+    }));
+    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
       this.dialogRef = null;
-    });
+    }));
   }
 
   shareScore() {
@@ -108,7 +109,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       const node = document.getElementById('share-content');
       domtoimage.toPng(node)
         .then((dataUrl) => {
-          this.store.dispatch(new socialactions.LoadSocialScoreShareUrl({
+          this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrl({
             imageBlob: this.utils.dataURItoBlob(dataUrl),
             userId: this.user.userId
           }));
@@ -132,7 +133,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       }
     }
 
-    for (let src in sources) {
+    for (const src in sources) {
       if (sources.hasOwnProperty(src)) {
         images[src] = new Image();
         images[src].onload = () => {
@@ -178,7 +179,8 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+    this.utils.unsubscribe(this.subscriptions);
+    this.destroy();
   }
 
 }
