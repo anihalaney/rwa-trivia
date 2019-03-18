@@ -315,8 +315,8 @@ export class GameDialog {
   }
 
   calculateMaxTime(): void {
-    this.applicationSettings.game_play_timer_loader_ranges.map((timerLoader) => {
-      if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength < timerLoader.end) {
+    this.applicationSettings.game_play_timer_loader_ranges.forEach((timerLoader) => {
+      if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength <= timerLoader.end) {
         this.MAX_TIME_IN_SECONDS = timerLoader.seconds;
       }
     });
