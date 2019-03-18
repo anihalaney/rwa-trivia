@@ -1,5 +1,4 @@
 import { GameOptions, GameStatus, PlayerMode, OpponentType } from './game-options';
-import { Question } from './question';
 
 export class PlayerQnA {
   playerId: string;
@@ -25,7 +24,7 @@ export class Stat {
 
 export class Game {
   private _gameId?: string;
-  private _gameOptions: GameOptions
+  private _gameOptions: GameOptions;
   private _playerIds: string[];
   public gameOver: boolean;
   public playerQnAs: PlayerQnA[];
@@ -108,7 +107,7 @@ export class Game {
 
   generateDefaultStat() {
     this.playerIds.map((playerId) => {
-      const stat: Stat = new Stat()
+      const stat: Stat = new Stat();
       this.stats[playerId] = stat;
     });
   }
@@ -127,7 +126,8 @@ export class Game {
     const playerQnA: PlayerQnA = {
       'playerId': playerId,
       'questionId': questionId
-    }
+    };
+
     this.playerQnAs.push(playerQnA);
     return playerQnA;
   }
@@ -230,7 +230,7 @@ export class Game {
   }
 
   getDbModel(): any {
-    let dbModel = {
+    const dbModel = {
       'gameOptions': { ...this._gameOptions },
       'playerIds': this.playerIds,
       'gameOver': (this.gameOver) ? this.gameOver : false,
@@ -238,7 +238,8 @@ export class Game {
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
       'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED,
       'round': this.round
-    }
+    };
+
     if (this.winnerPlayerId) {
       dbModel['winnerPlayerId'] = this.winnerPlayerId;
     }
@@ -260,7 +261,7 @@ export class Game {
 
     for (const key of Object.keys(this.stats)) {
       this.stats[key] = { ...this.stats[key] };
-    };
+    }
 
     dbModel['stats'] = this.stats;
 
