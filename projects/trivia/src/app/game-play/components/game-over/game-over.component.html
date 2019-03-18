@@ -16,7 +16,7 @@
         <img [src]="getImageUrl(user)" alt="User Profile Image" />
       </div>
       <label href="#" id="you" class="dark text-style ">{{playerUserName}}</label>
-      <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
+      <div class="dark div-top-spacing text-style ">Round {{game.stats[user.userId].score}} / {{game.round}}</div>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}}</div>
       <div class="div-top-spacing score-div-height">
         <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
@@ -99,15 +99,20 @@
   <mat-card-content class="textcenter">
     <div class="button-div">
       <div class="win-icon safari-icons spacing-bottom" *ngIf="socialFeedData">
-        <social-palette *ngIf="socialFeedData.share_status && !loaderStatus" class="spacing position" [blogData]="socialFeedData"
-          (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
+        <social-palette *ngIf="socialFeedData.share_status && !loaderStatus" class="spacing position"
+          [blogData]="socialFeedData" (notify)="onNotify($event)" [isFromBlog]=false></social-palette>
         <img *ngIf="loaderStatus" src="/assets/images/ajax-loader.gif" class="share-loaderimage" />
         <button class="btn-share" type="button" (click)="shareScore()" [disabled]="socialFeedData.share_status"
           [ngClass]="socialFeedData.share_status?'hide-share-btn':'show-share-btn'">Share</button>
-        <button class="btn-share" type="button" (click)="reMatchGame()" *ngIf="game.gameOptions.playerMode != PlayerMode.Single">Rematch</button>
-        <button class="btn-share" type="button" (click)="reMatchGame()" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play Again</button>
-        <button class="btn-share" type="button" (click)="inviteAsFriend()" *ngIf="game.gameOptions.opponentType == opponentType.Random && !disableFriendInviteBtn">Invite as Friend</button>
-        <img *ngIf="disableRematchBtn" src="/assets/images/ajax-loader.gif" class="rematch-loaderimage" alt="Loader Image">
+        <button class="btn-share" type="button" (click)="reMatchGame()"
+          *ngIf="game.gameOptions.playerMode != PlayerMode.Single">Rematch</button>
+        <button class="btn-share" type="button" (click)="reMatchGame()"
+          *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play Again</button>
+        <button class="btn-share" type="button" (click)="inviteAsFriend()"
+          *ngIf="game.gameOptions.opponentType == opponentType.Random && !disableFriendInviteBtn">Invite as
+          Friend</button>
+        <img *ngIf="disableRematchBtn" src="/assets/images/ajax-loader.gif" class="rematch-loaderimage"
+          alt="Loader Image">
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>
       </div>
     </div>
@@ -138,9 +143,11 @@
                       </span>
                       <span *ngFor="let answer of row.answers;let j=index;">
                         <p *ngIf="answer.answerText === row.userGivenAnswer">
-                          <label [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'"
+                          <label
+                            [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? 'answer-label':'label'"
                             class="text-style your-answer-label">Your ans.</label>
-                          <span class="text-style" [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}}
+                          <span class="text-style"
+                            [ngClass]="answer.answerText === row.userGivenAnswer  && answer.correct? '':'label'">{{row.userGivenAnswer}}
                           </span>
                         </p>
                       </span>
@@ -150,7 +157,8 @@
                     </div>
                   </div>
                   <div class="li-section2 textcenter reportMargin">
-                    <button class="btn-share reportButton" type="button" (click)="reportQuestion(row)" *ngIf="!game.playerQnAs[i].isReported">Report</button>
+                    <button class="btn-share reportButton" type="button" (click)="reportQuestion(row)"
+                      *ngIf="!game.playerQnAs[i].isReported">Report</button>
                     <label class="status-reported text-style " *ngIf="game.playerQnAs[i].isReported">Reported</label>
                   </div>
                 </div>
