@@ -1,23 +1,19 @@
-const pushNotificationFireBaseClient = require('../db/firebase-client');
-const pushNotificationMessagingClient = pushNotificationFireBaseClient.messaging();
+import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
 
-/**
- * sendPush
- * return PushResponse
- */
-exports.sendPush = (message: any): Promise<any> => {
-    // Send a message to the device corresponding to the provided
-    // registration token.
-    return pushNotificationMessagingClient.send(message)
-        .then((response) => {
-            // Response is a message ID string.
-            console.log('Successfully sent message:', response);
-            return response;
-        })
-        .catch((error) => {
-            console.log('Error sending message:', error);
-            return error;
-        });
-};
+export class PushNotificationService {
 
+    private static pushNotificationMessagingClient = admin.messaging();
 
+    /**
+     * sendPush
+     * return PushResponse
+     */
+    static async sendPush(message: any): Promise<any> {
+        try {
+            return await PushNotificationService.pushNotificationMessagingClient.send(message);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+}

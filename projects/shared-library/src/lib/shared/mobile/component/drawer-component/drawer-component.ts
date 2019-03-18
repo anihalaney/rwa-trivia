@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewContainerRef, OnDestroy } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import * as app from 'application';
@@ -10,11 +10,11 @@ import { UserActions } from '../../../../core/store/actions';
 import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
 import { Utils } from './../../../../core/services';
-import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     moduleId: module.id,
@@ -23,7 +23,10 @@ import { filter } from 'rxjs/operators';
     styleUrls: ['drawer-component.css']
 
 })
-export class DrawerComponent implements OnInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class DrawerComponent implements OnInit, OnDestroy {
+
     @Output() output = new EventEmitter();
     photoUrl = '~/assets/icons/icon-192x192.png';
     currentState;
@@ -35,27 +38,26 @@ export class DrawerComponent implements OnInit {
     version: string;
     logOut: boolean;
     pushToken: string;
+    subscriptions = [];
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
         public authProvider: AuthenticationProvider,
         private utils: Utils,
         private userActions: UserActions,
-        private modal: ModalDialogService,
-        private vcRef: ViewContainerRef,
         private router: Router
     ) {
-        router.events.subscribe((val) => {
+        this.router.events.subscribe((val) => {
             if (val instanceof NavigationEnd) {
                 const nav = val.url;
-                if (nav.includes('/stats/leaderboard')) {
+                if (nav.includes('/dashboard/leaderboard')) {
                     this.activeMenu = 'Category Leaderboard';
                 } else if (nav === '/dashboard') {
                     this.activeMenu = 'Home';
-                } else if (nav === '/my/recent-game') {
+                } else if (nav === '/recent-game') {
                     this.activeMenu = 'Recently Completed Games';
                 } else if (nav.includes('/my/profile')) {
-                    this.activeMenu = 'Profile Settings';
+                    this.activeMenu = 'Profile';
                 } else if (nav === '/my/questions') {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/my/invite-friends') {
@@ -67,9 +69,10 @@ export class DrawerComponent implements OnInit {
         this.categoriesObs.subscribe(categories => {
             this.categories = categories;
         });
+        this.subscriptions.push(this.categoriesObs);
     }
     ngOnInit() {
-        this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.user), filter(u => u !== null)).subscribe(user => {
             if (user && !this.logOut) {
                 this.photoUrl = this.utils.getImageUrl(user, 70, 60, '70X60');
                 this.user = user;
@@ -95,12 +98,12 @@ export class DrawerComponent implements OnInit {
                     });
                 }
             } else if (this.logOut) {
-                 /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
+                /* We have used Timout because authprovide.logout() gives permission_denied error without timeout */
                 setTimeout(() => {
                     this.resetValues();
                 }, 2000);
             }
-        });
+        }));
     }
 
     closeDrawer() {
@@ -109,7 +112,7 @@ export class DrawerComponent implements OnInit {
     }
 
     leaderBoard(category) {
-        this.routerExtension.navigate(['/stats/leaderboard', category]);
+        this.routerExtension.navigate(['/dashboard/leaderboard', category]);
         this.closeDrawer();
     }
 
@@ -151,7 +154,7 @@ export class DrawerComponent implements OnInit {
     }
 
     recentGame() {
-        this.routerExtension.navigate(['/my/recent-game']);
+        this.routerExtension.navigate(['/recent-game']);
         this.closeDrawer();
     }
 
@@ -170,4 +173,7 @@ export class DrawerComponent implements OnInit {
         this.closeDrawer();
     }
 
+    ngOnDestroy(): void {
+
+    }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -6,12 +6,16 @@ import { AppState } from '../../../store';
 import * as bulkActions from '../../store/actions';
 import { bulkState } from '../../store';
 import { Utils } from 'shared-library/core/services';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-bulk-summary',
   templateUrl: './bulk-summary.component.html',
-  styleUrls: ['./bulk-summary.component.scss']
+  styleUrls: ['./bulk-summary.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
 
   public bulkSummaryDetailPath = '/';
@@ -20,18 +24,17 @@ export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
   isArchive: boolean;
   isArchiveBtnClicked: boolean;
   toggleValue: boolean;
-  subs: Subscription[] = [];
-
+  subscriptions = [];
 
   constructor(private store: Store<AppState>, private utils: Utils) {
-    this.subs.push(this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;
       } else {
         this.toggleValue = false;
       }
     }));
-    this.subs.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.isArchive = true;
       } else {
@@ -75,7 +78,7 @@ export class BulkSummaryComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
 }

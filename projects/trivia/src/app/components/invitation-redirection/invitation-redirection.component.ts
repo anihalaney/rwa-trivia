@@ -5,7 +5,8 @@ import { Store, select } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { AppState, appState } from '../../store';
-import {UserActions} from 'shared-library/core/store/actions';
+import { UserActions } from 'shared-library/core/store/actions';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'invitation-redirection',
@@ -13,17 +14,21 @@ import {UserActions} from 'shared-library/core/store/actions';
     styleUrls: ['./invitation-redirection.component.scss', './invitation-redirection.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InvitationRedirectionComponent implements OnInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class InvitationRedirectionComponent implements OnInit, OnDestroy {
+
     @Input() user: User;
+    subscriptions = [];
 
     constructor(private activatedRoute: ActivatedRoute, private router: Router, private store: Store<AppState>,
-        private userAction: UserActions, private authService: AuthenticationProvider) {
-        this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+        private userAction: UserActions) {
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
             if (user) {
                 this.user = user;
             }
-        });
+        }));
     }
 
     ngOnInit() {
@@ -38,6 +43,9 @@ export class InvitationRedirectionComponent implements OnInit {
             }
 
         });
+    }
+
+    ngOnDestroy(): void {
     }
 
 }

@@ -1,21 +1,24 @@
-const firebaseAuthService = require('../services/firebase-auth.service');
-import { User } from '../../projects/shared-library/src/lib/shared/model';
+import { FirebaseAuthService } from '../services/firebase-auth.service';
+import { User, UserConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { Utils } from '../utils/utils';
 
 export class AuthUser {
 
-    getUsers(authUsers: User[], pageToken?: string): Promise<User[]> {
-        return firebaseAuthService.getAuthUsers(pageToken).then((listUsersResult) => {
-            listUsersResult.users.map((afUser) => {
+    static async getUsers(authUsers: User[], pageToken?: string): Promise<User[]> {
+        try {
+            const listUsersResult = await FirebaseAuthService.getAuthUsers(pageToken);
+            for (const afUser of listUsersResult.users) {
                 const user = new User(afUser);
-                delete user['authState'];
+                delete user[UserConstants.AUTH_STATE];
                 authUsers.push(user);
-            });
+            }
             if (listUsersResult.pageToken) {
-                return this.getUsers(authUsers, listUsersResult.pageToken);
+                return AuthUser.getUsers(authUsers, listUsersResult.pageToken);
             } else {
                 return authUsers;
             }
-        });
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 }
-

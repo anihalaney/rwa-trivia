@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { GameActions } from 'shared-library/core/store/actions';
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
@@ -12,18 +12,21 @@ import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/a
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
 import { filter } from 'rxjs/operators';
-import { UserActions } from 'shared-library/core/store/actions';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
-import { Friends } from '../../../../../../shared-library/src/lib/shared/model';
 import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ListViewEventData } from 'nativescript-ui-listview';
 
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
-  styleUrls: ['./new-game.component.scss']
+  styleUrls: ['./new-game.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   playerMode = 0;
@@ -33,12 +36,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   dataItem;
   categoriesObs: Observable<Category[]>;
   categories: Category[];
-  subs: Subscription[] = [];
   customTag: string;
   categoryIds: number[] = [];
   private tagItems: ObservableArray<TokenModel>;
-  sub3: Subscription;
   filteredCategories: Category[];
+  subscriptions = [];
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView') listViewComponent: RadListViewComponent;
@@ -48,21 +50,73 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public utils: Utils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
-    private router: Router) {
+    private router: Router,
+    private cd: ChangeDetectorRef) {
     super(store, utils, gameActions, userActions);
     this.initDataItems();
   }
-
   ngOnInit() {
 
-    this.sub3 = this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-    });
-    this.subs.push(this.categoriesObs.subscribe(categories => this.categories = categories.filter(c => c.isSelected = true)));
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+      if (gameObj && gameObj['gameId']) {
+        this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
+        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+        this.cd.markForCheck();
+      }
 
+    }));
 
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => {
+      categories.map(category => {
+        if (this.user.categoryIds && this.user.categoryIds.length > 0) {
+          category.isSelected = this.user.categoryIds.includes(category.id);
+        } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
+          category.isSelected = this.user.lastGamePlayOption.categoryIds.includes(category.id);
+        } else {
+          category.isSelected = true;
+        }
+        this.cd.markForCheck();
+        return category;
+      });
+      this.cd.markForCheck();
+      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+          let filteredCategories = [];
+          if (this.applicationSettings) {
+            filteredCategories = this.categories.filter((category) => {
+              if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+                return category;
+              }
+            });
+            if (this.applicationSettings && this.applicationSettings.lives.enable) {
+              this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+                if (account) {
+                  this.life = account.lives;
+                }
+                this.cd.markForCheck();
+              }));
+            }
+          } else {
+            filteredCategories = this.categories;
+          }
+
+          this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+          ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+        }
+        this.cd.markForCheck();
+      }));
+
+    }));
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+      if (gameCreateStatus) {
+        this.redirectToDashboard(gameCreateStatus);
+      }
+      this.cd.markForCheck();
+    }));
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
         this.uFriends = [];
         uFriends.myFriends.map(friend => {
@@ -73,30 +127,30 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       } else {
         this.noFriendsStatus = true;
       }
+      this.cd.markForCheck();
     }));
-    this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-      if (appSettings) {
-        this.applicationSettings = appSettings[0];
-        let filteredCategories = [];
-        if (this.applicationSettings) {
-          filteredCategories = this.categories.filter((category) => {
-            if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-              return category;
-            }
-          });
-        } else {
-          filteredCategories = this.categories;
-        }
 
-        this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-        ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-      }
-    }));
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+
+    this.utils.unsubscribe(this.subscriptions);
+
+    this.playerMode = undefined;
+    this.showSelectPlayer = undefined;
+    this.showSelectCategory = undefined;
+    this.showSelectTag = undefined;
+    this.dataItem = undefined;
+    this.categoriesObs = undefined;
+    this.categories = [];
+    this.subscriptions = [];
+    this.customTag = undefined;
+    this.categoryIds = [];
+    this.tagItems = undefined;
+    this.filteredCategories = [];
+
+    this.destroy();
+  }
 
   addCustomTag() {
     this.selectedTags.push(this.customTag);
@@ -115,10 +169,16 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       }
       return;
     }
+    if (this.applicationSettings.lives.enable && this.life === 0) {
+      this.redirectToDashboard(this.gameErrorMsg);
+      return false;
+    }
+
     this.startNewGame(this.gameOptions);
   }
 
-  selectCategory(category) {
+  selectCategory(args: ListViewEventData) {
+    const category: Category = this.filteredCategories[args.index];
     if (!category.requiredForGamePlay) {
       category.isSelected = !category.isSelected;
     }
@@ -176,8 +236,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   navigateToInvite() {
+    this.ngOnDestroy();
     this.router.navigate(['/my/app-invite-friends-dialog']);
   }
 
+  redirectToDashboard(msg) {
+    this.router.navigate(['/dashboard']);
+    Toast.makeText(msg).show();
+  }
 }
 

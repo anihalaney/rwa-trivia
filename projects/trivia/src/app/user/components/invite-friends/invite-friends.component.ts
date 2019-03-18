@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
 import { User } from 'shared-library/shared/model';
@@ -9,12 +9,16 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Observable, Subscription } from 'rxjs';
 import { UserActions } from 'shared-library/core/store/actions';
 import { InviteFriends } from './invite-friends';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-invite-friends',
   templateUrl: './invite-friends.component.html',
-  styleUrls: ['./invite-friends.component.scss']
+  styleUrls: ['./invite-friends.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class InviteFriendsComponent extends InviteFriends implements OnInit, OnDestroy {
 
   dialogRef: MatDialogRef<InviteFriendsDialogComponent>;
@@ -22,7 +26,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     'won', 'lost'];
   uFriends: Array<any>;
   dataSource: any;
-  subs: Subscription[] = [];
+  subscriptions = [];
   defaultAvatar = 'assets/images/default-avatar.png';
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -36,7 +40,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   }
 
   ngOnInit() {
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
         uFriends.myFriends.map((friend, index) => {
@@ -65,19 +69,18 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     });
     this.dialogRef.componentInstance.ref = this.dialogRef;
 
-    this.dialogRef.afterOpen().subscribe(x => {
+    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
       this.renderer.addClass(document.body, 'dialog-open');
-    });
-    this.dialogRef.afterClosed().subscribe(x => {
+    }));
+    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
       this.renderer.removeClass(document.body, 'dialog-open');
-    });
+    }));
   }
 
   ngOnDestroy() {
     if (this.dialogRef) {
       this.dialogRef.close();
     }
-    this.utils.unsubscribe(this.subs);
   }
 
 }

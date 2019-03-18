@@ -1,180 +1,281 @@
-import { Game, GameStatus, GameOptions, PlayerMode, OpponentType } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    Game, GameOperations, GameOptions, GameStatus,
+    OpponentType, PlayerMode, PlayerQnA,
+    pushNotificationRouteConstants, schedulerConstants, User, SystemStatConstants, GeneralConstants
+} from '../../projects/shared-library/src/lib/shared/model';
+import { AccountService } from '../services/account.service';
+import { GameService } from '../services/game.service';
+import { UserService } from '../services/user.service';
+import { PushNotification } from '../utils/push-notifications';
+import { SystemStatsCalculations } from './system-stats-calculations';
 import { Utils } from './utils';
-const utils: Utils = new Utils();
-const gameService = require('../services/game.service');
-const documentService = require('../services/document.service');
+
 export class GameMechanics {
 
-    private gameOptions: GameOptions;
-    private userId: string;
+    static async doGameOperations(userId: string, playerQnA: PlayerQnA, game: Game, operation: string): Promise<boolean> {
+        try {
+            switch (operation) {
+                case GameOperations.CALCULATE_SCORE:
+                    const qIndex = game.playerQnAs.findIndex((pastPlayerQnA) => pastPlayerQnA.questionId === playerQnA.questionId);
+                    game.playerQnAs[qIndex] = playerQnA;
+                    const currentTurnPlayerId = game.nextTurnPlayerId;
+                    game.decideNextTurn(playerQnA, userId);
 
+                    if (playerQnA.answerCorrect) {
+                        AccountService.setBits(userId);
+                    }
+                    if (game.nextTurnPlayerId && game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
+                        PushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
+                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
+                    }
+                    game.turnAt = Utils.getUTCTimeStamp();
+                    game.calculateStat(playerQnA.playerId);
 
-    constructor(private game_option?, private user_id?) {
-        if (game_option) {
-            this.gameOptions = game_option;
-        }
-        if (user_id) {
-            this.userId = user_id;
+                    break;
+                case GameOperations.GAME_OVER:
+                    game.gameOver = true;
+                    game.decideWinner();
+                    game.calculateStat(game.nextTurnPlayerId);
+                    game.GameStatus = GameStatus.COMPLETED;
+                    if (game.winnerPlayerId) {
+                        AccountService.setBytes(game.winnerPlayerId);
+                    }
+                    if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                        (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                        PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
+                    }
+                    SystemStatsCalculations.updateSystemStats(SystemStatConstants.GAME_PLAYED);
+                    break;
+                case GameOperations.REPORT_STATUS:
+                    const index = game.playerQnAs.findIndex(
+                        playerInfo => playerInfo.questionId === playerQnA.questionId
+                    );
+                    game.playerQnAs[index] = playerQnA;
+                    break;
+                case GameOperations.REJECT_GAME:
+                    game.gameOver = true;
+                    game.GameStatus = GameStatus.REJECTED;
+                    SystemStatsCalculations.updateSystemStats(SystemStatConstants.GAME_PLAYED);
+                    break;
+                case GameOperations.UPDATE_ROUND:
+                    game = GameMechanics.updateRound(game, userId);
+                    break;
+            }
+            await GameService.updateGame(game.getDbModel());
+            return true;
+        } catch (error) {
+            return Utils.throwError(error);
         }
     }
 
 
-    createNewGame(): Promise<string> {
+    static async doGameOverOperations(): Promise<boolean> {
+        try {
+            const games: Game[] = await GameService.checkGameOver();
+            for (const game of games) {
+                const millis = Utils.getUTCTimeStamp();
+                const noPlayTimeBound = (millis > game.turnAt) ? millis - game.turnAt : game.turnAt - millis;
+                const playedHours = Math.floor((noPlayTimeBound) / (1000 * 60 * 60));
+                const playedMinutes = Math.floor((noPlayTimeBound) / (1000 * 60));
 
-        // return documentService.updateAccount(this.userId).then(document => {
-        // });
-            if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent) {
-                if (this.gameOptions.rematch) {
-                    return this.createFriendUserGame(this.gameOptions.friendId, GameStatus.RESTARTED).then((gameId) => { return gameId });
+                let remainedTime;
+                if (playedMinutes > schedulerConstants.beforeGameExpireDuration) {
+                    remainedTime = playedMinutes - schedulerConstants.beforeGameExpireDuration;
                 } else {
-                    if (Number(this.gameOptions.opponentType) === OpponentType.Random) {
-                        return this.joinGame().then((gameId) => { return gameId });
-                    } else if (Number(this.gameOptions.opponentType) === OpponentType.Friend) {
-                        return this.createFriendUserGame(this.gameOptions.friendId, GameStatus.STARTED).then((gameId) => { return gameId });
+                    remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
+                }
+
+                if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                    (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                    if ((remainedTime) <= schedulerConstants.notificationInterval) {
+                        PushNotification.sendGamePlayPushNotifications(game, game.nextTurnPlayerId,
+                            pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
+                    }
+                }
+
+                if (playedHours >= schedulerConstants.gamePlayDuration) {
+                    game.gameOver = true;
+                    game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
+                    game.GameStatus = GameStatus.TIME_EXPIRED;
+                    if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
+                        (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
+                        PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
+                            pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
+                    }
+                    const dbGame = game.getDbModel();
+                    await GameService.updateGame(dbGame);
+
+                } else if (playedHours >= schedulerConstants.gameInvitationDuration
+                    && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
+                        game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)) {
+                    game.gameOver = true;
+                    game.GameStatus = GameStatus.INVITATION_TIMEOUT;
+                    const dbGame = game.getDbModel();
+                    await GameService.updateGame(dbGame);
+
+                }
+            }
+
+            return true;
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    static async createNewGame(userId: string, gameOptions: GameOptions): Promise<string> {
+        let gameId;
+        try {
+            await GameMechanics.updateUser(userId, gameOptions);
+
+            if (Number(gameOptions.playerMode) === PlayerMode.Opponent) {
+                if (gameOptions.rematch) {
+                    gameId = await GameMechanics.createFriendUserGame(gameOptions.friendId, GameStatus.RESTARTED, userId, gameOptions);
+                } else {
+                    if (Number(gameOptions.opponentType) === OpponentType.Random) {
+                        gameId = await GameMechanics.joinGame(userId, gameOptions);
+                    } else if (Number(gameOptions.opponentType) === OpponentType.Friend) {
+                        gameId = await GameMechanics.createFriendUserGame(gameOptions.friendId, GameStatus.STARTED, userId, gameOptions);
                     }
                 }
             } else {
-                return (this.gameOptions.rematch) ?
-                    this.createSingleAndRandomUserGame(GameStatus.RESTARTED).then((gameId) => { return gameId }) :
-                    this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
+                gameId = (gameOptions.rematch) ?
+                    await GameMechanics.createSingleAndRandomUserGame(GameStatus.RESTARTED, userId, gameOptions) :
+                    await GameMechanics.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
             }
+            return gameId;
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
 
-    private joinGame(): Promise<string> {
-        //  console.log('joinGame');
-        return gameService.getAvailableGames().then(games => {
-            const gameArr = [];
+    private static async joinGame(userId: string, gameOptions: GameOptions): Promise<string> {
+        try {
+            const games: Game[] = await GameService.getAvailableGames();
+            const totalGames = games.length;
 
-            games.forEach(game => {
-                gameArr.push(Game.getViewModel(game.data()))
-            });
-            const totalGames = gameArr.length;
-            //  console.log('games', gameArr);
             if (totalGames > 0) {
-                const promise = this.pickRandomGame(gameArr, totalGames);
-                return promise.then((gameId) => { return gameId });
+                return GameMechanics.pickRandomGame(games, totalGames, userId, gameOptions);
             } else {
-                return this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
+                return await GameMechanics.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
             }
-        });
-
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
-    private pickRandomGame(queriedItems: Array<Game>, totalGames: number): Promise<string> {
+    private static async pickRandomGame(queriedItems: Array<Game>, totalGames: number,
+        userId: string, gameOptions: GameOptions): Promise<string> {
 
         const randomGameNo = Math.floor(Math.random() * totalGames);
         const game = queriedItems[randomGameNo];
 
-        if (game.playerIds[0] !== this.userId && game.nextTurnPlayerId === '') {
-            game.nextTurnPlayerId = this.userId;
-            game.GameStatus = GameStatus.JOINED_GAME;
-            game.addPlayer(this.userId);
-            game.playerIds.map((playerId) => {
-                game.calculateStat(playerId);
-            })
+        try {
+            if (game.playerIds[0] !== userId && game.nextTurnPlayerId === '') {
+                game.nextTurnPlayerId = userId;
+                game.GameStatus = GameStatus.JOINED_GAME;
+                game.addPlayer(userId);
 
-            const dbGame = game.getDbModel();
-            //   console.log('dbGame', dbGame);
-            return this.setGame(dbGame).then((gameId) => { return gameId });
-        } else if (totalGames === 1) {
-            return this.createSingleAndRandomUserGame(GameStatus.STARTED).then((gameId) => { return gameId });
-        } else {
-            totalGames--;
-            queriedItems.splice(randomGameNo, 1);
-            return this.pickRandomGame(queriedItems, totalGames);
+                for (const playerId of game.playerIds) {
+                    game.calculateStat(playerId);
+                }
+
+                const dbGame = game.getDbModel();
+                //   console.log('dbGame', dbGame);
+                return await GameMechanics.setGame(dbGame);
+            } else if (totalGames === 1) {
+                return await GameMechanics.createSingleAndRandomUserGame(GameStatus.STARTED, userId, gameOptions);
+            } else {
+                totalGames--;
+                queriedItems.splice(randomGameNo, 1);
+                return await GameMechanics.pickRandomGame(queriedItems, totalGames, userId, gameOptions);
+            }
+        } catch (error) {
+            return Utils.throwError(error);
         }
-
-
     }
 
 
-    private createSingleAndRandomUserGame(gameStatus): Promise<string> {
-        const timestamp = utils.getUTCTimeStamp();
-        // console.log('timestamp', timestamp);
-        const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, undefined, undefined,
-            gameStatus, timestamp, timestamp);
-        return this.createGame(game);
-
+    private static async createSingleAndRandomUserGame(gameStatus, userId: string, gameOptions: GameOptions): Promise<string> {
+        const timestamp = Utils.getUTCTimeStamp();
+        try {
+            const game = new Game(gameOptions, userId, undefined, undefined, false, userId, undefined, undefined,
+                gameStatus, timestamp, timestamp);
+            return await GameMechanics.createGame(game);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
-    private createFriendUserGame(friendId: string, gameStatus): Promise<string> {
-        const timestamp = utils.getUTCTimeStamp();
-        const game = new Game(this.gameOptions, this.userId, undefined, undefined, false, this.userId, friendId, undefined,
-            gameStatus, timestamp, timestamp);
-        return this.createGame(game);
-
+    private static async createFriendUserGame(friendId: string, gameStatus, userId: string, gameOptions: GameOptions): Promise<string> {
+        const timestamp = Utils.getUTCTimeStamp();
+        try {
+            const game = new Game(gameOptions, userId, undefined, undefined, false, userId, friendId, undefined,
+                gameStatus, timestamp, timestamp);
+            return await GameMechanics.createGame(game);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
 
-    private createGame(game: Game): Promise<string> {
+    private static async createGame(game: Game): Promise<string> {
         game.generateDefaultStat();
         const dbGame = game.getDbModel(); // object to be saved
-        return gameService.createGame(dbGame).then(ref => {
+        try {
+            const ref = await GameService.createGame(dbGame);
             dbGame.id = ref.id;
-            return this.setGame(dbGame).then((gameId) => { return gameId });
-        });
-
-    }
-
-    public getGameById(gameId: string): Promise<Game> {
-        return gameService.getGameById(gameId).then(game => { return Game.getViewModel(game.data()) });
-    }
-
-    public setGame(dbGame: any): Promise<string> {
-        // Use the set method of the doc instead of the add method on the collection,
-        // so the id field of the data matches the id of the document
-        return gameService.setGame(dbGame).then(ref => {
-            return dbGame.id;
-        });
-    }
-
-    public UpdateGame(dbGame: any): Promise<string> {
-        // Use the set method of the doc instead of the add method on the collection,
-        // so the id field of the data matches the id of the document
-        return gameService.updateGame(dbGame).then(ref => {
-
-            return dbGame.id;
-        });
-    }
-
-
-    public changeTheTurn(game: Game): Promise<boolean> {
-
-
-        console.log('playerQuestions---->', game.playerQnAs);
-
-        if (game.playerQnAs.length > 0) {
-            const index = game.playerQnAs.length - 1;
-            const lastAddedQuestion = game.playerQnAs[index];
-
-            if (!lastAddedQuestion.playerAnswerInSeconds && lastAddedQuestion.playerAnswerInSeconds !== 0) {
-                lastAddedQuestion.playerAnswerId = null;
-                lastAddedQuestion.answerCorrect = false;
-                lastAddedQuestion.playerAnswerInSeconds = 16;
-                game.playerQnAs[index] = lastAddedQuestion;
-                if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
-                    game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0];
-                }
-                game.turnAt = utils.getUTCTimeStamp();
-                game.calculateStat(lastAddedQuestion.playerId);
-                const dbGame = game.getDbModel();
-                console.log('change the turn ---->', dbGame);
-                return this.UpdateGame(dbGame).then((id) => {
-                    return false;
-                });
-            } else {
-                return Promise.resolve(true);
-            }
-        } else {
-            return Promise.resolve(true);
+            return await GameMechanics.setGame(dbGame);
+        } catch (error) {
+            return Utils.throwError(error);
         }
-
     }
 
-    public updateRound(game: Game, userId: string): Game {
+    static async setGame(dbGame: any): Promise<string> {
+        // Use the set method of the doc instead of the add method on the collection,
+        // so the id field of the data matches the id of the document
+        try {
+            await GameService.setGame(dbGame);
+            return dbGame.id;
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    static async changeTheTurn(game: Game): Promise<boolean> {
+        try {
+            if (game.playerQnAs.length > 0) {
+                const index = game.playerQnAs.length - 1;
+                const lastAddedQuestion = game.playerQnAs[index];
+
+                if (!lastAddedQuestion.playerAnswerInSeconds && lastAddedQuestion.playerAnswerInSeconds !== 0) {
+                    lastAddedQuestion.playerAnswerId = null;
+                    lastAddedQuestion.answerCorrect = false;
+                    lastAddedQuestion.playerAnswerInSeconds = 16;
+                    game.playerQnAs[index] = lastAddedQuestion;
+                    if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent) {
+                        game.nextTurnPlayerId = game.playerIds.filter((playerId) => playerId !== game.nextTurnPlayerId)[0];
+                    }
+                    game.turnAt = Utils.getUTCTimeStamp();
+                    game.calculateStat(lastAddedQuestion.playerId);
+                    await GameService.updateGame(game.getDbModel());
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    static updateRound(game: Game, userId: string): Game {
         if (game.playerQnAs.length > 0) {
-            game.round = (game.round) ? game.round : game.stats[userId]['round'];
+            game.round = (game.round) ? game.round : game.stats[userId][GeneralConstants.ROUND];
             const otherPlayerUserId = game.playerIds.filter(playerId => playerId !== userId)[0];
             const currentUserQuestions = game.playerQnAs.filter((pastPlayerQnA) =>
                 pastPlayerQnA.playerId === userId);
@@ -182,17 +283,33 @@ export class GameMechanics {
             );
             if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                 currentUserQuestions.length > 0 && otherUserQuestions.length > 0) {
-                const lastcurrentUserQuestion = currentUserQuestions[currentUserQuestions.length - 1];
-                const lastotherUserQuestions = otherUserQuestions[otherUserQuestions.length - 1];
-                lastcurrentUserQuestion.round = (lastcurrentUserQuestion.round) ? lastcurrentUserQuestion.round : game.round;
-                lastotherUserQuestions.round = (lastotherUserQuestions.round) ? lastotherUserQuestions.round : game.round;
-                if (lastcurrentUserQuestion.round === lastotherUserQuestions.round
-                    && !lastcurrentUserQuestion.answerCorrect
-                    && !lastotherUserQuestions.answerCorrect) {
+                const lastCurrentUserQuestion = currentUserQuestions[currentUserQuestions.length - 1];
+                const lastOtherUserQuestions = otherUserQuestions[otherUserQuestions.length - 1];
+                lastCurrentUserQuestion.round = (lastCurrentUserQuestion.round) ? lastCurrentUserQuestion.round : game.round;
+                lastOtherUserQuestions.round = (lastOtherUserQuestions.round) ? lastOtherUserQuestions.round : game.round;
+                if (lastCurrentUserQuestion.round === lastOtherUserQuestions.round
+                    && !lastCurrentUserQuestion.answerCorrect
+                    && !lastOtherUserQuestions.answerCorrect) {
                     game.round = game.round + 1;
                 }
             }
         }
         return game;
     }
+
+    // Add lastGamePlayOption when new game create
+    private static async updateUser(userId: string, gameOptions: any): Promise<string> {
+        try {
+            const dbUser: User = await UserService.getUserById(userId);
+            dbUser.lastGamePlayOption = gameOptions;
+
+            await UserService.updateUser(dbUser);
+            return dbUser.userId;
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
 }

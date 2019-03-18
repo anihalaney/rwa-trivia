@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -14,14 +14,18 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
-
+import { Page, EventData } from 'tns-core-modules/ui/page/page';
+import { isAndroid } from 'tns-core-modules/platform';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.css']
+  styleUrls: ['./profile-settings.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   // Properties
@@ -34,6 +38,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   private twitterUrlStatus = true;
   private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
+  @ViewChildren('textField') textField: QueryList<ElementRef>;
+  subscriptions = [];
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -41,24 +47,29 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public width = 300;
   public height = 300;
 
+
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
+
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
-    public utils: Utils) {
+    private page: Page,
+    public utils: Utils,
+    private cd: ChangeDetectorRef) {
 
     super(fb, store, userAction, utils);
     this.initDataItems();
 
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         Toast.makeText('Profile is saved successfully').show();
         this.toggleLoader(false);
       }
+      this.cd.markForCheck();
     }));
-  }
 
+  }
 
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
@@ -103,8 +114,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.userForm.updateValueAndValidity();
   }
 
-
   addCustomTag() {
+    this.hideKeyboard();
     this.enteredTags.push(this.customTag);
     this.customTag = '';
     this.autocomplete.autoCompleteTextView.resetAutocomplete();
@@ -134,15 +145,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.enteredTags = this.enteredTags.filter(t => t !== tag);
   }
 
-  selectProfileOption(profileOption) {
-    this.user.profileSetting = profileOption;
-    this.userForm.controls['profileSetting'].setValue(profileOption);
-  }
-
-  selectLocationOption(locationOption) {
-    this.user.profileLocationSetting = locationOption;
-    this.userForm.controls['profileLocationSetting'].setValue(locationOption);
-  }
 
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
@@ -154,7 +156,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
   }
-
 
   onSubmit() {
     // validations
@@ -181,8 +182,19 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   }
 
+  hideKeyboard() {
+    this.textField
+      .toArray()
+      .map((el) => {
+        if (isAndroid) {
+          el.nativeElement.android.clearFocus();
+        }
+        return el.nativeElement.dismissSoftInput();
+      });
+  }
+
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
 }

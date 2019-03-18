@@ -1,21 +1,23 @@
-import { Component, Input, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { userState } from '../../../user/store';
 import { ProfileSettings } from './profile-settings';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { profileSettingsConstants } from 'shared-library/shared/model';
+import { profileSettingsConstants, Subscription } from 'shared-library/shared/model';
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { coreState, UserActions } from 'shared-library/core/store';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
-  styleUrls: ['./profile-settings.component.scss']
+  styleUrls: ['./profile-settings.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+@AutoUnsubscribe({'arrayName': 'subscriptions'})
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   @ViewChild('cropper') cropper: ImageCropperComponent;
@@ -23,11 +25,13 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   cropperSettings: CropperSettings;
   notificationMsg: string;
   errorStatus: boolean;
-
+  subscriptions = [];
+  
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     private windowRef: WindowRef,
     public userAction: UserActions,
+    private cd: ChangeDetectorRef,
     public utils: Utils) {
 
     super(fb, store, userAction, utils);
@@ -35,9 +39,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
 
-    this.subs.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.setNotificationMsg('Profile Saved !', false, 100);
+        this.cd.markForCheck();
       }
     }));
   }
@@ -109,6 +114,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.getUserFromFormValue(this.userForm.value);
       this.assignImageValues();
       this.saveUser(this.user);
+      this.cd.markForCheck();
     }
   }
 
@@ -179,10 +185,11 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     // call saveUser
     this.saveUser(this.user);
     this.setNotificationMsg('', false, 0);
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 
 }

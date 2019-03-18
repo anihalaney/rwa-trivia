@@ -7,7 +7,7 @@ service cloud.firestore {
   // This is temp solution for time being till fetching role from user document does not work
   function isAdmin() {
   	return isAuthenticated() && 
-    			(request.auth.uid == '');
+    			(request.auth.uid == '');
   }
 
   function isUserAuthenticated(userId) {

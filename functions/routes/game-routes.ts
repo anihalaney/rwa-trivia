@@ -1,17 +1,36 @@
 
 import * as express from 'express';
-const router = express.Router();
+import { GameController } from '../controllers/game.controller';
+import { AuthMiddleware } from '../middlewares/auth';
+import { GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 
-const gameAuth = require('../middlewares/auth');
+class GameRoutes {
 
-const gameController = require('../controllers/game.controller');
+    private UID = RoutesConstants.USER_ID;
+    private SID = RoutesConstants.SOCIAL_ID;
+    public gameRoutes: any;
 
+    constructor() {
 
-router.post('/', gameAuth.authorizedOnly, gameController.createGame);
-router.put('/:gameId', gameAuth.authorizedOnly, gameController.updateGame);
-router.post('/game-over/scheduler', gameAuth.authTokenOnly, gameController.checkGameOver);
-router.get('/update/all', gameAuth.adminOnly, gameController.updateAllGame);
-router.post('/turn/scheduler', gameAuth.authTokenOnly, gameController.changeGameTurn);
-router.get('/social/:userId/:socialId', gameController.createSocialContent);
-router.get('/social-image/:userId/:socialId', gameController.createSocialImage);
-module.exports = router;
+        this.gameRoutes = express.Router();
+
+        //  '/'
+        this.gameRoutes.post('/', AuthMiddleware.authorizedOnly, GameController.createGame);
+
+        //  '/:gameId'
+        this.gameRoutes.put(`/:${RoutesConstants.GAME_ID}`,
+            AuthMiddleware.authorizedOnly, GameController.updateGame);
+
+        //  '/social/:userId/:socialId'
+        this.gameRoutes.get(`/${RoutesConstants.SOCIAL}/:${this.UID}/:${this.SID}`,
+            GameController.createSocialContent);
+
+        //  '/social-image/:userId/:socialId'
+        this.gameRoutes.get(`/${RoutesConstants.SOCIAL_DASH_IMAGE}/:${this.UID}/:${this.SID}`,
+            GameController.createSocialImage);
+
+    }
+}
+
+export default new GameRoutes().gameRoutes;
+

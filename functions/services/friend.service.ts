@@ -1,78 +1,111 @@
-const friendFireBaseClient = require('../db/firebase-client');
-const friendFireStoreClient = friendFireBaseClient.firestore();
+import admin from '../db/firebase.client';
+import { Utils } from '../utils/utils';
+import { CollectionConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 
+export class FriendService {
 
-/**
- * createInvitation
- * return ref
- */
-exports.createInvitation = (dbInvitation: any): Promise<any> => {
-    return friendFireStoreClient.collection('invitations').add(dbInvitation).then(ref => ref);
-};
+    private static friendFireStoreClient = admin.firestore();
 
-/**
- * getInvitationByToken
- * return invitation
- */
-exports.getInvitationByToken = (token: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/invitations/${token}`)
-        .get()
-        .then(invitation => { return invitation });
-};
+    /**
+     * createInvitation
+     * return ref
+     */
+    static async createInvitation(dbInvitation: any): Promise<any> {
+        try {
+            return await FriendService.friendFireStoreClient.collection(CollectionConstants.INVITATIONS).add(dbInvitation);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-/**
- * checkInvitation
- * return invitation
- */
-exports.checkInvitation = (email: string, userId: string): Promise<any> => {
-    return friendFireStoreClient.collection('invitations')
-        .where('created_uid', '==', userId)
-        .where('email', '==', email)
-        .get()
-        .then(snapshot => snapshot);
-};
+    /**
+     * getInvitationByToken
+     * return invitation
+     */
+    static async getInvitationByToken(token: any): Promise<any> {
+        try {
+            const invitationData = await FriendService.friendFireStoreClient
+                .doc(`/${CollectionConstants.INVITATIONS}/${token}`)
+                .get();
+            return invitationData.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-/**
- * updateInvitation
- * return userId
- */
-exports.updateInvitation = (invitation: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/invitations/${invitation.id}`)
-        .update(invitation)
-        .then(ref => { return invitation.created_uid });
-};
+    /**
+     * checkInvitation
+     * return invitation
+     */
+    static async checkInvitation(email: string, userId: string): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await FriendService.friendFireStoreClient
+                    .collection(CollectionConstants.INVITATIONS)
+                    .where(GeneralConstants.CREATED_UID, GeneralConstants.DOUBLE_EQUAL, userId)
+                    .where(GeneralConstants.EMAIL, GeneralConstants.DOUBLE_EQUAL, email)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    /**
+     * updateInvitation
+     * return userId
+     */
+    static async updateInvitation(invitation: any) {
+        try {
+            return await FriendService.friendFireStoreClient
+                .doc(`/${CollectionConstants.INVITATIONS}/${invitation.id}`)
+                .update(invitation);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    /**
+     * getFriendByInvitee
+     * return friend
+     */
+    static async getFriendByInvitee(invitee: any): Promise<any> {
+        try {
+            const friends = await FriendService.friendFireStoreClient
+                .doc(`/${CollectionConstants.FRIENDS}/${invitee}`)
+                .get();
+            return friends.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-/**
- * getFriendByInvitee
- * return friend
- */
-exports.getFriendByInvitee = (invitee: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/friends/${invitee}`)
-        .get()
-        .then(friend => { return friend });
-};
+    /**
+     * updateFriend
+     * return ref
+     */
+    static async updateFriend(myFriends: any, invitee: any): Promise<any> {
+        try {
+            return await FriendService.friendFireStoreClient
+                .doc(`/${CollectionConstants.FRIENDS}/${invitee}`)
+                .update({ myFriends: myFriends });
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
+    /**
+     * setFriend
+     * return ref
+     */
+    static async setFriend(dbUser: any, invitee: any): Promise<any> {
+        try {
+            return await FriendService.friendFireStoreClient
+                .doc(`/${CollectionConstants.FRIENDS}/${invitee}`)
+                .set(dbUser);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 
-/**
- * updateFriend
- * return ref
- */
-exports.updateFriend = (myFriends: any, invitee: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/friends/${invitee}`)
-        .update({ myFriends: myFriends })
-        .then(ref => { return ref });
-};
-
-
-/**
- * setFriend
- * return ref
- */
-exports.setFriend = (dbUser: any, invitee: any): Promise<any> => {
-    return friendFireStoreClient.doc(`/friends/${invitee}`)
-        .set(dbUser)
-        .then(ref => { return ref });
-};
-
+}

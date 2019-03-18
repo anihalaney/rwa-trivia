@@ -5,19 +5,14 @@ import { SharedModule } from 'shared-library/shared/shared.module';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { effects, reducer } from './store';
 import { UserRoutingModule } from './routing/user-routing.module';
-
-
 import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
   InviteFriendsComponent,
   QuestionAddUpdateComponent,
-  RecentGamesComponent,
-  RecentGameCardComponent
+  InviteFriendsDialogComponent,
+  InviteMailFriendsComponent
 } from './components';
-import { InviteFriendsDialogComponent } from './components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
-// tslint:disable-next-line:max-line-length
-import { InviteMailFriendsComponent } from './components/invite-friends/invite-friends-dialog/invite-mail-friends/invite-mail-friends.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +23,6 @@ import { InviteMailFriendsComponent } from './components/invite-friends/invite-f
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    RecentGamesComponent,
-    RecentGameCardComponent
   ],
   imports: [
     // rwa modules

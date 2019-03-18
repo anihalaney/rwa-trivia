@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -7,19 +7,23 @@ import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { QuestionAddUpdate } from './question-add-update';
-import { Question, Answer } from 'shared-library/shared/model';
+import { Question, Answer, Subscription } from 'shared-library/shared/model';
 import { debounceTime, map } from 'rxjs/operators';
-
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
   templateUrl: './question-add-update.component.html',
-  styleUrls: ['./question-add-update.component.scss']
+  styleUrls: ['./question-add-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy {
 
   get tagsArray(): FormArray {
     return this.questionForm.get('tagsArray') as FormArray;
   }
+  subscriptions = [];
 
 
   // Constructor
@@ -33,24 +37,23 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     super(fb, store, utils, questionAction);
 
     this.question = new Question();
-    this.subs.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.createForm(this.question);
       }
     }));
 
-
     const questionControl = this.questionForm.get('questionText');
 
-    questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
-    this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags());
+    this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
+    this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
 
 
     this.filteredTags$ = this.questionForm.get('tags').valueChanges
       .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
-    this.subs.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.snackBar.open('Question saved!', '', { duration: 2000 });
         this.router.navigate(['/my/questions']);
@@ -130,7 +133,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subs);
+
   }
 }
 

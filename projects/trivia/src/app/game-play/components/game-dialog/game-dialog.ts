@@ -1,4 +1,4 @@
-import { ViewChild } from '@angular/core';
+import { ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Observable, Subscription, timer } from 'rxjs';
 import { take, filter } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
@@ -28,7 +28,7 @@ export class GameDialog {
   correctAnswerCount: number;
   totalRound: number;
   questionIndex: number;
-  sub: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   timerSub: Subscription;
   questionSub: Subscription;
   timer: number;
@@ -65,14 +65,13 @@ export class GameDialog {
     this.genQuestionComponent = questionComponent;
   }
 
-  constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils) {
+  constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
 
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.userDict$.subscribe(userDict => this.userDict = userDict);
-    this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user);
-    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.sub.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(this.userDict$.subscribe(userDict => {
       this.userDict = userDict;
+      // this.cd.detectChanges();
     }));
 
     this.resetValues();
@@ -80,8 +79,8 @@ export class GameDialog {
     this.gameQuestionObs = store.select(gamePlayState).pipe(select(s => s.currentGameQuestion));
 
 
-    this.sub.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
-    this.sub.push(
+    this.subscriptions.push(this.store.select(categoryDictionary).pipe(take(1)).subscribe(c => this.categoryDictionary = c));
+    this.subscriptions.push(
       this.gameObs.subscribe(game => {
         this.game = game;
         this.threeConsecutiveAnswer = false;
@@ -124,7 +123,7 @@ export class GameDialog {
 
       }));
 
-    this.sub.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
       }
@@ -143,6 +142,7 @@ export class GameDialog {
     this.isGameLoaded = true;
     this.continueNext = (this.questionAnswered) ? true : false;
     this.showContinueBtn = (this.questionAnswered && !this.turnFlag) ? true : false;
+    this.cd.markForCheck();
     this.checkGameOver();
     if (!this.gameOver) {
       if (!this.turnFlag) {
@@ -166,16 +166,20 @@ export class GameDialog {
           if (this.isQuestionAvailable) {
             this.getLoader();
           }
+          this.cd.markForCheck();
           if (!this.isQuestionAvailable) {
             this.showLoader = true;
             this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
             this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
               this.timer--;
+              this.cd.markForCheck();
             },
               null,
               () => {
                 this.showLoader = false;
                 this.subscribeQuestion();
+                this.cd.markForCheck();
+                // this.cd.detectChanges();
               });
           }
         }
@@ -197,6 +201,7 @@ export class GameDialog {
       this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
       this.timerSub = timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
         this.timer--;
+        this.cd.markForCheck();
       },
         null,
         () => {
@@ -204,6 +209,7 @@ export class GameDialog {
           this.showWinBadge = false;
           this.isCorrectAnswer = false;
           this.showBadgeScreen();
+          this.cd.markForCheck();
         });
     } else {
       this.showBadgeScreen();
@@ -217,6 +223,7 @@ export class GameDialog {
     this.timer = this.MAX_TIME_IN_SECONDS_LOADER;
     this.timerSub = timer(gamePlayConstants.GAME_Q_TIMER, gamePlayConstants.GAME_Q_TIMER).pipe(take(this.timer)).subscribe(t => {
       this.timer--;
+      this.cd.markForCheck();
     },
       null,
       () => {
@@ -227,6 +234,7 @@ export class GameDialog {
         this.timer = this.MAX_TIME_IN_SECONDS_BADGE;
         this.timerSub = timer(gamePlayConstants.GAME_Q_TIMER, gamePlayConstants.GAME_Q_TIMER).pipe(take(this.timer)).subscribe(t => {
           this.timer--;
+          this.cd.markForCheck();
         },
           null,
           () => {
@@ -234,6 +242,7 @@ export class GameDialog {
             this.utils.unsubscribe([this.timerSub]);
             this.showBadge = false;
             this.subscribeQuestion();
+            this.cd.detectChanges();
           });
       });
   }
@@ -242,6 +251,7 @@ export class GameDialog {
 
     this.questionSub = this.gameQuestionObs.subscribe(question => {
       if (!question) {
+        this.cd.markForCheck();
         this.currentQuestion = undefined;
         return;
       }
@@ -275,34 +285,38 @@ export class GameDialog {
       } else {
         remainSecond = this.MAX_TIME_IN_SECONDS;
       }
-
-    if (this.isQuestionAvailable || remainSecond >= 0) {
-      this.questionIndex++;
-      this.timer = remainSecond;
-      this.timerSub =
-        timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
-          this.timer--;
-        },
-          null,
-          () => {
-            // disable all buttons
-            if (this.currentQuestion) {
-              this.afterAnswer();
-              this.genQuestionComponent.fillTimer();
-            }
-          });
-    } else {
-      setTimeout(() => {
-        this.afterAnswer();
-        this.genQuestionComponent.fillTimer();
-      }, 1000);
-    }
-  });
-}
+      this.cd.markForCheck();
+      if (this.isQuestionAvailable || remainSecond >= 0) {
+        this.questionIndex++;
+        this.timer = remainSecond;
+        this.timerSub =
+          timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
+            this.timer--;
+            this.cd.markForCheck();
+          },
+            null,
+            () => {
+              // disable all buttons
+              if (this.currentQuestion) {
+                this.afterAnswer();
+                this.genQuestionComponent.fillTimer();
+                this.cd.markForCheck();
+              }
+            });
+      } else {
+        setTimeout(() => {
+          this.afterAnswer();
+          this.genQuestionComponent.fillTimer();
+          // this.cd.detectChanges();
+          this.cd.markForCheck();
+        }, 1000);
+      }
+    });
+  }
 
   calculateMaxTime(): void {
-    this.applicationSettings.game_play_timer_loader_ranges.map((timerLoader) => {
-      if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength < timerLoader.end) {
+    this.applicationSettings.game_play_timer_loader_ranges.forEach((timerLoader) => {
+      if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength <= timerLoader.end) {
         this.MAX_TIME_IN_SECONDS = timerLoader.seconds;
       }
     });
@@ -335,11 +349,13 @@ export class GameDialog {
       if (this.correctAnswerCount >= 5 ||
         (this.game.round >= 16)) {
         this.gameOverContinueClicked();
+        this.cd.detectChanges();
       }
     } else if (((this.questionIndex - this.correctAnswerCount) === 4) ||
       this.correctAnswerCount >= 5 ||
       this.questionIndex >= this.game.gameOptions.maxQuestions) {
       this.gameOverContinueClicked();
+      this.cd.markForCheck();
     }
   }
 
@@ -358,6 +374,7 @@ export class GameDialog {
 
   afterAnswer(userAnswerId?: number) {
     this.utils.unsubscribe([this.timerSub, this.questionSub]);
+    this.cd.markForCheck();
     const correctAnswerId = this.currentQuestion.answers.findIndex(a => a.correct);
     let index;
     if (userAnswerId === undefined) {
@@ -395,5 +412,49 @@ export class GameDialog {
     this.store.dispatch(new gameplayactions.AddPlayerQnA({ 'gameId': this.game.gameId, 'playerQnA': playerQnA }));
 
     this.genQuestionComponent.disableQuestions(correctAnswerId);
+    setTimeout(() => {
+      this.cd.markForCheck();
+    }, 0);
   }
+
+  destroy() {
+    this.user = undefined;
+    this.gameObs = undefined;
+    this.game = undefined;
+    this.gameQuestionObs = undefined;
+    this.currentQuestion = undefined;
+    this.originalAnswers = [];
+    this.correctAnswerCount = undefined;
+    this.totalRound = undefined;
+    this.questionIndex = undefined;
+    this.timerSub = undefined;
+    this.questionSub = undefined;
+    this.timer = undefined;
+    this.categoryName = undefined;
+    this.continueNext = undefined;
+    this.questionAnswered = undefined;
+    this.gameOver = undefined;
+    this.PlayerMode = undefined;
+
+    this.MAX_TIME_IN_SECONDS = undefined;
+    this.showContinueBtn = undefined;
+    this.otherPlayer = undefined;
+    this.otherPlayerUserId = undefined;
+    this.showBadge = undefined;
+    this.MAX_TIME_IN_SECONDS_LOADER = undefined;
+    this.MAX_TIME_IN_SECONDS_BADGE = undefined;
+    this.showLoader = undefined;
+    this.showWinBadge = undefined;
+    this.isCorrectAnswer = undefined;
+    this.turnFlag = undefined;
+
+    this.isQuestionAvailable = undefined;
+    this.isGameLoaded = undefined;
+    this.threeConsecutiveAnswer = undefined;
+    this.currentUTC = undefined;
+    this.applicationSettings = undefined;
+
+    this.genQuestionComponent = undefined;
+  }
+
 }

@@ -1,22 +1,48 @@
 
-import { appConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { appConstants, GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 import * as express from 'express';
-const router = express.Router();
+import questionRoutes from './question-routes';
+import subscriptionRoutes from './subscription-routes';
+import generalRoutes from './general-routes';
+import migrationRoutes from './migration-routes';
+import schedulerRoutes from './scheduler-routes';
+import friendRoutes from './friend-routes';
+import gameRoutes from './game-routes';
+import userRoutes from './user-routes';
 
-const questionRoutes = require('./question-routes');
-const gameRoutes = require('./game-routes');
-const subscriptionRoutes = require('./subscription-routes');
-const generalRoutes = require('./general-routes');
-const friendRoutes = require('./friend-routes');
-const userRoutes = require('./user-routes');
+class Router {
 
+    public router: any;
 
-router.use(`/${appConstants.API_PREFIX}/question`, questionRoutes);
-router.use(`/${appConstants.API_PREFIX}/subscription`, subscriptionRoutes);
-router.use(`/${appConstants.API_PREFIX}/game`, gameRoutes);
-router.use(`/${appConstants.API_PREFIX}/general`, generalRoutes);
-router.use(`/${appConstants.API_PREFIX}/friend`, friendRoutes);
-router.use(`/${appConstants.API_PREFIX}/user`, userRoutes);
+    constructor() {
 
+        this.router = express.Router();
 
-module.exports = router;
+        //  '/app/question'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.QUESTION}`, questionRoutes);
+
+        //  '/app/subscription'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
+
+        //  '/app/game'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.GAME}`, gameRoutes);
+
+        //  '/app/general'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.GENERAL}`, generalRoutes);
+
+        //  '/app/migration'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.MIGRATION}`, migrationRoutes);
+
+        //  '/app/scheduler'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.SCHEDULER}`, schedulerRoutes);
+
+        //  '/app/friend'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.FRIEND}`, friendRoutes);
+
+        //  '/app/user'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.USER}`, userRoutes);
+
+    }
+}
+
+export default new Router().router;

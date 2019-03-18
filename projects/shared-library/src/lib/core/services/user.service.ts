@@ -20,6 +20,7 @@ export class UserService {
     }
 
     loadUserProfile(user: User): Observable<User> {
+
         return this.dbService.valueChanges('users', user.userId)
             .pipe(map(u => {
                 if (u) {
@@ -145,5 +146,10 @@ export class UserService {
     updateUser(user: User) {
         const dbUser = Object.assign({}, user);
         this.dbService.setDoc('users', dbUser.userId, dbUser);
+    }
+
+    addUserLives(userId: string) {
+        const url = `${CONFIG.functionsUrl}/app/user/update-lives`;
+        return this.http.post<any>(url, { userId: userId });
     }
 }

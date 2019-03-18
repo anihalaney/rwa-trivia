@@ -155,13 +155,13 @@
                     <StackLayout padding="10" backgroundColor="#f3f3f3">
                         <GridLayout rows="auto,auto" columns="auto,auto,auto,auto" horizontalAlignment="center">
                             <Button row="1" col="0" class="navigate-button Hind-Medium" text="Share" (tap)="screenshot()"></Button>
-                            <button row="1" col="1" class="navigate-button Hind-Medium" text="Rematch" (tap)="reMatch()"
+                            <button row="1" col="1" class="navigate-button Hind-Medium" text="Rematch" (tap)="reMatchGame()"
                                 *ngIf="game.gameOptions?.playerMode != PlayerMode.Single"></button>
-                            <Button row="1" col="1" class="navigate-button Hind-Medium" text="Play Again" (tap)="reMatch()"
+                            <Button row="1" col="1" class="navigate-button Hind-Medium" text="Play Again" (tap)="reMatchGame()"
                                 *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"></Button>
                             <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend" (tap)="inviteAsFriend()"
                             isEnabled="{{!disableFriendInviteBtn}}" *ngIf="game.gameOptions.opponentType == opponentType.Random"></Button>
-                            <Button row="1" col="3" class="navigate-button Hind-Medium" text="Home" [nsRouterLink]="['/dashboard']"></Button>
+                            <Button row="1" col="3" class="navigate-button Hind-Medium" text="Home" (tap)="gotoDashboard()"></Button>
                         </GridLayout>
                     </StackLayout>
                 </StackLayout>

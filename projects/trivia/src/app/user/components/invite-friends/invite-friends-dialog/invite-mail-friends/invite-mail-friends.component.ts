@@ -1,21 +1,26 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy , ChangeDetectorRef, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 
 import { User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../../../store';
-import * as userActions from '../../../../../user/store/actions';
-import { userState } from '../../../../../user/store';
 import { coreState, UserActions } from 'shared-library/core/store';
+import { Subscription } from 'rxjs';
+import { Utils } from 'shared-library/core/services';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 const EMAIL_REGEXP = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 @Component({
   selector: 'app-invite-mail-friends',
   templateUrl: './invite-mail-friends.component.html',
-  styleUrls: ['./invite-mail-friends.component.scss']
+  styleUrls: ['./invite-mail-friends.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InviteMailFriendsComponent implements OnInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class InviteMailFriendsComponent implements OnInit, OnDestroy {
+
   @Input() user: User;
   invitationForm: FormGroup;
   showErrorMsg = false;
@@ -24,20 +29,25 @@ export class InviteMailFriendsComponent implements OnInit {
   showSuccessMsg: string;
   validEmail = [];
   emailCheck: Boolean = false;
+  @ViewChildren('textField') textField: QueryList<ElementRef>;
+  subscriptions = [];
 
-  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions) {
-    this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+
+  constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef,
+    private utils: Utils) {
+      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
         this.user = user;
       }
-    });
+    }));
 
-    this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
         this.showSuccessMsg = status;
+        this.cd.detectChanges();
       }
-    });
+    }));
 
   }
 
@@ -92,10 +102,24 @@ export class InviteMailFriendsComponent implements OnInit {
 
       }
       if (this.invalidEmailList.length === 0) {
-        this.store.dispatch( this.userAction.addUserInvitation(
+        this.store.dispatch(this.userAction.addUserInvitation(
           { userId: this.user.userId, emails: this.validEmail }));
       }
     }
+  }
+
+  ngOnDestroy(): void {
+  }
+
+  hideKeyboard() {
+    this.textField
+      .toArray()
+      .map((el) => {
+        if (el.nativeElement && el.nativeElement.android) {
+          el.nativeElement.android.clearFocus();
+        }
+        return el.nativeElement.dismissSoftInput();
+      });
   }
 }
 

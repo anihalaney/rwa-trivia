@@ -151,3 +151,35 @@
     background-color: #009fe8;
     color: #ffffff;
 }
+
+.label-link{
+    color: #b7b7b7;
+    margin-left:5;
+}
+
+.input-box{
+    padding: 10 5 10 0;
+    width: 100%;
+    background-color: #FFFFFF;
+}
+
+.social-section StackLayout{
+    padding: 0;
+}
+
+.social-profile-error{
+    color: #ff0000;
+  }
+
+.profile-settings>.social-section StackLayout>GridLayout{
+    padding-left: 0;
+    padding-top: 15;
+    padding-bottom: 15;
+    padding-right: 0;
+}
+
+.text-box{
+    margin-top: 10;
+    border-color: #b7b7b7;
+    border-width: 1;
+}

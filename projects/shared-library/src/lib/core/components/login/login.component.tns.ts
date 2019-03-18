@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef,
+  ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -10,29 +11,43 @@ import { Login } from './login';
 import { Page } from 'tns-core-modules/ui/page';
 import { LoadingIndicator } from "nativescript-loading-indicator";
 import { isAndroid } from 'tns-core-modules/platform';
+import { Utils } from '../../services';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+
 
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LoginComponent extends Login implements OnInit {
 
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class LoginComponent extends Login implements OnInit, OnDestroy {
+  @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = new LoadingIndicator();
+  message = {
+    show: false,
+    type: '',
+    text: ''
+  };
+  subscriptions = [];
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
     private uiStateActions: UIStateActions,
     private page: Page,
-    private firebaseAuthService: FirebaseAuthService) {
+    private firebaseAuthService: FirebaseAuthService,
+    private utils: Utils,
+    public cd: ChangeDetectorRef) {
     super(fb, store);
     this.page.actionBarHidden = true;
   }
 
   ngOnInit() {
     this.title = 'Login';
-    this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
+    this.subscriptions.push(this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
         case 1:
           // Sign up
@@ -48,18 +63,18 @@ export class LoginComponent extends Login implements OnInit {
           this.title = 'Forgot Password';
       }
       this.loginForm.get('password').updateValueAndValidity();
-    });
+    }));
 
 
   }
 
   onSubmit() {
-
+    this.hideKeyboard();
     if (!this.loginForm.valid) {
       return;
     }
     this.loader.show();
-
+    this.removeMessage();
     switch (this.mode) {
       case 0:
         // Login
@@ -71,7 +86,10 @@ export class LoginComponent extends Login implements OnInit {
           this.redirectTo();
         }).catch((error) => {
           this.loader.hide();
-          Toast.makeText(error.message).show();
+          const singInError = error.message.split(':');
+          this.showMessage('error', singInError[1] || error.message);
+        }).finally( () => {
+          this.cd.markForCheck();
         });
         break;
       case 1:
@@ -88,12 +106,16 @@ export class LoginComponent extends Login implements OnInit {
               }
             ).catch((error) => {
               this.loader.hide();
-              Toast.makeText(error).show();
+              const verificationError = error.split(':');
+              this.showMessage('error', verificationError[1] || error);
             });
           }
         }).catch((error) => {
           this.loader.hide();
-          Toast.makeText(error).show();
+          const singUpError = error.split(':');
+          this.showMessage('error', singUpError[1] || error);
+        }).finally( () => {
+          this.cd.markForCheck();
         });
         break;
       case 2:
@@ -101,20 +123,23 @@ export class LoginComponent extends Login implements OnInit {
         this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.value.email)
           .then((a: any) => {
             this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
-            Toast.makeText(this.notificationMsg).show();
+            this.showMessage('success', this.notificationMsg);
             this.loader.hide();
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
+            this.cd.markForCheck();
           }).catch((error) => {
             this.loader.hide();
-            Toast.makeText(error).show();
+            this.showMessage('error', error);
+            this.cd.markForCheck();
           });
     }
 
   }
 
   googleLogin() {
+    this.removeMessage();
     if (isAndroid) {
       this.loader.show();
     }
@@ -124,12 +149,13 @@ export class LoginComponent extends Login implements OnInit {
       }
     ).catch((error) => {
       this.loader.hide();
-      Toast.makeText(error).show();
+      this.showMessage('error', error);
     });
 
   }
 
   fbLogin() {
+    this.removeMessage();
     if (isAndroid) {
       this.loader.show();
     }
@@ -139,25 +165,60 @@ export class LoginComponent extends Login implements OnInit {
       }
     ).catch((error) => {
       this.loader.hide();
-      Toast.makeText(error).show();
+      this.showMessage('error', error);
     });
   }
 
   redirectTo() {
-    this.store.select(coreState).pipe(
+    this.subscriptions.push(this.store.select(coreState).pipe(
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe(() => {
         this.loader.hide();
-        this.store.select(coreState).pipe(
+        this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
             Toast.makeText('You have been successfully logged in').show();
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
-          });
+          }));
       }
-      );
-  }
+      ));
+}
 
+showMessage(type: string, text: string) {
+  this.message = {
+    show: true,
+    type: type,
+    text: text
+  };
+}
+
+changeMode(mode: number) {
+  super.changeMode(mode);
+  this.removeMessage();
+}
+
+removeMessage() {
+  this.message = {
+    show: false,
+    type: '',
+    text: ''
+  };
+}
+
+ngOnDestroy() {
+
+}
+
+hideKeyboard() {
+  this.textField
+    .toArray()
+    .map((el) => {
+      if (isAndroid) {
+        el.nativeElement.android.clearFocus();
+      }
+      return el.nativeElement.dismissSoftInput();
+    });
+}
 }
 

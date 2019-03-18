@@ -1,20 +1,26 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import {
     ReportQuestion, User, Game, QuestionMetadata, Category, Question
 } from 'shared-library/shared/model';
 import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
 import * as Toast from 'nativescript-toast';
+import { Utils } from 'shared-library/core/services';
+import { isAndroid } from 'tns-core-modules/ui/page/page';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'report-game',
     templateUrl: './report-game.component.html',
-    styleUrls: ['./report-game.component.scss']
+    styleUrls: ['./report-game.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ReportGameComponent implements OnInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class ReportGameComponent implements OnInit, OnDestroy {
 
     question: Question;
     reportQuestion: ReportQuestion;
@@ -29,12 +35,17 @@ export class ReportGameComponent implements OnInit {
     reportOptions?: Array<ReportOption>;
     selectedOption: string = null;
     otherReason: string = null;
+    subscriptions = [];
 
-    constructor(private store: Store<AppState>, private params: ModalDialogParams) {
+    @ViewChildren('textField') textField: QueryList<ElementRef>;
+
+    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils,
+        private cd: ChangeDetectorRef) {
         this.categoryDict$ = store.select(categoryDictionary);
-        this.categoryDict$.subscribe(categoryDict => {
+        this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {
             this.categoryDict = categoryDict;
-        });
+            this.cd.markForCheck();
+        }));
 
         this.question = params.context.question;
         this.user = params.context.user;
@@ -57,6 +68,7 @@ export class ReportGameComponent implements OnInit {
     }
 
     saveReportQuestion() {
+        this.hideKeyboard();
         if (this.selectedOption == null) {
             Toast.makeText('Select issue!').show();
             return;
@@ -119,6 +131,20 @@ export class ReportGameComponent implements OnInit {
 
     onClose(): void {
         this.params.closeCallback();
+    }
+
+    ngOnDestroy() {
+    }
+
+    hideKeyboard() {
+        this.textField
+            .toArray()
+            .map((el) => {
+                if (isAndroid) {
+                    el.nativeElement.android.clearFocus();
+                }
+                return el.nativeElement.dismissSoftInput();
+            });
     }
 
 }
