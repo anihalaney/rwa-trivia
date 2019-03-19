@@ -12,6 +12,7 @@ import * as gamePlayActions from '../../game-play/store/actions';
 import { UserActions, ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { CookieLawComponent } from 'angular2-cookie-law';
 
 @Component({
   selector: 'app-root',
@@ -27,7 +28,7 @@ export class AppComponent implements OnInit, OnDestroy {
   theme = '';
 
   @ViewChild('cookieLaw')
-  private cookieLawEl: any;
+  private cookieLawEl: CookieLawComponent;
 
   constructor(private renderer: Renderer2,
     private authService: AuthenticationProvider,
