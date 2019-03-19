@@ -173,7 +173,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.redirectToDashboard(this.gameErrorMsg);
       return false;
     }
-
     this.startNewGame(this.gameOptions);
   }
 
@@ -244,5 +243,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard']);
     Toast.makeText(msg).show();
   }
+
+  get categoryListHeight() {
+    return 60 * this.filteredCategories.length;
+  }
+
+  get tagsHeight() {
+    return  (60 * this.selectedTags.length) + 20;
+  }
+
 }
 
