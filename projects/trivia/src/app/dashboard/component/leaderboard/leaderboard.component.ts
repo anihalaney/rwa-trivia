@@ -26,7 +26,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   leaderBoardCat: Array<string>;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
-  lbsSliceStartIndex: number;
+  lbsSliceStartIndex = -1;
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;
@@ -81,10 +81,13 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
               }
             });
           });
-          this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
-          this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
-          this.lbsUsersSliceStartIndex = 0;
-          this.lbsUsersSliceLastIndex = 3;
+
+          if (this.lbsSliceStartIndex === -1) {
+            this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
+            this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
+            this.lbsUsersSliceStartIndex = 0;
+            this.lbsUsersSliceLastIndex = 3;
+          }
         }
       }
       this.cd.markForCheck();
