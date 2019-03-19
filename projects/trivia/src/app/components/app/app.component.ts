@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
@@ -12,6 +12,7 @@ import * as gamePlayActions from '../../game-play/store/actions';
 import { UserActions, ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { CookieLawComponent } from 'angular2-cookie-law';
 
 @Component({
   selector: 'app-root',
@@ -25,6 +26,10 @@ export class AppComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
   theme = '';
+
+  @ViewChild('cookieLaw')
+  private cookieLawEl: CookieLawComponent;
+
   constructor(private renderer: Renderer2,
     private authService: AuthenticationProvider,
     private store: Store<AppState>,
@@ -109,5 +114,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.renderer.removeClass(document.body, this.theme);
       this.theme = '';
     }
+  }
+  cookiesAccepted() {
+    this.cookieLawEl.dismiss();
   }
 }

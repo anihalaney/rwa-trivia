@@ -85,7 +85,6 @@ export class GameMechanics {
                 } else {
                     remainedTime = schedulerConstants.beforeGameExpireDuration - playedMinutes;
                 }
-
                 if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                     (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
                     if ((remainedTime) <= schedulerConstants.notificationInterval) {
@@ -93,7 +92,6 @@ export class GameMechanics {
                             pushNotificationRouteConstants.GAME_REMAINING_TIME_NOTIFICATIONS);
                     }
                 }
-
                 if (playedHours >= schedulerConstants.gamePlayDuration) {
                     game.gameOver = true;
                     game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
@@ -104,15 +102,18 @@ export class GameMechanics {
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
                     const dbGame = game.getDbModel();
-                    await GameService.updateGame(dbGame);
-
+                    if (dbGame.id) {
+                        await GameService.updateGame(dbGame);
+                    }
                 } else if (playedHours >= schedulerConstants.gameInvitationDuration
                     && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
                         game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)) {
                     game.gameOver = true;
                     game.GameStatus = GameStatus.INVITATION_TIMEOUT;
                     const dbGame = game.getDbModel();
-                    await GameService.updateGame(dbGame);
+                    if (dbGame.id) {
+                     await GameService.updateGame(dbGame);
+                    }
 
                 }
             }

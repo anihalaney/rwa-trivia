@@ -28,6 +28,7 @@
     "./projects/shared-library/src/lib/shared",
     "./projects/trivia/src/app/game-play/game-play.module.ts",
     "./projects/trivia/src/app/user/user.module.ts",
+    "./projects/trivia/src/app/dashboard/dashboard.module.ts",
     "./projects/trivia/src/main.ns.ts"
   ]
 }

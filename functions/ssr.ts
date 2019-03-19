@@ -9,6 +9,6 @@ const ngApp = server.app;
 
 const runtimeOpts = {
   memory: '512MB'
-}
+};
 
 exports.ssr = ssrFunction.runWith(runtimeOpts).https.onRequest(ngApp);

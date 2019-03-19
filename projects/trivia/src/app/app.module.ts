@@ -13,6 +13,7 @@ import { reducers, CustomSerializer } from './store';
 import { RoutingModule } from './routing/routing.module';
 
 import { LazyLoadImagesModule } from 'ngx-lazy-load-images';
+import { CookieLawModule } from 'angular2-cookie-law';
 
 import {
   AppComponent,
@@ -26,8 +27,6 @@ import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { interval } from 'rxjs';
 import { GameCardComponent } from './components/game-card/game-card.component';
-import { DashboardModule } from './dashboard/dashboard.module';
-
 
 @NgModule({
   declarations: [
@@ -47,6 +46,7 @@ import { DashboardModule } from './dashboard/dashboard.module';
     BrowserModule,
     BrowserAnimationsModule,
     LazyLoadImagesModule,
+    CookieLawModule,
 
     EffectsModule.forRoot([]),
     StoreModule.forRoot(reducers),
@@ -60,7 +60,6 @@ import { DashboardModule } from './dashboard/dashboard.module';
     CoreModule,
     SharedModule,
     RoutingModule,
-    DashboardModule,
     BrowserModule.withServerTransition({ appId: 'trivia' }),
     //BrowserTransferStateModule,
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })

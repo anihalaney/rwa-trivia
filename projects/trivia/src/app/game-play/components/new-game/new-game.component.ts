@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, GameMode, GameOptions, OpponentType, PlayerMode } from 'shared-library/shared/model';
@@ -70,45 +70,46 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-      if (appSettings) {
-        this.applicationSettings = appSettings[0];
-        this.selectedCategories = [];
-        let filteredCategories = [];
-        if (this.applicationSettings && this.applicationSettings.game_play_categories) {
-          filteredCategories = this.categories.filter((category) => {
-            if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-              return category;
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1))
+      .subscribe(appSettings => {
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+          this.selectedCategories = [];
+          let filteredCategories = [];
+          if (this.applicationSettings && this.applicationSettings.game_play_categories) {
+            filteredCategories = this.categories.filter((category) => {
+              if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+                return category;
+              }
+            });
+          } else {
+            filteredCategories = this.categories;
+          }
+
+          if (this.applicationSettings && this.applicationSettings.lives.enable) {
+            this.store.select(appState.coreState).pipe(select(s => s.account), take(1)).subscribe(account => {
+              if (account) {
+                this.life = account.lives;
+              }
+              this.cd.markForCheck();
+            });
+          }
+
+          const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+          ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+
+          this.sortedCategories = sortedCategories;
+
+          sortedCategories.map(category => {
+            category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
+            if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
+              this.selectedCategories.push(category.id);
             }
           });
-        } else {
-          filteredCategories = this.categories;
+          this.cd.markForCheck();
+          // this.cd.detectChanges();
         }
-
-        if (this.applicationSettings && this.applicationSettings.lives.enable) {
-          this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
-            if (account) {
-              this.life = account.lives;
-            }
-            this.cd.markForCheck();
-          }));
-        }
-
-        const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-        ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-
-        this.sortedCategories = sortedCategories;
-
-        sortedCategories.map(category => {
-          category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
-          if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
-            this.selectedCategories.push(category.id);
-          }
-        });
-        this.cd.markForCheck();
-        // this.cd.detectChanges();
-      }
-    }));
+      });
   }
 
   ngOnInit() {

@@ -11,7 +11,7 @@ import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
 import { Router } from '@angular/router';
@@ -66,7 +66,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     }));
 
-    this.subscriptions.push(this.categoriesObs.subscribe(categories => {
+    this.categoriesObs.pipe(take(1)).subscribe(categories => {
       categories.map(category => {
         if (this.user.categoryIds && this.user.categoryIds.length > 0) {
           category.isSelected = this.user.categoryIds.includes(category.id);
@@ -79,35 +79,36 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         return category;
       });
       this.cd.markForCheck();
-      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-        if (appSettings) {
-          this.applicationSettings = appSettings[0];
-          let filteredCategories = [];
-          if (this.applicationSettings) {
-            filteredCategories = this.categories.filter((category) => {
-              if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-                return category;
-              }
-            });
-            if (this.applicationSettings && this.applicationSettings.lives.enable) {
-              this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
-                if (account) {
-                  this.life = account.lives;
+      this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1)).subscribe(
+        appSettings => {
+          if (appSettings) {
+            this.applicationSettings = appSettings[0];
+            let filteredCategories = [];
+            if (this.applicationSettings) {
+              filteredCategories = this.categories.filter((category) => {
+                if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+                  return category;
                 }
-                this.cd.markForCheck();
-              }));
+              });
+              if (this.applicationSettings && this.applicationSettings.lives.enable) {
+                this.store.select(appState.coreState).pipe(select(s => s.account), take(1)).subscribe(account => {
+                  if (account) {
+                    this.life = account.lives;
+                  }
+                  this.cd.markForCheck();
+                });
+              }
+            } else {
+              filteredCategories = this.categories;
             }
-          } else {
-            filteredCategories = this.categories;
+
+            this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+            ...filteredCategories.filter(c => !c.requiredForGamePlay)];
           }
+          this.cd.markForCheck();
+        });
 
-          this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-          ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-        }
-        this.cd.markForCheck();
-      }));
-
-    }));
+    });
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
@@ -173,7 +174,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.redirectToDashboard(this.gameErrorMsg);
       return false;
     }
-
     this.startNewGame(this.gameOptions);
   }
 
@@ -244,5 +244,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard']);
     Toast.makeText(msg).show();
   }
+
+  get categoryListHeight() {
+    return 60 * this.filteredCategories.length;
+  }
+
+  get tagsHeight() {
+    return  (60 * this.selectedTags.length) + 20;
+  }
+
 }
 
