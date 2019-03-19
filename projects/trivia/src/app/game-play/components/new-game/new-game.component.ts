@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
@@ -11,8 +11,7 @@ import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, GameMode, GameOptions, OpponentType, PlayerMode } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
-
-
+import { SwiperDirective, SwiperConfigInterface } from 'ngx-swiper-wrapper';
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -38,6 +37,17 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   friendUserId: string;
   loaderStatus = false;
 
+  public config: SwiperConfigInterface = {
+    a11y: true,
+    direction: 'horizontal',
+    slidesPerView: 4,
+    keyboard: true,
+    mousewheel: true,
+    scrollbar: false,
+    navigation: true,
+    pagination: false
+  };
+  @ViewChild(SwiperDirective) directiveRef?: SwiperDirective;
 
   get categoriesFA(): FormArray {
     return this.newGameForm.get('categoriesFA') as FormArray;
@@ -50,8 +60,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
-    private cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions);
+    public cd: ChangeDetectorRef) {
+    super(store, utils, gameActions, userActions, cd);
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
