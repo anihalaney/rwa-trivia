@@ -5,11 +5,11 @@
   "angular-cli": {},
   "nativescript": {
     "id": "io.bitwiser.trivia.dev",
-    "tns-android": {
-      "version": "5.1.0"
-    },
     "tns-ios": {
       "version": "5.1.1"
+    },
+    "tns-android": {
+      "version": "5.1.0"
     }
   },
   "scripts": {
@@ -58,7 +58,7 @@
   "private": true,
   "dependencies": {
     "@angular-devkit/core": "~7.1.0",
-    "@angular/animations": "~7.1.0",
+    "@angular/animations": "^7.1.4",
     "@angular/cdk": "~7.2.0",
     "@angular/common": "~7.1.0",
     "@angular/compiler": "~7.1.0",
@@ -88,6 +88,7 @@
     "@ngx-share/button": "^7.1.1",
     "@ngx-share/buttons": "^7.1.1",
     "@ngx-share/core": "^7.1.1",
+    "angular2-cookie-law": "^6.2.0",
     "compression": "^1.7.3",
     "core-js": "2.6.1",
     "dom-to-image": "^2.6.0",
