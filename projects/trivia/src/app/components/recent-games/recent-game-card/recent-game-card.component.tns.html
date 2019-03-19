@@ -10,16 +10,8 @@
     <Image *ngIf="user" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64" width="64"
         marginLeft="2" verticalAlignment="center" borderRadius="50" horizontalAlignment="center"></Image>
     <Label text="You" textWrap="true" class="user-name" horizontalAlignment="center"></Label>
-    <Label text="Round {{game.stats[user.userId].score}} / {{game.round}}" class="label-score" textWrap="true"
+    <Label text="Score {{game.stats[user.userId].score}} / {{game.round}}" class="label-score" textWrap="true"
         horizontalAlignment="center"></Label>
-    <Label text="Score {{game.stats[user.userId]?.score}}" class="label-score" textWrap="true"
-        horizontalAlignment="center"></Label>
-
-    <Label text="Reason: You have given 5 right answer." textWrap="true"
-        *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId" horizontalAlignment="center"></Label>
-    <Label text="Reason: You have given 4 wrong answer." textWrap="true" *ngIf="game.winnerPlayerId !== user.userId"
-        horizontalAlignment="center"></Label>
-
 </StackLayout>
 
 <GridLayout rows="auto" columns="*,auto,*" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" padding="15">
@@ -67,16 +59,6 @@
     </StackLayout>
 </GridLayout>
 <StackLayout *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent" horizontalAlignment="center" padding="10">
-    <Label text="Reason: You have given 5 right answer." textWrap="true" class="label-score"
-        *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId"></Label>
-    <Label text="Reason: Your opponent has given 5 right answer." textWrap="true" class="label-score"
-        *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId"></Label>
-    <Label text="Reason: You and your opponent has given same correct answer." textWrap="true" class="label-score"
-        *ngIf="game.round < 16 && !game.winnerPlayerId && game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT"></Label>
-    <Label text="Reason: You ans your opponent has given same correct answer." textWrap="true" class="label-score"
-        *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED"></Label>
     <Label text="Reason: Your opponent did not answer in time." textWrap="true" class="label-score"
         *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.INVITATION_TIMEOUT"></Label>
-    <Label text="Reason: Your game is drawn." textWrap="true" class="label-score"
-        *ngIf="!game.winnerPlayerId && game.round === 16"></Label>
 </StackLayout>

@@ -24,6 +24,7 @@
             </div>
 
         </div>
+        
         <div class="dark">{{categoryDict[game.gameOptions.categoryIds[0]]?.categoryName.charAt(0).toUpperCase() +
             categoryDict[game.gameOptions.categoryIds[0]]?.categoryName.slice(1)}}</div>
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Opponent">
@@ -51,26 +52,8 @@
                 <p class="light">Score {{game.stats[user.userId]?.score}}</p>
             </div>
             <div class="col-xs-12 pt-10">
-                <p class="light">Reason:
-                    <span *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">
-                        You have given 5 right answer.
-                    </span>
-                    <span *ngIf="game.winnerPlayerId && game.winnerPlayerId !== user.userId">
-                        Your opponent has given 5 right answer.
-                    </span>
-                    <span
-                        *ngIf="game.round < 16 && !game.winnerPlayerId && game.GameStatus !== GameStatus.REJECTED && game.GameStatus !== GameStatus.INVITATION_TIMEOUT">
-                        You and your opponent has given same correct answer.
-                    </span>
-                    <span *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED">
-                        Your Opponent has Rejected the game.
-                    </span>
-                    <span *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.INVITATION_TIMEOUT">
-                        Your opponent did not answer in time.
-                    </span>
-                    <span *ngIf="!game.winnerPlayerId && game.round === 16">
-                        Your game is drawn.
-                    </span>
+                <p class="light" *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.INVITATION_TIMEOUT">    
+                    Reason: Your opponent did not answer in time.
                 </p>
             </div>
         </div>
@@ -80,17 +63,7 @@
                 <img [src]="userProfileImageUrl" alt="User Profile Image" />
             </div>
             <p class="light" title="{{user?.displayName}}">{{user?.displayName}}</p>
-            <p class="light">Round {{game.stats[user.userId].score}} / {{game.round}}</p>
-            <p class="light">Score {{game.stats[user.userId]?.score}}</p>
-
-            <p class="light reason pt-10">Reason :
-                <span *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">
-                    You have given 5 right answer.
-                </span>
-                <span *ngIf="game.winnerPlayerId !== user.userId">
-                    You have given 4 wrong answer.
-                </span>
-            </p>
+            <p class="light">Score {{game.stats[user.userId].score}} / {{game.round}}</p>
         </div>
     </div>
 </ng-container>
