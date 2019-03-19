@@ -46,13 +46,6 @@ export class Utils {
         }
     }
 
-    static isElasticSearchProduction(): boolean {
-        return (functions.config().elasticsearch &&
-            functions.config().elasticsearch.index &&
-            functions.config().elasticsearch.index.production &&
-            functions.config().elasticsearch.index.production === GeneralConstants.TRUE) ? true : false;
-    }
-
     static isEnvironmentProduction(): boolean {
         return (functions.config().environment &&
             functions.config().environment.production &&
@@ -62,11 +55,11 @@ export class Utils {
     static getESPrefix(): string {
         // set required prefix for different deployment environments(firebase project) using following command
         // default project in firebase is development deployment
-        // firebase -P production functions:config:set elasticsearch.index.production=true
+        // firebase -P production functions:config:set environment.production=true
         // After setting config variable do not forget to deploy functions
         // to see set environments firebase -P production functions:config:get
         let prefix = 'dev:';
-        if (Utils.isElasticSearchProduction()) {
+        if (Utils.isEnvironmentProduction()) {
             prefix = '';
         }
         return prefix;
