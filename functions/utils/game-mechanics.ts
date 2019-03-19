@@ -111,7 +111,9 @@ export class GameMechanics {
                     game.gameOver = true;
                     game.GameStatus = GameStatus.INVITATION_TIMEOUT;
                     const dbGame = game.getDbModel();
-                    await GameService.updateGame(dbGame);
+                    if (dbGame.id) {
+                     await GameService.updateGame(dbGame);
+                    }
 
                 }
             }
