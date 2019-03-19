@@ -167,8 +167,8 @@
             </GridLayout>
 
             <CardView margin="5 10" visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"
-                *ngIf="applicationSettings && applicationSettings.game_play_show_tags" iosOverflowSafeArea="false" height="100%">
-                <StackLayout height="100%">
+                *ngIf="applicationSettings && applicationSettings.game_play_show_tags" iosOverflowSafeArea="false">
+                <StackLayout>
                     <RadListView [items]="selectedTags" ios:height="{{tagsHeight}}" android:height="auto">
                         <ng-template tkListItemTemplate let-item="item">
                             <GridLayout rows="*" columns="*,auto" padding="10" borderBottomWidth="1"
@@ -205,7 +205,7 @@
             <CardView margin="5 10" visibility="{{ showSelectTag ? 'visible' : 'collapsed' }}" backgroundColor="white"
                 class="label" *ngIf="applicationSettings && applicationSettings.game_play_show_tags">
                 <Label padding="15" [text]="selectedTags.join(', ')" textWrap="true"></Label>
-            </CardView> -->
+            </CardView>
 
             <StackLayout margin="5 10">
                 <Button text="START A NEW GAME" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
