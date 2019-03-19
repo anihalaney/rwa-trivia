@@ -74,3 +74,17 @@
     <router-outlet></router-outlet>
   </div>
 </mat-sidenav-container>
+<cookie-law position="bottom" #cookieLaw awsomeCloseIcon="fa-window-close">
+
+  <div class="container">
+    <div class="col-sm-10 text-center">
+      We use cookies to provide our services. <br>To find out more about our use of cookies, please see our <a href="/privacy-policy">Privacy
+        Policy</a>. By continuing to browse our website, you agree to our use of cookies.
+
+    </div>
+    <div class="col-sm-2">
+      <button class="btn" (click)="cookiesAccepted()">Accept</button>
+    </div>
+  </div>
+
+</cookie-law>

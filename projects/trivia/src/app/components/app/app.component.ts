@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
@@ -25,6 +25,10 @@ export class AppComponent implements OnInit, OnDestroy {
   user: User;
   subscriptions = [];
   theme = '';
+
+  @ViewChild('cookieLaw')
+  private cookieLawEl: any;
+
   constructor(private renderer: Renderer2,
     private authService: AuthenticationProvider,
     private store: Store<AppState>,
@@ -109,5 +113,8 @@ export class AppComponent implements OnInit, OnDestroy {
       this.renderer.removeClass(document.body, this.theme);
       this.theme = '';
     }
+  }
+  cookiesAccepted() {
+    this.cookieLawEl.dismiss();
   }
 }

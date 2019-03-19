@@ -7,7 +7,7 @@ export const routes: Routes = [
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
         path: 'dashboard',
-        loadChildren: '../dashboard/dashboard.module#DashboardModule',
+        loadChildren: './../dashboard/dashboard.module#DashboardModule',
     },
     {
         path: 'game-play',
