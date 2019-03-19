@@ -48,7 +48,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     this.categoryDictObs = store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
     this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
-      this.user = s.user
+      this.user = s.user;
     });
 
     this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
@@ -132,11 +132,11 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     // add conditional columns in table
     if (this.isAdminUrl) {
       if (this.displayedColumns.indexOf('created') === -1) {
-        this.displayedColumns.push('created')
+        this.displayedColumns.push('created');
       }
     }
     if (this.displayedColumns.indexOf('download') === -1) {
-      this.displayedColumns.push('download')
+      this.displayedColumns.push('download');
     }
   }
 

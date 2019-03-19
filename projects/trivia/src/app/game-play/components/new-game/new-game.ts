@@ -37,7 +37,7 @@ export class NewGame implements OnDestroy {
     public utils: Utils,
     public gameActions: GameActions,
     public userActions: UserActions) {
-    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories), take(1));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
