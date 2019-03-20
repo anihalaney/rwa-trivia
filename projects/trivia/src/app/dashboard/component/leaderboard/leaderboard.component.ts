@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { Category, User, LeaderBoardUser, LeaderBoardConstants } from './../../../../../../shared-library/src/lib/shared/model';
+import { Store, select } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState } from '../../../store';
 import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
@@ -24,7 +24,7 @@ export class LeaderboardComponent extends Leaderboard {
   leaderBoardCat: Array<string>;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
-  lbsSliceStartIndex: number;
+  lbsSliceStartIndex: number = -1;
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;

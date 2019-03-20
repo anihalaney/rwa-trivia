@@ -64,7 +64,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     private cd: ChangeDetectorRef,
     private ngZone: NgZone) {
 
-    super(fb, store, userAction, utils);
+    super(fb, store, userAction, utils, cd);
     this.initDataItems();
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
@@ -162,7 +162,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      Toast.makeText('Please complete profile settings for bulk upload request').show();
+      Toast.makeText('Please add name, display name, location and profile picture for bulk upload request').show();
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
@@ -174,13 +174,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     // validations
     this.userForm.updateValueAndValidity();
 
-    if (!this.profileImageFile && !this.user.profilePicture) {
-      Toast.makeText('Please upload the profile picture').show();
-      return;
-    } else if (this.profileImageFile) {
+    if (this.profileImageFile) {
       this.assignImageValues();
     }
-
 
     if (this.userForm.invalid) {
       Toast.makeText('Please fill the mandatory fields').show();

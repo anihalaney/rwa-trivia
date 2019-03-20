@@ -17,7 +17,7 @@
                         <h2>Select
                             <span>Player Mode</span>
                         </h2>
-                    </div>
+                    </div>        
                     <div class="col-sm-9 radiobtn">
                         <input type="radio" id="p-radio1" formControlName="playerMode" value="0" checked="true">
                         <label for="p-radio1">
@@ -33,33 +33,38 @@
                             <input type="radio" id="tp-radio2" formControlName="opponentType" value="1">
                             <label for="tp-radio2">
                                 <span class="sprite friendsp-icon icon"></span>With Friends</label>
-                            <input type="radio" id="tp-radio3" formControlName="opponentType" value="2">
-                            <!-- <label for="tp-radio3">
-                                <span class="sprite computerp-icon"></span>With Computer</label> -->
+                                <input type="radio" id="tp-radio3" formControlName="opponentType" value="2">
+                                <!-- <label for="tp-radio3">
+                                    <span class="sprite computerp-icon"></span>With Computer</label> -->
 
-                            <div class="withfriends">
-                                <ul class="friendsslider" *ngIf="uFriends && uFriends.length>0">
-                                    <li *ngFor="let friendId of uFriends; let i=index">
-                                        <input type="radio" id="friends{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
-                                        <label for="friends{{i}}">
-                                            <span class="labelimg">
-                                                <img [src]="getImageUrl(userDict[friendId])" alt="User Profile Image" />
+                                    <div class="withfriends" *ngIf="newGameForm.value.opponentType == 1">      
+                                        <div *ngIf="uFriends && uFriends.length > 0"> 
+                                        <img class="arrow-img left swiper-button-prev" src="assets/images/arrow-left.png" alt="left" >                                   
+                                            <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
+                                                    <div  class="swiper-container" [swiper]="config">
+                                                      <div class="swiper-wrapper">
+                                                        <div *ngFor="let friendId of uFriends; let i=index" class="swiper-slide">
+                                                          <div >
+                                                                <input type="radio" id="friend-{{i}}" name="withfriends" (change)="selectFriendId(friendId)">
+                                                                <label for="friend-{{i}}">
+                                                                    <span class="labelimg">
+                                                                        <img [src]="getImageUrl(userDict[friendId])" alt="User Profile Image" />
+                                                                    </span>
+                                                                    <span class="dark">{{userDict[friendId]?.displayName ? userDict[friendId]?.displayName : ' '}}</span>
+                                                                    <span class="light pt-5">{{userDict[friendId]?.location}}</span>
+                                                                </label>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <img class="arrow-img right swiper-button-next" src="assets/images/arrow-right.png" alt="right">
+                                          </div> 
+                                          <span class="no-frd-msg" *ngIf="noFriendsStatus">
+                                                I do not have any friends, invite your friends using link
+                                                <a [routerLink]="['/my/invite-friends']">Invite Friends</a>
                                             </span>
-                                            <span class="dark">{{userDict[friendId]?.displayName}}</span>
-                                            <span class="expertise">
-                                                <span class="light">Expertise</span>
-                                                <span class="dark">PHP</span>
-                                            </span>
-                                            <span class="light">Favorite</span>
-                                            <span class="dark">C++</span>
-                                        </label>
-                                    </li>
-                                </ul>
-                                <span class="no-frd-msg" *ngIf="noFriendsStatus">
-                                    I do not have any friends, invite your friends using link
-                                    <a [routerLink]="['/my/invite-friends']">Invite Friends</a>
-                                </span>
-                            </div>
+                                    </div>        
                         </div>
                     </div>
                 </div>
