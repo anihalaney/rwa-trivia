@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CdkTableModule } from '@angular/cdk/table';
-import { ImageCropperModule } from 'ngx-img-cropper';
 import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
@@ -14,7 +13,6 @@ import {
   QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective } from './directive';
-
 
 @NgModule({
   declarations: [
@@ -41,7 +39,6 @@ import { ShowHintWhenFocusOutDirective } from './directive';
     // Flex
     FlexLayoutModule,
     RouterModule,
-    ImageCropperModule,
 
     HttpClientModule,       // for share counts
     ShareButtonModule
@@ -50,6 +47,7 @@ import { ShowHintWhenFocusOutDirective } from './directive';
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
-    ImageCropperModule, HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective]
+    HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective
+  ]
 })
 export class SharedModule { }
