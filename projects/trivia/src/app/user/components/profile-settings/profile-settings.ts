@@ -9,7 +9,7 @@ import { userState } from '../../../user/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import * as userActions from '../../store/actions';
 import { UserActions } from 'shared-library/core/store';
-import { ViewChildren, QueryList, HostListener } from '@angular/core';
+import { ViewChildren, QueryList, HostListener, ChangeDetectorRef } from '@angular/core';
 
 export class ProfileSettings {
     @ViewChildren('myInput') inputEl: QueryList<any>;
@@ -54,7 +54,8 @@ export class ProfileSettings {
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
         public userAction: UserActions,
-        public utils: Utils) {
+        public utils: Utils,
+        public cd: ChangeDetectorRef) {
 
         this.toggleLoader(true);
 
@@ -101,6 +102,7 @@ export class ProfileSettings {
                 }
 
                 this.toggleLoader(false);
+                this.cd.markForCheck();
             }
         }));
     }
@@ -172,7 +174,7 @@ export class ProfileSettings {
             categoryList: categoryFA,
             tags: '',
             tagsArray: tagsFA,
-            profilePicture: [user.profilePicture, Validators.required]
+            profilePicture: [user.profilePicture]
         });
         this.enteredTags = user.tags;
         this.afterFormCreate();
