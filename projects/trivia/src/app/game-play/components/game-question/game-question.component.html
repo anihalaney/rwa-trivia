@@ -18,16 +18,16 @@
             <a>{{otherPlayer?.displayName}}</a>
           </p>
         </div>  
-       <div class="col-sm-12 textcenter pb-8">
+       <div class="col-sm-12 textcenter pb-4">
           <span class="light">Round {{questionRound}} / {{totalRound}}</span>
-          <div class="answer-status" [ngClass]="continueNext ? '' : 'ptb-10'">
-              <div [hidden]="!continueNext">
-                  <p [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</p>
-                  <p [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</p>
-                  <p [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</p>
-              </div>
-            </div> 
         </div>
+        <div class="answer-status" [ngClass]="continueNext ? '' : 'ptb-10'">
+            <div [hidden]="!continueNext">
+                <p [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</p>
+                <p [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</p>
+                <p [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</p>
+            </div>
+        </div> 
       </div>
       <div class="col-sm-3" [ngClass]="otherPlayer?.displayName ? 'pb-40' : 'pb-20'">
         <div class="timer">
