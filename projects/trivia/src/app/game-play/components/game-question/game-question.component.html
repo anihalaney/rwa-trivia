@@ -9,7 +9,7 @@
         <div [ngClass]="correctCount < 4?'score0':'score4'" class="sprite"></div>
         <div [ngClass]="correctCount < 5?'score0':'score5'" class="sprite"></div>
       </div>
-      <div class="col-sm-6 category-div-spacing">
+      <div class="col-sm-6 category-div-spacing" >
         <div class="col-sm-12">
           <h1>{{categoryName}}</h1>
         </div>
@@ -17,17 +17,19 @@
           <p>Playing with
             <a>{{otherPlayer?.displayName}}</a>
           </p>
-        </div>
-        <div class="col-sm-12 textcenter pb-8">
+        </div>  
+       <div class="col-sm-12 textcenter pb-8">
           <span class="light">Round {{questionRound}} / {{totalRound}}</span>
         </div>
-        <div *ngIf="continueNext" class="col-sm-12 answer-status">
-          <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
-          <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
-          <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
-        </div>
+         <div class="col-sm-12 plr-0 answer-status" [ngClass]="continueNext ? '' : 'ptb-10'">
+          <span *ngIf="continueNext">
+              <span [hidden]="correctAnswerIndex !== answeredIndex" class="correct-text">CORRECT</span>
+              <span [hidden]="!(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex)" class="incorrect-text">INCORRECT</span>
+              <span [hidden]="answeredIndex !== null && answeredIndex !== undefined" class="timeout-text">TIMEOUT</span>
+          </span>
+        </div> 
       </div>
-      <div class="col-sm-3">
+      <div class="col-sm-3" [ngClass]="otherPlayer?.displayName ? 'pb-40' : 'pb-20'">
         <div class="timer">
           <svg class="rotate" viewbox="10 10 55 55">
             <path id="loader" #loader transform="translate(25, 25)" />
