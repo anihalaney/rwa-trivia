@@ -31,10 +31,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public store: Store<AppState>,
     private windowRef: WindowRef,
     public userAction: UserActions,
-    private cd: ChangeDetectorRef,
+    public cd: ChangeDetectorRef,
     public utils: Utils) {
 
-    super(fb, store, userAction, utils);
+    super(fb, store, userAction, utils, cd);
 
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
@@ -167,10 +167,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     // validations
     this.userForm.updateValueAndValidity();
 
-    if (!this.profileImageFile && !this.user.profilePicture) {
-      this.setNotificationMsg('Please upload the profile picture', true, 100);
-      return;
-    } else if (this.profileImageFile) {
+    if (this.profileImageFile) {
       this.assignImageValues();
     }
 
