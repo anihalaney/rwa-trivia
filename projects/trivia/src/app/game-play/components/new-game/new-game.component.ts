@@ -40,7 +40,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   public config: SwiperConfigInterface = {
     a11y: true,
     direction: 'horizontal',
-    slidesPerView: 4,
+    slidesPerView: 5,
     keyboard: true,
     mousewheel: true,
     scrollbar: false,
