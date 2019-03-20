@@ -11,6 +11,13 @@ import {
 } from './components';
 import { effects, reducer } from './store';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
+import { SwiperModule } from 'ngx-swiper-wrapper';
+import { SWIPER_CONFIG } from 'ngx-swiper-wrapper';
+import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
+const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
+  direction: 'horizontal',
+  slidesPerView: 'auto'
+};
 
 @NgModule({
   declarations: [
@@ -37,8 +44,13 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
     //ngrx effects
     EffectsModule.forFeature(effects),
 
+    SwiperModule
   ],
   providers: [
+    {
+      provide: SWIPER_CONFIG,
+      useValue: DEFAULT_SWIPER_CONFIG
+    }
   ]
 })
 export class GamePlayModule { }

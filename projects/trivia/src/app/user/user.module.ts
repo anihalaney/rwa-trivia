@@ -15,7 +15,7 @@ import {
   InviteFriendsDialogComponent,
   InviteMailFriendsComponent
 } from './components';
-
+import { ImageCropperModule } from 'ngx-img-cropper';
 
 @NgModule({
   declarations: [
@@ -38,6 +38,7 @@ import {
     //ngrx effects
     EffectsModule.forFeature(effects),
 
+    ImageCropperModule,
   ],
   providers: [],
   exports: [
