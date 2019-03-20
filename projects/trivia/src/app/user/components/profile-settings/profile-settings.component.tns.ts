@@ -149,7 +149,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      Toast.makeText('Please complete profile settings for bulk upload request').show();
+      Toast.makeText('Please add name, display name, location and profile picture for bulk upload request').show();
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
