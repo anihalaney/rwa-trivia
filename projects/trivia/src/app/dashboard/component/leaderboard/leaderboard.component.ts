@@ -2,7 +2,7 @@ import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetection
 import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
-import { Category, User, LeaderBoardUser, LeaderBoardConstants } from './../../../../../../shared-library/src/lib/shared/model';
+import { Category, User, LeaderBoardUser, LeaderBoardConstants } from 'shared-library/shared/model';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { dashboardState } from '../../store';
@@ -26,7 +26,7 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
   leaderBoardCat: Array<string>;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
-  lbsSliceStartIndex: number;
+  lbsSliceStartIndex: number = -1;
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;
@@ -81,10 +81,13 @@ export class LeaderboardComponent implements OnDestroy, AfterViewInit {
               }
             });
           });
-          this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
-          this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
-          this.lbsUsersSliceStartIndex = 0;
-          this.lbsUsersSliceLastIndex = 3;
+
+          if (this.lbsSliceStartIndex === -1) {
+            this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
+            this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
+            this.lbsUsersSliceStartIndex = 0;
+            this.lbsUsersSliceLastIndex = 3;
+          }
         }
       }
       this.cd.markForCheck();
