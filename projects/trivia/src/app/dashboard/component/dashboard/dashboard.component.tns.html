@@ -1,5 +1,5 @@
 <ns-action-bar title="Dashboard" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout class="mobile" backgroundColor="#f1f2f2">
+<StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
     <ScrollView>
         <StackLayout>        
                 <Label margin="5 10"  *ngIf="account?.bits && user" text=" Bits: {{account?.bits}} " textWrap="true"></Label>

@@ -1,13 +1,14 @@
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, NgZone} from '@angular/core';
+import { Store, select } from '@ngrx/store';
+
 import { Observable } from 'rxjs';
 import { Category, User, LeaderBoardUser, LeaderBoardConstants } from './../../../../../../shared-library/src/lib/shared/model';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState } from '../../../store';
 import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
 import { ActivatedRoute } from '@angular/router';
+import { Page } from 'tns-core-modules/ui/page';
 import { Leaderboard } from './leaderboard';
-
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',
@@ -15,8 +16,7 @@ import { Leaderboard } from './leaderboard';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-
-export class LeaderboardComponent extends Leaderboard {
+export class LeaderboardComponent extends Leaderboard implements OnDestroy {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User };
@@ -36,12 +36,29 @@ export class LeaderboardComponent extends Leaderboard {
   unknown = LeaderBoardConstants.UNKNOWN;
   category: string;
   subscriptions = [];
+  page: Page;
+   // This is magic variable
+  // it delay complex UI show Router navigation can finish first to have smooth transition
+  renderView = false;
 
   constructor(store: Store<AppState>,
     userActions: UserActions,
     utils: Utils,
     route: ActivatedRoute,
-    cd: ChangeDetectorRef) {
+    cd: ChangeDetectorRef,
+    page: Page,
+    ngZone: NgZone) {
+
     super(store, userActions, utils, route, cd);
+    this.page = page;
+    this.page.on('loaded', () => ngZone.run(() => {
+      this.renderView = true;
+      cd.markForCheck();
+    }));
+
+  }
+
+  ngOnDestroy() {
+    this.page.off('loaded');
   }
 }

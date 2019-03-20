@@ -1,4 +1,7 @@
-import { Component, Input, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef,
+  ChangeDetectionStrategy, ChangeDetectorRef, OnInit, NgZone
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
@@ -26,7 +29,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
+export class ProfileSettingsComponent extends ProfileSettings implements OnInit, OnDestroy {
 
   // Properties
   showSelectCategory = false;
@@ -46,7 +49,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public keepAspectRatio = true;
   public width = 300;
   public height = 300;
-
+  // This is magic variable
+  // it delay complex UI show Router navigation can finish first to have smooth transition
+  renderView = false;
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
@@ -56,7 +61,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public userAction: UserActions,
     private page: Page,
     public utils: Utils,
-    private cd: ChangeDetectorRef) {
+    private cd: ChangeDetectorRef,
+    private ngZone: NgZone) {
 
     super(fb, store, userAction, utils);
     this.initDataItems();
@@ -69,6 +75,13 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.cd.markForCheck();
     }));
 
+  }
+
+  ngOnInit(): void {
+    // update to variable needed to do in ngZone otherwise it did not understand it
+    this.page.on('loaded', () => this.ngZone.run(() => {
+      this.renderView = true; this.cd.markForCheck();
+    }));
   }
 
   get dataItems(): ObservableArray<TokenModel> {
@@ -194,7 +207,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   ngOnDestroy() {
-
+    this.page.off('loaded');
   }
 
 }
