@@ -38,9 +38,9 @@
                                     <span class="sprite computerp-icon"></span>With Computer</label> -->
 
                                     <div class="withfriends" *ngIf="newGameForm.value.opponentType == 1">      
-                                        <div *ngIf="uFriends && uFriends.length > 0"> 
-                                        <img class="arrow-img left swiper-button-prev" src="assets/images/arrow-left.png" alt="left" >                                   
-                                            <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
+                                    <div *ngIf="uFriends && uFriends.length > 0"> 
+                                        <div class="owl-prev swiper-button-prev" >Prev</div>                                
+                                        <div class="content-container" fxLayout="column" fxLayoutAlign="stretch" fxFlex="auto">
                                                     <div  class="swiper-container" [swiper]="config">
                                                       <div class="swiper-wrapper">
                                                         <div *ngFor="let friendId of uFriends; let i=index" class="swiper-slide">
@@ -58,7 +58,7 @@
                                                       </div>
                                                     </div>
                                                   </div>
-                                                  <img class="arrow-img right swiper-button-next" src="assets/images/arrow-right.png" alt="right">
+                                                <div class="owl-next swiper-button-next" >Next</div> 
                                           </div> 
                                           <span class="no-frd-msg" *ngIf="noFriendsStatus">
                                                 I do not have any friends, invite your friends using link
