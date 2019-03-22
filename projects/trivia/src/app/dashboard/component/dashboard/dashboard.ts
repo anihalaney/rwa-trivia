@@ -1,14 +1,12 @@
-import { Inject, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { Observable, Subscription, timer } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { PLATFORM_ID } from '@angular/core';
-import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
-import { User, Game, OpponentType, Invitation, CalenderConstants, ApplicationSettings } from 'shared-library/shared/model';
-import { WindowRef, Utils } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
-import { PlayerMode, GameStatus, Account } from 'shared-library/shared/model';
+import { ChangeDetectorRef, Inject, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable, Subscription, timer } from 'rxjs';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
+import { Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation, OpponentType, PlayerMode, User } from 'shared-library/shared/model';
+import { AppState, appState } from '../../../store';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
@@ -153,6 +151,7 @@ export class Dashboard implements OnDestroy {
                     }
                     // tslint:disable-next-line:max-line-length
                     if (game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
+                        game.GameStatus === GameStatus.JOINED_GAME ||
                         game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
                         || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) {
                         this.waitingForOpponentCount++;
