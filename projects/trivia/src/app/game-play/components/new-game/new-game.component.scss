@@ -38,8 +38,8 @@
 .optionbox .withfriends label .dark, .optionbox .withfriends label .light{ display: block; }
 .withfriends label .labelimg img{ width: 70px; height: 70px; display: inline-block; border-radius: 50%; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 10px; overflow: hidden;border-width:1px; border-style: solid; padding: 1px}
 .optionbox input:checked + label .light{ opacity: 0.7 }
-.withfriends .owl-prev{ left: -35px  }
-  .withfriends .owl-next{ right: -35px }
+.withfriends .owl-prev{ left: 10px  }
+  // .withfriends .owl-next{ right: -35px }
 .friendsslider .owl-prev,.friendsslider .owl-next{position: absolute;top:0; bottom: 0; margin: auto; height:30px; width: 30px; border-radius: 50%; border-width:1px; border-style: solid; transition: 0.3s ease-in-out; font-size: 0}
 
 .pcategories > .col-sm-9{ 
@@ -59,6 +59,15 @@
 //#curentactive .btnbox{ background: #fff; }
 
 .hide {display: none !important;}
+.withfriends .owl-prev, .withfriends .owl-next { position: absolute; top: 0; bottom: 0; margin: auto; height: 30px; width: 30px;
+  border-radius: 50%; border: 1px solid; transition: 0.3s ease-in-out; font-size: 0; border-color: #dfe0e1; }
+.withfriends .owl-prev:after, .withfriends .owl-next:after { background-position: -181px -73px; width: 5px; height: 12px; position: absolute;
+  left: 0; right: 0; bottom: 0; top: 0; margin: auto; content: ""; border-color: #dfe0e1; }
+.sprite, .withfriends .owl-prev:after, .withfriends .owl-next:after {  display: inline-block; vertical-align: middle; }
+.withfriends .owl-next:after { background-position: -192px -73px; }
+.withfriends .owl-next:hover:after { background-position: -192px -91px; }
+.withfriends .owl-prev:hover:after { background-position: -181px -91px; }
+.dark{ line-height: 1.5; }
 
 
 .loaderimage{
@@ -84,7 +93,7 @@
   border-radius: 4px;
   background-color: #fff;
   width: 100%;
-  height: 154px;
+  min-height: 171px;
   margin-left: 0px;
   margin-right: 0px;
 }
@@ -114,7 +123,7 @@
 }
 
 .optionbox .twoplayer .withfriends label{
-  height: 160px;
+  height: 170px;
 }
 
 .arrow-img{
@@ -159,4 +168,7 @@
   .submitpage .optionbox{ margin-top: 0; padding: 0 }
   .secondbg{ padding-top: 35px }
   .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
+  .withfriends .owl-prev:hover, .withfriends .owl-next:hover, .viewbublic:hover {
+    border-color: #71b02f;
+  }
 }
