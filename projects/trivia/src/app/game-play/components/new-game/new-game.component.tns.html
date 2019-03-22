@@ -1,6 +1,5 @@
 <ns-action-bar title="Start New Game" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout>
-
+<StackLayout *ngIf="renderView">
     <ScrollView>
         <StackLayout class="new-game Roboto-Regular" backgroundColor="#f1f2f2">
             <GridLayout rows="auto,auto" columns="auto,*" padding="10 10 5 10">

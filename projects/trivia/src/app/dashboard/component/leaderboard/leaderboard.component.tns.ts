@@ -18,40 +18,20 @@ import { Leaderboard } from './leaderboard';
 
 export class LeaderboardComponent extends Leaderboard implements OnDestroy {
 
-  userDict$: Observable<{ [key: string]: User }>;
-  userDict: { [key: string]: User };
-  leaderBoardStatDict: { [key: string]: Array<LeaderBoardUser> };
-  leaderBoardCat: Array<string>;
-  categoryDict$: Observable<{ [key: number]: Category }>;
-  categoryDict: { [key: number]: Category };
-  lbsSliceStartIndex: number;
-  lbsSliceLastIndex: number;
-  lbsUsersSliceStartIndex: number;
-  lbsUsersSliceLastIndex: number;
-  maxLeaderBoardDisplay: number;
-  platformIds: any;
-  isbrowser: any;
-  isServer: any;
-  defaultAvatar = 'assets/images/default-avatar-small.png';
-  unknown = LeaderBoardConstants.UNKNOWN;
-  category: string;
-  subscriptions = [];
-  page: Page;
    // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
 
-  constructor(store: Store<AppState>,
-    userActions: UserActions,
-    utils: Utils,
-    route: ActivatedRoute,
-    cd: ChangeDetectorRef,
-    page: Page,
-    ngZone: NgZone) {
+  constructor(protected store: Store<AppState>,
+    protected userActions: UserActions,
+    protected utils: Utils,
+    protected route: ActivatedRoute,
+    protected cd: ChangeDetectorRef,
+    private page: Page,
+    private ngZone: NgZone) {
 
     super(store, userActions, utils, route, cd);
-    this.page = page;
-    this.page.on('loaded', () => ngZone.run(() => {
+    this.page.on('loaded', () => this.ngZone.run(() => {
       this.renderView = true;
       cd.markForCheck();
     }));

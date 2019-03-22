@@ -1,11 +1,10 @@
 import {
   Component, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef,
-  ChangeDetectionStrategy, ChangeDetectorRef, OnInit, NgZone
+  ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { userState } from '../../../user/store';
 import { ProfileSettings } from './profile-settings';
 import { Utils } from 'shared-library/core/services';
 import { profileSettingsConstants } from 'shared-library/shared/model';
@@ -17,7 +16,6 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { Page, EventData } from 'tns-core-modules/ui/page/page';
 import { isAndroid } from 'tns-core-modules/platform';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -29,7 +27,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ProfileSettingsComponent extends ProfileSettings implements OnInit, OnDestroy {
+export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   // Properties
   showSelectCategory = false;
@@ -49,9 +47,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   public keepAspectRatio = true;
   public width = 300;
   public height = 300;
-  // This is magic variable
-  // it delay complex UI show Router navigation can finish first to have smooth transition
-  renderView = false;
+
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
@@ -59,11 +55,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
-    private page: Page,
     public utils: Utils,
-    private cd: ChangeDetectorRef,
-    private ngZone: NgZone) {
-
+    public cd: ChangeDetectorRef) {
     super(fb, store, userAction, utils, cd);
     this.initDataItems();
 
@@ -75,13 +68,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
       this.cd.markForCheck();
     }));
 
-  }
-
-  ngOnInit(): void {
-    // update to variable needed to do in ngZone otherwise it did not understand it
-    this.page.on('loaded', () => this.ngZone.run(() => {
-      this.renderView = true; this.cd.markForCheck();
-    }));
   }
 
   get dataItems(): ObservableArray<TokenModel> {
@@ -203,7 +189,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   }
 
   ngOnDestroy() {
-    this.page.off('loaded');
   }
 
 }

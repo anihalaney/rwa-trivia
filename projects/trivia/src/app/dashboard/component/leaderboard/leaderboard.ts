@@ -1,4 +1,4 @@
-import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 
 import { Observable, Subscription } from 'rxjs';
@@ -21,7 +21,7 @@ export class Leaderboard implements OnDestroy {
   leaderBoardCat: Array<string>;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
-  lbsSliceStartIndex: number;
+  lbsSliceStartIndex: number = -1;
   lbsSliceLastIndex: number;
   lbsUsersSliceStartIndex: number;
   lbsUsersSliceLastIndex: number;
@@ -34,11 +34,11 @@ export class Leaderboard implements OnDestroy {
   category: string;
   subscriptions = [];
 
-  constructor(private store: Store<AppState>,
-    private userActions: UserActions,
-    private utils: Utils,
-    public route: ActivatedRoute,
-    private cd: ChangeDetectorRef) {
+  constructor(protected store: Store<AppState>,
+    protected userActions: UserActions,
+    protected utils: Utils,
+    protected route: ActivatedRoute,
+    protected cd: ChangeDetectorRef) {
 
     this.route.params.subscribe((params) => {
       this.category = params['category'];
@@ -66,7 +66,7 @@ export class Leaderboard implements OnDestroy {
       if (lbsStat) {
         this.leaderBoardStatDict = lbsStat;
         this.leaderBoardCat = Object.keys(lbsStat);
-      //  this.cd.detectChanges();
+        //  this.cd.detectChanges();
         if (this.leaderBoardCat.length > 0) {
           this.leaderBoardCat.map((cat) => {
             this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
@@ -76,10 +76,12 @@ export class Leaderboard implements OnDestroy {
               }
             });
           });
-          this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
-          this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
-          this.lbsUsersSliceStartIndex = 0;
-          this.lbsUsersSliceLastIndex = 3;
+          if (this.lbsSliceStartIndex === -1) {
+            this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
+            this.lbsSliceLastIndex = this.lbsSliceStartIndex + 3;
+            this.lbsUsersSliceStartIndex = 0;
+            this.lbsUsersSliceLastIndex = 3;
+          }
         }
       }
       this.cd.markForCheck();

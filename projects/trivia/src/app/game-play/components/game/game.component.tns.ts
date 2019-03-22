@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, NgZone } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
-import { AppState, appState } from '../../../store';
+import { AppState } from '../../../store';
 import { Game } from './game';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'game',
@@ -17,16 +17,21 @@ export class GameComponent extends Game implements OnInit, OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   displayQuestion = false;
-  constructor(public store: Store<AppState>,
-    private utils: Utils) {
+  // This is magic variable
+  // it delay complex UI show Router navigation can finish first to have smooth transition
+  renderView = false;
+
+  constructor(public store: Store<AppState>, private page: Page, private ngZone: NgZone) {
     super(store);
   }
 
   ngOnInit() {
     setTimeout(() => this.displayQuestion = true, 0);
+    // update to variable needed to do in ngZone otherwise it did not understand it
+    this.page.on('loaded', () => this.ngZone.run(() => this.renderView = true));
 
   }
   ngOnDestroy() {
-   
+    this.page.off('loaded');
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, OnInit, NgZone } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -17,7 +17,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class MyQuestionsComponent extends MyQuestions implements OnInit, OnDestroy {
+export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
@@ -26,15 +26,11 @@ export class MyQuestionsComponent extends MyQuestions implements OnInit, OnDestr
   selectedQuestion: Question;
   tabIndex = 0;
   subscriptions = [];
-  // This is magic variable
-  // it delay complex UI show Router navigation can finish first to have smooth transition
-  renderView = false;
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
     private routerExtension: RouterExtensions,
-    private page: Page, private cd: ChangeDetectorRef,
-    private ngZone: NgZone) {
+    private page: Page, private cd: ChangeDetectorRef) {
     super(store, questionActions);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {
@@ -43,13 +39,6 @@ export class MyQuestionsComponent extends MyQuestions implements OnInit, OnDestr
     }));
   }
 
-  ngOnInit(): void {
-    // update to variable needed to do in ngZone otherwise it did not understand it
-    this.page.on('loaded', () => this.ngZone.run(() => {
-      this.renderView = true;
-      this.cd.markForCheck();
-    }));
-  }
 
   navigateToSubmitQuestion() {
     this.routerExtension.navigate(['/my/questions/add']);
@@ -83,7 +72,6 @@ export class MyQuestionsComponent extends MyQuestions implements OnInit, OnDestr
     this.tabIndex = index;
   }
   ngOnDestroy() {
-    this.page.off('loaded');
   }
 
 }

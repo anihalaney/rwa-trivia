@@ -93,8 +93,8 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       (game.nextTurnPlayerId === this.user.userId);
   }
 
-  filterTwoPlayerWaitNextQGame(game: Game): boolean {
-    return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q;
+  filterTwoPlayerWaitNextQGame = (game: Game): boolean => {
+    return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && game.nextTurnPlayerId !== this.user.userId;
   }
 
   ngOnDestroy(): void {

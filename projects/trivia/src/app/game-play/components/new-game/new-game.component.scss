@@ -70,56 +70,6 @@
   margin-top: 20px;
 }
 
-.new-game {
-  .selected-player {
-    background-color: #89C24F;
-    color: #fff;
-  }
-
-  .player-type {
-    background-color: #ffffff;
-  }
-
-  .player-type, .label{
-    color:#616161;
-  }
-
-  .two-player-option{
-    border-color: #D2D2D2;
-    border-width: 0 0 1 0;
-    border-style: solid;
-  }
-
-  .singlep-icon-mobile {
-    background-position: -88px -200px;
-    height: 53px;
-    width: 53px;
-    margin-right: 10px;
-    background-repeat: no-repeat;
-  }
-
-  .bottom-border{
-    border-color: #D2D2D2;
-    border-width: 0 0 1 0;
-    border-style: solid;
-  }
-
-  .friend-list{
-    border-color: #D2D2D2;
-    border-width:  1 1 0 1;
-    border-style: solid;
-    height: 130;
-  }
-
-  .expand-options{
-    color: #A9A9A9;
-    font-size: 11;
-  }
-  .main-label{
-    color: red;
-  }
-}
-
 .checkbox-group{
   display: inline-block;
   padding: 8px 15px;
