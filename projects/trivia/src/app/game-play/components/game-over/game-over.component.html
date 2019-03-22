@@ -10,6 +10,9 @@
     </div>
     <div class="category-div category-div-height">
       <span class="label category-name">{{categoryName}} </span>
+      <div class="round" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+          <span class="round-value" >Round {{game.round}} / {{totalRound}}</span>
+      </div>
     </div>
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="yourimg">
@@ -32,7 +35,6 @@
           <img [src]="getImageUrl(user)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{playerUserName}}</label>
-        <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
         <div class="div-top-spacing">
           <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
@@ -48,7 +50,6 @@
           <img [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{otherUserInfo?.displayName}}</label>
-        <div class="dark div-top-spacing text-style ">Round {{game.round}} / {{totalRound}}</div>
         <div class="dark div-top-spacing text-style">Score {{game.stats[otherUserId].score}}</div>
         <div class="div-top-spacing">
           <div *ngIf="game.stats[otherUserId].score >= 1" class="sprite score1"></div>
