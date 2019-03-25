@@ -3,8 +3,7 @@
         <div>
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
                 <div class="success result" *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId">Won</div>
-                <div class="label result" *ngIf="game.winnerPlayerId !== user.userId && game.GameStatus !== GameStatus.TIME_EXPIRED">Lost</div>
-                <div class="label result" *ngIf="game.GameStatus === GameStatus.TIME_EXPIRED">Expired</div>
+                <div class="label result" *ngIf="game.winnerPlayerId !== user.userId">Lost</div>
             </div>
 
             <div *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
@@ -15,13 +14,8 @@
                     Tie</div>
                 <div class="label result" *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED">
                     Rejected</div>
-                <div class="label result"
-                    *ngIf="game.GameStatus === GameStatus.TIME_EXPIRED">
-                    Expired
-                </div>
-                <div class="label result"
-                      *ngIf="game.GameStatus === GameStatus.INVITATION_TIMEOUT">
-                      Invitation Timeout
+                <div class="label result" *ngIf="game.GameStatus === GameStatus.INVITATION_TIMEOUT">
+                    Invitation Timeout
                 </div>
                 <div class="label result" *ngIf="!game.winnerPlayerId && game.round === 16">
                     Draw
