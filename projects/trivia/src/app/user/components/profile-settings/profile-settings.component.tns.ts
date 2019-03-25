@@ -1,8 +1,10 @@
-import { Component, Input, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { userState } from '../../../user/store';
 import { ProfileSettings } from './profile-settings';
 import { Utils } from 'shared-library/core/services';
 import { profileSettingsConstants } from 'shared-library/shared/model';
@@ -14,7 +16,6 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { Page, EventData } from 'tns-core-modules/ui/page/page';
 import { isAndroid } from 'tns-core-modules/platform';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -54,10 +55,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
-    private page: Page,
     public utils: Utils,
     public cd: ChangeDetectorRef) {
-
     super(fb, store, userAction, utils, cd);
     this.initDataItems();
 
@@ -190,7 +189,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   ngOnDestroy() {
-
   }
 
 }

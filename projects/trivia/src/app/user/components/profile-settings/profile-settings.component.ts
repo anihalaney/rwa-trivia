@@ -26,7 +26,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   notificationMsg: string;
   errorStatus: boolean;
   subscriptions = [];
-  
+
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     private windowRef: WindowRef,

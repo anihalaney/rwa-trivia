@@ -1,4 +1,4 @@
-    <StackLayout *ngIf="cardType == 'opponent'" class="mobile Roboto-Regular">
+    <StackLayout *ngIf="cardType == 'opponent'" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
         <GridLayout rows="*" columns="auto,auto,*">
             <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
                 width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
@@ -36,7 +36,7 @@
             padding="10" class="btn-wait-opp"></Button>
     </StackLayout>
 
-    <StackLayout *ngIf="cardType == 'singlePlayer'" class="mobile Roboto-Regular">
+    <StackLayout *ngIf="cardType == 'singlePlayer'" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
         <GridLayout rows="*" columns="*,auto">
             <StackLayout row="0" col="0" [nsRouterLink]="['/game-play', game.gameId]" clearHistory="true">
                 <GridLayout rows="*,*,*" columns="*">
@@ -72,7 +72,7 @@
     </StackLayout>
 
     <StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile Roboto-Regular" [nsRouterLink]="['/game-play', game.gameId]"
-        clearHistory="true">
+        clearHistory="true" iosOverflowSafeArea="false">
         <GridLayout rows="*" columns="auto,auto,*">
             <Image row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
                 stretch="aspectFill" height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
@@ -150,7 +150,7 @@
     </StackLayout>
 
 
-    <StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile Roboto-Regular">
+    <StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
         <GridLayout rows="*,*" columns="auto,auto,*" *ngIf="otherUserInfo">
             <Image row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill"
                 height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>

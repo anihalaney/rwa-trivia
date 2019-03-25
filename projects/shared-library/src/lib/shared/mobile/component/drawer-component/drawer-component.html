@@ -21,7 +21,7 @@
                         colSpan="2" [class.active-menu]="activeMenu === 'Category Leaderboard'">
                         <Label row="0" col="0" text="Category Leaderboard" class="sideLabel sideStackLayout"></Label>
                         <Label row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
-                            verticalAlignment="center" (tap)="showSelectCategory = !showSelectCategory" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
+                            verticalAlignment="center"  text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
                             paddingRight="15"></Label>
                     </GridLayout>
                     <StackLayout row="4" colSpan="2" visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}">

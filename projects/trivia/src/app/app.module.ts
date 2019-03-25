@@ -26,11 +26,9 @@ import { SwUpdate } from '@angular/service-worker';
 import { PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { interval } from 'rxjs';
-import { GameCardComponent } from './components/game-card/game-card.component';
 
 @NgModule({
   declarations: [
-    GameCardComponent,
     AppComponent,
     SideNavComponent,
     HeaderComponent,

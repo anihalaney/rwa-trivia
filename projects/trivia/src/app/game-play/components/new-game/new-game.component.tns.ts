@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ListViewEventData } from 'nativescript-ui-listview';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'new-game',
@@ -41,6 +42,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   private tagItems: ObservableArray<TokenModel>;
   filteredCategories: Category[];
   subscriptions = [];
+  // This is magic variable
+  // it delay complex UI show Router navigation can finish first to have smooth transition
+  renderView = false;
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView') listViewComponent: RadListViewComponent;
@@ -51,7 +55,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
     private router: Router,
-    public cd: ChangeDetectorRef) {
+    public cd: ChangeDetectorRef,
+    private page: Page,
+    private ngZone: NgZone) {
     super(store, utils, gameActions, userActions, cd);
     this.initDataItems();
   }
@@ -131,6 +137,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
+    // update to variable needed to do in ngZone otherwise it did not understand it
+     this.page.on('loaded', () => this.ngZone.run(() => {
+      this.renderView = true;
+      this.cd.markForCheck();
+     }));
   }
 
   ngOnDestroy() {
@@ -149,8 +160,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.categoryIds = [];
     this.tagItems = undefined;
     this.filteredCategories = [];
-
     this.destroy();
+    this.page.off('loaded');
   }
 
   addCustomTag() {
@@ -250,7 +261,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   get tagsHeight() {
-    return  (60 * this.selectedTags.length) + 20;
+    return (60 * this.selectedTags.length) + 20;
   }
 
 }

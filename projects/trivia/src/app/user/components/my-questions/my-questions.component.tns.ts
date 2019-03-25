@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
@@ -6,7 +6,6 @@ import { QuestionActions } from 'shared-library/core/store';
 import { User, Question, QuestionStatus } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
-import { TabView } from 'tns-core-modules/ui/tab-view';
 import { Page } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -40,6 +39,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     }));
   }
 
+
   navigateToSubmitQuestion() {
     this.routerExtension.navigate(['/my/questions/add']);
   }
@@ -72,7 +72,6 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     this.tabIndex = index;
   }
   ngOnDestroy() {
-
   }
 
 }

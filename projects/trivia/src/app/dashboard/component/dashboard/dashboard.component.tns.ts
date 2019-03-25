@@ -9,6 +9,7 @@ import { Dashboard } from './dashboard';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { User, Game } from 'shared-library/shared/model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 
 
@@ -24,6 +25,10 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   gameStatus: any;
   subscriptions = [];
+  // This is magic variable
+  // it delay complex UI show Router navigation can finish first to have smooth transition
+  renderView = false;
+
 
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
@@ -33,7 +38,8 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
     ngZone: NgZone,
     utils: Utils,
     cd: ChangeDetectorRef,
-    private routerExtension: RouterExtensions
+    private routerExtension: RouterExtensions,
+    private page: Page
   ) {
 
     super(store,
@@ -52,7 +58,12 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
-
+    // update to variable needed to do in ngZone otherwise it did not understand it
+    this.page.on('loaded', () => this.ngZone.run(() => {
+      this.renderView = true;
+      this.cd.markForCheck();
+    }
+    ));
   }
 
   startNewGame() {
@@ -83,11 +94,12 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       (game.nextTurnPlayerId === this.user.userId);
   }
 
-  filterTwoPlayerWaitNextQGame(game: Game): boolean {
-    return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q;
+  filterTwoPlayerWaitNextQGame = (game: Game): boolean => {
+    return game.GameStatus === GameStatus.WAITING_FOR_NEXT_Q && game.nextTurnPlayerId !== this.user.userId;
   }
 
   ngOnDestroy(): void {
+    this.page.off('loaded');
   }
 }
 
