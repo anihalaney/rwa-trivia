@@ -631,3 +631,25 @@ body.dialog-open .cdk-global-overlay-wrapper {
 .text-center {
   text-align: center;
 }
+
+.cookie-law-wrapper .copy {
+  padding: 15px 10px 15px 20px !important;
+  font-size: 18px !important;
+  line-height: 20px !important;
+}
+
+.btn-center{
+  display: table; 
+  margin: 0 auto;
+}
+
+@media only screen and (max-width: 600px) {
+  .privacy-content {
+    padding: 0px 0px 15px 0px !important;
+    text-align: center;
+  }
+
+  .cookie-law-wrapper .copy .container{
+    padding: 0px !important;
+  }
+}
