@@ -2,18 +2,18 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
     <ScrollView>
         <StackLayout>        
-                <Label margin="5 10"  *ngIf="account?.bits && user" text=" Bits: {{account?.bits}} " textWrap="true"></Label>
-                <Label margin="2 10"  *ngIf="account?.bytes && user" text=" Bytes: {{account?.bytes}} " textWrap="true"></Label>
+            <StackLayout orientation="horizontal"  margin="10">
+                    <DockLayout stretchLastChild="true"  backgroundColor="#3b5998" height="60" width="180" borderRadius="50%">
+                            <Label text="BITS" class="Roboto-Medium" color="#ffffff" padding="10" fontSize= "20" paddingTop="12" paddingLeft="25"></Label>
+                            <Label text="{{account?.bits}}" padding="10" class="Roboto-Medium"  color="#000000" textAlignment="center" horizontalAlignment="right" backgroundColor="#ffffff" minWidth="60" marginRight="5" fontSize= "20" height="55" width="auto"  borderRadius="50%"></Label>
+                    </DockLayout>
 
-                <!-- <Label text=" Bits:" textWrap="true" class="points"> 
-
-                </Label>-->
-
-                <GridLayout rows="*" columns="*, auto" backgroundColor="#3b5998" height="60" width="150" borderRadius="50%">
-                    <Label text="Bits:" row="0" col="0"  class="Roboto-Medium" padding="10" fontSize= "20" ></Label>
-                    <Label text="{{account?.bits}}" row="0" col="1" class="Roboto-Medium" fontSize= "20" backgroundColor="#ffffff"  height="55" width="auto" padding="10" borderRadius="50%" margin="5 7 5 0" ></Label>
-                </GridLayout>
-                
+                    <DockLayout stretchLastChild="true"  backgroundColor="#71b02f" height="60" width="180" borderRadius="50%" marginLeft="10">
+                            <Label text="BYTES" class="Roboto-Medium" color="#ffffff" padding="10" fontSize= "20" paddingTop="12" paddingLeft="25" ></Label>
+                            <Label text="{{account?.bytes}}" padding="10" class="Roboto-Medium"  color="#000000" textAlignment="center" horizontalAlignment="right" backgroundColor="#ffffff" minWidth="60" marginRight="5" fontSize= "20" height="55" width="auto"  borderRadius="50%"></Label>
+                    </DockLayout>
+            </StackLayout>
+            
             <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
                 
                 <Label text="START A NEW GAME {{timeoutLive}}" android:paddingTop="22" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true"></Label>
