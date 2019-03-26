@@ -94,11 +94,12 @@ mat-card>:first-child{
 
 .points{
   background-color: #3b5998;
-  width: 135px;
+  width: 130px;
   color: #fff;
   border-radius: 30px;
   padding-left: 23px;
-
+  font-size: 15px;
+  height: 42px;
 }
 
 .points-count{
@@ -106,7 +107,7 @@ mat-card>:first-child{
   color: #000;
   border-radius: 20px;
   // padding: 0px 5px;
-  margin: 5px 0 0 0;
+  margin: 3px 0 0 0;
   float: right;
   margin-left: 18px;
   width: 36px;
@@ -115,9 +116,10 @@ mat-card>:first-child{
   height: 36px;
   text-align: center;
   margin-right: 5px;
+  font-size: 15px;
 }
 .m-l-20{margin-left:20px }
-.p-t-10{padding-top:3px ;float: left;}
+.p-t-10{float: left;}
     
 .bytes {
   background-color: #71b02f !important;
@@ -141,18 +143,18 @@ mat-card>:first-child{
   .points-m {
     color:#000000;
     background-color:#ffffff;
-    min-width:40;
+    min-width:42;
     margin-right:5;
     font-size:17;
-    height:40;
+    height:42;
     width:auto;
     border-radius:50%;
   }
 
   .points-container{
-    height:45;
-    width:130;
-    border-radius:50;
+    height:47;
+    width:135;
+    border-radius:20;
   }
 
 }
