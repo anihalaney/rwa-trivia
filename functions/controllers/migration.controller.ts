@@ -1,21 +1,18 @@
-import { GeneralService } from '../services/general.service';
-import { UserService } from '../services/user.service';
-import { QuestionService } from '../services/question.service';
+import { Account, CollectionConstants, Game, GameStatus, HeaderConstants, interceptorConstants, MigrationConstants, Question, ResponseMessagesConstants, User, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
-import { FirestoreMigration } from '../utils/firestore-migration';
-import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
-import { UserContributionStat } from '../utils/user-contribution-stat';
-import { SystemStatsCalculations } from '../utils/system-stats-calculations';
-import { ProfileImagesGenerator } from '../utils/profile-images-generator';
-import { BulkUploadUpdate } from '../utils/bulk-upload-update';
-import {
-    User, Account, Question, interceptorConstants,
-    GeneralConstants, CollectionConstants, ResponseMessagesConstants, MigrationConstants, HeaderConstants
-} from '../../projects/shared-library/src/lib/shared/model';
-import { QuestionBifurcation } from '../utils/question-bifurcation';
-import { AuthUser } from '../utils/auth-user';
 import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
+import { GeneralService } from '../services/general.service';
+import { QuestionService } from '../services/question.service';
+import { UserService } from '../services/user.service';
+import { AuthUser } from '../utils/auth-user';
+import { BulkUploadUpdate } from '../utils/bulk-upload-update';
+import { FirestoreMigration } from '../utils/firestore-migration';
+import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
+import { ProfileImagesGenerator } from '../utils/profile-images-generator';
+import { QuestionBifurcation } from '../utils/question-bifurcation';
+import { SystemStatsCalculations } from '../utils/system-stats-calculations';
+import { UserContributionStat } from '../utils/user-contribution-stat';
 import { Utils } from '../utils/utils';
 
 export class MigrationController {
@@ -334,6 +331,34 @@ export class MigrationController {
         try {
             await GameService.updateStats();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.LOADED_DATA);
+
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+    /**
+    * addGameOverAtField
+    * return status
+    */
+    static async addGameOverAtField(req, res) {
+        try {
+
+            const games: Game[] = await GameService.getCompletedGames();
+            const promises = [];
+
+            for (const game of games) {
+                if (game.GameStatus === GameStatus.COMPLETED) {
+                    game.gameOverAt = game.turnAt;
+                } else {
+                    game.gameOverAt = game.turnAt + (1000 * 60 * 60 * GeneralConstants.GAME_EXPIRED_HOURS);
+                }
+                promises.push(GameService.setGame(game.getDbModel()));
+            }
+
+            await Promise.all(promises);
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.ADDED_GAME_OVER__FIELDS);
 
         } catch (error) {
             Utils.sendError(res, error);
