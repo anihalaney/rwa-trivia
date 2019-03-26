@@ -19,8 +19,7 @@
         <img [src]="getImageUrl(user)" alt="User Profile Image" />
       </div>
       <label href="#" id="you" class="dark text-style ">{{playerUserName}}</label>
-      <div class="dark div-top-spacing text-style ">Round {{game.stats[user.userId].score}} / {{game.round}}</div>
-      <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}}</div>
+      <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}} / {{game.round}}</div>
       <div class="div-top-spacing score-div-height">
         <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
         <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
@@ -42,7 +41,6 @@
           <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
           <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
           <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
-
         </div>
       </div>
       <div class="col-sm-3 yourimg-spacing">
