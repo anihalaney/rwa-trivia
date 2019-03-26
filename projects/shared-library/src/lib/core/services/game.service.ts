@@ -124,7 +124,7 @@ export class GameService {
 
   getNextQuestion(game: Game): Observable<Question> {
     const url: string = CONFIG.functionsUrl + '/app/question/next/';
-    return this.http.post<Question>(url + game.gameId,{});
+    return this.http.post<Question>(url + game.gameId, {});
   }
 
 
@@ -159,7 +159,6 @@ export class GameService {
       });
   }
 
-
   getGameResult(user: User): Observable<Game[]> {
     if (user && user.userId) {
 
@@ -167,7 +166,7 @@ export class GameService {
         condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: true },
         ],
-        orderBy: [{ name: 'turnAt', value: 'desc' }],
+        orderBy: [{ name: 'gameOverAt', value: 'desc' }],
         limit: 20
       };
 
@@ -177,7 +176,7 @@ export class GameService {
         condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: true },
         ],
-        orderBy: [{ name: 'turnAt', value: 'desc' }],
+        orderBy: [{ name: 'gameOverAt', value: 'desc' }],
         limit: 20
       };
 
@@ -187,7 +186,7 @@ export class GameService {
         .pipe(
           map((data) => data[1].concat(data[0])),
           map(gs => gs.map(g => Game.getViewModel(g))
-            .sort((a: any, b: any) => b.turnAt - a.turnAt)
+            .sort((a: any, b: any) => b.gameOverAt - a.gameOverAt)
           )
         );
     } else {
