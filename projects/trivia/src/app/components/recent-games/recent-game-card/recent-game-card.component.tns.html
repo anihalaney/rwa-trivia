@@ -2,9 +2,7 @@
     *ngIf="game.gameOptions?.playerMode == PlayerMode.Single">
     <Label text="WON" textWrap="true" class="label-success Roboto-Bold"
         *ngIf="game.winnerPlayerId && game.winnerPlayerId === user.userId" horizontalAlignment="center"></Label>
-    <Label text="LOST" textWrap="true" class="label-failed Roboto-Bold" *ngIf="game.winnerPlayerId !== user.userId && game.GameStatus !== GameStatus.TIME_EXPIRED"
-        horizontalAlignment="center"></Label>
-    <Label text="EXPIRED" textWrap="true" class="label-failed Roboto-Bold" *ngIf="game.GameStatus === GameStatus.TIME_EXPIRED"
+    <Label text="LOST" textWrap="true" class="label-failed Roboto-Bold" *ngIf="game.winnerPlayerId !== user.userId"
         horizontalAlignment="center"></Label>
     <Label text="{{categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.charAt(0)?.toUpperCase() +
         categoryDict[game.gameOptions?.categoryIds[0]]?.categoryName?.slice(1)}}" textWrap="true"
@@ -39,9 +37,6 @@
             horizontalAlignment="center"></Label>
         <Label text="REJECTED" textWrap="true" class="label-failed"
             *ngIf="!game.winnerPlayerId && game.GameStatus === GameStatus.REJECTED"
-            horizontalAlignment="center"></Label>
-        <Label text="EXPIRED" textWrap="true" class="label-failed"
-            *ngIf="game.GameStatus === GameStatus.TIME_EXPIRED"
             horizontalAlignment="center"></Label>
         <Label text="INVITATION TIMEOUT" textWrap="true" class="label-failed"
             *ngIf="game.GameStatus === GameStatus.INVITATION_TIMEOUT"
