@@ -192,6 +192,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     const category: Category = this.filteredCategories[args.index];
     if (!category.requiredForGamePlay) {
       category.isSelected = !category.isSelected;
+      this.filteredCategories = [... this.filteredCategories];
     }
   }
 
