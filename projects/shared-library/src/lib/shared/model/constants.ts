@@ -156,7 +156,8 @@ export enum GeneralConstants {
     TRUE = 'true',
     Error_Message = 'Error : ',
     BIT_WISER_DEV_STORAGE_BUCKET_NAME = 'rwa-trivia-dev-e57fc.appspot.com',
-    BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com'
+    BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com',
+    GAME_EXPIRED_HOURS = 32 // hr
 }
 
 export enum SocialShareConstants {
@@ -241,6 +242,7 @@ export enum ResponseMessagesConstants {
     PROFILE_DATA_IS_SAVED = 'Profile Data is saved !!',
     LIVES_ADDED = 'Lives added successfully !!',
     CHECK_FIRESTORE_DB_FOR_MIGRATION_DETAILS = 'Check firestore db for migration details',
+    ADDED_GAME_OVER__FIELDS = 'added gameOverAt fields',
 
 }
 
@@ -324,4 +326,5 @@ export enum RoutesConstants {
     WIDTH = 'width',
     HEIGHT = 'height',
     COUNT = 'count',
+    GAMEOVERAT= 'gameoverat',
 }

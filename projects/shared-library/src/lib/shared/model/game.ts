@@ -34,11 +34,12 @@ export class Game {
   public GameStatus: string;
   public createdAt: number;
   public turnAt: number;
+  public gameOverAt: number;
   public round: number;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
     nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number,
-    round?: number) {
+    gameOverAt?: number, round?: number) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
@@ -82,6 +83,10 @@ export class Game {
 
     if (turnAt) {
       this.turnAt = turnAt;
+    }
+
+    if (gameOverAt) {
+      this.gameOverAt = gameOverAt;
     }
 
     this.stats = {};
@@ -255,6 +260,10 @@ export class Game {
       dbModel['turnAt'] = this.turnAt;
     }
 
+    if (this.gameOverAt) {
+      dbModel['gameOverAt'] = this.gameOverAt;
+    }
+
     if (this.gameId) {
       dbModel['id'] = this.gameId;
     }
@@ -273,7 +282,7 @@ export class Game {
     const game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'], dbModel['round']);
+      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'],dbModel['gameOverAt'],  dbModel['round']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }
