@@ -33,7 +33,7 @@ export class GameMechanics {
 
                     break;
                 case GameOperations.GAME_OVER:
-                    GameMechanics.setGameOrGameStatusAndGameOverAt(true, GameStatus.COMPLETED, Utils.getUTCTimeStamp(), game);
+                    GameMechanics.setGameOverParams(true, GameStatus.COMPLETED, Utils.getUTCTimeStamp(), game);
                     game.decideWinner();
                     game.calculateStat(game.nextTurnPlayerId);
                     if (game.winnerPlayerId) {
@@ -53,7 +53,7 @@ export class GameMechanics {
                     game.playerQnAs[index] = playerQnA;
                     break;
                 case GameOperations.REJECT_GAME:
-                    GameMechanics.setGameOrGameStatusAndGameOverAt(true, GameStatus.REJECTED, Utils.getUTCTimeStamp(), game);
+                    GameMechanics.setGameOverParams(true, GameStatus.REJECTED, Utils.getUTCTimeStamp(), game);
                     SystemStatsCalculations.updateSystemStats(SystemStatConstants.GAME_PLAYED);
                     break;
                 case GameOperations.UPDATE_ROUND:
@@ -91,7 +91,7 @@ export class GameMechanics {
                     }
                 }
                 if (playedHours >= schedulerConstants.gamePlayDuration) {
-                    GameMechanics.setGameOrGameStatusAndGameOverAt(true, GameStatus.TIME_EXPIRED, Utils.getUTCTimeStamp(), game);
+                    GameMechanics.setGameOverParams(true, GameStatus.TIME_EXPIRED, Utils.getUTCTimeStamp(), game);
                     game.winnerPlayerId = game.playerIds.filter(playerId => playerId !== game.nextTurnPlayerId)[0];
                     if ((Number(game.gameOptions.opponentType) === OpponentType.Random) ||
                         (Number(game.gameOptions.opponentType) === OpponentType.Friend)) {
@@ -105,7 +105,7 @@ export class GameMechanics {
                 } else if (playedHours >= schedulerConstants.gameInvitationDuration
                     && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
                         game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE)) {
-                    GameMechanics.setGameOrGameStatusAndGameOverAt(true, GameStatus.INVITATION_TIMEOUT, Utils.getUTCTimeStamp(), game);
+                    GameMechanics.setGameOverParams(true, GameStatus.INVITATION_TIMEOUT, Utils.getUTCTimeStamp(), game);
                     const dbGame = game.getDbModel();
                     if (dbGame.id) {
                         await GameService.updateGame(dbGame);
@@ -306,7 +306,7 @@ export class GameMechanics {
         }
     }
 
-    private static setGameOrGameStatusAndGameOverAt(gameOver: boolean, gameStatus: string, gameOverAt: number, game: Game) {
+    private static setGameOverParams(gameOver: boolean, gameStatus: string, gameOverAt: number, game: Game) {
         game.gameOver = gameOver;
         game.GameStatus = gameStatus;
         game.gameOverAt = gameOverAt;
