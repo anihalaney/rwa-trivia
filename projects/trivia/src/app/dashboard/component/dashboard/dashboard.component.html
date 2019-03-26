@@ -6,6 +6,7 @@
     </div>
     <div class="col-md-6 col-xs-12 align-right">
       <button [disabled] = "gamePlayBtnDisabled" class="startgame" [routerLink]="['/game-play']"> Start New Game {{timeoutLive}} </button>
+      <button class="lives" *ngIf="user && account?.lives"> {{account.lives}}</button>
     </div>
   </div>
 

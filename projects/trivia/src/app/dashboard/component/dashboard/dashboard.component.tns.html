@@ -5,6 +5,10 @@
                 <Label margin="5 10"  *ngIf="account?.bits && user" text=" Bits: {{account?.bits}} " textWrap="true"></Label>
                 <Label margin="2 10"  *ngIf="account?.bytes && user" text=" Bytes: {{account?.bytes}} " textWrap="true"></Label>
 
+            <!-- <StackLayout>
+                    <Label text="START A NEW GAME {{timeoutLive}}" android:paddingTop="22" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true"></Label>
+                    <label width="50" height="50" backgroundColor="#71b02f"> 10 </label>
+            </StackLayout> -->
             <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
                 
                 <Label text="START A NEW GAME {{timeoutLive}}" android:paddingTop="22" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true"></Label>

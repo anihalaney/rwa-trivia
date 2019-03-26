@@ -265,7 +265,7 @@ export class Dashboard implements OnDestroy {
 
                     if (timeStamp >= this.account.nextLiveUpdate) {
                         this.timerSub.unsubscribe();
-                        this.timeoutLive = '(' + String(this.account.lives) + ')';
+                        // this.timeoutLive = '(' + String(this.account.lives) + ')';
                         this.cd.markForCheck();
                         if (this.user) {
                             this.store.dispatch(this.userActions.addUserLives(this.user.userId));
@@ -275,13 +275,13 @@ export class Dashboard implements OnDestroy {
                         if (this.account.lives !== this.applicationSettings.lives.max_lives) {
                             timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
                         }
-                        this.timeoutLive = '(' + String(this.account.lives) + ')' + timeOut;
+                        this.timeoutLive = timeOut;
                         this.cd.markForCheck();
                     }
                 });
                 this.subscriptions.push(this.timerSub);
             } else {
-                this.timeoutLive = '(' + String(this.account.lives) + ')';
+                // this.timeoutLive = '(' + String(this.account.lives) + ')';
                 this.cd.markForCheck();
             }
             this.cd.markForCheck();

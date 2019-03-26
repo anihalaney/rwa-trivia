@@ -91,3 +91,21 @@ mat-card>:first-child{
   font-size: 16;
   padding:10 0;
 }
+
+.lives {
+  border: 2px solid #fff;
+  background: #71b02f;
+  border-radius: 40px;
+  height: 38px;
+  position: absolute;
+  top: -21px;
+  right: 1px;
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 700;
+  width: 40px;
+}
+
+.startgame {
+  min-width: 205px;
+}
