@@ -133,12 +133,26 @@ mat-card>:first-child{
 
 
 .mobile {
-  .points {
-    background-color: #3b5998;
-    width: 400px;
-    color: #fff;
-    border-radius: 50%;
-    padding-left: 23px;
-    height: 150px;
+  .points-label {
+    color:#ffffff;
+    font-size:17;
+    margin-left:22;
   }
+  .points-m {
+    color:#000000;
+    background-color:#ffffff;
+    min-width:40;
+    margin-right:5;
+    font-size:17;
+    height:40;
+    width:auto;
+    border-radius:50%;
+  }
+
+  .points-container{
+    height:45;
+    width:130;
+    border-radius:50;
+  }
+
 }

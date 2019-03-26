@@ -2,15 +2,15 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
     <ScrollView>
         <StackLayout>        
-            <StackLayout orientation="horizontal"  margin="10">
-                    <DockLayout stretchLastChild="true"  backgroundColor="#3b5998" height="60" width="180" borderRadius="50%">
-                            <Label text="BITS" class="Roboto-Medium" color="#ffffff" padding="10" fontSize= "20" paddingTop="12" paddingLeft="25"></Label>
-                            <Label text="{{account?.bits}}" padding="10" class="Roboto-Medium"  color="#000000" textAlignment="center" horizontalAlignment="right" backgroundColor="#ffffff" minWidth="60" marginRight="5" fontSize= "20" height="55" width="auto"  borderRadius="50%"></Label>
+            <StackLayout orientation="horizontal"  margin="10" *ngIf="user">
+                    <DockLayout *ngIf="account?.bits && user"  stretchLastChild="true"  backgroundColor="#3b5998" class="points-container">
+                            <Label text="BITS" class="Roboto-Medium points-label" verticalAlignment="center"></Label>
+                            <Label text="{{account?.bits}}" android:paddingTop="8" class="Roboto-Medium points-m" textAlignment="center" horizontalAlignment="right"></Label>
                     </DockLayout>
 
-                    <DockLayout stretchLastChild="true"  backgroundColor="#71b02f" height="60" width="180" borderRadius="50%" marginLeft="10">
-                            <Label text="BYTES" class="Roboto-Medium" color="#ffffff" padding="10" fontSize= "20" paddingTop="12" paddingLeft="25" ></Label>
-                            <Label text="{{account?.bytes}}" padding="10" class="Roboto-Medium"  color="#000000" textAlignment="center" horizontalAlignment="right" backgroundColor="#ffffff" minWidth="60" marginRight="5" fontSize= "20" height="55" width="auto"  borderRadius="50%"></Label>
+                    <DockLayout *ngIf="account?.bytes && user"  stretchLastChild="true" class="points-container" backgroundColor="#71b02f" marginLeft="10">
+                            <Label text="BYTES" class="Roboto-Medium points-label" verticalAlignment="center"></Label>
+                            <Label text="{{account?.bytes}}" android:paddingTop="8" class="Roboto-Medium points-m" textAlignment="center" horizontalAlignment="right"></Label>
                     </DockLayout>
             </StackLayout>
             
