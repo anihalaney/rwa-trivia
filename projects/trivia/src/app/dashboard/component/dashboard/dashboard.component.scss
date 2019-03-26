@@ -91,3 +91,54 @@ mat-card>:first-child{
   font-size: 16;
   padding:10 0;
 }
+
+.points{
+  background-color: #3b5998;
+  width: 135px;
+  color: #fff;
+  border-radius: 30px;
+  padding-left: 23px;
+
+}
+
+.points-count{
+  background-color: #fff;
+  color: #000;
+  border-radius: 20px;
+  // padding: 0px 5px;
+  margin: 5px 0 0 0;
+  float: right;
+  margin-left: 18px;
+  width: 36px;
+  border-radius: 50%;
+  line-height: 40px;
+  height: 36px;
+  text-align: center;
+  margin-right: 5px;
+}
+.m-l-20{margin-left:20px }
+.p-t-10{padding-top:3px ;float: left;}
+    
+.bytes {
+  background-color: #71b02f !important;
+}
+.pageheading{height: auto !important;margin-bottom: 5px}
+@media(max-width :767px){
+  .points{
+    margin-bottom: 10px;
+    float: left;
+    display: inline-block;
+  }
+}
+
+
+.mobile {
+  .points {
+    background-color: #3b5998;
+    width: 400px;
+    color: #fff;
+    border-radius: 50%;
+    padding-left: 23px;
+    height: 150px;
+  }
+}
