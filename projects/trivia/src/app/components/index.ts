@@ -8,6 +8,7 @@ import { UserStatsCardComponent } from './user-stats-card/user-stats-card.compon
 import { ProfileCardComponent } from './profile-card/profile-card.component';
 import { RecentGamesComponent } from './recent-games/recent-games.component';
 import { RecentGameCardComponent } from './recent-games/recent-game-card/recent-game-card.component';
+import { TermsConditionsComponent } from './terms-conditions/terms-conditions.component';
 
 export {
     AppComponent,
@@ -19,7 +20,8 @@ export {
     UserStatsCardComponent,
     ProfileCardComponent,
     RecentGamesComponent,
-    RecentGameCardComponent
+    RecentGameCardComponent,
+    TermsConditionsComponent
 };
 
 export default [
@@ -32,5 +34,6 @@ export default [
     UserStatsCardComponent,
     ProfileCardComponent,
     RecentGamesComponent,
-    RecentGameCardComponent
+    RecentGameCardComponent,
+    TermsConditionsComponent
 ];
