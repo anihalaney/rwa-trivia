@@ -19,7 +19,6 @@ import {
   AppComponent,
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent,
   PrivacyPolicyComponent, UserStatsCardComponent, RecentGameCardComponent, RecentGamesComponent, ProfileCardComponent,
-  TermsConditionsComponent,
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'shared-library/environments/environment';
@@ -39,8 +38,7 @@ import { interval } from 'rxjs';
     ProfileCardComponent,
     RecentGamesComponent,
     RecentGameCardComponent,
-    UserStatsCardComponent,
-    TermsConditionsComponent
+    UserStatsCardComponent
   ],
   imports: [
     BrowserModule,
