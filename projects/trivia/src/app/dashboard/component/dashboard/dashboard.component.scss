@@ -95,17 +95,26 @@ mat-card>:first-child{
 .lives {
   border: 2px solid #fff;
   background: #71b02f;
-  border-radius: 40px;
-  height: 38px;
+  border-radius: 50%;
+  height: 35px;
   position: absolute;
-  top: -21px;
-  right: 1px;
+  top: -15px;
+  right: 4px;
   color: #FFF;
   font-size: 16px;
   font-weight: 700;
-  width: 40px;
+  width: 35px;
+}
+
+.lives-text{
+  position: absolute;
+  top: 9px;
+  right: 12px;
 }
 
 .startgame {
-  min-width: 205px;
+  min-width: 190px;
+}
+.min-startgame {
+  min-width: 230px;
 }

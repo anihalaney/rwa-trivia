@@ -21,7 +21,7 @@ export class NavigationService {
     if (this.router.url === '/my/invite-friends' ||
       this.router.url === '/my/questions' ||
       this.router.url === '/login' ||
-      this.router.url === '/my/recent-game' ||
+      this.router.url === '/recent-game' ||
       this.router.url.includes('game-play') ||
       this.router.url.includes('/my/profile/') ||
       this.router.url.includes('/stats/leaderboard/')) {

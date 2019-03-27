@@ -52,6 +52,7 @@ export class Dashboard implements OnDestroy {
     gamePlayBtnDisabled = true;
     applicationSettings: ApplicationSettings;
     subscriptions = [];
+    startGame = 'Start New Game';
     cd: ChangeDetectorRef;
 
     constructor(public store: Store<AppState>,
@@ -93,6 +94,7 @@ export class Dashboard implements OnDestroy {
                                         if (this.account && !this.account.enable) {
                                             this.timeoutLive = '';
                                             if (this.account && this.account.lives === 0) {
+                                                this.startGame = 'New Game In';
                                                 this.gamePlayBtnDisabled = true;
                                             } else {
                                                 this.gamePlayBtnDisabled = false;
