@@ -124,6 +124,10 @@ mat-card>:first-child{
 .bytes {
   background-color: #71b02f !important;
 }
+
+.points-count-f-12 {
+  font-size: 12px;
+}
 .pageheading{height: auto !important;margin-bottom: 5px}
 @media(max-width :767px){
   .points{
@@ -149,6 +153,9 @@ mat-card>:first-child{
     height:42;
     width:auto;
     border-radius:50%;
+  }
+  .points-m-f-15{
+    font-size:15;
   }
 
   .points-container{

@@ -4,12 +4,12 @@
       <span class="hidden-xs pull-left">Dashboard</span>
       <div *ngIf="account?.bits" class="points pull-left m-l-20"> 
        <div class="p-t-10"> Bits  </div>
-        <label class="points-count"> {{account?.bits}}</label>
+        <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }"> {{account.bits}}</label>
        </div>
    
        <div *ngIf="account?.bytes" class="points bytes pull-left m-l-20"> 
           <div class="p-t-10"> Bytes  </div>
-           <label class="points-count"> {{account?.bytes}}</label>
+           <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }" > {{account?.bytes}}</label>
       </div>
 
     </div>
