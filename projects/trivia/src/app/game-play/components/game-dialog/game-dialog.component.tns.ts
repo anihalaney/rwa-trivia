@@ -30,7 +30,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
       this.store.dispatch(new gameplayactions.ResetCurrentGame());
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
       this.store.dispatch(new gameplayactions.UpdateGameRound(this.game.gameId));
-      this.router.navigate(['/dashboard']);
+      this.navigateToDashboard();
     } else {
       this.questionAnswered = false;
       this.showContinueBtn = false;
@@ -38,11 +38,14 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
       this.checkGameOver();
       if (!this.gameOver) {
-        this.getLoader();
-        this.getNextQuestion();
+        this.getLoader(false);
       }
     }
     this.cd.markForCheck();
+  }
+
+  navigateToDashboard() {
+    this.router.navigate(['/dashboard']);
   }
 
   ngOnDestroy() {
