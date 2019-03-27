@@ -150,6 +150,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     ).catch((error) => {
       this.loader.hide();
       this.showMessage('error', error);
+      this.cd.markForCheck();
     });
 
   }
@@ -166,6 +167,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     ).catch((error) => {
       this.loader.hide();
       this.showMessage('error', error);
+      this.cd.markForCheck();
     });
   }
 
@@ -180,6 +182,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
             const redirectUrl = url ? url : '/dashboard';
             Toast.makeText('You have been successfully logged in').show();
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
+            this.cd.markForCheck();
           }));
       }
       ));
