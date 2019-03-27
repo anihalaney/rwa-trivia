@@ -4,14 +4,14 @@
         
         <StackLayout>       
             <DockLayout margin="10 15 0 15">
-                <DockLayout height="45" dock="left"*ngIf="account?.bits && user" backgroundColor="#3b5998" class="points-container">
+                <DockLayout  dock="left" *ngIf="account?.bits && user" backgroundColor="#3b5998" class="points-container">
                         <Label text="BITS" class="Roboto-Medium points-label" verticalAlignment="center"></Label>
-                        <Label [ngClass]="{'points-m-f-15': account.bits > 9999}" text="{{account?.bits}}" android:paddingTop="8" class="Roboto-Medium points-m" textAlignment="center" horizontalAlignment="right"></Label>
+                        <Label [ngClass]="{'points-m-f-15': account.bits > 9999}" text="{{account?.bits}}"android:paddingTop="9" class="Roboto-Medium points-m" textAlignment="center" horizontalAlignment="right"></Label>
                 </DockLayout>
 
                 <DockLayout dock="right" horizontalAlignment="right" *ngIf="account?.bits && user" backgroundColor="#71b02f" class="points-container">
                         <Label text="BYTES" class="Roboto-Medium points-label" verticalAlignment="center"></Label>
-                        <Label [ngClass]="{'points-m-f-15': account.bytes > 9999}" text="{{account?.bytes}}" android:paddingTop="8" class="Roboto-Medium points-m" textAlignment="center" horizontalAlignment="right"></Label>
+                        <Label [ngClass]="{'points-m-f-15': account.bytes > 9999}" text="{{account?.bytes}}" android:paddingTop="9" class="Roboto-Medium points-m" textAlignment="center" horizontalAlignment="right"></Label>
                 </DockLayout>
             </DockLayout>             
             <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
