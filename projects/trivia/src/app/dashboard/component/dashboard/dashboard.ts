@@ -296,11 +296,19 @@ export class Dashboard implements OnDestroy {
 
     }
 
-
     get gameStart() {
-        console.log(this.timeoutLive);
-        const startString = 'START A NEW GAME' + ((this.user && this.timeoutLive) ? ' | ' + this.timeoutLive : '');
+        if (this.account && this.account.lives === 0) {
+            this.startGame = 'New Game In';
+        } else {
+            this.startGame = 'Start New Game';
+        }
+        const startString = this.startGame + ((this.user && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
         this.cd.markForCheck();
         return startString;
+    }
+
+    get isLivesEnable(): Boolean {
+        const isEnable = (this.user && this.account) ?  true : false;
+        return isEnable;
     }
 }

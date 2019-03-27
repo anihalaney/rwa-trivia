@@ -8,21 +8,10 @@
 
 
             <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
-                
-                <!-- <Label text="START A NEW GAME {{timeoutLive}}" android:paddingTop="22" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true"></Label> -->
 
                 <GridLayout row="0" col="0" >
                        
-                        <Label [text]="gameStart" android:paddingTop="22"  marginRight="25" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true">
-                            <!-- <FormattedString *ngIf="user">
-                                <Span  text="| {{timeoutLive}}"></Span>
-                            </FormattedString> -->
-                        </Label>
-
-                        <!-- <StackLayout orientation="horizontal" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" (tap)="startNewGame()" horizontalAlignment="center" width="95%" verticalAlignment="center" marginRight="30" marginLeft="15">
-                            <Label text="(user === user ? START A NEW GAME | {{timeoutLive}} : START A NEW GAME)" textWrap="true" verticalAlignment="center"></Label>
-                            <Label *ngIf="user" text=" |  {{timeoutLive}}" textWrap="true" verticalAlignment="center"></Label>
-                        </StackLayout> -->
+                        <Label [text]="gameStart" android:paddingTop="19" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }" class="Roboto-Medium text-center" height="70"  (tap)="startNewGame()" fontSize="22" textWrap="true"></Label>
 
                         <AbsoluteLayout horizontalAlignment="right" marginRight="10" *ngIf="user && account">
                             <Label text="{{account?.lives}}" android:paddingTop="10" fontSize="20" fontWeight="700" color="#ffffff" textAlignment="center" width="50" height="50" borderColor="#ffffff" borderWidth="2" borderRadius="50%" backgroundColor="#71b02f" ></Label>

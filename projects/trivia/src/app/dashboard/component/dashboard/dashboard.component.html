@@ -5,7 +5,6 @@
       <span *ngIf="account?.bytes"> Bytes: {{account?.bytes}}</span>
     </div>
     <div class="col-md-6 col-xs-12 align-right">
-        <!-- min-startgame -->
       <button [disabled] = "gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive}" class="startgame" [routerLink]="['/game-play']"> {{startGame}}  <span *ngIf="timeoutLive"> | {{timeoutLive}} </span> </button>
       <div class="lives" *ngIf="user && account && account.lives >=0 " > <span class="lives-text">{{account.lives}}</span> </div>
     </div>

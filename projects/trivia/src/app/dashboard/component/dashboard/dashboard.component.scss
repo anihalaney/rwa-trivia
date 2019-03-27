@@ -79,6 +79,10 @@ mat-card>:first-child{
 
 .disabled-btn{
   background: silver;
+  margin: 10;
+}
+.btn-red {
+  margin: 10;
 }
 .text-center{
   text-align:center;
@@ -117,4 +121,8 @@ mat-card>:first-child{
 }
 .min-startgame {
   min-width: 230px;
+}
+
+.margin-r-25{
+  margin: 10 25 10 10;
 }
