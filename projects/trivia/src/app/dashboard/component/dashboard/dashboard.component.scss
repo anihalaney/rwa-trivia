@@ -104,12 +104,12 @@ mat-card>:first-child{
   font-size: 16px;
   font-weight: 700;
   width: 35px;
+  text-align: center;
 }
 
 .lives-text{
-  position: absolute;
-  top: 9px;
-  right: 12px;
+  text-align: center;
+  line-height: 32px;
 }
 
 .startgame {

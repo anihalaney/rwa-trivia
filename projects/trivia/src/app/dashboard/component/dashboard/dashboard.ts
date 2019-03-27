@@ -77,46 +77,47 @@ export class Dashboard implements OnDestroy {
                 }
                 if (this.user === null) {
                     this.timeoutLive = '';
+                    this.cd.markForCheck();
                     this.gamePlayBtnDisabled = false;
                 }
 
                 if (this.user) {
                     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
-                    .subscribe(appSettings => {
-                        if (appSettings) {
-                            this.applicationSettings = appSettings[0];
-                            if (this.applicationSettings) {
-                                if (this.applicationSettings.lives.enable) {
-                                    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
-                                    .subscribe(account => {
-                                        this.account = account;
-                                        this.cd.markForCheck();
-                                        if (this.account && !this.account.enable) {
-                                            this.timeoutLive = '';
-                                            if (this.account && this.account.lives === 0) {
-                                                this.startGame = 'New Game In';
-                                                this.gamePlayBtnDisabled = true;
-                                            } else {
-                                                this.gamePlayBtnDisabled = false;
-                                            }
-                                        } else {
-                                            this.gamePlayBtnDisabled = false;
-                                        }
+                        .subscribe(appSettings => {
+                            if (appSettings) {
+                                this.applicationSettings = appSettings[0];
+                                if (this.applicationSettings) {
+                                    if (this.applicationSettings.lives.enable) {
+                                        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
+                                            .subscribe(account => {
+                                                this.account = account;
+                                                this.cd.markForCheck();
+                                                if (this.account && !this.account.enable) {
+                                                    this.timeoutLive = '';
+                                                    if (this.account && this.account.lives === 0) {
+                                                        this.startGame = 'New Game In';
+                                                        this.gamePlayBtnDisabled = true;
+                                                    } else {
+                                                        this.gamePlayBtnDisabled = false;
+                                                    }
+                                                } else {
+                                                    this.gamePlayBtnDisabled = false;
+                                                }
+                                                if (this.timerSub) {
+                                                    this.timerSub.unsubscribe();
+                                                }
+                                                this.gameLives();
+                                            }));
+                                    } else {
+                                        this.gamePlayBtnDisabled = false;
                                         if (this.timerSub) {
+                                            this.timeoutLive = '';
                                             this.timerSub.unsubscribe();
                                         }
-                                        this.gameLives();
-                                    }));
-                                } else {
-                                    this.gamePlayBtnDisabled = false;
-                                    if (this.timerSub) {
-                                        this.timeoutLive = '';
-                                        this.timerSub.unsubscribe();
                                     }
                                 }
                             }
-                        }
-                    }));
+                        }));
                 }
             });
             this.store.dispatch(this.gameActions.getActiveGames(user));
@@ -293,5 +294,13 @@ export class Dashboard implements OnDestroy {
 
     ngOnDestroy(): void {
 
+    }
+
+
+    get gameStart() {
+        console.log(this.timeoutLive);
+        const startString = 'START A NEW GAME' + ((this.user && this.timeoutLive) ? ' | ' + this.timeoutLive : '');
+        this.cd.markForCheck();
+        return startString;
     }
 }
