@@ -2,20 +2,20 @@
   <div class="row">
     <div class="pageheading col-md-6 col-xs-12">
       <span class="hidden-xs pull-left">Dashboard</span>
-      <div *ngIf="account?.bits" class="points pull-left m-l-20"> 
+      <div *ngIf="applicationSettings?.tokens?.enable && account?.bits" class="points pull-left m-l-20"> 
        <div class="p-t-10"> Bits  </div>
         <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }"> {{account.bits}}</label>
        </div>
    
-       <div *ngIf="account?.bytes" class="points bytes pull-left m-l-20"> 
+       <div *ngIf="applicationSettings?.tokens?.enable && account?.bytes" class="points bytes pull-left m-l-20"> 
           <div class="p-t-10"> Bytes  </div>
            <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }" > {{account?.bytes}}</label>
       </div>
 
     </div>
     <div class="col-md-6 col-xs-12 align-right">
-      <button [disabled] = "gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive}" class="startgame" [routerLink]="['/game-play']"> {{startGame}}  <span *ngIf="timeoutLive"> | {{timeoutLive}} </span> </button>
-      <div class="lives" *ngIf="user && account && account.lives >=0 " > <span class="lives-text">{{account.lives}}</span> </div>
+      <button [disabled] = "gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive && isLivesEnable}" class="startgame" [routerLink]="['/game-play']"> {{startGame}}  <span *ngIf="isLivesEnable"> | {{timeoutLive}} </span> </button>
+      <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable" > <span class="lives-text">{{account.lives}}</span> </div>
     </div>
   </div>
 

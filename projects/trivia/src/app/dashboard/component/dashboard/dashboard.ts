@@ -87,28 +87,28 @@ export class Dashboard implements OnDestroy {
                             if (appSettings) {
                                 this.applicationSettings = appSettings[0];
                                 if (this.applicationSettings) {
-                                    if (this.applicationSettings.lives.enable) {
-                                        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
-                                            .subscribe(account => {
-                                                this.account = account;
-                                                this.cd.markForCheck();
-                                                if (this.account && !this.account.enable) {
-                                                    this.timeoutLive = '';
-                                                    if (this.account && this.account.lives === 0) {
-                                                        this.startGame = 'New Game In';
-                                                        this.gamePlayBtnDisabled = true;
-                                                    } else {
-                                                        this.gamePlayBtnDisabled = false;
-                                                    }
+                                    // if (this.applicationSettings.lives.enable) {
+                                    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
+                                        .subscribe(account => {
+                                            this.account = account;
+                                            this.cd.markForCheck();
+                                            if (this.account && !this.account.enable) {
+                                                this.timeoutLive = '';
+                                                if (this.account && this.account.lives === 0 && this.isLivesEnable) {
+                                                    this.startGame = 'New Game In';
+                                                    this.gamePlayBtnDisabled = true;
                                                 } else {
                                                     this.gamePlayBtnDisabled = false;
                                                 }
-                                                if (this.timerSub) {
-                                                    this.timerSub.unsubscribe();
-                                                }
-                                                this.gameLives();
-                                            }));
-                                    } else {
+                                            } else {
+                                                this.gamePlayBtnDisabled = false;
+                                            }
+                                            if (this.timerSub) {
+                                                this.timerSub.unsubscribe();
+                                            }
+                                            this.gameLives();
+                                        }));
+                                    if (!this.applicationSettings.lives.enable) {
                                         this.gamePlayBtnDisabled = false;
                                         if (this.timerSub) {
                                             this.timeoutLive = '';
@@ -128,6 +128,7 @@ export class Dashboard implements OnDestroy {
         this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subscriptions.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
+            this.cd.markForCheck();
             this.singlePlayerCount = 0;
             this.twoPlayerCount = 0;
             this.theirTurnCount = 0;
@@ -297,18 +298,19 @@ export class Dashboard implements OnDestroy {
     }
 
     get gameStart() {
-        if (this.user && this.account && this.account.lives === 0) {
+        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
             this.startGame = 'New Game In';
         } else {
             this.startGame = 'Start New Game';
         }
-        const startString = this.startGame + ((this.user && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        // tslint:disable-next-line:max-line-length
+        const startString = this.startGame + ((this.user  && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
         this.cd.markForCheck();
         return startString;
     }
 
     get isLivesEnable(): Boolean {
-        const isEnable = (this.user && this.account) ?  true : false;
+        const isEnable = (this.user && this.account && this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
 }
