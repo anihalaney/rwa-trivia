@@ -24,6 +24,7 @@ export class Question {
   addedOn?: number;
   gameRound?: number;
   totalQALength?: number;
+  serverTime?: number;
 
 
 

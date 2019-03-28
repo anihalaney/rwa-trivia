@@ -267,28 +267,29 @@ export class GameDialog {
         return this.categoryDictionary[category].categoryName;
       }).join(',');
 
-      let remainSecond = -1;
-      this.currentUTC = (new Date()).getTime();
+      let remainSecond = this.MAX_TIME_IN_SECONDS;
+      console.log('timer > ', this.MAX_TIME_IN_SECONDS);
       if (this.game.playerQnAs.length > 0) {
         const lastQuestionId = this.game.playerQnAs[this.game.playerQnAs.length - 1].questionId;
         if (lastQuestionId === this.currentQuestion.id) {
           const addedOn = this.game.playerQnAs[this.game.playerQnAs.length - 1].addedOn;
+          console.log('server time > ', this.currentQuestion.serverTime);
+          console.log('currentQuestion > ', addedOn);
+          console.log('diff> ',  this.currentQuestion.serverTime - addedOn);
           if (addedOn) {
-            const currentUTC = (new Date()).getTime();
-            remainSecond = (this.MAX_TIME_IN_SECONDS + 1) - Math.floor((currentUTC - addedOn) / 1000);
-          } else {
-            remainSecond = this.MAX_TIME_IN_SECONDS;
+            let timeDiff = this.currentQuestion.serverTime - addedOn;
+            timeDiff = (timeDiff < 0 ) ? 0 : Math.round((timeDiff / 1000));
+            remainSecond =  this.MAX_TIME_IN_SECONDS - timeDiff;
+            // remainSecond = (this.MAX_TIME_IN_SECONDS + 1) - Math.floor((currentUTC - addedOn) / 1000);
           }
-        } else {
-          remainSecond = this.MAX_TIME_IN_SECONDS;
         }
-      } else {
-        remainSecond = this.MAX_TIME_IN_SECONDS;
       }
+
       this.cd.markForCheck();
       if (this.isQuestionAvailable || remainSecond >= 0) {
         this.questionIndex++;
         this.timer = remainSecond;
+        console.log('timer > ', this.timer);
         this.timerSub =
           timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
             this.timer--;
