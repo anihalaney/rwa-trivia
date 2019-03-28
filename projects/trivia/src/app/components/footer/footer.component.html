@@ -6,6 +6,7 @@
       <a *ngIf="user" [routerLink]="['/my/questions']" title="My Questions" class="myQuestion">My
         Questions</a>
       <a [routerLink]="['/privacy-policy']">Privacy Policy</a>
+      <a [routerLink]="['/terms-and-conditions']">Terms & Conditions</a>
       <a *ngIf="user?.roles?.admin || user?.roles?.bulkuploader" [routerLink]="['/bulk']">Bulk</a>
       <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
       <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>

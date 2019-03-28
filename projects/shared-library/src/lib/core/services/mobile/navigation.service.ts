@@ -22,9 +22,11 @@ export class NavigationService {
       this.router.url === '/my/questions' ||
       this.router.url === '/login' ||
       this.router.url === '/my/recent-game' ||
+      this.router.url === '/privacy-policy' ||
+      this.router.url === '/terms-and-conditions' ||
       this.router.url.includes('game-play') ||
       this.router.url.includes('/my/profile/') ||
-      this.router.url.includes('/stats/leaderboard/')) {
+      this.router.url.includes('/stats/leaderboard/') ) {
       this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
     } else if (
       this.router.url === '/my/questions/add' ||
