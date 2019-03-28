@@ -17,6 +17,10 @@ export const routes: Routes = [
     component: PrivacyPolicyComponent
   },
   {
+    path: 'terms-and-conditions',
+    component: PrivacyPolicyComponent
+  },
+  {
     path: 'my',
     loadChildren: '../user/user.module#UserModule',
     canActivate: [AuthGuard],

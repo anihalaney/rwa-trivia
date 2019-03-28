@@ -2,7 +2,7 @@
     <GridLayout rows="*,auto" class="Roboto-Regular">
         <StackLayout row="0">
             <ScrollView>
-                <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
+                <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
                     <GridLayout row="0" columns="auto,*" class="sideStackLayoutHeader" *ngIf="authProvider.isAuthenticated">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
                             width="64" marginLeft="10" verticalAlignment="center" marginRight="10" iosOverflowSafeArea="false"></Image>
@@ -38,8 +38,12 @@
                     <Label *ngIf="authProvider.isAuthenticated" row="6" (tap)="navigateToMyQuestion()" colSpan="2" text="My Questions"
                         class="sideLabel sideStackLayout" [class.active-menu]="activeMenu === 'My Questions'"></Label>
 
-                    <Label *ngIf="authProvider.isAuthenticated" row="7" (tap)="navigateToProfileSettings()" colSpan="2"
-                        text="Profile" textWrap="true" class="sideLabel" [class.active-menu]="activeMenu === 'Profile'"></Label>
+                        <Label *ngIf="authProvider.isAuthenticated" row="7" (tap)="navigateToProfileSettings()" colSpan="2"
+                            text="Profile" textWrap="true" class="sideLabel sideStackLayout" [class.active-menu]="activeMenu === 'Profile'"></Label>
+                        <Label row="8" (tap)="navigateToPrivacyPolicy()" colSpan="2" text="Privacy Policy" 
+                            class="sideLabel" [class.active-menu]="activeMenu === 'Privacy Policy'"></Label>
+                        <Label row="9" (tap)="navigateToTermsConditions()" colSpan="2" text="Terms & Conditions" 
+                            class="sideLabel" [class.active-menu]="activeMenu === 'Terms & Conditions'"></Label>
                 </GridLayout>
             </ScrollView>
         </StackLayout>

@@ -52,6 +52,7 @@ export class Dashboard implements OnDestroy {
     gamePlayBtnDisabled = true;
     applicationSettings: ApplicationSettings;
     subscriptions = [];
+    startGame = 'Start New Game';
     cd: ChangeDetectorRef;
 
     constructor(public store: Store<AppState>,
@@ -76,45 +77,47 @@ export class Dashboard implements OnDestroy {
                 }
                 if (this.user === null) {
                     this.timeoutLive = '';
+                    this.cd.markForCheck();
                     this.gamePlayBtnDisabled = false;
                 }
 
                 if (this.user) {
                     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
-                    .subscribe(appSettings => {
-                        if (appSettings) {
-                            this.applicationSettings = appSettings[0];
-                            if (this.applicationSettings) {
-                                if (this.applicationSettings.lives.enable) {
-                                    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
-                                    .subscribe(account => {
-                                        this.account = account;
-                                        this.cd.markForCheck();
-                                        if (this.account && !this.account.enable) {
-                                            this.timeoutLive = '';
-                                            if (this.account && this.account.lives === 0) {
-                                                this.gamePlayBtnDisabled = true;
-                                            } else {
-                                                this.gamePlayBtnDisabled = false;
-                                            }
-                                        } else {
-                                            this.gamePlayBtnDisabled = false;
-                                        }
+                        .subscribe(appSettings => {
+                            if (appSettings) {
+                                this.applicationSettings = appSettings[0];
+                                if (this.applicationSettings) {
+                                    if (this.applicationSettings.lives.enable) {
+                                        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
+                                            .subscribe(account => {
+                                                this.account = account;
+                                                this.cd.markForCheck();
+                                                if (this.account && !this.account.enable) {
+                                                    this.timeoutLive = '';
+                                                    if (this.account && this.account.lives === 0) {
+                                                        this.startGame = 'New Game In';
+                                                        this.gamePlayBtnDisabled = true;
+                                                    } else {
+                                                        this.gamePlayBtnDisabled = false;
+                                                    }
+                                                } else {
+                                                    this.gamePlayBtnDisabled = false;
+                                                }
+                                                if (this.timerSub) {
+                                                    this.timerSub.unsubscribe();
+                                                }
+                                                this.gameLives();
+                                            }));
+                                    } else {
+                                        this.gamePlayBtnDisabled = false;
                                         if (this.timerSub) {
+                                            this.timeoutLive = '';
                                             this.timerSub.unsubscribe();
                                         }
-                                        this.gameLives();
-                                    }));
-                                } else {
-                                    this.gamePlayBtnDisabled = false;
-                                    if (this.timerSub) {
-                                        this.timeoutLive = '';
-                                        this.timerSub.unsubscribe();
                                     }
                                 }
                             }
-                        }
-                    }));
+                        }));
                 }
             });
             this.store.dispatch(this.gameActions.getActiveGames(user));
@@ -265,7 +268,7 @@ export class Dashboard implements OnDestroy {
 
                     if (timeStamp >= this.account.nextLiveUpdate) {
                         this.timerSub.unsubscribe();
-                        this.timeoutLive = '(' + String(this.account.lives) + ')';
+                        // this.timeoutLive = '(' + String(this.account.lives) + ')';
                         this.cd.markForCheck();
                         if (this.user) {
                             this.store.dispatch(this.userActions.addUserLives(this.user.userId));
@@ -275,13 +278,13 @@ export class Dashboard implements OnDestroy {
                         if (this.account.lives !== this.applicationSettings.lives.max_lives) {
                             timeOut = (this.remainingMinutes) + ':' + (this.remaningSeconds);
                         }
-                        this.timeoutLive = '(' + String(this.account.lives) + ')' + timeOut;
+                        this.timeoutLive = timeOut;
                         this.cd.markForCheck();
                     }
                 });
                 this.subscriptions.push(this.timerSub);
             } else {
-                this.timeoutLive = '(' + String(this.account.lives) + ')';
+                // this.timeoutLive = '(' + String(this.account.lives) + ')';
                 this.cd.markForCheck();
             }
             this.cd.markForCheck();
@@ -291,5 +294,21 @@ export class Dashboard implements OnDestroy {
 
     ngOnDestroy(): void {
 
+    }
+
+    get gameStart() {
+        if (this.user && this.account && this.account.lives === 0) {
+            this.startGame = 'New Game In';
+        } else {
+            this.startGame = 'Start New Game';
+        }
+        const startString = this.startGame + ((this.user && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        this.cd.markForCheck();
+        return startString;
+    }
+
+    get isLivesEnable(): Boolean {
+        const isEnable = (this.user && this.account) ?  true : false;
+        return isEnable;
     }
 }

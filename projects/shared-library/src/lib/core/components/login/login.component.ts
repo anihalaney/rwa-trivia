@@ -108,6 +108,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     this.firebaseAuthService.googleLogin().catch((error: Error) => {
       this.notificationMsg = error.message;
       this.errorStatus = true;
+      this.cd.detectChanges();
     });
   }
 
@@ -116,6 +117,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       .catch((error: Error) => {
         this.notificationMsg = error.message;
         this.errorStatus = true;
+         this.cd.detectChanges();
       });
   }
 
@@ -124,6 +126,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       .catch((error: Error) => {
         this.notificationMsg = error.message;
         this.errorStatus = true;
+        this.cd.detectChanges();
       });
   }
 
@@ -132,6 +135,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       .catch((error: Error) => {
         this.notificationMsg = error.message;
         this.errorStatus = true;
+        this.cd.detectChanges();
       });
   }
 
