@@ -62,6 +62,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/my/invite-friends') {
                     this.activeMenu = 'Friend List';
+                }  else if (nav === '/privacy-policy') {
+                    this.activeMenu = 'Privacy Policy';
+                } else if (nav === '/terms-and-conditions') {
+                    this.activeMenu = 'Terms & Conditions';
                 }
             }
         });
@@ -170,6 +174,16 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     navigateToFriendList() {
         this.routerExtension.navigate(['/my/invite-friends']);
+        this.closeDrawer();
+    }
+
+    navigateToPrivacyPolicy() {
+        this.routerExtension.navigate(['/privacy-policy']);
+        this.closeDrawer();
+    }
+
+    navigateToTermsConditions() {
+        this.routerExtension.navigate(['/terms-and-conditions']);
         this.closeDrawer();
     }
 
