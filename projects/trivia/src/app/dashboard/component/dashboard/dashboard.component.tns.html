@@ -11,7 +11,7 @@
 
                 <GridLayout row="0" col="0" >
                        
-                        <Label [text]="gameStart" android:paddingTop="19" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }" class="Roboto-Medium text-center" height="70"  (tap)="startNewGame()" fontSize="22" textWrap="true"></Label>
+                        <Label [text]="gameStart" android:paddingTop="22" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }" class="Roboto-Medium text-center" height="70"  (tap)="startNewGame()" fontSize="22" textWrap="true"></Label>
 
                         <AbsoluteLayout horizontalAlignment="right" marginRight="10" *ngIf="user && account">
                             <Label text="{{account?.lives}}" android:paddingTop="10" fontSize="20" fontWeight="700" color="#ffffff" textAlignment="center" width="50" height="50" borderColor="#ffffff" borderWidth="2" borderRadius="50%" backgroundColor="#71b02f" ></Label>
