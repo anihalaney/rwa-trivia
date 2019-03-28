@@ -14,8 +14,8 @@
 
     </div>
     <div class="col-md-6 col-xs-12 align-right">
-      <button [disabled]="gamePlayBtnDisabled" class="startgame" [routerLink]="['/game-play']"> Start New Game
-        {{timeoutLive}} </button>
+      <button [disabled] = "gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive}" class="startgame" [routerLink]="['/game-play']"> {{startGame}}  <span *ngIf="timeoutLive"> | {{timeoutLive}} </span> </button>
+      <div class="lives" *ngIf="user && account && account.lives >=0 " > <span class="lives-text">{{account.lives}}</span> </div>
     </div>
   </div>
 

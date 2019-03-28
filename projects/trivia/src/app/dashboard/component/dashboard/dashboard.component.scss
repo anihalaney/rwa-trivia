@@ -79,6 +79,10 @@ mat-card>:first-child{
 
 .disabled-btn{
   background: silver;
+  margin: 10;
+}
+.btn-red {
+  margin: 10;
 }
 .text-center{
   text-align:center;
@@ -92,6 +96,48 @@ mat-card>:first-child{
   padding:10 0;
 }
 
+.lives {
+  border: 2px solid #fff;
+  background: #71b02f;
+  border-radius: 50%;
+  height: 35px;
+  position: absolute;
+  top: -15px;
+  right: 4px;
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 700;
+  width: 35px;
+  text-align: center;
+}
+
+.lives-text{
+  text-align: center;
+  line-height: 32px;
+}
+
+.startgame {
+  min-width: 190px;
+}
+.min-startgame {
+  min-width: 230px;
+}
+
+.margin-r-25{
+  margin: 10 25 10 10;
+}
+
+.lives-count{
+  font-size:20;
+  font-weight:700;
+  color:#ffffff;
+  width:50;
+  height:50;
+  border-color:#ffffff;
+  border-width:2;
+  border-radius:50%;
+  background-color:#71b02f;
+}
 .points{
   background-color: #3b5998;
   width: 130px;
