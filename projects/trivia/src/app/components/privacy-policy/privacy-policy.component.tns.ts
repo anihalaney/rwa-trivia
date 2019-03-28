@@ -1,23 +1,23 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
-import * as utilsModule from 'tns-core-modules/utils/utils';
+import { openUrl } from 'tns-core-modules/utils/utils';
 
 @Component({
   selector: 'privacy-policy',
   templateUrl: './privacy-policy.component.html',
-  styleUrls: ['./privacy-policy.component.scss']
+  styleUrls: ['./privacy-policy.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 
-export class PrivacyPolicyComponent implements OnInit {
+export class PrivacyPolicyComponent {
 
   constructor(private page: Page) {
   }
 
   openUrl(url: any) {
-    utilsModule.openUrl(url);
+    openUrl(url);
   }
 
-  ngOnInit() {
-  }
+
 }
