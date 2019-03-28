@@ -1,10 +1,19 @@
 <ns-action-bar title="Dashboard" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
     <ScrollView>
-        <StackLayout>        
-                <Label margin="5 10"  *ngIf="account?.bits && user" text=" Bits: {{account?.bits}} " textWrap="true"></Label>
-                <Label margin="2 10"  *ngIf="account?.bytes && user" text=" Bytes: {{account?.bytes}} " textWrap="true"></Label>
+        
+        <StackLayout>       
+            <DockLayout margin="10 15 0 15"  *ngIf="user && applicationSettings?.tokens?.enable">
+                <DockLayout  dock="left" *ngIf="user" backgroundColor="#3b5998" class="points-container"  [style.width] = "this.account.bits > 9999999 ? '150' : '135'">
+                        <Label text="BITS" class="Roboto-Medium points-label" verticalAlignment="center"></Label>
+                        <Label [ngClass]="{'points-m-f-15': this.account.bits > 9999}" [text]="this.account.bits"android:paddingTop="9" class="Roboto-Medium points-m" textAlignment="center" horizontalAlignment="right"></Label>
+                </DockLayout>
 
+                <DockLayout dock="right" horizontalAlignment="right" *ngIf="account?.bytes && user" backgroundColor="#71b02f" class="points-container" [style.width] = "this.account.bytes >= 9999999 ? '150' : '135'">
+                        <Label text="BYTES" class="Roboto-Medium points-label" verticalAlignment="center"></Label>
+                        <Label [ngClass]="{'points-m-f-15': this.account.bytes > 9999}" [text]="this.account.bytes" android:paddingTop="9" class="Roboto-Medium points-m" textAlignment="center" horizontalAlignment="right"></Label>
+                </DockLayout>
+            </DockLayout>             
             <GridLayout rows="*, *, *, *, *, *, *" columns="*" iosOverflowSafeArea="false">
                 
                 <Label text="START A NEW GAME {{timeoutLive}}" android:paddingTop="22" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled}" class="Roboto-Medium text-center" height="70" margin="10" (tap)="startNewGame()" textWrap="true"></Label>
