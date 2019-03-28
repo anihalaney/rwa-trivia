@@ -297,7 +297,7 @@ export class Dashboard implements OnDestroy {
     }
 
     get gameStart() {
-        if (this.account && this.account.lives === 0) {
+        if (this.user && this.account && this.account.lives === 0) {
             this.startGame = 'New Game In';
         } else {
             this.startGame = 'Start New Game';
