@@ -1,4 +1,7 @@
-import { Account, CollectionConstants, Game, GameStatus, HeaderConstants, interceptorConstants, MigrationConstants, Question, ResponseMessagesConstants, User, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    Account, CollectionConstants, Game, GameStatus, HeaderConstants,
+    interceptorConstants, MigrationConstants, Question, ResponseMessagesConstants, User, GeneralConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
@@ -11,9 +14,9 @@ import { FirestoreMigration } from '../utils/firestore-migration';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
-import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { Utils } from '../utils/utils';
+import { StatsService } from '../services/stats.service';
 
 export class MigrationController {
 
@@ -149,7 +152,7 @@ export class MigrationController {
      */
     static async generateSystemStat(req, res): Promise<any> {
         try {
-            await SystemStatsCalculations.generateSystemStats();
+            await StatsService.generateSystemStats();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UPDATED_SYSTEM_STAT);
         } catch (error) {
             Utils.sendError(res, error);
