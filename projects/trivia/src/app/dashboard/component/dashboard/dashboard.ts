@@ -5,12 +5,17 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable, Subscription, timer } from 'rxjs';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
-import { Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation, OpponentType, PlayerMode, User } from 'shared-library/shared/model';
+import {
+    Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation,
+    OpponentType, PlayerMode, User
+} from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
 
+    START_A_NEW_GAME = 'Start New Game';
+    NEW_GAME_IN = 'New Game In';
     user: User;
     users: User[];
     activeGames$: Observable<Game[]>;
@@ -52,7 +57,7 @@ export class Dashboard implements OnDestroy {
     gamePlayBtnDisabled = true;
     applicationSettings: ApplicationSettings;
     subscriptions = [];
-    startGame = 'Start New Game';
+    startGame = this.START_A_NEW_GAME;
     cd: ChangeDetectorRef;
 
     constructor(public store: Store<AppState>,
@@ -87,28 +92,26 @@ export class Dashboard implements OnDestroy {
                             if (appSettings) {
                                 this.applicationSettings = appSettings[0];
                                 if (this.applicationSettings) {
-                                    if (this.applicationSettings.lives.enable) {
-                                        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
-                                            .subscribe(account => {
-                                                this.account = account;
-                                                this.cd.markForCheck();
-                                                if (this.account && !this.account.enable) {
-                                                    this.timeoutLive = '';
-                                                    if (this.account && this.account.lives === 0) {
-                                                        this.startGame = 'New Game In';
-                                                        this.gamePlayBtnDisabled = true;
-                                                    } else {
-                                                        this.gamePlayBtnDisabled = false;
-                                                    }
+                                    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
+                                        .subscribe(account => {
+                                            this.account = account;
+                                            this.cd.markForCheck();
+                                            if (this.account && !this.account.enable) {
+                                                this.timeoutLive = '';
+                                                if (this.account && this.account.lives === 0 && this.isLivesEnable) {
+                                                    this.gamePlayBtnDisabled = true;
                                                 } else {
                                                     this.gamePlayBtnDisabled = false;
                                                 }
-                                                if (this.timerSub) {
-                                                    this.timerSub.unsubscribe();
-                                                }
-                                                this.gameLives();
-                                            }));
-                                    } else {
+                                            } else {
+                                                this.gamePlayBtnDisabled = false;
+                                            }
+                                            if (this.timerSub) {
+                                                this.timerSub.unsubscribe();
+                                            }
+                                            this.gameLives();
+                                        }));
+                                    if (!this.applicationSettings.lives.enable) {
                                         this.gamePlayBtnDisabled = false;
                                         if (this.timerSub) {
                                             this.timeoutLive = '';
@@ -128,6 +131,7 @@ export class Dashboard implements OnDestroy {
         this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subscriptions.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
+            this.cd.markForCheck();
             this.singlePlayerCount = 0;
             this.twoPlayerCount = 0;
             this.theirTurnCount = 0;
@@ -283,11 +287,7 @@ export class Dashboard implements OnDestroy {
                     }
                 });
                 this.subscriptions.push(this.timerSub);
-            } else {
-                // this.timeoutLive = '(' + String(this.account.lives) + ')';
-                this.cd.markForCheck();
             }
-            this.cd.markForCheck();
         }
 
     }
@@ -297,18 +297,19 @@ export class Dashboard implements OnDestroy {
     }
 
     get gameStart() {
-        if (this.user && this.account && this.account.lives === 0) {
-            this.startGame = 'New Game In';
+        if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
+            this.startGame = this.NEW_GAME_IN;
         } else {
-            this.startGame = 'Start New Game';
+            this.startGame = this.START_A_NEW_GAME;
         }
-        const startString = this.startGame + ((this.user && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        // tslint:disable-next-line:max-line-length
+        const startString = this.startGame + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
         this.cd.markForCheck();
         return startString;
     }
 
     get isLivesEnable(): Boolean {
-        const isEnable = (this.user && this.account) ?  true : false;
+        const isEnable = (this.user && this.account && this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
 }

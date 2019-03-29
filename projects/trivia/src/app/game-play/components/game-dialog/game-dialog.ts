@@ -267,24 +267,19 @@ export class GameDialog {
         return this.categoryDictionary[category].categoryName;
       }).join(',');
 
-      let remainSecond = -1;
-      this.currentUTC = (new Date()).getTime();
+      let remainSecond = this.MAX_TIME_IN_SECONDS;
       if (this.game.playerQnAs.length > 0) {
         const lastQuestionId = this.game.playerQnAs[this.game.playerQnAs.length - 1].questionId;
         if (lastQuestionId === this.currentQuestion.id) {
           const addedOn = this.game.playerQnAs[this.game.playerQnAs.length - 1].addedOn;
           if (addedOn) {
-            const currentUTC = (new Date()).getTime();
-            remainSecond = (this.MAX_TIME_IN_SECONDS + 1) - Math.floor((currentUTC - addedOn) / 1000);
-          } else {
-            remainSecond = this.MAX_TIME_IN_SECONDS;
+            let timeDiff = this.currentQuestion.serverTimeQCreated - addedOn;
+            timeDiff = (timeDiff < 0 ) ? 0 : Math.round((timeDiff / 1000));
+            remainSecond =  this.MAX_TIME_IN_SECONDS - timeDiff;
           }
-        } else {
-          remainSecond = this.MAX_TIME_IN_SECONDS;
         }
-      } else {
-        remainSecond = this.MAX_TIME_IN_SECONDS;
       }
+
       this.cd.markForCheck();
       if (this.isQuestionAvailable || remainSecond >= 0) {
         this.questionIndex++;
@@ -307,7 +302,6 @@ export class GameDialog {
         setTimeout(() => {
           this.afterAnswer();
           this.genQuestionComponent.fillTimer();
-          // this.cd.detectChanges();
           this.cd.markForCheck();
         }, 1000);
       }
