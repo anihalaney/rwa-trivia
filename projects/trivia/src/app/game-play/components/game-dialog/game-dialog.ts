@@ -268,19 +268,14 @@ export class GameDialog {
       }).join(',');
 
       let remainSecond = this.MAX_TIME_IN_SECONDS;
-      console.log('timer > ', this.MAX_TIME_IN_SECONDS);
       if (this.game.playerQnAs.length > 0) {
         const lastQuestionId = this.game.playerQnAs[this.game.playerQnAs.length - 1].questionId;
         if (lastQuestionId === this.currentQuestion.id) {
           const addedOn = this.game.playerQnAs[this.game.playerQnAs.length - 1].addedOn;
-          console.log('server time > ', this.currentQuestion.serverTime);
-          console.log('currentQuestion > ', addedOn);
-          console.log('diff> ',  this.currentQuestion.serverTime - addedOn);
           if (addedOn) {
-            let timeDiff = this.currentQuestion.serverTime - addedOn;
+            let timeDiff = this.currentQuestion.serverTimeQCreated - addedOn;
             timeDiff = (timeDiff < 0 ) ? 0 : Math.round((timeDiff / 1000));
             remainSecond =  this.MAX_TIME_IN_SECONDS - timeDiff;
-            // remainSecond = (this.MAX_TIME_IN_SECONDS + 1) - Math.floor((currentUTC - addedOn) / 1000);
           }
         }
       }
@@ -289,7 +284,6 @@ export class GameDialog {
       if (this.isQuestionAvailable || remainSecond >= 0) {
         this.questionIndex++;
         this.timer = remainSecond;
-        console.log('timer > ', this.timer);
         this.timerSub =
           timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
             this.timer--;
@@ -308,7 +302,6 @@ export class GameDialog {
         setTimeout(() => {
           this.afterAnswer();
           this.genQuestionComponent.fillTimer();
-          // this.cd.detectChanges();
           this.cd.markForCheck();
         }, 1000);
       }

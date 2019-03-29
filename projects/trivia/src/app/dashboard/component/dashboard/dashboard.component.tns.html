@@ -2,7 +2,7 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
     <ScrollView>
         <StackLayout>
-            <DockLayout margin="15 15 0 15" *ngIf="user && applicationSettings?.tokens?.enable">
+            <DockLayout margin="15 10 0 10" *ngIf="user && applicationSettings?.tokens?.enable">
                 <DockLayout dock="left" *ngIf="account?.bits && user" backgroundColor="#3b5998" class="points-container"
                     [style.width]="account.bits > 9999999 ? '150' : '135'">
                     <Label text="BITS" class="Roboto-Medium points-label" verticalAlignment="center"></Label>

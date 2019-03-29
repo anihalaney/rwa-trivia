@@ -5,12 +5,17 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable, Subscription, timer } from 'rxjs';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
-import { Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation, OpponentType, PlayerMode, User } from 'shared-library/shared/model';
+import {
+    Account, ApplicationSettings, CalenderConstants, Game, GameStatus, Invitation,
+    OpponentType, PlayerMode, User
+} from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class Dashboard implements OnDestroy {
 
+    START_A_NEW_GAME = 'Start New Game';
+    NEW_GAME_IN = 'New Game In';
     user: User;
     users: User[];
     activeGames$: Observable<Game[]>;
@@ -52,7 +57,7 @@ export class Dashboard implements OnDestroy {
     gamePlayBtnDisabled = true;
     applicationSettings: ApplicationSettings;
     subscriptions = [];
-    startGame = 'Start New Game';
+    startGame = this.START_A_NEW_GAME;
     cd: ChangeDetectorRef;
 
     constructor(public store: Store<AppState>,
@@ -87,7 +92,6 @@ export class Dashboard implements OnDestroy {
                             if (appSettings) {
                                 this.applicationSettings = appSettings[0];
                                 if (this.applicationSettings) {
-                                    // if (this.applicationSettings.lives.enable) {
                                     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account))
                                         .subscribe(account => {
                                             this.account = account;
@@ -95,7 +99,6 @@ export class Dashboard implements OnDestroy {
                                             if (this.account && !this.account.enable) {
                                                 this.timeoutLive = '';
                                                 if (this.account && this.account.lives === 0 && this.isLivesEnable) {
-                                                    this.startGame = 'New Game In';
                                                     this.gamePlayBtnDisabled = true;
                                                 } else {
                                                     this.gamePlayBtnDisabled = false;
@@ -284,11 +287,7 @@ export class Dashboard implements OnDestroy {
                     }
                 });
                 this.subscriptions.push(this.timerSub);
-            } else {
-                // this.timeoutLive = '(' + String(this.account.lives) + ')';
-                this.cd.markForCheck();
             }
-            this.cd.markForCheck();
         }
 
     }
@@ -299,12 +298,12 @@ export class Dashboard implements OnDestroy {
 
     get gameStart() {
         if (this.user && this.account && this.account.lives === 0 && this.applicationSettings.lives.enable) {
-            this.startGame = 'New Game In';
+            this.startGame = this.NEW_GAME_IN;
         } else {
-            this.startGame = 'Start New Game';
+            this.startGame = this.START_A_NEW_GAME;
         }
         // tslint:disable-next-line:max-line-length
-        const startString = this.startGame + ((this.user  && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
+        const startString = this.startGame + ((this.user && this.applicationSettings.lives.enable && this.timeoutLive) ? '   |   ' + this.timeoutLive : '');
         this.cd.markForCheck();
         return startString;
     }
