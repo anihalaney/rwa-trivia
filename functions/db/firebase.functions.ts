@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import {
     friendInvitationConstants, Game, Invitation, OpponentType,
-    PlayerMode, Question, TriggerConstants, UserStatConstants
+    PlayerMode, Question, TriggerConstants, UserStatConstants, SystemStatConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
@@ -118,7 +118,8 @@ export class FirebaseFunctions {
                 const game: Game = Game.getViewModel(afterEventData);
                 if (game.gameOver) {
 
-                    await StatsService.updateSystemStats('active_games');
+                    await StatsService.updateSystemStats(SystemStatConstants.ACTIVE_GAMES);
+                    StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
 
                     await GameLeaderBoardStats.getGameUsers(game);
 

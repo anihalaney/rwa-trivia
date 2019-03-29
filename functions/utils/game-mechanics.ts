@@ -44,7 +44,6 @@ export class GameMechanics {
                         PushNotification.sendGamePlayPushNotifications(game, game.winnerPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }
-                    StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
                     break;
                 case GameOperations.REPORT_STATUS:
                     const index = game.playerQnAs.findIndex(
@@ -54,7 +53,6 @@ export class GameMechanics {
                     break;
                 case GameOperations.REJECT_GAME:
                     GameMechanics.setGameOverParams(true, GameStatus.REJECTED, Utils.getUTCTimeStamp(), game);
-                    StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
                     break;
                 case GameOperations.UPDATE_ROUND:
                     game = GameMechanics.updateRound(game, userId);
