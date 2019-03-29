@@ -12,10 +12,10 @@ import { ESUtils } from '../utils/ESUtils';
 import { FriendGameStats } from '../utils/friend-game-stats';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { MailClient } from '../utils/mail-client';
-import { SystemStatsCalculations } from '../utils/system-stats-calculations';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
 import { AppSettings } from '../services/app-settings.service';
+import { StatsService } from '../services/stats.service';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -51,9 +51,9 @@ export class FirebaseFunctions {
                 // add or update
                 await ESUtils.createOrUpdateIndex(data.categoryIds['0'], question, context.params.questionId);
 
-                await UserContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution);
+                await UserContributionStat.getUser(question.created_uid, UserStatConstants.initialContribution, false);
 
-                await SystemStatsCalculations.updateSystemStats('total_questions');
+                await StatsService.updateSystemStats('total_questions');
 
             } else {
                 // delete
@@ -98,7 +98,7 @@ export class FirebaseFunctions {
 
             if (data) {
 
-                await SystemStatsCalculations.updateSystemStats('active_games');
+                await StatsService.updateSystemStats('active_games');
             }
 
             return true;
@@ -118,15 +118,14 @@ export class FirebaseFunctions {
                 const game: Game = Game.getViewModel(afterEventData);
                 if (game.gameOver) {
 
+                    await StatsService.updateSystemStats('active_games');
+
                     await GameLeaderBoardStats.getGameUsers(game);
 
                     if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                         Number(game.gameOptions.opponentType) === OpponentType.Friend) {
                         await FriendGameStats.calculateFriendsGameState(game);
                     }
-
-
-                    await SystemStatsCalculations.updateSystemStats('active_games');
                 }
             }
 
@@ -143,7 +142,7 @@ export class FirebaseFunctions {
 
             if (data) {
 
-                await SystemStatsCalculations.updateSystemStats('total_users');
+                await StatsService.updateSystemStats('total_users');
 
                 const appSetting = await AppSettings.Instance.getAppSettings();
                 if (appSetting.lives.enable) {
