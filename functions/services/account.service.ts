@@ -69,6 +69,23 @@ export class AccountService {
     }
 
     /**
+     * deleteAllAccounts
+     * return any
+     */
+    static async deleteAllAccounts(): Promise<any> {
+        try {
+            AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).listDocuments().then(val => {
+                val.map((res) => {
+                    res.delete();
+                });
+            });
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
      * calculateAccountStat
      * return account
      */
@@ -81,7 +98,7 @@ export class AccountService {
         for (const id of categoryIds) {
             account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
             account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
-                account.leaderBoardStats[id] + score : score;
+                account.leaderBoardStats[id] + 1 : 1;
         }
 
         account[LeaderBoardConstants.LEADER_BOARD_STATS] = { ...account.leaderBoardStats };
