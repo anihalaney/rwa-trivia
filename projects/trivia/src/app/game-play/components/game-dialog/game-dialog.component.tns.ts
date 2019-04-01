@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, OnInit } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
@@ -23,7 +23,7 @@ import { Observable, Subscription, timer } from 'rxjs';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class GameDialogComponent extends GameDialog implements OnInit, OnDestroy {
+export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   suspendTime: number;
   resumeTime: number;
