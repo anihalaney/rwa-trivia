@@ -7,6 +7,13 @@ import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { GameDialog } from './game-dialog';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import {
+  resumeEvent, suspendEvent, ApplicationEventData,
+  on as applicationOn, off as applicationOff,
+} from 'tns-core-modules/application';
+
+import { Observable, Subscription, timer } from 'rxjs';
+
 
 @Component({
   selector: 'game-dialog',
@@ -17,10 +24,42 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameDialogComponent extends GameDialog implements OnDestroy {
+
+  suspendTime: number;
+  resumeTime: number;
   constructor(public store: Store<GamePlayState>, public gameActions: GameActions, public router: Router,
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
+    this.registerLifeCycleEvent();
   }
+
+  resumeCallBack(args: ApplicationEventData) {
+    if (args.ios) {
+      this.resumeTime = this.utils.getUTCTimeStamp();
+      const remainTime = Math.round((this.resumeTime - this.suspendTime) / 1000);
+      if ((this.timer - remainTime) < 0) {
+        this.timer = 0;
+        this.utils.unsubscribe([this.timerSub]);
+        this.fillTimer();
+      } else {
+        this.timer = (this.timer - remainTime);
+      }
+    }
+  }
+
+  suspendCallBack(args: ApplicationEventData) {
+    this.suspendTime = this.utils.getUTCTimeStamp();
+  }
+
+  registerLifeCycleEvent(): any {
+    applicationOff(resumeEvent, this.resumeCallBack);
+    applicationOff(suspendEvent, this.suspendCallBack);
+
+    applicationOn(resumeEvent, this.resumeCallBack, this);
+    applicationOn(suspendEvent, this.suspendCallBack, this);
+
+  }
+
 
   continueClicked($event) {
     this.currentQuestion = undefined;
@@ -46,6 +85,8 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
   }
 
   ngOnDestroy() {
+    applicationOff(resumeEvent, this.resumeCallBack);
+    applicationOff(suspendEvent, this.suspendCallBack);
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.utils.unsubscribe([this.timerSub, this.questionSub]);
     this.destroy();
