@@ -21,7 +21,7 @@ export class UserContributionStat {
 
             const userDictPromises = [];
             for (const userId of Object.keys(UserContributionStat.userDict)) {
-                userDictPromises.push(UserContributionStat.getUser(userId, UserContributionStat.userDict[userId]));
+                userDictPromises.push(UserContributionStat.getUser(userId, UserContributionStat.userDict[userId], true));
             }
 
             return await Promise.all(userDictPromises);
@@ -30,10 +30,16 @@ export class UserContributionStat {
         }
     }
 
-    static async getUser(id: string, count: number): Promise<string> {
+    static async getUser(id: string, count: number, isMigrationScript: boolean): Promise<string> {
         try {
             const account: Account = await AccountService.getAccountById(id);
-            account.contribution = count;
+
+            if (isMigrationScript) {
+                account.contribution = count;
+            } else {
+                account.contribution = account.contribution ? (account.contribution + count) : count;
+            }
+
             return await AccountService.setAccount({ ...account });
         } catch (error) {
             return Utils.throwError(error);
