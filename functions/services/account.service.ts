@@ -92,7 +92,10 @@ export class AccountService {
     static calculateAccountStat(account: Account, game: Game, categoryIds: Array<number>, userId: string): Account {
 
         const score = game.stats[userId].score;
-        const avgAnsTime = game.stats[userId].avgAnsTime;
+
+        let avgAnsTime = game.stats[userId].avgAnsTime;
+        avgAnsTime = (avgAnsTime) ? avgAnsTime : 0;
+
         account = (account) ? account : new Account();
 
         for (const id of categoryIds) {
