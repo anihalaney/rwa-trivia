@@ -1,12 +1,12 @@
 <div class="container footer">
   <div class="col-md-8 col-sm-8 col-xs-12">
-    <div class="col-xs-12 menu" [ngClass]="!user?'col-md-5 col-sm-7 ':'col-md-12 col-sm-12'">
+    <div class="col-xs-12 menu" [ngClass]="!user?'col-md-7 col-sm-8 ':'col-md-12 col-sm-12'">
       <a [routerLink]="['/']" title="Home">Home</a>
       <a *ngIf="user?.roles?.admin" href="{{hostname}}">Admin</a>
       <a *ngIf="user" [routerLink]="['/user/my/questions']" title="My Questions" class="myQuestion">My
         Questions</a>
       <a [routerLink]="['/privacy-policy']">Privacy Policy</a>
-      <a [routerLink]="['/terms-and-conditions']">Terms & Conditions</a>
+      <a [routerLink]="['/terms-and-conditions']">Terms of Use</a>
       <a *ngIf="user?.roles?.admin || user?.roles?.bulkuploader" [routerLink]="['/bulk']">Bulk</a>
       <a href="https://blog.realworldfullstack.io/" target="_blank" rel="noopener" title="Blog">Blog</a>
       <a href="https://github.com/anihalaney/rwa-trivia" target="_blank" rel="noopener" title="Github">Github</a>
@@ -15,7 +15,7 @@
       </ng-container>
       <a *ngIf="user" class="logout" (click)="logoutClicked.emit($event)" title="Logout">Logout</a>
     </div>
-    <div class="row col-md-5 col-sm-5 col-xs-12 ">
+    <div class="row col-md-5 col-sm-4 col-xs-12 ">
       <span *ngIf="!user" class="footer-social-icon">
         <share-button [theme]="'circles-dark'" [button]="'facebook'" [size]="4" [url]="blogUrl" [autoSetMeta]="false">
         </share-button>

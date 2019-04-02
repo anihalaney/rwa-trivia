@@ -65,7 +65,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
                 }  else if (nav === '/privacy-policy') {
                     this.activeMenu = 'Privacy Policy';
                 } else if (nav === '/terms-and-conditions') {
-                    this.activeMenu = 'Terms & Conditions';
+                    this.activeMenu = 'Terms of Use';
                 }
             }
         });
