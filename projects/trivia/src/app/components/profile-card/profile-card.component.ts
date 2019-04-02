@@ -35,7 +35,7 @@ export class ProfileCardComponent implements OnDestroy {
   }
 
   navigateToProfile() {
-    this.router.navigate(['my/profile', this.user.userId]);
+    this.router.navigate(['user/my/profile', this.user.userId]);
   }
 
   getImageUrl(user: User) {

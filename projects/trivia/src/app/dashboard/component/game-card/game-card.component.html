@@ -80,7 +80,7 @@
         </div>
         <div class="col-xs-6">
           <div class="yourimg ">
-            <img [src]="getImageUrl(otherUserInfo)" alt="User Profile Picture" />
+            <img  [stlOpenUserProfile]="otherUserInfo?.userId" [src]="getImageUrl(otherUserInfo)" alt="User Profile Picture" />
           </div>
         </div>
       </div>

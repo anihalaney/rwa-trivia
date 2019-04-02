@@ -3,7 +3,7 @@
     <div class="col-xs-12 menu" [ngClass]="!user?'col-md-5 col-sm-7 ':'col-md-12 col-sm-12'">
       <a [routerLink]="['/']" title="Home">Home</a>
       <a *ngIf="user?.roles?.admin" href="{{hostname}}">Admin</a>
-      <a *ngIf="user" [routerLink]="['/my/questions']" title="My Questions" class="myQuestion">My
+      <a *ngIf="user" [routerLink]="['/user/my/questions']" title="My Questions" class="myQuestion">My
         Questions</a>
       <a [routerLink]="['/privacy-policy']">Privacy Policy</a>
       <a [routerLink]="['/terms-and-conditions']">Terms & Conditions</a>
