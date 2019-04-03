@@ -24,7 +24,11 @@ export class UserContributionStat {
                 userDictPromises.push(UserContributionStat.getUser(userId, UserContributionStat.userDict[userId], true));
             }
 
-            return await Promise.all(userDictPromises);
+            const result = await Promise.all(userDictPromises);
+
+            UserContributionStat.userDict = {};
+            return result;
+
         } catch (error) {
             console.error(GeneralConstants.Error_Message, error);
         }
@@ -34,10 +38,12 @@ export class UserContributionStat {
         try {
             const account: Account = await AccountService.getAccountById(id);
 
-            if (isMigrationScript) {
-                account.contribution = count;
-            } else {
-                account.contribution = account.contribution ? (account.contribution + count) : count;
+            if (account) {
+                if (isMigrationScript) {
+                    account.contribution = count;
+                } else {
+                    account.contribution = account.contribution ? (account.contribution + count) : count;
+                }
             }
 
             return await AccountService.setAccount({ ...account });
@@ -45,6 +51,5 @@ export class UserContributionStat {
             return Utils.throwError(error);
         }
     }
-
 
 }
