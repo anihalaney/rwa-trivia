@@ -40,6 +40,15 @@ export class UserEffects {
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
+    @Effect()
+    // handle location update
+    loadOtherUserAllProfile$ = this.actions$
+        .pipe(ofType(UserActions.LOAD_OTHER_USER_ALL_PROFILE))
+        .pipe(map((action: ActionWithPayload<string>) => action.payload),
+            distinct(),
+            mergeMap((userId: string) => this.svc.loadOtherAllInfoOfUserProfile(userId)),
+            map((user: User) => this.userActions.loadOtherAllInfoOfUserProfileSuccess(user)));
+
 
     // Update User
     @Effect()

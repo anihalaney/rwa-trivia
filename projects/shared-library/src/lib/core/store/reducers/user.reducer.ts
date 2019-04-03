@@ -16,6 +16,7 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
 
 export function userDict(state: { [key: string]: User } = {}, action: ActionWithPayload<User>): { [key: string]: User } {
   switch (action.type) {
+    case UserActions.LOAD_OTHER_ALL_INFO_OF_USER_PROFILE_SUCCESS:
     case UserActions.LOAD_OTHER_USER_PROFILE_SUCCESS:
       const users = { ...state };
       if (action.payload) {

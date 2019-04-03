@@ -63,6 +63,24 @@ export class UserActions {
     };
   }
 
+
+  static LOAD_OTHER_USER_ALL_PROFILE = 'LOAD_OTHER_USER_ALL_PROFILE';
+  loadOtherUserAllProfile(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_OTHER_USER_ALL_PROFILE,
+      payload: userId
+    };
+  }
+
+
+  static LOAD_OTHER_ALL_INFO_OF_USER_PROFILE_SUCCESS = 'LOAD_OTHER_ALL_INFO_OF_USER_PROFILE_SUCCESS';
+  loadOtherAllInfoOfUserProfileSuccess(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.LOAD_OTHER_ALL_INFO_OF_USER_PROFILE_SUCCESS,
+      payload: user
+    };
+  }
+
   static UPDATE_USER = 'UPDATE_USER';
   updateUser(user: User): ActionWithPayload<User> {
     return {

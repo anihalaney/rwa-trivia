@@ -9,6 +9,7 @@ import {
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
+import { user } from '../store';
 
 @Injectable()
 export class UserService {
@@ -56,6 +57,11 @@ export class UserService {
 
     loadOtherUserProfile(userId: string): Observable<User> {
         const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
+        return this.http.get<User>(url);
+    }
+
+    loadOtherAllInfoOfUserProfile(userId: string): Observable<User> {
+        const url = `${CONFIG.functionsUrl}/app/user/allinfo/${userId}`;
         return this.http.get<User>(url);
     }
 

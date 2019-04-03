@@ -128,7 +128,11 @@ export class Dashboard implements OnDestroy {
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
 
-        this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+        this.subscriptions.push(this.userDict$.subscribe(userDict => {
+                this.userDict = userDict;
+                console.log('user dict', this.userDict);
+            }
+            ));
         this.subscriptions.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
             this.cd.markForCheck();
@@ -311,5 +315,9 @@ export class Dashboard implements OnDestroy {
     get isLivesEnable(): Boolean {
         const isEnable = (this.user && this.account && this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
+    }
+
+    test() {
+        this.store.dispatch(this.userActions.loadOtherUserAllProfile('tej7Au4YjrM5c5uHx06LT5fIRuF2'));
     }
 }

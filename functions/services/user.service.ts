@@ -1,6 +1,7 @@
-import { CollectionConstants, GeneralConstants, User, UserConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, GeneralConstants, User, UserConstants, Account } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
+import { AccountService } from './account.service';
 
 export class UserService {
 
@@ -69,7 +70,7 @@ export class UserService {
      * getUserProfile
      * return user
     */
-    static async getUserProfile(userId: string): Promise<any> {
+    static async getUserProfile(userId: string, allInfo = false): Promise<any> {
         try {
             const dbUser: User = await UserService.getUserById(userId);
             const user = new User();
@@ -77,6 +78,24 @@ export class UserService {
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;
+            if (allInfo) {
+                user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];
+                user.tags = (dbUser && dbUser.tags) ? dbUser.tags : [];
+                user.githubUrl = (dbUser && dbUser.githubUrl) ? dbUser.githubUrl : '';
+                user.linkedInUrl = (dbUser && dbUser.linkedInUrl) ? dbUser.linkedInUrl : '';
+                user.twitterUrl = (dbUser && dbUser.twitterUrl) ? dbUser.twitterUrl : '';
+                user.redditUrl = (dbUser && dbUser.redditUrl) ? dbUser.redditUrl : '';
+                user.stackoverflowUrl = (dbUser && dbUser.stackoverflowUrl) ? dbUser.stackoverflowUrl : '';
+                user.hackernewsUrl = (dbUser && dbUser.hackernewsUrl) ? dbUser.hackernewsUrl : '';
+                user.account = new Account();
+                const account = await AccountService.getAccountById(userId);
+                user.account.avgAnsTime = (account && account.avgAnsTime) ? account.avgAnsTime : 0;
+                user.account.badges = (account && account.badges) ? account.badges : 0;
+                user.account.categories = (account && account.categories) ? account.categories : 0;
+                user.account.contribution = (account && account.contribution) ? account.contribution : 0;
+                user.account.wins = (account && account.wins) ? account.wins : 0;
+                user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
+            }
             return user;
         } catch (error) {
             return Utils.throwError(error);

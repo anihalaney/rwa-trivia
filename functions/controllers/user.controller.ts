@@ -142,4 +142,22 @@ export class UserController {
 
     }
 
+    /**
+  * getUserById
+  * return user
+  */
+    static async getUserInfoById(req, res) {
+        const userId = req.params.userId;
+        if (!userId) {
+            // userId is not available
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
+        }
+        try {
+            const allInfo = true;
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await UserService.getUserProfile(userId, allInfo));
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
 }
