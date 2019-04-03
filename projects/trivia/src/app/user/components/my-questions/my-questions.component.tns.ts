@@ -41,7 +41,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
 
   navigateToSubmitQuestion() {
-    this.routerExtension.navigate(['/my/questions/add']);
+    this.routerExtension.navigate(['/user/my/questions/add']);
   }
 
   displayReason(reasonFlag: boolean) {

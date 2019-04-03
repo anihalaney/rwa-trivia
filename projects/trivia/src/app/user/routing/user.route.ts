@@ -14,23 +14,28 @@ export const userRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'profile/:userid',
+    path: 'my/profile/:userid',
     component: ProfileSettingsComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: 'questions',
+    path: 'my/profile/:userid',
+    component: ProfileSettingsComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'my/questions',
     component: MyQuestionsComponent,
     canActivate: [AuthGuard],
     resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
   },
   {
-    path: 'questions/add',
+    path: 'my/questions/add',
     component: QuestionAddUpdateComponent,
     canActivate: [AuthGuard]
   },
   {
-    path: 'invite-friends',
+    path: 'my/invite-friends',
     component: InviteFriendsComponent,
     canActivate: [AuthGuard]
   },

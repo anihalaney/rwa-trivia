@@ -249,7 +249,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   navigateToInvite() {
     this.ngOnDestroy();
-    this.router.navigate(['/my/app-invite-friends-dialog']);
+    this.router.navigate(['/user/my/app-invite-friends-dialog']);
   }
 
   redirectToDashboard(msg) {

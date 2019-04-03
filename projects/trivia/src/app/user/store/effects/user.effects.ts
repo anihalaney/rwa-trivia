@@ -21,7 +21,7 @@ export class UserEffects {
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
-                routerState.url.toLowerCase().startsWith('/my/questions')),
+                routerState.url.toLowerCase().startsWith('/user/my/questions')),
             mergeMap((routerState: RouterStateUrl) =>
                 this.store.select(coreState).pipe(
                     map(s => s.user),
@@ -44,7 +44,7 @@ export class UserEffects {
         .pipe(
             map((action: any): RouterStateUrl => action.payload.routerState),
             filter((routerState: RouterStateUrl) =>
-                routerState.url.toLowerCase().startsWith('/my/questions')),
+                routerState.url.toLowerCase().startsWith('/user/my/questions')),
             mergeMap((routerState: RouterStateUrl) =>
                 this.store.select(coreState).pipe(
                     map(s => s.user),

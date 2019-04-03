@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
-        this.routerExtension.navigate(['my/invite-friends']);
+        this.routerExtension.navigate(['user/my/invite-friends']);
       }
     }));
 

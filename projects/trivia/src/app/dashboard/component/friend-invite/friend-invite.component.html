@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-2  col-sm-2 col-xs-12 user-img">
-    <img [src]="getImageUrl(userDict[invitation.created_uid])" alt="User Profile Picture" />
+    <img  [stlOpenUserProfile]="invitation.created_uid" [src]="getImageUrl(userDict[invitation.created_uid])" alt="User Profile Picture" />
   </div>
   <div class="col-md-7 col-sm-2  col-xs-12 text-align">
     <div class="dark ellipsis col-xs-12" title="{{userDict[invitation.created_uid]?.displayName}}">{{userDict[invitation.created_uid]?.displayName}}</div>
