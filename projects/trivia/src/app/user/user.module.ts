@@ -13,7 +13,8 @@ import {
   QuestionAddUpdateComponent,
   InviteFriendsComponent,
   InviteFriendsDialogComponent,
-  InviteMailFriendsComponent
+  InviteMailFriendsComponent,
+  UserProfileComponent
 } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
 
@@ -25,7 +26,8 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    UserProfileComponent
   ],
   imports: [
     // rwa modules
@@ -47,7 +49,8 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     QuestionAddUpdateComponent,
     InviteFriendsComponent,
     InviteMailFriendsComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    UserProfileComponent
   ],
   entryComponents: [
     InviteFriendsDialogComponent

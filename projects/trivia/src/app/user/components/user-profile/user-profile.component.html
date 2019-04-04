@@ -1,0 +1,122 @@
+<!-- User setting -->
+<div class="mainpage submitpage mysetting" *ngIf="user">
+  <div class="row hidden-xs">
+    <div class="pageheading col-sm-6 col-xs-12">User Profile</div>
+  </div>
+  <section id="curentactive" class="card">
+      <!-- Profile pic -->
+      <div class="enterquestion">
+        <div class="optionbox">
+          <div class="row">
+            <div class="col-sm-5 col-xs-5">
+              <a class="user card" style="padding-top: 0px;" *ngIf="user && user!=null">
+                <img  [src]="userProfileImageUrl" alt="User Profile Image" />
+                <span class="username">
+                  <span class="name">{{user.displayName}}</span>
+                  <span class="userlocation">
+                    <span class="sprite mapicon"></span>{{user.location}}</span>
+                </span>
+              </a>
+            </div>
+
+            <div class="col-sm-7 col-xs-12">
+              <div class="card statsview">
+                <ul id="stats" class="tab-content active">
+                  <li>
+                    <div class="sprite playedicon"></div>
+                    <div class="viewtext">Game Played</div>
+                    <div class="viewcount align-right">{{user?.account?.gamePlayed}}</div>
+                  </li>
+              
+                  <li>
+                    <div class="sprite topicsicon"></div>
+                    <div class="viewtext">Categories</div>
+                    <div class="viewcount align-right">{{user?.account?.categories}}</div>
+                  </li>
+              
+                  <li>
+                    <div class="sprite winsicon"></div>
+                    <div class="viewtext">Win-Loss</div>
+                    <div class="viewcount align-right">{{user?.account?.wins}}-{{user?.account?.losses}}</div>
+                  </li>
+              
+                  <li>
+                    <div class="sprite badgesicon"></div>
+                    <div class="viewtext">Badges</div>
+                    <div class="viewcount align-right">{{user?.account?.badges}}</div>
+                  </li>
+              
+                  <li>
+                    <div class="sprite avgicon"></div>
+                    <div class="viewtext">Avg. answer time</div>
+                    <div class="viewcount align-right">{{user?.account?.avgAnsTime}}
+                      <div class="sec">sec</div>
+                    </div>
+                  </li>
+              
+                  <li>
+                    <div class="sprite contributicon"></div>
+                    <div class="viewtext">Contribution</div>
+                    <div class="viewcount align-right">{{user?.account?.contribution}}</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Categories -->
+          <div class="row pcategories">
+            <div class="col-sm-3 add-space">
+              <h3>Preferred Categories</h3>
+            </div>
+            <div class="col-sm-9">
+              <div class="formfield" *ngFor="let category of user.categoryIds; let i=index">
+                <label>
+                 {{categoryDict[category].categoryName}}
+                </label>
+              </div>
+            </div>
+          </div>
+          <!-- Categories end -->
+
+          <!-- Tags -->
+          <div class="row pcategories">
+            <div class="col-sm-3 add-space">
+              <h3 >Preferred Tags</h3>
+            </div>
+            <div class="col-sm-9">
+              <div class="formfield" *ngFor="let tag of user.tags; let i=index">
+                <label>
+                  {{tag}}
+                </label>
+              </div>
+            </div>
+          </div>
+          <!-- Categories end -->
+
+
+          <!-- Social Accounts -->
+          <div class="row pcategories saccount">
+            <div class="col-sm-3">
+              <h3>Social Profile </h3>
+            </div>
+            <div class="col-md-9 col-sm-9" *ngIf="socialProfileSettings">
+              <div *ngFor="let profiles of socialProfileSettings; let i=index">
+                <div *ngIf="user[profiles.social_name]" class="formfield">
+                  <h2 class="social-profile-name">{{profiles.display}}</h2>
+                  <div class="social-input-field">
+                    <div class="social-url-contain">
+                      <a [href]="profiles.url + user[profiles.social_name]" target="_blank">
+                          <span class="social-url">{{profiles.url + user[profiles.social_name]}}</span>
+                        </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Social Accounts end -->
+        </div>
+      </div>
+  </section>
+</div>
+<!-- User setting end -->

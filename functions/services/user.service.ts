@@ -94,6 +94,7 @@ export class UserService {
                 user.account.categories = (account && account.categories) ? account.categories : 0;
                 user.account.contribution = (account && account.contribution) ? account.contribution : 0;
                 user.account.wins = (account && account.wins) ? account.wins : 0;
+                user.account.losses = (account && account.losses) ? account.losses : 0;
                 user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
             }
             return user;

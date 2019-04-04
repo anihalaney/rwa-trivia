@@ -3,7 +3,8 @@ import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
   QuestionAddUpdateComponent,
-  InviteFriendsComponent
+  InviteFriendsComponent,
+  UserProfileComponent
 } from '../components';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 
@@ -14,8 +15,8 @@ export const userRoutes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'my/profile/:userid',
-    component: ProfileSettingsComponent,
+    path: 'profile/:userid',
+    component: UserProfileComponent,
     canActivate: [AuthGuard]
   },
   {

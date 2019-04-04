@@ -130,7 +130,6 @@ export class Dashboard implements OnDestroy {
 
         this.subscriptions.push(this.userDict$.subscribe(userDict => {
                 this.userDict = userDict;
-                console.log('user dict', this.userDict);
             }
             ));
         this.subscriptions.push(this.activeGames$.subscribe(games => {
@@ -317,7 +316,4 @@ export class Dashboard implements OnDestroy {
         return isEnable;
     }
 
-    test() {
-        this.store.dispatch(this.userActions.loadOtherUserAllProfile('tej7Au4YjrM5c5uHx06LT5fIRuF2'));
-    }
 }

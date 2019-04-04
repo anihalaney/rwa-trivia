@@ -9,9 +9,10 @@ export class OpenUserProfileDirective {
 
   @Input() stlOpenUserProfile: any;
 
-  @HostListener('click' || 'tap', ['$event'])
+  @HostListener('click', ['$event'])
+  @HostListener('tap', ['$event'])
   onClick(event) {
-    this.router.navigate(['/user/profile/', this.stlOpenUserProfile]);
+    this.router.navigate(['/user/profile/' + this.stlOpenUserProfile]);
   }
 
 

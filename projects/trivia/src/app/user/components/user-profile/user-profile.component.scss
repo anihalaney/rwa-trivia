@@ -1,0 +1,159 @@
+.submitpage .card{ padding: 25px 0 0 }
+.pcategories > .col-sm-9{ border-top: 1px solid; padding:46px 15px 0; }
+#curentactive { text-align: center; }
+.submitpage .optionbox{ padding: 0 10px }
+.optionbox{ margin-top: 30px; text-align: left;}
+.optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
+.optionbox h2 span{ font-size: 20px; text-transform: none; letter-spacing: .10px; padding-left: 0; font-family: 'hindmedium' }
+.card .enterquestion h3{ font-size: 18px; margin: 16px 0 16px}
+.card .enterquestion h3:before{ display: none;  }
+
+.enterquestion .formfield > input, .formfield select{padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px)}
+.enterquestion .formfield > label{ width: 30px; display: inline-block; vertical-align: -4px}
+
+.mysetting .formfield{ padding:0px 30px 0px 0; margin-bottom: 20px}
+.mysetting .formfield > label{ width: auto; }
+.saccount .formfield{ padding:0;}
+.saccount .formfield > input{ font-size: 14px; padding: 13px 17px; }
+.saccount .formfield select{ font-size: 14px; }
+.saccount .formfield label{ font-size: 18px; font-family: 'hindmedium'; width: 90px}
+.saccount .formfield label:nth-child(2){ width: auto; font-family: 'hindregular'; font-size: 16px; }
+.saccount .formfield label + p{margin-top: 13px }
+.add-space{padding-top:48px;}
+form .tags{padding-top:5px;}
+
+.statsview{ padding-top: 0px!important;}
+.statsview #stats, .statsview #graph{padding:8px 17px;}
+.statsview #stats li{border-bottom: 1px solid transparent; text-align: left;}
+.statsview #stats li{border-color: rgba(204,204,204,0.44);}
+.statsview #stats li {padding: 7px 0; display: block;}
+.statsview #stats li:last-child, .statsview #graph li:last-child{ border-bottom: 0 }
+.viewtext{ display: inline-block; vertical-align: middle; width: 50%; font-size: 16px;  }
+.viewcount{ display: inline-block; vertical-align: middle; width: 30%; font-size: 16px; letter-spacing: 0.75px; font-family: 'hindmedium'; line-height: 1;text-align: right; }
+.statsview .sprite{ width: 25px; height: 26px; margin-right:10px }
+.sec{ font-size: 12px; margin-top: -2px}
+.tabbing{box-shadow: 0 2px 6px rgba(0,0,0,0.12) }
+.tabbing li{  font-family: 'hindsemibold';width: 100%; float: left; height: 57px; line-height: 57px; font-size: 16px; border-bottom: 3px solid transparent; text-align: center; transition: 0.3s ease-in-out;}
+.tab-content { display: none;}
+.tab-content.active { display: block;}
+.tabbing li.active{ border-color: #3b5998}
+.chart-image{ display: block; margin:0 auto; }
+a{cursor: pointer}
+.social-profile{
+  font-size: 16px;
+  padding: 5px 5px 5px 0;
+  border-radius: 4px;
+}
+.social-url{
+  font-size: 16px;
+  color: #888888;
+}
+.social-profile-name{
+  margin: 0;
+  font-size: 20px;
+  font-family: 'hindmedium';
+  text-transform: none !important;
+}
+.social-input-field{
+  display: flex;
+  background-color: #FFF;
+  border-radius:4px;
+}
+.social-url-contain{
+  padding: 10px 0 10px 10px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+input[type="checkbox"]:disabled:before{
+  background: #fff !important;
+  cursor: not-allowed;
+}
+
+.not-allowed{
+  cursor: not-allowed;
+}
+
+.formfield {
+  label{
+    line-height: 1.5 !important;
+  }
+}
+
+.no-border{
+  border-top: none !important;
+}
+
+.card {border-color: rgba(204, 204, 204, 0.44); }
+.user{position: relative; display: block;}
+.user:after{ content: ""; position: absolute; bottom: 0; width: 100%; height: 46%; background: linear-gradient(to bottom, rgba(41,53,59,0) 0%, rgba(41,53,59,0.7) 50%, rgba(41,53,59,1) 100%); transition: 0.3s ease-in-out; z-index: 9}
+.user img{ display: block; max-width: 100%; height: 263px;}
+.user .username{ display: block; position: absolute; color: #fff; bottom: 0; width: 100%; box-sizing: border-box; padding: 30px 24px 12px; color: #fff; z-index: 99}
+.name{ display: block; font-size: 20px; font-family: 'hindbold'; }
+.userstatus, .userlocation{ display: block; font-size: 13px; margin: 5px 0; letter-spacing: 0.3px}
+#curentactive{ padding-bottom: 25px;}
+@media screen and ( min-width:767px){
+  .optionbox h2{ margin-top: 17px }
+  .optionbox h2 span{ font-size: 22px }
+  .savebox a:nth-child(2){ display: inline; margin-top: 0 }
+
+  .viewbublic{ padding: 10px 20px; display: inline-block; margin-top: 30px;}
+  .saccount .formfield select{ width: calc(100% - 94px) }
+  .mysetting .formfield{ padding:0 30px 0 0;} 
+  .saccount .col-xs-12  { margin-top: 30px }
+  .card .saccount .col-xs-12 h3{ margin-top: 16px; }
+  .saccount .col-xs-12 .col-sm-9{ padding: 10px 0;}
+  .saccount .formfield label + p{ padding-left:90px; }
+  .savebox a.btn.startg{ display: inline-block; margin-right: 70px}
+  #file-name{min-width: 280px;}
+  .card .enterquestion h3{margin-top: 0px}
+  .card .saccount h3{ margin-top: 53px }
+  .custom-file-upload { display: inline-block;}
+  .namefield .formfield > label{ width: 25% }
+  .namefield .formfield > input{ width: 55% }
+  .namefield .formfield > p{ margin-left: calc(25% + 4px ) }  
+}
+@media screen and ( min-width:1000px){
+  .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
+  .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
+  .pcategories > .col-sm-9{padding:46px 0 0; }
+  .optionbox{width: 680px; margin: 60px auto 0;}  
+  .submitpage .optionbox{ margin-top: 0; padding: 0 }
+  .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
+  .optionbox .pcategories h2{ margin-top: 40px}
+  .submitpage .optionbox h2{ margin-bottom: 7px }
+
+  .avatarimg{ margin: 0}
+  .mysetting .formfield{ width: auto; }
+  .saccount .formfield{ width: 100% }
+  .saccount .formfield > input{ width: 100% }
+  .saccount .formfield:nth-child(2n + 2), .namefield .formfield:nth-child(2n + 2){ text-align: left; }
+  .namefield .formfield{ width: 100% }
+  .namefield .formfield > input{ width: 55% }
+  
+  .social-profile{
+    font-size: 16px;
+    padding: 5px 5px 5px 0;
+    border-radius: 4px;
+  }
+  .social-url{
+    font-size: 16px;
+    color: #888888;
+  }
+  .social-profile-name{
+    margin: 0 !important;
+    font-size: 18px !important;
+    font-family: 'hindmedium';
+  }
+  .social-input-field{
+    display: flex;
+    background-color: #FFFFFF;
+    border-radius:4px;
+  }
+
+  .user:hover:after{height: 100%; background: linear-gradient(to bottom, rgba(41,53,59,0.7) 0%, rgba(41,53,59,0.7) 50%, rgba(41,53,59,0.9) 100%)}
+}
+
+@media (min-width: 1200px){
+  .card{ margin-bottom: 14px; border-bottom: 0;  box-shadow: 0 2px 6px rgba(0,0,0,0.12);}
+}
