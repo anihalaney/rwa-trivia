@@ -43,12 +43,11 @@
                             textWrap="true"></Label>
                     </StackLayout>
                     <StackLayout *ngIf="continueNext">
-                            <Label visibility="{{correctAnswerIndex === answeredIndex  ? 'visible'  : 'collapsed' }}" class="correct-text" text="CORRECT" textWrap="true"  style.textAlignment="center"></Label>
+                            <Label visibility="{{ (answeredIndex!==undefined && correctAnswerIndex === answeredIndex)  ? 'visible'  : 'collapsed' }}" class="correct-text" text="CORRECT" textWrap="true"  style.textAlignment="center"></Label>
 
-                            <Label visibility="{{(answeredIndex >= 0 && correctAnswerIndex !== answeredIndex) ? 'visible'  : 'collapsed' }}" class="incorrect-text" text="INCORRECT" textWrap="true"  style.textAlignment="center"></Label>
+                            <Label visibility="{{(answeredIndex!==undefined && correctAnswerIndex !== answeredIndex) ? 'visible'  : 'collapsed' }}" class="incorrect-text" text="INCORRECT" textWrap="true"  style.textAlignment="center"></Label>
 
-                            <Label visibility="{{ !(answeredIndex !== null && answeredIndex !== undefined)  ? 'visible'  : 'collapsed' }}" class="timeout-text" text="TIMEOUT" textWrap="true"  style.textAlignment="center"></Label>
-
+                            <Label visibility="{{ answeredIndex===undefined  ? 'visible'  : 'collapsed' }}" class="timeout-text" text="TIMEOUT" textWrap="true"  style.textAlignment="center"></Label>
                     </StackLayout>
                     <StackLayout marginTop="10">
                         <Progress [value]="progressValue" maxValue="100"></Progress>
