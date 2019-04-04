@@ -51,7 +51,7 @@
         </StackLayout>
     </StackLayout>
     <StackLayout row="0" col="2" class="Roboto-Regular">
-        <Image *ngIf="user" src="{{getImageUrl(userDict[this.otherUserId])}}" backgroundColor="gray"
+        <Image [stlOpenUserProfile]="this.otherUserId" *ngIf="user" src="{{getImageUrl(userDict[this.otherUserId])}}" backgroundColor="gray"
             stretch="aspectFill" height="64" width="64" marginLeft="2" borderRadius="50" horizontalAlignment="center">
         </Image>
         <Label text="{{userDict[getOpponentId(game)]?.displayName}}" textWrap="true" class="user-name"

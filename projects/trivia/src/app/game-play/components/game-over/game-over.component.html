@@ -45,7 +45,7 @@
       </div>
       <div class="col-sm-3 yourimg-spacing">
         <div class="yourimg">
-          <img [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
+          <img [stlOpenUserProfile]="otherUserId" [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{otherUserInfo?.displayName}}</label>
         <div class="dark div-top-spacing text-style">Score {{game.stats[otherUserId].score}}</div>

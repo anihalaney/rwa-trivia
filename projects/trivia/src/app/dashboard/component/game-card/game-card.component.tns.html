@@ -74,7 +74,7 @@
     <StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile Roboto-Regular" [nsRouterLink]="['/game-play', game.gameId]"
         clearHistory="true" iosOverflowSafeArea="false">
         <GridLayout rows="*" columns="auto,auto,*">
-            <Image row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
+            <Image [stlOpenUserProfile]="otherUserId" row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
                 stretch="aspectFill" height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" *ngIf="otherUserInfo">
                 <GridLayout rows="*,*" columns="*">
@@ -152,7 +152,7 @@
 
     <StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
         <GridLayout rows="*,*" columns="auto,auto,*" *ngIf="otherUserInfo">
-            <Image row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill"
+            <Image [stlOpenUserProfile]="otherUserId" row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill"
                 height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10">
                 <GridLayout rows="*,*,*,*" columns="*">
