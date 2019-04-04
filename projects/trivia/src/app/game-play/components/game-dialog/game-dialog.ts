@@ -281,7 +281,7 @@ export class GameDialog {
       }
 
       this.cd.markForCheck();
-      if (this.isQuestionAvailable || remainSecond >= 0) {
+      if (this.isQuestionAvailable || remainSecond > 0) {
         this.questionIndex++;
         this.timer = remainSecond;
         this.timerSub =
@@ -296,13 +296,15 @@ export class GameDialog {
             () => {
               // disable all buttons
               if (this.currentQuestion) {
-               this.fillTimer();
+                this.fillTimer();
               }
             });
       } else {
+        this.continueNext = true;
+        this.showContinueBtn = true;
         setTimeout(() => {
           this.fillTimer();
-        }, 1000);
+        }, 100);
       }
     });
   }
