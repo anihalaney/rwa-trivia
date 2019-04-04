@@ -1,42 +1,20 @@
-import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { User, Category, profileSettingsConstants } from 'shared-library/shared/model';
+import { User, Category } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { UserActions } from 'shared-library/core/store';
-import { ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 export class UserProfile {
-    @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
+    subscriptions = [];
     user: User;
-
-    categories: Category[];
-    userCategories: Category[];
     categoryDict: { [key: number]: Category };
     categoryDictObs: Observable<{ [key: number]: Category }>;
-    categoriesObs: Observable<Category[]>;
-    userObs: Observable<User>;
-    profileImage: { image: any } = { image: '/assets/images/avatarimg.jpg' };
-    tagsObs: Observable<string[]>;
-    tags: string[];
-    tagsAutoComplete: string[];
-    enteredTags: string[] = [];
-    filteredTags$: Observable<string[]>;
-    tagsArrays: String[];
-    NONE = profileSettingsConstants.NONE;
-    PENDING = profileSettingsConstants.PENDING;
-    APPROVED = profileSettingsConstants.APPROVED;
-    bulkUploadBtnText: string;
-    loaderBusy = false;
-    subscriptions = [];
-
     userDict$: Observable<{ [key: string]: User }>;
-    otherUserId: string;
     userDict: { [key: string]: User } = {};
-    account: any;
     userProfileImageUrl: any;
     socialProfileSettings: any;
     userId: any;

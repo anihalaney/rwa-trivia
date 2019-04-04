@@ -12,8 +12,8 @@
       <StackLayout class="input-field">
 
         <Label [text]="user.displayName" class="input title" textWrap="true"></Label>
-        <Label [text]="user.name" class="input title" textWrap="true"></Label>
-        <Label [text]="user.location" class="input title" textWrap="true"></Label>
+        <Label *ngIf="user.name" [text]="user.name" class="input title" textWrap="true"></Label>
+        <Label *ngIf="user.location" [text]="user.location" class="input title" textWrap="true"></Label>
         
       </StackLayout>
       <CardView margin="5" android:elevation="20" ios:elevation="40" radius="15" class="gameplay">
