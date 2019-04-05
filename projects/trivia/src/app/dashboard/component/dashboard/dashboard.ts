@@ -59,6 +59,7 @@ export class Dashboard implements OnDestroy {
     subscriptions = [];
     startGame = this.START_A_NEW_GAME;
     cd: ChangeDetectorRef;
+    serverCreatedTime: number;
 
     constructor(public store: Store<AppState>,
         private questionActions: QuestionActions,
@@ -71,6 +72,7 @@ export class Dashboard implements OnDestroy {
         this.utils = utils;
         this.ngZone = ngZone;
         this.cd = cd;
+        this.serverCreatedTime = this.utils.getUTCTimeStamp();
         this.activeGames$ = store.select(appState.coreState).pipe(select(s => s.activeGames));
         this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
         this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
@@ -85,6 +87,13 @@ export class Dashboard implements OnDestroy {
                     this.cd.markForCheck();
                     this.gamePlayBtnDisabled = false;
                 }
+
+                this.subscriptions.push(this.store.select(appState.coreState)
+                    .pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+                        if (questionOfTheDay) {
+                            this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
+                        }
+                    }));
 
                 if (this.user) {
                     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
@@ -128,10 +137,7 @@ export class Dashboard implements OnDestroy {
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
 
-        this.subscriptions.push(this.userDict$.subscribe(userDict => {
-                this.userDict = userDict;
-            }
-            ));
+        this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
         this.subscriptions.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
             this.cd.markForCheck();
@@ -257,10 +263,11 @@ export class Dashboard implements OnDestroy {
         if (this.account) {
             if (this.account.lives <= this.applicationSettings.lives.max_lives) {
                 this.timerSub = timer(1000, 1000).subscribe(t => {
-                    const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate);
+                    this.serverCreatedTime += 6000;
+                    const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate, this.serverCreatedTime);
                     const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
                     const second = Math.floor(diff / 1000) % 60;
-                    const timeStamp = this.utils.getUTCTimeStamp();
+                    const timeStamp = this.serverCreatedTime;
 
                     if (minute > 0) {
                         this.remainingMinutes = (this.utils.convertIntoDoubleDigit(maxMiliSecond - minute));
@@ -315,5 +322,8 @@ export class Dashboard implements OnDestroy {
         const isEnable = (this.user && this.account && this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> ab3788e91f40a45fef5ae4e1a99f3e84d2ba2a8b
 }
