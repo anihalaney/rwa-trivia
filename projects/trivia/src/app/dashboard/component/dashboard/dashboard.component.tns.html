@@ -2,24 +2,7 @@
 <StackLayout class="mobile" backgroundColor="#f1f2f2" *ngIf="renderView">
     <ScrollView>
         <StackLayout>
-                <!-- <AbsoluteLayout class="m-15 bg-primary" width="300" height="300" borderRadius="20" sdkExampleTitle sdkToggleNavButton> -->
-                        <!-- <Label #label text="{N}" backgroundColor="#ff00ff" width="40" height="40" textAlignment="center"
-                            borderRadius="2" fontSize="16"></Label> -->
-                <!-- <Label #label  [text]="gameStart" android:paddingTop="18" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }"
-                            class="Roboto-Medium text-center" height="70" (tap)="tapped()" fontSize="22" textWrap="true"
-                            marginTop="20"></Label> -->
-                      
-                <!-- </AbsoluteLayout> -->
-                <StackLayout >
-                    <button  #label  [stlRippleEffect]  class="view" color="black" height="30" (tap)="tapped()" text="Tap" backgroundColor="#D4493D"> </button>
-                
-                </StackLayout>
-               
-                <GridLayout width="300" height="300" backgroundColor="#a4c639" borderRadius="150"></GridLayout>
-                
-                <!-- <StackLayout  #stacklayout height="200" width="200" backgroundColor="#ff00ff"  (tap) ="taped()">
-                            
-                </StackLayout> -->
+            
             <DockLayout margin="15 10 0 10" *ngIf="user && applicationSettings?.tokens?.enable">
                 <DockLayout dock="left" *ngIf="account && user" backgroundColor="#3b5998" class="points-container"
                     [style.width]="account.bits > 9999999 ? '150' : '135'">
@@ -40,7 +23,7 @@
 
                 <GridLayout row="0" col="0" [style.marginTop]="isLivesEnable ? '10' : '0'">
 
-                    <Label [text]="gameStart" android:paddingTop="18" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }"
+                    <Label stlRippleEffect [text]="gameStart" android:paddingTop="18" [ngClass]="{'btn-red':!gamePlayBtnDisabled, 'disabled-btn':gamePlayBtnDisabled , 'margin-r-25' :  isLivesEnable }"
                         class="Roboto-Medium text-center" height="70" (tap)="startNewGame()" fontSize="22" textWrap="true"
                         marginTop="20"></Label>
 

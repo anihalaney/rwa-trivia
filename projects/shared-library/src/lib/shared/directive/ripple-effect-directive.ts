@@ -1,106 +1,74 @@
-import { Directive, Input, Renderer, Renderer2, HostListener, AfterViewInit, OnDestroy, ElementRef } from '@angular/core';
+import { Directive, Input, Renderer2, HostListener, OnDestroy, ElementRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Utils } from './../../core/services';
-import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Device, platformNames } from 'tns-core-modules/platform';
-import { DEVICE } from 'nativescript-angular/platform-providers';
-import { Label } from 'tns-core-modules/ui/label';
-import { Button } from 'tns-core-modules/ui/button';
-import {
-  AnimationPlayer,
-  AnimationBuilder,
-  AnimationMetadata,
-  animate,
-  style,
-} from '@angular/animations';
-import { ɵAnimationEngine as AnimationEngine, } from '@angular/animations/browser';
+import { Color } from 'tns-core-modules/color';
+import * as enums from 'tns-core-modules/ui/enums';
 @Directive({
   selector: '[stlRippleEffect]',
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class RippleEffectDirective implements AfterViewInit, OnDestroy {
+export class RippleEffectDirective implements OnDestroy {
 
-  controlRef: FormControl;
-  hintRef: any;
-  lostFocus = false;
-  removeClass: string;
-  subscriptions = [];
+
+  @Input() stlBackgroundColor: string;
+  @Input() stlOpacity: number;
+
   templateRef: any;
   renderer: Renderer2;
-  player: AnimationPlayer;
+  defaultColor: '#ff00ff';
 
   @Input() rippleEffect: any;
 
   @HostListener('tap', ['$event'])
-  onTap(event) {
-    // if (this.controlRef && this.controlRef.value !== '' && this.lostFocus === false) {
-    //   this.lostFocus = true;
-    //   // this.displayError();
-    // }
+  onTap(event){
     console.log('tap event');
-    // this.renderer.setElementStyle(this.templateRef.nativeElement, 'backgroundColor', 'yellow');
+    const originalColor = String(this.templateRef.nativeElement.backgroundColor);
+    // console.log('original collor', originalColor);
+    if (!this.stlOpacity) {
+      this.stlOpacity = 0.50;
+    } else {
+      this.stlOpacity = Number(this.stlOpacity);
+    }
 
+    if (!this.stlBackgroundColor) {
+      this.stlBackgroundColor = (this.templateRef.nativeElement.backgroundColor);
+      console.log('in line 32', this.stlBackgroundColor);
+      if (!this.stlBackgroundColor) {
+        this.stlBackgroundColor = '#fdfdfd';
+        this.stlOpacity = 0.20;
+      } else {
+        this.stlBackgroundColor = String(this.stlBackgroundColor);
+      }
+    } else {
+      console.log('background color', this.stlBackgroundColor);
+    }
+    console.log('background color fianl  45', this.stlBackgroundColor);
+    console.log('background stlOpacity', this.stlOpacity);
+    this.templateRef.nativeElement.animate({
+      opacity: this.stlOpacity,
+      backgroundColor: new Color(this.stlBackgroundColor),
+      duration: 350,
+      delay: 0,
+      iterations: 1,
+      curve: enums.AnimationCurve.easeOut
+    }).then(() => {
+      this.templateRef.nativeElement.style.backgroundColor = originalColor;
+      // this.templateRef.nativeElement.style
+      this.templateRef.nativeElement.style.opacity = 1;
 
-    // label.animate({
-    //   opacity: .80,
-    //   backgroundColor: new Color(newColor1),
-    //   duration: 300,
-    //   delay: 0,
-    //   iterations: 1,
-    //   curve: enums.AnimationCurve.easeOut
-    // }).then(() => {
-    //   label.animate({
-    //     opacity: 1,
-    //     backgroundColor: new Color(backgrundCol),
-    //   });
-    // });
-
-    // const startingStyles: any = {
-    //   styles: [{}]
-    // };
-
-    // const keyframes: any[] = [
-    //   {
-    //     offset: 0,
-    //     styles: {
-    //       styles: [{
-    //         transform: 'translateX(0px)',
-    //       }]
-    //     }
-    //   },
-    //   {
-    //     offset: 1,
-    //     styles: {
-    //       styles: [{
-    //         transform: 'translateX(100px)',
-    //       }]
-    //     }
-    //   }];
-    // const metadata = this.fadeIn();
-
-    // const factory = this.builder.build(metadata);
-    // const player = factory.create(this.templateRef.nativeElement);
-
-    // player.play();
-
+    });
   }
 
-  // , private builder: AnimationBuilder
   constructor(templateRef: ElementRef, renderer: Renderer2) {
-    console.log('test called');
     this.renderer = renderer;
     this.templateRef = templateRef;
-  }
 
-  ngAfterViewInit() {
   }
 
   ngOnDestroy() {
 
   }
-
 }
 
 
