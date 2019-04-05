@@ -322,8 +322,4 @@ export class Dashboard implements OnDestroy {
         const isEnable = (this.user && this.account && this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> ab3788e91f40a45fef5ae4e1a99f3e84d2ba2a8b
 }
