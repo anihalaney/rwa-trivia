@@ -94,7 +94,7 @@
         </StackLayout>
         <StackLayout class="input-field" *ngFor="let profiles of socialProfileSettings; let i=index"
           iosOverflowSafeArea="false">
-          <GridLayout  *ngIf="user[profiles.social_name]"  rows="auto,auto,*" columns="*"
+          <GridLayout  *ngIf="user[profiles.social_name] && profiles.enable"  rows="auto,auto,*" columns="*"
             iosOverflowSafeArea="false">
             <Label class="grid-label-text" [text]="profiles.display" row="0" col="0" textWrap="true"></Label>
 

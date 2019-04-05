@@ -12,7 +12,7 @@ export class OpenUserProfileDirective {
   @HostListener('click', ['$event'])
   @HostListener('tap', ['$event'])
   onClick(event) {
-    this.router.navigate(['/user/profile/' + this.stlOpenUserProfile]);
+    this.router.navigate([`/user/profile/${this.stlOpenUserProfile}`]);
   }
 
 

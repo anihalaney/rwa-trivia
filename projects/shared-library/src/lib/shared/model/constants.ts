@@ -327,5 +327,5 @@ export enum RoutesConstants {
     HEIGHT = 'height',
     COUNT = 'count',
     GAMEOVERAT= 'gameoverat',
-    ALLINFO= 'allinfo',
+    EXTENDEDINFO= 'extendedInfo',
 }

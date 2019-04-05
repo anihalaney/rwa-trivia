@@ -3,7 +3,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { UserProfile } from './user-profile';
 import { Utils } from 'shared-library/core/services';
-import { ImageCropperComponent } from 'ngx-img-cropper';
 import {  UserActions } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ActivatedRoute } from '@angular/router';
@@ -18,9 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 @AutoUnsubscribe({'arrayName': 'subscriptions'})
 export class UserProfileComponent extends UserProfile implements OnDestroy {
 
-  @ViewChild('cropper') cropper: ImageCropperComponent;
   // Properties
-
   subscriptions = [];
 
   constructor(public route: ActivatedRoute,

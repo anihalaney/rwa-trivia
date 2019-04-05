@@ -64,19 +64,19 @@ export class UserActions {
   }
 
 
-  static LOAD_OTHER_USER_ALL_PROFILE = 'LOAD_OTHER_USER_ALL_PROFILE';
-  loadOtherUserAllProfile(userId: string): ActionWithPayload<string> {
+  static LOAD_OTHER_USER_EXTEDED_INFO = 'LOAD_OTHER_USER_EXTEDED_INFO';
+  loadOtherUserExtendedInfo(userId: string): ActionWithPayload<string> {
     return {
-      type: UserActions.LOAD_OTHER_USER_ALL_PROFILE,
+      type: UserActions.LOAD_OTHER_USER_EXTEDED_INFO,
       payload: userId
     };
   }
 
 
-  static LOAD_OTHER_ALL_INFO_OF_USER_PROFILE_SUCCESS = 'LOAD_OTHER_ALL_INFO_OF_USER_PROFILE_SUCCESS';
-  loadOtherAllInfoOfUserProfileSuccess(user: User): ActionWithPayload<User> {
+  static LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS = 'LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS';
+  loadOtherUserProfileWithExtendedInfoSuccess(user: User): ActionWithPayload<User> {
     return {
-      type: UserActions.LOAD_OTHER_ALL_INFO_OF_USER_PROFILE_SUCCESS,
+      type: UserActions.LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS,
       payload: user
     };
   }

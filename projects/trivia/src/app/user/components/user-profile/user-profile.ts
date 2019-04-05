@@ -45,7 +45,7 @@ export class UserProfile {
         this.subscriptions.push(this.userDict$.subscribe(userDict => {
             this.userDict = userDict;
             if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
-                this.store.dispatch(this.userAction.loadOtherUserAllProfile(this.userId));
+                this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
                 this.cd.markForCheck();
             } else {
                 this.user = this.userDict[this.userId];

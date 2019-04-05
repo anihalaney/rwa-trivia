@@ -42,12 +42,12 @@ export class UserEffects {
 
     @Effect()
     // handle location update
-    loadOtherUserAllProfile$ = this.actions$
-        .pipe(ofType(UserActions.LOAD_OTHER_USER_ALL_PROFILE))
+    loadOtherUserExtendedInfo$ = this.actions$
+        .pipe(ofType(UserActions.LOAD_OTHER_USER_EXTEDED_INFO))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(),
-            mergeMap((userId: string) => this.svc.loadOtherAllInfoOfUserProfile(userId)),
-            map((user: User) => this.userActions.loadOtherAllInfoOfUserProfileSuccess(user)));
+            mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
+            map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
 
 
     // Update User

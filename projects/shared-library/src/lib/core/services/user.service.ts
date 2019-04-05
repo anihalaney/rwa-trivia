@@ -60,8 +60,8 @@ export class UserService {
         return this.http.get<User>(url);
     }
 
-    loadOtherAllInfoOfUserProfile(userId: string): Observable<User> {
-        const url = `${CONFIG.functionsUrl}/app/user/allinfo/${userId}`;
+    loadOtherUserProfileWithExtendedInfo(userId: string): Observable<User> {
+        const url = `${CONFIG.functionsUrl}/app/user/extendedInfo/${userId}`;
         return this.http.get<User>(url);
     }
 
