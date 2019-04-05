@@ -29,10 +29,6 @@ export class User {
   androidPushTokens?: string[];
   iosPushTokens?: string[];
   lastGamePlayOption?: GameOptions;
-  githubUrl?: string;
-  hackernewsUrl?: string;
-  stackoverflowUrl?: string;
-  redditUrl?: string;
   account?: Account;
 
 
