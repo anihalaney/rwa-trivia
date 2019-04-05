@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, NgZone, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Inject, NgZone, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -10,8 +10,10 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { User, Game } from 'shared-library/shared/model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Page } from 'tns-core-modules/ui/page/page';
-
-
+import { Color } from "tns-core-modules/color";
+import { Label } from "tns-core-modules/ui/label";
+import * as enums from "tns-core-modules/ui/enums";
+import { StackLayout } from 'tns-core-modules/ui/layouts/stack-layout/stack-layout';
 
 @Component({
   selector: 'dashboard',
@@ -28,7 +30,105 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
+  CGSizeMake: any;
+  @ViewChild('label') newLable: ElementRef;
+  @ViewChild('stacklayout') newstack: ElementRef;
 
+  // animate(label: Label) {
+  //   const backgrundCol = String(label.backgroundColor);
+  //   label.animate({
+  //     opacity: 0.50,
+  //     backgroundColor: new Color(backgrundCol),
+  //     duration: 350,
+  //     delay: 2,
+  //     iterations: 1,
+  //     curve: enums.AnimationCurve.easeOut
+  //   }).then(() => {
+  //     label.animate({
+  //       opacity: 1,
+  //       backgroundColor: new Color(backgrundCol),
+  //     });
+  //   }).catch((e) => {
+  //     console.log(e.message);
+  //   });
+  // }
+
+  colorLuminance(col, amt) {
+
+    let usePound = false;
+
+    if (col[0] == "#") {
+      col = col.slice(1);
+      usePound = true;
+    }
+    let num = parseInt(col, 16);
+    let r = (num >> 16) + amt;
+    if (r > 255) r = 255;
+    else if (r < 0) r = 0;
+    let b = ((num >> 8) & 0x00FF) + amt;
+
+    if (b > 255) b = 255;
+    else if (b < 0) b = 0;
+
+    let g = (num & 0x0000FF) + amt;
+
+    if (g > 255) g = 255;
+    else if (g < 0) g = 0;
+
+    return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+  }
+
+
+  async animate(label: Label) {
+    const backgrundCol = String(label.backgroundColor);
+    console.log('background color ', backgrundCol);
+    console.log(this.colorLuminance(backgrundCol, 20));
+    console.log('background color ', backgrundCol);
+    const newColor1 = this.colorLuminance(backgrundCol, 15);
+    const newColor2 = this.colorLuminance(backgrundCol, 10);
+    const newColor3 = this.colorLuminance(backgrundCol, 5);
+
+    label.animate({
+      opacity: .80,
+      backgroundColor: new Color(newColor3),
+      duration: 300,
+      delay: 2,
+      iterations: 1,
+      curve: enums.AnimationCurve.easeOut
+    }).then(() => {
+      label.animate({
+        opacity: .80,
+        backgroundColor: new Color(newColor2),
+        duration: 300,
+        delay: 0,
+        iterations: 1,
+        curve: enums.AnimationCurve.easeOut
+      }).then(() => {
+        label.animate({
+          opacity: .80,
+          backgroundColor: new Color(newColor1),
+          duration: 300,
+          delay: 0,
+          iterations: 1,
+          curve: enums.AnimationCurve.easeOut
+        }).then(() => {
+          label.animate({
+            opacity: 1,
+            backgroundColor: new Color(backgrundCol),
+          });
+        });
+      });
+
+    }).catch((e) => {
+      // console.log(e.message);
+      label.animate({
+        opacity: 1,
+        backgroundColor: new Color(backgrundCol),
+      });
+    });
+
+
+  }
 
   constructor(public store: Store<AppState>,
     questionActions: QuestionActions,
@@ -51,6 +151,37 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       utils,
       cd);
     this.gameStatus = GameStatus;
+
+  }
+
+
+  tapped() {
+    const tfElement = <Label>this.newLable.nativeElement;
+    this.animate(tfElement);
+  }
+
+  taped() {
+    const tfElement = <StackLayout>this.newstack.nativeElement;
+    console.log('background color', tfElement.backgroundColor);
+    const backgrundCol = String(tfElement.backgroundColor);
+    console.log(typeof (backgrundCol));
+    // this.animate(tfElement);
+    console.log('calledf');
+    tfElement.animate({
+      opacity: 0.40,
+      backgroundColor: new Color(backgrundCol),
+      duration: 800,
+      delay: 2,
+      iterations: 1,
+      curve: enums.AnimationCurve.easeOut
+    }).then(() => {
+      tfElement.animate({
+        opacity: 1,
+        backgroundColor: new Color(backgrundCol),
+      });
+    }).catch((e) => {
+      console.log(e.message);
+    });
 
   }
 
@@ -79,7 +210,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   filterGame(game: Game): boolean {
     return game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-    game.GameStatus === GameStatus.JOINED_GAME ||
+      game.GameStatus === GameStatus.JOINED_GAME ||
       game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
       || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
   }

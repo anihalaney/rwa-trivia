@@ -218,3 +218,22 @@ mat-card>:first-child{
   }
 
 }
+
+.bottom-gradient {
+  background: linear-gradient(to bottom, orangered, green, lightblue);
+}
+
+Button{
+  background-color: #D4493D;
+  border-radius: 1;
+  margin: 10
+  }
+
+// .view {
+//     animation-name: backgroundColor;
+//     animation-duration: 3;
+// }
+// @keyframes backgroundColor {
+//     from { background-color: white; }
+//     to { background-color: #3D5AFE; }
+// }
