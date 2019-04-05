@@ -89,11 +89,11 @@ export class Dashboard implements OnDestroy {
                 }
 
                 this.subscriptions.push(this.store.select(appState.coreState)
-                    .pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
-                        if (questionOfTheDay) {
-                            this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
-                        }
-                    }));
+                .pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
+                    if (questionOfTheDay) {
+                        this.serverCreatedTime = questionOfTheDay.serverTimeQCreated;
+                    }
+                }));
 
                 if (this.user) {
                     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
@@ -263,7 +263,7 @@ export class Dashboard implements OnDestroy {
         if (this.account) {
             if (this.account.lives <= this.applicationSettings.lives.max_lives) {
                 this.timerSub = timer(1000, 1000).subscribe(t => {
-                    this.serverCreatedTime += 6000;
+                    this.serverCreatedTime += 1000;
                     const diff = this.utils.getTimeDifference(this.account.lastLiveUpdate, this.serverCreatedTime);
                     const minute = Math.floor(diff % (CalenderConstants.HOURS_CALCULATIONS) / (CalenderConstants.MINUTE_CALCULATIONS));
                     const second = Math.floor(diff / 1000) % 60;
