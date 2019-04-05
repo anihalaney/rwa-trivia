@@ -92,14 +92,14 @@
         <StackLayout class="grid-label p-15">
           <Label textWrap="true" text="SOCIAL PROFILE"></Label>
         </StackLayout>
-        <StackLayout class="input-field" *ngFor="let profiles of socialProfileSettings; let i=index"
+        <StackLayout class="input-field" *ngFor="let profile of socialProfileSettings; let i=index"
           iosOverflowSafeArea="false">
-          <GridLayout  *ngIf="user[profiles.social_name] && profiles.enable"  rows="auto,auto,*" columns="*"
+          <GridLayout  *ngIf="user[profile.social_name] && profile.enable"  rows="auto,auto,*" columns="*"
             iosOverflowSafeArea="false">
-            <Label class="grid-label-text" [text]="profiles.display" row="0" col="0" textWrap="true"></Label>
+            <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
 
             <StackLayout row="1" col="0" orientation="horizontal">
-              <Label verticalAlignment="center" (tap)="openUrl(profiles.url + user[profiles.social_name])" class="label-link" [text]="profiles.url + user[profiles.social_name]" fontSize="14" textWrap="true"></Label>
+              <Label verticalAlignment="center" (tap)="openUrl(profile.url + user[profile.social_name])" class="label-link" [text]="profiles.url + user[profiles.social_name]" fontSize="14" textWrap="true"></Label>
             </StackLayout>
         
           </GridLayout>

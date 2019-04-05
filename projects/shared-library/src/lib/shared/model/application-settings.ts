@@ -26,7 +26,7 @@ export class SocialProfile {
     display: String;
     enable: Boolean;
     position: Number;
-    social_name: String;
+    social_name: string;
     url: String;
 }
 export class Tokens {

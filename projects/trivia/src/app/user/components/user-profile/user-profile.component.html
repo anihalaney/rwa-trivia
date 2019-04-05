@@ -100,13 +100,13 @@
               <h3>Social Profile </h3>
             </div>
             <div class="col-md-9 col-sm-9" *ngIf="socialProfileSettings">
-              <div *ngFor="let profiles of socialProfileSettings; let i=index">
-                <div *ngIf="user[profiles.social_name] && profiles.enable" class="formfield">
-                  <h2 class="social-profile-name">{{profiles.display}}</h2>
+              <div *ngFor="let profile of socialProfileSettings; let i=index">
+                <div *ngIf="user[profile.social_name] && profile.enable" class="formfield">
+                  <h2 class="social-profile-name">{{profile.display}}</h2>
                   <div class="social-input-field">
                     <div class="social-url-contain">
-                      <a [href]="profiles.url + user[profiles.social_name]" target="_blank">
-                          <span class="social-url">{{profiles.url + user[profiles.social_name]}}</span>
+                      <a [href]="profile.url + user[profile.social_name]" target="_blank">
+                          <span class="social-url">{{profile.url + user[profile.social_name]}}</span>
                         </a>
                     </div>
                   </div>
