@@ -31,14 +31,14 @@
 .optionbox .twoplayer label{font-size: 15px; }
 .optionbox .twoplayer label .sprite{ vertical-align:-16px }
 
-.withfriends{border-width:1px; border-style: solid; margin-top: 30px; padding:0 45px; overflow: hidden;}
+.withfriends{border-width:1px; border-style: solid; margin-top: 30px; padding:0 45px; overflow: hidden;position:relative;}
 .optionbox .withfriends label{ text-align: center; padding:10px; border:0; display: block; border-radius: 0}
 .expertise{ border-top: 1px solid; border-bottom: 1px solid; padding: 5px 0; margin: 5px 0; display: inline-block; }
 .optionbox .withfriends label .dark, .optionbox .withfriends label .light{ display: block; }
 .withfriends label .labelimg img{ width: 70px; height: 70px; display: inline-block; border-radius: 50%; /*box-shadow: 0 3px 7px rgba(0,0,0,0.25);*/ margin-bottom: 10px; overflow: hidden;border-width:1px; border-style: solid; padding: 1px}
 .optionbox input:checked + label .light{ opacity: 0.7 }
-.withfriends .owl-prev{ left: -35px  }
-  .withfriends .owl-next{ right: -35px }
+.withfriends .owl-prev{ left: 10px  }
+  // .withfriends .owl-next{ right: -35px }
 .friendsslider .owl-prev,.friendsslider .owl-next{position: absolute;top:0; bottom: 0; margin: auto; height:30px; width: 30px; border-radius: 50%; border-width:1px; border-style: solid; transition: 0.3s ease-in-out; font-size: 0}
 
 .pcategories > .col-sm-9{ 
@@ -58,6 +58,15 @@
 //#curentactive .btnbox{ background: #fff; }
 
 .hide {display: none !important;}
+.withfriends .owl-prev, .withfriends .owl-next { position: absolute; top: 0; bottom: 0; margin: auto; height: 30px; width: 30px;
+  border-radius: 50%; border: 1px solid; transition: 0.3s ease-in-out; font-size: 0; border-color: #dfe0e1; }
+.withfriends .owl-prev:after, .withfriends .owl-next:after { background-position: -181px -73px; width: 5px; height: 12px; position: absolute;
+  left: 0; right: 0; bottom: 0; top: 0; margin: auto; content: ""; border-color: #dfe0e1; }
+.sprite, .withfriends .owl-prev:after, .withfriends .owl-next:after {  display: inline-block; vertical-align: middle; }
+.withfriends .owl-next:after { background-position: -192px -73px; }
+.withfriends .owl-next:hover:after { background-position: -192px -91px; }
+.withfriends .owl-prev:hover:after { background-position: -181px -91px; }
+.dark{ line-height: 1.5; }
 
 
 .loaderimage{
@@ -69,59 +78,68 @@
   margin-top: 20px;
 }
 
-.new-game {
-  .selected-player {
-    background-color: #89C24F;
-    color: #fff;
-  }
-
-  .player-type {
-    background-color: #ffffff;
-  }
-
-  .player-type, .label{
-    color:#616161;
-  }
-
-  .two-player-option{
-    border-color: #D2D2D2;
-    border-width: 0 0 1 0;
-    border-style: solid;
-  }
-
-  .singlep-icon-mobile {
-    background-position: -88px -200px;
-    height: 53px;
-    width: 53px;
-    margin-right: 10px;
-    background-repeat: no-repeat;
-  }
-
-  .bottom-border{
-    border-color: #D2D2D2;
-    border-width: 0 0 1 0;
-    border-style: solid;
-  }
-
-  .friend-list{
-    border-color: #D2D2D2;
-    border-width:  1 1 0 1;
-    border-style: solid;
-    height: 130;
-  }
-
-  .expand-options{
-    color: #A9A9A9;
-    font-size: 11;
-  }
-  .main-label{
-    color: red;
-  }
-}
-
 .checkbox-group{
   display: inline-block;
   padding: 8px 15px;
+}
+
+.action-container,
+.content-container {
+  position: relative;
+  overflow: auto;
+  height: 100px;
+  min-height: 0;
+  border-radius: 4px;
+  background-color: #fff;
+  width: 100%;
+  min-height: 171px;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+.action-container {
+  padding: 16px;
+}
+
+.vertical-container,
+.horizontal-container {
+  min-height: 0 !important;
+}
+
+.swiper-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.swiper-button-next, .swiper-button-prev{
+  background-size: 0 0;
+  width: 24px; 
+  height: 24px; 
+  margin-top: 0px;
+}
+
+.optionbox .twoplayer .withfriends label{
+  height: 170px;
+}
+
+.arrow-img{
+  position: absolute;
+  top: 42%;
+}
+
+.left{
+  left: 2%;
+}
+
+.right{
+  right: 2%;
+}
+
+.pt-5{
+  padding-top: 6px;
 }
 
 /*--Game-Option End--*/
@@ -149,4 +167,7 @@
   .submitpage .optionbox{ margin-top: 0; padding: 0 }
   .secondbg{ padding-top: 35px }
   .submitpage .enterquestion .optionbox h2{ margin-bottom: 15px }
+  .withfriends .owl-prev:hover, .withfriends .owl-next:hover, .viewbublic:hover {
+    border-color: #71b02f;
+  }
 }

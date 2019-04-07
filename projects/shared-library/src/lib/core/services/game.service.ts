@@ -1,14 +1,11 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, combineLatest, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { combineLatest, forkJoin, Observable, of } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-
 import { CONFIG } from '../../environments/environment';
-import {
-  User, GameOptions, Game, Question, PlayerQnA, GameOperations,
-  GameStatus, ReportQuestion
-} from '../../shared/model';
+import { Game, GameOperations, GameOptions, GameStatus, PlayerQnA, Question, ReportQuestion, User } from '../../shared/model';
 import { DbService } from './../db-service';
+
 
 @Injectable()
 export class GameService {
@@ -58,6 +55,7 @@ export class GameService {
         { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE }
         ]
       };
+
       const userGames5 = this.dbService.valueChanges('games', '', queryParams5);
       const queryParams6 = {
         condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
@@ -65,22 +63,32 @@ export class GameService {
         { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE }
         ]
       };
+
       const userGames6 = this.dbService.valueChanges('games', '', queryParams6);
       const queryParams7 = {
+        condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
+        { name: 'gameOver', comparator: '==', value: false },
+        { name: 'GameStatus', comparator: '==', value: GameStatus.JOINED_GAME }
+        ]
+      };
+
+      const userGames7 = this.dbService.valueChanges('games', '', queryParams7);
+      const queryParams8 = {
         condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: false },
         { name: 'GameStatus', comparator: '==', value: GameStatus.JOINED_GAME }
         ]
       };
-      const OtherGames2 = this.dbService.valueChanges('games', '', queryParams7);
-      const queryParams8 = {
+
+      const OtherGames2 = this.dbService.valueChanges('games', '', queryParams8);
+      const queryParams9 = {
         condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: false },
         { name: 'GameStatus', comparator: '==', value: GameStatus.WAITING_FOR_NEXT_Q }
         ]
       };
-      const OtherGames3 = this.dbService.valueChanges('games', '', queryParams8);
-      return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, userGames6, OtherGames2, OtherGames3)
+      const OtherGames3 = this.dbService.valueChanges('games', '', queryParams9);
+      return combineLatest(userGames1, userGames2, userGames3, userGames4, userGames5, userGames6, userGames7, OtherGames2, OtherGames3)
         .pipe(
           map(games => [].concat.apply([], games)),
           map(gs => gs.map(g => Game.getViewModel(g))),
@@ -116,7 +124,7 @@ export class GameService {
 
   getNextQuestion(game: Game): Observable<Question> {
     const url: string = CONFIG.functionsUrl + '/app/question/next/';
-    return this.http.post<Question>(url + game.gameId,{});
+    return this.http.post<Question>(url + game.gameId, {});
   }
 
 
@@ -151,7 +159,6 @@ export class GameService {
       });
   }
 
-
   getGameResult(user: User): Observable<Game[]> {
     if (user && user.userId) {
 
@@ -159,7 +166,7 @@ export class GameService {
         condition: [{ name: 'playerId_0', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: true },
         ],
-        orderBy: [{ name: 'turnAt', value: 'desc' }],
+        orderBy: [{ name: 'gameOverAt', value: 'desc' }],
         limit: 20
       };
 
@@ -169,7 +176,7 @@ export class GameService {
         condition: [{ name: 'playerId_1', comparator: '==', value: user.userId },
         { name: 'gameOver', comparator: '==', value: true },
         ],
-        orderBy: [{ name: 'turnAt', value: 'desc' }],
+        orderBy: [{ name: 'gameOverAt', value: 'desc' }],
         limit: 20
       };
 
@@ -179,7 +186,7 @@ export class GameService {
         .pipe(
           map((data) => data[1].concat(data[0])),
           map(gs => gs.map(g => Game.getViewModel(g))
-            .sort((a: any, b: any) => b.turnAt - a.turnAt)
+            .sort((a: any, b: any) => b.gameOverAt - a.gameOverAt)
           )
         );
     } else {

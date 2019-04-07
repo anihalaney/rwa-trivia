@@ -1,5 +1,4 @@
 import { GameOptions, GameStatus, PlayerMode, OpponentType } from './game-options';
-import { Question } from './question';
 
 export class PlayerQnA {
   playerId: string;
@@ -25,7 +24,7 @@ export class Stat {
 
 export class Game {
   private _gameId?: string;
-  private _gameOptions: GameOptions
+  private _gameOptions: GameOptions;
   private _playerIds: string[];
   public gameOver: boolean;
   public playerQnAs: PlayerQnA[];
@@ -35,11 +34,12 @@ export class Game {
   public GameStatus: string;
   public createdAt: number;
   public turnAt: number;
+  public gameOverAt: number;
   public round: number;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
     nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number,
-    round?: number) {
+    gameOverAt?: number, round?: number) {
     //defaults
     this._gameOptions = gameOptions;
     this._playerIds = [player1UUId];
@@ -85,6 +85,10 @@ export class Game {
       this.turnAt = turnAt;
     }
 
+    if (gameOverAt) {
+      this.gameOverAt = gameOverAt;
+    }
+
     this.stats = {};
     this.round = (round) ? round : 1;
   }
@@ -108,7 +112,7 @@ export class Game {
 
   generateDefaultStat() {
     this.playerIds.map((playerId) => {
-      const stat: Stat = new Stat()
+      const stat: Stat = new Stat();
       this.stats[playerId] = stat;
     });
   }
@@ -127,7 +131,8 @@ export class Game {
     const playerQnA: PlayerQnA = {
       'playerId': playerId,
       'questionId': questionId
-    }
+    };
+
     this.playerQnAs.push(playerQnA);
     return playerQnA;
   }
@@ -230,7 +235,7 @@ export class Game {
   }
 
   getDbModel(): any {
-    let dbModel = {
+    const dbModel = {
       'gameOptions': { ...this._gameOptions },
       'playerIds': this.playerIds,
       'gameOver': (this.gameOver) ? this.gameOver : false,
@@ -238,7 +243,8 @@ export class Game {
       'nextTurnPlayerId': (this.nextTurnPlayerId) ? this.nextTurnPlayerId : '',
       'GameStatus': (this.GameStatus) ? this.GameStatus : GameStatus.STARTED,
       'round': this.round
-    }
+    };
+
     if (this.winnerPlayerId) {
       dbModel['winnerPlayerId'] = this.winnerPlayerId;
     }
@@ -254,13 +260,17 @@ export class Game {
       dbModel['turnAt'] = this.turnAt;
     }
 
+    if (this.gameOverAt) {
+      dbModel['gameOverAt'] = this.gameOverAt;
+    }
+
     if (this.gameId) {
       dbModel['id'] = this.gameId;
     }
 
     for (const key of Object.keys(this.stats)) {
       this.stats[key] = { ...this.stats[key] };
-    };
+    }
 
     dbModel['stats'] = this.stats;
 
@@ -272,7 +282,7 @@ export class Game {
     const game: Game = new Game(dbModel['gameOptions'], dbModel['playerIds'][0], dbModel['id'],
       dbModel['playerQnAs'], dbModel['gameOver'], dbModel['nextTurnPlayerId'],
       (dbModel['playerIds'].length > 1) ? dbModel['playerIds'][1] : undefined, dbModel['winnerPlayerId'],
-      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'], dbModel['round']);
+      dbModel['GameStatus'], dbModel['createdAt'], dbModel['turnAt'],dbModel['gameOverAt'],  dbModel['round']);
     if (dbModel['playerIds'].length > 1) {
       game.addPlayer(dbModel['playerIds'][1]);  //2 players
     }

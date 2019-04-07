@@ -113,8 +113,8 @@ mat-card {
   text-align: right;
 }
 
-.pb-8{
-  padding-bottom:8px;
+.pb-4{
+  padding-bottom:4px;
 }
  
  .margin-top-6{
@@ -161,6 +161,17 @@ Progress{
 }
 
 
+.pb-20 {
+  padding-bottom: 20px;
+}
+
+.pb-40 {
+  padding-bottom: 40px;
+}
+
+.ptb-10 {
+  padding: 12px 0px 19px 0px !important;
+}
 
 @media (min-width: 1000px){
   main h2 span{ display: block;}

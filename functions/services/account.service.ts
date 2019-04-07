@@ -69,19 +69,39 @@ export class AccountService {
     }
 
     /**
+     * deleteAllAccounts
+     * return any
+     */
+    static async deleteAllAccounts(): Promise<any> {
+        try {
+            AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).listDocuments().then(val => {
+                val.map((res) => {
+                    res.delete();
+                });
+            });
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
      * calculateAccountStat
      * return account
      */
     static calculateAccountStat(account: Account, game: Game, categoryIds: Array<number>, userId: string): Account {
 
         const score = game.stats[userId].score;
-        const avgAnsTime = game.stats[userId].avgAnsTime;
+
+        let avgAnsTime = game.stats[userId].avgAnsTime;
+        avgAnsTime = (avgAnsTime) ? avgAnsTime : 0;
+
         account = (account) ? account : new Account();
 
         for (const id of categoryIds) {
             account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
             account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
-                account.leaderBoardStats[id] + score : score;
+                account.leaderBoardStats[id] + 1 : 1;
         }
 
         account[LeaderBoardConstants.LEADER_BOARD_STATS] = { ...account.leaderBoardStats };

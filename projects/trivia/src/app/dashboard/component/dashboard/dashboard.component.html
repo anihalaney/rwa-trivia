@@ -1,11 +1,22 @@
 <div class="pageinner">
   <div class="row">
-    <div class="pageheading col-md-6 col-xs-12 hidden-xs">Dashboard     
-      <span *ngIf="account?.bits"> Bits: {{account?.bits}}</span> &nbsp; 
-      <span *ngIf="account?.bytes"> Bytes: {{account?.bytes}}</span>
+    <div class="pageheading col-md-6 col-xs-12">
+      <span class="hidden-xs pull-left">Dashboard</span>
+
+      <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points pull-left m-l-20"> 
+       <div class="p-t-10"> Bits  </div>
+        <label class="points-count" [ngClass]="{'points-count-f-12': account.bits > 9999 }"> {{account.bits || 0 }}</label>
+       </div>
+   
+       <div *ngIf="applicationSettings?.tokens?.enable && user && account" class="points bytes pull-left m-l-20"> 
+          <div class="p-t-10"> Bytes  </div>
+           <label class="points-count" [ngClass]="{'points-count-f-12': account.bytes > 9999 }" > {{account?.bytes || 0}}</label>
+      </div>
+
     </div>
     <div class="col-md-6 col-xs-12 align-right">
-      <button [disabled] = "gamePlayBtnDisabled" class="startgame" [routerLink]="['/game-play']"> Start New Game {{timeoutLive}} </button>
+      <button [disabled] = "gamePlayBtnDisabled" [ngClass]="{'min-startgame': timeoutLive && isLivesEnable}" class="startgame" [routerLink]="['/game-play']"> {{ gameStart }} </button>
+      <div class="lives" *ngIf="user && account && account.lives >=0 && isLivesEnable" > <span class="lives-text">{{account.lives}}</span> </div>
     </div>
   </div>
 
@@ -66,7 +77,7 @@
     </div>
 
     <ul class="invitationlist">
-      
+
       <li *ngFor="let game of gameInvites| slice:gameInviteSliceStartIndex:gameInviteSliceLastIndex">
         <game-invite [userDict]="userDict" [game]="game"></game-invite>
       </li>

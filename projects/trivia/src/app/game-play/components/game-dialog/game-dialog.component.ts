@@ -16,7 +16,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameDialogComponent extends GameDialog implements OnDestroy {
-  
+
   constructor(public store: Store<GamePlayState>, private router: Router,
     public userActions: UserActions,
     @Inject(MAT_DIALOG_DATA) public data: any, public utils: Utils, public cd: ChangeDetectorRef) {
@@ -50,6 +50,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
+    this.utils.unsubscribe([this.timerSub, this.questionSub]);
     this.destroy();
   }
 }

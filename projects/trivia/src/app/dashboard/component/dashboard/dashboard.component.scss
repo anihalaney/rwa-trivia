@@ -79,6 +79,10 @@ mat-card>:first-child{
 
 .disabled-btn{
   background: silver;
+  margin: 10;
+}
+.btn-red {
+  margin: 10;
 }
 .text-center{
   text-align:center;
@@ -90,4 +94,127 @@ mat-card>:first-child{
   font-weight: bold;
   font-size: 16;
   padding:10 0;
+}
+
+.lives {
+  border: 2px solid #fff;
+  background: #71b02f;
+  border-radius: 50%;
+  height: 35px;
+  position: absolute;
+  top: -15px;
+  right: 4px;
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 700;
+  width: 35px;
+  text-align: center;
+}
+
+.lives-text{
+  text-align: center;
+  line-height: 32px;
+}
+
+.startgame {
+  min-width: 190px;
+}
+.min-startgame {
+  min-width: 230px;
+  text-align: left !important;
+  padding-left: 24px !important;
+}
+
+.margin-r-25{
+  margin: 10 25 10 10;
+}
+
+.lives-count{
+  font-size:20;
+  font-weight:700;
+  color:#ffffff;
+  width:50;
+  height:50;
+  border-color:#ffffff;
+  border-width:2;
+  border-radius:50%;
+  background-color:#71b02f;
+}
+.points{
+  background-color: #3b5998;
+  width: 130px;
+  color: #fff;
+  border-radius: 30px;
+  padding-left: 23px;
+  font-size: 15px;
+  height: 42px;
+  line-height: 42px
+}
+
+.points-count{
+  background-color: #fff;
+  color: #000;
+  border-radius: 20px;
+  // padding: 0px 5px;
+  margin: 3px 0 0 0;
+  float: right;
+  margin-left: 18px;
+  width: auto;
+  min-width: 36px;
+  border-radius: 50%;
+  line-height: 37px;
+  height: 36px;
+  text-align: center;
+  margin-right: 5px;
+  font-size: 15px;
+}
+.m-l-20{margin-left:20px }
+.p-t-10{float: left;}
+    
+.bytes {
+  background-color: #71b02f !important;
+}
+
+.points-count-f-12 {
+  font-size: 12px;
+}
+.pageheading{height: auto !important;margin-bottom: 5px}
+@media(max-width :767px){
+  .points{
+    margin-bottom: 10px;
+    float: left;
+    display: inline-block;
+  }
+
+  .min-startgame {
+    padding-left: calc( 50% - 90px) !important;
+  }
+}
+
+
+.mobile {
+  .points-label {
+    color:#ffffff;
+    font-size:17;
+    margin-left:22;
+  }
+  .points-m {
+    color:#000000;
+    background-color:#ffffff;
+    min-width:42;
+    margin-right:5;
+    font-size:17;
+    height:42;
+    width:auto;
+    border-radius:50%;
+  }
+  .points-m-f-15{
+    font-size:15;
+  }
+
+  .points-container{
+    height:50;
+    border-radius:25;
+  }
+
 }

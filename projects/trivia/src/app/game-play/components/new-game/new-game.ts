@@ -7,7 +7,7 @@ import { Category, GameOptions, User, ApplicationSettings } from 'shared-library
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { OnDestroy } from '@angular/core';
+import { OnDestroy, ChangeDetectorRef } from '@angular/core';
 
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -36,13 +36,14 @@ export class NewGame implements OnDestroy {
     public store: Store<AppState>,
     public utils: Utils,
     public gameActions: GameActions,
-    public userActions: UserActions) {
-    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
+    public userActions: UserActions,
+    public cd: ChangeDetectorRef) {
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories), take(1));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
     this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
-    this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
+    this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
+    this.subscriptions.push(this.categoriesObs.subscribe(categories => { this.categories = categories; this.cd.markForCheck(); } ));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       if (user) {
@@ -71,6 +72,7 @@ export class NewGame implements OnDestroy {
       } else {
         this.noFriendsStatus = true;
       }
+      this.cd.markForCheck();
     }));
     this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());

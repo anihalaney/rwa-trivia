@@ -66,11 +66,12 @@ export class Utils {
     return answers;
   }
 
-  getTimeDifference(gameTimeStamp: number): number {
-    const utcDate = new Date(new Date().toUTCString());
-    const currentMillis = utcDate.getTime();
-
-    const diff = currentMillis - gameTimeStamp;
+  getTimeDifference(pastTime: number, currentTime?: number): number {
+    if (!currentTime) {
+      const utcDate = new Date(new Date().toUTCString());
+      currentTime = utcDate.getTime();
+    }
+    const diff = currentTime - pastTime;
     return diff;
   }
 

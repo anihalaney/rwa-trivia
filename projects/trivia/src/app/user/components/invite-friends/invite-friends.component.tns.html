@@ -1,5 +1,5 @@
 <ns-action-bar title="Friend List" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<GridLayout rows="auto,*,auto" columns="*">
+<GridLayout rows="auto,*,auto" columns="*" *ngIf="renderView">
     <GridLayout row="0" rows="*" columns="*,70,50,50" class="h-label">
         <Label class="Roboto-Regular" text="Friends" row="0" col="0"></Label>
         <Label class="Roboto-Regular" text="Played" row="0" col="1"></Label>
@@ -24,7 +24,7 @@
             </ng-template>
         </RadListView>
     </GridLayout>
-    <StackLayout row="2" verticalAlignment="bottom">
+    <StackLayout row="2" verticalAlignment="bottom" margin="0 10 10 0">
         <FAB (tap)="navigateToInvite()" icon="~/assets/images/add.png" class="fab-button1"></FAB>
     </StackLayout>
 </GridLayout>

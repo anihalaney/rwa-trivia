@@ -1,13 +1,14 @@
 import { Routes } from '@angular/router';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 import { RecentGamesComponent } from './../components/recent-games/recent-games.component';
+import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
 
 export const routes: Routes = [
 
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
         path: 'dashboard',
-        loadChildren: '../dashboard/dashboard.module#DashboardModule',
+        loadChildren: './../dashboard/dashboard.module#DashboardModule',
     },
     {
         path: 'game-play',
@@ -26,5 +27,12 @@ export const routes: Routes = [
         component: RecentGamesComponent,
         canActivate: [AuthGuard]
     },
-
+    {
+        path: 'privacy-policy',
+        component: PrivacyPolicyComponent
+    },
+    {
+        path: 'terms-and-conditions',
+        component: PrivacyPolicyComponent
+    },
 ];

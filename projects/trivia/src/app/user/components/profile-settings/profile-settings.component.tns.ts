@@ -1,8 +1,10 @@
-import { Component, Input, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+  Component, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { userState } from '../../../user/store';
 import { ProfileSettings } from './profile-settings';
 import { Utils } from 'shared-library/core/services';
 import { profileSettingsConstants } from 'shared-library/shared/model';
@@ -14,7 +16,6 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { Page, EventData } from 'tns-core-modules/ui/page/page';
 import { isAndroid } from 'tns-core-modules/platform';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -54,11 +55,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
-    private page: Page,
     public utils: Utils,
-    private cd: ChangeDetectorRef) {
-
-    super(fb, store, userAction, utils);
+    public cd: ChangeDetectorRef) {
+    super(fb, store, userAction, utils, cd);
     this.initDataItems();
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
@@ -149,7 +148,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      Toast.makeText('Please complete profile settings for bulk upload request').show();
+      Toast.makeText('Please add name, display name, location and profile picture for bulk upload request').show();
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
@@ -161,13 +160,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     // validations
     this.userForm.updateValueAndValidity();
 
-    if (!this.profileImageFile && !this.user.profilePicture) {
-      Toast.makeText('Please upload the profile picture').show();
-      return;
-    } else if (this.profileImageFile) {
+    if (this.profileImageFile) {
       this.assignImageValues();
     }
-
 
     if (this.userForm.invalid) {
       Toast.makeText('Please fill the mandatory fields').show();
@@ -194,7 +189,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   ngOnDestroy() {
-
   }
 
 }

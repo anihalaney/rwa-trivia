@@ -70,30 +70,33 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
       }
     }));
 
+    this.publishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadPublishedQuestions));
+    this.subscriptions.push(this.publishedQuestionObs.subscribe((questions) => {
+      if (questions) {
+        this.publishedCount = questions.length;
+        this.publishedQuestions = questions;
+      }
+    }));
+
+    this.unPublishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadUnpublishedQuestions));
+    this.subscriptions.push(this.unPublishedQuestionObs.subscribe((questions) => {
+      if (questions) {
+        this.unPublishedCount = questions.length;
+        this.unPublishedQuestions = questions;
+      }
+    }));
+
+
     this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileInfo)).subscribe((obj) => {
       if (obj) {
         this.bulkUploadFileInfo = obj;
         this.fileInfoDS = new MatTableDataSource<BulkUploadFileInfo>([obj]);
 
         // get published question by BulkUpload Id
-        this.publishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadPublishedQuestions));
         this.store.dispatch(new bulkActions.LoadBulkUploadPublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-        this.subscriptions.push(this.publishedQuestionObs.subscribe((questions) => {
-          if (questions) {
-            this.publishedCount = questions.length;
-            this.publishedQuestions = questions;
-          }
-        }));
 
         // get unpublished question by BulkUpload Id
-        this.unPublishedQuestionObs = this.store.select(bulkState).pipe(select(s => s.bulkUploadUnpublishedQuestions));
         this.store.dispatch(new bulkActions.LoadBulkUploadUnpublishedQuestions({ bulkUploadFileInfo: this.bulkUploadFileInfo }));
-        this.subscriptions.push(this.unPublishedQuestionObs.subscribe((questions) => {
-          if (questions) {
-            this.unPublishedCount = questions.length;
-            this.unPublishedQuestions = questions;
-          }
-        }));
 
         // get the download file url
         // tslint:disable-next-line:max-line-length
@@ -122,11 +125,11 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
     this.categoryDictObs = this.store.select(categoryDictionary);
     this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
     // subscribe to router event
-    this.subscriptions.push(this.activatedRoute.params.subscribe((params: Params) => {
+    this.activatedRoute.params.subscribe((params: Params) => {
       const bulkId = params['bulkid'];
       this.store.dispatch(new bulkActions.LoadBulkUploadFile({ bulkId: bulkId }));
 
-    }));
+    });
   }
 
   downloadFile() {

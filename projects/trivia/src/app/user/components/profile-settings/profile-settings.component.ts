@@ -26,15 +26,15 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   notificationMsg: string;
   errorStatus: boolean;
   subscriptions = [];
-  
+
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     private windowRef: WindowRef,
     public userAction: UserActions,
-    private cd: ChangeDetectorRef,
+    public cd: ChangeDetectorRef,
     public utils: Utils) {
 
-    super(fb, store, userAction, utils);
+    super(fb, store, userAction, utils, cd);
 
     this.setCropperSettings();
     this.setNotificationMsg('', false, 0);
@@ -131,7 +131,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      this.setNotificationMsg('Please complete profile settings for bulk upload request', true, 100);
+      this.setNotificationMsg('Please add name, display name, location and profile picture for bulk upload request', true, 100);
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
@@ -167,10 +167,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     // validations
     this.userForm.updateValueAndValidity();
 
-    if (!this.profileImageFile && !this.user.profilePicture) {
-      this.setNotificationMsg('Please upload the profile picture', true, 100);
-      return;
-    } else if (this.profileImageFile) {
+    if (this.profileImageFile) {
       this.assignImageValues();
     }
 

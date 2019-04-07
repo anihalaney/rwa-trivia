@@ -1,5 +1,5 @@
 <ns-action-bar title="Leaderboard" class="Roboto-Regular" showAdd="true"></ns-action-bar>
-<StackLayout backgroundColor="#f1f2f2">
+<StackLayout backgroundColor="#f1f2f2"  *ngIf="renderView"`>
 <ScrollView>
     <StackLayout *ngIf="leaderBoardCat && leaderBoardCat.length>0">
             <StackLayout class="question-answered Hind-Regular" *ngFor="let cat of leaderBoardCat">

@@ -1,4 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+    Component, OnInit, OnDestroy, ViewChild, ElementRef, AfterViewInit,
+    SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef
+  } from '@angular/core';
 import { GameQuestion } from './game-question';
 @Component({
   selector: 'game-question',

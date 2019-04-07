@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -11,13 +11,14 @@ import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import * as Toast from 'nativescript-toast';
 import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ListViewEventData } from 'nativescript-ui-listview';
+import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'new-game',
@@ -41,6 +42,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   private tagItems: ObservableArray<TokenModel>;
   filteredCategories: Category[];
   subscriptions = [];
+  // This is magic variable
+  // it delay complex UI show Router navigation can finish first to have smooth transition
+  renderView = false;
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView') listViewComponent: RadListViewComponent;
@@ -51,8 +55,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
     private router: Router,
-    private cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions);
+    public cd: ChangeDetectorRef,
+    private page: Page,
+    private ngZone: NgZone) {
+    super(store, utils, gameActions, userActions, cd);
     this.initDataItems();
   }
   ngOnInit() {
@@ -66,7 +72,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     }));
 
-    this.subscriptions.push(this.categoriesObs.subscribe(categories => {
+    this.categoriesObs.pipe(take(1)).subscribe(categories => {
       categories.map(category => {
         if (this.user.categoryIds && this.user.categoryIds.length > 0) {
           category.isSelected = this.user.categoryIds.includes(category.id);
@@ -79,35 +85,36 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         return category;
       });
       this.cd.markForCheck();
-      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-        if (appSettings) {
-          this.applicationSettings = appSettings[0];
-          let filteredCategories = [];
-          if (this.applicationSettings) {
-            filteredCategories = this.categories.filter((category) => {
-              if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-                return category;
-              }
-            });
-            if (this.applicationSettings && this.applicationSettings.lives.enable) {
-              this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
-                if (account) {
-                  this.life = account.lives;
+      this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1)).subscribe(
+        appSettings => {
+          if (appSettings) {
+            this.applicationSettings = appSettings[0];
+            let filteredCategories = [];
+            if (this.applicationSettings) {
+              filteredCategories = this.categories.filter((category) => {
+                if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+                  return category;
                 }
-                this.cd.markForCheck();
-              }));
+              });
+              if (this.applicationSettings && this.applicationSettings.lives.enable) {
+                this.store.select(appState.coreState).pipe(select(s => s.account), take(1)).subscribe(account => {
+                  if (account) {
+                    this.life = account.lives;
+                  }
+                  this.cd.markForCheck();
+                });
+              }
+            } else {
+              filteredCategories = this.categories;
             }
-          } else {
-            filteredCategories = this.categories;
+
+            this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+            ...filteredCategories.filter(c => !c.requiredForGamePlay)];
           }
+          this.cd.markForCheck();
+        });
 
-          this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-          ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-        }
-        this.cd.markForCheck();
-      }));
-
-    }));
+    });
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
@@ -130,6 +137,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
+    // update to variable needed to do in ngZone otherwise it did not understand it
+     this.page.on('loaded', () => this.ngZone.run(() => {
+      this.renderView = true;
+      this.cd.markForCheck();
+     }));
   }
 
   ngOnDestroy() {
@@ -148,8 +160,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.categoryIds = [];
     this.tagItems = undefined;
     this.filteredCategories = [];
-
     this.destroy();
+    this.page.off('loaded');
   }
 
   addCustomTag() {
@@ -173,7 +185,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.redirectToDashboard(this.gameErrorMsg);
       return false;
     }
-
     this.startNewGame(this.gameOptions);
   }
 
@@ -181,6 +192,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     const category: Category = this.filteredCategories[args.index];
     if (!category.requiredForGamePlay) {
       category.isSelected = !category.isSelected;
+      this.filteredCategories = [... this.filteredCategories];
     }
   }
 
@@ -244,5 +256,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.router.navigate(['/dashboard']);
     Toast.makeText(msg).show();
   }
+
+  get categoryListHeight() {
+    return 60 * this.filteredCategories.length;
+  }
+
+  get tagsHeight() {
+    return (60 * this.selectedTags.length) + 20;
+  }
+
 }
 
