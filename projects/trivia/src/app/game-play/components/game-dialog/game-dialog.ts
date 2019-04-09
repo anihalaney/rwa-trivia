@@ -57,7 +57,7 @@ export class GameDialog {
   applicationSettings: ApplicationSettings;
 
 
-  isVisibleContinueScreen = false;
+  showContinueScreen = false;
 
   private genQuestionComponent: GameQuestionComponent;
 
@@ -253,7 +253,7 @@ export class GameDialog {
   }
 
   setContinueScreenVisibility(value: boolean) {
-    this.isVisibleContinueScreen = value;
+    this.showContinueScreen = value;
   }
 
   continueButtonClicked() {
