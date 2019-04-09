@@ -121,6 +121,8 @@ mat-card>:first-child{
 }
 .min-startgame {
   min-width: 230px;
+  text-align: left !important;
+  padding-left: 24px !important;
 }
 
 .margin-r-25{
@@ -182,6 +184,10 @@ mat-card>:first-child{
     margin-bottom: 10px;
     float: left;
     display: inline-block;
+  }
+
+  .min-startgame {
+    padding-left: calc( 50% - 90px) !important;
   }
 }
 

@@ -62,6 +62,7 @@ export class Question {
     question.status = source.status;
     question.tags = source.tags;
     question.created_uid = source.created_uid;
+    question.serverTimeQCreated = source.serverTimeQCreated;
     question.totalQALength = this.countQALength(source);
     return question;
   }

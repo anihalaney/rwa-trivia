@@ -274,36 +274,37 @@ export class GameDialog {
           const addedOn = this.game.playerQnAs[this.game.playerQnAs.length - 1].addedOn;
           if (addedOn) {
             let timeDiff = this.currentQuestion.serverTimeQCreated - addedOn;
-            timeDiff = (timeDiff < 0 ) ? 0 : Math.round((timeDiff / 1000));
-            remainSecond =  this.MAX_TIME_IN_SECONDS - timeDiff;
+            timeDiff = (timeDiff < 0) ? 0 : Math.round((timeDiff / 1000));
+            remainSecond = this.MAX_TIME_IN_SECONDS - timeDiff;
           }
         }
       }
 
       this.cd.markForCheck();
-      if (this.isQuestionAvailable || remainSecond >= 0) {
+      if (this.isQuestionAvailable || remainSecond > 0) {
         this.questionIndex++;
         this.timer = remainSecond;
         this.timerSub =
           timer(1000, 1000).pipe(take(this.timer)).subscribe(t => {
             this.timer--;
             this.cd.markForCheck();
+            if (this.timer < 1) {
+              this.fillTimer();
+            }
           },
             null,
             () => {
               // disable all buttons
               if (this.currentQuestion) {
-                this.afterAnswer();
-                this.genQuestionComponent.fillTimer();
-                this.cd.markForCheck();
+                this.fillTimer();
               }
             });
       } else {
+        this.continueNext = true;
+        this.showContinueBtn = true;
         setTimeout(() => {
-          this.afterAnswer();
-          this.genQuestionComponent.fillTimer();
-          this.cd.markForCheck();
-        }, 1000);
+          this.fillTimer();
+        }, 100);
       }
     });
   }
@@ -409,6 +410,12 @@ export class GameDialog {
     setTimeout(() => {
       this.cd.markForCheck();
     }, 0);
+  }
+
+  fillTimer() {
+    this.afterAnswer();
+    this.genQuestionComponent.fillTimer();
+    this.cd.markForCheck();
   }
 
   destroy() {
