@@ -1,3 +1,4 @@
+
 import { Account, Game, Question, AccountConstants, PlayerQnA, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
@@ -7,37 +8,36 @@ import { Utils } from '../utils/utils';
 
 export class GameLeaderBoardStats {
 
-    static accountDict: { [key: string]: Account } = {};
-
-
     static async generateGameStats(): Promise<any> {
+
+        const accountDicts: { [key: string]: Account } = {};
         const userPromises = [];
+
         try {
-
-            await AccountService.deleteAllAccounts();
-
             const games: Game[] = await GameService.getCompletedGames();
 
             const questionDict = await GameLeaderBoardStats.loadQuestionDictionary();
 
             for (const game of games) {
                 for (const userId of Object.keys(game.stats)) {
-                    GameLeaderBoardStats.calculateAllGameUsersStat(
-                        userId, game, GameLeaderBoardStats.getGameQuestionCategories(game, questionDict, userId)
+
+                    const account: Account = (accountDicts[userId]) ?
+                        accountDicts[userId] : new Account();
+
+                    accountDicts[userId] = GameLeaderBoardStats.calculateAllGameUsersStat(
+                        account, userId, game, GameLeaderBoardStats.getGameQuestionCategories(game, questionDict, userId)
                     );
                 }
             }
 
-            for (const userId of Object.keys(GameLeaderBoardStats.accountDict)) {
-                const account: Account = GameLeaderBoardStats.accountDict[userId];
+            for (const userId of Object.keys(accountDicts)) {
+                const account: Account = accountDicts[userId];
                 account.id = userId;
                 userPromises.push(AccountService.setAccount({ ...account }));
             }
 
-            const userResults = await Promise.all(userPromises);
-            GameLeaderBoardStats.accountDict = {};
+            return await Promise.all(userPromises);
 
-            return userResults;
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -81,9 +81,8 @@ export class GameLeaderBoardStats {
         return questionCategories;
     }
 
-    private static calculateAllGameUsersStat(userId: string, game: Game, categoryIds: Array<number>): void {
-        const account: Account = (GameLeaderBoardStats.accountDict[userId]) ? GameLeaderBoardStats.accountDict[userId] : new Account();
-        GameLeaderBoardStats.accountDict[userId] = AccountService.calculateAccountStat(account, game, categoryIds, userId);
+    private static calculateAllGameUsersStat(account: Account, userId: string, game: Game, categoryIds: Array<number>): Account {
+        return AccountService.calculateAccountStat(account, game, categoryIds, userId);
     }
 
     static async getGameUsers(game: Game): Promise<any> {
