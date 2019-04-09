@@ -95,7 +95,7 @@ export class GameService {
             }
             const game = gameData.data();
             game['id'] = (game['id']) ? game['id'] : gameData['id'];
-            return Game.getViewModel(gameData.data());
+            return Game.getViewModel(game);
         } catch (error) {
             return Utils.throwError(error);
         }
