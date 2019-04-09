@@ -105,6 +105,7 @@
     "nativescript-checkbox": "^3.0.3",
     "nativescript-floatingactionbutton": "^5.0.0",
     "nativescript-loading-indicator": "^2.4.0",
+    "nativescript-mediafilepicker": "^2.0.16",
     "nativescript-plugin-firebase": "^7.6.0",
     "nativescript-screenshot": "0.0.2",
     "nativescript-social-share": "^1.5.1",

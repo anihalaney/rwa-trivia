@@ -13,11 +13,13 @@ import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
-import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
 import * as Toast from 'nativescript-toast';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { isAndroid } from 'tns-core-modules/platform';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import * as imageAssetModule from 'tns-core-modules/image-asset/image-asset';
+import { Mediafilepicker, ImagePickerOptions } from 'nativescript-mediafilepicker';
+import * as app from 'tns-core-modules/application';
 
 @Component({
   selector: 'profile-settings',
@@ -67,7 +69,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       }
       this.cd.markForCheck();
     }));
-
   }
 
   get dataItems(): ObservableArray<TokenModel> {
@@ -75,26 +76,68 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   onTakePhoto() {
-    const options = {
-      keepAspectRatio: this.keepAspectRatio,
-      saveToGallery: this.saveToGallery
+    const options: ImagePickerOptions = {
+      android: {
+        isCaptureMood: false, // if true then camera will open directly.
+        isNeedCamera: true,
+        maxNumberFiles: 1,
+        isNeedFolderList: true
+      }, ios: {
+        isCaptureMood: false, // if true then camera will open directly.
+        maxNumberFiles: 1
+      }
     };
 
-    if (isAvailable()) {
-      requestPermissions();
-      takePicture(options)
-        .then(imageAsset => {
-          this.imageTaken = imageAsset;
-          const source = new ImageSource();
-          source.fromAsset(imageAsset).then(imageSource => {
-            this.profileImage.image = `data:image/jpeg;base64,${imageSource.toBase64String('jpeg', 100)}`;
-            this.saveProfileImage();
-          });
-        }).catch(err => {
-          console.log(err.message);
-        });
-    }
+    const mediafilepicker = new Mediafilepicker();
+    mediafilepicker.openImagePicker(options);
 
+    mediafilepicker.on('getFiles', (res) => {
+      const results = res.object.get('results');
+
+      if (results) {
+
+        const result = results[0];
+
+        if (result.file && app.ios && !options.ios.isCaptureMood) {
+
+          // or can get UIImage to display
+          mediafilepicker.convertPHImageToUIImage(result.rawData).then(res1 => {
+            console.log('test1 ---> ', res1);
+          });
+        } else if (result.file && app.ios) {
+          // So we have taken image & will get UIImage
+
+          // We can copy it to app directory, if need
+          const fileName = 'myTmpImage.jpg';
+          mediafilepicker.copyUIImageToAppDirectory(result.rawData, fileName).then((res1: any) => {
+            console.dir('test2 ---> ', res1);
+          }).catch(e => {
+            console.dir(e);
+          });
+        } else {
+          const asset = new imageAssetModule.ImageAsset(result.file);
+          if (app.android) {
+            const source = new ImageSource();
+            source.fromAsset(asset).then(imageSource => {
+              this.profileImage.image = `data:image/jpeg;base64,${imageSource.toBase64String('jpeg', 100)}`;
+              this.saveProfileImage();
+            });
+          } else if (app.ios) {
+            console.log(asset.ios);
+          }
+        }
+      }
+    });
+
+    mediafilepicker.on('error', (res) => {
+      const msg = res.object.get('msg');
+      console.log(msg);
+    });
+
+    mediafilepicker.on('cancel', (res) => {
+      const msg = res.object.get('msg');
+      console.log(msg);
+    });
   }
 
   saveProfileImage() {
