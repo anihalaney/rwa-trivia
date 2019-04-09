@@ -10,7 +10,7 @@
           <Image [src]="profileImage.image" backgroundColor="gray" stretch="aspectFill" height="110" width="110"
             left="130" right="130" top="10" verticalAlignment="center" borderRadius="55" (tap)="onTakePhoto()"></Image>
           <Image src="~/assets/images/mobile/profile-image-icon.png" left="170" right="170" top="50" width="30"
-            height="30"></Image>
+            height="30" (tap)="onTakePhoto()"></Image>
         </AbsoluteLayout>
       </StackLayout>
 
