@@ -87,7 +87,7 @@ export class QuestionController {
                 const playerQnA: PlayerQnA = {
                     playerId: userId,
                     questionId: question.id,
-                    addedOn: createdOn
+                    addedOn: createdOn,
                 };
 
                 if (game.playerQnAs.length > 0) {
@@ -99,6 +99,7 @@ export class QuestionController {
                 playerQnA.round = game.round;
                 question.gameRound = game.round;
                 question.addedOn = createdOn;
+                question.serverTimeQCreated = createdOn;
                 game.playerQnAs.push(playerQnA);
                 const dbGame = game.getDbModel();
                 await GameService.updateGame(dbGame);
@@ -106,6 +107,8 @@ export class QuestionController {
             } else {
                 const newQuestion = await ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId);
                 newQuestion.gameRound = game.round;
+                const createdOn = Utils.getUTCTimeStamp();
+                newQuestion.serverTimeQCreated = createdOn;
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, newQuestion);
             }
         } catch (error) {

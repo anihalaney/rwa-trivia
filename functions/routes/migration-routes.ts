@@ -96,6 +96,10 @@ class MigrationRoutes {
         this.migrationRoutes.get(`/${RoutesConstants.UPDATE}/${RoutesConstants.ALL}`,
             AuthMiddleware.adminOnly, MigrationController.updateAllGame);
 
+        //  '/update/add/gameoverat'
+        this.migrationRoutes.get(`/${RoutesConstants.UPDATE}/${RoutesConstants.ADD}/${RoutesConstants.GAMEOVERAT}`,
+        AuthMiddleware.authTokenOnly, MigrationController.addGameOverAtField);
+
     }
 }
 

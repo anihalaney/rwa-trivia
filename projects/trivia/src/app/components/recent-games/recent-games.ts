@@ -41,9 +41,16 @@ export class RecentGames implements OnDestroy {
   }
 
   getMoreCard() {
-    this.nextIndex = (this.recentGames.length > (this.maxIndex)) ?
-      this.maxIndex : this.recentGames.length;
-      this.cd.markForCheck();
+    if (this.recentGames.length > this.maxIndex) {
+      if ((this.nextIndex + this.maxIndex) >= this.recentGames.length) {
+        this.nextIndex = this.recentGames.length;
+      } else {
+        this.nextIndex = this.nextIndex + this.maxIndex;
+      }
+    } else {
+      this.nextIndex = this.nextIndex + this.recentGames.length;
+    }
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {

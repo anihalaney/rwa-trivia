@@ -53,7 +53,7 @@ export class GeneralService {
                 .collection(`/${GeneralService.QC}`)
                 .orderBy(GeneralConstants.ID)
                 .get();
-            for (const q of qs) {
+            for (const q of qs.docs) {
                 const data = q.data();
                 const question = {};
 

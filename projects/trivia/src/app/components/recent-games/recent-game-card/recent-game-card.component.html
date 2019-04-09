@@ -39,7 +39,7 @@
                 <div class="yourimg">
                     <img [src]="getImageUrl(userDict[this.otherUserId])" alt="Other User Profile Image" />
                 </div>
-                <p class="light ellipsis" title="{{userDict[getOpponentId(game)]?.displayName}}">
+                <p class="light ellipsis user-name-text"  title="{{userDict[getOpponentId(game)]?.displayName}}">
                     {{userDict[getOpponentId(game)]?.displayName}}</p>
                 <p class="light">Score {{game.stats[getOpponentId(game)]?.score}}</p>
             </div>
@@ -64,7 +64,7 @@
             <div class="yourimg">
                 <img [src]="userProfileImageUrl" alt="User Profile Image" />
             </div>
-            <p class="light" title="{{user?.displayName}}">{{user?.displayName}}</p>
+            <p class="light ellipsis user-disp-text" title="{{user?.displayName}}">{{user?.displayName}}</p>
             <p class="light">Score {{game.stats[user.userId].score}} / {{game.round}}</p>           
             <p class="light" *ngIf="game.GameStatus === GameStatus.TIME_EXPIRED">    
                 You did not answer in time.
