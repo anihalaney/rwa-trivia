@@ -186,7 +186,8 @@ export class FirebaseFunctions {
             const data = snap.data();
             if (data) {
                 const question: Question = data;
-                await AccountService.setBytes(question.created_uid);
+                // Add four bytes when question is approve
+                await AccountService.earnBytesOnQuestionContribute(question.created_uid);
             }
             return true;
         } catch (error) {
