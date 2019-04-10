@@ -8,14 +8,14 @@
         <StackLayout row="0" rowSpan="2" visibility="{{ !displayReasonViewer && !displayEditQuestion && !loaderBusy ? 'visible' : 'hidden' }}">
             <TabView androidSelectedTabHighlightColor="#ef4545" tabTextFontSize="14" tabTextColor="#3b5998"
                 selectedTabTextColor="#3b5998">
-                <StackLayout *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
+                <StackLayout stlRippleEffect *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
                     <StackLayout>
                         <question-table *ngIf="!loaderBusy" [questions]="publishedQuestions" [categoryDictionary]="categoryDictObs | async"
                             [user]="user" [showApproveButton]="false" [userDict]="userDict">
                         </question-table>
                     </StackLayout>
                 </StackLayout>
-                <StackLayout *tabItem="{title: 'Pending', textTransform: 'none'}" fontSize="16" fontWeight="600">
+                <StackLayout stlRippleEffect *tabItem="{title: 'Pending', textTransform: 'none'}" fontSize="16" fontWeight="600">
                     <StackLayout>
                         <question-table [questions]="unpublishedQuestions" [categoryDictionary]="categoryDictObs | async"
                             [user]="user" [showApproveButton]="false" [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"

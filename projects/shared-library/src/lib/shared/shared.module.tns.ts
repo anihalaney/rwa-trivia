@@ -11,7 +11,7 @@ import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import { AuthorComponent } from './components/author/author.component';
-import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './directive';
+import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     AuthorComponent,
     GameFilterPipe,
     ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective
+    OpenUserProfileDirective,
+    RippleEffectDirective
   ],
   imports: [
     CommonModule,
@@ -38,7 +39,7 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     ReactiveFormsModule,
     TNSCheckBoxModule,
     NativeScriptUIAutoCompleteTextViewModule,
-    NativeScriptUIListViewModule
+    NativeScriptUIListViewModule,
   ],
   exports: [
     CommonModule, HttpClientModule,
@@ -55,7 +56,8 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     AuthorComponent,
     GameFilterPipe,
     ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective],
+    OpenUserProfileDirective,
+    RippleEffectDirective],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class SharedModule { }

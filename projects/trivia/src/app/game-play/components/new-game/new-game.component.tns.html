@@ -14,9 +14,10 @@
                 visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
                 <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white"
                     fontSize="17">
-                    <StackLayout orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 0"
-                        [class.player-type]="gameOptions.playerMode !== 0" (tap)="gameOptions.playerMode = 0;"
-                        width="50%" height="60">
+
+                    <StackLayout stlRippleEffect orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 0" [ngStyle]="{'background-color': (gameOptions.playerMode === 0) ? '#89C24F' : '#ffffff' }"
+                        [class.player-type]="gameOptions.playerMode !== 0" (rippleTap)="gameOptions.playerMode = 0;gameOptions.opponentType=''"
+                        width="50%" height="60" [isUserInteractionEnabled] = "gameOptions.playerMode !== 0">
                         <Image *ngIf="gameOptions.playerMode !== 0" src="~/assets/images/single_player.png" height="30"
                             width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
                         <Image *ngIf="gameOptions.playerMode === 0" src="~/assets/images/single_player_white.png"
@@ -25,9 +26,10 @@
                             ios:padding="5 15 5 5" VerticalAlignment="center"></Label>
                     </StackLayout>
 
-                    <StackLayout orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 1"
+                    <StackLayout stlRippleEffect  orientation="horizontal" [class.selected-player]="gameOptions.playerMode === 1"
                         [class.player-type]="gameOptions.playerMode !== 1"
-                        (tap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" width="50%">
+                        [ngStyle]="{'background-color': (gameOptions.playerMode === 1) ? '#89C24F' : '#ffffff' }"
+                        (rippleTap)="gameOptions.playerMode = 1;gameOptions.opponentType=0" width="50%" [isUserInteractionEnabled] = "gameOptions.playerMode !== 1">
 
                         <Image *ngIf="gameOptions.playerMode !== 1" src="~/assets/images/two_player.png" height="30"
                             width="30" marginLeft="10" verticalAlignment="center" marginRight="5"></Image>
@@ -117,7 +119,7 @@
                                 text="I do not have any friends, invite your friends using link"
                                 textWrap="true"></Label>
                             <Button *ngIf="noFriendsStatus" text="Invite Friends" color="#FFFFFF"
-                                backgroundColor="#71b02f" (tap)="navigateToInvite()"></Button>
+                                backgroundColor="#71b02f" (tap)="navigateToInvite()" stlRippleEffect></Button>
                         </StackLayout>
                     </GridLayout>
                 </StackLayout>
@@ -197,7 +199,7 @@
                             </RadAutoCompleteTextView>
                         </StackLayout>
                         <Button row="1" col="1" text="Add" (tap)="addCustomTag()" padding="10" fontSize="18"
-                            backgroundColor="#89C24F" color="#ffffff" marginLeft="10" fontWeight="700"></Button>
+                            backgroundColor="#89C24F" color="#ffffff" marginLeft="10" fontWeight="700" stlRippleEffect></Button>
                     </GridLayout>
                 </StackLayout>
             </CardView>
@@ -208,7 +210,7 @@
 
             <StackLayout margin="5 10">
                 <Button text="START A NEW GAME" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
-                    (tap)="startGame()" height="70"></Button>
+                    (rippleTap)="startGame()" height="70" stlRippleEffect></Button>
             </StackLayout>
         </StackLayout>
     </ScrollView>
