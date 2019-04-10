@@ -181,7 +181,24 @@ export class FirebaseFunctions {
             throw error;
         }
     }
+    static async doQuestionCreateOperation(snap: any, context: any): Promise<boolean> {
+        try {
+            const data = snap.data();
+            if (data) {
+                const question: Question = data;
+                await AccountService.setBytes(question.created_uid);
+            }
+            return true;
+        } catch (error) {
+            console.error('Error :', error);
+            throw error;
+        }
+    }
 }
+
+
+
+
 
 exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}')
     .onWrite(async (change, context) => await FirebaseFunctions.doQuestionWriteOperation(change, context));
@@ -202,3 +219,6 @@ exports.onUserCreate = functions.firestore.document('/users/{userId}')
 
 exports.onAccountUpdate = functions.firestore.document('/accounts/{accountId}')
     .onUpdate(async (change, context) => await FirebaseFunctions.doAccountUpdateOperation(change, context));
+
+exports.onQuestionCreate = functions.firestore.document('/questions/{questionId}')
+    .onCreate(async (snap, context) => await FirebaseFunctions.doQuestionCreateOperation(snap, context));
