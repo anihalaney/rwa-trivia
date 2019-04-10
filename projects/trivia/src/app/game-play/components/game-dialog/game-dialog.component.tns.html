@@ -63,9 +63,9 @@
     <StackLayout *ngIf="showContinueScreen && !gameOver " orientation="horizontal" horizontalAlignment="center"
         height="100%">
         <Button backgroundColor="#8ac541" class="Hind-Medium" color="white" width="50%" height="70" text="Dashboard"
-            fontSize="17" (tap)="navigateToDashboard()"></Button>
-        <Button backgroundColor="#f50057" class="Hind-Medium" color="white" width="50%" height="70" text="Continue"
-            fontSize="17" (tap)="continueButtonClicked()"></Button>
+            fontSize="17" stlRippleEffect margin="10 5 10 20" (rippleTap)="navigateToDashboard()"></Button>
+        <Button backgroundColor="#f50057" margin="10 20 10 5" class="Hind-Medium" color="white" width="50%" height="70" text="Continue"
+            fontSize="17"  stlRippleEffect (rippleTap)="continueButtonClicked()"></Button>
     </StackLayout>
 
     <StackLayout *ngIf="showWinBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">

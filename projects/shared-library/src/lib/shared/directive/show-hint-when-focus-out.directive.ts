@@ -17,7 +17,7 @@ export class ShowHintWhenFocusOutDirective implements AfterViewInit, OnDestroy {
   lostFocus = false;
   removeClass: string;
   subscriptions = [];
-  
+
   @Input() stlShowHintWhenFocusOut: any;
 
   @HostListener('blur', ['$event'])
