@@ -39,8 +39,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
       this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
       this.checkGameOver();
       if (!this.gameOver) {
-        this.getLoader();
-        this.getNextQuestion();
+        this.getLoader(false);
       }
       if (this.showLoader) {
         this.cd.markForCheck();
