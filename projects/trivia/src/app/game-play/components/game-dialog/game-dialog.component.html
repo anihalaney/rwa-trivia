@@ -38,7 +38,16 @@
     </div>
   </div>
 
-  <div class="" *ngIf="showWinBadge && !gameOver ">
+  <div class="" *ngIf="showContinueScreen && !gameOver ">
+    <div class="card main-div textcenter">
+      <div class="continue-button">
+          <button mat-button [routerLink]="['/dashboard']" class="dashboard-btn">Dashboard</button>
+          <button mat-button (click)="continueButtonClicked()" class="startgame continue-btn">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="" *ngIf="showWinBadge && !gameOver">
     <div class="card main-div textcenter">
       <div class="badge-icon">
         <div class="circle">
@@ -58,7 +67,7 @@
     </div>
   </div>
 
-  <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName"
+  <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen" [categoryName]="categoryName"
     [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS"
     [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn"
     [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
@@ -70,7 +79,7 @@
     (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-question-continue>
 
-  <game-over *ngIf="gameOver" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
+  <game-over *ngIf="gameOver && !showContinueScreen" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
     [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [totalRound]="totalRound"
     (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
   </game-over>

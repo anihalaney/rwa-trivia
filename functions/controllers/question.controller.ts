@@ -102,7 +102,7 @@ export class QuestionController {
                 question.serverTimeQCreated = createdOn;
                 game.playerQnAs.push(playerQnA);
                 const dbGame = game.getDbModel();
-                await GameService.updateGame(dbGame);
+                await GameService.setGame(dbGame);
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, question);
             } else {
                 const newQuestion = await ESUtils.getQuestionById(game.playerQnAs[game.playerQnAs.length - 1].questionId);
