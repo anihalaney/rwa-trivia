@@ -243,7 +243,7 @@ export enum ResponseMessagesConstants {
     LIVES_ADDED = 'Lives added successfully !!',
     CHECK_FIRESTORE_DB_FOR_MIGRATION_DETAILS = 'Check firestore db for migration details',
     ADDED_GAME_OVER__FIELDS = 'added gameOverAt fields',
-
+    REMOVE_ALL_ACCOUNTS = 'Remove all accounts'
 }
 
 export enum FriendConstants {
@@ -327,4 +327,5 @@ export enum RoutesConstants {
     HEIGHT = 'height',
     COUNT = 'count',
     GAMEOVERAT= 'gameoverat',
+    ACCOUNTS = 'accounts'
 }

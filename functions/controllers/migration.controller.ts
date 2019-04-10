@@ -367,4 +367,19 @@ export class MigrationController {
             Utils.sendError(res, error);
         }
     }
+
+    /**
+     * removeAllAccounts
+     * return status
+     */
+    static async removeAllAccounts(req, res) {
+        try {
+            await AccountService.deleteAllAccounts();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.REMOVE_ALL_ACCOUNTS);
+
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
 }

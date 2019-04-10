@@ -4,12 +4,12 @@
 
         <Label [text]="question?.questionText" color="#263238" fontSize="18" fontWeight="500" margin="10" textWrap="true"></Label>
       
-        <StackLayout orientation="horizontal" margin="5 10 5 10" *ngIf="question">
+        <StackLayout orientation="horizontal" margin="5 10 5 10" *ngIf="question" iosOverflowSafeArea="false">
             <Label text="Categories:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
             <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
         </StackLayout>
       
-        <StackLayout orientation="horizontal" margin="10" *ngIf="question">
+        <StackLayout orientation="horizontal" margin="10" *ngIf="question" iosOverflowSafeArea="false">
             <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
             <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" color="#1B1C1C" fontSize="15" textWrap="true"></Label>
         </StackLayout>  
@@ -21,7 +21,7 @@
                     marginBottom="15" textWrap="true" width="100%" style="text-align:center;" [isUserInteractionEnabled] = "doPlay"></Label>
             </StackLayout>
         </StackLayout>
-        <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10">
+        <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10" iosOverflowSafeArea="false">
             <author [userDict]="userDict" [userId]="question.created_uid"></author>
             <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (rippleTap)="getNextQuestion()" *ngIf="answeredText!==''"
                 width="100%" text="Try Another" fontSize="17" padding="15" stlRippleEffect stlBackgroundColor="#8ac541"></Button>

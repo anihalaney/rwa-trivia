@@ -28,7 +28,9 @@ export class QuestionService {
             const questionResult = await QuestionService.fireStoreClient
                 .doc(`/${QuestionService.QC}/${questionId}`)
                 .get();
-            return Question.getViewModelFromDb(questionResult.data());
+            const question = questionResult.data();
+            question['id'] = (question['id']) ? question['id'] : questionResult['id'];
+            return Question.getViewModelFromDb(question);
         } catch (error) {
             return Utils.throwError(error);
         }

@@ -58,7 +58,7 @@ export class GameMechanics {
                     game = GameMechanics.updateRound(game, userId);
                     break;
             }
-            await GameService.updateGame(game.getDbModel());
+            await GameService.setGame(game.getDbModel());
             return true;
         } catch (error) {
             return Utils.throwError(error);
@@ -98,7 +98,7 @@ export class GameMechanics {
                     }
                     const dbGame = game.getDbModel();
                     if (dbGame.id) {
-                        await GameService.updateGame(dbGame);
+                        await GameService.setGame(dbGame);
                     }
                 } else if (playedHours >= schedulerConstants.gameInvitationDuration
                     && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
@@ -106,7 +106,7 @@ export class GameMechanics {
                     GameMechanics.setGameOverParams(true, GameStatus.INVITATION_TIMEOUT, Utils.getUTCTimeStamp(), game);
                     const dbGame = game.getDbModel();
                     if (dbGame.id) {
-                        await GameService.updateGame(dbGame);
+                        await GameService.setGame(dbGame);
                     }
                 }
             }
@@ -253,7 +253,7 @@ export class GameMechanics {
                     }
                     game.turnAt = Utils.getUTCTimeStamp();
                     game.calculateStat(lastAddedQuestion.playerId);
-                    await GameService.updateGame(game.getDbModel());
+                    await GameService.setGame(game.getDbModel());
                     return false;
                 } else {
                     return true;
