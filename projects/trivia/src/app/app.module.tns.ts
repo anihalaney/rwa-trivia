@@ -15,6 +15,8 @@ import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angul
 import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterModule } from '@angular/router';
 import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent } from './components';
+import { CFAlertDialog } from 'nativescript-cfalert-dialog';
+
 export function firebaseFactory() {
   return TNSFirebase;
 }
@@ -44,6 +46,7 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     RouterModule
   ],
   providers: [
+    CFAlertDialog,
     {
       provide: PlatformFirebaseToken,
       useFactory: firebaseFactory

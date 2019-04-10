@@ -5,6 +5,7 @@ import { SharedModule } from 'shared-library/shared/shared.module';
 import { NativeScriptRouterModule } from 'nativescript-angular/router';
 import { effects, reducer } from './store';
 import { UserRoutingModule } from './routing/user-routing.module';
+import { CFAlertDialog } from 'nativescript-cfalert-dialog';
 import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
@@ -40,7 +41,9 @@ import {
 
 
   ],
-  providers: [],
+  providers: [
+    CFAlertDialog
+  ],
   exports: [
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,

@@ -1,25 +1,25 @@
 import {
-  Component, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef,
-  ChangeDetectionStrategy, ChangeDetectorRef
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { ProfileSettings } from './profile-settings';
-import { Utils } from 'shared-library/core/services';
-import { profileSettingsConstants } from 'shared-library/shared/model';
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { select, Store } from '@ngrx/store';
+import { isAvailable, requestPermissions, takePicture } from 'nativescript-camera';
+import { CFAlertActionAlignment, CFAlertActionStyle, CFAlertDialog, CFAlertStyle, DialogOptions } from 'nativescript-cfalert-dialog';
+import * as imagepicker from 'nativescript-imagepicker';
+import * as Toast from 'nativescript-toast';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Utils } from 'shared-library/core/services';
+import { coreState, UserActions } from 'shared-library/core/store';
+import { profileSettingsConstants } from 'shared-library/shared/model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
-import * as Toast from 'nativescript-toast';
-import { coreState, UserActions } from 'shared-library/core/store';
 import { isAndroid } from 'tns-core-modules/platform';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import * as imageAssetModule from 'tns-core-modules/image-asset/image-asset';
-import { Mediafilepicker, ImagePickerOptions } from 'nativescript-mediafilepicker';
-import * as app from 'tns-core-modules/application';
+import { AppState } from '../../../store';
+import { ProfileSettings } from './profile-settings';
 
 @Component({
   selector: 'profile-settings',
@@ -47,20 +47,21 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public imageTaken: ImageAsset;
   public saveToGallery = true;
   public keepAspectRatio = true;
-  public width = 300;
-  public height = 300;
-
+  public width = 200;
+  public height = 200;
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
-
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
     public utils: Utils,
+    private cfalertDialog: CFAlertDialog,
     public cd: ChangeDetectorRef) {
     super(fb, store, userAction, utils, cd);
     this.initDataItems();
+
+    this.cfalertDialog = new CFAlertDialog();
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
@@ -75,69 +76,94 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     return this.tagItems;
   }
 
+
   onTakePhoto() {
-    const options: ImagePickerOptions = {
-      android: {
-        isCaptureMood: false, // if true then camera will open directly.
-        isNeedCamera: true,
-        maxNumberFiles: 1,
-        isNeedFolderList: true
-      }, ios: {
-        isCaptureMood: false, // if true then camera will open directly.
-        maxNumberFiles: 1
-      }
+    const options: DialogOptions = {
+      dialogStyle: CFAlertStyle.BOTTOM_SHEET,
+      title: 'Choose option',
+      message: '',
+      buttons: [
+        {
+          text: 'Camera',
+          buttonStyle: CFAlertActionStyle.POSITIVE,
+          buttonAlignment: CFAlertActionAlignment.JUSTIFIED,
+          onClick: (response) => {
+
+          },
+        },
+        {
+          text: 'Gallery',
+          buttonStyle: CFAlertActionStyle.NEGATIVE,
+          buttonAlignment: CFAlertActionAlignment.JUSTIFIED,
+          onClick: (response) => {
+
+          },
+        },
+      ],
+    };
+    this.cfalertDialog.show(options)
+      .then(res => {
+        if (res === 'Camera') {
+          this.changeProfilePictureFromCamera();
+        } else if (res === 'Gallery') {
+          this.changeProfilePictureFromGallery();
+        }
+
+      });
+  }
+
+  changeProfilePictureFromCamera() {
+    const options = {
+      width: this.width,
+      height: this.height,
+      keepAspectRatio: this.keepAspectRatio,
+      saveToGallery: this.saveToGallery
     };
 
-    const mediafilepicker = new Mediafilepicker();
-    mediafilepicker.openImagePicker(options);
-
-    mediafilepicker.on('getFiles', (res) => {
-      const results = res.object.get('results');
-
-      if (results) {
-
-        const result = results[0];
-
-        if (result.file && app.ios && !options.ios.isCaptureMood) {
-
-          // or can get UIImage to display
-          mediafilepicker.convertPHImageToUIImage(result.rawData).then(res1 => {
-            console.log('test1 ---> ', res1);
+    if (isAvailable()) {
+      requestPermissions();
+      takePicture(options)
+        .then(imageAsset => {
+          this.imageTaken = imageAsset;
+          const source = new ImageSource();
+          source.fromAsset(imageAsset).then(imageSource => {
+            this.profileImage.image = `data:image/jpeg;base64,${imageSource.toBase64String('jpeg', 100)}`;
+            this.saveProfileImage();
           });
-        } else if (result.file && app.ios) {
-          // So we have taken image & will get UIImage
+        }).catch(err => {
+          console.log('Error -----> ', err);
+        });
+    }
+  }
 
-          // We can copy it to app directory, if need
-          const fileName = 'myTmpImage.jpg';
-          mediafilepicker.copyUIImageToAppDirectory(result.rawData, fileName).then((res1: any) => {
-            console.dir('test2 ---> ', res1);
-          }).catch(e => {
-            console.dir(e);
+  changeProfilePictureFromGallery() {
+    const imageSource = new ImageSource();
+    const context = imagepicker.create({
+      mode: 'single' // use "multiple" for multiple selection
+    });
+    context
+      .authorize()
+      .then(() => {
+        return context.present();
+      })
+      .then((selection) => {
+        const imageAsset = selection.length > 0 ? selection[0] : null;
+        imageAsset.options = {
+          width: this.width,
+          height: this.height,
+          keepAspectRatio: true
+        };
+        imageSource.fromAsset(imageAsset)
+          .then((imageSource1: ImageSource) => {
+            this.profileImage.image = `data:image/jpeg;base64,${imageSource1.toBase64String('jpeg', 100)}`;
+            this.saveProfileImage();
           });
-        } else {
-          const asset = new imageAssetModule.ImageAsset(result.file);
-          if (app.android) {
-            const source = new ImageSource();
-            source.fromAsset(asset).then(imageSource => {
-              this.profileImage.image = `data:image/jpeg;base64,${imageSource.toBase64String('jpeg', 100)}`;
-              this.saveProfileImage();
-            });
-          } else if (app.ios) {
-            console.log(asset.ios);
-          }
-        }
-      }
-    });
 
-    mediafilepicker.on('error', (res) => {
-      const msg = res.object.get('msg');
-      console.log(msg);
-    });
+      }).catch(function (err) {
+        // process error
+        console.log('Error -----> ', err);
+      });
 
-    mediafilepicker.on('cancel', (res) => {
-      const msg = res.object.get('msg');
-      console.log(msg);
-    });
   }
 
   saveProfileImage() {
