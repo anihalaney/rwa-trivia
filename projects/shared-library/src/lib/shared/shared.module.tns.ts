@@ -12,7 +12,6 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import { AuthorComponent } from './components/author/author.component';
 import { ShowHintWhenFocusOutDirective, RippleEffectDirective } from './directive';
-// import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -40,7 +39,6 @@ import { ShowHintWhenFocusOutDirective, RippleEffectDirective } from './directiv
     TNSCheckBoxModule,
     NativeScriptUIAutoCompleteTextViewModule,
     NativeScriptUIListViewModule,
-    // BrowserAnimationsModule
   ],
   exports: [
     CommonModule, HttpClientModule,

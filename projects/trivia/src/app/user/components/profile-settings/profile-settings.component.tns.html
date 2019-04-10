@@ -82,9 +82,7 @@
               </RadAutoCompleteTextView>
             </StackLayout>
             <StackLayout row="1" col="1" marginLeft="10" horizontalAlignment="right">
-              <Ripple padding="10" rippleColor="#dceec6">
-                <Button ios:padding="10" text="Add" class="Roboto-Bold" (tap)="addCustomTag()"></Button>
-              </Ripple>
+              <Button ios:padding="10" text="Add" class="Roboto-Bold" stlRippleEffect (tap)="addCustomTag()" ></Button>
             </StackLayout>
           </GridLayout>
         </StackLayout>
@@ -108,9 +106,9 @@
               row="2" col="0" textWrap="true"></Label>
           </GridLayout>
         </StackLayout>
-        <button class="p-15 showMore" horizontalAlignment="center"
+        <Button class="p-15 showMore" horizontalAlignment="center"
           *ngIf="enableSocialProfile > socialProfileShowLimit + 1" text="Show more"
-          (tap)="showMoreSocialProfile()"></button>
+           stlRippleEffect (tap)="showMoreSocialProfile()"></Button>
       </StackLayout>
 
       <StackLayout class="profile-buttons">
@@ -118,8 +116,8 @@
         <Button *ngIf="(!user.bulkUploadPermissionStatus
         || user.bulkUploadPermissionStatus === NONE
         || user.bulkUploadPermissionStatus === PENDING)
-        && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText" (tap)="setBulkUploadRequest()"
-          backgroundColor="#ffffff" color="black" padding="10 0" borderWidth="1" borderRadius="3"></Button>
+        && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText"
+          backgroundColor="#ffffff" color="black" padding="10 0" (tap)="setBulkUploadRequest()" borderWidth="1" borderRadius="3" stlRippleEffect></Button>
         <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING"
           text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
           textWrap="true" padding="8"></Label>
@@ -128,8 +126,8 @@
       </StackLayout>
 
       <StackLayout class="profile-buttons">
-        <Button text="SAVE" (tap)="onSubmit()" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff"
-          padding="20 0"></Button>
+        <Button text="SAVE" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff"
+          padding="20 0" stlRippleEffect (tap)="onSubmit()"></Button>
       </StackLayout>
 
 

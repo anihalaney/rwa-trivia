@@ -1,4 +1,4 @@
-import { Directive, Input, Renderer2, HostListener, OnDestroy, ElementRef } from '@angular/core';
+import { Directive, Input, Renderer2, HostListener, OnDestroy, ElementRef, Output, EventEmitter } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Color } from 'tns-core-modules/color';
@@ -13,50 +13,56 @@ export class RippleEffectDirective implements OnDestroy {
 
   @Input() stlBackgroundColor: string;
   @Input() stlOpacity: number;
+  @Input() stlBackgroundColorAfter: string;
 
   templateRef: any;
   renderer: Renderer2;
-  defaultColor: '#ff00ff';
+  defaultColor: '#F8F8F8';
 
   @Input() rippleEffect: any;
+  @Output() rippleTap = new EventEmitter<string>();
 
   @HostListener('tap', ['$event'])
-  onTap(event){
-    console.log('tap event');
-    const originalColor = String(this.templateRef.nativeElement.backgroundColor);
-    // console.log('original collor', originalColor);
+  onTap(event) {
     if (!this.stlOpacity) {
       this.stlOpacity = 0.50;
     } else {
       this.stlOpacity = Number(this.stlOpacity);
     }
 
-    if (!this.stlBackgroundColor) {
-      this.stlBackgroundColor = (this.templateRef.nativeElement.backgroundColor);
-      console.log('in line 32', this.stlBackgroundColor);
-      if (!this.stlBackgroundColor) {
-        this.stlBackgroundColor = '#fdfdfd';
-        this.stlOpacity = 0.20;
+    if (this.stlBackgroundColor === undefined) {
+      if (String(this.templateRef.nativeElement.backgroundColor) &&
+        String(this.templateRef.nativeElement.backgroundColor) !== 'undefined') {
+        this.stlBackgroundColor = String(this.templateRef.nativeElement.backgroundColor);
       } else {
-        this.stlBackgroundColor = String(this.stlBackgroundColor);
+        this.stlBackgroundColor = '#F8F8F8';
       }
-    } else {
-      console.log('background color', this.stlBackgroundColor);
     }
-    console.log('background color fianl  45', this.stlBackgroundColor);
-    console.log('background stlOpacity', this.stlOpacity);
+
+    if (!this.stlOpacity) {
+      this.stlOpacity = this.stlOpacity;
+    }
+
     this.templateRef.nativeElement.animate({
       opacity: this.stlOpacity,
       backgroundColor: new Color(this.stlBackgroundColor),
-      duration: 350,
+      duration: 200,
       delay: 0,
       iterations: 1,
       curve: enums.AnimationCurve.easeOut
     }).then(() => {
-      this.templateRef.nativeElement.style.backgroundColor = originalColor;
-      // this.templateRef.nativeElement.style
-      this.templateRef.nativeElement.style.opacity = 1;
+      if (this.stlBackgroundColor === '#F8F8F8') {
+        this.templateRef.nativeElement.style.backgroundColor = '';
+      } else {
 
+        if (this.stlBackgroundColorAfter || this.stlBackgroundColorAfter === '') {
+          this.templateRef.nativeElement.style.backgroundColor = this.stlBackgroundColorAfter;
+        } else {
+          this.templateRef.nativeElement.style.backgroundColor = this.stlBackgroundColor;
+        }
+      }
+      this.templateRef.nativeElement.style.opacity = 1;
+      this.rippleTap.emit();
     });
   }
 
