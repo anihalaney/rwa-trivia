@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, NgZone, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, Inject, NgZone, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy, ViewChild, ElementRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { PLATFORM_ID } from '@angular/core';
 import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -10,8 +10,6 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { User, Game } from 'shared-library/shared/model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Page } from 'tns-core-modules/ui/page/page';
-
-
 
 @Component({
   selector: 'dashboard',
@@ -79,7 +77,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   filterGame(game: Game): boolean {
     return game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-    game.GameStatus === GameStatus.JOINED_GAME ||
+      game.GameStatus === GameStatus.JOINED_GAME ||
       game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
       || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
   }
