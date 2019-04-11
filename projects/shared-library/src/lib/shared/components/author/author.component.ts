@@ -17,7 +17,7 @@ export class AuthorComponent implements OnChanges {
 
     @Input() userDict: { [key: string]: User };
     @Input() userId;
-    userProfileImageUrl = 'assets/images/avatar-44X40.png';
+    userProfileImageUrl;
 
     constructor(private store: Store<CoreState>, private userActions: UserActions, private utils: Utils, private cd: ChangeDetectorRef) {
 

@@ -1,20 +1,17 @@
-import { ViewChild, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { Observable, Subscription, timer } from 'rxjs';
-import { take, filter } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-
-import * as gameplayactions from '../../store/actions';
-
-import { gamePlayState, GamePlayState } from '../../store';
-
-import { GameQuestionComponent } from '../game-question/game-question.component';
+import { filter, take } from 'rxjs/operators';
+import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 import {
-  Game, PlayerQnA, User, Question, Category, GameStatus,
-  PlayerMode, OpponentType, Answer, gamePlayConstants, ApplicationSettings
+  Answer, ApplicationSettings, Category, Game, gamePlayConstants,
+  GameStatus, OpponentType, PlayerMode, PlayerQnA, Question, User
 } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
 import { appState, categoryDictionary } from '../../../store';
+import { gamePlayState, GamePlayState } from '../../store';
+import * as gameplayactions from '../../store/actions';
+import { GameQuestionComponent } from '../game-question/game-question.component';
 
 
 export class GameDialog {
@@ -58,6 +55,9 @@ export class GameDialog {
   threeConsecutiveAnswer = false;
   currentUTC: number;
   applicationSettings: ApplicationSettings;
+
+
+  showContinueScreen = false;
 
   private genQuestionComponent: GameQuestionComponent;
 
@@ -164,7 +164,7 @@ export class GameDialog {
         if (!this.currentQuestion) {
           this.getNextQuestion();
           if (this.isQuestionAvailable) {
-            this.getLoader();
+            this.getLoader(true);
           }
           this.cd.markForCheck();
           if (!this.isQuestionAvailable) {
@@ -194,7 +194,7 @@ export class GameDialog {
     this.otherPlayer = new User();
   }
 
-  getLoader() {
+  getLoader(isLoadContinueScreen: boolean) {
     // Show Loading screen
     if (this.isCorrectAnswer) {
       this.showWinBadge = true;
@@ -208,11 +208,16 @@ export class GameDialog {
           this.utils.unsubscribe([this.timerSub]);
           this.showWinBadge = false;
           this.isCorrectAnswer = false;
-          this.showBadgeScreen();
+          // this.showBadgeScreen();
+          this.setContinueScreenVisibility(true);
           this.cd.markForCheck();
         });
     } else {
-      this.showBadgeScreen();
+      if (isLoadContinueScreen) {
+        this.showBadgeScreen();
+      } else {
+        this.setContinueScreenVisibility(true);
+      }
     }
 
   }
@@ -245,6 +250,16 @@ export class GameDialog {
             this.cd.detectChanges();
           });
       });
+  }
+
+  setContinueScreenVisibility(value: boolean) {
+    this.showContinueScreen = value;
+  }
+
+  continueButtonClicked() {
+    this.setContinueScreenVisibility(false);
+    this.getNextQuestion();
+    this.showBadgeScreen();
   }
 
   subscribeQuestion() {

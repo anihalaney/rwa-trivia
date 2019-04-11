@@ -73,9 +73,9 @@
                     <StackLayout *ngIf="question">
                         <StackLayout class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
                             [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
-                            [class.right]="correctAnswerIndex === i">
-                            <Label text="{{answer?.answerText}}" (tap)="answerButtonClicked(answer,i)" horizontalAlignment="center" fontSize="15" fontWeight="500"
-                                marginTop="10" marginBottom="10" textWrap="true" padding="10" width="100%" style="text-align:center;"></Label>
+                            [class.right]="correctAnswerIndex === i"  stlRippleEffect (rippleTap)="answerButtonClicked(answer,i)"  [isUserInteractionEnabled] = "doPlay">
+                            <Label text="{{answer?.answerText}}"  horizontalAlignment="center" fontSize="15" fontWeight="500"
+                                marginTop="10" marginBottom="10" textWrap="true" padding="10" width="100%" style="text-align:center;"  [isUserInteractionEnabled] = "doPlay"></Label>
                         </StackLayout>
                     </StackLayout>
                     <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;" class="Roboto-Medium">
@@ -87,6 +87,6 @@
     </ScrollView>
     <AbsoluteLayout *ngIf="showContinueBtn" verticalAlignment="bottom">
         <Button backgroundColor="#8ac541" class="Hind-Medium" color="white" (tap)="continueClicked.emit($event)" *ngIf="answeredText!==''"
-            width="100%" height="70" text="CONTINUE" fontSize="17"></Button>
+            width="100%" height="70" text="CONTINUE" fontSize="17" stlRippleEffect></Button>
     </AbsoluteLayout>
 </GridLayout>
