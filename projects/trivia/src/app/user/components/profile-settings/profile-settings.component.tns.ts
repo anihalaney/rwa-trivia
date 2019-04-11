@@ -60,7 +60,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public cd: ChangeDetectorRef) {
     super(fb, store, userAction, utils, cd);
     this.initDataItems();
-
+    requestPermissions();
     this.cfalertDialog = new CFAlertDialog();
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
@@ -121,7 +121,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     };
 
     if (isAvailable()) {
-      requestPermissions();
+
       takePicture(options)
         .then(imageAsset => {
           this.imageTaken = imageAsset;
