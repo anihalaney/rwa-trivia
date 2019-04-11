@@ -116,6 +116,14 @@ export class PushNotification {
                     console.log(`${otherUser.displayName} has sent you a friend request.`);
                     break;
 
+                case pushNotificationRouteConstants.QUESTION_NOTIFICATIONS:
+                    msg_data = { 'messageType': pushNotificationRouteConstants.QUESTION_NOTIFICATIONS };
+                    result = await PushNotification
+                        .sendNotificationToDevices(currentTurnPlayerId, 'Question Status Update',
+                        data, msg_data);
+                    console.log('result', result);
+                    break;
+
             }
         } catch (error) {
             return Utils.throwError(error);
