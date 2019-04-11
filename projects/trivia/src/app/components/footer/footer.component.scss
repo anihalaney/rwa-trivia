@@ -4,7 +4,22 @@
 .signup, .logout, .login, .myQuestion {
   cursor: pointer;
 }
+.store-icon-span { 
+  height: 20px;
+  a {
+    height: 22px;
+    margin-left: 4px;
+    margin-right: 4px;
+      img {
+        height: 35px;
+      }
+  }
+} 
 
+.menu {padding-right : 0px;}
+.store-icon-span:hover img {
+  opacity: 1.0; 
+}
 @media screen and ( min-width:768px){      
   .textright{text-align: right;}
 }

@@ -329,3 +329,8 @@ export enum RoutesConstants {
     GAMEOVERAT= 'gameoverat',
     EXTENDEDINFO= 'extendedInfo',
 }
+
+export enum AppStoreUrl {
+    ANDROID = 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia',
+    IOS = 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8'
+}

@@ -1,5 +1,5 @@
 <div class="container footer">
-  <div class="col-md-8 col-sm-8 col-xs-12">
+  <div class="col-md-8 col-sm-12 col-xs-12">
     <div class="col-xs-12 menu" [ngClass]="!user?'col-md-7 col-sm-8 ':'col-md-12 col-sm-12'">
       <a [routerLink]="['/']" title="Home">Home</a>
       <a *ngIf="user?.roles?.admin" href="{{hostname}}">Admin</a>
@@ -23,6 +23,11 @@
         </share-button>
         <share-button [theme]="'circles-dark'" [button]="'linkedin'" [size]="4" [url]="blogUrl" [autoSetMeta]="false">
         </share-button>
+       
+      </span>
+      <span *ngIf="!user"  class="store-icon-span">
+        <a [href]="androidUrl" target="_blank"><img  src="/assets/images/android-icon.png" alt="Android app link"></a>
+        <a [href]="iosUrl" target="_blank"><img  src="/assets/images/ios-icon.png" alt="IOS app link"></a>
       </span>
     </div>
   </div>
