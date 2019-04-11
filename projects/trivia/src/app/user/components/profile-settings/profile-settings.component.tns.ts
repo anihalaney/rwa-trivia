@@ -5,7 +5,6 @@ import {
 import { FormBuilder } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { isAvailable, requestPermissions, takePicture } from 'nativescript-camera';
-import { CFAlertActionAlignment, CFAlertActionStyle, CFAlertDialog, CFAlertStyle, DialogOptions } from 'nativescript-cfalert-dialog';
 import * as imagepicker from 'nativescript-imagepicker';
 import * as Toast from 'nativescript-toast';
 import { TokenModel } from 'nativescript-ui-autocomplete';
@@ -20,6 +19,7 @@ import { ImageSource } from 'tns-core-modules/image-source';
 import { isAndroid } from 'tns-core-modules/platform';
 import { AppState } from '../../../store';
 import { ProfileSettings } from './profile-settings';
+import * as dialogs from 'tns-core-modules/ui/dialogs';
 
 @Component({
   selector: 'profile-settings',
@@ -37,9 +37,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   dataItem;
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
-  private facebookUrlStatus = true;
-  private twitterUrlStatus = true;
-  private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
@@ -56,12 +53,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public store: Store<AppState>,
     public userAction: UserActions,
     public utils: Utils,
-    private cfalertDialog: CFAlertDialog,
     public cd: ChangeDetectorRef) {
     super(fb, store, userAction, utils, cd);
     this.initDataItems();
     requestPermissions();
-    this.cfalertDialog = new CFAlertDialog();
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
@@ -78,38 +73,18 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
 
   onTakePhoto() {
-    const options: DialogOptions = {
-      dialogStyle: CFAlertStyle.BOTTOM_SHEET,
-      title: 'Choose option',
-      message: '',
-      buttons: [
-        {
-          text: 'Camera',
-          buttonStyle: CFAlertActionStyle.POSITIVE,
-          buttonAlignment: CFAlertActionAlignment.JUSTIFIED,
-          onClick: (response) => {
 
-          },
-        },
-        {
-          text: 'Gallery',
-          buttonStyle: CFAlertActionStyle.NEGATIVE,
-          buttonAlignment: CFAlertActionAlignment.JUSTIFIED,
-          onClick: (response) => {
-
-          },
-        },
-      ],
-    };
-    this.cfalertDialog.show(options)
-      .then(res => {
-        if (res === 'Camera') {
-          this.changeProfilePictureFromCamera();
-        } else if (res === 'Gallery') {
-          this.changeProfilePictureFromGallery();
-        }
-
-      });
+    dialogs.action({
+      message: 'Choose option',
+      cancelButtonText: 'Cancel',
+      actions: ['Camera', 'Gallery']
+    }).then(result => {
+      if (result === 'Camera') {
+        this.changeProfilePictureFromCamera();
+      } else if (result === 'Gallery') {
+        this.changeProfilePictureFromGallery();
+      }
+    });
   }
 
   changeProfilePictureFromCamera() {
