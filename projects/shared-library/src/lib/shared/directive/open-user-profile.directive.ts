@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
 
 export class OpenUserProfileDirective {
 
-  @Input() stlOpenUserProfile: any;
+  @Input('stlOpenUserProfile') userId: any;
 
   @HostListener('click', ['$event'])
   @HostListener('tap', ['$event'])
   onClick(event) {
-    this.router.navigate([`/user/profile/${this.stlOpenUserProfile}`]);
+    this.router.navigate([`/user/profile/${this.userId}`]);
   }
 
 

@@ -33,8 +33,8 @@ export class UserProfileComponent extends UserProfile implements OnDestroy {
 
   }
 
-  openUrl(url: any) {
-    openUrl(url);
+  openUrl(baseUrl: string, profile: string) {
+    openUrl(`${baseUrl}${profile}`);
   }
 
   ngOnDestroy() {
