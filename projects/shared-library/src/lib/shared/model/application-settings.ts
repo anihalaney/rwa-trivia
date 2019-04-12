@@ -7,6 +7,7 @@ export class ApplicationSettings {
     lives: Lives;
     social_profile: Array<SocialProfile>;
     tokens: Tokens;
+    earn_bytes_on_question_contribute: number;
 }
 
 export class TimerLoader {

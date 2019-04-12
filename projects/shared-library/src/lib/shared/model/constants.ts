@@ -86,7 +86,8 @@ export enum pushNotificationRouteConstants {
     FRIEND_REQUEST = 'friend-request',
     GAME_PLAY_NOTIFICATIONS = 'game-play-notifications',
     GAME_REMAINING_TIME_NOTIFICATIONS = 'game-play-time-notifications',
-    FRIEND_NOTIFICATIONS = 'friend-notifications'
+    FRIEND_NOTIFICATIONS = 'friend-notifications',
+    QUESTION_NOTIFICATIONS = 'my/questions'
 }
 
 
