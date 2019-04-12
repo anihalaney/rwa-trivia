@@ -63,7 +63,7 @@ export class ProfileSettings {
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             this.socialProfileSettings = appSettings[0].social_profile;
-            this.enableSocialProfile = this.socialProfileSettings.filter(res => res.enable).length;
+            this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
         }));
 
         this.categoriesObs = store.select(getCategories);
@@ -181,10 +181,10 @@ export class ProfileSettings {
     }
 
     afterFormCreate() {
-        this.socialProfileSettings.map(res => {
-            if (res.enable) {
-                const socialName = this.user[res.social_name] ? this.user[res.social_name] : '';
-                this.userForm.addControl(res.social_name, new FormControl(socialName, this.ValidateUrl));
+        this.socialProfileSettings.map(profile => {
+            if (profile.enable) {
+                const socialName = this.user[profile.social_name] ? this.user[profile.social_name] : '';
+                this.userForm.addControl(profile.social_name, new FormControl(socialName, this.ValidateUrl));
             }
         });
         this.socialProfileSettings.sort((a, b) => a.position - b.position);
@@ -200,9 +200,9 @@ export class ProfileSettings {
                 this.user.categoryIds.push(obj['category']);
             }
         }
-        this.socialProfileSettings.map(res => {
-            if (res.enable) {
-                this.user[res.social_name] = formValue[res.social_name];
+        this.socialProfileSettings.map(profile => {
+            if (profile.enable) {
+                this.user[profile.social_name] = formValue[profile.social_name];
             }
         });
         this.user.tags = [...this.enteredTags];

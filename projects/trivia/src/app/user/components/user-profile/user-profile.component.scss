@@ -1,26 +1,3 @@
-.error{
-  color: red !important;
-}
-
-.success{
-	color: #008004;
-}
-.view-profile{
-  background-color: #e50051;
-}
-
-.view-profile:hover{
-  background: #e50051;
-}
-
-.pt-20{
-  padding-top: 20px;
-}
-
-.margin-top-10{
-  margin-top:10px;
-}
-
 .submitpage .card{ padding: 25px 0 0 }
 .pcategories > .col-sm-9{ border-top: 1px solid; padding:46px 15px 0; }
 #curentactive { text-align: center; }
@@ -34,8 +11,6 @@
 .enterquestion .formfield > input, .formfield select{padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px)}
 .enterquestion .formfield > label{ width: 30px; display: inline-block; vertical-align: -4px}
 
-.viewbublic{ border:1px solid; border-radius: 4px; font-size: 18px; font-family: 'hindmedium'; box-shadow: 0 1px 1px rgba(0,0,0,0.63); padding:10px 0;  display: block; text-align: center; margin-top: 20px;}
-.avatarinput p{ margin-top: 15px; }
 .mysetting .formfield{ padding:0px 30px 0px 0; margin-bottom: 20px}
 .mysetting .formfield > label{ width: auto; }
 .saccount .formfield{ padding:0;}
@@ -44,29 +19,86 @@
 .saccount .formfield label{ font-size: 18px; font-family: 'hindmedium'; width: 90px}
 .saccount .formfield label:nth-child(2){ width: auto; font-family: 'hindregular'; font-size: 16px; }
 .saccount .formfield label + p{margin-top: 13px }
-.savebox{ padding: 20px 15px }
-.savebox a:nth-child(2){ font-size: 18px; font-family: 'hindmedium'; margin-top: 30px; display: inline-block; }
-.btn-sticky{position: fixed;bottom: 0;left:0;}
-
-#file-name{ border:1px solid; border-radius: 4px; padding: 7px 10px; font-size: 16px; min-width:100%; display: inline-block; }
-.custom-file-upload { border: 1px solid ; display: block; border-radius: 4px; overflow: hidden; cursor: pointer; transition: .3s ease-in-out; width: 151px; margin: 0 auto 20px; position: relative;}
-label.custom-file-upload:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
-label.custom-file-upload:hover:after{ opacity: 0.5 }
-
-/*Custom File Upload*/
-.custom-file-upload img{ display: block; }
-.namefield{ margin-top: 30px }
-.namefield .formfield{display: block !important; text-align: left;}
-.namefield .formfield > label{ text-align: left; font-size: 18px; font-family: 'hindmedium' }
-.namefield .formfield > p{ margin-top: 5px }
-.hide{ display: none !important; }
-.tagging input { line-height: 24px;padding: 7px 17px;border-radius: 3px;display: block;width: 61%;box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06); }
 .add-space{padding-top:48px;}
 form .tags{padding-top:5px;}
-@media screen and (max-width:767px){
-  .tagging input{ line-height: 24px;padding: 4px 10px;border-radius: 3px;display: block; width: calc(100% - 34px);}
+
+.statsview{ padding-top: 0px!important;}
+.statsview #stats, .statsview #graph{padding:8px 17px;}
+.statsview #stats li{border-bottom: 1px solid transparent; text-align: left;}
+.statsview #stats li{border-color: rgba(204,204,204,0.44);}
+.statsview #stats li {padding: 7px 0; display: block;}
+.statsview #stats li:last-child, .statsview #graph li:last-child{ border-bottom: 0 }
+.viewtext{ display: inline-block; vertical-align: middle; width: 50%; font-size: 16px;  }
+.viewcount{ display: inline-block; vertical-align: middle; width: 30%; font-size: 16px; letter-spacing: 0.75px; font-family: 'hindmedium'; line-height: 1;text-align: right; }
+.statsview .sprite{ width: 25px; height: 26px; margin-right:10px }
+.sec{ font-size: 12px; margin-top: -2px}
+.tabbing{box-shadow: 0 2px 6px rgba(0,0,0,0.12) }
+.tabbing li{  font-family: 'hindsemibold';width: 100%; float: left; height: 57px; line-height: 57px; font-size: 16px; border-bottom: 3px solid transparent; text-align: center; transition: 0.3s ease-in-out;}
+.tab-content { display: none;}
+.tab-content.active { display: block;}
+.tabbing li.active{ border-color: #3b5998}
+.chart-image{ display: block; margin:0 auto; }
+a{cursor: pointer}
+.social-profile{
+  font-size: 16px;
+  padding: 5px 5px 5px 0;
+  border-radius: 4px;
 }
-/*Custom File Upload End*/
+.social-url{
+  font-size: 16px;
+  color: #888888;
+}
+.social-profile-name{
+  margin: 0;
+  font-size: 20px;
+  font-family: 'hindmedium';
+  text-transform: none !important;
+}
+.social-input-field{
+  display: flex;
+  background-color: #FFF;
+  border-radius:4px;
+}
+.social-url-contain{
+  padding: 10px 0 10px 10px;
+  border-bottom-left-radius: 3px;
+  border-top-left-radius: 3px;
+}
+
+input[type="checkbox"]:disabled:before{
+  background: #fff !important;
+  cursor: not-allowed;
+}
+
+.not-allowed{
+  cursor: not-allowed;
+}
+
+.formfield {
+  label{
+    line-height: 1.5 !important;
+  }
+}
+
+.no-border{
+  border-top: none !important;
+}
+
+.card {border-color: rgba(204, 204, 204, 0.44); }
+.user{position: relative; display: block;}
+.user:after{ content: ""; position: absolute; bottom: 0; width: 100%; height: 46%; background: linear-gradient(to bottom, rgba(41,53,59,0) 0%, rgba(41,53,59,0.7) 50%, rgba(41,53,59,1) 100%); transition: 0.3s ease-in-out; z-index: 9}
+.user img{ display: block; max-width: 100%; height: 263px;}
+.user .username{ display: block; position: absolute; color: #fff; bottom: 0; width: 100%; box-sizing: border-box; padding: 30px 24px 12px; color: #fff; z-index: 99}
+.name{ display: block; font-size: 20px; font-family: 'hindbold'; }
+.userstatus, .userlocation{ display: block; font-size: 13px; margin: 5px 0; letter-spacing: 0.3px}
+#curentactive{ padding-bottom: 25px;}
+.expand-width { width : 100% !important; max-width : 100% !important}
+.btn{ padding: 10px 25px; font-size: 16px;}
+.view-profile{ background-color: #e50051;}
+.view-profile:hover{background: #e50051;}
+.pt-20{ padding-top: 20px;}
+.pb-20{ padding-bottom: 20px;}
+
 @media screen and ( min-width:767px){
   .optionbox h2{ margin-top: 17px }
   .optionbox h2 span{ font-size: 22px }
@@ -105,7 +137,6 @@ form .tags{padding-top:5px;}
   .saccount .formfield:nth-child(2n + 2), .namefield .formfield:nth-child(2n + 2){ text-align: left; }
   .namefield .formfield{ width: 100% }
   .namefield .formfield > input{ width: 55% }
-  .custom-file-upload:hover{ box-shadow: 0 2px 5px rgba(0,0,0,.30)}
   
   .social-profile{
     font-size: 16px;
@@ -126,72 +157,10 @@ form .tags{padding-top:5px;}
     background-color: #FFFFFF;
     border-radius:4px;
   }
-  .social-url-contain{
-    padding: 10px 0 10px 10px;
-    border-bottom-left-radius: 3px;
-    border-top-left-radius: 3px;
-  }
-  .social-profile-error{
-    color: #ff0000;
-    margin-top: 10px;
-  }
-  .show-more{
-    cursor: pointer;
-  }
+
+  .user:hover:after{height: 100%; background: linear-gradient(to bottom, rgba(41,53,59,0.7) 0%, rgba(41,53,59,0.7) 50%, rgba(41,53,59,0.9) 100%)}
 }
 
-.save
-{
-  width: 20%;
-  margin: 0 auto;
+@media (min-width: 1200px){
+  .card{ margin-bottom: 14px; border-bottom: 0;  box-shadow: 0 2px 6px rgba(0,0,0,0.12);}
 }
-.btn
-{
-  padding: 10px 25px;
-  font-size: 16px;
-}
-
-.social-profile{
-  font-size: 16px;
-  padding: 5px 5px 5px 0;
-  border-radius: 4px;
-}
-.social-url{
-  font-size: 16px;
-  color: #888888;
-}
-.social-profile-name{
-  margin: 0;
-  font-size: 20px;
-  font-family: 'hindmedium';
-  text-transform: none !important;
-}
-.social-input-field{
-  display: flex;
-  background-color: #FFF;
-  border-radius:4px;
-}
-.social-url-contain{
-  padding: 10px 0 10px 10px;
-  border-bottom-left-radius: 3px;
-  border-top-left-radius: 3px;
-}
-.social-profile-error{
-  color: #ff0000;
-  margin-top: 10px;
-}
-.show-more{
-  cursor: pointer;
-}
-@media(max-width: 600px) {
-  .btn
-  {
-    width: 100%;
-  }
-}
-
-.bulk-upload-request label p  {
-  margin-top: 8px;
-  color: #7c7c7c;
-}
-

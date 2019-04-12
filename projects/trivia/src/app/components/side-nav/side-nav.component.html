@@ -1,7 +1,7 @@
 <profile-card [user]="user"></profile-card>
 <recent-games></recent-games>
 <div class="card playwith">
-  <a [routerLink]="['/my/questions']" tabindex="1">
+  <a [routerLink]="['user/my/questions']" tabindex="1">
     <span class="sprite myqestion"></span>
     <span class="playtext">Submit
       <span>Questions</span>
@@ -12,7 +12,7 @@
 
 
 <div class="card playwith">
-  <a [routerLink]="['/my/invite-friends']" tabindex="2">
+  <a [routerLink]="['/user/my/invite-friends']" tabindex="2">
     <span class="sprite playwithicon"></span>
     <span class="playtext">
       <span>Friends</span>

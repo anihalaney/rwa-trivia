@@ -22,7 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
   navigateUrl() {
-    this.router.navigate(['my/profile', this.user.userId]);
+    this.router.navigate(['user/my/profile', this.user.userId]);
   }
 
   ngOnDestroy() {

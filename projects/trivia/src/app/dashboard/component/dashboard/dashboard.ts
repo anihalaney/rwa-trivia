@@ -137,7 +137,10 @@ export class Dashboard implements OnDestroy {
             this.showNewsCard = this.user && this.user.isSubscribed ? false : true;
         }));
 
-        this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+        this.subscriptions.push(this.userDict$.subscribe(userDict => {
+                this.userDict = userDict;
+            }
+            ));
         this.subscriptions.push(this.activeGames$.subscribe(games => {
             this.activeGames = games;
             this.cd.markForCheck();
@@ -322,4 +325,5 @@ export class Dashboard implements OnDestroy {
         const isEnable = (this.user && this.account && this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
+
 }

@@ -30,6 +30,10 @@ class UserRoutes {
         this.userRoutes.post(`/${RoutesConstants.UPDATE_DASH_LIVES}`,
             AuthMiddleware.authorizedOnly, UserController.updateLives);
 
+        //  'extendedInfo/:userId'
+        this.userRoutes.get(`/${RoutesConstants.EXTENDEDINFO}/:${this.UID}`,
+        UserController.getUserProfileById);
+
     }
 }
 

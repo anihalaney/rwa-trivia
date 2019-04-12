@@ -56,11 +56,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'Home';
                 } else if (nav === '/recent-game') {
                     this.activeMenu = 'Recently Completed Games';
-                } else if (nav.includes('/my/profile')) {
+                } else if (nav.includes('/user/my/profile')) {
                     this.activeMenu = 'Profile';
-                } else if (nav === '/my/questions') {
+                } else if (nav === '/user/my/questions') {
                     this.activeMenu = 'My Questions';
-                } else if (nav === '/my/invite-friends') {
+                } else if (nav === '/user/my/invite-friends') {
                     this.activeMenu = 'Friend List';
                 }  else if (nav === '/privacy-policy') {
                     this.activeMenu = 'Privacy Policy';
@@ -163,17 +163,17 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     navigateToProfileSettings() {
-        this.routerExtension.navigate(['/my/profile', this.user.userId]);
+        this.routerExtension.navigate(['/user/my/profile', this.user.userId]);
         this.closeDrawer();
     }
 
     navigateToMyQuestion() {
-        this.routerExtension.navigate(['/my/questions']);
+        this.routerExtension.navigate(['/user/my/questions']);
         this.closeDrawer();
     }
 
     navigateToFriendList() {
-        this.routerExtension.navigate(['/my/invite-friends']);
+        this.routerExtension.navigate(['/user/my/invite-friends']);
         this.closeDrawer();
     }
 

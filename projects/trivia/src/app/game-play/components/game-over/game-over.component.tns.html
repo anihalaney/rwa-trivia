@@ -81,7 +81,7 @@
                                 <Label row="0" col="1" text="V/S" verticalAlignment="top" textWrap="true"> </Label>
 
                                 <StackLayout row="0" col="2">
-                                    <Image src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
+                                    <Image [stlOpenUserProfile]="otherUserId"  src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
                                         stretch="aspectFill" height="64" width="64" marginLeft="10"
                                         verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
                                     <StackLayout paddingTop="10">

@@ -5,7 +5,7 @@ export class ApplicationSettings {
     question_max_length: number;           // Maximum character allowed for question
     game_play_timer_loader_ranges: Array<TimerLoader>;  // Contains start range, end  range and seconds
     lives: Lives;
-    social_profile: SocialProfile;
+    social_profile: Array<SocialProfile>;
     tokens: Tokens;
 }
 
@@ -26,7 +26,7 @@ export class SocialProfile {
     display: String;
     enable: Boolean;
     position: Number;
-    social_name: String;
+    social_name: string;
     url: String;
 }
 export class Tokens {

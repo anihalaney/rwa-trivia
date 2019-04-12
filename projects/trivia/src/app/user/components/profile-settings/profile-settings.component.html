@@ -55,6 +55,9 @@
               </div>
             </div>
           </div>
+          <div class="pt-20">
+              <button class="btn view-profile" routerLink="/user/profile/{{user.userId}}">View as public profile</button>
+          </div>
           <div class="clearfix namefield">
             <div class="formfield">
               <label>Name *</label>
@@ -139,17 +142,17 @@
               <h3>Social Profile </h3>
             </div>
             <div class="col-md-9 col-sm-9" *ngIf="socialProfileSettings">
-              <div *ngFor="let profiles of socialProfileSettings; let i=index">
-                <div class="formfield" *ngIf="profiles.enable && i <= socialProfileShowLimit">
-                  <h2 class="social-profile-name">{{profiles.display}}</h2>
+              <div *ngFor="let profile of socialProfileSettings; let i=index">
+                <div class="formfield" *ngIf="profile.enable && i <= socialProfileShowLimit">
+                  <h2 class="social-profile-name">{{profile.display}}</h2>
                   <div class="social-input-field">
                     <div class="social-url-contain" (click)="onSocialProfileInputFocus(i)">
-                      <span class="social-url">{{profiles.url}}</span>
+                      <span class="social-url">{{profile?.url}}</span>
                     </div>
                     <input #myInput class="social-profile col-md-6"
-                      [formControlName]="profiles.social_name">
+                      [formControlName]="profile.social_name">
                   </div>
-                  <p *ngIf="userForm.get(profiles.social_name).errors" class="social-profile-error">Please enter valid profile id</p>
+                  <p *ngIf="userForm.get(profile.social_name).errors" class="social-profile-error">Please enter valid profile id</p>
                 </div>
               </div>
               <div>

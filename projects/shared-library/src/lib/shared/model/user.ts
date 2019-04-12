@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import { GameOptions } from './game-options';
+import { Account } from './account';
 export class User {
   id?: string;
   userId: string;
@@ -28,6 +29,7 @@ export class User {
   androidPushTokens?: string[];
   iosPushTokens?: string[];
   lastGamePlayOption?: GameOptions;
+  account?: Account;
 
 
   constructor(authState?: firebase.User & { name: string }) {
