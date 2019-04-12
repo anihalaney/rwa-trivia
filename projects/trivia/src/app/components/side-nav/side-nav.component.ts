@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { User } from 'shared-library/shared/model';
+import { User, AppStoreUrl } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -21,6 +21,8 @@ export class SideNavComponent implements OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   blogUrl = 'https://bitwiser.io';
+  appStoreUrl = AppStoreUrl.APPSTOREURL;
+  playStoreUrl = AppStoreUrl.PLAYSTOREURL;
   subscriptions = [];
 
   constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
