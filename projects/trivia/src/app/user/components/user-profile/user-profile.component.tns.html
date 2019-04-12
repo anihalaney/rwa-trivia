@@ -103,7 +103,7 @@
             <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
 
             <StackLayout row="1" col="0" orientation="horizontal">
-              <Label verticalAlignment="center" (tap)="openUrl(profile?.url + user[profile?.social_name])" class="label-link" [text]="profiles?.url + user[profiles?.social_name]" fontSize="14" textWrap="true"></Label>
+              <Label verticalAlignment="center" (tap)="openUrl(profile?.url + user[profile?.social_name])" class="label-link" [text]="profile?.url + user[profile?.social_name]" fontSize="14" textWrap="true"></Label>
             </StackLayout>
         
           </GridLayout>
