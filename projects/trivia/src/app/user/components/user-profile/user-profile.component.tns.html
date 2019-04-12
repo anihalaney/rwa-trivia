@@ -16,8 +16,8 @@
         <Label *ngIf="user.location" [text]="user.location" class="input title" textWrap="true"></Label>
         
       </StackLayout>
-      <StackLayout margin="5 10" *ngIf="userLoginData && userLoginData.userId == user.userId">
-          <Button text="Go to profile setting" [nsRouterLink]="'/user/my/profile/'+userLoginData.userId" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
+      <StackLayout margin="5 10" *ngIf="loggedInUser && loggedInUser.userId == user.userId">
+          <Button text="Go to profile setting" nsRouterLink="/user/my/profile/{{loggedInUser.userId}}" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
              height="50" stlRippleEffect></Button>
       </StackLayout>
       <CardView margin="5" android:elevation="20" ios:elevation="40" radius="15" class="gameplay">
@@ -103,7 +103,7 @@
             <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
 
             <StackLayout row="1" col="0" orientation="horizontal">
-              <Label verticalAlignment="center" (tap)="openUrl(profile?.url + user[profile?.social_name])" class="label-link" [text]="profile?.url + user[profile?.social_name]" fontSize="14" textWrap="true"></Label>
+              <Label verticalAlignment="center" (tap)="openUrl(profile?.url, user[profile?.social_name])" class="label-link" text="{{profile?.url}}{{user[profile?.social_name]}}" fontSize="14" textWrap="true"></Label>
             </StackLayout>
         
           </GridLayout>

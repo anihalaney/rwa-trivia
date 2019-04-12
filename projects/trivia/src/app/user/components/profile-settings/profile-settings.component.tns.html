@@ -31,7 +31,7 @@
 
       </StackLayout>
       <StackLayout margin="5 10">
-          <Button text="View as public profile" [nsRouterLink]="'/user/profile/'+user.userId" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
+          <Button text="View as public profile" nsRouterLink="/user/profile/{{user.userId}}" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
              height="50" stlRippleEffect></Button>
       </StackLayout>
       <StackLayout class="list-view" iosOverflowSafeArea="false">

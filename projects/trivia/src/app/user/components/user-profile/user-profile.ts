@@ -18,7 +18,7 @@ export class UserProfile {
     userProfileImageUrl: any;
     socialProfileSettings: any;
     userId: any;
-    userLoginData: any;
+    loggedInUser: any;
     constructor(public store: Store<AppState>,
         public userAction: UserActions,
         public utils: Utils,
@@ -40,7 +40,7 @@ export class UserProfile {
         }));
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
-            this.userLoginData = user;
+            this.loggedInUser = user;
         }));
 
         this.categoryDictObs = this.store.select(categoryDictionary);
