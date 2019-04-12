@@ -30,7 +30,10 @@
           textWrap="true" text="Location is required!"></Label>
 
       </StackLayout>
-
+      <StackLayout margin="5 10">
+          <Button text="View as public profile" [nsRouterLink]="'/user/profile/'+user.userId" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
+             height="50" stlRippleEffect></Button>
+      </StackLayout>
       <StackLayout class="list-view" iosOverflowSafeArea="false">
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
           <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true"
@@ -99,7 +102,7 @@
             <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
 
             <StackLayout class="text-box" row="1" col="0" orientation="horizontal">
-              <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profile.url" fontSize="14" textWrap="true"></Label>
+              <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profile?.url" fontSize="14" textWrap="true"></Label>
               <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID" [formControlName]="profile.social_name" class="input-box"></TextField>
             </StackLayout>
             <Label *ngIf="userForm.get(profile.social_name).errors" class="error" text="Please enter valid profile id"
