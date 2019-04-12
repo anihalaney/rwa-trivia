@@ -47,11 +47,10 @@
                   <Label  row="1" col="0" *ngIf="(loginForm.controls.password.valid && loginForm.controls.confirmPassword.valid && loginForm.hasError('passwordmismatch'))"
                   marginTop="10" text="Must match Password" textWrap="true" class="text-center error"></Label>
               </GridLayout>
-
               <StackLayout [ngSwitch]="mode">
                 <StackLayout *ngSwitchCase="0">
                   <Button text="Login" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
-                     class="text-center login-button initial-button-label Roboto-Bold"></Button>
+                     class="text-center login-button initial-button-label Roboto-Bold" stlRippleEffect ></Button>
                   <StackLayout>
                     <Label text="Forgot your password?" (tap)="changeMode(2)" marginTop="25" class="text-center initial-label Roboto-Regular"
                       textWrap="true"></Label>
@@ -60,11 +59,11 @@
                 </StackLayout>
                 <StackLayout *ngSwitchCase="1">
                   <Button text="Sign Up" width="50%" marginTop="30" (tap)="onSubmit()" [disabled]="loginForm.invalid"
-                     class="text-center login-button initial-button-label"></Button>
+                     class="text-center login-button initial-button-label" stlRippleEffect></Button>
                   <Label text="Already have an account? Login" textWrap="true" marginTop="15" (tap)="changeMode(0)" class="text-center initial-label"></Label>
                 </StackLayout>
                 <StackLayout *ngSwitchCase="2">   
-                  <Button text="Send Password" width="70%" marginTop="20" (tap)="onSubmit()" class="text-center login-button initial-button-label Roboto-Bold"></Button>
+                  <Button text="Send Password" width="70%" marginTop="20" (tap)="onSubmit()" class="text-center login-button initial-button-label Roboto-Bold" stlRippleEffect></Button>
                   <Label text="No. I remember it now!" marginTop="30" textWrap="true" (tap)="changeMode(0)" color="black" class="text-center initial-label"></Label>
                 </StackLayout>
               </StackLayout>

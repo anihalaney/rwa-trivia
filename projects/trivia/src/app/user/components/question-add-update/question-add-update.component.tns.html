@@ -118,9 +118,9 @@
                                 </SuggestionView>
                             </RadAutoCompleteTextView>
                         </StackLayout>                        
-                        <Button row="0" col="1" text="Add" class="Roboto-Bold" (tap)="addCustomTag()" android:padding="5"
+                        <Button row="0" col="1" (tap)="addCustomTag()" text="Add" class="Roboto-Bold" android:padding="5"
                         fontSize="16" android:fontSize="10" ios:padding="10" backgroundColor="#89C24F" color="#ffffff"
-                        marginLeft="10" fontWeight="700" borderRadius="2"></Button>
+                        marginLeft="10" fontWeight="700" borderRadius="2" stlRippleEffect></Button>
                     </GridLayout>
                 </StackLayout>
             </CardView>
@@ -130,8 +130,9 @@
             </StackLayout>
 
             <StackLayout iosOverflowSafeArea="false" padding="10">
+                  
                 <Button [text]="submitBtnTxt" (tap)="submit()" class="Roboto-Medium" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
-                        color="#ffffff" padding="20" borderRadius="3" fontSize="20" fontWeight="bold"></Button>
+                        color="#ffffff" padding="20" borderRadius="3" fontSize="20" fontWeight="bold" stlRippleEffect></Button>
                 </StackLayout>
         </StackLayout>
     </ScrollView>

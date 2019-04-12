@@ -102,7 +102,6 @@
     "nativescript-angular": "^7.1.0",
     "nativescript-camera": "^4.1.1",
     "nativescript-cardview": "^3.1.1",
-    "nativescript-cfalert-dialog": "^1.0.14",
     "nativescript-checkbox": "^3.0.3",
     "nativescript-floatingactionbutton": "^5.0.0",
     "nativescript-imagepicker": "^6.1.2",
@@ -177,7 +176,7 @@
     },
     "husky": {
       "hooks": {
-        "pre-push": "npm run test && ng e2e trivia-e2e"
+        "pre-push": ""
       }
     }
   }

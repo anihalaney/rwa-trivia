@@ -32,12 +32,15 @@ export class GameQuestion {
   }
 
   answerButtonClicked(answer: Answer, index: number) {
-    if (this.answeredIndex >= 0 || this.continueNext) {
-      return;
+    if (this.doPlay) {
+      if (this.answeredIndex >= 0 || this.continueNext) {
+        return;
+      }
+      this.doPlay = false;
+      this.answeredIndex = index;
+      this.answerClicked.emit(index);
     }
-    this.doPlay = false;
-    this.answeredIndex = index;
-    this.answerClicked.emit(index);
+
   }
 
   disableQuestions(correctAnswerIndex: number) {
