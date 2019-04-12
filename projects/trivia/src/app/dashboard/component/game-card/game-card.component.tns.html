@@ -151,7 +151,7 @@
 
 
     <StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
-        <GridLayout rows="*,*" columns="auto,auto,*" *ngIf="otherUserInfo" iosOverflowSafeArea="false">
+        <GridLayout rows="*,*" columns="auto,auto,*" *ngIf="otherUserInfo" iosOverflowSafeArea="false"> 
             <Image [stlOpenUserProfile]="otherUserId" row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill"
                 height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" iosOverflowSafeArea="false">

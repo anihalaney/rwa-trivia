@@ -39,8 +39,9 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
     if (this.game) {
       this.randomCategoryId = Math.floor(Math.random() * this.game.gameOptions.categoryIds.length);
       this.gameStatus = (this.game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE) ? 'Random' : 'Friend';
+      const currentTime =  this.utils.getUTCTimeStamp();
       this.remainingDays = (GameInviteConstants.INVITATION_APPROVAL_TOTAL_DAYS -
-        Math.floor(this.utils.getTimeDifference(this.game.turnAt) / (CalenderConstants.DAYS_CALCULATIONS)));
+        Math.floor(this.utils.getTimeDifference(this.game.turnAt, currentTime) / (CalenderConstants.DAYS_CALCULATIONS)));
     }
   }
 

@@ -57,7 +57,9 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     GameFilterPipe,
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
-    RippleEffectDirective],
+    RippleEffectDirective,
+    // BrowserAnimationsModule
+  ],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class SharedModule { }
