@@ -6,3 +6,6 @@ exports.onFirestoreGameUpdate = require('./server/functions/db/firebase.function
 exports.onFirestoreUserCreate = require('./server/functions/db/firebase.functions').onUserCreate;
 exports.onFirestoreAccountUpdate = require('./server/functions/db/firebase.functions').onAccountUpdate;
 exports.onFirestoreUnpublishedQuestionsUpdate = require('./server/functions/db/firebase.functions').onUnpublishedQuestionsUpdate;
+exports.onFirestoreQuestionCreate = require('./server/functions/db/firebase.functions').onQuestionCreate;
+
+
