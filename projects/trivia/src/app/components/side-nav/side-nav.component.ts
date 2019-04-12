@@ -21,8 +21,8 @@ export class SideNavComponent implements OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   blogUrl = 'https://bitwiser.io';
-  androidUrl = AppStoreUrl.ANDROID;
-  iosUrl = AppStoreUrl.IOS;
+  appStoreUrl = AppStoreUrl.APPSTOREURL;
+  playStoreUrl = AppStoreUrl.PLAYSTOREURL;
   subscriptions = [];
 
   constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {

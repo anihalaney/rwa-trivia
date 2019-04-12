@@ -4,20 +4,33 @@
 .signup, .logout, .login, .myQuestion {
   cursor: pointer;
 }
-.store-icon-span { 
-  height: 20px;
+.store-icon-div { 
+  height: 50px;
   a {
-    height: 22px;
+    height: 26px;
     margin-left: 4px;
     margin-right: 4px;
       img {
-        height: 35px;
+        margin-top: -9px;
       }
   }
 } 
 
+.icon-container{
+  margin-right: 12px; 
+  margin-bottom: 15px;
+}
+.app-store-img{
+  padding-top: 10px;
+  height: 54px;
+  padding-right: 4px;
+}
+
+.play-store-img{
+  height: 64px;
+}
 .menu {padding-right : 0px;}
-.store-icon-span:hover img {
+.store-icon-div:hover img {
   opacity: 1.0; 
 }
 @media screen and ( min-width:768px){      
@@ -25,4 +38,30 @@
 }
 @media screen and ( max-width:768px){      
   .footer{ text-align: center; line-height: 2 }
+}
+
+@media screen and ( max-width: 990px) {
+  .app-store-img{
+    padding-top: 10px;
+    height: 41px !important;
+    padding-right: 4px;
+  }
+
+  .play-store-img{
+    height: 46px !important;
+    margin-top: -16px;
+  }
+
+  .store-icon-div { 
+    height: 40px;
+    a {
+        img {
+          margin-top: -14px;
+        }
+    }
+
+    a:first-child{
+      height: 28px;
+    }
+  } 
 }
