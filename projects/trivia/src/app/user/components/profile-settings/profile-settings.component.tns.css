@@ -2,6 +2,9 @@
     padding-bottom: 25;
 }
 
+.view-profile{
+    background-color: #e50051;
+}
 .profile-settings Button {
     color: #ffffff;
     background-color: #89C24F;

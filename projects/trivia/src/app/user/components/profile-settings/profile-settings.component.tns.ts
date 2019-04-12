@@ -1,23 +1,25 @@
 import {
-  Component, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef,
-  ChangeDetectionStrategy, ChangeDetectorRef
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { ProfileSettings } from './profile-settings';
-import { Utils } from 'shared-library/core/services';
-import { profileSettingsConstants } from 'shared-library/shared/model';
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { select, Store } from '@ngrx/store';
+import { isAvailable, requestPermissions, takePicture } from 'nativescript-camera';
+import * as imagepicker from 'nativescript-imagepicker';
+import * as Toast from 'nativescript-toast';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Utils } from 'shared-library/core/services';
+import { coreState, UserActions } from 'shared-library/core/store';
+import { profileSettingsConstants } from 'shared-library/shared/model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
-import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
-import * as Toast from 'nativescript-toast';
-import { coreState, UserActions } from 'shared-library/core/store';
 import { isAndroid } from 'tns-core-modules/platform';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AppState } from '../../../store';
+import { ProfileSettings } from './profile-settings';
+import * as dialogs from 'tns-core-modules/ui/dialogs';
 
 @Component({
   selector: 'profile-settings',
@@ -35,9 +37,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   dataItem;
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
-  private facebookUrlStatus = true;
-  private twitterUrlStatus = true;
-  private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
@@ -45,12 +44,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public imageTaken: ImageAsset;
   public saveToGallery = true;
   public keepAspectRatio = true;
-  public width = 300;
-  public height = 300;
-
+  public width = 200;
+  public height = 200;
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
-
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
@@ -59,6 +56,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public cd: ChangeDetectorRef) {
     super(fb, store, userAction, utils, cd);
     this.initDataItems();
+    requestPermissions();
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
@@ -67,21 +65,38 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       }
       this.cd.markForCheck();
     }));
-
   }
 
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
   }
 
+
   onTakePhoto() {
+
+    dialogs.action({
+      message: 'Choose option',
+      cancelButtonText: 'Cancel',
+      actions: ['Camera', 'Gallery']
+    }).then(result => {
+      if (result === 'Camera') {
+        this.changeProfilePictureFromCamera();
+      } else if (result === 'Gallery') {
+        this.changeProfilePictureFromGallery();
+      }
+    });
+  }
+
+  changeProfilePictureFromCamera() {
     const options = {
+      width: this.width,
+      height: this.height,
       keepAspectRatio: this.keepAspectRatio,
       saveToGallery: this.saveToGallery
     };
 
     if (isAvailable()) {
-      requestPermissions();
+
       takePicture(options)
         .then(imageAsset => {
           this.imageTaken = imageAsset;
@@ -91,9 +106,38 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
             this.saveProfileImage();
           });
         }).catch(err => {
-          console.log(err.message);
+          console.log('Error -----> ', err);
         });
     }
+  }
+
+  changeProfilePictureFromGallery() {
+    const imageSource = new ImageSource();
+    const context = imagepicker.create({
+      mode: 'single' // use "multiple" for multiple selection
+    });
+    context
+      .authorize()
+      .then(() => {
+        return context.present();
+      })
+      .then((selection) => {
+        const imageAsset = selection.length > 0 ? selection[0] : null;
+        imageAsset.options = {
+          width: this.width,
+          height: this.height,
+          keepAspectRatio: true
+        };
+        imageSource.fromAsset(imageAsset)
+          .then((imageSource1: ImageSource) => {
+            this.profileImage.image = `data:image/jpeg;base64,${imageSource1.toBase64String('jpeg', 100)}`;
+            this.saveProfileImage();
+          });
+
+      }).catch(function (err) {
+        // process error
+        console.log('Error -----> ', err);
+      });
 
   }
 

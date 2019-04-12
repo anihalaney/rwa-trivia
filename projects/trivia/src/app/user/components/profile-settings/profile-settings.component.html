@@ -55,6 +55,9 @@
               </div>
             </div>
           </div>
+          <div class="pt-20">
+              <button class="btn view-profile" routerLink="/user/profile/{{user.userId}}">View as public profile</button>
+          </div>
           <div class="clearfix namefield">
             <div class="formfield">
               <label>Name *</label>
@@ -144,7 +147,7 @@
                   <h2 class="social-profile-name">{{profile.display}}</h2>
                   <div class="social-input-field">
                     <div class="social-url-contain" (click)="onSocialProfileInputFocus(i)">
-                      <span class="social-url">{{profile.url}}</span>
+                      <span class="social-url">{{profile?.url}}</span>
                     </div>
                     <input #myInput class="social-profile col-md-6"
                       [formControlName]="profile.social_name">
