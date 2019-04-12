@@ -23,7 +23,6 @@ export const routes: Routes = [
   {
     path: 'user',
     loadChildren: '../user/user.module#UserModule',
-    canActivate: [AuthGuard],
     resolve: { "categories": CategoriesResolver, "tags": TagsResolver }
   },
   {

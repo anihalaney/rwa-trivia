@@ -92,6 +92,13 @@ input[type="checkbox"]:disabled:before{
 .name{ display: block; font-size: 20px; font-family: 'hindbold'; }
 .userstatus, .userlocation{ display: block; font-size: 13px; margin: 5px 0; letter-spacing: 0.3px}
 #curentactive{ padding-bottom: 25px;}
+.expand-width { width : 100% !important; max-width : 100% !important}
+.btn{ padding: 10px 25px; font-size: 16px;}
+.view-profile{ background-color: #e50051;}
+.view-profile:hover{background: #e50051;}
+.pt-20{ padding-top: 20px;}
+.pb-20{ padding-bottom: 20px;}
+
 @media screen and ( min-width:767px){
   .optionbox h2{ margin-top: 17px }
   .optionbox h2 span{ font-size: 22px }
