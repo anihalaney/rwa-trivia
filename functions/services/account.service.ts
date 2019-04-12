@@ -310,4 +310,27 @@ export class AccountService {
         }
     }
 
+    /**
+    * set number of Bytes on question is contribute
+    */
+    static async earnBytesOnQuestionContribute(userId: any): Promise<any> {
+        try {
+            const appSetting = await AppSettings.Instance.getAppSettings();
+            const bytes = appSetting.earn_bytes_on_question_contribute;
+            const accountRef = AccountService.accountFireStoreClient.collection(CollectionConstants.ACCOUNTS).doc(userId);
+            const docRef = await accountRef.get();
+
+            if (docRef.exists) {
+                const account = docRef.data();
+                account.bytes = (account.bytes) ? (account.bytes + bytes) : bytes;
+                account.id = userId;
+                accountRef.update(account);
+            } else {
+                accountRef.set({ bytes: bytes, id: userId });
+            }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 }

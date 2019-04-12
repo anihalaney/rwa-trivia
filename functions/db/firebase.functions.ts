@@ -4,7 +4,8 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import {
     friendInvitationConstants, Game, Invitation, OpponentType,
-    PlayerMode, Question, TriggerConstants, UserStatConstants, SystemStatConstants
+    PlayerMode, Question, TriggerConstants, UserStatConstants, SystemStatConstants,
+    pushNotificationRouteConstants, QuestionStatus
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
@@ -16,6 +17,7 @@ import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
 import { AppSettings } from '../services/app-settings.service';
 import { StatsService } from '../services/stats.service';
+import { PushNotification } from '../utils/push-notifications';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -181,6 +183,48 @@ export class FirebaseFunctions {
             throw error;
         }
     }
+
+    static async doUnpublishedQuestionsUpdateOperation(change: any, context: any): Promise<boolean> {
+        try {
+            const beforeEventData = change.before.data();
+            const afterEventData = change.after.data();
+            if (beforeEventData.status !== afterEventData.status) {
+                const oldStatus = QuestionStatus[beforeEventData.status].toLowerCase().replace('_', ' ');
+                const newStatus = QuestionStatus[afterEventData.status].toLowerCase().replace('_', ' ');
+                const message = `The status changed from ${oldStatus} to ${newStatus} for ${afterEventData.questionText}.`;
+                console.log('message', message);
+                PushNotification.sendGamePlayPushNotifications(message, afterEventData.created_uid,
+                    pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);
+
+            }
+            return true;
+
+        } catch (error) {
+            console.error('Error :', error);
+            throw error;
+        }
+    }
+
+    static async doQuestionCreateOperation(snap: any, context: any): Promise<boolean> {
+        try {
+            const data = snap.data();
+            if (data) {
+                const question: Question = data;
+
+                const message = `Your Question ${question.questionText} is approved `;
+                console.log('Notification sent on question approved');
+                PushNotification.sendGamePlayPushNotifications(message, question.created_uid,
+                    pushNotificationRouteConstants.QUESTION_NOTIFICATIONS);
+
+                // Add four bytes when question is approve
+                await AccountService.earnBytesOnQuestionContribute(question.created_uid);
+            }
+            return true;
+        } catch (error) {
+            console.error('Error :', error);
+            throw error;
+        }
+    }
 }
 
 exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}')
@@ -202,3 +246,9 @@ exports.onUserCreate = functions.firestore.document('/users/{userId}')
 
 exports.onAccountUpdate = functions.firestore.document('/accounts/{accountId}')
     .onUpdate(async (change, context) => await FirebaseFunctions.doAccountUpdateOperation(change, context));
+
+exports.onUnpublishedQuestionsUpdate = functions.firestore.document('/unpublished_questions/{questionId}')
+    .onUpdate(async (change, context) => await FirebaseFunctions.doUnpublishedQuestionsUpdateOperation(change, context));
+
+exports.onQuestionCreate = functions.firestore.document('/questions/{questionId}')
+    .onCreate(async (snap, context) => await FirebaseFunctions.doQuestionCreateOperation(snap, context));
