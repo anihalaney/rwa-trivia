@@ -131,6 +131,18 @@ service cloud.firestore {
       // document can only be modified by API , triggers
         allow read,get:  if isUserAuthenticated(userId);          
     }
+
+    match /achievements {
+      match /{document=**} {
+        allow read;
+      }
+    }
+    
+    match /user_achievements {
+      match /{document=**} {
+        allow read;
+      }
+    }
     
   }
 }

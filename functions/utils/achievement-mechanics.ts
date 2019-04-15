@@ -10,63 +10,14 @@ export class AchievementMechanics {
             const achievement = new Achievement(name, property);
             const dbAchievement = achievement.getDbModel();
 
-            const achievements: Achievement[] =
-                await AchievementService.getAchievementByPropertyName(achievement.property[GeneralConstants.NAME]);
+            const ref = await AchievementService.addAchievement(dbAchievement);
+            dbAchievement.id = ref.id;
 
-            if (achievements.length > 0) {
-                dbAchievement.id = achievements[0].id;
-            } else {
-                const ref = await AchievementService.addAchievement(dbAchievement);
-                dbAchievement.id = ref.id;
-            }
 
             return await AchievementService.setAchievement(dbAchievement);
         } catch (error) {
             return Utils.throwError(error);
         }
-    }
-
-    private static async checkAchievement(achievement: any, account: Account, propertyNames: Array<string>): Promise<boolean> {
-
-        let result = false;
-
-        if (achievement.property) {
-            propertyNames.push(achievement.property.name);
-            return AchievementMechanics.checkAchievement(achievement.property, account, propertyNames);
-        } else {
-            let value;
-            try {
-                for (const propertyName of propertyNames) {
-                    value = (account[propertyName]) ? account[propertyName] : value[propertyName];
-                }
-                if (value) {
-                    switch (achievement.comparator) {
-                        case AchievementConstants.GREATER_THAN:
-                            result = value > Number(achievement.value);
-                            break;
-                        case AchievementConstants.GREATER_THAN_OR_EQUAL:
-                            result = value >= Number(achievement.value);
-                            break;
-                            case AchievementConstants.LESS_THAN:
-                            result = value < Number(achievement.value);
-                            break;
-                            case AchievementConstants.LESS_THAN_OR_EQUAL:
-                            result = value <= Number(achievement.value);
-                            break;
-                            case AchievementConstants.DOUBLE_EQUAL:
-                            result = value === Number(achievement.value);
-                            break;
-                            case AchievementConstants.NOT_EQUAL:
-                            result = value !== Number(achievement.value);
-                            break;
-                    }
-                }
-            } catch (err) {
-                console.log(GeneralConstants.Error_Message, err);
-                return result;
-            }
-        }
-        return result;
     }
 
     static async updateAchievement(account: Account): Promise<string> {
@@ -76,9 +27,10 @@ export class AchievementMechanics {
             const achievements: Achievement[] = await AchievementService.getAchievements();
 
             for (const achievement of achievements) {
-                const validStatus = await AchievementMechanics.checkAchievement(achievement, account, []);
-                if (validStatus) {
-                    achievementIds.push(achievement.id);
+                if (account[achievement.property.name]) {
+                    if (AchievementMechanics.checkAchievement(achievement, account, [])) {
+                        achievementIds.push(achievement.id);
+                    }
                 }
             }
 
@@ -92,6 +44,45 @@ export class AchievementMechanics {
         } catch (error) {
             return Utils.throwError(error);
         }
+    }
+
+
+    private static checkAchievement(achievement: any, account: Account, propertyNames: Array<string>): boolean {
+
+        let result = false;
+
+        if (achievement.property) {
+            propertyNames.push(achievement.property.name);
+            return AchievementMechanics.checkAchievement(achievement.property, account, propertyNames);
+        } else {
+            let value: any = {};
+            for (const propertyName of propertyNames) {
+                value = (account[propertyName]) ? account[propertyName] : (value[propertyName] ? value[propertyName] : 'NA');
+            }
+            if (value) {
+                switch (achievement.comparator) {
+                    case AchievementConstants.GREATER_THAN:
+                        result = value > Number(achievement.value);
+                        break;
+                    case AchievementConstants.GREATER_THAN_OR_EQUAL:
+                        result = value >= Number(achievement.value);
+                        break;
+                    case AchievementConstants.LESS_THAN:
+                        result = value < Number(achievement.value);
+                        break;
+                    case AchievementConstants.LESS_THAN_OR_EQUAL:
+                        result = value <= Number(achievement.value);
+                        break;
+                    case AchievementConstants.DOUBLE_EQUAL:
+                        result = value === Number(achievement.value);
+                        break;
+                    case AchievementConstants.NOT_EQUAL:
+                        result = value !== Number(achievement.value);
+                        break;
+                }
+            }
+        }
+        return result;
     }
 
 }
