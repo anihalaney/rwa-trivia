@@ -21,3 +21,4 @@ export * from './query-params';
 export * from './application-settings';
 export * from './account';
 export * from './achievement';
+export * from './user-achievement';

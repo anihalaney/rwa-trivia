@@ -113,7 +113,8 @@ export enum CollectionConstants {
     TAG_LIST = '/tagList',
     LISTS_FORWARD_SLASH_TAGS = 'lists/tags',
     STATS_SYSTEM = 'system',
-    ACHIEVEMENTS = 'achievements'
+    ACHIEVEMENTS = 'achievements',
+    USER_ACHIEVEMENTS = 'user_achievements'
 }
 
 export enum UserConstants {

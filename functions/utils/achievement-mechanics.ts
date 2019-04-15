@@ -1,7 +1,7 @@
-import { Achievement, User } from '../../projects/shared-library/src/lib/shared/model';
+import { Achievement } from '../../projects/shared-library/src/lib/shared/model';
 import { AchievementService } from '../services/achievement.service';
+import { UserAchievementService } from '../services/user-achievement.service';
 import { Utils } from './utils';
-import { UserService } from '../services/user.service';
 
 export class AchievementMechanics {
 
@@ -72,7 +72,6 @@ export class AchievementMechanics {
         try {
 
             let achievementIds: string[] = [];
-            const dbUser: User = await UserService.getUserById(account.id);
             const achievements: Achievement[] = await AchievementService.getAchievements();
 
             for (const achievement of achievements) {
@@ -82,9 +81,13 @@ export class AchievementMechanics {
                 }
             }
 
-            dbUser.achievements = achievementIds;
+            const userAchievementData: any = {};
 
-            return await UserService.updateUser(dbUser);
+            userAchievementData.achievements = achievementIds;
+            userAchievementData.id = account.id;
+            
+            return await UserAchievementService.setUserAchievement(userAchievementData);
+
         } catch (error) {
             return Utils.throwError(error);
         }
