@@ -1,14 +1,15 @@
 
-import { appConstants, GeneralConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 import * as express from 'express';
-import questionRoutes from './question-routes';
-import subscriptionRoutes from './subscription-routes';
-import generalRoutes from './general-routes';
-import migrationRoutes from './migration-routes';
-import schedulerRoutes from './scheduler-routes';
+import { appConstants, RoutesConstants } from '../../projects/shared-library/src/lib/shared/model';
 import friendRoutes from './friend-routes';
 import gameRoutes from './game-routes';
+import generalRoutes from './general-routes';
+import migrationRoutes from './migration-routes';
+import questionRoutes from './question-routes';
+import schedulerRoutes from './scheduler-routes';
+import subscriptionRoutes from './subscription-routes';
 import userRoutes from './user-routes';
+import achievementRoutes from './achievement-routes';
 
 class Router {
 
@@ -42,6 +43,8 @@ class Router {
         //  '/app/user'
         this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.USER}`, userRoutes);
 
+         //  '/app/achievement'
+         this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.ACHIEVENENT}`, achievementRoutes);
     }
 }
 

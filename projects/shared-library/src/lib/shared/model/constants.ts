@@ -113,6 +113,7 @@ export enum CollectionConstants {
     TAG_LIST = '/tagList',
     LISTS_FORWARD_SLASH_TAGS = 'lists/tags',
     STATS_SYSTEM = 'system',
+    ACHIEVEMENTS = 'achievements'
 }
 
 export enum UserConstants {
@@ -244,7 +245,10 @@ export enum ResponseMessagesConstants {
     LIVES_ADDED = 'Lives added successfully !!',
     CHECK_FIRESTORE_DB_FOR_MIGRATION_DETAILS = 'Check firestore db for migration details',
     ADDED_GAME_OVER__FIELDS = 'added gameOverAt fields',
-    REMOVE_ALL_ACCOUNTS = 'Remove all accounts'
+    REMOVE_ALL_ACCOUNTS = 'Remove all accounts',
+    ACHIEVEMENT_PROPERTY_NOT_FOUND = 'Achievement property not found',
+    ACHIEVEMENT_NAME_NOT_FOUND = 'Achievement name not found',
+    ACHIEVEMENT_ADDED_SUCCESSFULLY = 'Achievement added successfully'
 }
 
 export enum FriendConstants {
@@ -329,7 +333,8 @@ export enum RoutesConstants {
     COUNT = 'count',
     GAMEOVERAT= 'gameoverat',
     EXTENDEDINFO= 'extendedInfo',
-    ACCOUNTS = 'accounts'
+    ACCOUNTS = 'accounts',
+    ACHIEVENENT = 'achievement'
 }
 
 export enum AppStoreUrl {

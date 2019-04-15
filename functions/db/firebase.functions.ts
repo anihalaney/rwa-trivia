@@ -174,6 +174,8 @@ export class FirebaseFunctions {
 
                 lbsStats = LeaderBoardService.calculateLeaderBoardStats(account, lbsStats);
 
+                await UserContributionStat.updateAchievement(account);
+
                 await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
             }
             return true;

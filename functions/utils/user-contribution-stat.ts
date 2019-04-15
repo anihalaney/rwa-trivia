@@ -1,6 +1,8 @@
-import { UserStatConstants, Account, Question, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { Account, Achievement, GeneralConstants, Question, User, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
+import { AchievementService } from '../services/achievement.service';
 import { QuestionService } from '../services/question.service';
+import { UserService } from '../services/user.service';
 import { Utils } from './utils';
 
 export class UserContributionStat {
@@ -51,5 +53,72 @@ export class UserContributionStat {
             return Utils.throwError(error);
         }
     }
+
+    private static async achievementLogic(achievement: any, account: Account, propertyNames: Array<string>): Promise<boolean> {
+
+        let result = false;
+        
+        if (achievement.property) {
+            propertyNames.push(achievement.property.name);
+            return UserContributionStat.achievementLogic(achievement.property, account, propertyNames);
+        } else {
+            let value;
+            try {
+                for (const propertyName  of propertyNames) {
+                    value = (account[propertyName]) ? account[propertyName] : value[propertyName];
+                }
+                if(value ) {
+                    switch (achievement.comparator) {
+                        case '>':
+                            result = value > Number(achievement.value);
+                            break;
+                        case '>=':
+                            result = value >= Number(achievement.value);
+                            break;
+                        case '<':
+                            result = value < Number(achievement.value);
+                            break;
+                        case '<=':
+                            result = value <= Number(achievement.value);
+                            break;
+                        case '===':
+                            result = value === Number(achievement.value);
+                            break;
+                        case '!=':
+                            result = value != Number(achievement.value);
+                            break;   
+                    }
+                }
+            } catch (err) {
+                console.log('Error : ', err);
+                return result;
+            }
+        }
+        return result;
+    }
+
+    static async updateAchievement(account: Account): Promise<string> {
+        try {
+
+            let achievementArrays: string[] = [];
+            const dbUser: User = await UserService.getUserById(account.id);
+            const achievements: Achievement[] = await AchievementService.getAchievements();
+
+            for (const achievement of achievements) {
+                const res = await UserContributionStat.achievementLogic(achievement, account,[]);
+                if (res) {
+                    achievementArrays.push(achievement.id);
+                }
+            }
+
+            dbUser.achievements = achievementArrays;
+
+            return await UserService.updateUser(dbUser);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
 
 }
