@@ -41,7 +41,7 @@ export class AchievementService {
             return Utils.getValesFromFirebaseSnapshot(
                 await AchievementService.achievementFireStoreClient
                     .collection(CollectionConstants.ACHIEVEMENTS)
-                    .where("property.name", '==', name)
+                    .where('property.name', '==', name)
                     .get()
             );
         } catch (error) {

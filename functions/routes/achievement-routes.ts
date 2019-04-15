@@ -12,7 +12,7 @@ class AchievementRoutes {
         this.achievementRoutes = express.Router();
 
         //  '/add'
-        this.achievementRoutes.post(`/${RoutesConstants.ADD}`, AuthMiddleware.authTokenOnly, AchievementController.addAchievement);        
+        this.achievementRoutes.post(`/${RoutesConstants.ADD}`, AuthMiddleware.authTokenOnly, AchievementController.addAchievement);
     }
 }
 

@@ -24,8 +24,8 @@ export class AchievementController {
             }
 
             await AchievementMechanics.addNewAchievement(name, property);
-            
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.ACHIEVEMENT_ADDED_SUCCESSFULLY  );
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.ACHIEVEMENT_ADDED_SUCCESSFULLY);
         } catch (error) {
             Utils.sendError(res, error);
         }
