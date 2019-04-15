@@ -18,6 +18,7 @@ import admin from './firebase.client';
 import { AppSettings } from '../services/app-settings.service';
 import { StatsService } from '../services/stats.service';
 import { PushNotification } from '../utils/push-notifications';
+import { AchievementMechanics } from '../utils/achievement-mechanics';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -174,9 +175,9 @@ export class FirebaseFunctions {
 
                 lbsStats = LeaderBoardService.calculateLeaderBoardStats(account, lbsStats);
 
-                await UserContributionStat.updateAchievement(account);
-
                 await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
+
+                await AchievementMechanics.updateAchievement(account);
             }
             return true;
 

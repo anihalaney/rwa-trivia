@@ -14,12 +14,12 @@ export class AchievementController {
             const property = req.body.property;
 
             if (!name) {
-                // Game Option is not added
+                // Achievement name is not added
                 Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.ACHIEVEMENT_NAME_NOT_FOUND);
             }
 
             if (!property) {
-                // Game Option is not added
+                // Achievement property is not added
                 Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.ACHIEVEMENT_NAME_NOT_FOUND);
             }
 
