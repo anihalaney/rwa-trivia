@@ -1,4 +1,4 @@
-import { CollectionConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, AchievementConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 
@@ -41,7 +41,7 @@ export class AchievementService {
             return Utils.getValesFromFirebaseSnapshot(
                 await AchievementService.achievementFireStoreClient
                     .collection(CollectionConstants.ACHIEVEMENTS)
-                    .where('property.name', '==', name)
+                    .where(AchievementConstants.PROPERTY_DOT_NAME, GeneralConstants.DOUBLE_EQUAL, name)
                     .get()
             );
         } catch (error) {

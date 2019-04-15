@@ -1,4 +1,4 @@
-import { Achievement } from '../../projects/shared-library/src/lib/shared/model';
+import { Achievement, AchievementConstants, GeneralConstants, UserAchievement } from '../../projects/shared-library/src/lib/shared/model';
 import { AchievementService } from '../services/achievement.service';
 import { UserAchievementService } from '../services/user-achievement.service';
 import { Utils } from './utils';
@@ -10,7 +10,8 @@ export class AchievementMechanics {
             const achievement = new Achievement(name, property);
             const dbAchievement = achievement.getDbModel();
 
-            const achievements: Achievement[] = await AchievementService.getAchievementByPropertyName(achievement.property['name']);
+            const achievements: Achievement[] =
+                await AchievementService.getAchievementByPropertyName(achievement.property[GeneralConstants.NAME]);
 
             if (achievements.length > 0) {
                 dbAchievement.id = achievements[0].id;
@@ -40,28 +41,28 @@ export class AchievementMechanics {
                 }
                 if (value) {
                     switch (achievement.comparator) {
-                        case '>':
+                        case AchievementConstants.GREATER_THAN:
                             result = value > Number(achievement.value);
                             break;
-                        case '>=':
+                        case AchievementConstants.GREATER_THAN_OR_EQUAL:
                             result = value >= Number(achievement.value);
                             break;
-                        case '<':
+                            case AchievementConstants.LESS_THAN:
                             result = value < Number(achievement.value);
                             break;
-                        case '<=':
+                            case AchievementConstants.LESS_THAN_OR_EQUAL:
                             result = value <= Number(achievement.value);
                             break;
-                        case '===':
+                            case AchievementConstants.DOUBLE_EQUAL:
                             result = value === Number(achievement.value);
                             break;
-                        case '!=':
+                            case AchievementConstants.NOT_EQUAL:
                             result = value !== Number(achievement.value);
                             break;
                     }
                 }
             } catch (err) {
-                console.log('Error : ', err);
+                console.log(GeneralConstants.Error_Message, err);
                 return result;
             }
         }
@@ -81,12 +82,12 @@ export class AchievementMechanics {
                 }
             }
 
-            const userAchievementData: any = {};
+            const userAchievementData = new UserAchievement();
 
             userAchievementData.achievements = achievementIds;
             userAchievementData.id = account.id;
 
-            return await UserAchievementService.setUserAchievement(userAchievementData);
+            return await UserAchievementService.setUserAchievement({ ...userAchievementData });
 
         } catch (error) {
             return Utils.throwError(error);
