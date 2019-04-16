@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 import { RecentGamesComponent } from './../components/recent-games/recent-games.component';
 import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
+import { UserFeedbackComponent } from '../../../../shared-library/src/lib/shared/mobile/component/user-feedback/user-feedback.component';
 
 export const routes: Routes = [
 
@@ -34,5 +35,9 @@ export const routes: Routes = [
     {
         path: 'terms-and-conditions',
         component: PrivacyPolicyComponent
+    },
+    {
+        path: 'user-feedback',
+        component: UserFeedbackComponent
     },
 ];

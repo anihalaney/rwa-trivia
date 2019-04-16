@@ -9,7 +9,8 @@ import {
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
-import { user } from '../store';
+import { Store } from '@ngrx/store';
+import { CoreState, UserActions } from '../store';
 
 @Injectable()
 export class UserService {
@@ -17,7 +18,9 @@ export class UserService {
     constructor(
         private http: HttpClient,
         private dbService: DbService,
-        private utils: Utils) {
+        private utils: Utils,
+        private store: Store<CoreState>,
+        private userActions: UserActions) {
     }
 
     loadUserProfile(user: User): Observable<User> {
@@ -52,6 +55,12 @@ export class UserService {
         delete dbUser.profilePictureUrl;
         return this.http.post<User>(url, { user: dbUser });
 
+    }
+
+    addFeedback(feedback) {
+         this.dbService.createDoc('feedback', feedback).then(ref => {
+            this.store.dispatch(this.userActions.addFeedbackSuccess());
+         });
     }
 
 

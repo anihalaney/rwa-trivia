@@ -40,10 +40,32 @@
 
                         <Label *ngIf="authProvider.isAuthenticated" row="7" (tap)="navigateToProfileSettings()" colSpan="2"
                             text="Profile" textWrap="true" class="sideLabel sideStackLayout" [class.active-menu]="activeMenu === 'Profile'"></Label>
-                        <Label row="8" (tap)="navigateToPrivacyPolicy()" colSpan="2" text="Privacy Policy" 
-                            class="sideLabel" [class.active-menu]="activeMenu === 'Privacy Policy'"></Label>
-                        <Label row="9" (tap)="navigateToTermsConditions()" colSpan="2" text="Terms of Use" 
-                            class="sideLabel" [class.active-menu]="activeMenu === 'Terms of Use'"></Label>
+                        
+                        <GridLayout row="8" (tap)="showHelp = !showHelp" rows="*" column="*, auto"
+                            colSpan="2" [class.active-menu]="activeMenu === 'Help'">
+                            <Label row="0" col="0" text="Help" class="sideLabel sideStackLayout"></Label>
+                            <Label row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
+                                verticalAlignment="center"  text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
+                                paddingRight="15"></Label>
+                        </GridLayout>
+
+                        <StackLayout row="9" colSpan="2" visibility="{{ !showHelp ? 'visible' : 'collapsed' }}">
+                            <StackLayout orientation="horizontal" paddingLeft="10">
+                                <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
+                                <Label  (tap)="navigateToPrivacyPolicy()" colSpan="2" text="Privacy Policy" 
+                                class="sideLabel" [class.active-menu]="activeMenu === 'Privacy Policy'"></Label>
+                            </StackLayout>
+                            <StackLayout orientation="horizontal" paddingLeft="10">
+                                <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
+                                <Label (tap)="navigateToTermsConditions()" colSpan="2" text="Terms of Use" 
+                                class="sideLabel" [class.active-menu]="activeMenu === 'Terms of Use'"></Label>
+                            </StackLayout>
+                            <StackLayout orientation="horizontal" paddingLeft="10">
+                                <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
+                                <Label (tap)="navigateToUserFeedback()" colSpan="2" text="Feedback" 
+                                class="sideLabel" [class.active-menu]="activeMenu === 'Feedback'"></Label>
+                            </StackLayout>
+                        </StackLayout>                        
                 </GridLayout>
             </ScrollView>
         </StackLayout>
