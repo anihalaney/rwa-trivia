@@ -26,7 +26,7 @@ export class TNSDbService extends DbService {
         });
     }
 
-    public addDoc(collectionName: string, document: any) {
+    public CreateDocWithoutDocID(collectionName: string, document: any) {
         const collectionRef = firebaseApp.firestore().collection(collectionName);
         return collectionRef.add(document);
     }

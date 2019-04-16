@@ -54,7 +54,7 @@ export class UserService {
     }
 
     addFeedback(feedback): Observable<any> {
-        return this.dbService.addDoc('feedback', feedback);
+        return this.dbService.CreateDocWithoutDocID('feedback', feedback);
     }
 
 
