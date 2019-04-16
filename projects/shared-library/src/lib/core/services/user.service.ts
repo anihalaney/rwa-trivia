@@ -9,8 +9,6 @@ import {
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
-import { Store } from '@ngrx/store';
-import { CoreState, UserActions } from '../store';
 
 @Injectable()
 export class UserService {
@@ -18,9 +16,7 @@ export class UserService {
     constructor(
         private http: HttpClient,
         private dbService: DbService,
-        private utils: Utils,
-        private store: Store<CoreState>,
-        private userActions: UserActions) {
+        private utils: Utils) {
     }
 
     loadUserProfile(user: User): Observable<User> {
@@ -57,10 +53,8 @@ export class UserService {
 
     }
 
-    addFeedback(feedback) {
-         this.dbService.createDoc('feedback', feedback).then(ref => {
-            this.store.dispatch(this.userActions.addFeedbackSuccess());
-         });
+    addFeedback(feedback): Observable<any> {
+        return this.dbService.addDoc('feedback', feedback);
     }
 
 

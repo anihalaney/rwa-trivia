@@ -56,24 +56,24 @@
                             colSpan="2" [class.active-menu]="activeMenu === 'Help'">
                             <Label row="0" col="0" text="Help" class="sideLabel sideStackLayout"></Label>
                             <Label  row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
-                                verticalAlignment="center"  text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
+                                verticalAlignment="center"  text="{{ showHelp ? '&#xf067;' : '&#xf068;' }}"
                                 paddingRight="15"></Label>
                         </GridLayout>
 
                         <StackLayout row="9" colSpan="2" visibility="{{ !showHelp ? 'visible' : 'collapsed' }}">
                             <StackLayout orientation="horizontal" paddingLeft="10">
                                 <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
-                                <Label  stlRippleEffect stlBackgroundColor="#13284F" (tap)="navigateToPrivacyPolicy()" colSpan="2" text="Privacy Policy" 
+                                <Label padding="10"  (tap)="navigateToPrivacyPolicy()" colSpan="2" text="Privacy Policy" 
                                 class="sideLabel" [class.active-menu]="activeMenu === 'Privacy Policy'"></Label>
                             </StackLayout>
-                            <StackLayout orientation="horizontal" paddingLeft="10">
+                            <StackLayout  orientation="horizontal" paddingLeft="10">
                                 <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
-                                <Label stlRippleEffect stlBackgroundColor="#13284F" (tap)="navigateToTermsConditions()" colSpan="2" text="Terms of Use" 
+                                <Label padding="10" (tap)="navigateToTermsConditions()" colSpan="2" text="Terms of Use" 
                                 class="sideLabel" [class.active-menu]="activeMenu === 'Terms of Use'"></Label>
                             </StackLayout>
-                            <StackLayout orientation="horizontal" paddingLeft="10">
+                            <StackLayout  orientation="horizontal" paddingLeft="10">
                                 <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
-                                <Label stlRippleEffect stlBackgroundColor="#13284F" (tap)="navigateToUserFeedback()" colSpan="2" text="Feedback" 
+                                <Label padding="10" (tap)="navigateToUserFeedback()" colSpan="2" text="Feedback" 
                                 class="sideLabel" [class.active-menu]="activeMenu === 'Feedback'"></Label>
                             </StackLayout>
                         </StackLayout>                        
