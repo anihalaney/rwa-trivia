@@ -138,11 +138,5 @@ service cloud.firestore {
       }
     }
     
-    match /user_achievements {
-      match /{document=**} {
-        allow read;
-      }
-    }
-    
   }
 }

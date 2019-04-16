@@ -9,7 +9,7 @@ import questionRoutes from './question-routes';
 import schedulerRoutes from './scheduler-routes';
 import subscriptionRoutes from './subscription-routes';
 import userRoutes from './user-routes';
-import achievementRoutes from './achievement-routes';
+import achievementRulesRoutes from './achievement-rules-routes';
 
 class Router {
 
@@ -43,8 +43,8 @@ class Router {
         //  '/app/user'
         this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.USER}`, userRoutes);
 
-         //  '/app/achievement'
-         this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.ACHIEVENENT}`, achievementRoutes);
+        //  '/app/achievement'
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.ACHIEVENENT}`, achievementRulesRoutes);
     }
 }
 

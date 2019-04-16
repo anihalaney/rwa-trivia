@@ -114,7 +114,7 @@ export enum CollectionConstants {
     LISTS_FORWARD_SLASH_TAGS = 'lists/tags',
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
-    USER_ACHIEVEMENTS = 'user_achievements'
+    ACHIEVEMENT_RULES = 'achievement_rules',
 }
 
 export enum UserConstants {
@@ -346,7 +346,8 @@ export enum RoutesConstants {
     GAMEOVERAT = 'gameoverat',
     EXTENDEDINFO = 'extendedInfo',
     ACCOUNTS = 'accounts',
-    ACHIEVENENT = 'achievement'
+    ACHIEVENENT = 'achievement',
+    RULES = 'rules'
 }
 
 export enum AppStoreUrl {
