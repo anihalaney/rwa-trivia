@@ -30,7 +30,10 @@
           textWrap="true" text="Location is required!"></Label>
 
       </StackLayout>
-
+      <StackLayout margin="5 10">
+          <Button text="View as public profile" nsRouterLink="/user/profile/{{user.userId}}" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
+             height="50" stlRippleEffect></Button>
+      </StackLayout>
       <StackLayout class="list-view" iosOverflowSafeArea="false">
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
           <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true"
@@ -82,9 +85,7 @@
               </RadAutoCompleteTextView>
             </StackLayout>
             <StackLayout row="1" col="1" marginLeft="10" horizontalAlignment="right">
-              <Ripple padding="10" rippleColor="#dceec6">
-                <Button ios:padding="10" text="Add" class="Roboto-Bold" (tap)="addCustomTag()"></Button>
-              </Ripple>
+              <Button ios:padding="10" text="Add" class="Roboto-Bold" stlRippleEffect (tap)="addCustomTag()" ></Button>
             </StackLayout>
           </GridLayout>
         </StackLayout>
@@ -101,16 +102,16 @@
             <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
 
             <StackLayout class="text-box" row="1" col="0" orientation="horizontal">
-              <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profile.url" fontSize="14" textWrap="true"></Label>
+              <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profile?.url" fontSize="14" textWrap="true"></Label>
               <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID" [formControlName]="profile.social_name" class="input-box"></TextField>
             </StackLayout>
             <Label *ngIf="userForm.get(profile.social_name).errors" class="error" text="Please enter valid profile id"
               row="2" col="0" textWrap="true"></Label>
           </GridLayout>
         </StackLayout>
-        <button class="p-15 showMore" horizontalAlignment="center"
+        <Button class="p-15 showMore" horizontalAlignment="center"
           *ngIf="enableSocialProfile > socialProfileShowLimit + 1" text="Show more"
-          (tap)="showMoreSocialProfile()"></button>
+           stlRippleEffect (tap)="showMoreSocialProfile()"></Button>
       </StackLayout>
 
       <StackLayout class="profile-buttons">
@@ -118,8 +119,8 @@
         <Button *ngIf="(!user.bulkUploadPermissionStatus
         || user.bulkUploadPermissionStatus === NONE
         || user.bulkUploadPermissionStatus === PENDING)
-        && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText" (tap)="setBulkUploadRequest()"
-          backgroundColor="#ffffff" color="black" padding="10 0" borderWidth="1" borderRadius="3"></Button>
+        && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText"
+          backgroundColor="#ffffff" color="black" padding="10 0" (tap)="setBulkUploadRequest()" borderWidth="1" borderRadius="3" stlRippleEffect></Button>
         <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING"
           text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
           textWrap="true" padding="8"></Label>
@@ -128,8 +129,8 @@
       </StackLayout>
 
       <StackLayout class="profile-buttons">
-        <Button text="SAVE" (tap)="onSubmit()" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff"
-          padding="20 0"></Button>
+        <Button text="SAVE" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff"
+          padding="20 0" stlRippleEffect (tap)="onSubmit()"></Button>
       </StackLayout>
 
 

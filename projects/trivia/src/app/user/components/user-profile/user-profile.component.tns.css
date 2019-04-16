@@ -183,3 +183,6 @@
     border-color: #b7b7b7;
     border-width: 1;
 }
+Button {
+    border-radius:1; 
+}

@@ -1,5 +1,5 @@
 <!-- User setting -->
-<div class="mainpage submitpage mysetting" *ngIf="user">
+<div class="mainpage submitpage mysetting" [class.expand-width]="!loggedInUser" *ngIf="user">
   <div class="row hidden-xs">
     <div class="pageheading col-sm-6 col-xs-12">User Profile</div>
   </div>
@@ -18,7 +18,7 @@
                 </span>
               </a>
             </div>
-
+          
             <div class="col-sm-7 col-xs-12">
               <div class="card statsview">
                 <ul id="stats" class="tab-content active">
@@ -63,6 +63,9 @@
               </div>
             </div>
           </div>
+          <div class="pt-20 pb-20" *ngIf="loggedInUser && loggedInUser.userId == user.userId">
+              <button class="btn view-profile" routerLink="/user/my/profile/{{loggedInUser.userId}}">Go to profile setting</button>
+          </div>
           <!-- Categories -->
           <div class="row pcategories">
             <div class="col-sm-3 add-space">
@@ -105,8 +108,8 @@
                   <h2 class="social-profile-name">{{profile.display}}</h2>
                   <div class="social-input-field">
                     <div class="social-url-contain">
-                      <a [href]="profile.url + user[profile.social_name]" target="_blank">
-                          <span class="social-url">{{profile.url + user[profile.social_name]}}</span>
+                      <a href="{{profile.url}}{{user[profile.social_name]}}" target="_blank">
+                          <span class="social-url">{{profile.url}}{{user[profile.social_name]}}</span>
                         </a>
                     </div>
                   </div>

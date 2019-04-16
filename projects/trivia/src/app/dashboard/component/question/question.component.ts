@@ -84,6 +84,9 @@ export class QuestionComponent implements OnDestroy {
 
   }
 
+  rippleTap(answer) {
+    this.answerButtonClicked(answer);
+  }
   ngOnDestroy(): void {
 
   }

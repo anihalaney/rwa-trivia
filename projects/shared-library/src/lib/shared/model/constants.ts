@@ -86,7 +86,8 @@ export enum pushNotificationRouteConstants {
     FRIEND_REQUEST = 'friend-request',
     GAME_PLAY_NOTIFICATIONS = 'game-play-notifications',
     GAME_REMAINING_TIME_NOTIFICATIONS = 'game-play-time-notifications',
-    FRIEND_NOTIFICATIONS = 'friend-notifications'
+    FRIEND_NOTIFICATIONS = 'friend-notifications',
+    QUESTION_NOTIFICATIONS = 'my/questions'
 }
 
 
@@ -243,7 +244,7 @@ export enum ResponseMessagesConstants {
     LIVES_ADDED = 'Lives added successfully !!',
     CHECK_FIRESTORE_DB_FOR_MIGRATION_DETAILS = 'Check firestore db for migration details',
     ADDED_GAME_OVER__FIELDS = 'added gameOverAt fields',
-
+    REMOVE_ALL_ACCOUNTS = 'Remove all accounts'
 }
 
 export enum FriendConstants {
@@ -328,4 +329,10 @@ export enum RoutesConstants {
     COUNT = 'count',
     GAMEOVERAT= 'gameoverat',
     EXTENDEDINFO= 'extendedInfo',
+    ACCOUNTS = 'accounts'
+}
+
+export enum AppStoreUrl {
+    PLAYSTOREURL = 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1',
+    APPSTOREURL = 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8'
 }
