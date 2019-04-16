@@ -14,9 +14,6 @@ class AchievementRulesRoutes {
         //  '/rules/add'
         this.achievementRulesRoutes.post(`/${RoutesConstants.RULES}/${RoutesConstants.ADD}`,
             AuthMiddleware.authTokenOnly, AchievementRulesController.addAchievementRule);
-
-        //  '/rules/set'
-        this.achievementRulesRoutes.get('/rules/set', AuthMiddleware.authTokenOnly, AchievementRulesController.setAchievementRule);
     }
 }
 

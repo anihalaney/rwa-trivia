@@ -1,7 +1,6 @@
 import { interceptorConstants, ResponseMessagesConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AchievementMechanics } from '../utils/achievement-mechanics';
 import { Utils } from '../utils/utils';
-import { AccountService } from '../services/account.service';
 
 export class AchievementRulesController {
 
@@ -31,27 +30,4 @@ export class AchievementRulesController {
             Utils.sendError(res, error);
         }
     }
-
-
-
-    /**
-     * setAchievement
-     * return message
-     */
-    static async setAchievementRule(req, res) {
-        try {
-
-            const account: Account = await AccountService.getAccountById('rQWSRKCFpcPZLkCyKcDpATGXNlw1');
-
-            await AchievementMechanics.updateAchievement(account);
-
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.ACHIEVEMENT_ADDED_SUCCESSFULLY);
-        } catch (error) {
-            Utils.sendError(res, error);
-        }
-    }
-
-
-
-
 }
