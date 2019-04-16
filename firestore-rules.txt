@@ -134,7 +134,7 @@ service cloud.firestore {
 
     match /achievements {
       match /{document=**} {
-        allow read;
+        allow read : if isUserAuthenticated(userId);
       }
     }
     
