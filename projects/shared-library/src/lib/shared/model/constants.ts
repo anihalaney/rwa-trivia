@@ -348,7 +348,7 @@ export enum RoutesConstants {
     GAMEOVERAT = 'gameoverat',
     EXTENDEDINFO = 'extendedInfo',
     ACCOUNTS = 'accounts',
-    ACHIEVENENT = 'achievement',
+    ACHIEVEMENT = 'achievement',
     RULES = 'rules'
 }
 

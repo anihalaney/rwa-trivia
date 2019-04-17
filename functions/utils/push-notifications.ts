@@ -12,13 +12,13 @@ export class PushNotification {
         try {
             const dbUser: User = await UserService.getUserById(userId);
             const notificationPromises = [];
-            if (dbUser.androidPushTokens) {
+            if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
                 for (const token of dbUser.androidPushTokens) {
                     notificationPromises.push(PushNotification.sendNotification(token, title, body, data));
                 }
             }
 
-            if (dbUser.iosPushTokens) {
+            if (dbUser.iosPushTokens && dbUser.iosPushTokens.length > 0) {
                 for (const token of dbUser.iosPushTokens) {
                     notificationPromises.push(PushNotification.sendNotification(token, title, body, data));
                 }
@@ -129,6 +129,7 @@ export class PushNotification {
                         .sendNotificationToDevices(currentTurnPlayerId, 'Achievement Notification',
                             data, msg_data);
                     console.log('result', result);
+                    console.log(`${msg_data} `);
                     break;
 
             }

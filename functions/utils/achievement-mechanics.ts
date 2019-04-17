@@ -28,6 +28,10 @@ export class AchievementMechanics {
 
             const achievementRuleIds: string[] = [];
             const achievementRules: AchievementRule[] = await AchievementRulesService.getAchievementRules();
+            const achievementRulesDict: { [key: string]: AchievementRule } = {};
+            for (const achievementRule of achievementRules) {
+                achievementRulesDict[achievementRules['id']] = achievementRule;
+            }
             const oldAchievementData: Achievement = await AchievementService.getAchievementById(account.id);
 
 
@@ -50,13 +54,11 @@ export class AchievementMechanics {
                 achievementIdsForNotification = achievementRuleIds;
             } else {
                 achievementIdsForNotification = achievementRuleIds.
-                    filter((achievementRuleId) => {
-                        return oldAchievementData.achievements.indexOf(achievementRuleId) === -1;
-                    });
+                    filter((achievementRuleId) => oldAchievementData.achievements.indexOf(achievementRuleId) === -1);
             }
 
             for (const achievementId of achievementIdsForNotification) {
-                const message = `You Achieved ${achievementId} Achievement`;
+                const message = `You get ${achievementRulesDict[achievementId].name} Achievement`;
 
                 PushNotification.sendGamePlayPushNotifications(message, account.id,
                     pushNotificationRouteConstants.ACHIEVEMENT_NOTIFICATION);
@@ -106,5 +108,23 @@ export class AchievementMechanics {
             }
         }
         return result;
+    }
+
+    public static async retrieveAchievements(userId: string): Promise<Array<AchievementRule>> {
+
+        let achievementRules: AchievementRule[] = await AchievementRulesService.getAchievementRules();
+        const achievementData: Achievement = await AchievementService.getAchievementById(userId);
+
+        achievementRules = achievementRules.
+            filter((achievementRule) => achievementData.achievements.indexOf(achievementRule.id) === -1);
+
+        achievementRules.map((achievementRule) => {
+            delete achievementRule.displayOrder;
+            delete achievementRule.id;
+            delete achievementRule.property;
+            return achievementRule;
+        }).sort((a, b) => a.displayOrder - b.displayOrder);
+
+        return achievementRules;
     }
 }

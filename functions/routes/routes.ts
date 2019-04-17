@@ -44,7 +44,7 @@ class Router {
         this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.USER}`, userRoutes);
 
         //  '/app/achievement'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.ACHIEVENENT}`, achievementRulesRoutes);
+        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.ACHIEVEMENT}`, achievementRulesRoutes);
     }
 }
 
