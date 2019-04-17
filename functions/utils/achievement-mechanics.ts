@@ -1,19 +1,23 @@
-import { AchievementRule, AchievementConstants, Achievement } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    Achievement, AchievementConstants, AchievementRule, pushNotificationRouteConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { AchievementRulesService } from '../services/achievement-rules.service';
 import { AchievementService } from '../services/achievement.service';
 import { Utils } from './utils';
+import { PushNotification } from './push-notifications';
 
 export class AchievementMechanics {
 
-    static async addAchievementRule(name: string, property: any): Promise<any> {
+    static async addAchievementRule(name: string, property: any, displayOrder: number, iconPath?: any): Promise<any> {
         try {
-            const achievementRule = new AchievementRule(name, property);
-            const dbAchievementRule = achievementRule.getDbModel();
+            const achievementRule = new AchievementRule(name, property, displayOrder, iconPath);
+            if (!achievementRule.iconPath) {
+                achievementRule.iconPath = Utils.getWebsiteUrl() + '/assets/images/default-achievement.png';
+            }
+            const ref = await AchievementRulesService.addAchievementRule({ ...achievementRule });
+            achievementRule.id = ref.id;
 
-            const ref = await AchievementRulesService.addAchievementRule(dbAchievementRule);
-            dbAchievementRule.id = ref.id;
-
-            return await AchievementRulesService.setAchievementRule(dbAchievementRule);
+            return await AchievementRulesService.setAchievementRule({ ...achievementRule });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -24,6 +28,8 @@ export class AchievementMechanics {
 
             const achievementRuleIds: string[] = [];
             const achievementRules: AchievementRule[] = await AchievementRulesService.getAchievementRules();
+            const oldAchievementData: Achievement = await AchievementService.getAchievementById(account.id);
+
 
             for (const achievementRule of achievementRules) {
                 if (account[achievementRule.property.name]) {
@@ -37,6 +43,24 @@ export class AchievementMechanics {
 
             achievementData.achievements = achievementRuleIds;
             achievementData.id = account.id;
+
+            let achievementIdsForNotification: string[] = [];
+
+            if (!oldAchievementData || (oldAchievementData && !oldAchievementData.achievements)) {
+                achievementIdsForNotification = achievementRuleIds;
+            } else {
+                achievementIdsForNotification = achievementRuleIds.
+                    filter((achievementRuleId) => {
+                        return oldAchievementData.achievements.indexOf(achievementRuleId) === -1;
+                    });
+            }
+
+            for (const achievementId of achievementIdsForNotification) {
+                const message = `You Achieved ${achievementId} Achievement`;
+
+                PushNotification.sendGamePlayPushNotifications(message, account.id,
+                    pushNotificationRouteConstants.ACHIEVEMENT_NOTIFICATION);
+            }
 
             return await AchievementService.setAchievement({ ...achievementData });
 

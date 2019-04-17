@@ -87,7 +87,8 @@ export enum pushNotificationRouteConstants {
     GAME_PLAY_NOTIFICATIONS = 'game-play-notifications',
     GAME_REMAINING_TIME_NOTIFICATIONS = 'game-play-time-notifications',
     FRIEND_NOTIFICATIONS = 'friend-notifications',
-    QUESTION_NOTIFICATIONS = 'my/questions'
+    QUESTION_NOTIFICATIONS = 'my/questions',
+    ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
 }
 
 
@@ -250,7 +251,8 @@ export enum ResponseMessagesConstants {
     REMOVE_ALL_ACCOUNTS = 'Remove all accounts',
     ACHIEVEMENT_PROPERTY_NOT_FOUND = 'Achievement property not found',
     ACHIEVEMENT_NAME_NOT_FOUND = 'Achievement name not found',
-    ACHIEVEMENT_ADDED_SUCCESSFULLY = 'Achievement added successfully'
+    DISPLAY_ORDER_NOT_FOUND = 'Display order not found',
+    ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully'
 }
 
 export enum FriendConstants {

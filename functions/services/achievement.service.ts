@@ -21,4 +21,19 @@ export class AchievementService {
         }
     }
 
+
+    /**
+     * getAchievementById
+     * return Achievement
+     */
+    static async getAchievementById(id: string): Promise<any> {
+        try {
+            const achieventData = await AchievementService.achievementFireStoreClient.
+                doc(`/${CollectionConstants.ACHIEVEMENTS}/${id}`).get();
+            return achieventData.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 }

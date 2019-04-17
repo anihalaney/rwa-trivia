@@ -120,7 +120,14 @@ export class PushNotification {
                     msg_data = { 'messageType': pushNotificationRouteConstants.QUESTION_NOTIFICATIONS };
                     result = await PushNotification
                         .sendNotificationToDevices(currentTurnPlayerId, 'Question Status Update',
-                        data, msg_data);
+                            data, msg_data);
+                    console.log('result', result);
+                    break;
+                case pushNotificationRouteConstants.ACHIEVEMENT_NOTIFICATION:
+                    msg_data = { 'messageType': pushNotificationRouteConstants.ACHIEVEMENT_NOTIFICATION };
+                    result = await PushNotification
+                        .sendNotificationToDevices(currentTurnPlayerId, 'Achievement Notification',
+                            data, msg_data);
                     console.log('result', result);
                     break;
 

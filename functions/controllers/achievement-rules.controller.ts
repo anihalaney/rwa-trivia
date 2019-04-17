@@ -12,6 +12,8 @@ export class AchievementRulesController {
         try {
             const name = req.body.name;
             const property = req.body.property;
+            const displayOrder = req.body.displayOrder;
+            const iconPath = req.body.iconPath;
 
             if (!name) {
                 // Achievement name is not added
@@ -23,11 +25,17 @@ export class AchievementRulesController {
                 Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.ACHIEVEMENT_NAME_NOT_FOUND);
             }
 
-            await AchievementMechanics.addAchievementRule(name, property);
+            if (!displayOrder) {
+                // Achievement property is not added
+                Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.DISPLAY_ORDER_NOT_FOUND);
+            }
 
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.ACHIEVEMENT_ADDED_SUCCESSFULLY);
+            await AchievementMechanics.addAchievementRule(name, property, displayOrder, iconPath);
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY);
         } catch (error) {
             Utils.sendError(res, error);
         }
     }
+
 }
