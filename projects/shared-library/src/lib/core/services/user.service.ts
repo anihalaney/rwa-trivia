@@ -9,7 +9,6 @@ import {
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
-import { user } from '../store';
 
 @Injectable()
 export class UserService {
@@ -52,6 +51,10 @@ export class UserService {
         delete dbUser.profilePictureUrl;
         return this.http.post<User>(url, { user: dbUser });
 
+    }
+
+    addFeedback(feedback): Observable<any> {
+        return this.dbService.CreateDocWithoutDocID('feedback', feedback);
     }
 
 
