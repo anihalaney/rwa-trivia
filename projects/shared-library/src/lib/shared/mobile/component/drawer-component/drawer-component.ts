@@ -39,6 +39,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     logOut: boolean;
     pushToken: string;
     subscriptions = [];
+    showHelp: Boolean = true;
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
@@ -62,10 +63,8 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/user/my/invite-friends') {
                     this.activeMenu = 'Friend List';
-                }  else if (nav === '/privacy-policy') {
-                    this.activeMenu = 'Privacy Policy';
-                } else if (nav === '/terms-and-conditions') {
-                    this.activeMenu = 'Terms of Use';
+                }  else if (nav === '/privacy-policy' || nav === '/terms-and-conditions' || nav === '/user-feedback') {
+                    this.activeMenu = 'Help';
                 }
             }
         });
@@ -187,6 +186,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.closeDrawer();
     }
 
+    navigateToUserFeedback() {
+        this.routerExtension.navigate(['/user-feedback']);
+        this.closeDrawer();
+    }
     ngOnDestroy(): void {
 
     }
