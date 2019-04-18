@@ -17,6 +17,7 @@ import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { Utils } from '../utils/utils';
 import { StatsService } from '../services/stats.service';
+const katex = require('katex');
 
 export class MigrationController {
 
@@ -377,6 +378,35 @@ export class MigrationController {
             await AccountService.deleteAllAccounts();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.REMOVE_ALL_ACCOUNTS);
 
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
+    /**
+     * Generate rendered View for questions and unpublished question
+     *
+     */
+
+    static async generateRenderedQuestion(req, res) {
+        try {
+            // getAllUnpublishedQuestions
+            const updatePromises = [];
+            const unPublishedQs: Question[] = await QuestionService.getAllUnpublishedQuestions();
+
+            for (const question of unPublishedQs) {
+
+                console.log('<<<< quesiton >>>>>>>>', question.id);
+                const renderedQuestion = question.questionText.replace(/_/g, '\\_');
+                console.log('<<<< quesiton >>>>>>>>', question.questionText);
+                question.renderedQuestion = katex.renderToString(` \\text{ ${renderedQuestion} }`, {
+                    throwOnError: true
+                });
+
+                const dbQuestionObj = { ...question };
+                // updatePromises.push(QuestionService.updateQuestion(MigrationConstants.UNPUBLISHED_QUESTIONS, dbQuestionObj));
+            }
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await Promise.all(updatePromises));
         } catch (error) {
             Utils.sendError(res, error);
         }
