@@ -117,10 +117,11 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       const imageCropper: ImageCropper = new ImageCropper();
       const result: ImageSource = (await imageCropper.show(imageSource,
       {width: 150, height: 140, lockSquare: false})).image;
-
-      this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
-      this.saveProfileImage();
-      this.cd.detectChanges();
+      if (result) {
+        this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
+        this.saveProfileImage();
+        this.cd.detectChanges();
+      }
     } catch (error) {
       console.error(error);
     }
