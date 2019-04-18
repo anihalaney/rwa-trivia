@@ -1,4 +1,4 @@
-import { Component,, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component,, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Achievements } from './achievements';
@@ -20,4 +20,5 @@ export class AchievementsComponent extends Achievements implements OnInit, OnDes
   ngOnInit() {}
 
   ngOnDestroy() {}
+  
 }

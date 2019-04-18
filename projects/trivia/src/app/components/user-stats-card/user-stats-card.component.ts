@@ -2,7 +2,6 @@ import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from
 import { Store, select } from '@ngrx/store';
 import { Account } from 'shared-library/shared/model';
 import { AppState, appState } from '../../store';
-import { Observable, Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @Component({
@@ -14,6 +13,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class UserStatsCardComponent implements OnDestroy {
+
   account: Account;
   subscriptions = [];
 
