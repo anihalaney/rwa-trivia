@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Achievements } from './achievements';
@@ -11,9 +11,10 @@ import { Achievements } from './achievements';
 export class AchievementsComponent extends Achievements {
 
   constructor(
-    public store: Store<AppState>
+    protected store: Store<AppState>,
+    protected cd: ChangeDetectorRef
   ) {
-    super(store);
+    super(store, cd);
   }
 
 }

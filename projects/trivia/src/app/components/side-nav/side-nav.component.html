@@ -8,7 +8,20 @@
     </span>
   </a>
 </div>
-<user-stats-card></user-stats-card>
+
+<div class="card">
+    <mat-card-content>
+      <mat-tab-group>
+          <mat-tab label="Stats View">
+            <user-stats-card></user-stats-card>
+          </mat-tab>
+          <mat-tab label="Achievements">
+              <app-achievements></app-achievements>
+          </mat-tab>
+      </mat-tab-group>
+    </mat-card-content>      
+</div>
+
 
 
 <div class="card playwith">

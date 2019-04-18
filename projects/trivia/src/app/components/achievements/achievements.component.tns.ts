@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component,, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Achievements } from './achievements';
@@ -8,17 +8,16 @@ import { Achievements } from './achievements';
   styleUrls: ['./achievements.component.scss']
 })
 
-export class AchievementsComponent extends Achievements implements OnInit {
-
-  renderView = false;
+export class AchievementsComponent extends Achievements implements OnInit, OnDestroy {
 
   constructor(
-    public store: Store<AppState>
+    protected store: Store<AppState>,
+    protected cd: ChangeDetectorRef
   ) {
-    super(store);
-
+    super(store, cd);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
+
+  ngOnDestroy() {}
 }

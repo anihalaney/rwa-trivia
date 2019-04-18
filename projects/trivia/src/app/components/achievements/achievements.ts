@@ -1,4 +1,4 @@
-import { OnDestroy } from '@angular/core';
+import { OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AchievementRule, User } from '../../../../../shared-library/src/lib/shared/model';
 import { dashboardState } from '../../dashboard/store';
@@ -11,7 +11,8 @@ export class Achievements implements OnDestroy {
     subscriptions = [];
 
     constructor(
-        public store: Store<AppState>
+        protected store: Store<AppState>,
+        protected cd: ChangeDetectorRef
     ) {
         this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
             this.user = user;
@@ -23,6 +24,7 @@ export class Achievements implements OnDestroy {
         this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.achievements)).subscribe(achievements => {
             if (achievements) {
                 this.achievements = achievements;
+                this.cd.markForCheck();
             }
         }));
     }

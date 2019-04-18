@@ -23,13 +23,13 @@ export class AchievementService {
 
 
     /**
-     * getAchievementById
+     * getAchievementByUserId
      * return Achievement
      */
-    static async getAchievementById(id: string): Promise<any> {
+    static async getAchievementByUserId(userId: string): Promise<any> {
         try {
             const achieventData = await AchievementService.achievementFireStoreClient.
-                doc(`/${CollectionConstants.ACHIEVEMENTS}/${id}`).get();
+                doc(`/${CollectionConstants.ACHIEVEMENTS}/${userId}`).get();
             return achieventData.data();
         } catch (error) {
             return Utils.throwError(error);

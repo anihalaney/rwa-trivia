@@ -32,7 +32,7 @@ export class AchievementMechanics {
             for (const achievementRule of achievementRules) {
                 achievementRulesDict[achievementRules[GeneralConstants.ID]] = achievementRule;
             }
-            const oldAchievementData: Achievement = await AchievementService.getAchievementById(account.id);
+            const oldAchievementData: Achievement = await AchievementService.getAchievementByUserId(account.id);
 
 
             for (const achievementRule of achievementRules) {
@@ -114,7 +114,7 @@ export class AchievementMechanics {
     public static async retrieveAchievements(userId: string): Promise<Array<AchievementRule>> {
 
         let achievementRules: AchievementRule[] = await AchievementRulesService.getAchievementRules();
-        const achievementData: Achievement = await AchievementService.getAchievementById(userId);
+        const achievementData: Achievement = await AchievementService.getAchievementByUserId(userId);
 
         if (achievementData) {
             achievementRules = achievementRules.
