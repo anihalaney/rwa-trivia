@@ -20,7 +20,6 @@ class AchievementRulesRoutes {
         this.achievementRulesRoutes.post(`/${RoutesConstants.RULES}/${RoutesConstants.ADD}`,
             AuthMiddleware.authTokenOnly, AchievementRulesController.addAchievementRule);
 
-
     }
 }
 

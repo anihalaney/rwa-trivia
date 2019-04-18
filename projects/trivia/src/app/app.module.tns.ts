@@ -14,7 +14,7 @@ import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens';
 import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angular';
 import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterModule } from '@angular/router';
-import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent } from './components';
+import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent, AchievementsComponent } from './components';
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export function firebaseFactory() {
@@ -31,7 +31,8 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     AppComponent,
     RecentGameCardComponent,
     RecentGamesComponent,
-    PrivacyPolicyComponent
+    PrivacyPolicyComponent,
+    AchievementsComponent
   ],
   imports: [
     CoreModule,

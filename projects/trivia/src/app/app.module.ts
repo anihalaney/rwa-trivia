@@ -18,7 +18,8 @@ import { CookieLawModule } from 'angular2-cookie-law';
 import {
   AppComponent,
   SideNavComponent, HeaderComponent, FooterComponent, InvitationRedirectionComponent,
-  PrivacyPolicyComponent, UserStatsCardComponent, RecentGameCardComponent, RecentGamesComponent, ProfileCardComponent,
+  PrivacyPolicyComponent, UserStatsCardComponent, RecentGameCardComponent, RecentGamesComponent,
+  ProfileCardComponent, AchievementsComponent,
 } from './components';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from 'shared-library/environments/environment';
@@ -38,7 +39,8 @@ import { interval } from 'rxjs';
     ProfileCardComponent,
     RecentGamesComponent,
     RecentGameCardComponent,
-    UserStatsCardComponent
+    UserStatsCardComponent,
+    AchievementsComponent
   ],
   imports: [
     BrowserModule,

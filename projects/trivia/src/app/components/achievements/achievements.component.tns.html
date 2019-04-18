@@ -1,0 +1,19 @@
+<ns-action-bar title="Achievements" class="Roboto-Regular"></ns-action-bar>
+<StackLayout>
+  <ScrollView>
+    <GridLayout rows="auto,*,auto" columns="*">
+      <GridLayout row="1" tkExampleTitle tkToggleNavButton>
+        <RadListView [items]="achievements">
+          <ng-template tkListItemTemplate let-row="item">
+            <GridLayout rows="*" columns="70,*" class="achievement-list">
+              <Image row="0" col="0" [src]="row.iconPath" stretch="aspectFill" height="40" width="40" marginLeft="10"
+                verticalAlignment="center" marginRight="15" borderRadius="50"></Image>
+              <Label class="name Hind-Regular" marginLeft="30" verticalAlignment="center" [text]="row.name" row="0"
+                col="1"></Label>
+            </GridLayout>
+          </ng-template>
+        </RadListView>
+      </GridLayout>
+    </GridLayout>
+  </ScrollView>
+</StackLayout>

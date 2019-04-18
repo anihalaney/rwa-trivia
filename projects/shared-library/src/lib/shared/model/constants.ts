@@ -266,7 +266,9 @@ export enum AchievementConstants {
     LESS_THAN = '<',
     LESS_THAN_OR_EQUAL = '<=',
     DOUBLE_EQUAL = '==',
-    NOT_EQUAL = '!='
+    NOT_EQUAL = '!=',
+    DEFAULT_ACHIEVEMENT_ICON_PATH = '/assets/images/default-achievement.png',
+    NA = 'NA'
 }
 
 export enum MigrationConstants {

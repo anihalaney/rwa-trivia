@@ -5,7 +5,7 @@ import * as app from 'application';
 import * as firebase from 'nativescript-plugin-firebase';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Store, select } from '@ngrx/store';
-import { User } from './../../../../shared/model';
+import { User, ApplicationSettings } from './../../../../shared/model';
 import { UserActions } from '../../../../core/store/actions';
 import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
@@ -38,6 +38,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     version: string;
     logOut: boolean;
     pushToken: string;
+    applicationSettings: ApplicationSettings;
     subscriptions = [];
 
     constructor(private routerExtension: RouterExtensions,
@@ -62,17 +63,25 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/user/my/invite-friends') {
                     this.activeMenu = 'Friend List';
-                }  else if (nav === '/privacy-policy') {
+                } else if (nav === '/privacy-policy') {
                     this.activeMenu = 'Privacy Policy';
                 } else if (nav === '/terms-and-conditions') {
                     this.activeMenu = 'Terms of Use';
+                } else if (nav === '/achievements') {
+                    this.activeMenu = 'achievements';
                 }
+
             }
         });
         this.categoriesObs = store.select(coreState).pipe(select(s => s.categories));
         this.categoriesObs.subscribe(categories => {
             this.categories = categories;
         });
+        this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+            if (appSettings) {
+              this.applicationSettings = appSettings[0];
+            }
+          }));
         this.subscriptions.push(this.categoriesObs);
     }
     ngOnInit() {
@@ -184,6 +193,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     navigateToTermsConditions() {
         this.routerExtension.navigate(['/terms-and-conditions']);
+        this.closeDrawer();
+    }
+
+    navigateToAchievements() {
+        this.routerExtension.navigate(['/achievements']);
         this.closeDrawer();
     }
 

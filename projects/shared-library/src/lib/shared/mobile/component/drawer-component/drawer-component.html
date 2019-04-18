@@ -2,7 +2,7 @@
     <GridLayout rows="*,auto" class="Roboto-Regular">
         <StackLayout row="0">
             <ScrollView>
-                <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
+                <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
                     <GridLayout row="0" columns="auto,*" class="sideStackLayoutHeader" *ngIf="authProvider.isAuthenticated">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
                             width="64" marginLeft="10" verticalAlignment="center" marginRight="10" iosOverflowSafeArea="false"></Image>
@@ -35,26 +35,31 @@
                             </Label>
                         </StackLayout>
                     </StackLayout>
-                    <Label *ngIf="authProvider.isAuthenticated" colSpan="2" row="5" text="Friend List"
+                    <Label *ngIf="(authProvider.isAuthenticated ) && (applicationSettings && applicationSettings.display_achievements)" row="5" colSpan="2" text="Achievements" 
+                            class="sideLabel" [class.active-menu]="activeMenu === 'achievements'"
+                            
+                            [ngStyle]="{'background-color': (activeMenu === 'achievements') ? '#10347f' : '#13284F' }" 
+                        class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToAchievements()"></Label>
+                    <Label *ngIf="authProvider.isAuthenticated" colSpan="2" row="6" text="Friend List"
                         [class.active-menu]="activeMenu === 'Friend List'" class="sideLabel sideStackLayout"
                         [ngStyle]="{'background-color': (activeMenu === 'Friend List') ? '#10347f' : '#13284F' }" 
                         class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToFriendList()"
                         ></Label>
 
-                    <Label *ngIf="authProvider.isAuthenticated" row="6" colSpan="2" text="My Questions"
+                    <Label *ngIf="authProvider.isAuthenticated" row="7" colSpan="2" text="My Questions"
                         class="sideLabel sideStackLayout" [class.active-menu]="activeMenu === 'My Questions'"
                         [ngStyle]="{'background-color': (activeMenu === 'My Questions') ? '#10347f' : '#13284F' }" 
                         class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToMyQuestion()"
                         ></Label>
 
-                        <Label *ngIf="authProvider.isAuthenticated" row="7" colSpan="2"
+                        <Label *ngIf="authProvider.isAuthenticated" row="8" colSpan="2"
                             text="Profile" textWrap="true" class="sideLabel sideStackLayout" [class.active-menu]="activeMenu === 'Profile'"
                             [ngStyle]="{'background-color': (activeMenu === 'Profile') ? '#10347f' : '#13284F' }" 
                             class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToProfileSettings()"></Label>
-                        <Label row="8" colSpan="2" text="Privacy Policy" class="sideLabel" [class.active-menu]="activeMenu === 'Privacy Policy'" [ngStyle]="{'background-color': (activeMenu === 'Privacy Policy') ? '#10347f' : '#13284F' }" 
+                        <Label row="9" colSpan="2" text="Privacy Policy" class="sideLabel" [class.active-menu]="activeMenu === 'Privacy Policy'" [ngStyle]="{'background-color': (activeMenu === 'Privacy Policy') ? '#10347f' : '#13284F' }" 
                         class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToPrivacyPolicy()"
                         ></Label>
-                        <Label row="9" colSpan="2" text="Terms of Use" 
+                        <Label row="10" colSpan="2" text="Terms of Use" 
                             class="sideLabel" [class.active-menu]="activeMenu === 'Terms of Use'"
                             
                             [ngStyle]="{'background-color': (activeMenu === 'Terms of Use') ? '#10347f' : '#13284F' }" 

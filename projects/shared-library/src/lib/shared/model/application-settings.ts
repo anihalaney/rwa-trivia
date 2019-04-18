@@ -8,6 +8,7 @@ export class ApplicationSettings {
     social_profile: Array<SocialProfile>;
     tokens: Tokens;
     earn_bytes_on_question_contribute: number;
+    display_achievements: boolean;
 }
 
 export class TimerLoader {

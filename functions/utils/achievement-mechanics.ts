@@ -1,10 +1,10 @@
 import {
-    Achievement, AchievementConstants, AchievementRule, pushNotificationRouteConstants
+    Achievement, AchievementConstants, AchievementRule, pushNotificationRouteConstants, GeneralConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AchievementRulesService } from '../services/achievement-rules.service';
 import { AchievementService } from '../services/achievement.service';
-import { Utils } from './utils';
 import { PushNotification } from './push-notifications';
+import { Utils } from './utils';
 
 export class AchievementMechanics {
 
@@ -12,7 +12,7 @@ export class AchievementMechanics {
         try {
             const achievementRule = new AchievementRule(name, property, displayOrder, iconPath);
             if (!achievementRule.iconPath) {
-                achievementRule.iconPath = Utils.getWebsiteUrl() + '/assets/images/default-achievement.png';
+                achievementRule.iconPath = Utils.getWebsiteUrl() + AchievementConstants.DEFAULT_ACHIEVEMENT_ICON_PATH;
             }
             const ref = await AchievementRulesService.addAchievementRule({ ...achievementRule });
             achievementRule.id = ref.id;
@@ -30,7 +30,7 @@ export class AchievementMechanics {
             const achievementRules: AchievementRule[] = await AchievementRulesService.getAchievementRules();
             const achievementRulesDict: { [key: string]: AchievementRule } = {};
             for (const achievementRule of achievementRules) {
-                achievementRulesDict[achievementRules['id']] = achievementRule;
+                achievementRulesDict[achievementRules[GeneralConstants.ID]] = achievementRule;
             }
             const oldAchievementData: Achievement = await AchievementService.getAchievementById(account.id);
 
@@ -82,7 +82,8 @@ export class AchievementMechanics {
         } else {
             let value: any = {};
             for (const propertyName of propertyNames) {
-                value = (account[propertyName]) ? account[propertyName] : (value[propertyName] ? value[propertyName] : 'NA');
+                value = (account[propertyName]) ? account[propertyName] :
+                    (value[propertyName] ? value[propertyName] : AchievementConstants.NA);
             }
             if (value) {
                 switch (achievementRule.comparator) {
@@ -115,16 +116,21 @@ export class AchievementMechanics {
         let achievementRules: AchievementRule[] = await AchievementRulesService.getAchievementRules();
         const achievementData: Achievement = await AchievementService.getAchievementById(userId);
 
-        achievementRules = achievementRules.
-            filter((achievementRule) => achievementData.achievements.indexOf(achievementRule.id) === -1);
+        if (achievementData) {
+            achievementRules = achievementRules.
+                filter((achievementRule) => achievementData.achievements.indexOf(achievementRule.id) !== -1);
 
-        achievementRules.map((achievementRule) => {
-            delete achievementRule.displayOrder;
-            delete achievementRule.id;
-            delete achievementRule.property;
-            return achievementRule;
-        }).sort((a, b) => a.displayOrder - b.displayOrder);
+            achievementRules = achievementRules.sort((a, b) => Number(a.displayOrder) - Number(b.displayOrder));
 
+            achievementRules.map((achievementRule) => {
+                delete achievementRule.displayOrder;
+                delete achievementRule.id;
+                delete achievementRule.property;
+                return achievementRule;
+            });
+        } else {
+            achievementRules = [];
+        }
         return achievementRules;
     }
 }
