@@ -4,7 +4,10 @@ import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { ActionBarComponent, DrawerComponent, QuestionsTableComponent } from './mobile/component';
+import {
+  ActionBarComponent, DrawerComponent, QuestionsTableComponent,
+  RenderAnswerComponent, RenderQuestionComponent
+} from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
@@ -22,7 +25,9 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     GameFilterPipe,
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
-    RippleEffectDirective
+    RippleEffectDirective,
+    RenderAnswerComponent,
+    RenderQuestionComponent
   ],
   imports: [
     CommonModule,
@@ -57,7 +62,9 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     GameFilterPipe,
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
-    RippleEffectDirective
+    RippleEffectDirective,
+    RenderAnswerComponent,
+    RenderQuestionComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

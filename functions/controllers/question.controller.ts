@@ -7,6 +7,7 @@ import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
 import { QuestionService } from '../services/question.service';
 import { GameService } from '../services/game.service';
+const katex = require('katex');
 
 export class QuestionController {
 
@@ -75,6 +76,9 @@ export class QuestionController {
                 // Multiplayer mode - check whose turn it is. Not yet implemented
                 Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.WAIT_FOR_YOUR_TURN);
             }
+            const redneredQuestion = katex.renderToString('  \\text{What is answer}  c = \\pm\\sqrt{a^2 + b^2}  \\text{number of cats}', {
+                throwOnError: true
+            });
 
             const status = await GameMechanics.changeTheTurn(game);
             if (status) {
@@ -100,6 +104,7 @@ export class QuestionController {
                 question.gameRound = game.round;
                 question.addedOn = createdOn;
                 question.serverTimeQCreated = createdOn;
+                question.renderedQuestion = redneredQuestion;
                 game.playerQnAs.push(playerQnA);
                 const dbGame = game.getDbModel();
                 await GameService.setGame(dbGame);
@@ -109,6 +114,7 @@ export class QuestionController {
                 newQuestion.gameRound = game.round;
                 const createdOn = Utils.getUTCTimeStamp();
                 newQuestion.serverTimeQCreated = createdOn;
+                newQuestion.renderedQuestion = redneredQuestion;
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, newQuestion);
             }
         } catch (error) {

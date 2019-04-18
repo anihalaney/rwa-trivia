@@ -1,4 +1,5 @@
-import { Category } from './category'
+import { Category } from './category';
+import { SafeHtml } from '@angular/platform-browser';
 
 export class Question {
   id: string;
@@ -25,6 +26,8 @@ export class Question {
   gameRound?: number;
   totalQALength?: number;
   serverTimeQCreated?: number;
+  renderedQuestion?: any;
+  renderedAnswer?; any;
 
 
 
@@ -63,6 +66,8 @@ export class Question {
     question.tags = source.tags;
     question.created_uid = source.created_uid;
     question.serverTimeQCreated = source.serverTimeQCreated;
+    question.renderedQuestion = source.renderedQuestion;
+
     question.totalQALength = this.countQALength(source);
     return question;
   }
@@ -96,6 +101,7 @@ export class Answer {
   id: number;
   answerText: string;
   correct: boolean;
+  renderedAnswer?: string;
 }
 
 export enum QuestionStatus {

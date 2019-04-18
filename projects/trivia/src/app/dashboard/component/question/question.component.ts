@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Question, Answer, User } from 'shared-library/shared/model';
+import { Question, Answer, User, ApplicationSettings } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { QuestionActions } from './../../../../../../shared-library/src/lib/core/store/actions';
@@ -29,16 +29,28 @@ export class QuestionComponent implements OnDestroy {
   doPlay = true;
   categoryDictionary: any;
   subscriptions = [];
+  applicationSettings: ApplicationSettings;
 
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils,
     private cd: ChangeDetectorRef) {
     this.answeredText = '';
     this.correctAnswerText = '';
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+      .subscribe(appSettings => {
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+          this.cd.markForCheck();
+        }
+      }));
+
     this.subscriptions.push(this.store.select(categoryDictionary).subscribe(categories => {
       this.categoryDictionary = categories;
       this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
+          this.question.answers.forEach((ans, index) => {
+            ans.renderedAnswer = ans.answerText;
+          });
           this.cd.markForCheck();
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
           if (this.question.answers) {
@@ -73,6 +85,7 @@ export class QuestionComponent implements OnDestroy {
       this.doPlay = false;
       const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
       this.answerClicked.emit(index);
+      this.cd.markForCheck();
     }
   }
 

@@ -272,6 +272,11 @@ export class GameDialog {
       }
       this.originalAnswers = Object.assign({}, question.answers);
       this.currentQuestion = question;
+
+      this.currentQuestion.answers.forEach((ans, index) => {
+        ans.renderedAnswer = ans.answerText;
+      });
+
       this.calculateMaxTime();
       this.timer = this.MAX_TIME_IN_SECONDS;
       this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);

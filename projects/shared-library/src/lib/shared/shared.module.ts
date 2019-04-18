@@ -7,6 +7,7 @@ import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { ShareButtonModule } from '@ngx-share/button';
+import { SafeHtmlPipe } from './pipe/safe-html.pipe';
 
 import {
   QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
@@ -24,7 +25,8 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     SocialPaletteComponent,
     AuthorComponent,
     ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective
+    OpenUserProfileDirective,
+    SafeHtmlPipe
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,7 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
     HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective
+    OpenUserProfileDirective , SafeHtmlPipe
   ]
 })
 export class SharedModule { }
