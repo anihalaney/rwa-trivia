@@ -193,10 +193,26 @@ export class UserActions {
     };
   }
 
+  static ADD_FEEDBACK = 'ADD_FEEDBACK';
+  addFeedback(feedback): ActionWithPayload<User> {
+    return {
+      type: UserActions.ADD_FEEDBACK,
+      payload: feedback
+    };
+  }
+
   static ADD_USER_PROFILE_SUCCESS = 'ADD_USER_PROFILE_SUCCESS';
   addUserProfileSuccess() {
     return {
       type: UserActions.ADD_USER_PROFILE_SUCCESS,
+      payload: null
+    };
+  }
+
+  static ADD_FEEDBACK_SUCCESS = 'ADD_FEEDBACK_SUCCESS';
+  addFeedbackSuccess() {
+    return {
+      type: UserActions.ADD_FEEDBACK_SUCCESS,
       payload: null
     };
   }

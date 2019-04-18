@@ -93,6 +93,19 @@ export function userProfileSaveStatus(state: any = 'NONE', action: ActionWithPay
       return null;
   }
 }
+
+// feedback
+export function feedback(state: any = 'NONE', action: ActionWithPayload<String>): String {
+  switch (action.type) {
+    case UserActions.ADD_FEEDBACK:
+      return action.payload;
+    case UserActions.ADD_FEEDBACK_SUCCESS:
+      return 'SUCCESS';
+    default:
+      return null;
+  }
+}
+
 export function account(state: any = null, action: ActionWithPayload<any>) {
   switch (action.type) {
     case UserActions.LOAD_ACCOUNT_SUCCESS:
