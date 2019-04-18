@@ -397,14 +397,16 @@ export class MigrationController {
             for (const question of unPublishedQs) {
 
                 console.log('<<<< quesiton >>>>>>>>', question.id);
-                const renderedQuestion = question.questionText.replace(/_/g, '\\_');
-                console.log('<<<< quesiton >>>>>>>>', question.questionText);
+                let renderedQuestion = question.questionText.replace(/_/g, '\\_');
+                renderedQuestion = renderedQuestion.replace(/#/g, '\\#');
+                 renderedQuestion = renderedQuestion.replace(/%/g, '\\%');
+                console.log('<<<< quesiton >>>>>>>>', renderedQuestion);
                 question.renderedQuestion = katex.renderToString(` \\text{ ${renderedQuestion} }`, {
                     throwOnError: true
                 });
 
                 const dbQuestionObj = { ...question };
-                // updatePromises.push(QuestionService.updateQuestion(MigrationConstants.UNPUBLISHED_QUESTIONS, dbQuestionObj));
+                updatePromises.push(QuestionService.updateQuestion(MigrationConstants.UNPUBLISHED_QUESTIONS, dbQuestionObj));
             }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await Promise.all(updatePromises));
         } catch (error) {
