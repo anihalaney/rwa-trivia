@@ -35,7 +35,7 @@
                             </Label>
                         </StackLayout>
                     </StackLayout>
-                    <Label *ngIf="(authProvider.isAuthenticated ) && (applicationSettings && applicationSettings.display_achievements)" row="5" colSpan="2" text="Achievements" 
+                    <Label *ngIf="authProvider.isAuthenticated  && applicationSettings && applicationSettings.display_achievements" row="5" colSpan="2" text="Achievements" 
                             class="sideLabel" [class.active-menu]="activeMenu === 'achievements'"
                             
                             [ngStyle]="{'background-color': (activeMenu === 'achievements') ? '#10347f' : '#13284F' }" 
