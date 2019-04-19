@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 
-import { Subscription, Subscribers, Blog, SystemStats } from 'shared-library/shared/model';
+import { Subscription, Subscribers, Blog, SystemStats, AchievementRule } from 'shared-library/shared/model';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
 export enum DashboardActionTypes {
@@ -23,7 +22,9 @@ export enum DashboardActionTypes {
     LOAD_LEADERBOARD_SUCCESS = '[Stats] LoadLeaderBoardSuccess',
     LOAD_SYSTEM_STAT = '[Stats] LoadSystemStat',
     LOAD_SYSTEM_STAT_SUCCESS = '[Stats] LoadSystemStatSuccess',
-    LOAD_SYSTEM_STAT_ERROR = '[Stats] LoadSystemStatError'
+    LOAD_SYSTEM_STAT_ERROR = '[Stats] LoadSystemStatError',
+    LOAD_ACHIEVEMENTS = '[Stats] LoadAchievements',
+    LOAD_ACHIEVEMENTS_SUCCESS = '[Stats] LoadAchievementsSuccess',
 }
 
 // Save subscriber
@@ -134,6 +135,18 @@ export class LoadSystemStatError implements Action {
     constructor(public payload: string) { }
 }
 
+// Load Achievements
+export class LoadAchievements implements Action {
+    readonly type = DashboardActionTypes.LOAD_ACHIEVEMENTS;
+    constructor() { }
+}
+
+// Load Achievements
+export class LoadAchievementsSuccess implements Action {
+    readonly type = DashboardActionTypes.LOAD_ACHIEVEMENTS_SUCCESS;
+    constructor(public payload: AchievementRule[]) { }
+}
+
 
 
 export type DashboardActions
@@ -154,5 +167,7 @@ export type DashboardActions
     | LoadLeaderBoardSuccess
     | LoadSystemStat
     | LoadSystemStatSuccess
-    | LoadSystemStatError;
+    | LoadSystemStatError
+    | LoadAchievements
+    | LoadAchievementsSuccess;
 

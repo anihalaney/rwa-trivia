@@ -1,4 +1,4 @@
-.card{ border-bottom: 1px solid }
+.card{ border-bottom: 1px solid; max-width:263px; }
 .card {border-color: rgba(204, 204, 204, 0.44); }
 .playwith a{ display: block; padding:20px 25px; position: relative;cursor: pointer }
 .playwith a:after{ content: ""; position: absolute; right: 35px; height: 26px; width: 26px; border-radius: 23px;margin: auto; top: 0; bottom: 0;z-index: 99; transition: 0.3s ease-in-out}
@@ -27,4 +27,3 @@
 {
   padding: 10px 0;
 }
-

@@ -14,7 +14,7 @@ import { PlatformFirebaseToken } from 'shared-library/core/db-service/tokens';
 import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angular';
 import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterModule } from '@angular/router';
-import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent } from './components';
+import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent, AchievementsComponent } from './components';
 import { UserFeedbackComponent } from './components/index.tns';
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -33,6 +33,7 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     RecentGameCardComponent,
     RecentGamesComponent,
     PrivacyPolicyComponent,
+    AchievementsComponent,
     UserFeedbackComponent
   ],
   imports: [

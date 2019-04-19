@@ -1,0 +1,14 @@
+<div class="card">
+  <ul class="achievements">
+    <li *ngFor="let achievement of achievements">
+      <div class="row">
+        <div class="col-md-3">
+          <img [src]="achievement.iconPath" alt="{{achievement.name}}" width="30" height="30" />
+        </div>
+        <div class="col-md-9">
+          <p class="name">{{achievement.name}}</p>
+        </div>
+      </div>
+    </li>  
+  </ul>
+</div>
