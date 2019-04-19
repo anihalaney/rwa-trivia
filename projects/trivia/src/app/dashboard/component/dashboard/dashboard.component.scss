@@ -218,3 +218,12 @@ mat-card>:first-child{
   }
 }
 
+
+.pb-12 {
+  padding-bottom:12;
+}
+
+.div-opacity {
+  opacity: 0.5 !important;
+  filter: Alpha(opacity=50) !important; /* IE8 and earlier */
+}
