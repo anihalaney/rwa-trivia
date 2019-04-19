@@ -52,18 +52,36 @@
                         class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToMyQuestion()"
                         ></Label>
 
-                        <Label *ngIf="authProvider.isAuthenticated" row="8" colSpan="2"
-                            text="Profile" textWrap="true" class="sideLabel sideStackLayout" [class.active-menu]="activeMenu === 'Profile'"
-                            [ngStyle]="{'background-color': (activeMenu === 'Profile') ? '#10347f' : '#13284F' }" 
-                            class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToProfileSettings()"></Label>
-                        <Label row="9" colSpan="2" text="Privacy Policy" class="sideLabel" [class.active-menu]="activeMenu === 'Privacy Policy'" [ngStyle]="{'background-color': (activeMenu === 'Privacy Policy') ? '#10347f' : '#13284F' }" 
-                        class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToPrivacyPolicy()"
-                        ></Label>
-                        <Label row="10" colSpan="2" text="Terms of Use" 
-                            class="sideLabel" [class.active-menu]="activeMenu === 'Terms of Use'"
-                            
-                            [ngStyle]="{'background-color': (activeMenu === 'Terms of Use') ? '#10347f' : '#13284F' }" 
-                        class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToTermsConditions()"></Label>
+                    <Label *ngIf="authProvider.isAuthenticated" row="8" colSpan="2"
+                        text="Profile" textWrap="true" class="sideLabel sideStackLayout" [class.active-menu]="activeMenu === 'Profile'"
+                        [ngStyle]="{'background-color': (activeMenu === 'Profile') ? '#10347f' : '#13284F' }" 
+                        class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToProfileSettings()"></Label>
+                    
+                    <GridLayout row="9" stlRippleEffect stlBackgroundColor="#10347f" (tap)="showHelp = !showHelp" rows="*" column="*, auto"
+                        colSpan="2" [class.active-menu]="activeMenu === 'Help'">
+                        <Label row="0" col="0" text="Help" class="sideLabel sideStackLayout"></Label>
+                        <Label  row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"
+                            verticalAlignment="center"  text="{{ showHelp ? '&#xf067;' : '&#xf068;' }}"
+                            paddingRight="15"></Label>
+                    </GridLayout>
+
+                    <StackLayout row="10" colSpan="2" visibility="{{ !showHelp ? 'visible' : 'collapsed' }}">
+                        <StackLayout orientation="horizontal" paddingLeft="10">
+                            <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
+                            <Label padding="10"  (tap)="navigateToPrivacyPolicy()" colSpan="2" text="Privacy Policy" 
+                            class="sideLabel" [class.active-menu]="activeMenu === 'Privacy Policy'"></Label>
+                        </StackLayout>
+                        <StackLayout  orientation="horizontal" paddingLeft="10">
+                            <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
+                            <Label padding="10" (tap)="navigateToTermsConditions()" colSpan="2" text="Terms of Use" 
+                            class="sideLabel" [class.active-menu]="activeMenu === 'Terms of Use'"></Label>
+                        </StackLayout>
+                        <StackLayout  orientation="horizontal" paddingLeft="10">
+                            <Label col="0"  text="&#xf111;" class="fa" fontSize="9" verticalAlignment="center" color="#10347f"></Label>
+                            <Label padding="10" (tap)="navigateToUserFeedback()" colSpan="2" text="Feedback" 
+                            class="sideLabel" [class.active-menu]="activeMenu === 'Feedback'"></Label>
+                        </StackLayout>
+                    </StackLayout>                        
                 </GridLayout>
             </ScrollView>
         </StackLayout>

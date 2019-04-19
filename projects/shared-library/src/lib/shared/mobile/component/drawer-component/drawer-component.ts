@@ -40,6 +40,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     pushToken: string;
     applicationSettings: ApplicationSettings;
     subscriptions = [];
+    showHelp: Boolean = true;
 
     constructor(private routerExtension: RouterExtensions,
         private store: Store<CoreState>,
@@ -63,11 +64,10 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/user/my/invite-friends') {
                     this.activeMenu = 'Friend List';
-                } else if (nav === '/privacy-policy') {
-                    this.activeMenu = 'Privacy Policy';
-                } else if (nav === '/terms-and-conditions') {
-                    this.activeMenu = 'Terms of Use';
-                } else if (nav === '/achievements') {
+                }  else if (nav === '/privacy-policy' || nav === '/terms-and-conditions' || nav === '/user-feedback') {
+                    this.activeMenu = 'Help';
+                }
+                else if (nav === '/achievements') {
                     this.activeMenu = 'achievements';
                 }
 
@@ -198,6 +198,11 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     navigateToAchievements() {
         this.routerExtension.navigate(['/achievements']);
+        this.closeDrawer();
+    }
+
+    navigateToUserFeedback() {
+        this.routerExtension.navigate(['/user-feedback']);
         this.closeDrawer();
     }
 

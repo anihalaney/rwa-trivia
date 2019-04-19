@@ -15,6 +15,7 @@ import { NativeScriptUISideDrawerModule } from 'nativescript-ui-sidedrawer/angul
 import { registerElement } from 'nativescript-angular/element-registry';
 import { RouterModule } from '@angular/router';
 import { RecentGameCardComponent, RecentGamesComponent, PrivacyPolicyComponent, AchievementsComponent } from './components';
+import { UserFeedbackComponent } from './components/index.tns';
 
 // import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 export function firebaseFactory() {
@@ -32,7 +33,8 @@ registerElement('Fab', () => require('nativescript-floatingactionbutton').Fab);
     RecentGameCardComponent,
     RecentGamesComponent,
     PrivacyPolicyComponent,
-    AchievementsComponent
+    AchievementsComponent,
+    UserFeedbackComponent
   ],
   imports: [
     CoreModule,
