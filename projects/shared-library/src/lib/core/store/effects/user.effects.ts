@@ -163,6 +163,15 @@ export class UserEffects {
                 );
             })
         );
+
+    // Save feedback
+    @Effect()
+    addFeedback$ = this.actions$
+        .pipe(ofType(UserActions.ADD_FEEDBACK))
+        .pipe(map((action: ActionWithPayload<any>) => action.payload),
+        switchMap((feedback: any) => this.svc.addFeedback(feedback)),
+        map((res: any) => this.userActions.addFeedbackSuccess()));
+
     // Add User lives
     @Effect()
     AddUserLives$ = this.actions$
