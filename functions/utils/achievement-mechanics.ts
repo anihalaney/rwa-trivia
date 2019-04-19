@@ -30,7 +30,7 @@ export class AchievementMechanics {
             const achievementRules: AchievementRule[] = await AchievementRulesService.getAchievementRules();
             const achievementRulesDict: { [key: string]: AchievementRule } = {};
             for (const achievementRule of achievementRules) {
-                achievementRulesDict[achievementRules[GeneralConstants.ID]] = achievementRule;
+                achievementRulesDict[achievementRule[GeneralConstants.ID]] = achievementRule;
             }
             const oldAchievementData: Achievement = await AchievementService.getAchievementByUserId(account.id);
 
@@ -59,7 +59,6 @@ export class AchievementMechanics {
 
             for (const achievementId of achievementIdsForNotification) {
                 const message = `You get ${achievementRulesDict[achievementId].name} Achievement`;
-
                 PushNotification.sendGamePlayPushNotifications(message, account.id,
                     pushNotificationRouteConstants.ACHIEVEMENT_NOTIFICATION);
             }
