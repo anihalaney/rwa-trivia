@@ -21,8 +21,7 @@ import { AppState } from '../../../store';
 import { ProfileSettings } from './profile-settings';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { fromAsset } from 'tns-core-modules/image-source';
-import { ImageCropper, OptionsCommon } from 'nativescript-imagecropper';
-import { path, knownFolders} from 'tns-core-modules/file-system/file-system';
+import { ImageCropper } from 'nativescript-imagecropper';
 
 @Component({
   selector: 'profile-settings',
