@@ -25,6 +25,7 @@ export class NavigationService {
       this.router.url === '/privacy-policy' ||
       this.router.url === '/terms-and-conditions' ||
       this.router.url === '/user-feedback' ||
+      this.router.url === '/achievements' ||
       this.router.url.includes('game-play') ||
       this.router.url.includes('/user/my/profile/') ||
       this.router.url.includes('/stats/leaderboard/') ) {

@@ -4,7 +4,7 @@ import { Subscription, Subscribers, Blog } from 'shared-library/shared/model';
 import {
     subscriptionSaveStatus, getTotalSubscriptionStatus,
     subscriptionRemoveStatus, checkEmailSubscriptionStatus,
-    socialShareImageUrl, blogs, scoreBoard, systemStat
+    socialShareImageUrl, blogs, scoreBoard, systemStat, achievements
 } from './dashboard.reducer';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
 
@@ -19,6 +19,7 @@ export interface DashboardState {
     blogs: any;
     scoreBoard: any;
     systemStat: any;
+    achievements: any;
 }
 
 export const reducer: ActionReducerMap<DashboardState> = {
@@ -29,7 +30,8 @@ export const reducer: ActionReducerMap<DashboardState> = {
     socialShareImageUrl: socialShareImageUrl,
     blogs: blogs,
     scoreBoard: scoreBoard,
-    systemStat: systemStat
+    systemStat: systemStat,
+    achievements: achievements,
 };
 
 export const dashboardState = createFeatureSelector<DashboardState>('dashboard');

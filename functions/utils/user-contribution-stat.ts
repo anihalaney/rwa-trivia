@@ -1,4 +1,4 @@
-import { UserStatConstants, Account, Question, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { Account, GeneralConstants, Question, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from './utils';
@@ -51,5 +51,4 @@ export class UserContributionStat {
             return Utils.throwError(error);
         }
     }
-
 }

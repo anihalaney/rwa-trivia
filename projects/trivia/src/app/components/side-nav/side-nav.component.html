@@ -8,8 +8,19 @@
     </span>
   </a>
 </div>
-<user-stats-card></user-stats-card>
 
+<div class="card">
+  <mat-card-content>
+    <mat-tab-group fxFlex mat-stretch-tabs>
+      <mat-tab fxFlex label="Stats View">
+         <user-stats-card></user-stats-card>
+      </mat-tab>
+      <mat-tab fxFlex label="Achievements" *ngIf="applicationSettings && applicationSettings.display_achievements">
+        <app-achievements></app-achievements>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</div>
 
 <div class="card playwith">
   <a [routerLink]="['/user/my/invite-friends']" tabindex="2">
@@ -35,10 +46,12 @@
   </share-button>
   <div class="store-img-container-div">
     <span>
-      <a [href]="appStoreUrl" target="_blank"><img class="app-store-img" style="height: 50px;" src="/assets/images/appstore-badge.svg"/></a>        
+      <a [href]="appStoreUrl" target="_blank"><img class="app-store-img" style="height: 50px;"
+          src="/assets/images/appstore-badge.svg" /></a>
     </span>
     <span>
-      <a class="play-store-a" target="_blank" [href]='playStoreUrl'><img alt='Get it on Google Play' class="play-store-img" src='assets/images/google-play-badge.png'/></a>
+      <a class="play-store-a" target="_blank" [href]='playStoreUrl'><img alt='Get it on Google Play'
+          class="play-store-img" src='assets/images/google-play-badge.png' /></a>
     </span>
   </div>
 </div>
