@@ -224,6 +224,7 @@ mat-card>:first-child{
 }
 
 .div-opacity {
-  opacity: 0.5 !important;
-  filter: Alpha(opacity=50) !important; /* IE8 and earlier */
+  background-color: #eaeaea;
+  opacity: 0.8 !important;
+  filter: Alpha(opacity=80) !important; /* IE8 and earlier */
 }
