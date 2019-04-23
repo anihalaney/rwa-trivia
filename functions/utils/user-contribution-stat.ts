@@ -42,7 +42,7 @@ export class UserContributionStat {
                 if (isMigrationScript) {
                     account.contribution = count;
                 } else {
-                    account.contribution = account.contribution ? (account.contribution + count) : count;
+                    account.contribution = account.contribution ? Utils.changeFieldValue(1) : count;
                 }
             }
 

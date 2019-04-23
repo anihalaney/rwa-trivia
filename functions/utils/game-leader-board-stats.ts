@@ -82,7 +82,7 @@ export class GameLeaderBoardStats {
     }
 
     private static calculateAllGameUsersStat(account: Account, userId: string, game: Game, categoryIds: Array<number>): Account {
-        return AccountService.calculateAccountStat(account, game, categoryIds, userId);
+        return AccountService.calculateAccountStat(account, game, categoryIds, userId, true);
     }
 
     static async getGameUsers(game: Game): Promise<any> {
@@ -132,7 +132,7 @@ export class GameLeaderBoardStats {
             if (account && account.id) {
 
                 return await AccountService.updateAccountData(
-                    AccountService.calculateAccountStat(account, game, categoryIds, userId));
+                    AccountService.calculateAccountStat(account, game, categoryIds, userId, false));
             }
             return AccountConstants.ACCOUNT_DOES_NOT_EXIST;
         } catch (error) {

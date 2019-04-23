@@ -8,7 +8,7 @@ export class Friends {
 export class FriendsMetadata {
     date: number;
     created_uid: string;
-    gamePlayed: number;
-    losses: number;
-    wins: number;
+    gamePlayed: any;
+    losses: any;
+    wins: any;
 }

@@ -35,7 +35,7 @@ export class Game {
   public createdAt: number;
   public turnAt: number;
   public gameOverAt: number;
-  public round: number;
+  public round: any;
 
   constructor(gameOptions: GameOptions, player1UUId: string, gameId?: string, playerQnAs?: any, gameOver?: boolean,
     nextTurnPlayerId?: string, player2UUId?: string, winnerPlayerId?: string, gameStatus?: string, createdAt?: number, turnAt?: number,

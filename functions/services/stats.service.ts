@@ -34,7 +34,7 @@ export class StatsService {
         try {
             return await StatsService.statsFireStoreClient
                 .doc(`${CollectionConstants.STATS}/${statName}`)
-                .set(SystemStat);
+                .set(SystemStat, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -71,11 +71,11 @@ export class StatsService {
 
             switch (entity) {
                 case SystemStatConstants.TOTAL_USERS:
-                    systemStatObj.total_users = (systemStatObj.total_users) ? systemStatObj.total_users + 1 : 1;
+                    systemStatObj.total_users = (systemStatObj.total_users) ? Utils.changeFieldValue(1) : 1;
                     break;
                 case SystemStatConstants.TOTAL_QUESTIONS:
                     systemStatObj.total_questions = (systemStatObj.total_questions)
-                        ? systemStatObj.total_questions + 1 : 1;
+                        ? Utils.changeFieldValue(1) : 1;
                     break;
                 case SystemStatConstants.ACTIVE_GAMES:
                     const active_games = await GameService.getLiveGames();

@@ -102,7 +102,7 @@ export class FriendService {
         try {
             return await FriendService.friendFireStoreClient
                 .doc(`/${CollectionConstants.FRIENDS}/${invitee}`)
-                .set(dbUser);
+                .set(dbUser, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
