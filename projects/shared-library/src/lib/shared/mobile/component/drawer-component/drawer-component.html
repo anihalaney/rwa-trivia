@@ -1,7 +1,7 @@
 <StackLayout backgroundColor="#13284F">
     <GridLayout rows="*,auto" class="Roboto-Regular">
         <StackLayout row="0">
-            <ScrollView>
+            <ScrollView #ScrollList >
                 <GridLayout rows="120,auto,auto,auto,auto,auto,auto,auto,auto,auto,auto" class="sideStackLayout">
                     <GridLayout row="0" columns="auto,*" class="sideStackLayoutHeader" *ngIf="authProvider.isAuthenticated">
                         <Image row="0" col="0" src="{{photoUrl}}" backgroundColor="gray" stretch="aspectFill" height="64"
@@ -57,7 +57,7 @@
                         [ngStyle]="{'background-color': (activeMenu === 'Profile') ? '#10347f' : '#13284F' }" 
                         class="sideLabel" stlRippleEffect stlBackgroundColor="#10347f" stlBackgroundColorAfter="#10347f" (rippleTap)="navigateToProfileSettings()"></Label>
                     
-                    <GridLayout row="9" stlRippleEffect stlBackgroundColor="#10347f" (tap)="showHelp = !showHelp" rows="*" column="*, auto"
+                    <GridLayout row="9" stlRippleEffect stlBackgroundColor="#10347f" (tap)="showHelp = !showHelp;scrollToBottom()" rows="*" column="*, auto"
                         colSpan="2" [class.active-menu]="activeMenu === 'Help'">
                         <Label row="0" col="0" text="Help" class="sideLabel sideStackLayout"></Label>
                         <Label  row="0" col="1" class="fa expand-options" color="#fff" horizontalAlignment="right"

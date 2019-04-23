@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewContainerRef, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 import * as app from 'application';
@@ -27,6 +27,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class DrawerComponent implements OnInit, OnDestroy {
 
+    @ViewChild('ScrollList') scrollList: ElementRef;
     @Output() output = new EventEmitter();
     photoUrl = '~/assets/icons/icon-192x192.png';
     currentState;
@@ -204,6 +205,12 @@ export class DrawerComponent implements OnInit, OnDestroy {
     navigateToUserFeedback() {
         this.routerExtension.navigate(['/user-feedback']);
         this.closeDrawer();
+    }
+
+    scrollToBottom() {
+        setTimeout(() => {
+            this.scrollList.nativeElement.scrollToVerticalOffset(this.scrollList.nativeElement.scrollableHeight, true);
+        }, 100);
     }
 
     ngOnDestroy(): void {
