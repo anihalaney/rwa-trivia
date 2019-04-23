@@ -9,11 +9,11 @@ import { AchievementRule } from '../../shared/model';
 export class AchievementService {
   constructor(
     private http: HttpClient
-    ) {
+  ) {
   }
 
   getAchievements(): Observable<AchievementRule[]> {
-    const url: string = CONFIG.functionsUrl + '/app/achievement';
+    const url = `${CONFIG.functionsUrl}/app/achievement`;
     return this.http.get<AchievementRule[]>(url);
   }
 
