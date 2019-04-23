@@ -208,6 +208,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     scrollToBottom() {
+        // wait for the layout to be loaded before scroll to bottom
         setTimeout(() => {
             this.scrollList.nativeElement.scrollToVerticalOffset(this.scrollList.nativeElement.scrollableHeight, true);
         }, 100);
