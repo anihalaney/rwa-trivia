@@ -11,11 +11,11 @@
 
 <div class="card">
   <mat-card-content>
-    <mat-tab-group mat-stretch-tabs>
-      <mat-tab label="Stats View">
+    <mat-tab-group fxFlex mat-stretch-tabs>
+      <mat-tab fxFlex label="Stats View">
          <user-stats-card></user-stats-card>
       </mat-tab>
-      <mat-tab label="Achievements" *ngIf="applicationSettings && applicationSettings.display_achievements">
+      <mat-tab fxFlex label="Achievements" *ngIf="applicationSettings && applicationSettings.display_achievements">
         <app-achievements></app-achievements>
       </mat-tab>
     </mat-tab-group>
