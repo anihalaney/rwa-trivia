@@ -1,11 +1,12 @@
 import {
-    CollectionConstants, Game, Question, SystemStatConstants, SystemStats, User, SystemStatsAtomic
+    CollectionConstants, Game, Question, SystemStatConstants, SystemStats, User
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 import { GameService } from './game.service';
 import { QuestionService } from './question.service';
 import { UserService } from './user.service';
+import { SystemStatsAtomic } from '../model';
 
 export class StatsService {
 

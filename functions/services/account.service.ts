@@ -1,10 +1,11 @@
 import {
     Account, Game, CollectionConstants,
-    GeneralConstants, LeaderBoardConstants, AccountConstants, AccountAtomic
+    GeneralConstants, LeaderBoardConstants, AccountConstants,
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 import { AppSettings } from './app-settings.service';
+import { AccountAtomic } from '../model';
 
 export class AccountService {
 

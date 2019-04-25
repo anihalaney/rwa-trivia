@@ -1,12 +1,13 @@
 
 import {
-    Account, Game, Question, AccountConstants, PlayerQnA, AccountAtomic
+    Account, Game, Question, AccountConstants, PlayerQnA
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from '../utils/utils';
+import { AccountAtomic } from '../model';
 
 export class GameLeaderBoardStats {
 

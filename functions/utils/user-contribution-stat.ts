@@ -1,7 +1,8 @@
-import { GeneralConstants, Question, UserStatConstants, AccountAtomic } from '../../projects/shared-library/src/lib/shared/model';
+import { GeneralConstants, Question, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from './utils';
+import { AccountAtomic } from '../model';
 
 export class UserContributionStat {
 
