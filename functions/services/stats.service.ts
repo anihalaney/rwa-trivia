@@ -1,5 +1,5 @@
 import {
-    CollectionConstants, Game, Question, SystemStatConstants, SystemStats, User
+    CollectionConstants, Game, Question, SystemStatConstants, SystemStats, User, SystemStatsAtomic
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
@@ -66,8 +66,8 @@ export class StatsService {
 
     static async updateSystemStats(entity: string): Promise<any> {
         try {
-            let systemStatObj: SystemStats = await StatsService.getSystemStats(CollectionConstants.STATS_SYSTEM);
-            systemStatObj = (systemStatObj) ? systemStatObj : new SystemStats();
+            let systemStatObj: SystemStatsAtomic = await StatsService.getSystemStats(CollectionConstants.STATS_SYSTEM);
+            systemStatObj = (systemStatObj) ? systemStatObj : new SystemStatsAtomic();
 
             switch (entity) {
                 case SystemStatConstants.TOTAL_USERS:

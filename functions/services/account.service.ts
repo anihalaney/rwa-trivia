@@ -1,6 +1,6 @@
 import {
     Account, Game, CollectionConstants,
-    GeneralConstants, LeaderBoardConstants, AccountConstants
+    GeneralConstants, LeaderBoardConstants, AccountConstants, AccountAtomic
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
@@ -89,7 +89,8 @@ export class AccountService {
      * calculateAccountStat
      * return account
      */
-    static calculateAccountStat(account: Account, game: Game, categoryIds: Array<number>, userId: string, isMigration: boolean): Account {
+    static calculateAccountStat(account: AccountAtomic, game: Game, categoryIds: Array<number>,
+        userId: string, isMigration: boolean): AccountAtomic {
 
         const score = game.stats[userId].score;
 
@@ -150,8 +151,7 @@ export class AccountService {
                         account.nextLiveUpdate = Utils.addMinutes(timestamp, livesMilles);
                     }
                     if (account.lives > 0) {
-                        const livesDecrease = Utils.changeFieldValue(-1);
-                        account.lives = livesDecrease;
+                        account.lives = Utils.changeFieldValue(-1);
                     }
                     accountRef.update(account);
                 }
@@ -283,10 +283,7 @@ export class AccountService {
                 if (docRef.exists) {
 
                     const account = docRef.data();
-
-                    const bitsIncrement = Utils.changeFieldValue(bits);
-
-                    account.bits = (account.bits) ? bitsIncrement : bits;
+                    account.bits = (account.bits) ? Utils.changeFieldValue(bits) : bits;
                     account.id = userId;
                     accountRef.update(account);
                 } else {
@@ -311,8 +308,7 @@ export class AccountService {
 
                 if (docRef.exists) {
                     const account = docRef.data();
-                    const bytesIncrement = Utils.changeFieldValue(bytes);
-                    account.bytes = (account.bytes) ? bytesIncrement : bytes;
+                    account.bytes = (account.bytes) ? Utils.changeFieldValue(bytes) : bytes;
                     account.id = userId;
                     accountRef.update(account);
                 } else {
@@ -336,8 +332,7 @@ export class AccountService {
 
             if (docRef.exists) {
                 const account = docRef.data();
-                const bytesIncrement = Utils.changeFieldValue(bytes);
-                account.bytes = (account.bytes) ? bytesIncrement : bytes;
+                account.bytes = (account.bytes) ? Utils.changeFieldValue(bytes) : bytes;
                 account.id = userId;
                 accountRef.update(account);
             } else {
