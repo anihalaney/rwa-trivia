@@ -7,7 +7,7 @@ import { GamePlayRoutingModule } from './routing/game-play-routing.module';
 import {
   NewGameComponent, GameComponent,
   GameQuestionComponent, GameQuestionContinueComponent,
-  GameOverComponent, GameDialogComponent, ReportGameComponent
+  GameOverComponent, GameDialogComponent, ReportGameComponent, GameContinueComponent
 } from './components';
 import { effects, reducer } from './store';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
@@ -28,6 +28,7 @@ const DEFAULT_SWIPER_CONFIG: SwiperConfigInterface = {
     GameOverComponent,
     GameDialogComponent,
     ReportGameComponent,
+    GameContinueComponent
   ],
   entryComponents: [
     GameDialogComponent,
