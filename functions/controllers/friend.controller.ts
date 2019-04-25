@@ -1,6 +1,6 @@
+import { FriendConstants, interceptorConstants, ResponseMessagesConstants, User } from '../../projects/shared-library/src/lib/shared/model';
 import { MakeFriends } from '../utils/make-friends';
 import { Utils } from '../utils/utils';
-import { interceptorConstants, FriendConstants, ResponseMessagesConstants, User } from '../../projects/shared-library/src/lib/shared/model';
 
 export class FriendController {
 
