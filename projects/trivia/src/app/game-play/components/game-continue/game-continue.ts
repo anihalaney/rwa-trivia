@@ -7,12 +7,8 @@ import { Game, PlayerMode, User } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 
 export class GameContinue implements OnInit {
-
-  @Input() correctCount: number;
-  @Input() noOfQuestions: number;
+  
   @Output() continueButtonClicked = new EventEmitter();
-  @Output() viewQuestionClicked = new EventEmitter<any>();
-  @Input() categoryName: string;
   @Input() game: Game;
   @Input() userDict: { [key: string]: User };
   @Input() totalRound: number;

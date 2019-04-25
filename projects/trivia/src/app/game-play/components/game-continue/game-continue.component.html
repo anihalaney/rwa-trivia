@@ -1,3 +1,58 @@
 <div class="card main-div">
-  <h2>Game Continue</h2>
+  <mat-card-content class="textcenter" id="share-content">
+    <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
+      <div class="yourimg">
+        <img [src]="getImageUrl(user)" alt="User Profile Image" />
+      </div>
+      <label href="#" id="you" class="dark text-style ">{{playerUserName}}</label>
+      <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}} / {{game.round}}</div>
+      <div class="div-top-spacing score-div-height">
+        <div *ngIf="game.stats[user.userId].score>= 1" class="sprite score1"></div>
+        <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
+        <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
+        <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
+        <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+      </div>
+    </div>
+    <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+      <div class="col-sm-3 col-sm-offset-3">
+        <div class="yourimg" [ngClass]="{'vs': game.playerIds.length>1 }">
+          <img [src]="getImageUrl(user)" alt="User Profile Image" />
+        </div>
+        <label href="#" class="dark text-style">{{playerUserName}}</label>
+        <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
+        <div class="div-top-spacing">
+          <div *ngIf="game.stats[user.userId].score >= 1" class="sprite score1"></div>
+          <div *ngIf="game.stats[user.userId].score >= 2" class="sprite score2"></div>
+          <div *ngIf="game.stats[user.userId].score >= 3" class="sprite score3"></div>
+          <div *ngIf="game.stats[user.userId].score >= 4" class="sprite score4"></div>
+          <div *ngIf="game.stats[user.userId].score >= 5" class="sprite score5"></div>
+        </div>
+      </div>
+      <div class="col-sm-3 yourimg-spacing">
+        <div class="yourimg">
+          <img [stlOpenUserProfile]="otherUserId" [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
+        </div>
+        <label href="#" class="dark text-style">{{otherUserInfo?.displayName}}</label>
+        <div class="dark div-top-spacing text-style">Score {{game.stats[otherUserId].score}}</div>
+        <div class="div-top-spacing">
+          <div *ngIf="game.stats[otherUserId].score >= 1" class="sprite score1"></div>
+          <div *ngIf="game.stats[otherUserId].score >= 2" class="sprite score2"></div>
+          <div *ngIf="game.stats[otherUserId].score >= 3" class="sprite score3"></div>
+          <div *ngIf="game.stats[otherUserId].score >= 4" class="sprite score4"></div>
+          <div *ngIf="game.stats[otherUserId].score >= 5" class="sprite score5"></div>
+        </div>
+      </div>
+    </div>
+    <div class="category-div">
+        <div class="round" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+          <span class="round-value">Round {{game.round}} / {{totalRound}}</span>
+        </div>
+    </div>
+    <div class="continue-button">
+        <button mat-button (click)="continueClicked()" class="continue-btn">Continue</button>
+        <button mat-button [routerLink]="['/dashboard']" class="dashboard-btn">Home</button>
+    </div>
+
+  </mat-card-content>
 </div>

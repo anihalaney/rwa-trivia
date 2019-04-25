@@ -4,8 +4,8 @@
             <CardView class="cardStyle Roboto-Regular" android:elevation="20" ios:elevation="20" radius="1"
                 backgroundColor="white" margin="8">
                 <StackLayout>
-                    <StackLayout (onloaded)="stackLoaded($event)" backgroundColor="#ffffff">
-                        <StackLayout marginTop="30" marginBottom="20">
+                    <StackLayout (onloaded)="stackLoaded($event)" backgroundColor="#ffffff" marginTop="30">
+                        <StackLayout>
                             <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single">
                                 <StackLayout marginLeft="10" verticalAlignment="center" marginRight="10"
                                     borderRadius="50" borderColor="#3b5998" borderWidth="1" height="90" width="90"
@@ -132,11 +132,11 @@
                             <Label class="round" horizontalAlignment="center" text="Round {{game.round}}/{{totalRound}}"
                                 textWrap="true"></Label>
                         </StackLayout>
-                        <StackLayout marginTop="30" marginBottom="60">
-                            <Button class="Hind-Medium dashboard-btn" width="64%" height="60" text="Dashboard"
+                        <StackLayout paddingTop="8" marginBottom="60">
+                            <Button class="Hind-Medium continue-btn" borderColor="#3b5998" width="64%" height="60"
+                                text="Continue" (tap)="continueClicked()" stlRippleEffect></Button>
+                            <Button class="Hind-Medium dashboard-btn" width="64%" height="60" text="Home"
                                 (tap)="gotoDashboard()" stlRippleEffect></Button>
-                            <Button class="Hind-Medium continue-btn" marginTop="14" borderColor="#3b5998" width="64%"
-                                height="60" text="Continue" (tap)="continueClicked()" stlRippleEffect></Button>
                         </StackLayout>
                     </StackLayout>
                 </StackLayout>

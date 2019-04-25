@@ -34,29 +34,8 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
     }
   }
 
-
-  loadImages(sources, callback) {
-    const images = {};
-    let loadedImages = 0;
-    let numImages = 0;
-    // get num of sources
-    for (const key in sources) {
-      if (sources.hasOwnProperty(key)) {
-        numImages++;
-      }
-    }
-
-    for (const src in sources) {
-      if (sources.hasOwnProperty(src)) {
-        images[src] = new Image();
-        images[src].onload = () => {
-          if (++loadedImages >= numImages) {
-            callback(images);
-          }
-        };
-        images[src].src = sources[src];
-      }
-    }
+  continueClicked(event: any) {
+    this.continueButtonClicked.emit();
   }
 
 
