@@ -34,7 +34,7 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
     }
   }
 
-  continueClicked(event: any) {
+  continueClicked() {
     this.continueButtonClicked.emit();
   }
 
