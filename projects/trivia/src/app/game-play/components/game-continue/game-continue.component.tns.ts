@@ -25,7 +25,8 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
     public cd: ChangeDetectorRef,
     public routerExtensions: RouterExtensions
   ) {
-    super(store, userActions, utils, cd);  }
+    super(store, userActions, utils, cd);
+  }
   ngOnInit() {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
@@ -35,7 +36,6 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
 
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subscriptions);
     this.destroy();
   }
 
