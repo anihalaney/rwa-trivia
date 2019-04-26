@@ -40,7 +40,6 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
 
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subscriptions);
     this.destroy();
   }
 

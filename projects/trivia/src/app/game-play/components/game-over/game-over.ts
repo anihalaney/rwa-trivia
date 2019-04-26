@@ -113,9 +113,6 @@ export class GameOver implements OnInit {
   }
 
   getImageUrl(user: User) {
-    setTimeout(() => {
-      this.cd.markForCheck();
-    }, 0);
     return this.utils.getImageUrl(user, 44, 40, '44X40');
   }
 
