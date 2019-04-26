@@ -31,6 +31,7 @@ export class NavigationService {
       this.router.url.includes('/stats/leaderboard/') ) {
       this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
     } else if (
+      this.router.url.includes('/user/profile/') ||
       this.router.url === '/user/my/questions/add' ||
       this.router.url === '/user/my/app-invite-friends-dialog') {
       this.routerExtensions.back();

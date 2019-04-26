@@ -47,6 +47,7 @@ mat-card>:first-child{
   font-weight: bold;
   font-size: 16;
   padding:10 0;
+  text-align: center;
 }
 
 .padding-10 {
@@ -218,3 +219,13 @@ mat-card>:first-child{
   }
 }
 
+
+.pb-12 {
+  padding-bottom:12;
+}
+
+.card-opacity {
+  background-color: #eaeaea;
+  opacity: 0.8 !important;
+  filter: Alpha(opacity=80) !important; /* IE8 and earlier */
+}
