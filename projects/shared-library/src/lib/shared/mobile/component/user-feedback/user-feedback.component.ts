@@ -20,7 +20,7 @@ export class UserFeedbackComponent implements OnDestroy {
   subscriptions = [];
   feedbackForm: FormGroup;
   user: any;
-  feedbacklength = { min: 20 , max: 200};
+  feedbacklength = { min: 15 , max: 200};
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   email_regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -57,6 +57,7 @@ export class UserFeedbackComponent implements OnDestroy {
   }
 
   onSubmit() {
+    this.hideKeyboard();
     if (!this.feedbackForm.valid) {
       return;
     }

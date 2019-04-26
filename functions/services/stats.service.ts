@@ -6,6 +6,7 @@ import { Utils } from '../utils/utils';
 import { GameService } from './game.service';
 import { QuestionService } from './question.service';
 import { UserService } from './user.service';
+import { SystemStatsAtomic } from '../model';
 
 export class StatsService {
 
@@ -34,7 +35,7 @@ export class StatsService {
         try {
             return await StatsService.statsFireStoreClient
                 .doc(`${CollectionConstants.STATS}/${statName}`)
-                .set(SystemStat);
+                .set(SystemStat, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -66,16 +67,16 @@ export class StatsService {
 
     static async updateSystemStats(entity: string): Promise<any> {
         try {
-            let systemStatObj: SystemStats = await StatsService.getSystemStats(CollectionConstants.STATS_SYSTEM);
-            systemStatObj = (systemStatObj) ? systemStatObj : new SystemStats();
+            let systemStatObj: SystemStatsAtomic = await StatsService.getSystemStats(CollectionConstants.STATS_SYSTEM);
+            systemStatObj = (systemStatObj) ? systemStatObj : new SystemStatsAtomic();
 
             switch (entity) {
                 case SystemStatConstants.TOTAL_USERS:
-                    systemStatObj.total_users = (systemStatObj.total_users) ? systemStatObj.total_users + 1 : 1;
+                    systemStatObj.total_users = (systemStatObj.total_users) ? Utils.changeFieldValue(1) : 1;
                     break;
                 case SystemStatConstants.TOTAL_QUESTIONS:
                     systemStatObj.total_questions = (systemStatObj.total_questions)
-                        ? systemStatObj.total_questions + 1 : 1;
+                        ? Utils.changeFieldValue(1) : 1;
                     break;
                 case SystemStatConstants.ACTIVE_GAMES:
                     const active_games = await GameService.getLiveGames();

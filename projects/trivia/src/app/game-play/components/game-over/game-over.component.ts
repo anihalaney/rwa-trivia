@@ -179,7 +179,6 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.utils.unsubscribe(this.subscriptions);
     this.destroy();
   }
 
