@@ -31,7 +31,7 @@ export class LeaderBoardService {
         try {
             return await LeaderBoardService.leaderBoardFireStoreClient
                 .doc(`/${CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES}`)
-                .set(leaderBoardStat);
+                .set(leaderBoardStat, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
