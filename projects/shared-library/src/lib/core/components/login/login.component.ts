@@ -6,7 +6,9 @@ import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import * as firebase from 'firebase/app';
 
+import * as firebaseui from 'firebaseui';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -16,6 +18,26 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
+  windowRef: any;
+  signInMethod = 'email';
+  ui: any;
+  uiConfig = {
+    callbacks: {
+      signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+        console.log(authResult.credential, 'authresult');
+        return false;
+    },
+    signInFailure: function(error): Promise<any>  {
+      return this.handleUIError(error);
+    }},
+    signInOptions: [
+      firebase.auth.PhoneAuthProvider.PROVIDER_ID,
+    ],
+    tosUrl: 'http://localhost:4200/terms-and-conditions',
+    privacyPolicyUrl: function() {
+      window.location.assign('http://localhost:4200/terms-and-conditions');
+    }
+  };
 
   constructor(public fb: FormBuilder,
     public store: Store<CoreState>,
@@ -26,8 +48,29 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     super(fb, store);
   }
 
-  ngOnInit() { }
+  ngOnInit() {
 
+
+  }
+
+  phoneSignIn() {
+    this.signInMethod = 'phone';
+
+    setTimeout(() => {
+      if (!this.ui) {
+        this.ui = new firebaseui.auth.AuthUI(firebase.auth());
+      }
+      this.ui.start('#firebaseui-auth-container', this.uiConfig);
+    }, 100);
+
+  }
+
+  emailSignIn() {
+    if ( this.ui  && this.signInMethod === 'phone') {
+      this.ui.reset();
+    }
+    this.signInMethod = 'email';
+  }
   onSubmit() {
     if (!this.loginForm.valid) {
       return;

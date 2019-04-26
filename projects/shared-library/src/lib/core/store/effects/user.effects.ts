@@ -109,7 +109,7 @@ export class UserEffects {
                     map(s => s.user),
                     filter(u => !!u),
                     take(1),
-                    map(user => user.email))
+                    map(user => user.email || user.authState.phoneNumber))
             ))
         .pipe(
             switchMap((email: string) => {

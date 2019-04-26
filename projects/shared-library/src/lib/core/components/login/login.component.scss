@@ -37,7 +37,52 @@ button {
 /*Signup*/
 .loginlink a.forgot{ font-size: 12px; border-bottom:1px solid transparent; }
 .signupfree{ font-size: 12px; padding: 10px 0 }
+#firebaseui-auth-container{
+	margin-left: -23px;
+	margin-top: 23px;
+	width: 100%;
+}
 
+.startgame {
+	min-width: 190px;
+	height: 39px;
+	width: 98%;
+	border-radius: 4px;
+	font-size: 17px;
+	font-weight: 600;
+	margin-top: 0px;
+}
+
+.emailLogin{
+	width: 98%;
+	height: 45px;
+	background-color: #db4437;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 500;
+	display: flex;
+	border-radius: 4px;
+}
+
+.phoneLogin{
+	width: 98%;
+	height: 45px;
+	background-color: #02bd7e;
+	color: #fff;
+	font-size: 18px;
+	font-weight: 500;
+	display: flex;
+	border-radius: 4px;
+}
+
+.loginText{
+	line-height: 27px;
+  padding-left: 39px;
+}
+
+.loginImage{
+	line-height: 10px;
+}
 @media screen and ( min-width:767px){
 	//.landinginner, .logininner{ position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%); padding:0 }
 	.landinginner img{  height:auto; }
