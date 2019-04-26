@@ -145,9 +145,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-
-    this.utils.unsubscribe(this.subscriptions);
-
     this.playerMode = undefined;
     this.showSelectPlayer = undefined;
     this.showSelectCategory = undefined;
