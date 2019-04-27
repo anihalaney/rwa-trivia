@@ -4,7 +4,6 @@ export class AccountBase {
     lastLiveUpdate?: number;
     nextLiveUpdate?: number;
     categories?: number;
-    badges?: number;
     avgAnsTime?: number;
     id?: string;
     bits?: number;
@@ -17,6 +16,7 @@ export class Account extends AccountBase{
     wins?: number;
     losses?: number;
     contribution?: number;
+    badges?: number;
 
     constructor() {
         super();
