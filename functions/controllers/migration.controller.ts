@@ -113,9 +113,7 @@ export class MigrationController {
             res.status(500).send(error);
             return error;
         }
-
     }
-
 
     /**
      * generateLeaderBoardStat
@@ -128,9 +126,7 @@ export class MigrationController {
         } catch (error) {
             Utils.sendError(res, error);
         }
-
     }
-
 
     /**
      * generateUserContributionStat
@@ -145,7 +141,6 @@ export class MigrationController {
         }
     }
 
-
     /**
      * generateSystemStat
      * return status
@@ -157,7 +152,6 @@ export class MigrationController {
         } catch (error) {
             Utils.sendError(res, error);
         }
-
     }
 
     /**
@@ -165,7 +159,6 @@ export class MigrationController {
      * return status
      */
     static async updateBulkUploadCollection(req, res): Promise<any> {
-
         try {
             await BulkUploadUpdate.getUserList();
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UPDATED_BULK_UPLOAD_COLLECTION);
@@ -179,7 +172,6 @@ export class MigrationController {
      * return status
      */
     static async updateQuestionCollection(req, res): Promise<any> {
-
         try {
             console.log(req.params.collectionName);
             switch (req.params.collectionName) {
@@ -198,16 +190,13 @@ export class MigrationController {
         } catch (error) {
             Utils.sendError(res, error);
         }
-
     }
-
 
     /**
      * dumpAuthUsersInFirestore
      * return status
      */
     static async dumpAuthUsersInFirestore(req, res): Promise<any> {
-
         try {
             const authUsers: User[] = [];
             const users = await AuthUser.getUsers(authUsers);
@@ -219,7 +208,6 @@ export class MigrationController {
             Utils.sendError(res, error);
         }
     }
-
 
     /**
      * generateAllUsersProfileImages
@@ -233,13 +221,11 @@ export class MigrationController {
         }
     }
 
-
     /**
      * migrateUserStatToAccounts
      * return status
      */
     static async migrateUserStatToAccounts(req, res): Promise<any> {
-
         try {
             const migrationPromises = [];
             const users: User[] = await UserService.getUsers();
@@ -254,9 +240,7 @@ export class MigrationController {
         } catch (error) {
             Utils.sendError(res, error);
         }
-
     }
-
 
     /**
      * Add default number of lives to each account
@@ -277,10 +261,8 @@ export class MigrationController {
                         migrationPromises.push(AccountService.addDefaultLives({ ...accountObj }));
                     }
                 }
-
                 await Promise.all(migrationPromises);
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.DEFAULT_LIVES_ADDED);
-
             } else {
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.LIVE_FEATURES_IS_NOT_ENABLED);
             }
@@ -288,8 +270,6 @@ export class MigrationController {
             Utils.sendError(res, error);
         }
     }
-
-
 
     /**
      * changeQuestionCategoryIdType
@@ -304,12 +284,14 @@ export class MigrationController {
 
                 const categoryIds = question.categoryIds;
                 const updatedCategory = [];
+
                 for (const categoryId of categoryIds) {
                     updatedCategory.push(Number(categoryId));
                 }
-                question.categoryIds = updatedCategory;
 
+                question.categoryIds = updatedCategory;
                 const dbQuestionObj = { ...question };
+
                 updatePromises.push(QuestionService.updateQuestion(MigrationConstants.QUESTIONS, dbQuestionObj));
             }
             Utils.sendResponse(res, interceptorConstants.SUCCESS, await Promise.all(updatePromises));
@@ -360,7 +342,6 @@ export class MigrationController {
             }
 
             await Promise.all(promises);
-
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.ADDED_GAME_OVER__FIELDS);
 
         } catch (error) {

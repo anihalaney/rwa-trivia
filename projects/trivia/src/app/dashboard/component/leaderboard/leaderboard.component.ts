@@ -1,11 +1,9 @@
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { Category, User, LeaderBoardUser, LeaderBoardConstants } from './../../../../../../shared-library/src/lib/shared/model';
-import { Store, select } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Utils } from '../../../../../../shared-library/src/lib/core/services';
 import { AppState } from '../../../store';
 import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
-import { ActivatedRoute } from '@angular/router';
 import { Leaderboard } from './leaderboard';
 
 @Component({

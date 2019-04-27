@@ -61,8 +61,3 @@ export class UserStats {
     this.leaderBoardStats = {};
   }
 }
-
-export class LeaderBoardUser {
-  userId: string;
-  score: number;
-}
