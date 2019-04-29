@@ -1,7 +1,5 @@
 
-import {
-    Account, Game, Question, AccountConstants, PlayerQnA
-} from '../../projects/shared-library/src/lib/shared/model';
+import { Account, AccountConstants, Game, LeaderBoardUsers, PlayerQnA, Question } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
@@ -17,8 +15,8 @@ export class GameLeaderBoardStats {
         const userPromises = [];
 
         try {
-            const games: Game[] = await GameService.getCompletedGames();
 
+            const games: Game[] = await GameService.getCompletedGames();
             const questionDict = await GameLeaderBoardStats.loadQuestionDictionary();
 
             for (const game of games) {
@@ -32,15 +30,12 @@ export class GameLeaderBoardStats {
                     );
                 }
             }
-
             for (const userId of Object.keys(accountDicts)) {
                 const account: AccountAtomic = accountDicts[userId];
                 account.id = userId;
                 userPromises.push(AccountService.setAccount({ ...account }));
             }
-
             return await Promise.all(userPromises);
-
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -48,17 +43,14 @@ export class GameLeaderBoardStats {
 
     static async loadQuestionDictionary(): Promise<{ [key: string]: Array<number> }> {
         const questionDict: { [key: string]: Array<number> } = {};
-
         try {
             const questions: Question[] = await QuestionService.getAllQuestions();
-
             for (const question of questions) {
                 if (question.categoryIds.length > 0) {
                     questionDict[question.id] = question.categoryIds;
                 }
             }
             return questionDict;
-
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -66,8 +58,8 @@ export class GameLeaderBoardStats {
 
 
     private static getGameQuestionCategories(game: Game, questionDict: { [key: string]: Array<number> }, userId: string): Array<number> {
-        const questionCategories: Array<number> = [];
 
+        const questionCategories: Array<number> = [];
         const questions: PlayerQnA[] = game.playerQnAs.filter(playerQ => playerQ.playerId === userId && playerQ.answerCorrect === true);
 
         for (const question of questions) {
@@ -80,7 +72,6 @@ export class GameLeaderBoardStats {
                 }
             }
         }
-
         return questionCategories;
     }
 
@@ -101,7 +92,6 @@ export class GameLeaderBoardStats {
         } catch (error) {
             return Utils.throwError(error);
         }
-
     }
 
     private static async getUserQuestionCategoryIds(gameQuestions: PlayerQnA[], userId: string): Promise<Array<number>> {
@@ -142,21 +132,35 @@ export class GameLeaderBoardStats {
         } catch (error) {
             return Utils.throwError(error);
         }
-
     }
 
-
-    static async calculateGameLeaderBoardStat(): Promise<string> {
+    static async calculateGameLeaderBoardStat(): Promise<any> {
         try {
-            const accounts: Account[] = await AccountService.getAccounts();
-            let lbsStats = await LeaderBoardService.getLeaderBoardStats();
+            let leaderBoardDict: { [key: string]: LeaderBoardUsers } = {};
 
+            const accounts: Account[] = await AccountService.getAccounts();
             for (const account of accounts) {
-                lbsStats = LeaderBoardService.calculateLeaderBoardStats(account, lbsStats);
+                leaderBoardDict = await LeaderBoardService.calculateLeaderBoardStats(account, leaderBoardDict);
             }
 
-            const updateLBSStatResult = await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
-            return updateLBSStatResult;
+            return await GameLeaderBoardStats.setLeaderBoardStat(leaderBoardDict);
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    static async setLeaderBoardStat(leaderBoardDict: { [key: string]: LeaderBoardUsers }): Promise<any> {
+        try {
+
+            const promises = [];
+
+            for (const id of Object.keys(leaderBoardDict)) {
+                const leaderBoardUsers: LeaderBoardUsers = leaderBoardDict[id];
+                promises.push(LeaderBoardService.setLeaderBoardStatsById(id, { ...leaderBoardUsers }));
+            }
+
+            return await Promise.all(promises);
         } catch (error) {
             return Utils.throwError(error);
         }

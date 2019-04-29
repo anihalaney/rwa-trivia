@@ -102,7 +102,7 @@ export enum CollectionConstants {
     INVITATIONS = 'invitations',
     FRIENDS = 'friends',
     GAMES = 'games',
-    LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES = 'leader_board_stats/categories',
+    LEADER_BOARD_STATS = 'leader_board_stats',
     QUESTIONS = 'questions',
     UNPUBLISHED_QUESTIONS = 'unpublished_questions',
     STATS = 'stats',
