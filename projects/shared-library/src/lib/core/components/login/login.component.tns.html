@@ -1,6 +1,5 @@
 <!-- <ns-action-bar [title]="title" showAdd="true"></ns-action-bar> -->
 <GridLayout>
-
   <GridLayout *ngIf="mode === 2" #background class="background"></GridLayout>
   <ScrollView>
     <StackLayout  (tap)="hideKeyboard()" class="mobile">
@@ -96,18 +95,17 @@
             <Image (tap)="fbLogin()" class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/faceboockbtn.png"></Image>
             <Image *ngIf="twitter" class="text-center" margin="10 0 10 0" width="70%" src="~/assets/images/twitbtn.png"></Image>
             <Image (tap)="googleLogin()" class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/gpulsebtn.png"></Image>
-            <GridLayout *ngIf="signInMethod === 'email'" borderRadius="2" height="35" backgroundColor="#02bd7e"  margin="10 10 10 10" width="60%" (tap)="phoneSignIn()" rows="auto" columns="40,auto,auto">
-                <Image width="9%" margin="0 0 0 10" row="0" col="0" class="text-center"  src="~/assets/images/phone-icon.png"></Image> 
-                <Label row="0" col="1" text=" "  class="testclass"></Label>
-                <Label row="0" col="2"  padding="10 20 10 22" fontSize="14" fontWeight="600" class="fa text-icon-field email-text" text="Sign in with Phone"
+            <GridLayout *ngIf="signInMethod === 'email'" borderRadius="2" height="45" backgroundColor="#02bd7e"  margin="0 10 10 10" width="60%" (tap)="phoneSignIn()" rows="auto" columns="45,auto,auto">
+                <Image width="9%"  margin="7 0 0 7" row="0" col="0" class="text-center"  src="~/assets/images/phone-icon.png"></Image> 
+                <Label row="0" col="1" text=" "  class="phone-dividier" padding="0 0 15 0"></Label>
+                <Label textAlignment="center" row="0" col="2"  padding="0 20 10 20" margin="0 0 0 0" fontSize="15" fontWeight="600" class="fa text-icon-field" text="Sign in with Phone"
                   color="white" textWrap="true"></Label>             
             </GridLayout>
 
-            <GridLayout *ngIf="signInMethod === 'phone'" borderRadius="2" height="35" backgroundColor="#db4437" margin="10 10 10 10" width="60%" (tap)="emailSignIn()" rows="auto" columns="40,auto">
-                <Image width="9%" margin="0 0 0 10" row="0" col="0" class="text-center"  src="~/assets/images/email-icon.png"></Image> 
-                <StackLayout width="2" background-color="black">
-                </StackLayout>
-                <Label row="0" col="1"  padding="10 20 10 22" fontSize="14" fontWeight="600" class="fa text-icon-field" text="Sign in with Email"
+            <GridLayout *ngIf="signInMethod === 'phone'" borderRadius="2" height="45" backgroundColor="#db4437" margin="0 10 10 10" width="60%" (tap)="emailSignIn()" rows="auto" columns="45,auto,auto">
+                <Image width="10%" margin="7 0 0 7" row="0" col="0" class="text-center"  src="~/assets/images/email-icon.png"></Image> 
+                <Label row="0" col="1" text=" "  class="email-dividier" padding="0 0 15 0"></Label>
+                <Label textAlignment="center" row="0" col="2"  padding="0 20 10 20" fontSize="15" fontWeight="600" class="fa text-icon-field" text="Sign in with Email"
                   color="white" textWrap="true"></Label>             
             </GridLayout>
           </StackLayout>

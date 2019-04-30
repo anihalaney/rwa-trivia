@@ -112,19 +112,30 @@ button {
 	border-image-slice: 1;
 }
 
-.email-text{
-	// border-left-width: 1;
-	// border-color: #08a270;
-	// height: 12;
-	// box-shadow: 1px 0px #55c7adeb;
+.email-dividier{
+	top: 0;
+	background-color: #bb3a2f;
+	height: 70%;
+	width: 1;
+	border-left-color: #bb3a2f;
+	border-left-width: 2;
+	border-left-width: 1;
+	padding-bottom: 50;
+	padding-top: 0;
+	text-align:top;
 }
 
-.testclass{
-	background-color: #08a270;
-	height: 90%;
+.phone-dividier{
+	top: 0;
+	background-color: #0b9e6e;
+	height: 70%;
 	width: 1;
-	border-left-color: #08a270;
+	border-left-color: #039c69;
+	border-left-width: 2;
 	border-left-width: 1;
+	padding-bottom: 50;
+	padding-top: 0;
+	text-align:top;
 }
 
 
@@ -236,7 +247,8 @@ TextField {
 .initial-label {
   color: white;
   horizontal-align: center;
-  margin-bottom: 25;
+	margin-bottom: 10;
+
 }
 
 .message-label{
