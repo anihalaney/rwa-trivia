@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef,
-  ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ViewContainerRef} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -13,7 +13,10 @@ import { LoadingIndicator } from "nativescript-loading-indicator";
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from '../../services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
+import { CountryListComponent } from "../countryList/countryList.component";
+import { NgModel } from "@angular/forms";
+import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
+import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
 
 @Component({
   selector: 'login',
@@ -33,17 +36,95 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     text: ''
   };
   subscriptions = [];
-  constructor(public fb: FormBuilder,
+  signInMethod = 'email';
+  @ViewChild('mobileNumber') mobileNumber: NgModel;
+  isCountryCodeOpened = false;
+  isCountryCodeError;
+  input: any;
+  country: any;
+  mobileSigninError = '';
+
+  constructor(
+    private modalDialogService: ModalDialogService,
+    public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
     private uiStateActions: UIStateActions,
     private page: Page,
     private firebaseAuthService: FirebaseAuthService,
     private utils: Utils,
-    public cd: ChangeDetectorRef) {
+    public cd: ChangeDetectorRef,
+    private viewContainerRef: ViewContainerRef) {
     super(fb, store);
     this.page.actionBarHidden = true;
+
+    this.input = {
+        selectedCountry: '',
+        countryCode: '',
+        mobileNumber: '',
+        country: '',
+        currentCountry: ''
+    };
   }
+
+  phoneSignIn() {
+    this.signInMethod = 'phone';
+  }
+
+  emailSignIn() {
+    this.signInMethod = 'email';
+  }
+
+  signInWithPhone() {
+    if (this.input.selectedCountry === '') {
+        this.isCountryCodeError = true;
+        return false;
+    }
+
+    this.mobileNumber.control.setErrors(this.mobileNumber.validator(this.mobileNumber.control));
+    this.mobileNumber.control.markAsDirty();
+    this.cd.markForCheck();
+
+    if (!this.mobileNumber.valid) {
+      return false;
+    }
+
+    const self = this;
+    console.log(`${this.input.countryCode}${this.input.mobileNumber}`);
+    this.firebaseAuthService.phoneLogin( `${this.input.countryCode}${this.input.mobileNumber}` ).then(
+        function (result) {
+          JSON.stringify(result);
+          self.redirectTo();
+        },
+        function (errorMessage) {
+          console.error(errorMessage);
+          self.mobileSigninError = errorMessage;
+          self.cd.markForCheck();
+        }
+    );
+  }
+
+  onSelectCountry() {
+    const options: ModalDialogOptions = {
+      viewContainerRef: this.viewContainerRef,
+      fullscreen: false,
+      context: { Country: this.country }
+  };
+  this.modalDialogService.showModal(CountryListComponent, options).then((result) => {
+      if (result === undefined || this.input.selectedCountry === null) {
+          this.isCountryCodeError = true;
+      } else {
+          setString('countryCode', result.flagClass);
+          this.input.country = result.flagClass;
+          this.input.currentCountry = result.flagClass;
+          this.input.selectedCountry = result.name;
+          this.input.countryCode = '+' + result.dialCode;
+          this.isCountryCodeError = false;
+      }
+      this.isCountryCodeOpened = true;
+      this.cd.markForCheck();
+  });
+}
 
   ngOnInit() {
     this.title = 'Login';

@@ -95,12 +95,14 @@
           <a (click)="googleLogin()"><img src="/assets/images/gpulsebtn.png" alt="Google Plus" /></a>
           <button (click)="emailSignIn()" *ngIf="signInMethod === 'phone'" class="emailLogin"> 
             <div class="loginImage"><img src="assets/images/email-icon.png"/></div>
+            <div class="email-login-divider"></div>
             <div class="loginText">Sign in with Email</div>
           </button>
           <button (click)="phoneSignIn()"  *ngIf="signInMethod === 'email'" class="phoneLogin">
             <div class="loginImage">
               <img src="assets/images/phone-icon.png" />
             </div>
+            <div class="phone-login-divider"></div>
             <div class="loginText">    
               Sign in with Phone 
             </div>
