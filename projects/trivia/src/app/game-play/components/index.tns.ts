@@ -4,6 +4,7 @@ import { GameDialogComponent } from './game-dialog/game-dialog.component';
 import { GameQuestionComponent } from './game-question/game-question.component';
 import { GameOverComponent } from './game-over/game-over.component';
 import { ReportGameComponent } from './report-game/report-game.component';
+import { GameContinueComponent } from './game-continue/game-continue.component';
 
 export {
     NewGameComponent,
@@ -11,7 +12,8 @@ export {
     GameDialogComponent,
     GameQuestionComponent,
     GameOverComponent,
-    ReportGameComponent
+    ReportGameComponent,
+    GameContinueComponent
 };
 
 export default [
@@ -20,5 +22,6 @@ export default [
     GameDialogComponent,
     GameQuestionComponent,
     GameOverComponent,
-    ReportGameComponent
+    ReportGameComponent,
+    GameContinueComponent
 ];

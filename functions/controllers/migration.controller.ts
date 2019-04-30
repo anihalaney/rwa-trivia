@@ -1,12 +1,13 @@
 import {
-    Account, CollectionConstants, Game, GameStatus, HeaderConstants,
-    interceptorConstants, MigrationConstants, Question, ResponseMessagesConstants, User, GeneralConstants
+    Account, CollectionConstants, Game, GameStatus, GeneralConstants, HeaderConstants,
+    interceptorConstants, MigrationConstants, Question, ResponseMessagesConstants, User
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
 import { GeneralService } from '../services/general.service';
 import { QuestionService } from '../services/question.service';
+import { StatsService } from '../services/stats.service';
 import { UserService } from '../services/user.service';
 import { AuthUser } from '../utils/auth-user';
 import { BulkUploadUpdate } from '../utils/bulk-upload-update';
@@ -16,7 +17,6 @@ import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { Utils } from '../utils/utils';
-import { StatsService } from '../services/stats.service';
 
 export class MigrationController {
 

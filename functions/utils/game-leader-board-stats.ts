@@ -5,12 +5,13 @@ import { GameService } from '../services/game.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from '../utils/utils';
+import { AccountAtomic } from '../model';
 
 export class GameLeaderBoardStats {
 
     static async generateGameStats(): Promise<any> {
 
-        const accountDicts: { [key: string]: Account } = {};
+        const accountDicts: { [key: string]: AccountAtomic } = {};
         const userPromises = [];
 
         try {
@@ -21,8 +22,8 @@ export class GameLeaderBoardStats {
             for (const game of games) {
                 for (const userId of Object.keys(game.stats)) {
 
-                    const account: Account = (accountDicts[userId]) ?
-                        accountDicts[userId] : new Account();
+                    const account: AccountAtomic = (accountDicts[userId]) ?
+                        accountDicts[userId] : new AccountAtomic();
 
                     accountDicts[userId] = GameLeaderBoardStats.calculateAllGameUsersStat(
                         account, userId, game, GameLeaderBoardStats.getGameQuestionCategories(game, questionDict, userId)
@@ -30,7 +31,7 @@ export class GameLeaderBoardStats {
                 }
             }
             for (const userId of Object.keys(accountDicts)) {
-                const account: Account = accountDicts[userId];
+                const account: AccountAtomic = accountDicts[userId];
                 account.id = userId;
                 userPromises.push(AccountService.setAccount({ ...account }));
             }
@@ -74,8 +75,9 @@ export class GameLeaderBoardStats {
         return questionCategories;
     }
 
-    private static calculateAllGameUsersStat(account: Account, userId: string, game: Game, categoryIds: Array<number>): Account {
-        return AccountService.calculateAccountStat(account, game, categoryIds, userId);
+    private static calculateAllGameUsersStat(account: AccountAtomic, userId: string,
+        game: Game, categoryIds: Array<number>): AccountAtomic {
+        return AccountService.calculateAccountStat(account, game, categoryIds, userId, true);
     }
 
     static async getGameUsers(game: Game): Promise<any> {
@@ -119,12 +121,12 @@ export class GameLeaderBoardStats {
 
     private static async calculateUserStat(userId: string, game: Game, categoryIds: Array<number>): Promise<string> {
         try {
-            const account: Account = await AccountService.getAccountById(userId);
+            const account: AccountAtomic = await AccountService.getAccountById(userId);
 
             if (account && account.id) {
 
                 return await AccountService.updateAccountData(
-                    AccountService.calculateAccountStat(account, game, categoryIds, userId));
+                    AccountService.calculateAccountStat(account, game, categoryIds, userId, false));
             }
             return AccountConstants.ACCOUNT_DOES_NOT_EXIST;
         } catch (error) {

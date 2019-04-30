@@ -14,7 +14,7 @@ export class AchievementService {
         try {
             return await AchievementService.achievementFireStoreClient
                 .doc(`/${CollectionConstants.ACHIEVEMENTS}/${achievement.id}`)
-                .set(achievement);
+                .set(achievement, { merge: true });
 
         } catch (error) {
             return Utils.throwError(error);

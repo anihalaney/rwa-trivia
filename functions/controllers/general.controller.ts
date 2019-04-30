@@ -1,6 +1,6 @@
+import { GeneralConstants, interceptorConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { GeneralService } from '../services/general.service';
 import { Utils } from '../utils/utils';
-import { interceptorConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 
 export class GeneralController {
 
