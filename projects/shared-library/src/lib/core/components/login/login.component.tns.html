@@ -10,18 +10,23 @@
             <Label *ngIf="message.show" class="message-label" textWrap="true" [ngClass]="{'text-primary': message.type === 'success', 'text-danger': message.type === 'error'}" [text]="message.text"></Label>
             <StackLayout *ngIf="signInMethod === 'phone'">
               <StackLayout row="2" colSpan="2" class="input-field">
-                  <GridLayout   rows="auto" columns="100,10,*" class="initial-button">
-                      <TextField [ngClass]="{'input-error':isCountryCodeError}" editable="false" row="0" col="0" hint="Country" keyboardType="number" [(ngModel)]="input.countryCode"  (tap)="onSelectCountry()"  class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>          
+                  <GridLayout   rows="auto" columns="110,10,*" class="initial-button">
+                      <GridLayout (tap)="onSelectCountry()" row="0" col="0" rows="auto" columns="auto,*" class="list-group-item" class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15">
+                          <Image col="0" col="0" src="~/assets/flags/{{input.country}}.png" height="18" backgroundColor="gray" width="29" class="img-rounded"></Image>
+                          <Label row="0" col="1"  text="{{input.countryCode}}" class="p-l-10"  textWrap="true"></Label>
+                      </GridLayout>
+
+                      <!-- <TextField [ngClass]="{'input-error':isCountryCodeError}" editable="false" row="0" col="0" hint="Country" keyboardType="number" [(ngModel)]="input.countryCode"  (tap)="onSelectCountry()"  class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>           -->
                       <Label text="" row="0" col="1" class="label-style p-b-5"></Label>
-                      <TextField hint="Phone" class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15" #mobileNumber="ngModel" [(ngModel)]="input.mobileNumber" keyboardType="number" [ngClass]="{'input-error': (mobileNumber.dirty && mobileNumber.errors) }" row="0" col="2" maxlength="10" required mobileNumber></TextField>
+                      <TextField hint="Phone number" class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15" #mobileNumber="ngModel" [(ngModel)]="input.mobileNumber" keyboardType="number" [ngClass]="{'input-error': (mobileNumber.dirty && mobileNumber.errors) }" row="0" col="2" maxlength="10" required mobileNumber></TextField>
                   </GridLayout>
                   <Label *ngIf="isCountryCodeError"  marginTop="6" textWrap="true" class="text-center error" text="Country code is required"></Label>
                   <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="mobileNumber.dirty && mobileNumber.errors && mobileNumber.errors.required" text="Phone number is required"></Label>
                   <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="mobileNumber.errors && !mobileNumber.errors.required" text="Invalid Phone number"></Label>
-                  <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="mobileSigninError != ''" text="You have provided incorrect phone number"></Label>
+                  <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="mobileSigninError != ''" text="Enter a valid phone number"></Label>
               </StackLayout>
 
-              <Button text="Verify" width="50%" marginTop="30" marginBottom="20" (tap)="signInWithPhone()" [disabled]="loginForm.invalid"
+              <Button text="VERIFY" width="50%" marginTop="30" marginBottom="20" (rippleTap)="signInWithPhone()" [disabled]="loginForm.invalid"
               class="text-center login-button initial-button-label Roboto-Bold" stlRippleEffect ></Button>
             </StackLayout>
             <StackLayout [formGroup]="loginForm">
@@ -95,19 +100,8 @@
             <Image (tap)="fbLogin()" class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/faceboockbtn.png"></Image>
             <Image *ngIf="twitter" class="text-center" margin="10 0 10 0" width="70%" src="~/assets/images/twitbtn.png"></Image>
             <Image (tap)="googleLogin()" class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/gpulsebtn.png"></Image>
-            <GridLayout *ngIf="signInMethod === 'email'" borderRadius="2" height="45" backgroundColor="#02bd7e"  margin="0 10 10 10" width="60%" (tap)="phoneSignIn()" rows="auto" columns="45,auto,auto">
-                <Image width="9%"  margin="7 0 0 7" row="0" col="0" class="text-center"  src="~/assets/images/phone-icon.png"></Image> 
-                <Label row="0" col="1" text=" "  class="phone-dividier" padding="0 0 15 0"></Label>
-                <Label textAlignment="center" row="0" col="2"  padding="0 20 10 20" margin="0 0 0 0" fontSize="15" fontWeight="600" class="fa text-icon-field" text="Sign in with Phone"
-                  color="white" textWrap="true"></Label>             
-            </GridLayout>
-
-            <GridLayout *ngIf="signInMethod === 'phone'" borderRadius="2" height="45" backgroundColor="#db4437" margin="0 10 10 10" width="60%" (tap)="emailSignIn()" rows="auto" columns="45,auto,auto">
-                <Image width="10%" margin="7 0 0 7" row="0" col="0" class="text-center"  src="~/assets/images/email-icon.png"></Image> 
-                <Label row="0" col="1" text=" "  class="email-dividier" padding="0 0 15 0"></Label>
-                <Label textAlignment="center" row="0" col="2"  padding="0 20 10 20" fontSize="15" fontWeight="600" class="fa text-icon-field" text="Sign in with Email"
-                  color="white" textWrap="true"></Label>             
-            </GridLayout>
+            <Image  (tap)="emailSignIn()" *ngIf="signInMethod === 'phone'" class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/sign-email.png"></Image>
+            <Image  (tap)="phoneSignIn()" *ngIf="signInMethod === 'email'"  class="text-center" margin="10 0 10 0" width="60%" src="~/assets/images/sign-phone.png"></Image>
           </StackLayout>
         </StackLayout>
 

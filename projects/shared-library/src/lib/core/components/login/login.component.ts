@@ -7,8 +7,8 @@ import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as firebase from 'firebase/app';
-
 import * as firebaseui from 'firebaseui';
+import { TermsAndPrivacyUrlConstant } from 'shared-library/shared/model';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -19,12 +19,10 @@ import * as firebaseui from 'firebaseui';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class LoginComponent extends Login implements OnInit, OnDestroy {
   windowRef: any;
-  signInMethod = 'email';
   ui: any;
   uiConfig = {
     callbacks: {
       signInSuccessWithAuthResult: function(authResult, redirectUrl) {
-        console.log(authResult.credential, 'authresult');
         return false;
     },
     signInFailure: function(error): Promise<any>  {
@@ -33,9 +31,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     signInOptions: [
       firebase.auth.PhoneAuthProvider.PROVIDER_ID,
     ],
-    tosUrl: 'http://localhost:4200/terms-and-conditions',
+    tosUrl: TermsAndPrivacyUrlConstant.TERMSANDCONDITIONSURL,
     privacyPolicyUrl: function() {
-      window.location.assign('http://localhost:4200/terms-and-conditions');
+      window.location.assign(TermsAndPrivacyUrlConstant.PRIVACYURL);
     }
   };
 
@@ -54,8 +52,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   phoneSignIn() {
-    this.signInMethod = 'phone';
-
+    super.phoneSignIn();
     setTimeout(() => {
       if (!this.ui) {
         this.ui = new firebaseui.auth.AuthUI(firebase.auth());
@@ -69,7 +66,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     if ( this.ui  && this.signInMethod === 'phone') {
       this.ui.reset();
     }
-    this.signInMethod = 'email';
+    super.emailSignIn();
   }
   onSubmit() {
     if (!this.loginForm.valid) {

@@ -358,3 +358,8 @@ export enum AppStoreUrl {
     PLAYSTOREURL = 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1',
     APPSTOREURL = 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8'
 }
+
+export enum TermsAndPrivacyUrlConstant {
+    TERMSANDCONDITIONSURL = 'https://bitwiser.io/terms-and-conditions',
+    PRIVACYURL = 'https://bitwiser.io/terms-and-conditions'
+}

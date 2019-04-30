@@ -36,7 +36,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     text: ''
   };
   subscriptions = [];
-  signInMethod = 'email';
   @ViewChild('mobileNumber') mobileNumber: NgModel;
   isCountryCodeOpened = false;
   isCountryCodeError;
@@ -59,21 +58,13 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     this.page.actionBarHidden = true;
 
     this.input = {
-        selectedCountry: '',
-        countryCode: '',
+        selectedCountry: 'United States',
+        countryCode: '+1',
         mobileNumber: '',
-        country: '',
-        currentCountry: ''
+        country: 'us',
     };
   }
 
-  phoneSignIn() {
-    this.signInMethod = 'phone';
-  }
-
-  emailSignIn() {
-    this.signInMethod = 'email';
-  }
 
   signInWithPhone() {
     if (this.input.selectedCountry === '') {
@@ -90,7 +81,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     }
 
     const self = this;
-    console.log(`${this.input.countryCode}${this.input.mobileNumber}`);
     this.firebaseAuthService.phoneLogin( `${this.input.countryCode}${this.input.mobileNumber}` ).then(
         function (result) {
           JSON.stringify(result);
@@ -116,7 +106,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       } else {
           setString('countryCode', result.flagClass);
           this.input.country = result.flagClass;
-          this.input.currentCountry = result.flagClass;
           this.input.selectedCountry = result.name;
           this.input.countryCode = '+' + result.dialCode;
           this.isCountryCodeError = false;

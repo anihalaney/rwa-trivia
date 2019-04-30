@@ -10,7 +10,7 @@ export class Login {
   errorStatus: boolean;
   subscriptions: Subscription[] = [];
   notificationLogs: string[];
-
+  signInMethod = 'email';
   // tslint:disable-next-line:max-line-length
   email_regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -62,6 +62,13 @@ export class Login {
       .subscribe(notificationLogs => this.notificationLogs = notificationLogs));
   }
 
+  phoneSignIn() {
+    this.signInMethod = 'phone';
+  }
+
+  emailSignIn() {
+    this.signInMethod = 'email';
+  }
 
   changeMode(mode) {
     this.mode = mode;

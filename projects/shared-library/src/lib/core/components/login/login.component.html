@@ -93,20 +93,8 @@
           <h3>You can also login with your social account</h3>
           <a (click)="fbLogin()"><img src="/assets/images/faceboockbtn.png" alt="facebook" /></a>
           <a (click)="googleLogin()"><img src="/assets/images/gpulsebtn.png" alt="Google Plus" /></a>
-          <button (click)="emailSignIn()" *ngIf="signInMethod === 'phone'" class="emailLogin"> 
-            <div class="loginImage"><img src="assets/images/email-icon.png"/></div>
-            <div class="email-login-divider"></div>
-            <div class="loginText">Sign in with Email</div>
-          </button>
-          <button (click)="phoneSignIn()"  *ngIf="signInMethod === 'email'" class="phoneLogin">
-            <div class="loginImage">
-              <img src="assets/images/phone-icon.png" />
-            </div>
-            <div class="phone-login-divider"></div>
-            <div class="loginText">    
-              Sign in with Phone 
-            </div>
-          </button>
+          <a (click)="emailSignIn()" *ngIf="signInMethod === 'phone'"><img src="/assets/images/sign-email.png" alt="Email Login" /></a>
+          <a (click)="phoneSignIn()" *ngIf="signInMethod === 'email'"><img src="/assets/images/sign-phone.png" alt="Phone Login" /></a>
         </div>
       </div>
     </div>
