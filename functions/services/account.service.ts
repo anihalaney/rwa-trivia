@@ -1,10 +1,11 @@
 import {
     Account, Game, CollectionConstants,
-    GeneralConstants, LeaderBoardConstants, AccountConstants
+    GeneralConstants, LeaderBoardConstants, AccountConstants,
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 import { AppSettings } from './app-settings.service';
+import { AccountAtomic } from '../model';
 
 export class AccountService {
 
@@ -32,7 +33,7 @@ export class AccountService {
         try {
             return await AccountService.accountFireStoreClient
                 .doc(`/${CollectionConstants.ACCOUNTS}/${dbAccount.id}`)
-                .set(dbAccount);
+                .set(dbAccount, { merge: true });
 
         } catch (error) {
             return Utils.throwError(error);
@@ -89,7 +90,8 @@ export class AccountService {
      * calculateAccountStat
      * return account
      */
-    static calculateAccountStat(account: Account, game: Game, categoryIds: Array<number>, userId: string): Account {
+    static calculateAccountStat(account: AccountAtomic, game: Game, categoryIds: Array<number>,
+        userId: string, isMigration: boolean): AccountAtomic {
 
         const score = game.stats[userId].score;
 
@@ -98,6 +100,14 @@ export class AccountService {
 
         account = (account) ? account : new Account();
 
+        let increment;
+        let badgesIncrement;
+
+        if (!isMigration) {
+            increment = Utils.changeFieldValue(1);
+            badgesIncrement = Utils.changeFieldValue(score);
+        }
+
         for (const id of categoryIds) {
             account.leaderBoardStats = (account.leaderBoardStats) ? account.leaderBoardStats : {};
             account.leaderBoardStats[id] = (account.leaderBoardStats && account.leaderBoardStats[id]) ?
@@ -105,18 +115,18 @@ export class AccountService {
         }
 
         account[LeaderBoardConstants.LEADER_BOARD_STATS] = { ...account.leaderBoardStats };
-        account.gamePlayed = (account.gamePlayed) ? account.gamePlayed + 1 : 1;
+        account.gamePlayed = (account.gamePlayed) ? (isMigration ? (account.gamePlayed as number) + 1 : increment) : 1;
         account.categories = Object.keys(account.leaderBoardStats).length;
 
         if (game.winnerPlayerId) {
             (game.winnerPlayerId === userId) ?
-                account.wins = (account.wins) ? account.wins + 1 : 1 :
-                account.losses = (account.losses) ? account.losses + 1 : 1;
+                account.wins = (account.wins) ? (isMigration ? (account.wins as number) + 1 : increment) : 1 :
+                account.losses = (account.losses) ? (isMigration ? (account.losses as number) + 1 : increment) : 1;
         } else {
-            account.losses = (account.losses) ? account.losses + 1 : 1;
+            account.losses = (account.losses) ? (isMigration ? (account.losses as number) + 1 : increment) : 1;
         }
 
-        account.badges = (account.badges) ? account.badges + score : score;
+        account.badges = (account.badges) ? (isMigration ? ((account.badges as number) + score) : badgesIncrement) : score;
         account.avgAnsTime = (account.avgAnsTime) ? Math.floor((account.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
 
         return account;
@@ -142,7 +152,7 @@ export class AccountService {
                         account.nextLiveUpdate = Utils.addMinutes(timestamp, livesMilles);
                     }
                     if (account.lives > 0) {
-                        account.lives += -1;
+                        account.lives = Utils.changeFieldValue(-1);
                     }
                     accountRef.update(account);
                 }
@@ -186,7 +196,7 @@ export class AccountService {
                         accountRef.update(account);
                     }
                 } else {
-                    accountRef.set({ lives: maxLives, id: user.id });
+                    accountRef.set({ lives: maxLives, id: user.id }, { merge: true });
                 }
             }
         } catch (error) {
@@ -244,7 +254,7 @@ export class AccountService {
                     accountRef.update(account);
                 }
             } else {
-                accountRef.set({ lives: appSetting.lives.max_lives, id: userId });
+                accountRef.set({ lives: appSetting.lives.max_lives, id: userId }, { merge: true });
             }
         } catch (error) {
             return Utils.throwError(error);
@@ -272,12 +282,13 @@ export class AccountService {
                 const docRef = await accountRef.get();
 
                 if (docRef.exists) {
+
                     const account = docRef.data();
-                    account.bits = (account.bits) ? (account.bits + bits) : bits;
+                    account.bits = (account.bits) ? Utils.changeFieldValue(bits) : bits;
                     account.id = userId;
                     accountRef.update(account);
                 } else {
-                    accountRef.set({ bits: bits, id: userId });
+                    accountRef.set({ bits: bits, id: userId }, { merge: true });
                 }
             }
         } catch (error) {
@@ -298,11 +309,11 @@ export class AccountService {
 
                 if (docRef.exists) {
                     const account = docRef.data();
-                    account.bytes = (account.bytes) ? (account.bytes + bytes) : bytes;
+                    account.bytes = (account.bytes) ? Utils.changeFieldValue(bytes) : bytes;
                     account.id = userId;
                     accountRef.update(account);
                 } else {
-                    accountRef.set({ bytes: bytes, id: userId });
+                    accountRef.set({ bytes: bytes, id: userId }, { merge: true });
                 }
             }
         } catch (error) {
@@ -322,11 +333,11 @@ export class AccountService {
 
             if (docRef.exists) {
                 const account = docRef.data();
-                account.bytes = (account.bytes) ? (account.bytes + bytes) : bytes;
+                account.bytes = (account.bytes) ? Utils.changeFieldValue(bytes) : bytes;
                 account.id = userId;
                 accountRef.update(account);
             } else {
-                accountRef.set({ bytes: bytes, id: userId });
+                accountRef.set({ bytes: bytes, id: userId }, { merge: true });
             }
         } catch (error) {
             return Utils.throwError(error);

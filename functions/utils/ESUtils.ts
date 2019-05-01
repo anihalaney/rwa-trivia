@@ -1,5 +1,4 @@
 import * as ElasticSearch from 'elasticsearch';
-import * as functions from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';

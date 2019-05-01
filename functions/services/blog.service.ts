@@ -17,7 +17,7 @@ export class BlogService {
                 const pub_date = new Date(blog.pubDate).getTime() + '';
                 blog.id = Number(pub_date);
                 const blogInstance = BlogService.blogFireStoreClient.collection(CollectionConstants.BLOGS).doc(pub_date);
-                batch.set(blogInstance, blog);
+                batch.set(blogInstance, blog, { merge: true });
             }
             return await batch.commit();
         } catch (error) {

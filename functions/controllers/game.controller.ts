@@ -1,14 +1,11 @@
 import {
-    Game, GameOperations, PlayerQnA, Account,
-    ResponseMessagesConstants, interceptorConstants,
-    HeaderConstants, GeneralConstants
+    Account, Game, GameOperations, HeaderConstants, interceptorConstants, PlayerQnA, ResponseMessagesConstants
 } from '../../projects/shared-library/src/lib/shared/model';
+import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
 import { GameService } from '../services/game.service';
-import { GameMechanics } from '../utils/game-mechanics';
-import { AccountService } from '../services/account.service';
 import { SocialService } from '../services/social.service';
-import * as functions from 'firebase-functions';
+import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
 
 export class GameController {

@@ -1,7 +1,8 @@
-import { Account, GeneralConstants, Question, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { GeneralConstants, Question, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { QuestionService } from '../services/question.service';
 import { Utils } from './utils';
+import { AccountAtomic } from '../model';
 
 export class UserContributionStat {
 
@@ -36,13 +37,13 @@ export class UserContributionStat {
 
     static async getUser(id: string, count: number, isMigrationScript: boolean): Promise<string> {
         try {
-            const account: Account = await AccountService.getAccountById(id);
+            const account: AccountAtomic = await AccountService.getAccountById(id);
 
             if (account) {
                 if (isMigrationScript) {
                     account.contribution = count;
                 } else {
-                    account.contribution = account.contribution ? (account.contribution + count) : count;
+                    account.contribution = account.contribution ? Utils.changeFieldValue(1) : count;
                 }
             }
 

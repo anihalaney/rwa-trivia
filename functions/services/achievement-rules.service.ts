@@ -27,7 +27,7 @@ export class AchievementRulesService {
         try {
             return await AchievementRulesService.achievementRulesFireStoreClient
                 .doc(`/${CollectionConstants.ACHIEVEMENT_RULES}/${achievementRule.id}`)
-                .set(achievementRule);
+                .set(achievementRule, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }

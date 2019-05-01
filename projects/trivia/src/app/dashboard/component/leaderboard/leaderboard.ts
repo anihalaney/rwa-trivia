@@ -1,15 +1,17 @@
-import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-
-import { Observable, Subscription } from 'rxjs';
-import { Category, User, LeaderBoardUser, LeaderBoardConstants } from './../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable } from 'rxjs';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { dashboardState } from '../../store';
-import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
 import * as leaderBoardActions from '../../store/actions';
-import { ActivatedRoute } from '@angular/router';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { UserActions } from 'shared-library/core/store/actions';
+import {
+  Category, LeaderBoardConstants, LeaderBoardUser, LeaderBoardStats, User
+} from 'shared-library/shared/model';
+
 
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -17,7 +19,8 @@ export class Leaderboard implements OnDestroy {
 
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User };
-  leaderBoardStatDict: { [key: string]: Array<LeaderBoardUser> };
+  leaderBoardStatDict: { [key: string]: Array<LeaderBoardUser> } = {};
+  leaderBoardStatDictArray: LeaderBoardStats[] = [];
   leaderBoardCat: Array<string>;
   categoryDict$: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -64,9 +67,14 @@ export class Leaderboard implements OnDestroy {
 
     this.subscriptions.push(this.store.select(dashboardState).pipe(select(s => s.scoreBoard)).subscribe(lbsStat => {
       if (lbsStat) {
-        this.leaderBoardStatDict = lbsStat;
-        this.leaderBoardCat = Object.keys(lbsStat);
-        //  this.cd.detectChanges();
+
+        this.leaderBoardStatDictArray = lbsStat;
+        this.leaderBoardCat = this.leaderBoardStatDictArray.map(leaderBoard => leaderBoard.id);
+
+        this.leaderBoardStatDictArray.filter((leaderBoardStatDict) => {
+          this.leaderBoardStatDict[leaderBoardStatDict.id] = leaderBoardStatDict.users;
+        });
+
         if (this.leaderBoardCat.length > 0) {
           this.leaderBoardCat.map((cat) => {
             this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {

@@ -1,5 +1,5 @@
 import {
-    LeaderBoardUser, Account, UserStatConstants, CollectionConstants, GeneralConstants
+    Account, CollectionConstants, LeaderBoardUsers, UserStatConstants, LeaderBoardUser
 } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
@@ -9,70 +9,87 @@ export class LeaderBoardService {
     private static leaderBoardFireStoreClient = admin.firestore();
 
     /**
-     * getLeaderBoardStats
-     * return leaderoardstat
+     * setLeaderBoardStatsById
+     * return any
      */
-    static async getLeaderBoardStats(): Promise<any> {
-        try {
-            const lbsStats = await LeaderBoardService.leaderBoardFireStoreClient.
-                doc(CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES).
-                get();
-            return (lbsStats.data()) ? lbsStats.data() : {};
-        } catch (error) {
-            return Utils.throwError(error);
-        }
-    }
-
-    /**
-     * setLeaderBoardStats
-     * return ref
-     */
-    static async setLeaderBoardStats(leaderBoardStat: any): Promise<any> {
+    static async setLeaderBoardStatsById(id: any, leaderBoardStat: any): Promise<any> {
         try {
             return await LeaderBoardService.leaderBoardFireStoreClient
-                .doc(`/${CollectionConstants.LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES}`)
+                .doc(`/${CollectionConstants.LEADER_BOARD_STATS}/${id}`)
                 .set(leaderBoardStat);
         } catch (error) {
             return Utils.throwError(error);
         }
     }
 
+    /**
+    * getLeaderBoardStats
+    * return any
+    */
+    static async getLeaderBoardStats(): Promise<any> {
+        try {
+            return LeaderBoardService.getLeaderBoardDict(
+                await LeaderBoardService.leaderBoardFireStoreClient
+                    .collection(CollectionConstants.LEADER_BOARD_STATS).get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+    * getLeaderBoardDict
+    * return leaderBoardDicts
+    */
+    static getLeaderBoardDict(snapshots: any): { [key: string]: LeaderBoardUser[] } {
+
+        const leaderBoardDicts: { [key: string]: LeaderBoardUser[] } = {};
+
+        for (const snapshot of snapshots.docs) {
+            leaderBoardDicts[snapshot.id] = snapshot.data();
+        }
+        return leaderBoardDicts;
+    }
 
     /**
      * calculateLeaderBoardStats
-     * return lbsstat
+     * return any
      */
-    static calculateLeaderBoardStats(accountObj: Account, lbsStats: { [key: string]: Array<LeaderBoardUser> })
-        : { [key: string]: Array<LeaderBoardUser> } {
+    static calculateLeaderBoardStats(accountObj: Account, leaderBoardDict: { [key: string]: LeaderBoardUsers })
+        : { [key: string]: LeaderBoardUsers } {
 
         if (accountObj && accountObj.id) {
             const leaderBoardStats = accountObj.leaderBoardStats;
 
             if (leaderBoardStats) {
                 for (const id of Object.keys(leaderBoardStats)) {
-                    const leaderBoardUsers: Array<LeaderBoardUser> = (lbsStats[id]) ? lbsStats[id] : [];
-                    const filteredUsers: Array<LeaderBoardUser> =
-                        leaderBoardUsers.filter((lbUser) => lbUser.userId === accountObj.id);
 
-                    const leaderBoardUser: LeaderBoardUser = (filteredUsers.length > 0) ?
-                        filteredUsers[0] : new LeaderBoardUser();
-                    leaderBoardUser.userId = accountObj.id;
-                    leaderBoardUser.score = leaderBoardStats[id];
-                    const leaderBoardUserObj = { ...leaderBoardUser };
-                    (filteredUsers.length > 0) ?
-                        leaderBoardUsers[leaderBoardUsers.findIndex((fUser) => fUser.userId === accountObj.id)] = leaderBoardUserObj
-                        : leaderBoardUsers.push(leaderBoardUserObj);
+                    let userIndex = -1;
+                    const leaderBoardUsers = leaderBoardDict[id] ? new LeaderBoardUsers(leaderBoardDict[id]) : new LeaderBoardUsers({});
 
-                    leaderBoardUsers.sort((a, b) => {
+                    userIndex = leaderBoardUsers.users.findIndex((lUser) => lUser.userId === accountObj.id);
+
+                    const leaderBoardUserData = (userIndex === -1) ? new LeaderBoardUser() : leaderBoardUsers.users[userIndex];
+
+                    leaderBoardUserData.userId = accountObj.id;
+                    leaderBoardUserData.score = leaderBoardStats[id];
+
+                    (userIndex === -1) ? leaderBoardUsers.users.push({ ...leaderBoardUserData }) :
+                        leaderBoardUsers.users[userIndex] = leaderBoardUserData;
+
+                    leaderBoardUsers.users.sort((a, b) => {
                         return b.score - a.score;
                     });
-                    if (leaderBoardUsers.length > UserStatConstants.maxUsers) {
-                        leaderBoardUsers.splice(leaderBoardUsers.length - 1, 1);
+
+                    if (leaderBoardUsers.users.length > UserStatConstants.maxUsers) {
+                        leaderBoardUsers.users.splice(leaderBoardUsers.users.length - 1, 1);
                     }
-                    lbsStats[id] = leaderBoardUsers;
+
+                    leaderBoardDict[id] = leaderBoardUsers;
                 }
             }
         }
-        return lbsStats;
+        return leaderBoardDict;
     }
+
 }

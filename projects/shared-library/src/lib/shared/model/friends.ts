@@ -1,5 +1,4 @@
 
-
 export class Friends {
     myFriends: Array<{ [key: string]: FriendsMetadata }>;
     created_uid: string;

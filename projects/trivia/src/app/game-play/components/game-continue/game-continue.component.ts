@@ -38,7 +38,6 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
     this.continueButtonClicked.emit();
   }
 
-
   ngOnDestroy() {
     this.destroy();
   }
