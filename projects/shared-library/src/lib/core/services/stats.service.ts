@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
-import { SystemStats, CollectionConstants } from '../../shared/model';
+import { map } from 'rxjs/operators';
+import { CollectionConstants, SystemStats } from '../../shared/model';
 import { DbService } from './../db-service';
 
 @Injectable()
