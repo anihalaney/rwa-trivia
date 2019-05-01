@@ -1,14 +1,12 @@
-import { Component, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, NgZone} from '@angular/core';
-import { Store, select } from '@ngrx/store';
-
-import { Observable } from 'rxjs';
-import { Category, User, LeaderBoardUser, LeaderBoardConstants } from './../../../../../../shared-library/src/lib/shared/model';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
-import { AppState } from '../../../store';
-import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { Page } from 'tns-core-modules/ui/page';
+import { Utils } from 'shared-library/core/services';
+import { AppState } from '../../../store';
+import { UserActions } from 'shared-library/core/store/actions';
 import { Leaderboard } from './leaderboard';
+
 @Component({
   selector: 'leaderboard',
   templateUrl: './leaderboard.component.html',

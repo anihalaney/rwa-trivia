@@ -2,23 +2,19 @@
 import * as functions from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import {
-    friendInvitationConstants, Game, Invitation, OpponentType,
-    PlayerMode, Question, TriggerConstants, UserStatConstants, SystemStatConstants,
-    pushNotificationRouteConstants, QuestionStatus
-} from '../../projects/shared-library/src/lib/shared/model';
+import { friendInvitationConstants, Game, Invitation, LeaderBoardUsers, OpponentType, PlayerMode, pushNotificationRouteConstants, Question, QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
+import { AppSettings } from '../services/app-settings.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
+import { StatsService } from '../services/stats.service';
+import { AchievementMechanics } from '../utils/achievement-mechanics';
 import { ESUtils } from '../utils/ESUtils';
 import { FriendGameStats } from '../utils/friend-game-stats';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { MailClient } from '../utils/mail-client';
+import { PushNotification } from '../utils/push-notifications';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
-import { AppSettings } from '../services/app-settings.service';
-import { StatsService } from '../services/stats.service';
-import { PushNotification } from '../utils/push-notifications';
-import { AchievementMechanics } from '../utils/achievement-mechanics';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -171,11 +167,9 @@ export class FirebaseFunctions {
             if (afterEventData !== beforeEventData) {
                 const account: Account = afterEventData;
 
-                let lbsStats = await LeaderBoardService.getLeaderBoardStats();
+                const leaderBoardDict: { [key: string]: LeaderBoardUsers } = await LeaderBoardService.getLeaderBoardStats();
 
-                lbsStats = LeaderBoardService.calculateLeaderBoardStats(account, lbsStats);
-
-                await LeaderBoardService.setLeaderBoardStats({ ...lbsStats });
+                await GameLeaderBoardStats.setLeaderBoardStat(await LeaderBoardService.calculateLeaderBoardStats(account, leaderBoardDict));
 
                 await AchievementMechanics.updateAchievement(account);
             }

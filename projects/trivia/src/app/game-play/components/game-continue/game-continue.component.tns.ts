@@ -51,5 +51,4 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
     this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
   }
 
-
 }
