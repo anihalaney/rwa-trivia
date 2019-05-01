@@ -2,7 +2,7 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
 import { CoreState, coreState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-
+import { ApplicationSettings } from 'shared-library/shared/model';
 export class Login {
   mode: SignInMode;
   loginForm: FormGroup;
@@ -11,6 +11,7 @@ export class Login {
   subscriptions: Subscription[] = [];
   notificationLogs: string[];
   signInMethod = 'email';
+  applicationSettings: ApplicationSettings;
   // tslint:disable-next-line:max-line-length
   email_regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -60,6 +61,12 @@ export class Login {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.resetPasswordLogs))
       .subscribe(notificationLogs => this.notificationLogs = notificationLogs));
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+      }
+    }));
   }
 
   phoneSignIn() {
