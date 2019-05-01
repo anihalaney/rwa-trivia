@@ -2,7 +2,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractCon
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
-import { User, Category, profileSettingsConstants } from 'shared-library/shared/model';
+import { User, Category, profileSettingsConstants, Account } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import { userState } from '../../../user/store';
@@ -45,7 +45,7 @@ export class ProfileSettings {
     bulkUploadBtnText: string;
     loaderBusy = false;
     subscriptions = [];
-
+    account: Account;
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
@@ -60,6 +60,13 @@ export class ProfileSettings {
         this.toggleLoader(true);
 
         this.fb = formBuilder;
+
+        this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
+            if (account) {
+              this.account = account;
+              this.cd.detectChanges();
+            }
+        }));
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             this.socialProfileSettings = appSettings[0].social_profile;
