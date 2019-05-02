@@ -34,7 +34,46 @@
           <Button text="View as public profile" nsRouterLink="/user/profile/{{user.userId}}" class="btn-red Roboto-Medium" backgroundColor="#D4493D" color="#ffffff"
              height="50" stlRippleEffect></Button>
       </StackLayout>
-      <StackLayout class="list-view" iosOverflowSafeArea="false">
+      <CardView margin="5" android:elevation="20" ios:elevation="40" radius="15" class="gameplay">
+        <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff" height="100%" padding="0" margin="10">
+          <StackLayout marginTop="10">
+            <GridLayout rows="*,*,*,*,*,*" columns="auto,*,auto" marginTop="10">
+              <Label text="Game Played" row="0" col="0" class="padding-5 text-black Hind-Bold" fontSize="16" verticalAlignment="center" ></Label>
+              <GridLayout  row="0" col="2" rows="*, *" columns="*" class="padding-10">
+                  <Label [text]="account?.gamePlayed" row="0" col="0" class="text-black" fontSize="16"></Label>
+              </GridLayout>
+
+              <Label text="Categories" row="1" col="0" class="padding-5 text-black Hind-Bold" fontSize="16" verticalAlignment="center" ></Label>
+              <GridLayout  row="1" col="2" rows="*, *" columns="*" class="padding-10">
+                  <Label [text]="account?.categories" row="0" col="0" class="text-black" fontSize="16"></Label>
+              </GridLayout>
+              
+              <Label text="Win-Loss" row="2" col="0" class="padding-5 text-black Hind-Bold" fontSize="16" verticalAlignment="center" ></Label>
+              <GridLayout  row="2" col="2" rows="*, *" columns="*" class="padding-10">
+                  <Label text="{{account?.wins}}-{{account?.losses}}" row="0" col="0" class="text-black" fontSize="16"></Label>
+              </GridLayout>
+
+              
+              <Label text="Badges" row="3" col="0" class="padding-5 text-black Hind-Bold" fontSize="16" verticalAlignment="center" ></Label>
+              <GridLayout  row="3" col="2" rows="*, *" columns="*" class="padding-10">
+                  <Label [text]="account?.badges" row="0" col="0" class="text-black" fontSize="16"></Label>
+              </GridLayout>
+
+              
+              <Label text="Avg. answer time" row="4" col="0" class="padding-5 text-black Hind-Bold" fontSize="16" verticalAlignment="center" ></Label>
+              <GridLayout  row="4" col="2" rows="*, *" columns="*" class="padding-10">
+                  <Label [text]="account?.avgAnsTime" row="0" col="0" class="text-black" fontSize="16"></Label>
+              </GridLayout>
+
+              <Label text="Contribution" row="5" col="0" class="padding-5 text-black Hind-Bold" fontSize="16" verticalAlignment="center" ></Label>
+              <GridLayout  row="5" col="2" rows="*, *" columns="*">
+                  <Label [text]="account?.contribution" row="0" col="0" class="text-black" fontSize="16"></Label>
+              </GridLayout>
+            </GridLayout>
+          </StackLayout>
+        </StackLayout>
+      </CardView>
+      <StackLayout class="list-view" iosOverflowSafeArea="false" marginTop="12">
         <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
           <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true"
             iosOverflowSafeArea="false"></Label>
