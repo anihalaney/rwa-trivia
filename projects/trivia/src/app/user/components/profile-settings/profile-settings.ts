@@ -1,7 +1,7 @@
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, skip } from 'rxjs/operators';
 import { User, Category, profileSettingsConstants, Account } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
@@ -86,7 +86,14 @@ export class ProfileSettings {
         this.route.params.subscribe(data => {
             if (data && data.userid) {
                 this.userId = data.userid;
-                this.initData();
+
+                this.store.select(appState.coreState).pipe(skip(1)).subscribe(s => {
+                    if (s.user) {
+                        this.initData();
+                    } else {
+                        this.initializeOtherUserProfile();
+                    }
+                });
             }
         });
 
@@ -97,7 +104,6 @@ export class ProfileSettings {
         this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
 
         this.subscriptions.push(this.userObs.subscribe(user => {
-            console.log(user);
             if (user) {
                 this.user = user;
                 if (this.user.userId === this.userId) {
@@ -107,8 +113,6 @@ export class ProfileSettings {
                     this.userType = UserType.loggedInuseOtherUserProfile;
                     this.initializeOtherUserProfile();
                 }
-            } else {
-                this.initializeOtherUserProfile();
             }
         }));
     }
@@ -155,7 +159,6 @@ export class ProfileSettings {
     }
 
     initializeOtherUserProfile() {
-        console.log(' it is here');
         this.categoryDictObs = this.store.select(categoryDictionary);
         this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
 
@@ -237,11 +240,10 @@ export class ProfileSettings {
             categoryFA = new FormArray(categoryIds);
             this.enteredTags = user.tags;
         }
-
         this.userForm = this.fb.group({
             name: [user.name, Validators.required],
-            displayName: [user.displayName, Validators.required],
-            location: [user.location, Validators.required],
+            displayName: [user.displayName],
+            location: [user.location],
             categoryList: categoryFA ? categoryFA : [],
             tags: '',
             tagsArray: tagsFA ? tagsFA : [],
@@ -250,7 +252,7 @@ export class ProfileSettings {
 
         this.afterFormCreate();
         if (!this.isEnableEditProfile) {
-            this.userForm.disable();
+            this.disableForm();
         }
     }
 
@@ -266,23 +268,27 @@ export class ProfileSettings {
         }
     }
 
-    getUserFromFormValue(formValue: any): void {
-        this.user.name = formValue.name;
-        this.user.displayName = formValue.displayName;
-        this.user.location = formValue.location;
-        this.user.categoryIds = [];
-        for (const obj of formValue.categoryList) {
-            if (obj['isSelected']) {
-                this.user.categoryIds.push(obj['category']);
+    getUserFromFormValue(formValue: any, editSingleField , field): void {
+        if (editSingleField) {
+            this.user[field] = formValue[field];
+        } else {
+            this.user.name = formValue.name;
+            this.user.displayName = formValue.displayName;
+            this.user.location = formValue.location;
+            this.user.categoryIds = [];
+            for (const obj of formValue.categoryList) {
+                if (obj['isSelected']) {
+                    this.user.categoryIds.push(obj['category']);
+                }
             }
+            this.socialProfileSettings.map(profile => {
+                if (profile.enable) {
+                    this.user[profile.social_name] = formValue[profile.social_name];
+                }
+            });
+            this.user.tags = [...this.enteredTags];
+            this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
         }
-        this.socialProfileSettings.map(profile => {
-            if (profile.enable) {
-                this.user[profile.social_name] = formValue[profile.social_name];
-            }
-        });
-        this.user.tags = [...this.enteredTags];
-        this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
     }
 
     showMoreSocialProfile() {
@@ -300,7 +306,7 @@ export class ProfileSettings {
     saveUser(user: User) {
         this.toggleLoader(true);
         this.isEnableEditProfile = false;
-        this.userForm.disable();
+        this.disableForm();
         this.store.dispatch(this.userAction.addUserProfile(user));
     }
 
@@ -314,6 +320,16 @@ export class ProfileSettings {
 
     editProfile() {
         this.isEnableEditProfile = true;
+        this.enableForm();
+    }
+
+    disableForm() {
+        this.userForm.disable();
+        this.userForm.get('displayName').enable();
+        this.userForm.get('location').enable();
+    }
+
+    enableForm() {
         this.userForm.enable();
     }
 }
