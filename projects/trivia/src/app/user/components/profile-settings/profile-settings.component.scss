@@ -83,7 +83,14 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
 .add-space{padding-top:48px;}
 form .tags{padding-top:5px;}
 
+.input-edit{position: relative;float: left;}
+.input-edit span{content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
+.input-edit input:hover::before{ opacity: 0.5 }
 
+.input-edit > input, .formfield select{padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px);
+  box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06);
+  border-color: #9a9a9a;
+}
 .statsview #stats, .statsview #graph{padding:17px;}
 .statsview #stats li{border-bottom: 1px solid transparent; text-align: left;}
 .statsview #stats li{border-color: rgba(204,204,204,0.44);}

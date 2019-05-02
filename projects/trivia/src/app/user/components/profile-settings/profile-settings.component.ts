@@ -115,7 +115,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   saveProfileImage() {
     if (!this.profileImageValidation) {
-      this.getUserFromFormValue(this.userForm.value);
+      this.enableForm();
+      this.getUserFromFormValue(this.userForm.value, false, '');
+      this.disableForm();
       this.assignImageValues();
       this.saveUser(this.user);
       this.cd.markForCheck();
@@ -167,7 +169,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
   // tags end
 
-  onSubmit() {
+  onSubmit(editSingleField = false, field = '') {
     // validations
     this.userForm.updateValueAndValidity();
 
@@ -176,13 +178,13 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
 
-    if (this.userForm.invalid) {
+    if (this.userForm.invalid && !editSingleField) {
       this.setNotificationMsg('Please fill the mandatory fields', true, 100);
       return;
     }
 
     // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value);
+    this.getUserFromFormValue(this.userForm.value, editSingleField, field);
     // call saveUser
     this.saveUser(this.user);
     this.setNotificationMsg('', false, 0);
