@@ -3,14 +3,14 @@ import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { dashboardState } from '../../store';
 import * as leaderBoardActions from '../../store/actions';
-import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
+import { UserActions } from 'shared-library/core/store/actions';
 import {
   Category, LeaderBoardConstants, LeaderBoardUser, LeaderBoardStats, User
-} from './../../../../../../shared-library/src/lib/shared/model';
+} from 'shared-library/shared/model';
 
 
 

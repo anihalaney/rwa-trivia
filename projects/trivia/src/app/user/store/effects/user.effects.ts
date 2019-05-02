@@ -3,12 +3,12 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { switchMap, map, filter, take, mergeMap } from 'rxjs/operators';
 import { empty } from 'rxjs';
-import { QuestionService } from '../../../../../../shared-library/src/lib/core/services';
-import { Question, RouterStateUrl } from '../../../../../../shared-library/src/lib/shared/model';
+import { QuestionService } from 'shared-library/core/services';
+import { Question, RouterStateUrl } from 'shared-library/shared/model';
 import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
 import { AppState } from '../../../store';
-import { coreState } from '../../../../../../shared-library/src/lib/core/store';
+import { coreState } from 'shared-library/core/store';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
 @Injectable()

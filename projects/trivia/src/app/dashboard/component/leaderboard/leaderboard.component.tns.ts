@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestro
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Page } from 'tns-core-modules/ui/page';
-import { Utils } from '../../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
-import { UserActions } from './../../../../../../shared-library/src/lib/core/store/actions';
+import { UserActions } from 'shared-library/core/store/actions';
 import { Leaderboard } from './leaderboard';
 
 @Component({

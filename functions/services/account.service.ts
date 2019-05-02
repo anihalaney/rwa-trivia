@@ -114,18 +114,18 @@ export class AccountService {
         }
 
         account[LeaderBoardConstants.LEADER_BOARD_STATS] = { ...account.leaderBoardStats };
-        account.gamePlayed = (account.gamePlayed) ? (isMigration ? account.gamePlayed + 1 : increment) : 1;
+        account.gamePlayed = (account.gamePlayed) ? (isMigration ? (account.gamePlayed as number) + 1 : increment) : 1;
         account.categories = Object.keys(account.leaderBoardStats).length;
 
         if (game.winnerPlayerId) {
             (game.winnerPlayerId === userId) ?
-                account.wins = (account.wins) ? (isMigration ? account.wins + 1 : increment) : 1 :
-                account.losses = (account.losses) ? (isMigration ? account.losses + 1 : increment) : 1;
+                account.wins = (account.wins) ? (isMigration ? (account.wins as number) + 1 : increment) : 1 :
+                account.losses = (account.losses) ? (isMigration ? (account.losses as number) + 1 : increment) : 1;
         } else {
-            account.losses = (account.losses) ? (isMigration ? account.losses + 1 : increment) : 1;
+            account.losses = (account.losses) ? (isMigration ? (account.losses as number) + 1 : increment) : 1;
         }
 
-        account.badges = (account.badges) ? (isMigration ? account.badges + score : badgesIncrement) : score;
+        account.badges = (account.badges) ? (isMigration ? ((account.badges as number) + score) : badgesIncrement) : score;
         account.avgAnsTime = (account.avgAnsTime) ? Math.floor((account.avgAnsTime + avgAnsTime) / 2) : avgAnsTime;
 
         return account;
