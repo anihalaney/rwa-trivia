@@ -77,12 +77,14 @@ export class Leaderboard implements OnDestroy {
 
         if (this.leaderBoardCat.length > 0) {
           this.leaderBoardCat.map((cat) => {
-            this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
-              const userId = user.userId;
-              if (this.userDict && !this.userDict[userId]) {
-                this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
-              }
-            });
+            if (Array.isArray(this.leaderBoardStatDict[cat])) {
+              this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
+                const userId = user.userId;
+                if (this.userDict && !this.userDict[userId]) {
+                  this.store.dispatch(this.userActions.loadOtherUserProfile(userId));
+                }
+              });
+            }
           });
           if (this.lbsSliceStartIndex === -1) {
             this.lbsSliceStartIndex = Math.floor((Math.random() * (this.leaderBoardCat.length - 3)) + 1);
