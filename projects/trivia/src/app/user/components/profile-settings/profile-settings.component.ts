@@ -9,6 +9,7 @@ import { profileSettingsConstants, Subscription } from 'shared-library/shared/mo
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'profile-settings',
@@ -32,19 +33,22 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     private windowRef: WindowRef,
     public userAction: UserActions,
     public cd: ChangeDetectorRef,
-    public utils: Utils) {
+    public utils: Utils,
+    public route: ActivatedRoute) {
 
-    super(fb, store, userAction, utils, cd);
+    super(fb, store, userAction, utils, cd, route);
 
-    this.setCropperSettings();
-    this.setNotificationMsg('', false, 0);
+    // if (this.userType === 0) {
+      this.setCropperSettings();
+      this.setNotificationMsg('', false, 0);
 
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-      if (status === 'SUCCESS') {
-        this.setNotificationMsg('Profile Saved !', false, 100);
-        this.cd.markForCheck();
-      }
-    }));
+      this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+        if (status === 'SUCCESS') {
+          this.setNotificationMsg('Profile Saved !', false, 100);
+          this.cd.markForCheck();
+        }
+      }));
+    // }
   }
 
   setNotificationMsg(msg: string, flag: boolean, scrollPosition: number): void {

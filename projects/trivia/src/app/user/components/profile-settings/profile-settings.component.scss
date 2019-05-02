@@ -51,7 +51,7 @@
 .saccount .formfield label{ font-size: 18px; font-family: 'hindmedium'; width: 90px}
 .saccount .formfield label:nth-child(2){ width: auto; font-family: 'hindregular'; font-size: 16px; }
 .saccount .formfield label + p{margin-top: 13px }
-.savebox{ padding: 20px 0px; display: flex; margin-top: 100%; }
+.savebox{ padding: 20px 0px; display: flex;}
 .savebox button{ width: 100%;    padding-left: 10px; padding-right: 10px;}
 .savebox a:nth-child(2){ font-size: 18px; font-family: 'hindmedium'; margin-top: 30px; display: inline-block; }
 .btn-sticky{position: fixed;bottom: 0;left:0;}
@@ -65,7 +65,8 @@
 .custom-file-upload { border: 1px solid ; display: block; border-radius: 4px; overflow: hidden; cursor: pointer; transition: .3s ease-in-out; width: 151px; margin: 0 auto 20px; position: relative;}
 label.custom-file-upload:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
 label.custom-file-upload:hover:after{ opacity: 0.5 }
-
+.expand-width { width : 100% !important; max-width : 100% !important}
+.other-profile-img-container { width: 150px; margin: 0 auto;} 
 /*Custom File Upload*/
 .custom-file-upload img{ display: block; }
 .namefield{ margin-top: 30px }
@@ -92,6 +93,8 @@ form .tags{padding-top:5px;}
 .viewtext{ display: inline-block; vertical-align: middle; width: 50%; font-size: 16px;  }
 .viewcount{ display: inline-block; vertical-align: middle; width: 30%; font-size: 16px; letter-spacing: 0.75px; font-family: 'hindmedium'; line-height: 1;text-align: right; }
 .profile-img-container{width: 150px;left:40%;position: absolute}
+input:disabled { background-color: #fff; }
+.other-user-avatar-container {position: relative; min-height: 140px; }
 
 @media screen and (max-width:767px){
   .tagging input{ line-height: 24px;padding: 4px 10px;border-radius: 3px;display: block; width: calc(100% - 34px);}

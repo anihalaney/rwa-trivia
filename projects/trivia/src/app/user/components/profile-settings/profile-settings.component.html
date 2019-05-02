@@ -1,5 +1,5 @@
 <!-- My setting -->
-<div class="mainpage submitpage mysetting" *ngIf="user">
+<div class="mainpage submitpage mysetting" [class.expand-width]="userType === 2"  *ngIf="user">
   <div class="row hidden-xs">
     <div class="pageheading col-sm-6 col-xs-12">My Profile</div>
   </div>
@@ -22,8 +22,18 @@
               </label>
             </div>
           </div>
+
+            <!-- User avatar -->
+            <div  *ngIf="userType !== 0" class="row other-user-avatar-container">
+                <div class="other-profile-img-container">
+                  <label class="custom-file-upload">
+                    <img [src]="userProfileImageUrl" width="150" height="140"
+                      alt="Avatar" />
+                  </label>
+                </div>                
+            </div>
           <!-- Upload avatar -->
-          <div class="row upload-avatar-container">
+          <div *ngIf="userType === 0" class="row upload-avatar-container" [ngStyle]="{'min-height': (!profileImageFile || profileImageValidation) ?'175px':'250px'}">
             
               <div class="profile-img-container">
               <label for="file-upload" class="custom-file-upload">
@@ -38,12 +48,14 @@
                 <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide"
                   aria-label="file">
               </div>
-              <P *ngIf="profileImageValidation" class="error">
-                {{profileImageValidation}}
-              </P>
-              <p *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can adjust the cropped image
-                Recommend
-                an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
+              <div style="margin-top: 157px; text-align: center;">
+                <p *ngIf="profileImageValidation" class="error">
+                  {{profileImageValidation}}
+                </p>
+                <p *ngIf="!profileImageFile || profileImageValidation">Once Uploaded, You can adjust the cropped image
+                  Recommend
+                  an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
+              </div>
               <div class="file-upload-container">
                 <div class="file-upload">
                 </div>
@@ -53,14 +65,16 @@
               </div>
             
           </div>
+          <!-- Upload avatar end -->
           <!-- <div class="pt-20">
               <button class="btn view-profile" routerLink="/user/profile/{{user.userId}}">View as public profile</button>
           </div> -->
 
+      <!-- Profile pik end -->
           <div class="clearfix displayfield">
               <div class="formfield">
                 <label>Display Name *</label>
-                <input formControlName="displayName" placeholder="Enter Display Name" type="text" class="required"
+                <input formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text" class="required"
                   aria-label="display-name">
                 <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">
                   Display
@@ -68,9 +82,9 @@
               </div>
               <div class="formfield">
                 <label>Location *</label>
-                <input formControlName="location" placeholder="Enter Location" type="text" class="required"
+                <input formControlName="location" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text" class="required"
                   aria-label="location">
-                <p>Where in the world you are</p>
+                <p *ngIf = "userType === 0">Where in the world you are</p>
                 <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">
                   Location
                   is required!</p>
@@ -82,13 +96,13 @@
                   <mat-tab-group>
                     <mat-tab label="Profile">
                       <div class="row">
-                        <div class="col-lg-12 profile-container">
+                        <div class="col-lg-12 profile-container" [ngStyle]="{'align-items': isEnableEditProfile ? 'flex-end': 'flex-start'}">
                           <div class="col-lg-10">
                             <div class="m-25">
                               <div class="clearfix namefield">
                                 <div class="formfield">
                                   <label id="nameLableField">Name *</label>
-                                  <input formControlName="name" type="text" placeholder="Enter Name" class="required" aria-label="name">
+                                  <input formControlName="name" type="text" [placeholder]="userType === 0 ? 'Enter Name' : ''" class="required" aria-label="name">
                                   <p>Enter your real name, so people you know and recognize you</p>
                                   <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error">Name is
                                     required!</p>
@@ -124,7 +138,7 @@
                                 </div>
                               <!-- Social Accounts end -->
                               <!-- Categories -->
-                              <div class="row pcategories">
+                              <div *ngIf="userType === 0" class="row pcategories">
                                   <div class="col-sm-3 add-space">
                                     <h3>Preferred Categories</h3>
                                   </div>
@@ -140,7 +154,7 @@
                                 <!-- Categories end -->
                       
                                 <!-- Tags -->
-                                <div class="row pcategories">
+                                <div  *ngIf="userType === 0" class="row pcategories">
                                   <div class="col-sm-3 add-space">
                                     <h3 >Preferred Tags</h3>
                                   </div>
@@ -195,8 +209,11 @@
                                 <!-- Categories end -->
                               </div>
                           </div>
-                          <div class="col-lg-2">
-                              <div class="savebox textcenter">
+                          <div  *ngIf="userType === 0" class="col-lg-2">
+                              <div class="savebox textcenter" *ngIf="!isEnableEditProfile">
+                                  <button type="button" class="btn save" (click)="editProfile()">Edit Profile</button>
+                                </div>
+                              <div class="savebox textcenter" *ngIf="isEnableEditProfile">
                                   <button type="button" class="btn save" (click)="onSubmit()">Save Profile</button>
                                   <!-- <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button> -->
                                 </div>
@@ -250,18 +267,8 @@
                   </mat-tab-group>
                 </mat-card-content>
             </div>
-
-       
-          <!-- Upload avatar end -->
-
-
-
-
-
         </div>
       </div>
-      <!-- Profile pik end -->
-
     </form>
   </section>
 </div>

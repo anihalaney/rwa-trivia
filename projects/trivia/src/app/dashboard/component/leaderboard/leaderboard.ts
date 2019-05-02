@@ -69,13 +69,13 @@ export class Leaderboard implements OnDestroy {
       if (lbsStat) {
 
         this.leaderBoardStatDictArray = lbsStat;
-        this.leaderBoardCat = this.leaderBoardStatDictArray.map(leaderBoard => leaderBoard.id);
+        // this.leaderBoardCat = this.leaderBoardStatDictArray.map(leaderBoard => leaderBoard.id);
 
         this.leaderBoardStatDictArray.filter((leaderBoardStatDict) => {
           this.leaderBoardStatDict[leaderBoardStatDict.id] = leaderBoardStatDict.users;
         });
 
-        if (this.leaderBoardCat.length > 0) {
+        if (this.leaderBoardCat && this.leaderBoardCat.length > 0) {
           this.leaderBoardCat.map((cat) => {
             this.leaderBoardStatDict[cat].map((user: LeaderBoardUser) => {
               const userId = user.userId;

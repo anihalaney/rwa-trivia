@@ -22,6 +22,7 @@ import { ProfileSettings } from './profile-settings';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { fromAsset } from 'tns-core-modules/image-source';
 import { ImageCropper } from 'nativescript-imagecropper';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'profile-settings',
@@ -55,8 +56,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public store: Store<AppState>,
     public userAction: UserActions,
     public utils: Utils,
-    public cd: ChangeDetectorRef) {
-    super(fb, store, userAction, utils, cd);
+    public cd: ChangeDetectorRef,
+    public route: ActivatedRoute) {
+    super(fb, store, userAction, utils, cd, route);
     this.initDataItems();
     requestPermissions();
 
