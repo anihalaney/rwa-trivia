@@ -3,7 +3,7 @@ import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core
 import { RecentGamesComponent } from './../components/recent-games/recent-games.component';
 import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
 import { AchievementsComponent } from '../components';
-import { UserFeedbackComponent } from '../../../../shared-library/src/lib/shared/mobile/component/user-feedback/user-feedback.component';
+import { UserFeedbackComponent } from 'shared-library/shared/mobile/component/user-feedback/user-feedback.component';
 
 export const routes: Routes = [
 

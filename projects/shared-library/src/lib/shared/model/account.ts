@@ -10,7 +10,7 @@ export class AccountBase {
     bytes?: number;
 }
 
-export class Account extends AccountBase{
+export class Account extends AccountBase {
     leaderBoardStats?: { [key: number]: number };
     gamePlayed?: number;
     wins?: number;
