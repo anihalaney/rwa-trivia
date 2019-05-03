@@ -81,7 +81,8 @@ export class ProfileSettings {
             this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
         }));
 
-
+        this.tagsObs = this.store.select(getTags);
+        this.subscriptions.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
 
         this.route.params.subscribe(data => {
             if (data && data.userid) {
@@ -130,9 +131,6 @@ export class ProfileSettings {
 
         this.categoryDictObs = this.store.select(categoryDictionary);
         this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-
-        this.tagsObs = this.store.select(getTags);
-        this.subscriptions.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
 
         this.userCopyForReset = cloneDeep(this.user);
         this.createForm(this.user);
