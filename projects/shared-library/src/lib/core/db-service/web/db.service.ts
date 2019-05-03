@@ -1,11 +1,11 @@
-import { Injectable, Inject, NgZone } from '@angular/core';
-import { DbService } from './../db.service';
-import { Observable, of } from 'rxjs';
+import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireStorage, AngularFireStorageReference } from '@angular/fire/storage';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { isArray } from 'util';
+import { DbService } from './../db.service';
 
 
 @Injectable()
@@ -31,11 +31,11 @@ export class WebDbService extends DbService {
     }
 
     public setDoc(collectionName: string, docId: any, document: any) {
-        return this._afStore.doc(`/${collectionName}/${docId}`).set(document);
+        return this._afStore.doc(`/${collectionName}/${docId}`).set(document, { merge: true });
     }
 
     public updateDoc(collectionName: string, docId: any, document: any) {
-        return this._afStore.doc(`/${collectionName}/${docId}`).update(document);
+        return this._afStore.doc(`/${collectionName}/${docId}`).set(document, { merge: true });
     }
 
 

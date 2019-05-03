@@ -3,10 +3,11 @@ import { FieldValue } from '@google-cloud/firestore';
 
 export class AccountAtomic extends AccountBase {
     leaderBoardStats?: { [key: number]: any };
-    gamePlayed?: number;
-    wins?: number;
-    losses?: number;
-    contribution?: number;
+    gamePlayed?: number | FieldValue;
+    wins?: number | FieldValue;
+    losses?: number | FieldValue;
+    contribution?: number | FieldValue;
+    badges?: number | FieldValue;
 
     constructor() {
         super();

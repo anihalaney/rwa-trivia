@@ -1,6 +1,6 @@
 <ActionBar title="" class="action-bar action-title">
     <NavigationButton visibility="collapsed"></NavigationButton>
-    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*" android:columns="auto,*" width="100%">
+    <GridLayout ios:rows="auto" android:rows="auto" ios:columns="auto,*,auto" android:columns="auto,*,auto" width="100%">
 
         <StackLayout stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center" width="45" col="0" (tap)="openSidebar()">
             <Label *ngIf="!hideMenu" text="&#xf0c9;" class="fa text-left padding-back" padding="10" fontSize="20"></Label>
@@ -9,5 +9,10 @@
         <StackLayout col="1" verticalAlignment="center">
             <Label [text]="title" marginLeft="20" class="action-text-title" fontSize="20"></Label>
         </StackLayout>
+
+        <StackLayout col="2" verticalAlignment="center" horizontalAlignment="right">
+            <Label *ngIf="!hideHomeIcon" text="&#xf015;" (tap)="goToDashboard()" class="fa" ios.marginRight="10" android.marginRight="10" fontSize="22"></Label>
+        </StackLayout>
+
     </GridLayout>
 </ActionBar>

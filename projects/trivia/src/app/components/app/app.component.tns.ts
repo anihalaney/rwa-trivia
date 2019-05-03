@@ -15,7 +15,7 @@ import { coreState } from 'shared-library/core/store';
 import { User } from 'shared-library/shared/model';
 import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
-import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
+import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 

@@ -45,13 +45,17 @@
       </div>
     </div>
     <div class="category-div">
-        <div class="round" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
-          <span class="round-value">Round {{game.round}} / {{totalRound}}</span>
-        </div>
+      <div class="round" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
+        <span class="round-value">Round {{game.round}} / {{totalRound}}</span>
+      </div>
     </div>
     <div class="continue-button">
+      <div>
         <button mat-button (click)="continueClicked()" class="continue-btn">Continue</button>
-        <button mat-button [routerLink]="['/dashboard']" class="dashboard-btn">Home</button>
+      </div>
+      <div class="dashboard">
+        <p>Do you want to go to <span class="dashboard-link" [routerLink]="['/dashboard']"> Home</span>?</p>
+      </div>
     </div>
 
   </mat-card-content>

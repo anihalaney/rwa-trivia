@@ -141,7 +141,7 @@ export class GameService {
         try {
             return await GameService.gameFireStoreClient
                 .doc(`/${CollectionConstants.GAMES}/${dbGame.id}`)
-                .update(dbGame);
+                .set(dbGame, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }

@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { finalize, catchError, take, map } from 'rxjs/operators';
+import { catchError, finalize, map, take } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
-import { Subscription, Subscribers, SocialGameScoreShare, Blog } from '../../shared/model';
-import { UserService } from './user.service';
-import { debug } from 'util';
+import { Blog, SocialGameScoreShare, Subscribers, Subscription } from '../../shared/model';
 import { DbService } from './../db-service';
+import { UserService } from './user.service';
 
 
 @Injectable()
@@ -70,7 +69,7 @@ export class SocialService {
     loadBlogs(): Observable<Blog[]> {
         const queryParams = {
             condition: [],
-            orderBy: [{ name: "id", value: 'desc' }],
+            orderBy: [{ name: 'id', value: 'desc' }],
             limit: 3
         };
 
