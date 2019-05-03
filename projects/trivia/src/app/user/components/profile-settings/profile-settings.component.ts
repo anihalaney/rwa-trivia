@@ -169,22 +169,32 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
   // tags end
 
-  onSubmit(editSingleField = false, field = '') {
+  onSubmit(isEditSingleField = false, field = '') {
     // validations
     this.userForm.updateValueAndValidity();
 
     if (this.profileImageFile) {
       this.assignImageValues();
     }
+    // validate for main form except single edit field
+    if (this.userForm.invalid && !isEditSingleField) {
 
-
-    if (this.userForm.invalid && !editSingleField) {
-      this.setNotificationMsg('Please fill the mandatory fields', true, 100);
-      return;
+      const controls = this.userForm.controls;
+      const singleEditFields = Object.getOwnPropertyNames(this.singleFieldEdit);
+      for (const name in controls) {
+          if (controls[name].invalid &&  singleEditFields.indexOf(name) < 0) {
+            this.setNotificationMsg('Please fill the mandatory fields', true, 100);
+            return;
+          }
+      }
     }
 
+    if (isEditSingleField) {
+      this.userForm.get(field).disable();
+      this.singleFieldEdit[field] = false;
+    }
     // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value, editSingleField, field);
+    this.getUserFromFormValue(this.userForm.value, isEditSingleField, field);
     // call saveUser
     this.saveUser(this.user);
     this.setNotificationMsg('', false, 0);

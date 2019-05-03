@@ -72,11 +72,12 @@
       <!-- Profile pik end -->
           <div class="clearfix displayfield">
               <div class="formfield">
-                <label class="pull-left">Display Name *</label>
+                <label>Display Name *</label>
                 <div class="input-edit">
-                  <input style="width: 116%;" (change)="onSubmit(true, 'displayName')" formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text" class="required"
+                  <input  formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text" class="required"
                     aria-label="display-name">
-                    <span></span>
+                    <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName" (click)="editSingleField('displayName')" style="right: 8px;"></span>
+                    <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !==''" (click)="onSubmit(true, 'displayName')" style="right: 8px;"></span>
                 </div>
                 <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">
                   Display
@@ -84,9 +85,12 @@
               </div>
               <div class="formfield">
                 <label>Location *</label>
-                <input formControlName="location" (change)="onSubmit(true, 'location')" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text" class="required"
-                  aria-label="location">
-                  <span></span>
+                <div class="input-edit">
+                <input formControlName="location"  [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text" class="required"
+                  aria-label="location" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location" (click)="editSingleField('location')" style="right: 8px;"></span>
+                  <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''" (click)="onSubmit(true, 'location')" style="right: 8px;"></span>
+                </div>
                 <p *ngIf = "userType === 0">Where in the world you are</p>
                 <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">
                   Location

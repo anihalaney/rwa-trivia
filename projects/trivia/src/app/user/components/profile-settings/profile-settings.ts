@@ -14,7 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { initDomAdapter } from '@angular/platform-browser/src/browser';
 export enum UserType {
     userProfile,
-    loggedInuseOtherUserProfile,
+    loggedInOtherUserProfile,
     OtherUserProfile
   }
 export class ProfileSettings {
@@ -58,6 +58,10 @@ export class ProfileSettings {
     userProfileImageUrl = '';
     userType = UserType.OtherUserProfile;
     isEnableEditProfile = false;
+    singleFieldEdit = {
+        displayName: false,
+        location: false
+    };
 
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
@@ -110,7 +114,7 @@ export class ProfileSettings {
                     this.userType = UserType.userProfile;
                     this.initializeUserProfile();
                 } else {
-                    this.userType = UserType.loggedInuseOtherUserProfile;
+                    this.userType = UserType.loggedInOtherUserProfile;
                     this.initializeOtherUserProfile();
                 }
             }
@@ -252,7 +256,7 @@ export class ProfileSettings {
 
         this.afterFormCreate();
         if (!this.isEnableEditProfile) {
-            this.disableForm();
+            this.disableForm(true);
         }
     }
 
@@ -268,13 +272,11 @@ export class ProfileSettings {
         }
     }
 
-    getUserFromFormValue(formValue: any, editSingleField , field): void {
-        if (editSingleField) {
+    getUserFromFormValue(formValue: any, isEditSingleField , field): void {
+        if (isEditSingleField) {
             this.user[field] = formValue[field];
         } else {
             this.user.name = formValue.name;
-            this.user.displayName = formValue.displayName;
-            this.user.location = formValue.location;
             this.user.categoryIds = [];
             for (const obj of formValue.categoryList) {
                 if (obj['isSelected']) {
@@ -323,13 +325,40 @@ export class ProfileSettings {
         this.enableForm();
     }
 
-    disableForm() {
-        this.userForm.disable();
-        this.userForm.get('displayName').enable();
-        this.userForm.get('location').enable();
+    disableForm(isDisableAll = false) {
+        if (isDisableAll) {
+            this.userForm.disable();
+        } else {
+            const controls = this.userForm.controls;
+            const singleEditFields = Object.getOwnPropertyNames(this.singleFieldEdit);
+            for (const name in controls) {
+                if (singleEditFields.indexOf(name) < 0) {
+                    this.userForm.get(name).disable();
+                }
+            }
+        }
     }
 
     enableForm() {
-        this.userForm.enable();
+        const controls = this.userForm.controls;
+        const singleEditFields = Object.getOwnPropertyNames(this.singleFieldEdit);
+        for (const name in controls) {
+            if (singleEditFields.indexOf(name) < 0) {
+                this.userForm.get(name).enable();
+            }
+        }
+    }
+
+    editSingleField(field: string) {
+        this.singleFieldEdit[field] = !this.singleFieldEdit[field];
+        if (this.singleFieldEdit[field]) {
+            this.userForm.get(field).enable();
+            this.userForm.get(field).setValidators([Validators.required]);
+            this.userForm.updateValueAndValidity();
+        } else {
+            this.userForm.get(field).disable();
+            this.userForm.get(field).setValidators([]);
+            this.userForm.updateValueAndValidity();
+        }
     }
 }
