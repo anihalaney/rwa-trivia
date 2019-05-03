@@ -13,14 +13,10 @@
       <!-- Profile pik -->
       <div class="enterquestion">
         <div class="optionbox">
-          <div class="row" [ngClass]="{'error':errorStatus, 'success':!errorStatus}">
-            <div class="col-sm-3 col-xs-12">
-            </div>
-            <div class="col-sm-9 col-xs-12">
+          <div class="row m-b-10 text-center" [ngClass]="{'error':errorStatus, 'success':!errorStatus}">
               <label>
                 {{notificationMsg}}
               </label>
-            </div>
           </div>
 
             <!-- User avatar -->
@@ -33,21 +29,28 @@
                 </div>                
             </div>
           <!-- Upload avatar -->
-          <div *ngIf="userType === 0" class="row upload-avatar-container" [ngStyle]="{'min-height': (!profileImageFile || profileImageValidation) ?'175px':'250px'}">
+          <div *ngIf="userType === 0" class="row">
             
             <div class="profile-img-container">
-              <label for="file-upload" class="custom-file-upload">
+              <label for="file-upload" class="custom-file-upload" *ngIf="!profileImageFile">
                 <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"
                  alt="Avatar" />
               </label>
-              <button *ngIf="profileImageFile && !profileImageValidation" class="btn"
-              (click)="saveProfileImage()">Save</button>
+              <div class="file-upload-container">
+                  <div class="file-upload">
+                  </div>
+                  <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage"
+                  [settings]="cropperSettings"></img-cropper>
+                  <br>
+                </div>
+                <button *ngIf="profileImageFile && !profileImageValidation" class="btn profile-save-btn"
+                (click)="saveProfileImage()">Save</button>
             </div>
               <div class="pull-right">
                 <input id="file-upload" name='upload_cont_img' type="file" (change)="onFileChange($event)" class="hide"
                   aria-label="file">
               </div>
-              <div style="margin-top: 157px; text-align: center;">
+              <div class="text-center">
                 <p *ngIf="profileImageValidation" class="error">
                   {{profileImageValidation}}
                 </p>
@@ -55,20 +58,8 @@
                   Recommend
                   an image 263 px or larger. Allowed formats: jpeg, gif and png</p>
               </div>
-              <div class="file-upload-container">
-                <div class="file-upload">
-                </div>
-                <img-cropper *ngIf="profileImageFile && !profileImageValidation" #cropper [image]="profileImage"
-                  [settings]="cropperSettings"></img-cropper>
-                <br>
-              </div>
-            
           </div>
           <!-- Upload avatar end -->
-          <!-- <div class="pt-20">
-              <button class="btn view-profile" routerLink="/user/profile/{{user.userId}}">View as public profile</button>
-          </div> -->
-
       <!-- Profile pik end -->
           <div class="clearfix displayfield">
               <div class="formfield">
@@ -76,8 +67,8 @@
                 <div class="input-edit">
                   <input  formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text" class="required"
                     aria-label="display-name">
-                    <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName" (click)="editSingleField('displayName')" style="right: 8px;"></span>
-                    <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !==''" (click)="onSubmit(true, 'displayName')" style="right: 8px;"></span>
+                    <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName" (click)="editSingleField('displayName')"></span>
+                    <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !==''" (click)="onSubmit(true, 'displayName')"></span>
                 </div>
                 <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">
                   Display
@@ -88,8 +79,8 @@
                 <div class="input-edit">
                 <input formControlName="location"  [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text" class="required"
                   aria-label="location" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location" (click)="editSingleField('location')" style="right: 8px;"></span>
-                  <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''" (click)="onSubmit(true, 'location')" style="right: 8px;"></span>
+                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location" (click)="editSingleField('location')"></span>
+                  <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''" (click)="onSubmit(true, 'location')"></span>
                 </div>
                 <p *ngIf = "userType === 0">Where in the world you are</p>
                 <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">
@@ -104,7 +95,7 @@
                     <mat-tab label="Profile">
                       <div class="row">
                         <div class="col-lg-12 profile-container" [ngStyle]="{'align-items': isEnableEditProfile ? 'flex-end': 'flex-start'}">
-                          <div class="col-lg-10">
+                          <div class="col-lg-10 col-sm-12 col-md-12 col-xs-12">
                             <div class="m-25">
                               <div class="clearfix namefield">
                                 <div class="formfield">
@@ -216,7 +207,7 @@
                                 <!-- Categories end -->
                               </div>
                           </div>
-                          <div  *ngIf="userType === 0" class="col-lg-2">
+                          <div  *ngIf="userType === 0" class="col-lg-2 col-sm-12 col-md-12 col-xs-12">
                               <div class="savebox textcenter" *ngIf="!isEnableEditProfile">
                                   <button type="button" class="btn save" (click)="editProfile()">Edit Profile</button>
                                 </div>
