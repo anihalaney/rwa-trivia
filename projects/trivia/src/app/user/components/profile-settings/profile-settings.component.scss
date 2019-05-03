@@ -20,10 +20,19 @@
 .margin-top-10{
   margin-top:10px;
 }
-
-.submitpage .card{ padding: 25px 0 0 }
+.enterquestion{ margin-top: 25px; background-color: #f1f2f2; }
+.upload-avatar-container{position: relative; min-height: 250px;}
+.file-upload-container{display: flex;justify-content: center}
+.profile-save-btn{margin: 0 auto; margin-top: 15px;max-width: 83px;}
+.mat-tab-group{border: 1px solid black}
+.m-b-55{margin-bottom: 55px;}
+.m-b-10{margin-bottom: 10px;}
+.profile-container{ display: flex; align-items: flex-end;}
+.submitpage .card{ padding: 0px 0 0 }
+.m-25{margin: 25px;}
+#nameLableField{text-align: right; padding-right: 20px;}
 .pcategories > .col-sm-9{ border-top: 1px solid; padding:46px 15px 0; }
-#curentactive { text-align: center; }
+#curentactive { text-align: center;  background-color: #f1f2f2;}
 .submitpage .optionbox{ padding: 0 10px }
 .optionbox{ margin-top: 30px; text-align: left;}
 .optionbox h2{ font-size: 20px; letter-spacing: 0.75px; line-height: 1.2; margin: 0 0 10px }
@@ -44,25 +53,60 @@
 .saccount .formfield label{ font-size: 18px; font-family: 'hindmedium'; width: 90px}
 .saccount .formfield label:nth-child(2){ width: auto; font-family: 'hindregular'; font-size: 16px; }
 .saccount .formfield label + p{margin-top: 13px }
-.savebox{ padding: 20px 15px }
+.savebox{ padding: 20px 0px; display: flex;}
+.savebox button{ width: 100%;    padding-left: 10px; padding-right: 10px;}
 .savebox a:nth-child(2){ font-size: 18px; font-family: 'hindmedium'; margin-top: 30px; display: inline-block; }
 .btn-sticky{position: fixed;bottom: 0;left:0;}
+.m-t-0{margin-top: 0px;}
+.profile-display-label{text-align: right !important; padding-right: 20px;}
+.profile-display-field{display: inline-block; width: 55%;}
+.text-center{text-align: center;}
+.show-more-div{text-align: center; margin-bottom: 20px;}
 
 #file-name{ border:1px solid; border-radius: 4px; padding: 7px 10px; font-size: 16px; min-width:100%; display: inline-block; }
 .custom-file-upload { border: 1px solid ; display: block; border-radius: 4px; overflow: hidden; cursor: pointer; transition: .3s ease-in-out; width: 151px; margin: 0 auto 20px; position: relative;}
-label.custom-file-upload:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
-label.custom-file-upload:hover:after{ opacity: 0.5 }
-
+label.custom-file-upload-image:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
+label.custom-file-upload-image:hover:after{ opacity: 0.5 }
+.expand-width { width : 100% !important; max-width : 100% !important}
+.other-profile-img-container { width: 150px; margin: 0 auto;} 
 /*Custom File Upload*/
 .custom-file-upload img{ display: block; }
 .namefield{ margin-top: 30px }
 .namefield .formfield{display: block !important; text-align: left;}
 .namefield .formfield > label{ text-align: left; font-size: 18px; font-family: 'hindmedium' }
 .namefield .formfield > p{ margin-top: 5px }
+
+.displayfield { margin-top: 30px }
+.displayfield .formfield{display: block !important; text-align: left;}
+.displayfield .formfield > label{ text-align: right; font-size: 18px; font-family: 'hindmedium'; padding-right: 25px; }
+.displayfield .formfield > p{ margin-top: 5px }
 .hide{ display: none !important; }
 .tagging input { line-height: 24px;padding: 7px 17px;border-radius: 3px;display: block;width: 61%;box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06); }
 .add-space{padding-top:48px;}
 form .tags{padding-top:5px;}
+
+.input-edit{position: relative;width: 35%;display: inline-block;}
+.field-edit-icon{right: 8px;content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
+.input-edit input:hover::before{ opacity: 0.5 }
+.field-save-icon{right: 8px;content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/check.png) no-repeat; background-size: 28px 28px; transition: 0.3s ease-in-out}
+
+.input-edit > input {padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px);
+  box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06);
+  border-color: #9a9a9a;
+  width: 116%;width: 100%;padding-right: 45px;
+}
+.statsview #stats, .statsview #graph{padding:17px;}
+.statsview #stats li{border-bottom: 1px solid transparent; text-align: left;}
+.statsview #stats li{border-color: rgba(204,204,204,0.44);}
+.statsview #stats li {padding: 7px 0; display: block;}
+.statsview #stats li:last-child, .statsview #graph li:last-child{ border-bottom: 0 }
+.statsview .sprite{ width: 25px; height: 26px; margin-right:10px }
+.viewtext{ display: inline-block; vertical-align: middle; width: 50%; font-size: 16px;  }
+.viewcount{ display: inline-block; vertical-align: middle; width: 30%; font-size: 16px; letter-spacing: 0.75px; font-family: 'hindmedium'; line-height: 1;text-align: right; }
+.profile-img-container{display: flex; flex-direction: column}
+input:disabled { background-color: #fff; }
+.other-user-avatar-container {position: relative; min-height: 140px; }
+
 @media screen and (max-width:767px){
   .tagging input{ line-height: 24px;padding: 4px 10px;border-radius: 3px;display: block; width: calc(100% - 34px);}
 }
@@ -83,16 +127,19 @@ form .tags{padding-top:5px;}
   #file-name{min-width: 280px;}
   .card .enterquestion h3{margin-top: 0px}
   .card .saccount h3{ margin-top: 53px }
-  .custom-file-upload { display: inline-block;}
+  // .custom-file-upload { display: inline-block;}
   .namefield .formfield > label{ width: 25% }
   .namefield .formfield > input{ width: 55% }
-  .namefield .formfield > p{ margin-left: calc(25% + 4px ) }  
+  .namefield .formfield > p{ margin-left: calc(25% + 4px ) } 
+  .displayfield .formfield > label{ width: 54% }
+  .displayfield .formfield > input{ width: 35% }
+  .displayfield .formfield > p{ margin-left: calc(55% + 4px ) }   
 }
 @media screen and ( min-width:1000px){
   .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
   .optionbox > .row > .col-sm-3{ padding-left: 15px; padding-right: 15px; }
   .pcategories > .col-sm-9{padding:46px 0 0; }
-  .optionbox{width: 680px; margin: 60px auto 0;}  
+  .optionbox{width: 85%; margin: 60px auto 0;}  
   .submitpage .optionbox{ margin-top: 0; padding: 0 }
   .optionbox h2{ font-size: 16px; text-transform: uppercase; margin-bottom: 0 }
   .optionbox .pcategories h2{ margin-top: 40px}
@@ -103,8 +150,11 @@ form .tags{padding-top:5px;}
   .saccount .formfield{ width: 100% }
   .saccount .formfield > input{ width: 100% }
   .saccount .formfield:nth-child(2n + 2), .namefield .formfield:nth-child(2n + 2){ text-align: left; }
+  .saccount .formfield:nth-child(2n + 2), .displayfield .formfield:nth-child(2n + 2){ text-align: left; }
   .namefield .formfield{ width: 100% }
   .namefield .formfield > input{ width: 55% }
+  .displayfield .formfield{ width: 100% }
+  .displayfield .formfield > input{ width: 35% }
   .custom-file-upload:hover{ box-shadow: 0 2px 5px rgba(0,0,0,.30)}
   
   .social-profile{
@@ -193,5 +243,9 @@ form .tags{padding-top:5px;}
 .bulk-upload-request label p  {
   margin-top: 8px;
   color: #7c7c7c;
+}
+
+.mat-tab-group{
+  border: 1px solid rgba(0, 0, 0, 0.12)
 }
 

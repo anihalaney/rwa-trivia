@@ -22,6 +22,7 @@ import { ProfileSettings } from './profile-settings';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { fromAsset } from 'tns-core-modules/image-source';
 import { ImageCropper } from 'nativescript-imagecropper';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'profile-settings',
@@ -55,8 +56,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public store: Store<AppState>,
     public userAction: UserActions,
     public utils: Utils,
-    public cd: ChangeDetectorRef) {
-    super(fb, store, userAction, utils, cd);
+    public cd: ChangeDetectorRef,
+    public route: ActivatedRoute) {
+    super(fb, store, userAction, utils, cd, route);
     this.initDataItems();
     requestPermissions();
 
@@ -150,7 +152,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   saveProfileImage() {
-    this.getUserFromFormValue(this.userForm.value);
+    this.getUserFromFormValue(this.userForm.value, false, '');
     this.assignImageValues();
     this.saveUser(this.user);
   }
@@ -222,7 +224,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
     // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value);
+    this.getUserFromFormValue(this.userForm.value, false, '');
     this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
     // call saveUser
     this.saveUser(this.user);

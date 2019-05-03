@@ -9,6 +9,7 @@ import { profileSettingsConstants, Subscription } from 'shared-library/shared/mo
 import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'profile-settings',
@@ -32,19 +33,22 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     private windowRef: WindowRef,
     public userAction: UserActions,
     public cd: ChangeDetectorRef,
-    public utils: Utils) {
+    public utils: Utils,
+    public route: ActivatedRoute) {
 
-    super(fb, store, userAction, utils, cd);
+    super(fb, store, userAction, utils, cd, route);
 
-    this.setCropperSettings();
-    this.setNotificationMsg('', false, 0);
+    // if (this.userType === 0) {
+      this.setCropperSettings();
+      this.setNotificationMsg('', false, 0);
 
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-      if (status === 'SUCCESS') {
-        this.setNotificationMsg('Profile Saved !', false, 100);
-        this.cd.markForCheck();
-      }
-    }));
+      this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+        if (status === 'SUCCESS') {
+          this.setNotificationMsg('Profile Saved !', false, 100);
+          this.cd.markForCheck();
+        }
+      }));
+    // }
   }
 
   setNotificationMsg(msg: string, flag: boolean, scrollPosition: number): void {
@@ -111,7 +115,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   saveProfileImage() {
     if (!this.profileImageValidation) {
-      this.getUserFromFormValue(this.userForm.value);
+      this.enableForm();
+      this.getUserFromFormValue(this.userForm.value, false, '');
+      this.disableForm();
       this.assignImageValues();
       this.saveUser(this.user);
       this.cd.markForCheck();
@@ -163,22 +169,33 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
   // tags end
 
-  onSubmit() {
+  onSubmit(isEditSingleField = false, field = '') {
     // validations
     this.userForm.updateValueAndValidity();
 
     if (this.profileImageFile) {
       this.assignImageValues();
     }
+    // validate for main form except single edit field
+    if (this.userForm.invalid && !isEditSingleField) {
 
-
-    if (this.userForm.invalid) {
-      this.setNotificationMsg('Please fill the mandatory fields', true, 100);
-      return;
+      const controls = this.userForm.controls;
+      const singleEditFields = Object.getOwnPropertyNames(this.singleFieldEdit);
+      for (const name in controls) {
+          if (controls[name].invalid &&  singleEditFields.indexOf(name) < 0) {
+            this.setNotificationMsg('Please fill the mandatory fields', true, 100);
+            return;
+          }
+      }
     }
 
+
     // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value);
+    this.getUserFromFormValue(this.userForm.value, isEditSingleField, field);
+    if (isEditSingleField) {
+      this.userForm.get(field).disable();
+      this.singleFieldEdit[field] = false;
+    }
     // call saveUser
     this.saveUser(this.user);
     this.setNotificationMsg('', false, 0);
