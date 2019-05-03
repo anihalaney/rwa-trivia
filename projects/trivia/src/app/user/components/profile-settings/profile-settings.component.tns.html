@@ -132,7 +132,7 @@
                 </StackLayout>
               </StackLayout>
 
-              <StackLayout class="list-view social-section" iosOverflowSafeArea="false">
+              <StackLayout class="list-view social-section" iosOverflowSafeArea="false" *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
                 <StackLayout class="grid-label p-15" iosOverflowSafeArea="false">
                   <Label textWrap="true" text="SOCIAL PROFILE"></Label>
                 </StackLayout>
