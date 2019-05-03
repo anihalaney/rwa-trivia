@@ -1,22 +1,21 @@
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl, AbstractControl } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { map, skip } from 'rxjs/operators';
-import { User, Category, profileSettingsConstants, Account } from 'shared-library/shared/model';
-import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
-import { userState } from '../../../user/store';
-import * as cloneDeep from 'lodash.clonedeep';
-import * as userActions from '../../store/actions';
-import { UserActions } from 'shared-library/core/store';
-import { ViewChildren, QueryList, HostListener, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { initDomAdapter } from '@angular/platform-browser/src/browser';
+import { select, Store } from '@ngrx/store';
+import * as cloneDeep from 'lodash.clonedeep';
+import { Observable } from 'rxjs';
+import { map, skip } from 'rxjs/operators';
+import { Utils } from 'shared-library/core/services';
+import { UserActions } from 'shared-library/core/store';
+import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
+import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+
 export enum UserType {
     userProfile,
     loggedInOtherUserProfile,
     OtherUserProfile
-  }
+}
+
 export class ProfileSettings {
     @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
@@ -33,7 +32,7 @@ export class ProfileSettings {
     locationOptions: string[] = ['Only with friends', 'With EveryOne'];
     socialProfileSettings;
     enableSocialProfile;
-    profileImage: { image: any } = { image: '/assets/images/avatarimg.jpg' };
+    profileImage: { image: any } = { image: '/assets/images/default-avatar-small.png' };
     profileImageValidation: String;
     profileImageFile: File;
     userCopyForReset: User;
@@ -66,15 +65,12 @@ export class ProfileSettings {
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
-
-
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
         public userAction: UserActions,
         public utils: Utils,
         public cd: ChangeDetectorRef,
         public route: ActivatedRoute) {
-
 
         this.toggleLoader(true);
 
@@ -105,9 +101,7 @@ export class ProfileSettings {
     }
 
     initData() {
-
         this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
-
         this.subscriptions.push(this.userObs.subscribe(user => {
             if (user) {
                 this.user = user;
@@ -125,8 +119,8 @@ export class ProfileSettings {
     initializeUserProfile() {
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
             if (account) {
-              this.account = account;
-              this.cd.markForCheck();
+                this.account = account;
+                this.cd.markForCheck();
             }
         }));
 
@@ -175,6 +169,8 @@ export class ProfileSettings {
                 this.createForm(this.user);
                 this.account = this.user.account;
                 this.userProfileImageUrl = this.getImageUrl(this.user);
+                this.profileImage.image = this.userProfileImageUrl;
+                this.toggleLoader(false);
             }
             this.cd.markForCheck();
         }));
@@ -270,7 +266,7 @@ export class ProfileSettings {
         }
     }
 
-    getUserFromFormValue(formValue: any, isEditSingleField , field): void {
+    getUserFromFormValue(formValue: any, isEditSingleField, field): void {
         if (isEditSingleField) {
             this.user[field] = formValue[field];
         } else {
