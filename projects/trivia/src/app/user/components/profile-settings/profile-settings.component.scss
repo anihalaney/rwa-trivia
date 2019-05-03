@@ -65,8 +65,8 @@
 
 #file-name{ border:1px solid; border-radius: 4px; padding: 7px 10px; font-size: 16px; min-width:100%; display: inline-block; }
 .custom-file-upload { border: 1px solid ; display: block; border-radius: 4px; overflow: hidden; cursor: pointer; transition: .3s ease-in-out; width: 151px; margin: 0 auto 20px; position: relative;}
-label.custom-file-upload:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
-label.custom-file-upload:hover:after{ opacity: 0.5 }
+label.custom-file-upload-image:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
+label.custom-file-upload-image:hover:after{ opacity: 0.5 }
 .expand-width { width : 100% !important; max-width : 100% !important}
 .other-profile-img-container { width: 150px; margin: 0 auto;} 
 /*Custom File Upload*/
@@ -131,7 +131,7 @@ input:disabled { background-color: #fff; }
   .namefield .formfield > label{ width: 25% }
   .namefield .formfield > input{ width: 55% }
   .namefield .formfield > p{ margin-left: calc(25% + 4px ) } 
-  .displayfield .formfield > label{ width: 50% }
+  .displayfield .formfield > label{ width: 54% }
   .displayfield .formfield > input{ width: 35% }
   .displayfield .formfield > p{ margin-left: calc(55% + 4px ) }   
 }

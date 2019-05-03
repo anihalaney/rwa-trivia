@@ -189,12 +189,13 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       }
     }
 
+
+    // get user object from the forms
+    this.getUserFromFormValue(this.userForm.value, isEditSingleField, field);
     if (isEditSingleField) {
       this.userForm.get(field).disable();
       this.singleFieldEdit[field] = false;
     }
-    // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value, isEditSingleField, field);
     // call saveUser
     this.saveUser(this.user);
     this.setNotificationMsg('', false, 0);

@@ -1,7 +1,7 @@
 <!-- My setting -->
 <div class="mainpage submitpage mysetting" [class.expand-width]="userType === 2"  *ngIf="user">
   <div class="row hidden-xs">
-    <div class="pageheading col-sm-6 col-xs-12">My Profile</div>
+    <div class="pageheading col-sm-6 col-xs-12">{{userType === 0 ? 'My': user?.displayName}} Profile  </div>
   </div>
   <section id="curentactive" class="card">
     <!-- <div class="h1block">
@@ -32,7 +32,7 @@
           <div *ngIf="userType === 0" class="row">
             
             <div class="profile-img-container">
-              <label for="file-upload" class="custom-file-upload" *ngIf="!profileImageFile">
+              <label for="file-upload" class="custom-file-upload custom-file-upload-image" *ngIf="!profileImageFile">
                 <img [src]="profileImage.image" [width]="cropperSettings.croppedWidth" [height]="cropperSettings.croppedHeight"
                  alt="Avatar" />
               </label>
@@ -63,24 +63,24 @@
       <!-- Profile pik end -->
           <div class="clearfix displayfield">
               <div class="formfield">
-                <label>Display Name *</label>
+                <label>Display Name {{userType === 0 ? '*': ''}}</label>
                 <div class="input-edit">
                   <input  formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text" class="required"
                     aria-label="display-name">
-                    <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName" (click)="editSingleField('displayName')"></span>
-                    <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !==''" (click)="onSubmit(true, 'displayName')"></span>
+                    <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName && userType === 0" (click)="editSingleField('displayName')"></span>
+                    <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0" (click)="onSubmit(true, 'displayName')"></span>
                 </div>
                 <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error">
                   Display
                   Name is required!</p>
               </div>
               <div class="formfield">
-                <label>Location *</label>
+                <label>Location {{userType === 0 ? '*': ''}}</label>
                 <div class="input-edit">
                 <input formControlName="location"  [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text" class="required"
                   aria-label="location" aria-label="Recipient's username" aria-describedby="basic-addon2">
-                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location" (click)="editSingleField('location')"></span>
-                  <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''" (click)="onSubmit(true, 'location')"></span>
+                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0" (click)="editSingleField('location')"></span>
+                  <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0" (click)="onSubmit(true, 'location')"></span>
                 </div>
                 <p *ngIf = "userType === 0">Where in the world you are</p>
                 <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error">
@@ -99,9 +99,9 @@
                             <div class="m-25">
                               <div class="clearfix namefield">
                                 <div class="formfield">
-                                  <label id="nameLableField">Name *</label>
+                                  <label id="nameLableField">Name {{userType === 0 ? '*': ''}}</label>
                                   <input formControlName="name" type="text" [placeholder]="userType === 0 ? 'Enter Name' : ''" class="required" aria-label="name">
-                                  <p>Enter your real name, so people you know and recognize you</p>
+                                  <p *ngIf="userType===0">Enter your real name, so people you know and recognize you</p>
                                   <p *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error">Name is
                                     required!</p>
                                 </div>
@@ -116,9 +116,12 @@
                                         <label class="profile-display-label">{{profile.display}}</label>
                                         <div class="profile-display-field">
                                           <div class="social-input-field">
-                                            <div class="social-url-contain" (click)="onSocialProfileInputFocus(i)">
+                                            <div class="social-url-contain" *ngIf="userType === 0" (click)="onSocialProfileInputFocus(i)">
                                               <span class="social-url">{{profile?.url}}</span>
                                             </div>
+                                            <div class="social-url-contain" *ngIf="userType !== 0">
+                                                <span class="social-url">{{profile?.url}}</span>
+                                              </div>
                                             <input #myInput class="social-profile col-md-6"
                                               [formControlName]="profile.social_name">
                                           </div>
@@ -136,7 +139,7 @@
                                 </div>
                               <!-- Social Accounts end -->
                               <!-- Categories -->
-                              <div *ngIf="userType === 0" class="row pcategories">
+                              <div *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
                                   <div class="col-sm-3 add-space">
                                     <h3>Preferred Categories</h3>
                                   </div>
@@ -152,7 +155,7 @@
                                 <!-- Categories end -->
                       
                                 <!-- Tags -->
-                                <div  *ngIf="userType === 0" class="row pcategories">
+                                <div  *ngIf="userType === 0 && isEnableEditProfile" class="row pcategories">
                                   <div class="col-sm-3 add-space">
                                     <h3 >Preferred Tags</h3>
                                   </div>
