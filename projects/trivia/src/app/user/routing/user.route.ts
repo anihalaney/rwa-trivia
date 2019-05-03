@@ -3,8 +3,7 @@ import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
   QuestionAddUpdateComponent,
-  InviteFriendsComponent,
-  UserProfileComponent
+  InviteFriendsComponent
 } from '../components';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 
