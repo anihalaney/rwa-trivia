@@ -13,7 +13,7 @@ export class OpenUserProfileDirective {
   @HostListener('tap', ['$event'])
   onClick(event) {
     if (this.userId && this.userId !== '') {
-      this.router.navigate([`/user/my/profile/${this.userId}`]);
+      this.router.navigate([`/user/profile/${this.userId}`]);
     }
   }
 

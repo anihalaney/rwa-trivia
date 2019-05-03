@@ -16,7 +16,7 @@ export const userRoutes: Routes = [
   },
   {
     path: 'profile/:userid',
-    component: UserProfileComponent
+    component: ProfileSettingsComponent
   },
   {
     path: 'my',
