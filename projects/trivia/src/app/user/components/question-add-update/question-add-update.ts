@@ -8,7 +8,6 @@ import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 
-
 export class QuestionAddUpdate {
 
   tagsObs: Observable<string[]>;
@@ -104,6 +103,7 @@ export class QuestionAddUpdate {
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
     question.createdOn = new Date();
+    question.isRichEditor = formValue.isRichEditor;
 
     return question;
   }

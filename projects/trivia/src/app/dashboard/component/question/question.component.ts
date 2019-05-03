@@ -19,6 +19,8 @@ export class QuestionComponent implements OnDestroy {
 
   question: Question;
   categoryName: string;
+  htmlText = `<p>First Maths Question <span class="ql-formula" data-value="3">﻿<span contenteditable="false"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">3</span></span></span></span></span>﻿</span>?</p>`;
+
   @Input() userDict: { [key: string]: User };
 
   @Output() answerClicked = new EventEmitter<number>();

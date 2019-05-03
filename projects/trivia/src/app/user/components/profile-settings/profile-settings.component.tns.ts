@@ -20,6 +20,8 @@ import { isAndroid } from 'tns-core-modules/platform';
 import { AppState } from '../../../store';
 import { ProfileSettings } from './profile-settings';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
+import { fromAsset } from 'tns-core-modules/image-source';
+import { ImageCropper } from 'nativescript-imagecropper';
 
 @Component({
   selector: 'profile-settings',
@@ -87,7 +89,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     });
   }
 
-  changeProfilePictureFromCamera() {
+  async changeProfilePictureFromCamera() {
     const options = {
       width: this.width,
       height: this.height,
@@ -97,47 +99,53 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     if (isAvailable()) {
 
-      takePicture(options)
-        .then(imageAsset => {
+        try {
+          const imageAsset  = await takePicture(options);
           this.imageTaken = imageAsset;
           const source = new ImageSource();
-          source.fromAsset(imageAsset).then(imageSource => {
-            this.profileImage.image = `data:image/jpeg;base64,${imageSource.toBase64String('jpeg', 100)}`;
-            this.saveProfileImage();
-          });
-        }).catch(err => {
-          console.log('Error -----> ', err);
-        });
+          const imageSource = await fromAsset(imageAsset);
+          this.cropImage(imageSource);
+        } catch (error) {
+          console.error(error);
+        }
     }
   }
 
-  changeProfilePictureFromGallery() {
-    const imageSource = new ImageSource();
-    const context = imagepicker.create({
-      mode: 'single' // use "multiple" for multiple selection
-    });
-    context
-      .authorize()
-      .then(() => {
-        return context.present();
-      })
-      .then((selection) => {
-        const imageAsset = selection.length > 0 ? selection[0] : null;
-        imageAsset.options = {
-          width: this.width,
-          height: this.height,
-          keepAspectRatio: true
-        };
-        imageSource.fromAsset(imageAsset)
-          .then((imageSource1: ImageSource) => {
-            this.profileImage.image = `data:image/jpeg;base64,${imageSource1.toBase64String('jpeg', 100)}`;
-            this.saveProfileImage();
-          });
+  async cropImage(imageSource) {
+    try {
+      const imageCropper: ImageCropper = new ImageCropper();
+      const result: ImageSource = (await imageCropper.show(imageSource,
+      {width: 150, height: 140, lockSquare: false})).image;
+      if (result) {
+        this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
+        this.saveProfileImage();
+        this.cd.detectChanges();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-      }).catch(function (err) {
-        // process error
-        console.log('Error -----> ', err);
+  async changeProfilePictureFromGallery() {
+    try {
+      let imageSource = new ImageSource();
+      const context = imagepicker.create({
+        mode: 'single' // use "multiple" for multiple selection
       });
+      await context.authorize();
+      const selection = await context.present();
+      const imageAsset = selection.length > 0 ? selection[0] : null;
+      imageAsset.options = {
+        width: this.width,
+        height: this.height,
+        keepAspectRatio: true
+      };
+      imageSource = await fromAsset(imageAsset);
+      this.cropImage(imageSource);
+    } catch (error) {
+      console.error(error);
+    }
+
 
   }
 

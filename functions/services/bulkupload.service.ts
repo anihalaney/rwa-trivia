@@ -1,6 +1,6 @@
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
-import { CollectionConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants } from '../../projects/shared-library/src/lib/shared/model';
 export class BulkUploadService {
 
     private static bulkUploadFireStoreClient = admin.firestore();
@@ -30,7 +30,7 @@ export class BulkUploadService {
         try {
             return await BulkUploadService.bulkUploadFireStoreClient.
                 doc(`/${CollectionConstants.BULK_UPLOADS}/${dbBulkUpload.id}`).
-                set(dbBulkUpload);
+                set(dbBulkUpload, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }

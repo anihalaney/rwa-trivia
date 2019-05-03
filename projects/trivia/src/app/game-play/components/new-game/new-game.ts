@@ -52,8 +52,6 @@ export class NewGame implements OnDestroy {
           this.selectedTags = this.user.tags;
         } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
           this.selectedTags = this.user.lastGamePlayOption.tags;
-        } else {
-          this.selectedTags = this.tags;
         }
         this.store.dispatch(this.userActions.loadUserFriends(user.userId));
       }

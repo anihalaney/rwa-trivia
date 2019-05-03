@@ -60,13 +60,11 @@
             verticalAlignment="center" textWrap="true"></Label>
     </StackLayout>
 
-    <StackLayout *ngIf="showContinueScreen && !gameOver " orientation="horizontal" horizontalAlignment="center"
-        height="100%">
-        <Button backgroundColor="#8ac541" class="Hind-Medium" color="white" width="50%" height="70" text="Dashboard"
-            fontSize="17" (tap)="navigateToDashboard()"></Button>
-        <Button backgroundColor="#f50057" class="Hind-Medium" color="white" width="50%" height="70" text="Continue"
-            fontSize="17" (tap)="continueButtonClicked()"></Button>
-    </StackLayout>
+    <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"
+        [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+        [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked($event)"
+        (viewQuestionClicked)="viewQuestionClicked($event)">
+    </game-continue>
 
     <StackLayout *ngIf="showWinBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
         <Image *ngIf="correctAnswerCount > 0" src="~/assets/images/score{{correctAnswerCount}}.png" height="70"

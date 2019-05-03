@@ -1,5 +1,4 @@
 import * as ElasticSearch from 'elasticsearch';
-import * as functions from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
@@ -174,7 +173,7 @@ export class ESUtils {
     const redneredQuestion = katex.renderToString('  \\text{What is answer}  c = \\pm\\sqrt{a^2 + b^2}  \\text{number of cats}', {
       throwOnError: true
   });
-
+  console.log('question callled>>>>>>>' , hits[0]['_source']);
     hits[0]['_source'].serverTimeQCreated = Utils.getUTCTimeStamp();
     hits[0]['_source'].renderedQuestion = redneredQuestion;
 

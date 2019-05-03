@@ -7,7 +7,7 @@ import {
   Utils,
   CategoryService, TagService, QuestionService,
   GameService, BulkService, UserService, SocialService, StatsService,
-  WindowRef, ApplicationSettingsService
+  WindowRef, ApplicationSettingsService, AchievementService
 } from './services';
 
 import { NavigationService } from './services/mobile/navigation.service';
@@ -65,7 +65,7 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
     Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService, SocialService, StatsService, NavigationService,
-    WindowRef, ApplicationSettingsService,
+    WindowRef, ApplicationSettingsService, AchievementService,
 
     // Actions
     UserActions, CategoryActions, TagActions, QuestionActions,

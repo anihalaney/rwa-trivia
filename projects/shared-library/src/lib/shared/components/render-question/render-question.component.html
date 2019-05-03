@@ -1,0 +1,2 @@
+<div *ngIf="question.isRichEditor" [innerHtml]='question.questionText | safeHtml'></div>
+<p class="" *ngIf="!question.isRichEditor"> {{question.questionText}}</p>

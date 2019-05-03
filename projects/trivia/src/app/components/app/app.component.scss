@@ -1,6 +1,6 @@
 /*side nav*/
 .pagelayout{ padding: 26px 0 0 }
-nav { min-height: 500px; position: relative; z-index: 998; width: 263px; min-width: 263px; display: table-cell;}
+nav { min-height: 500px; position: relative; z-index: 998; max-width: 263px; min-width: 263px; display: table-cell;}
 nav .card{ border-bottom: 1px solid }
 
 @media (min-width: 1200px){

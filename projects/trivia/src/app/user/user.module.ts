@@ -4,8 +4,10 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { SharedModule } from 'shared-library/shared/shared.module';
 import { UserRoutingModule } from './routing/user-routing.module';
-
+import { QuillModule } from 'ngx-quill';
 import { effects, reducer } from './store';
+import { QuillInitializeService } from 'shared-library/core/services/quillInitialize.service';
+import { FormsModule } from '@angular/forms';
 
 import {
   ProfileSettingsComponent,
@@ -33,7 +35,7 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     // rwa modules
     SharedModule,
     UserRoutingModule,
-
+    QuillModule,
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
@@ -41,8 +43,9 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     EffectsModule.forFeature(effects),
 
     ImageCropperModule,
+    FormsModule
   ],
-  providers: [],
+  providers: [QuillInitializeService],
   exports: [
     ProfileSettingsComponent,
     MyQuestionsComponent,

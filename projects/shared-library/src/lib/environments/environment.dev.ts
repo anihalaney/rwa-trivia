@@ -15,5 +15,5 @@ export const CONFIG: IConfig = {
     storageBucket: 'rwa-trivia-dev-e57fc.appspot.com',
     messagingSenderId: '701588063269'
   },
-  'functionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com'
+  'functionsUrl': 'http://192.168.0.100:5000/rwa-trivia-dev-e57fc/us-central1/app'
   };

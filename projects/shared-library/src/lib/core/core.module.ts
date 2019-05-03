@@ -15,7 +15,7 @@ import {
   Utils,
   CategoryService, TagService, QuestionService,
   GameService, BulkService, UserService, SocialService, StatsService,
-  WindowRef, ApplicationSettingsService
+  WindowRef, ApplicationSettingsService, AchievementService, QuillInitializeService
 } from './services';
 
 import { AuthenticationProvider, AuthInterceptor } from './auth';
@@ -70,7 +70,7 @@ export const firebaseConfig: FirebaseAppConfig = CONFIG.firebaseConfig;
     Utils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService, SocialService, StatsService,
-    WindowRef, ApplicationSettingsService,
+    WindowRef, ApplicationSettingsService, AchievementService, QuillInitializeService,
 
     //route guards
     AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver, AdminLoadGuard,

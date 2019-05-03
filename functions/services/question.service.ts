@@ -57,7 +57,7 @@ export class QuestionService {
         try {
             return await QuestionService.fireStoreClient
                 .doc(`/${collectionName}/${question.id}`)
-                .set(question);
+                .set(question, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }

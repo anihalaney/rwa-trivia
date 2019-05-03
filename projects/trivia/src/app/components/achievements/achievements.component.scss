@@ -1,0 +1,22 @@
+.card{ border-bottom: 1px solid }
+.card {border-color: rgba(204, 204, 204, 0.44); }
+
+.achievements {}
+
+.achievements li {
+  border-bottom: 1px solid rgba(204, 204, 204, 0.44);;
+  text-align: left;
+  padding: 8px 10px 4px 20px; 
+}
+
+.achievements li image{
+  text-align: center;
+}
+
+.achievements li:last-child {
+   border-bottom: 0;
+}
+
+.name{
+  padding-top: 5px;
+}

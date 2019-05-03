@@ -1,14 +1,13 @@
 import {
     Game, GameOperations, GameOptions, GameStatus,
     OpponentType, PlayerMode, PlayerQnA,
-    pushNotificationRouteConstants, schedulerConstants, User, SystemStatConstants, GeneralConstants
+    pushNotificationRouteConstants, schedulerConstants, User, GeneralConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
 import { UserService } from '../services/user.service';
 import { PushNotification } from '../utils/push-notifications';
 import { Utils } from './utils';
-import { StatsService } from '../services/stats.service';
 
 export class GameMechanics {
 
@@ -283,7 +282,7 @@ export class GameMechanics {
                 if (lastCurrentUserQuestion.round === lastOtherUserQuestions.round
                     && !lastCurrentUserQuestion.answerCorrect
                     && !lastOtherUserQuestions.answerCorrect) {
-                    game.round = game.round + 1;
+                    game.round = Utils.changeFieldValue(1);
                 }
             }
         }

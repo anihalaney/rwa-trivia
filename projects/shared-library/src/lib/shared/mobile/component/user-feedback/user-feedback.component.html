@@ -29,7 +29,7 @@
         </StackLayout>
     </CardView>
       <StackLayout class="profile-buttons">
-        <Button text="SEND" backgroundColor="{{feedbackForm.valid ? '#71b02f' : 'silver' }}" (tap)="onSubmit()" [disabled]="feedbackForm.invalid" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff"
+        <Button stlRippleEffect text="SEND" backgroundColor="{{feedbackForm.valid ? '#71b02f' : 'silver' }}" (rippleTap)="onSubmit()" [disabled]="feedbackForm.invalid" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff"
           padding="20 0"></Button>
       </StackLayout>
     </StackLayout>

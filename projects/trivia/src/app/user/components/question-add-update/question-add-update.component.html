@@ -1,3 +1,14 @@
+<!-- <h3>Fomat - object</h3>
+<pre>
+  <code>
+    {{ objectFormat | json }}
+</code>
+</pre>
+<quill-editor
+  format="object"
+  [(ngModel)]="objectFormat"
+  [modules]="quillConfig">
+</quill-editor> -->
 <form class="question-form" [formGroup]="questionForm" novalidate>
 
   <div class="mainpage submitpage">
@@ -32,15 +43,30 @@
         <!-- Category end -->
       </div>
 
+
+      <!-- isRichEditor -->
+
+
       <!-- Enter Your Question -->
       <div class="enterquestion secondbg">
+
+        <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
+          <label><span class="label-richtext">Rich Editor:</span></label>
+            <mat-checkbox mdPrefix formControlName="isRichEditor"></mat-checkbox>
+        </div>
+
         <div class="optionbox">
           <h2><span>Enter Your Question:</span></h2>
-          <textarea class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"
+          
+          <textarea *ngIf="!questionForm.value.isRichEditor" class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"
             aria-label="question-area"></textarea>
+dfdfdff
+          <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object" formControlName="questionText"
+            [modules]="quillConfig" [sanitize]="true" [placeholder]="ddfddfffddfdf"></quill-editor>
+          <!-- [(ngModel)]="htmlText" -->
           <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
             <p *ngIf="questionForm.controls.questionText.errors.required" class="error">Question is required!</p>
-            <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">{{this.applicationSettings.question_max_length}} characters are allowed</p>
+            <!-- <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">{{this.applicationSettings.question_max_length}} characters are allowed</p> -->
           </div>
 
 

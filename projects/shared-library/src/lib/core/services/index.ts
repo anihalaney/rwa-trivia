@@ -9,7 +9,8 @@ import { SocialService } from './social.service';
 import { StatsService } from './stats.service';
 import { WindowRef } from './windowref.service';
 import { ApplicationSettingsService } from './application-settings.service';
-
+import { AchievementService } from './achievement.service';
+import { QuillInitializeService } from './quillInitialize.service';
 
 export {
     Utils,
@@ -22,7 +23,9 @@ export {
     SocialService,
     StatsService,
     ApplicationSettingsService,
-    WindowRef
+    WindowRef,
+    AchievementService,
+    QuillInitializeService
 };
 
 export default [
@@ -36,5 +39,7 @@ export default [
     SocialService,
     StatsService,
     ApplicationSettingsService,
-    WindowRef
+    WindowRef,
+    AchievementService,
+    QuillInitializeService
 ];

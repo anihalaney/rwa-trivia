@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
@@ -10,6 +10,9 @@ import { QuestionAddUpdate } from './question-add-update';
 import { Question, Answer, Subscription } from 'shared-library/shared/model';
 import { debounceTime, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { QuillInitializeService } from 'shared-library/core/services/quillInitialize.service';
+import { QuillEditorComponent } from 'ngx-quill';
+
 @Component({
   templateUrl: './question-add-update.component.html',
   styleUrls: ['./question-add-update.component.scss'],
@@ -18,13 +21,55 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnDestroy {
+export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnInit, OnDestroy {
 
   get tagsArray(): FormArray {
     return this.questionForm.get('tagsArray') as FormArray;
   }
   subscriptions = [];
+  htmlText: any;
+  objectFormat = [
+    { insert: { formula: '6\\sqrt{-753+\\sqrt{355}}' } },
+    { insert: 'World!', attributes: { bold: true } },
+    { insert: '\n' }
+  ];
+  jsonObject: any;
+  @ViewChild('quillEditior') quillEditior: QuillEditorComponent;
+  public editorConfig = {
+    placeholder: 's'
+  };
+  quillConfig = {
+    // toolbar: '.toolbar',
+    toolbar: {
+      // ['formula'],
+      // container: "#customToolbar",
+      container: [
+        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        ['code-block'],
+        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+        [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+        [{ 'direction': 'rtl' }],                         // text direction
 
+        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+        [{ 'font': [] }],
+        [{ 'align': [] }],
+        ['clean'],
+        ['autoLink'],
+      ],
+      autoLink: true,
+      handlers: {
+        // handlers object will be merged with default handlers object
+        'autoLink': function () {
+          console.log('handler called');
+        }
+      }
+    },
+    autoLink: true,
+  };
 
   // Constructor
   constructor(public fb: FormBuilder,
@@ -32,7 +77,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     public utils: Utils,
     public router: Router,
     public snackBar: MatSnackBar,
-    public questionAction: QuestionActions) {
+    public questionAction: QuestionActions,
+    public quillInitializeService: QuillInitializeService) {
 
     super(fb, store, utils, questionAction);
 
@@ -43,6 +89,33 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
         this.createForm(this.question);
       }
     }));
+
+    this.questionForm.get('questionText').valueChanges.subscribe(val => {
+      console.log('value is here', val);
+    });
+
+    this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
+
+      if (isRichEditor) {
+        setTimeout(() => {
+          this.quillEditior
+            .onContentChanged
+            .pipe(
+              debounceTime(400),
+            )
+            .subscribe((data) => {
+              // tslint:disable-next-line:no-console
+              console.log('view child + directly subscription', data);
+              this.question.questionObject = data.html;
+              this.jsonObject = data.content.ops;
+            });
+        }, 0);
+      }
+      setTimeout(() => {
+        this.questionForm.patchValue({ questionText: '' });
+      }, 0);
+
+    });
 
     const questionControl = this.questionForm.get('questionText');
 
@@ -62,6 +135,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     }));
   }
 
+  ngOnInit(): void {
+  }
+
+
 
 
   createForm(question: Question) {
@@ -80,13 +157,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
     this.questionForm = this.fb.group({
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
-      questionText: [question.questionText,
-      Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.question_max_length)])],
+      questionText: ['',
+        Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.question_max_length)])],
       tags: '',
       tagsArray: tagsFA,
       answers: answersFA,
       ordered: [question.ordered],
-      explanation: [question.explanation]
+      explanation: [question.explanation],
+      isRichEditor: [false],
     }, { validator: questionFormValidator }
     );
   }
@@ -121,7 +199,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   submit() {
 
     const question: Question = super.onSubmit();
-
+    if (question.isRichEditor) {
+      const questionObject = this.jsonObject;
+      question.questionText = this.question.questionObject;
+      question.questionObject = questionObject;
+    }
+    console.log('question>', question);
+    // console.log('this quesiton', this.question);
     if (question) {
       // call saveQuestion
       this.saveQuestion(question);

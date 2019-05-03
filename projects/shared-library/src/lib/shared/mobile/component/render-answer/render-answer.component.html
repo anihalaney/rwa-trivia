@@ -1,10 +1,10 @@
-<StackLayout *ngIf="renderWebView; else renderView">
+<!-- <StackLayout *ngIf="renderWebView; else renderView">
     <WebView width="100%" padding="10" *ngIf="!isAndroid" [src]="renderText" stlRippleEffect (rippleTap)="answerButtonClicked(answer)"
         ios:height="{{answerHeight}}" (loadFinished)="onLoadFinished($event)" [isUserInteractionEnabled]="doPlay"></WebView>
 
     <WebView width="100%" padding="10" *ngIf="isAndroid" [src]="renderText" stlRippleEffect (rippleTap)="answerButtonClicked(answer)"
         (loadFinished)="onLoadFinished($event)" [isUserInteractionEnabled]="doPlay" minHeight="50"></WebView>
-</StackLayout>
+</StackLayout> -->
 
 <ng-template #renderView>
     <Label class="question-answered Hind-Medium" text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="17"

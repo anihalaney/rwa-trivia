@@ -47,9 +47,11 @@
 
     <ng-container>
       <div class="row secondbg">
-        <h2>{{questionIndex}}. 
+        <h2>
+          <!-- {{questionIndex}}. 
             <span *ngIf="!applicationSettings?.renderWebView" > {{question.questionText}} </span>
-            <span *ngIf="applicationSettings?.renderWebView" [innerHtml]='question.renderedQuestion | safeHtml'></span>
+            <span *ngIf="applicationSettings?.renderWebView" [innerHtml]='question.renderedQuestion | safeHtml'></span> -->
+            <render-question [renderWebView]="applicationSettings?.renderWebView" [question]="question" [questionIndex]="questionIndex"></render-question> 
         </h2>
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)"

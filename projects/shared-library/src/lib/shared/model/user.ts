@@ -30,7 +30,7 @@ export class User {
   iosPushTokens?: string[];
   lastGamePlayOption?: GameOptions;
   account?: Account;
-
+  achievements: string[];
 
   constructor(authState?: firebase.User & { name: string }) {
     if (authState) {

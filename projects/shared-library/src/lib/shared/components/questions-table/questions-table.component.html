@@ -37,7 +37,9 @@
         <div class="col-sm-12 col-xs-12 question-section" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
           <div class="date">{{ ( (row.createdOn) ? (row.createdOn.seconds * 1000) : row.createdOn) | date:'dd MMM yyyy'
             }}</div>
-          <p class="dark">{{row.questionText}}</p>
+          <p class="dark">
+            <render-question [renderWebView]="true" [question]="row"></render-question>
+          </p>
           <ul class="currentans">
             <li>
               <div class="button-web-css">

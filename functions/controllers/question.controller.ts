@@ -53,7 +53,7 @@ export class QuestionController {
             const userId = req.user.uid;
             const gameId = req.params.gameId;
             const g = await GameService.getGameById(gameId);
-
+            console.log('next question >>>>>>');
             if (!g) {
                 // game not found
                 Utils.sendResponse(res, interceptorConstants.FORBIDDEN, ResponseMessagesConstants.GAME_NOT_FOUND);

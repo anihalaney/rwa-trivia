@@ -657,3 +657,106 @@ body.dialog-open .cdk-global-overlay-wrapper {
 .gameplay .wrong .text, .gameplay .right .text{
   color: #fff !important;
 }
+
+.mat-link-bar {
+  left: 131px !important;
+  min-width: 130px !important;
+}
+
+.mat-tab-label{
+  min-width: 120px !important;
+}
+
+.mat-tab-label-content {
+  font-size: 14px !important;
+}
+
+// maths quill js
+
+.ql-input,  .mq-root-block{
+  width: 100% !important;
+  padding: 12px 20px !important;
+  margin: 8px 0 !important;
+  display: inline-block !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+  min-height: 40px;
+}
+#math-palette {
+  // border: 1px solid rgba(0,0,0,.15);
+  // border-radius: 3px;
+  // box-shadow: 0 5px 10px rgba(0,0,0,.12);
+  // max-width: 400px;
+  min-width: 400px;
+  position: absolute;
+  z-index: 999;
+  // background-color: #f7f7f7;
+  /* padding-right: 35px; */
+}
+
+
+#math-palette #toolbar{
+  // padding:15px;
+}
+
+.mq-editable-field {
+  border: none !important;
+}
+
+.mq-editable-field {
+  width: 100%;
+}
+
+.ql-close {
+  float: right;
+  cursor: pointer;
+  border: 1px solid;
+  padding: 3px;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  padding-left: 5px;
+  padding-top: 2px;
+}
+
+.key {
+  border: 1px solid #cccccc;
+  background: #f6f6f6;
+  font-weight: bold;
+  /* color: #1c94c4; */
+  // height: 2em;
+  min-width: 2em;
+  margin: .1em;
+  cursor: pointer;
+  overflow: hidden;
+  line-height: 2em;
+  text-align: center;
+  padding: 5px;
+}
+
+.key:hover {
+  border: 1px solid #fbd850;
+  background: #ffffff;
+  font-weight: bold;
+  color: #eb8f00;
+}
+
+.ql-editor.ql-blank:focus::before {
+  content: '' !important;
+}
+
+.ql-editor.ql-blank::before {
+  content: '' !important;
+}
+
+.mq-editable-field.mq-focused, {
+  box-shadow: none !important;
+  border-color: none !important;
+  border-radius: 0px;
+}
+
+.ql-toolbar.ql-snow + .ql-container.ql-snow {
+  min-height: 400px;
+}
+// maths quill js

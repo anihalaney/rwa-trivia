@@ -9,6 +9,7 @@ export class ApplicationSettings {
     tokens: Tokens;
     earn_bytes_on_question_contribute: number;
     renderWebView: boolean;
+    display_achievements: boolean;
 }
 
 export class TimerLoader {

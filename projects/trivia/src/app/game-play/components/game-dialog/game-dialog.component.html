@@ -38,14 +38,9 @@
     </div>
   </div>
 
-  <div class="" *ngIf="showContinueScreen && !gameOver ">
-    <div class="card main-div textcenter">
-      <div class="continue-button">
-          <button mat-button [routerLink]="['/dashboard']" class="dashboard-btn">Dashboard</button>
-          <button mat-button (click)="continueButtonClicked()" class="startgame continue-btn">Continue</button>
-      </div>
-    </div>
-  </div>
+  <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"
+  [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked($event)">
+</game-continue>
 
   <div class="" *ngIf="showWinBadge && !gameOver">
     <div class="card main-div textcenter">
