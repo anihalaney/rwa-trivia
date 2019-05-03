@@ -1,15 +1,14 @@
-import { Component, Input, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { userState } from '../../../user/store';
-import { ProfileSettings } from './profile-settings';
-import { Utils, WindowRef } from 'shared-library/core/services';
-import { profileSettingsConstants, Subscription } from 'shared-library/shared/model';
-import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
-import { coreState, UserActions } from 'shared-library/core/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { coreState, UserActions } from 'shared-library/core/store';
+import { profileSettingsConstants } from 'shared-library/shared/model';
+import { AppState } from '../../../store';
+import { ProfileSettings } from './profile-settings';
 
 @Component({
   selector: 'profile-settings',
