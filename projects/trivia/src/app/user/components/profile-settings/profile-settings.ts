@@ -76,10 +76,7 @@ export class ProfileSettings {
 
         this.fb = formBuilder;
 
-        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-            this.socialProfileSettings = appSettings[0].social_profile;
-            this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
-        }));
+
 
         this.tagsObs = this.store.select(getTags);
         this.subscriptions.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
@@ -104,8 +101,8 @@ export class ProfileSettings {
         this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
         this.subscriptions.push(this.userObs.subscribe(user => {
             if (user) {
-                this.user = user;
-                if (this.user.userId === this.userId) {
+                if (user.userId === this.userId) {
+                    this.user = user;
                     this.userType = UserType.userProfile;
                     this.initializeUserProfile();
                 } else {
@@ -116,7 +113,20 @@ export class ProfileSettings {
         }));
     }
 
+    initializeSocialSetting() {
+
+        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+            if (this.userType === 0) {
+                this.socialProfileSettings = appSettings[0].social_profile;
+            } else {
+                this.socialProfileSettings = appSettings[0].social_profile.filter(profile => this.user[profile.social_name] 
+                    && this.user[profile.social_name] !== '');
+            }
+            this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
+        }));
+    }
     initializeUserProfile() {
+        this.initializeSocialSetting();
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
             if (account) {
                 this.account = account;
@@ -166,6 +176,7 @@ export class ProfileSettings {
                 this.cd.markForCheck();
             } else {
                 this.user = this.userDict[this.userId];
+                this.initializeSocialSetting();
                 this.createForm(this.user);
                 this.account = this.user.account;
                 this.userProfileImageUrl = this.getImageUrl(this.user);

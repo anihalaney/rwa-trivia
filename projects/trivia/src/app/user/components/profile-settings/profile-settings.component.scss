@@ -22,9 +22,11 @@
 }
 .enterquestion{ margin-top: 25px; background-color: #f1f2f2; }
 .upload-avatar-container{position: relative; min-height: 250px;}
-.file-upload-container{position: absolute; right: 0;}
+.file-upload-container{display: flex;justify-content: center}
+.profile-save-btn{margin: 0 auto; margin-top: 15px;max-width: 83px;}
 .mat-tab-group{border: 1px solid black}
 .m-b-55{margin-bottom: 55px;}
+.m-b-10{margin-bottom: 10px;}
 .profile-container{ display: flex; align-items: flex-end;}
 .submitpage .card{ padding: 0px 0 0 }
 .m-25{margin: 25px;}
@@ -63,8 +65,8 @@
 
 #file-name{ border:1px solid; border-radius: 4px; padding: 7px 10px; font-size: 16px; min-width:100%; display: inline-block; }
 .custom-file-upload { border: 1px solid ; display: block; border-radius: 4px; overflow: hidden; cursor: pointer; transition: .3s ease-in-out; width: 151px; margin: 0 auto 20px; position: relative;}
-label.custom-file-upload:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
-label.custom-file-upload:hover:after{ opacity: 0.5 }
+label.custom-file-upload-image:after {content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
+label.custom-file-upload-image:hover:after{ opacity: 0.5 }
 .expand-width { width : 100% !important; max-width : 100% !important}
 .other-profile-img-container { width: 150px; margin: 0 auto;} 
 /*Custom File Upload*/
@@ -84,9 +86,9 @@ label.custom-file-upload:hover:after{ opacity: 0.5 }
 form .tags{padding-top:5px;}
 
 .input-edit{position: relative;width: 35%;display: inline-block;}
-.field-edit-icon{content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
+.field-edit-icon{right: 8px;content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/editicon.png) no-repeat; opacity: 0.3; transition: 0.3s ease-in-out}
 .input-edit input:hover::before{ opacity: 0.5 }
-.field-save-icon{content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/check.png) no-repeat; background-size: 28px 28px; transition: 0.3s ease-in-out}
+.field-save-icon{right: 8px;content: ""; position: absolute; right: 7px; bottom: 7px; width: 28px; height: 28px; background: url(/assets/images/check.png) no-repeat; background-size: 28px 28px; transition: 0.3s ease-in-out}
 
 .input-edit > input {padding: 10px 25px; font-size: 18px; display: inline-block; width: calc(100% - 34px);
   box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.06);
@@ -101,7 +103,7 @@ form .tags{padding-top:5px;}
 .statsview .sprite{ width: 25px; height: 26px; margin-right:10px }
 .viewtext{ display: inline-block; vertical-align: middle; width: 50%; font-size: 16px;  }
 .viewcount{ display: inline-block; vertical-align: middle; width: 30%; font-size: 16px; letter-spacing: 0.75px; font-family: 'hindmedium'; line-height: 1;text-align: right; }
-.profile-img-container{width: 150px;left:40%;position: absolute}
+.profile-img-container{display: flex; flex-direction: column}
 input:disabled { background-color: #fff; }
 .other-user-avatar-container {position: relative; min-height: 140px; }
 
@@ -125,11 +127,11 @@ input:disabled { background-color: #fff; }
   #file-name{min-width: 280px;}
   .card .enterquestion h3{margin-top: 0px}
   .card .saccount h3{ margin-top: 53px }
-  .custom-file-upload { display: inline-block;}
+  // .custom-file-upload { display: inline-block;}
   .namefield .formfield > label{ width: 25% }
   .namefield .formfield > input{ width: 55% }
   .namefield .formfield > p{ margin-left: calc(25% + 4px ) } 
-  .displayfield .formfield > label{ width: 50% }
+  .displayfield .formfield > label{ width: 54% }
   .displayfield .formfield > input{ width: 35% }
   .displayfield .formfield > p{ margin-left: calc(55% + 4px ) }   
 }

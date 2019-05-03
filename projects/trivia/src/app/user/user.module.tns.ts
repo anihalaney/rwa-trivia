@@ -11,8 +11,7 @@ import {
   InviteFriendsComponent,
   QuestionAddUpdateComponent,
   InviteFriendsDialogComponent,
-  InviteMailFriendsComponent,
-  UserProfileComponent
+  InviteMailFriendsComponent
 } from './components';
 
 @NgModule({
@@ -23,8 +22,7 @@ import {
     InviteFriendsComponent,
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent,
-    UserProfileComponent
+    InviteMailFriendsComponent
   ],
   imports: [
     // rwa modules
@@ -45,8 +43,7 @@ import {
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent,
-    UserProfileComponent
+    InviteFriendsComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })
