@@ -6,6 +6,7 @@ export class QuestionService {
 
     private static fireStoreClient = admin.firestore();
     private static QC = CollectionConstants.QUESTIONS;
+    private static UQC = CollectionConstants.UNPUBLISHED_QUESTIONS;
 
     /**
      * getAllQuestions
@@ -57,6 +58,18 @@ export class QuestionService {
             return await QuestionService.fireStoreClient
                 .doc(`/${collectionName}/${question.id}`)
                 .set(question, { merge: true });
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * getAllUnpublished Questions
+     * return questions
+     */
+    static async getAllUnpublishedQuestions(): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(await QuestionService.fireStoreClient.collection(QuestionService.UQC).get());
         } catch (error) {
             return Utils.throwError(error);
         }

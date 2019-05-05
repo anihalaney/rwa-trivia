@@ -1,4 +1,5 @@
-import { Category } from './category'
+import { Category } from './category';
+import { SafeHtml } from '@angular/platform-browser';
 
 export class Question {
   id: string;
@@ -25,6 +26,10 @@ export class Question {
   gameRound?: number;
   totalQALength?: number;
   serverTimeQCreated?: number;
+  renderedQuestion?: any;
+  renderedAnswer?; any;
+  questionObject?: any;
+  isRichEditor?: boolean;
 
 
 
@@ -44,6 +49,8 @@ export class Question {
     question.explanation = db.explanation;
     question.bulkUploadId = db.bulkUploadId ? db.bulkUploadId : '';
     question.reason = db.reason ? db.reason : '';
+    question.isRichEditor = db.isRichEditor ? db.isRichEditor : false;
+    question.questionObject = db.questionObject ? db.questionObject : false;
     question.createdOn = db.createdOn ? db.createdOn : new Date();
     question.totalQALength = this.countQALength(db);
     return question;
@@ -63,6 +70,10 @@ export class Question {
     question.tags = source.tags;
     question.created_uid = source.created_uid;
     question.serverTimeQCreated = source.serverTimeQCreated;
+    question.renderedQuestion = source.renderedQuestion;
+    question.isRichEditor = source.isRichEditor;
+    question.questionObject = (source.questionObject) ? source.questionObject : '' ;
+
     question.totalQALength = this.countQALength(source);
     return question;
   }
@@ -96,6 +107,7 @@ export class Answer {
   id: number;
   answerText: string;
   correct: boolean;
+  renderedAnswer?: string;
 }
 
 export enum QuestionStatus {

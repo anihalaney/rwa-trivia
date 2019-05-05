@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Question, Answer, User } from 'shared-library/shared/model';
+import { Question, Answer, User, ApplicationSettings } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { QuestionActions } from 'shared-library/core/store/actions';
@@ -19,6 +19,8 @@ export class QuestionComponent implements OnDestroy {
 
   question: Question;
   categoryName: string;
+  htmlText = `<p>First Maths Question <span class="ql-formula" data-value="3">﻿<span contenteditable="false"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>3</mn></mrow><annotation encoding="application/x-tex">3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.64444em; vertical-align: 0em;"></span><span class="mord">3</span></span></span></span></span>﻿</span>?</p>`;
+
   @Input() userDict: { [key: string]: User };
 
   @Output() answerClicked = new EventEmitter<number>();
@@ -29,16 +31,28 @@ export class QuestionComponent implements OnDestroy {
   doPlay = true;
   categoryDictionary: any;
   subscriptions = [];
+  applicationSettings: ApplicationSettings;
 
   constructor(private store: Store<AppState>, private questionAction: QuestionActions, private utils: Utils,
     private cd: ChangeDetectorRef) {
     this.answeredText = '';
     this.correctAnswerText = '';
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+      .subscribe(appSettings => {
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+          this.cd.markForCheck();
+        }
+      }));
+
     this.subscriptions.push(this.store.select(categoryDictionary).subscribe(categories => {
       this.categoryDictionary = categories;
       this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
+          this.question.answers.forEach((ans, index) => {
+            ans.renderedAnswer = ans.answerText;
+          });
           this.cd.markForCheck();
           this.question.answers = utils.changeAnswerOrder(questionOfTheDay.answers);
           if (this.question.answers) {
@@ -73,6 +87,7 @@ export class QuestionComponent implements OnDestroy {
       this.doPlay = false;
       const index = this.question.answers.findIndex(x => x.answerText === answer.answerText);
       this.answerClicked.emit(index);
+      this.cd.markForCheck();
     }
   }
 

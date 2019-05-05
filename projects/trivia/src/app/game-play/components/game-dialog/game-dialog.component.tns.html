@@ -80,7 +80,7 @@
         (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
         (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [totalRound]="totalRound"
         [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [user]="user"
-        [questionRound]="game.round">
+        [questionRound]="game.round" [applicationSettings]="applicationSettings">
     </game-question>
     <game-over *ngIf="gameOver && !showContinueScreen" class="overlay" [userDict]="userDict" [game]="game"
         [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"

@@ -67,7 +67,7 @@
     [continueNext]="continueNext" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn"
     [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
     (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [questionRound]="game.round" [totalRound]="totalRound"
-    [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer">
+    [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [applicationSettings]="applicationSettings">
   </game-question>
 
   <game-question-continue *ngIf="false" class="overlay" [categoryName]="categoryName" [question]="currentQuestion"
