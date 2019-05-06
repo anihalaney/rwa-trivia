@@ -10,8 +10,8 @@
             <Label [text]="title" marginLeft="20" class="action-text-title" fontSize="20"></Label>
         </StackLayout>
 
-        <StackLayout col="2" verticalAlignment="center" horizontalAlignment="right">
-            <Label *ngIf="!hideHomeIcon" text="&#xf015;" (tap)="goToDashboard()" class="fa" ios.marginRight="10" android.marginRight="10" fontSize="22"></Label>
+        <StackLayout stlRippleEffect stlBackgroundColor="#13284F" stlOpacity="0.5" stlBackgroundColorAfter="" verticalAlignment="center" horizontalAlignment="right" width="45" col="2" (rippleTap)="goToDashboard()">
+            <Label *ngIf="!hideHomeIcon" text="&#xf015;" class="fa" padding="10" fontSize="22" ios.marginRight="3" android.marginRight="4"></Label>
         </StackLayout>
 
     </GridLayout>
