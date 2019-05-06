@@ -31,7 +31,10 @@ export class ProfileSettings {
     profileOptions: string[] = ['Only with friends', 'With EveryOne'];
     locationOptions: string[] = ['Only with friends', 'With EveryOne'];
     socialProfileSettings;
+    originalSocialProfileSettings;
+    socialProfileSettingsForMobile;
     enableSocialProfile;
+    enableSocialProfileForMobile;
     profileImage: { image: any } = { image: '/assets/images/default-avatar-small.png' };
     profileImageValidation: String;
     profileImageFile: File;
@@ -117,12 +120,23 @@ export class ProfileSettings {
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             if (this.userType === 0) {
-                this.socialProfileSettings = appSettings[0].social_profile;
+                this.originalSocialProfileSettings = appSettings[0].social_profile;
             } else {
-                this.socialProfileSettings = appSettings[0].social_profile.filter(profile => this.user[profile.social_name] 
+                this.originalSocialProfileSettings = appSettings[0].social_profile.filter(profile => this.user[profile.social_name]
                     && this.user[profile.social_name] !== '');
             }
+            this.socialProfileSettings = this.originalSocialProfileSettings;
+
+            this.originalSocialProfileSettings = this.originalSocialProfileSettings.filter(profile => profile.enable);
+            this.socialProfileSettingsForMobile = this.originalSocialProfileSettings.filter(profile => this.user[profile.social_name]);
+            this.enableSocialProfileForMobile = this.socialProfileSettingsForMobile.length;
+
             this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
+
+            if (this.userType !== UserType.userProfile) {
+                this.socialProfileShowLimit = this.originalSocialProfileSettings.length;
+            }
+
         }));
     }
     initializeUserProfile() {
@@ -298,10 +312,6 @@ export class ProfileSettings {
         }
     }
 
-    showMoreSocialProfile() {
-        this.socialProfileShowLimit = this.enableSocialProfile;
-    }
-
     resetUserProfile() {
         this.user = cloneDeep(this.userCopyForReset);
         this.createForm(this.user);
@@ -323,11 +333,6 @@ export class ProfileSettings {
 
     getImageUrl(user: User) {
         return this.utils.getImageUrl(user, 263, 263, '400X400');
-    }
-
-    editProfile() {
-        this.isEnableEditProfile = true;
-        this.enableForm();
     }
 
     disableForm(isDisableAll = false) {

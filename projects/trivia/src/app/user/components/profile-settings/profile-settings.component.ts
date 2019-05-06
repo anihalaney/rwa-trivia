@@ -201,6 +201,16 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.cd.markForCheck();
   }
 
+
+  showMoreSocialProfile() {
+    this.socialProfileShowLimit = this.enableSocialProfile;
+  }
+
+  editProfile() {
+    this.isEnableEditProfile = true;
+    this.enableForm();
+  }
+
   ngOnDestroy() {
 
   }

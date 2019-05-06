@@ -24,11 +24,11 @@
                   formControlName="displayName" class="input">
                 </TextField>
                 <Label *ngIf="!singleFieldEdit.displayName && userType === 0" (tap)="editSingleField('displayName')" row="0" col="1"
-                  android:marginTop="24" android:marginRight="16" ios:marginTop="8" fontSize="20"
-                  horizontalAlignment="right" class="fa" text="&#xf044;"></Label>
+                  android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
+                  horizontalAlignment="right" class="fas" text="&#xf303;"></Label>
                 <Label *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
                   (tap)="onSubmit(true, 'displayName')" row="0" col="1" android:marginTop="22" color="#71b02b"
-                  android:marginRight="20" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
+                  android:marginRight="2" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
                   text="&#xf14a;"></Label>
               </GridLayout>
               <Label *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine"
@@ -38,11 +38,11 @@
                   class="input">
                 </TextField>
                 <Label *ngIf="!singleFieldEdit.location && userType === 0" (tap)="editSingleField('location')" row="0" col="1"
-                  android:marginTop="24" android:marginRight="16" ios:marginTop="8" fontSize="20"
-                  horizontalAlignment="right" class="fa" text="&#xf044;"></Label>
+                  android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
+                  horizontalAlignment="right" class="fas" text="&#xf303;"></Label>
                 <Label *ngIf="singleFieldEdit.location && userForm.value.location !=='' && userType === 0"
                   (tap)="onSubmit(true, 'location')" row="0" col="1" android:marginTop="22" color="#71b02b"
-                  android:marginRight="20" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
+                  android:marginRight="2" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
                   text="&#xf14a;"></Label>
               </GridLayout>
               <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error"
@@ -60,12 +60,12 @@
             <StackLayout class="profile" [visibility]="selectedIndex === 0 ? 'visible' : 'collapsed'"
               iosOverflowSafeArea="false">
 
-              <StackLayout padding="30 20 0 0" *ngIf="userType ===  0">
-                <Label *ngIf="!isEnableEditProfile" (tap)="editProfile()" horizontalAlignment="right" class="fa"
-                  text="&#xf044;" fontSize="20"></Label>
+              <StackLayout paddingTop="30" *ngIf="userType ===  0">
+                <Label stlRippleEffect stlBackgroundColor="#3b5998" stlOpacity="0.5" stlBackgroundColorAfter="#3b5998" *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()" horizontalAlignment="right" class="fa edit-profile-btn"
+                  text="Edit Profile"></Label>
               </StackLayout>
 
-              <StackLayout class="input-field" iosOverflowSafeArea="false">
+              <StackLayout *ngIf="userType ===  0" class="input-field" iosOverflowSafeArea="false">
                 <TextField #textField hint="{{userType ===  0 ? '@username' : ''}}" formControlName="name" class="input">
                 </TextField>
                 <Label *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error"
@@ -132,32 +132,36 @@
                 </StackLayout>
               </StackLayout>
 
-              <StackLayout class="list-view social-section" iosOverflowSafeArea="false" *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
+              <StackLayout [ngClass]="{'mt-30': userType !== 0 }" class="list-view social-section" iosOverflowSafeArea="false" *ngIf="socialProfileSettingsForMobile && socialProfileSettingsForMobile.length > 0">
                 <StackLayout class="grid-label p-15" iosOverflowSafeArea="false">
                   <Label textWrap="true" text="SOCIAL PROFILE"></Label>
                 </StackLayout>
-                <StackLayout class="input-field" *ngFor="let profile of socialProfileSettings; let i=index"
+                <StackLayout class="input-field" *ngFor="let profile of socialProfileSettingsForMobile | slice:0:socialProfileShowLimit;"
                   iosOverflowSafeArea="false">
-                  <GridLayout rows="auto,auto,*" columns="*" *ngIf="profile.enable && i <= socialProfileShowLimit"
-                    iosOverflowSafeArea="false">
-                    <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
-
-                    <StackLayout class="text-box" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
-                      <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
-                        [text]="profile?.url" fontSize="14" textWrap="true"></Label>
-                      <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID"
-                        [formControlName]="profile.social_name" class="input-box"></TextField>
-                    </StackLayout>
-                    <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
+                    <GridLayout *ngIf="userType === 0" rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
+                      <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
+                      <StackLayout class="text-box" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
+                        <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
+                          [text]="profile?.url" fontSize="14" textWrap="true"></Label>
+                        <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID"
+                          [formControlName]="profile.social_name" class="input-box"></TextField>
+                      </StackLayout>
+                      <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
                       text="Please enter valid profile id" row="2" col="0" textWrap="true"></Label>
+                  </GridLayout>
+                  <GridLayout *ngIf="userType !== 0" rows="auto,*" columns="*" iosOverflowSafeArea="false">
+                      <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
+                      <StackLayout marginLeft="14" marginTop="8" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
+                        <Label class="grid-label-text" (tap)="openUrl(profile?.url, userForm.get([profile.social_name]).value)" color="blue" text="{{profile?.url}}{{userForm.get([profile.social_name]).value}}" textWrap="true"></Label>
+                      </StackLayout>
                   </GridLayout>
                 </StackLayout>
                 <Button class="p-15 showMore" marginTop="24" horizontalAlignment="center"
-                  *ngIf="enableSocialProfile > socialProfileShowLimit + 1" text="Show more" stlRippleEffect
+                  *ngIf="enableSocialProfileForMobile > socialProfileShowLimit" text="Show more" stlRippleEffect
                   (tap)="showMoreSocialProfile()"></Button>
               </StackLayout>
 
-              <StackLayout *ngIf="userType === 0" class="profile-buttons" iosOverflowSafeArea="false">
+              <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons" iosOverflowSafeArea="false">
                 <Label text="Bulk upload Request" textWrap="true" padding="8"></Label>
                 <Button *ngIf="(!user.bulkUploadPermissionStatus
                   || user.bulkUploadPermissionStatus === NONE
@@ -179,8 +183,6 @@
             </StackLayout>
 
             <StackLayout rows="*" [visibility]="selectedIndex === 1 ? 'visible' : 'collapsed'" marginTop="10" iosOverflowSafeArea="false">
-              <CardView margin="5" android:elevation="20" ios:elevation="40" radius="15" class="gameplay"
-                iosOverflowSafeArea="false">
                 <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
                   height="100%" padding="0 10" margin="10">
                   <StackLayout marginTop="10" iosOverflowSafeArea="false">
@@ -226,7 +228,6 @@
                     </GridLayout>
                   </StackLayout>
                 </StackLayout>
-              </CardView>
             </StackLayout>
           </StackLayout>
         </CardView>

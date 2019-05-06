@@ -75,7 +75,6 @@ export class UserService {
             const dbUser: User = await UserService.getUserById(userId);
             const user = new User();
             user.displayName = (dbUser && dbUser.displayName) ? dbUser.displayName : '';
-            user.name = (dbUser && dbUser.name) ? dbUser.name : '';
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;

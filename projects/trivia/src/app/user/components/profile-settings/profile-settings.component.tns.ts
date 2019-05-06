@@ -24,6 +24,9 @@ import { fromAsset } from 'tns-core-modules/image-source';
 import { ImageCropper } from 'nativescript-imagecropper';
 import { ActivatedRoute } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
+import * as utils from 'tns-core-modules/utils/utils';
+
+
 
 @Component({
   selector: 'profile-settings',
@@ -74,7 +77,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       }
       this.cd.markForCheck();
     }));
-    this.tabsTitles = ['Profile', 'Stat'];
+    this.tabsTitles = ['Profile', 'Stats'];
     this.items = [];
     for (let i = 0; i < this.tabsTitles.length; i++) {
       const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
@@ -193,7 +196,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   selectCategory(category) {
-      category.isSelected = (!category.isSelected) ? true : false;
+    category.isSelected = (!category.isSelected) ? true : false;
   }
 
   private initDataItems() {
@@ -263,6 +266,26 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         }
         return el.nativeElement.dismissSoftInput();
       });
+  }
+
+  showMoreSocialProfile() {
+    if (this.isEnableEditProfile) {
+      this.socialProfileShowLimit = this.originalSocialProfileSettings.length;
+    } else {
+      this.socialProfileShowLimit = this.enableSocialProfileForMobile;
+    }
+  }
+
+  editProfile() {
+    this.isEnableEditProfile = true;
+    this.socialProfileSettingsForMobile = this.originalSocialProfileSettings;
+    this.enableSocialProfileForMobile = this.originalSocialProfileSettings.length;
+    this.enableForm();
+  }
+
+  openUrl(url, id) {
+    const fullUrl = `${url}${id}`;
+    utils.openUrl(fullUrl);
   }
 
   ngOnDestroy() {
