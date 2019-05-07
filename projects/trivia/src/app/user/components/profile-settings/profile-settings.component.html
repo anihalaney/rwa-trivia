@@ -61,40 +61,62 @@
           </div>
           <!-- Upload avatar end -->
       <!-- Profile pik end -->
-          <div class="clearfix displayfield">
-              <div class="formfield">
-                <div class="cell">
-                <label class="p-r-10">Display Name {{userType === 0 ? '*': ''}}</label>
-                <div class="input-edit">
-                  <input  formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text" class="required"
-                    aria-label="display-name">
-                    <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName && userType === 0" (click)="editSingleField('displayName')"></span>
-                    <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0" (click)="onSubmit(true, 'displayName')"></span>
+      <div class="clearfix displayfield" *ngIf="userType === 0">
+          <div class="formfield">
+            <div class="cell">
+            <label class="p-r-10">Display Name {{userType === 0 ? '*': ''}}</label>
+            <div *ngIf="userType === 0" class="input-edit">
+              <input  formControlName="displayName" [placeholder]="userType === 0 ? 'Enter Display Name': ''" type="text" class="required"
+                aria-label="display-name">
+                <span class="field-edit-icon" *ngIf="!singleFieldEdit.displayName && userType === 0" (click)="editSingleField('displayName')"></span>
+                <span class="field-save-icon" *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0" (click)="onSubmit(true, 'displayName')"></span>
+              </div>
+            <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error display-name-error">
+              Display
+              Name is required!</p>
+          </div>
+
+          </div>
+          <div class="formfield">
+              <div class="cell">
+
+            <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
+            <div  *ngIf="userType === 0" class="input-edit">
+            <input formControlName="location"  [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text" class="required"
+              aria-label="location" >
+              <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0" (click)="editSingleField('location')"></span>
+              <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0" (click)="onSubmit(true, 'location')"></span>
+            </div>
+            <p class="location-info" *ngIf = "userType === 0">Where in the world you are</p>
+            <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error location-error">
+              Location
+              is required!</p>
+          </div>
+          </div>
+      </div>
+            <div  *ngIf="userType !== 0" class="row user-info-div">
+              <div class="table-div">
+                <div class="flex-info-div">
+                  <div class="margin-auto flex-sub-div">
+                  <div class="pull-left text-left">
+                    <div>
+                    <label class="text-left">Display Name </label>
+                  </div>
+                  <div>
+                    <label class="text-left">Location</label>
+                  </div>
                 </div>
-                <p *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine" class="error display-name-error">
-                  Display
-                  Name is required!</p>
-              </div>
-
-              </div>
-              <div class="formfield">
-                  <div class="cell">
-
-                <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
-                <div class="input-edit">
-                <input formControlName="location"  [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text" class="required"
-                  aria-label="location" >
-                  <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0" (click)="editSingleField('location')"></span>
-                  <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0" (click)="onSubmit(true, 'location')"></span>
+                  <div class="pull-left">
+                  <div class="text-left">
+                    <label class="text-display  text-left">{{user.displayName}}</label>
+                    </div>
+                    <div class="text-left">
+                    <label >{{user?.location ? user?.location: 'Unknown'}}</label>
+                  </div>
+                  </div>
                 </div>
-                <p class="location-info" *ngIf = "userType === 0">Where in the world you are</p>
-                <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error location-error">
-                  Location
-                  is required!</p>
-                
+                </div>
               </div>
-              </div>
-
             </div>
 
             <div class="row m-b-55">
@@ -105,7 +127,7 @@
                         <div class="col-lg-12 profile-container" [ngStyle]="{'align-items': isEnableEditProfile ? 'flex-end': 'flex-start'}">
                           <div class="col-lg-10 col-sm-12 col-md-9 col-xs-12">
                             <div class="m-25">
-                              <div class="clearfix namefield">
+                              <div class="clearfix namefield" *ngIf="isEnableEditProfile">
                                 <div class="formfield">
                                   
                                   <label id="nameLableField">Name {{userType === 0 ? '*': ''}}</label>
@@ -117,7 +139,7 @@
                               </div>
       
                               <!-- Social Accounts -->
-                              <div class="row pcategories saccount">
+                              <div *ngIf="isEnableEditProfile && userType===0" class="row pcategories saccount">
                                 <div class="col-md-12 col-sm-12 clearfix namefield m-t-0"  *ngIf="socialProfileSettings">
                                   <div *ngFor="let profile of socialProfileSettings; let i=index">
                                       <div class="formfield" *ngIf="profile.enable && i <= socialProfileShowLimit">
@@ -144,7 +166,19 @@
                                     <a *ngIf="enableSocialProfile > socialProfileShowLimit + 1" class="viewall show-more"
                                       (click)="showMoreSocialProfile()">Show more</a>
                                   </div>
-      
+                                </div>
+
+                                <div  *ngIf="!isEnableEditProfile" class="row pcategories saccount">
+                                    <div class="mt-0 col-md-12 col-sm-12 clearfix namefield "  *ngIf="socialProfileSettings">
+                                      <div *ngFor="let profile of socialProfileSettings">
+                                          <div class="formfield" *ngIf="profile.enable">
+                                            <label class="profile-display-label">{{profile.display}}</label>
+                                            <div class="profile-display-field social-profile-link">
+                                                <a href="{{profile?.url}}{{user[profile.social_name]}}" target="_blank" class="social-url">{{profile?.url}}{{user[profile.social_name]}}</a>
+                                             </div>
+                                          </div>
+                                      </div>
+                                    </div>
                                 </div>
                               <!-- Social Accounts end -->
                               <!-- Categories -->

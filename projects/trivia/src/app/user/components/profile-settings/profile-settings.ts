@@ -85,14 +85,13 @@ export class ProfileSettings {
         this.route.params.subscribe(data => {
             if (data && data.userid) {
                 this.userId = data.userid;
-
-                this.store.select(appState.coreState).pipe(skip(1)).subscribe(s => {
+                this.subscriptions.push(this.store.select(appState.coreState).subscribe(s => {
                     if (s.user) {
                         this.initData();
                     } else {
                         this.initializeOtherUserProfile();
                     }
-                });
+                }));
             }
         });
 

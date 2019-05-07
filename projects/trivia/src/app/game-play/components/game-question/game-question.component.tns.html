@@ -79,7 +79,7 @@
                         </StackLayout>
                     </StackLayout>
                     <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;" class="Roboto-Medium">
-                             <author [userDict]="userDict" [userId]="question.created_uid"></author>
+                             <author  [isGamePlay]="true" [userDict]="userDict" [userId]="question.created_uid"></author>
                     </GridLayout>
                 </StackLayout>
             </CardView>
