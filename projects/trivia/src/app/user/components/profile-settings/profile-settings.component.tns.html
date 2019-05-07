@@ -62,9 +62,8 @@
               iosOverflowSafeArea="false">
 
               <StackLayout paddingTop="30" *ngIf="userType ===  0">
-                <Label stlRippleEffect stlBackgroundColor="#3b5998" stlOpacity="0.5" stlBackgroundColorAfter="#3b5998"
-                  *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()" horizontalAlignment="right"
-                  class="fa edit-profile-btn" text="Edit Profile"></Label>
+                <Label stlRippleEffect *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()" horizontalAlignment="right"
+                  class="edit-profile-btn" text="Edit Profile"></Label>
               </StackLayout>
 
               <StackLayout *ngIf="userType ===  0" class="input-field" iosOverflowSafeArea="false">

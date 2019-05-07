@@ -10,8 +10,8 @@
             <Label [text]="title" marginLeft="20" class="action-text-title" fontSize="20"></Label>
         </StackLayout>
 
-        <StackLayout col="2" verticalAlignment="center" horizontalAlignment="right">
-            <Label *ngIf="!hideHomeIcon" text="&#xf015;" (tap)="goToDashboard()" class="fa" ios.marginRight="10" android.marginRight="10" fontSize="22"></Label>
+        <StackLayout col="2" ios:marginRight="30" verticalAlignment="center" horizontalAlignment="right">
+            <Label *ngIf="!hideHomeIcon" text="&#xf015;" (tap)="goToDashboard()" class="fa" ios.marginRight="4" android.marginRight="4" fontSize="22"></Label>
         </StackLayout>
 
     </GridLayout>
