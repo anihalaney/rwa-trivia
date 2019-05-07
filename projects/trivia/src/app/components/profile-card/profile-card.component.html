@@ -1,5 +1,5 @@
-<div class="user card" *ngIf="user && user!=null" >
-  <img (click)="navigateToProfile()" [src]="userProfileImageUrl" alt="User Profile Image" />
+<div class="user card" *ngIf="user && user!=null" (click)="navigateToProfile()" >
+  <img  [src]="userProfileImageUrl" alt="User Profile Image" />
   <span class="username">
     <span class="name">{{user.displayName}}</span>
     <span class="userlocation">
