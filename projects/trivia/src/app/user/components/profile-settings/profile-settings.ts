@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import { Observable } from 'rxjs';
-import { map, skip } from 'rxjs/operators';
+import { map, skipWhile, flatMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
@@ -74,43 +74,28 @@ export class ProfileSettings {
         public route: ActivatedRoute) {
 
         this.toggleLoader(true);
-
         this.fb = formBuilder;
-
-
-
         this.tagsObs = this.store.select(getTags);
         this.subscriptions.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
 
-        this.route.params.subscribe(data => {
-            if (data && data.userid) {
-                this.userId = data.userid;
-                this.subscriptions.push(this.store.select(appState.coreState).subscribe(s => {
-                    if (s.user) {
-                        this.initData();
-                    } else {
-                        this.initializeOtherUserProfile();
-                    }
-                }));
+        this.subscriptions.push(
+        this.route.params.pipe(
+        skipWhile(params => !params.userid),
+        map(params => this.userId = params.userid),
+        flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
+        skipWhile(user => !user),
+        map(user => {
+            console.log('user id is', this.userId);
+            if (user && user.userId === this.userId) {
+                this.user = user;
+                this.userType = UserType.userProfile;
+                this.initializeUserProfile();
+            } else {
+                this.userType = UserType.loggedInOtherUserProfile;
+                this.initializeOtherUserProfile();
             }
-        });
-
-    }
-
-    initData() {
-        this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
-        this.subscriptions.push(this.userObs.subscribe(user => {
-            if (user) {
-                if (user.userId === this.userId) {
-                    this.user = user;
-                    this.userType = UserType.userProfile;
-                    this.initializeUserProfile();
-                } else {
-                    this.userType = UserType.loggedInOtherUserProfile;
-                    this.initializeOtherUserProfile();
-                }
-            }
-        }));
+        })
+        ).subscribe(console.log));
     }
 
     initializeSocialSetting() {
@@ -172,8 +157,6 @@ export class ProfileSettings {
     }
 
     initializeOtherUserProfile() {
-        this.categoryDictObs = this.store.select(categoryDictionary);
-        this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
 
         this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
         this.subscriptions.push(this.userDict$.subscribe(userDict => {
