@@ -69,7 +69,7 @@ export class Leaderboard implements OnDestroy {
       if (lbsStat) {
 
         this.leaderBoardStatDictArray = lbsStat;
-        // this.leaderBoardCat = this.leaderBoardStatDictArray.map(leaderBoard => leaderBoard.id);
+        this.leaderBoardCat = this.leaderBoardStatDictArray.map(leaderBoard => leaderBoard.id);
 
         this.leaderBoardStatDictArray.filter((leaderBoardStatDict) => {
           this.leaderBoardStatDict[leaderBoardStatDict.id] = leaderBoardStatDict.users;
