@@ -291,24 +291,25 @@ export class ProfileSettings {
         }
     }
 
-    getUserFromFormValue(formValue: any, isEditSingleField, field): void {
+    getUserFromFormValue(isEditSingleField, field): void {
         if (isEditSingleField) {
-            this.user[field] = formValue[field];
+            this.user[field] = this.userForm.get(field).value;
         } else {
-            this.user.name = formValue.name;
+            this.user.name = this.userForm.get('name').value;
             this.user.categoryIds = [];
-            for (const obj of formValue.categoryList) {
+
+            for (const obj of this.userForm.get('categoryList').value) {
                 if (obj['isSelected']) {
                     this.user.categoryIds.push(obj['category']);
                 }
             }
             this.socialProfileSettings.map(profile => {
                 if (profile.enable) {
-                    this.user[profile.social_name] = formValue[profile.social_name];
+                    this.user[profile.social_name] = this.userForm.get(profile.social_name).value;
                 }
             });
             this.user.tags = [...this.enteredTags];
-            this.user.profilePicture = formValue.profilePicture ? formValue.profilePicture : '';
+            this.user.profilePicture = this.userForm.get('profilePicture').value ? this.userForm.get('profilePicture').value : '';
         }
     }
 

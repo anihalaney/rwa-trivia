@@ -115,7 +115,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   saveProfileImage() {
     if (!this.profileImageValidation) {
       this.enableForm();
-      this.getUserFromFormValue(this.userForm.value, false, '');
+      this.getUserFromFormValue(false, '');
       this.disableForm();
       this.assignImageValues();
       this.saveUser(this.user);
@@ -190,7 +190,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
 
     // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value, isEditSingleField, field);
+    this.getUserFromFormValue(isEditSingleField, field);
     if (isEditSingleField) {
       this.userForm.get(field).disable();
       this.singleFieldEdit[field] = false;

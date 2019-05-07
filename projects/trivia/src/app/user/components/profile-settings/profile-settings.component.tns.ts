@@ -173,7 +173,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
 
   saveProfileImage() {
-    this.getUserFromFormValue(this.userForm.value, false, '');
+    this.getUserFromFormValue(false, '');
     this.assignImageValues();
     this.saveUser(this.user);
   }
@@ -250,7 +250,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
     // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value, isEditSingleField, field);
+    this.getUserFromFormValue(isEditSingleField, field);
     this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
     // call saveUser
     this.saveUser(this.user);
