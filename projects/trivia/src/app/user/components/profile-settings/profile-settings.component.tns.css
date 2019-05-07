@@ -187,18 +187,12 @@
     border-width: 1;
 }
 
-.padding-2{
-    padding: 2;
-    padding-top: 4;
-}
-
 .mt-30 {
     margin-top: 30;
 }
 
 .padding-10 {
     padding: 10;
-    padding-top: 12;
 }
 
 .edit-profile-btn {
@@ -208,4 +202,13 @@
     color: #fff;
     width:auto;
     font-size: 16;
+}
+
+.stats-main {
+    margin-top: 40;
+}
+
+.stats {
+    border-bottom-width:1;
+    border-color:#c8c8c8;
 }

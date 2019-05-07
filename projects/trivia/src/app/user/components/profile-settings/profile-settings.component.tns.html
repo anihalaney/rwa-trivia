@@ -12,19 +12,20 @@
             <StackLayout class="input-field" iosOverflowSafeArea="false">
               <AbsoluteLayout iosOverflowSafeArea="false" horizontalAlignment="center">
                 <Image [src]="profileImage.image" backgroundColor="gray" stretch="aspectFill" height="110" width="110"
-                  top="10" verticalAlignment="center" borderRadius="55" (tap)="userType ===  0 ? onTakePhoto() : ''"></Image>
-                <Image *ngIf="userType ===  0" src="~/assets/images/mobile/profile-image-icon.png" left="40" top="50" width="30" height="30"
-                  (tap)="onTakePhoto()"></Image>
+                  top="10" verticalAlignment="center" borderRadius="55" (tap)="userType ===  0 ? onTakePhoto() : ''">
+                </Image>
+                <Image *ngIf="userType ===  0" src="~/assets/images/mobile/profile-image-icon.png" left="40" top="50"
+                  width="30" height="30" (tap)="onTakePhoto()"></Image>
               </AbsoluteLayout>
             </StackLayout>
 
             <StackLayout class="input-field" iosOverflowSafeArea="false">
               <GridLayout row="*" col="*, auto" orientation="horizontal" margin="0 20">
-                <TextField row="0" col="0" #textField hint="{{userType === 0 ? 'Display Name' : ''}}"
+                <TextField row="0" col="0" #textField hint="{{userType === 0 ? 'Display Name' : 'Undefined'}}"
                   formControlName="displayName" class="input">
                 </TextField>
-                <Label *ngIf="!singleFieldEdit.displayName && userType === 0" (tap)="editSingleField('displayName')" row="0" col="1"
-                  android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
+                <Label *ngIf="!singleFieldEdit.displayName && userType === 0" (tap)="editSingleField('displayName')"
+                  row="0" col="1" android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
                   horizontalAlignment="right" class="fas" text="&#xf303;"></Label>
                 <Label *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
                   (tap)="onSubmit(true, 'displayName')" row="0" col="1" android:marginTop="22" color="#71b02b"
@@ -34,11 +35,11 @@
               <Label *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine"
                 class=" error" textWrap="true" text="Display Name is required!"></Label>
               <GridLayout row="*" col="*, auto" orientation="horizontal" margin="0 20">
-                <TextField #textField hint="{{userType ===  0 ? 'Location' : ''}}" formControlName="location"
+                <TextField #textField hint="{{userType ===  0 ? 'Location' : 'Undefined'}}" formControlName="location"
                   class="input">
                 </TextField>
-                <Label *ngIf="!singleFieldEdit.location && userType === 0" (tap)="editSingleField('location')" row="0" col="1"
-                  android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
+                <Label *ngIf="!singleFieldEdit.location && userType === 0" (tap)="editSingleField('location')" row="0"
+                  col="1" android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
                   horizontalAlignment="right" class="fas" text="&#xf303;"></Label>
                 <Label *ngIf="singleFieldEdit.location && userForm.value.location !=='' && userType === 0"
                   (tap)="onSubmit(true, 'location')" row="0" col="1" android:marginTop="22" color="#71b02b"
@@ -61,12 +62,14 @@
               iosOverflowSafeArea="false">
 
               <StackLayout paddingTop="30" *ngIf="userType ===  0">
-                <Label stlRippleEffect stlBackgroundColor="#3b5998" stlOpacity="0.5" stlBackgroundColorAfter="#3b5998" *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()" horizontalAlignment="right" class="fa edit-profile-btn"
-                  text="Edit Profile"></Label>
+                <Label stlRippleEffect stlBackgroundColor="#3b5998" stlOpacity="0.5" stlBackgroundColorAfter="#3b5998"
+                  *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()" horizontalAlignment="right"
+                  class="fa edit-profile-btn" text="Edit Profile"></Label>
               </StackLayout>
 
               <StackLayout *ngIf="userType ===  0" class="input-field" iosOverflowSafeArea="false">
-                <TextField #textField hint="{{userType ===  0 ? '@username' : ''}}" formControlName="name" class="input">
+                <TextField #textField hint="{{userType ===  0 ? '@username' : ''}}" formControlName="name"
+                  class="input">
                 </TextField>
                 <Label *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error"
                   textWrap="true" text="Name is required!"></Label>
@@ -78,14 +81,17 @@
                   <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true"
                     iosOverflowSafeArea="false"></Label>
                   <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-                    text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4" borderWidth="2"
-                    borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"
+                    text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4"
+                    borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"
                     iosOverflowSafeArea="false"></Label>
                 </GridLayout>
-                <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
+                <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}"
+                  iosOverflowSafeArea="false">
                   <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option"
-                    *ngFor="let category of userCategories" (tap)="selectCategory(category)" iosOverflowSafeArea="false">
-                    <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>
+                    *ngFor="let category of userCategories" (tap)="selectCategory(category)"
+                    iosOverflowSafeArea="false">
+                    <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0"
+                      textWrap="true"></Label>
                     <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
                       height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
                       visibility="{{ category.isSelected ? 'visible' : 'hidden' }}"></Image>
@@ -102,8 +108,8 @@
                     borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
                 </GridLayout>
                 <StackLayout visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
-                  <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let tag of enteredTags"
-                    iosOverflowSafeArea="false">
+                  <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option"
+                    *ngFor="let tag of enteredTags" iosOverflowSafeArea="false">
                     <Label [text]="tag" row="0" col="0" textWrap="true" iosOverflowSafeArea="false"></Label>
                     <Label id="cross-button" row="0" col="1" class="fa" text="&#xf00d;" textWrap="true"
                       horizontalAlignment="right" (tap)="removeEnteredTag(tag)" iosOverflowSafeArea="false"></Label>
@@ -112,8 +118,8 @@
                     <Label class="input-label" row="0" col="0" text="Add Tag" textWrap="true"></Label>
                     <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff"
                       iosOverflowSafeArea="false">
-                      <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
-                        showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)"
+                      <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems"
+                        completionMode="Contains" showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)"
                         (textChanged)="onTextChanged($event)" border="none" ios:backgroundColor="#ffffff">
                         <SuggestionView tkAutoCompleteSuggestionView>
                           <ng-template tkSuggestionItemTemplate let-item="item">
@@ -124,7 +130,8 @@
                         </SuggestionView>
                       </RadAutoCompleteTextView>
                     </StackLayout>
-                    <StackLayout row="1" col="1" marginLeft="10" horizontalAlignment="right" iosOverflowSafeArea="false">
+                    <StackLayout row="1" col="1" marginLeft="10" horizontalAlignment="right"
+                      iosOverflowSafeArea="false">
                       <Button ios:padding="10" text="Add" class="Roboto-Bold" stlRippleEffect
                         (tap)="addCustomTag()"></Button>
                     </StackLayout>
@@ -132,28 +139,34 @@
                 </StackLayout>
               </StackLayout>
 
-              <StackLayout [ngClass]="{'mt-30': userType !== 0 }" class="list-view social-section" iosOverflowSafeArea="false" *ngIf="socialProfileSettingsForMobile && socialProfileSettingsForMobile.length > 0">
+              <StackLayout [ngClass]="{'mt-30': userType !== 0 }" class="list-view social-section"
+                iosOverflowSafeArea="false"
+                *ngIf="socialProfileSettingsForMobile && socialProfileSettingsForMobile.length > 0">
                 <StackLayout class="grid-label p-15" iosOverflowSafeArea="false">
                   <Label textWrap="true" text="SOCIAL PROFILE"></Label>
                 </StackLayout>
-                <StackLayout class="input-field" *ngFor="let profile of socialProfileSettingsForMobile | slice:0:socialProfileShowLimit;"
+                <StackLayout class="input-field"
+                  *ngFor="let profile of socialProfileSettingsForMobile | slice:0:socialProfileShowLimit;"
                   iosOverflowSafeArea="false">
-                    <GridLayout *ngIf="userType === 0" rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
-                      <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
-                      <StackLayout class="text-box" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
-                        <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
-                          [text]="profile?.url" fontSize="14" textWrap="true"></Label>
-                        <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID"
-                          [formControlName]="profile.social_name" class="input-box"></TextField>
-                      </StackLayout>
-                      <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
+                  <GridLayout *ngIf="userType === 0" rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
+                    <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
+                    <StackLayout class="text-box" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
+                      <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
+                        [text]="profile?.url" fontSize="14" textWrap="true"></Label>
+                      <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID"
+                        [formControlName]="profile.social_name" class="input-box"></TextField>
+                    </StackLayout>
+                    <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
                       text="Please enter valid profile id" row="2" col="0" textWrap="true"></Label>
                   </GridLayout>
                   <GridLayout *ngIf="userType !== 0" rows="auto,*" columns="*" iosOverflowSafeArea="false">
-                      <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
-                      <StackLayout marginLeft="14" marginTop="8" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
-                        <Label class="grid-label-text" (tap)="openUrl(profile?.url, userForm.get([profile.social_name]).value)" color="blue" text="{{profile?.url}}{{userForm.get([profile.social_name]).value}}" textWrap="true"></Label>
-                      </StackLayout>
+                    <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
+                    <StackLayout marginLeft="14" marginTop="8" row="1" col="0" orientation="horizontal"
+                      iosOverflowSafeArea="false">
+                      <Label class="grid-label-text"
+                        (tap)="openUrl(profile?.url, userForm.get([profile.social_name]).value)" color="blue"
+                        text="{{profile?.url}}{{userForm.get([profile.social_name]).value}}" textWrap="true"></Label>
+                    </StackLayout>
                   </GridLayout>
                 </StackLayout>
                 <Button class="p-15 showMore" marginTop="24" horizontalAlignment="center"
@@ -161,13 +174,15 @@
                   (tap)="showMoreSocialProfile()"></Button>
               </StackLayout>
 
-              <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons" iosOverflowSafeArea="false">
+              <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons"
+                iosOverflowSafeArea="false">
                 <Label text="Bulk upload Request" textWrap="true" padding="8"></Label>
                 <Button *ngIf="(!user.bulkUploadPermissionStatus
                   || user.bulkUploadPermissionStatus === NONE
                   || user.bulkUploadPermissionStatus === PENDING)
                   && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText" backgroundColor="#ffffff" color="black"
-                  padding="10 0" (tap)="setBulkUploadRequest()" borderWidth="1" borderRadius="3" stlRippleEffect></Button>
+                  padding="10 0" (tap)="setBulkUploadRequest()" borderWidth="1" borderRadius="3"
+                  stlRippleEffect></Button>
                 <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING"
                   text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
                   textWrap="true" padding="8"></Label>
@@ -182,52 +197,50 @@
               </StackLayout>
             </StackLayout>
 
-            <StackLayout rows="*" [visibility]="selectedIndex === 1 ? 'visible' : 'collapsed'" marginTop="10" iosOverflowSafeArea="false">
-                <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
-                  height="100%" padding="0 10" margin="10">
-                  <StackLayout marginTop="10" iosOverflowSafeArea="false">
-                    <GridLayout rows="*,*,*,*,*,*" columns="auto,*,auto" marginTop="10" iosOverflowSafeArea="false">
-                      <Label text="Game Played" row="0" col="0" class="padding-2 text-black Hind-Bold" fontSize="16"
-                        verticalAlignment="center"></Label>
-                      <GridLayout row="0" col="2" rows="*, *" columns="*" class="padding-10" iosOverflowSafeArea="false">
-                        <Label [text]="account?.gamePlayed" row="0" col="0" class="text-black" fontSize="16"></Label>
-                      </GridLayout>
-
-                      <Label text="Categories" row="1" col="0" class="padding-2 text-black Hind-Bold" fontSize="16"
-                        verticalAlignment="center"></Label>
-                      <GridLayout row="1" col="2" rows="*, *" columns="*" class="padding-10" iosOverflowSafeArea="false">
-                        <Label [text]="account?.categories" row="0" col="0" class="text-black" fontSize="16"></Label>
-                      </GridLayout>
-
-                      <Label text="Win-Loss" row="2" col="0" class="padding-2 text-black Hind-Bold" fontSize="16"
-                        verticalAlignment="center"></Label>
-                      <GridLayout row="2" col="2" rows="*, *" columns="*" class="padding-10" iosOverflowSafeArea="false">
-                        <Label text="{{account?.wins}}-{{account?.losses}}" row="0" col="0" class="text-black"
-                          fontSize="16"></Label>
-                      </GridLayout>
-
-
-                      <Label text="Badges" row="3" col="0" class="padding-2 text-black Hind-Bold" fontSize="16"
-                        verticalAlignment="center"></Label>
-                      <GridLayout row="3" col="2" rows="*, *" columns="*" class="padding-10" iosOverflowSafeArea="false">
-                        <Label [text]="account?.badges" row="0" col="0" class="text-black" fontSize="16"></Label>
-                      </GridLayout>
-
-
-                      <Label text="Avg. answer time" row="4" col="0" class="padding-2 text-black Hind-Bold" fontSize="16"
-                        verticalAlignment="center"></Label>
-                      <GridLayout row="4" col="2" rows="*, *" columns="*" class="padding-10" iosOverflowSafeArea="false">
-                        <Label [text]="account?.avgAnsTime" row="0" col="0" class="text-black" fontSize="16"></Label>
-                      </GridLayout>
-
-                      <Label text="Contribution" row="5" col="0" class="padding-2 text-black Hind-Bold" fontSize="16"
-                        verticalAlignment="center"></Label>
-                      <GridLayout row="5" col="2" rows="*, *" columns="*" iosOverflowSafeArea="false">
-                        <Label [text]="account?.contribution" row="0" col="0" class="text-black" fontSize="16"></Label>
-                      </GridLayout>
-                    </GridLayout>
-                  </StackLayout>
+            <StackLayout rows="*" [visibility]="selectedIndex === 1 ? 'visible' : 'collapsed'"
+              iosOverflowSafeArea="false">
+              <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
+                margin="10">
+                <StackLayout class="stats-main" iosOverflowSafeArea="false">
+                  <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="0" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf109;"></Label>
+                    <Label text="Game" row="0" col="1" class="text-black Hind-Bold" fontSize="16"
+                      verticalAlignment="center"></Label>
+                    <Label [text]="account?.gamePlayed" row="0" col="2" class="text-black" fontSize="16"></Label>
+                  </GridLayout>
+                  <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="1" col="0" fontSize="16" class="far" verticalAlignment="center" text="&#xf09d;"></Label>
+                    <Label text="Categories" row="1" col="1" class="text-black Hind-Bold" fontSize="16"
+                      verticalAlignment="center"></Label>
+                    <Label [text]="account?.categories" row="0" col="2" class="text-black" fontSize="16"></Label>
+                  </GridLayout>
+                  <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="2" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf091;"></Label>
+                    <Label text="Win-Loss" row="2" col="1" class="text-black Hind-Bold" fontSize="16"
+                      verticalAlignment="center"></Label>
+                    <Label text="{{account?.wins}}-{{account?.losses}}" row="0" col="2" class="text-black"
+                      fontSize="16"></Label>
+                  </GridLayout>
+                  <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="3" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf5a2;"></Label>
+                    <Label text="Badges" row="3" col="1" class="text-black Hind-Bold" fontSize="16"
+                      verticalAlignment="center"></Label>
+                    <Label [text]="account?.badges" row="0" col="2" class="text-black" fontSize="16"></Label>
+                  </GridLayout>
+                  <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="4" col="0" fontSize="16" class="far" verticalAlignment="center" text="&#xf017;"></Label>
+                    <Label text="Avg. answer time" row="4" col="1" class="text-black Hind-Bold" fontSize="16"
+                      verticalAlignment="center"></Label>
+                    <Label [text]="account?.avgAnsTime" row="0" col="2" class="text-black" fontSize="16"></Label>
+                  </GridLayout>
+                  <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="5" col="0" fontSize="16" class="far" text="&#xf164;" verticalAlignment="center"></Label>
+                    <Label text="Contribution" row="5" col="1" class="text-black Hind-Bold" fontSize="16"
+                      verticalAlignment="center"></Label>
+                    <Label [text]="account?.contribution" row="0" col="2" class="text-black" fontSize="16"></Label>
+                  </GridLayout>
                 </StackLayout>
+              </StackLayout>
             </StackLayout>
           </StackLayout>
         </CardView>
