@@ -208,6 +208,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   editProfile() {
     this.isEnableEditProfile = true;
+    this.showAllSocialSetting();
     this.enableForm();
   }
 

@@ -60,6 +60,7 @@ export class ProfileSettings {
     userProfileImageUrl = '';
     userType = UserType.OtherUserProfile;
     isEnableEditProfile = false;
+    socialProfileObj: any;
     singleFieldEdit = {
         displayName: false,
         location: false
@@ -87,14 +88,13 @@ export class ProfileSettings {
         this.route.params.subscribe(data => {
             if (data && data.userid) {
                 this.userId = data.userid;
-
-                this.store.select(appState.coreState).pipe(skip(1)).subscribe(s => {
+                this.subscriptions.push(this.store.select(appState.coreState).subscribe(s => {
                     if (s.user) {
                         this.initData();
                     } else {
                         this.initializeOtherUserProfile();
                     }
-                });
+                }));
             }
         });
 
@@ -119,13 +119,13 @@ export class ProfileSettings {
     initializeSocialSetting() {
 
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-            if (this.userType === 0) {
-                this.originalSocialProfileSettings = appSettings[0].social_profile;
-            } else {
-                this.originalSocialProfileSettings = appSettings[0].social_profile.filter(profile => this.user[profile.social_name]
-                    && this.user[profile.social_name] !== '');
-            }
-            this.socialProfileSettings = this.originalSocialProfileSettings;
+
+            this.socialProfileObj = [...appSettings[0].social_profile];
+            this.socialProfileSettings = appSettings[0].social_profile.filter(profile => this.user[profile.social_name]
+                && this.user[profile.social_name] !== '');
+
+            this.originalSocialProfileSettings = (this.userType === 0) ?
+                this.socialProfileObj : this.socialProfileSettings;
 
             this.originalSocialProfileSettings = this.originalSocialProfileSettings.filter(profile => profile.enable);
             this.socialProfileSettingsForMobile = this.originalSocialProfileSettings.filter(profile => this.user[profile.social_name]);
@@ -139,6 +139,13 @@ export class ProfileSettings {
 
         }));
     }
+
+
+    showAllSocialSetting() {
+        this.socialProfileSettings = [...this.socialProfileObj];
+        this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
+    }
+
     initializeUserProfile() {
         this.initializeSocialSetting();
         this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
@@ -280,14 +287,14 @@ export class ProfileSettings {
     }
 
     afterFormCreate() {
-        if (this.socialProfileSettings) {
-            this.socialProfileSettings.map(profile => {
+        if (this.socialProfileObj) {
+            this.socialProfileObj.map(profile => {
                 if (profile.enable) {
                     const socialName = this.user[profile.social_name] ? this.user[profile.social_name] : '';
                     this.userForm.addControl(profile.social_name, new FormControl(socialName, this.ValidateUrl));
                 }
             });
-            this.socialProfileSettings.sort((a, b) => a.position - b.position);
+            this.socialProfileObj.sort((a, b) => a.position - b.position);
         }
     }
 
@@ -303,7 +310,7 @@ export class ProfileSettings {
                     this.user.categoryIds.push(obj['category']);
                 }
             }
-            this.socialProfileSettings.map(profile => {
+            this.socialProfileObj.map(profile => {
                 if (profile.enable) {
                     this.user[profile.social_name] = this.userForm.get(profile.social_name).value;
                 }

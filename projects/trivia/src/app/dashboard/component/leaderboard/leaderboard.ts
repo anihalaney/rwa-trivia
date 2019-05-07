@@ -36,6 +36,7 @@ export class Leaderboard implements OnDestroy {
   unknown = LeaderBoardConstants.UNKNOWN;
   category: string;
   subscriptions = [];
+  loggedInUserId: string;
 
   constructor(protected store: Store<AppState>,
     protected userActions: UserActions,
@@ -47,6 +48,11 @@ export class Leaderboard implements OnDestroy {
       this.category = params['category'];
     });
 
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+        if (user && user.userId) {
+            this.loggedInUserId = user.userId;
+        }
+    }));
     // if (isPlatformBrowser(this.platformId)) {
     this.store.dispatch(new leaderBoardActions.LoadLeaderBoard());
     // }

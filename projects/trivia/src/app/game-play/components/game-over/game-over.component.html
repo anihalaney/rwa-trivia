@@ -16,7 +16,7 @@
     </div>
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="yourimg">
-        <img [src]="getImageUrl(user)" alt="User Profile Image" />
+        <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image" />
       </div>
       <label href="#" id="you" class="dark text-style ">{{playerUserName}}</label>
       <div class="dark div-top-spacing text-style ">Score {{game.stats[user.userId].score}} / {{game.round}}</div>
@@ -31,7 +31,7 @@
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
       <div class="col-sm-3 col-sm-offset-3">
         <div class="yourimg" [ngClass]="{'vs': game.playerIds.length>1 }">
-          <img [src]="getImageUrl(user)" alt="User Profile Image" />
+          <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{playerUserName}}</label>
         <div class="dark div-top-spacing text-style">Score {{game.stats[user.userId].score}}</div>
@@ -45,7 +45,7 @@
       </div>
       <div class="col-sm-3 yourimg-spacing">
         <div class="yourimg">
-          <img [stlOpenUserProfile]="otherUserId" [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
+          <img [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(otherUserInfo)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{otherUserInfo?.displayName}}</label>
         <div class="dark div-top-spacing text-style">Score {{game.stats[otherUserId].score}}</div>

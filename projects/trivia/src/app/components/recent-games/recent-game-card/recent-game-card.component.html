@@ -29,7 +29,7 @@
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Opponent">
             <div class="col-xs-6 no-padding" *ngIf="game.winnerPlayerId === user.userId">
                 <div class="yourimg">
-                    <img [src]="userProfileImageUrl" alt="User Profile Image" />
+                    <img  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="userProfileImageUrl" alt="User Profile Image" />
                 </div>
                 <p class="light">Your</p>
                 <p class="light">Score {{game.stats[game.winnerPlayerId]?.score}}</p>
@@ -37,7 +37,7 @@
             <div class="col-xs-6 no-padding "
                 [ngClass]="game.winnerPlayerId !== user.userId?'card-border-right':'card-border-left'">
                 <div class="yourimg">
-                    <img  [stlOpenUserProfile]="getOpponentId(game)" [src]="getImageUrl(userDict[this.otherUserId])" alt="Other User Profile Image" />
+                    <img  [stlOpenUserProfile]="{userId: getOpponentId(game), redirectTo: 'otherUserProfile'}" [src]="getImageUrl(userDict[this.otherUserId])" alt="Other User Profile Image" />
                 </div>
                 <p class="light ellipsis user-name-text"  title="{{userDict[getOpponentId(game)]?.displayName}}">
                     {{userDict[getOpponentId(game)]?.displayName}}</p>
@@ -45,7 +45,7 @@
             </div>
             <div class="col-xs-6 card-left-border no-padding" *ngIf="game.winnerPlayerId !== user.userId">
                 <div class="yourimg">
-                    <img [src]="userProfileImageUrl" alt="User Profile Image" />
+                    <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="userProfileImageUrl" alt="User Profile Image" />
                 </div>
                 <p class="light">Your</p>
                 <p class="light">Score {{game.stats[user.userId]?.score}}</p>
@@ -62,7 +62,7 @@
 
         <div class="col-xs-12 no-padding card-bottom-spacing" *ngIf="game.gameOptions.playerMode==PlayerMode.Single">
             <div class="yourimg">
-                <img [src]="userProfileImageUrl" alt="User Profile Image" />
+                <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="userProfileImageUrl" alt="User Profile Image" />
             </div>
             <p class="light ellipsis user-disp-text" title="{{user?.displayName}}">{{user?.displayName}}</p>
             <p class="light">Score {{game.stats[user.userId].score}} / {{game.round}}</p>           
