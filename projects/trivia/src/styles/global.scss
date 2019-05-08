@@ -674,7 +674,8 @@ body.dialog-open .cdk-global-overlay-wrapper {
 // maths quill js
 
 .ql-input,  .mq-root-block{
-  width: 100% !important;
+  // width: 100% !important;
+  width: 360px !important;
   padding: 12px 20px !important;
   margin: 8px 0 !important;
   display: inline-block !important;
@@ -705,7 +706,7 @@ body.dialog-open .cdk-global-overlay-wrapper {
 }
 
 .mq-editable-field {
-  width: 100%;
+  // width: 100%;
 }
 
 .ql-close {
@@ -717,6 +718,7 @@ body.dialog-open .cdk-global-overlay-wrapper {
   height: 20px;
   width: 20px;
   padding-left: 5px;
+  margin-top: 16px;
   padding-top: 2px;
 }
 

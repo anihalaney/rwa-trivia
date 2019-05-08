@@ -60,7 +60,6 @@
           
           <textarea *ngIf="!questionForm.value.isRichEditor" class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"
             aria-label="question-area"></textarea>
-dfdfdff
           <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object" formControlName="questionText"
             [modules]="quillConfig" [sanitize]="true" [placeholder]="ddfddfffddfdf"></quill-editor>
           <!-- [(ngModel)]="htmlText" -->

@@ -10,6 +10,7 @@ export class ApplicationSettings {
     earn_bytes_on_question_contribute: number;
     renderWebView: boolean;
     display_achievements: boolean;
+    quill_options: { list, options };
 }
 
 export class TimerLoader {

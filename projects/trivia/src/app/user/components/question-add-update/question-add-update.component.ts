@@ -38,6 +38,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   public editorConfig = {
     placeholder: 's'
   };
+
+
   quillConfig = {
     // toolbar: '.toolbar',
     toolbar: {
@@ -54,21 +56,24 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
         [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
         [{ 'font': [] }],
         [{ 'align': [] }],
         ['clean'],
         ['autoLink'],
+        // [
+        //   'autoLink': {
+        //     buttonIcon: 'ddd'
+        //   }]
       ],
-      autoLink: true,
       handlers: {
         // handlers object will be merged with default handlers object
-        'autoLink': function () {
-          console.log('handler called');
+        'autoLink': function (value) {
+          // const appSettings = this.appSettings;
+          // console.log('autolink >>>', appSettings);
         }
       }
     },
-    autoLink: true,
+    autoLink: { applicationSettings: this.applicationSettings },
   };
 
   // Constructor
@@ -86,7 +91,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
+        // this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+        // this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
         this.createForm(this.question);
+        console.log('app sertttings');
+        this.quillConfig.autoLink = { applicationSettings: this.applicationSettings };
       }
     }));
 
