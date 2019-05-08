@@ -246,13 +246,13 @@ export class ProfileSettings {
         this.filteredTags$ = this.userForm.get('tags').valueChanges
         .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
-        this.afterFormCreate();
+        this.createSocialProfileControl();
         if (!this.isEnableEditProfile) {
             this.disableForm(true);
         }
     }
 
-    afterFormCreate() {
+    createSocialProfileControl() {
         if (this.socialProfileObj) {
             this.socialProfileObj.map(profile => {
                 if (profile.enable) {
