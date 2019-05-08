@@ -1,10 +1,12 @@
 import Quill from 'quill';
 import { HostListener } from '@angular/core';
 const Module = Quill.import('core/module');
+const Range = Quill.import('core/selection');
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 // import { CoreState, coreState } from './../../core/store/';
 import { coreState, CoreState } from './../../core/store/reducers';
+import { FormulaBlot } from './formula';
 
 const defaults = {
     globalRegularExpression: /https?:\/\/[\S]+/g,
@@ -21,6 +23,8 @@ export default class QuillAutoLink extends Module {
     buttonIcon;
     mathsOptions = [];
     range;
+    existingFomula: any;
+    foffset: any;
 
     constructor(quill, options) {
         super(quill, options);
@@ -45,17 +49,25 @@ export default class QuillAutoLink extends Module {
         this.quill = quill;
 
         this.toolbar = quill.getModule('toolbar');
+
         this.quill.getModule('toolbar').addHandler('autoLink', () => {
-            console.log('open');
+
             // console.log('quill selection', quill.getSelection());
             const range = quill.getSelection();
+            console.log('open', range);
+            [this.existingFomula, this.foffset] = this.quill.scroll.descendant(FormulaBlot, range.index);
+            if (this.existingFomula) {
+                // formula
+                console.log('existing formula', this.existingFomula);
+                console.log('foffset ', this.foffset);
+            }
             console.log(range);
             if (range) {
                 if (range.length === 0) {
                     console.log('User cursor is at index', range.index);
                 } else {
                     const text = quill.getText(range.index, range.length);
-                    alert(text);
+                    alert(text.length);
                     console.log('User has highlighted: ', text);
                 }
             } else {
@@ -230,6 +242,11 @@ export default class QuillAutoLink extends Module {
         const MQ = (window as any).MathQuill.getInterface(2);
         const mathquilljs = MQ.MathField(document.getElementById('mathquill'));
         mathquilljs.focus();
+        if (this.existingFomula) {
+            console.log('this iexisting', this.existingFomula.text);
+            mathquilljs.write(this.existingFomula.text);
+        }
+
     }
 
     onClickLink(displayContent, action, content, event) {
@@ -275,8 +292,22 @@ export default class QuillAutoLink extends Module {
         const MQ = (window as any).MathQuill.getInterface(2);
         const mathquill = MQ.MathField(document.getElementById('mathquill'));
         const latesx = ' ' + mathquill.latex() + ' ';
-        quill.updateContents([{ retain: rangeIndex }, { insert: { formula: latesx } }]);
-        const delta = quill.getContents();
+        const [t, b] = quill.scroll.descendant(FormulaBlot, range.index);
+        console.log('t', t);
+        console.log('b', b);
+        if (t) {
+            const linkRange = new Range(range.index - b, t.length());
+            console.log('update > ', this.existingFomula);
+            console.log('iff', this.foffset);
+            console.log(linkRange);
+            quill.updateContents([{ delete:  (b + 1) }, { insert: { formula: latesx } }]);
+
+        } else {
+            console.log('new');
+            quill.updateContents([{ retain: rangeIndex }, { insert: { formula: latesx } }]);
+            const delta = quill.getContents();
+        }
+
         quill.focus();
         const eleMathPlate = document.getElementById('math-palette');
         if (eleMathPlate) { eleMathPlate.remove(); }

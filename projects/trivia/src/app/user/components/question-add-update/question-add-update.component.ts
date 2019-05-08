@@ -46,20 +46,20 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       // ['formula'],
       // container: "#customToolbar",
       container: [
-        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-        ['code-block'],
-        [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-        [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-        [{ 'direction': 'rtl' }],                         // text direction
+        // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        // ['code-block'],
+        // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
+        // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
+        // [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
+        // [{ 'direction': 'rtl' }],                         // text direction
 
-        [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'font': [] }],
-        [{ 'align': [] }],
-        ['clean'],
-        ['autoLink'],
+        // [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        // [{ 'font': [] }],
+        // [{ 'align': [] }],
+        // ['clean'],
+        // ['autoLink'],
         // [
         //   'autoLink': {
         //     buttonIcon: 'ddd'
@@ -91,10 +91,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
-        // this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
-        // this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+        this.quillConfig.toolbar.container.push(['formula']);
         this.createForm(this.question);
-        console.log('app sertttings');
+        // console.log('app sertttings');
         this.quillConfig.autoLink = { applicationSettings: this.applicationSettings };
       }
     }));

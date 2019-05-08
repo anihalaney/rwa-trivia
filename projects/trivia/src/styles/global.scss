@@ -692,6 +692,8 @@ body.dialog-open .cdk-global-overlay-wrapper {
   min-width: 400px;
   position: absolute;
   z-index: 999;
+  padding: 5px 7px;
+  background: white;
   // background-color: #f7f7f7;
   /* padding-right: 35px; */
 }
