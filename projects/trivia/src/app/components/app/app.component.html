@@ -16,7 +16,7 @@
       <side-nav [user]="user"></side-nav>
     </nav>
 
-    <main  [ngStyle]="{'display': user ? 'table-cell':'block'}" >
+    <main  [class.block]="!user" >
       <router-outlet></router-outlet>
     </main>
   </div>

@@ -1,14 +1,14 @@
-import { Component, Input, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { userState } from '../../../user/store';
-import { ProfileSettings } from './profile-settings';
-import { Utils, WindowRef } from 'shared-library/core/services';
-import { profileSettingsConstants, Subscription } from 'shared-library/shared/model';
-import { ImageCropperComponent, CropperSettings } from 'ngx-img-cropper';
-import { coreState, UserActions } from 'shared-library/core/store';
+import { ActivatedRoute } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { coreState, UserActions } from 'shared-library/core/store';
+import { profileSettingsConstants } from 'shared-library/shared/model';
+import { AppState } from '../../../store';
+import { ProfileSettings } from './profile-settings';
 
 @Component({
   selector: 'profile-settings',
@@ -32,19 +32,22 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     private windowRef: WindowRef,
     public userAction: UserActions,
     public cd: ChangeDetectorRef,
-    public utils: Utils) {
+    public utils: Utils,
+    public route: ActivatedRoute) {
 
-    super(fb, store, userAction, utils, cd);
+    super(fb, store, userAction, utils, cd, route);
 
-    this.setCropperSettings();
-    this.setNotificationMsg('', false, 0);
+    // if (this.userType === 0) {
+      this.setCropperSettings();
+      this.setNotificationMsg('', false, 0);
 
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-      if (status === 'SUCCESS') {
-        this.setNotificationMsg('Profile Saved !', false, 100);
-        this.cd.markForCheck();
-      }
-    }));
+      this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+        if (status === 'SUCCESS') {
+          this.setNotificationMsg('Profile Saved !', false, 100);
+          this.cd.markForCheck();
+        }
+      }));
+    // }
   }
 
   setNotificationMsg(msg: string, flag: boolean, scrollPosition: number): void {
@@ -111,7 +114,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   saveProfileImage() {
     if (!this.profileImageValidation) {
-      this.getUserFromFormValue(this.userForm.value);
+      this.enableForm();
+      this.getUserFromFormValue(false, '');
+      this.disableForm();
       this.assignImageValues();
       this.saveUser(this.user);
       this.cd.markForCheck();
@@ -163,22 +168,33 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   }
   // tags end
 
-  onSubmit() {
+  onSubmit(isEditSingleField = false, field = '') {
     // validations
     this.userForm.updateValueAndValidity();
 
     if (this.profileImageFile) {
       this.assignImageValues();
     }
+    // validate for main form except single edit field
+    if (this.userForm.invalid && !isEditSingleField) {
 
-
-    if (this.userForm.invalid) {
-      this.setNotificationMsg('Please fill the mandatory fields', true, 100);
-      return;
+      const controls = this.userForm.controls;
+      const singleEditFields = Object.getOwnPropertyNames(this.singleFieldEdit);
+      for (const name in controls) {
+          if (controls[name].invalid &&  singleEditFields.indexOf(name) < 0) {
+            this.setNotificationMsg('Please fill the mandatory fields', true, 100);
+            return;
+          }
+      }
     }
 
+
     // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value);
+    this.getUserFromFormValue(isEditSingleField, field);
+    if (isEditSingleField) {
+      this.userForm.get(field).disable();
+      this.singleFieldEdit[field] = false;
+    }
     // call saveUser
     this.saveUser(this.user);
     this.setNotificationMsg('', false, 0);

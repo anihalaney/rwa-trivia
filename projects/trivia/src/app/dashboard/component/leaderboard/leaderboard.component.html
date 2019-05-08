@@ -8,7 +8,7 @@
           <div class="row">
             <div class="col-xs-2 has">#{{j+1}}</div>
             <div class="col-xs-3 yourimg">
-              <img [stlOpenUserProfile]="user.userId" [src]="getImageUrl(userDict[user.userId])"
+              <img   [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}" [src]="getImageUrl(userDict[user.userId])"
                 alt="User Profile Image" />
             </div>
             <div class="col-xs-4 ellipsis">
