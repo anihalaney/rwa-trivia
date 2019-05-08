@@ -1,6 +1,6 @@
     <StackLayout *ngIf="cardType == 'opponent'" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
         <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
-            <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+            <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
                 width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" iosOverflowSafeArea="false">
                 <GridLayout rows="*,*,*,*" columns="*" iosOverflowSafeArea="false">
@@ -74,7 +74,7 @@
     <StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile Roboto-Regular" [nsRouterLink]="['/game-play', game.gameId]"
         clearHistory="true" iosOverflowSafeArea="false">
         <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
-            <Image [stlOpenUserProfile]="otherUserId" row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
+            <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}" row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
                 stretch="aspectFill" height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" *ngIf="otherUserInfo" iosOverflowSafeArea="false">
                 <GridLayout rows="*,*" columns="*" iosOverflowSafeArea="false">
@@ -114,7 +114,7 @@
             <StackLayout row="0" col="2" class="hr-light m-10" iosOverflowSafeArea="false"></StackLayout>
         </GridLayout>
         <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
-            <Image row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+            <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
                 width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" iosOverflowSafeArea="false">
                 <GridLayout rows="*,*" columns="*" iosOverflowSafeArea="false">
@@ -152,7 +152,7 @@
 
     <StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
         <GridLayout rows="*,*" columns="auto,auto,*" *ngIf="otherUserInfo" iosOverflowSafeArea="false">
-            <Image [stlOpenUserProfile]="otherUserId" row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill"
+            <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}" row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill"
                 height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" iosOverflowSafeArea="false">
                 <GridLayout rows="*,*,*,*" columns="*" iosOverflowSafeArea="false">

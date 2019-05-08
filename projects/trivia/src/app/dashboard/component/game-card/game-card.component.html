@@ -5,7 +5,7 @@
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="col-xs-12 textcenter clearfix">
         <div class="yourimg">
-          <img [src]="getImageUrl(user)" alt="User Profile Image">
+          <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image">
         </div>
         <div class="clear"></div>
         <span class="dark ellipsis" title="{{user.displayName}}">{{user.displayName}}</span>
@@ -26,7 +26,7 @@
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg vs">
-            <img [src]="getImageUrl(user)" alt="User Profile Image" />
+            <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image" />
           </div>
         </div>
         <div class="col-xs-6">
@@ -75,12 +75,12 @@
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
           <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
-            <img [src]="getImageUrl(user)" alt="User Profile Picture" />
+            <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Picture" />
           </div>
         </div>
         <div class="col-xs-6">
           <div class="yourimg ">
-            <img  [stlOpenUserProfile]="otherUserInfo?.userId" [src]="getImageUrl(otherUserInfo)" alt="User Profile Picture" />
+            <img  [stlOpenUserProfile]="{userId: otherUserInfo?.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(otherUserInfo)" alt="User Profile Picture" />
           </div>
         </div>
       </div>

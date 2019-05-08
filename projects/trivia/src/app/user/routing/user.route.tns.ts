@@ -4,24 +4,21 @@ import {
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent,
-    UserProfileComponent
+    InviteFriendsComponent
 } from '../components';
 import { InviteFriendsDialogComponent } from '../components/invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 
 export const userRoutes: Routes = [
     {
         path: 'profile/:userid',
-        component: UserProfileComponent
+        component: ProfileSettingsComponent
     },
     {
         path: 'my',
-        canActivateChild: [AuthGuard],
         children: [
         {
             path: 'profile/:userid',
-            component: ProfileSettingsComponent,
-            canActivate: [AuthGuard]
+            component: ProfileSettingsComponent
         },
         {
             path: 'questions',
