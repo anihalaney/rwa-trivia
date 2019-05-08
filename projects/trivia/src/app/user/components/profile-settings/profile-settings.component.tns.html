@@ -147,7 +147,7 @@
                 <StackLayout class="input-field"
                   *ngFor="let profile of socialProfileSettings; let i=index"
                   iosOverflowSafeArea="false">
-                  <GridLayout *ngIf="userType === 0 && profile.enable && i <= socialProfileShowLimit" rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
+                  <GridLayout *ngIf="userType === 0 && profile.enable && ((isEnableEditProfile && i <= socialProfileShowLimit) || (!isEnableEditProfile))" rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
                     <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
                     <StackLayout class="text-box" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
                       <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
