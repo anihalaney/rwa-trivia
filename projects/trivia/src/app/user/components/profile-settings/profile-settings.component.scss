@@ -315,6 +315,11 @@ input:disabled { background-color: #fff; }
   }
 }
 
+@media (min-width: 1355px) {
+  .mainpage {
+      max-width: 100%;
+  }
+}
 
 .save
 {
