@@ -1,7 +1,7 @@
 import Quill from 'quill';
 import { HostListener } from '@angular/core';
 const Module = Quill.import('core/module');
-const Range = Quill.import('core/selection');
+// const Range = Quill.import('core/selection');
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 // import { CoreState, coreState } from './../../core/store/';
@@ -67,7 +67,7 @@ export default class QuillAutoLink extends Module {
                     console.log('User cursor is at index', range.index);
                 } else {
                     const text = quill.getText(range.index, range.length);
-                    alert(text.length);
+                    // alert(text.length);
                     console.log('User has highlighted: ', text);
                 }
             } else {
@@ -289,24 +289,29 @@ export default class QuillAutoLink extends Module {
     closeMaths(quill, range, event) {
         let rangeIndex;
         rangeIndex = (range.index) ? range.index : 1;
+        console.log('index', rangeIndex);
         const MQ = (window as any).MathQuill.getInterface(2);
         const mathquill = MQ.MathField(document.getElementById('mathquill'));
         const latesx = ' ' + mathquill.latex() + ' ';
         const [t, b] = quill.scroll.descendant(FormulaBlot, range.index);
         console.log('t', t);
         console.log('b', b);
+        console.log(quill);
         if (t) {
-            const linkRange = new Range(range.index - b, t.length());
-            console.log('update > ', this.existingFomula);
-            console.log('iff', this.foffset);
-            console.log(linkRange);
-            quill.updateContents([{ delete:  (b + 1) }, { insert: { formula: latesx } }]);
+            // const linkRange = new Range(range.index - b, t.length());
+            console.log('update > ', t.length());
+            console.log('iff', b);
+            console.log(Quill.sources.USER);
+            quill.updateContents([  { retain: (rangeIndex)  }, { delete: t.length() }, { insert: { formula: latesx }}]);
+            // quill.updateContents([{ retain : rangeIndex }, { delete: t.length() }, { concat: { formula: latesx } }]);
+
 
         } else {
             console.log('new');
             quill.updateContents([{ retain: rangeIndex }, { insert: { formula: latesx } }]);
-            const delta = quill.getContents();
         }
+       
+        const delta = quill.getContents();
 
         quill.focus();
         const eleMathPlate = document.getElementById('math-palette');
