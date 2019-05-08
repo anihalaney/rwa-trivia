@@ -140,14 +140,14 @@
 
               <StackLayout [ngClass]="{'mt-30': userType !== 0 }" class="list-view social-section"
                 iosOverflowSafeArea="false"
-                *ngIf="socialProfileSettingsForMobile && socialProfileSettingsForMobile.length > 0">
+                *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
                 <StackLayout class="grid-label p-15" iosOverflowSafeArea="false">
                   <Label textWrap="true" text="SOCIAL PROFILE"></Label>
                 </StackLayout>
                 <StackLayout class="input-field"
-                  *ngFor="let profile of socialProfileSettingsForMobile | slice:0:socialProfileShowLimit;"
+                  *ngFor="let profile of socialProfileSettings; let i=index"
                   iosOverflowSafeArea="false">
-                  <GridLayout *ngIf="userType === 0" rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
+                  <GridLayout *ngIf="userType === 0 && profile.enable && i <= socialProfileShowLimit" rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
                     <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
                     <StackLayout class="text-box" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
                       <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
@@ -158,7 +158,7 @@
                     <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
                       text="Please enter valid profile id" row="2" col="0" textWrap="true"></Label>
                   </GridLayout>
-                  <GridLayout *ngIf="userType !== 0" rows="auto,*" columns="*" iosOverflowSafeArea="false">
+                  <GridLayout *ngIf="userType !== 0 && profile.enable" rows="auto,*" columns="*" iosOverflowSafeArea="false">
                     <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
                     <StackLayout marginLeft="14" marginTop="8" row="1" col="0" orientation="horizontal"
                       iosOverflowSafeArea="false">
@@ -169,7 +169,7 @@
                   </GridLayout>
                 </StackLayout>
                 <Button class="p-15 showMore" marginTop="24" horizontalAlignment="center"
-                  *ngIf="enableSocialProfileForMobile > socialProfileShowLimit" text="Show more" stlRippleEffect
+                  *ngIf="(enableSocialProfile > (socialProfileShowLimit + 1)) && isEnableEditProfile" text="Show more" stlRippleEffect
                   (tap)="showMoreSocialProfile()"></Button>
               </StackLayout>
 

@@ -26,8 +26,6 @@ import { ActivatedRoute } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
 
-
-
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
@@ -254,6 +252,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
     // call saveUser
     this.saveUser(this.user);
+    this.toggleLoader(false);
 
   }
 
@@ -266,21 +265,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         }
         return el.nativeElement.dismissSoftInput();
       });
-  }
-
-  showMoreSocialProfile() {
-    if (this.isEnableEditProfile) {
-      this.socialProfileShowLimit = this.originalSocialProfileSettings.length;
-    } else {
-      this.socialProfileShowLimit = this.enableSocialProfileForMobile;
-    }
-  }
-
-  editProfile() {
-    this.isEnableEditProfile = true;
-    this.socialProfileSettingsForMobile = this.originalSocialProfileSettings;
-    this.enableSocialProfileForMobile = this.originalSocialProfileSettings.length;
-    this.enableForm();
   }
 
   openUrl(url, id) {

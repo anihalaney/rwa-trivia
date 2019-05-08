@@ -3,8 +3,8 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
-import { Observable } from 'rxjs';
-import { map, skip } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map, skipWhile, flatMap, switchMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
@@ -31,10 +31,7 @@ export class ProfileSettings {
     profileOptions: string[] = ['Only with friends', 'With EveryOne'];
     locationOptions: string[] = ['Only with friends', 'With EveryOne'];
     socialProfileSettings;
-    originalSocialProfileSettings;
-    socialProfileSettingsForMobile;
     enableSocialProfile;
-    enableSocialProfileForMobile;
     profileImage: { image: any } = { image: '/assets/images/default-avatar-small.png' };
     profileImageValidation: String;
     profileImageFile: File;
@@ -77,69 +74,41 @@ export class ProfileSettings {
         public route: ActivatedRoute) {
 
         this.toggleLoader(true);
-
         this.fb = formBuilder;
-
-
-
         this.tagsObs = this.store.select(getTags);
         this.subscriptions.push(this.tagsObs.subscribe(tagsAutoComplete => this.tagsAutoComplete = tagsAutoComplete));
 
-        this.route.params.subscribe(data => {
-            if (data && data.userid) {
-                this.userId = data.userid;
-                this.subscriptions.push(this.store.select(appState.coreState).subscribe(s => {
-                    if (s.user) {
-                        this.initData();
+        this.subscriptions.push(
+            this.route.params.pipe(
+                skipWhile(params => !params.userid),
+                map(params => this.userId = params.userid),
+                flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
+                switchMap(user => {
+                    if (user && user.userId === this.userId) {
+                        this.user = user;
+                        this.userType = UserType.userProfile;
+                        return this.initializeUserProfile();
                     } else {
-                        this.initializeOtherUserProfile();
+                        this.userType = UserType.loggedInOtherUserProfile;
+                        return this.initializeOtherUserProfile();
                     }
-                }));
-            }
-        });
-
-    }
-
-    initData() {
-        this.userObs = this.store.select(appState.coreState).pipe(select(s => s.user));
-        this.subscriptions.push(this.userObs.subscribe(user => {
-            if (user) {
-                if (user.userId === this.userId) {
-                    this.user = user;
-                    this.userType = UserType.userProfile;
-                    this.initializeUserProfile();
-                } else {
-                    this.userType = UserType.loggedInOtherUserProfile;
-                    this.initializeOtherUserProfile();
-                }
-            }
-        }));
+                })
+            ).subscribe());
     }
 
     initializeSocialSetting() {
-
-        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
-
-            this.socialProfileObj = [...appSettings[0].social_profile];
-            this.socialProfileSettings = appSettings[0].social_profile.filter(profile => this.user[profile.social_name]
-                && this.user[profile.social_name] !== '');
-
-            this.originalSocialProfileSettings = (this.userType === 0) ?
-                this.socialProfileObj : this.socialProfileSettings;
-
-            this.originalSocialProfileSettings = this.originalSocialProfileSettings.filter(profile => profile.enable);
-            this.socialProfileSettingsForMobile = this.originalSocialProfileSettings.filter(profile => this.user[profile.social_name]);
-            this.enableSocialProfileForMobile = this.socialProfileSettingsForMobile.length;
-
-            this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
-
-            if (this.userType !== UserType.userProfile) {
-                this.socialProfileShowLimit = this.originalSocialProfileSettings.length;
-            }
-
-        }));
+        return this.store.select(appState.coreState)
+            .pipe(select(s => s.applicationSettings),
+                map(appSettings => {
+                    this.socialProfileObj = [...appSettings[0].social_profile];
+                    this.socialProfileSettings = appSettings[0].social_profile
+                        .filter(profile =>
+                            this.user &&
+                            this.user[profile.social_name]
+                            && this.user[profile.social_name] !== '');
+                    this.enableSocialProfile = this.socialProfileSettings.filter(profile => profile.enable).length;
+                }));
     }
-
 
     showAllSocialSetting() {
         this.socialProfileSettings = [...this.socialProfileObj];
@@ -147,65 +116,56 @@ export class ProfileSettings {
     }
 
     initializeUserProfile() {
-        this.initializeSocialSetting();
-        this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.account)).subscribe(account => {
-            if (account) {
-                this.account = account;
-                this.cd.markForCheck();
+        return combineLatest(
+            this.store.select(appState.coreState).pipe(select(s => s.account)),
+            this.store.select(getCategories),
+            this.store.select(categoryDictionary),
+            this.initializeSocialSetting(),
+        ).pipe(map(values => {
+            this.account = values[0] || new Account();
+            this.categories = values[1] || [];
+            this.categoryDict = values[2] || {};
+
+            this.userCopyForReset = cloneDeep(this.user);
+            this.createForm(this.user);
+
+            if (this.user.profilePictureUrl) {
+                this.profileImage.image = this.user.profilePictureUrl;
             }
+
+            switch (this.user.bulkUploadPermissionStatus) {
+                case this.NONE: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
+                case this.PENDING: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT; break; }
+                default: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
+            }
+            if (this.user.roles && this.user.roles['bulkuploader']) {
+                this.user.bulkUploadPermissionStatus = profileSettingsConstants.APPROVED;
+            }
+            this.toggleLoader(false);
+            this.cd.markForCheck();
         }));
-
-        this.categoriesObs = this.store.select(getCategories);
-        this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-
-        this.categoryDictObs = this.store.select(categoryDictionary);
-        this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-
-        this.userCopyForReset = cloneDeep(this.user);
-        this.createForm(this.user);
-
-        this.filteredTags$ = this.userForm.get('tags').valueChanges
-            .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-
-        if (this.user.profilePictureUrl) {
-            this.profileImage.image = this.user.profilePictureUrl;
-        }
-
-        switch (this.user.bulkUploadPermissionStatus) {
-            case this.NONE: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
-            case this.PENDING: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_SEND_REQUEST_AGAIN_BTN_TEXT; break; }
-            default: { this.bulkUploadBtnText = profileSettingsConstants.BULK_UPLOAD_REQUEST_BTN_TEXT; break; }
-        }
-
-        if (this.user.roles && this.user.roles['bulkuploader']) {
-            this.user.bulkUploadPermissionStatus = profileSettingsConstants.APPROVED;
-        }
-
-        this.toggleLoader(false);
-        this.cd.markForCheck();
     }
 
     initializeOtherUserProfile() {
-        this.categoryDictObs = this.store.select(categoryDictionary);
-        this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
-
-        this.userDict$ = this.store.select(appState.coreState).pipe(select(s => s.userDict));
-        this.subscriptions.push(this.userDict$.subscribe(userDict => {
-            this.userDict = userDict;
-            if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
-                this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
-                this.cd.markForCheck();
-            } else {
-                this.user = this.userDict[this.userId];
-                this.initializeSocialSetting();
-                this.createForm(this.user);
-                this.account = this.user.account;
-                this.userProfileImageUrl = this.getImageUrl(this.user);
-                this.profileImage.image = this.userProfileImageUrl;
-                this.toggleLoader(false);
-            }
-            this.cd.markForCheck();
-        }));
+        return this.store.select(appState.coreState).pipe(
+            select(s => s.userDict),
+            skipWhile(userDict => !userDict),
+            map(userDict => {
+                this.userDict = userDict;
+                if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
+                    this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
+                } else {
+                    this.user = this.userDict[this.userId];
+                    this.createForm(this.user);
+                    this.account = this.user.account;
+                    this.userProfileImageUrl = this.getImageUrl(this.user);
+                    this.profileImage.image = this.userProfileImageUrl;
+                    this.toggleLoader(false);
+                }
+            }),
+            flatMap(() => this.initializeSocialSetting()),
+            map(() => this.cd.markForCheck())
+        );
     }
     get tagsArray(): FormArray {
         return this.userForm.get('tagsArray') as FormArray;
@@ -280,13 +240,16 @@ export class ProfileSettings {
             profilePicture: [user.profilePicture]
         });
 
-        this.afterFormCreate();
+        this.filteredTags$ = this.userForm.get('tags').valueChanges
+            .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+
+        this.createSocialProfileControl();
         if (!this.isEnableEditProfile) {
             this.disableForm(true);
         }
     }
 
-    afterFormCreate() {
+    createSocialProfileControl() {
         if (this.socialProfileObj) {
             this.socialProfileObj.map(profile => {
                 if (profile.enable) {
@@ -355,6 +318,16 @@ export class ProfileSettings {
                 }
             }
         }
+    }
+
+    editProfile() {
+        this.isEnableEditProfile = true;
+        this.showAllSocialSetting();
+        this.enableForm();
+    }
+
+    showMoreSocialProfile() {
+        this.socialProfileShowLimit = this.enableSocialProfile;
     }
 
     enableForm() {
