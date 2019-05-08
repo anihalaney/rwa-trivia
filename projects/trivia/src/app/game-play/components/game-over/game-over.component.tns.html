@@ -12,7 +12,7 @@
                                 textWrap="true"></Label>
 
                             <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single">
-                                <Image src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
+                                <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
                                     height="64" width="64" marginLeft="10" verticalAlignment="center" marginRight="10"
                                     borderRadius="50"></Image>
                                 <Label class="username" horizontalAlignment="center" text="{{playerUserName}}"
@@ -44,7 +44,7 @@
                             <GridLayout rows="*" columns="*,auto,*" horizontalAlignment="center"
                                 *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                                 <StackLayout row="0" col="0">
-                                    <Image src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
+                                    <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
                                         height="64" width="64" marginLeft="10" verticalAlignment="center"
                                         marginRight="10" borderRadius="50"></Image>
                                     <StackLayout paddingTop="10">
@@ -81,7 +81,7 @@
                                 <Label row="0" col="1" text="V/S" verticalAlignment="top" textWrap="true"> </Label>
 
                                 <StackLayout row="0" col="2">
-                                    <Image src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
+                                    <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}"  src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
                                         stretch="aspectFill" height="64" width="64" marginLeft="10"
                                         verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
                                     <StackLayout paddingTop="10">
@@ -166,18 +166,18 @@
                     <StackLayout padding="10" backgroundColor="#f3f3f3">
                         <GridLayout rows="auto,auto" columns="auto,auto,auto,auto" horizontalAlignment="center">
                             <Button row="1" col="0" class="navigate-button Hind-Medium" text="Share"
-                                (tap)="screenshot()"></Button>
+                                (rippleTap)="screenshot()" stlRippleEffect></Button>
                             <button row="1" col="1" class="navigate-button Hind-Medium" text="Rematch"
-                                (tap)="reMatchGame()"
-                                *ngIf="game.gameOptions?.playerMode != PlayerMode.Single"></button>
+                                (rippleTap)="reMatchGame()"
+                                *ngIf="game.gameOptions?.playerMode != PlayerMode.Single" stlRippleEffect></button>
                             <Button row="1" col="1" class="navigate-button Hind-Medium" text="Play Again"
-                                (tap)="reMatchGame()"
+                                (rippleTap)="reMatchGame()"
                                 *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"></Button>
-                            <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend"
-                                (tap)="inviteAsFriend()" isEnabled="{{!disableFriendInviteBtn}}"
-                                *ngIf="game.gameOptions.opponentType == opponentType.Random"></Button>
+                            <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend {{game.gameOptions.opponentType}}"
+                                (rippleTap)="inviteAsFriend()" isEnabled="{{!disableFriendInviteBtn}}"
+                                *ngIf="game.gameOptions.opponentType == opponentType.Random" stlRippleEffect></Button>
                             <Button row="1" col="3" class="navigate-button Hind-Medium" text="Home"
-                                (tap)="gotoDashboard()"></Button>
+                                (rippleTap)="gotoDashboard()" stlRippleEffect></Button>
                         </GridLayout>
                     </StackLayout>
                 </StackLayout>
@@ -185,13 +185,13 @@
             <CardView class="cardStyle" android:elevation="20" ios:elevation="20" radius="1" backgroundColor="white"
                 margin="15">
                 <StackLayout class="Hind-Medium">
-                    <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5"
-                        (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;">
+                    <GridLayout rows="auto,auto" columns="auto,*" padding="5" margin="10 5">
                         <Label row="0" col="0" text="View questions & answers" textWrap="true" color="#000000"
                             fontSize="18" class="label Roboto-Medium"></Label>
                         <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
                             text="{{ showQuesAndAnswer ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="7"
-                            borderWidth="2" borderColor="#A9A9A9" color="#A9A9A9" background="#fff"></Label>
+                            borderWidth="2" borderColor="#A9A9A9" color="#A9A9A9" background="#fff"  
+                            (tap)="bindQuestions();showQuesAndAnswer=!showQuesAndAnswer;" stlRippleEffect></Label>
                     </GridLayout>
                     <ActivityIndicator *ngIf="questionsArray.length == 0 && !showQuesAndAnswer" busy="true"
                         ios:width="100" ios:height="100" android:width="50" android:height="50"
@@ -220,8 +220,8 @@
                             </StackLayout>
                             <Button col="3" rowSpan="3" verticalAlignment="center"
                                 style="color:#3b444f; border-width:2px; border-color:#f3f3f3;" text="Report"
-                                marginRight="10" (tap)="openDialog(row)"
-                                *ngIf="!game.playerQnAs[i].isReported"></Button>
+                                marginRight="10"
+                                *ngIf="!game.playerQnAs[i].isReported" (rippleTap)="openDialog(row)" stlRippleEffect></Button>
                             <Label col="3" rowSpan="3" text="Reported" verticalAlignment="center" marginRight="10"
                                 color="red" fontWeight="600" textWrap="true"
                                 *ngIf="game.playerQnAs[i]?.isReported"></Label>

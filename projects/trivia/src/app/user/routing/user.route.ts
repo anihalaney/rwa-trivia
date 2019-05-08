@@ -15,23 +15,30 @@ export const userRoutes: Routes = [
   },
   {
     path: 'profile/:userid',
-    component: ProfileSettingsComponent,
-    canActivate: [AuthGuard]
+    component: ProfileSettingsComponent
   },
   {
-    path: 'questions',
-    component: MyQuestionsComponent,
-    canActivate: [AuthGuard],
-    resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
-  },
-  {
-    path: 'questions/add',
-    component: QuestionAddUpdateComponent,
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'invite-friends',
-    component: InviteFriendsComponent,
-    canActivate: [AuthGuard]
-  },
+    path: 'my',
+    children: [
+          {
+            path: 'profile/:userid',
+            component: ProfileSettingsComponent
+          },
+          {
+            path: 'questions',
+            component: MyQuestionsComponent,
+            canActivate: [AuthGuard],
+            resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
+          },
+          {
+            path: 'questions/add',
+            component: QuestionAddUpdateComponent,
+            canActivate: [AuthGuard]
+          },
+          {
+            path: 'invite-friends',
+            component: InviteFriendsComponent,
+            canActivate: [AuthGuard]
+          }
+    ]}
 ];

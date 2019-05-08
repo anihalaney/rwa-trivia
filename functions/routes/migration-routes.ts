@@ -98,7 +98,11 @@ class MigrationRoutes {
 
         //  '/update/add/gameoverat'
         this.migrationRoutes.get(`/${RoutesConstants.UPDATE}/${RoutesConstants.ADD}/${RoutesConstants.GAMEOVERAT}`,
-        AuthMiddleware.authTokenOnly, MigrationController.addGameOverAtField);
+            AuthMiddleware.authTokenOnly, MigrationController.addGameOverAtField);
+
+        //  '/remove/accounts'
+        this.migrationRoutes.post(`/${RoutesConstants.REMOVE}/${RoutesConstants.ACCOUNTS}`,
+            AuthMiddleware.authTokenOnly, MigrationController.removeAllAccounts);
 
     }
 }

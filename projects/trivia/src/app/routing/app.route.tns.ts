@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { AuthGuard, CategoriesResolver, TagsResolver } from 'shared-library/core/route-guards';
 import { RecentGamesComponent } from './../components/recent-games/recent-games.component';
 import { PrivacyPolicyComponent } from './../components/privacy-policy/privacy-policy.component';
+import { AchievementsComponent } from '../components';
+import { UserFeedbackComponent } from 'shared-library/shared/mobile/component/user-feedback/user-feedback.component';
 
 export const routes: Routes = [
 
@@ -17,9 +19,8 @@ export const routes: Routes = [
         resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
     },
     {
-        path: 'my',
+        path: 'user',
         loadChildren: './../user/user.module#UserModule',
-        canActivate: [AuthGuard],
         resolve: { 'categories': CategoriesResolver, 'tags': TagsResolver }
     },
     {
@@ -35,4 +36,13 @@ export const routes: Routes = [
         path: 'terms-and-conditions',
         component: PrivacyPolicyComponent
     },
+    {
+        path: 'user-feedback',
+        component: UserFeedbackComponent
+    },
+    {
+        path: 'achievements',
+        component: AchievementsComponent,
+        canActivate: [AuthGuard]
+    }
 ];

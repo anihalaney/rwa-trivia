@@ -1,20 +1,15 @@
-import { Injectable, Inject, NgZone } from '@angular/core';
-import { DbService } from './../db.service';
-import { Observable } from 'rxjs';
-import { User } from './../../../shared/model';
-const firebaseApp = require('nativescript-plugin-firebase/app');
-const firebase = require('nativescript-plugin-firebase');
-// import { firestore } from "nativescript-plugin-firebase";
+import { Injectable, NgZone } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { UserActions, UIStateActions } from './../../store/actions';
-
+import { Observable } from 'rxjs';
+import { DbService } from './../db.service';
+const firebaseApp = require('nativescript-plugin-firebase/app');
 
 @Injectable()
 export class TNSDbService extends DbService {
 
     constructor(private zone: NgZone,
-        protected _store: Store<any>,
-        private userActions: UserActions) {
+        protected _store: Store<any>
+        ) {
         super();
     }
 
@@ -26,6 +21,11 @@ export class TNSDbService extends DbService {
         });
     }
 
+    public CreateDocWithoutDocID(collectionName: string, document: any) {
+        const collectionRef = firebaseApp.firestore().collection(collectionName);
+        return collectionRef.add(document);
+    }
+
     public setDoc(collectionName: string, docId: any, document: any) {
         const userCollection = firebaseApp.firestore().collection(collectionName);
         return userCollection.doc(docId).set(document);
@@ -33,7 +33,7 @@ export class TNSDbService extends DbService {
 
     public updateDoc(collectionName, docId, document) {
         const userCollection = firebaseApp.firestore().collection(collectionName);
-        userCollection.doc(docId).update(document);
+        userCollection.doc(docId).set(document, { merge: true });
     }
 
     public valueChanges(collectionName: string, path?: any, queryParams?: any): Observable<any> {

@@ -1,8 +1,6 @@
-import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
-import { Subscription, Subscribers, Blog } from 'shared-library/shared/model';
-import { DashboardActions, DashboardActionTypes } from '../actions';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
+import { AchievementRule, Subscribers } from 'shared-library/shared/model';
+import { DashboardActions, DashboardActionTypes } from '../actions';
 
 // add subscription Status
 export function subscriptionSaveStatus(state: any = 'NONE', action: DashboardActions): String {
@@ -90,3 +88,12 @@ export function systemStat(state: any = null, action: DashboardActions): any {
     }
 }
 
+export function achievements(state: any = null, action: DashboardActions): AchievementRule[] {
+
+    switch (action.type) {
+        case DashboardActionTypes.LOAD_ACHIEVEMENTS_SUCCESS:
+            return action.payload;
+        default:
+            return state;
+    }
+}

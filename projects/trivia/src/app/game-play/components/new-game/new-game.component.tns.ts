@@ -138,16 +138,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
 
     // update to variable needed to do in ngZone otherwise it did not understand it
-     this.page.on('loaded', () => this.ngZone.run(() => {
+    this.page.on('loaded', () => this.ngZone.run(() => {
       this.renderView = true;
       this.cd.markForCheck();
-     }));
+    }));
   }
 
   ngOnDestroy() {
-
-    this.utils.unsubscribe(this.subscriptions);
-
     this.playerMode = undefined;
     this.showSelectPlayer = undefined;
     this.showSelectCategory = undefined;
@@ -184,6 +181,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     if (this.applicationSettings.lives.enable && this.life === 0) {
       this.redirectToDashboard(this.gameErrorMsg);
       return false;
+    }
+    if (this.gameOptions.playerMode === PlayerMode.Single) {
+      delete this.gameOptions.opponentType;
     }
     this.startNewGame(this.gameOptions);
   }
@@ -249,7 +249,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   navigateToInvite() {
     this.ngOnDestroy();
-    this.router.navigate(['/my/app-invite-friends-dialog']);
+    this.router.navigate(['/user/my/app-invite-friends-dialog']);
   }
 
   redirectToDashboard(msg) {

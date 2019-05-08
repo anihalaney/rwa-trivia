@@ -77,7 +77,14 @@ function isAuthenticated() {
           allow read:  if true; 
           }
       }      
-    }   
+    }
+
+     match /feedback {
+       // a user only can create feedback and can not modify it, anonymous user can also create feedback
+      match /{document=**} {
+        allow create: if true;
+      }
+    }
     
   }
 }

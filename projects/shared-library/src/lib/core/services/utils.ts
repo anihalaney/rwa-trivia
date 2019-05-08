@@ -1,8 +1,8 @@
-import { Injectable, PLATFORM_ID, APP_ID, Inject } from '@angular/core';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
-import { User, Answer } from '../../shared/model';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { Answer, User } from '../../shared/model';
 
 @Injectable()
 export class Utils {

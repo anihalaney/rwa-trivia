@@ -1,4 +1,4 @@
-import { CollectionConstants, GeneralConstants, Question } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, Question } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 
@@ -28,7 +28,9 @@ export class QuestionService {
             const questionResult = await QuestionService.fireStoreClient
                 .doc(`/${QuestionService.QC}/${questionId}`)
                 .get();
-            return Question.getViewModelFromDb(questionResult.data());
+            const question = questionResult.data();
+            question['id'] = (question['id']) ? question['id'] : questionResult['id'];
+            return Question.getViewModelFromDb(question);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -54,7 +56,7 @@ export class QuestionService {
         try {
             return await QuestionService.fireStoreClient
                 .doc(`/${collectionName}/${question.id}`)
-                .set(question);
+                .set(question, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }

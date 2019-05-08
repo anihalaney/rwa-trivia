@@ -1,23 +1,30 @@
 import {
-  Component, OnDestroy, ViewChild, ViewChildren, QueryList, ElementRef,
-  ChangeDetectionStrategy, ChangeDetectorRef
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
-import { ProfileSettings } from './profile-settings';
-import { Utils } from 'shared-library/core/services';
-import { profileSettingsConstants } from 'shared-library/shared/model';
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { select, Store } from '@ngrx/store';
+import { isAvailable, requestPermissions, takePicture } from 'nativescript-camera';
+import * as imagepicker from 'nativescript-imagepicker';
+import * as Toast from 'nativescript-toast';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Utils } from 'shared-library/core/services';
+import { coreState, UserActions } from 'shared-library/core/store';
+import { profileSettingsConstants } from 'shared-library/shared/model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
-import { takePicture, requestPermissions, isAvailable } from 'nativescript-camera';
-import * as Toast from 'nativescript-toast';
-import { coreState, UserActions } from 'shared-library/core/store';
 import { isAndroid } from 'tns-core-modules/platform';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { AppState } from '../../../store';
+import { ProfileSettings } from './profile-settings';
+import * as dialogs from 'tns-core-modules/ui/dialogs';
+import { fromAsset } from 'tns-core-modules/image-source';
+import { ImageCropper } from 'nativescript-imagecropper';
+import { ActivatedRoute } from '@angular/router';
+import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
+import * as utils from 'tns-core-modules/utils/utils';
 
 @Component({
   selector: 'profile-settings',
@@ -35,9 +42,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   dataItem;
   customTag: string;
   private tagItems: ObservableArray<TokenModel>;
-  private facebookUrlStatus = true;
-  private twitterUrlStatus = true;
-  private linkedInUrlStatus = true;
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
@@ -45,21 +49,25 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public imageTaken: ImageAsset;
   public saveToGallery = true;
   public keepAspectRatio = true;
-  public width = 300;
-  public height = 300;
+  public width = 200;
+  public height = 200;
+
+  public items: Array<SegmentedBarItem>;
+  public selectedIndex = 0;
+  tabsTitles: Array<string>;
 
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
-
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
     public utils: Utils,
-    public cd: ChangeDetectorRef) {
-    super(fb, store, userAction, utils, cd);
+    public cd: ChangeDetectorRef,
+    public route: ActivatedRoute) {
+    super(fb, store, userAction, utils, cd, route);
     this.initDataItems();
-
+    requestPermissions();
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         Toast.makeText('Profile is saved successfully').show();
@@ -67,38 +75,103 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       }
       this.cd.markForCheck();
     }));
+    this.tabsTitles = ['Profile', 'Stats'];
+    this.items = [];
+    for (let i = 0; i < this.tabsTitles.length; i++) {
+      const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
+      segmentedBarItem.title = this.tabsTitles[i];
+      this.items.push(segmentedBarItem);
+    }
 
+  }
+
+  onSelectedIndexChange(args) {
+    const segmentedBar = <SegmentedBar>args.object;
+    this.selectedIndex = segmentedBar.selectedIndex;
   }
 
   get dataItems(): ObservableArray<TokenModel> {
     return this.tagItems;
   }
 
+
   onTakePhoto() {
+
+    dialogs.action({
+      message: 'Choose option',
+      cancelButtonText: 'Cancel',
+      actions: ['Camera', 'Gallery']
+    }).then(result => {
+      if (result === 'Camera') {
+        this.changeProfilePictureFromCamera();
+      } else if (result === 'Gallery') {
+        this.changeProfilePictureFromGallery();
+      }
+    });
+  }
+
+  async changeProfilePictureFromCamera() {
     const options = {
+      width: this.width,
+      height: this.height,
       keepAspectRatio: this.keepAspectRatio,
       saveToGallery: this.saveToGallery
     };
 
     if (isAvailable()) {
-      requestPermissions();
-      takePicture(options)
-        .then(imageAsset => {
-          this.imageTaken = imageAsset;
-          const source = new ImageSource();
-          source.fromAsset(imageAsset).then(imageSource => {
-            this.profileImage.image = `data:image/jpeg;base64,${imageSource.toBase64String('jpeg', 100)}`;
-            this.saveProfileImage();
-          });
-        }).catch(err => {
-          console.log(err.message);
-        });
+
+      try {
+        const imageAsset = await takePicture(options);
+        this.imageTaken = imageAsset;
+        const source = new ImageSource();
+        const imageSource = await fromAsset(imageAsset);
+        this.cropImage(imageSource);
+      } catch (error) {
+        console.error(error);
+      }
     }
+  }
+
+  async cropImage(imageSource) {
+    try {
+      const imageCropper: ImageCropper = new ImageCropper();
+      const result: ImageSource = (await imageCropper.show(imageSource,
+        { width: 150, height: 140, lockSquare: false })).image;
+      if (result) {
+        this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
+        this.saveProfileImage();
+        this.cd.detectChanges();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async changeProfilePictureFromGallery() {
+    try {
+      let imageSource = new ImageSource();
+      const context = imagepicker.create({
+        mode: 'single' // use "multiple" for multiple selection
+      });
+      await context.authorize();
+      const selection = await context.present();
+      const imageAsset = selection.length > 0 ? selection[0] : null;
+      imageAsset.options = {
+        width: this.width,
+        height: this.height,
+        keepAspectRatio: true
+      };
+      imageSource = await fromAsset(imageAsset);
+      this.cropImage(imageSource);
+    } catch (error) {
+      console.error(error);
+    }
+
 
   }
 
   saveProfileImage() {
-    this.getUserFromFormValue(this.userForm.value);
+    this.getUserFromFormValue(false, '');
     this.assignImageValues();
     this.saveUser(this.user);
   }
@@ -156,7 +229,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   }
 
-  onSubmit() {
+  onSubmit(isEditSingleField = false, field = '') {
     // validations
     this.userForm.updateValueAndValidity();
 
@@ -169,11 +242,17 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       return;
     }
 
+    if (isEditSingleField) {
+      this.userForm.get(field).disable();
+      this.singleFieldEdit[field] = false;
+    }
+
     // get user object from the forms
-    this.getUserFromFormValue(this.userForm.value);
+    this.getUserFromFormValue(isEditSingleField, field);
     this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
     // call saveUser
     this.saveUser(this.user);
+    this.toggleLoader(false);
 
   }
 
@@ -186,6 +265,11 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         }
         return el.nativeElement.dismissSoftInput();
       });
+  }
+
+  openUrl(url, id) {
+    const fullUrl = `${url}${id}`;
+    utils.openUrl(fullUrl);
   }
 
   ngOnDestroy() {

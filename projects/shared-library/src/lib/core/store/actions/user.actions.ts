@@ -63,6 +63,24 @@ export class UserActions {
     };
   }
 
+
+  static LOAD_OTHER_USER_EXTEDED_INFO = 'LOAD_OTHER_USER_EXTEDED_INFO';
+  loadOtherUserExtendedInfo(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_OTHER_USER_EXTEDED_INFO,
+      payload: userId
+    };
+  }
+
+
+  static LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS = 'LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS';
+  loadOtherUserProfileWithExtendedInfoSuccess(user: User): ActionWithPayload<User> {
+    return {
+      type: UserActions.LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS,
+      payload: user
+    };
+  }
+
   static UPDATE_USER = 'UPDATE_USER';
   updateUser(user: User): ActionWithPayload<User> {
     return {
@@ -175,10 +193,26 @@ export class UserActions {
     };
   }
 
+  static ADD_FEEDBACK = 'ADD_FEEDBACK';
+  addFeedback(feedback): ActionWithPayload<User> {
+    return {
+      type: UserActions.ADD_FEEDBACK,
+      payload: feedback
+    };
+  }
+
   static ADD_USER_PROFILE_SUCCESS = 'ADD_USER_PROFILE_SUCCESS';
   addUserProfileSuccess() {
     return {
       type: UserActions.ADD_USER_PROFILE_SUCCESS,
+      payload: null
+    };
+  }
+
+  static ADD_FEEDBACK_SUCCESS = 'ADD_FEEDBACK_SUCCESS';
+  addFeedbackSuccess() {
+    return {
+      type: UserActions.ADD_FEEDBACK_SUCCESS,
       payload: null
     };
   }

@@ -11,8 +11,6 @@ import { User, Game } from 'shared-library/shared/model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Page } from 'tns-core-modules/ui/page/page';
 
-
-
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
@@ -79,7 +77,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
 
   filterGame(game: Game): boolean {
     return game.GameStatus === GameStatus.AVAILABLE_FOR_OPPONENT ||
-    game.GameStatus === GameStatus.JOINED_GAME ||
+      game.GameStatus === GameStatus.JOINED_GAME ||
       game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE
       || game.GameStatus === GameStatus.WAITING_FOR_RANDOM_PLAYER_INVITATION_ACCEPTANCE;
   }

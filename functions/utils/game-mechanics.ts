@@ -1,14 +1,13 @@
 import {
     Game, GameOperations, GameOptions, GameStatus,
     OpponentType, PlayerMode, PlayerQnA,
-    pushNotificationRouteConstants, schedulerConstants, User, SystemStatConstants, GeneralConstants
+    pushNotificationRouteConstants, schedulerConstants, User, GeneralConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { GameService } from '../services/game.service';
 import { UserService } from '../services/user.service';
 import { PushNotification } from '../utils/push-notifications';
 import { Utils } from './utils';
-import { StatsService } from '../services/stats.service';
 
 export class GameMechanics {
 
@@ -58,7 +57,7 @@ export class GameMechanics {
                     game = GameMechanics.updateRound(game, userId);
                     break;
             }
-            await GameService.updateGame(game.getDbModel());
+            await GameService.setGame(game.getDbModel());
             return true;
         } catch (error) {
             return Utils.throwError(error);
@@ -98,7 +97,7 @@ export class GameMechanics {
                     }
                     const dbGame = game.getDbModel();
                     if (dbGame.id) {
-                        await GameService.updateGame(dbGame);
+                        await GameService.setGame(dbGame);
                     }
                 } else if (playedHours >= schedulerConstants.gameInvitationDuration
                     && (game.GameStatus === GameStatus.WAITING_FOR_FRIEND_INVITATION_ACCEPTANCE ||
@@ -106,7 +105,7 @@ export class GameMechanics {
                     GameMechanics.setGameOverParams(true, GameStatus.INVITATION_TIMEOUT, Utils.getUTCTimeStamp(), game);
                     const dbGame = game.getDbModel();
                     if (dbGame.id) {
-                        await GameService.updateGame(dbGame);
+                        await GameService.setGame(dbGame);
                     }
                 }
             }
@@ -253,7 +252,7 @@ export class GameMechanics {
                     }
                     game.turnAt = Utils.getUTCTimeStamp();
                     game.calculateStat(lastAddedQuestion.playerId);
-                    await GameService.updateGame(game.getDbModel());
+                    await GameService.setGame(game.getDbModel());
                     return false;
                 } else {
                     return true;
@@ -283,7 +282,7 @@ export class GameMechanics {
                 if (lastCurrentUserQuestion.round === lastOtherUserQuestions.round
                     && !lastCurrentUserQuestion.answerCorrect
                     && !lastOtherUserQuestions.answerCorrect) {
-                    game.round = game.round + 1;
+                    game.round = Utils.changeFieldValue(1);
                 }
             }
         }

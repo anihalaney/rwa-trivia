@@ -86,6 +86,25 @@ refer to http://docs.nativescript.org/ui/theme.
 .fa {
   font-family: "FontAwesome", fontawesome-webfont;
 }
+
+.fa-brands {
+  font-family: "Font Awesome 5 Brands", "fa-brands-400";
+}
+
+.far {
+  font-family: "Font Awesome 5 Free", "fa-regular-400";
+}
+
+.fab {
+  font-family: "Font Awesome 5 Brands", "fa-brands-400";
+}
+
+.fas {
+  font-family: "Font Awesome 5 Free", "fa-solid-900";
+  font-weight: 900;
+}
+
+
 .new-btn-s {
   color: red;
 }
@@ -229,4 +248,8 @@ refer to http://docs.nativescript.org/ui/theme.
     background-color:#f1f5f7;
     color:#949494;
   }
+}
+
+Button{
+  border-radius: 0;
 }

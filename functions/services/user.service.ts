@@ -1,7 +1,8 @@
-import { CollectionConstants, GeneralConstants, User, UserConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, GeneralConstants, User, UserConstants, Account } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
-
+import { AccountService } from './account.service';
+import { AppSettings } from '../services/app-settings.service';
 export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
@@ -42,7 +43,7 @@ export class UserService {
         try {
             return await UserService.fireStoreClient
                 .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
-                .update(dbUser);
+                .set(dbUser, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -69,7 +70,7 @@ export class UserService {
      * getUserProfile
      * return user
     */
-    static async getUserProfile(userId: string): Promise<any> {
+    static async getUserProfile(userId: string, extendedInfo = false): Promise<any> {
         try {
             const dbUser: User = await UserService.getUserById(userId);
             const user = new User();
@@ -77,6 +78,29 @@ export class UserService {
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;
+            if (extendedInfo) {
+                user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];
+                user.tags = (dbUser && dbUser.tags) ? dbUser.tags : [];
+
+                // Get App Settings
+                const appSetting = await AppSettings.Instance.getAppSettings();
+                if (appSetting.social_profile) {
+                    for (const socialProfile of appSetting.social_profile) {
+                        if (socialProfile.enable) {
+                            user[socialProfile.social_name] = dbUser[socialProfile.social_name];
+                        }
+                    }
+                }
+                user.account = new Account();
+                const account = await AccountService.getAccountById(userId);
+                user.account.avgAnsTime = (account && account.avgAnsTime) ? account.avgAnsTime : 0;
+                user.account.badges = (account && account.badges) ? account.badges : 0;
+                user.account.categories = (account && account.categories) ? account.categories : 0;
+                user.account.contribution = (account && account.contribution) ? account.contribution : 0;
+                user.account.wins = (account && account.wins) ? account.wins : 0;
+                user.account.losses = (account && account.losses) ? account.losses : 0;
+                user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
+            }
             return user;
         } catch (error) {
             return Utils.throwError(error);

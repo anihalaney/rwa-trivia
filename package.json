@@ -104,6 +104,8 @@
     "nativescript-cardview": "^3.1.1",
     "nativescript-checkbox": "^3.0.3",
     "nativescript-floatingactionbutton": "^5.0.0",
+    "nativescript-imagecropper": "^1.0.5",
+    "nativescript-imagepicker": "^6.1.2",
     "nativescript-loading-indicator": "^2.4.0",
     "nativescript-plugin-firebase": "^7.6.0",
     "nativescript-screenshot": "0.0.2",

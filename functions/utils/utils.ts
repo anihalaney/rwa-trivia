@@ -1,5 +1,6 @@
 import { interceptorConstants, ResponseMessagesConstants, GeneralConstants } from '../../projects/shared-library/src/lib/shared/model';
 import * as functions from 'firebase-functions';
+import * as firebase from 'firebase-admin';
 
 export class Utils {
 
@@ -72,8 +73,11 @@ export class Utils {
         } else {
             websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
         }
-
         return websiteUrl;
-
     }
+
+    static changeFieldValue(value): any {
+        return firebase.firestore.FieldValue.increment(value);
+    }
+
 }

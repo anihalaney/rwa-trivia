@@ -78,7 +78,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       if (status === 'SUCCESS') {
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
         Toast.makeText('Question saved!').show();
-        this.routerExtension.navigate(['/my/questions']);
+        this.routerExtension.navigate(['/user/my/questions']);
         this.actionBarTxt = 'My Question';
         setTimeout(() => {
           this.hideQuestion.emit(false);

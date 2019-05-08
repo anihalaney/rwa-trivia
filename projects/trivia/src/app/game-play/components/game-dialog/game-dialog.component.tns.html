@@ -1,4 +1,5 @@
-<ns-action-bar title="{{actionBarStatus}}" class="Roboto-Regular" showAdd="true" hideMenu="{{isDispayMenu}}"></ns-action-bar>
+<ns-action-bar title="{{actionBarStatus}}" class="Roboto-Regular" showAdd="true" hideHomeIcon="{{isDispayMenu}}" hideMenu="{{isDispayMenu}}">
+</ns-action-bar>
 <StackLayout>
     <StackLayout *ngIf="showLoader && !gameOver" verticalAlignment="center" height="100%" horizontalAlignment="center">
         <StackLayout verticalAlignment="center" height="100%" horizontalAlignment="center" width="100%">
@@ -47,7 +48,8 @@
 
 
             </AbsoluteLayout>
-            <Label text="Loading" textWrap="true" fontSize="17" verticalAlignment="center" horizontalAlignment="center"></Label>
+            <Label text="Loading" textWrap="true" fontSize="17" verticalAlignment="center"
+                horizontalAlignment="center"></Label>
         </StackLayout>
     </StackLayout>
     <StackLayout *ngIf="showBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
@@ -58,22 +60,31 @@
             verticalAlignment="center" textWrap="true"></Label>
     </StackLayout>
 
-    <StackLayout *ngIf="showWinBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
-        <Image *ngIf="correctAnswerCount > 0" src="~/assets/images/score{{correctAnswerCount}}.png" height="70" width="70"
-            marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+    <game-continue *ngIf="showContinueScreen && !gameOver" class="overlay" [userDict]="userDict" [game]="game"
+        [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+        [totalRound]="totalRound" (continueButtonClicked)="continueButtonClicked($event)"
+        (viewQuestionClicked)="viewQuestionClicked($event)">
+    </game-continue>
 
-        <Label text="You Earned" class='text-center' textWrap="true" horizontalAlignment="center" verticalAlignment="center"></Label>
+    <StackLayout *ngIf="showWinBadge && !gameOver" orientation="vertical" verticalAlignment="center" height="100%">
+        <Image *ngIf="correctAnswerCount > 0" src="~/assets/images/score{{correctAnswerCount}}.png" height="70"
+            width="70" marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
+
+        <Label text="You Earned" class='text-center' textWrap="true" horizontalAlignment="center"
+            verticalAlignment="center"></Label>
     </StackLayout>
-    <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge" [categoryName]="categoryName"
-        [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer" [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS" [continueNext]="continueNext"
-        [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn"
-        [otherPlayer]="otherPlayer" (answerClicked)="answerClicked($event)" (okClick)="okClick($event)"
-        (continueClicked)="continueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict"
-        [totalRound]="totalRound" [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [user]="user"
+    <game-question *ngIf="currentQuestion && !showLoader && !showBadge && !showWinBadge && !showContinueScreen"
+        [categoryName]="categoryName" [question]="currentQuestion" [questionIndex]="questionIndex" [timer]="timer"
+        [MAX_TIME_IN_SECONDS]="MAX_TIME_IN_SECONDS" [continueNext]="continueNext" [correctCount]="correctAnswerCount"
+        [noOfQuestions]="questionIndex" [showContinueBtn]="showContinueBtn" [otherPlayer]="otherPlayer"
+        (answerClicked)="answerClicked($event)" (okClick)="okClick($event)" (continueClicked)="continueClicked($event)"
+        (viewQuestionClicked)="viewQuestionClicked($event)" [userDict]="userDict" [totalRound]="totalRound"
+        [turnFlag]="turnFlag" [threeConsecutiveAnswer]="threeConsecutiveAnswer" [user]="user"
         [questionRound]="game.round">
     </game-question>
-    <game-over *ngIf="gameOver" class="overlay" [userDict]="userDict" [game]="game" [categoryName]="categoryName"
-        [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex" [totalRound]="totalRound"
-        (gameOverContinueClicked)="gameOverContinueClicked($event)" (viewQuestionClicked)="viewQuestionClicked($event)">
+    <game-over *ngIf="gameOver && !showContinueScreen" class="overlay" [userDict]="userDict" [game]="game"
+        [categoryName]="categoryName" [correctCount]="correctAnswerCount" [noOfQuestions]="questionIndex"
+        [totalRound]="totalRound" (gameOverContinueClicked)="gameOverContinueClicked($event)"
+        (viewQuestionClicked)="viewQuestionClicked($event)">
     </game-over>
 </StackLayout>

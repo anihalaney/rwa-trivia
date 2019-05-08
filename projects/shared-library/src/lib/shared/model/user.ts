@@ -1,5 +1,6 @@
 import * as firebase from 'firebase/app';
 import { GameOptions } from './game-options';
+import { Account } from './account';
 export class User {
   id?: string;
   userId: string;
@@ -28,7 +29,8 @@ export class User {
   androidPushTokens?: string[];
   iosPushTokens?: string[];
   lastGamePlayOption?: GameOptions;
-
+  account?: Account;
+  achievements: string[];
 
   constructor(authState?: firebase.User & { name: string }) {
     if (authState) {
@@ -58,9 +60,4 @@ export class UserStats {
   constructor() {
     this.leaderBoardStats = {};
   }
-}
-
-export class LeaderBoardUser {
-  userId: string;
-  score: number;
 }

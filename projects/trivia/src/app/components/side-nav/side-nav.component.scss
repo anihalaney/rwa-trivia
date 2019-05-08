@@ -1,4 +1,4 @@
-.card{ border-bottom: 1px solid }
+.card{ border-bottom: 1px solid; max-width:263px; }
 .card {border-color: rgba(204, 204, 204, 0.44); }
 .playwith a{ display: block; padding:20px 25px; position: relative;cursor: pointer }
 .playwith a:after{ content: ""; position: absolute; right: 35px; height: 26px; width: 26px; border-radius: 23px;margin: auto; top: 0; bottom: 0;z-index: 99; transition: 0.3s ease-in-out}
@@ -6,7 +6,12 @@
 .playtext{ display: inline-block;vertical-align: -9px; font-family: 'hindmedium';}
 .playtext span{ display: block; font-size: 18px; letter-spacing: 2px; text-transform: uppercase; margin-top: 2px;}
 .myqestion{ background-position: -179px -22px; width: 30px; height: 30px; margin-right: 16px; }
-
+.store-img-container-div{ display: flex; flex-direction: column; margin-top: 9px;}
+.store-img-container-div span{display: flex; justify-content: center}
+.store-img-container-div{ span { a:hover{ img {opacity: 1;}}}}
+.app-store-img{height: 50px;}
+.play-store-a{height: 77px;}
+.play-store-img{height: 65px;margin-top: 9px;}
 @media screen and ( min-width:1000px){
   .playwith a:hover:after{ right: 30px; }
   .playwith a:hover:before{ right: 40px; }
@@ -22,4 +27,3 @@
 {
   padding: 10px 0;
 }
-

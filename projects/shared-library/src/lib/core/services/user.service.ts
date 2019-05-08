@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, combineLatest, of } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
-    User, Invitation, Friends, QueryParams, QueryParam, friendInvitationConstants, Game,
-    GameStatus, GameOperations
+    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User
 } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
@@ -53,9 +52,18 @@ export class UserService {
 
     }
 
+    addFeedback(feedback): Observable<any> {
+        return this.dbService.CreateDocWithoutDocID('feedback', feedback);
+    }
+
 
     loadOtherUserProfile(userId: string): Observable<User> {
         const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
+        return this.http.get<User>(url);
+    }
+
+    loadOtherUserProfileWithExtendedInfo(userId: string): Observable<User> {
+        const url = `${CONFIG.functionsUrl}/app/user/extendedInfo/${userId}`;
         return this.http.get<User>(url);
     }
 

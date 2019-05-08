@@ -1,0 +1,164 @@
+mat-card {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  mat-card-content {
+    margin-bottom: 0px;
+  }
+  .mat-card-title
+  {
+    display: block !important;
+    margin-top: 7%;
+  }
+  .round {
+    margin-top:10px;
+  }
+  .category-div
+  {
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }
+  .textcenter.clearfix .yourimg 
+  {
+     margin: 0 auto 16px; 
+  }
+  .yourimg img
+  {
+    width: 70px; 
+    height: 60px;
+    border-radius: 50%;
+    display: block; 
+  }
+  .gameOver .yourimg
+  { 
+    width: 94%; 
+    max-width: 70px;
+    border-radius: 50%; 
+    height: auto;
+    margin-bottom: 16px; 
+    border:1px solid; padding: 2px
+  }
+  .div-top-spacing
+  {
+    margin-top: 2%;
+  }
+  .text-style
+  {
+    font-family: 'hindmedium';
+    font-size: 16px;
+  }
+  .vs:after
+  { 
+    content: "Vs"; 
+    position: absolute; 
+    right: -10px; 
+    top: 84px; 
+    font-size: 18px; 
+    font-family: 'hindmedium';
+    height:25px; 
+    color:#000;
+  }
+  .mat-expansion-panel:not([class*=mat-elevation-z]) {
+     box-shadow:none;
+  }
+  ul
+  {
+    text-align: left;
+    width: 100%;
+  }
+  .your-answer-label
+  {
+    padding-left: 25px;
+  }
+  ul li
+  {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding-bottom: 2%;
+    padding-top: 2%;
+    display: flex;
+    padding-left: 2%;
+  
+  }
+  ul li:last-child{ border-bottom: 0 }
+  
+  .li-section1
+  {
+    width: 80%;
+    float: left;
+  }
+  .li-section2
+  {
+    width: 20%;
+    float:right;
+  }
+  .mat-expansion-panel-header-description, .mat-expansion-panel-header-title {
+  
+     margin-right: 0px; 
+  }
+  .mat-card-content {
+      display: block;
+      margin-bottom: 0px; 
+  }
+  #share-content
+  {
+    padding-top: 12%;
+  }
+  .main-div
+  {
+    min-height:480px !important;
+  }
+  .score-div-height
+  {
+    min-height: 30px;
+  } 
+  
+  @media (max-width: 768px){
+    .yourimg-spacing{
+      margin-top: 44px;
+    }
+    .vs:after {
+      margin-top: 102px;
+      width: 103%;
+    }
+  }
+  
+  @media (max-width: 568px){
+    .vs:after {
+      margin-top: 98px;
+      width: 103%;
+    }
+  }
+  
+  @media (max-width: 460px){
+    .vs:after {
+      margin-top: 94px;
+      width: 103%;
+    }
+  }
+
+  .round-value{
+      color: #000;
+  }
+
+.continue-button {
+  padding-top: 12px;
+}
+
+.continue-btn{
+  background-color:#f50057;
+  color: #FFF;
+  margin-right: 20px;
+  padding: 4px 42px;
+  width: auto;
+}
+
+.dashboard {
+  margin-top:  16px;
+}
+
+.dashboard-link{
+  font-weight: bold;
+  color: #3b5998;
+  cursor: pointer;
+}

@@ -86,7 +86,9 @@ export enum pushNotificationRouteConstants {
     FRIEND_REQUEST = 'friend-request',
     GAME_PLAY_NOTIFICATIONS = 'game-play-notifications',
     GAME_REMAINING_TIME_NOTIFICATIONS = 'game-play-time-notifications',
-    FRIEND_NOTIFICATIONS = 'friend-notifications'
+    FRIEND_NOTIFICATIONS = 'friend-notifications',
+    QUESTION_NOTIFICATIONS = 'my/questions',
+    ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
 }
 
 
@@ -100,7 +102,7 @@ export enum CollectionConstants {
     INVITATIONS = 'invitations',
     FRIENDS = 'friends',
     GAMES = 'games',
-    LEADER_BOARD_STATS_FORWARD_SLASH_CATEGORIES = 'leader_board_stats/categories',
+    LEADER_BOARD_STATS = 'leader_board_stats',
     QUESTIONS = 'questions',
     UNPUBLISHED_QUESTIONS = 'unpublished_questions',
     STATS = 'stats',
@@ -112,6 +114,8 @@ export enum CollectionConstants {
     TAG_LIST = '/tagList',
     LISTS_FORWARD_SLASH_TAGS = 'lists/tags',
     STATS_SYSTEM = 'system',
+    ACHIEVEMENTS = 'achievements',
+    ACHIEVEMENT_RULES = 'achievement_rules',
 }
 
 export enum UserConstants {
@@ -157,7 +161,8 @@ export enum GeneralConstants {
     Error_Message = 'Error : ',
     BIT_WISER_DEV_STORAGE_BUCKET_NAME = 'rwa-trivia-dev-e57fc.appspot.com',
     BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com',
-    GAME_EXPIRED_HOURS = 32 // hr
+    GAME_EXPIRED_HOURS = 32, // hr
+    NAME = 'name'
 }
 
 export enum SocialShareConstants {
@@ -243,11 +248,27 @@ export enum ResponseMessagesConstants {
     LIVES_ADDED = 'Lives added successfully !!',
     CHECK_FIRESTORE_DB_FOR_MIGRATION_DETAILS = 'Check firestore db for migration details',
     ADDED_GAME_OVER__FIELDS = 'added gameOverAt fields',
-
+    REMOVE_ALL_ACCOUNTS = 'Remove all accounts',
+    ACHIEVEMENT_PROPERTY_NOT_FOUND = 'Achievement property not found',
+    ACHIEVEMENT_NAME_NOT_FOUND = 'Achievement name not found',
+    DISPLAY_ORDER_NOT_FOUND = 'Display order not found',
+    ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully'
 }
 
 export enum FriendConstants {
     BR_HTML = '<br />',
+}
+
+export enum AchievementConstants {
+    PROPERTY_DOT_NAME = 'property.name',
+    GREATER_THAN = '>',
+    GREATER_THAN_OR_EQUAL = '>=',
+    LESS_THAN = '<',
+    LESS_THAN_OR_EQUAL = '<=',
+    DOUBLE_EQUAL = '==',
+    NOT_EQUAL = '!=',
+    DEFAULT_ACHIEVEMENT_ICON_PATH = '/assets/images/default-achievement.png',
+    NA = 'NA'
 }
 
 export enum MigrationConstants {
@@ -326,5 +347,14 @@ export enum RoutesConstants {
     WIDTH = 'width',
     HEIGHT = 'height',
     COUNT = 'count',
-    GAMEOVERAT= 'gameoverat',
+    GAMEOVERAT = 'gameoverat',
+    EXTENDEDINFO = 'extendedInfo',
+    ACCOUNTS = 'accounts',
+    ACHIEVEMENT = 'achievement',
+    RULES = 'rules'
+}
+
+export enum AppStoreUrl {
+    PLAYSTOREURL = 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1',
+    APPSTOREURL = 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8'
 }

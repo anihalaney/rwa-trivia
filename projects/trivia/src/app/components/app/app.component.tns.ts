@@ -15,7 +15,7 @@ import { coreState } from 'shared-library/core/store';
 import { User } from 'shared-library/shared/model';
 import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
-import { FirebaseAuthService } from '../../../../../shared-library/src/lib/core/auth/firebase-auth.service';
+import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -43,7 +43,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {
-        this.routerExtension.navigate(['my/invite-friends']);
+        this.routerExtension.navigate(['user/my/invite-friends']);
       }
     }));
 

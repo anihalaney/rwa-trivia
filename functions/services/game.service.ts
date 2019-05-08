@@ -93,7 +93,9 @@ export class GameService {
                 // game not found
                 return;
             }
-            return Game.getViewModel(gameData.data());
+            const game = gameData.data();
+            game['id'] = (game['id']) ? game['id'] : gameData['id'];
+            return Game.getViewModel(game);
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -107,7 +109,7 @@ export class GameService {
         try {
             return await GameService.gameFireStoreClient
                 .doc(`/${CollectionConstants.GAMES}/${dbGame.id}`)
-                .set(dbGame);
+                .set(dbGame, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -139,7 +141,7 @@ export class GameService {
         try {
             return await GameService.gameFireStoreClient
                 .doc(`/${CollectionConstants.GAMES}/${dbGame.id}`)
-                .update(dbGame);
+                .set(dbGame, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }

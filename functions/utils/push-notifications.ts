@@ -12,13 +12,13 @@ export class PushNotification {
         try {
             const dbUser: User = await UserService.getUserById(userId);
             const notificationPromises = [];
-            if (dbUser.androidPushTokens) {
+            if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
                 for (const token of dbUser.androidPushTokens) {
                     notificationPromises.push(PushNotification.sendNotification(token, title, body, data));
                 }
             }
 
-            if (dbUser.iosPushTokens) {
+            if (dbUser.iosPushTokens && dbUser.iosPushTokens.length > 0) {
                 for (const token of dbUser.iosPushTokens) {
                     notificationPromises.push(PushNotification.sendNotification(token, title, body, data));
                 }
@@ -114,6 +114,22 @@ export class PushNotification {
                             `${otherUser.displayName} has sent you a friend request.`, data);
                     console.log('result', result);
                     console.log(`${otherUser.displayName} has sent you a friend request.`);
+                    break;
+
+                case pushNotificationRouteConstants.QUESTION_NOTIFICATIONS:
+                    msg_data = { 'messageType': pushNotificationRouteConstants.QUESTION_NOTIFICATIONS };
+                    result = await PushNotification
+                        .sendNotificationToDevices(currentTurnPlayerId, 'Question Status Update',
+                            data, msg_data);
+                    console.log('result', result);
+                    break;
+                case pushNotificationRouteConstants.ACHIEVEMENT_NOTIFICATION:
+                    msg_data = { 'messageType': pushNotificationRouteConstants.ACHIEVEMENT_NOTIFICATION };
+                    result = await PushNotification
+                        .sendNotificationToDevices(currentTurnPlayerId, 'Achievement Notification',
+                            data, msg_data);
+                    console.log('result', result);
+                    console.log(`${msg_data} `);
                     break;
 
             }

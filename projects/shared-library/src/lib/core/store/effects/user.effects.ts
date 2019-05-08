@@ -40,6 +40,15 @@ export class UserEffects {
             mergeMap((userId: string) => this.svc.loadOtherUserProfile(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileSuccess(user)));
 
+    @Effect()
+    // handle location update
+    loadOtherUserExtendedInfo$ = this.actions$
+        .pipe(ofType(UserActions.LOAD_OTHER_USER_EXTEDED_INFO))
+        .pipe(map((action: ActionWithPayload<string>) => action.payload),
+            distinct(),
+            mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
+            map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
+
 
     // Update User
     @Effect()
@@ -154,6 +163,15 @@ export class UserEffects {
                 );
             })
         );
+
+    // Save feedback
+    @Effect()
+    addFeedback$ = this.actions$
+        .pipe(ofType(UserActions.ADD_FEEDBACK))
+        .pipe(map((action: ActionWithPayload<any>) => action.payload),
+        switchMap((feedback: any) => this.svc.addFeedback(feedback)),
+        map((res: any) => this.userActions.addFeedbackSuccess()));
+
     // Add User lives
     @Effect()
     AddUserLives$ = this.actions$

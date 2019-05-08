@@ -2,8 +2,8 @@ import { Component, Input, Output, EventEmitter, OnDestroy, ChangeDetectionStrat
 import { Question, Answer, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import { QuestionActions } from './../../../../../../shared-library/src/lib/core/store/actions';
-import { Utils } from './../../../../../../shared-library/src/lib/core/services';
+import { QuestionActions } from 'shared-library/core/store/actions';
+import { Utils } from 'shared-library/core/services';
 import { Subscription } from 'rxjs';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -84,6 +84,9 @@ export class QuestionComponent implements OnDestroy {
 
   }
 
+  rippleTap(answer) {
+    this.answerButtonClicked(answer);
+  }
   ngOnDestroy(): void {
 
   }

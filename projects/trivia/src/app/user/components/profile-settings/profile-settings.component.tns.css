@@ -2,6 +2,9 @@
     padding-bottom: 25;
 }
 
+.view-profile{
+    background-color: #e50051;
+}
 .profile-settings Button {
     color: #ffffff;
     background-color: #89C24F;
@@ -9,7 +12,7 @@
     border-radius: 3;
 }
 
-.profile-settings>.input-field>.input, .profile-settings>.list-view>.input-field>.input {
+.profile-settings>.profile-settings-card>.cardStyle>.input-field> GridLayout>.input, .profile-settings>.profile-settings-card>.cardStyle>.profile>.input-field>.input, .profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view>.input-field>.input {
     padding: 15;
     width: 325;
     border: none;
@@ -18,13 +21,13 @@
     border-bottom-color: #D3D3D3;
 }
 
-.profile-settings>.input-field>.title {
+.profile-settings>.profile-settings-card>.cardStyle>.input-field>.title {
     font-weight: 500;
     color: black;
     font-size: 18;
 }
 
-.profile-settings>.list-view>.grid-label {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view>.grid-label {
     padding-left: 30;
     padding-right: 25;
     padding-top: 15;
@@ -35,11 +38,11 @@
     font-size: 12;
 }
 
-.profile-settings>.list-view>.grid-label>.grid-label-text {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view>.grid-label>.grid-label-text {
     padding-top: 4;
 }
 
-.profile-settings>.list-view StackLayout>GridLayout, .profile-settings>.list-view>.sub-list-view, .profile-settings>.privacy-area, .profile-settings>.profile-buttons {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view StackLayout>GridLayout, .profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view>.sub-list-view, .profile-settings>.profile-settings-card>.cardStyle>.profile>.privacy-area, .profile-settings>.profile-settings-card>.cardStyle>.profile>.profile-buttons {
     border-bottom-width: 1;
     border-bottom-color: #D3D3D3;
     padding-left: 15;
@@ -52,7 +55,7 @@
     color: black;
 }
 
-.profile-settings>.list-view StackLayout>GridLayout .input-label {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view StackLayout>GridLayout .input-label {
     padding-bottom: 10;
     font-size: 16;
 }
@@ -63,7 +66,7 @@
     font-weight: 100;
 }
 
-.profile-settings>.list-view RadAutoCompleteTextView {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view RadAutoCompleteTextView {
     border-width: 1;
     border-color: #D3D3D3;
     border-radius: 3;
@@ -71,21 +74,21 @@
     padding-top: 0;
 }
 
-.profile-settings>.list-view StackLayout>GridLayout>StackLayout>Button {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view StackLayout>GridLayout>StackLayout>Button {
     padding: 5;
     margin-left: 10;
 }
 
-.profile-settings>.list-view>.sub-list-view>.sub-list-label {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view>.sub-list-view>.sub-list-label {
     font-size: 16;
     padding-bottom: 5;
 }
 
-.profile-settings>.list-view>.sub-list-view {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view>.sub-list-view {
     padding-bottom: 5;
 }
 
-.profile-settings>.list-view>.sub-list-view StackLayout>GridLayout {
+.profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view>.sub-list-view StackLayout>GridLayout {
     border-bottom-width: 0;
     padding-bottom: 0;
     color: #A9A9A9
@@ -182,4 +185,30 @@
     margin-top: 10;
     border-color: #b7b7b7;
     border-width: 1;
+}
+
+.mt-30 {
+    margin-top: 30;
+}
+
+.padding-10 {
+    padding: 10;
+}
+
+.edit-profile-btn {
+    padding: 10 20;
+    border-radius: 4;
+    background-color: #3e5b95;
+    color: #fff;
+    width:auto;
+    font-size: 16;
+}
+
+.stats-main {
+    margin-top: 40;
+}
+
+.stats {
+    border-bottom-width:1;
+    border-color:#c8c8c8;
 }

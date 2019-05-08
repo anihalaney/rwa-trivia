@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map, filter, catchError } from 'rxjs/operators';
-import { SocialService, StatsService } from '../../../../../../shared-library/src/lib/core/services';
-import { Subscribers, Blog, RouterStateUrl, SystemStats } from 'shared-library/shared/model';
+import { SocialService, StatsService, AchievementService } from 'shared-library/core/services';
+import { Subscribers, Blog, RouterStateUrl, SystemStats, AchievementRule } from 'shared-library/shared/model';
 import { DashboardActionTypes } from '../actions';
 import * as dashboardActions from '../actions/dashboard.actions';
 import { UploadTaskSnapshot } from '@angular/fire/storage/interfaces';
@@ -99,9 +99,23 @@ export class DashboardEffects {
                         ), catchError(err => of(new dashboardActions.LoadSystemStatError(err)))
                     )));
 
+        // Load Achievements
+        @Effect()
+        getAchievements$ = this.actions$
+            .pipe(ofType(DashboardActionTypes.LOAD_ACHIEVEMENTS))
+            .pipe(
+                switchMap((action: dashboardActions.LoadAchievements) =>
+                    this.achievementService.getAchievements().pipe(
+                        map((achievements: AchievementRule[]) => {
+                            return new dashboardActions.LoadAchievementsSuccess(achievements);
+                        }
+                        )
+                    )));
+
     constructor(
         private actions$: Actions,
         private socialService: SocialService,
-        private statsService: StatsService
+        private statsService: StatsService,
+        private achievementService: AchievementService
     ) { }
 }

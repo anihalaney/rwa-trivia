@@ -16,6 +16,7 @@ export function user(state: any = null, action: ActionWithPayload<User>): User {
 
 export function userDict(state: { [key: string]: User } = {}, action: ActionWithPayload<User>): { [key: string]: User } {
   switch (action.type) {
+    case UserActions.LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS:
     case UserActions.LOAD_OTHER_USER_PROFILE_SUCCESS:
       const users = { ...state };
       if (action.payload) {
@@ -92,6 +93,19 @@ export function userProfileSaveStatus(state: any = 'NONE', action: ActionWithPay
       return null;
   }
 }
+
+// feedback
+export function feedback(state: any = 'NONE', action: ActionWithPayload<String>): String {
+  switch (action.type) {
+    case UserActions.ADD_FEEDBACK:
+      return action.payload;
+    case UserActions.ADD_FEEDBACK_SUCCESS:
+      return 'SUCCESS';
+    default:
+      return null;
+  }
+}
+
 export function account(state: any = null, action: ActionWithPayload<any>) {
   switch (action.type) {
     case UserActions.LOAD_ACCOUNT_SUCCESS:

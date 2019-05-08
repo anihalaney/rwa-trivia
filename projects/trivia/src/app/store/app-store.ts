@@ -2,7 +2,7 @@ import * as rootStoreReducers from './reducers';
 import * as gamePlayStore from '../game-play/store';
 import * as userStore from '../user/store';
 import * as bulkStore from '../bulk/store';
-import * as coreStore from '../../../../shared-library/src/lib/core/store';
+import * as coreStore from 'shared-library/core/store';
 import * as dashboardStore from '../dashboard/store';
 
 

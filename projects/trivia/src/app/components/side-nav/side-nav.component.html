@@ -1,18 +1,29 @@
 <profile-card [user]="user"></profile-card>
 <recent-games></recent-games>
 <div class="card playwith">
-  <a [routerLink]="['/my/questions']" tabindex="1">
+  <a [routerLink]="['user/my/questions']" tabindex="1">
     <span class="sprite myqestion"></span>
     <span class="playtext">Submit
       <span>Questions</span>
     </span>
   </a>
 </div>
-<user-stats-card></user-stats-card>
 
+<div class="card">
+  <mat-card-content>
+    <mat-tab-group fxFlex mat-stretch-tabs>
+      <mat-tab fxFlex label="Stats View">
+         <user-stats-card></user-stats-card>
+      </mat-tab>
+      <mat-tab fxFlex label="Achievements" *ngIf="applicationSettings && applicationSettings.display_achievements">
+        <app-achievements></app-achievements>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</div>
 
 <div class="card playwith">
-  <a [routerLink]="['/my/invite-friends']" tabindex="2">
+  <a [routerLink]="['/user/my/invite-friends']" tabindex="2">
     <span class="sprite playwithicon"></span>
     <span class="playtext">
       <span>Friends</span>
@@ -33,4 +44,16 @@
   </share-button>
   <share-button [theme]="'circles-dark'" [button]="'linkedin'" [size]="4" [url]="blogUrl" [autoSetMeta]="false">
   </share-button>
+</div>
+<div class="card social-icon textcenter">
+  <div class="store-img-container-div">
+    <span>
+      <a [href]="appStoreUrl" target="_blank"><img class="app-store-img" style="height: 50px;"
+          src="/assets/images/appstore-badge.svg" /></a>
+    </span>
+    <span>
+      <a class="play-store-a" target="_blank" [href]='playStoreUrl'><img alt='Get it on Google Play'
+          class="play-store-img" src='assets/images/google-play-badge.png' /></a>
+    </span>
+  </div>
 </div>

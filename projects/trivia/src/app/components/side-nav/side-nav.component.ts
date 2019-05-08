@@ -3,10 +3,11 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { User } from 'shared-library/shared/model';
+import { User, AppStoreUrl, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { coreState } from 'shared-library/core/store';
 
 @Component({
   selector: 'side-nav',
@@ -21,11 +22,19 @@ export class SideNavComponent implements OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   blogUrl = 'https://bitwiser.io';
+  appStoreUrl = AppStoreUrl.APPSTOREURL;
+  playStoreUrl = AppStoreUrl.PLAYSTOREURL;
   subscriptions = [];
+  applicationSettings: ApplicationSettings;
 
   constructor(private store: Store<AppState>, private router: Router, private utils: Utils) {
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+      }
+    }));
   }
 
   ngOnDestroy() {

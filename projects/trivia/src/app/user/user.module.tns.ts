@@ -22,7 +22,7 @@ import {
     InviteFriendsComponent,
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent,
+    InviteMailFriendsComponent
   ],
   imports: [
     // rwa modules
