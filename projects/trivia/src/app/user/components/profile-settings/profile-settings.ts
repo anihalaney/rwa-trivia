@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import { Observable, combineLatest } from 'rxjs';
-import { map, skipWhile, flatMap } from 'rxjs/operators';
+import { map, skipWhile, flatMap, switchMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
@@ -83,7 +83,7 @@ export class ProfileSettings {
                 skipWhile(params => !params.userid),
                 map(params => this.userId = params.userid),
                 flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
-                flatMap(user => {
+                switchMap(user => {
                     if (user && user.userId === this.userId) {
                         this.user = user;
                         this.userType = UserType.userProfile;
@@ -125,15 +125,12 @@ export class ProfileSettings {
             this.store.select(categoryDictionary),
             this.initializeSocialSetting(),
         ).pipe(map(values => {
-            this.account = values[0] ? values[0] : new Account();
-            this.categories = values[1] ? values[1] : [];
-            this.categoryDict = values[2] ? values[2] : {};
+            this.account = values[0] || new Account();
+            this.categories = values[1] || [];
+            this.categoryDict = values[2] || {};
 
             this.userCopyForReset = cloneDeep(this.user);
             this.createForm(this.user);
-
-            this.filteredTags$ = this.userForm.get('tags').valueChanges
-                .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
             if (this.user.profilePictureUrl) {
                 this.profileImage.image = this.user.profilePictureUrl;
@@ -245,6 +242,9 @@ export class ProfileSettings {
             tagsArray: tagsFA ? tagsFA : [],
             profilePicture: [user.profilePicture]
         });
+
+        this.filteredTags$ = this.userForm.get('tags').valueChanges
+        .pipe(map(val => val.length > 0 ? this.filter(val) : []));
 
         this.afterFormCreate();
         if (!this.isEnableEditProfile) {
