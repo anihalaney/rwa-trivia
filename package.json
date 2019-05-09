@@ -4,7 +4,10 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "io.bitwiser.trivia.dev"
+    "id": "io.bitwiser.trivia.dev",
+    "tns-android": {
+      "version": "5.3.1"
+    }
   },
   "scripts": {
     "ng": "ng",
