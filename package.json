@@ -4,13 +4,7 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "io.bitwiser.trivia.dev",
-    "tns-android": {
-      "version": "5.1.0"
-    },
-    "tns-ios": {
-      "version": "5.1.1"
-    }
+    "id": "io.bitwiser.trivia.dev"
   },
   "scripts": {
     "ng": "ng",
@@ -99,7 +93,7 @@
     "hammerjs": "^2.0.8",
     "jasmine-marbles": "^0.4.1",
     "lodash": "^4.17.11",
-    "nativescript-angular": "^7.1.0",
+    "nativescript-angular": "^7.2.3",
     "nativescript-camera": "^4.1.1",
     "nativescript-cardview": "^3.1.1",
     "nativescript-checkbox": "^3.0.3",
@@ -123,7 +117,7 @@
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.3.3",
     "stream": "0.0.2",
-    "tns-core-modules": "^5.1.1",
+    "tns-core-modules": "^5.4.0-next-2019-05-08-130628-04",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -150,8 +144,8 @@
     "karma-coverage-istanbul-reporter": "2.0.4",
     "karma-jasmine": "2.0.1",
     "karma-jasmine-html-reporter": "1.4.0",
-    "nativescript-dev-typescript": "^0.7.8",
-    "nativescript-dev-webpack": "^0.18.5",
+    "nativescript-dev-typescript": "^0.9.0",
+    "nativescript-dev-webpack": "^0.21.2",
     "ng-packagr": "^4.4.5",
     "protractor": "^5.4.2",
     "shelljs": "^0.8.3",
