@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output, ViewContainerRef, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
-import * as app from 'application';
+import * as app from 'tns-core-modules/application';
 import * as firebase from 'nativescript-plugin-firebase';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Store, select } from '@ngrx/store';

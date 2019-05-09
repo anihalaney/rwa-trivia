@@ -7,9 +7,9 @@ import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { UserActions } from 'shared-library/core/store/actions';
 import { RouterExtensions } from 'nativescript-angular/router';
-import * as Platform from 'platform';
+import * as Platform from 'tns-core-modules/platform';
 import { isAndroid } from 'tns-core-modules/platform';
-import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'application';
+import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
 import { User } from 'shared-library/shared/model';
