@@ -17,6 +17,7 @@ import { CountryListComponent } from "../countryList/countryList.component";
 import { NgModel } from "@angular/forms";
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
+import {PhoneNumberValidationProvider} from '../countryList/phone-number-validation.provider';
 
 @Component({
   selector: 'login',
@@ -36,12 +37,11 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     text: ''
   };
   subscriptions = [];
-  @ViewChild('mobileNumber') mobileNumber: NgModel;
+  @ViewChild('phoneNumber') phoneNumber: NgModel;
   isCountryCodeOpened = false;
   isCountryCodeError;
   input: any;
   country: any;
-  mobileSigninError = '';
 
   constructor(
     private modalDialogService: ModalDialogService,
@@ -53,45 +53,50 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     private firebaseAuthService: FirebaseAuthService,
     private utils: Utils,
     public cd: ChangeDetectorRef,
-    private viewContainerRef: ViewContainerRef) {
-    super(fb, store);
+    private viewContainerRef: ViewContainerRef,
+    private phonenumber: PhoneNumberValidationProvider) {
+    super(fb, store, cd);
     this.page.actionBarHidden = true;
 
     this.input = {
         selectedCountry: 'United States',
         countryCode: '+1',
-        mobileNumber: '',
+        phoneNumber: '',
         country: 'us',
     };
   }
 
 
-  signInWithPhone() {
+  private validateNumber(): boolean {
+    return this.phonenumber.isValidMobile(this.input.phoneNumber, this.input.country);
+  }
+
+
+  async signInWithPhone() {
     if (this.input.selectedCountry === '') {
         this.isCountryCodeError = true;
         return false;
     }
 
-    this.mobileNumber.control.setErrors(this.mobileNumber.validator(this.mobileNumber.control));
-    this.mobileNumber.control.markAsDirty();
-    this.cd.markForCheck();
-
-    if (!this.mobileNumber.valid) {
+    if (!this.validateNumber()) {
+      this.phoneNumber.control.setErrors({'invalid': true});
+      this.phoneNumber.control.markAsDirty();
+      this.cd.markForCheck();
       return false;
     }
 
-    const self = this;
-    this.firebaseAuthService.phoneLogin( `${this.input.countryCode}${this.input.mobileNumber}` ).then(
-        function (result) {
-          JSON.stringify(result);
-          self.redirectTo();
-        },
-        function (errorMessage) {
-          console.error(errorMessage);
-          self.mobileSigninError = errorMessage;
-          self.cd.markForCheck();
-        }
-    );
+    try {
+      const result = await this.firebaseAuthService.phoneLogin( `${this.input.countryCode}${this.input.phoneNumber}` );
+      if (result) {
+        JSON.stringify(result);
+        this.redirectTo();
+      }
+
+    } catch ( errorMessage ) {
+      console.error(errorMessage);
+      this.showMessage('error', errorMessage);
+      this.cd.markForCheck();
+    }
   }
 
   onSelectCountry() {

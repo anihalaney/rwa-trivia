@@ -1,28 +1,23 @@
-import { Pipe, PipeTransform } from "@angular/core";
+import { Pipe, PipeTransform } from '@angular/core';
+import { Country } from 'shared-library/core/components/countryList/model/country.model';
 
-@Pipe({ name: "searchCountry" })
+@Pipe({
+    name: 'searchCountry'
+})
 export class SearchCountryFilterPipe implements PipeTransform {
 
-    filterValue: any;
-    newValue: any;
-    name = "harsh";
-    transform(value: string, args: string): any {
-
-        if (!value) { return value; }
-        if (args == null || args === "all" || args === "") {
+    transform(value: Array<Country>, args: string): any {
+        if (args == null || args === 'all' || args === '') {
             return value;
         }
-        value = JSON.stringify(value);
-        this.filterValue = JSON.parse(value);
-        this.filterValue = this.filterValue.filter(function (val: any) {
-            if (val.name.toUpperCase().match(args.toUpperCase())) {
-                return val.name;
-            } if (val.dialCode.toUpperCase().match(args.toUpperCase())) {
-                return val.dialCode;
-            } else {
-                return;
-            }
-        });
-        return this.filterValue;
+
+        if (value) {
+            args = args.replace('+', '');
+            return value.filter((val: Country) => {
+               return  val.name.toUpperCase().search(args.toUpperCase()) >= 0 || val.dialCode.toUpperCase().search(args.toUpperCase()) >= 0;
+            });
+        } else {
+            return;
+        }
     }
 }

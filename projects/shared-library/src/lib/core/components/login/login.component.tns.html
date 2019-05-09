@@ -15,15 +15,12 @@
                           <Image col="0" col="0" src="~/assets/flags/{{input.country}}.png" height="18" backgroundColor="gray" width="29" class="img-rounded"></Image>
                           <Label row="0" col="1"  text="{{input.countryCode}}" class="p-l-10"  textWrap="true"></Label>
                       </GridLayout>
-
-                      <!-- <TextField [ngClass]="{'input-error':isCountryCodeError}" editable="false" row="0" col="0" hint="Country" keyboardType="number" [(ngModel)]="input.countryCode"  (tap)="onSelectCountry()"  class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15"></TextField>           -->
                       <Label text="" row="0" col="1" class="label-style p-b-5"></Label>
-                      <TextField hint="Phone number" class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15" #mobileNumber="ngModel" [(ngModel)]="input.mobileNumber" keyboardType="number" [ngClass]="{'input-error': (mobileNumber.dirty && mobileNumber.errors) }" row="0" col="2" maxlength="10" required mobileNumber></TextField>
+                      <TextField hint="Phone number" class="input-border-field Roboto-Regular" ios:borderColor="#f7f8fa" ios:borderWidth="1"  backgroundColor="#f7f8fa" padding="17 15 15 15" #phoneNumber="ngModel" [(ngModel)]="input.phoneNumber" keyboardType="number" [ngClass]="{'input-error': (phoneNumber.dirty && phoneNumber.errors) }" row="0" col="2" maxlength="10" required phoneNumber></TextField>
                   </GridLayout>
                   <Label *ngIf="isCountryCodeError"  marginTop="6" textWrap="true" class="text-center error" text="Country code is required"></Label>
-                  <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="mobileNumber.dirty && mobileNumber.errors && mobileNumber.errors.required" text="Phone number is required"></Label>
-                  <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="mobileNumber.errors && !mobileNumber.errors.required" text="Invalid Phone number"></Label>
-                  <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="mobileSigninError != ''" text="Enter a valid phone number"></Label>
+                  <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="phoneNumber.dirty && phoneNumber.errors && phoneNumber.errors.required" text="Phone number is required"></Label>
+                  <Label  marginTop="6" textWrap="true" class="text-center error" *ngIf="phoneNumber.errors && !phoneNumber.errors.required" text="Invalid Phone number"></Label>
               </StackLayout>
 
               <Button text="VERIFY" width="50%" marginTop="30" marginBottom="20" (rippleTap)="signInWithPhone()" [disabled]="loginForm.invalid"

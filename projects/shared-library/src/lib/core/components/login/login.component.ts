@@ -22,15 +22,15 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   ui: any;
   uiConfig = {
     callbacks: {
-      signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+      signInSuccessWithAuthResult: (authResult, redirectUrl) => {
+        // used this function to return false for do not redirect after success
         return false;
-    },
-    signInFailure: function(error): Promise<any>  {
-      return this.handleUIError(error);
     }},
+    autoUpgradeAnonymousUsers: false,
     signInOptions: [
       firebase.auth.PhoneAuthProvider.PROVIDER_ID,
     ],
+    signInFlow: 'popup',
     tosUrl: TermsAndPrivacyUrlConstant.TERMSANDCONDITIONSURL,
     privacyPolicyUrl: function() {
       window.location.assign(TermsAndPrivacyUrlConstant.PRIVACYURL);
@@ -42,8 +42,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<LoginComponent>,
     private uiStateActions: UIStateActions,
     private firebaseAuthService: FirebaseAuthService,
-    private cd: ChangeDetectorRef) {
-    super(fb, store);
+    public cd: ChangeDetectorRef) {
+    super(fb, store, cd);
   }
 
   ngOnInit() {
@@ -51,15 +51,13 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   }
 
+
   phoneSignIn() {
     super.phoneSignIn();
-    setTimeout(() => {
       if (!this.ui) {
         this.ui = new firebaseui.auth.AuthUI(firebase.auth());
       }
       this.ui.start('#firebaseui-auth-container', this.uiConfig);
-    }, 100);
-
   }
 
   emailSignIn() {

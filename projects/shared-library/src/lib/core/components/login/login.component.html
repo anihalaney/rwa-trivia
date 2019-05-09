@@ -22,7 +22,7 @@
           <div class="heading"  *ngIf="signInMethod === 'phone'">
               <span>Sign in with Phone</span>
           </div>
-          <div id="firebaseui-auth-container" *ngIf="signInMethod === 'phone'"></div>
+          <div id="firebaseui-auth-container" [class.hide]="signInMethod !== 'phone'"></div>
          
           <form *ngIf="signInMethod === 'email'" (ngSubmit)="onSubmit()" class="sign-in-form" [formGroup]="loginForm" novalidate>
             <input type="hidden" formControlName="mode"  aria-label="hidden">

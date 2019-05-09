@@ -38,6 +38,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { FirebaseAuthService } from './auth/firebase-auth.service';
 import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
 import { CountryCode } from './components/countryList/country-code';
+import { PhoneNumberValidationProvider } from './components/countryList/phone-number-validation.provider';
 
 
 @NgModule({
@@ -92,7 +93,8 @@ import { CountryCode } from './components/countryList/country-code';
     },
     // Route guards
     AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
-    CountryCode
+    CountryCode,
+    PhoneNumberValidationProvider
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

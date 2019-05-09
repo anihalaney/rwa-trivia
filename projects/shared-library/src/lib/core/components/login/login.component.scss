@@ -10,6 +10,10 @@ button {
 ::ng-deep mat-hint.error, .error {
   color: red;
 }
+.hide{
+	display: none;
+}
+
 /*Login page*/
 .logininner .card .row{margin: 0 }
 .logininner .withsocial, .logininner .col-xs-12{ padding: 30px }
