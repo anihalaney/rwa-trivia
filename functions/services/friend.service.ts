@@ -59,7 +59,7 @@ export class FriendService {
         try {
             return await FriendService.friendFireStoreClient
                 .doc(`/${CollectionConstants.INVITATIONS}/${invitation.id}`)
-                .update(invitation);
+                .set(invitation), { merge: true };
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -88,7 +88,7 @@ export class FriendService {
         try {
             return await FriendService.friendFireStoreClient
                 .doc(`/${CollectionConstants.FRIENDS}/${invitee}`)
-                .update({ myFriends: myFriends });
+                .set({ myFriends: myFriends }, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }

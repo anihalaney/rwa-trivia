@@ -43,7 +43,7 @@ export class UserService {
         try {
             return await UserService.fireStoreClient
                 .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
-                .update(dbUser);
+                .set(dbUser, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }

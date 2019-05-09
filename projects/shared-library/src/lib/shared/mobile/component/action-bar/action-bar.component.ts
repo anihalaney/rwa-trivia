@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import * as app from 'application';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
-import * as app from "application";
 
 @Component({
     selector: 'ns-action-bar',
@@ -13,12 +14,23 @@ export class ActionBarComponent {
 
     @Input() title;
     @Input() hideMenu;
+    @Input() hideHomeIcon;
     @Output() open: EventEmitter<any> = new EventEmitter<any>();
+
+    constructor(
+        private routerExtensions: RouterExtensions,
+    ) {
+    }
 
     openSidebar() {
         this.open.emit();
         const sideDrawer = <RadSideDrawer>app.getRootView();
         sideDrawer.showDrawer();
+    }
+
+
+    goToDashboard() {
+        this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
     }
 
 }

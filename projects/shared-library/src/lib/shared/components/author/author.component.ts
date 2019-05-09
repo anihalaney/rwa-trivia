@@ -17,6 +17,7 @@ export class AuthorComponent implements OnChanges {
 
     @Input() userDict: { [key: string]: User };
     @Input() userId;
+    @Input() isGamePlay;
     userProfileImageUrl;
 
     constructor(private store: Store<CoreState>, private userActions: UserActions, private utils: Utils, private cd: ChangeDetectorRef) {

@@ -7,12 +7,16 @@ import { Router } from '@angular/router';
 
 export class OpenUserProfileDirective {
 
-  @Input('stlOpenUserProfile') userId: any;
+  @Input('stlOpenUserProfile') user: any;
 
   @HostListener('click', ['$event'])
   @HostListener('tap', ['$event'])
   onClick(event) {
-    this.router.navigate([`/user/profile/${this.userId}`]);
+    if (this.user.userId && this.user.userId !== '' && this.user.redirectTo === 'otherUserProfile') {
+      this.router.navigate([`/user/profile/${this.user.userId}`]);
+    } else if (this.user.userId && this.user.userId !== '' && this.user.redirectTo === 'userProfile') {
+      this.router.navigate([`/user/my/profile/${this.user.userId}`]);
+    }
   }
 
 

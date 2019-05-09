@@ -146,23 +146,19 @@ mat-card {
 }
 
 .continue-btn{
-  background-color:#3b5998;
+  background-color:#f50057;
   color: #FFF;
   margin-right: 20px;
   padding: 4px 42px;
   width: auto;
 }
 
-.dashboard-btn{
-  border:1px solid #3b5998;
-  background-color: #FFF;
-  color: #3b5998;
-  padding: 2px 40px;
-  width: auto;
-
+.dashboard {
+  margin-top:  16px;
 }
 
-.dashboard-btn:hover{
-  background-color: #3b5998;
-  color: #FFF;
+.dashboard-link{
+  font-weight: bold;
+  color: #3b5998;
+  cursor: pointer;
 }

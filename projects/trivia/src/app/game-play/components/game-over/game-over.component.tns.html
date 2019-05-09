@@ -12,7 +12,7 @@
                                 textWrap="true"></Label>
 
                             <StackLayout *ngIf="game.gameOptions?.playerMode == PlayerMode.Single">
-                                <Image src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
+                                <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
                                     height="64" width="64" marginLeft="10" verticalAlignment="center" marginRight="10"
                                     borderRadius="50"></Image>
                                 <Label class="username" horizontalAlignment="center" text="{{playerUserName}}"
@@ -44,7 +44,7 @@
                             <GridLayout rows="*" columns="*,auto,*" horizontalAlignment="center"
                                 *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
                                 <StackLayout row="0" col="0">
-                                    <Image src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
+                                    <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill"
                                         height="64" width="64" marginLeft="10" verticalAlignment="center"
                                         marginRight="10" borderRadius="50"></Image>
                                     <StackLayout paddingTop="10">
@@ -81,7 +81,7 @@
                                 <Label row="0" col="1" text="V/S" verticalAlignment="top" textWrap="true"> </Label>
 
                                 <StackLayout row="0" col="2">
-                                    <Image [stlOpenUserProfile]="otherUserId"  src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
+                                    <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}"  src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
                                         stretch="aspectFill" height="64" width="64" marginLeft="10"
                                         verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
                                     <StackLayout paddingTop="10">

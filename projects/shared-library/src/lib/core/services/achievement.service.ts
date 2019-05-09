@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
 import { AchievementRule } from '../../shared/model';
 
-
 @Injectable()
 export class AchievementService {
   constructor(

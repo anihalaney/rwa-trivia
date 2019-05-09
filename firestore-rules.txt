@@ -89,8 +89,10 @@ service cloud.firestore {
       	}           
     } 
     
-     match /leader_board_stats/categories { 
-        allow get: if true;
+       match /leader_board_stats {
+        match /{document=**} {
+           allow read,get:  if true; 
+       }
     }
     
     match /friends/{userId} {

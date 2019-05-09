@@ -42,13 +42,6 @@ mat-card>:first-child{
   padding-left: 0px;
 }
 
-.title {
-  color: #3b5998;
-  font-weight: bold;
-  font-size: 16;
-  padding:10 0;
-  text-align: center;
-}
 
 .padding-10 {
   padding: 10;
@@ -229,3 +222,40 @@ mat-card>:first-child{
   opacity: 0.8 !important;
   filter: Alpha(opacity=80) !important; /* IE8 and earlier */
 }
+
+.title {
+  color: #fff;
+  font-weight: bold;
+  font-size: 16;
+  padding:12 0;
+  text-align: center;
+}
+
+.my-turn-card {
+  border-width: 1;
+  border-color: #71b02f;
+}
+
+.my-turn-title{
+  background-color: #71b02f;
+}
+
+
+.their-turn-card {
+  border-width: 1;
+  border-color: #f9ba01;
+}
+
+.their-turn-title{
+  background-color: #f9ba01;
+}
+
+.hr-my-turn{
+  background-color: #71b02f;
+}
+
+.hr-their-turn{
+  background-color: #f9ba01;
+}
+
+
