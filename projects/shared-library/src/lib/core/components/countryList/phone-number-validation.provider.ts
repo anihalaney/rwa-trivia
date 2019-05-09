@@ -1,15 +1,10 @@
 import {Injectable} from '@angular/core';
 import * as phonenumbers from 'google-libphonenumber';
-import { CountryCode } from './country-code';
-import { Country } from './model/country.model';
 
 @Injectable()
 export class PhoneNumberValidationProvider {
 
-  // country metadata
-  public countries: Array<Country>;
-  constructor(private countryCodeData: CountryCode) {
-    this.countries = countryCodeData.allCountries;
+  constructor() {
   }
 
 
