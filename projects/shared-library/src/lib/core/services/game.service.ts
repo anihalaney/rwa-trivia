@@ -235,7 +235,7 @@ export class GameService {
       });
   }
 
-  getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
+  getUsersAnsweredQuestion(userId: string, game: Game): Observable<any[]> {
     const observables = [];
 
     for (const playerQnA of game.playerQnAs) {
