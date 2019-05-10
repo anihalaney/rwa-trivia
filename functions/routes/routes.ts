@@ -19,32 +19,32 @@ class Router {
 
         this.router = express.Router();
 
-        //  '/app/question'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.QUESTION}`, questionRoutes);
+        //  '/app/v1/question'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.QUESTION}`, questionRoutes);
 
-        //  '/app/subscription'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
+        //  '/app/v1/subscription'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
 
-        //  '/app/game'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.GAME}`, gameRoutes);
+        //  '/app/v1/game'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.GAME}`, gameRoutes);
 
-        //  '/app/general'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.GENERAL}`, generalRoutes);
+        //  '/app/v1/general'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.GENERAL}`, generalRoutes);
 
-        //  '/app/migration'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.MIGRATION}`, migrationRoutes);
+        //  '/app/v1/migration'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.MIGRATION}`, migrationRoutes);
 
-        //  '/app/scheduler'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.SCHEDULER}`, schedulerRoutes);
+        //  '/app/v1/scheduler'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.SCHEDULER}`, schedulerRoutes);
 
-        //  '/app/friend'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.FRIEND}`, friendRoutes);
+        //  '/app/v1/friend'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.FRIEND}`, friendRoutes);
 
-        //  '/app/user'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.USER}`, userRoutes);
+        //  '/app/v1/user'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.USER}`, userRoutes);
 
-        //  '/app/achievement'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.ACHIEVEMENT}`, achievementRulesRoutes);
+        //  '/app/v1/achievement'
+        this.router.use(`/${appConstants.API_PREFIX}/${appConstants.API_VERSION}/${RoutesConstants.ACHIEVEMENT}`, achievementRulesRoutes);
     }
 }
 

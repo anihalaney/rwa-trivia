@@ -30,7 +30,8 @@ export enum UserControllerConstants {
 }
 
 export enum appConstants {
-    API_PREFIX = 'app'
+    API_PREFIX = 'app',
+    API_VERSION = 'v1'
 }
 
 export enum interceptorConstants {

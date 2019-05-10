@@ -1,5 +1,5 @@
 import {
-    Account, Game, GameOperations, HeaderConstants, interceptorConstants, PlayerQnA, ResponseMessagesConstants
+    Account, Game, GameOperations, HeaderConstants, interceptorConstants, PlayerQnA, ResponseMessagesConstants, appConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
@@ -114,7 +114,7 @@ export class GameController {
     static async createSocialContent(req, res) {
 
         const websiteUrl = Utils.getWebsiteUrl();
-        const imageUrl = `${websiteUrl}/app/game/social-image/${req.params.userId}/${req.params.socialId}`;
+        const imageUrl = `${websiteUrl}/${appConstants.API_VERSION}/game/social-image/${req.params.userId}/${req.params.socialId}`;
 
         const htmlContent = `<!DOCTYPE html>
                                <html>

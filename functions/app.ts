@@ -24,12 +24,10 @@ class App {
         this.app.use(bodyParser.json());
         this.app.use('/images', express.static(__dirname + '/../../images'));
         this.app.use((req, res, next) => {
-            //  console.log('before', req.url);
-            if (req.url.indexOf(`/${appConstants.API_PREFIX}/`) === -1) {
-                req.url = `/${appConstants.API_PREFIX}${req.url}`; // prepend '/' to keep query params if any
-            }
-            //  console.log('after', req.url);
-            next();
+        // console.log('before', req.url);
+        req.url = `/${appConstants.API_PREFIX}${req.url}`; // prepend '/' to keep query params if any
+        // console.log('after', req.url);
+        next();
         });
         // Routes
         this.app.use(router);

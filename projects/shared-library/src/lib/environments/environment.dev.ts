@@ -1,6 +1,7 @@
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 import { IConfig } from './iconfig';
+import { appConstants } from 'shared-library/shared/model';
 
 export const environment = {
   production: true
@@ -15,5 +16,5 @@ export const CONFIG: IConfig = {
     storageBucket: 'rwa-trivia-dev-e57fc.appspot.com',
     messagingSenderId: '701588063269'
   },
-  'functionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com'
+  'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`
   };

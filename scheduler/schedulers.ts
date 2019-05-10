@@ -1,4 +1,5 @@
 import { schedulerConstants } from './constants';
+import { appConstants } from 'shared-library/shared/model';
 
 const cron = require('node-cron');
 const https = require('https');
@@ -16,7 +17,7 @@ export class GameScheduler {
             host: `${schedulerConstants.domainZone}-${envAppName}${schedulerConstants.extensionName}`,
             port: schedulerConstants.port,
             method: 'POST',
-            path: schedulerConstants.gameOverApiPath,
+            path: `/${appConstants.API_VERSION}/${schedulerConstants.gameOverApiPath}`,
             headers: {
                 'token': token
             }
@@ -54,7 +55,7 @@ export class GameScheduler {
             host: `${schedulerConstants.domainZone}-${envAppName}${schedulerConstants.extensionName}`,
             port: schedulerConstants.port,
             method: 'POST',
-            path: schedulerConstants.turnChangeApiPath,
+            path: `/${appConstants.API_VERSION}/${schedulerConstants.turnChangeApiPath}`,
             headers: {
                 'token': token
             }
