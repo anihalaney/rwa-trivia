@@ -31,7 +31,9 @@ export enum UserControllerConstants {
 
 export enum appConstants {
     API_PREFIX = 'app',
-    API_VERSION = 'v1'
+    API_VERSION = 'v1',
+    ANDROID_VERSION = 1.0,
+    IOS_VERSION = 1.0
 }
 
 export enum interceptorConstants {

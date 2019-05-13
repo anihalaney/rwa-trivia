@@ -12,12 +12,15 @@ import { isAndroid } from 'tns-core-modules/platform';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'application';
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
-import { User } from 'shared-library/shared/model';
+import { User, ApplicationSettings, appConstants } from 'shared-library/shared/model';
 import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import * as utils from 'tns-core-modules/utils/utils';
+import { action, ActionOptions } from 'tns-core-modules/ui/dialogs/dialogs';
+import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -26,7 +29,10 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
+
   subscriptions = [];
+  applicationSettings: ApplicationSettings;
+
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
@@ -35,6 +41,22 @@ export class AppComponent implements OnInit, OnDestroy {
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions) {
 
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+      .subscribe(appSettings => {
+        if (appSettings && appSettings.length > 0) {
+          this.applicationSettings = appSettings[0];
+
+          if (isAndroid && appConstants.ANDROID_VERSION && this.applicationSettings.android_version
+            && this.applicationSettings.android_version > appConstants.ANDROID_VERSION) {
+            this.checkForceUpdate(CONFIG.firebaseConfig.googlePlayUrl);
+          } else {
+            if (appConstants.IOS_VERSION && this.applicationSettings.ios_version
+              && this.applicationSettings.ios_version > appConstants.IOS_VERSION) {
+              this.checkForceUpdate(CONFIG.firebaseConfig.iTunesUrl);
+            }
+          }
+        }
+      }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
@@ -77,6 +99,22 @@ export class AppComponent implements OnInit, OnDestroy {
       firebase.getCurrentUser().then((user) => {
         this.firebaseAuthService.resumeState(user);
       });
+    });
+
+  }
+
+
+  checkForceUpdate(url: string) {
+
+    const actionOptions: ActionOptions = {
+      title: 'New version available',
+      message: 'Please, update app to new version to continue reposting.',
+      cancelButtonText: 'Update',
+      cancelable: false
+    };
+
+    action(actionOptions).then((result) => {
+      utils.openUrl(url);
     });
 
   }

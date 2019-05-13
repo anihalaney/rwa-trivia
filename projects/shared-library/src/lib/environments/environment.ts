@@ -14,7 +14,9 @@ export const CONFIG: IConfig = {
     databaseURL: 'https://rwa-trivia-dev-e57fc.firebaseio.com',
     projectId: 'rwa-trivia-dev-e57fc',
     storageBucket: 'rwa-trivia-dev-e57fc.appspot.com',
-    messagingSenderId: '701588063269'
+    messagingSenderId: '701588063269',
+    googlePlayUrl: 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia.dev',
+    iTunesUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447131917?ls=1&mt=8'
   },
   'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`
   };
