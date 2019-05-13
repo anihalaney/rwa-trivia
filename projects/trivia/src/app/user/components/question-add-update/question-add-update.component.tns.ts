@@ -146,7 +146,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.hideKeyboard();
     super.addTag(this.customTag);
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutocomplete();
+    this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
 
   public onDidAutoComplete(args) {

@@ -73,7 +73,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     if (!this.loginForm.valid) {
       return;
     }
-    this.loader.show();
+    this.loader.show({android: {color: '#4B9ED6'},  message: 'Loading'});
     this.removeMessage();
     switch (this.mode) {
       case 0:

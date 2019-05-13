@@ -164,7 +164,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   addCustomTag() {
     this.selectedTags.push(this.customTag);
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutocomplete();
+    this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
 
   startGame() {

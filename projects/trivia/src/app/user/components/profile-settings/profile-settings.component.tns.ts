@@ -125,7 +125,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.imageTaken = imageAsset;
         const source = new ImageSource();
         const imageSource = await fromAsset(imageAsset);
-        this.cropImage(imageSource);
+       this.cropImage(imageSource);
       } catch (error) {
         console.error(error);
       }
@@ -139,7 +139,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         { width: 150, height: 140, lockSquare: false })).image;
       if (result) {
         this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
-        this.saveProfileImage();
+       this.saveProfileImage();
         this.cd.detectChanges();
       }
     } catch (error) {
@@ -190,7 +190,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.hideKeyboard();
     this.enteredTags.push(this.customTag);
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutocomplete();
+    this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
 
   selectCategory(category) {

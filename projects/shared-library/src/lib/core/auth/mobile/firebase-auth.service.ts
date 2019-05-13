@@ -44,7 +44,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         return firebaseApp.auth();
     }
 
-    public refreshToken(forceRefresh: boolean): Promise<string> {
+    public refreshToken(forceRefresh: boolean): Promise<any> {
         return firebase.getAuthToken({
             forceRefresh: forceRefresh
         });
@@ -59,7 +59,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public sendPasswordResetEmail(email: string) {
-        return firebase.resetPassword({ email: email });
+        return firebase.sendPasswordResetEmail( email );
     }
 
     public googleLogin(): Promise<any> {
