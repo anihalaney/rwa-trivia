@@ -172,6 +172,21 @@ export class UserEffects {
         switchMap((feedback: any) => this.svc.addFeedback(feedback)),
         map((res: any) => this.userActions.addFeedbackSuccess()));
 
+    // Get Country
+    @Effect()
+        getCountries$ = this.actions$
+        .pipe(ofType(UserActions.GET_COUNTRIES))
+        .pipe(
+            switchMap(() => {
+                return this.svc.getCountries()
+                    .pipe(
+                        map((countries: any[]) => {
+                            return this.userActions.loadCountriesSuccess(countries);
+                        })
+                    );
+            })
+        );
+
     // Add User lives
     @Effect()
     AddUserLives$ = this.actions$

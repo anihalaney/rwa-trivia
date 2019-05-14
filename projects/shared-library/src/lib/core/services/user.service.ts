@@ -8,6 +8,7 @@ import {
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
+import { Country } from '../components/countryList/model/country.model';
 
 @Injectable()
 export class UserService {
@@ -56,6 +57,9 @@ export class UserService {
         return this.dbService.CreateDocWithoutDocID('feedback', feedback);
     }
 
+    getCountries(): Observable<Country[]> {
+        return this.dbService.valueChanges('countries');
+    }
 
     loadOtherUserProfile(userId: string): Observable<User> {
         const url = `${CONFIG.functionsUrl}/app/user/${userId}`;

@@ -135,6 +135,12 @@ service cloud.firestore {
       // document can only be modified by API , triggers
         allow read,get:  if isUserAuthenticated(userId);          
     }
+
+    match /countries {
+      match /{document=**} {
+        allow get;
+      }
+    }
     
   }
 }
