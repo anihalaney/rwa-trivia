@@ -7,6 +7,9 @@
     "id": "io.bitwiser.trivia.dev",
     "tns-android": {
       "version": "5.3.1"
+    },
+    "tns-ios": {
+      "version": "5.3.1"
     }
   },
   "scripts": {
@@ -100,6 +103,7 @@
     "nativescript-camera": "^4.4.1",
     "nativescript-cardview": "^3.1.1",
     "nativescript-checkbox": "^3.0.3",
+    "nativescript-feedback": "^1.3.9",
     "nativescript-floatingactionbutton": "^5.0.3",
     "nativescript-imagecropper": "^1.0.5",
     "nativescript-imagepicker": "^6.2.0",
@@ -108,7 +112,6 @@
     "nativescript-screenshot": "0.0.2",
     "nativescript-social-share": "^1.5.1",
     "nativescript-theme-core": "^1.0.6",
-    "nativescript-toast": "^2.0.0",
     "nativescript-ui-autocomplete": "^4.0.0",
     "nativescript-ui-listview": "^6.3.0",
     "nativescript-ui-sidedrawer": "^6.0.0",

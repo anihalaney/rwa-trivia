@@ -7,7 +7,6 @@ import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
-import * as Toast from 'nativescript-toast';
 import { Utils } from 'shared-library/core/services';
 import { isAndroid } from 'tns-core-modules/ui/page/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -70,11 +69,11 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     saveReportQuestion() {
         this.hideKeyboard();
         if (this.selectedOption == null) {
-            Toast.makeText('Select issue!').show();
+            this.utils.showMessage("error", 'Select issue!');
             return;
         }
         if (this.otherReason === null && this.selectedOption === 'Other') {
-            Toast.makeText('Reason is required!').show();
+            this.utils.showMessage("error", 'Reason is required!');
             return;
         } {
             this.reportQuestion.gameId = this.game.gameId;

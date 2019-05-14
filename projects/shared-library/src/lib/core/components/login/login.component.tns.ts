@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef,
   ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
-import * as Toast from 'nativescript-toast';
 import { take, map, filter } from 'rxjs/operators';
 import { CoreState, coreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
@@ -181,7 +180,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
-            Toast.makeText('You have been successfully logged in').show();
+            this.utils.showMessage("success", 'You have been successfully logged in');
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
             this.cd.markForCheck();
           }));
