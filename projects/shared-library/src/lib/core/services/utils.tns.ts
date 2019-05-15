@@ -3,12 +3,22 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
 import { Answer, User } from '../../shared/model';
+import { Feedback, FeedbackType, FeedbackPosition } from 'nativescript-feedback';
 
 @Injectable()
 export class Utils {
 
+  private message: Feedback;
+  private messageConfig = {
+    position: FeedbackPosition.Bottom,
+    duration: 3000,
+    type: FeedbackType.Custom,
+    message: ''
+  };
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object) {
+      this.message = new Feedback();
   }
 
   regExpEscape(s: string) {
@@ -22,6 +32,20 @@ export class Utils {
         sub.unsubscribe();
       }
     });
+  }
+
+  showMessage(type, message) {
+    switch (type) {
+      case 'success':
+        this.messageConfig.type = FeedbackType.Success;
+      break;
+      case 'error':
+        this.messageConfig.type = FeedbackType.Error;
+      break;
+    }
+    this.messageConfig.message = message;
+    this.message.show(this.messageConfig);
+
   }
 
   getRandomInt(min, max) {

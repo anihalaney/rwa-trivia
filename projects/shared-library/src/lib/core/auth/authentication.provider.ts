@@ -61,9 +61,6 @@ export class AuthenticationProvider {
   }
   generateToken(flag) {
     return this.firebaseAuthService.refreshToken(flag).then((token) => {
-      if (token.token) {
-        return token.token;
-      }
       return token;
     });
 
