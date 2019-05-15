@@ -88,15 +88,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async checkForceUpdate() {
 
-    let androidVersion;
-    let iosVersion;
-
+    let version;
     try {
-      if (isAndroid) {
-        androidVersion = await appversion.getVersionName();
-      } else {
-        iosVersion = await appversion.getAppId();
-      }
+        version = await appversion.getVersionCode();
     } catch (error) {
       console.error(error);
     }
@@ -107,16 +101,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
           this.applicationSettings = appSettings[0];
 
-          if (isAndroid && androidVersion && this.applicationSettings.android_version
-            && this.applicationSettings.android_version > androidVersion) {
-
+          if (isAndroid && version && this.applicationSettings.android_version
+            && this.applicationSettings.android_version > version) {
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.googlePlayUrl);
-
-          } else if (!isAndroid && iosVersion && this.applicationSettings.ios_version
-            && this.applicationSettings.ios_version > iosVersion) {
-
+          } else if (!isAndroid && version && this.applicationSettings.ios_version
+            && this.applicationSettings.ios_version > version) {
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
-
           }
         }
       }));
