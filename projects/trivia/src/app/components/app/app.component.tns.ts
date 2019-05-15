@@ -88,12 +88,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async checkForceUpdate() {
 
-    let androidVerion;
+    let androidVersion;
     let iosVersion;
 
     try {
       if (isAndroid) {
-        androidVerion = await appversion.getVersionName();
+        androidVersion = await appversion.getVersionName();
       } else {
         iosVersion = await appversion.getAppId();
       }
@@ -107,8 +107,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
           this.applicationSettings = appSettings[0];
 
-          if (isAndroid && androidVerion && this.applicationSettings.android_version
-            && this.applicationSettings.android_version > androidVerion) {
+          if (isAndroid && androidVersion && this.applicationSettings.android_version
+            && this.applicationSettings.android_version > androidVersion) {
 
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.googlePlayUrl);
 
