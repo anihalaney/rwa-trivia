@@ -1,26 +1,25 @@
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
-import { UserActions } from 'shared-library/core/store/actions';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Platform from 'platform';
 import { isAndroid } from 'tns-core-modules/platform';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'application';
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
-import { User, ApplicationSettings, appConstants } from 'shared-library/shared/model';
+import { ApplicationSettings } from 'shared-library/shared/model';
 import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as utils from 'tns-core-modules/utils/utils';
-import { action, ActionOptions } from 'tns-core-modules/ui/dialogs/dialogs';
+import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
 import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
+import * as appversion from 'nativescript-appversion';
 
 @Component({
   selector: 'app-root',
@@ -37,26 +36,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private navigationService: NavigationService,
     private ngZone: NgZone,
     private routerExtension: RouterExtensions,
-    private userActions: UserActions,
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions) {
 
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
-      .subscribe(appSettings => {
-        if (appSettings && appSettings.length > 0) {
-          this.applicationSettings = appSettings[0];
-
-          if (isAndroid && appConstants.ANDROID_VERSION && this.applicationSettings.android_version
-            && this.applicationSettings.android_version > appConstants.ANDROID_VERSION) {
-            this.checkForceUpdate(CONFIG.firebaseConfig.googlePlayUrl);
-          } else {
-            if (appConstants.IOS_VERSION && this.applicationSettings.ios_version
-              && this.applicationSettings.ios_version > appConstants.IOS_VERSION) {
-              this.checkForceUpdate(CONFIG.firebaseConfig.iTunesUrl);
-            }
-          }
-        }
-      }));
+    this.checkForceUpdate();
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
@@ -103,28 +86,59 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
+  async checkForceUpdate() {
 
-  checkForceUpdate(url: string) {
+    let androidVerion;
+    let iosVersion;
 
-    const actionOptions: ActionOptions = {
+    try {
+      if (isAndroid) {
+        androidVerion = await appversion.getVersionName();
+      } else {
+        iosVersion = await appversion.getAppId();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+      .subscribe(appSettings => {
+        if (appSettings && appSettings.length > 0) {
+
+          this.applicationSettings = appSettings[0];
+
+          if (isAndroid && androidVerion && this.applicationSettings.android_version
+            && this.applicationSettings.android_version > androidVerion) {
+
+            this.displayForceUpdateDialog(CONFIG.firebaseConfig.googlePlayUrl);
+
+          } else if (!isAndroid && iosVersion && this.applicationSettings.ios_version
+            && this.applicationSettings.ios_version > iosVersion) {
+
+            this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
+
+          }
+        }
+      }));
+  }
+
+  async displayForceUpdateDialog(url: string) {
+
+    const alertOptions = {
       title: 'New version available',
       message: 'Please, update app to new version to continue reposting.',
-      cancelButtonText: 'Update',
+      okButtonText: 'Update',
       cancelable: false
     };
-
-    action(actionOptions).then((result) => {
+    try {
+      await alert(alertOptions);
       utils.openUrl(url);
-    });
-
+    } catch (error) {
+      console.error(error);
+    }
   }
 
-
-
-  ngOnDestroy() {
-
-  }
-
+  ngOnDestroy() { }
 
   handleBackPress() {
     if (!Platform.isAndroid) {
