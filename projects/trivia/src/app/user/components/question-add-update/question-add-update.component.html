@@ -58,6 +58,10 @@
         <div class="optionbox">
           <h2><span>Enter Your Question:</span></h2>
 
+
+          <app-trivia-quill-editor [modules]="quillConfig" (quillHtml)="quilHtml($event)" (quillDelta)="quilDelta($event)"
+            (fileuploaded)="fileuploaded($event)" [imageUrl]="quillImageUrl">
+          </app-trivia-quill-editor>
           <textarea *ngIf="!questionForm.value.isRichEditor" class="qinput" placeholder="Enter Your Question"
             formControlName="questionText" class="required" aria-label="question-area"></textarea>
           <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object"

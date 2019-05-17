@@ -1,3 +1,4 @@
+
 var path = require("path");
 var fs = require("fs");
 
@@ -27,11 +28,10 @@ module.exports = function($logger, $projectData, hookArgs) {
         var platform = hookArgs['checkForChangesOpts']['platform'].toLowerCase(); // ios | android
         var platformsDir = hookArgs['checkForChangesOpts']['projectData']['platformsDir'];
         var appResourcesDirectoryPath = hookArgs['checkForChangesOpts']['projectData']['appResourcesDirectoryPath'];
-        var projectDirectoryPath = hookArgs['checkForChangesOpts']['projectData']['projectDir'];
         var forcePrepare = true; // whether to force NS to run prepare, defaults to true
         var npfInfoPath = path.join(platformsDir, platform, ".pluginfirebaseinfo");
         var nsPrepareInfoPath = path.join(platformsDir, platform, ".nsprepareinfo");
-        var copyPlistOpts = { platform, appResourcesDirectoryPath,projectDirectoryPath, buildType, isProdEnv,  $logger }
+        var copyPlistOpts = { platform, appResourcesDirectoryPath, buildType, $logger }
 
         if (fs.existsSync(npfInfoPath)) {
             var npfInfo = undefined;
@@ -51,7 +51,6 @@ module.exports = function($logger, $projectData, hookArgs) {
             if (fs.existsSync(nsPrepareInfoPath)) { fs.unlinkSync(nsPrepareInfoPath); }
 
             if (copyPlist(copyPlistOpts)) { resolve(); } else { reject(); }
-            if (copyInfoPlist(copyPlistOpts)) { resolve(); } else { reject(); }            
         } else { resolve(); }
     });
 };
@@ -68,7 +67,7 @@ var copyPlist = function(copyPlistOpts) {
 
         // if we have both dev/prod versions, we copy (or overwrite) GoogleService-Info.plist in destination dir
         if (fs.existsSync(sourceGooglePlistProd) && fs.existsSync(sourceGooglePlistDev)) {
-            if (copyPlistOpts.isProdEnv) { // use prod version
+            if (copyPlistOpts.buildType==='production') { // use prod version
                 copyPlistOpts.$logger.out("nativescript-plugin-firebase: copy " + sourceGooglePlistProd + " to " + destinationGooglePlist + ".");
                 fs.writeFileSync(destinationGooglePlist, fs.readFileSync(sourceGooglePlistProd));
                 return true;
@@ -83,37 +82,5 @@ var copyPlist = function(copyPlistOpts) {
         } else {
             return true; // single GoogleService-Info.plist modus
         }
-    } else { return true; }
-}
-
-
-/*
-    Handle preparing of Info.plist files for iOS
-*/
-var copyInfoPlist = function(copyPlistOpts) {
-    if (copyPlistOpts.platform === 'android') { return true; }
-    else if (copyPlistOpts.platform === 'ios') {
-        var sourceInfoPlistProd = path.join(copyPlistOpts.projectDirectoryPath, "configurations", "ios",  "Info.plist.prod");
-        var sourceInfoPlistDev = path.join(copyPlistOpts.projectDirectoryPath, "configurations", "ios",  "Info.plist.dev");
-        var destinationInfoPlist = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", "Info.plist");
-
-        // if we have both dev/prod versions, we copy (or overwrite) Info.plist in destination dir
-        if (fs.existsSync(sourceInfoPlistProd) && fs.existsSync(sourceInfoPlistDev)) {
-            if (copyPlistOpts.isProdEnv) { // use prod version
-                copyPlistOpts.$logger.out("nativescript-plugin-firebase: copy " + sourceInfoPlistProd + " to " + destinationInfoPlist + ".");
-                fs.writeFileSync(destinationInfoPlist, fs.readFileSync(sourceInfoPlistProd));
-                return true;
-            } else { // use dev version
-                copyPlistOpts.$logger.out("nativescript-plugin-firebase: copy " + sourceInfoPlistDev + " to " + destinationInfoPlist + ".");
-                fs.writeFileSync(destinationInfoPlist, fs.readFileSync(sourceInfoPlistDev));
-                return true;
-            }
-        } else if (!fs.existsSync(destinationInfoPlist)) { // single Info.plist modus but missing
-            copyPlistOpts.$logger.warn("nativescript-plugin-firebase: " + destinationInfoPlist + " does not exist. Please follow the installation instructions from the documentation");
-            return false;
-        } else {
-            return true; // single Info.plist modus
-        }
-
     } else { return true; }
 }

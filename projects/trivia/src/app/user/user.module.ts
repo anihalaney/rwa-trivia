@@ -8,7 +8,6 @@ import { QuillModule } from 'ngx-quill';
 import { effects, reducer } from './store';
 import { QuillInitializeService } from 'shared-library/core/services/quillInitialize.service';
 import { FormsModule } from '@angular/forms';
-
 import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
@@ -20,6 +19,10 @@ import {
 } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
 
+
+import { TriviaQuillEditorComponent } from './../../../../trivia-editior/src/lib/trivia-quill-editor/trivia-quill-editor.component';
+
+
 @NgModule({
   declarations: [
     ProfileSettingsComponent,
@@ -29,7 +32,8 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
     InviteFriendsDialogComponent,
-    CropImageDialogComponent
+    CropImageDialogComponent,
+    TriviaQuillEditorComponent
   ],
   imports: [
     // rwa modules

@@ -53,13 +53,17 @@
     "release:dev:android": "sh release/dev-android.sh",
     "release:dev:ios": "rm -rf platforms/ios && tns prepare ios --bundle --release  --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia.dev",
     "release:prod:android": "sh release/prod-android.sh",
-    "release:prod:ios": "rm -rf platforms/ios && tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia"
+    "release:prod:ios": "rm -rf platforms/ios && tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia",
+    "build_lib": "ng build trivia-editior",
+    "npm_pack": "cd dist/trivia-editior && npm pack",
+    "package": "npm run build_lib && npm run npm_pack"
   },
   "private": true,
   "dependencies": {
     "@angular-devkit/core": "~7.1.0",
     "@angular/animations": "^7.1.4",
     "@angular/cdk": "~7.2.0",
+    "@angular/cli": "^7.3.9",
     "@angular/common": "~7.1.0",
     "@angular/compiler": "~7.1.0",
     "@angular/core": "~7.1.0",
@@ -128,12 +132,12 @@
     "rxjs": "^6.3.3",
     "stream": "0.0.2",
     "tns-core-modules": "^5.1.1",
+    "trivia-editior": "file:dist/trivia-editior/trivia-editior-0.0.1.tgz",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.11.4",
     "@angular-devkit/build-ng-packagr": "~0.11.4",
-    "@angular/cli": "~7.1.4",
     "@angular/compiler-cli": "~7.1.0",
     "@nativescript/schematics": "^0.4.0",
     "@types/hammerjs": "2.0.36",

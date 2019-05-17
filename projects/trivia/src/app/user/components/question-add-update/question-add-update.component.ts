@@ -14,13 +14,13 @@ import { QuillInitializeService } from 'shared-library/core/services/quillInitia
 import { QuillEditorComponent } from 'ngx-quill';
 import Quill from 'quill';
 import BlotFormatter from 'quill-blot-formatter';
-
 import { ImageUpload } from 'quill-image-upload';
 import { QuestionService } from 'shared-library/core/services';
 import { WindowRef } from 'shared-library/core/services';
 import { CONFIG } from 'shared-library/environments/environment';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
+
 
 @Component({
   templateUrl: './question-add-update.component.html',
@@ -47,6 +47,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   ];
   jsonObject: any;
   quillEditorRef;
+  quillImageUrl: string;
 
   @ViewChild('quillEditior') quillEditior: QuillEditorComponent;
   public editorConfig = {
@@ -138,6 +139,20 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     }));
   }
 
+
+  quilHtml(html) {
+    console.log('html called', html);
+  }
+
+  quilDelta(delta) {
+    console.log('delta>>>', delta);
+  }
+
+  fileuploaded(file) {
+    // console.log('image uploadede', file);
+    this.openDialog(file);
+    // console.log('file');
+  }
   openDialog(file: File) {
     this.dialogRef = this.dialog.open(CropImageDialogComponent, {
       disableClose: false,
@@ -152,10 +167,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
           if (uploadTask != null) {
             if (uploadTask.task.snapshot.state === 'success') {
               this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
-                const range = this.quillEditorRef.getSelection();
-                const imageIndex = range.index;
-                this.quillEditorRef.insertEmbed(imageIndex, 'image', imageUrl);
-                console.log(this.quillEditorRef.getLength());
+                // const range = this.quillEditorRef.getSelection();
+                // const imageIndex = range.index;
+                // this.quillEditorRef.insertEmbed(imageIndex, 'image', imageUrl);
+                this.quillImageUrl = imageUrl;
+                console.log('image URL', this.quillImageUrl);
+
+                // console.log(this.quillEditorRef.getLength());
               });
             }
           }
@@ -171,6 +189,18 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   }
 
   ngOnInit(): void {
+
+    setTimeout(() => {
+      this.quillImageUrl = 'fileupdated';
+    }, 2000);
+    setTimeout(() => {
+      this.quillImageUrl = 'fileupdated 4';
+    }, 4000);
+
+    setTimeout(() => {
+      this.quillImageUrl = 'fileupdated 6';
+    }, 6000);
+
   }
 
   getEditorInstance(editorInstance: any) {
