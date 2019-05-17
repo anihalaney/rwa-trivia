@@ -19,7 +19,6 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
 
     ngOnInit(): void {
         setTimeout(() => {
-            console.log('rich editor called');
             this.question.isRichEditor = true;
             this.question = { ...this.question };
         }, 5000);

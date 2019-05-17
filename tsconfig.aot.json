@@ -23,6 +23,7 @@
     "**/*.spec.ts",
     "server.ts",
     "./projects/shared-library/src/lib/shared/components/*",
+    "**/quill-module/*"
   ],
   "include": [
     "./projects/shared-library/src/lib/shared",

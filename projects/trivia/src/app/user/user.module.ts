@@ -15,7 +15,8 @@ import {
   QuestionAddUpdateComponent,
   InviteFriendsComponent,
   InviteFriendsDialogComponent,
-  InviteMailFriendsComponent
+  InviteMailFriendsComponent,
+  CropImageDialogComponent
 } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
 
@@ -27,13 +28,14 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    CropImageDialogComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     UserRoutingModule,
-    QuillModule,
+    QuillModule.forRoot(),
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
@@ -50,10 +52,12 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     QuestionAddUpdateComponent,
     InviteFriendsComponent,
     InviteMailFriendsComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    CropImageDialogComponent
   ],
   entryComponents: [
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    CropImageDialogComponent
   ]
 })
 export class UserModule { }

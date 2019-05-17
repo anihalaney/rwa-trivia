@@ -3,15 +3,24 @@ import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@ang
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { QuestionAddUpdate } from './question-add-update';
 import { Question, Answer, Subscription } from 'shared-library/shared/model';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime, map, finalize } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { QuillInitializeService } from 'shared-library/core/services/quillInitialize.service';
 import { QuillEditorComponent } from 'ngx-quill';
+import Quill from 'quill';
+import BlotFormatter from 'quill-blot-formatter';
+
+import { ImageUpload } from 'quill-image-upload';
+import { QuestionService } from 'shared-library/core/services';
+import { WindowRef } from 'shared-library/core/services';
+import { CONFIG } from 'shared-library/environments/environment';
+import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
+import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
 
 @Component({
   templateUrl: './question-add-update.component.html',
@@ -22,6 +31,9 @@ import { QuillEditorComponent } from 'ngx-quill';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnInit, OnDestroy {
+
+  @ViewChild('cropper') cropper: ImageCropperComponent;
+  dialogRef;
 
   get tagsArray(): FormArray {
     return this.questionForm.get('tagsArray') as FormArray;
@@ -34,46 +46,30 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     { insert: '\n' }
   ];
   jsonObject: any;
+  quillEditorRef;
+
   @ViewChild('quillEditior') quillEditior: QuillEditorComponent;
   public editorConfig = {
     placeholder: 's'
   };
 
-
   quillConfig = {
-    // toolbar: '.toolbar',
     toolbar: {
-      // ['formula'],
-      // container: "#customToolbar",
-      container: [
-        // ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-        // ['code-block'],
-        // [{ 'header': 1 }, { 'header': 2 }],               // custom button values
-        // [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        // [{ 'script': 'sub' }, { 'script': 'super' }],      // superscript/subscript
-        // [{ 'indent': '-1' }, { 'indent': '+1' }],          // outdent/indent
-        // [{ 'direction': 'rtl' }],                         // text direction
-
-        // [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
-        // [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        // [{ 'font': [] }],
-        // [{ 'align': [] }],
-        // ['clean'],
-        // ['autoLink'],
-        // [
-        //   'autoLink': {
-        //     buttonIcon: 'ddd'
-        //   }]
-      ],
+      container: [],
       handlers: {
         // handlers object will be merged with default handlers object
-        'autoLink': function (value) {
-          // const appSettings = this.appSettings;
-          // console.log('autolink >>>', appSettings);
+        'mathEditor': () => {
         }
       }
     },
-    autoLink: { applicationSettings: this.applicationSettings },
+    mathEditor: {},
+    blotFormatter: {},
+    syntax: true,
+    imageUpload: {
+      customUploader: (file) => {
+        this.openDialog(file);
+      }
+    }
   };
 
   // Constructor
@@ -83,9 +79,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     public router: Router,
     public snackBar: MatSnackBar,
     public questionAction: QuestionActions,
-    public quillInitializeService: QuillInitializeService) {
+    public quillInitializeService: QuillInitializeService,
+    public questionService: QuestionService,
+    public dialog: MatDialog) {
 
     super(fb, store, utils, questionAction);
+
+    Quill.register('modules/imageUpload', ImageUpload);
+    Quill.register('modules/blotFormatter', BlotFormatter);
 
     this.question = new Question();
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
@@ -93,16 +94,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
         this.applicationSettings = appSettings[0];
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
-        this.quillConfig.toolbar.container.push(['formula']);
         this.createForm(this.question);
-        // console.log('app sertttings');
-        this.quillConfig.autoLink = { applicationSettings: this.applicationSettings };
+        this.quillConfig.mathEditor = { applicationSettings: this.applicationSettings };
       }
     }));
-
-    this.questionForm.get('questionText').valueChanges.subscribe(val => {
-      console.log('value is here', val);
-    });
 
     this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
 
@@ -114,8 +109,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
               debounceTime(400),
             )
             .subscribe((data) => {
-              // tslint:disable-next-line:no-console
-              console.log('view child + directly subscription', data);
               this.question.questionObject = data.html;
               this.jsonObject = data.content.ops;
             });
@@ -145,11 +138,44 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     }));
   }
 
+  openDialog(file: File) {
+    this.dialogRef = this.dialog.open(CropImageDialogComponent, {
+      disableClose: false,
+      data: { file: file, applicationSettings: this.applicationSettings }
+    });
+
+    this.dialogRef.componentInstance.ref = this.dialogRef;
+    this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+      if (result) {
+        const fileName = `questions/${new Date().getTime()}-${file.name}`;
+        this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
+          if (uploadTask != null) {
+            if (uploadTask.task.snapshot.state === 'success') {
+              this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
+                const range = this.quillEditorRef.getSelection();
+                const imageIndex = range.index;
+                this.quillEditorRef.insertEmbed(imageIndex, 'image', imageUrl);
+                console.log(this.quillEditorRef.getLength());
+              });
+            }
+          }
+        });
+      }
+    });
+    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
+      // this.renderer.addClass(document.body, 'dialog-open');
+    }));
+    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
+      // this.renderer.removeClass(document.body, 'dialog-open');
+    }));
+  }
+
   ngOnInit(): void {
   }
 
-
-
+  getEditorInstance(editorInstance: any) {
+    this.quillEditorRef = editorInstance;
+  }
 
   createForm(question: Question) {
 

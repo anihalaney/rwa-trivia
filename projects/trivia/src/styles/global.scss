@@ -713,15 +713,16 @@ body.dialog-open .cdk-global-overlay-wrapper {
 
 .ql-close {
   float: right;
-  cursor: pointer;
-  border: 1px solid;
-  padding: 3px;
-  border-radius: 50%;
-  height: 20px;
-  width: 20px;
-  padding-left: 5px;
-  margin-top: 16px;
-  padding-top: 2px;
+    border-radius: 6px;
+    height: auto;
+    padding-left: 5px;
+    margin-top: 9px;
+    padding: 11px 5px;
+    margin-left: 13px;
+    color: #06c;
+    cursor: pointer;
+    text-decoration: none;
+    font-weight: 700;
 }
 
 .key {

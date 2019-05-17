@@ -52,16 +52,17 @@
 
         <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
           <label><span class="label-richtext">Rich Editor:</span></label>
-            <mat-checkbox mdPrefix formControlName="isRichEditor"></mat-checkbox>
+          <mat-checkbox mdPrefix formControlName="isRichEditor"></mat-checkbox>
         </div>
 
         <div class="optionbox">
           <h2><span>Enter Your Question:</span></h2>
-          
-          <textarea *ngIf="!questionForm.value.isRichEditor" class="qinput" placeholder="Enter Your Question" formControlName="questionText" class="required"
-            aria-label="question-area"></textarea>
-          <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object" formControlName="questionText"
-            [modules]="quillConfig" [sanitize]="true" [placeholder]="ddfddfffddfdf"></quill-editor>
+
+          <textarea *ngIf="!questionForm.value.isRichEditor" class="qinput" placeholder="Enter Your Question"
+            formControlName="questionText" class="required" aria-label="question-area"></textarea>
+          <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object"
+            formControlName="questionText" [modules]="quillConfig" [sanitize]="true" (onEditorCreated)="getEditorInstance($event)"></quill-editor>
+
           <!-- [(ngModel)]="htmlText" -->
           <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
             <p *ngIf="questionForm.controls.questionText.errors.required" class="error">Question is required!</p>

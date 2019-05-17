@@ -11,6 +11,7 @@ export class ApplicationSettings {
     renderWebView: boolean;
     display_achievements: boolean;
     quill_options: { list, options };
+    max_image_size_of_question?: number;
 }
 
 export class TimerLoader {

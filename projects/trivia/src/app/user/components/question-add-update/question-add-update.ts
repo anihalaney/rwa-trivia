@@ -7,8 +7,9 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
-
+import { ViewChild } from '@angular/core';
 export class QuestionAddUpdate {
+
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;

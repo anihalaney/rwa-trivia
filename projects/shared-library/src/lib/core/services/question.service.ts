@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, combineLatest } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, finalize } from 'rxjs/operators';
 import { CONFIG } from '../../environments/environment';
 import {
   Question, QuestionStatus, SearchResults, SearchCriteria,
@@ -11,7 +11,6 @@ import { Store } from '@ngrx/store';
 import { CoreState } from '../store';
 import { QuestionActions } from '../store/actions';
 import { DbService } from './../db-service';
-
 @Injectable()
 export class QuestionService {
 
@@ -178,4 +177,22 @@ export class QuestionService {
       );
     });
   }
+
+  saveQuestionImage(image: File, fileName) {
+    console.log('file is here', image);
+    // return this.dbService.upload(`questions/image`, image);
+    const fileRef = this.dbService.getFireStorageReference(fileName);
+
+    return this.dbService.upload(fileName, image).snapshotChanges().pipe(
+      finalize(() => {
+        console.log('image url');
+      })
+    );
+  }
+
+
+  getQuestionDownloadUrl(image: string) {
+    return this.dbService.getFireStorageReference(image).getDownloadURL();
+  }
+
 }
