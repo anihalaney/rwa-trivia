@@ -4,7 +4,6 @@ import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { getImage } from 'nativescript-screenshot';
 import * as SocialShare from "nativescript-social-share";
-import * as Toast from 'nativescript-toast';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
@@ -38,7 +37,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     }));
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
-        Toast.makeText(status).show();
+        this.utils.showMessage("success", status);
         this.disableFriendInviteBtn = true;
       }
       this.cd.markForCheck();
@@ -92,7 +91,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   reMatchGame() {
     if (this.applicationSettings.lives.enable && this.account.lives === 0) {
-      Toast.makeText(this.liveErrorMsg).show();
+      this.utils.showMessage("error", this.liveErrorMsg);
     } else {
       this.reMatch();
     }

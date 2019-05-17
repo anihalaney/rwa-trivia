@@ -44,10 +44,11 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         return firebaseApp.auth();
     }
 
-    public refreshToken(forceRefresh: boolean): Promise<string> {
-        return firebase.getAuthToken({
+    public async refreshToken(forceRefresh: boolean): Promise<string> {
+        const token =  await firebase.getAuthToken({
             forceRefresh: forceRefresh
         });
+        return token.token;
     }
 
     public signInWithEmailAndPassword(email: string, password: string) {
@@ -59,7 +60,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public sendPasswordResetEmail(email: string) {
-        return firebase.resetPassword({ email: email });
+        return firebase.sendPasswordResetEmail( email );
     }
 
     public googleLogin(): Promise<any> {

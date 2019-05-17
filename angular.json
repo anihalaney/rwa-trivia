@@ -140,7 +140,9 @@
           "options": {
             "outputPath": "functions/dist/server",
             "main": "projects/trivia/src/main.server.ts",
-            "tsConfig": "projects/trivia/tsconfig.server.json"
+            "tsConfig": "projects/trivia/tsconfig.server.json",
+            "sourceMap": false,
+            "optimization": true
           }
         }
       }

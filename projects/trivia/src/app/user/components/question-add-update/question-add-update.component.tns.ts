@@ -12,7 +12,6 @@ import { debounceTime, map } from 'rxjs/operators';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import * as Toast from 'nativescript-toast';
 import { Page, isAndroid } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -77,7 +76,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
-        Toast.makeText('Question saved!').show();
+        this.utils.showMessage("success", 'Question saved!');
         this.routerExtension.navigate(['/user/my/questions']);
         this.actionBarTxt = 'My Question';
         setTimeout(() => {
@@ -146,7 +145,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.hideKeyboard();
     super.addTag(this.customTag);
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutocomplete();
+    this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
 
   public onDidAutoComplete(args) {

@@ -37,14 +37,13 @@ export class AuthInterceptor implements HttpInterceptor {
 
         }
 
-        if (error.status === interceptorConstants.TOKEN_EXPIRE) {
-
+         if (error.status === interceptorConstants.TOKEN_EXPIRE) {
           return this.authService.refreshToken().pipe(mergeMap((tokenResponse) => {
             authReq = req.clone({ headers: req.headers.set('Authorization', 'Bearer ' + tokenResponse) });
             return next.handle(authReq);
           }));
 
-        }
+         }
 
         console.log('error------>', error);
 
