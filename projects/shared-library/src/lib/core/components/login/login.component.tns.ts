@@ -2,22 +2,21 @@ import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef,
   ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ViewContainerRef} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
-import * as Toast from 'nativescript-toast';
 import { take, map, filter } from 'rxjs/operators';
 import { CoreState, coreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Page } from 'tns-core-modules/ui/page';
-import { LoadingIndicator } from "nativescript-loading-indicator";
+import { LoadingIndicator } from 'nativescript-loading-indicator';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from '../../services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { CountryListComponent } from "../countryList/countryList.component";
-import { NgModel } from "@angular/forms";
+import { CountryListComponent } from '../../../shared/mobile/component/countryList/countryList.component';
+import { NgModel } from '@angular/forms';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
-import {PhoneNumberValidationProvider} from '../countryList/phone-number-validation.provider';
+import {PhoneNumberValidationProvider} from '../../../shared/mobile/component/countryList/phone-number-validation.provider';
 
 @Component({
   selector: 'login',
@@ -31,6 +30,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = new LoadingIndicator();
+  loaderOptionsCommon = {android: {color: '#3B5998'}, ios: { color: '#4B9ED6'},  message: 'Loading'};
   message = {
     show: false,
     type: '',
@@ -152,7 +152,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     if (!this.loginForm.valid) {
       return;
     }
-    this.loader.show();
+    this.loader.show(this.loaderOptionsCommon);
     this.removeMessage();
     let user;
     try {
@@ -226,7 +226,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   async googleLogin() {
     this.removeMessage();
     if (isAndroid) {
-      this.loader.show();
+      this.loader.show(this.loaderOptionsCommon);
     }
     try {
     const result = await this.firebaseAuthService.googleLogin();
@@ -245,7 +245,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     try {
       this.removeMessage();
       if (isAndroid) {
-        this.loader.show();
+        this.loader.show(this.loaderOptionsCommon);
       }
       const result = await this.firebaseAuthService.facebookLogin();
           this.redirectTo();
@@ -265,7 +265,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
-            Toast.makeText('You have been successfully logged in').show();
+            this.utils.showMessage("success", 'You have been successfully logged in');
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
             this.cd.markForCheck();
           }));

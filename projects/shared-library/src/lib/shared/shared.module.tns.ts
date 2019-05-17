@@ -4,7 +4,7 @@ import { NativeScriptFormsModule } from 'nativescript-angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-import { ActionBarComponent, DrawerComponent, QuestionsTableComponent } from './mobile/component';
+import { ActionBarComponent, DrawerComponent, QuestionsTableComponent, CountryListComponent } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
 import { SearchCountryFilterPipe } from './pipe/search-country-filter.pipe';
@@ -13,7 +13,7 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import { AuthorComponent } from './components/author/author.component';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
-
+import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
 @NgModule({
   declarations: [
     ActionBarComponent,
@@ -24,7 +24,8 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     SearchCountryFilterPipe,
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
-    RippleEffectDirective
+    RippleEffectDirective,
+    CountryListComponent
   ],
   imports: [
     CommonModule,
@@ -62,6 +63,12 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     OpenUserProfileDirective,
     RippleEffectDirective
   ],
-  schemas: [NO_ERRORS_SCHEMA]
+  schemas: [NO_ERRORS_SCHEMA],
+  entryComponents: [
+    CountryListComponent
+  ],
+  providers: [
+    PhoneNumberValidationProvider
+  ]
 })
 export class SharedModule { }

@@ -5,21 +5,21 @@ import { filter } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { RouterExtensions } from 'nativescript-angular/router';
-import * as Platform from 'platform';
+import * as Platform from 'tns-core-modules/platform';
 import { isAndroid } from 'tns-core-modules/platform';
-import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'application';
+import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
 import { ApplicationSettings } from 'shared-library/shared/model';
-import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import * as utils from 'tns-core-modules/utils/utils';
+import * as util from 'tns-core-modules/utils/utils';
 import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
 import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
 import * as appversion from 'nativescript-appversion';
+import { Utils } from '../../../../../shared-library/src/lib/core/services';
 
 @Component({
   selector: 'app-root',
@@ -37,7 +37,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private ngZone: NgZone,
     private routerExtension: RouterExtensions,
     private firebaseAuthService: FirebaseAuthService,
-    private applicationSettingsAction: ApplicationSettingsActions) {
+    private applicationSettingsAction: ApplicationSettingsActions,
+    private utils: Utils) {
 
     this.checkForceUpdate();
 
@@ -61,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
       onMessageReceivedCallback: (message) => {
         console.log('message', message);
         if (message.foreground) {
-          Toast.makeText(message.body).show();
+          this.utils.showMessage("success", message.body);
         }
         this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
       },
@@ -122,7 +123,7 @@ export class AppComponent implements OnInit, OnDestroy {
     };
     try {
       await alert(alertOptions);
-      utils.openUrl(url);
+      util.openUrl(url);
     } catch (error) {
       console.error(error);
     }

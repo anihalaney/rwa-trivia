@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import * as app from 'application';
+import * as app from 'tns-core-modules/application';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { RadSideDrawer } from 'nativescript-ui-sidedrawer';
 

@@ -172,7 +172,7 @@
                                 *ngIf="game.gameOptions?.playerMode != PlayerMode.Single" stlRippleEffect></button>
                             <Button row="1" col="1" class="navigate-button Hind-Medium" text="Play Again"
                                 (rippleTap)="reMatchGame()"
-                                *ngIf="game.gameOptions?.playerMode == PlayerMode.Single"></Button>
+                                *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" stlRippleEffect></Button>
                             <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend {{game.gameOptions.opponentType}}"
                                 (rippleTap)="inviteAsFriend()" isEnabled="{{!disableFriendInviteBtn}}"
                                 *ngIf="game.gameOptions.opponentType == opponentType.Random" stlRippleEffect></Button>
