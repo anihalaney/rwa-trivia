@@ -227,9 +227,9 @@ export class GameService {
   }
 
 
-  checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
+  checkUserQuestion(playerQnA: PlayerQnA): Observable<Question> {
 
-    return this.http.post(`${CONFIG.functionsUrl}/app/question/${playerQnA.questionId}`,
+    return this.http.post<Question>(`${CONFIG.functionsUrl}/app/question/${playerQnA.questionId}`,
       {
         playerQnA: playerQnA
       });

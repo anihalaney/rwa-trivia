@@ -10,6 +10,7 @@ import {
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
+import { SearchCountryFilterPipe } from './pipe/search-country-filter.pipe';
 import { TNSCheckBoxModule } from 'nativescript-checkbox/angular';
 import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autocomplete/angular';
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
@@ -23,6 +24,7 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     QuestionsTableComponent,
     AuthorComponent,
     GameFilterPipe,
+    SearchCountryFilterPipe,
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
     RippleEffectDirective,
@@ -60,6 +62,7 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     QuestionsTableComponent,
     AuthorComponent,
     GameFilterPipe,
+    SearchCountryFilterPipe,
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
     RippleEffectDirective,

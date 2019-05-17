@@ -42,7 +42,8 @@ export class User {
       } else if (authState.name) {
         this.displayName = authState.name;
       } else {
-        this.displayName = this.email.split('@')[0] + new Date().getTime();
+        this.displayName = this.email ? this.email.split('@')[0] + new Date().getTime() :
+        `${this.authState.phoneNumber}${new Date().getTime()}`;
       }
     }
   }

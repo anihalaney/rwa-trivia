@@ -7,17 +7,17 @@ import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { UserActions } from 'shared-library/core/store/actions';
 import { RouterExtensions } from 'nativescript-angular/router';
-import * as Platform from 'platform';
+import * as Platform from 'tns-core-modules/platform';
 import { isAndroid } from 'tns-core-modules/platform';
-import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'application';
+import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
 import { User } from 'shared-library/shared/model';
-import * as Toast from 'nativescript-toast';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Utils } from '../../../../../shared-library/src/lib/core/services';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +33,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     private userActions: UserActions,
     private firebaseAuthService: FirebaseAuthService,
-    private applicationSettingsAction: ApplicationSettingsActions) {
+    private applicationSettingsAction: ApplicationSettingsActions,
+    private utils: Utils) {
 
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
@@ -56,7 +57,7 @@ export class AppComponent implements OnInit, OnDestroy {
       onMessageReceivedCallback: (message) => {
         console.log('message', message);
         if (message.foreground) {
-          Toast.makeText(message.body).show();
+          this.utils.showMessage("success", message.body);
         }
         this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
       },

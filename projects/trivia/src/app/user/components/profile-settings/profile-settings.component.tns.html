@@ -1,9 +1,9 @@
 <ns-action-bar title="Profile" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout iosOverflowSafeArea="false">
-  <ActivityIndicator *ngIf="loaderBusy" [busy]="loaderBusy" width="100" height="100" marginTop="225"
+  <ActivityIndicator visibility="{{ loaderBusy ? 'visible' : 'collapsed' }}" [busy]="loaderBusy" width="100" height="100" marginTop="225"
     class="activity-indicator"></ActivityIndicator>
-  <ScrollView *ngIf="!loaderBusy" iosOverflowSafeArea="false">
-    <StackLayout [formGroup]="userForm" iosOverflowSafeArea="false">
+  <ScrollView visibility="{{ !loaderBusy ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
+    <StackLayout *ngIf="userForm" [formGroup]="userForm" iosOverflowSafeArea="false">
       <StackLayout (tap)="hideKeyboard()" class="profile-settings Roboto-Regular" iosOverflowSafeArea="false">
         <CardView class="profile-settings-card gameplay" margin="5" android:elevation="20" ios:elevation="40"
           radius="15" iosOverflowSafeArea="false">

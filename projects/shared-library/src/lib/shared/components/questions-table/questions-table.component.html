@@ -78,7 +78,7 @@
                 <div class="question-text ">Category :</div>
                 <div class="answer-text">
                   <span *ngFor="let id of row.categoryIds">
-                    {{categoryDictionary[id].categoryName}}
+                    {{categoryDictionary[id]?.categoryName}}
                   </span>
                 </div>
               </div>

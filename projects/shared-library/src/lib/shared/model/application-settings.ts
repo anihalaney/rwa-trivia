@@ -12,6 +12,7 @@ export class ApplicationSettings {
     display_achievements: boolean;
     quill_options: { list, options };
     max_image_size_of_question?: number;
+    phone_authentication: boolean;
 }
 
 export class TimerLoader {
