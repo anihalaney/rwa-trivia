@@ -69,6 +69,9 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     public facebookLogin(): Promise<any> {
         return this.afAuth.auth.signInWithPopup(new firebase.auth.FacebookAuthProvider());
     }
+    public phoneLogin(phoneNumber): Promise<any> {
+        return;
+    }
 
     public twitterLogin(): Promise<any> {
         return this.afAuth.auth.signInWithPopup(new firebase.auth.TwitterAuthProvider());

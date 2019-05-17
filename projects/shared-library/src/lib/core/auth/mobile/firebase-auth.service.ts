@@ -76,6 +76,16 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         });
     }
 
+    public phoneLogin(phoneNumber): Promise<any> {
+        return firebase.login({
+            type: firebase.LoginType.PHONE,
+            phoneOptions: {
+                phoneNumber: phoneNumber,
+                verificationPrompt: 'Enter received verification code'
+            }
+        });
+    }
+
     public twitterLogin(): Promise<any> { return new Promise(resolve => resolve()); }
 
     public githubLogin(): Promise<any> { return new Promise(resolve => resolve()); }

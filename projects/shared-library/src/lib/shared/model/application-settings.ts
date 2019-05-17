@@ -9,6 +9,7 @@ export class ApplicationSettings {
     tokens: Tokens;
     earn_bytes_on_question_contribute: number;
     display_achievements: boolean;
+    phone_authentication: boolean;
 }
 
 export class TimerLoader {

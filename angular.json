@@ -30,9 +30,12 @@
               "projects/trivia/src/styles/styles.scss",
               "projects/trivia/src/styles/global.scss",
               "projects/trivia/src/styles/light.theme.scss",
-              "projects/trivia/src/styles/dark.theme.scss"
+              "projects/trivia/src/styles/dark.theme.scss",
+              "./node_modules/firebaseui/dist/firebaseui.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/firebaseui/dist/firebaseui.js"
+            ]
           },
           "configurations": {
             "dev": {
