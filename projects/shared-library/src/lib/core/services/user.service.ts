@@ -8,7 +8,7 @@ import {
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
-import { Country } from '../components/countryList/model/country.model';
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
 @Injectable()
 export class UserService {

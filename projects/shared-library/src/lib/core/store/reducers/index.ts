@@ -10,7 +10,7 @@ import { questionOfTheDay, questionSaveStatus } from './questions.reducer';
 import { loginRedirectUrl, resetPasswordLogs } from './ui-state.reducer';
 import { activeGames, newGameId, gameCreateStatus } from './game.reducer';
 import { applicationSettings } from './application-settings.reducer';
-import { Country } from 'shared-library/core/components/countryList/model/country.model';
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
 export * from './user.reducer';
 export * from './categories.reducer';
