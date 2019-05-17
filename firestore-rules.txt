@@ -83,9 +83,11 @@ service cloud.firestore {
      match /invitations {
       	match /{document=**} {
       	allow create: if isUserAuthenticated(request.resource.data.created_uid);
-        allow read,update: if resource.data.email == request.auth.token.email
+       // allow read, update: if request.auth.token.phone_number;
+        allow read, update: if (resource.data.email == request.auth.token.phone_number)
+        || (resource.data.email == request.auth.token.email);
       	}           
-    }   
+    } 
     
        match /leader_board_stats {
         match /{document=**} {
@@ -132,6 +134,12 @@ service cloud.firestore {
       // logged in user does not have rights to modify this document
       // document can only be modified by API , triggers
         allow read,get:  if isUserAuthenticated(userId);          
+    }
+
+    match /countries {
+      match /{document=**} {
+        allow get;
+      }
     }
     
   }

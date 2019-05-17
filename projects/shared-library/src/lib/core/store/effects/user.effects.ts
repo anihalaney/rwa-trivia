@@ -109,7 +109,7 @@ export class UserEffects {
                     map(s => s.user),
                     filter(u => !!u),
                     take(1),
-                    map(user => user.email))
+                    map(user => user.email || user.authState.phoneNumber))
             ))
         .pipe(
             switchMap((email: string) => {
@@ -171,6 +171,21 @@ export class UserEffects {
         .pipe(map((action: ActionWithPayload<any>) => action.payload),
         switchMap((feedback: any) => this.svc.addFeedback(feedback)),
         map((res: any) => this.userActions.addFeedbackSuccess()));
+
+    // Get Country
+    @Effect()
+        getCountries$ = this.actions$
+        .pipe(ofType(UserActions.GET_COUNTRIES))
+        .pipe(
+            switchMap(() => {
+                return this.svc.getCountries()
+                    .pipe(
+                        map((countries: any[]) => {
+                            return this.userActions.loadCountriesSuccess(countries);
+                        })
+                    );
+            })
+        );
 
     // Add User lives
     @Effect()

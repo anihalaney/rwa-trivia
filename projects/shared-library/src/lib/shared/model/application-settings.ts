@@ -11,6 +11,7 @@ export class ApplicationSettings {
     display_achievements: boolean;
     android_version: number;
     ios_version: number;
+    phone_authentication: boolean;
 }
 
 export class TimerLoader {
