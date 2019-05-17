@@ -6,14 +6,14 @@ export const environment = {
 
 export const CONFIG: IConfig = {
   'firebaseConfig': {
-    apiKey: 'AIzaSyAqSJgn64UBZUbc7p7UDKSLOoburAENGDw',
-    authDomain: 'rwa-trivia-dev-e57fc.firebaseapp.com',
-    databaseURL: 'https://rwa-trivia-dev-e57fc.firebaseio.com',
-    projectId: 'rwa-trivia-dev-e57fc',
-    storageBucket: 'rwa-trivia-dev-e57fc.appspot.com',
-    messagingSenderId: '701588063269',
-    googlePlayUrl: 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia.dev',
-    iTunesUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447131917?ls=1&mt=8'
+    apiKey: 'AIzaSyDIEpabJv44Iu7go6M30T3WAF-GlSMcR7Y',
+    authDomain: 'bitwiser.io',
+    databaseURL: 'https://rwa-trivia.firebaseio.com',
+    projectId: 'rwa-trivia',
+    storageBucket: 'rwa-trivia.appspot.com',
+    messagingSenderId: '479350787602',
+    googlePlayUrl: 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia',
+    iTunesUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?ls=1&mt=8'
   },
-  'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`
-  };
+  'functionsUrl': `https://bitwiser.io/${appConstants.API_VERSION}`
+};
