@@ -8,6 +8,7 @@ import {
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
+import { Country } from '../components/countryList/model/country.model';
 
 @Injectable()
 export class UserService {
@@ -20,22 +21,22 @@ export class UserService {
 
     loadUserProfile(user: User): Observable<User> {
 
-        return this.dbService.valueChanges('users', user.userId)
-            .pipe(map(u => {
-                if (u) {
-                    const userInfo = user;
-                    user = u;
-                    user.idToken = userInfo.idToken;
-                    user.authState = userInfo.authState;
-                } else {
-                    const dbUser = Object.assign({}, user); // object to be saved
-                    delete dbUser.authState;
-                    delete dbUser.profilePictureUrl;
-                    this.dbService.setDoc('users', dbUser.userId, dbUser);
-                }
-                return user;
-            }),
-                mergeMap(u => this.getUserProfileImage(u)));
+    return this.dbService.valueChanges('users', user.userId)
+    .pipe(map(u => {
+        if (u) {
+            const userInfo = user;
+            user = u;
+            user.idToken = userInfo.idToken;
+            user.authState = userInfo.authState;
+        } else {
+            const dbUser = Object.assign({}, user); // object to be saved
+            delete dbUser.authState;
+            delete dbUser.profilePictureUrl;
+            this.dbService.setDoc('users', dbUser.userId, dbUser);
+        }
+        return user;
+    }),
+        mergeMap(u => this.getUserProfileImage(u)));
     }
 
     loadAccounts(user): Observable<any> {
@@ -56,6 +57,9 @@ export class UserService {
         return this.dbService.CreateDocWithoutDocID('feedback', feedback);
     }
 
+    getCountries(): Observable<Country[]> {
+        return this.dbService.valueChanges('countries');
+    }
 
     loadOtherUserProfile(userId: string): Observable<User> {
         const url = `${CONFIG.functionsUrl}/app/user/${userId}`;

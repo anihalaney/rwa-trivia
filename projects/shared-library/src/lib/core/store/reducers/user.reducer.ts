@@ -2,6 +2,7 @@ import { Observable } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, Game, Friends, Invitation } from '../../../shared/model';
+import { Country } from 'shared-library/core/components/countryList/model/country.model';
 
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
@@ -125,3 +126,12 @@ export function getGameResult(state: any = [], action: ActionWithPayload<any>):
     }
 }
 
+// Load Countries
+export function countries(state: any = [], action: ActionWithPayload<any[]>): Country[] {
+  switch (action.type) {
+      case UserActions.LOAD_COUNTRIES_SUCCESS:
+          return action.payload;
+      default:
+          return state;
+  }
+}

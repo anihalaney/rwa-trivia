@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
 import { User, Game, Friends, Invitation } from '../../../shared/model';
+import { Country } from 'shared-library/core/components/countryList/model/country.model';
 
 @Injectable()
 export class UserActions {
@@ -198,6 +199,22 @@ export class UserActions {
     return {
       type: UserActions.ADD_FEEDBACK,
       payload: feedback
+    };
+  }
+
+  static GET_COUNTRIES = 'GET_COUNTRIES';
+  getCountries(): ActionWithPayload<Country> {
+    return {
+      type: UserActions.GET_COUNTRIES,
+      payload: null
+    };
+  }
+
+  static LOAD_COUNTRIES_SUCCESS = 'LOAD_COUNTRIES_SUCCESS';
+  loadCountriesSuccess(countries: Country[]): ActionWithPayload<any[]> {
+    return {
+      type: UserActions.LOAD_COUNTRIES_SUCCESS,
+      payload: countries
     };
   }
 
