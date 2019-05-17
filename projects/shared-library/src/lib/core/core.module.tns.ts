@@ -29,7 +29,7 @@ import { reducer } from './store';
 
 import { SharedRoutingModule } from './routing/shared-routing.module';
 
-import { LoginComponent, CountryListComponent } from './components';
+import { LoginComponent } from './components';
 import { SharedModule } from './../shared/shared.module';
 
 import { NativeScriptFormsModule } from 'nativescript-angular/forms';
@@ -37,17 +37,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { FirebaseAuthService } from './auth/firebase-auth.service';
 import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
-import { PhoneNumberValidationProvider } from './components/countryList/phone-number-validation.provider';
 
 
 @NgModule({
   declarations: [
-    LoginComponent,
-    CountryListComponent
-  ],
-
-  entryComponents: [
-      CountryListComponent
+    LoginComponent
   ],
   imports: [
 
@@ -91,8 +85,7 @@ import { PhoneNumberValidationProvider } from './components/countryList/phone-nu
       useClass: TNSFirebaseAuthService
     },
     // Route guards
-    AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver,
-    PhoneNumberValidationProvider
+    AuthGuard, BulkLoadGuard, CategoriesResolver, TagsResolver
   ],
   schemas: [NO_ERRORS_SCHEMA]
 })

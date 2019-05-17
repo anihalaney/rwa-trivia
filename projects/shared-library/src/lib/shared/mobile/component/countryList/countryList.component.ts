@@ -21,6 +21,8 @@ export class CountryListComponent implements OnInit, OnDestroy {
   responseJson;
   allCountries: Array<Country> = [];
   subscriptions: Subscription[] = [];
+  searchCountries = '';
+
   constructor(private _modalDialogParams: ModalDialogParams, private cd: ChangeDetectorRef,
     private store: Store<CoreState>, private userAction: UserActions) {
     this.country = this._modalDialogParams.context.Country;
