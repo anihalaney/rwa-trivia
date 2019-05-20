@@ -84,7 +84,14 @@
                                 </Label>
 
                                 <StackLayout row="0" col="2" horizontalAlignment="center" width="120">
-                                    <StackLayout marginLeft="10" verticalAlignment="center" marginRight="10"
+                                    <StackLayout *ngIf="!game.stats[otherUserId]" marginLeft="10" verticalAlignment="center" marginRight="10"
+                                        borderRadius="50" borderColor="#3b5998" borderWidth="1" height="94" width="94"
+                                        paddingTop="2" paddingLeft="1" paddingRight="1">
+                                        <Image src="~/assets/images/no_user.png"
+                                            height="94" width="94" stretch="aspectFill"
+                                            borderRadius="50" horizontalAlignment="center"></Image>
+                                    </StackLayout>
+                                    <StackLayout *ngIf="game.stats[otherUserId]" marginLeft="10" verticalAlignment="center" marginRight="10"
                                         borderRadius="50" borderColor="#3b5998" borderWidth="1" height="90" width="90"
                                         paddingTop="2" paddingLeft="1" paddingRight="1">
                                         <Image src="{{getImageUrl(otherUserInfo)}}"
@@ -95,7 +102,7 @@
                                     <StackLayout paddingTop="10">
                                         <Label class="username-double user-name" horizontalAlignment="center"
                                             text="{{otherUserInfo?.displayName}}" textWrap="true"></Label>
-                                        <Label class="roundandscore tagging" horizontalAlignment="center"
+                                        <Label *ngIf="game.stats[otherUserId] && game.stats[otherUserId].score" class="roundandscore tagging" horizontalAlignment="center"
                                             text="Score {{game.stats[otherUserId]?.score}}" textWrap="true"> </Label>
                                     </StackLayout>
                                     <StackLayout class="earnedsymbolsStack" orientation="horizontal">
