@@ -162,7 +162,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   addCustomTag() {
-    this.selectedTags.push(this.customTag);
+    if (this.customTag && this.customTag !== '' &&
+      this.selectedTags.filter((res) => res.toLowerCase() === this.customTag.toLowerCase()).length === 0) {
+      this.selectedTags.push(this.customTag);
+    }
     this.customTag = '';
     this.autocomplete.autoCompleteTextView.resetAutocomplete();
   }

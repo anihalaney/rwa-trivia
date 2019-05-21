@@ -236,7 +236,7 @@ export class GameService {
   }
 
   getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
-    const observables = [];
+    const observables: Observable<Question>[] = [];
 
     for (const playerQnA of game.playerQnAs) {
       if (playerQnA.playerId === userId) {
