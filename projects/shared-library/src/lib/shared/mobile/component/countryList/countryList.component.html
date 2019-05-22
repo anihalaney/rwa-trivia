@@ -1,10 +1,13 @@
 <StackLayout height="350" borderRadius="10">
-    <GridLayout rows="auto" columns="auto,*" class="search-box">
-        <Label row="0" col="0" text="&#xf002;" class="fa text-icon-field" fontSize="24" verticalAlignment="center" margin="0 12"></Label>
-        <TextField row="0" col="1" text-muted hint="Search name or code" [(ngModel)]="searchCountries" class="input" editable="true"
+    <GridLayout rows="auto" columns="auto,*">
+        <GridLayout row="0" col="0" rows="auto" columns="auto,*" class="search-box">
+            <Label row="0" col="0" text="&#xf002;" class="fa text-icon-field" fontSize="24" verticalAlignment="center" margin="0 12"></Label>
+            <TextField row="0" col="1" text-muted hint="Search name or code" [(ngModel)]="searchCountries" class="input" editable="true"
             width="78%"></TextField>
+        </GridLayout>
+        <Label (tap)="onClose()" row="0" col="1" text="&#xf057;" class="fa text-icon-field close-btn" verticalAlignment="center" fontSize="24" ></Label>
     </GridLayout>
-    <ListView [items]="allCountries | searchCountry:searchCountries" class="list-group">
+    <ListView height="250" [items]="allCountries | searchCountry:searchCountries" class="list-group">
         <ng-template let-country="item ">
             <GridLayout rows="auto,auto" columns="auto,*" class="list-group-item" (tap)="onItemTap(country)">
                 <Image col="0" rowSpan="2" src="~/assets/flags/{{country.flagClass}}.png" height="20" backgroundColor="gray" width="29" class="img-rounded"></Image>

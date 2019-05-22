@@ -20,7 +20,6 @@ export class NavigationService {
     console.log(this.router.url);
     if (this.router.url === '/user/my/invite-friends' ||
       this.router.url === '/user/my/questions' ||
-      this.router.url === '/login' ||
       this.router.url === '/recent-game' ||
       this.router.url === '/privacy-policy' ||
       this.router.url === '/terms-and-conditions' ||
