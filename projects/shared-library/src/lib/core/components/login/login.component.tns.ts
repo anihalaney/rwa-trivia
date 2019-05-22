@@ -27,6 +27,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = new LoadingIndicator();
+  loaderOptionsCommon = {android: {color: '#3B5998'}, ios: { color: '#4B9ED6'},  message: 'Loading'};
   message = {
     show: false,
     type: '',
@@ -73,7 +74,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     if (!this.loginForm.valid) {
       return;
     }
-    this.loader.show();
+    this.loader.show(this.loaderOptionsCommon);
     this.removeMessage();
     switch (this.mode) {
       case 0:
@@ -141,7 +142,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   googleLogin() {
     this.removeMessage();
     if (isAndroid) {
-      this.loader.show();
+      this.loader.show(this.loaderOptionsCommon);
     }
     this.firebaseAuthService.googleLogin().then(
       (result) => {
@@ -158,7 +159,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   fbLogin() {
     this.removeMessage();
     if (isAndroid) {
-      this.loader.show();
+      this.loader.show(this.loaderOptionsCommon);
     }
     this.firebaseAuthService.facebookLogin().then(
       (result) => {
