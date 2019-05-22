@@ -241,11 +241,22 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   }
 
+<<<<<<< HEAD
   async fbLogin() {
     try {
       this.removeMessage();
       if (isAndroid) {
         this.loader.show(this.loaderOptionsCommon);
+=======
+  fbLogin() {
+    this.removeMessage();
+    if (isAndroid) {
+      this.loader.show(this.loaderOptionsCommon);
+    }
+    this.firebaseAuthService.facebookLogin().then(
+      (result) => {
+        this.redirectTo();
+>>>>>>> 92460d6d909d2ac512021e67e28f4cbccc80b6b9
       }
       const result = await this.firebaseAuthService.facebookLogin();
           this.redirectTo();
