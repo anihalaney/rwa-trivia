@@ -161,7 +161,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   addCustomTag() {
-    this.selectedTags.push(this.customTag);
+    if (this.customTag && this.customTag !== '' &&
+      this.selectedTags.filter((res) => res.toLowerCase() === this.customTag.toLowerCase()).length === 0) {
+      this.selectedTags.push(this.customTag);
+    }
     this.customTag = '';
     this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
@@ -173,7 +176,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       && !this.friendUserId) {
       if (!this.friendUserId) {
         this.errMsg = 'Please Select Friend';
-        this.utils.showMessage("error", this.errMsg);
+        this.utils.showMessage('error', this.errMsg);
       }
       return;
     }
@@ -253,7 +256,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   redirectToDashboard(msg) {
     this.router.navigate(['/dashboard']);
-    this.utils.showMessage("success", msg);
+    this.utils.showMessage('success', msg);
   }
 
   get categoryListHeight() {
