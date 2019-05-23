@@ -6,7 +6,6 @@ import { FormBuilder } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
 import { isAvailable, requestPermissions, takePicture } from 'nativescript-camera';
 import * as imagepicker from 'nativescript-imagepicker';
-import * as Toast from 'nativescript-toast';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -70,7 +69,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     requestPermissions();
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
-        Toast.makeText('Profile is saved successfully').show();
+        this.utils.showMessage("success", 'Profile is saved successfully');
         this.toggleLoader(false);
       }
       this.cd.markForCheck();
@@ -125,7 +124,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.imageTaken = imageAsset;
         const source = new ImageSource();
         const imageSource = await fromAsset(imageAsset);
-        this.cropImage(imageSource);
+       this.cropImage(imageSource);
       } catch (error) {
         console.error(error);
       }
@@ -139,7 +138,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         { width: 150, height: 140, lockSquare: false })).image;
       if (result) {
         this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
-        this.saveProfileImage();
+       this.saveProfileImage();
         this.cd.detectChanges();
       }
     } catch (error) {
@@ -190,7 +189,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.hideKeyboard();
     this.enteredTags.push(this.customTag);
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutocomplete();
+    this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
 
   selectCategory(category) {
@@ -221,7 +220,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      Toast.makeText('Please add name, display name, location and profile picture for bulk upload request').show();
+      this.utils.showMessage("error", 'Please add name, display name, location and profile picture for bulk upload request');
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
@@ -238,7 +237,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
 
     if (this.userForm.invalid) {
-      Toast.makeText('Please fill the mandatory fields').show();
+      this.utils.showMessage("error", 'Please fill the mandatory fields');
       return;
     }
 

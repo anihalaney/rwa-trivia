@@ -13,7 +13,6 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
 import { filter, take } from 'rxjs/operators';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
-import * as Toast from 'nativescript-toast';
 import { Router } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -164,7 +163,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   addCustomTag() {
     this.selectedTags.push(this.customTag);
     this.customTag = '';
-    this.autocomplete.autoCompleteTextView.resetAutocomplete();
+    this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
 
   startGame() {
@@ -174,7 +173,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       && !this.friendUserId) {
       if (!this.friendUserId) {
         this.errMsg = 'Please Select Friend';
-        Toast.makeText(this.errMsg).show();
+        this.utils.showMessage("error", this.errMsg);
       }
       return;
     }
@@ -254,7 +253,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   redirectToDashboard(msg) {
     this.router.navigate(['/dashboard']);
-    Toast.makeText(msg).show();
+    this.utils.showMessage("success", msg);
   }
 
   get categoryListHeight() {

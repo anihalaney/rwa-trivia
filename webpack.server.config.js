@@ -13,6 +13,13 @@ module.exports = {
     path: path.join(__dirname, `functions/server/functions`),
     filename: '[name].js'
   },
+  // This is required to solve SDK_VERSION issue 
+  // https://github.com/firebase/firebase-js-sdk/issues/1754
+  resolve: {
+    alias: {
+      ['firebase/app']: path.resolve(__dirname, 'node_modules/firebase/app/dist/index.cjs.js')
+    }
+  },
   module: {
     rules: [
       { test: /\.ts$/, loader: 'ts-loader', exclude: /^(?!.*\.spec\.ts$).*\.ts$/  },

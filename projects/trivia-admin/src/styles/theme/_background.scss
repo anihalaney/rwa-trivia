@@ -29,20 +29,20 @@
 		}
 	}
 
-	.matHeader > div > button,  {
-		@if $theme='dark' {
+	.matHeader > div > button {
+		@if $theme=='dark' {
 			background: #FFF;
 			color:rgba(0, 0, 0, 0.54);
 		}
 	}
 
 	.color-black{
-		@if $theme='dark' {
+		@if $theme=='dark' {
 			color:#282828;
 		}
 	}
 	.color-white > span, .color-white{
-		@if $theme='dark' {
+		@if $theme=='dark' {
 			color:#FFF;
 		}
 	}

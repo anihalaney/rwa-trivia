@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef,
-  ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+  ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, ViewContainerRef} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
-import * as Toast from 'nativescript-toast';
 import { take, map, filter } from 'rxjs/operators';
 import { CoreState, coreState, UIStateActions } from '../../store';
 import { Store } from '@ngrx/store';
@@ -13,7 +12,11 @@ import { LoadingIndicator } from "nativescript-loading-indicator";
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from '../../services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
+import { CountryListComponent } from "../countryList/countryList.component";
+import { NgModel } from "@angular/forms";
+import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
+import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
+import {PhoneNumberValidationProvider} from '../countryList/phone-number-validation.provider';
 
 @Component({
   selector: 'login',
@@ -27,23 +30,99 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = new LoadingIndicator();
+  loaderOptionsCommon = {android: {color: '#3B5998'}, ios: { color: '#4B9ED6'},  message: 'Loading'};
   message = {
     show: false,
     type: '',
     text: ''
   };
   subscriptions = [];
-  constructor(public fb: FormBuilder,
+  @ViewChild('phoneNumber') phoneNumber: NgModel;
+  isCountryCodeOpened = false;
+  isCountryCodeError;
+  input: any;
+  country: any;
+
+  constructor(
+    private modalDialogService: ModalDialogService,
+    public fb: FormBuilder,
     public store: Store<CoreState>,
     private routerExtension: RouterExtensions,
     private uiStateActions: UIStateActions,
     private page: Page,
     private firebaseAuthService: FirebaseAuthService,
     private utils: Utils,
-    public cd: ChangeDetectorRef) {
-    super(fb, store);
+    public cd: ChangeDetectorRef,
+    private viewContainerRef: ViewContainerRef,
+    private phonenumber: PhoneNumberValidationProvider) {
+    super(fb, store, cd);
     this.page.actionBarHidden = true;
+
+    this.input = {
+        selectedCountry: 'United States',
+        countryCode: '+1',
+        phoneNumber: '',
+        country: 'us',
+    };
   }
+
+
+  private validateNumber(): boolean {
+    return this.phonenumber.isValidMobile(this.input.phoneNumber, this.input.country);
+  }
+
+
+  async signInWithPhone() {
+    if (this.input.selectedCountry === '') {
+        this.isCountryCodeError = true;
+        return false;
+    }
+
+    if (!this.validateNumber()) {
+      this.phoneNumber.control.setErrors({'invalid': true});
+      this.phoneNumber.control.markAsDirty();
+      this.cd.markForCheck();
+      return false;
+    }
+
+    try {
+      const result = await this.firebaseAuthService.phoneLogin( `${this.input.countryCode}${this.input.phoneNumber}` );
+      if (result) {
+        JSON.stringify(result);
+        this.redirectTo();
+      }
+
+    } catch ( errorMessage ) {
+      console.error(errorMessage);
+      this.showMessage('error', errorMessage);
+      this.cd.markForCheck();
+    }
+  }
+
+  async onSelectCountry() {
+    const options: ModalDialogOptions = {
+      viewContainerRef: this.viewContainerRef,
+      fullscreen: false,
+      context: { Country: this.country }
+  };
+  try {
+      const result = await this.modalDialogService.showModal(CountryListComponent, options);
+      if (result === undefined || this.input.selectedCountry === null) {
+          this.isCountryCodeError = true;
+      } else {
+          setString('countryCode', result.flagClass);
+          this.input.country = result.flagClass;
+          this.input.selectedCountry = result.name;
+          this.input.countryCode = '+' + result.dialCode;
+          this.isCountryCodeError = false;
+      }
+      this.isCountryCodeOpened = true;
+      this.cd.markForCheck();
+  } catch (error) {
+    console.error(error);
+  }
+
+}
 
   ngOnInit() {
     this.title = 'Login';
@@ -68,107 +147,113 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.hideKeyboard();
     if (!this.loginForm.valid) {
       return;
     }
-    this.loader.show();
+    this.loader.show(this.loaderOptionsCommon);
     this.removeMessage();
-    switch (this.mode) {
-      case 0:
-        // Login
-        this.firebaseAuthService.signInWithEmailAndPassword(
-          this.loginForm.value.email,
-          this.loginForm.value.password
-        ).then((user: any) => {
-          // Success
-          this.redirectTo();
-        }).catch((error) => {
-          this.loader.hide();
-          const singInError = error.message.split(':');
-          this.showMessage('error', singInError[1] || error.message);
-        }).finally( () => {
-          this.cd.markForCheck();
-        });
-        break;
-      case 1:
-        // Sign up
-        this.firebaseAuthService.createUserWithEmailAndPassword(
-          this.loginForm.value.email,
-          this.loginForm.value.password
-        ).then((user: any) => {
-          // Success
-          if (user && !user.emailVerified) {
-            this.firebaseAuthService.sendEmailVerification(user).then(
-              (response) => {
-                this.redirectTo();
-              }
-            ).catch((error) => {
-              this.loader.hide();
-              const verificationError = error.split(':');
-              this.showMessage('error', verificationError[1] || error);
-            });
+    let user;
+    try {
+      switch (this.mode) {
+        case 0:
+          // Login
+        user = await this.firebaseAuthService.signInWithEmailAndPassword(
+            this.loginForm.value.email,
+            this.loginForm.value.password
+          );
+          if (user) {
+            this.redirectTo();
           }
-        }).catch((error) => {
-          this.loader.hide();
-          const singUpError = error.split(':');
-          this.showMessage('error', singUpError[1] || error);
-        }).finally( () => {
-          this.cd.markForCheck();
-        });
-        break;
-      case 2:
-        // Forgot Password
-        this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.value.email)
-          .then((a: any) => {
+          break;
+        case 1:
+          // Sign up
+          user = await this.firebaseAuthService.createUserWithEmailAndPassword(
+            this.loginForm.value.email,
+            this.loginForm.value.password
+          );
+          if (user) {
+            // Success
+            if (user && !user.emailVerified) {
+               const isEmailVerify = await this.firebaseAuthService.sendEmailVerification(user);
+               if (isEmailVerify) {
+                 this.redirectTo();
+               }
+            }
+          }
+          break;
+        case 2:
+          // Forgot Password
+          user = await this.firebaseAuthService.sendPasswordResetEmail(this.loginForm.value.email);
             this.notificationMsg = `email sent to ${this.loginForm.value.email}`;
             this.showMessage('success', this.notificationMsg);
             this.loader.hide();
             this.errorStatus = false;
             this.notificationLogs.push(this.loginForm.get('email').value);
             this.store.dispatch(this.uiStateActions.saveResetPasswordNotificationLogs([this.loginForm.get('email').value]));
-            this.cd.markForCheck();
-          }).catch((error) => {
-            this.loader.hide();
+
+      }
+
+    } catch ( error ) {
+        this.loader.hide();
+        switch (this.mode) {
+          case 0:
+            const singInError = error.message.split(':');
+            this.showMessage('error', singInError[1] || error.message);
+          break;
+          case 1:
+          if (user && !user.emailVerified) {
+            const verificationError = error.split(':');
+            this.showMessage('error', verificationError[1] || error);
+          } else {
+            const singUpError = error.split(':');
+            this.showMessage('error', singUpError[1] || error);
+          }
+          break;
+          case 2:
             this.showMessage('error', error);
-            this.cd.markForCheck();
-          });
+          break;
+        }
+        this.cd.markForCheck();
+
+    } finally {
+      this.cd.markForCheck();
     }
 
   }
 
-  googleLogin() {
+  async googleLogin() {
     this.removeMessage();
     if (isAndroid) {
-      this.loader.show();
+      this.loader.show(this.loaderOptionsCommon);
     }
-    this.firebaseAuthService.googleLogin().then(
-      (result) => {
-        this.redirectTo();
-      }
-    ).catch((error) => {
+    try {
+    const result = await this.firebaseAuthService.googleLogin();
+    if (result) {
+      this.redirectTo();
+    }
+    } catch (error) {
       this.loader.hide();
       this.showMessage('error', error);
       this.cd.markForCheck();
-    });
+    }
 
   }
 
-  fbLogin() {
-    this.removeMessage();
-    if (isAndroid) {
-      this.loader.show();
-    }
-    this.firebaseAuthService.facebookLogin().then(
-      (result) => {
-        this.redirectTo();
+  async fbLogin() {
+    try {
+      this.removeMessage();
+      if (isAndroid) {
+        this.loader.show(this.loaderOptionsCommon);
       }
-    ).catch((error) => {
+      const result = await this.firebaseAuthService.facebookLogin();
+          this.redirectTo();
+    } catch ( error ) {
       this.loader.hide();
       this.showMessage('error', error);
       this.cd.markForCheck();
-    });
+    }
   }
 
   redirectTo() {
@@ -180,7 +265,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
-            Toast.makeText('You have been successfully logged in').show();
+            this.utils.showMessage("success", 'You have been successfully logged in');
             this.routerExtension.navigate([redirectUrl], { clearHistory: true });
             this.cd.markForCheck();
           }));

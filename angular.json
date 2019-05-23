@@ -30,9 +30,12 @@
               "projects/trivia/src/styles/styles.scss",
               "projects/trivia/src/styles/global.scss",
               "projects/trivia/src/styles/light.theme.scss",
-              "projects/trivia/src/styles/dark.theme.scss"
+              "projects/trivia/src/styles/dark.theme.scss",
+              "./node_modules/firebaseui/dist/firebaseui.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/firebaseui/dist/firebaseui.js"
+            ]
           },
           "configurations": {
             "trivia-dev": {
@@ -182,7 +185,9 @@
           "options": {
             "outputPath": "functions/dist/server",
             "main": "projects/trivia/src/main.server.ts",
-            "tsConfig": "projects/trivia/tsconfig.server.json"
+            "tsConfig": "projects/trivia/tsconfig.server.json",
+            "sourceMap": false,
+            "optimization": true
           }
         }
       }

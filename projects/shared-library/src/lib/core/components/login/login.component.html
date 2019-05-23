@@ -19,13 +19,18 @@
     <div class="card">
       <div class="row">
         <div class="col-sm-7 col-xs-12">
-          <form (ngSubmit)="onSubmit()" class="sign-in-form" [formGroup]="loginForm" novalidate>
+          <div class="heading"  *ngIf="signInMethod === 'phone'">
+              <span>Sign in with Phone</span>
+          </div>
+          <div id="firebaseui-auth-container" [class.hide]="signInMethod !== 'phone'"></div>
+         
+          <form *ngIf="signInMethod === 'email'" (ngSubmit)="onSubmit()" class="sign-in-form" [formGroup]="loginForm" novalidate>
             <input type="hidden" formControlName="mode"  aria-label="hidden">
             <div class="heading" [ngSwitch]="mode">
-              <span *ngSwitchCase="0">Login to your account</span>
-              <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>
-              <span *ngSwitchCase="2">Forgot Password</span>
-            </div>
+                <span *ngSwitchCase="0">Login to your account</span>
+                <span *ngSwitchCase="1">Get a bit wiser - Sign up</span>
+                <span *ngSwitchCase="2">Forgot Password</span>
+              </div>
             <div class="auth-msg" [ngClass]="{'error':errorStatus, 'success':!errorStatus}">
               <label>
                 {{notificationMsg}}
@@ -88,6 +93,8 @@
           <h3>You can also login with your social account</h3>
           <a (click)="fbLogin()"><img src="/assets/images/faceboockbtn.png" alt="facebook" /></a>
           <a (click)="googleLogin()"><img src="/assets/images/gpulsebtn.png" alt="Google Plus" /></a>
+          <a (click)="emailSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'phone'"><img src="/assets/images/sign-email.png" alt="Email Login" /></a>
+          <a (click)="phoneSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'email'"><img src="/assets/images/sign-phone.png" alt="Phone Login" /></a>
         </div>
       </div>
     </div>

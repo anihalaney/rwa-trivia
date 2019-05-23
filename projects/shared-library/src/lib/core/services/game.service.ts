@@ -227,16 +227,16 @@ export class GameService {
   }
 
 
-  checkUserQuestion(playerQnA: PlayerQnA): Observable<any> {
+  checkUserQuestion(playerQnA: PlayerQnA): Observable<Question> {
 
-    return this.http.post(`${CONFIG.functionsUrl}/app/question/${playerQnA.questionId}`,
+    return this.http.post<Question>(`${CONFIG.functionsUrl}/app/question/${playerQnA.questionId}`,
       {
         playerQnA: playerQnA
       });
   }
 
   getUsersAnsweredQuestion(userId: string, game: Game): Observable<Question[]> {
-    const observables = [];
+    const observables: Observable<Question>[] = [];
 
     for (const playerQnA of game.playerQnAs) {
       if (playerQnA.playerId === userId) {
