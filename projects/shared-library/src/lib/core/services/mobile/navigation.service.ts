@@ -27,7 +27,8 @@ export class NavigationService {
       this.router.url === '/achievements' ||
       this.router.url.includes('game-play') ||
       this.router.url.includes('/user/my/profile/') ||
-      this.router.url.includes('/stats/leaderboard/') ) {
+      this.router.url.includes('/stats/leaderboard/') ||
+      this.router.url.includes('/leaderboard/') ) {
       this.routerExtensions.navigate(['/dashboard'], { clearHistory: true });
     } else if (
       this.router.url.includes('/user/profile/') ||

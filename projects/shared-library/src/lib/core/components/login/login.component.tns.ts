@@ -17,10 +17,10 @@ import { NgModel } from '@angular/forms';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
 import {PhoneNumberValidationProvider} from '../../../shared/mobile/component/countryList/phone-number-validation.provider';
-import { Router } from "@angular/router";
 import * as application from 'application';
 import { AndroidApplication } from 'tns-core-modules/application';
 import { Subject } from 'rxjs';
+import { android, AndroidActivityBackPressedEventData } from 'tns-core-modules/application';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -41,12 +41,12 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   };
   subscriptions = [];
   @ViewChild('phoneNumber') phoneNumber: NgModel;
-  isCountryCodeOpened = false;
+  isCountryListOpened = false;
   isCountryCodeError;
   input: any;
   country: any;
-  dialogSubject = new Subject();
-  dialogObservable: any;
+  dialogCloseSubject = new Subject();
+  dialogCloseObservable = this.dialogCloseSubject.asObservable();
 
   constructor(
     private modalDialogService: ModalDialogService,
@@ -59,11 +59,9 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     private utils: Utils,
     public cd: ChangeDetectorRef,
     private viewContainerRef: ViewContainerRef,
-    private phonenumber: PhoneNumberValidationProvider,
-    private router: Router) {
+    private phonenumber: PhoneNumberValidationProvider) {
     super(fb, store, cd);
     this.page.actionBarHidden = true;
-    this.dialogObservable = this.dialogSubject.asObservable();
 
     this.input = {
         selectedCountry: 'United States',
@@ -110,10 +108,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     const options: ModalDialogOptions = {
       viewContainerRef: this.viewContainerRef,
       fullscreen: false,
-      context: { Country: this.country, closeObserver: this.dialogObservable }
+      context: { Country: this.country, closeObserver: this.dialogCloseObservable }
   };
   try {
-      this.isCountryCodeOpened = true;
+      this.isCountryListOpened = true;
       const result = await this.modalDialogService.showModal(CountryListComponent, options);
 
       if (result === undefined && this.input.selectedCountry === null) {
@@ -125,7 +123,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           this.input.countryCode = '+' + result.dialCode;
           this.isCountryCodeError = false;
       }
-      this.isCountryCodeOpened = false;
+      this.isCountryListOpened = false;
       this.cd.markForCheck();
   } catch (error) {
     console.error(error);
@@ -159,16 +157,20 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   handleBackButtonPress() {
     if (application.android) {
-      application.android.off(AndroidApplication.activityBackPressedEvent);
-      application.android.on(application.AndroidApplication.activityBackPressedEvent, (args) => {
-        if (this.routerExtension.canGoBack() && this.isCountryCodeOpened === false) {
-          this.routerExtension.back();
-        } else if (this.isCountryCodeOpened) {
-          this.dialogSubject.next(true);
-        }
-      });
+      android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
+      android.on(application.AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack, this);
     }
   }
+
+  handleBackButtonPressCallBack(args: AndroidActivityBackPressedEventData) {
+    if (this.routerExtension.canGoBack() && this.isCountryListOpened === false) {
+      this.routerExtension.back();
+    } else if (this.isCountryListOpened) {
+      this.dialogCloseSubject.next(true);
+    }
+    args.cancel = true;
+  }
+
   async onSubmit() {
     this.hideKeyboard();
     if (!this.loginForm.valid) {
@@ -317,7 +319,7 @@ removeMessage() {
 }
 
 ngOnDestroy() {
-
+  android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
 }
 
 hideKeyboard() {
