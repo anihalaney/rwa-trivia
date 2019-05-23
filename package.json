@@ -6,10 +6,10 @@
   "nativescript": {
     "id": "io.bitwiser.trivia.dev",
     "tns-android": {
-      "version": "5.1.0"
+      "version": "5.4.0"
     },
     "tns-ios": {
-      "version": "5.1.0"
+      "version": "5.4.0"
     }
   },
   "scripts": {
