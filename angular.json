@@ -32,7 +32,8 @@
               "projects/trivia/src/styles/light.theme.scss",
               "projects/trivia/src/styles/dark.theme.scss",
               "projects/trivia/src/styles/mathquill.scss",
-              "./node_modules/firebaseui/dist/firebaseui.css"
+              "./node_modules/firebaseui/dist/firebaseui.css",
+              "./node_modules/ng-quill-tex/assets/theme.css"
             ],
             "scripts": [
               "./node_modules/firebaseui/dist/firebaseui.js"
@@ -358,41 +359,6 @@
             "tsConfig": [
               "projects/shared-library/tsconfig.lib.json",
               "projects/shared-library/tsconfig.spec.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
-    },
-    "trivia-editior": {
-      "root": "projects/trivia-editior",
-      "sourceRoot": "projects/trivia-editior/src",
-      "projectType": "library",
-      "prefix": "lib",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
-          "options": {
-            "tsConfig": "projects/trivia-editior/tsconfig.lib.json",
-            "project": "projects/trivia-editior/ng-package.json"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/trivia-editior/src/test.ts",
-            "tsConfig": "projects/trivia-editior/tsconfig.spec.json",
-            "karmaConfig": "projects/trivia-editior/karma.conf.js"
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "projects/trivia-editior/tsconfig.lib.json",
-              "projects/trivia-editior/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

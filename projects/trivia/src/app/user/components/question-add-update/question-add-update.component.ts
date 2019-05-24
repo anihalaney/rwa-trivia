@@ -1,25 +1,19 @@
-import { Component, OnDestroy, ChangeDetectionStrategy, ViewChild, OnInit } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ViewChild, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormArray, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
-import { MatSnackBar, MatDialogRef, MatDialog } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { QuestionAddUpdate } from './question-add-update';
-import { Question, Answer, Subscription } from 'shared-library/shared/model';
-import { debounceTime, map, finalize } from 'rxjs/operators';
+import { Question, Answer } from 'shared-library/shared/model';
+import { debounceTime, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { QuillInitializeService } from 'shared-library/core/services/quillInitialize.service';
-import { QuillEditorComponent } from 'ngx-quill';
-import Quill from 'quill';
-import BlotFormatter from 'quill-blot-formatter';
-import { ImageUpload } from 'quill-image-upload';
 import { QuestionService } from 'shared-library/core/services';
-import { WindowRef } from 'shared-library/core/services';
-import { CONFIG } from 'shared-library/environments/environment';
-import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
+import { ImageCropperComponent } from 'ngx-img-cropper';
 import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
+import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 
 
 @Component({
@@ -40,16 +34,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   }
   subscriptions = [];
   htmlText: any;
-  objectFormat = [
-    { insert: { formula: '6\\sqrt{-753+\\sqrt{355}}' } },
-    { insert: 'World!', attributes: { bold: true } },
-    { insert: '\n' }
-  ];
   jsonObject: any;
-  quillEditorRef;
   quillImageUrl: string;
 
-  @ViewChild('quillEditior') quillEditior: QuillEditorComponent;
   public editorConfig = {
     placeholder: 's'
   };
@@ -60,17 +47,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       handlers: {
         // handlers object will be merged with default handlers object
         'mathEditor': () => {
+          console.log('maths called');
         }
       }
     },
     mathEditor: {},
     blotFormatter: {},
-    syntax: true,
-    imageUpload: {
-      customUploader: (file) => {
-        this.openDialog(file);
-      }
-    }
+    syntax: true
   };
 
   // Constructor
@@ -80,45 +63,28 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     public router: Router,
     public snackBar: MatSnackBar,
     public questionAction: QuestionActions,
-    public quillInitializeService: QuillInitializeService,
     public questionService: QuestionService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private cd: ChangeDetectorRef) {
 
     super(fb, store, utils, questionAction);
-
-    Quill.register('modules/imageUpload', ImageUpload);
-    Quill.register('modules/blotFormatter', BlotFormatter);
 
     this.question = new Question();
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
+
         this.applicationSettings = appSettings[0];
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
         this.createForm(this.question);
-        this.quillConfig.mathEditor = { applicationSettings: this.applicationSettings };
+        this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
       }
     }));
 
     this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
-
-      if (isRichEditor) {
-        setTimeout(() => {
-          this.quillEditior
-            .onContentChanged
-            .pipe(
-              debounceTime(400),
-            )
-            .subscribe((data) => {
-              this.question.questionObject = data.html;
-              this.jsonObject = data.content.ops;
-            });
-        }, 0);
-      }
       setTimeout(() => {
         this.questionForm.patchValue({ questionText: '' });
       }, 0);
-
     });
 
     const questionControl = this.questionForm.get('questionText');
@@ -139,20 +105,46 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     }));
   }
 
-
-  quilHtml(html) {
-    console.log('html called', html);
+  // Text change in quill editor
+  onTextChanged(text) {
+    this.jsonObject = text.delta;
+    this.question.questionObject = text.html;
   }
 
-  quilDelta(delta) {
-    console.log('delta>>>', delta);
+  // Image Upload
+  fileUploaded(quillImageUpload: QuillImageUpload) {
+    const file: File = quillImageUpload.file;
+
+    this.dialogRef = this.dialog.open(CropImageDialogComponent, {
+      disableClose: false,
+      data: { file: file, applicationSettings: this.applicationSettings }
+    });
+
+    this.dialogRef.componentInstance.ref = this.dialogRef;
+    this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+      if (result) {
+        const fileName = `questions/${new Date().getTime()}-${file.name}`;
+        this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
+          if (uploadTask != null) {
+            if (uploadTask.task.snapshot.state === 'success') {
+              this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
+                quillImageUpload.setImage(imageUrl);
+                this.cd.markForCheck();
+              });
+            }
+          }
+        });
+      }
+    });
+    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
+      // this.renderer.addClass(document.body, 'dialog-open');
+    }));
+    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
+      // this.renderer.removeClass(document.body, 'dialog-open');
+    }));
+
   }
 
-  fileuploaded(file) {
-    // console.log('image uploadede', file);
-    this.openDialog(file);
-    // console.log('file');
-  }
   openDialog(file: File) {
     this.dialogRef = this.dialog.open(CropImageDialogComponent, {
       disableClose: false,
@@ -167,13 +159,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
           if (uploadTask != null) {
             if (uploadTask.task.snapshot.state === 'success') {
               this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
-                // const range = this.quillEditorRef.getSelection();
-                // const imageIndex = range.index;
-                // this.quillEditorRef.insertEmbed(imageIndex, 'image', imageUrl);
                 this.quillImageUrl = imageUrl;
-                console.log('image URL', this.quillImageUrl);
-
-                // console.log(this.quillEditorRef.getLength());
+                this.cd.markForCheck();
               });
             }
           }
@@ -189,23 +176,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   }
 
   ngOnInit(): void {
-
-    setTimeout(() => {
-      this.quillImageUrl = 'fileupdated';
-    }, 2000);
-    setTimeout(() => {
-      this.quillImageUrl = 'fileupdated 4';
-    }, 4000);
-
-    setTimeout(() => {
-      this.quillImageUrl = 'fileupdated 6';
-    }, 6000);
-
   }
 
-  getEditorInstance(editorInstance: any) {
-    this.quillEditorRef = editorInstance;
-  }
 
   createForm(question: Question) {
 
@@ -270,8 +242,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       question.questionText = this.question.questionObject;
       question.questionObject = questionObject;
     }
-    console.log('question>', question);
-    // console.log('this quesiton', this.question);
     if (question) {
       // call saveQuestion
       this.saveQuestion(question);

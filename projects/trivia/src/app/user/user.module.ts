@@ -4,9 +4,7 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { SharedModule } from 'shared-library/shared/shared.module';
 import { UserRoutingModule } from './routing/user-routing.module';
-import { QuillModule } from 'ngx-quill';
 import { effects, reducer } from './store';
-import { QuillInitializeService } from 'shared-library/core/services/quillInitialize.service';
 import { FormsModule } from '@angular/forms';
 import {
   ProfileSettingsComponent,
@@ -19,9 +17,7 @@ import {
 } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
 
-
-import { TriviaQuillEditorComponent } from './../../../../trivia-editior/src/lib/trivia-quill-editor/trivia-quill-editor.component';
-
+import { NgQuillTexModule } from 'ng-quill-tex';
 
 @NgModule({
   declarations: [
@@ -33,13 +29,11 @@ import { TriviaQuillEditorComponent } from './../../../../trivia-editior/src/lib
     InviteMailFriendsComponent,
     InviteFriendsDialogComponent,
     CropImageDialogComponent,
-    TriviaQuillEditorComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     UserRoutingModule,
-    QuillModule.forRoot(),
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
@@ -47,9 +41,10 @@ import { TriviaQuillEditorComponent } from './../../../../trivia-editior/src/lib
     EffectsModule.forFeature(effects),
 
     ImageCropperModule,
-    FormsModule
+    FormsModule,
+    NgQuillTexModule
   ],
-  providers: [QuillInitializeService],
+  providers: [],
   exports: [
     ProfileSettingsComponent,
     MyQuestionsComponent,

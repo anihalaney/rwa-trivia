@@ -1,14 +1,3 @@
-<!-- <h3>Fomat - object</h3>
-<pre>
-  <code>
-    {{ objectFormat | json }}
-</code>
-</pre>
-<quill-editor
-  format="object"
-  [(ngModel)]="objectFormat"
-  [modules]="quillConfig">
-</quill-editor> -->
 <form class="question-form" [formGroup]="questionForm" novalidate>
 
   <div class="mainpage submitpage">
@@ -58,14 +47,18 @@
         <div class="optionbox">
           <h2><span>Enter Your Question:</span></h2>
 
-
-          <app-trivia-quill-editor [modules]="quillConfig" (quillHtml)="quilHtml($event)" (quillDelta)="quilDelta($event)"
-            (fileuploaded)="fileuploaded($event)" [imageUrl]="quillImageUrl">
-          </app-trivia-quill-editor>
           <textarea *ngIf="!questionForm.value.isRichEditor" class="qinput" placeholder="Enter Your Question"
             formControlName="questionText" class="required" aria-label="question-area"></textarea>
-          <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object"
-            formControlName="questionText" [modules]="quillConfig" [sanitize]="true" (onEditorCreated)="getEditorInstance($event)"></quill-editor>
+          <!-- <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object"
+            formControlName="questionText" [modules]="quillConfig" [sanitize]="true" (onEditorCreated)="getEditorInstance($event)"></quill-editor> -->
+
+            <!-- <app-trivia-quill-editor *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (quillHtml)="quilHtml($event)" (quillDelta)="quilDelta($event)"
+            (fileuploaded)="fileuploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
+          </app-trivia-quill-editor> -->
+
+          <ng-quill-tex *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
+          (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
+          </ng-quill-tex>  
 
           <!-- [(ngModel)]="htmlText" -->
           <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
