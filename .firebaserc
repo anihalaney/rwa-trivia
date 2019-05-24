@@ -1,6 +1,7 @@
 {
   "projects": {
     "default": "rwa-trivia-dev-e57fc",
-    "production": "rwa-trivia"
+    "production": "rwa-trivia",
+    "bitwiser-default": "bitwiser-edu"
   }
 }

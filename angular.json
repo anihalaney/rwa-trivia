@@ -45,6 +45,15 @@
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
                 }
               ],
+              "serviceWorker": false
+            },
+            "trivia-staging": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
+                }
+              ],
               "serviceWorker": true,
               "optimization": true,
               "outputHashing": "all",
@@ -78,6 +87,15 @@
               "buildOptimizer": true
             },
             "bitwiser-edu-dev": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
+                }
+              ],
+              "serviceWorker": true
+            },
+            "bitwiser-edu-staging": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
@@ -251,7 +269,15 @@
             "scripts": []
           },
           "configurations": {
-            "dev": {
+            "trivia-admin-dev": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
+                }
+              ]
+            },
+            "trivia-admin-staging": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
@@ -268,11 +294,53 @@
               "vendorChunk": false,
               "buildOptimizer": true
             },
-            "production": {
+            "trivia-admin-production": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "bitwiser-edu-admin-dev": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
+                }
+              ]
+            },
+            "bitwiser-edu-admin-staging": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true
+            },
+            "bitwiser-edu-admin-production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.prod.ts"
                 }
               ],
               "optimization": true,

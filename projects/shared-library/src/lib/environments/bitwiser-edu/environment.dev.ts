@@ -8,12 +8,12 @@ export const environment = {
 
 export const CONFIG: IConfig = {
   'firebaseConfig': {
-    apiKey: 'AIzaSyAqSJgn64UBZUbc7p7UDKSLOoburAENGDw',
-    authDomain: 'rwa-trivia-dev-e57fc.firebaseapp.com',
-    databaseURL: 'https://rwa-trivia-dev-e57fc.firebaseio.com',
-    projectId: 'rwa-trivia-dev-e57fc',
-    storageBucket: 'rwa-trivia-dev-e57fc.appspot.com',
-    messagingSenderId: '701588063269'
+    apiKey: 'AIzaSyBbD7dMiOBXLPVFquP-6sdif8MkxYBYJb0',
+    authDomain: 'bitwiser-edu.firebaseapp.com',
+    databaseURL: 'https://bitwiser-edu.firebaseio.com',
+    projectId: 'bitwiser-edu',
+    storageBucket: 'bitwiser-edu.appspot.com',
+    messagingSenderId: '704157888306'
   },
-  'functionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com'
+  'functionsUrl': 'http://localhost:5000/bitwiser-edu/us-central1/app'
   };
