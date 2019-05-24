@@ -6,7 +6,7 @@ import { UserActions, coreState } from 'shared-library/core/store';
 import { AppState, appState } from './../../../../../../../trivia/src/app/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { isAndroid } from 'tns-core-modules/platform';
-import { Utils } from 'shared-library/core/services';
+import { MobUtils } from '../../../../core/services/mobile';
 
 @Component({
   selector: 'user-feedback',
@@ -25,13 +25,13 @@ export class UserFeedbackComponent implements OnDestroy {
   email_regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
   constructor(private page: Page, private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions,
-     private cd: ChangeDetectorRef, private utils: Utils) {
+     private cd: ChangeDetectorRef, private utils: MobUtils) {
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.feedback)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.resetForm();
         this.cd.markForCheck();
-        this.utils.showMessage("success", 'Feedback sent successfully');
+        this.utils.showMessage('success', 'Feedback sent successfully');
       }
     }));
 
