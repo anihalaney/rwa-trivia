@@ -36,8 +36,28 @@ mat-card {
     border-radius: 50%; 
     height: auto;
     margin-bottom: 16px; 
-    border:1px solid; padding: 2px
+    border:1px solid; 
+    padding: 2px
   }
+
+  .other-user {
+    width: 94%; 
+    max-width: 70px; 
+    border-radius: 50%; 
+    height: auto;
+    margin-bottom: 16px; 
+    border:1px solid;
+    padding: 2px;
+    margin: 0 auto;
+  }
+
+  .no-opponent { 
+    display: block; 
+    width: 64px; 
+    height: 60px; 
+    border-radius: 50% 
+  } 
+
   .div-top-spacing
   {
     margin-top: 2%;
