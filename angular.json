@@ -145,11 +145,17 @@
             "trivia-dev": {
               "browserTarget": "trivia:build:trivia-dev"
             },
-            "bitwiser-edu-dev": {
-              "browserTarget": "trivia:build:bitwiser-edu-dev"
+            "trivia-staging": {
+              "browserTarget": "trivia:build:trivia-staging"
             },
             "trivia-production": {
               "browserTarget": "trivia:build:trivia-production"
+            },
+            "bitwiser-edu-dev": {
+              "browserTarget": "trivia:build:bitwiser-edu-dev"
+            },
+            "bitwiser-edu-staging": {
+              "browserTarget": "trivia:build:bitwiser-edu-staging"
             },
             "bitwiser-edu-production": {
               "browserTarget": "trivia:build:bitwiser-edu-production"
@@ -361,8 +367,23 @@
             "browserTarget": "trivia-admin:build"
           },
           "configurations": {
-            "production": {
-              "browserTarget": "trivia-admin:build:production"
+            "trivia-admin-dev": {
+              "browserTarget": "trivia-admin:build:trivia-admin-dev"
+            },
+            "trivia-admin-staging": {
+              "browserTarget": "trivia-admin:build:trivia-admin-staging"
+            },
+            "trivia-admin-production": {
+              "browserTarget": "trivia-admin:build:trivia-admin-production"
+            },
+            "bitwiser-edu-admin-dev": {
+              "browserTarget": "trivia-admin:build:bitwiser-edu-admin-dev"
+            },
+            "bitwiser-edu-admin-staging": {
+              "browserTarget": "trivia-admin:build:bitwiser-edu-admin-staging"
+            },
+            "bitwiser-edu-admin-production": {
+              "browserTarget": "trivia-admin:build:bitwiser-edu-admin-production"
             }
           }
         },
