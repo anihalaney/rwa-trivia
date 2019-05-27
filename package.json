@@ -23,8 +23,8 @@
 
     "start-bitwiser-edu": "ng serve trivia --configuration=bitwiser-edu-dev",
     "start-bitwiser-edu-admin": "ng serve trivia-admin  --configuration=bitwiser-edu-admin-dev",
-    "staging:bitwiser-edu": "ng serve trivia --configuration=bitwiser-edu-staging",
-    "staging:bitwiser-edu-admin": "ng serve trivia-admin --configuration=bitwiser-edu-admin-staging",
+    "staging:start-bitwiser-edu": "ng serve trivia --configuration=bitwiser-edu-staging",
+    "staging:start-bitwiser-edu-admin": "ng serve trivia-admin --configuration=bitwiser-edu-admin-staging",
     "prod:start-bitwiser-edu": "ng serve  trivia --configuration=bitwiser-edu-production",
     "prod:start-bitwiser-edu-admin": "ng serve  trivia-admin --configuration=bitwiser-edu-admin-production",
 
