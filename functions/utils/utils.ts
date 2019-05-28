@@ -57,21 +57,11 @@ export class Utils {
         // firebase -P production functions:config:set environment.production=true
         // After setting config variable do not forget to deploy functions
         // to see set environments firebase -P production functions:config:get
-        let prefix = 'dev:';
-        if (Utils.isEnvironmentProduction()) {
-            prefix = '';
-        }
-        return prefix;
+        return Utils.getConfig().esPrefix;
     }
 
     static getWebsiteUrl(): string {
-        let websiteUrl = `https://`;
-        if (Utils.isEnvironmentProduction()) {
-            websiteUrl += 'bitwiser.io';
-        } else {
-            websiteUrl += 'rwa-trivia-dev-e57fc.firebaseapp.com';
-        }
-        return websiteUrl;
+        return Utils.getConfig().websiteUrl;
     }
 
     static changeFieldValue(value): any {
