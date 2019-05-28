@@ -7,6 +7,10 @@
         "function": "app"
       },
       {
+        "source": "/v1/**",
+        "function": "v1"
+      },
+      {
         "source": "/robots.txt",
         "destination": "/robots.txt"
       },

@@ -40,7 +40,7 @@ export class UtilsCore {
   getImageUrl(user: User, width: Number, height: Number, size: string) {
 
     if (user && user.profilePicture && user.profilePicture !== '') {
-      return `${CONFIG.functionsUrl}/app/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
+      return `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
     } else {
       if (isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false) {
         return `~/assets/images/avatar-${size}.png`;

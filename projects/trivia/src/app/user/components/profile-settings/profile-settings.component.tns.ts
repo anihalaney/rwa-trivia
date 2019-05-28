@@ -69,7 +69,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     requestPermissions();
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
-        this.utils.showMessage("success", 'Profile is saved successfully');
+        this.utils.showMessage('success', 'Profile is saved successfully');
         this.toggleLoader(false);
       }
       this.cd.markForCheck();

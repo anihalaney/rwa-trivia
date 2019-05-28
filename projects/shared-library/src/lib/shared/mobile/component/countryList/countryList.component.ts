@@ -4,8 +4,10 @@ import { Country } from './model/country.model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { UserActions } from '../../store';
-import { appState, AppState } from './../../../../../../trivia/src/app/store';
+// import { UserActions } from '../../store';
+import { UserActions, coreState, CoreState } from 'shared-library/core/store';
+
+
 @Component({
   selector: 'country-list',
   templateUrl: 'countryList.component.html',
@@ -19,10 +21,12 @@ export class CountryListComponent implements OnInit, OnDestroy {
   responseJson;
   allCountries: Array<Country> = [];
   subscriptions: Subscription[] = [];
+  searchCountries = '';
+
   constructor(private _modalDialogParams: ModalDialogParams, private cd: ChangeDetectorRef,
-    private store: Store<AppState>, private userAction: UserActions) {
+    private store: Store<CoreState>, private userAction: UserActions) {
     this.country = this._modalDialogParams.context.Country;
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.countries)).subscribe(countries => {
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.countries)).subscribe(countries => {
       this.cd.markForCheck();
       if (countries.length > 0) {
         this.allCountries = countries.sort((prev, next) => prev.name.localeCompare(next.name) );

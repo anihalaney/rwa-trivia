@@ -4,7 +4,13 @@
   "license": "MIT",
   "angular-cli": {},
   "nativescript": {
-    "id": "io.bitwiser.trivia.dev"
+    "id": "io.bitwiser.trivia.dev",
+    "tns-android": {
+      "version": "5.4.0"
+    },
+    "tns-ios": {
+      "version": "5.4.0"
+    }
   },
   "scripts": {
     "ng": "ng",
@@ -95,6 +101,7 @@
     "jasmine-marbles": "^0.5.0",
     "lodash": "^4.17.11",
     "nativescript-angular": "^7.2.3",
+    "nativescript-appversion": "^1.4.1",
     "nativescript-camera": "^4.4.1",
     "nativescript-cardview": "^3.1.1",
     "nativescript-checkbox": "^3.0.3",
