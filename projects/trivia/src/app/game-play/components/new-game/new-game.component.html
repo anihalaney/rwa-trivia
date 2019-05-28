@@ -110,8 +110,10 @@
                                         <span (click)="removeEnteredTag(tag)" class="remove-tag">x</span>
                                     </mat-basic-chip>
                                 </mat-chip-list>
-                                <input type="text" placeholder="Tag" matInput formControlName="tagControl"
-                                    [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)" aria-label="tag">
+                                <!-- <input type="text" placeholder="Tag" matInput formControlName="tagControl"
+                                    [matAutocomplete]="tagAuto" (change)="autoOptionClick($event)" aria-label="tag"> -->
+                                    <input type="text" placeholder="Tag" matInput formControlName="tagControl"
+                                    [matAutocomplete]="tagAuto" aria-label="tag">
                                 <mat-autocomplete #tagAuto="matAutocomplete">
                                     <mat-option *ngFor="let tag of filteredTags$ | async" [value]="tag">
                                         {{ tag }}

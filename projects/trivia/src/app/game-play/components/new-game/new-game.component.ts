@@ -150,7 +150,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }
   }
   addTagToSelectedList(tag: string) {
-    if (tag && tag !== '') {
+    if (tag && tag !== '' && this.selectedTags.filter((res) => res.toLowerCase() === tag.toLowerCase()).length === 0) {
       this.selectedTags.push(tag);
     }
   }
