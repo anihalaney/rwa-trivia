@@ -12,6 +12,7 @@ export class ApplicationSettings {
     android_version: number;
     ios_version: number;
     phone_authentication: boolean;
+    default_names: Array<string>;
 }
 
 export class TimerLoader {

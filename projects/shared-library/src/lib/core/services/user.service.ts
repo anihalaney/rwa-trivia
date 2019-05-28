@@ -3,15 +3,18 @@ import { Injectable } from '@angular/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
-    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User
+    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User, RoutesConstants
 } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
+import { BlockScrollStrategy } from '@angular/cdk/overlay';
 
 @Injectable()
 export class UserService {
+
+    private RC = RoutesConstants;
 
     constructor(
         private http: HttpClient,
@@ -21,22 +24,25 @@ export class UserService {
 
     loadUserProfile(user: User): Observable<User> {
 
-    return this.dbService.valueChanges('users', user.userId)
-    .pipe(map(u => {
-        if (u) {
-            const userInfo = user;
-            user = u;
-            user.idToken = userInfo.idToken;
-            user.authState = userInfo.authState;
-        } else {
-            const dbUser = Object.assign({}, user); // object to be saved
-            delete dbUser.authState;
-            delete dbUser.profilePictureUrl;
-            this.dbService.setDoc('users', dbUser.userId, dbUser);
-        }
-        return user;
-    }),
-        mergeMap(u => this.getUserProfileImage(u)));
+        return this.dbService.valueChanges('users', user.userId)
+            .pipe(map(u => {
+                if (u) {
+                    const userInfo = user;
+                    user = u;
+                    user.idToken = userInfo.idToken;
+                    user.authState = userInfo.authState;
+                } else {
+                    const dbUser = Object.assign({}, user); // object to be saved
+                    delete dbUser.authState;
+                    delete dbUser.profilePictureUrl;
+
+                    console.log('db User ====> ', dbUser);
+
+                    this.dbService.setDoc('users', dbUser.userId, dbUser);
+                }
+                return user;
+            }),
+                mergeMap(u => this.getUserProfileImage(u)));
     }
 
     loadAccounts(user): Observable<any> {
@@ -164,4 +170,10 @@ export class UserService {
         const url = `${CONFIG.functionsUrl}/user/update-lives`;
         return this.http.post<any>(url, { userId: userId });
     }
+
+    checkDisplayName(displayName: string): Observable<any> {
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.CHECK}/${this.RC.DISPLAY_NAME}/${displayName}`;
+        return this.http.get<any>(url);
+    }
+
 }

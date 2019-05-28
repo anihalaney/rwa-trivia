@@ -223,4 +223,22 @@ export class UserService {
         }
     }
 
+
+    /**
+     * getUsersDisplayName
+     * return users
+     */
+    static async getUsersByDisplayName(displayName: string): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await UserService.fireStoreClient
+                    .collection(CollectionConstants.USERS)
+                    .where(GeneralConstants.DISPLAY_NAME, GeneralConstants.DOUBLE_EQUAL, displayName)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 }
