@@ -30,8 +30,8 @@ module.exports = function ($logger, $projectData, hookArgs) {
             var destinationFacebookLoginXml = path.join($projectData.appResourcesDirectoryPath, "Android", "values", "facebooklogin.xml");
             var destinationFacebookLoginXmlAlt = path.join($projectData.appResourcesDirectoryPath, "Android", "values", "facebooklogin.xml");
             var sourceFacebookLoginXml = path.join($projectData.projectDir, "configurations", "android", "facebooklogin.xml");
-            var sourceFacebookLoginXmlProd = path.join($projectData.projectDir, "configurations", "android", "facebooklogin.prod.xml");
-            var sourceFacebookLoginXmlDev = path.join($projectData.projectDir, "configurations", "android", "facebooklogin.dev.xml");
+            var sourceFacebookLoginXmlProd = path.join($projectData.projectDir, "configurations",hookArgs.platformSpecificData.env.project, "android", "facebooklogin.prod.xml");
+            var sourceFacebookLoginXmlDev = path.join($projectData.projectDir, "configurations",hookArgs.platformSpecificData.env.project, "android", "facebooklogin.dev.xml");
             var facebookFileExist = false;
             var stringsFileExist = false;
 
@@ -62,8 +62,8 @@ module.exports = function ($logger, $projectData, hookArgs) {
             var destinationStringsXml = path.join($projectData.appResourcesDirectoryPath, "Android", "values", "strings.xml");
             var destinationStringsXmlAlt = path.join($projectData.appResourcesDirectoryPath, "Android", "values", "strings.xml");
             var sourceStringsXml = path.join($projectData.projectDir, "configurations", "android", "strings.xml");
-            var sourceStringsXmlProd = path.join($projectData.projectDir, "configurations", "android", "strings.prod.xml");
-            var sourceStringsXmlDev = path.join($projectData.projectDir, "configurations", "android", "strings.dev.xml");
+            var sourceStringsXmlProd = path.join($projectData.projectDir, "configurations",hookArgs.platformSpecificData.env.project, "android", "strings.prod.xml");
+            var sourceStringsXmlDev = path.join($projectData.projectDir, "configurations",hookArgs.platformSpecificData.env.project, "android", "strings.dev.xml");
 
             // ensure we have both dev/prod versions so we never overwrite singular strings.xml
             if (fs.existsSync(sourceStringsXmlProd) && fs.existsSync(sourceStringsXmlDev)) {

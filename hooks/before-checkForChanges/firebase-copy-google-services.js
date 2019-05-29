@@ -62,8 +62,8 @@ module.exports = function($logger, $projectData, hookArgs) {
 var copyPlist = function(copyPlistOpts) {
     if (copyPlistOpts.platform === 'android') { return true; }
     else if (copyPlistOpts.platform === 'ios') {
-        var sourceGooglePlistProd = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist.prod");
-        var sourceGooglePlistDev = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist.dev");
+        var sourceGooglePlistProd = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", `google-services/${hookArgs.platformSpecificData.env.project}/GoogleService-Info.plist.prod`);
+        var sourceGooglePlistDev = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", `google-services/${hookArgs.platformSpecificData.env.project}/GoogleService-Info.plist.dev`);
         var destinationGooglePlist = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist");
 
         // if we have both dev/prod versions, we copy (or overwrite) GoogleService-Info.plist in destination dir
