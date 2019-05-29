@@ -23,13 +23,13 @@ export class QuestionService {
 
   // Elasticsearch
   getQuestionOfTheDay(isNextQuestion: boolean): Observable<Question> {
-    let url: string = CONFIG.functionsUrl + '/app/question/day';
+    let url = `${CONFIG.functionsUrl}/question/day`;
     url = (isNextQuestion) ? `${url}/next` : `${url}/current`;
     return this.http.get<Question>(url);
   }
 
   getQuestions(startRow: number, pageSize: number, criteria: SearchCriteria): Observable<SearchResults> {
-    const url: string = CONFIG.functionsUrl + '/app/question/';
+    const url = `${CONFIG.functionsUrl}/question/`;
 
     return this.http.post<SearchResults>(url + startRow + '/' + pageSize, criteria);
   }

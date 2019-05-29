@@ -5,8 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import {
-  ActionBarComponent, DrawerComponent, QuestionsTableComponent,
-  RenderAnswerComponent
+  ActionBarComponent, DrawerComponent,
+  QuestionsTableComponent, RenderAnswerComponent, CountryListComponent
 } from './mobile/component';
 import { NativeScriptCommonModule } from 'nativescript-angular/common';
 import { GameFilterPipe } from './pipe/game-filter.pipe';
@@ -16,7 +16,7 @@ import { NativeScriptUIAutoCompleteTextViewModule } from 'nativescript-ui-autoco
 import { NativeScriptUIListViewModule } from 'nativescript-ui-listview/angular';
 import { RenderQuestionComponent, AuthorComponent } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDirective } from './directive';
-
+import { PhoneNumberValidationProvider } from './mobile/component/countryList/phone-number-validation.provider';
 @NgModule({
   declarations: [
     ActionBarComponent,
@@ -29,7 +29,8 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     OpenUserProfileDirective,
     RippleEffectDirective,
     RenderAnswerComponent,
-    RenderQuestionComponent
+    RenderQuestionComponent,
+    CountryListComponent
   ],
   imports: [
     CommonModule,
@@ -69,6 +70,12 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective, RippleEffectDi
     RenderAnswerComponent,
     RenderQuestionComponent
   ],
-  schemas: [NO_ERRORS_SCHEMA]
+  schemas: [NO_ERRORS_SCHEMA],
+  entryComponents: [
+    CountryListComponent
+  ],
+  providers: [
+    PhoneNumberValidationProvider
+  ]
 })
 export class SharedModule { }

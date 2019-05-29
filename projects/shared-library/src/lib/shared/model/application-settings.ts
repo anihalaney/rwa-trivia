@@ -12,6 +12,8 @@ export class ApplicationSettings {
     display_achievements: boolean;
     quill_options: { list, options };
     max_image_size_of_question?: number;
+    android_version: number;
+    ios_version: number;
     phone_authentication: boolean;
 }
 

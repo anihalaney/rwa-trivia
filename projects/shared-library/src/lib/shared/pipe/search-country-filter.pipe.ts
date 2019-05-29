@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Country } from 'shared-library/core/components/countryList/model/country.model';
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
 @Pipe({
     name: 'searchCountry'

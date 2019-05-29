@@ -46,7 +46,7 @@ export class SocialService {
     }
 
     getTotalSubscription(): Observable<Subscribers> {
-        const url: string = CONFIG.functionsUrl + '/app/subscription/count';
+        const url = `${CONFIG.functionsUrl}/subscription/count`;
         return this.http.get<Subscribers>(url);
     }
 

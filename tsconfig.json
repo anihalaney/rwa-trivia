@@ -26,14 +26,8 @@
             "shared-library/*": [
                 "./projects/shared-library/src/lib/*"
             ],
-            "trivia-editior": [
-                "dist/trivia-editior"
-            ],
-            "trivia-editior/*": [
-                "dist/trivia-editior/*"
-            ],
-            "~/*": [
-                "projects/trivia/src/*"
+            "core-js/es7/reflect": [
+                "node_modules/core-js/proposals/reflect-metadata"
             ]
         }
     },

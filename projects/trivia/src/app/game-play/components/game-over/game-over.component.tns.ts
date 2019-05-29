@@ -13,6 +13,7 @@ import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
 import { ReportGameComponent } from './../report-game/report-game.component';
 import { Image } from "tns-core-modules/ui/image";
+import { appConstants } from 'shared-library/shared/model';
 
 @Component({
   selector: 'game-over',
@@ -48,7 +49,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
         if (uploadTask.task.snapshot.state === 'success') {
           const path = uploadTask.task.snapshot.metadata.fullPath.split('/');
           // tslint:disable-next-line:max-line-length
-          const url = `https://${this.windowRef.nativeWindow.location.hostname}/app/game/social/${this.user.userId}/${path[path.length - 1]}`;
+          const url = `https://${this.windowRef.nativeWindow.location.hostname}/${appConstants.API_VERSION}/game/social/${this.user.userId}/${path[path.length - 1]}`;
           this.socialFeedData.share_status = true;
           this.socialFeedData.link = url;
           this.loaderStatus = false;

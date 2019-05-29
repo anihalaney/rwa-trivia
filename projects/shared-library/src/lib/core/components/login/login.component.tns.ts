@@ -8,15 +8,15 @@ import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Page } from 'tns-core-modules/ui/page';
-import { LoadingIndicator } from "nativescript-loading-indicator";
+import { LoadingIndicator } from 'nativescript-loading-indicator';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from '../../services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { CountryListComponent } from "../countryList/countryList.component";
-import { NgModel } from "@angular/forms";
+import { CountryListComponent } from '../../../shared/mobile/component/countryList/countryList.component';
+import { NgModel } from '@angular/forms';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
-import {PhoneNumberValidationProvider} from '../countryList/phone-number-validation.provider';
+import {PhoneNumberValidationProvider} from '../../../shared/mobile/component/countryList/phone-number-validation.provider';
 
 @Component({
   selector: 'login',

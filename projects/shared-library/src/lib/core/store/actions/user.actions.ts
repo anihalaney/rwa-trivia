@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
 import { User, Game, Friends, Invitation } from '../../../shared/model';
-import { Country } from 'shared-library/core/components/countryList/model/country.model';
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
 @Injectable()
 export class UserActions {

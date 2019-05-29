@@ -76,7 +76,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.questionSaveStatus)).subscribe((status) => {
       if (status === 'SUCCESS') {
         this.store.dispatch(this.questionAction.resetQuestionSuccess());
-        this.utils.showMessage("success", 'Question saved!');
+        this.utils.showMessage('success', 'Question saved!');
         this.routerExtension.navigate(['/user/my/questions']);
         this.actionBarTxt = 'My Question';
         setTimeout(() => {

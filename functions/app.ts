@@ -5,7 +5,7 @@ import * as functions from 'firebase-functions';
 import * as cookieParser from 'cookie-parser';
 import * as bodyParser from 'body-parser';
 import * as cors from 'cors';
-import router from './routes/routes';
+import rootRouter from './routes/root-routes';
 import { FirebaseFunctions } from './db/firebase.functions';
 
 
@@ -24,15 +24,15 @@ class App {
         this.app.use(bodyParser.json());
         this.app.use('/images', express.static(__dirname + '/../../images'));
         this.app.use((req, res, next) => {
-            //  console.log('before', req.url);
-            if (req.url.indexOf(`/${appConstants.API_PREFIX}/`) === -1) {
-                req.url = `/${appConstants.API_PREFIX}${req.url}`; // prepend '/' to keep query params if any
-            }
-            //  console.log('after', req.url);
+
+            // console.log('before', req.url);
+            req.url = req.url.slice(req.url.indexOf(appConstants.API_VERSION) - 1);
+            req.url = `/${appConstants.API_PREFIX}${req.url}`; // prepend '/' to keep query params if any
+            // console.log('after', req.url);
             next();
         });
         // Routes
-        this.app.use(router);
+        this.app.use(rootRouter);
         this.appFunction = functions.https.onRequest(this.app);
 
     }

@@ -8,7 +8,7 @@ import {
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
-import { Country } from '../components/countryList/model/country.model';
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
 @Injectable()
 export class UserService {
@@ -44,7 +44,7 @@ export class UserService {
     }
 
     saveUserProfile(user: User): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/user/profile`;
+        const url = `${CONFIG.functionsUrl}/user/profile`;
         user.roles = (!user.roles) ? {} : user.roles;
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
@@ -62,12 +62,12 @@ export class UserService {
     }
 
     loadOtherUserProfile(userId: string): Observable<User> {
-        const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
+        const url = `${CONFIG.functionsUrl}/user/${userId}`;
         return this.http.get<User>(url);
     }
 
     loadOtherUserProfileWithExtendedInfo(userId: string): Observable<User> {
-        const url = `${CONFIG.functionsUrl}/app/user/extendedInfo/${userId}`;
+        const url = `${CONFIG.functionsUrl}/user/extendedInfo/${userId}`;
         return this.http.get<User>(url);
     }
 
@@ -87,12 +87,12 @@ export class UserService {
     }
 
     saveUserInvitations(obj: any): Observable<string> {
-        const url = `${CONFIG.functionsUrl}/app/friend/invitation`;
+        const url = `${CONFIG.functionsUrl}/friend/invitation`;
         return this.http.post<any>(url, obj);
     }
 
     checkInvitationToken(obj: any): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/friend`;
+        const url = `${CONFIG.functionsUrl}/friend`;
         return this.http.post<any>(url, obj);
     }
 
@@ -149,7 +149,7 @@ export class UserService {
     }
 
     rejectGameInvitation(gameId: string) {
-        return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+        return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
             {
                 operation: GameOperations.REJECT_GAME
             });
@@ -161,7 +161,7 @@ export class UserService {
     }
 
     addUserLives(userId: string) {
-        const url = `${CONFIG.functionsUrl}/app/user/update-lives`;
+        const url = `${CONFIG.functionsUrl}/user/update-lives`;
         return this.http.post<any>(url, { userId: userId });
     }
 }

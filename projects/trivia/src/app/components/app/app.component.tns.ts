@@ -1,22 +1,24 @@
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Store, select } from '@ngrx/store';
-import { Subscription } from 'rxjs';
-import { filter, take } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
-import { UserActions } from 'shared-library/core/store/actions';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Platform from 'tns-core-modules/platform';
 import { isAndroid } from 'tns-core-modules/platform';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
 import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
 import { coreState } from 'shared-library/core/store';
-import { User } from 'shared-library/shared/model';
+import { ApplicationSettings } from 'shared-library/shared/model';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
 import { FirebaseAuthService } from 'shared-library/core/auth/firebase-auth.service';
 import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import * as util from 'tns-core-modules/utils/utils';
+import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
+import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
+import * as appversion from 'nativescript-appversion';
 import { Utils } from '../../../../../shared-library/src/lib/core/services';
 
 @Component({
@@ -26,16 +28,19 @@ import { Utils } from '../../../../../shared-library/src/lib/core/services';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class AppComponent implements OnInit, OnDestroy {
+
   subscriptions = [];
+  applicationSettings: ApplicationSettings;
+
   constructor(private store: Store<AppState>,
     private navigationService: NavigationService,
     private ngZone: NgZone,
     private routerExtension: RouterExtensions,
-    private userActions: UserActions,
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions,
     private utils: Utils) {
 
+    this.checkForceUpdate();
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
@@ -82,12 +87,49 @@ export class AppComponent implements OnInit, OnDestroy {
 
   }
 
+  async checkForceUpdate() {
 
+    let version;
+    try {
+        version = await appversion.getVersionCode();
+    } catch (error) {
+      console.error(error);
+    }
 
-  ngOnDestroy() {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
+      .subscribe(appSettings => {
+        if (appSettings && appSettings.length > 0) {
 
+          this.applicationSettings = appSettings[0];
+
+          if (isAndroid && version && this.applicationSettings.android_version
+            && this.applicationSettings.android_version > version) {
+            this.displayForceUpdateDialog(CONFIG.firebaseConfig.googlePlayUrl);
+          } else if (!isAndroid && version && this.applicationSettings.ios_version
+            && this.applicationSettings.ios_version > version) {
+            this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
+          }
+        }
+      }));
   }
 
+  async displayForceUpdateDialog(url: string) {
+
+    const alertOptions = {
+      title: 'New version available',
+      message: 'Please, update app to new version to continue reposting.',
+      okButtonText: 'Update',
+      cancelable: false
+    };
+    try {
+      await alert(alertOptions);
+      util.openUrl(url);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  ngOnDestroy() { }
 
   handleBackPress() {
     if (!Platform.isAndroid) {
