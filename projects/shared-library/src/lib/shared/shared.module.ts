@@ -11,10 +11,11 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
 
 import {
   QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-  QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent, RenderQuestionComponent
+  QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent, RenderQuestionComponent,
+  RenderAnswerComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './directive';
-
+import { NgQuillTexModule } from 'ng-quill-tex';
 @NgModule({
   declarations: [
     QuestionsComponent,
@@ -27,7 +28,8 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective,
     SafeHtmlPipe,
-    RenderQuestionComponent
+    RenderQuestionComponent,
+    RenderAnswerComponent
   ],
   imports: [
     CommonModule,
@@ -45,9 +47,10 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     RouterModule,
 
     HttpClientModule,       // for share counts
-    ShareButtonModule
+    ShareButtonModule,
+    NgQuillTexModule
   ],
-  exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
+  exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent, RenderAnswerComponent,
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,

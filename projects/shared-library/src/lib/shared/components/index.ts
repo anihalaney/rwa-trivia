@@ -7,6 +7,7 @@ import { RejectedQuestionContentComponent } from './rejected-question-content/re
 import { SocialPaletteComponent } from './social-palette/social-palette.component';
 import { AuthorComponent } from './author/author.component';
 import { RenderQuestionComponent } from './render-question/render-question.component';
+import { RenderAnswerComponent } from './render-answer/render-answer.component';
 export {
     QuestionsComponent,
     QuestionsSearchComponent,
@@ -15,7 +16,8 @@ export {
     RejectedQuestionContentComponent,
     SocialPaletteComponent,
     AuthorComponent,
-    RenderQuestionComponent
+    RenderQuestionComponent,
+    RenderAnswerComponent
 };
 
 export default [
@@ -26,5 +28,6 @@ export default [
     RejectedQuestionContentComponent,
     SocialPaletteComponent,
     AuthorComponent,
-    RenderQuestionComponent
+    RenderQuestionComponent,
+    RenderAnswerComponent
 ];

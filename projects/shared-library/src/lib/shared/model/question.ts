@@ -29,7 +29,7 @@ export class Question {
   renderedQuestion?: any;
   renderedAnswer?; any;
   questionObject?: any;
-  isRichEditor?: boolean;
+  isRichEditor?: boolean = false;
 
 
 
@@ -53,6 +53,11 @@ export class Question {
     question.questionObject = db.questionObject ? db.questionObject : false;
     question.createdOn = db.createdOn ? db.createdOn : new Date();
     question.totalQALength = this.countQALength(db);
+
+    db.answers = db.answers.map(answer => {
+      answer.isRichEditor = answer.isRichEditor ? answer.isRichEditor : false;
+      return answer;
+    });
     return question;
   }
 
@@ -71,7 +76,7 @@ export class Question {
     question.created_uid = source.created_uid;
     question.serverTimeQCreated = source.serverTimeQCreated;
     question.renderedQuestion = source.renderedQuestion;
-    question.isRichEditor = source.isRichEditor;
+    question.isRichEditor = (source.isRichEditor) ? source.isRichEditor : false;
     question.questionObject = (source.questionObject) ? source.questionObject : '' ;
 
     question.totalQALength = this.countQALength(source);
@@ -108,6 +113,8 @@ export class Answer {
   answerText: string;
   correct: boolean;
   renderedAnswer?: string;
+  answerObject?: any;
+  isRichEditor?: boolean = false;
 }
 
 export enum QuestionStatus {

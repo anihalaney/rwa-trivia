@@ -28,19 +28,32 @@
       </div>
       <div class="optionbox row col-md-11 formfield">
         <p class="field-caption">Enter Your Question</p>
-        <textarea placeholder="Enter Your Question" formControlName="questionText" class="required col-md-12 col-xs-12" aria-label="questionText"></textarea>
+         <textarea  *ngIf="!questionForm.value.isRichEditor" placeholder="Enter Your Question" formControlName="questionText" class="required col-md-12 col-xs-12" aria-label="questionText"></textarea> 
+        <!-- *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" -->
+
+        <ng-quill-tex *ngIf="questionForm.value.isRichEditor" (textChanged)="onTextChanged($event)"   [modules]="quillConfig"
+        (fileUploaded)="fileUploaded($event)"  [group]="questionForm" [controlName]="'questionText'">
+        </ng-quill-tex>  
+
         <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
           is required!</p>
       </div>
-      <div class="optionbox row col-md-11 enterquestion">
+      <div class="optionbox row col-md-12 enterquestion">
         <p class="field-caption">Answers</p>
         <ng-container formArrayName="answers">
-          <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield col-md-6 ">
+          <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
             <label>
               <input type="checkbox" formControlName="correct">
             </label>
-            <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required edit-form-input-field"
+            <input *ngIf="!answer.value.isRichEditor" [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required edit-form-input-field"
               aria-label="answerText">
+            <div class="mathseditor" *ngIf="answer.value.isRichEditor">
+                <ng-quill-tex  [modules]="quillConfig" (textChanged)="onAnswerChanged($event,i)" 
+                (fileUploaded)="fileUploaded($event)"  [content]="answer.value.answerText">
+                </ng-quill-tex> 
+            </div>
+           
+
           </div>
         </ng-container>
         <div class="error" *ngIf="!answers.valid && !answers.pristine">

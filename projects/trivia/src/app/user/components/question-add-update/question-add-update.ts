@@ -50,11 +50,14 @@ export class QuestionAddUpdate {
   }
 
   createDefaultForm(question: Question): FormArray {
+    // , Validators.maxLength(this.applicationSettings.answer_max_length)
     const fgs: FormGroup[] = question.answers.map(answer => {
       const fg = new FormGroup({
         answerText: new FormControl(answer.answerText,
-          Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.answer_max_length)])),
+          Validators.compose([Validators.required])),
         correct: new FormControl(answer.correct),
+        isRichEditor: new FormControl(false),
+        answerObject: new FormControl(),
       });
       return fg;
     });

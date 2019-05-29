@@ -46,7 +46,11 @@
                 <div class="question-text ">Correct answer :</div>
                 <div class="answer-text">
                   <span *ngFor="let answer of row.answers">
-                    <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                    <span *ngIf="answer.correct">
+                      <!-- {{answer.answerText}} -->
+                        <render-answer [renderWebView]="true" [answer]="answer"></render-answer>
+
+                    </span>
                   </span>
                 </div>
                 <div class="row col-sm-3 col-xs-12 question-status">
@@ -69,7 +73,9 @@
               <div class="question-text ">Other options :</div>
               <div class="answer-text">
                 <span *ngFor="let answer of row.answers">
-                  <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
+                  <span *ngIf="!answer.correct">
+                    <!-- {{answer.answerText}}, -->
+                      <render-answer [renderWebView]="true" [answer]="answer"></render-answer></span>
                 </span>
               </div>
             </li>
@@ -77,8 +83,9 @@
               <div class="textleft ">
                 <div class="question-text ">Category :</div>
                 <div class="answer-text">
-                  <span *ngFor="let id of row.categoryIds">
-                    {{categoryDictionary[id]?.categoryName}}
+            
+                 <span *ngFor="let id of row.categoryIds">
+                    {{categoriesObs[id]?.categoryName}}
                   </span>
                 </div>
               </div>
@@ -192,8 +199,9 @@
           </div>
         </div>
       </div>
-      <div class="row edit-form-div" *ngIf="row === editQuestion">
-        <app-question-form [editQuestion]="editQuestion" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs"
+      <div class="row edit-form-div" *ngIf="editQuestion !== null && row === editQuestion">
+
+        <app-question-form [editQuestion]="editQuestion" [tagsDictionary]="tagsDictionary" [tagsObs] ="tagsObs" [categoriesObs]="categoriesObs"
           (updateStatus)=nullifyQuestion($event) (updateUnpublishedQuestions)="updateQuestionData($event)"></app-question-form>
       </div>
       <div class="row rejection-div" *ngIf="row === viewReasonArray[i]">

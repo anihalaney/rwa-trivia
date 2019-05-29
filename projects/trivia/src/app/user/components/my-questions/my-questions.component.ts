@@ -1,4 +1,4 @@
-import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { QuestionActions } from 'shared-library/core/store';
 import { AppState } from '../../../store';
@@ -16,8 +16,9 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
+    public cd: ChangeDetectorRef
   ) {
-    super(store, questionActions);
+    super(store, questionActions, cd);
   }
 
   ngOnDestroy() {

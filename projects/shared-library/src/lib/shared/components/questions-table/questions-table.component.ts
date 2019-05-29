@@ -10,6 +10,7 @@ import { Utils } from '../../../core/services';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { categoryDictionary } from 'projects/trivia-admin/src/app/store';
 
 
 @Component({
@@ -32,6 +33,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   @Input() userDict: { [key: string]: User };
   @Input() user: User;
   @Input() tagsObs: Observable<string[]>;
+  @Input() tagDictionary: { [key: number]: string };
   @Input() categoriesObs: Observable<Category[]>;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
@@ -81,7 +83,6 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
     this.rejectFormGroup = this.fb.group({
       reason: ['', Validators.required]
     });
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -89,6 +90,7 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
       (this.clientSidePagination) ? this.setClientSidePaginationDataSource(this.questions) : this.questionsSubject.next(this.questions);
       (changes['questions'].previousValue) ? this.setPagination() : '';
     }
+
 
   }
 

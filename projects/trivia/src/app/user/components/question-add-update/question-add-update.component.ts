@@ -107,6 +107,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
   // Text change in quill editor
   onTextChanged(text) {
+    console.log(text);
     this.jsonObject = text.delta;
     this.question.questionObject = text.html;
   }
@@ -242,6 +243,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       question.questionText = this.question.questionObject;
       question.questionObject = questionObject;
     }
+    console.log(question);
     if (question) {
       // call saveQuestion
       this.saveQuestion(question);
@@ -254,6 +256,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
   ngOnDestroy() {
 
+  }
+
+  onAnswerChanged(event, answerIndex) {
+    const answers = (<FormArray>this.questionForm.get('answers'));
+    answers.controls[answerIndex]['controls'].answerObject.patchValue(event.delta);
+    answers.controls[answerIndex]['controls'].answerText.patchValue(event.html);
   }
 }
 

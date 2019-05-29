@@ -1,0 +1,13 @@
+<StackLayout *ngIf="renderWebView && question; else renderView" marginBottm="500">
+
+    <WebView width="100%" padding="10 10 0 10" *ngIf="!isAndroid" [src]="question?.renderedQuestion"  ios:height="{{questionHeight}}"
+        (loadFinished)="onLoadFinished($event)" [isUserInteractionEnabled]="false"></WebView>
+
+    <WebView width="100%"padding="10 10 0 10" *ngIf="isAndroid" [src]="question?.renderedQuestion" 
+        [isUserInteractionEnabled]="false" minHeight="50"></WebView>
+</StackLayout>
+
+<ng-template #renderView>     
+    <Label text="{{ questionIndex + ' ' +  question?.questionText }}" color="#263238" fontSize="18" fontWeight="500" margin="10"
+        textWrap="true"></Label>        
+</ng-template>

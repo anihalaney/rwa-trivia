@@ -19,7 +19,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() editQuestion: Question;
   @Input() tagsObs: Observable<string[]>;
-  @Input() categoriesObs: Observable<Category[]>;
+  @Input() tagsDictionary: any; //{ [key: number]: Category };
+  @Input() categoriesObs: any; //[[key: number]: ]; /// [key: number]: string };
   @Output() updateStatus = new EventEmitter<boolean>();
   @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
 
@@ -32,6 +33,41 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   enteredTags: string[] = [];
   user: User;
   subscriptions = [];
+
+  // Math quill options
+  mathOptions = {
+    quill_options: {
+      maths: [{
+        cmd: 'sqrt', // Math quill 
+        name: 'Square Root',
+        url: '' // Image url of maths function
+      },
+      {
+        cmd: 'pm',
+        name: 'Plus Minus',
+        url: '' // Image url of maths function
+      },
+      ]
+    }
+  }
+
+  quillConfig = {
+    toolbar: {
+      container: [['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+      ['code-block', 'image'],
+      ['mathEditor']
+      ],
+      handlers: {
+        // handlers object will be merged with default handlers object
+        'mathEditor': () => {
+          console.log('maths called');
+        }
+      }
+    },
+    mathEditor: { mathOptions: this.mathOptions },
+    blotFormatter: {},
+    syntax: true
+  };
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -48,6 +84,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
+  
     this.questionForm = this.fb.group({
       category: [(this.editQuestion.categories.length > 0 ? this.editQuestion.categories[0] : ''), Validators.required]
     });
@@ -59,8 +96,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
-
+    this.subscriptions.push(this.tagsObs.subscribe(tags => { this.tags = tags; console.log('tags', tags); }));
   }
 
 
@@ -72,13 +108,18 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   createForm(question: Question) {
     const fgs: FormGroup[] = question.answers.map(answer => {
+      const isRichEditor = (answer.isRichEditor) ? answer.isRichEditor : false;
+      const answerText = (answer.isRichEditor) ? answer.answerObject : answer.answerText;
       const fg = new FormGroup({
-        answerText: new FormControl(answer.answerText, Validators.required),
+        answerText: new FormControl(answerText, Validators.required),
         correct: new FormControl(answer.correct),
+        isRichEditor: new FormControl(isRichEditor),
+        answerObject: new FormControl(answer.answerObject),
       });
       return fg;
     });
     const answersFA = new FormArray(fgs);
+
     let fcs: FormControl[] = question.tags.map(tag => {
       const fc = new FormControl(tag);
       return fc;
@@ -87,15 +128,16 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
       fcs = [new FormControl('')];
     }
     const tagsFA = new FormArray(fcs);
-
+    const questionText = (question.isRichEditor) ? question.questionObject : question.questionText;
     this.questionForm = this.fb.group({
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
-      questionText: [question.questionText, Validators.required],
+      questionText: [questionText, Validators.required],
       tags: '',
       tagsArray: tagsFA,
       answers: answersFA,
       ordered: [question.ordered],
-      explanation: [question.explanation]
+      explanation: [question.explanation],
+      isRichEditor: question.isRichEditor
     }, { validator: this.questionFormValidator }
     );
 
@@ -211,6 +253,12 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
 
+  }
+
+  onAnswerChanged(event,answerIndex){
+    const answers = (<FormArray>this.questionForm.get('answers'));
+    answers.controls[answerIndex]['controls'].answerObject.patchValue(event.delta);
+    answers.controls[answerIndex]['controls'].answerText.patchValue(event.html);
   }
 
 }

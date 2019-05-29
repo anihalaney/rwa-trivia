@@ -70,22 +70,37 @@
           <h3>Answers</h3>
           <ng-container formArrayName="answers">
             <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
+            <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
+                <label><span class="label-richtext">Rich Editor:</span></label>
+                <input type="checkbox" formControlName="isRichEditor">
+              </div>      
+             
+
               <label>
                 <input type="checkbox" formControlName="correct">
               </label>
-              <input [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required"
+          
+              <input *ngIf="!answer.value.isRichEditor" [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required"
                 aria-label="answer-text">
-              <p *ngIf="(i%2 === 0) " [ngClass]=" 
+
+              <div class="mathseditor" *ngIf="answer.value.isRichEditor">
+                  <ng-quill-tex  [modules]="quillConfig" (textChanged)="onAnswerChanged($event,i)" 
+                  (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl"  [controlName]="'answerText'">
+                  </ng-quill-tex> 
+                </div>
+             
+              
+                <p *ngIf="(i%2 === 0) " [ngClass]=" 
                  (!answers.controls[i].controls.answerText.valid
                  && answers.controls[i].controls.answerText.errors 
                  &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
-                class="error left-question">
+                class="error">
                 {{this.applicationSettings.answer_max_length}} characters are allowed</p>
               <p *ngIf="(i%2 !== 0) " [ngClass]=" 
                  (!answers.controls[i].controls.answerText.valid
                  && answers.controls[i].controls.answerText.errors 
                  &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
-                class="error right-question">
+                class="error">
                 {{this.applicationSettings.answer_max_length}} characters are allowed</p>
             </div>
           </ng-container>

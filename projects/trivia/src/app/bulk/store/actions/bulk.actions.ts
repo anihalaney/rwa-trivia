@@ -92,7 +92,8 @@ export class LoadBulkUploadFileUrlSuccess implements Action {
 // update Questions
 export class UpdateQuestion implements Action {
     readonly type = BulkActionTypes.UPDATE_QUESTION;
-    constructor(public payload: { question: Question }) { }
+    constructor(public payload: { question: Question }) {
+    }
 }
 
 // update Questions

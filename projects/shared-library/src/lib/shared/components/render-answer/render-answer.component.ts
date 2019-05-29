@@ -4,23 +4,23 @@ import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
 
 
 @Component({
-    selector: 'render-question',
+    selector: 'render-answer',
     moduleId: module.id,
-    templateUrl: 'render-question.component.html',
-    styleUrls: ['render-question.component.css']
+    templateUrl: 'render-answer.component.html',
+    styleUrls: ['render-answer.component.css']
 })
 
-export class RenderQuestionComponent implements OnInit, OnChanges {
+export class RenderAnswerComponent implements OnInit, OnChanges {
 
     @Input() renderWebView: boolean;
-    @Input() question: Question;
+    @Input() answer: Answer;
     @Input() questionIndex: number;
 
 
     ngOnInit(): void {
         setTimeout(() => {
-            // this.question.isRichEditor = true;
-            this.question = { ...this.question };
+            // this.answer.isRichEditor = true;
+            this.answer = { ...this.answer };
         }, 5000);
 
     }

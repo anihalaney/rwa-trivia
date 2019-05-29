@@ -9,20 +9,22 @@
 
 </div>
 <!-- <mat-card> -->
+  dfdf
 <div class="card">
   <mat-card-content>
     <mat-tab-group>
       <mat-tab label="Published">
         <question-table [showSort]="false" [showPaginator]="false" [questions]="publishedQuestions" [totalCount]="10"
-          [categoryDictionary]="categoryDictObs | async" [user]="user" [showApproveButton]="false">
+        [categoriesObs]="categoryDictObs"  [categoryDictionary]="categoryDictObs | async"  [tagDictionary]="tags | async" [tagsObs]= "tags"  [user]="user" [showApproveButton]="false">
         </question-table>
       </mat-tab>
       <mat-tab label="Pending">
         <question-table [showSort]="false" [showPaginator]="false" [questions]="unpublishedQuestions" [totalCount]="10"
-          [categoryDictionary]="categoryDictObs | async" [user]="user" [showApproveButton]="false">
+        [categoriesObs]="categoryDictObs" (updateUnpublishedQuestions)="updateQuestionData($event)" [categoryDictionary]="categoryDictObs | async" [tagDictionary]="tags | async" [tagsObs]= "tags" [user]="user" [showApproveButton]="false">
         </question-table>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>
 </div>
 <!-- </mat-card> -->
+<!-- updateUnpublishedQuestions -->
