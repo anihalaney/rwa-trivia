@@ -5,6 +5,7 @@ import { InviteFriendsComponent } from './invite-friends/invite-friends.componen
 import { InviteFriendsDialogComponent } from './invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 import { InviteMailFriendsComponent } from './invite-friends/invite-friends-dialog/invite-mail-friends/invite-mail-friends.component';
 import { CropImageDialogComponent } from './question-add-update/crop-image-dialog/crop-image-dialog.component';
+import { PreviewQuestionDialogComponent } from './question-add-update/preview-question-dialog/preview-question-dialog.component';
 export {
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
@@ -12,7 +13,8 @@ export {
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    CropImageDialogComponent
+    CropImageDialogComponent,
+    PreviewQuestionDialogComponent
 };
 
 export default [
@@ -22,5 +24,6 @@ export default [
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    CropImageDialogComponent
+    CropImageDialogComponent,
+    PreviewQuestionDialogComponent
 ];

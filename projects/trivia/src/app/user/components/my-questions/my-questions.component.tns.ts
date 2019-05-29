@@ -30,7 +30,7 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
     private routerExtension: RouterExtensions,
-    private page: Page, private cd: ChangeDetectorRef) {
+    private page: Page, public cd: ChangeDetectorRef) {
     super(store, questionActions, cd);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
     this.subscriptions.push(this.userDict$.subscribe(userDict => {

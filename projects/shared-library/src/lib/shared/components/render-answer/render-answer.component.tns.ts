@@ -4,13 +4,13 @@ import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS, device, screen } from 'tns-core-modules/platform';
 
 @Component({
-    selector: 'render-question',
+    selector: 'render-answer',
     moduleId: module.id,
-    templateUrl: 'render-question.component.html',
-    styleUrls: ['render-question.component.css']
+    templateUrl: 'render-answer.component.html',
+    styleUrls: ['render-answer.component.css']
 })
 
-export class RenderQuestionComponent implements OnInit, OnChanges {
+export class RenderAnswerComponent implements OnInit, OnChanges {
 
     @Input() renderWebView: boolean;
     @Input() question: Question;

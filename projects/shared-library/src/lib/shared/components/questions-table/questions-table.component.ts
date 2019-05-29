@@ -10,7 +10,6 @@ import { Utils } from '../../../core/services';
 import { Observable, Subject, BehaviorSubject } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
-import { categoryDictionary } from 'projects/trivia-admin/src/app/store';
 
 
 @Component({

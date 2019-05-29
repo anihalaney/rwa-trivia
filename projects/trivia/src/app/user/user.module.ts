@@ -13,7 +13,8 @@ import {
   InviteFriendsComponent,
   InviteFriendsDialogComponent,
   InviteMailFriendsComponent,
-  CropImageDialogComponent
+  CropImageDialogComponent,
+  PreviewQuestionDialogComponent
 } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
 
@@ -29,6 +30,7 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     InviteMailFriendsComponent,
     InviteFriendsDialogComponent,
     CropImageDialogComponent,
+    PreviewQuestionDialogComponent
   ],
   imports: [
     // rwa modules
@@ -56,7 +58,8 @@ import { NgQuillTexModule } from 'ng-quill-tex';
   ],
   entryComponents: [
     InviteFriendsDialogComponent,
-    CropImageDialogComponent
+    CropImageDialogComponent,
+    PreviewQuestionDialogComponent
   ]
 })
 export class UserModule { }

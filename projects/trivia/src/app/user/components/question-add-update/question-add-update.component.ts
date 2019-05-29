@@ -14,6 +14,7 @@ import { QuestionService } from 'shared-library/core/services';
 import { ImageCropperComponent } from 'ngx-img-cropper';
 import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
 import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
+import { PreviewQuestionDialogComponent } from './preview-question-dialog/preview-question-dialog.component';
 
 
 @Component({
@@ -36,10 +37,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   htmlText: any;
   jsonObject: any;
   quillImageUrl: string;
-
-  public editorConfig = {
-    placeholder: 's'
-  };
+  quillObject: any = {};
 
   quillConfig = {
     toolbar: {
@@ -47,7 +45,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       handlers: {
         // handlers object will be merged with default handlers object
         'mathEditor': () => {
-          console.log('maths called');
         }
       }
     },
@@ -110,6 +107,9 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     console.log(text);
     this.jsonObject = text.delta;
     this.question.questionObject = text.html;
+
+    this.quillObject.jsonObject = text.delta;
+    this.quillObject.questionText = text.html;
   }
 
   // Image Upload
@@ -262,6 +262,30 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     const answers = (<FormArray>this.questionForm.get('answers'));
     answers.controls[answerIndex]['controls'].answerObject.patchValue(event.delta);
     answers.controls[answerIndex]['controls'].answerText.patchValue(event.html);
+  }
+
+  preview() {
+    this.question = super.onSubmit();
+     this.question.questionText = this.quillObject.questionText;
+     this.question.questionObject = this.quillObject.jsonObject;
+    // console.log(this.question );
+
+    this.dialogRef = this.dialog.open(PreviewQuestionDialogComponent, {
+      disableClose: false,
+      data: { question: this.question }
+    });
+
+    this.dialogRef.componentInstance.ref = this.dialogRef;
+    this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+
+    });
+    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
+      // this.renderer.addClass(document.body, 'dialog-open');
+    }));
+    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
+      // this.renderer.removeClass(document.body, 'dialog-open');
+    }));
+
   }
 }
 

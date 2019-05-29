@@ -35,10 +35,8 @@
 
       <!-- isRichEditor -->
 
-
       <!-- Enter Your Question -->
       <div class="enterquestion secondbg">
-
         <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
           <label><span class="label-richtext">Rich Editor:</span></label>
           <mat-checkbox mdPrefix formControlName="isRichEditor"></mat-checkbox>
@@ -52,13 +50,13 @@
           <!-- <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object"
             formControlName="questionText" [modules]="quillConfig" [sanitize]="true" (onEditorCreated)="getEditorInstance($event)"></quill-editor> -->
 
-            <!-- <app-trivia-quill-editor *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (quillHtml)="quilHtml($event)" (quillDelta)="quilDelta($event)"
+          <!-- <app-trivia-quill-editor *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (quillHtml)="quilHtml($event)" (quillDelta)="quilDelta($event)"
             (fileuploaded)="fileuploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
           </app-trivia-quill-editor> -->
 
-          <ng-quill-tex *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (textChanged)="onTextChanged($event)" 
-          (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
-          </ng-quill-tex>  
+          <ng-quill-tex *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (textChanged)="onTextChanged($event)"
+            (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
+          </ng-quill-tex>
 
           <!-- [(ngModel)]="htmlText" -->
           <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
@@ -70,27 +68,27 @@
           <h3>Answers</h3>
           <ng-container formArrayName="answers">
             <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
-            <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
+              <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
                 <label><span class="label-richtext">Rich Editor:</span></label>
                 <input type="checkbox" formControlName="isRichEditor">
-              </div>      
-             
+              </div>
+
 
               <label>
                 <input type="checkbox" formControlName="correct">
               </label>
-          
-              <input *ngIf="!answer.value.isRichEditor" [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText" type="text" class="required"
-                aria-label="answer-text">
+
+              <input *ngIf="!answer.value.isRichEditor" [placeholder]="'Enter Option ' + (i+1)" formControlName="answerText"
+                type="text" class="required" aria-label="answer-text">
 
               <div class="mathseditor" *ngIf="answer.value.isRichEditor">
-                  <ng-quill-tex  [modules]="quillConfig" (textChanged)="onAnswerChanged($event,i)" 
-                  (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl"  [controlName]="'answerText'">
-                  </ng-quill-tex> 
-                </div>
-             
-              
-                <p *ngIf="(i%2 === 0) " [ngClass]=" 
+                <ng-quill-tex [modules]="quillConfig" (textChanged)="onAnswerChanged($event,i)" (fileUploaded)="fileUploaded($event)"
+                  [imageUrl]="quillImageUrl" [controlName]="'answerText'">
+                </ng-quill-tex>
+              </div>
+
+
+              <p *ngIf="(i%2 === 0) " [ngClass]=" 
                  (!answers.controls[i].controls.answerText.valid
                  && answers.controls[i].controls.answerText.errors 
                  &&  answers.controls[i].controls.answerText.errors.maxlength) ? 'show-answer-text' : 'hide-answer-text'"
@@ -136,7 +134,9 @@
               </div>
             </div>
           </div>
-          <div class="btnbox">
+
+          <div class="btnbox" layout-padding>
+            <button class="btn startg" type="submit" (click)="preview()" [disabled]="!questionForm.valid">PREVIEW</button>
             <button class="btn startg" type="submit" (click)="submit()" [disabled]="!questionForm.valid">SUBMIT</button>
           </div>
         </div>

@@ -20,8 +20,8 @@
 .question-list li label:before{ content: "";position: absolute; height: 17px; width: 8px; border-width:0 2px 2px 0; border-style: solid; transform: rotate(45deg); left: 22px; display: none;}
 .question-list li input:checked ~ label{ padding-left: 40px; }
 .question-list li input:checked ~ label:before{ display: block; }
-#curentactive .btnbox{ background: #fff; }
-.btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px;line-height: 1.2; margin:0 auto}
+#curentactive .btnbox{ background: #fff;  display: flex; justify-content: space-evenly; }
+.btn.startg{ font-size: 24px; display: block; padding: 15px 0; width: 100% ; max-width: 300px;line-height: 1.2; margin:0}
 .btn.startg:disabled{ background-color: silver; }
 .category-font-size { font-size: 11px; }
 
@@ -108,4 +108,3 @@ visibility: visible;
   margin-right:15px; 
 
 }
-  
