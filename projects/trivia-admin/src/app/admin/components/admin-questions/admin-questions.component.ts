@@ -12,7 +12,7 @@ import {
 
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
-import * as bulkActions from '../../../bulk/store/actions'; 0
+import * as bulkActions from '../../../bulk/store/actions';
 import { Router } from '@angular/router';
 import { UserActions } from 'shared-library/core/store';
 import { MatTabChangeEvent } from '@angular/material';
@@ -70,7 +70,7 @@ export class AdminQuestionsComponent implements OnInit {
 
     this.store.select(adminState).pipe(select(s => s.getQuestionToggleState)).subscribe((stat) => {
       if (stat != null) {
-        this.selectedTab = stat === 'Published' ? 0 : 1
+        this.selectedTab = stat === 'Published' ? 0 : 1;
       }
     });
     this.store.select(adminState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {

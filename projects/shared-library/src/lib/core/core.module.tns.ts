@@ -10,7 +10,7 @@ import {
   WindowRef, ApplicationSettingsService, AchievementService
 } from './services';
 
-import { NavigationService } from './services/mobile/navigation.service';
+import { NavigationService, MobUtils } from './services/mobile';
 
 import { AuthenticationProvider, AuthInterceptor } from './auth';
 
@@ -59,7 +59,7 @@ import { TNSFirebaseAuthService } from './auth/mobile/firebase-auth.service';
 
   providers: [
 
-    Utils, AuthenticationProvider,
+    Utils, MobUtils, AuthenticationProvider,
     CategoryService, TagService, QuestionService,
     GameService, BulkService, UserService, SocialService, StatsService, NavigationService,
     WindowRef, ApplicationSettingsService, AchievementService,

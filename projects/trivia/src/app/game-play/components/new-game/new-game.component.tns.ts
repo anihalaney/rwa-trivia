@@ -1,11 +1,12 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { 
+  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
-import { Utils } from 'shared-library/core/services';
+import { MobUtils } from 'shared-library/core/services/mobile';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
@@ -50,7 +51,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
-    public utils: Utils,
+    public utils: MobUtils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
     private router: Router,
@@ -176,7 +177,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       && !this.friendUserId) {
       if (!this.friendUserId) {
         this.errMsg = 'Please Select Friend';
-        this.utils.showMessage("error", this.errMsg);
+        this.utils.showMessage('error', this.errMsg);
       }
       return;
     }
@@ -256,7 +257,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   redirectToDashboard(msg) {
     this.router.navigate(['/dashboard']);
-    this.utils.showMessage("success", msg);
+    this.utils.showMessage('success', msg);
   }
 
   get categoryListHeight() {

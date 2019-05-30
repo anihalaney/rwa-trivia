@@ -1,8 +1,8 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Feedback, FeedbackType, FeedbackPosition } from 'nativescript-feedback';
-import { UtilsCore } from './utilsCore';
+import { UtilsCore } from '../utilsCore';
 @Injectable()
-export class Utils extends UtilsCore {
+export class MobUtils extends UtilsCore {
 
   private message: Feedback;
   private messageConfig = {

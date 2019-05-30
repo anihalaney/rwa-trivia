@@ -14,7 +14,6 @@ export enum BulkActionTypes {
     LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS = '[Bulk] LoadBulkUploadUnpublishedQuestionsSuccess',
     LOAD_BULK_UPLOAD_FILE_URL = '[Bulk] LoadBulkUploadFileUrl',
     LOAD_BULK_UPLOAD_FILE_URL_SUCCESS = '[Bulk] LoadBulkUploadFileUrlSuccess',
-    UPDATE_QUESTION = '[Bulk] UpdateQuestion',
     UPDATE_BULK_UPLOAD = '[Bulk] UpdateBulkUpload',
     ADD_BULK_QUESTIONS = '[Bulk] AddBulkQuestion',
     ARCHIVE_BULK_UPLOAD = '[Bulk] ArchiveBulkUpload',
@@ -88,14 +87,6 @@ export class LoadBulkUploadFileUrlSuccess implements Action {
     constructor(public payload: string) { }
 }
 
-
-// update Questions
-export class UpdateQuestion implements Action {
-    readonly type = BulkActionTypes.UPDATE_QUESTION;
-    constructor(public payload: { question: Question }) {
-    }
-}
-
 // update Questions
 export class UpdateBulkUpload implements Action {
     readonly type = BulkActionTypes.UPDATE_BULK_UPLOAD;
@@ -154,7 +145,6 @@ export type BulkActions
     | LoadBulkUploadUnpublishedQuestionsSuccess
     | LoadBulkUploadFileUrl
     | LoadBulkUploadFileUrlSuccess
-    | UpdateQuestion
     | UpdateBulkUpload
     | AddBulkQuestions
     | ArchiveBulkUpload
@@ -162,4 +152,4 @@ export type BulkActions
     | LoadBulkUploadFile
     | LoadBulkUploadFileSuccess
     | SaveArchiveToggleState
-    | SaveArchiveList
+    | SaveArchiveList;

@@ -1,22 +1,16 @@
-import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import { BulkUploadFileInfo, Question, Category } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
-import { AppState, appState, categoryDictionary } from '../../../../store';
-import { MatTableDataSource } from '@angular/material';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-
-
-import { MatSnackBar } from '@angular/material';
-
+import { MatSnackBar, MatTableDataSource } from '@angular/material';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable } from 'rxjs';
+import { Utils } from 'shared-library/core/services';
+import { BulkUploadFileInfo, Category, Question } from 'shared-library/shared/model';
+import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
-
+import { coreState, QuestionActions } from 'shared-library/core/store';
 
 @Component({
   selector: 'app-bulk-summary-questions',
@@ -34,6 +28,8 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   unPublishedCount: number;
   unPublishedQuestionObs: Observable<Question[]>;
   publishedQuestionObs: Observable<Question[]>;
+  categoriesObs: Observable<Category[]>;
+  tagsObs: Observable<string[]>;
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -50,10 +46,18 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<AppState>,
     private snackBar: MatSnackBar,
-    private storage: AngularFireStorage, private activatedRoute: ActivatedRoute, private router: Router,
+    private storage: AngularFireStorage,
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    public cd: ChangeDetectorRef,
+    private questionActions: QuestionActions,
     private utils: Utils) {
 
-    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.questionSaveStatus)).subscribe(status => {
+
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
+    this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.updateQuestion)).subscribe(status => {
       if (status === 'UPDATE') {
         this.snackBar.open('Question Updated!', '', { duration: 1500 });
       }
@@ -82,6 +86,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
       if (questions) {
         this.unPublishedCount = questions.length;
         this.unPublishedQuestions = questions;
+        this.cd.markForCheck();
       }
     }));
 
@@ -134,10 +139,13 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
     (!this.isAdminUrl) ? this.router.navigate(['/bulk']) : this.router.navigate(['/admin/bulk']);
   }
 
+  updateUnpublishedQuestions(question: Question) {
+    this.store.dispatch(this.questionActions.updateQuestion(question));
+  }
+
+
   ngOnDestroy() {
 
   }
 
 }
-
-

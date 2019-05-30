@@ -3,7 +3,7 @@ import { Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { Utils } from 'shared-library/core/services';
+import { MobUtils } from 'shared-library/core/services/mobile';
 import { AppState, appState } from '../../../store';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { Question, Answer } from 'shared-library/shared/model';
@@ -47,7 +47,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   // Constructor
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
-    public utils: Utils,
+    public utils: MobUtils,
     public questionAction: QuestionActions,
     private routerExtension: RouterExtensions,
     private page: Page, private cd: ChangeDetectorRef) {
@@ -159,6 +159,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   submit() {
     this.hideKeyboard();
     const question: Question = super.onSubmit();
+
+    // tslint:disable-next-line:no-unused-expression
     (this.editQuestion) ? question.id = this.editQuestion.id : '';
     if (question && this.categoryIds.length > 0 && this.enteredTags.length > 2) {
       question.categoryIds = this.categoryIds;

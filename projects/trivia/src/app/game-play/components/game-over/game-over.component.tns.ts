@@ -5,7 +5,8 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { getImage } from 'nativescript-screenshot';
 import * as SocialShare from "nativescript-social-share";
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Utils, WindowRef } from 'shared-library/core/services';
+import { WindowRef } from 'shared-library/core/services';
+import { MobUtils } from 'shared-library/core/services/mobile';
 import { coreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AppState, appState } from '../../../store';
@@ -27,7 +28,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   stackLayout;
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
-    private windowRef: WindowRef, public utils: Utils,
+    private windowRef: WindowRef, public utils: MobUtils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
     public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
     super(store, userActions, utils, cd);
@@ -38,7 +39,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     }));
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
-        this.utils.showMessage("success", status);
+        this.utils.showMessage('success', status);
         this.disableFriendInviteBtn = true;
       }
       this.cd.markForCheck();
