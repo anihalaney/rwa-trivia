@@ -6,21 +6,29 @@ import { User, Question, QuestionStatus, Category } from 'shared-library/shared/
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { userState } from '../../../user/store';
 import * as userActions from '../../store/actions';
+import { ChangeDetectorRef } from '@angular/core';
 export class MyQuestions {
 
   publishedQuestions: Question[];
   unpublishedQuestions: Question[];
   categoryDictObs: Observable<{ [key: number]: Category }>;
+  categoriesObs: Observable<Category[]>;
+  tagsObs: Observable<string[]>;
   user: User;
   loaderBusy = false;
   subscriptions = [];
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
+    public cd: ChangeDetectorRef,
   ) {
 
     this.loaderBusy = true;
     this.categoryDictObs = store.select(categoryDictionary);
+
+    this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
+    this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
+
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user;
@@ -46,5 +54,6 @@ export class MyQuestions {
 
   toggleLoader(flag: boolean) {
     this.loaderBusy = flag;
+    this.cd.markForCheck();
   }
 }

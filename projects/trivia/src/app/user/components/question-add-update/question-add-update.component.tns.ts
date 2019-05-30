@@ -160,6 +160,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   submit() {
     this.hideKeyboard();
     const question: Question = super.onSubmit();
+    // tslint:disable-next-line:no-unused-expression
     (this.editQuestion) ? question.id = this.editQuestion.id : '';
     if (question && this.categoryIds.length > 0 && this.enteredTags.length > 2) {
       question.categoryIds = this.categoryIds;
