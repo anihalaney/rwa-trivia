@@ -27,7 +27,7 @@ export function checkDisplayName(state: any = null, action: UserActions): boolea
         case UserActionTypes.CHECK_DISPLAY_NAME_SUCCESS:
             return action.payload;
         default:
-            return state;
+            return null;
     }
 }
 

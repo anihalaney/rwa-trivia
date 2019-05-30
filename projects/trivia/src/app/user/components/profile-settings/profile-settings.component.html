@@ -76,10 +76,12 @@
                 </div>
                 <p *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
                   class="error display-name-error">
-                  Display
-                  Name is required!</p>
+                  Display Name is required!
+                </p>
                 <p *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
-                  class="error display-name-error">Display Name is already taken by other user</p>
+                  class="error display-name-error">
+                  Display Name is already taken by other user
+                </p>
               </div>
 
             </div>

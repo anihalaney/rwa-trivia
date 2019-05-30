@@ -30,6 +30,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   errorStatus: boolean;
   subscriptions = [];
   checkUserSubscriptions: Subscription;
+  isValidDisplayName: boolean = null;
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
@@ -196,61 +197,36 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       }
     }
 
+    this.checkDisplayName(this.userForm.get('displayName').value);
 
-    this.userService.checkDisplayName(this.userForm.get('displayName').value).subscribe(res => {
-      console.log(' result ==> ', res);
-      if (res) {
-        // get user object from the forms
-        this.getUserFromFormValue(isEditSingleField, field);
-        if (isEditSingleField) {
-          this.userForm.get(field).disable();
-          this.singleFieldEdit[field] = false;
+
+    this.checkUserSubscriptions = this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+
+      this.isValidDisplayName = status;
+      
+      if (this.isValidDisplayName !== null) {
+        if (this.isValidDisplayName) {
+          // get user object from the forms
+          this.getUserFromFormValue(isEditSingleField, field);
+          if (isEditSingleField) {
+            this.userForm.get(field).disable();
+            this.singleFieldEdit[field] = false;
+          }
+          // call saveUser
+          this.saveUser(this.user);
+          this.setNotificationMsg('', false, 0);
+          this.cd.markForCheck();
+        } else {
+          this.userForm.controls['displayName'].setErrors({ 'exist': true });
+          this.userForm.controls['displayName'].markAsTouched();
+          this.cd.markForCheck();
         }
-        // call saveUser
-        this.saveUser(this.user);
-        this.setNotificationMsg('', false, 0);
-        this.cd.markForCheck();
-      } else {
-        this.userForm.controls['displayName'].setErrors({ 'exist': true });
-        this.userForm.controls['displayName'].markAsTouched();
-        this.cd.markForCheck();
+
+        this.isValidDisplayName = null;
+        this.checkUserSubscriptions.unsubscribe();
       }
+
     });
-
-
-
-    // this.store.dispatch(new userActions.CheckDisplayName(this.userForm.get('displayName').value));
-
-    // this.checkUserSubscriptions = this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
-
-    //   this.isValidDisplayName = status;
-    //   console.log('status ==== > ', status);
-    //   if (this.isValidDisplayName !== null) {
-
-    //     console.log('users ===> ', this.isValidDisplayName);
-    //     if (this.isValidDisplayName) {
-    //       console.log('asdfadsf asdf asdf =================== ');
-    //       // get user object from the forms
-    //       this.getUserFromFormValue(isEditSingleField, field);
-    //       if (isEditSingleField) {
-    //         this.userForm.get(field).disable();
-    //         this.singleFieldEdit[field] = false;
-    //       }
-    //       // call saveUser
-    //       this.saveUser(this.user);
-    //       this.setNotificationMsg('', false, 0);
-    //       this.cd.markForCheck();
-    //     } else {
-    //       console.log('asdfadsf asdf asdf');
-    //       this.userForm.controls['displayName'].setErrors({ 'exist': true });
-    //       this.userForm.controls['displayName'].markAsTouched();
-    //     }
-
-    //     this.isValidDisplayName = null;
-    //     this.checkUserSubscriptions.unsubscribe();
-    //   }
-
-    // });
 
   }
 
