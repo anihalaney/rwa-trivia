@@ -222,6 +222,9 @@ module.exports = env => {
             ],
         },
         plugins: [
+            // https://github.com/angular/angular-cli/issues/5433
+            // use this before AngularCompilerPlugin to replace environment file
+            new webpack.NormalModuleReplacementPlugin(/\.\.\/environments\/environment/, `shared-library/environments/${env.project}/environment.${envFullPath}`),
             // Define useful constants like TNS_WEBPACK
             new webpack.DefinePlugin({
                 "global.TNS_WEBPACK": "true",

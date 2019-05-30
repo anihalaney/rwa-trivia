@@ -1,4 +1,4 @@
-import { IConfig } from './iconfig';
+import { IConfig } from 'shared-library/environments/iconfig';
 export const environment = {
   production: true
 };
@@ -12,5 +12,5 @@ export const CONFIG: IConfig = {
     storageBucket: 'bitwiser-edu.appspot.com',
     messagingSenderId: '704157888306'
   },
-  'functionsUrl': 'https://bitwiser.io'
+  'functionsUrl': 'https://bitwiser-eduu.firebaseapp.com'
 };

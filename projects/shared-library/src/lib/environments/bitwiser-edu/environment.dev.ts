@@ -1,6 +1,6 @@
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
-import { IConfig } from './iconfig';
+import { IConfig } from 'shared-library/environments/iconfig';
 
 export const environment = {
   production: false
@@ -15,5 +15,5 @@ export const CONFIG: IConfig = {
     storageBucket: 'bitwiser-edu.appspot.com',
     messagingSenderId: '704157888306'
   },
-  'functionsUrl': 'http://localhost:5000/bitwiser-edu/us-central1/app'
+  'functionsUrl': 'https://bitwiser-edu.firebaseapp.com'
   };

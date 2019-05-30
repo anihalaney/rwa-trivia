@@ -1,4 +1,4 @@
-import { IConfig } from './iconfig';
+import { IConfig } from 'shared-library/environments/iconfig';
 export const environment = {
   production: true
 };
