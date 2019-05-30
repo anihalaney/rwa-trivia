@@ -14,3 +14,9 @@ export const CONFIG: IConfig = {
   },
   'functionsUrl': 'https://bitwiser.io'
 };
+
+export const projectDetail = {
+  projectName: 'rwa-trivia',
+  projectDisplayName: 'Trivia',
+  title: 'bitwiser.io: get wiser - bit by bit'
+};

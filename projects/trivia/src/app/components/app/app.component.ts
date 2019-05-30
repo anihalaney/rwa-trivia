@@ -13,7 +13,8 @@ import { UserActions, ApplicationSettingsActions } from 'shared-library/core/sto
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CookieLawComponent } from 'angular2-cookie-law';
-
+import { Title } from '@angular/platform-browser';
+import { projectDetail } from 'shared-library/environments/environment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -38,7 +39,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private windowRef: WindowRef,
     private userAction: UserActions,
     private applicationSettingsAction: ApplicationSettingsActions,
-    private utils: Utils) {
+    private utils: Utils,
+    private titleService: Title) {
+
+    titleService.setTitle( projectDetail.title );
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
 

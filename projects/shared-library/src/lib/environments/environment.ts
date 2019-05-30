@@ -17,3 +17,9 @@ export const CONFIG: IConfig = {
   },
   'functionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com'
   };
+
+export const projectDetail = {
+  projectName: 'rwa-trivia',
+  projectDisplayName: 'Trivia',
+  title: 'bitwiser.io: get wiser - bit by bit'
+};

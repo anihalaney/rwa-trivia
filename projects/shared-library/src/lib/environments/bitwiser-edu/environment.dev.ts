@@ -17,3 +17,9 @@ export const CONFIG: IConfig = {
   },
   'functionsUrl': 'https://bitwiser-edu.firebaseapp.com'
   };
+
+export const projectDetail = {
+    projectName: 'bitwiser-edu',
+    projectDisplayName: 'Bitwiser-edu',
+    title: 'bitwiser.io: get wiser - bit by bit'
+};
