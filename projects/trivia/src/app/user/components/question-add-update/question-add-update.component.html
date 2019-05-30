@@ -32,12 +32,9 @@
         <!-- Category end -->
       </div>
 
-
-      <!-- isRichEditor -->
-
       <!-- Enter Your Question -->
       <div class="enterquestion secondbg">
-        <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
+        <div class="optionbox" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
           <label><span class="label-richtext">Rich Editor:</span></label>
           <mat-checkbox mdPrefix formControlName="isRichEditor"></mat-checkbox>
         </div>
@@ -47,12 +44,6 @@
 
           <textarea *ngIf="!questionForm.value.isRichEditor" class="qinput" placeholder="Enter Your Question"
             formControlName="questionText" class="required" aria-label="question-area"></textarea>
-          <!-- <quill-editor *ngIf="questionForm.value.isRichEditor" id="ql-object" #quillEditior trackChanges="all" format="object"
-            formControlName="questionText" [modules]="quillConfig" [sanitize]="true" (onEditorCreated)="getEditorInstance($event)"></quill-editor> -->
-
-          <!-- <app-trivia-quill-editor *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (quillHtml)="quilHtml($event)" (quillDelta)="quilDelta($event)"
-            (fileuploaded)="fileuploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
-          </app-trivia-quill-editor> -->
 
           <ng-quill-tex *ngIf="questionForm.value.isRichEditor" [modules]="quillConfig" (textChanged)="onTextChanged($event)"
             (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
@@ -64,6 +55,22 @@
             <!-- <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">{{this.applicationSettings.question_max_length}} characters are allowed</p> -->
           </div>
 
+          <div class="form-group" *ngIf="questionForm.value.isRichEditor" style="margin-top:15px;">
+            <h2><span>Select a Max time:</span></h2>
+            <div class="formfield">
+              <select placeholder="Select Max time" class="required" formControlName="maxTime">
+                <option value="">
+                  Select a Max time
+                </option>
+                <option *ngFor="let maxTime of applicationSettings.game_play_max_time" [value]="maxTime">
+                  {{maxTime}}
+                </option>
+              </select>
+              <p *ngIf="questionForm.controls.maxTime.errors && !questionForm.controls.maxTime.pristine" class="error">
+                Select a max time
+              </p>
+            </div>
+          </div>
 
           <h3>Answers</h3>
           <ng-container formArrayName="answers">

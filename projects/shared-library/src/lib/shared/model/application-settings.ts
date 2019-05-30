@@ -15,6 +15,7 @@ export class ApplicationSettings {
     android_version: number;
     ios_version: number;
     phone_authentication: boolean;
+    game_play_max_time: number[];
 }
 
 export class TimerLoader {

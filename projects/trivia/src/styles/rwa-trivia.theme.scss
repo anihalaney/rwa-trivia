@@ -1,7 +1,7 @@
 @import '~@angular/material/theming';
 @import '~@ngx-share/button/themes/default/default-theme';
 @import '~@ngx-share/button/themes/circles/circles-dark-theme';
-// @import '~swiper/dist/css/swiper.min.css'; 
+@import '~swiper/dist/css/swiper.min.css'; 
 
 // Include the base styles for Angular Material core. 
 @include mat-core();

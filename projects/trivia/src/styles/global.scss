@@ -25,7 +25,7 @@ button, input, select { font-family: inherit; border:none;} //textarea
 button, input { line-height: normal; text-transform: none; }
 button, html input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer; -webkit-appearance: button; }
 button[disabled], input[disabled] { cursor: default; }
-input[type="checkbox"], input[type="radio"], li, div, p, span { box-sizing: border-box; }
+input[type="number"], input[type="checkbox"], input[type="radio"], li, div, p, span { box-sizing: border-box; }
 input[type="search"] { -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; -webkit-appearance: textfield; }
 textarea { overflow: auto; vertical-align: top; padding: 15px 13px 20px; resize: none; }
 /*Fonts family*/

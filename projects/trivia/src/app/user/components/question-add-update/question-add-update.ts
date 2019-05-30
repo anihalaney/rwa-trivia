@@ -108,6 +108,7 @@ export class QuestionAddUpdate {
     question.explanation = formValue.explanation;
     question.createdOn = new Date();
     question.isRichEditor = formValue.isRichEditor;
+    question.maxTime = formValue.maxTime;
 
     return question;
   }

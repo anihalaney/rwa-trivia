@@ -28,6 +28,7 @@
 @media screen and (min-width: 767px){
   .optionbox h2 span{ font-size: 22px }
   .pcategories .formfield select{  width: 300px }
+  .formfield select{  width: 300px }
   .card .enterquestion h3{margin-top: 40px}
   // .formfield, .mysetting .formfield { display: inline-block; }
   .formfield { display: block !important; }
@@ -107,4 +108,8 @@ visibility: visible;
   font-family: 'hindmedium';
   margin-right:15px; 
 
+}
+
+.form-group {
+  text-align: left;
 }

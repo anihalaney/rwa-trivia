@@ -69,7 +69,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     this.question = new Question();
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
-
         this.applicationSettings = appSettings[0];
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
@@ -81,6 +80,12 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
       setTimeout(() => {
         this.questionForm.patchValue({ questionText: '' });
+        if (isRichEditor) {
+          this.questionForm.get('maxTime').setValidators(Validators.compose([Validators.required]));
+        } else {
+          this.questionForm.get('maxTime').setValidators([]);
+        }
+        this.questionForm.get('maxTime').updateValueAndValidity();
       }, 0);
     });
 
@@ -104,10 +109,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
   // Text change in quill editor
   onTextChanged(text) {
-    console.log(text);
-    this.jsonObject = text.delta;
-    this.question.questionObject = text.html;
-
     this.quillObject.jsonObject = text.delta;
     this.quillObject.questionText = text.html;
   }
@@ -122,7 +123,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     });
 
     this.dialogRef.componentInstance.ref = this.dialogRef;
-    this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
       if (result) {
         const fileName = `questions/${new Date().getTime()}-${file.name}`;
         this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
@@ -136,14 +137,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
           }
         });
       }
-    });
-    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
-      // this.renderer.addClass(document.body, 'dialog-open');
     }));
-    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
-      // this.renderer.removeClass(document.body, 'dialog-open');
-    }));
-
   }
 
   openDialog(file: File) {
@@ -153,7 +147,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     });
 
     this.dialogRef.componentInstance.ref = this.dialogRef;
-    this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
       if (result) {
         const fileName = `questions/${new Date().getTime()}-${file.name}`;
         this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
@@ -167,12 +161,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
           }
         });
       }
-    });
-    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
-      // this.renderer.addClass(document.body, 'dialog-open');
-    }));
-    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
-      // this.renderer.removeClass(document.body, 'dialog-open');
     }));
   }
 
@@ -204,6 +192,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       ordered: [question.ordered],
       explanation: [question.explanation],
       isRichEditor: [false],
+      maxTime: []
     }, { validator: questionFormValidator }
     );
   }
@@ -238,12 +227,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
   submit() {
 
     const question: Question = super.onSubmit();
+
     if (question.isRichEditor) {
-      const questionObject = this.jsonObject;
-      question.questionText = this.question.questionObject;
-      question.questionObject = questionObject;
+      question.questionText = this.quillObject.questionText;
+      question.questionObject = this.quillObject.jsonObject;
     }
-    console.log(question);
     if (question) {
       // call saveQuestion
       this.saveQuestion(question);
@@ -266,9 +254,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
   preview() {
     this.question = super.onSubmit();
-     this.question.questionText = this.quillObject.questionText;
-     this.question.questionObject = this.quillObject.jsonObject;
-    // console.log(this.question );
+    this.question.questionText = this.quillObject.questionText;
+    this.question.questionObject = this.quillObject.jsonObject;
 
     this.dialogRef = this.dialog.open(PreviewQuestionDialogComponent, {
       disableClose: false,

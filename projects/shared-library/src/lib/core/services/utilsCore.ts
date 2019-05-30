@@ -11,7 +11,6 @@ export class UtilsCore {
   }
 
   regExpEscape(s: string) {
-    console.log('in here');
     return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
       replace(/\x08/g, '\\x08');
   }

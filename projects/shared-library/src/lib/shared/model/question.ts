@@ -30,6 +30,7 @@ export class Question {
   renderedAnswer?; any;
   questionObject?: any;
   isRichEditor?: boolean = false;
+  maxTime?: number;
 
 
 
