@@ -2,7 +2,7 @@ import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { QuestionActions } from 'shared-library/core/store';
-import { Category, Question, User } from 'shared-library/shared/model';
+import { Category, Question, User, ApplicationSettings } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../store';
 import { userState } from '../../../user/store';
 import { ChangeDetectorRef } from '@angular/core';
@@ -17,6 +17,20 @@ export class MyQuestions {
   user: User;
   loaderBusy = false;
   subscriptions = [];
+  applicationSettings: ApplicationSettings;
+  quillConfig = {
+    toolbar: {
+      container: [],
+      handlers: {
+        // handlers object will be merged with default handlers object
+        'mathEditor': () => {
+        }
+      }
+    },
+    mathEditor: {},
+    blotFormatter: {},
+    syntax: true
+  };
 
   constructor(public store: Store<AppState>,
     public questionActions: QuestionActions,
@@ -41,6 +55,17 @@ export class MyQuestions {
       this.unpublishedQuestions = questions;
       this.hideLoader();
     }));
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+        // this.createForm(this.question);
+        this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
+      }
+    }));
+
   }
 
   hideLoader() {

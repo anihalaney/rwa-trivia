@@ -179,15 +179,7 @@ export class QuestionService {
   }
 
   saveQuestionImage(image: File, fileName) {
-    console.log('file is here', image);
-    // return this.dbService.upload(`questions/image`, image);
-    const fileRef = this.dbService.getFireStorageReference(fileName);
-
-    return this.dbService.upload(fileName, image).snapshotChanges().pipe(
-      finalize(() => {
-        console.log('image url');
-      })
-    );
+    return this.dbService.upload(fileName, image).snapshotChanges();
   }
 
 

@@ -12,10 +12,9 @@ import { debounceTime, map } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { QuestionService } from 'shared-library/core/services';
 import { ImageCropperComponent } from 'ngx-img-cropper';
-import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
 import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { PreviewQuestionDialogComponent } from './preview-question-dialog/preview-question-dialog.component';
-
+import { CropImageDialogComponent } from 'shared-library/shared/components';
 
 @Component({
   templateUrl: './question-add-update.component.html',

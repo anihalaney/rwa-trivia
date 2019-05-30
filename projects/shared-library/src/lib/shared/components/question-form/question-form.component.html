@@ -38,6 +38,24 @@
         <p *ngIf="questionForm.controls.questionText.errors && !questionForm.controls.questionText.pristine" class="error">Question
           is required!</p>
       </div>
+
+      <div class="form-group row col-md-12" *ngIf="questionForm.value.isRichEditor" style="margin-top:15px;">
+        <p class="field-caption">Select a Max time:</p>
+        <div class="formfield">
+          <select placeholder="Select Max time" class="required" formControlName="maxTime">
+            <option value="">
+              Select a Max time
+            </option>
+            <option *ngFor="let maxTime of applicationSettings.game_play_max_time" [value]="maxTime">
+              {{maxTime}}
+            </option>
+          </select>
+          <p *ngIf="questionForm.controls.maxTime.errors && !questionForm.controls.maxTime.pristine" class="error">
+            Select a max time
+          </p>
+        </div>
+      </div>
+
       <div class="optionbox row col-md-12 enterquestion">
         <p class="field-caption">Answers</p>
         <ng-container formArrayName="answers">

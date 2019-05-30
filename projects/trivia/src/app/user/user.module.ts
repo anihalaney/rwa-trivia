@@ -13,11 +13,9 @@ import {
   InviteFriendsComponent,
   InviteFriendsDialogComponent,
   InviteMailFriendsComponent,
-  CropImageDialogComponent,
   PreviewQuestionDialogComponent
 } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
-
 import { NgQuillTexModule } from 'ng-quill-tex';
 
 @NgModule({
@@ -29,7 +27,6 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
     InviteFriendsDialogComponent,
-    CropImageDialogComponent,
     PreviewQuestionDialogComponent
   ],
   imports: [
@@ -54,11 +51,9 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     InviteFriendsComponent,
     InviteMailFriendsComponent,
     InviteFriendsDialogComponent,
-    CropImageDialogComponent
   ],
   entryComponents: [
     InviteFriendsDialogComponent,
-    CropImageDialogComponent,
     PreviewQuestionDialogComponent
   ]
 })

@@ -8,11 +8,12 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { ShareButtonModule } from '@ngx-share/button';
 import { SafeHtmlPipe } from './pipe/safe-html.pipe';
+import { ImageCropperModule } from 'ngx-img-cropper';
 
 import {
   QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
   QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent, RenderQuestionComponent,
-  RenderAnswerComponent
+  RenderAnswerComponent, CropImageDialogComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './directive';
 import { NgQuillTexModule } from 'ng-quill-tex';
@@ -29,7 +30,8 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     OpenUserProfileDirective,
     SafeHtmlPipe,
     RenderQuestionComponent,
-    RenderAnswerComponent
+    RenderAnswerComponent,
+    CropImageDialogComponent
   ],
   imports: [
     CommonModule,
@@ -48,14 +50,16 @@ import { NgQuillTexModule } from 'ng-quill-tex';
 
     HttpClientModule,       // for share counts
     ShareButtonModule,
-    NgQuillTexModule
+    NgQuillTexModule,
+    ImageCropperModule
   ],
-  exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent, RenderAnswerComponent,
+  exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent, RenderAnswerComponent, CropImageDialogComponent,
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
     HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective,
     OpenUserProfileDirective , SafeHtmlPipe, RenderQuestionComponent
-  ]
+  ],
+  entryComponents: [CropImageDialogComponent]
 })
 export class SharedModule { }

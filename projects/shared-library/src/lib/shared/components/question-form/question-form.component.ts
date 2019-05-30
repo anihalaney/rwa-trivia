@@ -1,12 +1,13 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Question, QuestionStatus, Category, User, Answer } from '../../model';
-import { Utils } from '../../../core/services';
-import { Observable, Subscription } from 'rxjs';
+import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings } from '../../model';
+import { Utils, QuestionService } from '../../../core/services';
+import { Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
-
+import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
+import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
+import { MatDialog } from '@angular/material';
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
@@ -23,6 +24,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() categoriesObs: any; //[[key: number]: ]; /// [key: number]: string };
   @Output() updateStatus = new EventEmitter<boolean>();
   @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
+  @Input() quillConfig: any;
+  @Input() applicationSettings: ApplicationSettings;
 
   questionForm: FormGroup;
   // Properties
@@ -33,41 +36,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   enteredTags: string[] = [];
   user: User;
   subscriptions = [];
-
-  // Math quill options
-  mathOptions = {
-    quill_options: {
-      maths: [{
-        cmd: 'sqrt', // Math quill 
-        name: 'Square Root',
-        url: '' // Image url of maths function
-      },
-      {
-        cmd: 'pm',
-        name: 'Plus Minus',
-        url: '' // Image url of maths function
-      },
-      ]
-    }
-  }
-
-  quillConfig = {
-    toolbar: {
-      container: [['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-      ['code-block', 'image'],
-      ['mathEditor']
-      ],
-      handlers: {
-        // handlers object will be merged with default handlers object
-        'mathEditor': () => {
-          console.log('maths called');
-        }
-      }
-    },
-    mathEditor: { mathOptions: this.mathOptions },
-    blotFormatter: {},
-    syntax: true
-  };
+  quillObject: any = {};
+  dialogRef;
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -78,13 +48,14 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private utils: Utils) {
+    public dialog: MatDialog,
+    public questionService: QuestionService) {
 
 
   }
 
   ngOnInit() {
-  
+
     this.questionForm = this.fb.group({
       category: [(this.editQuestion.categories.length > 0 ? this.editQuestion.categories[0] : ''), Validators.required]
     });
@@ -129,6 +100,12 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     }
     const tagsFA = new FormArray(fcs);
     const questionText = (question.isRichEditor) ? question.questionObject : question.questionText;
+
+    if (question.isRichEditor) {
+      this.quillObject.questionText =  question.questionText ;
+      this.quillObject.jsonObject = question.questionObject;
+    }
+
     this.questionForm = this.fb.group({
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: [questionText, Validators.required],
@@ -137,7 +114,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
       answers: answersFA,
       ordered: [question.ordered],
       explanation: [question.explanation],
-      isRichEditor: question.isRichEditor
+      isRichEditor: question.isRichEditor,
+      maxTime: (question.maxTime) ? question.maxTime : ''
     }, { validator: this.questionFormValidator }
     );
 
@@ -209,6 +187,12 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     question.created_uid = this.editQuestion.created_uid ? this.editQuestion.created_uid : this.user.userId;
     question.approved_uid = this.editQuestion.approved_uid ? this.editQuestion.approved_uid : '';
     question.explanation = this.editQuestion.explanation ? this.editQuestion.explanation : '';
+
+    if (question.isRichEditor) {
+      question.questionText = this.quillObject.questionText;
+      question.questionObject = this.quillObject.jsonObject;
+    }
+
     // call updateQuestion
     this.updateQuestion(question);
   }
@@ -223,10 +207,13 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     question.tags = [...this.autoTags, ...this.enteredTags];
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
+    question.isRichEditor = formValue.isRichEditor;
     return question;
   }
 
   updateQuestion(question: Question) {
+    // console.log('dd', question);
+    // return false;
     this.updateUnpublishedQuestions.emit(question);
     this.updateStatus.emit(true);
   }
@@ -255,10 +242,42 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   }
 
-  onAnswerChanged(event,answerIndex){
+  onAnswerChanged(event, answerIndex) {
     const answers = (<FormArray>this.questionForm.get('answers'));
     answers.controls[answerIndex]['controls'].answerObject.patchValue(event.delta);
     answers.controls[answerIndex]['controls'].answerText.patchValue(event.html);
+  }
+
+  // Text change in quill editor
+  onTextChanged(text) {
+    this.quillObject.jsonObject = text.delta;
+    this.quillObject.questionText = text.html;
+  }
+
+  // Image Upload
+  fileUploaded(quillImageUpload: QuillImageUpload) {
+    const file: File = quillImageUpload.file;
+
+    this.dialogRef = this.dialog.open(CropImageDialogComponent, {
+      disableClose: false,
+      data: { file: file, applicationSettings: this.applicationSettings }
+    });
+
+    this.dialogRef.componentInstance.ref = this.dialogRef;
+    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+      if (result) {
+        const fileName = `questions/${new Date().getTime()}-${file.name}`;
+        this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
+          if (uploadTask != null) {
+            if (uploadTask.task.snapshot.state === 'success') {
+              this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
+                quillImageUpload.setImage(imageUrl);
+              });
+            }
+          }
+        });
+      }
+    }));
   }
 
 }

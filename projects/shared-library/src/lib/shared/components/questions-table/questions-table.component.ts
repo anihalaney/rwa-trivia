@@ -2,13 +2,11 @@ import {
   Component, Input, Output, OnInit, OnChanges, EventEmitter,
   ViewChild, AfterViewInit, SimpleChanges, ChangeDetectionStrategy
 } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
 import { PageEvent, MatSelectChange } from '@angular/material';
-import { Question, QuestionStatus, Category, User, Answer, BulkUploadFileInfo } from '../../model';
-import { Utils } from '../../../core/services';
-import { Observable, Subject, BehaviorSubject } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { Question, QuestionStatus, Category, User, BulkUploadFileInfo, ApplicationSettings } from '../../model';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 
 
@@ -34,6 +32,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   @Input() tagsObs: Observable<string[]>;
   @Input() tagDictionary: { [key: number]: string };
   @Input() categoriesObs: Observable<Category[]>;
+  @Input() quillConfig: any;
+  @Input() applicationSettings: ApplicationSettings;
   @Output() onApproveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onSortOrderChanged = new EventEmitter<string>();

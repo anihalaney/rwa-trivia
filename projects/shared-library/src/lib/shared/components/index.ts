@@ -8,6 +8,7 @@ import { SocialPaletteComponent } from './social-palette/social-palette.componen
 import { AuthorComponent } from './author/author.component';
 import { RenderQuestionComponent } from './render-question/render-question.component';
 import { RenderAnswerComponent } from './render-answer/render-answer.component';
+import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
 export {
     QuestionsComponent,
     QuestionsSearchComponent,
@@ -17,7 +18,8 @@ export {
     SocialPaletteComponent,
     AuthorComponent,
     RenderQuestionComponent,
-    RenderAnswerComponent
+    RenderAnswerComponent,
+    CropImageDialogComponent
 };
 
 export default [
@@ -29,5 +31,6 @@ export default [
     SocialPaletteComponent,
     AuthorComponent,
     RenderQuestionComponent,
-    RenderAnswerComponent
+    RenderAnswerComponent,
+    CropImageDialogComponent
 ];
