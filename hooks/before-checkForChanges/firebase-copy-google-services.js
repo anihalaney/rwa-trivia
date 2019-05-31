@@ -31,7 +31,8 @@ module.exports = function($logger, $projectData, hookArgs) {
         var forcePrepare = true; // whether to force NS to run prepare, defaults to true
         var npfInfoPath = path.join(platformsDir, platform, ".pluginfirebaseinfo");
         var nsPrepareInfoPath = path.join(platformsDir, platform, ".nsprepareinfo");
-        var copyPlistOpts = { platform, appResourcesDirectoryPath,projectDirectoryPath, buildType, isProdEnv,  $logger }
+        var project = hookArgs['checkForChangesOpts']['projectData']['$options']['argv']['env']['project'];
+        var copyPlistOpts = { platform, appResourcesDirectoryPath,projectDirectoryPath, buildType, isProdEnv,  $logger, project }
 
         if (fs.existsSync(npfInfoPath)) {
             var npfInfo = undefined;
@@ -62,8 +63,8 @@ module.exports = function($logger, $projectData, hookArgs) {
 var copyPlist = function(copyPlistOpts) {
     if (copyPlistOpts.platform === 'android') { return true; }
     else if (copyPlistOpts.platform === 'ios') {
-        var sourceGooglePlistProd = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", `google-services/${hookArgs.platformSpecificData.env.project}/GoogleService-Info.plist.prod`);
-        var sourceGooglePlistDev = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", `google-services/${hookArgs.platformSpecificData.env.project}/GoogleService-Info.plist.dev`);
+        var sourceGooglePlistProd = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", `google-services/${copyPlistOpts.project}/GoogleService-Info.plist.prod`);
+        var sourceGooglePlistDev = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", `google-services/${copyPlistOpts.project}/GoogleService-Info.plist.dev`);
         var destinationGooglePlist = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist");
 
         // if we have both dev/prod versions, we copy (or overwrite) GoogleService-Info.plist in destination dir
@@ -93,8 +94,8 @@ var copyPlist = function(copyPlistOpts) {
 var copyInfoPlist = function(copyPlistOpts) {
     if (copyPlistOpts.platform === 'android') { return true; }
     else if (copyPlistOpts.platform === 'ios') {
-        var sourceInfoPlistProd = path.join(copyPlistOpts.projectDirectoryPath, "configurations", "ios",  "Info.plist.prod");
-        var sourceInfoPlistDev = path.join(copyPlistOpts.projectDirectoryPath, "configurations", "ios",  "Info.plist.dev");
+        var sourceInfoPlistProd = path.join(copyPlistOpts.projectDirectoryPath, "configurations", copyPlistOpts.project , "ios",  "Info.plist.prod");
+        var sourceInfoPlistDev = path.join(copyPlistOpts.projectDirectoryPath, "configurations", copyPlistOpts.project , "ios",  "Info.plist.dev");
         var destinationInfoPlist = path.join(copyPlistOpts.appResourcesDirectoryPath, "iOS", "Info.plist");
 
         // if we have both dev/prod versions, we copy (or overwrite) Info.plist in destination dir
