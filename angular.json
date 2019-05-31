@@ -227,8 +227,11 @@
             "devServerTarget": "trivia:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "trivia:serve:production"
+            "trivia-production": {
+              "devServerTarget": "trivia:serve:trivia-production"
+            },
+            "bitwiser-edu-production": {
+              "devServerTarget": "trivia:serve:bitwiser-edu-production"
             }
           }
         },
@@ -443,8 +446,11 @@
             "devServerTarget": "trivia-admin:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "trivia-admin:serve:production"
+            "trivia-admin-production": {
+              "devServerTarget": "trivia-admin:serve:trivia-admin-production"
+            },
+            "bitwiser-edu-admin-production": {
+              "devServerTarget": "trivia-admin:serve:bitwiser-edu-admin-production"
             }
           }
         },

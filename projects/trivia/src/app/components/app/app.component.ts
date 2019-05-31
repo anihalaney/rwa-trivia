@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewChild, Inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
@@ -15,6 +15,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CookieLawComponent } from 'angular2-cookie-law';
 import { Title } from '@angular/platform-browser';
 import { projectDetail } from 'shared-library/environments/environment';
+import { DOCUMENT } from '@angular/platform-browser';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -40,9 +41,13 @@ export class AppComponent implements OnInit, OnDestroy {
     private userAction: UserActions,
     private applicationSettingsAction: ApplicationSettingsActions,
     private utils: Utils,
-    private titleService: Title) {
+    private titleService: Title,
+    @Inject(DOCUMENT) private _document: HTMLDocument) {
 
     titleService.setTitle( projectDetail.title );
+
+    _document.getElementById('appFavicon').setAttribute('href', `./assets/images/logo/${projectDetail.projectName}/favicon.ico`);
+    _document.getElementById('appManifest').setAttribute('href', `./assets/manifest/${projectDetail.projectName}/manifest.json`);
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
 

@@ -49,18 +49,18 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>com.googleusercontent.apps.701588063269-dor381go31bk90elf47kfbub5nq8v8pd</string>
+			<string>com.googleusercontent.apps.704157888306-c921rsjncge4fqqlm27c1bsuq6dc6u89</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.701588063269-dor381go31bk90elf47kfbub5nq8v8pd</string>
-				<string>fb266820933965932</string>
+				<string>com.googleusercontent.apps.704157888306-c921rsjncge4fqqlm27c1bsuq6dc6u89</string>
+				<string>fb462351904573050</string>
 			</array>
 		</dict>
 	</array>
 	<key>FacebookAppID</key>
-	<string>266820933965932</string>
+	<string>462351904573050</string>
 	<key>FacebookDisplayName</key>
-	<string>bitwiser.io_test</string>
+	<string>bitwiser.edu</string>
 	<key>UIBackgroundModes</key>
     <array>
     <string>remote-notification</string>

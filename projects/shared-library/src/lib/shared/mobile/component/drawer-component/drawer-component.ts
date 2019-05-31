@@ -15,6 +15,7 @@ import { Category } from './../../../model';
 import { Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { projectDetail } from 'shared-library/environments/environment';
 
 @Component({
     moduleId: module.id,
@@ -29,7 +30,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     @ViewChild('ScrollList') scrollList: ElementRef;
     @Output() output = new EventEmitter();
-    photoUrl = '~/assets/icons/icon-192x192.png';
+    photoUrl = `~/assets/icons/${projectDetail.projectName}/icon-192x192.png`;
     currentState;
     user: User;
     categoriesObs: Observable<Category[]>;
