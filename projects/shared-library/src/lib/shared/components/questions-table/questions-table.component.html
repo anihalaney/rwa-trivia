@@ -200,10 +200,10 @@
         </div>
       </div>
       <div class="row edit-form-div" *ngIf="editQuestion !== null && row === editQuestion">
-
         <app-question-form [editQuestion]="editQuestion" [tagsDictionary]="tagsDictionary" [tagsObs] ="tagsObs" [categoriesObs]="categoriesObs"
           (updateStatus)=nullifyQuestion($event) (updateUnpublishedQuestions)="updateQuestionData($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings"></app-question-form>
       </div>
+
       <div class="row rejection-div" *ngIf="row === viewReasonArray[i]">
         <app-rejected-question-content [rejectQuestion]="viewReasonArray[i]" (cancelStatus)=showQuestion($event)></app-rejected-question-content>
       </div>

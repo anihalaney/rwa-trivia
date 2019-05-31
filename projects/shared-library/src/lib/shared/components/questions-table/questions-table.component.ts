@@ -1,6 +1,6 @@
 import {
   Component, Input, Output, OnInit, OnChanges, EventEmitter,
-  ViewChild, AfterViewInit, SimpleChanges, ChangeDetectionStrategy
+  ViewChild, AfterViewInit, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DataSource } from '@angular/cdk/table';
@@ -69,7 +69,8 @@ export class QuestionsTableComponent implements OnInit, OnChanges, AfterViewInit
   viewReasonArray = [];
 
   constructor(
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef) {
     this.questionsSubject = new BehaviorSubject<Question[]>([]);
     this.questionsDS = new QuestionsDataSource(this.questionsSubject);
     this.sortOrder = 'Category';

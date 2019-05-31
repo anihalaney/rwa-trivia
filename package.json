@@ -14,7 +14,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start-trivia": "ng serve trivia --host=192.168.0.100",
+    "start-trivia": "ng serve trivia --host=192.168.0.101",
     "start-trivia-admin": "ng serve trivia-admin",
     "prod:start-trivia": "ng serve  trivia --configuration=production",
     "prod:start-trivia-admin": "ng serve  trivia-admin --configuration=production",

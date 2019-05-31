@@ -203,7 +203,8 @@
               "projects/trivia-admin/src/styles/styles.scss",
               "projects/trivia-admin/src/styles/global.scss",
               "projects/trivia-admin/src/styles/light.theme.scss",
-              "projects/trivia-admin/src/styles/dark.theme.scss"
+              "projects/trivia-admin/src/styles/dark.theme.scss",
+              "./node_modules/ng-quill-tex/assets/theme.css"
             ],
             "scripts": []
           },

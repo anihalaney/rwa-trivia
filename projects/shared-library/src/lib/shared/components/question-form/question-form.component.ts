@@ -1,7 +1,7 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings } from '../../model';
-import { Utils, QuestionService } from '../../../core/services';
+import { QuestionService } from '../../../core/services';
 import { Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -63,11 +63,10 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     this.createForm(this.editQuestion);
 
     const questionControl = this.questionForm.get('questionText');
-
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
-    this.subscriptions.push(this.tagsObs.subscribe(tags => { this.tags = tags; console.log('tags', tags); }));
+    this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
   }
 
 

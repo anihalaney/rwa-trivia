@@ -3,7 +3,6 @@ import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { User } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
-import { AppState, appState } from '../../../../store';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Inject } from '@angular/core';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';

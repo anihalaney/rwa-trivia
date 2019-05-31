@@ -1,13 +1,13 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 
 import { PageEvent, MatCheckboxChange } from '@angular/material';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+import { AppState, appState, getCategories, getTags } from '../../../store';
 import {
   User, Question, Category, SearchResults,
-  SearchCriteria, BulkUploadFileInfo, QuestionStatus
+  SearchCriteria, ApplicationSettings, QuestionStatus
 } from 'shared-library/shared/model';
 
 import { adminState } from '../../store';
@@ -41,8 +41,33 @@ export class AdminQuestionsComponent implements OnInit {
   PENDING = QuestionStatus.PENDING;
   REJECTED = QuestionStatus.REJECTED;
   REQUIRED_CHANGE = QuestionStatus.REQUIRED_CHANGE;
+  applicationSettings: ApplicationSettings;
+  quillConfig = {
+    toolbar: {
+      container: [],
+      handlers: {
+        // handlers object will be merged with default handlers object
+        'mathEditor': () => {
+        }
+      }
+    },
+    mathEditor: {},
+    blotFormatter: {},
+    syntax: true
+  };
 
-  constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
+  constructor(private store: Store<AppState>,
+    private router: Router,
+    private userActions: UserActions) {
+
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+        this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
+      }
+    });
 
     this.questionsSearchResultsObs = this.store.select(adminState).pipe(select(s => s.questionsSearchResults));
     this.unpublishedQuestionsObs = this.store.select(adminState).pipe(select(s => s.unpublishedQuestions), map((question) => {
@@ -62,7 +87,7 @@ export class AdminQuestionsComponent implements OnInit {
     this.userDict$.subscribe(userDict => this.userDict = userDict);
 
 
-    this.categoryDictObs = store.select(categoryDictionary);
+    this.categoryDictObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.criteria = new SearchCriteria();
 
     const url = this.router.url;

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { QuestionActions } from 'shared-library/core/store';
 import { Category, Question, User, ApplicationSettings } from 'shared-library/shared/model';
-import { AppState, appState, categoryDictionary } from '../../../store';
+import { AppState, appState } from '../../../store';
 import { userState } from '../../../user/store';
 import { ChangeDetectorRef } from '@angular/core';
 
@@ -61,7 +61,6 @@ export class MyQuestions {
         this.applicationSettings = appSettings[0];
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
-        // this.createForm(this.question);
         this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
       }
     }));
@@ -80,9 +79,4 @@ export class MyQuestions {
     this.loaderBusy = flag;
     this.cd.markForCheck();
   }
-
-  // updateQuestionData(question: Question) {
-  //   this.store.dispatch(new bulkActions.UpdateQuestion({ question: question }));
-  // }
-
 }
