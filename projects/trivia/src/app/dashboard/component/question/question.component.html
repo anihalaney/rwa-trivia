@@ -11,10 +11,7 @@
           <li class="col-sm-5 col-xs-12 item" *ngFor="let answer of question.answers|slice:0:2;" (click)="answerButtonClicked(answer)"
             [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
             [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [class.question-answered]="answeredText!==''">
-            <!-- *ngIf="!applicationSettings?.renderWebView"  -->
-            <span > {{answer.answerText}} </span>
-            <!-- <span *ngIf="applicationSettings?.renderWebView" [innerHtml]='answer.renderedQuestion | safeHtml'></span> -->
-
+            <render-answer [renderWebView]="!applicationSettings?.renderWebView" [answer]="answer"></render-answer>
           </li>
         </ul>
       </div>
@@ -23,10 +20,7 @@
           <li class="col-sm-5 col-xs-12" *ngFor="let answer of question.answers|slice:2:4;" (click)="answerButtonClicked(answer)"
             [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
             [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [class.question-answered]="answeredText!==''">
-            <!-- {{answer.answerText}} -->
-            <!-- *ngIf="!applicationSettings?.renderWebView" -->
-            <span > {{answer?.answerText}} </span>
-            <!-- <span *ngIf="applicationSettings?.renderWebView" [innerHtml]='answer?.renderedAnswer | safeHtml'></span> -->
+            <render-answer [renderWebView]="!applicationSettings?.renderWebView" [answer]="answer"></render-answer>
           </li>
         </ul>
       </div>

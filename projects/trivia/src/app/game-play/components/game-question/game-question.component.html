@@ -48,18 +48,13 @@
     <ng-container>
       <div class="row secondbg">
         <h2>
-          <!-- {{questionIndex}}. 
-            <span *ngIf="!applicationSettings?.renderWebView" > {{question.questionText}} </span>
-            <span *ngIf="applicationSettings?.renderWebView" [innerHtml]='question.renderedQuestion | safeHtml'></span> -->
-            <render-question [renderWebView]="applicationSettings?.renderWebView" [question]="question" [questionIndex]="questionIndex"></render-question> 
+          <render-question [renderWebView]="applicationSettings?.renderWebView" [question]="question" [questionIndex]="questionIndex"></render-question> 
         </h2>
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)"
             [class.question-answered]="answeredIndex >= 0 || continueNext" [class.players-answer]="answeredIndex === i"
             [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]=" correctAnswerIndex === i">
-            <span *ngIf="!applicationSettings?.renderWebView" > {{answer?.answerText}} </span>
-            <span *ngIf="applicationSettings?.renderWebView" [innerHtml]='answer?.renderedAnswer | safeHtml'></span>
-
+              <render-answer [renderWebView]="applicationSettings?.renderWebView" [answer]="answer"></render-answer>
           </li>
         </ul>
         <div class=" col-sm-12 col-xs-12">
