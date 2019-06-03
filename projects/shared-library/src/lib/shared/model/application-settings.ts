@@ -13,6 +13,7 @@ export class ApplicationSettings {
     ios_version: number;
     phone_authentication: boolean;
     default_names: Array<string>;
+    user_display_name_value: number;
 }
 
 export class TimerLoader {

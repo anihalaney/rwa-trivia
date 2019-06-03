@@ -38,12 +38,9 @@ export class User {
       this.userId = authState.uid;
       this.email = authState.providerData ? authState.providerData[0].email : authState.email;
       if (authState.providerData && authState.providerData[0].displayName) {
-        this.displayName = authState.providerData[0].displayName;
+        this.name = authState.providerData[0].displayName;
       } else if (authState.name) {
-        this.displayName = authState.name;
-      } else {
-        this.displayName = this.email ? this.email.split('@')[0] + new Date().getTime() :
-        `${this.authState.phoneNumber}${new Date().getTime()}`;
+        this.name = authState.name;
       }
     }
   }
