@@ -6,10 +6,10 @@
   "nativescript": {
     "id": "io.bitwiser.trivia.dev",
     "tns-android": {
-      "version": "5.1.0"
+      "version": "5.4.0"
     },
     "tns-ios": {
-      "version": "5.1.0"
+      "version": "5.4.0"
     }
   },
   "scripts": {
@@ -26,7 +26,7 @@
     "e2e": "protractor",
     "deploy-functions-local": "npm run compile-functions  && firebase serve --only functions",
     "compile-functions": "rmdir /s/q functions\\server & tsc --project functions",
-    "deploy-trivia-functions": "npm run deploy-trivia-functions-build && npm run deploy-functions-app &&  npm run deploy-functions-ssr && npm run deploy-apps-to-firebase && npm install firebase@5.7.0",
+    "deploy-trivia-functions": "npm run deploy-trivia-functions-build && npm run deploy-functions-app &&  npm run deploy-functions-ssr && npm run deploy-apps-to-firebase && npm install firebase@6.0.2",
     "deploy-trivia-functions-build": "npm run build-trivia:ssr && npm run compile-ssr-functions",
     "build-trivia:ssr": "ng build trivia  --configuration=dev && ng build trivia-admin  --configuration=dev && ng run trivia:server",
     "compile-ssr-functions": "npm run compile-functions && npm run webpack:server && cpx dist/index.html functions/dist && rimraf dist/index.html",
@@ -36,7 +36,7 @@
     "deploy-functions-ssr": "npm run pre-compile-ssr-functions && firebase deploy -P default --only functions:ssr",
     "pre-compile-ssr-functions": "rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js",
     "deploy-apps-to-firebase": "firebase deploy -P default --only hosting",
-    "prod:deploy-trivia-functions": "npm run prod:deploy-trivia-functions-build && npm run prod:set-index && npm run prod:deploy-functions-app && npm run prod:deploy-functions-ssr && npm run prod:deploy-apps-to-firebase && npm install firebase@5.7.0",
+    "prod:deploy-trivia-functions": "npm run prod:deploy-trivia-functions-build && npm run prod:set-index && npm run prod:deploy-functions-app && npm run prod:deploy-functions-ssr && npm run prod:deploy-apps-to-firebase && npm install firebase@6.0.2",
     "prod:deploy-trivia-functions-build": "npm run prod:build-trivia:ssr && npm run compile-ssr-functions",
     "prod:build-trivia:ssr": "ng build trivia  --configuration=production && ng build trivia-admin  --configuration=production && ng run trivia:server",
     "prod:set-index": "firebase -P production functions:config:set environment.production=true",
