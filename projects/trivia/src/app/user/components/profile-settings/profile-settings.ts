@@ -9,7 +9,7 @@ import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
-
+import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 export enum UserType {
     userProfile,
     loggedInOtherUserProfile,
@@ -62,17 +62,19 @@ export class ProfileSettings {
         displayName: false,
         location: false
     };
-
+    loggedInUser: User;
+    gamePlayedAgainst: any;
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
+    public items: Array<SegmentedBarItem>;
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
         public userAction: UserActions,
         public utils: Utils,
         public cd: ChangeDetectorRef,
         public route: ActivatedRoute) {
-
+        this.items = [];
         this.toggleLoader(true);
         this.fb = formBuilder;
         this.tagsObs = this.store.select(getTags);
@@ -84,6 +86,7 @@ export class ProfileSettings {
                 map(params => this.userId = params.userid),
                 flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
                 switchMap(user => {
+                    this.loggedInUser = user;
                     if (user && user.userId === this.userId) {
                         this.user = user;
                         this.userType = UserType.userProfile;
@@ -153,11 +156,21 @@ export class ProfileSettings {
             map(userDict => {
                 this.userDict = userDict;
                 if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
-                    this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
+                    const userIdDetails = {
+                                userId: this.userId,
+                                loggedInUserId: this.loggedInUser && this.loggedInUser.userId ? this.loggedInUser.userId : ''
+                            };
+                    this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(userIdDetails));
                 } else {
                     this.user = this.userDict[this.userId];
                     this.createForm(this.user);
                     this.account = this.user.account;
+                    this.gamePlayedAgainst = this.user.gamePlayed;
+                     if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
+                        const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
+                        segmentedBarItem.title = 'Game Played';
+                        this.items.push(segmentedBarItem);
+                     }
                     this.userProfileImageUrl = this.getImageUrl(this.user);
                     this.profileImage.image = this.userProfileImageUrl;
                     this.toggleLoader(false);
@@ -351,5 +364,11 @@ export class ProfileSettings {
             this.userForm.get(field).setValidators([]);
             this.userForm.updateValueAndValidity();
         }
+    }
+
+    sendFriendRequest() {
+            const inviteeUserId = this.user.userId;
+            this.store.dispatch(this.userAction.addUserInvitation(
+                { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));
     }
 }

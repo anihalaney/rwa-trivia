@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import { GameOptions } from './game-options';
 import { Account } from './account';
+import { FriendsMetadata } from './friends';
 export class User {
   id?: string;
   userId: string;
@@ -31,6 +32,7 @@ export class User {
   lastGamePlayOption?: GameOptions;
   account?: Account;
   achievements: string[];
+  gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
 
   constructor(authState?: firebase.User & { name: string }) {
     if (authState) {

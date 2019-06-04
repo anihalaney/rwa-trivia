@@ -51,9 +51,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public width = 200;
   public height = 200;
 
-  public items: Array<SegmentedBarItem>;
+
   public selectedIndex = 0;
   tabsTitles: Array<string>;
+
 
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
@@ -75,13 +76,19 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.cd.markForCheck();
     }));
     this.tabsTitles = ['Profile', 'Stats'];
-    this.items = [];
+
     for (let i = 0; i < this.tabsTitles.length; i++) {
       const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
       segmentedBarItem.title = this.tabsTitles[i];
       this.items.push(segmentedBarItem);
     }
 
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.utils.showMessage('success', 'Invitation sent successfully!');
+      }
+      this.cd.markForCheck();
+    }));
   }
 
   onSelectedIndexChange(args) {

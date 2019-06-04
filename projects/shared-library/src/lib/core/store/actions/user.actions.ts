@@ -66,10 +66,10 @@ export class UserActions {
 
 
   static LOAD_OTHER_USER_EXTEDED_INFO = 'LOAD_OTHER_USER_EXTEDED_INFO';
-  loadOtherUserExtendedInfo(userId: string): ActionWithPayload<string> {
+  loadOtherUserExtendedInfo(userIdDetails: any): ActionWithPayload<string> {
     return {
       type: UserActions.LOAD_OTHER_USER_EXTEDED_INFO,
-      payload: userId
+      payload: userIdDetails
     };
   }
 

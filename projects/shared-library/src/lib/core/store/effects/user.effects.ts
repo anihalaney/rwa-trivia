@@ -46,7 +46,8 @@ export class UserEffects {
         .pipe(ofType(UserActions.LOAD_OTHER_USER_EXTEDED_INFO))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(),
-            mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
+            mergeMap((userIdDetails: any) =>
+            this.svc.loadOtherUserProfileWithExtendedInfo(userIdDetails.userId, userIdDetails.loggedInUserId)),
             map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
 
 
