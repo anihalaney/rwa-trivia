@@ -319,7 +319,9 @@ removeMessage() {
 }
 
 ngOnDestroy() {
-  android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
+  if (application.android) {
+    android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
+  }
 }
 
 hideKeyboard() {
