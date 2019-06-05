@@ -235,10 +235,14 @@ module.exports = env => {
             // Copy native app resources to out dir.
             new CopyWebpackPlugin([
                 {
+                    from: `${appResourcesFullPath}/${appResourcesPlatformDir}/${env.project}`,
+                    to: `${dist}/App_Resources/${appResourcesPlatformDir}`
+                },
+                {
                     from: `${appResourcesFullPath}/${appResourcesPlatformDir}`,
                     to: `${dist}/App_Resources/${appResourcesPlatformDir}`,
                     context: projectRoot
-                },
+                }
             ]),
             // Copy assets to out dir. Add your own globs as needed.
             new CopyWebpackPlugin([

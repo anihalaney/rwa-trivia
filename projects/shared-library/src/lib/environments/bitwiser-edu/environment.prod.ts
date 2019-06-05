@@ -12,7 +12,7 @@ export const CONFIG: IConfig = {
     storageBucket: 'bitwiser-edu.appspot.com',
     messagingSenderId: '704157888306'
   },
-  'functionsUrl': 'https://bitwiser-eduu.firebaseapp.com'
+  'functionsUrl': 'https://bitwiser-edu.firebaseapp.com'
 };
 
 
