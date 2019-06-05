@@ -4,7 +4,6 @@ import { Country } from './model/country.model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-// import { UserActions } from '../../store';
 import { UserActions, coreState, CoreState } from 'shared-library/core/store';
 
 
@@ -34,6 +33,11 @@ export class CountryListComponent implements OnInit, OnDestroy {
     }));
 
     this.store.dispatch(this.userAction.getCountries());
+
+    this._modalDialogParams.context.closeObserver.subscribe((res) => {
+        this.onClose();
+    });
+
   }
 
   ngOnInit() {
@@ -47,6 +51,10 @@ export class CountryListComponent implements OnInit, OnDestroy {
     };
     this._modalDialogParams.closeCallback(this.responseJson);
     this.cd.markForCheck();
+  }
+
+  onClose() {
+    this._modalDialogParams.closeCallback();
   }
 
   ngOnDestroy() {

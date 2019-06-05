@@ -17,7 +17,10 @@ import { NgModel } from '@angular/forms';
 import { ModalDialogOptions, ModalDialogService } from 'nativescript-angular/modal-dialog';
 import { setString } from 'nativescript-plugin-firebase/crashlytics/crashlytics';
 import {PhoneNumberValidationProvider} from '../../../shared/mobile/component/countryList/phone-number-validation.provider';
-
+import * as application from 'application';
+import { AndroidApplication } from 'tns-core-modules/application';
+import { Subject } from 'rxjs';
+import { android, AndroidActivityBackPressedEventData } from 'tns-core-modules/application';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -38,16 +41,18 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   };
   subscriptions = [];
   @ViewChild('phoneNumber') phoneNumber: NgModel;
-  isCountryCodeOpened = false;
+  isCountryListOpened = false;
   isCountryCodeError;
   input: any;
   country: any;
+  dialogCloseSubject = new Subject();
+  dialogCloseObservable = this.dialogCloseSubject.asObservable();
 
   constructor(
     private modalDialogService: ModalDialogService,
     public fb: FormBuilder,
     public store: Store<CoreState>,
-    private routerExtension: RouterExtensions,
+    public routerExtension: RouterExtensions,
     private uiStateActions: UIStateActions,
     private page: Page,
     private firebaseAuthService: FirebaseAuthService,
@@ -103,20 +108,22 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     const options: ModalDialogOptions = {
       viewContainerRef: this.viewContainerRef,
       fullscreen: false,
-      context: { Country: this.country }
+      context: { Country: this.country, closeObserver: this.dialogCloseObservable }
   };
   try {
+      this.isCountryListOpened = true;
       const result = await this.modalDialogService.showModal(CountryListComponent, options);
-      if (result === undefined || this.input.selectedCountry === null) {
+
+      if (result === undefined && this.input.selectedCountry === null) {
           this.isCountryCodeError = true;
-      } else {
+      } else if (result) {
           setString('countryCode', result.flagClass);
           this.input.country = result.flagClass;
           this.input.selectedCountry = result.name;
           this.input.countryCode = '+' + result.dialCode;
           this.isCountryCodeError = false;
       }
-      this.isCountryCodeOpened = true;
+      this.isCountryListOpened = false;
       this.cd.markForCheck();
   } catch (error) {
     console.error(error);
@@ -125,6 +132,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 }
 
   ngOnInit() {
+    this.handleBackButtonPress();
     this.title = 'Login';
     this.subscriptions.push(this.loginForm.get('mode').valueChanges.subscribe((mode: number) => {
       switch (mode) {
@@ -145,6 +153,22 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     }));
 
 
+  }
+
+  handleBackButtonPress() {
+    if (application.android) {
+      android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
+      android.on(application.AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack, this);
+    }
+  }
+
+  handleBackButtonPressCallBack(args: AndroidActivityBackPressedEventData) {
+    if (this.routerExtension.canGoBack() && this.isCountryListOpened === false) {
+      this.routerExtension.back();
+    } else if (this.isCountryListOpened) {
+      this.dialogCloseSubject.next(true);
+    }
+    args.cancel = true;
   }
 
   async onSubmit() {
@@ -295,7 +319,9 @@ removeMessage() {
 }
 
 ngOnDestroy() {
-
+  if (application.android) {
+    android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
+  }
 }
 
 hideKeyboard() {
