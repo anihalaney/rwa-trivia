@@ -18,6 +18,7 @@ import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Utils } from '../../services';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -323,8 +324,8 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   hideKeyboard() {
-    this.textField
-      .toArray()
+   this.textField
+    .toArray()
       .map((el) => {
         if (isAndroid) {
           el.nativeElement.android.clearFocus();
