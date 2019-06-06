@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef,
-  ChangeDetectionStrategy, ChangeDetectorRef} from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Toast from 'nativescript-toast';
@@ -9,7 +11,7 @@ import { Store } from '@ngrx/store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Page } from 'tns-core-modules/ui/page';
-import { LoadingIndicator } from "nativescript-loading-indicator";
+import { LoadingIndicator } from 'nativescript-loading-indicator';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from '../../services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -27,7 +29,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   title: string;
   loader = new LoadingIndicator();
-  loaderOptionsCommon = {android: {color: '#3B5998'}, ios: { color: '#4B9ED6'},  message: 'Loading'};
+  loaderOptionsCommon = { android: { color: '#3B5998' }, ios: { color: '#4B9ED6' }, message: 'Loading' };
   message = {
     show: false,
     type: '',
@@ -89,7 +91,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           this.loader.hide();
           const singInError = error.message.split(':');
           this.showMessage('error', singInError[1] || error.message);
-        }).finally( () => {
+        }).finally(() => {
           this.cd.markForCheck();
         });
         break;
@@ -115,7 +117,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           this.loader.hide();
           const singUpError = error.split(':');
           this.showMessage('error', singUpError[1] || error);
-        }).finally( () => {
+        }).finally(() => {
           this.cd.markForCheck();
         });
         break;
@@ -187,42 +189,42 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           }));
       }
       ));
-}
+  }
 
-showMessage(type: string, text: string) {
-  this.message = {
-    show: true,
-    type: type,
-    text: text
-  };
-}
+  showMessage(type: string, text: string) {
+    this.message = {
+      show: true,
+      type: type,
+      text: text
+    };
+  }
 
-changeMode(mode: number) {
-  super.changeMode(mode);
-  this.removeMessage();
-}
+  changeMode(mode: number) {
+    super.changeMode(mode);
+    this.removeMessage();
+  }
 
-removeMessage() {
-  this.message = {
-    show: false,
-    type: '',
-    text: ''
-  };
-}
+  removeMessage() {
+    this.message = {
+      show: false,
+      type: '',
+      text: ''
+    };
+  }
 
-ngOnDestroy() {
+  ngOnDestroy() {
 
-}
+  }
 
-hideKeyboard() {
-  this.textField
-    .toArray()
-    .map((el) => {
-      if (isAndroid) {
-        el.nativeElement.android.clearFocus();
-      }
-      return el.nativeElement.dismissSoftInput();
-    });
-}
+  hideKeyboard() {
+    this.textField
+      .toArray()
+      .map((el) => {
+        if (isAndroid) {
+          el.nativeElement.android.clearFocus();
+        }
+        return el.nativeElement.dismissSoftInput();
+      });
+  }
 }
 

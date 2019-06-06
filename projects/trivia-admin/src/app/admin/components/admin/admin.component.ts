@@ -26,7 +26,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
       }
 
-      this.user = user
+      this.user = user;
     });
   }
 

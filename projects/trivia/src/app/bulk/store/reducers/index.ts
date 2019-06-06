@@ -3,7 +3,7 @@ import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/s
 import { BulkUploadFileInfo, Question } from 'shared-library/shared/model';
 import {
     bulkUploadFileInfos, userBulkUploadFileInfos,
-    bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions, questionSaveStatus,
+    bulkUploadPublishedQuestions, bulkUploadUnpublishedQuestions,
     bulkUploadFileUrl, bulkUploadArchiveStatus, bulkUploadFileInfo, getArchiveToggleState, getArchiveList
 } from './bulk.reducer';
 
@@ -14,7 +14,6 @@ export interface BulkState {
     userBulkUploadFileInfos: BulkUploadFileInfo[];
     bulkUploadPublishedQuestions: Question[];
     bulkUploadUnpublishedQuestions: Question[];
-    questionSaveStatus: String;
     bulkUploadFileUrl: string;
     bulkUploadArchiveStatus: string;
     bulkUploadFileInfo: BulkUploadFileInfo;
@@ -27,7 +26,6 @@ export const reducer: ActionReducerMap<BulkState> = {
     userBulkUploadFileInfos: userBulkUploadFileInfos,
     bulkUploadPublishedQuestions: bulkUploadPublishedQuestions,
     bulkUploadUnpublishedQuestions: bulkUploadUnpublishedQuestions,
-    questionSaveStatus: questionSaveStatus,
     bulkUploadFileUrl: bulkUploadFileUrl,
     bulkUploadArchiveStatus: bulkUploadArchiveStatus,
     bulkUploadFileInfo: bulkUploadFileInfo,

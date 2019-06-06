@@ -1,7 +1,4 @@
-import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
 import { ActionWithPayload, QuestionActions } from '../actions';
-import { Question, SearchResults } from '../../../shared/model';
 
 
 export function questionOfTheDay(state: any = null, action: ActionWithPayload<any>): any {
@@ -13,7 +10,7 @@ export function questionOfTheDay(state: any = null, action: ActionWithPayload<an
     default:
       return state;
   }
-};
+}
 
 
 export function questionSaveStatus(state: any = 'NONE', action: ActionWithPayload<string>): string {
@@ -25,6 +22,14 @@ export function questionSaveStatus(state: any = 'NONE', action: ActionWithPayloa
     default:
       return state;
   }
-};
+}
 
 
+export function updateQuestion(state: any = 'NONE', action: ActionWithPayload<string>): string {
+  switch (action.type) {
+    case QuestionActions.UPDATE_QUESTION:
+      return 'UPDATE';
+    default:
+      return null;
+  }
+}

@@ -11,6 +11,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   templateUrl: './tags.component.html',
   styleUrls: ['./tags.component.scss']
 })
+
 @AutoUnsubscribe()
 export class TagsComponent implements OnInit, OnDestroy {
   tagsObs: Observable<string[]>;
