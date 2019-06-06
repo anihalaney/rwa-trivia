@@ -8,7 +8,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import * as Platform from 'tns-core-modules/platform';
 import { isAndroid } from 'tns-core-modules/platform';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
-import { NavigationService } from 'shared-library/core/services/mobile/navigation.service'
+import { NavigationService } from 'shared-library/core/services/mobile'
 import { coreState } from 'shared-library/core/store';
 import { ApplicationSettings } from 'shared-library/shared/model';
 import { on as applicationOn, resumeEvent, ApplicationEventData } from 'tns-core-modules/application';
@@ -19,7 +19,7 @@ import * as util from 'tns-core-modules/utils/utils';
 import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
 import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
 import * as appversion from 'nativescript-appversion';
-import { Utils } from '../../../../../shared-library/src/lib/core/services';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'app-root',
@@ -62,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
       onMessageReceivedCallback: (message) => {
         console.log('message', message);
         if (message.foreground) {
-          this.utils.showMessage("success", message.body);
+          this.utils.showMessage('success', message.body);
         }
         this.ngZone.run(() => this.navigationService.redirectPushRoutes(message.data));
       },
