@@ -6,7 +6,6 @@ import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
-import { MobUtils } from 'shared-library/core/services/mobile';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
@@ -19,6 +18,7 @@ import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ListViewEventData } from 'nativescript-ui-listview';
 import { Page } from 'tns-core-modules/ui/page/page';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'new-game',
@@ -51,7 +51,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
-    public utils: MobUtils,
+    public utils: Utils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
     private router: Router,
