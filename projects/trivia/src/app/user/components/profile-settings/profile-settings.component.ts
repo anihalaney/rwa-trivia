@@ -50,7 +50,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
       this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
         if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
-          this.setNotificationMsg('Friend Request Sent !', false, 100);
+          this.setNotificationMsg(status, false, 100);
           this.cd.markForCheck();
         }
         this.cd.markForCheck();

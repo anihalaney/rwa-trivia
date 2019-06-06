@@ -8,8 +8,8 @@ import { map, skipWhile, flatMap, switchMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
+import { Subject } from 'rxjs';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
-import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 export enum UserType {
     userProfile,
     loggedInOtherUserProfile,
@@ -17,6 +17,9 @@ export enum UserType {
 }
 
 export class ProfileSettings {
+    gamePlayedChangeSubject = new Subject();
+    gamePlayedChangeObservable = this.gamePlayedChangeSubject.asObservable();
+
     @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
     user: User;
@@ -67,14 +70,12 @@ export class ProfileSettings {
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
-    public items: Array<SegmentedBarItem>;
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
         public userAction: UserActions,
         public utils: Utils,
         public cd: ChangeDetectorRef,
         public route: ActivatedRoute) {
-        this.items = [];
         this.toggleLoader(true);
         this.fb = formBuilder;
         this.tagsObs = this.store.select(getTags);
@@ -166,10 +167,8 @@ export class ProfileSettings {
                     this.createForm(this.user);
                     this.account = this.user.account;
                     this.gamePlayedAgainst = this.user.gamePlayed;
-                     if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
-                        const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
-                        segmentedBarItem.title = 'Game Played';
-                        this.items.push(segmentedBarItem);
+                    if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
+                        this.gamePlayedChangeSubject.next(true);
                      }
                     this.userProfileImageUrl = this.getImageUrl(this.user);
                     this.profileImage.image = this.userProfileImageUrl;

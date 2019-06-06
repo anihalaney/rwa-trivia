@@ -51,7 +51,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public width = 200;
   public height = 200;
 
-
+  public items: Array<SegmentedBarItem>;
   public selectedIndex = 0;
   tabsTitles: Array<string>;
 
@@ -76,7 +76,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.cd.markForCheck();
     }));
     this.tabsTitles = ['Profile', 'Stats'];
-
+    this.items = [];
     for (let i = 0; i < this.tabsTitles.length; i++) {
       const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
       segmentedBarItem.title = this.tabsTitles[i];
@@ -85,10 +85,20 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
       if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
-        this.utils.showMessage('success', 'Invitation sent successfully!');
+        this.utils.showMessage('success', status);
       }
       this.cd.markForCheck();
     }));
+
+    this.gamePlayedChangeObservable.subscribe(data => {
+      if (this.tabsTitles.indexOf('Game Played') < 0) {
+        this.tabsTitles.push('Game Played');
+        const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
+        segmentedBarItem.title = 'Game Played';
+        this.items.push(segmentedBarItem);
+      }
+    });
+
   }
 
   onSelectedIndexChange(args) {
