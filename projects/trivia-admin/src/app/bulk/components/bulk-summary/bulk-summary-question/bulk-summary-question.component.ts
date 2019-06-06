@@ -1,19 +1,16 @@
-import { Component, Input, Output, OnInit, EventEmitter, SimpleChanges, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { map, take } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
-import { BulkUploadFileInfo, Question, Category, User, QuestionStatus } from 'shared-library/shared/model';
-import { MatTableDataSource } from '@angular/material';
-import { Utils } from 'shared-library/core/services';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/storage';
-
-
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatTableDataSource } from '@angular/material';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { Utils } from 'shared-library/core/services';
+import { BulkUploadFileInfo, Category, Question, QuestionStatus, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../../store';
 import { bulkState } from '../../../store';
 import * as bulkActions from '../../../store/actions';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'app-bulk-summary-questions',
@@ -42,7 +39,7 @@ export class BulkSummaryQuestionComponent implements OnInit, OnDestroy {
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl: boolean;
   user: User;
-  subscriptions = [];
+  subscriptions: Subscription[] = [];
 
 
   tagsObs: Observable<string[]>;

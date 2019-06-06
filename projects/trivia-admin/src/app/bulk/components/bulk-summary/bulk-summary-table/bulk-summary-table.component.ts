@@ -1,25 +1,24 @@
-import {
-  Component, Input, ViewChild, OnChanges, Output, EventEmitter,
-  OnInit, SimpleChanges, ChangeDetectionStrategy
-} from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
-import { Store, select } from '@ngrx/store';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild, OnDestroy } from '@angular/core';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { BulkUploadFileInfo, Category, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary } from '../../../../store';
 import { bulkState } from '../../../store';
-import { BulkUploadFileInfo, Category, User } from 'shared-library/shared/model';
-import { MatPaginator, MatTableDataSource, MatSort } from '@angular/material';
-import { Sort } from '@angular/material';
-import { AngularFireStorage } from '@angular/fire/storage';
 import * as bulkActions from '../../../store/actions';
-import { Router } from '@angular/router';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
   selector: 'bulk-summary-table',
   templateUrl: './bulk-summary-table.component.html',
   styleUrls: ['./bulk-summary-table.component.scss']
 })
-export class BulkSummaryTableComponent implements OnInit, OnChanges {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class BulkSummaryTableComponent implements OnInit, OnChanges, OnDestroy {
 
   categoryDictObs: Observable<{ [key: number]: Category }>;
   categoryDict: { [key: number]: Category };
@@ -28,7 +27,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
   dataSource: any;
   bulkUploadFileInfo: BulkUploadFileInfo;
   isAdminUrl = false;
-
+  subscriptions: Subscription[] = [];
 
   displayedColumns = ['archive', 'uploadDate', 'fileName', 'category',
     'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status'];
@@ -46,12 +45,12 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     private store: Store<AppState>,
     private storage: AngularFireStorage, private router: Router) {
     this.categoryDictObs = store.select(categoryDictionary);
-    this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict);
-    this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
+    this.subscriptions.push(this.categoryDictObs.subscribe(categoryDict => this.categoryDict = categoryDict));
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe((s) => {
       this.user = s.user;
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadFileUrl)).subscribe((url) => {
       if (url) {
         const link = document.createElement('a');
         document.body.appendChild(link);
@@ -59,30 +58,30 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
         link.click();
         this.store.dispatch(new bulkActions.LoadBulkUploadFileUrlSuccess(undefined));
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.bulkUploadArchiveStatus)).subscribe((state) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.bulkUploadArchiveStatus)).subscribe((state) => {
       if (state === 'ARCHIVED') {
         this.archivedArray = [];
         this.store.dispatch(new bulkActions.SaveArchiveList(this.archivedArray));
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.archivedArray = list;
       } else {
         this.archivedArray = [];
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.archivedArray = list;
       } else {
         this.archivedArray = [];
       }
-    });
+    }));
 
 
   }
@@ -115,7 +114,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     this.bulkUploadObs = this.store.select(bulkState).pipe(select((this.bulkSummaryDetailPath.includes('admin'))
       ? s => s.bulkUploadFileInfos : s => s.userBulkUploadFileInfos));
 
-    this.bulkUploadObs.subscribe(bulkUploadFileInfos => {
+    this.subscriptions.push(this.bulkUploadObs.subscribe(bulkUploadFileInfos => {
       if (bulkUploadFileInfos && bulkUploadFileInfos.length !== 0) {
         for (const key in bulkUploadFileInfos) {
           if (bulkUploadFileInfos[key]) {
@@ -127,7 +126,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
       }
       this.dataSource = new MatTableDataSource<BulkUploadFileInfo>(bulkUploadFileInfos);
       this.setPaginatorAndSort();
-    });
+    }));
 
     // add conditional columns in table
     if (this.isAdminUrl) {
@@ -169,5 +168,7 @@ export class BulkSummaryTableComponent implements OnInit, OnChanges {
     return this.archivedArray.findIndex((row) => row.id === id) === -1 ? false : true;
   }
 
+  ngOnDestroy(): void {
+  }
 
 }

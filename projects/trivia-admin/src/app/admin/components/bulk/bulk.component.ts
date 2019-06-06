@@ -1,17 +1,18 @@
-import { Component, OnInit } from '@angular/core';
-import { map } from 'rxjs/operators';
-
-import * as bulkActions from '../../../bulk/store/actions';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { bulkState } from '../../../bulk/store';
-import { AppState, appState, categoryDictionary } from '../../../store';
-import { Store, select } from '@ngrx/store';
-
+import * as bulkActions from '../../../bulk/store/actions';
+import { AppState } from '../../../store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-bulk',
   templateUrl: './bulk.component.html',
   styleUrls: ['./bulk.component.scss']
 })
-export class BulkComponent implements OnInit {
+
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
+export class BulkComponent implements OnInit, OnDestroy {
 
   public bulkSummaryDetailPath = 'admin/';
   public bulkSummaryTitle: string;
@@ -19,18 +20,19 @@ export class BulkComponent implements OnInit {
   isArchive: boolean;
   isArchiveBtnClicked: boolean;
   toggleValue: boolean;
+  subscriptions: Subscription[] = [];
 
 
   constructor(private store: Store<AppState>) {
-    this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveToggleState)).subscribe((state) => {
       if (state != null) {
         this.toggleValue = state;
       } else {
         this.toggleValue = false;
       }
-    });
+    }));
 
-    this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
+    this.subscriptions.push(this.store.select(bulkState).pipe(select(s => s.getArchiveList)).subscribe((list) => {
       if (list.length > 0) {
         this.isArchive = true;
       } else {
@@ -38,7 +40,7 @@ export class BulkComponent implements OnInit {
         this.isArchiveBtnClicked = false;
 
       }
-    });
+    }));
   }
 
   ngOnInit() {
@@ -68,4 +70,7 @@ export class BulkComponent implements OnInit {
   archiveData() {
     this.isArchiveBtnClicked = true;
   }
+
+  ngOnDestroy(): void { }
+
 }
