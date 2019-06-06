@@ -18,6 +18,7 @@ import { MobUtils } from '../../services/mobile';
 import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -316,14 +317,15 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+
     if (isAndroid) {
       android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
     }
   }
 
   hideKeyboard() {
-    this.textField
-      .toArray()
+   this.textField
+    .toArray()
       .map((el) => {
         if (isAndroid) {
           el.nativeElement.android.clearFocus();
