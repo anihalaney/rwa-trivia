@@ -9,7 +9,7 @@ import * as imagepicker from 'nativescript-imagepicker';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { MobUtils } from 'shared-library/core/services/mobile';
+import { Utils } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
@@ -65,15 +65,15 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
-    public utils: MobUtils,
+    public uUtils: Utils,
     public cd: ChangeDetectorRef,
     public route: ActivatedRoute) {
-    super(fb, store, userAction, utils, cd, route);
+    super(fb, store, userAction, uUtils, cd, route);
     this.initDataItems();
     requestPermissions();
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
-        this.utils.showMessage('success', 'Profile is saved successfully');
+        this.uUtils.showMessage('success', 'Profile is saved successfully');
         this.toggleLoader(false);
       }
       this.cd.markForCheck();
@@ -224,7 +224,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      this.utils.showMessage('error', 'Please add name, display name, location and profile picture for bulk upload request');
+      this.uUtils.showMessage('error', 'Please add name, display name, location and profile picture for bulk upload request');
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
