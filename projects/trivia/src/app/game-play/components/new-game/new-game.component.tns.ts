@@ -1,24 +1,24 @@
-import { 
-  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
-import { AppState, appState } from '../../../store';
-import { NewGame } from './new-game';
-import { MobUtils } from 'shared-library/core/services/mobile';
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { RouterExtensions } from 'nativescript-angular/router';
-import * as gamePlayActions from './../../store/actions';
-import { filter, take } from 'rxjs/operators';
-import { RadListViewComponent } from 'nativescript-ui-listview/angular';
-import { Router } from '@angular/router';
-import { coreState } from 'shared-library/core/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ListViewEventData } from 'nativescript-ui-listview';
+import { RadListViewComponent } from 'nativescript-ui-listview/angular';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { MobUtils } from 'shared-library/core/services/mobile';
+import { coreState } from 'shared-library/core/store';
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { Category, OpponentType, PlayerMode } from 'shared-library/shared/model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page } from 'tns-core-modules/ui/page/page';
+import { AppState, appState } from '../../../store';
+import * as gamePlayActions from './../../store/actions';
+import { NewGame } from './new-game';
+import * as firebase from 'nativescript-plugin-firebase';
 
 @Component({
   selector: 'new-game',
@@ -60,6 +60,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private ngZone: NgZone) {
     super(store, utils, gameActions, userActions, cd);
     this.initDataItems();
+    firebase.analytics.setScreenName({
+      screenName: 'New Game Screen'
+    }).then(
+      function () {
+        console.log('New Screen Log is added');
+      }
+    );
   }
   ngOnInit() {
 
@@ -188,6 +195,24 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     if (this.gameOptions.playerMode === PlayerMode.Single) {
       delete this.gameOptions.opponentType;
     }
+
+    firebase.analytics.logEvent({
+      key: 'start_new_game',
+      parameters: [ // optional
+        {
+          key: 'userid',
+          value: this.user.userId
+        },
+        {
+          key: 'game_options',
+          value: 'game_options'
+        }]
+    }).then(
+      function () {
+        console.log('start_new_game event logged');
+      }
+    );
+
     this.startNewGame(this.gameOptions);
   }
 
