@@ -14,10 +14,10 @@ import { isAndroid } from 'tns-core-modules/platform';
 import { Page } from 'tns-core-modules/ui/page';
 import { CountryListComponent } from '../../../shared/mobile/component/countryList/countryList.component';
 import { PhoneNumberValidationProvider } from '../../../shared/mobile/component/countryList/phone-number-validation.provider';
-import { MobUtils } from '../../services/mobile';
 import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
+import { Utils } from '../../services';
 
 @Component({
   selector: 'login',
@@ -54,7 +54,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     private uiStateActions: UIStateActions,
     private page: Page,
     private firebaseAuthService: FirebaseAuthService,
-    private utils: MobUtils,
+    private utils: Utils,
     public cd: ChangeDetectorRef,
     private viewContainerRef: ViewContainerRef,
     private phonenumber: PhoneNumberValidationProvider) {
