@@ -16,7 +16,7 @@
     </div>
     <div class="textcenter clearfix gameOver" *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent">
       <div class="col-sm-3 col-sm-offset-3">
-        <div class="yourimg" [ngClass]="{'vs': game.gameOptions.playerMode == PlayerMode.Opponent }">
+        <div class="yourimg" [ngClass]="{'vs': game.gameOptions.playerMode == PlayerMode.Opponent}">
           <img [src]="getImageUrl(user)" alt="User Profile Image" />
         </div>
         <label href="#" class="dark text-style">{{playerUserName}}</label>

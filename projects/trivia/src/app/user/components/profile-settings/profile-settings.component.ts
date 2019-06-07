@@ -4,10 +4,12 @@ import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
-import { Utils, WindowRef } from 'shared-library/core/services';
+import { Subscription } from 'rxjs';
+import { UserService, Utils, WindowRef } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { profileSettingsConstants } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
+import { userState } from '../../store';
 import { ProfileSettings } from './profile-settings';
 
 @Component({
@@ -17,7 +19,7 @@ import { ProfileSettings } from './profile-settings';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({'arrayName': 'subscriptions'})
+@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
 
   @ViewChild('cropper') cropper: ImageCropperComponent;
@@ -26,6 +28,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   notificationMsg: string;
   errorStatus: boolean;
   subscriptions = [];
+  checkUserSubscriptions: Subscription;
+  isValidDisplayName: boolean = null;
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
@@ -33,29 +37,31 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public userAction: UserActions,
     public cd: ChangeDetectorRef,
     public utils: Utils,
+    private userService: UserService,
     public route: ActivatedRoute) {
 
     super(fb, store, userAction, utils, cd, route);
 
     // if (this.userType === 0) {
-      this.setCropperSettings();
-      this.setNotificationMsg('', false, 0);
+    this.setCropperSettings();
+    this.setNotificationMsg('', false, 0);
 
-      this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
-        if (status === 'SUCCESS') {
-          this.setNotificationMsg('Profile Saved !', false, 100);
-          this.cd.markForCheck();
-        }
-      }));
-
-      this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
-        if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
-          this.setNotificationMsg(status, false, 100);
-          this.cd.markForCheck();
-        }
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
+      if (status === 'SUCCESS') {
+        this.setNotificationMsg('Profile Saved !', false, 100);
         this.cd.markForCheck();
-      }));
+      }
+    }));
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.setNotificationMsg(status, false, 100);
+        this.cd.markForCheck();
+      }
+      this.cd.markForCheck();
+    }));
     // }
+
   }
 
   setNotificationMsg(msg: string, flag: boolean, scrollPosition: number): void {
@@ -180,6 +186,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     // validations
     this.userForm.updateValueAndValidity();
 
+    // this.userForm.controls['displayName'].setErrors({ 'exist': false });
+
     if (this.profileImageFile) {
       this.assignImageValues();
     }
@@ -189,24 +197,44 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       const controls = this.userForm.controls;
       const singleEditFields = Object.getOwnPropertyNames(this.singleFieldEdit);
       for (const name in controls) {
-          if (controls[name].invalid &&  singleEditFields.indexOf(name) < 0) {
-            this.setNotificationMsg('Please fill the mandatory fields', true, 100);
-            return;
-          }
+        if (controls[name].invalid && singleEditFields.indexOf(name) < 0) {
+          this.setNotificationMsg('Please fill the mandatory fields', true, 100);
+          return;
+        }
       }
     }
 
+    this.checkDisplayName(this.userForm.get('displayName').value);
 
-    // get user object from the forms
-    this.getUserFromFormValue(isEditSingleField, field);
-    if (isEditSingleField) {
-      this.userForm.get(field).disable();
-      this.singleFieldEdit[field] = false;
-    }
-    // call saveUser
-    this.saveUser(this.user);
-    this.setNotificationMsg('', false, 0);
-    this.cd.markForCheck();
+
+    this.checkUserSubscriptions = this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+
+      this.isValidDisplayName = status;
+
+      if (this.isValidDisplayName !== null) {
+        if (this.isValidDisplayName) {
+          // get user object from the forms
+          this.getUserFromFormValue(isEditSingleField, field);
+          if (isEditSingleField) {
+            this.userForm.get(field).disable();
+            this.singleFieldEdit[field] = false;
+          }
+          // call saveUser
+          this.saveUser(this.user);
+          this.setNotificationMsg('', false, 0);
+          this.cd.markForCheck();
+        } else {
+          this.userForm.controls['displayName'].setErrors({ 'exist': true });
+          this.userForm.controls['displayName'].markAsTouched();
+          this.cd.markForCheck();
+        }
+
+        this.isValidDisplayName = null;
+        this.checkUserSubscriptions.unsubscribe();
+      }
+
+    });
+
   }
 
   ngOnDestroy() {

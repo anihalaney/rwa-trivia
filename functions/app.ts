@@ -26,8 +26,13 @@ class App {
         this.app.use((req, res, next) => {
 
             // console.log('before', req.url);
-            req.url = req.url.slice(req.url.indexOf(appConstants.API_VERSION) - 1);
-            req.url = `/${appConstants.API_PREFIX}${req.url}`; // prepend '/' to keep query params if any
+            if (req.url.indexOf(appConstants.API_VERSION) !== -1) {
+                req.url = req.url.slice(req.url.indexOf(appConstants.API_VERSION) - 1);
+                req.url = `/${appConstants.API_PREFIX}${req.url}`; // prepend '/' to keep query params if any
+            } else {
+                req.url = `/${appConstants.API_PREFIX}/${appConstants.API_VERSION}${req.url}`; // prepend '/' to keep query params if any
+            }
+
             // console.log('after', req.url);
             next();
         });

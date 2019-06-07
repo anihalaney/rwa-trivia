@@ -236,4 +236,51 @@ export class UserService {
         }
     }
 
+
+    /**
+     * getUsersDisplayName
+     * return users
+     */
+    static async getUsersByDisplayName(displayName: string): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await UserService.fireStoreClient
+                    .collection(CollectionConstants.USERS)
+                    .where(GeneralConstants.DISPLAY_NAME, GeneralConstants.DOUBLE_EQUAL, displayName)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+   * add default number of lives into account
+   * return ref
+   */
+    static async setUserDisplayName(user: any): Promise<any> {
+        try {
+
+            const appSetting = await AppSettings.Instance.loadAppSettings();
+
+            let displayName = user.displayName ? user.displayName : '';
+
+            if (appSetting.default_names.length > 0) {
+                const randomNumber = Math.floor(Math.random() * Math.floor(appSetting.default_names.length));
+                displayName = appSetting.default_names[randomNumber] + appSetting.user_display_name_value;
+            }
+
+            user['displayName'] = displayName;
+
+            await UserService.updateUser({ ...user });
+
+            AppSettings.Instance.updateUserDisplayNameValue(appSetting.user_display_name_value + 1);
+
+            return user;
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 }

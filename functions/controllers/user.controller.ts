@@ -6,7 +6,8 @@ import {
     interceptorConstants,
     ResponseMessagesConstants,
     UserConstants,
-    HeaderConstants
+    HeaderConstants,
+    User
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { AccountService } from '../services/account.service';
@@ -160,5 +161,36 @@ export class UserController {
             Utils.sendError(res, error);
         }
     }
+
+    /**
+   * checkDisplayName
+   * return users
+   */
+    static async checkDisplayName(req, res) {
+
+        const displayName = req.params.displayName;
+        const userId = req.user.uid;
+
+        if (!displayName) {
+            // displayName is not available
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.DISPLAY_NAME_NOT_FOUND);
+        }
+
+        if (!userId) {
+            // displayName is not available
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.USER_ID_NOT_FOUND);
+        }
+
+        try {
+            let users: User[] = await UserService.getUsersByDisplayName(displayName);
+
+            users = users.filter(user => user.userId !== userId);
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, users.length <= 0);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
 
 }

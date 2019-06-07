@@ -1,4 +1,4 @@
-import { Question } from 'shared-library/shared/model';
+import { Question, User } from 'shared-library/shared/model';
 import { UserActions, UserActionTypes } from '../actions';
 
 // Load User Published Question by userId
@@ -20,3 +20,13 @@ export function userUnpublishedQuestions(state: any = [], action: UserActions): 
             return state;
     }
 }
+
+export function checkDisplayName(state: any = null, action: UserActions): boolean {
+    switch (action.type) {
+        case UserActionTypes.CHECK_DISPLAY_NAME_SUCCESS:
+            return action.payload;
+        default:
+            return null;
+    }
+}
+
