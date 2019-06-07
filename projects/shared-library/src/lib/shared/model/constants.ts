@@ -163,7 +163,7 @@ export enum GeneralConstants {
     BIT_WISER_DEV_STORAGE_BUCKET_NAME = 'rwa-trivia-dev-e57fc.appspot.com',
     BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com',
     GAME_EXPIRED_HOURS = 32, // hr
-    NAME = 'name'
+    NAME = 'name',
 }
 
 export enum SocialShareConstants {
@@ -363,4 +363,14 @@ export enum AppStoreUrl {
 export enum TermsAndPrivacyUrlConstant {
     TERMSANDCONDITIONSURL = 'https://bitwiser.io/terms-and-conditions',
     PRIVACYURL = 'https://bitwiser.io/terms-and-conditions'
+}
+
+export enum GameConstant {
+    SINGLE = 'Single',
+    OPPONENT = 'Opponent',
+    RANDOM = 'Random',
+    FRIEND = 'Friend',
+    COMPUTER = 'Computer',
+    NORMAL = 'Normal',
+    OFFLINE = 'Offline'
 }

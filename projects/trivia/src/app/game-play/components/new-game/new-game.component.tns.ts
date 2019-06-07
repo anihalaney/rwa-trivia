@@ -12,7 +12,7 @@ import { filter, take } from 'rxjs/operators';
 import { MobUtils } from 'shared-library/core/services/mobile';
 import { coreState } from 'shared-library/core/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, OpponentType, PlayerMode } from 'shared-library/shared/model';
+import { Category, OpponentType, PlayerMode, Parameter, GameConstant, GameMode } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
@@ -196,24 +196,64 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       delete this.gameOptions.opponentType;
     }
 
+    const firebaseAnalyticParameters: Array<Parameter> = this.setNewGameFirebaseAnalyticsParameter();
     firebase.analytics.logEvent({
       key: 'start_new_game',
-      parameters: [ // optional
-        {
-          key: 'userid',
-          value: this.user.userId
-        },
-        {
-          key: 'game_options',
-          value: 'game_options'
-        }]
-    }).then(
-      function () {
-        console.log('start_new_game event logged');
-      }
+      parameters: firebaseAnalyticParameters
+    }).then(() => {
+      console.log('start_new_game event slogged');
+    }
     );
 
     this.startNewGame(this.gameOptions);
+  }
+
+  setNewGameFirebaseAnalyticsParameter(): Array<Parameter> {
+
+    const analyticsParameter: Parameter[] = [];
+
+    const userId: Parameter = {
+      key: 'userid',
+      value: this.user.userId
+    };
+    analyticsParameter.push(userId);
+
+    const playerMode: Parameter = {
+      key: 'playerMode',
+      value: this.gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT
+    };
+    analyticsParameter.push(playerMode);
+
+    if (this.gameOptions.playerMode === PlayerMode.Opponent) {
+      const opponentType: Parameter = {
+        key: 'opponentType',
+        value: this.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
+          this.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER
+      };
+      analyticsParameter.push(opponentType);
+    }
+
+    const gameMode: Parameter = {
+      key: 'gameMode',
+      value: this.gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE
+    };
+    analyticsParameter.push(gameMode);
+
+    const categories: Parameter = {
+      key: 'categoryIds',
+      value: JSON.stringify(this.gameOptions.categoryIds)
+    };
+    analyticsParameter.push(categories);
+
+    const tagsValue = JSON.stringify(this.gameOptions.tags);
+
+    const tags: Parameter = {
+      key: 'tags',
+      value: tagsValue.substr(0, 100)
+    };
+    analyticsParameter.push(tags);
+
+    return analyticsParameter;
   }
 
   selectCategory(args: ListViewEventData) {
@@ -292,6 +332,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   get tagsHeight() {
     return (60 * this.selectedTags.length) + 20;
   }
+
 
 }
 
