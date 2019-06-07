@@ -352,8 +352,7 @@ export enum RoutesConstants {
     EXTENDEDINFO = 'extendedInfo',
     ACCOUNTS = 'accounts',
     ACHIEVEMENT = 'achievement',
-    RULES = 'rules',
-    LOGINUSERID = 'loginUserId'
+    RULES = 'rules'
 }
 
 export enum AppStoreUrl {

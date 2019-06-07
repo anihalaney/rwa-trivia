@@ -31,7 +31,7 @@ class UserRoutes {
             AuthMiddleware.authorizedOnly, UserController.updateLives);
 
         //  'extendedInfo/:userId/:loginUserId'
-        this.userRoutes.get(`/${RoutesConstants.EXTENDEDINFO}/:${this.UID}/:${RoutesConstants.LOGINUSERID}?`,
+        this.userRoutes.get(`/${RoutesConstants.EXTENDEDINFO}/:${this.UID}`,
         UserController.getUserProfileById);
 
     }

@@ -46,8 +46,15 @@ export class UserEffects {
         .pipe(ofType(UserActions.LOAD_OTHER_USER_EXTEDED_INFO))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(),
-            mergeMap((userIdDetails: any) =>
-            this.svc.loadOtherUserProfileWithExtendedInfo(userIdDetails.userId, userIdDetails.loggedInUserId)),
+            mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
+            map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
+
+    // get info if the other user is friend or not
+    @Effect()
+    loadOtherUserFriendExtendedInfo$ = this.actions$
+        .pipe(ofType(UserActions.LOAD_OTHER_USER_FRIEND_EXTEDED_INFO))
+        .pipe(map((action: ActionWithPayload<string>) => action.payload),
+            mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
 
 

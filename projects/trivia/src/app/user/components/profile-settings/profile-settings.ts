@@ -6,7 +6,7 @@ import * as cloneDeep from 'lodash.clonedeep';
 import { Observable, combineLatest } from 'rxjs';
 import { map, skipWhile, flatMap, switchMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
-import { UserActions } from 'shared-library/core/store';
+import { UserActions, coreState } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
 import { Subject } from 'rxjs';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
@@ -87,14 +87,13 @@ export class ProfileSettings {
                 map(params => this.userId = params.userid),
                 flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.user))),
                 switchMap(user => {
-                    this.loggedInUser = user;
                     if (user && user.userId === this.userId) {
                         this.user = user;
                         this.userType = UserType.userProfile;
                         return this.initializeUserProfile();
                     } else {
                         this.userType = UserType.loggedInOtherUserProfile;
-                        return this.initializeOtherUserProfile();
+                        return this.initializeOtherUserProfile(user);
                     }
                 })
             ).subscribe());
@@ -150,18 +149,17 @@ export class ProfileSettings {
         }));
     }
 
-    initializeOtherUserProfile() {
+    initializeOtherUserProfile(user) {
         return this.store.select(appState.coreState).pipe(
             select(s => s.userDict),
             skipWhile(userDict => !userDict),
             map(userDict => {
                 this.userDict = userDict;
-                if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
-                    const userIdDetails = {
-                                userId: this.userId,
-                                loggedInUserId: this.loggedInUser && this.loggedInUser.userId ? this.loggedInUser.userId : ''
-                            };
-                    this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(userIdDetails));
+                if ( user && !this.loggedInUser ) {
+                    this.loggedInUser = user;
+                    this.store.dispatch(this.userAction.loadOtherUserFriendExtendedInfo(this.userId));
+                } else if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
+                    this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
                 } else {
                     this.user = this.userDict[this.userId];
                     this.createForm(this.user);
@@ -169,7 +167,7 @@ export class ProfileSettings {
                     this.gamePlayedAgainst = this.user.gamePlayed;
                     if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
                         this.gamePlayedChangeSubject.next(true);
-                     }
+                    }
                     this.userProfileImageUrl = this.getImageUrl(this.user);
                     this.profileImage.image = this.userProfileImageUrl;
                     this.toggleLoader(false);
@@ -366,8 +364,8 @@ export class ProfileSettings {
     }
 
     sendFriendRequest() {
-            const inviteeUserId = this.user.userId;
-            this.store.dispatch(this.userAction.addUserInvitation(
-                { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));
+        const inviteeUserId = this.user.userId;
+        this.store.dispatch(this.userAction.addUserInvitation(
+            { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));
     }
 }

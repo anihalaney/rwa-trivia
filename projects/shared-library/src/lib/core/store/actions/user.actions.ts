@@ -66,13 +66,20 @@ export class UserActions {
 
 
   static LOAD_OTHER_USER_EXTEDED_INFO = 'LOAD_OTHER_USER_EXTEDED_INFO';
-  loadOtherUserExtendedInfo(userIdDetails: any): ActionWithPayload<string> {
+  loadOtherUserExtendedInfo(userId: string): ActionWithPayload<string> {
     return {
       type: UserActions.LOAD_OTHER_USER_EXTEDED_INFO,
-      payload: userIdDetails
+      payload: userId
     };
   }
 
+  static LOAD_OTHER_USER_FRIEND_EXTEDED_INFO = 'LOAD_OTHER_USER_FRIEND_EXTEDED_INFO';
+  loadOtherUserFriendExtendedInfo(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_OTHER_USER_FRIEND_EXTEDED_INFO,
+      payload: userId
+    };
+  }
 
   static LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS = 'LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS';
   loadOtherUserProfileWithExtendedInfoSuccess(user: User): ActionWithPayload<User> {
