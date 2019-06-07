@@ -317,7 +317,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
 ngOnDestroy() {
-  if (application.android) {
+  if (isAndroid) {
     android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
   }
 }
