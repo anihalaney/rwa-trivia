@@ -1,10 +1,10 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs';
-
-import { Store, select } from '@ngrx/store';
-
-import { AppState, appState } from '../../../store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable } from 'rxjs';
+import { AppState, appState } from '../../../store';
+
+
 
 @Component({
   selector: 'tag-list',

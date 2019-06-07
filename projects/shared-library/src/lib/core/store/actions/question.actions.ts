@@ -46,4 +46,12 @@ export class QuestionActions {
     };
   }
 
+  static UPDATE_QUESTION = 'UPDATE_QUESTION';
+  updateQuestion(question: Question): ActionWithPayload<Question> {
+    return {
+      type: QuestionActions.UPDATE_QUESTION,
+      payload: question
+    };
+  }
+
 }

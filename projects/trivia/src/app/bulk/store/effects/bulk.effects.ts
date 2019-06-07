@@ -62,17 +62,6 @@ export class BulkEffects {
             )
         );
 
-    // for update Question
-    @Effect()
-    updateQuestion$ = this.actions$
-        .pipe(ofType(BulkActionTypes.UPDATE_QUESTION))
-        .pipe(
-            switchMap((action: bulkActions.UpdateQuestion) => {
-                this.questionService.saveQuestion(action.payload.question);
-                return empty();
-            })
-        );
-
     @Effect()
     loadBulkUploadFileUrl$ = this.actions$
         .pipe(ofType(BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL))
