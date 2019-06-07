@@ -74,6 +74,7 @@
                     *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
                     (click)="onSubmit(true, 'displayName')"></span>
                 </div>
+
                 <p *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
                   class="error display-name-error">
                   Display Name is required!
@@ -269,83 +270,96 @@
                               <!-- </div> -->
                             </div>
                           </div>
-                          <div  *ngIf="loggedInUser?.userId && userType === 1" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
-                            <div class="savebox textcenter">
-                              <div *ngIf="gamePlayedAgainst" class="friends-div">
-                                  <img src="assets/images/friends.png" alt="Friends" />
-                                  <span class="is-friend-span">Friends</span>
-                              </div>
-                              <div *ngIf="!gamePlayedAgainst" (click)="sendFriendRequest()" class="friends-div">
-                                  <img src="assets/images/send-friend-request.png" alt="Friends" />
-                                  <span class="send-friend-request-span">Add Friend</span>
-                              </div>
-                            </div>
+                          <!-- Categories end -->
+                        </div>
+                      </div>
+                      <div *ngIf="userType === 0" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
+                        <div class="savebox textcenter" *ngIf="!isEnableEditProfile">
+                          <button type="button" class="btn save" (click)="editProfile()">Edit Profile</button>
+                        </div>
+                        <div class="savebox textcenter" *ngIf="isEnableEditProfile">
+                          <button type="button" class="btn save" (click)="onSubmit()">Save Profile</button>
+                          <!-- <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button> -->
+                        </div>
+                      </div>
+                      <div *ngIf="loggedInUser?.userId && userType === 1" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
+                        <div class="savebox textcenter">
+                          <div *ngIf="gamePlayedAgainst" class="friends-div">
+                            <img src="assets/images/friends.png" alt="Friends" />
+                            <span class="is-friend-span">Friends</span>
+                          </div>
+                          <div *ngIf="!gamePlayedAgainst" (click)="sendFriendRequest()" class="friends-div">
+                            <img src="assets/images/send-friend-request.png" alt="Friends" />
+                            <span class="send-friend-request-span">Add Friend</span>
                           </div>
                         </div>
                       </div>
-                    </mat-tab>
-                    <mat-tab label="Stats">
-                        <div class="statsview">
-                            <ul id="stats" class="tab-content active">
-                              <li>
-                                <div class="sprite playedicon"></div>
-                                <div class="viewtext">Game Played</div>
-                                <div class="viewcount align-right">{{account?.gamePlayed}}</div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite topicsicon"></div>
-                                <div class="viewtext">Categories</div>
-                                <div class="viewcount align-right">{{account?.categories}}</div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite winsicon"></div>
-                                <div class="viewtext">Win-Loss</div>
-                                <div class="viewcount align-right">{{account?.wins}}-{{account?.losses}}</div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite badgesicon"></div>
-                                <div class="viewtext">Badges</div>
-                                <div class="viewcount align-right">{{account?.badges}}</div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite avgicon"></div>
-                                <div class="viewtext">Avg. answer time</div>
-                                <div class="viewcount align-right">{{account?.avgAnsTime}}
-                                  <div class="sec">sec</div>
-                                </div>
-                              </li>
-                          
-                              <li>
-                                <div class="sprite contributicon"></div>
-                                <div class="viewtext">Contribution</div>
-                                <div class="viewcount align-right">{{account?.contribution}}</div>
-                              </li>
-                            </ul>        
-                          </div>
-                    </mat-tab>
-                    <mat-tab label="Game Played" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
-                      <div class="statsview">
-                          <ul id="stats" class="tab-content active">
-                            <li>
-                              <div class="sprite playedicon"></div>
-                              <div class="viewtext">Game Played Against You</div>
-                              <div class="viewcount align-right">{{gamePlayedAgainst?.gamePlayed}}</div>
-                            </li>
-                            <li>
-                              <div class="sprite winsicon"></div>
-                              <div class="viewtext">Games Won-Games Lost</div>
-                              <div class="viewcount align-right">{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}</div>
-                            </li>
-                          </ul>        
+                    </div>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Stats">
+                  <div class="statsview">
+                    <ul id="stats" class="tab-content active">
+                      <li>
+                        <div class="sprite playedicon"></div>
+                        <div class="viewtext">Game Played</div>
+                        <div class="viewcount align-right">{{account?.gamePlayed}}</div>
+                      </li>
+
+                      <li>
+                        <div class="sprite topicsicon"></div>
+                        <div class="viewtext">Categories</div>
+                        <div class="viewcount align-right">{{account?.categories}}</div>
+                      </li>
+
+                      <li>
+                        <div class="sprite winsicon"></div>
+                        <div class="viewtext">Win-Loss</div>
+                        <div class="viewcount align-right">{{account?.wins}}-{{account?.losses}}</div>
+                      </li>
+
+                      <li>
+                        <div class="sprite badgesicon"></div>
+                        <div class="viewtext">Badges</div>
+                        <div class="viewcount align-right">{{account?.badges}}</div>
+                      </li>
+
+                      <li>
+                        <div class="sprite avgicon"></div>
+                        <div class="viewtext">Avg. answer time</div>
+                        <div class="viewcount align-right">{{account?.avgAnsTime}}
+                          <div class="sec">sec</div>
                         </div>
-                  </mat-tab>
-                  </mat-tab-group>
-                </mat-card-content>
-            </div>
+                      </li>
+
+                      <li>
+                        <div class="sprite contributicon"></div>
+                        <div class="viewtext">Contribution</div>
+                        <div class="viewcount align-right">{{account?.contribution}}</div>
+                      </li>
+                    </ul>
+                  </div>
+                </mat-tab>
+                <mat-tab label="Game Played" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
+                  <div class="statsview">
+                    <ul id="stats" class="tab-content active">
+                      <li>
+                        <div class="sprite playedicon"></div>
+                        <div class="viewtext">Game Played Against You</div>
+                        <div class="viewcount align-right">{{gamePlayedAgainst?.gamePlayed}}</div>
+                      </li>
+                      <li>
+                        <div class="sprite winsicon"></div>
+                        <div class="viewtext">Games Won-Games Lost</div>
+                        <div class="viewcount align-right">{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+            </mat-card-content>
+          </div>
         </div>
       </div>
     </form>
