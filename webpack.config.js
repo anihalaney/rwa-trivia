@@ -13,6 +13,8 @@ const { AngularCompilerPlugin } = require("@ngtools/webpack");
 const editJsonFile = require("edit-json-file");
 const path_1 = require("path");
 const fs_1 = require("fs");
+
+const projects = ['trivia', 'bitwiser-edu'];
 module.exports = env => {
   // Add your custom Activities, Services and other Android app components here.
   const appComponents = [
@@ -63,7 +65,7 @@ module.exports = env => {
   // deployment enviornement, copywebpackplugin was creating problem on Android
   // hostReplacementPath work like file replacement in angular.json
   const envFullPath = (env.prod) ? "prod" : "dev";
-
+  
   const ngCompilerPlugin = new AngularCompilerPlugin({
     hostReplacementPaths: getResolverExtended([platform, "tns", envFullPath], env.project),
     platformTransformers: aot ? [nsReplaceBootstrap(() => ngCompilerPlugin)] : null,
@@ -243,9 +245,6 @@ module.exports = env => {
       ],
     },
     plugins: [
-      // https://github.com/angular/angular-cli/issues/5433
-      // use this before AngularCompilerPlugin to replace environment file
-      // new webpack.NormalModuleReplacementPlugin(/\.\.\/environments\/environment/, `shared-library/environments/${env.project}/environment.${envFullPath}`),
       // Define useful constants like TNS_WEBPACK
       new webpack.DefinePlugin({
         "global.TNS_WEBPACK": "true",
@@ -255,7 +254,7 @@ module.exports = env => {
       new CleanWebpackPlugin([`${dist}/**/*`]),
       // Copy native app resources to out dir.
       new CopyWebpackPlugin([{
-          from: `${appResourcesFullPath}/${appResourcesPlatformDir}/${env.project}`,
+          from: `${appResourcesFullPath}/projects-assets/${env.project}/${appResourcesPlatformDir}`,
           to: `${dist}/App_Resources/${appResourcesPlatformDir}`
         },
         {
@@ -332,7 +331,6 @@ function getResolverExtended(platforms, project) {
       ext
     } = path_1.parse(path);
     let newDir = dir;
-    let projects = ['trivia', 'bitwiser-edu'];
     for (const platform of platforms) {
       if (dir.search('environments') > -1 && !endsWithAny(projects, dir)) {
         newDir = toSystemPath(path_1.join(dir, project));
