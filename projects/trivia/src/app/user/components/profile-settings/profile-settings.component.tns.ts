@@ -56,6 +56,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   tabsTitles: Array<string>;
 
 
+
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
   constructor(public fb: FormBuilder,
@@ -81,6 +82,22 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       segmentedBarItem.title = this.tabsTitles[i];
       this.items.push(segmentedBarItem);
     }
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.utils.showMessage('success', status);
+      }
+      this.cd.markForCheck();
+    }));
+
+    this.subscriptions.push(this.gamePlayedChangeObservable.subscribe(data => {
+      if (this.tabsTitles.indexOf('Game Played') < 0) {
+        this.tabsTitles.push('Game Played');
+        const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
+        segmentedBarItem.title = 'Game Played';
+        this.items.push(segmentedBarItem);
+      }
+    }));
 
   }
 

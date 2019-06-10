@@ -135,7 +135,21 @@ input:disabled { background-color: #fff; }
     color: #3b5998;
   }
 }
+.friends-div{
+  display: flex;
+  flex-direction: column;
+  margin-top: -13px;
+  cursor: pointer;
+}
 
+.is-friend-span{
+  margin-top: -13px;
+  color: #71b02f;
+}
+.send-friend-request-span{
+  margin-top: -13px;  
+  color: #f50057;
+}
 .viewtext{ width:63%; }
 .mt-0{ margin-top: 0px !important;}
 @media screen and (max-width:767px){

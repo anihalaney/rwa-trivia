@@ -262,6 +262,18 @@
                                   <!-- <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button> -->
                                 </div>
                           </div>
+                          <div  *ngIf="loggedInUser?.userId && userType === 1" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
+                            <div class="savebox textcenter">
+                              <div *ngIf="gamePlayedAgainst" class="friends-div">
+                                  <img src="assets/images/friends.png" alt="Friends" />
+                                  <span class="is-friend-span">Friends</span>
+                              </div>
+                              <div *ngIf="!gamePlayedAgainst" (click)="sendFriendRequest()" class="friends-div">
+                                  <img src="assets/images/send-friend-request.png" alt="Friends" />
+                                  <span class="send-friend-request-span">Add Friend</span>
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </mat-tab>
@@ -308,6 +320,22 @@
                             </ul>        
                           </div>
                     </mat-tab>
+                    <mat-tab label="Game Played" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
+                      <div class="statsview">
+                          <ul id="stats" class="tab-content active">
+                            <li>
+                              <div class="sprite playedicon"></div>
+                              <div class="viewtext">Game Played Against You</div>
+                              <div class="viewcount align-right">{{gamePlayedAgainst?.gamePlayed}}</div>
+                            </li>
+                            <li>
+                              <div class="sprite winsicon"></div>
+                              <div class="viewtext">Games Won-Games Lost</div>
+                              <div class="viewcount align-right">{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}</div>
+                            </li>
+                          </ul>        
+                        </div>
+                  </mat-tab>
                   </mat-tab-group>
                 </mat-card-content>
             </div>
