@@ -90,14 +90,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.cd.markForCheck();
     }));
 
-    this.gamePlayedChangeObservable.subscribe(data => {
+    this.subscriptions.push(this.gamePlayedChangeObservable.subscribe(data => {
       if (this.tabsTitles.indexOf('Game Played') < 0) {
         this.tabsTitles.push('Game Played');
         const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
         segmentedBarItem.title = 'Game Played';
         this.items.push(segmentedBarItem);
       }
-    });
+    }));
 
   }
 
