@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
-import { Utils, WindowRef, UserService } from 'shared-library/core/services';
-import { coreState, UserActions, user } from 'shared-library/core/store';
+import { Subscription } from 'rxjs';
+import { UserService, Utils, WindowRef } from 'shared-library/core/services';
+import { coreState, UserActions } from 'shared-library/core/store';
 import { profileSettingsConstants } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
-import { ProfileSettings } from './profile-settings';
 import { userState } from '../../store';
-import * as userActions from '../../store/actions';
-import { Subscription } from 'rxjs';
+import { ProfileSettings } from './profile-settings';
 
 @Component({
   selector: 'profile-settings',
@@ -52,6 +51,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.setNotificationMsg('Profile Saved !', false, 100);
         this.cd.markForCheck();
       }
+    }));
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.setNotificationMsg(status, false, 100);
+        this.cd.markForCheck();
+      }
+      this.cd.markForCheck();
     }));
     // }
 
@@ -203,7 +210,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.checkUserSubscriptions = this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
 
       this.isValidDisplayName = status;
-      
+
       if (this.isValidDisplayName !== null) {
         if (this.isValidDisplayName) {
           // get user object from the forms

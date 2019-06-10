@@ -69,6 +69,19 @@
                   horizontalAlignment="right" class="edit-profile-btn" text="Edit Profile"></Label>
               </StackLayout>
 
+              <StackLayout stlRippleEffect (rippleTap)="sendFriendRequest()" paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && !gamePlayedAgainst">
+                <Image row="0" col="2" checked="true" horizontalAlignment="center" src="~/assets/images/send-friend-request.png"
+                height="80" width="80" marginRight="5"></Image>
+                <Label  horizontalAlignment="center"
+                class="send-friend-request-span" margin="-10 0 0 0" text="Add Friend"></Label>
+              </StackLayout>
+
+              <StackLayout paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && gamePlayedAgainst">
+                <Image row="0" col="2" checked="true" horizontalAlignment="center" src="~/assets/images/friends.png"
+                height="80" width="80" marginRight="5"></Image>
+                <Label horizontalAlignment="center"
+                class="is-friend-span" margin="-10 0 0 0" text="Friends"></Label>
+              </StackLayout>
               <StackLayout *ngIf="userType ===  0" class="input-field" iosOverflowSafeArea="false">
                 <TextField #textField hint="{{userType ===  0 ? '@username' : ''}}" formControlName="name"
                   class="input">
@@ -245,6 +258,27 @@
                 </StackLayout>
               </StackLayout>
             </StackLayout>
+
+            <StackLayout rows="*" [visibility]="selectedIndex === 2 && loggedInUser?.userId && userType === 1 && gamePlayedAgainst ? 'visible':'collapsed'"
+            iosOverflowSafeArea="false">
+            <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
+              margin="10">
+              <StackLayout class="stats-main" iosOverflowSafeArea="false">
+                <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                  <Label row="0" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf109;"></Label>
+                  <Label text="Game Played Against You" row="0" col="1" class="text-black Hind-Bold" fontSize="16"
+                    verticalAlignment="center"></Label>
+                  <Label [text]="gamePlayedAgainst?.gamePlayed" row="0" col="2" class="text-black" fontSize="16"></Label>
+                </GridLayout>
+                <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                  <Label row="1" col="0" fontSize="16" class="far" verticalAlignment="center" text="&#xf09d;"></Label>
+                  <Label text="Games Won-Games Lost" row="1" col="1" class="text-black Hind-Bold" fontSize="16"
+                    verticalAlignment="center"></Label>
+                  <Label text="{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}" row="0" col="2" class="text-black" fontSize="16"></Label>
+                </GridLayout>
+              </StackLayout>
+            </StackLayout>
+          </StackLayout>
           </StackLayout>
         </CardView>
       </StackLayout>

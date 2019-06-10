@@ -155,7 +155,8 @@ export class UserController {
         }
         try {
             const extendedInfo = true;
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, await UserService.getUserProfile(userId, extendedInfo));
+            Utils.sendResponse(res, interceptorConstants.SUCCESS,
+                await UserService.getUserProfile(userId, extendedInfo, req && req.user && req.user.uid ? req.user.uid : ''));
         } catch (error) {
             Utils.sendError(res, error);
         }

@@ -3,6 +3,7 @@ import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 import { AccountService } from './account.service';
 import { AppSettings } from '../services/app-settings.service';
+import { FriendService } from './friend.service';
 export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
@@ -70,7 +71,7 @@ export class UserService {
      * getUserProfile
      * return user
     */
-    static async getUserProfile(userId: string, extendedInfo = false): Promise<any> {
+    static async getUserProfile(userId: string, extendedInfo = false, loginUserId = ''): Promise<any> {
         try {
             const dbUser: User = await UserService.getUserById(userId);
             const user = new User();
@@ -78,6 +79,7 @@ export class UserService {
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;
+            let gamePlayed;
             if (extendedInfo) {
                 user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];
                 user.tags = (dbUser && dbUser.tags) ? dbUser.tags : [];
@@ -100,8 +102,19 @@ export class UserService {
                 user.account.wins = (account && account.wins) ? account.wins : 0;
                 user.account.losses = (account && account.losses) ? account.losses : 0;
                 user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
+
+                if (loginUserId && loginUserId !== '') {
+                    const friendList = await FriendService.getFriendByInvitee(loginUserId);
+                    if (friendList && friendList.myFriends) {
+                        const game = friendList.myFriends.filter(element => element[userId] ? true : false);
+                        if (game[0] && game[0][userId]) {
+                            gamePlayed = game[0][userId];
+                        }
+                    }
+                }
+
             }
-            return user;
+            return { ...user, gamePlayed};
         } catch (error) {
             return Utils.throwError(error);
         }
