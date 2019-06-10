@@ -1,8 +1,8 @@
-import { Component, OnInit, Renderer2, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { User, Question } from 'shared-library/shared/model';
-import { MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 
 @Component({
   selector: 'app-preview-question-dialog',
@@ -13,27 +13,32 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class PreviewQuestionDialogComponent implements OnInit, OnDestroy {
-  question: Question;
+
   user: User;
   navLinks = [];
   ref: any;
   subscriptions = [];
+  question: Question;
 
-  constructor(@Inject(MAT_DIALOG_DATA) private data: any,
+  constructor(private params: ModalDialogParams,
     public cd: ChangeDetectorRef) {
-    this.question = data.question;
+    this.question = params.context.question;
+    console.log('<>>>>>>>>>>>>>');
+    console.log(this.question);
   }
 
   ngOnInit() {
+    // console.log(this.question);
+  }
 
-    console.log(this.question);
-  }
-  closeModel() {
-    this.ref.close();
-  }
 
   ngOnDestroy() {
 
   }
+
+  onClose(): void {
+    this.params.closeCallback();
+  }
+
 
 }

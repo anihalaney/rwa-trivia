@@ -1,7 +1,8 @@
 import { ESUtils } from '../utils/ESUtils';
 import {
     SearchCriteria, Game, PlayerQnA, Question,
-    PlayerMode, QuestionStatus, interceptorConstants, ResponseMessagesConstants, CollectionConstants, QuestionsConstants
+    PlayerMode, QuestionStatus, interceptorConstants, ResponseMessagesConstants, CollectionConstants, QuestionsConstants,
+    HeaderConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { GameMechanics } from '../utils/game-mechanics';
 import { Utils } from '../utils/utils';
@@ -168,6 +169,35 @@ export class QuestionController {
             Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UNPUBLISHED_STATUS_CHANGED);
         } catch (error) {
             Utils.sendError(res, error);
+        }
+    }
+
+    static async uploadQuestionImage(req, res): Promise<any> {
+        const questionImage = req.body.image;
+        if (questionImage) {
+            const imageName = new Date().getTime();
+            await QuestionService.uploadImage(questionImage, imageName);
+            // QuestionService.generateQuesitonImage(imageName);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, { name: imageName });
+        } else {
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.UNPUBLISHED_STATUS_CHANGED);
+        }
+    }
+
+    static async getQuestionImage(req, res): Promise<any> {
+        const imageName = req.params.imageName;
+        if (imageName) {
+            try {
+                const stream = await QuestionService.generateQuesitonImage(imageName);
+                res.setHeader(HeaderConstants.CONTENT_DASH_DISPOSITION,
+                    HeaderConstants.ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_PROFILE_UNDER_SCORE_IMAGE_DOT_PNG);
+                res.setHeader(HeaderConstants.CONTENT_DASH_TYPE, HeaderConstants.IMAGE_FORWARD_SLASH_JPEG);
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, stream);
+            } catch (error) {
+                Utils.sendError(res, error);
+            }
+        } else {
+            Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.BAD_REQUEST);
         }
     }
 

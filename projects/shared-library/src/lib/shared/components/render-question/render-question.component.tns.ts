@@ -30,8 +30,13 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     isAndroid = isAndroid;
     ngOnInit(): void {
         if (this.question) {
-            // tslint:disable-next-line:max-line-length
-            this.question.renderedQuestion = this.htmlStartTag + this.questionIndex + '. ' + this.question.renderedQuestion + this.scriptToGetHeight + this.htmlEndTag;
+
+            if (this.question.isRichEditor) {
+                let qIndex = this.questionIndex ? `${this.questionIndex} . `  : '';
+                // tslint:disable-next-line:max-line-length
+                this.question.questionText = this.htmlStartTag + qIndex + this.question.questionText + this.scriptToGetHeight + this.htmlEndTag;
+            }
+
         }
     }
 
@@ -45,8 +50,9 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         if (this.renderWebView) {
             if (changes.question) {
+                console.log('quertion loaded');
                 // tslint:disable-next-line:max-line-length
-                this.question.renderedQuestion = this.htmlStartTag +  changes.question.currentValue.renderedQuestion + this.scriptToGetHeight + this.htmlEndTag;
+                // this.question.questionText = this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;
             }
         }
     }

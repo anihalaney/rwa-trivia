@@ -178,8 +178,10 @@ export class QuestionService {
     });
   }
 
-  saveQuestionImage(image: File, fileName) {
-    return this.dbService.upload(fileName, image).snapshotChanges();
+  saveQuestionImage(image: any, fileName) {
+    const url = `${CONFIG.functionsUrl}/question/uploadQuestionImage`;
+    return this.http.post<any>(url, { image: image });
+
   }
 
 

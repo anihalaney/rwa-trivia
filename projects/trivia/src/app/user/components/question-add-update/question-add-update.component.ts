@@ -81,10 +81,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
         this.questionForm.patchValue({ questionText: '' });
         if (isRichEditor) {
           this.questionForm.get('maxTime').setValidators(Validators.compose([Validators.required]));
+          this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required]));
         } else {
           this.questionForm.get('maxTime').setValidators([]);
+          this.questionForm.get('questionText').setValidators(Validators.compose([Validators.required,
+          Validators.maxLength(this.applicationSettings.question_max_length)]));
         }
         this.questionForm.get('maxTime').updateValueAndValidity();
+        this.questionForm.get('questionText').updateValueAndValidity();
       }, 0);
     });
 
@@ -114,29 +118,34 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
   // Image Upload
   fileUploaded(quillImageUpload: QuillImageUpload) {
-    const file: File = quillImageUpload.file;
 
-    this.dialogRef = this.dialog.open(CropImageDialogComponent, {
-      disableClose: false,
-      data: { file: file, applicationSettings: this.applicationSettings }
-    });
+    if (!quillImageUpload.isMobile) {
+      const file: File = quillImageUpload.file;
 
-    this.dialogRef.componentInstance.ref = this.dialogRef;
-    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
-      if (result) {
-        const fileName = `questions/${new Date().getTime()}-${file.name}`;
-        this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
-          if (uploadTask != null) {
-            if (uploadTask.task.snapshot.state === 'success') {
-              this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
-                quillImageUpload.setImage(imageUrl);
-                this.cd.markForCheck();
-              });
+      this.dialogRef = this.dialog.open(CropImageDialogComponent, {
+        disableClose: false,
+        data: { file: file, applicationSettings: this.applicationSettings }
+      });
+
+      this.dialogRef.componentInstance.ref = this.dialogRef;
+      this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+        if (result) {
+          const fileName = `questions/${new Date().getTime()}-${file.name}`;
+          this.questionService.saveQuestionImage(result.image, fileName).subscribe(image => {
+            if (image != null) {
+              if (image.name) {
+                this.questionService.getQuestionDownloadUrl(`questions/${image.name}`).subscribe(imageUrl => {
+                  quillImageUpload.setImage(imageUrl);
+                  this.cd.markForCheck();
+                });
+              }
             }
-          }
-        });
-      }
-    }));
+          });
+        }
+      }));
+    }
+
+
   }
 
   openDialog(file: File) {
@@ -149,10 +158,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
       if (result) {
         const fileName = `questions/${new Date().getTime()}-${file.name}`;
-        this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
-          if (uploadTask != null) {
-            if (uploadTask.task.snapshot.state === 'success') {
-              this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
+        console.log('image upload');
+        this.questionService.saveQuestionImage(result.image, fileName).subscribe(image => {
+          if (image != null) {
+            if (image.name) {
+              this.questionService.getQuestionDownloadUrl(`questions/${image.name}`).subscribe(imageUrl => {
                 this.quillImageUrl = imageUrl;
                 this.cd.markForCheck();
               });
@@ -253,8 +263,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
   preview() {
     this.question = super.onSubmit();
-    this.question.questionText = this.quillObject.questionText;
-    this.question.questionObject = this.quillObject.jsonObject;
+    if (this.question.isRichEditor) {
+      this.question.questionText = this.quillObject.questionText;
+      this.question.questionObject = this.quillObject.jsonObject;
+    }
 
     this.dialogRef = this.dialog.open(PreviewQuestionDialogComponent, {
       disableClose: false,

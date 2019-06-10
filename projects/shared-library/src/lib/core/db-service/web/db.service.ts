@@ -97,7 +97,7 @@ export class WebDbService extends DbService {
     }
 
     public upload(filePath: string, imageBlob: any) {
-        return this._afstorage.ref(filePath).putString(imageBlob, 'data_url');
+        // return this._afstorage.ref(filePath).put(imageBlob, 'data_url');
     }
 
 }

@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges, OnChanges } from "@angular/core";
-import { Answer, Question } from "shared-library/shared/model";
+import { Answer} from "shared-library/shared/model";
 import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS, device, screen } from 'tns-core-modules/platform';
 
@@ -13,7 +13,7 @@ import { isAndroid, isIOS, device, screen } from 'tns-core-modules/platform';
 export class RenderAnswerComponent implements OnInit, OnChanges {
 
     @Input() renderWebView: boolean;
-    @Input() question: Question;
+    @Input() answer: Answer;
     @Input() questionIndex: number;
 
 
@@ -29,14 +29,15 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     questionHeight = 0;
     isAndroid = isAndroid;
     ngOnInit(): void {
-        if (this.question) {
+        console.log(this.answer);
+        if (this.answer && this.answer.isRichEditor) {
             // tslint:disable-next-line:max-line-length
-            this.question.renderedQuestion = this.htmlStartTag + this.questionIndex + '. ' + this.question.renderedQuestion + this.scriptToGetHeight + this.htmlEndTag;
+            this.answer.answerText = this.htmlStartTag + this.answer.answerText + this.scriptToGetHeight + this.htmlEndTag;
         }
     }
 
     onLoadFinished(event: LoadEventData) {
-        if (isIOS && this.question) {
+        if (isIOS && this.answer) {
             const height = event.url.split('#')[1];
             this.questionHeight = Number(height);
         }
@@ -44,10 +45,10 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         if (this.renderWebView) {
-            if (changes.question) {
-                // tslint:disable-next-line:max-line-length
-                this.question.renderedQuestion = this.htmlStartTag +  changes.question.currentValue.renderedQuestion + this.scriptToGetHeight + this.htmlEndTag;
-            }
+            // if (changes.answer) {
+            //     // tslint:disable-next-line:max-line-length
+            //     this.answer.answerText = this.htmlStartTag +  changes.answer.currentValue.answerText + this.scriptToGetHeight + this.htmlEndTag;
+            // }
         }
     }
 

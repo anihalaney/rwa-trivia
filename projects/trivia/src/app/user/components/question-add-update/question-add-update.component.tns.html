@@ -6,7 +6,7 @@
 
 <StackLayout *ngIf="!loaderBusy">
     <ScrollView>
-        <StackLayout  (tap)="hideKeyboard()"  class="new-game Roboto-Regular" backgroundColor="#f1f2f2" [formGroup]="questionForm">
+        <StackLayout (tap)="hideKeyboard()" class="new-game Roboto-Regular" backgroundColor="#f1f2f2" [formGroup]="questionForm">
 
             <GridLayout iosOverflowSafeArea="false" rows="auto,auto" columns="auto,*" padding="10" marginTop="5">
                 <Label row="0" col="0" text="Select Preferred Category" textWrap="true" class="label" fontSize="18"
@@ -34,34 +34,62 @@
                 <Label text="Select a category !" textWrap="true" class="label error" fontSize="12"></Label>
             </StackLayout>
 
+            <GridLayout rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10">
+                <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18" fontWeight="400"
+                    color="#616161" marginTop="10"></Label>
+                <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f" ios:marginTop="10"
+                    formControlName="isRichEditor"></CheckBox>
+            </GridLayout>
+
             <StackLayout iosOverflowSafeArea="false" padding="10">
                 <Label text="Enter Your Question" textWrap="true" class="label" fontSize="18" fontWeight="400" color="#616161"></Label>
             </StackLayout>
 
             <CardView iosOverflowSafeArea="false" margin="5 10 5 10" backgroundColor="white">
                 <StackLayout>
-                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10">
-                        <TextView  #textField  hint="Enter Your Question" formControlName="questionText" class="input" height="150"
-                            borderWidth="1" borderRadius="3" borderColor="#a3a3a3" padding="10"></TextView>
+                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="!questionForm.value.isRichEditor">
+                        <TextView #textField hint="Enter Your Question" formControlName="questionText" class="input"
+                            height="150" borderWidth="1" borderRadius="3" borderColor="#a3a3a3" padding="10"></TextView>
                         <StackLayout *ngIf="!questionForm.controls.questionText.pristine && questionForm.controls.questionText.errors">
                             <Label *ngIf="questionForm.controls.questionText.errors.required" class="error" textWrap="true"
                                 text="Answer required !"></Label>
                             <Label *ngIf="questionForm.controls.questionText.errors.maxlength" class="error" textWrap="true"
                                 text="{{this.applicationSettings.question_max_length}}  characters are allowed !"></Label>
                         </StackLayout>
-
                     </StackLayout>
+                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="questionForm.value.isRichEditor">
+                        <WebView #questionWebView id="questionWebView" height="500"></WebView>
+                    </StackLayout>
+
+                    <StackLayout *ngIf="questionForm.value.isRichEditor">
+                        <GridLayout rows="*,*" columns="auto, auto">
+                            <Label text="Select a Max time" row="0" col="0" textWrap="true" class="label" padding="10"
+                                fontSize="16" fontWeight="400" color="#616161" verticalAlignment="bottom"></Label>
+                            <DropDown backroundColor="red" [items]="applicationSettings.game_play_max_time"
+                                (selectedIndexChanged)="onchange($event)" selectedIndex="{{selectedMaxTimeIndex}}" row="0"
+                                col="1" paddingLeft="20" style="text-align: center; padding: 15px; font-size: 17px; color: black;padding-top: 10;"></DropDown>
+                            <Label row="1" col="0" *ngIf="questionForm.hasError('maxTimeNotSelected')" class="error"
+                                textWrap="true" text="Select max time" padding="10"></Label>
+                        </GridLayout>
+                    </StackLayout>
+
                     <Label text="Enter your answers" textWrap="true" class="label" padding="10" fontSize="16"
                         fontWeight="400" color="#616161"></Label>
                     <StackLayout formArrayName="answers" padding="10">
                         <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
                             <GridLayout rows="auto,auto" columns="auto,*" marginBottom="20">
-                                <CheckBox row="0" col="0" #elem formControlName="correct" class="checkbox" marginRight="10"
+                                <GridLayout row="0" col="0" rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10">
+                                    <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18"
+                                        fontWeight="400" color="#616161" marginTop="10"></Label>
+                                    <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f"
+                                        ios:marginTop="10" formControlName="isRichEditor" (checkedChange)=checkboxChecked(i)></CheckBox>
+                                </GridLayout>
+                                <CheckBox row="1" col="0" #elem formControlName="correct" class="checkbox" marginRight="10"
                                     fillColor="#71b02f" ios:marginTop="10"></CheckBox>
-                                <StackLayout row="0" col="1">
-                                    <TextField  #textField  [hint]="'Enter Option ' + (i+1)" formControlName="answerText" class="input"
-                                        borderWidth="1" borderColor="#a3a3a3" borderRadius="3" paddingLeft="10"
-                                        ios:padding="10"></TextField>
+                                <StackLayout row="1" col="1" *ngIf="!answers.controls[i].controls.isRichEditor.value">
+                                    <TextField #textField [hint]="'Enter Option ' + (i+1)" formControlName="answerText"
+                                        class="input" borderWidth="1" borderColor="#a3a3a3" borderRadius="3"
+                                        paddingLeft="10" ios:padding="10"></TextField>
                                     <StackLayout *ngIf="!answers.controls[i].controls.answerText.pristine && answers.controls[i].controls.answerText.errors">
                                         <Label *ngIf="answers.controls[i].controls.answerText.errors.required " class="error"
                                             textWrap="true" text="Answer required !"></Label>
@@ -70,6 +98,11 @@
 
                                     </StackLayout>
                                 </StackLayout>
+                                <StackLayout row="1" col="1" *ngIf="answers.controls[i].controls.isRichEditor.value">
+                                    <Label text="is Rich Editor" textWrap="true"></Label>
+                                    <WebView #webView id="{{i}}" height="500"></WebView>
+                                </StackLayout>
+
                             </GridLayout>
                         </StackLayout>
                     </StackLayout>
@@ -79,6 +112,7 @@
                         textWrap="true" text="Pick one and only one correct answer !" padding="10"></Label>
                 </StackLayout>
             </CardView>
+
 
             <GridLayout iosOverflowSafeArea="false" rows="auto,auto" columns="auto,*" padding="10">
                 <Label row="0" col="0" text="Tags Associated Categories" textWrap="true" class="label" fontSize="18"
@@ -117,10 +151,10 @@
                                     </ng-template>
                                 </SuggestionView>
                             </RadAutoCompleteTextView>
-                        </StackLayout>                        
+                        </StackLayout>
                         <Button row="0" col="1" (tap)="addCustomTag()" text="Add" class="Roboto-Bold" android:padding="5"
-                        fontSize="16" android:fontSize="10" ios:padding="10" backgroundColor="#89C24F" color="#ffffff"
-                        marginLeft="10" fontWeight="700" borderRadius="2" stlRippleEffect></Button>
+                            fontSize="16" android:fontSize="10" ios:padding="10" backgroundColor="#89C24F" color="#ffffff"
+                            marginLeft="10" fontWeight="700" borderRadius="2" stlRippleEffect></Button>
                     </GridLayout>
                 </StackLayout>
             </CardView>
@@ -129,11 +163,13 @@
                 <Label text="Must have atleast 3 tags !" textWrap="true" class="label error" fontSize="12"></Label>
             </StackLayout>
 
-            <StackLayout iosOverflowSafeArea="false" padding="10">
-                  
-                <Button [text]="submitBtnTxt" (tap)="submit()" class="Roboto-Medium" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
-                        color="#ffffff" padding="20" borderRadius="3" fontSize="20" fontWeight="bold" stlRippleEffect></Button>
-                </StackLayout>
+            <GridLayout iosOverflowSafeArea="false" padding="10" rows="auto" columns="*, *">
+                <Button row="0" col="0" text="Preview" (tap)="preview()" class="Roboto-Medium" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
+                    color="#ffffff"  borderRadius="3" fontSize="20" padding="10 10 10 10" fontWeight="bold" stlRippleEffect></Button>
+                <Button row="0" col="1" width="100%" [text]="submitBtnTxt" (tap)="submit()" class="Roboto-Medium"
+                    backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
+                    color="#ffffff"  borderRadius="3" fontSize="20" padding="10 10 10 0" fontWeight="bold" stlRippleEffect></Button>
+            </GridLayout>
         </StackLayout>
     </ScrollView>
 </StackLayout>

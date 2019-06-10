@@ -73,7 +73,8 @@ import { SafeHtmlPipe } from './pipe/safe-html.pipe';
   ],
   schemas: [NO_ERRORS_SCHEMA],
   entryComponents: [
-    CountryListComponent
+    CountryListComponent,
+    RenderQuestionComponent
   ],
   providers: [
     PhoneNumberValidationProvider

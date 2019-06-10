@@ -37,7 +37,6 @@ export class UtilsCore {
   }
 
   getImageUrl(user: User, width: Number, height: Number, size: string) {
-
     if (user && user.profilePicture && user.profilePicture !== '') {
       return `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
     } else {
@@ -47,6 +46,10 @@ export class UtilsCore {
         return `assets/images/avatar-${size}.png`;
       }
     }
+  }
+
+  getQuestionUrl(image) {
+    return `${CONFIG.functionsUrl}/question/getQuestionImage/${image}`;
   }
 
   convertIntoDoubleDigit(digit: Number) {

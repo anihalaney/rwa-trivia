@@ -14,10 +14,15 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
 
     @Input() renderWebView: boolean;
     @Input() question: Question;
-    @Input() questionIndex: number;
+    @Input() questionIndex: number | string;
 
 
     ngOnInit(): void {
+        if (this.questionIndex) {
+            this.questionIndex = this.questionIndex + '.';
+        } else {
+            this.questionIndex = '';
+        }
         setTimeout(() => {
             // this.question.isRichEditor = true;
             this.question = { ...this.question };

@@ -27,8 +27,8 @@
                         <GridLayout rows="*" columns="auto,auto">
                             <Label row="0" col="0" text="Category :" textWrap="true" class="label Roboto-Medium" fontWeight="bold"></Label>
                             <StackLayout row="0" col="1" *ngFor="let id of question.categoryIds">
-                                <Label [text]="categoryDictionary[id].categoryName" textWrap="true" class="label Roboto-Regular"
-                                    padding="2" color="#616161"></Label>
+                                <!-- <Label [text]="categoriesObs[id].categoryName" textWrap="true" class="label Roboto-Regular"
+                                    padding="2" color="#616161"></Label> -->
                             </StackLayout>
                         </GridLayout>
                         <GridLayout rows="*" columns="auto,auto">

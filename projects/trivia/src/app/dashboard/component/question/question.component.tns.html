@@ -2,7 +2,7 @@
     <StackLayout class="cardStyle Roboto-Medium" backgroundColor="#ffffff" height="100%" width="100%" margin="15"  iosOverflowSafeArea="false">
         <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
         <!-- <Label [text]="question?.questionText" color="#263238" fontSize="18" fontWeight="500" margin="10" textWrap="true"></Label> -->
-        <render-question [renderWebView]="applicationSettings?.renderWebView" [question]="question"></render-question> 
+        <render-question [renderWebView]="false" [question]="question"></render-question> 
 
         <StackLayout orientation="horizontal" margin="5 10 5 10" *ngIf="question" iosOverflowSafeArea="false">
             <Label text="Categories:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>

@@ -11,13 +11,13 @@
                 <StackLayout stlRippleEffect *tabItem="{title: 'Published', textTransform: 'none'}" fontSize="16" fontWeight="600">
                     <StackLayout>
                         <question-table *ngIf="!loaderBusy" [questions]="publishedQuestions" [categoryDictionary]="categoryDictObs | async"
-                            [user]="user" [showApproveButton]="false" [userDict]="userDict">
+                            [user]="user" [showApproveButton]="false" [userDict]="userDict"  [categoriesObs]="categoriesObs">
                         </question-table>
                     </StackLayout>
                 </StackLayout>
                 <StackLayout stlRippleEffect *tabItem="{title: 'Pending', textTransform: 'none'}" fontSize="16" fontWeight="600">
                     <StackLayout>
-                        <question-table [questions]="unpublishedQuestions" [categoryDictionary]="categoryDictObs | async"
+                        <question-table [questions]="unpublishedQuestions" [categoryDictionary]="categoryDictObs | async"  [categoriesObs]="categoriesObs"
                             [user]="user" [showApproveButton]="false" [userDict]="userDict" [displayReasonViewer]="displayReasonViewer"
                             (displayReason)="displayReason($event)" (selectedQuestion)="setSelectedQuestion($event)">
                             <Button class="fa approve-btn" text="&#xf00c;" textWrap="true" top="70" width="90" height="25"
