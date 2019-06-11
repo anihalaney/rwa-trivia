@@ -111,26 +111,34 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.demoQ.isRichEditor = true;
 
     this.demoQ.answers = [{
+      id: 1,
       // tslint:disable-next-line: max-line-length
       answerText: '<p><span class="ql-formula" data-value="2x^{x2}y\ +\ 8xy^2\ -6y^2">﻿<span contenteditable="false"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><msup><mi>x</mi><mrow><mi>x</mi><mn>2</mn></mrow></msup><mi>y</mi><mtext>&nbsp;</mtext><mo>+</mo><mtext>&nbsp;</mtext><mn>8</mn><mi>x</mi><msup><mi>y</mi><mn>2</mn></msup><mtext>&nbsp;</mtext><mo>−</mo><mn>6</mn><msup><mi>y</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">2x^{x2}y\ +\ 8xy^2\ -6y^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.00855em; vertical-align: -0.19444em;"></span><span class="mord">2</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">x</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right: 0.03588em;">y</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mspace">&nbsp;</span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mspace">&nbsp;</span></span><span class="base"><span class="strut" style="height: 1.00855em; vertical-align: -0.19444em;"></span><span class="mord">8</span><span class="mord mathdefault">x</span><span class="mord"><span class="mord mathdefault" style="margin-right: 0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mspace">&nbsp;</span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span></span><span class="base"><span class="strut" style="height: 1.00855em; vertical-align: -0.19444em;"></span><span class="mord">6</span><span class="mord"><span class="mord mathdefault" style="margin-right: 0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>﻿</span></p>',
       isRichEditor: true,
+      correct: false
     },
     {
       // answerText: 'b',
       // isRichEditor: false,
       // answerText: this.questionHtml2,
       answerText: '<p><span class="ql-formula" data-value="4x^2y^2">﻿<span contenteditable="false"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><msup><mi>x</mi><mn>2</mn></msup><msup><mi>y</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">4x^2y^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.00855em; vertical-align: -0.19444em;"></span><span class="mord">4</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathdefault" style="margin-right: 0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>﻿</span></p><p><br></p>',
-      isRichEditor: true
+      isRichEditor: true,
+      id: 2,
+      correct: false
     },
     {
       // answerText: 'c',
       answerText: '<p><span class="ql-formula" data-value="8xy^2\ \ -\ 6y^2">﻿<span contenteditable="false"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>8</mn><mi>x</mi><msup><mi>y</mi><mn>2</mn></msup><mtext>&nbsp;&nbsp;</mtext><mo>−</mo><mtext>&nbsp;</mtext><mn>6</mn><msup><mi>y</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">8xy^2\ \ -\ 6y^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.00855em; vertical-align: -0.19444em;"></span><span class="mord">8</span><span class="mord mathdefault">x</span><span class="mord"><span class="mord mathdefault" style="margin-right: 0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mspace">&nbsp;</span><span class="mspace">&nbsp;</span><span class="mbin">−</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mspace">&nbsp;</span></span><span class="base"><span class="strut" style="height: 1.00855em; vertical-align: -0.19444em;"></span><span class="mord">6</span><span class="mord"><span class="mord mathdefault" style="margin-right: 0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>﻿</span></p>',
       isRichEditor: true,
+      id: 3,
+      correct: false
     },
     {
       answerText: 'd',
       // answerText: '<p><span class="ql-formula" data-value="2x^2y\ +\ 2xy^2">﻿<span contenteditable="false"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><msup><mi>x</mi><mn>2</mn></msup><mi>y</mi><mtext>&nbsp;</mtext><mo>+</mo><mtext>&nbsp;</mtext><mn>2</mn><mi>x</mi><msup><mi>y</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">2x^2y\ +\ 2xy^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1.00855em; vertical-align: -0.19444em;"></span><span class="mord">2</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right: 0.03588em;">y</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mspace">&nbsp;</span><span class="mbin">+</span><span class="mspace" style="margin-right: 0.222222em;"></span><span class="mspace">&nbsp;</span></span><span class="base"><span class="strut" style="height: 1.00855em; vertical-align: -0.19444em;"></span><span class="mord">2</span><span class="mord mathdefault">x</span><span class="mord"><span class="mord mathdefault" style="margin-right: 0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height: 0.814108em;"><span class="" style="top: -3.063em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span>﻿</span></p>',
       isRichEditor: false,
+      id: 4,
+      correct: true
     }];
     this.demoQ.tags = ['a', 'b', 'c'];
     this.submitBtnTxt = 'SUBMIT';
@@ -140,7 +148,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
-        this.applicationSettings.game_play_max_time = ['Select a max time', ...this.applicationSettings.game_play_max_time];
+        // 'Select a max time',
+
+
+        this.applicationSettings.game_play_max_time = [ ...this.applicationSettings.game_play_max_time];
         this.cd.markForCheck();
         this.createForm(this.question);
         this.answers = (<FormArray>this.questionForm.get('answers'));
@@ -148,7 +159,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
     })
     );
-
     const questionControl = this.questionForm.get('questionText');
 
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
@@ -405,8 +415,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   submit() {
     this.hideKeyboard();
     const question: Question = super.onSubmit();
-    console.log(question);
-    return false;
+
     // tslint:disable-next-line:no-unused-expression
     (this.editQuestion) ? question.id = this.editQuestion.id : '';
     if (question && this.categoryIds.length > 0 && this.enteredTags.length > 2) {
@@ -419,11 +428,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   preview() {
     this.hideKeyboard();
-    const question: Question = super.onSubmit();
-    console.log(question);
+    // const question: Question = super.onSubmit();
+    // console.log(question);
 
     const options = {
-      context: { question: question },
+      context: { question: this.demoQ },
       fullscreen: true,
       viewContainerRef: this.vcRef
     };

@@ -49,7 +49,6 @@
             (fileUploaded)="fileUploaded($event)" [imageUrl]="quillImageUrl" [group]="questionForm" [controlName]="'questionText'">
           </ng-quill-tex>
 
-          <!-- [(ngModel)]="htmlText" -->
           <div *ngIf="!questionForm.controls.questionText.valid && questionForm.controls.questionText.touched && questionForm.controls.questionText.errors">
             <p *ngIf="questionForm.controls.questionText.errors.required" class="error">Question is required!</p>
             <!-- <p *ngIf="questionForm.controls.questionText.errors.maxlength" class="error">{{this.applicationSettings.question_max_length}} characters are allowed</p> -->

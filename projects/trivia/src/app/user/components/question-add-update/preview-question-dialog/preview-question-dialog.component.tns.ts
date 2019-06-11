@@ -23,8 +23,6 @@ export class PreviewQuestionDialogComponent implements OnInit, OnDestroy {
   constructor(private params: ModalDialogParams,
     public cd: ChangeDetectorRef) {
     this.question = params.context.question;
-    console.log('<>>>>>>>>>>>>>');
-    console.log(this.question);
   }
 
   ngOnInit() {

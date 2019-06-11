@@ -27,14 +27,14 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     // tslint:disable-next-line:max-line-length
     htmlEndTag = `</body><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous"></html>`;
     questionHeight = 0;
+    qIndex = '';
     isAndroid = isAndroid;
     ngOnInit(): void {
         if (this.question) {
-
+            this.qIndex = this.questionIndex ? `${this.questionIndex} . ` : '';
             if (this.question.isRichEditor) {
-                let qIndex = this.questionIndex ? `${this.questionIndex} . `  : '';
                 // tslint:disable-next-line:max-line-length
-                this.question.questionText = this.htmlStartTag + qIndex + this.question.questionText + this.scriptToGetHeight + this.htmlEndTag;
+                this.question.questionText = this.htmlStartTag  + this.question.questionText + this.scriptToGetHeight + this.htmlEndTag;
             }
 
         }
@@ -43,16 +43,18 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     onLoadFinished(event: LoadEventData) {
         if (isIOS && this.question) {
             const height = event.url.split('#')[1];
-            this.questionHeight = Number(height);
+            if (height) {
+                this.questionHeight = parseInt(height, 10);
+            }
+
         }
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (this.renderWebView) {
+        if (this.question.isRichEditor) {
             if (changes.question) {
-                console.log('quertion loaded');
                 // tslint:disable-next-line:max-line-length
-                // this.question.questionText = this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;
+                this.question.questionText = this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;
             }
         }
     }

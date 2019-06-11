@@ -57,16 +57,16 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnInit() {
 
     // TODO: Remove after complete math editor
-    // if (this.question.answers) {
-    //   this.question.questionText = this.questionHtml3;
-    //   this.question.maxTime = 50;
-    //   this.question.isRichEditor = true;
-    //   this.question.answers.forEach((ans, index) => {
-    //     ans.answerText = this.answer[index].answerText;
-    //     ans.isRichEditor = this.answer[index].isRichEditor;
-    //   });
-    // }
-    // this.cd.markForCheck();
+    if (this.question.answers) {
+      this.question.questionText = this.questionHtml3;
+      this.question.maxTime = 50;
+      this.question.isRichEditor = true;
+      this.question.answers.forEach((ans, index) => {
+        ans.answerText = this.answer[index].answerText;
+        ans.isRichEditor = this.answer[index].isRichEditor;
+      });
+    }
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {

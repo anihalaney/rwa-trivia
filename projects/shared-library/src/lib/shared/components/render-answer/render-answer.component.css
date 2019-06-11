@@ -1,5 +1,10 @@
-.question-answered{
-    border-color: #000;
-    border-width: 1;
-    border-radius: 2;
-  }
+.answer {
+  font-weight:500;
+  font-size:18;
+  padding:10;
+  text-align: center;
+}
+
+.right, .wrong {
+  color: #fff;
+}

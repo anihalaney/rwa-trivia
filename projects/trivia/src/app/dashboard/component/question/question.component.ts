@@ -78,14 +78,13 @@ export class QuestionComponent implements OnDestroy {
           this.cd.markForCheck();
         }
       }));
-
     this.subscriptions.push(this.store.select(categoryDictionary).subscribe(categories => {
       this.categoryDictionary = categories;
       this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.questionOfTheDay)).subscribe(questionOfTheDay => {
         if (questionOfTheDay) {
           this.question = questionOfTheDay;
           // TODO: Remove after complete math editor
-          // this.question.questionText = this.questionHtml;
+          // this.question.questionText = this.questionHtml2;
           // this.question.isRichEditor = true;
           // this.question.answers.forEach((ans, index) => {
           //   ans.answerText = this.answer[index].answerText;

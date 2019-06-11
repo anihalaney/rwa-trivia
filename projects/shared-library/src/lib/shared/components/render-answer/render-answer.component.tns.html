@@ -1,17 +1,14 @@
-<StackLayout *ngIf="answer.isRichEditor && answer; else renderView" marginBottm="500" margin="10" class="question-answered">
-
-    <WebView width="100%" padding="10 10 0 10" *ngIf="!isAndroid" [src]="answer?.answerText"  ios:height="{{questionHeight}}"
-        (loadFinished)="onLoadFinished($event)" [isUserInteractionEnabled]="false"></WebView>
-
-<span class="" *ngIf="!answer.isRichEditor"> {{answer.answerText}}</span>
-    <WebView width="100%"padding="10 10 0 10" *ngIf="isAndroid" [src]="answer?.answerText" 
-        [isUserInteractionEnabled]="false" minHeight="50"></WebView>
+<StackLayout *ngIf="answer?.isRichEditor && answer; else renderView" marginBottm="500"> 
+    <WebView width="100%" padding="10 10 0 10" *ngIf="!isAndroid" [src]="answer?.answerText" ios:height="{{answerHeight}}"
+        (loadFinished)="onLoadFinished($event)" stlRippleEffect (rippleTap)="answerButtonClicked(answer)" [isUserInteractionEnabled]="doPlay"></WebView>
+    <WebView width="100%" padding="10 10 0 10" *ngIf="isAndroid" [src]="answer?.answerText" 
+        minHeight="50" stlRippleEffect (rippleTap)="answerButtonClicked(answer)" [isUserInteractionEnabled]="doPlay"></WebView>
 </StackLayout>
 
-<ng-template #renderView>       
-    <StackLayout class="question-answered" margin="10">
-            <Label text="{{ answer?.answerText }}" color="#263238" fontSize="18" fontWeight="500" margin="10"
-            textWrap="true"></Label>        
-    </StackLayout>  
-    
+<ng-template #renderView>
+    <StackLayout>    
+        <Label text="{{ answer?.answerText }}" [class.wrong]="wrong"
+        [class.right]="right ? 'right' : ''" [ngClass]="{'answer': isGameAnswer}"  textWrap="true"></Label>
+    </StackLayout>
+
 </ng-template>

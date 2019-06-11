@@ -1,32 +1,44 @@
-<CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay" backgroundColor="white" iosOverflowSafeArea="false">
-    <StackLayout class="cardStyle Roboto-Medium" backgroundColor="#ffffff" height="100%" width="100%" margin="15"  iosOverflowSafeArea="false">
+<CardView class="cardStyle" margin="10" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
+    backgroundColor="white" iosOverflowSafeArea="false">
+    <StackLayout class="cardStyle Roboto-Medium" backgroundColor="#ffffff" height="100%" width="100%" margin="15"
+        iosOverflowSafeArea="false">
         <Label text="Question of the day!" color="#000" fontSize="20" class="text-center" textWrap="true"></Label>
         <!-- <Label [text]="question?.questionText" color="#263238" fontSize="18" fontWeight="500" margin="10" textWrap="true"></Label> -->
-        <render-question [renderWebView]="false" [question]="question"></render-question> 
+        <StackLayout margin="10">
+            <render-question [renderWebView]="false" [question]="question"></render-question>
+        </StackLayout>
+
 
         <StackLayout orientation="horizontal" margin="5 10 5 10" *ngIf="question" iosOverflowSafeArea="false">
             <Label text="Categories:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
             <Label text="{{categoryName}}" class="Roboto-Regular" fontSize="15" textWrap="true" color="#1b1c1c"></Label>
         </StackLayout>
-      
+
         <StackLayout orientation="horizontal" margin="10" *ngIf="question" iosOverflowSafeArea="false">
             <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
             <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" color="#1B1C1C" fontSize="15" textWrap="true"></Label>
-        </StackLayout>  
-        <StackLayout *ngIf="question" iosOverflowSafeArea="false">   
+        </StackLayout>
+        <StackLayout *ngIf="question" iosOverflowSafeArea="false">
             <StackLayout iosOverflowSafeArea="false" class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers"
                 [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
-                [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [isUserInteractionEnabled] = "doPlay" stlRippleEffect (rippleTap)="rippleTap(answer)">
-                    <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="17" fontWeight="500" marginTop="15"
-                    marginBottom="15" textWrap="true" width="100%" style="text-align:center;" [isUserInteractionEnabled] = "doPlay"></Label>
-                    <!-- <render-answer [renderWebView]="applicationSettings?.renderWebView" [answer]="answer" [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
-                    [isRight]="answeredText !== '' && correctAnswerText === answer.answerText" [doPlay] ="doPlay" [isUserInteractionEnabled] = "doPlay"></render-answer> -->
-                </StackLayout>
+                [class.right]="answeredText !== '' && correctAnswerText === answer.answerText"
+                [isUserInteractionEnabled]="doPlay" stlRippleEffect (rippleTap)="rippleTap(answer)">
+                <!-- <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="17" fontWeight="500"
+                    marginTop="15" marginBottom="15" textWrap="true" width="100%" style="text-align:center;"
+                    [isUserInteractionEnabled]="doPlay"></Label> -->
+                <!-- [answer]="answer" [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+                    [isRight]="answeredText !== '' && correctAnswerText === answer.answerText" [doPlay] ="doPlay" [isUserInteractionEnabled] = "doPlay" -->
+                <render-answer [renderWebView]="true" [answer]="answer" [isGameAnswer]="true" [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
+                    [isRight]="answeredText !== '' && correctAnswerText === answer.answerText" [doPlay]="doPlay"
+                    [isUserInteractionEnabled]="doPlay"></render-answer>
+            </StackLayout>
         </StackLayout>
-        <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10" iosOverflowSafeArea="false">
+        <StackLayout iosOverflowSafeArea="false" orientation="vertical" *ngIf="question" margin="10"
+            iosOverflowSafeArea="false">
             <author [userDict]="userDict" [userId]="question.created_uid"></author>
-            <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (rippleTap)="getNextQuestion()" *ngIf="answeredText!==''"
-                width="100%" text="Try Another" fontSize="17" padding="15" stlRippleEffect stlBackgroundColor="#8ac541"></Button>
+            <Button class="Roboto-Regular" backgroundColor="#8ac541" color="white" margin="20" (rippleTap)="getNextQuestion()"
+                *ngIf="answeredText!==''" width="100%" text="Try Another" fontSize="17" padding="15" stlRippleEffect
+                stlBackgroundColor="#8ac541"></Button>
         </StackLayout>
     </StackLayout>
 
