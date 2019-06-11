@@ -14,7 +14,6 @@ const editJsonFile = require("edit-json-file");
 const path_1 = require("path");
 const fs_1 = require("fs");
 
-const projects = ['trivia', 'bitwiser-edu'];
 module.exports = env => {
   // Add your custom Activities, Services and other Android app components here.
   const appComponents = [
@@ -332,7 +331,7 @@ function getResolverExtended(platforms, project) {
     } = path_1.parse(path);
     let newDir = dir;
     for (const platform of platforms) {
-      if (dir.search('environments') > -1 && !endsWithAny(projects, dir)) {
+      if (dir.endsWith('environments') && dir.search('node_modules') < 0 ) {
         newDir = toSystemPath(path_1.join(dir, project));
       }
 
@@ -360,11 +359,3 @@ function toSystemPath(path) {
 }
 //# sourceMappingURL=resolver.js.map
 
-
-function endsWithAny(suffixes, string) {
-  for (let suffix of suffixes) {
-    if (string.endsWith(suffix))
-      return true;
-  }
-  return false;
-}

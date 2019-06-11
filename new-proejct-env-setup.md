@@ -79,20 +79,27 @@
             e.g. "prod:build-bitwiser-edu:ssr": "ng build trivia  --configuration=bitwiser-edu-production && ng build trivia-admin  --configuration=bitwiser-edu-admin-production && ng run trivia:server",
 
         4)  deploy functions app
-         "{environment}:deploy-{projectName}-functions-app": "npm run pre-compile-app-functions && firebase deploy -P {projectName} --only functions"
+         "{environment}:deploy-{projectName}-functions-app": "npm run pre-compile-app-functions && firebase deploy -P {projectName from .firebaserc} --only functions"
 
             e.g. "deploy-bitwiser-edu-functions-app": "npm run pre-compile-app-functions && firebase deploy -P bitwiser-edu-dev --only functions",
 
          5) deploy functions ssr
-
-            "{environment}:{projectName}:deploy-functions-ssr": "npm run pre-compile-ssr-functions && firebase deploy -P {projectName} --only functions:ssr",
+            
+            "{environment (only specify for prod)}:{projectName}:deploy-functions-ssr": "npm run pre-compile-ssr-functions && firebase deploy -P {projectName from .firebaserc} --only functions:ssr",
 
              e.g. "prod:bitwiser-edu:deploy-functions-ssr": "npm run pre-compile-ssr-functions && firebase deploy -P bitwiser-edu-production --only functions:ssr",
 
         6) deploy functions to firebase
-            "{environment}:{projectName}:deploy-apps-to-firebase": "firebase deploy -P {projectName} --only hosting"
+            "{environment (only specify for prod)}:{projectName}:deploy-apps-to-firebase": "firebase deploy -P {projectName from .firebaserc} --only hosting"
 
             e.g. "prod:bitwiser-edu:deploy-apps-to-firebase": "firebase deploy -P bitwiser-edu-production --only hosting",
+
+        7) production set index
+
+                "prod:{projectName}:set-index": "firebase -P {projectName from .firebaserc} functions:config:set environment.production=true",
+
+                e.g.  "prod:bitwiser-edu:set-index": "firebase -P bitwiser-edu-production functions:config:set environment.production=true"
+
 
 
 
@@ -110,15 +117,42 @@
             e.g. "prod:android:bitwiser-edu": "tns run android --bundle --env.prod --env.aot --env.uglify --env.package_name=io.bitwiser.edu.dev --env.project=bitwiser-edu",
 
         3) release android app
-                "release:{environment}:android:{projectName}": "sh {projectDir}/release/{environment}-android.sh",
 
-                e.g. "release:dev:android:trivia": "sh trivia/release/dev-android.sh",
+                1 ) make changes in current trivia project release folder
+
+                    put .sh files for dev and prod environment in project specific folder 
+                    e.g. release > trivia > prod-android.sh
+
+                    add new folder in release and add release file
+
+                    specify --env.project={projectName} in release command in {environment}.{platform}.sh
+
+                2) add certificates in current trivia certificate folder
+
+                    directory structure : certificate > {projectName} > {platform} > {certificate files}
+                    e.g. certificates > trivia > android > {certificate file}
+
+                3) add command in package.json : "release:{environment}:android:{projectName}": "sh release/{projectDir}/      {environment}-android.sh",
+
+                    e.g. "release:dev:android:trivia": "sh release/trivia/dev-android.sh",
+
+
 
         4) release ios app
+        
+            Add certificates in certificates > {projectName} > {platform} folder
+     
+            1) release dev
 
-            "release:{environment}:ios:trivia": "rm -rf platforms/ios && tns prepare ios --bundle --release  --env.aot --env.uglify --for-device --env.package_name={packageName from firebase general setting}  --env.project={projectName}",
+            command: "release:dev:ios:{projectName}": "rm -rf platforms/ios && tns prepare ios --bundle --release  --env.aot --env.uglify --for-device --env.package_name={packageName from firebase}  --env.project={projectName}",
 
-            e.g.   "release:prod:ios:trivia": "rm -rf platforms/ios && tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia  --env.project=trivia",
+            e.g. "release:dev:ios:trivia": "rm -rf platforms/ios && tns prepare ios --bundle --release  --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia.dev  --env.project=trivia",
+
+            2) release prod
+
+            "release:prod:ios:{projectName}": "rm -rf platforms/ios && tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name={packageName from firebase}  --env.project={projectName}",
+
+            e.g.   "release:prod:ios:trivia": "rm -rf platforms/ios && tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name=io.bitwiser.trivia  --env.project=trivia"
 
 
 
@@ -139,7 +173,7 @@
 
 9) add icons in folders for App_Resources
     put Drawable screen and logo, icon specific for platform under projects-assets folder 
-    platform-wise follow the same structure as used in project-assets
+    platform wise follow the same structure as used in project-assets
 
 
 
