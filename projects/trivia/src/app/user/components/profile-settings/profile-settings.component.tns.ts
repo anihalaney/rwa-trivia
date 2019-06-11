@@ -46,7 +46,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
-  checkUserSubscriptions: Subscription;
   isValidDisplayName: boolean = null;
 
   public imageTaken: ImageAsset;
@@ -265,7 +264,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     this.checkDisplayName(this.userForm.get('displayName').value);
 
-    this.checkUserSubscriptions = this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+    this.subscriptions.push(this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
       this.isValidDisplayName = status;
       if (this.isValidDisplayName !== null) {
         if (this.isValidDisplayName) {
@@ -288,7 +287,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.toggleLoader(false);
       }
 
-    });
+    }));
 
   }
 
