@@ -56,7 +56,7 @@
     "prod:build-trivia:ssr": "ng build trivia  --configuration=trivia-production && ng build trivia-admin  --configuration=trivia-admin-production && ng run trivia:server",
     "prod:deploy-bitwiser-edu-functions": "npm run prod:deploy-bitwiser-edu-functions-build && npm run prod:bitwiser-edu:set-index && npm run prod:bitwiser-edu:deploy-functions-app && npm run prod:bitwiser-edu:deploy-functions-ssr && npm run prod:bitwiser-edu:deploy-apps-to-firebase && npm install firebase@6.0.2",
     "prod:deploy-bitwiser-edu-functions-build": "npm run prod:build-bitwiser-edu:ssr && npm run compile-ssr-functions",
-    "prod:build-bitwiser-edu:ssr": "ng build trivia  --configuration=bitwiser-edu-production && ng build bitwiser-edu-admin  --configuration=bitwiser-edu-admin-production && ng run trivia:server",
+    "prod:build-bitwiser-edu:ssr": "ng build trivia  --configuration=bitwiser-edu-production && ng build trivia-admin  --configuration=bitwiser-edu-admin-production && ng run trivia:server",
     "prod:set-index": "firebase -P trivia-production functions:config:set environment.production=true",
     "prod:bitwiser-edu:set-index": "firebase -P bitwiser-edu-production functions:config:set environment.production=true",
     "prod:deploy-functions-app": "npm run pre-compile-app-functions && firebase deploy -P trivia-production --only functions",
