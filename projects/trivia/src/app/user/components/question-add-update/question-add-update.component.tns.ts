@@ -5,7 +5,7 @@ import {
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { MobUtils } from 'shared-library/core/services/mobile';
+import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { Question, Answer } from 'shared-library/shared/model';
@@ -92,7 +92,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   // Constructor
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
-    public utils: MobUtils,
+    public utils: Utils,
     public questionAction: QuestionActions,
     private routerExtension: RouterExtensions,
     private page: Page, private cd: ChangeDetectorRef,

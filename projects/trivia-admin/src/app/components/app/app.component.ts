@@ -66,9 +66,9 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleTheme() {
     if (this.theme === '') {
       this.theme = 'dark';
-      this.renderer.addClass(document.body, this.theme)
+      this.renderer.addClass(document.body, this.theme);
     } else {
-      this.renderer.removeClass(document.body, this.theme)
+      this.renderer.removeClass(document.body, this.theme);
       this.theme = '';
     }
   }

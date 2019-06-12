@@ -19,7 +19,7 @@ import * as util from 'tns-core-modules/utils/utils';
 import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
 import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
 import * as appversion from 'nativescript-appversion';
-import { MobUtils } from 'shared-library/core/services/mobile';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions,
-    private utils: MobUtils) {
+    private utils: Utils) {
 
     this.checkForceUpdate();
 

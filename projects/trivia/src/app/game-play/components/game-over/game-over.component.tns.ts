@@ -5,8 +5,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { getImage } from 'nativescript-screenshot';
 import * as SocialShare from "nativescript-social-share";
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { WindowRef } from 'shared-library/core/services';
-import { MobUtils } from 'shared-library/core/services/mobile';
+import { WindowRef, Utils } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AppState, appState } from '../../../store';
@@ -28,7 +27,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
   stackLayout;
   showQuesAndAnswer: Boolean = true;
   constructor(public store: Store<AppState>, public userActions: UserActions,
-    private windowRef: WindowRef, public utils: MobUtils,
+    private windowRef: WindowRef, public utils: Utils,
     private modal: ModalDialogService, private vcRef: ViewContainerRef,
     public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
     super(store, userActions, utils, cd);
