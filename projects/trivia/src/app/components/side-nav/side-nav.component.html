@@ -45,14 +45,14 @@
   <share-button [theme]="'circles-dark'" [button]="'linkedin'" [size]="4" [url]="blogUrl" [autoSetMeta]="false">
   </share-button>
 </div>
-<div class="card social-icon textcenter">
+<div *ngIf="(appStoreUrl!=='' || playStoreUrl!=='')" class="card social-icon textcenter">
   <div class="store-img-container-div">
     <span>
-      <a [href]="appStoreUrl" target="_blank"><img class="app-store-img" style="height: 50px;"
+      <a  *ngIf="appStoreUrl!==''" [href]="appStoreUrl" target="_blank"><img class="app-store-img" style="height: 50px;"
           src="/assets/images/appstore-badge.svg" /></a>
     </span>
     <span>
-      <a class="play-store-a" target="_blank" [href]='playStoreUrl'><img alt='Get it on Google Play'
+      <a *ngIf="playStoreUrl!==''" class="play-store-a" target="_blank" [href]='playStoreUrl'><img alt='Get it on Google Play'
           class="play-store-img" src='assets/images/google-play-badge.png' /></a>
     </span>
   </div>

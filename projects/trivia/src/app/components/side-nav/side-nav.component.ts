@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 
-import { User, AppStoreUrl, ApplicationSettings } from 'shared-library/shared/model';
+import { User, ApplicationSettings } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { coreState } from 'shared-library/core/store';
+import { projectDetail } from 'shared-library/environments/environment';
 
 @Component({
   selector: 'side-nav',
@@ -21,9 +22,9 @@ export class SideNavComponent implements OnDestroy {
   @Input() user: User;
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
-  blogUrl = 'https://bitwiser.io';
-  appStoreUrl = AppStoreUrl.APPSTOREURL;
-  playStoreUrl = AppStoreUrl.PLAYSTOREURL;
+  blogUrl = projectDetail.blogUrl;
+  appStoreUrl = projectDetail.appStoreUrl
+  playStoreUrl = projectDetail.playStoreUrl;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
 

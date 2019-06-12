@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { User, DashboardConstants, AppStoreUrl } from 'shared-library/shared/model';
+import { User, DashboardConstants } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
+import { projectDetail } from 'shared-library/environments/environment';
 
 @Component({
   selector: 'app-footer',
@@ -14,10 +15,10 @@ export class FooterComponent implements OnInit, OnDestroy {
   @Input() user: User;
   @Output() logoutClicked = new EventEmitter();
   @Output() loginClicked = new EventEmitter();
-  blogUrl = 'https://bitwiser.io';
+  blogUrl = projectDetail.blogUrl;
   hostname: string;
-  playstoreUrl = AppStoreUrl.PLAYSTOREURL;
-  appStoreUrl = AppStoreUrl.APPSTOREURL;
+  playstoreUrl =  projectDetail.playStoreUrl;
+  appStoreUrl = projectDetail.appStoreUrl;
   constructor(private router: Router, private windowRef: WindowRef) {
     this.hostname = `${windowRef.nativeWindow.location.protocol}//${windowRef.nativeWindow.location.hostname}/${DashboardConstants.ADMIN_ROUTE}`;
   }
