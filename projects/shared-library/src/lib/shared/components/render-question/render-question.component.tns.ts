@@ -51,7 +51,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (this.question.isRichEditor) {
+        if (this.question && this.question.isRichEditor) {
             if (changes.question) {
                 // tslint:disable-next-line:max-line-length
                 this.question.questionText = this.htmlStartTag + changes.question.currentValue.questionText + this.scriptToGetHeight + this.htmlEndTag;

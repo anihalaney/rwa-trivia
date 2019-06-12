@@ -40,8 +40,8 @@
                             <Label row="0" col="0" text="Category :" textWrap="true" class="label Roboto-Medium"
                                 fontWeight="bold"></Label>
                             <StackLayout row="0" col="1" *ngFor="let id of question.categoryIds">
-                                <!-- <Label [text]="categoriesObs[id].categoryName" textWrap="true" class="label Roboto-Regular"
-                                    padding="2" color="#616161"></Label> -->
+                                <Label [text]="categoryDictionary[id]?.categoryName" textWrap="true" class="label Roboto-Regular"
+                                    padding="2" color="#616161"></Label>
                             </StackLayout>
                         </GridLayout>
                         <GridLayout rows="*" columns="auto,auto">
@@ -62,7 +62,6 @@
                                                     'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
                             width="90" height="200">
                         </Button>
-
                         <Button row="1" *ngIf="getDisplayStatus(question.status)==='PENDING'" class="fa pending-btn"
                             horizontalAlignment="right" text="&#xf251;" textWrap="true" color="#574b4c" fontSize="16"
                             fontWeight="bold" width="90" height="25" marginTop="-55"></Button>

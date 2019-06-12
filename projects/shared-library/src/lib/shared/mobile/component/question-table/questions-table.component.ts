@@ -2,7 +2,6 @@ import {
   Component, Input, Output, EventEmitter
 } from '@angular/core';
 import { Question, QuestionStatus, Category, User, Answer } from '../../../../shared/model';
-import { Utils } from '../../../../core/services';
 import { Observable } from 'rxjs';
 
 
@@ -12,7 +11,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./questions-table.component.css']
 })
 
-export class QuestionsTableComponent {
+export class QuestionsTableComponent{
 
   QuestionStatusTexts = ['', '', '&#xf00c;', '', '&#xf251;', '&#xf00d;', '&#xf044;'];
 

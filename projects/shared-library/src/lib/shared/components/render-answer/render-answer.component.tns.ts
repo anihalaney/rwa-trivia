@@ -37,6 +37,9 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
             // tslint:disable-next-line:max-line-length
             this.answer.answerText = this.htmlStartTag + this.answer.answerText + this.scriptToGetHeight + this.htmlEndTag;
         }
+        if (!this.doPlay) {
+            this.doPlay = false;
+        }
     }
 
     onLoadFinished(event: LoadEventData) {
