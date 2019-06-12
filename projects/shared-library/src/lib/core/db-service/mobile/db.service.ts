@@ -9,7 +9,7 @@ export class TNSDbService extends DbService {
 
     constructor(private zone: NgZone,
         protected _store: Store<any>
-        ) {
+    ) {
         super();
     }
 
@@ -28,7 +28,7 @@ export class TNSDbService extends DbService {
 
     public setDoc(collectionName: string, docId: any, document: any) {
         const userCollection = firebaseApp.firestore().collection(collectionName);
-        return userCollection.doc(docId).set(document);
+        return userCollection.doc(docId).set(document, { merge: true });
     }
 
     public updateDoc(collectionName, docId, document) {
