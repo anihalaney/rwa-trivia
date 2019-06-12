@@ -21,5 +21,8 @@ export const CONFIG: IConfig = {
 export const projectDetail = {
   projectName: 'rwa-trivia',
   projectDisplayName: 'Trivia',
-  title: 'bitwiser.io: get wiser - bit by bit'
+  title: 'bitwiser.io: get wiser - bit by bit',
+  playStoreUrl: 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1',
+  appStoreUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8',
+  blogUrl: 'https://bitwiser.io'
 };

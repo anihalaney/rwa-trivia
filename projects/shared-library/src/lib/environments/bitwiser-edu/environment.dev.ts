@@ -21,5 +21,8 @@ export const CONFIG: IConfig = {
 export const projectDetail = {
     projectName: 'bitwiser-edu',
     projectDisplayName: 'Bitwiser-edu',
-    title: 'bitwiser.io: get wiser - bit by bit'
+    title: 'bitwiser.io: get wiser - bit by bit',
+    playStoreUrl: '',
+    appStoreUrl: '',
+    blogUrl: 'https://bitwiser.io'
 };
