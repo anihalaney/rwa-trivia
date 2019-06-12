@@ -163,7 +163,9 @@ export enum GeneralConstants {
     BIT_WISER_DEV_STORAGE_BUCKET_NAME = 'rwa-trivia-dev-e57fc.appspot.com',
     BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com',
     GAME_EXPIRED_HOURS = 32, // hr
-    NAME = 'name'
+    NAME = 'name',
+    DISPLAY_NAME = 'displayName',
+    USER_ID = 'userId'
 }
 
 export enum SocialShareConstants {
@@ -253,7 +255,8 @@ export enum ResponseMessagesConstants {
     ACHIEVEMENT_PROPERTY_NOT_FOUND = 'Achievement property not found',
     ACHIEVEMENT_NAME_NOT_FOUND = 'Achievement name not found',
     DISPLAY_ORDER_NOT_FOUND = 'Display order not found',
-    ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully'
+    ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully',
+    DISPLAY_NAME_NOT_FOUND = 'displayName is not added in request',
 }
 
 export enum FriendConstants {
@@ -352,7 +355,9 @@ export enum RoutesConstants {
     EXTENDEDINFO = 'extendedInfo',
     ACCOUNTS = 'accounts',
     ACHIEVEMENT = 'achievement',
-    RULES = 'rules'
+    RULES = 'rules',
+    DISPLAY_NAME = 'display-name',
+    DISPLAY_DASH_NAME = 'displayName'
 }
 
 export enum AppStoreUrl {

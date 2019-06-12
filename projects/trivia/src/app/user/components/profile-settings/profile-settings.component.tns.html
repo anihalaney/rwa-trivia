@@ -1,7 +1,7 @@
 <ns-action-bar title="Profile" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout iosOverflowSafeArea="false">
-  <ActivityIndicator visibility="{{ loaderBusy ? 'visible' : 'collapsed' }}" [busy]="loaderBusy" width="100" height="100" marginTop="225"
-    class="activity-indicator"></ActivityIndicator>
+  <ActivityIndicator visibility="{{ loaderBusy ? 'visible' : 'collapsed' }}" [busy]="loaderBusy" width="100"
+    height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
   <ScrollView visibility="{{ !loaderBusy ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
     <StackLayout *ngIf="userForm" [formGroup]="userForm" iosOverflowSafeArea="false">
       <StackLayout (tap)="hideKeyboard()" class="profile-settings Roboto-Regular" iosOverflowSafeArea="false">
@@ -32,8 +32,11 @@
                   android:marginRight="2" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
                   text="&#xf14a;"></Label>
               </GridLayout>
-              <Label *ngIf="userForm.controls.displayName.errors && !userForm.controls.displayName.pristine"
+              <Label
+                *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
                 class=" error" textWrap="true" text="Display Name is required!"></Label>
+              <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
+                class=" error" textWrap="true" text="Display Name is already taken by other user"></Label>
               <GridLayout row="*" col="*, auto" orientation="horizontal" margin="0 20">
                 <TextField #textField hint="{{userType ===  0 ? 'Location' : 'Undefined'}}" formControlName="location"
                   class="input">
@@ -62,8 +65,8 @@
               iosOverflowSafeArea="false">
 
               <StackLayout paddingTop="30" *ngIf="userType ===  0">
-                <Label stlRippleEffect *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()" horizontalAlignment="right"
-                  class="edit-profile-btn" text="Edit Profile"></Label>
+                <Label stlRippleEffect *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()"
+                  horizontalAlignment="right" class="edit-profile-btn" text="Edit Profile"></Label>
               </StackLayout>
 
               <StackLayout stlRippleEffect (rippleTap)="sendFriendRequest()" paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && !gamePlayedAgainst">
@@ -152,15 +155,15 @@
               </StackLayout>
 
               <StackLayout [ngClass]="{'mt-30': userType !== 0 }" class="list-view social-section"
-                iosOverflowSafeArea="false"
-                *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
+                iosOverflowSafeArea="false" *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
                 <StackLayout class="grid-label p-15" iosOverflowSafeArea="false">
                   <Label textWrap="true" text="SOCIAL PROFILE"></Label>
                 </StackLayout>
-                <StackLayout class="input-field"
-                  *ngFor="let profile of socialProfileSettings; let i=index"
+                <StackLayout class="input-field" *ngFor="let profile of socialProfileSettings; let i=index"
                   iosOverflowSafeArea="false">
-                  <GridLayout *ngIf="userType === 0 && profile.enable && ((isEnableEditProfile && i <= socialProfileShowLimit) || (!isEnableEditProfile))" rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
+                  <GridLayout
+                    *ngIf="userType === 0 && profile.enable && ((isEnableEditProfile && i <= socialProfileShowLimit) || (!isEnableEditProfile))"
+                    rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
                     <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
                     <StackLayout class="text-box" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
                       <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
@@ -171,7 +174,8 @@
                     <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
                       text="Please enter valid profile id" row="2" col="0" textWrap="true"></Label>
                   </GridLayout>
-                  <GridLayout *ngIf="userType !== 0 && profile.enable" rows="auto,*" columns="*" iosOverflowSafeArea="false">
+                  <GridLayout *ngIf="userType !== 0 && profile.enable" rows="auto,*" columns="*"
+                    iosOverflowSafeArea="false">
                     <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
                     <StackLayout marginLeft="14" marginTop="8" row="1" col="0" orientation="horizontal"
                       iosOverflowSafeArea="false">
@@ -182,8 +186,8 @@
                   </GridLayout>
                 </StackLayout>
                 <Button class="p-15 showMore" marginTop="24" horizontalAlignment="center"
-                  *ngIf="(enableSocialProfile > (socialProfileShowLimit + 1)) && isEnableEditProfile" text="Show more" stlRippleEffect
-                  (tap)="showMoreSocialProfile()"></Button>
+                  *ngIf="(enableSocialProfile > (socialProfileShowLimit + 1)) && isEnableEditProfile" text="Show more"
+                  stlRippleEffect (tap)="showMoreSocialProfile()"></Button>
               </StackLayout>
 
               <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons"

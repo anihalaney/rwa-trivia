@@ -3,13 +3,14 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
-import { Observable, combineLatest } from 'rxjs';
-import { map, skipWhile, flatMap, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { flatMap, map, skipWhile, switchMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
-import { UserActions, coreState } from 'shared-library/core/store';
+import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
-import { Subject } from 'rxjs';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+import * as userActions from '../../store/actions';
+
 export enum UserType {
     userProfile,
     loggedInOtherUserProfile,
@@ -361,6 +362,10 @@ export class ProfileSettings {
             this.userForm.get(field).setValidators([]);
             this.userForm.updateValueAndValidity();
         }
+    }
+
+    checkDisplayName(displayName: string) {
+        this.store.dispatch(new userActions.CheckDisplayName(displayName));
     }
 
     sendFriendRequest() {

@@ -32,7 +32,12 @@ class UserRoutes {
 
         //  'extendedInfo/:userId/:loginUserId'
         this.userRoutes.get(`/${RoutesConstants.EXTENDEDINFO}/:${this.UID}`,
-        UserController.getUserProfileById);
+            UserController.getUserProfileById);
+
+        //  '/check/display-name/:displayName'
+        this.userRoutes.get(
+            `/${RoutesConstants.CHECK}/${RoutesConstants.DISPLAY_NAME}/:${RoutesConstants.DISPLAY_DASH_NAME}`,
+            AuthMiddleware.authorizedOnly, UserController.checkDisplayName);
 
     }
 }

@@ -3,8 +3,8 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { switchMap, map, filter, take, mergeMap } from 'rxjs/operators';
 import { empty } from 'rxjs';
-import { QuestionService } from 'shared-library/core/services';
-import { Question, RouterStateUrl } from 'shared-library/shared/model';
+import { QuestionService, UserService } from 'shared-library/core/services';
+import { Question, RouterStateUrl, User } from 'shared-library/shared/model';
 import { UserActionTypes } from '../actions';
 import * as userActions from '../actions/user.actions';
 import { AppState } from '../../../store';
@@ -72,9 +72,22 @@ export class UserEffects {
             })
         );
 
+
+    @Effect()
+    // check display Name
+    checkDisplayName$ = this.actions$
+        .pipe(ofType(UserActionTypes.CHECK_DISPLAY_NAME))
+        .pipe(
+            switchMap((action: userActions.CheckDisplayName) =>
+                this.userService.checkDisplayName(action.payload).pipe(
+                    map((result: any) => new userActions.CheckDisplayNameSuccess(result))
+                )
+            ));
+
     constructor(
         private actions$: Actions,
         private questionService: QuestionService,
+        private userService: UserService,
         private store: Store<AppState>,
     ) {
 
