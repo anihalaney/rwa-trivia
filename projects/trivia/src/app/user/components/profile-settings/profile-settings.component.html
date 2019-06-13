@@ -74,6 +74,7 @@
                     *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
                     (click)="onSubmit(true, 'displayName')"></span>
                 </div>
+
                 <p *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
                   class="error display-name-error">
                   Display Name is required!
@@ -291,6 +292,18 @@
                         <div class="savebox textcenter" *ngIf="isEnableEditProfile">
                           <button type="button" class="btn save" (click)="onSubmit()">Save Profile</button>
                           <!-- <button type="button" class="btn margin-top-10" (click)="resetUserProfile()">Cancel</button> -->
+                        </div>
+                      </div>
+                      <div *ngIf="loggedInUser?.userId && userType === 1" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
+                        <div class="savebox textcenter">
+                          <div *ngIf="gamePlayedAgainst" class="friends-div">
+                            <img src="assets/images/friends.png" alt="Friends" />
+                            <span class="is-friend-span">Friends</span>
+                          </div>
+                          <div *ngIf="!gamePlayedAgainst" (click)="sendFriendRequest()" class="friends-div">
+                            <img src="assets/images/send-friend-request.png" alt="Friends" />
+                            <span class="send-friend-request-span">Add Friend</span>
+                          </div>
                         </div>
                       </div>
                     </div>

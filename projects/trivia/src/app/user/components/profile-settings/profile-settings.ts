@@ -156,7 +156,7 @@ export class ProfileSettings {
             skipWhile(userDict => !userDict),
             map(userDict => {
                 this.userDict = userDict;
-                if ( user && !this.loggedInUser ) {
+                if (user && !this.loggedInUser) {
                     this.loggedInUser = user;
                     this.store.dispatch(this.userAction.loadOtherUserFriendExtendedInfo(this.userId));
                 } else if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
@@ -364,13 +364,13 @@ export class ProfileSettings {
         }
     }
 
-    checkDisplayName(displayName: string) {
-        this.store.dispatch(new userActions.CheckDisplayName(displayName));
-    }
-
     sendFriendRequest() {
         const inviteeUserId = this.user.userId;
         this.store.dispatch(this.userAction.addUserInvitation(
             { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));
     }
+    checkDisplayName(displayName: string) {
+        this.store.dispatch(new userActions.CheckDisplayName(displayName));
+    }
+
 }

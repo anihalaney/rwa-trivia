@@ -10,7 +10,7 @@ export class UtilsCore {
 
   constructor(
     @Inject(PLATFORM_ID) public platformId: Object,
-    public sanitizer: DomSanitizer
+    public sanitizer?: DomSanitizer
   ) {
   }
 
@@ -44,9 +44,13 @@ export class UtilsCore {
   getImageUrl(user: User, width: Number, height: Number, size: string): any {
 
     if (user && user.profilePicture && user.profilePicture !== '') {
-      return this.sanitizer.bypassSecurityTrustUrl(
-        `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`
-      );
+      if (this.sanitizer) {
+        return this.sanitizer.bypassSecurityTrustUrl(
+          `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`
+        );
+      } else {
+        return `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
+      }
     } else {
       if (isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false) {
         return `~/assets/images/avatar-${size}.png`;
