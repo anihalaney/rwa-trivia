@@ -3,15 +3,18 @@ import { Injectable } from '@angular/core';
 import { combineLatest, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import {
-    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User
+    friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User, RoutesConstants
 } from './../../../lib/shared/model';
 import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
-import { Country } from '../components/countryList/model/country.model';
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
+import { BlockScrollStrategy } from '@angular/cdk/overlay';
 
 @Injectable()
 export class UserService {
+
+    private RC = RoutesConstants;
 
     constructor(
         private http: HttpClient,
@@ -21,22 +24,25 @@ export class UserService {
 
     loadUserProfile(user: User): Observable<User> {
 
-    return this.dbService.valueChanges('users', user.userId)
-    .pipe(map(u => {
-        if (u) {
-            const userInfo = user;
-            user = u;
-            user.idToken = userInfo.idToken;
-            user.authState = userInfo.authState;
-        } else {
-            const dbUser = Object.assign({}, user); // object to be saved
-            delete dbUser.authState;
-            delete dbUser.profilePictureUrl;
-            this.dbService.setDoc('users', dbUser.userId, dbUser);
-        }
-        return user;
-    }),
-        mergeMap(u => this.getUserProfileImage(u)));
+        return this.dbService.valueChanges('users', user.userId)
+            .pipe(map(u => {
+                if (u) {
+                    const userInfo = user;
+                    user = u;
+                    user.idToken = userInfo.idToken;
+                    user.authState = userInfo.authState;
+                } else {
+                    const dbUser = Object.assign({}, user); // object to be saved
+                    delete dbUser.authState;
+                    delete dbUser.profilePictureUrl;
+
+                    console.log('db User ====> ', dbUser);
+
+                    this.dbService.setDoc('users', dbUser.userId, dbUser);
+                }
+                return user;
+            }),
+                mergeMap(u => this.getUserProfileImage(u)));
     }
 
     loadAccounts(user): Observable<any> {
@@ -44,7 +50,7 @@ export class UserService {
     }
 
     saveUserProfile(user: User): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/user/profile`;
+        const url = `${CONFIG.functionsUrl}/user/profile`;
         user.roles = (!user.roles) ? {} : user.roles;
         const dbUser = Object.assign({}, user); // object to be saved
         delete dbUser.authState;
@@ -62,12 +68,12 @@ export class UserService {
     }
 
     loadOtherUserProfile(userId: string): Observable<User> {
-        const url = `${CONFIG.functionsUrl}/app/user/${userId}`;
+        const url = `${CONFIG.functionsUrl}/user/${userId}`;
         return this.http.get<User>(url);
     }
 
     loadOtherUserProfileWithExtendedInfo(userId: string): Observable<User> {
-        const url = `${CONFIG.functionsUrl}/app/user/extendedInfo/${userId}`;
+        const url = `${CONFIG.functionsUrl}/user/extendedInfo/${userId}`;
         return this.http.get<User>(url);
     }
 
@@ -87,12 +93,12 @@ export class UserService {
     }
 
     saveUserInvitations(obj: any): Observable<string> {
-        const url = `${CONFIG.functionsUrl}/app/friend/invitation`;
+        const url = `${CONFIG.functionsUrl}/friend/invitation`;
         return this.http.post<any>(url, obj);
     }
 
     checkInvitationToken(obj: any): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/app/friend`;
+        const url = `${CONFIG.functionsUrl}/friend`;
         return this.http.post<any>(url, obj);
     }
 
@@ -149,7 +155,7 @@ export class UserService {
     }
 
     rejectGameInvitation(gameId: string) {
-        return this.http.put(`${CONFIG.functionsUrl}/app/game/${gameId}`,
+        return this.http.put(`${CONFIG.functionsUrl}/game/${gameId}`,
             {
                 operation: GameOperations.REJECT_GAME
             });
@@ -161,7 +167,13 @@ export class UserService {
     }
 
     addUserLives(userId: string) {
-        const url = `${CONFIG.functionsUrl}/app/user/update-lives`;
+        const url = `${CONFIG.functionsUrl}/user/update-lives`;
         return this.http.post<any>(url, { userId: userId });
     }
+
+    checkDisplayName(displayName: string): Observable<any> {
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.CHECK}/${this.RC.DISPLAY_NAME}/${displayName}`;
+        return this.http.get<any>(url);
+    }
+
 }

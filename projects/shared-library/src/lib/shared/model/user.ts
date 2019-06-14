@@ -1,6 +1,7 @@
 import * as firebase from 'firebase/app';
 import { GameOptions } from './game-options';
 import { Account } from './account';
+import { FriendsMetadata } from './friends';
 export class User {
   id?: string;
   userId: string;
@@ -31,6 +32,7 @@ export class User {
   lastGamePlayOption?: GameOptions;
   account?: Account;
   achievements: string[];
+  gamePlayed: Array<{ [key: string]: FriendsMetadata }>;
 
   constructor(authState?: firebase.User & { name: string }) {
     if (authState) {
@@ -38,12 +40,9 @@ export class User {
       this.userId = authState.uid;
       this.email = authState.providerData ? authState.providerData[0].email : authState.email;
       if (authState.providerData && authState.providerData[0].displayName) {
-        this.displayName = authState.providerData[0].displayName;
+        this.name = authState.providerData[0].displayName;
       } else if (authState.name) {
-        this.displayName = authState.name;
-      } else {
-        this.displayName = this.email ? this.email.split('@')[0] + new Date().getTime() :
-        `${this.authState.phoneNumber}${new Date().getTime()}`;
+        this.name = authState.name;
       }
     }
   }

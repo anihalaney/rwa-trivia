@@ -12,7 +12,7 @@ export class AchievementService {
   }
 
   getAchievements(): Observable<AchievementRule[]> {
-    const url = `${CONFIG.functionsUrl}/app/achievement`;
+    const url = `${CONFIG.functionsUrl}/achievement`;
     return this.http.get<AchievementRule[]>(url);
   }
 

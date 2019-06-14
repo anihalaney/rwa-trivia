@@ -1,9 +1,10 @@
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 import { IConfig } from 'shared-library/environments/iconfig';
+import { appConstants } from 'shared-library/shared/model';
 
 export const environment = {
-  production: false
+  production: true
 };
 
 export const CONFIG: IConfig = {
@@ -13,16 +14,16 @@ export const CONFIG: IConfig = {
     databaseURL: 'https://bitwiser-edu.firebaseio.com',
     projectId: 'bitwiser-edu',
     storageBucket: 'bitwiser-edu.appspot.com',
-    messagingSenderId: '704157888306'
+    messagingSenderId: '704157888306',
+    googlePlayUrl: '',
+    iTunesUrl: ''
   },
-  'functionsUrl': 'https://bitwiser-edu.firebaseapp.com'
+  'functionsUrl': `https://bitwiser-edu.firebaseapp.com/${appConstants.API_VERSION}`
   };
 
 export const projectDetail = {
     projectName: 'bitwiser-edu',
     projectDisplayName: 'Bitwiser-edu',
     title: 'bitwiser.io: get wiser - bit by bit',
-    playStoreUrl: '',
-    appStoreUrl: '',
     blogUrl: 'https://bitwiser.io'
 };

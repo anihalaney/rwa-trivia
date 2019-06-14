@@ -3,12 +3,13 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
-import { Observable, combineLatest } from 'rxjs';
-import { map, skipWhile, flatMap, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable, Subject } from 'rxjs';
+import { flatMap, map, skipWhile, switchMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+import * as userActions from '../../store/actions';
 
 export enum UserType {
     userProfile,
@@ -17,6 +18,9 @@ export enum UserType {
 }
 
 export class ProfileSettings {
+    gamePlayedChangeSubject = new Subject();
+    gamePlayedChangeObservable = this.gamePlayedChangeSubject.asObservable();
+
     @ViewChildren('myInput') inputEl: QueryList<any>;
     // Properties
     user: User;
@@ -62,7 +66,8 @@ export class ProfileSettings {
         displayName: false,
         location: false
     };
-
+    loggedInUser: User;
+    gamePlayedAgainst: any;
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
 
@@ -72,7 +77,6 @@ export class ProfileSettings {
         public utils: Utils,
         public cd: ChangeDetectorRef,
         public route: ActivatedRoute) {
-
         this.toggleLoader(true);
         this.fb = formBuilder;
         this.tagsObs = this.store.select(getTags);
@@ -90,7 +94,7 @@ export class ProfileSettings {
                         return this.initializeUserProfile();
                     } else {
                         this.userType = UserType.loggedInOtherUserProfile;
-                        return this.initializeOtherUserProfile();
+                        return this.initializeOtherUserProfile(user);
                     }
                 })
             ).subscribe());
@@ -146,18 +150,25 @@ export class ProfileSettings {
         }));
     }
 
-    initializeOtherUserProfile() {
+    initializeOtherUserProfile(user) {
         return this.store.select(appState.coreState).pipe(
             select(s => s.userDict),
             skipWhile(userDict => !userDict),
             map(userDict => {
                 this.userDict = userDict;
-                if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
+                if (user && !this.loggedInUser) {
+                    this.loggedInUser = user;
+                    this.store.dispatch(this.userAction.loadOtherUserFriendExtendedInfo(this.userId));
+                } else if (!this.userDict[this.userId] || !this.userDict[this.userId].account) {
                     this.store.dispatch(this.userAction.loadOtherUserExtendedInfo(this.userId));
                 } else {
                     this.user = this.userDict[this.userId];
                     this.createForm(this.user);
                     this.account = this.user.account;
+                    this.gamePlayedAgainst = this.user.gamePlayed;
+                    if (this.gamePlayedAgainst && this.loggedInUser && this.loggedInUser.userId && this.userType === 1) {
+                        this.gamePlayedChangeSubject.next(true);
+                    }
                     this.userProfileImageUrl = this.getImageUrl(this.user);
                     this.profileImage.image = this.userProfileImageUrl;
                     this.toggleLoader(false);
@@ -352,4 +363,14 @@ export class ProfileSettings {
             this.userForm.updateValueAndValidity();
         }
     }
+
+    sendFriendRequest() {
+        const inviteeUserId = this.user.userId;
+        this.store.dispatch(this.userAction.addUserInvitation(
+            { userId: this.loggedInUser.userId, inviteeUserId: inviteeUserId }));
+    }
+    checkDisplayName(displayName: string) {
+        this.store.dispatch(new userActions.CheckDisplayName(displayName));
+    }
+
 }

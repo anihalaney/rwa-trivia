@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { ActionWithPayload } from './action-with-payload';
 import { User, Game, Friends, Invitation } from '../../../shared/model';
-import { Country } from 'shared-library/core/components/countryList/model/country.model';
+import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
 @Injectable()
 export class UserActions {
@@ -73,6 +73,13 @@ export class UserActions {
     };
   }
 
+  static LOAD_OTHER_USER_FRIEND_EXTEDED_INFO = 'LOAD_OTHER_USER_FRIEND_EXTEDED_INFO';
+  loadOtherUserFriendExtendedInfo(userId: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_OTHER_USER_FRIEND_EXTEDED_INFO,
+      payload: userId
+    };
+  }
 
   static LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS = 'LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS';
   loadOtherUserProfileWithExtendedInfoSuccess(user: User): ActionWithPayload<User> {

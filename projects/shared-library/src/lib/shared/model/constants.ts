@@ -30,7 +30,8 @@ export enum UserControllerConstants {
 }
 
 export enum appConstants {
-    API_PREFIX = 'app'
+    API_PREFIX = 'app',
+    API_VERSION = 'v1'
 }
 
 export enum interceptorConstants {
@@ -160,7 +161,9 @@ export enum GeneralConstants {
     TRUE = 'true',
     Error_Message = 'Error : ',
     GAME_EXPIRED_HOURS = 32, // hr
-    NAME = 'name'
+    NAME = 'name',
+    DISPLAY_NAME = 'displayName',
+    USER_ID = 'userId'
 }
 
 export enum SocialShareConstants {
@@ -250,7 +253,8 @@ export enum ResponseMessagesConstants {
     ACHIEVEMENT_PROPERTY_NOT_FOUND = 'Achievement property not found',
     ACHIEVEMENT_NAME_NOT_FOUND = 'Achievement name not found',
     DISPLAY_ORDER_NOT_FOUND = 'Display order not found',
-    ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully'
+    ACHIEVEMENT_RULES_ADDED_SUCCESSFULLY = 'Achievement rules added successfully',
+    DISPLAY_NAME_NOT_FOUND = 'displayName is not added in request',
 }
 
 export enum FriendConstants {
@@ -349,7 +353,9 @@ export enum RoutesConstants {
     EXTENDEDINFO = 'extendedInfo',
     ACCOUNTS = 'accounts',
     ACHIEVEMENT = 'achievement',
-    RULES = 'rules'
+    RULES = 'rules',
+    DISPLAY_NAME = 'display-name',
+    DISPLAY_DASH_NAME = 'displayName'
 }
 
 export enum TermsAndPrivacyUrlConstant {

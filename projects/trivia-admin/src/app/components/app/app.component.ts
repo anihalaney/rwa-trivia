@@ -1,16 +1,15 @@
-import { Component, OnInit, OnDestroy, Renderer2, Inject } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { Store, select } from '@ngrx/store';
-import { map, skip, take, filter } from 'rxjs/operators';
-import { AppState, appState } from '../../store';
-import { AuthenticationProvider } from 'shared-library/core/auth';
-import { User } from 'shared-library/shared/model';
 import { Location } from '@angular/common';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Title } from '@angular/platform-browser';
 import { projectDetail } from 'shared-library/environments/environment';
 import { DOCUMENT } from '@angular/platform-browser';
-
+import { skip, take } from 'rxjs/operators';
+import { AuthenticationProvider } from 'shared-library/core/auth';
+import { User } from 'shared-library/shared/model';
+import { AppState, appState } from '../../store';
 
 @Component({
   selector: 'app-root',
@@ -75,9 +74,9 @@ export class AppComponent implements OnInit, OnDestroy {
   toggleTheme() {
     if (this.theme === '') {
       this.theme = 'dark';
-      this.renderer.addClass(document.body, this.theme)
+      this.renderer.addClass(document.body, this.theme);
     } else {
-      this.renderer.removeClass(document.body, this.theme)
+      this.renderer.removeClass(document.body, this.theme);
       this.theme = '';
     }
   }

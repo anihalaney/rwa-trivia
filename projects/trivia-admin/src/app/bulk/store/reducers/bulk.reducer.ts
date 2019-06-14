@@ -32,7 +32,7 @@ export function bulkUploadPublishedQuestions(state: any = [], action: BulkAction
         default:
             return state;
     }
-};
+}
 
 
 // file UnpublishedQuestions by BulkUpload Id
@@ -43,7 +43,7 @@ export function bulkUploadUnpublishedQuestions(state: any = [], action: BulkActi
         default:
             return state;
     }
-};
+}
 
 // for get BulkUploadFileUrl
 export function bulkUploadFileUrl(state: string, action: BulkActions): string {
@@ -64,7 +64,7 @@ export function questionSaveStatus(state: any = 'NONE', action: BulkActions): st
         default:
             return null;
     }
-};
+}
 
 // archive bulk upload Status
 export function bulkUploadArchiveStatus(state: any = 'NONE', action: BulkActions): string {
@@ -74,7 +74,7 @@ export function bulkUploadArchiveStatus(state: any = 'NONE', action: BulkActions
         default:
             return null;
     }
-};
+}
 
 // for get single BulkUploadFileInfo Object
 export function bulkUploadFileInfo(state: any, action: BulkActions): BulkUploadFileInfo {
@@ -94,7 +94,7 @@ export function getArchiveToggleState(state: any = null, action: BulkActions): b
         default:
             return state;
     }
-};
+}
 
 // Get Archive Toggle stat
 export function getArchiveList(state = [], action: BulkActions): BulkUploadFileInfo[] {
@@ -104,4 +104,4 @@ export function getArchiveList(state = [], action: BulkActions): BulkUploadFileI
         default:
             return state;
     }
-};
+}

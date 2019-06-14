@@ -3,6 +3,7 @@ import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 import { AccountService } from './account.service';
 import { AppSettings } from '../services/app-settings.service';
+import { FriendService } from './friend.service';
 export class UserService {
 
     private static fireStoreClient: any = admin.firestore();
@@ -70,7 +71,7 @@ export class UserService {
      * getUserProfile
      * return user
     */
-    static async getUserProfile(userId: string, extendedInfo = false): Promise<any> {
+    static async getUserProfile(userId: string, extendedInfo = false, loginUserId = ''): Promise<any> {
         try {
             const dbUser: User = await UserService.getUserById(userId);
             const user = new User();
@@ -78,6 +79,7 @@ export class UserService {
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;
+            let gamePlayed;
             if (extendedInfo) {
                 user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];
                 user.tags = (dbUser && dbUser.tags) ? dbUser.tags : [];
@@ -100,8 +102,19 @@ export class UserService {
                 user.account.wins = (account && account.wins) ? account.wins : 0;
                 user.account.losses = (account && account.losses) ? account.losses : 0;
                 user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
+
+                if (loginUserId && loginUserId !== '') {
+                    const friendList = await FriendService.getFriendByInvitee(loginUserId);
+                    if (friendList && friendList.myFriends) {
+                        const game = friendList.myFriends.filter(element => element[userId] ? true : false);
+                        if (game[0] && game[0][userId]) {
+                            gamePlayed = game[0][userId];
+                        }
+                    }
+                }
+
             }
-            return user;
+            return { ...user, gamePlayed};
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -218,6 +231,53 @@ export class UserService {
         }
         try {
             return await Promise.all(migrationPromises);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    /**
+     * getUsersDisplayName
+     * return users
+     */
+    static async getUsersByDisplayName(displayName: string): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(
+                await UserService.fireStoreClient
+                    .collection(CollectionConstants.USERS)
+                    .where(GeneralConstants.DISPLAY_NAME, GeneralConstants.DOUBLE_EQUAL, displayName)
+                    .get()
+            );
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+   * add default number of lives into account
+   * return ref
+   */
+    static async setUserDisplayName(user: any): Promise<any> {
+        try {
+
+            const appSetting = await AppSettings.Instance.loadAppSettings();
+
+            let displayName = user.displayName ? user.displayName : '';
+
+            if (appSetting.default_names.length > 0) {
+                const randomNumber = Math.floor(Math.random() * Math.floor(appSetting.default_names.length));
+                displayName = appSetting.default_names[randomNumber] + appSetting.user_display_name_value;
+            }
+
+            user['displayName'] = displayName;
+
+            await UserService.updateUser({ ...user });
+
+            AppSettings.Instance.updateUserDisplayNameValue(appSetting.user_display_name_value + 1);
+
+            return user;
+
         } catch (error) {
             return Utils.throwError(error);
         }

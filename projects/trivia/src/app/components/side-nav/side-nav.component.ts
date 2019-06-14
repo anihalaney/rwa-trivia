@@ -8,7 +8,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { coreState } from 'shared-library/core/store';
-import { projectDetail } from 'shared-library/environments/environment';
+import { projectDetail, CONFIG } from 'shared-library/environments/environment';
 
 @Component({
   selector: 'side-nav',
@@ -23,8 +23,8 @@ export class SideNavComponent implements OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   blogUrl = projectDetail.blogUrl;
-  appStoreUrl = projectDetail.appStoreUrl
-  playStoreUrl = projectDetail.playStoreUrl;
+  playstoreUrl =  CONFIG.firebaseConfig.googlePlayUrl;
+  appStoreUrl = CONFIG.firebaseConfig.iTunesUrl;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
 

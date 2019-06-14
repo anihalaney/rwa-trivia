@@ -212,3 +212,10 @@
     border-bottom-width:1;
     border-color:#c8c8c8;
 }
+
+.is-friend-span{
+    color: #71b02f;
+  }
+  .send-friend-request-span{
+    color: #f50057;
+  }

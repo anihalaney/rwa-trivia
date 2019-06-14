@@ -9,7 +9,11 @@ export class ApplicationSettings {
     tokens: Tokens;
     earn_bytes_on_question_contribute: number;
     display_achievements: boolean;
+    android_version: number;
+    ios_version: number;
     phone_authentication: boolean;
+    default_names: Array<string>;
+    user_display_name_value: number;
 }
 
 export class TimerLoader {

@@ -1,11 +1,11 @@
-import { Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { 
+  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
-import { Utils } from 'shared-library/core/services';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
@@ -18,6 +18,7 @@ import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ListViewEventData } from 'nativescript-ui-listview';
 import { Page } from 'tns-core-modules/ui/page/page';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'new-game',
@@ -161,7 +162,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   addCustomTag() {
-    this.selectedTags.push(this.customTag);
+    if (this.customTag && this.customTag !== '' &&
+      this.selectedTags.filter((res) => res.toLowerCase() === this.customTag.toLowerCase()).length === 0) {
+      this.selectedTags.push(this.customTag);
+    }
     this.customTag = '';
     this.autocomplete.autoCompleteTextView.resetAutoComplete();
   }
@@ -173,7 +177,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       && !this.friendUserId) {
       if (!this.friendUserId) {
         this.errMsg = 'Please Select Friend';
-        this.utils.showMessage("error", this.errMsg);
+        this.utils.showMessage('error', this.errMsg);
       }
       return;
     }
@@ -253,7 +257,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   redirectToDashboard(msg) {
     this.router.navigate(['/dashboard']);
-    this.utils.showMessage("success", msg);
+    this.utils.showMessage('success', msg);
   }
 
   get categoryListHeight() {

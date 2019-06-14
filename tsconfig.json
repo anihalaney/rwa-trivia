@@ -25,6 +25,9 @@
         "paths": {
             "shared-library/*": [
                 "./projects/shared-library/src/lib/*"
+            ],
+            "core-js/es7/reflect": [
+                "node_modules/core-js/proposals/reflect-metadata"
             ]
         },
     },

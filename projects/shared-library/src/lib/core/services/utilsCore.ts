@@ -3,11 +3,15 @@ import { Inject, PLATFORM_ID } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
 import { Answer, User } from '../../shared/model';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+
 
 export class UtilsCore {
 
   constructor(
-    @Inject(PLATFORM_ID) public platformId: Object) {
+    @Inject(PLATFORM_ID) public platformId: Object,
+    public sanitizer?: DomSanitizer
+  ) {
   }
 
   regExpEscape(s: string) {
@@ -37,10 +41,16 @@ export class UtilsCore {
     return new Blob([new Uint8Array(array)]);
   }
 
-  getImageUrl(user: User, width: Number, height: Number, size: string) {
+  getImageUrl(user: User, width: Number, height: Number, size: string): any {
 
     if (user && user.profilePicture && user.profilePicture !== '') {
-      return `${CONFIG.functionsUrl}/app/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
+      if (this.sanitizer) {
+        return this.sanitizer.bypassSecurityTrustUrl(
+          `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`
+        );
+      } else {
+        return `${CONFIG.functionsUrl}/user/profile/${user.userId}/${user.profilePicture}/${width}/${height}`;
+      }
     } else {
       if (isPlatformBrowser(this.platformId) === false && isPlatformServer(this.platformId) === false) {
         return `~/assets/images/avatar-${size}.png`;

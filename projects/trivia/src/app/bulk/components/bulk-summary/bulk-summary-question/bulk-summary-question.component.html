@@ -13,7 +13,9 @@
 
     <ng-container cdkColumnDef="category">
       <mat-header-cell *cdkHeaderCellDef>Category</mat-header-cell>
-      <mat-cell class="col-chkbox bulk-summary-question-table-cell" *cdkCellDef="let row">{{categoryDict[row.categoryId].categoryName}}</mat-cell>
+      <mat-cell class="col-chkbox bulk-summary-question-table-cell" *cdkCellDef="let row">
+        {{categoryDict[row.categoryId].categoryName}}
+      </mat-cell>
     </ng-container>
 
     <ng-container cdkColumnDef="primaryTag">
@@ -47,9 +49,11 @@
       </mat-cell>
     </ng-container>
 
-    <mat-header-row class="bulk-summary-question-header" *cdkHeaderRowDef="['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
+    <mat-header-row class="bulk-summary-question-header"
+      *cdkHeaderRowDef="['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download']">
     </mat-header-row>
-    <mat-row class="row-question" *cdkRowDef="let row; columns: ['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download'];">
+    <mat-row class="row-question"
+      *cdkRowDef="let row; columns: ['fileName', 'category', 'primaryTag', 'countQuestionsUploaded', 'countQuestionsApproved', 'countQuestionsRejected', 'status', 'download'];">
     </mat-row>
   </mat-table>
 
@@ -58,15 +62,17 @@
   <mat-card-title>Questions</mat-card-title>
   <mat-tab-group>
     <mat-tab label="Published">
-      <question-table *ngIf="publishedCount != 0" [showSort]="false" [showPaginator]="true" [showButtons]="PUBLISHED_SHOW_BUTTON_STATE"
-        [questions]="publishedQuestions" [totalCount]="publishedCount" [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false"
-        [clientSidePagination]="true">
+      <question-table *ngIf="publishedCount != 0" [showSort]="false" [showPaginator]="true"
+        [showButtons]="PUBLISHED_SHOW_BUTTON_STATE" [questions]="publishedQuestions" [totalCount]="publishedCount"
+        [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false" [clientSidePagination]="true">
       </question-table>
     </mat-tab>
     <mat-tab label="Unpublished">
-      <question-table *ngIf="unPublishedCount != 0" [bulkUploadFileInfo]="bulkUploadFileInfo" [showSort]="false" [showPaginator]="true"
-        [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions" [totalCount]="unPublishedCount"
-        [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false" [clientSidePagination]="true">
+      <question-table *ngIf="unPublishedCount != 0" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs"
+        [bulkUploadFileInfo]="bulkUploadFileInfo" [showSort]="false" [showPaginator]="true"
+        [showButtons]="UNPUBLISHED_SHOW_BUTTON_STATE && isAdminUrl" [questions]="unPublishedQuestions"
+        [totalCount]="unPublishedCount" [categoryDictionary]="categoryDictObs| async" [showApproveButton]="false"
+        [clientSidePagination]="true" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)">
       </question-table>
     </mat-tab>
   </mat-tab-group>

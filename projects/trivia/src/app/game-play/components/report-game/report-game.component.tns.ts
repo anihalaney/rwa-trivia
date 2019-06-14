@@ -1,4 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import {
+    Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef
+} from '@angular/core';
 import {
     ReportQuestion, User, Game, QuestionMetadata, Category, Question
 } from 'shared-library/shared/model';
@@ -69,11 +71,11 @@ export class ReportGameComponent implements OnInit, OnDestroy {
     saveReportQuestion() {
         this.hideKeyboard();
         if (this.selectedOption == null) {
-            this.utils.showMessage("error", 'Select issue!');
+            this.utils.showMessage('error', 'Select issue!');
             return;
         }
         if (this.otherReason === null && this.selectedOption === 'Other') {
-            this.utils.showMessage("error", 'Reason is required!');
+            this.utils.showMessage('error', 'Reason is required!');
             return;
         } {
             this.reportQuestion.gameId = this.game.gameId;

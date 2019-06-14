@@ -30,9 +30,14 @@ class UserRoutes {
         this.userRoutes.post(`/${RoutesConstants.UPDATE_DASH_LIVES}`,
             AuthMiddleware.authorizedOnly, UserController.updateLives);
 
-        //  'extendedInfo/:userId'
+        //  'extendedInfo/:userId/:loginUserId'
         this.userRoutes.get(`/${RoutesConstants.EXTENDEDINFO}/:${this.UID}`,
-        UserController.getUserProfileById);
+            UserController.getUserProfileById);
+
+        //  '/check/display-name/:displayName'
+        this.userRoutes.get(
+            `/${RoutesConstants.CHECK}/${RoutesConstants.DISPLAY_NAME}/:${RoutesConstants.DISPLAY_DASH_NAME}`,
+            AuthMiddleware.authorizedOnly, UserController.checkDisplayName);
 
     }
 }

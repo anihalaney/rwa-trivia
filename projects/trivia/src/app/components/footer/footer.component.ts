@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { User, DashboardConstants } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
-import { projectDetail } from 'shared-library/environments/environment';
+import { CONFIG, projectDetail } from 'shared-library/environments/environment';
 
 @Component({
   selector: 'app-footer',
@@ -17,8 +17,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   @Output() loginClicked = new EventEmitter();
   blogUrl = projectDetail.blogUrl;
   hostname: string;
-  playstoreUrl =  projectDetail.playStoreUrl;
-  appStoreUrl = projectDetail.appStoreUrl;
+  playstoreUrl =  CONFIG.firebaseConfig.googlePlayUrl;
+  appStoreUrl = CONFIG.firebaseConfig.iTunesUrl;
   constructor(private router: Router, private windowRef: WindowRef) {
     this.hostname = `${windowRef.nativeWindow.location.protocol}//${windowRef.nativeWindow.location.hostname}/${DashboardConstants.ADMIN_ROUTE}`;
   }

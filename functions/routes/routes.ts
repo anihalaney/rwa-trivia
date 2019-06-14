@@ -19,32 +19,32 @@ class Router {
 
         this.router = express.Router();
 
-        //  '/app/question'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.QUESTION}`, questionRoutes);
+        //  '/question'
+        this.router.use(`/${RoutesConstants.QUESTION}`, questionRoutes);
 
-        //  '/app/subscription'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
+        //  '/subscription'
+        this.router.use(`/${RoutesConstants.SUBSCRIPTION}`, subscriptionRoutes);
 
-        //  '/app/game'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.GAME}`, gameRoutes);
+        //  '/game'
+        this.router.use(`/${RoutesConstants.GAME}`, gameRoutes);
 
-        //  '/app/general'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.GENERAL}`, generalRoutes);
+        //  '/general'
+        this.router.use(`/${RoutesConstants.GENERAL}`, generalRoutes);
 
-        //  '/app/migration'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.MIGRATION}`, migrationRoutes);
+        //  '/migration'
+        this.router.use(`/${RoutesConstants.MIGRATION}`, migrationRoutes);
 
-        //  '/app/scheduler'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.SCHEDULER}`, schedulerRoutes);
+        //  '/scheduler'
+        this.router.use(`/${RoutesConstants.SCHEDULER}`, schedulerRoutes);
 
-        //  '/app/friend'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.FRIEND}`, friendRoutes);
+        //  '/friend'
+        this.router.use(`/${RoutesConstants.FRIEND}`, friendRoutes);
 
-        //  '/app/user'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.USER}`, userRoutes);
+        //  '/user'
+        this.router.use(`/${RoutesConstants.USER}`, userRoutes);
 
-        //  '/app/achievement'
-        this.router.use(`/${appConstants.API_PREFIX}/${RoutesConstants.ACHIEVEMENT}`, achievementRulesRoutes);
+        //  '/achievement'
+        this.router.use(`/${RoutesConstants.ACHIEVEMENT}`, achievementRulesRoutes);
     }
 }
 
