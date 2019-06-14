@@ -5,10 +5,10 @@
   "angular-cli": {},
   "nativescript": {
     "id": "io.bitwiser.trivia.dev",
-    "tns-android": {
-      "version": "5.4.0"
-    },
     "tns-ios": {
+      "version": "5.4.1"
+    },
+    "tns-android": {
       "version": "5.4.0"
     }
   },
@@ -155,7 +155,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.2",
     "stream": "0.0.2",
-    "tns-core-modules": "^5.3.2",
+    "tns-core-modules": "^5.4.2",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
