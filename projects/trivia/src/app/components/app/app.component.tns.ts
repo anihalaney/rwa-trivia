@@ -6,6 +6,7 @@ import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Platform from 'tns-core-modules/platform';
+import * as application from 'tns-core-modules/application';
 import { isAndroid } from 'tns-core-modules/platform';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
 import { NavigationService } from 'shared-library/core/services/mobile'
@@ -54,6 +55,8 @@ export class AppComponent implements OnInit, OnDestroy {
     }));
 
     this.handleBackPress();
+
+
   }
 
   ngOnInit() {
@@ -85,14 +88,20 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     });
 
+    application.on(application.uncaughtErrorEvent, (args) => {
+      this.utils.sendErrorToCrashlytics('uncaughtException', args.error);
+      console.error(args.error);
+    });
+
   }
 
   async checkForceUpdate() {
 
     let version;
     try {
-        version = await appversion.getVersionCode();
+      version = await appversion.getVersionCode();
     } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
 
@@ -117,7 +126,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const alertOptions = {
       title: 'New version available',
-      message: 'Please, update app to new version to continue reposting.',
+      message: 'Please, update app to new version to continue posting.',
       okButtonText: 'Update',
       cancelable: false
     };
