@@ -126,7 +126,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     const alertOptions = {
       title: 'New version available',
-      message: 'Please, update app to new version to continue posting.',
+      message: 'New version available, please update to new version to continue.',
       okButtonText: 'Update',
       cancelable: false
     };
