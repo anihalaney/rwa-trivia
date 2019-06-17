@@ -75,7 +75,7 @@ export class UserController {
      * return status
      */
     static async generateUserProfileImage(req, res) {
-        if (req.body.user.userId !== req.user.uid) {
+        if (!req.body.user || !req.body.user.userId || req.body.user.userId !== req.user.uid) {
             Utils.sendResponse(res, interceptorConstants.UNAUTHORIZED, ResponseMessagesConstants.UNAUTHORIZED);
         }
 

@@ -41,12 +41,16 @@ export class UserService {
      * return ref
      */
     static async updateUser(dbUser: any): Promise<any> {
-        try {
-            return await UserService.fireStoreClient
-                .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
-                .set(dbUser, { merge: true });
-        } catch (error) {
-            return Utils.throwError(error);
+        if (dbUser && dbUser.userId) {
+            try {
+                return await UserService.fireStoreClient
+                    .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
+                    .set(dbUser, { merge: true });
+            } catch (error) {
+                return Utils.throwError(error);
+            }
+        } else {
+            return false;
         }
     }
 
@@ -114,7 +118,7 @@ export class UserService {
                 }
 
             }
-            return { ...user, gamePlayed};
+            return { ...user, gamePlayed };
         } catch (error) {
             return Utils.throwError(error);
         }
