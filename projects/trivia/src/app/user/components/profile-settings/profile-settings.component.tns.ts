@@ -24,6 +24,8 @@ import { ImageCropper } from 'nativescript-imagecropper';
 import { ActivatedRoute } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
+import { Subscription } from 'rxjs';
+import { userState } from '../../store';
 
 @Component({
   selector: 'profile-settings',
@@ -44,6 +46,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
+  isValidDisplayName: boolean = null;
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -141,7 +144,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.imageTaken = imageAsset;
         const source = new ImageSource();
         const imageSource = await fromAsset(imageAsset);
-       this.cropImage(imageSource);
+        this.cropImage(imageSource);
       } catch (error) {
         console.error(error);
       }
@@ -155,7 +158,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         { width: 150, height: 140, lockSquare: false })).image;
       if (result) {
         this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
-       this.saveProfileImage();
+        this.saveProfileImage();
         this.cd.detectChanges();
       }
     } catch (error) {
@@ -258,17 +261,33 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       return;
     }
 
-    if (isEditSingleField) {
-      this.userForm.get(field).disable();
-      this.singleFieldEdit[field] = false;
-    }
 
-    // get user object from the forms
-    this.getUserFromFormValue(isEditSingleField, field);
-    this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
-    // call saveUser
-    this.saveUser(this.user);
-    this.toggleLoader(false);
+    this.checkDisplayName(this.userForm.get('displayName').value);
+
+    this.subscriptions.push(this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+      this.isValidDisplayName = status;
+      if (this.isValidDisplayName !== null) {
+        if (this.isValidDisplayName) {
+          if (isEditSingleField) {
+            this.userForm.get(field).disable();
+            this.singleFieldEdit[field] = false;
+          }
+
+          // get user object from the forms
+          this.getUserFromFormValue(isEditSingleField, field);
+          this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
+          // call saveUser
+          this.saveUser(this.user);
+
+        } else {
+          this.userForm.controls['displayName'].setErrors({ 'exist': true });
+          this.userForm.controls['displayName'].markAsTouched();
+          this.cd.markForCheck();
+        }
+        this.toggleLoader(false);
+      }
+
+    }));
 
   }
 

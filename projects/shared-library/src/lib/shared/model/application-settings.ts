@@ -16,6 +16,8 @@ export class ApplicationSettings {
     ios_version: number;
     phone_authentication: boolean;
     game_play_max_time: number[];
+    default_names: Array<string>;
+    user_display_name_value: number;
 }
 
 export class TimerLoader {
