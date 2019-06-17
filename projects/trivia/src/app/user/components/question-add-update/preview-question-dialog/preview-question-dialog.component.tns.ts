@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { User, Question } from 'shared-library/shared/model';
-import { Inject } from '@angular/core';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 
@@ -8,7 +7,7 @@ import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
   selector: 'app-preview-question-dialog',
   templateUrl: './preview-question-dialog.component.html',
   styleUrls: ['./preview-question-dialog.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -22,13 +21,11 @@ export class PreviewQuestionDialogComponent implements OnInit, OnDestroy {
 
   constructor(private params: ModalDialogParams,
     public cd: ChangeDetectorRef) {
-    this.question = params.context.question;
+      setTimeout(() => {
+        this.question = params.context.question;
+        this.cd.markForCheck();
+      }, 0);
   }
-
-  ngOnInit() {
-    // console.log(this.question);
-  }
-
 
   ngOnDestroy() {
 

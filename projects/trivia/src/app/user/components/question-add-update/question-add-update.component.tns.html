@@ -34,11 +34,11 @@
                 <Label text="Select a category !" textWrap="true" class="label error" fontSize="12"></Label>
             </StackLayout>
 
-            <GridLayout rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10">
+            <GridLayout rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10"  [visibility]="!editQuestion ? 'visible' : 'collapsed'">
                 <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18" fontWeight="400"
                     color="#616161" marginTop="10"></Label>
                 <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f" ios:marginTop="10"
-                    formControlName="isRichEditor"></CheckBox>
+                    formControlName="isRichEditor" (checkedChange)=questionChecked(5)></CheckBox>
             </GridLayout>
 
             <StackLayout iosOverflowSafeArea="false" padding="10">
@@ -58,16 +58,15 @@
                         </StackLayout>
                     </StackLayout>
                     <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="questionForm.value.isRichEditor">
-                        <WebView #questionWebView id="questionWebView" height="500"></WebView>
+                        <WebView #questionWebView id="questionWebView" height="500" (loadFinished)="onLoadFinished($event,-1)"></WebView>
                     </StackLayout>
 
                     <StackLayout *ngIf="questionForm.value.isRichEditor">
                         <GridLayout rows="*,*" columns="auto, auto">
                             <Label text="Select a Max time" row="0" col="0" textWrap="true" class="label" padding="10"
                                 fontSize="16" fontWeight="400" color="#616161" verticalAlignment="bottom"></Label>
-                            <DropDown backroundColor="red" [items]="applicationSettings.game_play_max_time"
-                                (selectedIndexChanged)="onchange($event)" selectedIndex="{{selectedMaxTimeIndex}}" row="0"
-                                col="1" paddingLeft="20" style="text-align: center; padding: 15px; font-size: 17px; color: black;padding-top: 10;"></DropDown>
+                            <DropDown backroundColor="red" [items]="playMaxTime" (selectedIndexChanged)="onchange($event)"
+                                selectedIndex="{{selectedMaxTimeIndex}}" row="0" col="1" paddingLeft="20" style="text-align: center; padding: 15px; font-size: 17px; color: black;padding-top: 10;"></DropDown>
                             <Label row="1" col="0" *ngIf="questionForm.hasError('maxTimeNotSelected')" class="error"
                                 textWrap="true" text="Select max time" padding="10"></Label>
                         </GridLayout>
@@ -78,7 +77,8 @@
                     <StackLayout formArrayName="answers" padding="10">
                         <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
                             <GridLayout rows="auto,auto" columns="auto,*" marginBottom="20">
-                                <GridLayout row="0" col="0" rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10">
+                                <GridLayout row="0" col="0" rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10"
+                                    [visibility]="!editQuestion ? 'visible' : 'collapsed'">
                                     <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18"
                                         fontWeight="400" color="#616161" marginTop="10"></Label>
                                     <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f"
@@ -99,8 +99,7 @@
                                     </StackLayout>
                                 </StackLayout>
                                 <StackLayout row="1" col="1" *ngIf="answers.controls[i].controls.isRichEditor.value">
-                                    <Label text="is Rich Editor" textWrap="true"></Label>
-                                    <WebView #webView id="{{i}}" height="500"></WebView>
+                                    <WebView #webView [id]="i" height="500" (loadFinished)="onLoadFinished($event,i)"></WebView>
                                 </StackLayout>
 
                             </GridLayout>
@@ -165,10 +164,12 @@
 
             <GridLayout iosOverflowSafeArea="false" padding="10" rows="auto" columns="*, *">
                 <Button row="0" col="0" text="Preview" (tap)="preview()" class="Roboto-Medium" backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
-                    color="#ffffff"  borderRadius="3" fontSize="20" padding="10 10 10 10" fontWeight="bold" stlRippleEffect></Button>
+                    color="#ffffff" borderRadius="3" fontSize="20" padding="10 10 10 10" fontWeight="bold"
+                    stlRippleEffect marginRight="5"></Button>
                 <Button row="0" col="1" width="100%" [text]="submitBtnTxt" (tap)="submit()" class="Roboto-Medium"
                     backgroundColor="{{questionForm.valid && categoryIds && categoryIds.length > 0 && enteredTags.length > 2? '#71b02f' : 'silver' }}"
-                    color="#ffffff"  borderRadius="3" fontSize="20" padding="10 10 10 0" fontWeight="bold" stlRippleEffect></Button>
+                    color="#ffffff" borderRadius="3" fontSize="20" padding="10 10 10 0" fontWeight="bold"
+                    stlRippleEffect marginLeft="5"></Button>
             </GridLayout>
         </StackLayout>
     </ScrollView>

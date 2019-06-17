@@ -104,7 +104,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
       this.quillObject.questionText =  question.questionText ;
       this.quillObject.jsonObject = question.questionObject;
     }
-
     this.questionForm = this.fb.group({
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: [questionText, Validators.required],
@@ -211,8 +210,6 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   updateQuestion(question: Question) {
-    // console.log('dd', question);
-    // return false;
     this.updateUnpublishedQuestions.emit(question);
     this.updateStatus.emit(true);
   }

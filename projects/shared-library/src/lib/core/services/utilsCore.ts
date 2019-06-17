@@ -87,4 +87,7 @@ export class UtilsCore {
     return millis / 60000;
   }
 
+  showMessage(type, message) {
+  }
+
 }

@@ -56,7 +56,7 @@ export class QuestionAddUpdate {
         answerText: new FormControl(answer.answerText,
           Validators.compose([Validators.required])),
         correct: new FormControl(answer.correct),
-        isRichEditor: new FormControl(false),
+        isRichEditor: new FormControl(answer.isRichEditor),
         answerObject: new FormControl(),
       });
       return fg;
@@ -109,7 +109,7 @@ export class QuestionAddUpdate {
     question.createdOn = new Date();
     question.isRichEditor = formValue.isRichEditor;
     question.maxTime = formValue.maxTime;
-
+    question.questionObject = formValue.questionObject;
     return question;
   }
 

@@ -52,7 +52,7 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
     syntax: true
   };
   subscriptions: Subscription[] = [];
-  
+
   constructor(private store: Store<AppState>,
     private router: Router,
     private userActions: UserActions) {

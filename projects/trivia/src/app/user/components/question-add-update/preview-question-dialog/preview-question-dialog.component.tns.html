@@ -7,15 +7,15 @@
                 <Label row="0" col="1" text="&#xf057;" horizontalAlignment="right" (tap)="onClose()" class="fa times-circle close-icon"></Label>
             </GridLayout>
 
-            <StackLayout row="1" col="0" *ngIf="question">
-                <render-question [renderWebView]="true" [question]="question"></render-question>
+            <StackLayout row="1" col="0" *ngIf="question" margin="10">
+                <render-question [renderWebView]="true" [question]="question" ></render-question>
             </StackLayout>
             <StackLayout row="2" col="0" orientation="horizontal" margin="10" *ngIf="question" iosOverflowSafeArea="false">
                 <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
                 <Label text="{{question.tags?.toString()}}" class="Roboto-Regular" color="#1B1C1C" fontSize="15"
                     textWrap="true"></Label>
             </StackLayout>
-            <StackLayout row="3" col="0">
+            <StackLayout row="3" col="0" *ngIf="question">
                 <ng-template ngFor let-answer [ngForOf]="question.answers">
                     <StackLayout orientation="horizontal" class="question-answered" margin="10"  [style.padding]="answer.isRichEditor? 0 : 15">
                         <render-answer [renderWebView]="true" [answer]="answer"></render-answer>

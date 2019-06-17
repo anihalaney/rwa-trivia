@@ -97,7 +97,6 @@ export class CropImageDialogComponent implements OnInit, OnDestroy {
 
   checkImageSize(cropImage) {
     const imageSize = this.getImageSize(cropImage.image);
-    console.log('image size', imageSize);
     if (imageSize > this.maxImageSize) {
       this.cd.markForCheck();
       this.errorMsg = `Image size should be less than ${this.maxImageSize} KB`;

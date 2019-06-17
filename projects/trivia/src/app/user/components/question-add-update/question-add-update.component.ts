@@ -158,7 +158,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
       if (result) {
         const fileName = `questions/${new Date().getTime()}-${file.name}`;
-        console.log('image upload');
         this.questionService.saveQuestionImage(result.image, fileName).subscribe(image => {
           if (image != null) {
             if (image.name) {
@@ -190,8 +189,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     }
 
     const tagsFA = new FormArray(fcs);
-
-    this.questionForm = this.fb.group({
+     this.questionForm = this.fb.group({
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: ['',
         Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.question_max_length)])],

@@ -190,7 +190,7 @@ export class QuestionController {
             try {
                 const stream = await QuestionService.generateQuesitonImage(imageName);
                 res.setHeader(HeaderConstants.CONTENT_DASH_DISPOSITION,
-                    HeaderConstants.ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_PROFILE_UNDER_SCORE_IMAGE_DOT_PNG);
+                    HeaderConstants.ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_QUESTION_UNDER_SCORE_IMAGE_DOT_PNG);
                 res.setHeader(HeaderConstants.CONTENT_DASH_TYPE, HeaderConstants.IMAGE_FORWARD_SLASH_JPEG);
                 Utils.sendResponse(res, interceptorConstants.SUCCESS, stream);
             } catch (error) {

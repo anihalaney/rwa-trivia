@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer2, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { User, Question } from 'shared-library/shared/model';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
@@ -24,10 +24,6 @@ export class PreviewQuestionDialogComponent implements OnInit, OnDestroy {
     this.question = data.question;
   }
 
-  ngOnInit() {
-
-    console.log(this.question);
-  }
   closeModel() {
     this.ref.close();
   }

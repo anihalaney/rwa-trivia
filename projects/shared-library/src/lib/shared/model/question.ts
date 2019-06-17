@@ -54,6 +54,7 @@ export class Question {
     question.questionObject = db.questionObject ? db.questionObject : false;
     question.createdOn = db.createdOn ? db.createdOn : new Date();
     question.totalQALength = this.countQALength(db);
+    question.maxTime = db.maxTime ? db.maxTime : 0;
 
     db.answers = db.answers.map(answer => {
       answer.isRichEditor = answer.isRichEditor ? answer.isRichEditor : false;
