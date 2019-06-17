@@ -1,27 +1,4 @@
-// import { BrowserModule } from '@angular/platform-browser';
-// import { NgModule } from '@angular/core';
-
-// import { AppComponent } from './app.component';
-// import { EditorComponent } from './editor/editor.component';
-
-// @NgModule({
-//   declarations: [
-//     AppComponent,
-//     EditorComponent
-//   ],
-//   imports: [
-//     BrowserModule
-//   ],
-//   exports: [
-//     EditorComponent
-//   ],
-//   providers: [],
-//   bootstrap: [AppComponent]
-// })
-// export class AppModule { }
-
-
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -31,7 +8,7 @@ import { EditorComponent } from './editor/editor.component';
 
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { StoreRouterConnectingModule, RouterStateSerializer } from '@ngrx/router-store';
+import { StoreRouterConnectingModule, } from '@ngrx/router-store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // CustomSerializer
 import { reducers } from './store';
@@ -74,7 +51,6 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
-    // { provide: RouterStateSerializer, useClass: CustomSerializer }
   ],
   bootstrap: [AppComponent]
 })
