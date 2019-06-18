@@ -19,5 +19,5 @@ export const CONFIG: IConfig = {
     iTunesUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447131917?ls=1&mt=8'
   },
   'functionsUrl': `https://rwa-trivia-dev-e57fc.firebaseapp.com/${appConstants.API_VERSION}`,
-  'editorUrl': ''
+  'editorUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/editor'
   };

@@ -48,13 +48,13 @@
     <ng-container>
       <div class="row secondbg">
         <h2>
-          <render-question [renderWebView]="applicationSettings?.renderWebView" [question]="question" [questionIndex]="questionIndex"></render-question> 
+          <render-question [question]="question" [questionIndex]="questionIndex"></render-question> 
         </h2>
         <ul>
           <li *ngFor="let answer of question.answers; let i=index" (click)="answerButtonClicked(answer, i)"
             [class.question-answered]="answeredIndex >= 0 || continueNext" [class.players-answer]="answeredIndex === i"
             [class.wrong]="answeredIndex === i && correctAnswerIndex !== i" [class.right]=" correctAnswerIndex === i">
-              <render-answer [renderWebView]="applicationSettings?.renderWebView" [answer]="answer"></render-answer>
+              <render-answer [answer]="answer"></render-answer>
           </li>
         </ul>
         <div class=" col-sm-12 col-xs-12">

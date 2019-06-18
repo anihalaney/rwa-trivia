@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { User, Question } from 'shared-library/shared/model';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
@@ -11,7 +11,7 @@ import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class PreviewQuestionDialogComponent implements OnInit, OnDestroy {
+export class PreviewQuestionDialogComponent implements OnDestroy {
 
   user: User;
   navLinks = [];
@@ -21,10 +21,10 @@ export class PreviewQuestionDialogComponent implements OnInit, OnDestroy {
 
   constructor(private params: ModalDialogParams,
     public cd: ChangeDetectorRef) {
-      setTimeout(() => {
-        this.question = params.context.question;
-        this.cd.markForCheck();
-      }, 0);
+    setTimeout(() => {
+      this.question = params.context.question;
+      this.cd.markForCheck();
+    }, 0);
   }
 
   ngOnDestroy() {

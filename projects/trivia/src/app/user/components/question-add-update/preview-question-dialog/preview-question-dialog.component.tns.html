@@ -8,7 +8,7 @@
             </GridLayout>
 
             <StackLayout row="1" col="0" *ngIf="question" margin="10">
-                <render-question [renderWebView]="true" [question]="question" ></render-question>
+                <render-question [question]="question" ></render-question>
             </StackLayout>
             <StackLayout row="2" col="0" orientation="horizontal" margin="10" *ngIf="question" iosOverflowSafeArea="false">
                 <Label text="Tags:" marginRight="5" color="#1B1C1C" fontSize="15" fontWeight="500" textWrap="true"></Label>
@@ -18,7 +18,7 @@
             <StackLayout row="3" col="0" *ngIf="question">
                 <ng-template ngFor let-answer [ngForOf]="question.answers">
                     <StackLayout orientation="horizontal" class="question-answered" margin="10"  [style.padding]="answer.isRichEditor? 0 : 15">
-                        <render-answer [renderWebView]="true" [answer]="answer"></render-answer>
+                        <render-answer [answer]="answer"></render-answer>
                     </StackLayout>
                 </ng-template>
             </StackLayout>

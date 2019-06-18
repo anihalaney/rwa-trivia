@@ -3,7 +3,6 @@ import { readFileSync } from 'fs';
 import { resolve } from 'path';
 import { Question, SearchCriteria, SearchResults } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from './utils';
-const katex = require('katex');
 
 const elasticSearchConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/elasticsearch.config.json'), 'utf8'));
 
@@ -170,12 +169,7 @@ export class ESUtils {
     const date = new Date();
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
     const hits = await ESUtils.getRandomItems(ESUtils.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed);
-    const redneredQuestion = katex.renderToString('  \\text{What is answer}  c = \\pm\\sqrt{a^2 + b^2}  \\text{number of cats}', {
-      throwOnError: true
-  });
-  console.log('question callled>>>>>>>' , hits[0]['_source']);
     hits[0]['_source'].serverTimeQCreated = Utils.getUTCTimeStamp();
-    hits[0]['_source'].renderedQuestion = redneredQuestion;
 
     // convert hit to Question
     return Question.getViewModelFromES(hits[0]);

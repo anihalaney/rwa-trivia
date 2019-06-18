@@ -11,20 +11,20 @@
       <div>
         <div class="card gameplay" *ngIf="question">
           <div class="col-md-12 question">
-              <render-question [renderWebView]="true" [question]="question"></render-question>
+              <render-question [question]="question"></render-question>
           </div>
           <div class="question-list">
             <div class="col-xs-12">
               <ul id="list">
                 <li class="col-sm-5 col-xs-12 item" *ngFor="let answer of question.answers|slice:0:2;">
-                  <render-answer [renderWebView]="true" [answer]="answer"></render-answer>
+                  <render-answer [answer]="answer"></render-answer>
                 </li>
               </ul>
             </div>
             <div class="col-xs-12">
               <ul>
                 <li class="col-sm-5 col-xs-12" *ngFor="let answer of question.answers|slice:2:4;">
-                  <render-answer [renderWebView]="true" [answer]="answer"></render-answer>
+                  <render-answer [answer]="answer"></render-answer>
                 </li>
               </ul>
             </div>

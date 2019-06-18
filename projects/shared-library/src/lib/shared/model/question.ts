@@ -1,5 +1,4 @@
 import { Category } from './category';
-import { SafeHtml } from '@angular/platform-browser';
 
 export class Question {
   id: string;

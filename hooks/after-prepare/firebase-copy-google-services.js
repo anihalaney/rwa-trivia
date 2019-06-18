@@ -1,4 +1,3 @@
-
 var path = require("path");
 var fs = require("fs");
 
@@ -8,7 +7,7 @@ return new Promise(function(resolve, reject) {
 
         /* Decide whether to prepare for dev or prod environment */
 
-        var isReleaseBuild = (hookArgs.appFilesUpdaterOptions && hookArgs.appFilesUpdaterOptions.release) ? true : false;
+       
         var validProdEnvs = ['prod','production'];
         var isProdEnv = false; // building with --env.prod or --env.production flag
 
@@ -18,7 +17,7 @@ return new Promise(function(resolve, reject) {
             });
         }
 
-        var buildType = isReleaseBuild || isProdEnv ? 'production' : 'development';
+        var buildType = isProdEnv ? 'production' : 'development';
 
         /* Create info file in platforms dir so we can detect changes in environment and force prepare if needed */
 
@@ -62,20 +61,7 @@ return new Promise(function(resolve, reject) {
                 $logger.warn("Unable to copy google-services.json.");
                 reject();
             }
-        } else if (hookArgs.platform.toLowerCase() === 'ios') {
-            // we have copied our GoogleService-Info.plist during before-checkForChanges hook, here we delete it to avoid changes in git
-            var destinationGooglePlist = path.join($projectData.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist");
-            var sourceGooglePlistProd = path.join($projectData.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist.prod");
-            var sourceGooglePlistDev = path.join($projectData.appResourcesDirectoryPath, "iOS", "GoogleService-Info.plist.dev");
-
-            // if we have both dev/prod versions, let's remove GoogleService-Info.plist in destination dir
-            if (fs.existsSync(sourceGooglePlistProd) && fs.existsSync(sourceGooglePlistDev)) {
-                if (fs.existsSync(destinationGooglePlist)) { fs.unlinkSync(destinationGooglePlist); }
-                resolve();
-            } else { // single GoogleService-Info.plist modus
-                resolve();
-            }
-        } else {
+        }  else {
             resolve();
         }
     });

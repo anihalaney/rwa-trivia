@@ -38,8 +38,6 @@ export class MyQuestions {
   ) {
 
     this.loaderBusy = true;
-    // this.categoryDictObs = store.select(getCategories);
-    // this.tags = store.select(getTags);
 
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));

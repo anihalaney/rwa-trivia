@@ -17,7 +17,6 @@ import { ProfileImagesGenerator } from '../utils/profile-images-generator';
 import { QuestionBifurcation } from '../utils/question-bifurcation';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import { Utils } from '../utils/utils';
-const katex = require('katex');
 
 export class MigrationController {
 

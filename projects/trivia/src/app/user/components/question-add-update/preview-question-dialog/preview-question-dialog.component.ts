@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { User, Question } from 'shared-library/shared/model';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { Inject } from '@angular/core';
@@ -12,7 +12,7 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class PreviewQuestionDialogComponent implements OnInit, OnDestroy {
+export class PreviewQuestionDialogComponent implements OnDestroy {
   question: Question;
   user: User;
   navLinks = [];

@@ -34,7 +34,7 @@
                 <Label text="Select a category !" textWrap="true" class="label error" fontSize="12"></Label>
             </StackLayout>
 
-            <GridLayout rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10"  [visibility]="!editQuestion ? 'visible' : 'collapsed'">
+            <GridLayout rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10" *ngIf="applicationSettings.renderWebView" [visibility]="!editQuestion ? 'visible' : 'collapsed'">
                 <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18" fontWeight="400"
                     color="#616161" marginTop="10"></Label>
                 <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f" ios:marginTop="10"
@@ -76,13 +76,13 @@
                         fontWeight="400" color="#616161"></Label>
                     <StackLayout formArrayName="answers" padding="10">
                         <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
-                            <GridLayout rows="auto,auto" columns="auto,*" marginBottom="20">
+                            <GridLayout rows="auto,auto" columns="auto,*" marginBottom="20" >
                                 <GridLayout row="0" col="0" rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10"
-                                    [visibility]="!editQuestion ? 'visible' : 'collapsed'">
+                                    [visibility]="!editQuestion ? 'visible' : 'collapsed'" >
                                     <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18"
-                                        fontWeight="400" color="#616161" marginTop="10"></Label>
+                                        fontWeight="400" color="#616161" marginTop="10" *ngIf="applicationSettings.renderWebView"></Label>
                                     <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f"
-                                        ios:marginTop="10" formControlName="isRichEditor" (checkedChange)=checkboxChecked(i)></CheckBox>
+                                        ios:marginTop="10" formControlName="isRichEditor" (checkedChange)="checkboxChecked(i)" *ngIf="applicationSettings.renderWebView"></CheckBox>
                                 </GridLayout>
                                 <CheckBox row="1" col="0" #elem formControlName="correct" class="checkbox" marginRight="10"
                                     fillColor="#71b02f" ios:marginTop="10"></CheckBox>
