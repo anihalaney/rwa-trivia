@@ -272,4 +272,38 @@ export class UserActions {
       payload: games
     };
   }
+
+  static LOAD_ADDRESS_USING_LAT_LONG = 'LOAD_ADDRESS_USING_LAT_LONG';
+  loadAddressUsingLatLong(location: any): ActionWithPayload<User> {
+    return {
+      type: UserActions.LOAD_ADDRESS_USING_LAT_LONG,
+      payload: location
+    };
+  }
+
+  static LOAD_ADDRESS_USING_LAT_LONG_SUCCESS = 'LOAD_ADDRESS_USING_LAT_LONG_SUCCESS';
+  loadAddressUsingLatLongSuccess(location: any): ActionWithPayload<any[]> {
+    return {
+      type: UserActions.LOAD_ADDRESS_USING_LAT_LONG_SUCCESS,
+      payload: location
+    };
+  }
+
+  static LOAD_ADDRESS_USER_SUGGESTION = 'LOAD_ADDRESS_USER_SUGGESTION';
+  loadAddressUserSuggestion(location: any): ActionWithPayload<User> {
+    console.log('this is tsting');
+    return {
+      type: UserActions.LOAD_ADDRESS_USER_SUGGESTION,
+      payload: location
+    };
+  }
+
+  static LOAD_ADDRESS_USER_SUGGESTION_SUCCESS = 'LOAD_ADDRESS_USER_SUGGESTION_SUCCESS';
+  loadAddressUserSuggestionSuccess(location: any): ActionWithPayload<any[]> {
+    return {
+      type: UserActions.LOAD_ADDRESS_USER_SUGGESTION_SUCCESS,
+      payload: location
+    };
+  }
+
 }

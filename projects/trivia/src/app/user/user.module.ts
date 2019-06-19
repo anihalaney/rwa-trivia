@@ -13,10 +13,10 @@ import {
   QuestionAddUpdateComponent,
   InviteFriendsComponent,
   InviteFriendsDialogComponent,
-  InviteMailFriendsComponent
+  InviteMailFriendsComponent,
+  LocactionResetDialogComponent
 } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
-
 @NgModule({
   declarations: [
     ProfileSettingsComponent,
@@ -25,7 +25,8 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    LocactionResetDialogComponent
   ],
   imports: [
     // rwa modules
@@ -47,10 +48,12 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     QuestionAddUpdateComponent,
     InviteFriendsComponent,
     InviteMailFriendsComponent,
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    LocactionResetDialogComponent
   ],
   entryComponents: [
-    InviteFriendsDialogComponent
+    InviteFriendsDialogComponent,
+    LocactionResetDialogComponent
   ]
 })
 export class UserModule { }

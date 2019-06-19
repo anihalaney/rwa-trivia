@@ -15,6 +15,9 @@ import { BlockScrollStrategy } from '@angular/cdk/overlay';
 export class UserService {
 
     private RC = RoutesConstants;
+    addressByLatLongURL = 'https://maps.googleapis.com/maps/api/geocode/json';
+    private addressSuggestionsURL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+    APIKEY = 'AIzaSyB_VpDTc5WQx3QMCUJea8YAj7rOLBRIzRY';
 
     constructor(
         private http: HttpClient,
@@ -176,4 +179,15 @@ export class UserService {
         return this.http.get<any>(url);
     }
 
+
+    getAddressByLatLang(latlong) {
+        const url = `${this.addressByLatLongURL}?latlng=${latlong}&key=${this.APIKEY}`;
+        return this.http.get<any>(url);
+    }
+
+    getAddressSuggestions(address) {
+        // tslint:disable-next-line:max-line-length
+        const url = `${this.addressSuggestionsURL}?input=${encodeURIComponent(address)}&key=${this.APIKEY}`;
+        return this.http.get<any>(url);
+    }
 }
