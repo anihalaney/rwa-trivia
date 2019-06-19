@@ -8,7 +8,7 @@ import { appState } from '../../../store';
 import { Observable, timer, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { projectDetail } from 'shared-library/environments/environment';
+import { projectMeta } from 'shared-library/environments/environment';
 
 @Component({
   selector: 'game-question',
@@ -30,7 +30,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   columns;
   doPlay = true;
 
-  photoUrl: String = `~/assets/icons/${projectDetail.projectName}/icon-192x192.png`;
+  photoUrl: String = `~/assets/icons/${projectMeta.projectName}/icon-192x192.png`;
   userDict$: Observable<{ [key: string]: User }>;
   processTimeInterval: number;
   elapsedTime: number;

@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Title } from '@angular/platform-browser';
-import { projectDetail } from 'shared-library/environments/environment';
+import { projectMeta } from 'shared-library/environments/environment';
 import { DOCUMENT } from '@angular/platform-browser';
 import { skip, take } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
@@ -33,10 +33,10 @@ export class AppComponent implements OnInit, OnDestroy {
     @Inject(DOCUMENT) private _document: HTMLDocument
   ) {
 
-    titleService.setTitle( projectDetail.title );
+    titleService.setTitle( projectMeta.title );
 
-    _document.getElementById('appFavicon').setAttribute('href', `./assets/images/logo/${projectDetail.projectName}/favicon.ico`);
-    _document.getElementById('appManifest').setAttribute('href', `./assets/manifest/${projectDetail.projectName}/manifest.json`);
+    _document.getElementById('appFavicon').setAttribute('href', `./assets/images/logo/${projectMeta.projectName}/favicon.ico`);
+    _document.getElementById('appManifest').setAttribute('href', `./assets/manifest/${projectMeta.projectName}/manifest.json`);
 
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;

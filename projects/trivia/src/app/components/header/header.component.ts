@@ -2,7 +2,7 @@ import { Component, Input, Output, OnInit, OnDestroy, EventEmitter, ChangeDetect
 import { Router } from '@angular/router';
 
 import { User } from 'shared-library/shared/model';
-import { projectDetail } from 'shared-library/environments/environment';
+import { projectMeta } from 'shared-library/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() logoutClicked = new EventEmitter();
   @Output() loginClicked = new EventEmitter();
   @Output() toggleThemeClicked = new EventEmitter();
-  projectDetail = projectDetail;
+  projectMeta = projectMeta;
 
   constructor(private router: Router) { }
 

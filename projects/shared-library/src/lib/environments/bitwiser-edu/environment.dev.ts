@@ -14,16 +14,16 @@ export const CONFIG: IConfig = {
     databaseURL: 'https://bitwiser-edu.firebaseio.com',
     projectId: 'bitwiser-edu',
     storageBucket: 'bitwiser-edu.appspot.com',
-    messagingSenderId: '704157888306',
-    googlePlayUrl: '',
-    iTunesUrl: ''
+    messagingSenderId: '704157888306'
   },
   'functionsUrl': `https://bitwiser-edu.firebaseapp.com/${appConstants.API_VERSION}`
   };
 
-export const projectDetail = {
+export const projectMeta = {
     projectName: 'bitwiser-edu',
     projectDisplayName: 'Bitwiser-edu',
     title: 'bitwiser.io: get wiser - bit by bit',
+    playStoreUrl: '',
+    appStoreUrl: '',
     blogUrl: 'https://bitwiser.io'
 };
