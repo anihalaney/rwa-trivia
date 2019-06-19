@@ -175,6 +175,6 @@
     put Drawable screen and logo, icon specific for platform under projects-assets folder 
     platform wise follow the same structure as used in project-assets
 
-
+10) Add index.html file in (trivia / trivia-admin) > src > assets > index > {projectName} folder
 
 
