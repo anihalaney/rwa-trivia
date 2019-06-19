@@ -16,7 +16,7 @@ export const CONFIG: IConfig = {
     storageBucket: 'bitwiser-edu.appspot.com',
     messagingSenderId: '704157888306'
   },
-  'functionsUrl': `https://bitwiser-edu.firebaseapp.com/${appConstants.API_VERSION}`
+  'functionsUrl': `https://bitwiser-edu.firebaseapp.com`
   };
 
 export const projectMeta = {
