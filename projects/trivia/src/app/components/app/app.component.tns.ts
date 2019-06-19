@@ -21,6 +21,7 @@ import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
 import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
 import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
+import { crashlytics } from 'nativescript-plugin-firebase';
 
 @Component({
   selector: 'app-root',
@@ -93,6 +94,8 @@ export class AppComponent implements OnInit, OnDestroy {
       console.error(args.error);
     });
 
+  //  this.utils.sendErrorToCrashlytics('custom Exception', new java.lang.Exception("other Exception"));
+
   }
 
   async checkForceUpdate() {
@@ -101,7 +104,7 @@ export class AppComponent implements OnInit, OnDestroy {
     try {
       version = await appversion.getVersionCode();
     } catch (error) {
-      this.utils.sendErrorToCrashlytics('appLog', error);
+      this.utils.sendErrorToCrashlytics('appLog', new java.lang.Exception("test"));
       console.error(error);
     }
 
@@ -117,6 +120,11 @@ export class AppComponent implements OnInit, OnDestroy {
           } else if (!isAndroid && version && this.applicationSettings.ios_version
             && this.applicationSettings.ios_version > version) {
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
+          }
+
+        //  console.log("this.applicationSettings.crashlytics", this.applicationSettings.crashlytics);
+          if (!this.applicationSettings.crashlytics) {
+            crashlytics.setCrashlyticsCollectionEnabled(false);
           }
         }
       }));
