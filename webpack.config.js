@@ -11,8 +11,7 @@ const { NativeScriptWorkerPlugin } = require("nativescript-worker-loader/NativeS
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
 const { AngularCompilerPlugin } = require("@ngtools/webpack");
 const editJsonFile = require("edit-json-file");
-const path_1 = require("path");
-const fs_1 = require("fs");
+const resExt = require("./resolver-extended");
 
 module.exports = env => {
   // Add your custom Activities, Services and other Android app components here.
@@ -66,7 +65,7 @@ module.exports = env => {
   const envFullPath = (env.prod) ? "prod" : "dev";
   
   const ngCompilerPlugin = new AngularCompilerPlugin({
-    hostReplacementPaths: getResolverExtended([platform, "tns", envFullPath], env.project),
+    hostReplacementPaths: resExt.getResolverExtended([platform, "tns", envFullPath], env.project),
     platformTransformers: aot ? [nsReplaceBootstrap(() => ngCompilerPlugin)] : null,
     mainPath: resolve(appPath, entryModule),
     tsConfigPath: join(__dirname, aot ? "tsconfig.aot.json" : "tsconfig.tns.json"),
@@ -321,41 +320,4 @@ module.exports = env => {
   return config;
 };
 
-function getResolverExtended(platforms, project) {
-  let path = nsWebpack.getResolver(platforms);
-  return function (path) {
-    const {
-      dir,
-      name,
-      ext
-    } = path_1.parse(path);
-    let newDir = dir;
-    for (const platform of platforms) {
-      if (dir.endsWith('environments') && dir.search('node_modules') < 0 ) {
-        newDir = toSystemPath(path_1.join(dir, project));
-      }
-
-      const platformFileName = `${name}.${platform}${ext}`;
-      const platformPath = toSystemPath(path_1.join(newDir, platformFileName));
-      try {
-        if (fs_1.statSync(platformPath)) {
-          return platformPath;
-        }
-      } catch (_e) {
-        // continue checking the other platforms
-      }
-
-    }
-    return path;
-  }
-}
-// Convert paths from \c\some\path to c:\some\path
-function toSystemPath(path) {
-  if (!process.platform.startsWith("win32")) {
-    return path;
-  }
-  const drive = path.match(/^\\(\w)\\(.*)$/);
-  return path;
-}
-//# sourceMappingURL=resolver.js.map
 
