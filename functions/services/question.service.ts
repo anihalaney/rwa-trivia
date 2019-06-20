@@ -28,8 +28,13 @@ export class QuestionService {
             const questionResult = await QuestionService.fireStoreClient
                 .doc(`/${QuestionService.QC}/${questionId}`)
                 .get();
-            const question = questionResult.data();
-            question['id'] = (question['id']) ? question['id'] : questionResult['id'];
+            let question = questionResult.data();
+            if (question) {
+                question['id'] = (question['id']) ? question['id'] : questionResult['id'];
+            } else {
+                question = new Question();
+            }
+
             return Question.getViewModelFromDb(question);
         } catch (error) {
             return Utils.throwError(error);
