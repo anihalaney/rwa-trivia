@@ -104,7 +104,7 @@ export class AppComponent implements OnInit, OnDestroy {
     try {
       version = await appversion.getVersionCode();
     } catch (error) {
-      this.utils.sendErrorToCrashlytics('appLog', new java.lang.Exception("test"));
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
 
@@ -126,6 +126,8 @@ export class AppComponent implements OnInit, OnDestroy {
           if (!this.applicationSettings.crashlytics) {
             crashlytics.setCrashlyticsCollectionEnabled(false);
           }
+
+
         }
       }));
   }
