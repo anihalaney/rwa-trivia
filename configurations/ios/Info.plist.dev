@@ -67,5 +67,7 @@
     </array>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>Please allow gallery access</string>
+	<key>firebase_crashlytics_collection_enabled</key>
+  	<string>true</string>
 </dict>
 </plist>

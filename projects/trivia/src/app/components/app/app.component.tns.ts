@@ -94,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
       console.error(args.error);
     });
 
-  //  this.utils.sendErrorToCrashlytics('custom Exception', new java.lang.Exception("other Exception"));
+  //  this.utils.sendErrorToCrashlytics(' ======================= custos Exceptions ======================= ', new java.lang.Exception("other Exception"));
 
   }
 
@@ -122,11 +122,11 @@ export class AppComponent implements OnInit, OnDestroy {
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
           }
 
-        //  console.log("this.applicationSettings.crashlytics", this.applicationSettings.crashlytics);
+        //  console.log(" ======================= this.applicationSettings.crashlytics ======================= ", this.applicationSettings.crashlytics);
           if (!this.applicationSettings.crashlytics) {
             crashlytics.setCrashlyticsCollectionEnabled(false);
           }
-
+          // this.utils.sendErrorToCrashlytics(' ====================== custos Exceptions ======================= ', new java.lang.Exception("other Exception"));
 
         }
       }));

@@ -34,10 +34,11 @@ export class Utils extends UtilsCore {
   }
 
   sendErrorToCrashlytics(type: any, error: any) {
-    firebase.crashlytics.sendCrashLog({
-      type: type,
-      exception: error
-    });
+    firebase.crashlytics.sendCrashLog(error);
+    // firebase.crashlytics.sendCrashLog({
+    //   type: type,
+    //   exception: error
+    // });
 
   }
 
