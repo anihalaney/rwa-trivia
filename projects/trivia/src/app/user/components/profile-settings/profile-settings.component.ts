@@ -89,30 +89,12 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(u => u.addressUsingUserSuggestion), filter(location => !!location))
       .subscribe(locations => {
-        console.log('suggewstion>>>', locations.predictions);
         this.locations = [];
         locations.predictions.map(location => {
-          // console.log(location.terms);
-          // console.log(location.terms[0].value);
-          // console.log(location.terms[(location.terms.length - 1)].value);
           const city = location.terms[0].value;
           const country = location.terms[(location.terms.length - 1)].value;
           this.locations.push(`${city}, ${country}`);
         });
-        // if (location) {
-        //   let cityName, countryName;
-        //   location.results[0].address_components.map(component => {
-        //     const cityList = component.types.filter(typeName => typeName === 'administrative_area_level_2');
-        //     if (cityList.length > 0) {
-        //       cityName = component.long_name;
-        //     }
-        //     const countryList = component.types.filter(typeName => typeName === 'country');
-        //     if (countryList.length > 0) {
-        //       countryName = component.long_name;
-        //     }
-        //   });
-        //   this.userForm.patchValue({ location: `${cityName}, ${countryName}` });
-        // }
         console.log('list >', this.locations);
         this.cd.markForCheck();
       }));

@@ -26,7 +26,12 @@ import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-ba
 import * as utils from 'tns-core-modules/utils/utils';
 import { Subscription } from 'rxjs';
 import { userState } from '../../store';
+// import {
+//    isEnabled, enableLocationRequest,
+//   getCurrentLocation, watchLocation, distance, clearWatch
+// } from "nativescript-geolocation";
 
+import * as geolocation from 'nativescript-geolocation';
 @Component({
   selector: 'profile-settings',
   templateUrl: './profile-settings.component.html',
@@ -313,4 +318,31 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   ngOnDestroy() {
   }
 
+  getLocation() {
+    console.log('get locaiton');
+    geolocation.isEnabled().then((isEnabled) =>  {
+      if (!isEnabled) {
+        geolocation.enableLocationRequest().then((location) => {
+          console.log('location');
+          console.log(location);
+        }, function (e) {
+          console.log("Error: " + (e.message || e));
+        });
+      } else {
+        console.log('else');
+        geolocation.getCurrentLocation({}).
+        then((position) => {
+            if (position) {
+                console.log("Current location is: " + JSON.stringify(position));
+                this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.latitude},${position.longitude}`));
+            }
+        }, function(e){
+            console.log("Error: " + e.message);
+        });
+        // console.log(JSON.stringify(location));
+      }
+    }, function (e) {
+      console.log("Error: " + (e.message || e));
+    });
+  }
 }

@@ -49,6 +49,8 @@
                   android:marginRight="2" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
                   text="&#xf14a;"></Label>
               </GridLayout>
+              <Button text="Get Location" (tap)="getLocation()"></Button>
+              
               <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error"
                 textWrap="true" text="Location is required!"></Label>
             </StackLayout>
