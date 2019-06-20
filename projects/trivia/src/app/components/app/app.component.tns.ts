@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Store, select } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
@@ -40,9 +40,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions,
-    private utils: Utils) {
+    private utils: Utils,
+    private cd: ChangeDetectorRef) {
 
-    this.checkForceUpdate();
+
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
@@ -61,6 +62,8 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    this.checkForceUpdate();
 
     firebase.init({
       onMessageReceivedCallback: (message) => {
@@ -94,7 +97,6 @@ export class AppComponent implements OnInit, OnDestroy {
       console.error(args.error);
     });
 
-  //  this.utils.sendErrorToCrashlytics('custom Exception', new java.lang.Exception("other Exception"));
 
   }
 
@@ -110,10 +112,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {
+
         if (appSettings && appSettings.length > 0) {
 
           this.applicationSettings = appSettings[0];
-
+          console.log('appSettings', this.applicationSettings.crashlytics);
           if (isAndroid && version && this.applicationSettings.android_version
             && this.applicationSettings.android_version > version) {
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.googlePlayUrl);
@@ -122,14 +125,19 @@ export class AppComponent implements OnInit, OnDestroy {
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
           }
 
-        //  console.log("this.applicationSettings.crashlytics", this.applicationSettings.crashlytics);
-          if (!this.applicationSettings.crashlytics) {
-            crashlytics.setCrashlyticsCollectionEnabled(false);
-          }
+          //  console.log("this.applicationSettings.crashlytics", this.applicationSettings.crashlytics);
+          (this.applicationSettings.crashlytics) ?
+            crashlytics.setCrashlyticsCollectionEnabled(true)
+            : crashlytics.setCrashlyticsCollectionEnabled(false);
+
+       //   this.utils.sendErrorToCrashlytics('custom Exception', new java.lang.Exception("other Exception"));
 
 
         }
+        this.cd.markForCheck();
       }));
+
+
   }
 
   async displayForceUpdateDialog(url: string) {
