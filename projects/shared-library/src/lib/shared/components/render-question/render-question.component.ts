@@ -1,6 +1,5 @@
-import { Component, Input, OnInit, SimpleChanges, OnChanges } from "@angular/core";
-import { Answer, Question } from "shared-library/shared/model";
-import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
+import { Component, Input, OnInit } from '@angular/core';
+import { Question } from 'shared-library/shared/model';
 
 
 @Component({
@@ -10,7 +9,7 @@ import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
     styleUrls: ['render-question.component.css']
 })
 
-export class RenderQuestionComponent implements OnInit, OnChanges {
+export class RenderQuestionComponent implements OnInit {
 
     @Input() renderWebView: boolean;
     @Input() question: Question;
@@ -23,18 +22,6 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
         } else {
             this.questionIndex = '';
         }
-        setTimeout(() => {
-            // this.question.isRichEditor = true;
-            this.question = { ...this.question };
-        }, 5000);
-
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-
-        // if (this.renderWebView) {
-        if (changes.renderWebView) {
-            this.renderWebView = changes.renderWebView.currentValue;
-        }
+        // this.question = { ...this.question };
     }
 }

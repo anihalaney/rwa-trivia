@@ -57,8 +57,8 @@
                                 text="{{this.applicationSettings.question_max_length}}  characters are allowed !"></Label>
                         </StackLayout>
                     </StackLayout>
-                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="questionForm.value.isRichEditor">
-                        <WebView #questionWebView id="questionWebView" height="500" (loadFinished)="onLoadFinished($event,-1)"></WebView>
+                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="questionForm.value.isRichEditor" (loaded)="questionLoaded($event)">
+                        <WebView #questionWebView id="questionWebView" height="500" (loadFinished)="onLoadFinished($event,-1)" ></WebView>
                     </StackLayout>
 
                     <StackLayout *ngIf="questionForm.value.isRichEditor">
@@ -98,7 +98,7 @@
 
                                     </StackLayout>
                                 </StackLayout>
-                                <StackLayout row="1" col="1" *ngIf="answers.controls[i].controls.isRichEditor.value">
+                                <StackLayout row="1" col="1" *ngIf="answers.controls[i].controls.isRichEditor.value" (loaded)="answerLoaded(i)">
                                     <WebView #webView [id]="i" height="500" (loadFinished)="onLoadFinished($event,i)"></WebView>
                                 </StackLayout>
 

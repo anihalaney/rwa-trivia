@@ -12,7 +12,6 @@ import { isAndroid, isIOS } from 'tns-core-modules/platform';
 
 export class RenderQuestionComponent implements OnInit, OnChanges {
 
-    @Input() renderWebView: boolean;
     @Input() question: Question;
     @Input() questionIndex: number;
 

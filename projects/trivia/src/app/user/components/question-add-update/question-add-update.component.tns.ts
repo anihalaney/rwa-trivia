@@ -77,12 +77,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   @Output() hideQuestion = new EventEmitter<boolean>();
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChildren('textField') textField: QueryList<ElementRef>;
+  @ViewChild('questionWebView') questionWebView: ElementRef;
+  // @ViewChild('questionWebView') questionWebView: RadAutoCompleteTextViewComponent;
 
-  questionWebView: ElementRef;
-  @ViewChild('questionWebView') set contents(content: ElementRef) {
-    this.questionWebView = content;
-  }
-
+  // @ViewChildren('textField') textField: QueryList<ElementRef>;
   @ViewChildren('webView') webView: QueryList<ElementRef>;
 
   get dataItems(): ObservableArray<TokenModel> {
@@ -174,7 +172,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   onLoadFinished(event, id) {
-
+    console.log('on loaded complete');
     if (id === -1) {
       if (this.oWebViewInterface && this.editQuestion) {
         this.oWebViewInterface.emit('deltaObject', this.editQuestion.questionObject);
@@ -195,85 +193,85 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
   }
 
   questionChecked(i) {
-    setTimeout(() => {
-      if (this.questionWebView) {
-        const myWebViewInstance = this.questionWebView.nativeElement;
-        if (!myWebViewInstance) {
-        } else {
-          this.oWebViewInterface = new webViewInterfaceModule.WebViewInterface(myWebViewInstance, CONFIG.editorUrl);
-          this.oWebViewInterface.on(WebView.loadFinishedEvent, (args: LoadEventData) => {
-          });
+    // setTimeout(() => {
+    //   if (this.questionWebView) {
+    //     const myWebViewInstance = this.questionWebView.nativeElement;
+    //     if (!myWebViewInstance) {
+    //     } else {
+    //       this.oWebViewInterface = new webViewInterfaceModule.WebViewInterface(myWebViewInstance, CONFIG.editorUrl);
+    //       this.oWebViewInterface.on(WebView.loadFinishedEvent, (args: LoadEventData) => {
+    //       });
 
-          this.oWebViewInterface.on('quillContent', (quillContent) => {
+    //       this.oWebViewInterface.on('quillContent', (quillContent) => {
 
-            this.questionForm.patchValue({ questionText: quillContent.html });
-            this.questionForm.patchValue({ questionObject: quillContent.delta });
-            this.cd.markForCheck();
-          });
+    //         this.questionForm.patchValue({ questionText: quillContent.html });
+    //         this.questionForm.patchValue({ questionObject: quillContent.delta });
+    //         this.cd.markForCheck();
+    //       });
 
-          this.oWebViewInterface.on('uploadImageStart', (uploadImage) => {
-            dialogs.action({
-              message: 'Choose option',
-              cancelButtonText: 'Cancel',
-              actions: ['Camera', 'Gallery']
-            }).then(async result => {
-              if (result === 'Camera') {
-                await this.uploadImageFromCamera(this.oWebViewInterface);
-              } else if (result === 'Gallery') {
-                await this.uploadImageFromGallery(this.oWebViewInterface);
-              }
-              this.cd.markForCheck();
-            });
-          });
-        }
-      }
-    }, 1000);
+    //       this.oWebViewInterface.on('uploadImageStart', (uploadImage) => {
+    //         dialogs.action({
+    //           message: 'Choose option',
+    //           cancelButtonText: 'Cancel',
+    //           actions: ['Camera', 'Gallery']
+    //         }).then(async result => {
+    //           if (result === 'Camera') {
+    //             await this.uploadImageFromCamera(this.oWebViewInterface);
+    //           } else if (result === 'Gallery') {
+    //             await this.uploadImageFromGallery(this.oWebViewInterface);
+    //           }
+    //           this.cd.markForCheck();
+    //         });
+    //       });
+    //     }
+    //   }
+    // }, 1000);
   }
   checkboxChecked(i) {
 
-    this.answers.controls[i]['controls'].answerText.patchValue('');
-    this.answers.controls[i]['controls'].answerObject.patchValue('');
-    setTimeout(() => {
-      this.webView.toArray()
-        .map((el, index) => {
-          if (i === Number(el.nativeElement.id)) {
-            const elementId = el.nativeElement.id;
-            this.answers.controls[elementId]['controls'].answerText.patchValue('');
-            this.answers.controls[elementId]['controls'].answerObject.patchValue('');
+    // this.answers.controls[i]['controls'].answerText.patchValue('');
+    // this.answers.controls[i]['controls'].answerObject.patchValue('');
+    // setTimeout(() => {
+    //   this.webView.toArray()
+    //     .map((el, index) => {
+    //       if (i === Number(el.nativeElement.id)) {
+    //         const elementId = el.nativeElement.id;
+    //         this.answers.controls[elementId]['controls'].answerText.patchValue('');
+    //         this.answers.controls[elementId]['controls'].answerObject.patchValue('');
 
-            const webViewInterfaceObject = new webViewInterfaceModule.WebViewInterface(el.nativeElement, CONFIG.editorUrl);
+    //         const webViewInterfaceObject = new webViewInterfaceModule.WebViewInterface(el.nativeElement, CONFIG.editorUrl);
 
-            const webViewInterface = {
-              id: i,
-              element: webViewInterfaceObject
-            };
-            const fIndex = this.webViews.findIndex(view => view.id === i);
-            if (fIndex >= 0) {
-              this.webViews.splice(fIndex, 1);
-            }
-            this.webViews.push(webViewInterface);
+    //         const webViewInterface = {
+    //           id: i,
+    //           element: webViewInterfaceObject
+    //         };
+    //         const fIndex = this.webViews.findIndex(view => view.id === i);
+    //         if (fIndex >= 0) {
+    //           this.webViews.splice(fIndex, 1);
+    //         }
+    //         this.webViews.push(webViewInterface);
 
-            webViewInterfaceObject.on('quillContent', (quillContent) => {
-              this.answers.controls[elementId]['controls'].answerObject.patchValue(quillContent.delta);
-              this.answers.controls[elementId]['controls'].answerText.patchValue(quillContent.html);
-            });
+    //         webViewInterfaceObject.on('quillContent', (quillContent) => {
+    //           this.answers.controls[elementId]['controls'].answerObject.patchValue(quillContent.delta);
+    //           this.answers.controls[elementId]['controls'].answerText.patchValue(quillContent.html);
+    //         });
 
-            webViewInterfaceObject.on('uploadImageStart', (uploadImage) => {
-              dialogs.action({
-                message: 'Choose option',
-                cancelButtonText: 'Cancel',
-                actions: ['Camera', 'Gallery']
-              }).then(async result => {
-                if (result === 'Camera') {
-                  await this.uploadImageFromCamera(webViewInterfaceObject);
-                } else if (result === 'Gallery') {
-                  await this.uploadImageFromGallery(webViewInterfaceObject);
-                }
-              });
-            });
-          }
-        });
-    }, 1000);
+    //         webViewInterfaceObject.on('uploadImageStart', (uploadImage) => {
+    //           dialogs.action({
+    //             message: 'Choose option',
+    //             cancelButtonText: 'Cancel',
+    //             actions: ['Camera', 'Gallery']
+    //           }).then(async result => {
+    //             if (result === 'Camera') {
+    //               await this.uploadImageFromCamera(webViewInterfaceObject);
+    //             } else if (result === 'Gallery') {
+    //               await this.uploadImageFromGallery(webViewInterfaceObject);
+    //             }
+    //           });
+    //         });
+    //       }
+    //     });
+    // }, 1000);
   }
   async uploadImageFromCamera(webviewElement) {
     const options = {
@@ -451,6 +449,88 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
 
   ngOnDestroy() {
 
+  }
+
+  questionLoaded(event) {
+    console.log('event loaded ?????  ');
+    setTimeout(() => {
+      if (this.questionWebView) {
+        const myWebViewInstance = this.questionWebView.nativeElement;
+        if (!myWebViewInstance) {
+        } else {
+          this.oWebViewInterface = new webViewInterfaceModule.WebViewInterface(myWebViewInstance, CONFIG.editorUrl);
+          this.oWebViewInterface.on(WebView.loadFinishedEvent, (args: LoadEventData) => {
+          });
+
+          this.oWebViewInterface.on('quillContent', (quillContent) => {
+
+            this.questionForm.patchValue({ questionText: quillContent.html });
+            this.questionForm.patchValue({ questionObject: quillContent.delta });
+            this.cd.markForCheck();
+          });
+          this.oWebViewInterface.on('uploadImageStart', (uploadImage) => {
+            dialogs.action({
+              message: 'Choose option',
+              cancelButtonText: 'Cancel',
+              actions: ['Camera', 'Gallery']
+            }).then(async result => {
+              if (result === 'Camera') {
+                await this.uploadImageFromCamera(this.oWebViewInterface);
+              } else if (result === 'Gallery') {
+                await this.uploadImageFromGallery(this.oWebViewInterface);
+              }
+              this.cd.markForCheck();
+            });
+          });
+        }
+      }
+    }, 0);
+  }
+
+  answerLoaded(i) {
+    this.answers.controls[i]['controls'].answerText.patchValue('');
+    this.answers.controls[i]['controls'].answerObject.patchValue('');
+    setTimeout(() => {
+      this.webView.toArray()
+        .map((el, index) => {
+          if (i === Number(el.nativeElement.id)) {
+            const elementId = el.nativeElement.id;
+            this.answers.controls[elementId]['controls'].answerText.patchValue('');
+            this.answers.controls[elementId]['controls'].answerObject.patchValue('');
+
+            const webViewInterfaceObject = new webViewInterfaceModule.WebViewInterface(el.nativeElement, CONFIG.editorUrl);
+
+            const webViewInterface = {
+              id: i,
+              element: webViewInterfaceObject
+            };
+            const fIndex = this.webViews.findIndex(view => view.id === i);
+            if (fIndex >= 0) {
+              this.webViews.splice(fIndex, 1);
+            }
+            this.webViews.push(webViewInterface);
+
+            webViewInterfaceObject.on('quillContent', (quillContent) => {
+              this.answers.controls[elementId]['controls'].answerObject.patchValue(quillContent.delta);
+              this.answers.controls[elementId]['controls'].answerText.patchValue(quillContent.html);
+            });
+
+            webViewInterfaceObject.on('uploadImageStart', (uploadImage) => {
+              dialogs.action({
+                message: 'Choose option',
+                cancelButtonText: 'Cancel',
+                actions: ['Camera', 'Gallery']
+              }).then(async result => {
+                if (result === 'Camera') {
+                  await this.uploadImageFromCamera(webViewInterfaceObject);
+                } else if (result === 'Gallery') {
+                  await this.uploadImageFromGallery(webViewInterfaceObject);
+                }
+              });
+            });
+          }
+        });
+    }, 1000);
   }
 }
 
