@@ -1,9 +1,9 @@
-import { Component, AfterViewInit, OnInit, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import { AppState, appState } from './../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ApplicationSettings } from 'shared-library/shared/model';
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-editor',
@@ -38,7 +38,7 @@ export class EditorComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>,
     private cd: ChangeDetectorRef,
     private ngZone: NgZone) {
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings[0]) {
         this.applicationSettings = appSettings[0];
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
@@ -46,7 +46,7 @@ export class EditorComponent implements OnInit, OnDestroy {
         this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
         this.show = true;
       }
-    });
+    }));
   }
 
   ngOnInit() {

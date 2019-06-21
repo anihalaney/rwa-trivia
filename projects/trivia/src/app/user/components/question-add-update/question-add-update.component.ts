@@ -8,13 +8,14 @@ import { Router } from '@angular/router';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
 import { QuestionAddUpdate } from './question-add-update';
 import { Question, Answer } from 'shared-library/shared/model';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime, map, concatMap, mergeMap } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { QuestionService } from 'shared-library/core/services';
 import { ImageCropperComponent } from 'ngx-img-cropper';
 import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
 import { PreviewQuestionDialogComponent } from './preview-question-dialog/preview-question-dialog.component';
 import { CropImageDialogComponent } from 'shared-library/shared/components';
+import { of } from 'rxjs';
 
 @Component({
   templateUrl: './question-add-update.component.html',
@@ -76,7 +77,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       }
     }));
 
-    this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
+    this.subscriptions.push(this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
       setTimeout(() => {
         this.questionForm.patchValue({ questionText: '' });
         if (isRichEditor) {
@@ -90,7 +91,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
         this.questionForm.get('maxTime').updateValueAndValidity();
         this.questionForm.get('questionText').updateValueAndValidity();
       }, 0);
-    });
+    }));
 
     const questionControl = this.questionForm.get('questionText');
 
@@ -128,21 +129,19 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
       });
 
       this.dialogRef.componentInstance.ref = this.dialogRef;
-      this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
-        if (result) {
+
+      this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed()
+        .pipe(mergeMap(result => {
           const fileName = `questions/${new Date().getTime()}-${file.name}`;
-          this.questionService.saveQuestionImage(result.image, fileName).subscribe(image => {
-            if (image != null) {
-              if (image.name) {
-                this.questionService.getQuestionDownloadUrl(`questions/${image.name}`).subscribe(imageUrl => {
-                  quillImageUpload.setImage(imageUrl);
-                  this.cd.markForCheck();
-                });
-              }
-            }
-          });
-        }
-      }));
+          return this.questionService.saveQuestionImage(result['image'], fileName);
+        }),
+          mergeMap(image => {
+            return this.questionService.getQuestionDownloadUrl(`questions/${image['name']}`);
+          })
+        ).subscribe(imageUrl => {
+          quillImageUpload.setImage(imageUrl);
+          this.cd.markForCheck();
+        }));
     }
 
 
@@ -158,16 +157,16 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
       if (result) {
         const fileName = `questions/${new Date().getTime()}-${file.name}`;
-        this.questionService.saveQuestionImage(result.image, fileName).subscribe(image => {
+        this.subscriptions.push(this.questionService.saveQuestionImage(result.image, fileName).subscribe(image => {
           if (image != null) {
             if (image.name) {
-              this.questionService.getQuestionDownloadUrl(`questions/${image.name}`).subscribe(imageUrl => {
+              this.subscriptions.push(this.questionService.getQuestionDownloadUrl(`questions/${image.name}`).subscribe(imageUrl => {
                 this.quillImageUrl = imageUrl;
                 this.cd.markForCheck();
-              });
+              }));
             }
           }
-        });
+        }));
       }
     }));
   }
@@ -189,7 +188,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     }
 
     const tagsFA = new FormArray(fcs);
-     this.questionForm = this.fb.group({
+    this.questionForm = this.fb.group({
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
       questionText: ['',
         Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.question_max_length)])],
@@ -272,14 +271,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     });
 
     this.dialogRef.componentInstance.ref = this.dialogRef;
-    this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
-
-    });
-    this.subscriptions.push(this.dialogRef.afterOpen().subscribe(x => {
-      // this.renderer.addClass(document.body, 'dialog-open');
-    }));
-    this.subscriptions.push(this.dialogRef.afterClosed().subscribe(x => {
-      // this.renderer.removeClass(document.body, 'dialog-open');
+    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
     }));
 
   }

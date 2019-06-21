@@ -8,7 +8,7 @@ import { map, take } from 'rxjs/operators';
 import { UserActions } from 'shared-library/core/store';
 import { Category, Question, QuestionStatus, SearchCriteria, SearchResults, User, ApplicationSettings } from 'shared-library/shared/model';
 import * as bulkActions from '../../../bulk/store/actions';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+import { AppState, appState, getCategories, getTags } from '../../../store';
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
 
@@ -57,14 +57,14 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
     private router: Router,
     private userActions: UserActions) {
 
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
         this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
       }
-    });
+    }));
 
     this.questionsSearchResultsObs = this.store.select(adminState).pipe(select(s => s.questionsSearchResults));
     this.unpublishedQuestionsObs = this.store.select(adminState).pipe(select(s => s.unpublishedQuestions), map((question) => {

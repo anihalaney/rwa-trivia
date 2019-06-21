@@ -2,7 +2,7 @@ import {
   Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
   ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewContainerRef, AfterViewInit, OnInit
 } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { Utils } from 'shared-library/core/services';
@@ -137,7 +137,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       this.cd.markForCheck();
     }));
 
-    this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
+    this.subscriptions.push(this.questionForm.get('isRichEditor').valueChanges.subscribe(isRichEditor => {
       this.cd.markForCheck();
       this.questionForm.patchValue({ questionText: '' });
       if (isRichEditor) {
@@ -151,11 +151,11 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       }
       this.questionForm.get('maxTime').updateValueAndValidity();
       this.questionForm.get('questionText').updateValueAndValidity();
-    });
+    }));
 
-    this.questionForm.get('answers').valueChanges.subscribe((changes) => {
+    this.subscriptions.push(this.questionForm.get('answers').valueChanges.subscribe((changes) => {
       this.cd.markForCheck();
-    });
+    }));
 
   }
 
@@ -306,14 +306,14 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
       if (result) {
         const image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
         this.imagePath = image;
-        this.questionService.saveQuestionImage(this.imagePath, 'ded').subscribe(imageObject => {
+        this.subscriptions.push(this.questionService.saveQuestionImage(this.imagePath, '').subscribe(imageObject => {
           if (imageObject != null) {
             if (imageObject.name) {
               const imageName = this.utils.getQuestionUrl(imageObject.name) + `?d=${new Date().getTime()}`;
               webviewElement.emit('imageUrl', imageName);
             }
           }
-        });
+        }));
       }
     } catch (error) {
       console.error(error);

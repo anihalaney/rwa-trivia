@@ -295,7 +295,7 @@ export enum HeaderConstants {
     IMAGE_FORWARD_SLASH_PNG = 'image/png',
     TEXT_FORWARD_SLASH_PLAIN = 'text/plain',
     IMAGE_FORWARD_SLASH_JPEG = 'image/jpeg',
-    ATTACHMENT_SEMI_COLON_FILE_NAME_EQUAL_TO_QUESTION_UNDER_SCORE_IMAGE_DOT_PNG = 'attachment; filename=question_image.png',
+    ATTACHMENT_QUESTION_IMAGE_PNG = 'attachment; filename=question_image.png',
 }
 
 export enum RoutesConstants {
