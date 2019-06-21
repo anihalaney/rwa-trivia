@@ -93,7 +93,7 @@ export class UserService {
                 if (appSetting.social_profile) {
                     for (const socialProfile of appSetting.social_profile) {
                         if (socialProfile.enable) {
-                            user[socialProfile.social_name] = dbUser[socialProfile.social_name];
+                            user[socialProfile.social_name] = (dbUser[socialProfile.social_name]) ? dbUser[socialProfile.social_name] : '';
                         }
                     }
                 }
