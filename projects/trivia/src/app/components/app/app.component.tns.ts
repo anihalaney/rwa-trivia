@@ -21,7 +21,6 @@ import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
 import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
 import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
-import { crashlytics } from 'nativescript-plugin-firebase';
 
 @Component({
   selector: 'app-root',
@@ -116,7 +115,7 @@ export class AppComponent implements OnInit, OnDestroy {
         if (appSettings && appSettings.length > 0) {
 
           this.applicationSettings = appSettings[0];
-          console.log('appSettings', this.applicationSettings.crashlytics);
+       //   console.log('appSettings', this.applicationSettings.crashlytics);
           if (isAndroid && version && this.applicationSettings.android_version
             && this.applicationSettings.android_version > version) {
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.googlePlayUrl);
@@ -124,16 +123,6 @@ export class AppComponent implements OnInit, OnDestroy {
             && this.applicationSettings.ios_version > version) {
             this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
           }
-
-          //  console.log("this.applicationSettings.crashlytics", this.applicationSettings.crashlytics);
-          (this.applicationSettings.crashlytics) ?
-            crashlytics.setCrashlyticsCollectionEnabled(true)
-            : crashlytics.setCrashlyticsCollectionEnabled(false);
-
-       //   this.utils.sendErrorToCrashlytics('custom Exception', new java.lang.Exception("other Exception"));
-
-
-       
 
         }
         this.cd.markForCheck();

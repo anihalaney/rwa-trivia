@@ -14,7 +14,6 @@ export class ApplicationSettings {
     phone_authentication: boolean;
     default_names: Array<string>;
     user_display_name_value: number;
-    crashlytics: boolean;
 }
 
 export class TimerLoader {
