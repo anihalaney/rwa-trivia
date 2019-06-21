@@ -133,6 +133,8 @@ export class AppComponent implements OnInit, OnDestroy {
        //   this.utils.sendErrorToCrashlytics('custom Exception', new java.lang.Exception("other Exception"));
 
 
+       
+
         }
         this.cd.markForCheck();
       }));
