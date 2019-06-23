@@ -146,6 +146,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         const imageSource = await fromAsset(imageAsset);
         this.cropImage(imageSource);
       } catch (error) {
+        this.utils.sendErrorToCrashlytics('appLog', error);
         console.error(error);
       }
     }
@@ -162,6 +163,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.cd.detectChanges();
       }
     } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
   }
@@ -183,6 +185,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       imageSource = await fromAsset(imageAsset);
       this.cropImage(imageSource);
     } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
 

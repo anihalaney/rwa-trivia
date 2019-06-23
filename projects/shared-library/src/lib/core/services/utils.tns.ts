@@ -1,6 +1,7 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Feedback, FeedbackType, FeedbackPosition } from 'nativescript-feedback';
 import { UtilsCore } from './utilsCore';
+import * as firebase from 'nativescript-plugin-firebase';
 
 @Injectable()
 export class Utils extends UtilsCore {
@@ -14,21 +15,29 @@ export class Utils extends UtilsCore {
   };
 
   constructor(@Inject(PLATFORM_ID) public platformId: Object) {
-      super(platformId);
-      this.message = new Feedback();
+    super(platformId);
+    this.message = new Feedback();
   }
 
   showMessage(type, message) {
     switch (type) {
       case 'success':
         this.messageConfig.type = FeedbackType.Success;
-      break;
+        break;
       case 'error':
         this.messageConfig.type = FeedbackType.Error;
-      break;
+        break;
     }
     this.messageConfig.message = message;
     this.message.show(this.messageConfig);
+
+  }
+
+  sendErrorToCrashlytics(type: any, error: any) {
+    firebase.crashlytics.sendCrashLog({
+      type: type,
+      exception: error
+    });
 
   }
 
