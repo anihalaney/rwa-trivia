@@ -55,11 +55,11 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
     private router: Router,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     public cd: ChangeDetectorRef,
     private page: Page,
     private ngZone: NgZone) {
-    super(store, utils, gameActions, userActions, cd);
+    super(store, utils, gameActions, userActions, cd, route);
     this.initDataItems();
   }
   ngOnInit() {

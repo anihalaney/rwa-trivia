@@ -8,6 +8,7 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -37,7 +38,8 @@ export class NewGame implements OnDestroy {
     public utils: Utils,
     public gameActions: GameActions,
     public userActions: UserActions,
-    public cd: ChangeDetectorRef) {
+    public cd: ChangeDetectorRef,
+    public route: ActivatedRoute) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories), take(1));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
@@ -53,25 +55,35 @@ export class NewGame implements OnDestroy {
         } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
           this.selectedTags = this.user.lastGamePlayOption.tags;
         }
+        this.route.params.subscribe(data => {
+          if (!data.userid) {
         this.store.dispatch(this.userActions.loadUserFriends(user.userId));
+          }
+        });
       }
     }));
 
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
-      if (uFriends) {
-        this.uFriends = [];
-        uFriends.map(friend => {
-          if (this.userDict && !this.userDict[friend.userId]) {
-            this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
-          }
-          this.uFriends = [...this.uFriends, ...friend.userId];
-        });
-        this.noFriendsStatus = false;
-      } else {
-        this.noFriendsStatus = true;
-      }
-      this.cd.markForCheck();
-    }));
+    this.subscriptions.push(
+      this.route.params.subscribe(data => {
+        if (!data.userid) {
+          this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
+            if (uFriends) {
+              this.uFriends = [];
+              uFriends.map(friend => {
+                if (this.userDict && !this.userDict[friend.userId]) {
+                  this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
+                }
+                this.uFriends = [...this.uFriends, ...friend.userId];
+              });
+              this.noFriendsStatus = false;
+            } else {
+              this.noFriendsStatus = true;
+            }
+            this.cd.markForCheck();
+          });
+        }
+      })
+    );
     this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.gameOptions = new GameOptions();

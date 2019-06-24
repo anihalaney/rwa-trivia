@@ -58,12 +58,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public gameActions: GameActions,
     private windowRef: WindowRef,
     private router: Router,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
     public cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions, cd);
+    super(store, utils, gameActions, userActions, cd, route);
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {

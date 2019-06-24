@@ -102,9 +102,11 @@ export class UserEffects {
                 this.svc.loadUserFriends(action.payload)
                     .pipe(map((friends: Friends) => {
                     const friendList = [];
-                    friends.myFriends.map((friend, index) => {
-                        friendList.push(Object.keys(friend)[0]);
-                    });
+                    if (friends && friends.myFriends) {
+                        friends.myFriends.map((friend, index) => {
+                            friendList.push(Object.keys(friend)[0]);
+                        });
+                    }
                     return friendList;
                     }),
                     switchMap((friendsList: string[]) =>
