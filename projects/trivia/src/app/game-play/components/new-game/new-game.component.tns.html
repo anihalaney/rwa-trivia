@@ -2,7 +2,7 @@
 <StackLayout *ngIf="renderView">
     <ScrollView>
         <StackLayout class="new-game Roboto-Regular" backgroundColor="#f1f2f2">
-            <GridLayout rows="auto,auto" columns="auto,*" padding="10 10 5 10">
+            <GridLayout  *ngIf="!challengerUserId" rows="auto,auto" columns="auto,*" padding="10 10 5 10">
                 <Label row="0" col="0" text="Select Player Mode" textWrap="true" class="main-label" fontSize="18"
                     color="#616161"></Label>
                 <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
@@ -10,7 +10,7 @@
                     borderColor="#A9A9A9" (tap)="showSelectPlayer = !showSelectPlayer" background="#fff"></Label>
             </GridLayout>
 
-            <CardView margin="10" android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"
+            <CardView  *ngIf="!challengerUserId" margin="10" android:elevation="20" ios:elevation="40" radius="1" width="95%" margin="15 0 15 0"
                 visibility="{{ !showSelectPlayer ? 'visible' : 'collapsed' }}">
                 <StackLayout orientation="horizontal" horizontalAlignment="center" backgroundColor="white"
                     fontSize="17">

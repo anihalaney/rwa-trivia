@@ -1,4 +1,4 @@
-import { 
+import {
   Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
@@ -13,7 +13,7 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
 import { filter, take } from 'rxjs/operators';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ListViewEventData } from 'nativescript-ui-listview';
@@ -45,7 +45,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   // This is magic variable
   // it delay complex UI show Router navigation can finish first to have smooth transition
   renderView = false;
-
+  challengerUserId: string;
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
   @ViewChild('friendListView') listViewComponent: RadListViewComponent;
 
@@ -55,6 +55,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
     private router: Router,
+    private route: ActivatedRoute,
     public cd: ChangeDetectorRef,
     private page: Page,
     private ngZone: NgZone) {
@@ -62,6 +63,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.initDataItems();
   }
   ngOnInit() {
+
+    this.subscriptions.push(
+      this.route.params.subscribe(data => {
+        if (data && data.userid) {
+          this.challengerUserId = data.userid;
+          this.gameOptions.playerMode = '1';
+          this.gameOptions.opponentType = '1';
+    }}));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       if (gameObj && gameObj['gameId']) {
@@ -126,8 +135,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
       if (uFriends) {
         this.uFriends = [];
-        uFriends.myFriends.map(friend => {
-          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
+        uFriends.map(friend => {
+          this.uFriends = [...this.uFriends, ...friend.userId];
         });
         this.dataItem = this.uFriends;
         this.noFriendsStatus = false;

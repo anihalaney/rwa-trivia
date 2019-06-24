@@ -1,4 +1,5 @@
-import { CollectionConstants, GeneralConstants, User, UserConstants, Account } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, GeneralConstants, User, UserConstants, Account,
+    GamePlayedWithMetadata } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 import { AccountService } from './account.service';
@@ -28,9 +29,38 @@ export class UserService {
     static async getUserById(userId: string): Promise<any> {
         try {
             const userData = await UserService.fireStoreClient
-                .doc(`/${CollectionConstants.USERS}/${userId}`)
+                .doc(`/${CollectionConstants.USERS}/${userId}/`)
                 .get();
             return userData.data();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * getOtherUserByIdWithGameStat
+     * return userGameStatwith other user
+    */
+   static async getOtherUserGameStatById(userId: string, otherUserId): Promise<any> {
+    try {
+        const userData = await UserService.fireStoreClient
+            .doc(`/${CollectionConstants.USERS}/${userId}/game_played_with/${otherUserId}`)
+            .get();
+        return userData.data();
+    } catch (error) {
+        return Utils.throwError(error);
+    }
+   }
+
+    /**
+     * setUser Game stat with other user
+     * return ref
+     */
+    static async setGameStat(gameStat: any, userId, otherUserId: any): Promise<any> {
+        try {
+            return await UserService.fireStoreClient
+            .doc(`/${CollectionConstants.USERS}/${userId}/game_played_with/${otherUserId}`)
+            .set(gameStat, { merge: true });
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -80,6 +110,7 @@ export class UserService {
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;
             let gamePlayed;
+            let isFriend = false;
             if (extendedInfo) {
                 user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];
                 user.tags = (dbUser && dbUser.tags) ? dbUser.tags : [];
@@ -104,17 +135,16 @@ export class UserService {
                 user.account.gamePlayed = (account && account.gamePlayed) ? account.gamePlayed : 0;
 
                 if (loginUserId && loginUserId !== '') {
+                    gamePlayed = await UserService.getOtherUserGameStatById(loginUserId, userId);
                     const friendList = await FriendService.getFriendByInvitee(loginUserId);
                     if (friendList && friendList.myFriends) {
-                        const game = friendList.myFriends.filter(element => element[userId] ? true : false);
-                        if (game[0] && game[0][userId]) {
-                            gamePlayed = game[0][userId];
-                        }
+                        const friend = friendList.myFriends.filter(element => element[userId] ? true : false);
+                        isFriend = friend[0] ? true : false;
                     }
                 }
 
             }
-            return { ...user, gamePlayed};
+            return { ...user, gamePlayed, 'isFriend': isFriend };
         } catch (error) {
             return Utils.throwError(error);
         }
@@ -278,6 +308,40 @@ export class UserService {
 
             return user;
 
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * updateUserGameStat
+     * return status
+     */
+    static async updateUserGamePlayedWithStat(): Promise<any> {
+        try {
+            const friendsData = await FriendService.getFriendsCollection();
+            const promises = [];
+            for (const doc of friendsData.docs) {
+                const friends = doc.data();
+                const userId = doc.id;
+                    const updateUser = {...friends};
+                    for (const [index, friendMetaDataMap] of friends.myFriends.entries()) {
+                        for (const friendUserId of Object.keys(friendMetaDataMap)) {
+                            promises.push(UserService.setGameStat({ ...friendMetaDataMap[friendUserId] }, userId, friendUserId));
+                            if (updateUser.myFriends[index] && updateUser.myFriends[index][friendUserId] &&
+                                friendMetaDataMap[friendUserId] && friendMetaDataMap[friendUserId].created_uid) {
+
+                                updateUser.myFriends[index][friendUserId] = {
+                                    'created_uid': friendMetaDataMap[friendUserId].created_uid,
+                                    'date' : friendMetaDataMap[friendUserId].date ?
+                                    friendMetaDataMap[friendUserId].date : new Date().getUTCDate()
+                                };
+                            }
+                        }
+                    }
+                    promises.push(FriendService.setFriend(updateUser, userId));
+            }
+           return await Promise.all(promises);
         } catch (error) {
             return Utils.throwError(error);
         }

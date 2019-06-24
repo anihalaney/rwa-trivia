@@ -21,7 +21,7 @@ import { ProfileSettings } from './profile-settings';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { fromAsset } from 'tns-core-modules/image-source';
 import { ImageCropper } from 'nativescript-imagecropper';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
 import { Subscription } from 'rxjs';
@@ -68,8 +68,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public userAction: UserActions,
     public uUtils: Utils,
     public cd: ChangeDetectorRef,
-    public route: ActivatedRoute) {
-    super(fb, store, userAction, uUtils, cd, route);
+    public route: ActivatedRoute,
+    public router: Router) {
+    super(fb, store, userAction, uUtils, cd, route, router);
     this.initDataItems();
     requestPermissions();
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {

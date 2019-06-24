@@ -357,7 +357,8 @@ export enum RoutesConstants {
     ACHIEVEMENT = 'achievement',
     RULES = 'rules',
     DISPLAY_NAME = 'display-name',
-    DISPLAY_DASH_NAME = 'displayName'
+    DISPLAY_DASH_NAME = 'displayName',
+    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat'
 }
 
 export enum AppStoreUrl {

@@ -51,9 +51,11 @@ export class GamePlayEffects {
       map((action: any): RouterStateUrl => action.payload.routerState),
       filter((routerState: RouterStateUrl) => {
         if (routerState.url.toLowerCase().startsWith('/game-play/') &&
+        !routerState.url.toLowerCase().startsWith('/game-play/challenge') &&
           routerState.params) {
           return true;
-        } else if (routerState.url.toLowerCase().startsWith('/game-play/') && routerState['root']) {
+        } else if ((routerState.url.toLowerCase().startsWith('/game-play/') ||
+        routerState.url.toLowerCase().startsWith('/game-play/challenge'))  && routerState['root']) {
           return true;
         } else {
           return false;

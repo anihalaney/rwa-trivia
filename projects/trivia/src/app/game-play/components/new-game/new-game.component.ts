@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
@@ -37,6 +37,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   friendUserId: string;
   loaderStatus = false;
 
+  challengerUserId: string;
   public config: SwiperConfigInterface = {
     a11y: true,
     direction: 'horizontal',
@@ -57,6 +58,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public gameActions: GameActions,
     private windowRef: WindowRef,
     private router: Router,
+    private route: ActivatedRoute,
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
@@ -114,26 +116,39 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.gameOptions = new GameOptions();
 
-    this.newGameForm = this.createForm(this.gameOptions);
+    this.subscriptions.push(
+      this.route.params.subscribe(data => {
+        if (data && data.userid) {
+          this.challengerUserId = data.userid;
+        }
+        this.gameOptions = new GameOptions(this.challengerUserId ? true : false);
 
-    const playerModeControl = this.newGameForm.get('playerMode');
-    playerModeControl.setValue('0');
-    const opponentTypeControl = this.newGameForm.get('opponentType');
+        this.newGameForm = this.createForm(this.gameOptions);
 
-    this.subscriptions.push(playerModeControl.valueChanges.subscribe(v => {
-      if (v === '1') {
-        opponentTypeControl.enable();
-        opponentTypeControl.setValue('0');
-      } else {
-        opponentTypeControl.disable();
-        opponentTypeControl.reset();
-      }
+        const playerModeControl = this.newGameForm.get('playerMode');
+        playerModeControl.setValue(this.challengerUserId ? '1' : '0');
+        const opponentTypeControl = this.newGameForm.get('opponentType');
+        if ( this.challengerUserId ) {
+          opponentTypeControl.setValue('1');
+        }
+
+        if ( this.challengerUserId ) {
+          this.selectFriendId(this.challengerUserId);
+        }
+        this.subscriptions.push(playerModeControl.valueChanges.subscribe(v => {
+          if (v === '1') {
+            opponentTypeControl.enable();
+            opponentTypeControl.setValue('0');
+          } else {
+            opponentTypeControl.disable();
+            opponentTypeControl.reset();
+          }
+        }));
+
+        this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
+          .pipe(map(val => val.length > 0 ? this.filter(val) : []));
     }));
-
-    this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
   }
 
   autoOptionClick(event) {
@@ -176,13 +191,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }
 
     const tagsFA = new FormArray(fcs);
-
     const form: FormGroup = this.fb.group({
       playerMode: [gameOptions.playerMode, Validators.required],
       opponentType: [gameOptions.opponentType],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
-      tagsArray: tagsFA
+      tagsArray: tagsFA,
+      isChallenege: gameOptions.isChallenge
     } //, {validator: questionFormValidator}
     );
     return form;
@@ -241,6 +256,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     gameOptions.categoryIds = this.selectedCategories;
     gameOptions.gameMode = GameMode.Normal;
     gameOptions.tags = this.selectedTags;
+    gameOptions.isChallenge = formValue.isChallenege;
 
     return gameOptions;
   }

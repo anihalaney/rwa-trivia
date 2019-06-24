@@ -57,14 +57,14 @@ export class NewGame implements OnDestroy {
       }
     }));
 
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
       if (uFriends) {
         this.uFriends = [];
-        uFriends.myFriends.map(friend => {
-          if (this.userDict && !this.userDict[Object.keys(friend)[0]]) {
-            this.store.dispatch(this.userActions.loadOtherUserProfile(Object.keys(friend)[0]));
+        uFriends.map(friend => {
+          if (this.userDict && !this.userDict[friend.userId]) {
+            this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
           }
-          this.uFriends = [...this.uFriends, ...Object.keys(friend)];
+          this.uFriends = [...this.uFriends, ...friend.userId];
         });
         this.noFriendsStatus = false;
       } else {
