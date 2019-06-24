@@ -42,7 +42,8 @@ export enum interceptorConstants {
     SUCCESS = 200,
     BAD_REQUEST = 400,
     FORBIDDEN = 403,
-    MAXIMUM_RE_REQUEST_LIMIT = 3
+    MAXIMUM_RE_REQUEST_LIMIT = 3,
+    ENTITY_NOT_FOUND = 404
 }
 
 

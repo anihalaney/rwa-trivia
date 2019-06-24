@@ -14,13 +14,13 @@ export class PushNotification {
             const notificationPromises = [];
             if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
                 for (const token of dbUser.androidPushTokens) {
-                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data));
+                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
                 }
             }
 
             if (dbUser.iosPushTokens && dbUser.iosPushTokens.length > 0) {
                 for (const token of dbUser.iosPushTokens) {
-                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data));
+                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
                 }
             }
 
@@ -31,7 +31,7 @@ export class PushNotification {
 
     }
 
-    static sendNotification(registrationToken: string, title: string, body: string, data: any): Promise<String> {
+    static sendNotification(registrationToken: string, title: string, body: string, data: any, dbUser: User): Promise<String> {
         const message = {
             notification: {
                 title: title,
@@ -40,7 +40,7 @@ export class PushNotification {
             data: data,
             token: registrationToken
         };
-        return PushNotificationService.sendPush(message);
+        return PushNotificationService.sendPush(message, dbUser);
     }
 
 
