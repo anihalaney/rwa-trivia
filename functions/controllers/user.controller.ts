@@ -79,6 +79,7 @@ export class UserController {
             Utils.sendResponse(res, interceptorConstants.UNAUTHORIZED, ResponseMessagesConstants.UNAUTHORIZED);
         }
 
+
         let user = req.body.user;
 
         try {
