@@ -94,6 +94,10 @@ export class EditorComponent implements OnInit, OnDestroy {
     this.oWebViewInterface.emit('uploadImageStart', true);
   }
 
-  ngOnDestroy() { }
+  ngOnDestroy() {
+    this.oWebViewInterface.off('answerIndex');
+    this.oWebViewInterface.off('imageUrl');
+    this.oWebViewInterface.off('deltaObject');
+  }
 
 }

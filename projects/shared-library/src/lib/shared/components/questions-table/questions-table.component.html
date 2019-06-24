@@ -72,8 +72,9 @@
               <div class="question-text ">Other options :</div>
               <div class="answer-text">
                 <span *ngFor="let answer of row.answers">
-                  <span *ngIf="!answer.correct">
-                      <render-answer  [answer]="answer"></render-answer></span>
+                  <div *ngIf="!answer.correct">
+                      <render-answer  [answer]="answer"></render-answer>
+                  </div>
                 </span>
               </div>
             </li>
@@ -108,7 +109,10 @@
                 <div class="question-text">Correct answer :</div>
                 <div class="answer-text">
                   <span *ngFor="let answer of row.answers">
-                    <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                    <span *ngIf="answer.correct">
+                      <!-- {{answer.answerText}} -->
+                      <render-answer  [answer]="answer"></render-answer>
+                    </span>
                   </span>
                 </div>
               </div>

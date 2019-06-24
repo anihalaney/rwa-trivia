@@ -2,7 +2,7 @@ import { Component, Input, OnInit, SimpleChanges, OnChanges, ChangeDetectorRef }
 import { Question } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
-
+import { CONFIG } from './../../../environments/environment';
 @Component({
     selector: 'render-question',
     moduleId: module.id,
@@ -25,7 +25,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     // tslint:disable-next-line:max-line-length
     htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
     // tslint:disable-next-line:max-line-length
-    htmlEndTag = `</body><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css" crossorigin="anonymous"></html>`;
+    htmlEndTag = `</body><link rel="stylesheet" href="${CONFIG.katexCSSURL}" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous"><link rel="stylesheet" href="${CONFIG.hightlighCSSURL}" crossorigin="anonymous"></html>`;
 
     questionHeight = 0;
     qIndex = '';

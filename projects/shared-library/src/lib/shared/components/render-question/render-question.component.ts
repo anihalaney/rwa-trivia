@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Question } from 'shared-library/shared/model';
 
-
 @Component({
     selector: 'render-question',
     moduleId: module.id,
@@ -22,6 +21,5 @@ export class RenderQuestionComponent implements OnInit {
         } else {
             this.questionIndex = '';
         }
-        // this.question = { ...this.question };
     }
 }

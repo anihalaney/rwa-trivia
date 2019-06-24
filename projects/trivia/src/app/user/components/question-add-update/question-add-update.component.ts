@@ -139,36 +139,13 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
             return this.questionService.getQuestionDownloadUrl(`questions/${image['name']}`);
           })
         ).subscribe(imageUrl => {
+          // SetImage callback function called to set image in editor
           quillImageUpload.setImage(imageUrl);
           this.cd.markForCheck();
         }));
     }
 
 
-  }
-
-  openDialog(file: File) {
-    this.dialogRef = this.dialog.open(CropImageDialogComponent, {
-      disableClose: false,
-      data: { file: file, applicationSettings: this.applicationSettings }
-    });
-
-    this.dialogRef.componentInstance.ref = this.dialogRef;
-    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
-      if (result) {
-        const fileName = `questions/${new Date().getTime()}-${file.name}`;
-        this.subscriptions.push(this.questionService.saveQuestionImage(result.image, fileName).subscribe(image => {
-          if (image != null) {
-            if (image.name) {
-              this.subscriptions.push(this.questionService.getQuestionDownloadUrl(`questions/${image.name}`).subscribe(imageUrl => {
-                this.quillImageUrl = imageUrl;
-                this.cd.markForCheck();
-              }));
-            }
-          }
-        }));
-      }
-    }));
   }
 
   ngOnInit(): void {

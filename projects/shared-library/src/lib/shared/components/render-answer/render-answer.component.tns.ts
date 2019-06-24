@@ -1,7 +1,8 @@
 import { Component, Input, OnInit, SimpleChanges, OnChanges } from "@angular/core";
 import { Answer } from "shared-library/shared/model";
-import { WebView, LoadEventData } from 'tns-core-modules/ui/web-view';
-import { isAndroid, isIOS, device, screen } from 'tns-core-modules/platform';
+import { LoadEventData } from 'tns-core-modules/ui/web-view';
+import { isAndroid, isIOS } from 'tns-core-modules/platform';
+import { CONFIG } from './../../../environments/environment';
 
 @Component({
     selector: 'render-answer',
@@ -25,9 +26,9 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     document.location.href += "#" + height;
     </script><style>pre.ql-syntax { background-color: #23241f;overflow: visible;}</style>`;
     // tslint:disable-next-line:max-line-length
-    htmlStartTag = `<html><head><body style="font-size:12px; ${this.isGameAnswer ? 'font-weight: bold !important;' : ''} padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>`;
+    htmlStartTag = `<html><head><body style="font-size:12px; ${this.isGameAnswer ? 'font-weight: bold !important;' : ''} padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">   <script src="${CONFIG.hightlighJsURL}"></script>`;
     // tslint:disable-next-line:max-line-length
-    htmlEndTag = `</body><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css" crossorigin="anonymous"></html>`;
+    htmlEndTag = `</body><link rel="stylesheet" href="${CONFIG.katexCSSURL}" integrity="sha384-dbVIfZGuN1Yq7/1Ocstc1lUEm+AT+/rCkibIcC/OmWo5f0EA48Vf8CytHzGrSwbQ" crossorigin="anonymous"><link rel="stylesheet" href="${CONFIG.hightlighCSSURL}" crossorigin="anonymous"></html>`;
     answerHeight = 0;
     isAndroid = isAndroid;
 

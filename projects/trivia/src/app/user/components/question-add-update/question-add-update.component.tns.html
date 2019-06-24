@@ -38,7 +38,7 @@
                 <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18" fontWeight="400"
                     color="#616161" marginTop="10"></Label>
                 <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f" ios:marginTop="10"
-                    formControlName="isRichEditor" (checkedChange)=questionChecked(5)></CheckBox>
+                    formControlName="isRichEditor"></CheckBox>
             </GridLayout>
 
             <StackLayout iosOverflowSafeArea="false" padding="10">
@@ -57,8 +57,8 @@
                                 text="{{this.applicationSettings.question_max_length}}  characters are allowed !"></Label>
                         </StackLayout>
                     </StackLayout>
-                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="questionForm.value.isRichEditor" (loaded)="questionLoaded($event)">
-                        <WebView #questionWebView id="questionWebView" height="500" (loadFinished)="onLoadFinished($event,-1)" ></WebView>
+                    <StackLayout borderBottomWidth="1" borderColor="#e5e5e5" padding="10" *ngIf="questionForm.value.isRichEditor" >                        
+                        <WebView #questionWebView id="questionWebView" height="500" (loadFinished)="onLoadFinished($event,-1)" (loaded)="questionLoaded($event)" (unloaded)="questionUnloaded($event)" ></WebView>
                     </StackLayout>
 
                     <StackLayout *ngIf="questionForm.value.isRichEditor">
@@ -82,7 +82,7 @@
                                     <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18"
                                         fontWeight="400" color="#616161" marginTop="10" *ngIf="applicationSettings.renderWebView"></Label>
                                     <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f"
-                                        ios:marginTop="10" formControlName="isRichEditor" (checkedChange)="checkboxChecked(i)" *ngIf="applicationSettings.renderWebView"></CheckBox>
+                                        ios:marginTop="10" formControlName="isRichEditor"  *ngIf="applicationSettings.renderWebView"></CheckBox>
                                 </GridLayout>
                                 <CheckBox row="1" col="0" #elem formControlName="correct" class="checkbox" marginRight="10"
                                     fillColor="#71b02f" ios:marginTop="10"></CheckBox>
@@ -98,8 +98,8 @@
 
                                     </StackLayout>
                                 </StackLayout>
-                                <StackLayout row="1" col="1" *ngIf="answers.controls[i].controls.isRichEditor.value" (loaded)="answerLoaded(i)">
-                                    <WebView #webView [id]="i" height="500" (loadFinished)="onLoadFinished($event,i)"></WebView>
+                                <StackLayout row="1" col="1" *ngIf="answers.controls[i].controls.isRichEditor.value" >
+                                    <WebView #webView [id]="i" height="500" (loadFinished)="onLoadFinished($event,i)" (loaded)="answerLoaded($event,i)" (unloaded)="answerUnloaded($event,i)"></WebView>
                                 </StackLayout>
 
                             </GridLayout>
