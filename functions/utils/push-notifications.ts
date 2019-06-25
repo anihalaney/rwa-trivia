@@ -53,7 +53,7 @@ export class PushNotification {
             let result: any;
             switch (pushType) {
                 case pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS:
-                    if (dbUser.displayName) {
+                    if (dbUser && dbUser.displayName) {
                         const game: Game = data;
                         msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
                         switch (game.GameStatus) {
@@ -111,7 +111,7 @@ export class PushNotification {
                     msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
                     const otherUser: User = await UserService.getUserById(data.created_uid);
                     msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
-                    if (otherUser.displayName) {
+                    if (otherUser && otherUser.displayName) {
                         result = await PushNotification
                             .sendNotificationToDevices(currentTurnPlayerId, 'Friend Request',
                                 `${otherUser.displayName} has sent you a friend request.`, data);
