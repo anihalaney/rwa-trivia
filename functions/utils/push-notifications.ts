@@ -10,7 +10,9 @@ export class PushNotification {
 
     static async sendNotificationToDevices(userId: string, title: string, body: string, data: any): Promise<any> {
         try {
+            console.log('next PlayerId ----------------->', userId);
             const dbUser: User = await UserService.getUserById(userId);
+            console.log('next dbUser----------------->', dbUser);
             const notificationPromises = [];
             if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
                 for (const token of dbUser.androidPushTokens) {
@@ -31,16 +33,20 @@ export class PushNotification {
 
     }
 
-    static sendNotification(registrationToken: string, title: string, body: string, data: any, dbUser: User): Promise<String> {
-        const message = {
-            notification: {
-                title: title,
-                body: body
-            },
-            data: data,
-            token: registrationToken
-        };
-        return PushNotificationService.sendPush(message, dbUser);
+    static async sendNotification(registrationToken: string, title: string, body: string, data: any, dbUser: User): Promise<String> {
+        try {
+            const message = {
+                notification: {
+                    title: title,
+                    body: body
+                },
+                data: data,
+                token: registrationToken
+            };
+            return await PushNotificationService.sendPush(message, dbUser);
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 
 
@@ -49,11 +55,13 @@ export class PushNotification {
         try {
             let looserPlayerId;
             let msg_data;
+            console.log('currentTurnPlayerId----------------->', currentTurnPlayerId);
             let dbUser: User = await UserService.getUserById(currentTurnPlayerId);
+            console.log('dbUser----------------->', dbUser);
             let result: any;
             switch (pushType) {
                 case pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS:
-                    if (dbUser.displayName) {
+                    if (dbUser && dbUser.displayName) {
                         const game: Game = data;
                         msg_data = { 'messageType': pushNotificationRouteConstants.GAME_PLAY, 'gameId': game.gameId };
                         switch (game.GameStatus) {
@@ -109,9 +117,11 @@ export class PushNotification {
 
                 case pushNotificationRouteConstants.FRIEND_NOTIFICATIONS:
                     msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
+                    console.log('otherUser----------------->', data.created_uid);
                     const otherUser: User = await UserService.getUserById(data.created_uid);
+                    console.log('otherUser Object----------------->', otherUser);
                     msg_data = { 'messageType': pushNotificationRouteConstants.FRIEND_REQUEST };
-                    if (otherUser.displayName) {
+                    if (otherUser && otherUser.displayName) {
                         result = await PushNotification
                             .sendNotificationToDevices(currentTurnPlayerId, 'Friend Request',
                                 `${otherUser.displayName} has sent you a friend request.`, data);
