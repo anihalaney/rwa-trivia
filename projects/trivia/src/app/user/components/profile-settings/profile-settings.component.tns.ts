@@ -9,7 +9,7 @@ import * as imagepicker from 'nativescript-imagepicker';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { MobUtils } from 'shared-library/core/services/mobile';
+import { Utils } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
@@ -24,6 +24,8 @@ import { ImageCropper } from 'nativescript-imagecropper';
 import { ActivatedRoute } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
+import { Subscription } from 'rxjs';
+import { userState } from '../../store';
 
 @Component({
   selector: 'profile-settings',
@@ -44,6 +46,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
+  isValidDisplayName: boolean = null;
 
   public imageTaken: ImageAsset;
   public saveToGallery = true;
@@ -56,20 +59,21 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   tabsTitles: Array<string>;
 
 
+
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
     public userAction: UserActions,
-    public utils: MobUtils,
+    public uUtils: Utils,
     public cd: ChangeDetectorRef,
     public route: ActivatedRoute) {
-    super(fb, store, userAction, utils, cd, route);
+    super(fb, store, userAction, uUtils, cd, route);
     this.initDataItems();
     requestPermissions();
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
-        this.utils.showMessage('success', 'Profile is saved successfully');
+        this.uUtils.showMessage('success', 'Profile is saved successfully');
         this.toggleLoader(false);
       }
       this.cd.markForCheck();
@@ -81,6 +85,22 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       segmentedBarItem.title = this.tabsTitles[i];
       this.items.push(segmentedBarItem);
     }
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe((status: string) => {
+      if (status && status !== 'NONE' && status !== 'IN PROCESS' && status !== 'SUCCESS' && status !== 'MAKE FRIEND SUCCESS') {
+        this.utils.showMessage('success', status);
+      }
+      this.cd.markForCheck();
+    }));
+
+    this.subscriptions.push(this.gamePlayedChangeObservable.subscribe(data => {
+      if (this.tabsTitles.indexOf('Game Played') < 0) {
+        this.tabsTitles.push('Game Played');
+        const segmentedBarItem = <SegmentedBarItem>new SegmentedBarItem();
+        segmentedBarItem.title = 'Game Played';
+        this.items.push(segmentedBarItem);
+      }
+    }));
 
   }
 
@@ -124,7 +144,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.imageTaken = imageAsset;
         const source = new ImageSource();
         const imageSource = await fromAsset(imageAsset);
-       this.cropImage(imageSource);
+        this.cropImage(imageSource);
       } catch (error) {
         console.error(error);
       }
@@ -138,7 +158,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         { width: 150, height: 140, lockSquare: false })).image;
       if (result) {
         this.profileImage.image = `data:image/jpeg;base64,${result.toBase64String('jpeg', 100)}`;
-       this.saveProfileImage();
+        this.saveProfileImage();
         this.cd.detectChanges();
       }
     } catch (error) {
@@ -220,7 +240,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   setBulkUploadRequest(checkStatus: boolean): void {
     const userForm = this.userForm.value;
     if (!userForm.name || !userForm.displayName || !userForm.location || !userForm.profilePicture) {
-      this.utils.showMessage('error', 'Please add name, display name, location and profile picture for bulk upload request');
+      this.uUtils.showMessage('error', 'Please add name, display name, location and profile picture for bulk upload request');
     } else {
       this.user.bulkUploadPermissionStatus = profileSettingsConstants.NONE;
       this.onSubmit();
@@ -241,17 +261,33 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       return;
     }
 
-    if (isEditSingleField) {
-      this.userForm.get(field).disable();
-      this.singleFieldEdit[field] = false;
-    }
 
-    // get user object from the forms
-    this.getUserFromFormValue(isEditSingleField, field);
-    this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
-    // call saveUser
-    this.saveUser(this.user);
-    this.toggleLoader(false);
+    this.checkDisplayName(this.userForm.get('displayName').value);
+
+    this.subscriptions.push(this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+      this.isValidDisplayName = status;
+      if (this.isValidDisplayName !== null) {
+        if (this.isValidDisplayName) {
+          if (isEditSingleField) {
+            this.userForm.get(field).disable();
+            this.singleFieldEdit[field] = false;
+          }
+
+          // get user object from the forms
+          this.getUserFromFormValue(isEditSingleField, field);
+          this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
+          // call saveUser
+          this.saveUser(this.user);
+
+        } else {
+          this.userForm.controls['displayName'].setErrors({ 'exist': true });
+          this.userForm.controls['displayName'].markAsTouched();
+          this.cd.markForCheck();
+        }
+        this.toggleLoader(false);
+      }
+
+    }));
 
   }
 

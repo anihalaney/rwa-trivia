@@ -9,7 +9,7 @@ import * as gameplayactions from '../../store/actions';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
-import { MobUtils } from 'shared-library/core/services/mobile';
+import { Utils } from 'shared-library/core/services';
 import { isAndroid } from 'tns-core-modules/ui/page/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -40,7 +40,7 @@ export class ReportGameComponent implements OnInit, OnDestroy {
 
     @ViewChildren('textField') textField: QueryList<ElementRef>;
 
-    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: MobUtils,
+    constructor(private store: Store<AppState>, private params: ModalDialogParams, public utils: Utils,
         private cd: ChangeDetectorRef) {
         this.categoryDict$ = store.select(categoryDictionary);
         this.subscriptions.push(this.categoryDict$.subscribe(categoryDict => {

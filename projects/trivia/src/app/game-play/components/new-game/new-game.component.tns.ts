@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { ListViewEventData } from 'nativescript-ui-listview';
@@ -9,16 +7,18 @@ import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { MobUtils } from 'shared-library/core/services/mobile';
+import { Utils } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, OpponentType, PlayerMode, Parameter, GameConstant, GameMode } from 'shared-library/shared/model';
+import { Category, GameConstant, GameMode, OpponentType, Parameter, PlayerMode } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
+import { RouterExtensions } from 'nativescript-angular/router';
+import * as firebase from 'nativescript-plugin-firebase';
 import * as gamePlayActions from './../../store/actions';
 import { NewGame } from './new-game';
-import * as firebase from 'nativescript-plugin-firebase';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'new-game',
@@ -51,7 +51,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   constructor(public store: Store<AppState>,
     public gameActions: GameActions,
-    public utils: MobUtils,
+    public utils: Utils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
     private router: Router,

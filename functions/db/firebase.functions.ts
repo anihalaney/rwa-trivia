@@ -2,7 +2,11 @@
 import * as functions from 'firebase-functions';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { friendInvitationConstants, Game, Invitation, LeaderBoardUsers, OpponentType, PlayerMode, pushNotificationRouteConstants, Question, QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants } from '../../projects/shared-library/src/lib/shared/model';
+import {
+    friendInvitationConstants, Game, Invitation, LeaderBoardUsers,
+    OpponentType, PlayerMode, pushNotificationRouteConstants, Question,
+    QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants
+} from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
 import { LeaderBoardService } from '../services/leaderboard.service';
@@ -15,6 +19,7 @@ import { MailClient } from '../utils/mail-client';
 import { PushNotification } from '../utils/push-notifications';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
+import { UserService } from '../services/user.service';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -143,6 +148,8 @@ export class FirebaseFunctions {
             if (data) {
 
                 await StatsService.updateSystemStats('total_users');
+
+                await UserService.setUserDisplayName(data);
 
                 const appSetting = await AppSettings.Instance.getAppSettings();
                 if (appSetting.lives.enable) {
