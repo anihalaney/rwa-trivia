@@ -27,6 +27,17 @@ service cloud.firestore {
           (!request.resource.data.keys().hasAny(['roles']) || (resource.data.roles == request.resource.data.roles));
     }
     
+    match /users/{userId}/game_played_with/{otherUserId} {
+    allow read,write : if true;
+    // only allow creating user document when no roles specified
+    // only allow updating user document when roles are not altered
+    // updating of user happen via API and rules have no effect on API    
+         allow read: if isUserAuthenticated(userId); 
+         allow create: if isUserAuthenticated(userId) && !request.resource.data.keys().hasAny(['roles']);         
+    	 	allow update: if isUserAuthenticated(userId) && 
+       (!request.resource.data.keys().hasAny(['roles']) || (resource.data.roles == request.resource.data.roles));
+    }
+
 		match /{document=**} {
 		allow read, write: if isAdmin();
 		}
