@@ -70,6 +70,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.challengerUserId = data.userid;
           this.gameOptions.playerMode = '1';
           this.gameOptions.opponentType = '1';
+          this.friendUserId = data.userid;
     }}));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {

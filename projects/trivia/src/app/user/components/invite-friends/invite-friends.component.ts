@@ -40,7 +40,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     super(store, userActions, utils, cd);
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];

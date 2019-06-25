@@ -51,8 +51,7 @@
               </GridLayout>
               <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error"
                 textWrap="true" text="Location is required!"></Label>
-                <!-- *ngIf="loggedInUser && userType !== 0 && loggedInUserAccount &&  loggedInUserAccount.lives >=0 && isLivesEnable" -->
-                <StackLayout paddingTop="30" horizontalAlignment="center">
+                <StackLayout paddingTop="30" horizontalAlignment="center" *ngIf="loggedInUser && userType !== 0 && loggedInUserAccount &&  loggedInUserAccount.lives >=0 && isLivesEnable">
                   <Label stlRippleEffect (rippleTap)="startNewGame()"
                     horizontalAlignment="right" class="new-game-btn" text="Start New Game"></Label>
                 </StackLayout>
