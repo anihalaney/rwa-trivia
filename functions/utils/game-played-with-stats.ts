@@ -1,5 +1,5 @@
 import {
-    Game, GamePlayedWithMetadata
+    Game, GamePlayedWith
 } from '../../projects/shared-library/src/lib/shared/model';
 import { UserService } from '../services/user.service';
 import { Utils } from '../utils/utils';
@@ -23,24 +23,24 @@ export class GamePlayedWithStats {
 
     static async calculateGamePlayedWithStat(userId: string, otherUserId: string, game: Game): Promise<string> {
         try {
-            let userGameStat: GamePlayedWithMetadata = await UserService.getOtherUserGameStatById(userId, otherUserId);
-            let gamePlayedWithMetadata = new GamePlayedWithMetadata();
+            let userGameStat: GamePlayedWith = await UserService.getOtherUserGameStatById(userId, otherUserId);
+            let gamePlayedWith = new GamePlayedWith();
             if (userGameStat) {
-                gamePlayedWithMetadata = userGameStat;
+                gamePlayedWith = userGameStat;
             } else {
-                gamePlayedWithMetadata.date = new Date().getUTCDate();
-                gamePlayedWithMetadata.created_uid = otherUserId;
+                gamePlayedWith.date = new Date().getUTCDate();
+                gamePlayedWith.created_uid = otherUserId;
             }
-                gamePlayedWithMetadata.gamePlayed = (gamePlayedWithMetadata.gamePlayed) ? gamePlayedWithMetadata.gamePlayed + 1 : 1;
-                gamePlayedWithMetadata.wins = (gamePlayedWithMetadata.wins) ? gamePlayedWithMetadata.wins : 0;
-                gamePlayedWithMetadata.losses = (gamePlayedWithMetadata.losses) ? gamePlayedWithMetadata.losses : 0;
+                gamePlayedWith.gamePlayed = (gamePlayedWith.gamePlayed) ? Utils.changeFieldValue(1) : 1;
+                gamePlayedWith.wins = (gamePlayedWith.wins) ? gamePlayedWith.wins : 0;
+                gamePlayedWith.losses = (gamePlayedWith.losses) ? gamePlayedWith.losses : 0;
                 if (game.winnerPlayerId) {
-                    gamePlayedWithMetadata.wins = (game.winnerPlayerId === otherUserId) ?
-                             gamePlayedWithMetadata.wins + 1 : gamePlayedWithMetadata.wins;
-                    gamePlayedWithMetadata.losses = (game.winnerPlayerId !== otherUserId) ?
-                             gamePlayedWithMetadata.losses + 1 : gamePlayedWithMetadata.losses;
+                    gamePlayedWith.wins = (game.winnerPlayerId === otherUserId) ?
+                             gamePlayedWith.wins + 1 : gamePlayedWith.wins;
+                    gamePlayedWith.losses = (game.winnerPlayerId !== otherUserId) ?
+                             gamePlayedWith.losses + 1 : gamePlayedWith.losses;
                 }
-                userGameStat = { ...gamePlayedWithMetadata };
+                userGameStat = { ...gamePlayedWith };
                 return await UserService.setGameStat({ ...userGameStat }, userId, otherUserId);
         } catch (error) {
             return Utils.throwError(error);

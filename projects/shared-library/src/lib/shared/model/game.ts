@@ -22,7 +22,7 @@ export class Stat {
   }
 }
 
-export class GamePlayedWithMetadata {
+export class GamePlayedWith {
   date: number;
   created_uid: string;
   gamePlayed: number;
