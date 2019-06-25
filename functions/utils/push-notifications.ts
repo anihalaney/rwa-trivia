@@ -10,9 +10,9 @@ export class PushNotification {
 
     static async sendNotificationToDevices(userId: string, title: string, body: string, data: any): Promise<any> {
         try {
-            console.log('next PlayerId ----------------->', userId);
+          //  console.log('next PlayerId ----------------->', userId);
             const dbUser: User = await UserService.getUserById(userId);
-            console.log('next dbUser----------------->', dbUser);
+          //  console.log('next dbUser----------------->', dbUser);
             const notificationPromises = [];
             if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
                 for (const token of dbUser.androidPushTokens) {
@@ -55,9 +55,9 @@ export class PushNotification {
         try {
             let looserPlayerId;
             let msg_data;
-            console.log('currentTurnPlayerId----------------->', currentTurnPlayerId);
+        //    console.log('currentTurnPlayerId----------------->', currentTurnPlayerId);
             let dbUser: User = await UserService.getUserById(currentTurnPlayerId);
-            console.log('dbUser----------------->', dbUser);
+          //  console.log('dbUser----------------->', dbUser);
             let result: any;
             switch (pushType) {
                 case pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS:

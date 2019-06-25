@@ -36,7 +36,7 @@ export class Utils {
 
     static sendError(res: any, error: any): void {
         console.error(GeneralConstants.Error_Message, error);
-        Utils.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseMessagesConstants.INTERNAL_SERVER_ERROR);
+        return Utils.sendResponse(res, interceptorConstants.INTERNAL_ERROR, ResponseMessagesConstants.INTERNAL_SERVER_ERROR);
     }
 
     static getFireStorageBucket(admin: any): any {
