@@ -1,5 +1,4 @@
-import { CollectionConstants, GeneralConstants, User, UserConstants, Account,
-    GamePlayedWithMetadata } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, GeneralConstants, User, UserConstants, Account } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 import { AccountService } from './account.service';
