@@ -91,6 +91,7 @@ export enum pushNotificationRouteConstants {
     FRIEND_NOTIFICATIONS = 'friend-notifications',
     QUESTION_NOTIFICATIONS = 'my/questions',
     ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
+    TOKEN_IS_NOT_REGISTERED= 'messaging/registration-token-not-registered'
 }
 
 
@@ -370,3 +371,5 @@ export enum TermsAndPrivacyUrlConstant {
     TERMSANDCONDITIONSURL = 'https://bitwiser.io/terms-and-conditions',
     PRIVACYURL = 'https://bitwiser.io/terms-and-conditions'
 }
+
+
