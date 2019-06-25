@@ -163,7 +163,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     if (fcs.length === 0) {
       fcs = [new FormControl('')];
     }
-    console.log('ques', question);
 
     const tagsFA = new FormArray(fcs);
     this.questionForm = this.fb.group({

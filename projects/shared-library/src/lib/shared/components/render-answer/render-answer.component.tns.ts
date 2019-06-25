@@ -20,7 +20,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     @Input() isWrong;
     @Input() doPlay;
 
-    private _answer: Answer;
+    currentAnswer: Answer;
 
     scriptToGetHeight = `<script> var body = document.body, html = document.documentElement;
     var height = Math.max(body.scrollHeight, body.offsetHeight,
@@ -37,11 +37,11 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
     ngOnInit(): void {
         // Created new local answer object because here I am modifing answer object
         if (this.answer) {
-            this._answer = { ...this.answer };
+            this.currentAnswer = { ...this.answer };
         }
-        if (this._answer && this._answer.isRichEditor) {
+        if (this.currentAnswer && this.currentAnswer.isRichEditor) {
             // tslint:disable-next-line:max-line-length
-            this._answer.answerText = this.htmlStartTag + this._answer.answerText + this.scriptToGetHeight + this.htmlEndTag;
+            this.currentAnswer.answerText = this.htmlStartTag + this.currentAnswer.answerText + this.scriptToGetHeight + this.htmlEndTag;
         }
         if (!this.doPlay) {
             this.doPlay = false;
@@ -53,7 +53,7 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
      * @param event:LoadEventData
      */
     onLoadFinished(event: LoadEventData) {
-        if (isIOS && this._answer) {
+        if (isIOS && this.currentAnswer) {
             const height = event.url.split('#')[1];
             if (height) {
                 this.answerHeight = parseInt(height, 10);
@@ -67,19 +67,19 @@ export class RenderAnswerComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes: SimpleChanges) {
         // Change background color of webview after answer given
-        if (this._answer) {
-            if (this._answer.isRichEditor) {
+        if (this.currentAnswer) {
+            if (this.currentAnswer.isRichEditor) {
                 if (changes.isWrong) {
                     if (changes.isWrong.currentValue) {
                         // tslint:disable-next-line:max-line-length
-                        this._answer.answerText = `${this.htmlStartTag}  ${this._answer.answerText}   <style> html {background:#d54937;color:#ffffff;font-size:17;}</style> ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
+                        this.currentAnswer.answerText = `${this.htmlStartTag}  ${this.currentAnswer.answerText}   <style> html {background:#d54937;color:#ffffff;font-size:17;}</style> ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
 
                     }
                 }
                 if (changes.isRight) {
                     if (changes.isRight.currentValue) {
                         // tslint:disable-next-line:max-line-length
-                        this._answer.answerText = `${this.htmlStartTag} ${this._answer.answerText}   <style> html {background:#71b02f;color:#ffffff;font-size:17;}</style> ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
+                        this.currentAnswer.answerText = `${this.htmlStartTag} ${this.currentAnswer.answerText}   <style> html {background:#71b02f;color:#ffffff;font-size:17;}</style> ${this.scriptToGetHeight}   ${this.htmlEndTag}`;
                     }
                 }
             }
