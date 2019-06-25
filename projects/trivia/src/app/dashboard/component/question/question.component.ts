@@ -19,6 +19,7 @@ export class QuestionComponent implements OnDestroy {
 
   question: Question;
   categoryName: string;
+
   @Input() userDict: { [key: string]: User };
 
   @Output() answerClicked = new EventEmitter<number>();
@@ -57,7 +58,6 @@ export class QuestionComponent implements OnDestroy {
               }
             });
           }
-
           if (this.question.categoryIds) {
             this.categoryName = this.question.categoryIds.map(category => {
               if (this.categoryDictionary[category]) {

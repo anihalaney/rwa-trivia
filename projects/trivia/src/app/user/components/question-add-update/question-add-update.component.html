@@ -34,7 +34,7 @@
 
       <!-- Enter Your Question -->
       <div class="enterquestion secondbg">
-        <div class="optionbox" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
+        <div class="optionbox" style="margin-bottom:20px;" *ngIf="applicationSettings.enabled_rich_editor">
           <label><span class="label-richtext">Rich Editor:</span></label>
           <mat-checkbox mdPrefix formControlName="isRichEditor"></mat-checkbox>
         </div>
@@ -74,7 +74,7 @@
           <h3>Answers</h3>
           <ng-container formArrayName="answers">
             <div *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i" class="formfield">
-              <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.renderWebView">
+              <div class="optionbox col-md-12" style="margin-bottom:20px;" *ngIf="applicationSettings.enabled_rich_editor">
                 <label><span class="label-richtext">Rich Editor:</span></label>
                 <input type="checkbox" formControlName="isRichEditor">
               </div>

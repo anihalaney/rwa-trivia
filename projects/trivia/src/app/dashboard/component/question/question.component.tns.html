@@ -22,13 +22,8 @@
                 [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
                 [class.right]="answeredText !== '' && correctAnswerText === answer.answerText"
                 [isUserInteractionEnabled]="doPlay" stlRippleEffect (rippleTap)="rippleTap(answer)">
-                <!-- <Label text="{{answer?.answerText}}" horizontalAlignment="center" fontSize="17" fontWeight="500"
-                    marginTop="15" marginBottom="15" textWrap="true" width="100%" style="text-align:center;"
-                    [isUserInteractionEnabled]="doPlay"></Label> -->
-                <!-- [answer]="answer" [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
-                    [isRight]="answeredText !== '' && correctAnswerText === answer.answerText" [doPlay] ="doPlay" [isUserInteractionEnabled] = "doPlay" -->
                 <render-answer [answer]="answer" [isGameAnswer]="true" [isWrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
-                    [isRight]="answeredText !== '' && correctAnswerText === answer.answerText" [doPlay]="doPlay"
+                    [isRight]="(answeredText != '') && (correctAnswerText == answer.answerText)" [doPlay]="doPlay"
                     [isUserInteractionEnabled]="doPlay"></render-answer>
             </StackLayout>
         </StackLayout>

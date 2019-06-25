@@ -10,7 +10,6 @@ import { Question } from 'shared-library/shared/model';
 
 export class RenderQuestionComponent implements OnInit {
 
-    @Input() renderWebView: boolean;
     @Input() question: Question;
     @Input() questionIndex: number | string;
 

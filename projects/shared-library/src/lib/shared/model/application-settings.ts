@@ -8,7 +8,7 @@ export class ApplicationSettings {
     social_profile: Array<SocialProfile>;
     tokens: Tokens;
     earn_bytes_on_question_contribute: number;
-    renderWebView: boolean;
+    enabled_rich_editor: boolean;
     display_achievements: boolean;
     quill_options: { list, options };
     max_image_size_of_question?: number;

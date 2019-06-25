@@ -70,6 +70,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
       if (appSettings) {
         this.applicationSettings = appSettings[0];
+        // Add editor's options from app settings
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
         this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
         this.createForm(this.question);
@@ -153,7 +154,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
 
 
   createForm(question: Question) {
-
     const answersFA: FormArray = super.createDefaultForm(question);
 
     let fcs: FormControl[] = question.tags.map(tag => {
@@ -163,6 +163,7 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnI
     if (fcs.length === 0) {
       fcs = [new FormControl('')];
     }
+    console.log('ques', question);
 
     const tagsFA = new FormArray(fcs);
     this.questionForm = this.fb.group({

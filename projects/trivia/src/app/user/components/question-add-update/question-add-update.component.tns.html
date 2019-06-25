@@ -34,7 +34,7 @@
                 <Label text="Select a category !" textWrap="true" class="label error" fontSize="12"></Label>
             </StackLayout>
 
-            <GridLayout rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10" *ngIf="applicationSettings.renderWebView" [visibility]="!editQuestion ? 'visible' : 'collapsed'">
+            <GridLayout rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10" *ngIf="applicationSettings.enabled_rich_editor" [visibility]="!editQuestion ? 'visible' : 'collapsed'">
                 <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18" fontWeight="400"
                     color="#616161" marginTop="10"></Label>
                 <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f" ios:marginTop="10"
@@ -80,9 +80,9 @@
                                 <GridLayout row="0" col="0" rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10"
                                     [visibility]="!editQuestion ? 'visible' : 'collapsed'" >
                                     <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18"
-                                        fontWeight="400" color="#616161" marginTop="10" *ngIf="applicationSettings.renderWebView"></Label>
+                                        fontWeight="400" color="#616161" marginTop="10" *ngIf="applicationSettings.enabled_rich_editor"></Label>
                                     <CheckBox row="0" col="1" class="checkbox" marginLeft="20" fillColor="#71b02f"
-                                        ios:marginTop="10" formControlName="isRichEditor"  *ngIf="applicationSettings.renderWebView"></CheckBox>
+                                        ios:marginTop="10" formControlName="isRichEditor"  *ngIf="applicationSettings.enabled_rich_editor"></CheckBox>
                                 </GridLayout>
                                 <CheckBox row="1" col="0" #elem formControlName="correct" class="checkbox" marginRight="10"
                                     fillColor="#71b02f" ios:marginTop="10"></CheckBox>
