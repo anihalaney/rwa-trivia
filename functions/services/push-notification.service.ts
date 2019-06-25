@@ -1,6 +1,6 @@
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
-import { User, interceptorConstants } from '../../projects/shared-library/src/lib/shared/model';
+import { User, interceptorConstants, pushNotificationRouteConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { UserService } from './user.service';
 
 export class PushNotificationService {
@@ -15,15 +15,15 @@ export class PushNotificationService {
         try {
             return await PushNotificationService.pushNotificationMessagingClient.send(message);
         } catch (error) {
-            if (error.code === interceptorConstants.ENTITY_NOT_FOUND) {
+            if (error.code === pushNotificationRouteConstants.TOKEN_IS_NOT_REGISTERED) {
                 if (dbUser.androidPushTokens.indexOf(message.token) !== -1) {
                     dbUser.androidPushTokens.splice(message.token, 1);
                 } else if (dbUser.iosPushTokens.indexOf(message.token) !== -1) {
                     dbUser.iosPushTokens.splice(message.token, 1);
                 }
-                UserService.updateUser({ ...dbUser });
+                return await UserService.updateUser({ ...dbUser });
+            } else {
+                return Utils.throwError(error);
             }
-            return Utils.throwError(error);
         }
     }
-}

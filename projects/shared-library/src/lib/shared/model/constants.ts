@@ -91,6 +91,7 @@ export enum pushNotificationRouteConstants {
     FRIEND_NOTIFICATIONS = 'friend-notifications',
     QUESTION_NOTIFICATIONS = 'my/questions',
     ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
+    TOKEN_IS_NOT_REGISTERED= 'messaging/registration-token-not-registered'
 }
 
 
