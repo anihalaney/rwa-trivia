@@ -24,8 +24,9 @@ import { ImageCropper } from 'nativescript-imagecropper';
 import { ActivatedRoute } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
-import { Subscription } from 'rxjs';
 import { userState } from '../../store';
+import { Parameter, User } from '../../../../../../shared-library/src/lib/shared/model';
+import * as firebase from 'nativescript-plugin-firebase';
 
 @Component({
   selector: 'profile-settings',
@@ -57,8 +58,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   public items: Array<SegmentedBarItem>;
   public selectedIndex = 0;
   tabsTitles: Array<string>;
-
-
 
   @ViewChild('autocomplete') autocomplete: RadAutoCompleteTextViewComponent;
 
@@ -261,6 +260,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       return;
     }
 
+    console.log('this.userForm.get().values ---> ', this.userForm.get('displayName').value);
 
     this.checkDisplayName(this.userForm.get('displayName').value);
 
@@ -276,6 +276,11 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
           // get user object from the forms
           this.getUserFromFormValue(isEditSingleField, field);
           this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
+
+          if (this.user.location !== this.userCopyForReset.location) {
+            this.setUserLocationFirebaseAnalyticsParameter(this.user);
+          }
+
           // call saveUser
           this.saveUser(this.user);
 
@@ -288,6 +293,33 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       }
 
     }));
+
+  }
+
+  setUserLocationFirebaseAnalyticsParameter(user: User) {
+
+    const analyticsParameter: Parameter[] = [];
+
+    const userId: Parameter = {
+      key: 'userId',
+      value: user.userId
+    };
+    analyticsParameter.push(userId);
+
+    const location: Parameter = {
+      key: 'location',
+      value: user.location
+    };
+    analyticsParameter.push(location);
+
+    console.log('analyticsParameter ==> ', analyticsParameter);
+
+    firebase.analytics.logEvent({
+      key: 'user_location',
+      parameters: analyticsParameter
+    }).then(() => {
+      console.log('user_location event slogged');
+    });
 
   }
 

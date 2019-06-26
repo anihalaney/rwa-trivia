@@ -5,7 +5,7 @@ import * as app from 'tns-core-modules/application';
 import * as firebase from 'nativescript-plugin-firebase';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Store, select } from '@ngrx/store';
-import { User, ApplicationSettings } from './../../../../shared/model';
+import { User, ApplicationSettings, Parameter } from './../../../../shared/model';
 import { UserActions } from '../../../../core/store/actions';
 import { CoreState, coreState } from '../../../../core/store';
 import { AuthenticationProvider } from './../../../../core/auth/authentication.provider';
@@ -65,10 +65,9 @@ export class DrawerComponent implements OnInit, OnDestroy {
                     this.activeMenu = 'My Questions';
                 } else if (nav === '/user/my/invite-friends') {
                     this.activeMenu = 'Friend List';
-                }  else if (nav === '/privacy-policy' || nav === '/terms-and-conditions' || nav === '/user-feedback') {
+                } else if (nav === '/privacy-policy' || nav === '/terms-and-conditions' || nav === '/user-feedback') {
                     this.activeMenu = 'Help';
-                }
-                else if (nav === '/achievements') {
+                } else if (nav === '/achievements') {
                     this.activeMenu = 'achievements';
                 }
 
@@ -80,9 +79,9 @@ export class DrawerComponent implements OnInit, OnDestroy {
         });
         this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
             if (appSettings) {
-              this.applicationSettings = appSettings[0];
+                this.applicationSettings = appSettings[0];
             }
-          }));
+        }));
         this.subscriptions.push(this.categoriesObs);
     }
     ngOnInit() {
@@ -142,6 +141,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
 
     logout() {
         this.logOut = true;
+        this.setLogoutFirebaseAnalyticsParameter(this.user);
         if (isAndroid && this.user.androidPushTokens && this.user.androidPushTokens.indexOf(this.pushToken) > -1) {
             this.user.androidPushTokens.splice(this.user.androidPushTokens.indexOf(this.pushToken), 1);
             this.updateUser(this.user);
@@ -155,6 +155,27 @@ export class DrawerComponent implements OnInit, OnDestroy {
         this.activeMenu = 'Home';
         this.closeDrawer();
         this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
+    }
+
+    setLogoutFirebaseAnalyticsParameter(user: User) {
+
+        const analyticsParameter: Parameter[] = [];
+
+        const userId: Parameter = {
+            key: 'userId',
+            value: user.userId
+        };
+        analyticsParameter.push(userId);
+
+        console.log('analyticsParameter ==> ', analyticsParameter);
+
+        firebase.analytics.logEvent({
+            key: 'user_logout',
+            parameters: analyticsParameter
+        }).then(() => {
+            console.log('user_logout event slogged');
+        });
+
     }
 
     resetValues() {

@@ -13,7 +13,8 @@ import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
 import { ReportGameComponent } from './../report-game/report-game.component';
 import { Image } from "tns-core-modules/ui/image";
-import { appConstants } from 'shared-library/shared/model';
+import { appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode } from 'shared-library/shared/model';
+import * as firebase from 'nativescript-plugin-firebase';
 
 @Component({
   selector: 'game-over',
@@ -60,13 +61,134 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       }
       this.cd.markForCheck();
     }));
+
   }
   ngOnInit() {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
+      const firebaseAnalyticParameters: Array<Parameter> = this.setEndGameFirebaseAnalyticsParameter();
+      firebase.analytics.logEvent({
+        key: 'completed_game',
+        parameters: firebaseAnalyticParameters
+      }).then(() => {
+        console.log('completed_game event slogged');
+      }
+      );
+
     }
   }
+
+  setEndGameFirebaseAnalyticsParameter(): Array<Parameter> {
+
+    const analyticsParameter: Parameter[] = [];
+
+
+    const gameId: Parameter = {
+      key: 'gameId',
+      value: this.game.gameId
+    };
+    analyticsParameter.push(gameId);
+
+    const userId: Parameter = {
+      key: 'userId',
+      value: this.user.userId
+    };
+    analyticsParameter.push(userId);
+
+    const playerMode: Parameter = {
+      key: 'playerMode',
+      value: this.game.gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT
+    };
+    analyticsParameter.push(playerMode);
+
+    if (this.game.gameOptions.playerMode === PlayerMode.Opponent) {
+      const opponentType: Parameter = {
+        key: 'opponentType',
+        value: this.game.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
+          this.game.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER
+      };
+      analyticsParameter.push(opponentType);
+
+      const otherUserId: Parameter = {
+        key: 'otherUserId',
+        value: this.otherUserId
+      };
+      analyticsParameter.push(otherUserId);
+
+      const userScore: Parameter = {
+        key: 'userScore',
+        value: this.game.stats[this.user.userId].score + ''
+      };
+      analyticsParameter.push(userScore);
+
+      const otherUserScore: Parameter = {
+        key: 'otherUserScore',
+        value: this.game.stats[this.otherUserId].score + ''
+      };
+      analyticsParameter.push(otherUserScore);
+
+      if (this.game.round < 16 && this.game.stats[this.user.userId].score === this.game.stats[this.otherUserId].score) {
+        const isTie: Parameter = {
+          key: 'isTie',
+          value: 'true'
+        };
+        analyticsParameter.push(isTie);
+      } else {
+        let winPlayerId = this.otherUserId;
+        if (this.game.round < 16 && this.game.stats[this.user.userId].score > this.game.stats[this.otherUserId].score) {
+          winPlayerId = this.user.userId;
+        }
+        const winnerPlayerId: Parameter = {
+          key: 'winnerPlayerId',
+          value: winPlayerId
+        };
+        analyticsParameter.push(winnerPlayerId);
+      }
+    } else {
+      const gameStatus: Parameter = {
+        key: 'gameStatus',
+        value: (this.game.playerQnAs.length - this.game.stats[this.user.userId].score !== 4) ? 'Win' : 'Lost'
+      };
+      analyticsParameter.push(gameStatus);
+
+      const userScore: Parameter = {
+        key: 'userScore',
+        value: this.game.stats[this.user.userId].score + ''
+      };
+      analyticsParameter.push(userScore);
+
+    }
+
+    const gameMode: Parameter = {
+      key: 'gameMode',
+      value: this.game.gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE
+    };
+    analyticsParameter.push(gameMode);
+
+    const categories: Parameter = {
+      key: 'categoryIds',
+      value: JSON.stringify(this.game.gameOptions.categoryIds)
+    };
+    analyticsParameter.push(categories);
+
+    const tagsValue = JSON.stringify(this.game.gameOptions.tags);
+
+    const tags: Parameter = {
+      key: 'tags',
+      value: tagsValue.substr(0, 100)
+    };
+    analyticsParameter.push(tags);
+
+    const round: Parameter = {
+      key: 'round',
+      value: this.game.round + ''
+    };
+    analyticsParameter.push(round);
+
+    return analyticsParameter;
+  }
+
 
   shareScore() {
     this.loaderStatus = true;
@@ -92,7 +214,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   reMatchGame() {
     if (this.applicationSettings.lives.enable && this.account.lives === 0) {
-      this.utils.showMessage("error", this.liveErrorMsg);
+      this.utils.showMessage('error', this.liveErrorMsg);
     } else {
       this.reMatch();
     }
