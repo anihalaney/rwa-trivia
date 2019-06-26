@@ -51,8 +51,14 @@ export class UserService {
         return combineLatest(gamesPlayedWithObs)
         .pipe(map((values) => {
             return values.map((value, index) => {
-                value['userId'] = friendList[index];
-                return value;
+                if (value) {
+                    value['userId'] = friendList[index];
+                    return value;
+                } else {
+                    value = {};
+                    value.created_uid = friendList[index];
+                    return value;
+                }
                 });
         }),
         catchError(error => {

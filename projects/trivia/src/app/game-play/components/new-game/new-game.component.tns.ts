@@ -68,8 +68,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.route.params.subscribe(data => {
         if (data && data.userid) {
           this.challengerUserId = data.userid;
-          this.gameOptions.playerMode = '1';
-          this.gameOptions.opponentType = '1';
+          this.gameOptions.playerMode = 1;
+          this.gameOptions.opponentType = 1;
+          this.gameOptions.isChallenge = true;
           this.friendUserId = data.userid;
     }}));
 
@@ -133,7 +134,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
       if (uFriends) {
         this.uFriends = [];
         uFriends.map(friend => {

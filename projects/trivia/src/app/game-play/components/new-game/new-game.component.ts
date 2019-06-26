@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, flatMap, skipWhile } from 'rxjs/operators';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, GameMode, GameOptions, OpponentType, PlayerMode } from 'shared-library/shared/model';
@@ -72,10 +72,18 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1))
-      .subscribe(appSettings => {
-        if (appSettings) {
-          this.applicationSettings = appSettings[0];
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1),
+    map(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        if (this.applicationSettings && this.applicationSettings.lives.enable) {
+          return appSettings;
+        }
+      }
+    }),
+    flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
+    skipWhile(account => !account), take(1), map(account =>  this.life = account.lives)))).subscribe(data => {
+        if (this.applicationSettings) {
           this.selectedCategories = [];
           let filteredCategories = [];
           if (this.applicationSettings && this.applicationSettings.game_play_categories) {
@@ -88,14 +96,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             filteredCategories = this.categories;
           }
 
-          if (this.applicationSettings && this.applicationSettings.lives.enable) {
-            this.store.select(appState.coreState).pipe(select(s => s.account), take(1)).subscribe(account => {
-              if (account) {
-                this.life = account.lives;
-              }
-              this.cd.markForCheck();
-            });
-          }
+          this.cd.markForCheck();
+
 
           const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
           ...filteredCategories.filter(c => !c.requiredForGamePlay)];
@@ -116,39 +118,42 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    this.gameOptions = new GameOptions();
 
+    this.newGameForm = this.createForm(this.gameOptions);
+    const playerModeControl = this.newGameForm.get('playerMode');
+    const opponentTypeControl = this.newGameForm.get('opponentType');
     this.subscriptions.push(
-      this.route.params.subscribe(data => {
-        if (data && data.userid) {
-          this.challengerUserId = data.userid;
-        }
-        this.gameOptions = new GameOptions(this.challengerUserId ? true : false);
-
-        this.newGameForm = this.createForm(this.gameOptions);
-
-        const playerModeControl = this.newGameForm.get('playerMode');
-        playerModeControl.setValue(this.challengerUserId ? '1' : '0');
-        const opponentTypeControl = this.newGameForm.get('opponentType');
-        if ( this.challengerUserId ) {
-          opponentTypeControl.setValue('1');
-        }
-
-        if ( this.challengerUserId ) {
-          this.selectFriendId(this.challengerUserId);
-        }
-        this.subscriptions.push(playerModeControl.valueChanges.subscribe(v => {
-          if (v === '1') {
-            opponentTypeControl.enable();
-            opponentTypeControl.setValue('0');
-          } else {
-            opponentTypeControl.disable();
-            opponentTypeControl.reset();
+      this.route.params.pipe(
+        map(params => {
+          this.challengerUserId = params.userid;
+          playerModeControl.setValue(this.challengerUserId ? '1' : '0');
+          const isChallengeControl = this.newGameForm.get('isChallenge');
+         isChallengeControl.setValue(this.challengerUserId ? true : false);
+          if ( this.challengerUserId ) {
+            opponentTypeControl.setValue('1');
           }
-        }));
 
-        this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
+          if ( this.challengerUserId ) {
+            this.selectFriendId(this.challengerUserId);
+          }
+
+          this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
           .pipe(map(val => val.length > 0 ? this.filter(val) : []));
-    }));
+        }),
+        flatMap(() => playerModeControl.valueChanges)
+      ).subscribe(v => {
+        if (v === '1') {
+          opponentTypeControl.enable();
+          opponentTypeControl.setValue('0');
+        } else {
+          opponentTypeControl.disable();
+          opponentTypeControl.reset();
+        }
+
+      })
+    );
+
   }
 
   autoOptionClick(event) {
@@ -197,7 +202,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
       tagsArray: tagsFA,
-      isChallenege: gameOptions.isChallenge
+      isChallenge: gameOptions.isChallenge
     } //, {validator: questionFormValidator}
     );
     return form;
@@ -256,7 +261,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     gameOptions.categoryIds = this.selectedCategories;
     gameOptions.gameMode = GameMode.Normal;
     gameOptions.tags = this.selectedTags;
-    gameOptions.isChallenge = formValue.isChallenege;
+    gameOptions.isChallenge = formValue.isChallenge;
 
     return gameOptions;
   }

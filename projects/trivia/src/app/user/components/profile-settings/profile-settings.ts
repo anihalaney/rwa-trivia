@@ -390,7 +390,8 @@ export class ProfileSettings {
     }
 
     get isLivesEnable(): Boolean {
-        const isEnable = (this.loggedInUser && this.loggedInUserAccount && this.applicationSettings.lives.enable) ? true : false;
+        const isEnable = (this.loggedInUser && this.loggedInUserAccount && this.loggedInUserAccount.lives > 0 &&
+             this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
 }

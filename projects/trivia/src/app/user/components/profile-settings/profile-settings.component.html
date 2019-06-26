@@ -131,7 +131,7 @@
               </div>
               <div class="new-game-btn-container">
                   <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
-                      <button *ngIf="loggedInUserAccount &&  loggedInUserAccount.lives >=0 && isLivesEnable"  class="startgame" (click)="startNewGame()">Start New Game</button>
+                      <button *ngIf="loggedInUserAccount &&  isLivesEnable"  class="startgame" (click)="startNewGame()">Start New Game</button>
                   </div>
               </div>
             </div>

@@ -36,9 +36,9 @@ export class GamePlayedWithStats {
                 gamePlayedWith.losses = (gamePlayedWith.losses) ? gamePlayedWith.losses : 0;
                 if (game.winnerPlayerId) {
                     gamePlayedWith.wins = (game.winnerPlayerId === otherUserId) ?
-                             gamePlayedWith.wins + 1 : gamePlayedWith.wins;
+                            Utils.changeFieldValue(1) : gamePlayedWith.wins;
                     gamePlayedWith.losses = (game.winnerPlayerId !== otherUserId) ?
-                             gamePlayedWith.losses + 1 : gamePlayedWith.losses;
+                            Utils.changeFieldValue(1) : gamePlayedWith.losses;
                 }
                 userGameStat = { ...gamePlayedWith };
                 return await UserService.setGameStat({ ...userGameStat }, userId, otherUserId);
