@@ -1,5 +1,5 @@
-import { Observable, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, Subscription, empty } from 'rxjs';
+import { take, switchMap, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
@@ -47,7 +47,9 @@ export class NewGame implements OnDestroy {
     this.subscriptions.push(this.userDict$.subscribe(userDict => { this.userDict = userDict; this.cd.markForCheck(); }));
     this.subscriptions.push(this.categoriesObs.subscribe(categories => { this.categories = categories; this.cd.markForCheck(); } ));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+    let challengerUserId = '';
+    this.subscriptions.push(this.route.params.pipe( map(data => challengerUserId = data.userid),
+      switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.user)))).subscribe(user => {
       if (user) {
         this.user = user;
         if (this.user.tags && this.user.tags.length > 0) {
@@ -55,35 +57,35 @@ export class NewGame implements OnDestroy {
         } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.tags.length > 0) {
           this.selectedTags = this.user.lastGamePlayOption.tags;
         }
-        this.route.params.subscribe(data => {
-          if (!data.userid) {
-        this.store.dispatch(this.userActions.loadUserFriends(user.userId));
-          }
-        });
+        if (!challengerUserId) {
+          this.store.dispatch(this.userActions.loadUserFriends(user.userId));
+        }
       }
     }));
 
     this.subscriptions.push(
-      this.route.params.subscribe(data => {
+      this.route.params.pipe( map(data => data),
+      switchMap((data) => {
         if (!data.userid) {
-          this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
-            if (uFriends) {
-              this.uFriends = [];
-              uFriends.map(friend => {
-                if (this.userDict && !this.userDict[friend.userId]) {
-                  this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
-                }
-                this.uFriends = [...this.uFriends, ...friend.userId];
-              });
-              this.noFriendsStatus = false;
-            } else {
-              this.noFriendsStatus = true;
-            }
-            this.cd.markForCheck();
-          });
+          return this.store.select(appState.coreState).pipe(select(s => s.userFriends));
+        } else {
+          return empty();
         }
-      })
-    );
+      })).subscribe((uFriends: any) => {
+      if (uFriends) {
+        this.uFriends = [];
+        uFriends.map(friend => {
+          if (this.userDict && !this.userDict[friend.userId]) {
+            this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
+          }
+          this.uFriends = [...this.uFriends, ...friend.userId];
+        });
+        this.noFriendsStatus = false;
+      } else {
+        this.noFriendsStatus = true;
+      }
+      this.cd.markForCheck();
+    }));
     this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.gameOptions = new GameOptions();
