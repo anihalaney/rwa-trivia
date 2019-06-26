@@ -313,8 +313,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     };
     analyticsParameter.push(userId);
 
-    console.log('analyticsParameter ==> ', analyticsParameter);
-
     firebase.analytics.logEvent({
       key: 'user_login',
       parameters: analyticsParameter

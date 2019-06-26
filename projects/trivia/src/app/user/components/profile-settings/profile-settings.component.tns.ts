@@ -260,8 +260,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       return;
     }
 
-    console.log('this.userForm.get().values ---> ', this.userForm.get('displayName').value);
-
     this.checkDisplayName(this.userForm.get('displayName').value);
 
     this.subscriptions.push(this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
@@ -311,8 +309,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       value: user.location
     };
     analyticsParameter.push(location);
-
-    console.log('analyticsParameter ==> ', analyticsParameter);
 
     firebase.analytics.logEvent({
       key: 'user_location',
