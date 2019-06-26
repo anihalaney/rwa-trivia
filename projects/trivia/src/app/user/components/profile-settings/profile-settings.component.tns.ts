@@ -25,8 +25,9 @@ import { ActivatedRoute } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
 import { userState } from '../../store';
-import { Parameter, User } from '../../../../../../shared-library/src/lib/shared/model';
-import * as firebase from 'nativescript-plugin-firebase';
+import {
+  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants
+} from '../../../../../../shared-library/src/lib/shared/model';
 
 @Component({
   selector: 'profile-settings',
@@ -296,27 +297,12 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   setUserLocationFirebaseAnalyticsParameter(user: User) {
 
-    const analyticsParameter: Parameter[] = [];
+    let analyticsParameter: Parameter[] = [];
 
-    const userId: Parameter = {
-      key: 'userId',
-      value: user.userId
-    };
-    analyticsParameter.push(userId);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.LOCATION, user.location, analyticsParameter);
 
-    const location: Parameter = {
-      key: 'location',
-      value: user.location
-    };
-    analyticsParameter.push(location);
-
-    firebase.analytics.logEvent({
-      key: 'user_location',
-      parameters: analyticsParameter
-    }).then(() => {
-      console.log('user_location event slogged');
-    });
-
+    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION, analyticsParameter);
   }
 
   hideKeyboard() {

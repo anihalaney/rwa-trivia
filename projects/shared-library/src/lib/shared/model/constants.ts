@@ -165,7 +165,9 @@ export enum GeneralConstants {
     GAME_EXPIRED_HOURS = 32, // hr
     NAME = 'name',
     DISPLAY_NAME = 'displayName',
-    USER_ID = 'userId'
+    USER_ID = 'userId',
+    WIN = 'Win',
+    LOST = 'Lost'
 }
 
 export enum SocialShareConstants {
@@ -378,4 +380,31 @@ export enum GameConstant {
     COMPUTER = 'Computer',
     NORMAL = 'Normal',
     OFFLINE = 'Offline'
+}
+
+
+export enum FirebaseAnalyticsKeyConstants {
+    USER_ID = 'userId',
+    GAME_ID = 'gameId',
+    PLAYER_MODE = 'playerMode',
+    OPPONENT_TYPE = 'opponentType',
+    OTHER_USER_ID = 'otherUserId',
+    USER_SCORE = 'userScore',
+    OTHER_USER_SCORE = 'otherUserScore',
+    GAME_STATUS = 'gameStatus',
+    GAME_MODE = 'gameMode',
+    CATEGORY_IDS = 'categoryIds',
+    TAGS = 'tags',
+    ROUND = 'round',
+    IS_TIE = 'isTie',
+    WINNER_PLAYER_ID = 'winnerPlayerId',
+    LOCATION = 'location'
+}
+
+
+export enum FirebaseAnalyticsEventConstants {
+    USER_LOGIN = 'user_login',
+    COMPLETED_GAME = 'completed_game',
+    START_NEW_GAME = 'start_new_game',
+    USER_LOCATION = 'user_location'
 }

@@ -1,6 +1,8 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Feedback, FeedbackType, FeedbackPosition } from 'nativescript-feedback';
 import { UtilsCore } from './utilsCore';
+import { Parameter } from '../../shared/model';
+import * as firebase from 'nativescript-plugin-firebase';
 
 @Injectable()
 export class Utils extends UtilsCore {
@@ -30,6 +32,20 @@ export class Utils extends UtilsCore {
     this.messageConfig.message = message;
     this.message.show(this.messageConfig);
 
+  }
+
+  setAnalyticsParameter(key: string, value: string, analyticsParameter: Array<Parameter>): Array<Parameter> {
+    analyticsParameter.push({key: key, value: value});
+    return analyticsParameter;
+  }
+
+  sendFirebaseAnalyticsEvents(eventName: string, analyticsParameter: Array<Parameter>) {
+    firebase.analytics.logEvent({
+      key: eventName,
+      parameters: analyticsParameter
+    }).then(() => {
+      console.log(`${eventName} event slogged`);
+    });
   }
 
 }

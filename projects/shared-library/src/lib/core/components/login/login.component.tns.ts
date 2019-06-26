@@ -21,8 +21,7 @@ import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Utils } from '../../services';
-import { Parameter, User } from '../../../shared/model';
-import * as firebase from 'nativescript-plugin-firebase';
+import { Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from '../../../shared/model';
 
 @Component({
   selector: 'login',
@@ -305,20 +304,11 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
 
   setLoginFirebaseAnalyticsParameter(user: User) {
 
-    const analyticsParameter: Parameter[] = [];
+    let analyticsParameter: Parameter[] = [];
 
-    const userId: Parameter = {
-      key: 'userId',
-      value: user.userId
-    };
-    analyticsParameter.push(userId);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
 
-    firebase.analytics.logEvent({
-      key: 'user_login',
-      parameters: analyticsParameter
-    }).then(() => {
-      console.log('user_login event slogged');
-    });
+    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOGIN, analyticsParameter);
 
   }
 
