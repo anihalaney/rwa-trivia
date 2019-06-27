@@ -36,17 +36,22 @@ export class UserService {
         }
     }
 
+
     /**
      * updateUser
      * return ref
      */
     static async updateUser(dbUser: any): Promise<any> {
-        try {
-            return await UserService.fireStoreClient
-                .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
-                .set(dbUser, { merge: true });
-        } catch (error) {
-            return Utils.throwError(error);
+        if (dbUser && dbUser.userId) {
+            try {
+                return await UserService.fireStoreClient
+                    .doc(`/${CollectionConstants.USERS}/${dbUser.userId}`)
+                    .set(dbUser, { merge: true });
+            } catch (error) {
+                return Utils.throwError(error);
+            }
+        } else {
+            return false;
         }
     }
 
@@ -89,7 +94,7 @@ export class UserService {
                 if (appSetting.social_profile) {
                     for (const socialProfile of appSetting.social_profile) {
                         if (socialProfile.enable) {
-                            user[socialProfile.social_name] = dbUser[socialProfile.social_name];
+                            user[socialProfile.social_name] = (dbUser[socialProfile.social_name]) ? dbUser[socialProfile.social_name] : '';
                         }
                     }
                 }
@@ -114,7 +119,7 @@ export class UserService {
                 }
 
             }
-            return { ...user, gamePlayed};
+            return { ...user, gamePlayed };
         } catch (error) {
             return Utils.throwError(error);
         }
