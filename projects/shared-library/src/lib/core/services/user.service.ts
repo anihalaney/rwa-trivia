@@ -9,15 +9,11 @@ import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
-import { BlockScrollStrategy } from '@angular/cdk/overlay';
 
 @Injectable()
 export class UserService {
 
     private RC = RoutesConstants;
-    addressByLatLongURL = 'https://maps.googleapis.com/maps/api/geocode/json';
-    private addressSuggestionsURL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
-    APIKEY = 'AIzaSyB_VpDTc5WQx3QMCUJea8YAj7rOLBRIzRY';
 
     constructor(
         private http: HttpClient,
@@ -179,15 +175,16 @@ export class UserService {
         return this.http.get<any>(url);
     }
 
-
     getAddressByLatLang(latlong) {
-        const url = `${this.addressByLatLongURL}?latlng=${latlong}&key=${this.APIKEY}`;
+        console.log(CONFIG.firebaseConfig.apiKey);
+        const url = `${CONFIG.addressByLatLongURL}?latlng=${latlong}&key=${CONFIG.firebaseConfig.apiKey}`;
         return this.http.get<any>(url);
     }
 
     getAddressSuggestions(address) {
+        console.log(CONFIG.firebaseConfig.apiKey);
         // tslint:disable-next-line:max-line-length
-        const url = `${this.addressSuggestionsURL}?input=${encodeURIComponent(address)}&key=${this.APIKEY}`;
+        const url = `${CONFIG.addressSuggestionsURL}?input=${encodeURIComponent(address)}&key=${CONFIG.firebaseConfig.apiKey}`;
         return this.http.get<any>(url);
     }
 }

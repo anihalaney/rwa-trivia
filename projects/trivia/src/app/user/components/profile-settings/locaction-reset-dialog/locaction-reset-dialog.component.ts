@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/core';
-import { User } from 'shared-library/shared/model';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-locaction-reset-dialog',
@@ -9,26 +8,13 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-@AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class LocactionResetDialogComponent implements OnInit, OnDestroy {
 
-  user: User;
-  navLinks = [];
-  ref: any;
-  subscriptions = [];
+export class LocactionResetDialogComponent {
 
-  constructor() {
+
+  constructor(private dialogRef: MatDialogRef<LocactionResetDialogComponent>) {
   }
-
-  ngOnInit() {
-
-  }
-
   closeModel() {
-    this.ref.close();
-  }
-
-  ngOnDestroy() {
-
+    this.dialogRef.close();
   }
 }

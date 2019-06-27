@@ -96,8 +96,9 @@
                   <span class="field-save-icon" *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0"
                     (click)="onSubmit(true, 'location')"></span>
                 </div>
+                <button *ngIf="singleFieldEdit.location" (click)="getLocation()" class="get-location btn save"> Get Location </button>
                 <p class="location-info" *ngIf="userType === 0">
-                  <button *ngIf="singleFieldEdit.location" (click)="getLocation()"> Get Location </button> <br>
+                
                   Where in the world you are
                 </p>
                 <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error location-error">

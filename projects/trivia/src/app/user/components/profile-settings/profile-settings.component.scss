@@ -154,6 +154,14 @@ input:disabled { background-color: #fff; }
 .mt-0{ margin-top: 0px !important;}
 @media screen and (max-width:767px){
   .tagging input{ line-height: 24px;padding: 4px 10px;border-radius: 3px;display: block; width: calc(100% - 34px);}
+  .get-location{
+    position: absolute !important;
+    right: 55px !important;
+    padding: 5px 15px !important;
+    width: auto !important;
+    margin-top: 5px !important;
+  }
+
 }
 /*Custom File Upload End*/
 @media screen and ( min-width:767px){
@@ -179,6 +187,7 @@ input:disabled { background-color: #fff; }
   .displayfield .formfield > label{ width: 54% }
   .displayfield .formfield > input{ width: 35% }
   .displayfield .formfield > p{ margin-left: calc(55% + 4px ) }   
+
 }
 @media screen and ( min-width:1000px){
   .optionbox > .row > .col-sm-9, .optionbox > .row > .col-sm-3{ padding-left: 0; padding-right: 0 }
@@ -234,7 +243,6 @@ input:disabled { background-color: #fff; }
   .show-more{
     cursor: pointer;
   }
-
 
 }
 
@@ -295,6 +303,13 @@ input:disabled { background-color: #fff; }
   }
   .location-error {
     margin-left: 0px;
+  }
+  .get-location{
+    position: absolute !important;
+    right: 55px !important;
+    padding: 5px 15px !important;
+    width: auto !important;
+    margin-top: 5px !important;
   }
 
 }
@@ -395,3 +410,8 @@ input:disabled { background-color: #fff; }
   border: 1px solid rgba(0, 0, 0, 0.12)
 }
 
+
+.get-location{
+  position: absolute;
+  margin-left: 15px;
+}

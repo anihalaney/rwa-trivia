@@ -15,5 +15,7 @@ export const CONFIG: IConfig = {
     googlePlayUrl: 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia',
     iTunesUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?ls=1&mt=8'
   },
-  'functionsUrl': `https://bitwiser.io/${appConstants.API_VERSION}`
+  'functionsUrl': `https://bitwiser.io/${appConstants.API_VERSION}`,
+  'addressByLatLongURL': 'https://maps.googleapis.com/maps/api/geocode/json',
+  'addressSuggestionsURL': 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
 };

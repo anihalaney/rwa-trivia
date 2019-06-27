@@ -4,6 +4,7 @@ import { QuestionAddUpdateComponent } from './question-add-update/question-add-u
 import { MyQuestionsComponent } from './my-questions/my-questions.component';
 import { InviteFriendsDialogComponent } from './invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 import { InviteMailFriendsComponent } from './invite-friends/invite-friends-dialog/invite-mail-friends/invite-mail-friends.component';
+import { LocactionResetDialogComponent } from './profile-settings/locaction-reset-dialog/locaction-reset-dialog.component';
 
 export {
     ProfileSettingsComponent,
@@ -11,7 +12,8 @@ export {
     MyQuestionsComponent,
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent
+    InviteMailFriendsComponent,
+    LocactionResetDialogComponent
 };
 
 export default [
@@ -20,5 +22,6 @@ export default [
     MyQuestionsComponent,
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent
+    InviteMailFriendsComponent,
+    LocactionResetDialogComponent
 ];

@@ -38,10 +38,17 @@
               <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
                 class=" error" textWrap="true" text="Display Name is already taken by other user"></Label>
               <GridLayout row="*" col="*, auto" orientation="horizontal" margin="0 20">
-                <TextField #textField hint="{{userType ===  0 ? 'Location' : 'Undefined'}}" formControlName="location"
-                  class="input">
-                </TextField>
-                <Label *ngIf="!singleFieldEdit.location && userType === 0" (tap)="editSingleField('location')" row="0"
+                <RadAutoCompleteTextView  row="0" col="0" #acLocation [items]="dataLocation" suggestMode="Suggest" showCloseButton="false" (didAutoComplete)="onTextChangedLocation($event)"  (textChanged)="onTextChangedLocation($event)" borderWidth="0 0 2 0" borderColor="#D3D3D3" width="315" (loaded)="onLoadedLoaction($event)" >
+                    <SuggestionView tkAutoCompleteSuggestionView marginTop="20">
+                        <ng-template tkSuggestionItemTemplate let-item="item">
+                            <StackLayout orientation="vertical" padding="10">
+                                <Label [text]="item.text"></Label>
+                            </StackLayout>
+                        </ng-template>
+                    </SuggestionView>
+                </RadAutoCompleteTextView>
+             
+                <Label *ngIf="!singleFieldEdit.location && userType === 0 && !isLocationEdit" (tap)="editLocationField()" row="0"
                   col="1" android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
                   horizontalAlignment="right" class="fas" text="&#xf303;"></Label>
                 <Label *ngIf="singleFieldEdit.location && userForm.value.location !=='' && userType === 0"
@@ -49,7 +56,8 @@
                   android:marginRight="2" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
                   text="&#xf14a;"></Label>
               </GridLayout>
-              <Button text="Get Location" (tap)="getLocation()"></Button>
+
+              <Button margin="20 20 20 0" padding="7 0" text="Get Location" (tap)="getLocation()"  *ngIf="singleFieldEdit.location && userForm.value.location !=='' && userType === 0"></Button>
               
               <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error"
                 textWrap="true" text="Location is required!"></Label>
@@ -133,12 +141,12 @@
                   </GridLayout>
                   <GridLayout rows="auto,auto" columns="*,auto" class="two-player-option" iosOverflowSafeArea="false">
                     <Label class="input-label" row="0" col="0" text="Add Tag" textWrap="true"></Label>
-                    <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff"
+                    <StackLayout row="1" col="0" ios:backgroundColor="#ffffff"
                       iosOverflowSafeArea="false">
                       <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems"
                         completionMode="Contains" showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)"
-                        (textChanged)="onTextChanged($event)" border="none" ios:backgroundColor="#ffffff">
-                        <SuggestionView tkAutoCompleteSuggestionView>
+                        (textChanged)="onTextChanged($event)" border="none" ios:backgroundColor="#ffffff" >
+                        <SuggestionView tkAutoCompleteSuggestionView >
                           <ng-template tkSuggestionItemTemplate let-item="item">
                             <StackLayout orientation="vertical" padding="10">
                               <Label [text]="item.text"></Label>

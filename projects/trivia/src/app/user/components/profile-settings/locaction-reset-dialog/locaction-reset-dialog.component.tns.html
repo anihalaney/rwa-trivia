@@ -1,4 +1,8 @@
-<ns-action-bar title="Invitation to play" showAdd="true"></ns-action-bar>
-<StackLayout backgroundColor="#f1f5f7">
-    <app-invite-mail-friends [user]="user"></app-invite-mail-friends>
+<StackLayout>
+    <GridLayout rows="auto" columns="auto,*" backgroundColor="#3e5b95" padding="15">
+        <Label row="0" col="0" text="Allow Permission" horizontalAlignment="left" color="#ffffff" fontSize="20"
+            textWrap="true"></Label>
+        <Label row="0" col="1" text="&#xf057;" horizontalAlignment="right" (tap)="onClose()" class="fa times-circle close-icon"></Label>
+    </GridLayout>
+    <Label row="1" class="Roboto-Regular" fontSize="18" text="Please enable location permission in app" textWrap="true" padding="30 10 10 10"></Label>
 </StackLayout>

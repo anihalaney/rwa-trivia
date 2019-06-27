@@ -100,20 +100,20 @@ export class ProfileSettings {
             ).subscribe());
 
         this.subscriptions.push(this.store.select(appState.coreState)
-        .pipe(select(u => u.addressUsingLongLat), filter(location => !!location))
+            .pipe(select(u => u.addressUsingLongLat), filter(location => !!location))
             .subscribe(location => {
                 if (location) {
                     console.log(JSON.stringify(location));
                     let cityName, countryName;
                     location.results[0].address_components.map(component => {
-                      const cityList = component.types.filter(typeName => typeName === 'administrative_area_level_2');
-                      if (cityList.length > 0) {
-                        cityName = component.long_name;
-                      }
-                      const countryList = component.types.filter(typeName => typeName === 'country');
-                      if (countryList.length > 0) {
-                        countryName = component.long_name;
-                      }
+                        const cityList = component.types.filter(typeName => typeName === 'administrative_area_level_2');
+                        if (cityList.length > 0) {
+                            cityName = component.long_name;
+                        }
+                        const countryList = component.types.filter(typeName => typeName === 'country');
+                        if (countryList.length > 0) {
+                            countryName = component.long_name;
+                        }
                     });
                     this.userForm.patchValue({ location: `${cityName}, ${countryName}` });
                 }
@@ -391,6 +391,22 @@ export class ProfileSettings {
     }
     checkDisplayName(displayName: string) {
         this.store.dispatch(new userActions.CheckDisplayName(displayName));
+    }
+
+    getCityAndCountryName(location) {
+        let cityName = '';
+        let countryName = '';
+        location.results[0].address_components.map(component => {
+            const cityList = component.types.filter(typeName => typeName === 'administrative_area_level_2');
+            if (cityList.length > 0) {
+                cityName = component.long_name;
+            }
+            const countryList = component.types.filter(typeName => typeName === 'country');
+            if (countryList.length > 0) {
+                countryName = component.long_name;
+            }
+        });
+        return `${cityName}, ${countryName}`;
     }
 
 }

@@ -5,7 +5,7 @@ import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { Subscription, Subject } from 'rxjs';
-import { UserService, Utils, WindowRef } from 'shared-library/core/services';
+import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { profileSettingsConstants } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
@@ -13,7 +13,7 @@ import { userState } from '../../store';
 import { ProfileSettings } from './profile-settings';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { LocactionResetDialogComponent } from './locaction-reset-dialog/locaction-reset-dialog.component';
-import { filter, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'profile-settings',
@@ -72,18 +72,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
     this.subscriptions.push(this.store.select(coreState).pipe(select(u => u.addressUsingLongLat), filter(location => !!location))
       .subscribe(location => {
         if (location) {
-          let cityName, countryName;
-          location.results[0].address_components.map(component => {
-            const cityList = component.types.filter(typeName => typeName === 'administrative_area_level_2');
-            if (cityList.length > 0) {
-              cityName = component.long_name;
-            }
-            const countryList = component.types.filter(typeName => typeName === 'country');
-            if (countryList.length > 0) {
-              countryName = component.long_name;
-            }
-          });
-          this.userForm.patchValue({ location: `${cityName}, ${countryName}` });
+          this.userForm.patchValue({ location: this.getCityAndCountryName(location) });
         }
       }));
 
@@ -95,7 +84,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
           const country = location.terms[(location.terms.length - 1)].value;
           this.locations.push(`${city}, ${country}`);
         });
-        console.log('list >', this.locations);
         this.cd.markForCheck();
       }));
 
@@ -110,41 +98,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   }
 
   ngOnInit(): void {
-    // this.userForm.get('location');
-    console.log(this.userForm);
-    if (this.userForm) {
-      this.userForm.get('location').valueChanges.subscribe(val => {
-        console.log('location>', val);
-      });
-      this.userForm.get('displayName').valueChanges.subscribe(val => {
-        console.log('location>', val);
-      });
-    }
-    // this.locationChanged();
-  }
-
-  onChanges(): void {
-    console.log(' on chagnes');
-    this.userForm.get('location').valueChanges.subscribe(val => {
-      console.log('tester', val);
-    });
   }
 
   locationChanged(result): void {
-    console.log('event changed', result);
-    // this.locationService.getAddressSuggestions(term)
-    // console.log('location changed');
     this.store.dispatch(this.userAction.loadAddressUserSuggestion(result));
-
-    // this.locationTerm$.pipe(debounceTime(400),
-    //   distinctUntilChanged())
-    //   // switchMap((term) => 'tester'))
-    //   .subscribe((result) => {
-    //     console.log('result', result);
-
-    //   }, (err) => {
-    //     console.log("error in search " + JSON.stringify(err));
-    //   });
   }
 
   private setCropperSettings() {
@@ -316,7 +273,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   }
 
   getLocation() {
-    console.log('get location');
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.coords.latitude},${position.coords.longitude}`));
@@ -325,13 +281,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
         this.dialogRef = this.dialog.open(LocactionResetDialogComponent, {
           disableClose: false
         });
-        this.dialogRef.componentInstance.ref = this.dialogRef;
       });
-    } else {
-      alert("Geolocation is not supported by this browser.");
     }
-
-
   }
 
 }
