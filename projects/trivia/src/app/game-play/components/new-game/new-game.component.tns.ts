@@ -10,17 +10,17 @@ import { filter, take } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, GameConstant, GameMode, OpponentType, Parameter, PlayerMode } from 'shared-library/shared/model';
+import {
+  Category, GameConstant, GameMode, OpponentType, Parameter, PlayerMode,
+  FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
+} from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { RouterExtensions } from 'nativescript-angular/router';
-import * as firebase from 'nativescript-plugin-firebase';
 import * as gamePlayActions from './../../store/actions';
 import { NewGame } from './new-game';
 import { Router } from '@angular/router';
-import { FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from '../../../../../../shared-library/src/lib/shared/model';
-
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -61,13 +61,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private ngZone: NgZone) {
     super(store, utils, gameActions, userActions, cd);
     this.initDataItems();
-    firebase.analytics.setScreenName({
-      screenName: 'New Game Screen'
-    }).then(
-      function () {
-        console.log('New Screen Log is added');
-      }
-    );
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.NEW_GAME);
   }
   ngOnInit() {
 
@@ -216,7 +210,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     analyticsParameter = this.utils.setAnalyticsParameter(
       FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
       this.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
-          this.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER,
+        this.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER,
       analyticsParameter
     );
 

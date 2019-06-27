@@ -48,4 +48,14 @@ export class Utils extends UtilsCore {
     });
   }
 
+  setScreenNameInFirebaseAnalytics(screenName: string) {
+    firebase.analytics.setScreenName({
+      screenName: screenName
+    }).then(
+      function () {
+        console.log(`${screenName} Screen is added`);
+      }
+    );
+  }
+
 }

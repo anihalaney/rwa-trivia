@@ -1,15 +1,13 @@
-import { Component, OnInit, Inject, NgZone, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { PLATFORM_ID } from '@angular/core';
-import { QuestionActions, GameActions, UserActions } from 'shared-library/core/store/actions';
-import { PlayerMode, GameStatus } from 'shared-library/shared/model';
-import { WindowRef, Utils } from 'shared-library/core/services';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, NgZone, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { RouterExtensions } from 'nativescript-angular/router';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Utils, WindowRef } from 'shared-library/core/services';
+import { GameActions, QuestionActions, UserActions } from 'shared-library/core/store/actions';
+import { FirebaseScreenNameConstants, Game, GameStatus, PlayerMode } from 'shared-library/shared/model';
+import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState, appState } from '../../../store';
 import { Dashboard } from './dashboard';
-import { RouterExtensions } from 'nativescript-angular/router';
-import { User, Game } from 'shared-library/shared/model';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Page } from 'tns-core-modules/ui/page/page';
 
 @Component({
   selector: 'dashboard',
@@ -49,7 +47,7 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       utils,
       cd);
     this.gameStatus = GameStatus;
-
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.DASHBOARD);
   }
 
   ngOnInit() {

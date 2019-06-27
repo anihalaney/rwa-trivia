@@ -13,7 +13,9 @@ import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
 import { ReportGameComponent } from './../report-game/report-game.component';
 import { Image } from "tns-core-modules/ui/image";
-import { appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode } from 'shared-library/shared/model';
+import {
+  appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode, FirebaseScreenNameConstants
+} from 'shared-library/shared/model';
 import {
   FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants
 } from '../../../../../../shared-library/src/lib/shared/model';
@@ -35,6 +37,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
     super(store, userActions, utils, cd);
 
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.GAME_OVER);
 
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();

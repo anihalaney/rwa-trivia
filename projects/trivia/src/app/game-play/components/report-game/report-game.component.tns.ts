@@ -1,17 +1,15 @@
 import {
-    Component, OnInit, OnDestroy, ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef
+    ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChildren
 } from '@angular/core';
-import {
-    ReportQuestion, User, Game, QuestionMetadata, Category, Question
-} from 'shared-library/shared/model';
+import { Store } from '@ngrx/store';
+import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable } from 'rxjs';
+import { Utils } from 'shared-library/core/services';
+import { Category, FirebaseScreenNameConstants, Game, Question, QuestionMetadata, ReportQuestion, User } from 'shared-library/shared/model';
+import { isAndroid } from 'tns-core-modules/ui/page/page';
 import { AppState, categoryDictionary } from '../../../store';
 import * as gameplayactions from '../../store/actions';
-import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { ModalDialogParams } from 'nativescript-angular/directives/dialogs';
-import { Utils } from 'shared-library/core/services';
-import { isAndroid } from 'tns-core-modules/ui/page/page';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
 @Component({
     selector: 'report-game',
@@ -62,6 +60,9 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             new ReportOption('Spam'),
             new ReportOption('Other')
         ];
+
+        this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.REPORT_GAME);
+
     }
 
     ngOnInit() {

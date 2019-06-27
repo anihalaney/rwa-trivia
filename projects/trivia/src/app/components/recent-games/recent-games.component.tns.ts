@@ -1,13 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnDestroy, OnInit, ChangeDetectorRef, AfterViewInit, NgZone } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-import { User, GameStatus, Game } from 'shared-library/shared/model';
-import { AppState, appState } from '../../store';
-import { Observable } from 'rxjs';
-import { Utils } from 'shared-library/core/services';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { UserActions } from 'shared-library/core/store/actions';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { RecentGames } from './recent-games';
 import { Page } from 'tns-core-modules/ui/page';
+import { AppState } from '../../store';
+import { RecentGames } from './recent-games';
+import { Utils } from 'shared-library/core/services';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @Component({
   selector: 'recent-games',
@@ -27,8 +25,11 @@ export class RecentGamesComponent extends RecentGames implements OnInit, OnDestr
     cd: ChangeDetectorRef,
     userActions: UserActions,
     private ngZone: NgZone,
-    private page: Page) {
+    private page: Page,
+    private utils: Utils
+    ) {
     super(store, cd, userActions);
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.RECENT_COMPLETED_GAMES);
   }
 
   ngOnInit(): void {

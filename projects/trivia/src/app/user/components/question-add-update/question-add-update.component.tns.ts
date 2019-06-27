@@ -1,14 +1,14 @@
 import { Component, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges,
   ViewChildren, QueryList, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
-import { Question, Answer } from 'shared-library/shared/model';
+import { Question, Answer, FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { QuestionAddUpdate } from './question-add-update';
-import { debounceTime, map } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
@@ -53,6 +53,8 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     private page: Page, private cd: ChangeDetectorRef) {
 
     super(fb, store, utils, questionAction);
+
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.QUESTION_ADD_UPDATE);
 
     this.submitBtnTxt = 'SUBMIT';
     this.actionBarTxt = 'Submit Question';

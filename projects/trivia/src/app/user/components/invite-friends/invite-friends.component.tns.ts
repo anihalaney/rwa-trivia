@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -6,6 +6,7 @@ import { UserActions } from 'shared-library/core/store/actions';
 import { InviteFriends } from './invite-friends';
 import { RouterExtensions } from 'nativescript-angular/router';
 import { Page } from 'tns-core-modules/ui/page/page';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @Component({
   selector: 'app-invite-friends',
@@ -21,6 +22,7 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
     private routerExtension: RouterExtensions, private page: Page, private ngZone: NgZone) {
     super(store, userActions, utils);
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.FRIEND_LIST);
   }
 
   ngOnInit() {

@@ -401,10 +401,32 @@ export enum FirebaseAnalyticsKeyConstants {
     LOCATION = 'location'
 }
 
-
 export enum FirebaseAnalyticsEventConstants {
     USER_LOGIN = 'user_login',
     COMPLETED_GAME = 'completed_game',
     START_NEW_GAME = 'start_new_game',
     USER_LOCATION = 'user_location'
 }
+
+export enum FirebaseScreenNameConstants {
+    NEW_GAME = 'New Game',
+    ACHIEVEMENTS = 'Achievements',
+    PRIVACY_POLICY = 'Privacy Policy',
+    RECENT_COMPLETED_GAMES = 'Recent Completed Games',
+    DASHBOARD = ' Dashboard',
+    LEADERBOARD = 'Leaderboard',
+    GAME_OVER = 'Game Over',
+    REPORT_GAME = 'Report Game',
+    GAME_CONTINUE = 'Game Continue',
+    GAME_QUESTION  = 'Game Question',
+    GAME_DIALOG = 'Game Dialog',
+    INVITE_FRIENDS = 'Invite Friends',
+    FRIEND_LIST = 'Friend List',
+    MY_QUESTIONS = 'My Questions',
+    INVITE_MAIL_FRIENDS = 'Invite Mail Friends',
+    PROFILE_SETTINGS = 'Profile Settings',
+    QUESTION_ADD_UPDATE = 'Question Add Update',
+    LOGIN = 'Login',
+    USER_FEEDBACK = 'User Feedback'
+}
+
