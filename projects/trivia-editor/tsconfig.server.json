@@ -1,0 +1,28 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "baseUrl": "./",
+    "module": "commonjs",
+    "types": [],
+    "paths": {
+      "shared-library/*": [
+          "../shared-library/src/lib/*"
+      ]
+    },
+  },
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts",
+    "./src/**/*.tns.ts",
+    "./src**/*.android.ts",
+    "./src/**/*.ios.ts",
+    "./src/main.ns.aot.ts",
+    "./src/main.ns.ts",
+    "./src/vendor.ts",
+    "./src/**/mobile"
+  ],
+  "angularCompilerOptions": {
+    "entryModule": "src/app/app.server.module#AppServerModule"
+  }
+}

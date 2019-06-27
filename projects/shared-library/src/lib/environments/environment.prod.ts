@@ -15,5 +15,9 @@ export const CONFIG: IConfig = {
     googlePlayUrl: 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia',
     iTunesUrl: 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?ls=1&mt=8'
   },
-  'functionsUrl': `https://bitwiser.io/${appConstants.API_VERSION}`
+  'functionsUrl': `https://bitwiser.io/${appConstants.API_VERSION}`,
+  'editorUrl': 'https://bitwiser.io/editor',
+  'hightlighJsURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js',
+  'hightlighCSSURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css',
+  'katexCSSURL' : 'https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css',
 };

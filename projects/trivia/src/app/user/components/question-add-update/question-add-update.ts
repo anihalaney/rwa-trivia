@@ -7,9 +7,9 @@ import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import * as userActions from '../../store/actions';
 import { QuestionActions } from 'shared-library/core/store/actions/question.actions';
-
-
+import { ViewChild } from '@angular/core';
 export class QuestionAddUpdate {
+
 
   tagsObs: Observable<string[]>;
   categoriesObs: Observable<Category[]>;
@@ -52,9 +52,11 @@ export class QuestionAddUpdate {
   createDefaultForm(question: Question): FormArray {
     const fgs: FormGroup[] = question.answers.map(answer => {
       const fg = new FormGroup({
-        answerText: new FormControl(answer.answerText,
-          Validators.compose([Validators.required, Validators.maxLength(this.applicationSettings.answer_max_length)])),
+        answerText: new FormControl(answer.answerObject,
+          Validators.compose([Validators.required])),
         correct: new FormControl(answer.correct),
+        isRichEditor: new FormControl(answer.isRichEditor),
+        answerObject: new FormControl(),
       });
       return fg;
     });
@@ -104,7 +106,9 @@ export class QuestionAddUpdate {
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
     question.createdOn = new Date();
-
+    question.isRichEditor = formValue.isRichEditor;
+    question.maxTime = formValue.maxTime;
+    question.questionObject = (formValue.questionObject) ? formValue.questionObject : '';
     return question;
   }
 

@@ -6,7 +6,7 @@
   // border-color: rgba(204,204,204,0.44);
 }
 .dark{ font-family: 'hindsemibold'; display: inline-block;font-size: 18px; }
-.question-text{ display: inline-block; font-size: 16px;font-family: 'hindsemibold';};
+.question-text{ display: inline-block; font-size: 16px;font-family: 'hindsemibold'; vertical-align: top};
 .answer-text{ display: inline-block; font-size: 16px;color: #282828}
 
 .currentans li:nth-child(1) {

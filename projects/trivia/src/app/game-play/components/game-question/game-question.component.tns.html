@@ -68,14 +68,14 @@
             <CardView class="cardStyle" android:elevation="20" ios:elevation="40" radius="5" class="gameplay"
                 backgroundColor="white" margin="15">
                 <StackLayout padding="20 10">
-                    <Label text="{{questionIndex}}. {{question?.questionText}}" class="Roboto-Bold" fontSize="17"
-                        fontWeight="700" marginBottom="10" textWrap="true" color="#1b1c1c" horizontalAlignment="center"></Label>
+                    <render-question [question]="question" [questionIndex]="questionIndex"></render-question>
                     <StackLayout *ngIf="question">
                         <StackLayout class="question-answered Hind-Medium" margin="10" *ngFor="let answer of question.answers;let i=index"
                             [class.players-answer]="answeredIndex === i" [class.wrong]="answeredIndex === i && correctAnswerIndex !== i"
                             [class.right]="correctAnswerIndex === i"  stlRippleEffect (rippleTap)="answerButtonClicked(answer,i)"  [isUserInteractionEnabled] = "doPlay">
-                            <Label text="{{answer?.answerText}}"  horizontalAlignment="center" fontSize="15" fontWeight="500"
-                                marginTop="10" marginBottom="10" textWrap="true" padding="10" width="100%" style="text-align:center;"  [isUserInteractionEnabled] = "doPlay"></Label>
+                                <render-answer [answer]="answer" [isWrong]="answeredIndex === i && correctAnswerIndex !== i"
+                                [isRight]="correctAnswerIndex === i" [doPlay] ="doPlay" [isUserInteractionEnabled] = "doPlay"  [isGameAnswer]="true"></render-answer>
+
                         </StackLayout>
                     </StackLayout>
                     <GridLayout margin="0 15" rows="auto" columns="auto" *ngIf="question" style=" horizontal-align:right;" class="Roboto-Medium">

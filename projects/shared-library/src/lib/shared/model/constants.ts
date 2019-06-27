@@ -208,6 +208,8 @@ export enum QuestionsConstants {
     BULK_QUESTION = 'bulk-question',
     QUESTION = 'question',
     NEXT = 'next',
+    META_DATA = 'metadata',
+    UPLOAD_FINISHED = 'upload finished',
 }
 
 export enum ResponseMessagesConstants {
@@ -293,6 +295,7 @@ export enum HeaderConstants {
     IMAGE_FORWARD_SLASH_PNG = 'image/png',
     TEXT_FORWARD_SLASH_PLAIN = 'text/plain',
     IMAGE_FORWARD_SLASH_JPEG = 'image/jpeg',
+    ATTACHMENT_QUESTION_IMAGE_PNG = 'attachment; filename=question_image.png',
 }
 
 export enum RoutesConstants {
@@ -356,6 +359,9 @@ export enum RoutesConstants {
     ACCOUNTS = 'accounts',
     ACHIEVEMENT = 'achievement',
     RULES = 'rules',
+    GET_QUESTION_IMAGE = 'getQuestionImage',
+    UPLOAD_QUESTION_IMAGE = 'uploadQuestionImage',
+
     DISPLAY_NAME = 'display-name',
     DISPLAY_DASH_NAME = 'displayName'
 }

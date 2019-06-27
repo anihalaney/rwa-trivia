@@ -1,33 +1,39 @@
 <GridLayout tkExampleTitle tkToggleNavButton>
     <RadListView [items]="questions">
         <ng-template tkListItemTemplate let-question="item">
-            <GridLayout rows="*" columns="*,*,*,*" borderBottomWidth="1" borderBottomColor="#e5e5e5">
+            <GridLayout rows="*" columns="*,*,*,auto" borderBottomWidth="1" borderBottomColor="#e5e5e5">
                 <StackLayout row="0" col="0" padding="10" colSpan="3">
 
-                    <Label text="{{ question.createdOn | date:'dd MMM yyyy' }}" textWrap="true" class="label Roboto-Regular" fontSize="12"
-                        color="#616161" marginTop="5"></Label>
+                    <Label text="{{ question.createdOn | date:'dd MMM yyyy' }}" textWrap="true" class="label Roboto-Regular"
+                        fontSize="12" color="#616161" marginTop="5"></Label>
 
-                    <Label [text]="question.questionText" textWrap="true" class="label Roboto-Medium" fontSize="16" fontWeight="bold"></Label>
+                    <render-question [question]="question"></render-question>
 
                     <StackLayout fontSize="12">
-                        <GridLayout rows="*" columns="auto,auto" marginTop="5">
-                            <Label row="0" col="0" text="Correct answer :" textWrap="true" class="label Roboto-Medium" fontWeight="bold"></Label>
+                        <GridLayout rows="*" columns="auto,*" marginTop="5">
+                            <Label row="0" col="0" text="Correct answer :" textWrap="true" class="label Roboto-Medium"
+                                fontWeight="bold"></Label>
                             <StackLayout row="0" col="1" *ngFor="let answer of question.answers">
-                                <Label *ngIf="answer.correct" [text]="answer.answerText" textWrap="true" class="label Roboto-Regular"
-                                    padding="2" color="#616161"></Label>
+                                <render-answer *ngIf="answer.correct" [answer]="answer"
+                                    [isGameAnswer]="false"></render-answer>
+
                             </StackLayout>
                         </GridLayout>
-                        <GridLayout rows="*" columns="auto,auto">
-                            <Label row="0" col="0" text="Other options :" textWrap="true" class="label Roboto-Medium" fontWeight="bold"></Label>
+                        <GridLayout rows="*" columns="auto,*">
+                            <Label row="0" col="0" text="Other options :" textWrap="true" class="label Roboto-Medium"
+                                fontWeight="bold"></Label>
                             <StackLayout row="0" col="1">
-                                <Label text="{{getOtherOptionsString(question.answers)}}" textWrap="true" class="label Roboto-Regular"
-                                    width="180" padding="2" color="#616161"></Label>
+                                <ng-template ngFor let-answer [ngForOf]="question.answers">
+                                    <render-answer *ngIf="!answer.correct" [answer]="answer"
+                                        [isGameAnswer]="false"></render-answer>
+                                </ng-template>
                             </StackLayout>
                         </GridLayout>
                         <GridLayout rows="*" columns="auto,auto">
-                            <Label row="0" col="0" text="Category :" textWrap="true" class="label Roboto-Medium" fontWeight="bold"></Label>
+                            <Label row="0" col="0" text="Category :" textWrap="true" class="label Roboto-Medium"
+                                fontWeight="bold"></Label>
                             <StackLayout row="0" col="1" *ngFor="let id of question.categoryIds">
-                                <Label [text]="categoryDictionary[id].categoryName" textWrap="true" class="label Roboto-Regular"
+                                <Label [text]="categoryDictionary[id]?.categoryName" textWrap="true" class="label Roboto-Regular"
                                     padding="2" color="#616161"></Label>
                             </StackLayout>
                         </GridLayout>
@@ -42,14 +48,12 @@
                 <StackLayout col="3">
                     <GridLayout row="*,*,*,*" col="*" borderLeftWidth="1" borderLeftColor="#e5e5e5" class="status-layout Hind-Bold">
 
-
                         <Button row="0" rowSpan="4" text="" [ngClass]="{'pending-btn': getDisplayStatus(question.status)==='PENDING', 
                                                     'required-change-btn': getDisplayStatus(question.status)==='REQUIRED_CHANGE',
                                                     'reject-btn': getDisplayStatus(question.status)==='REJECTED',
                                                     'approve-btn': getDisplayStatus(question.status)==='APPROVED'}"
                             width="90" height="200">
                         </Button>
-
                         <Button row="1" *ngIf="getDisplayStatus(question.status)==='PENDING'" class="fa pending-btn"
                             horizontalAlignment="right" text="&#xf251;" textWrap="true" color="#574b4c" fontSize="16"
                             fontWeight="bold" width="90" height="25" marginTop="-55"></Button>
