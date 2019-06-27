@@ -6,6 +6,9 @@ import { QuestionFormComponent } from './question-form/question-form.component';
 import { RejectedQuestionContentComponent } from './rejected-question-content/rejected-question-content.component';
 import { SocialPaletteComponent } from './social-palette/social-palette.component';
 import { AuthorComponent } from './author/author.component';
+import { RenderQuestionComponent } from './render-question/render-question.component';
+import { RenderAnswerComponent } from './render-answer/render-answer.component';
+import { CropImageDialogComponent } from './crop-image-dialog/crop-image-dialog.component';
 export {
     QuestionsComponent,
     QuestionsSearchComponent,
@@ -13,7 +16,10 @@ export {
     QuestionFormComponent,
     RejectedQuestionContentComponent,
     SocialPaletteComponent,
-    AuthorComponent
+    AuthorComponent,
+    RenderQuestionComponent,
+    RenderAnswerComponent,
+    CropImageDialogComponent
 };
 
 export default [
@@ -23,5 +29,8 @@ export default [
     QuestionFormComponent,
     RejectedQuestionContentComponent,
     SocialPaletteComponent,
-    AuthorComponent
+    AuthorComponent,
+    RenderQuestionComponent,
+    RenderAnswerComponent,
+    CropImageDialogComponent
 ];

@@ -104,6 +104,10 @@ class MigrationRoutes {
         this.migrationRoutes.post(`/${RoutesConstants.REMOVE}/${RoutesConstants.ACCOUNTS}`,
             AuthMiddleware.authTokenOnly, MigrationController.removeAllAccounts);
 
+        //  '/question/renderwebview'
+        this.migrationRoutes.post(`/question/renderwebview`,
+        AuthMiddleware.authTokenOnly, MigrationController.generateRenderedQuestion);
+
     }
 }
 

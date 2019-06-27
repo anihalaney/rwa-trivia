@@ -13,7 +13,11 @@ export const CONFIG: IConfig = {
     storageBucket: 'rwa-trivia.appspot.com',
     messagingSenderId: '479350787602'
   },
-  'functionsUrl': `https://bitwiser.io`
+  'functionsUrl': `https://bitwiser.io`,
+  'editorUrl': 'https://bitwiser.io/editor',
+  'hightlighJsURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js',
+  'hightlighCSSURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css',
+  'katexCSSURL' : 'https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css',
 };
 
 export const projectMeta = {

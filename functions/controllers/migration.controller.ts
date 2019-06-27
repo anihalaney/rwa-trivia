@@ -363,4 +363,37 @@ export class MigrationController {
         }
     }
 
+    /**
+     * Generate rendered View for questions and unpublished question
+     *
+     */
+
+    static async generateRenderedQuestion(req, res) {
+        try {
+            // getAllUnpublishedQuestions
+            const updatePromises = [];
+            const unPublishedQs: Question[] = await QuestionService.getAllUnpublishedQuestions();
+
+            for (const question of unPublishedQs) {
+                question.isRichEditor = false;
+                const dbQuestionObj = { ...question };
+                updatePromises.push(QuestionService.updateQuestion(MigrationConstants.UNPUBLISHED_QUESTIONS, dbQuestionObj));
+            }
+
+            const publishedQs: Question[] = await QuestionService.getAllQuestions();
+
+            for (const question of publishedQs) {
+                question.isRichEditor = false;
+                const dbQuestionObj = { ...question };
+                updatePromises.push(QuestionService.updateQuestion(MigrationConstants.QUESTIONS, dbQuestionObj));
+            }
+
+
+
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await Promise.all(updatePromises));
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+
 }

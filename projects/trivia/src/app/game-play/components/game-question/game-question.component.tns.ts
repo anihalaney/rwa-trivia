@@ -35,6 +35,7 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   processTimeInterval: number;
   elapsedTime: number;
   timerSub: Subscription;
+
   constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -43,6 +44,8 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   ngOnInit() {
     this.progressValue = 0;
     this.photoUrl = this.utils.getImageUrl(this.user, 70, 60, '70X60');
+
+  this.cd.markForCheck();
   }
 
   ngOnDestroy() {

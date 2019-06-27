@@ -1,8 +1,8 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
-import { PageEvent, MatCheckboxChange, MatSelectChange } from '@angular/material';
+import { PageEvent, MatCheckboxChange } from '@angular/material';
 import { Observable } from 'rxjs';
 
-import { Question, QuestionStatus, Category, SearchResults } from '../../model';
+import { Question, QuestionStatus, Category, SearchResults, ApplicationSettings } from '../../model';
 
 @Component({
   selector: 'question-search',
@@ -15,6 +15,8 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
   @Input() categoryDictionary: { [key: number]: Category };
   @Input() showApproveButton: boolean;
   @Input() categoriesObs: Observable<Category[]>;
+  @Input() quillConfig: any;
+  @Input() applicationSettings: ApplicationSettings;
   @Output() approveClicked = new EventEmitter<Question>();
   @Output() onPageChanged = new EventEmitter<PageEvent>();
   @Output() onCategoryChanged = new EventEmitter<{ categoryId: number, added: boolean }>();
@@ -33,8 +35,7 @@ export class QuestionsSearchComponent implements OnInit, OnChanges, OnDestroy {
 
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnChanges() {
     this.questions = this.questionsSearchResults.questions;

@@ -1,0 +1,29 @@
+<mat-dialog-content class="cd-popup">
+  <mat-card class="cd-popup-container">
+    <mat-card-content>
+      <div class="sprite cancelicon col-sm-1" (click)="closeModel()"></div>
+      <mat-card-title>
+        <span>Crop Image</span>
+      </mat-card-title>
+      <mat-card-subtitle>
+      </mat-card-subtitle>
+      <div class="text-center" *ngIf="errorMsg">
+        <p>
+          <mat-hint class="error">
+             {{errorMsg }}
+          </mat-hint>
+        </p>
+      </div>
+      <div class="text-center">
+        <img-cropper *ngIf="profileImageFile" #cropper [image]="cropImage" [settings]="cropperSettings"></img-cropper>
+      </div>
+
+    </mat-card-content>
+    <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancel</button>
+      <button mat-button (click)="onCropClick()">Crop & Save</button>
+      <button mat-button (click)="onSaveClick()" cdkFocusInitial>Save</button>
+    </mat-dialog-actions>
+  </mat-card>
+
+</mat-dialog-content>
