@@ -170,6 +170,7 @@ export class ESUtils {
     const seed = date.getUTCFullYear().toString() + date.getUTCMonth().toString() + date.getUTCDate().toString();
     const hits = await ESUtils.getRandomItems(ESUtils.QUESTIONS_INDEX, 1, (isNextQuestion) ? '' : seed);
     hits[0]['_source'].serverTimeQCreated = Utils.getUTCTimeStamp();
+
     // convert hit to Question
     return Question.getViewModelFromES(hits[0]);
   }

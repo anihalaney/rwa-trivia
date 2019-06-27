@@ -46,7 +46,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   SOCIAL_LABEL = 'CONNECT YOUR SOCIAL ACCOUNT';
   @ViewChildren('textField') textField: QueryList<ElementRef>;
   subscriptions = [];
-  checkUserSubscriptions: Subscription;
   isValidDisplayName: boolean = null;
 
   public imageTaken: ImageAsset;
@@ -148,6 +147,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         const imageSource = await fromAsset(imageAsset);
         this.cropImage(imageSource);
       } catch (error) {
+        this.utils.sendErrorToCrashlytics('appLog', error);
         console.error(error);
       }
     }
@@ -164,6 +164,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.cd.detectChanges();
       }
     } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
   }
@@ -185,6 +186,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       imageSource = await fromAsset(imageAsset);
       this.cropImage(imageSource);
     } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
 
@@ -266,7 +268,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     this.checkDisplayName(this.userForm.get('displayName').value);
 
-    this.checkUserSubscriptions = this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
+    this.subscriptions.push(this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
       this.isValidDisplayName = status;
       if (this.isValidDisplayName !== null) {
         if (this.isValidDisplayName) {
@@ -289,7 +291,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         this.toggleLoader(false);
       }
 
-    });
+    }));
 
   }
 

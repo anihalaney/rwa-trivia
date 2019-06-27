@@ -29,4 +29,3 @@ export function checkDisplayName(state: any = null, action: UserActions): boolea
             return null;
     }
 }
-

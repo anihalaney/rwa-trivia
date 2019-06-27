@@ -272,6 +272,10 @@ export class GameDialog {
       }
       this.originalAnswers = Object.assign({}, question.answers);
       this.currentQuestion = question;
+      this.currentQuestion.answers.forEach((ans, index) => {
+        ans.renderedAnswer = ans.answerText;
+      });
+
       this.calculateMaxTime();
       this.timer = this.MAX_TIME_IN_SECONDS;
       this.currentQuestion.answers = this.utils.changeAnswerOrder(this.currentQuestion.answers);
@@ -325,12 +329,15 @@ export class GameDialog {
   }
 
   calculateMaxTime(): void {
-    this.applicationSettings.game_play_timer_loader_ranges.forEach((timerLoader) => {
-      if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength <= timerLoader.end) {
-        this.MAX_TIME_IN_SECONDS = timerLoader.seconds;
-      }
-    });
-
+    if (this.currentQuestion.isRichEditor && this.currentQuestion.maxTime) {
+      this.MAX_TIME_IN_SECONDS = this.currentQuestion.maxTime;
+    } else {
+      this.applicationSettings.game_play_timer_loader_ranges.forEach((timerLoader) => {
+        if (this.currentQuestion.totalQALength > timerLoader.start && this.currentQuestion.totalQALength <= timerLoader.end) {
+          this.MAX_TIME_IN_SECONDS = timerLoader.seconds;
+        }
+      });
+    }
   }
 
   getNextQuestion() {

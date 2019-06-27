@@ -108,6 +108,10 @@ class MigrationRoutes {
         this.migrationRoutes.post(`/${RoutesConstants.USER}/${RoutesConstants.UPDATE_USER_GAME_PLAYED_WITH_STAT}`,
         AuthMiddleware.authTokenOnly, MigrationController.updateUserGamePlayedWithStat);
 
+        //  '/question/renderwebview'
+        this.migrationRoutes.post(`/question/renderwebview`,
+        AuthMiddleware.authTokenOnly, MigrationController.generateRenderedQuestion);
+
     }
 }
 

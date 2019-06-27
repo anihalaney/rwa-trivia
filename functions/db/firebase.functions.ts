@@ -123,7 +123,7 @@ export class FirebaseFunctions {
                 if (game.gameOver) {
 
                     await StatsService.updateSystemStats(SystemStatConstants.ACTIVE_GAMES);
-                    StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
+                    await StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
 
                     await GameLeaderBoardStats.getGameUsers(game);
 

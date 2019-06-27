@@ -31,10 +31,20 @@
               "projects/trivia/src/styles/global.scss",
               "projects/trivia/src/styles/light.theme.scss",
               "projects/trivia/src/styles/dark.theme.scss",
-              "./node_modules/firebaseui/dist/firebaseui.css"
+              "projects/trivia/src/styles/mathquill.scss",
+              "./node_modules/firebaseui/dist/firebaseui.css",
+              "./node_modules/ng-quill-tex/assets/theme.css",
+              "./node_modules/mathquill/formula/formula.css",
+              "./node_modules/katex/dist/katex.css",
+              "./node_modules/highlightjs/styles/arta.css",
+              "./node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
-              "./node_modules/firebaseui/dist/firebaseui.js"
+              "./node_modules/firebaseui/dist/firebaseui.js",
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./node_modules/mathquill/build/mathquill.min.js",
+              "./node_modules/highlightjs/highlight.pack.min.js",
+              "./node_modules/katex/dist/katex.min.js"
             ]
           },
           "configurations": {
@@ -201,9 +211,19 @@
               "projects/trivia-admin/src/styles/styles.scss",
               "projects/trivia-admin/src/styles/global.scss",
               "projects/trivia-admin/src/styles/light.theme.scss",
-              "projects/trivia-admin/src/styles/dark.theme.scss"
+              "projects/trivia-admin/src/styles/dark.theme.scss",
+              "./node_modules/ng-quill-tex/assets/theme.css",
+              "./node_modules/mathquill/formula/formula.css",
+              "./node_modules/katex/dist/katex.css",
+              "./node_modules/highlightjs/styles/arta.css",
+              "./node_modules/quill/dist/quill.snow.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./node_modules/mathquill/build/mathquill.min.js",
+              "./node_modules/highlightjs/highlight.pack.min.js",
+              "./node_modules/katex/dist/katex.min.js"
+            ]
           },
           "configurations": {
             "dev": {
@@ -358,6 +378,146 @@
               "projects/shared-library/tsconfig.lib.json",
               "projects/shared-library/tsconfig.spec.json"
             ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "trivia-editor": {
+      "root": "projects/trivia-editor/",
+      "sourceRoot": "projects/trivia-editor/src",
+      "projectType": "application",
+      "prefix": "app",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/trivia-editor",
+
+            "index": "projects/trivia-editor/src/index.html",
+            "main": "projects/trivia-editor/src/main.ts",
+            "polyfills": "projects/trivia-editor/src/polyfills.ts",
+            "tsConfig": "projects/trivia-editor/tsconfig.app.json",
+            "assets": [
+              "projects/trivia-editor/src/favicon.ico",
+              "projects/trivia-editor/src/assets"
+            ],
+            "styles": [
+              "projects/trivia-editor/src/styles.css",
+              "./node_modules/ng-quill-tex/assets/theme.css",
+              "./node_modules/mathquill/formula/formula.css",
+              "./node_modules/katex/dist/katex.css",
+              "./node_modules/highlightjs/styles/arta.css",
+              "./node_modules/quill/dist/quill.snow.css"
+            ],
+            "scripts": [
+              "projects/trivia-editor/src/assets/js/nativescript-webview-interface.js",
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./node_modules/mathquill/build/mathquill.min.js",
+              "./node_modules/highlightjs/highlight.pack.min.js",
+              "./node_modules/katex/dist/katex.min.js"
+            ],
+            "es5BrowserSupport": true
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/trivia-editor/src/environments/environment.ts",
+                  "with": "projects/trivia-editor/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "trivia-editor:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "trivia-editor:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "trivia-editor:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/trivia-editor/src/test.ts",
+            "polyfills": "projects/trivia-editor/src/polyfills.ts",
+            "tsConfig": "projects/trivia-editor/tsconfig.spec.json",
+            "karmaConfig": "projects/trivia-editor/karma.conf.js",
+            "styles": [
+              "projects/trivia-editor/src/styles.css"
+            ],
+            "scripts": [],
+            "assets": [
+              "projects/trivia-editor/src/favicon.ico",
+              "projects/trivia-editor/src/assets"
+            ]
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/trivia-editor/tsconfig.app.json",
+              "projects/trivia-editor/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "trivia-editor-e2e": {
+      "root": "projects/trivia-editor-e2e/",
+      "projectType": "application",
+      "prefix": "",
+      "architect": {
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "projects/trivia-editor-e2e/protractor.conf.js",
+            "devServerTarget": "trivia-editor:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "trivia-editor:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": "projects/trivia-editor-e2e/tsconfig.e2e.json",
             "exclude": [
               "**/node_modules/**"
             ]

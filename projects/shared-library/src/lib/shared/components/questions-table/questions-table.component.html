@@ -37,14 +37,19 @@
         <div class="col-sm-12 col-xs-12 question-section" [ngClass]="row.validationErrorMessages?.length > 0?'error-que':''">
           <div class="date">{{ ( (row.createdOn) ? (row.createdOn.seconds * 1000) : row.createdOn) | date:'dd MMM yyyy'
             }}</div>
-          <p class="dark">{{row.questionText}}</p>
+          <p class="dark">
+            <render-question [question]="row"></render-question>
+          </p>
           <ul class="currentans">
             <li>
               <div class="button-web-css">
                 <div class="question-text ">Correct answer :</div>
                 <div class="answer-text">
                   <span *ngFor="let answer of row.answers">
-                    <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                    <span *ngIf="answer.correct">
+                        <render-answer [answer]="answer"></render-answer>
+
+                    </span>
                   </span>
                 </div>
                 <div class="row col-sm-3 col-xs-12 question-status">
@@ -67,7 +72,9 @@
               <div class="question-text ">Other options :</div>
               <div class="answer-text">
                 <span *ngFor="let answer of row.answers">
-                  <span *ngIf="!answer.correct">{{answer.answerText}}, </span>
+                  <div *ngIf="!answer.correct">
+                      <render-answer  [answer]="answer"></render-answer>
+                  </div>
                 </span>
               </div>
             </li>
@@ -75,8 +82,8 @@
               <div class="textleft ">
                 <div class="question-text ">Category :</div>
                 <div class="answer-text">
-                  <span *ngFor="let id of row.categoryIds">
-                    {{categoryDictionary[id]?.categoryName}}
+                 <span *ngFor="let id of row.categoryIds">
+                    {{categoriesObs[id]?.categoryName}}
                   </span>
                 </div>
               </div>
@@ -102,7 +109,10 @@
                 <div class="question-text">Correct answer :</div>
                 <div class="answer-text">
                   <span *ngFor="let answer of row.answers">
-                    <span *ngIf="answer.correct">{{answer.answerText}}</span>
+                    <span *ngIf="answer.correct">
+                      <!-- {{answer.answerText}} -->
+                      <render-answer  [answer]="answer"></render-answer>
+                    </span>
                   </span>
                 </div>
               </div>
@@ -190,10 +200,11 @@
           </div>
         </div>
       </div>
-      <div class="row edit-form-div" *ngIf="row === editQuestion">
-        <app-question-form [editQuestion]="editQuestion" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs"
-          (updateStatus)=nullifyQuestion($event) (updateUnpublishedQuestions)="updateQuestionData($event)"></app-question-form>
+      <div class="row edit-form-div" *ngIf="editQuestion !== null && row === editQuestion">
+        <app-question-form [editQuestion]="editQuestion" [tagsDictionary]="tagsDictionary" [tagsObs] ="tagsObs" [categoriesObs]="categoriesObs"
+          (updateStatus)=nullifyQuestion($event) (updateUnpublishedQuestions)="updateQuestionData($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings"></app-question-form>
       </div>
+
       <div class="row rejection-div" *ngIf="row === viewReasonArray[i]">
         <app-rejected-question-content [rejectQuestion]="viewReasonArray[i]" (cancelStatus)=showQuestion($event)></app-rejected-question-content>
       </div>
