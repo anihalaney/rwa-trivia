@@ -24,7 +24,7 @@ export class SideNavComponent implements OnDestroy {
   userDict: { [key: string]: User } = {};
   blogUrl = projectMeta.blogUrl;
   playstoreUrl =  projectMeta.playStoreUrl;
-  appStoreUrl = projectMeta.appStoreUrl;
+  appstoreUrl = projectMeta.appStoreUrl;
   subscriptions = [];
   applicationSettings: ApplicationSettings;
 
