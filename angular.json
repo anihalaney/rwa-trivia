@@ -615,7 +615,7 @@
               "fileReplacements": [
                 {
                   "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/trivia/environment.prod.ts"
+                  "with": "projects/trivia-editor/src/environments/environment.prod.ts"
                 }
               ]
             },
@@ -623,7 +623,7 @@
               "fileReplacements": [
                 {
                   "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/trivia/environment.prod.ts"
+                  "with": "projects/trivia-editor/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
