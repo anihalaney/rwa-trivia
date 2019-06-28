@@ -109,7 +109,19 @@ export class UserEffects {
         .pipe(
             switchMap((action: ActionWithPayload<string>) =>
                 this.svc.loadUserFriends(action.payload)
-                    .pipe(map((friends: Friends) => this.userActions.loadUserFriendsSuccess(friends)))
+                    .pipe(map((friends: Friends) => {
+                    const friendList = [];
+                    if (friends && friends.myFriends) {
+                        friends.myFriends.map((friend, index) => {
+                            friendList.push(Object.keys(friend)[0]);
+                        });
+                    }
+                    return friendList;
+                    }),
+                    switchMap((friendsList: string[]) =>
+                        this.svc.getOtherUserGamePlayedStat(action.payload, friendsList)
+                        .pipe(map((friends: Friends) => this.userActions.loadUserFriendsSuccess(friends)))
+                    ))
             )
         );
 

@@ -13,7 +13,7 @@ import { LeaderBoardService } from '../services/leaderboard.service';
 import { StatsService } from '../services/stats.service';
 import { AchievementMechanics } from '../utils/achievement-mechanics';
 import { ESUtils } from '../utils/ESUtils';
-import { FriendGameStats } from '../utils/friend-game-stats';
+import { GamePlayedWithStats } from '../utils/game-played-with-stats';
 import { GameLeaderBoardStats } from '../utils/game-leader-board-stats';
 import { MailClient } from '../utils/mail-client';
 import { PushNotification } from '../utils/push-notifications';
@@ -123,13 +123,13 @@ export class FirebaseFunctions {
                 if (game.gameOver) {
 
                     await StatsService.updateSystemStats(SystemStatConstants.ACTIVE_GAMES);
-                    StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
+                    await StatsService.updateSystemStats(SystemStatConstants.GAME_PLAYED);
 
                     await GameLeaderBoardStats.getGameUsers(game);
 
                     if (Number(game.gameOptions.playerMode) === PlayerMode.Opponent &&
                         Number(game.gameOptions.opponentType) === OpponentType.Friend) {
-                        await FriendGameStats.calculateFriendsGameState(game);
+                        await GamePlayedWithStats.calculateUserGamePlayedState(game);
                     }
                 }
             }

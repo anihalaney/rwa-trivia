@@ -6,9 +6,9 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable, Subscription } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { UserActions } from 'shared-library/core/store';
-import { Category, Question, QuestionStatus, SearchCriteria, SearchResults, User } from 'shared-library/shared/model';
+import { Category, Question, QuestionStatus, SearchCriteria, SearchResults, User, ApplicationSettings } from 'shared-library/shared/model';
 import * as bulkActions from '../../../bulk/store/actions';
-import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
+import { AppState, appState, getCategories, getTags } from '../../../store';
 import { adminState } from '../../store';
 import * as adminActions from '../../store/actions';
 
@@ -37,9 +37,34 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
   PENDING = QuestionStatus.PENDING;
   REJECTED = QuestionStatus.REJECTED;
   REQUIRED_CHANGE = QuestionStatus.REQUIRED_CHANGE;
+  applicationSettings: ApplicationSettings;
+  quillConfig = {
+    toolbar: {
+      container: [],
+      handlers: {
+        // handlers object will be merged with default handlers object
+        'mathEditor': () => {
+        }
+      }
+    },
+    mathEditor: {},
+    blotFormatter: {},
+    syntax: true
+  };
   subscriptions: Subscription[] = [];
 
-  constructor(private store: Store<AppState>, private router: Router, private userActions: UserActions) {
+  constructor(private store: Store<AppState>,
+    private router: Router,
+    private userActions: UserActions) {
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings)).subscribe(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.options);
+        this.quillConfig.toolbar.container.push(this.applicationSettings.quill_options.list);
+        this.quillConfig.mathEditor = { mathOptions: this.applicationSettings };
+      }
+    }));
 
     this.questionsSearchResultsObs = this.store.select(adminState).pipe(select(s => s.questionsSearchResults));
     this.unpublishedQuestionsObs = this.store.select(adminState).pipe(select(s => s.unpublishedQuestions), map((question) => {
@@ -59,7 +84,7 @@ export class AdminQuestionsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.userDict$.subscribe(userDict => this.userDict = userDict));
 
 
-    this.categoryDictObs = store.select(categoryDictionary);
+    this.categoryDictObs = store.select(appState.coreState).pipe(select(s => s.categories));
     this.criteria = new SearchCriteria();
 
     const url = this.router.url;

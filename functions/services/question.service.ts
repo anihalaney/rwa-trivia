@@ -1,4 +1,4 @@
-import { CollectionConstants, Question } from '../../projects/shared-library/src/lib/shared/model';
+import { CollectionConstants, Question, GeneralConstants, QuestionsConstants } from '../../projects/shared-library/src/lib/shared/model';
 import admin from '../db/firebase.client';
 import { Utils } from '../utils/utils';
 
@@ -6,6 +6,8 @@ export class QuestionService {
 
     private static fireStoreClient = admin.firestore();
     private static QC = CollectionConstants.QUESTIONS;
+    private static UQC = CollectionConstants.UNPUBLISHED_QUESTIONS;
+    private static bucket: any = Utils.getFireStorageBucket(admin);
 
     /**
      * getAllQuestions
@@ -28,8 +30,13 @@ export class QuestionService {
             const questionResult = await QuestionService.fireStoreClient
                 .doc(`/${QuestionService.QC}/${questionId}`)
                 .get();
-            const question = questionResult.data();
-            question['id'] = (question['id']) ? question['id'] : questionResult['id'];
+            let question = questionResult.data();
+            if (question) {
+                question['id'] = (question['id']) ? question['id'] : questionResult['id'];
+            } else {
+                question = new Question();
+            }
+
             return Question.getViewModelFromDb(question);
         } catch (error) {
             return Utils.throwError(error);
@@ -62,4 +69,79 @@ export class QuestionService {
         }
     }
 
+    /**
+     * getAllUnpublished Questions
+     * return questions
+     */
+    static async getAllUnpublishedQuestions(): Promise<any> {
+        try {
+            return Utils.getValesFromFirebaseSnapshot(await QuestionService.fireStoreClient.collection(QuestionService.UQC).get());
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+
+    static async uploadImage(image: String, imageName: number): Promise<any> {
+
+        let filePath =
+            `questions`;
+        const imageBase64 = image.replace(/^data:image\/\w+;base64,/, '');
+        let bufferStream = new Buffer(imageBase64, GeneralConstants.BASE64);
+        try {
+            await QuestionService.uploadQImage(bufferStream, 'image/jpeg', filePath, imageName);
+            return;
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+    * upload Question Image
+    * return status
+   */
+    static async uploadQImage(data: any, mimeType: any, filePath: string, imageName: number): Promise<any> {
+        const stream = require('stream');
+        const file = QuestionService.bucket.file(`${filePath}/${imageName}`);
+        const dataStream = new stream.PassThrough();
+        dataStream.push(data);
+        dataStream.push(null);
+        mimeType = (mimeType) ? mimeType : dataStream.mimetype;
+
+        return new Promise((resolve, reject) => {
+            dataStream.pipe(file.createWriteStream({
+                metadata: {
+                    contentType: mimeType,
+                    metadata: {
+                        custom: QuestionsConstants.META_DATA
+                    }
+                }
+            }))
+                .on(GeneralConstants.ERROR, (error) => {
+                    Utils.throwError(error);
+                })
+                .on(GeneralConstants.FINISH, () => {
+                    resolve(QuestionsConstants.UPLOAD_FINISHED);
+                });
+        });
+    }
+
+    /**
+       * generate Quesiton Image
+       * return stream
+       */
+    static async generateQuesitonImage(imageName): Promise<string> {
+
+        const fileName = `questions/${imageName}`;
+
+        const file = QuestionService.bucket.file(fileName);
+        try {
+            const streamData = await file.download();
+            return streamData[0];
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+
+    }
 }

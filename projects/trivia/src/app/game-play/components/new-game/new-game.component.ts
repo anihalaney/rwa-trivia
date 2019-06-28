@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { map, take, flatMap, skipWhile } from 'rxjs/operators';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Category, GameMode, GameOptions, OpponentType, PlayerMode } from 'shared-library/shared/model';
@@ -37,6 +37,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   friendUserId: string;
   loaderStatus = false;
 
+  challengerUserId: string;
   public config: SwiperConfigInterface = {
     a11y: true,
     direction: 'horizontal',
@@ -57,11 +58,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public gameActions: GameActions,
     private windowRef: WindowRef,
     private router: Router,
+    public route: ActivatedRoute,
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
     public cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions, cd);
+    super(store, utils, gameActions, userActions, cd, route);
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
@@ -70,10 +72,18 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
       this.cd.markForCheck();
     }));
 
-    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1))
-      .subscribe(appSettings => {
-        if (appSettings) {
-          this.applicationSettings = appSettings[0];
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1),
+    map(appSettings => {
+      if (appSettings) {
+        this.applicationSettings = appSettings[0];
+        if (this.applicationSettings && this.applicationSettings.lives.enable) {
+          return appSettings;
+        }
+      }
+    }),
+    flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
+    skipWhile(account => !account), take(1), map(account =>  this.life = account.lives)))).subscribe(data => {
+        if (this.applicationSettings) {
           this.selectedCategories = [];
           let filteredCategories = [];
           if (this.applicationSettings && this.applicationSettings.game_play_categories) {
@@ -86,14 +96,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
             filteredCategories = this.categories;
           }
 
-          if (this.applicationSettings && this.applicationSettings.lives.enable) {
-            this.store.select(appState.coreState).pipe(select(s => s.account), take(1)).subscribe(account => {
-              if (account) {
-                this.life = account.lives;
-              }
-              this.cd.markForCheck();
-            });
-          }
+          this.cd.markForCheck();
+
 
           const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
           ...filteredCategories.filter(c => !c.requiredForGamePlay)];
@@ -117,23 +121,39 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.gameOptions = new GameOptions();
 
     this.newGameForm = this.createForm(this.gameOptions);
-
     const playerModeControl = this.newGameForm.get('playerMode');
-    playerModeControl.setValue('0');
     const opponentTypeControl = this.newGameForm.get('opponentType');
+    this.subscriptions.push(
+      this.route.params.pipe(
+        map(params => {
+          this.challengerUserId = params.userid;
+          playerModeControl.setValue(this.challengerUserId ? '1' : '0');
+          const isChallengeControl = this.newGameForm.get('isChallenge');
+         isChallengeControl.setValue(this.challengerUserId ? true : false);
+          if ( this.challengerUserId ) {
+            opponentTypeControl.setValue('1');
+          }
 
-    this.subscriptions.push(playerModeControl.valueChanges.subscribe(v => {
-      if (v === '1') {
-        opponentTypeControl.enable();
-        opponentTypeControl.setValue('0');
-      } else {
-        opponentTypeControl.disable();
-        opponentTypeControl.reset();
-      }
-    }));
+          if ( this.challengerUserId ) {
+            this.selectFriendId(this.challengerUserId);
+          }
 
-    this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-      .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+          this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
+          .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+        }),
+        flatMap(() => playerModeControl.valueChanges)
+      ).subscribe(v => {
+        if (v === '1') {
+          opponentTypeControl.enable();
+          opponentTypeControl.setValue('0');
+        } else {
+          opponentTypeControl.disable();
+          opponentTypeControl.reset();
+        }
+
+      })
+    );
+
   }
 
   autoOptionClick(event) {
@@ -176,13 +196,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }
 
     const tagsFA = new FormArray(fcs);
-
     const form: FormGroup = this.fb.group({
       playerMode: [gameOptions.playerMode, Validators.required],
       opponentType: [gameOptions.opponentType],
       gameMode: [gameOptions.gameMode, Validators.required],
       tagControl: '',
-      tagsArray: tagsFA
+      tagsArray: tagsFA,
+      isChallenge: gameOptions.isChallenge
     } //, {validator: questionFormValidator}
     );
     return form;
@@ -241,6 +261,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     gameOptions.categoryIds = this.selectedCategories;
     gameOptions.gameMode = GameMode.Normal;
     gameOptions.tags = this.selectedTags;
+    gameOptions.isChallenge = formValue.isChallenge;
 
     return gameOptions;
   }

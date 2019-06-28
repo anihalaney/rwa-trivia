@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { InviteFriendsDialogComponent } from './invite-friends-dialog/invite-friends-dialog.component';
 import { User } from 'shared-library/shared/model';
@@ -35,23 +35,23 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
     public store: Store<AppState>,
     public renderer: Renderer2,
     public userActions: UserActions,
-    public utils: Utils) {
-    super(store, userActions, utils);
+    public utils: Utils,
+    public cd: ChangeDetectorRef) {
+    super(store, userActions, utils, cd);
   }
 
   ngOnInit() {
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe(uFriends => {
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
-        uFriends.myFriends.map((friend, index) => {
-          this.store.dispatch(this.userActions.loadOtherUserProfile(Object.keys(friend)[0]));
-          this.uFriends.push(friend[Object.keys(friend)[0]]);
-          this.uFriends[index].userId = Object.keys(friend)[0];
-        });
-      }
 
-      this.dataSource = new MatTableDataSource<any>(this.uFriends);
-      this.setPaginatorAndSort();
+        uFriends.map(friend => {
+          this.store.dispatch(this.userActions.loadOtherUserProfile(uFriends.userId));
+          this.uFriends.push(friend);
+        });
+        this.dataSource = new MatTableDataSource<any>(uFriends);
+        this.setPaginatorAndSort();
+      }
     }));
   }
 

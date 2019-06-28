@@ -22,6 +22,14 @@ export class Stat {
   }
 }
 
+export class GamePlayedWith {
+  date: number;
+  created_uid: string;
+  gamePlayed: number;
+  losses: number;
+  wins: number;
+}
+
 export class Game {
   private _gameId?: string;
   private _gameOptions: GameOptions;

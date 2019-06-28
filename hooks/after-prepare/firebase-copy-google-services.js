@@ -38,8 +38,8 @@ return new Promise(function(resolve, reject) {
             var destinationGoogleJson = path.join($projectData.platformsDir, "android", "app", "google-services.json");
             var destinationGoogleJsonAlt = path.join($projectData.platformsDir, "android", "google-services.json");
             var sourceGoogleJson = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json");
-            var sourceGoogleJsonProd = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json.prod");
-            var sourceGoogleJsonDev = path.join($projectData.appResourcesDirectoryPath, "Android", "google-services.json.dev");
+            var sourceGoogleJsonProd = path.join($projectData.projectDir, 'configurations' , `${hookArgs.platformSpecificData.env.project}/android/google-services.json.prod`);
+            var sourceGoogleJsonDev = path.join($projectData.projectDir, 'configurations' , `${hookArgs.platformSpecificData.env.project}/android/google-services.json.dev`);
 
             // ensure we have both dev/prod versions so we never overwrite singlular google-services.json
             if (fs.existsSync(sourceGoogleJsonProd) && fs.existsSync(sourceGoogleJsonDev)) {

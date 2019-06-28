@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
@@ -38,9 +38,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public cd: ChangeDetectorRef,
     public utils: Utils,
     private userService: UserService,
-    public route: ActivatedRoute) {
+    public route: ActivatedRoute,
+    public router: Router) {
 
-    super(fb, store, userAction, utils, cd, route);
+    super(fb, store, userAction, utils, cd, route, router);
 
     // if (this.userType === 0) {
     this.setCropperSettings();

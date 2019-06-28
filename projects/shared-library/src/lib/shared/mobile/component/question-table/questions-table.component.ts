@@ -1,8 +1,7 @@
 import {
-  Component, Input, Output, EventEmitter
+  Component, Input, Output, EventEmitter, OnInit, ChangeDetectorRef
 } from '@angular/core';
 import { Question, QuestionStatus, Category, User, Answer } from '../../../../shared/model';
-import { Utils } from '../../../../core/services';
 import { Observable } from 'rxjs';
 
 
@@ -12,7 +11,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./questions-table.component.css']
 })
 
-export class QuestionsTableComponent {
+export class QuestionsTableComponent implements OnInit {
 
   QuestionStatusTexts = ['', '', '&#xf00c;', '', '&#xf251;', '&#xf00d;', '&#xf044;'];
 
@@ -27,8 +26,13 @@ export class QuestionsTableComponent {
   @Output() selectedQuestion: EventEmitter<Question> = new EventEmitter<Question>();
 
 
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
   }
+
+  ngOnInit(): void {
+    this.cd.markForCheck();
+  }
+
 
   getDisplayStatus(status: number): string {
     return QuestionStatus[status];

@@ -1,4 +1,4 @@
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, Inject, NgZone } from '@angular/core';
 
@@ -65,7 +65,7 @@ import { interval } from 'rxjs';
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
-    { provide: RouterStateSerializer, useClass: CustomSerializer }
+    { provide: RouterStateSerializer, useClass: CustomSerializer }, Title
   ],
   bootstrap: [AppComponent]
 })
