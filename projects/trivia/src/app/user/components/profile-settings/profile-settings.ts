@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, QueryList, ViewChildren } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import { combineLatest, Observable, Subject } from 'rxjs';
@@ -68,15 +68,17 @@ export class ProfileSettings {
     };
     loggedInUser: User;
     gamePlayedAgainst: any;
+    applicationSettings: any;
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
-
+    loggedInUserAccount: Account;
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
         public userAction: UserActions,
         public utils: Utils,
         public cd: ChangeDetectorRef,
-        public route: ActivatedRoute) {
+        public route: ActivatedRoute,
+        public router: Router) {
         this.toggleLoader(true);
         this.fb = formBuilder;
         this.tagsObs = this.store.select(getTags);
@@ -105,6 +107,7 @@ export class ProfileSettings {
         return this.store.select(appState.coreState)
             .pipe(select(s => s.applicationSettings),
                 map(appSettings => {
+                    this.applicationSettings = {...appSettings[0]};
                     this.socialProfileObj = [...appSettings[0].social_profile];
                     this.socialProfileSettings = appSettings[0].social_profile
                         .filter(profile =>
@@ -176,8 +179,17 @@ export class ProfileSettings {
                 }
             }),
             flatMap(() => this.initializeSocialSetting()),
-            map(() => this.cd.markForCheck())
+            map(() => this.cd.markForCheck()),
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
+            skipWhile(account => !account || this.loggedInUserAccount === account))),
+            map((s) => {
+            return this.loggedInUserAccount = s;
+         })
         );
+    }
+
+    initializedLoggedInUserAccoutInfo() {
+        return this.store.select(appState.coreState).pipe(select(s => s.account));
     }
     get tagsArray(): FormArray {
         return this.userForm.get('tagsArray') as FormArray;
@@ -390,4 +402,13 @@ export class ProfileSettings {
         return userLocation.toString();
     }
 
+    startNewGame() {
+        this.router.navigate(['/game-play/challenge/', this.user.userId]);
+    }
+
+    get isLivesEnable(): Boolean {
+        const isEnable = (this.loggedInUser && this.loggedInUserAccount && this.loggedInUserAccount.lives > 0 &&
+             this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
+        return isEnable;
+    }
 }

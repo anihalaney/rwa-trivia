@@ -129,6 +129,11 @@
                   </div>
                 </div>
               </div>
+              <div class="new-game-btn-container">
+                  <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
+                      <button *ngIf="loggedInUserAccount &&  isLivesEnable"  class="startgame" (click)="startNewGame()">Start New Game</button>
+                  </div>
+              </div>
             </div>
           </div>
 
@@ -290,11 +295,11 @@
                       </div>
                       <div *ngIf="loggedInUser?.userId && userType === 1" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
                         <div class="savebox textcenter">
-                          <div *ngIf="gamePlayedAgainst" class="friends-div">
+                          <div *ngIf="user?.isFriend" class="friends-div">
                             <img src="assets/images/friends.png" alt="Friends" />
                             <span class="is-friend-span">Friends</span>
                           </div>
-                          <div *ngIf="!gamePlayedAgainst" (click)="sendFriendRequest()" class="friends-div">
+                          <div *ngIf="!user?.isFriend" (click)="sendFriendRequest()" class="friends-div">
                             <img src="assets/images/send-friend-request.png" alt="Friends" />
                             <span class="send-friend-request-span">Add Friend</span>
                           </div>

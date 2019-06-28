@@ -15,8 +15,7 @@ import {
   Utils,
   CategoryService, TagService, QuestionService,
   GameService, BulkService, UserService, SocialService, StatsService,
-  WindowRef, ApplicationSettingsService, AchievementService
-} from './services';
+  WindowRef, ApplicationSettingsService, AchievementService} from './services';
 
 import { AuthenticationProvider, AuthInterceptor } from './auth';
 

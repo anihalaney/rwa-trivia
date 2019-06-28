@@ -20,6 +20,35 @@
 .margin-top-10{
   margin-top:10px;
 }
+.startgame {
+  min-width: 190px;
+
+  font-family: "hindsemibold";
+  text-transform: uppercase;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  line-height: 34px;
+  border-radius: 4px;
+  display: inline-block;
+  text-align: center;
+  letter-spacing: 1px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.startgame:disabled {
+  background: silver;
+}
+
+.min-startgame {
+  min-width: 230px;
+  text-align: left !important;
+  padding-left: 24px !important;
+}
+.new-game-btn-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .enterquestion{ margin-top: 25px; background-color: #f1f2f2; }
 .upload-avatar-container{position: relative; min-height: 250px;}
 .file-upload-container{display: flex;justify-content: center}
@@ -314,7 +343,30 @@ input:disabled { background-color: #fff; }
 
 }
 
+.lives {
+  border: 2px solid #fff;
+  background: #71b02f;
+  border-radius: 50%;
+  height: 35px;
+  position: absolute;
+  top: -15px;
+  right: 4px;
+  color: #FFF;
+  font-size: 16px;
+  font-weight: 700;
+  width: 35px;
+  text-align: center;
+}
+
+.lives-text{
+  text-align: center;
+  line-height: 32px;
+}
+
 @media screen and ( max-width:767px) {
+  .min-startgame {
+    padding-left: calc( 50% - 90px) !important;
+  }
   .profile-display-field{
     width: 100%;
   }

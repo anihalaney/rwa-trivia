@@ -21,7 +21,7 @@ import { ProfileSettings } from './profile-settings';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { fromAsset } from 'tns-core-modules/image-source';
 import { ImageCropper } from 'nativescript-imagecropper';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
 import { userState } from '../../store';
@@ -73,9 +73,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public uUtils: Utils,
     public cd: ChangeDetectorRef,
     public route: ActivatedRoute,
+    public router: Router,
     private modal: ModalDialogService,
     private vcRef: ViewContainerRef) {
-    super(fb, store, userAction, uUtils, cd, route);
+    super(fb, store, userAction, uUtils, cd, route, router);
     this.initDataItems();
     requestPermissions();
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
@@ -115,6 +116,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         if (location) {
           const cityAndCountry = this.getCityAndCountryName(location);
           this.userForm.patchValue({ location: cityAndCountry });
+          console.log(this.userForm.value.locaction);
           this.acLocation.nativeElement.text = cityAndCountry;
         }
       }));
@@ -355,6 +357,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
           this.getUserFromFormValue(isEditSingleField, field);
           this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
           // call saveUser
+          console.log(JSON.stringify(this.user));
           this.saveUser(this.user);
 
         } else {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { combineLatest, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, catchError } from 'rxjs/operators';
 import {
     friendInvitationConstants, Friends, Game, GameOperations, GameStatus, Invitation, QueryParam, QueryParams, User, RoutesConstants
 } from './../../../lib/shared/model';
@@ -42,6 +42,28 @@ export class UserService {
                 return user;
             }),
                 mergeMap(u => this.getUserProfileImage(u)));
+    }
+
+    getOtherUserGamePlayedStat(userId: string, friendList: string[]): Observable<any> {
+      const gamesPlayedWithObs =  friendList.map( friendId =>
+        this.dbService.valueChanges('users', `/${userId}/game_played_with/${friendId}`));
+        return combineLatest(gamesPlayedWithObs)
+        .pipe(map((values) => {
+            return values.map((value, index) => {
+                if (value) {
+                    value['userId'] = friendList[index];
+                    return value;
+                } else {
+                    value = {};
+                    value.created_uid = friendList[index];
+                    return value;
+                }
+                });
+        }),
+        catchError(error => {
+            console.log(error);
+            return of(null);
+        }));
     }
 
     loadAccounts(user): Observable<any> {

@@ -4,14 +4,14 @@
   </div>
   <div class="question-cont">
     <h2>Question of the day!</h2>
-    <p class="">{{question.questionText}}</p>
+    <render-question [question]="question" ></render-question>   
     <div class="question-list col-sm-12">
       <div class="col-xs-12">
         <ul id="list">
           <li class="col-sm-5 col-xs-12 item" *ngFor="let answer of question.answers|slice:0:2;" (click)="answerButtonClicked(answer)"
             [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
             [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [class.question-answered]="answeredText!==''">
-            {{answer.answerText}}
+            <render-answer [answer]="answer"></render-answer>
           </li>
         </ul>
       </div>
@@ -20,7 +20,7 @@
           <li class="col-sm-5 col-xs-12" *ngFor="let answer of question.answers|slice:2:4;" (click)="answerButtonClicked(answer)"
             [class.players-answer]="answeredText === answer.answerText" [class.wrong]="answeredText === answer.answerText && correctAnswerText !== answer.answerText"
             [class.right]="answeredText !== '' && correctAnswerText === answer.answerText" [class.question-answered]="answeredText!==''">
-            {{answer.answerText}}
+            <render-answer [answer]="answer"></render-answer>
           </li>
         </ul>
       </div>

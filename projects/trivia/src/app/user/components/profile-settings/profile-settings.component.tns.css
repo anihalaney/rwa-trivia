@@ -12,6 +12,10 @@
     border-radius: 3;
 }
 
+.new-game-btn{
+    background-color: #e50051;
+}
+
 .profile-settings>.profile-settings-card>.cardStyle>.input-field> GridLayout>.input, .profile-settings>.profile-settings-card>.cardStyle>.profile>.input-field>.input, .profile-settings>.profile-settings-card>.cardStyle>.profile>.list-view>.input-field>.input {
     padding: 15;
     width: 325;
@@ -195,6 +199,14 @@
     padding: 10;
 }
 
+.new-game-btn{
+    padding: 10 20;
+    border-radius: 4;
+    background-color: #e50051;
+    color: #fff;
+    width:auto;
+    font-size: 16;
+}
 .edit-profile-btn {
     padding: 10 20;
     border-radius: 4;

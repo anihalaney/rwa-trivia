@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2, ViewChild, Inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material';
@@ -13,7 +13,6 @@ import { UserActions, ApplicationSettingsActions } from 'shared-library/core/sto
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CookieLawComponent } from 'angular2-cookie-law';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

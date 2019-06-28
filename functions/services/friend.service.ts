@@ -108,4 +108,17 @@ export class FriendService {
         }
     }
 
+    /**
+     * getAllFriendscollection
+     * return friends
+     */
+    static async getFriendsCollection(): Promise<any> {
+        try {
+            return await FriendService.friendFireStoreClient.collection(CollectionConstants.FRIENDS)
+                .get();
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
 }

@@ -7,13 +7,16 @@ import { SharedMaterialModule } from './shared-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { RouterModule } from '@angular/router';
 import { ShareButtonModule } from '@ngx-share/button';
+import { SafeHtmlPipe } from './pipe/safe-html.pipe';
+import { ImageCropperModule } from 'ngx-img-cropper';
 
 import {
   QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
-  QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent
+  QuestionFormComponent, RejectedQuestionContentComponent, SocialPaletteComponent, AuthorComponent, RenderQuestionComponent,
+  RenderAnswerComponent, CropImageDialogComponent
 } from './components';
 import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './directive';
-
+import { NgQuillTexModule } from 'ng-quill-tex';
 @NgModule({
   declarations: [
     QuestionsComponent,
@@ -24,7 +27,11 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     SocialPaletteComponent,
     AuthorComponent,
     ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective
+    OpenUserProfileDirective,
+    SafeHtmlPipe,
+    RenderQuestionComponent,
+    RenderAnswerComponent,
+    CropImageDialogComponent
   ],
   imports: [
     CommonModule,
@@ -42,14 +49,17 @@ import { ShowHintWhenFocusOutDirective, OpenUserProfileDirective } from './direc
     RouterModule,
 
     HttpClientModule,       // for share counts
-    ShareButtonModule
+    ShareButtonModule,
+    NgQuillTexModule,
+    ImageCropperModule
   ],
-  exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent,
+  exports: [QuestionsComponent, QuestionsSearchComponent, QuestionsTableComponent, RenderAnswerComponent, CropImageDialogComponent,
     CommonModule, HttpClientModule, ReactiveFormsModule,
     FlexLayoutModule, QuestionFormComponent,
     SharedMaterialModule, CdkTableModule, RejectedQuestionContentComponent,
     HttpClientModule, ShareButtonModule, SocialPaletteComponent, AuthorComponent, ShowHintWhenFocusOutDirective,
-    OpenUserProfileDirective
-  ]
+    OpenUserProfileDirective , SafeHtmlPipe, RenderQuestionComponent
+  ],
+  entryComponents: [CropImageDialogComponent]
 })
 export class SharedModule { }

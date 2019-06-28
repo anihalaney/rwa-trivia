@@ -4,9 +4,8 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { SharedModule } from 'shared-library/shared/shared.module';
 import { UserRoutingModule } from './routing/user-routing.module';
-
 import { effects, reducer } from './store';
-
+import { FormsModule } from '@angular/forms';
 import {
   ProfileSettingsComponent,
   MyQuestionsComponent,
@@ -16,7 +15,11 @@ import {
   InviteMailFriendsComponent,
   LocactionResetDialogComponent
 } from './components';
+// import { ImageCropperModule } from 'ngx-img-cropper';
+import { PreviewQuestionDialogComponent } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
+import { NgQuillTexModule } from 'ng-quill-tex';
+
 @NgModule({
   declarations: [
     ProfileSettingsComponent,
@@ -26,13 +29,13 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
     InviteFriendsDialogComponent,
-    LocactionResetDialogComponent
+    LocactionResetDialogComponent,
+    PreviewQuestionDialogComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     UserRoutingModule,
-
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
@@ -40,6 +43,8 @@ import { ImageCropperModule } from 'ngx-img-cropper';
     EffectsModule.forFeature(effects),
 
     ImageCropperModule,
+    FormsModule,
+    NgQuillTexModule
   ],
   providers: [],
   exports: [
@@ -53,7 +58,8 @@ import { ImageCropperModule } from 'ngx-img-cropper';
   ],
   entryComponents: [
     InviteFriendsDialogComponent,
-    LocactionResetDialogComponent
+    LocactionResetDialogComponent,
+    PreviewQuestionDialogComponent
   ]
 })
 export class UserModule { }
