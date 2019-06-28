@@ -584,8 +584,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/trivia-editor",
-            "baseHref": "/editor",
-            "deployUrl": "/editor/",
+            "baseHref": "/trivia-editor",
+            "deployUrl": "/trivia-editor/",
             "index": "projects/trivia-editor/src/index.html",
             "main": "projects/trivia-editor/src/main.ts",
             "polyfills": "projects/trivia-editor/src/polyfills.ts",
