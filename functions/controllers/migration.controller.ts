@@ -364,6 +364,18 @@ export class MigrationController {
     }
 
     /**
+     * Update user Game Played with stat
+     * return status
+     */
+    static async updateUserGamePlayedWithStat(req, res) {
+        try {
+            await UserService.updateUserGamePlayedWithStat();
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, ResponseMessagesConstants.MIGRATED_COLLECTION);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
+    }
+    /**
      * Generate rendered View for questions and unpublished question
      *
      */
