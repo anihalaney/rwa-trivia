@@ -6,7 +6,6 @@ import { CONFIG } from './../../../environments/environment';
 
 @Component({
     selector: 'render-answer',
-    moduleId: module.id,
     templateUrl: 'render-answer.component.html',
     styleUrls: ['render-answer.component.css']
 })

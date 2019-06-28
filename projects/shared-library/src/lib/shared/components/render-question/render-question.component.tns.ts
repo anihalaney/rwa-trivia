@@ -5,7 +5,6 @@ import { isAndroid, isIOS } from 'tns-core-modules/platform';
 import { CONFIG } from './../../../environments/environment';
 @Component({
     selector: 'render-question',
-    moduleId: module.id,
     templateUrl: 'render-question.component.html',
     styleUrls: ['render-question.component.css']
 })
