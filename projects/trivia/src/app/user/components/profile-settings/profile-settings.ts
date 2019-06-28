@@ -7,7 +7,7 @@ import { combineLatest, Observable, Subject } from 'rxjs';
 import { flatMap, map, skipWhile, switchMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
-import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
+import { Account, Category, profileSettingsConstants, User, Invitation } from 'shared-library/shared/model';
 import { AppState, appState, categoryDictionary, getCategories, getTags } from '../../../store';
 import * as userActions from '../../store/actions';
 
@@ -70,7 +70,7 @@ export class ProfileSettings {
     gamePlayedAgainst: any;
     // tslint:disable-next-line:quotemark
     linkValidation = "^http(s?)\:\/\/[0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([a-zA-Z0-9\-\.\?\,\'\/\\\+&amp;%\$#_]*)?$";
-
+    userInvitations: { [key: string]: Invitation };
     constructor(public formBuilder: FormBuilder,
         public store: Store<AppState>,
         public userAction: UserActions,
@@ -155,7 +155,7 @@ export class ProfileSettings {
             select(s => s.userDict),
             skipWhile(userDict => !userDict),
             map(userDict => {
-                this.userDict = userDict;
+                this.userDict = userDict;      
                 if (user && !this.loggedInUser) {
                     this.loggedInUser = user;
                     this.store.dispatch(this.userAction.loadOtherUserFriendExtendedInfo(this.userId));
@@ -174,6 +174,15 @@ export class ProfileSettings {
                     this.toggleLoader(false);
                 }
             }),
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations), 
+            skipWhile(userInvitations => !(userInvitations && this.user)),
+            map(userInvitations => { 
+                this.userInvitations = userInvitations; 
+                if (!this.userInvitations[this.user.email]) {
+                    this.store.dispatch(this.userAction.loadUserInvitationsInfo(this.loggedInUser.userId, this.user.email));
+                }
+            }),
+            )),
             flatMap(() => this.initializeSocialSetting()),
             map(() => this.cd.markForCheck())
         );

@@ -79,6 +79,7 @@ export class UserService {
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;
+            user.email = (dbUser && dbUser.email) ? dbUser.email : '';
             let gamePlayed;
             if (extendedInfo) {
                 user.categoryIds = (dbUser && dbUser.categoryIds) ? dbUser.categoryIds : [];

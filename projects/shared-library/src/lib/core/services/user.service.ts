@@ -77,6 +77,26 @@ export class UserService {
         return this.http.get<User>(url);
     }
 
+    loadUserInvitationsInfo(userId ,email: string): Observable<Invitation> {
+        const queryParams = {
+            condition: [
+            { name: 'created_uid', comparator: '==', value: userId },
+            { name: 'email', comparator: '==',  value: email}
+            ],
+            limit: 1
+        };
+
+        return this.dbService.valueChanges('invitations', '', queryParams).pipe(
+            map(invitations => {
+                if (invitations.length > 0) {
+                    return invitations[0];
+                } else {
+                    return {'email': email, 'created_uid': null, 'status': 'add'};
+                }
+            })
+        );
+    }
+
 
     getUserProfileImage(user: User): Observable<User> {
         if (user.profilePicture && user.profilePicture !== '') {
@@ -119,6 +139,31 @@ export class UserService {
 
         return this.dbService.valueChanges('invitations', '', queryParams).pipe(
             map(invitations => invitations));
+    }
+
+
+    loadAllFriendInvitations(email: string, created_uid: string) {
+        const queryParams1 = {
+            condition: [
+            { name: 'email', comparator: '==',  value: email},
+            { name: 'status', comparator: '==', value: friendInvitationConstants.PENDING }
+            ]
+        };
+
+        const query1 = this.dbService.valueChanges('invitations', '', queryParams1);
+
+        const queryParams2 = {
+            condition: [
+            { name: 'created_uid', comparator: '==',  value: created_uid},
+            { name: 'status', comparator: '==', value: friendInvitationConstants.PENDING }
+            ]
+        };
+
+        const query2 = this.dbService.valueChanges('invitations', '', queryParams2);
+
+        return combineLatest(query1, query2)
+        .pipe(map((data) => data[0].concat(data[1]))
+        );
     }
 
     setInvitation(invitation: Invitation) {
