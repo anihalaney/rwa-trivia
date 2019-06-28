@@ -18,7 +18,10 @@ let index;
 
 global['window'] = win;
 global['document'] = win.document;
+global['Node'] = win.Node;
+global['navigator'] = win.navigator;
 global['XMLHttpRequest'] = require('xmlhttprequest').XMLHttpRequest;
+
 
 // console.log(process.cwd());
 const DIST_FOLDER = resolve(process.cwd(), './dist');
