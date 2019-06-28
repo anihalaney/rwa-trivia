@@ -162,8 +162,6 @@ export enum GeneralConstants {
     HELLO = 'Hello',
     TRUE = 'true',
     Error_Message = 'Error : ',
-    BIT_WISER_DEV_STORAGE_BUCKET_NAME = 'rwa-trivia-dev-e57fc.appspot.com',
-    BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com',
     GAME_EXPIRED_HOURS = 32, // hr
     NAME = 'name',
     DISPLAY_NAME = 'displayName',
@@ -366,11 +364,6 @@ export enum RoutesConstants {
 
     DISPLAY_NAME = 'display-name',
     DISPLAY_DASH_NAME = 'displayName'
-}
-
-export enum AppStoreUrl {
-    PLAYSTOREURL = 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1',
-    APPSTOREURL = 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8'
 }
 
 export enum TermsAndPrivacyUrlConstant {

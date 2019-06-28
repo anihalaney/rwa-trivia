@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "704157888306",
+    "firebase_url": "https://bitwiser-edu.firebaseio.com",
+    "project_id": "bitwiser-edu",
+    "storage_bucket": "bitwiser-edu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704157888306:android:8c66f9daa3493ca2",
+        "android_client_info": {
+          "package_name": "io.bitwiser.edu.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "704157888306-1vt61mq734e5n15gq7iaei5rth1d7n8f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJg7aDI-FxlUz2gn9MQphCaAw9fA9mTWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704157888306-1vt61mq734e5n15gq7iaei5rth1d7n8f.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "704157888306-c921rsjncge4fqqlm27c1bsuq6dc6u89.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.bitwiser.edu.dev"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

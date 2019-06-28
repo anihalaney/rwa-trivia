@@ -25,9 +25,9 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthenticationProvider,
     private store: Store<AppState>,
     public router: Router,
+    private location: Location,
     private applicationSettingsAction: ApplicationSettingsActions,
   ) {
-
 
     this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {

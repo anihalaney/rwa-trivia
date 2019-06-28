@@ -18,7 +18,7 @@ import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as util from 'tns-core-modules/utils/utils';
 import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
-import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
+import { projectMeta } from '../../../../../shared-library/src/lib/environments/environment';
 import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
 
@@ -118,10 +118,10 @@ export class AppComponent implements OnInit, OnDestroy {
        //   console.log('appSettings', this.applicationSettings.crashlytics);
           if (isAndroid && version && this.applicationSettings.android_version
             && this.applicationSettings.android_version > version) {
-            this.displayForceUpdateDialog(CONFIG.firebaseConfig.googlePlayUrl);
+            this.displayForceUpdateDialog(projectMeta.playStoreUrl);
           } else if (!isAndroid && version && this.applicationSettings.ios_version
             && this.applicationSettings.ios_version > version) {
-            this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
+            this.displayForceUpdateDialog(projectMeta.appStoreUrl);
           }
 
         }
