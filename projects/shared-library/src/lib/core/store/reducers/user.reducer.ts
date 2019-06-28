@@ -145,9 +145,9 @@ export function addressUsingLongLat(state: any = null, action: ActionWithPayload
   }
 }
 
-export function addressUsingUserSuggestion(state: any = null, action: ActionWithPayload<any[]>): any {
+export function addressSuggestions(state: any = null, action: ActionWithPayload<any[]>): any {
   switch (action.type) {
-    case UserActions.LOAD_ADDRESS_USER_SUGGESTION_SUCCESS:
+    case UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS:
       return action.payload;
     default:
       return null;

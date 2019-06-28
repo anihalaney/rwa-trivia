@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as cloneDeep from 'lodash.clonedeep';
 import { combineLatest, Observable, Subject } from 'rxjs';
-import { flatMap, map, skipWhile, switchMap, filter } from 'rxjs/operators';
+import { flatMap, map, skipWhile, switchMap } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store';
 import { Account, Category, profileSettingsConstants, User } from 'shared-library/shared/model';
@@ -99,25 +99,6 @@ export class ProfileSettings {
                 })
             ).subscribe());
 
-        this.subscriptions.push(this.store.select(appState.coreState)
-            .pipe(select(u => u.addressUsingLongLat), filter(location => !!location))
-            .subscribe(location => {
-                if (location) {
-                    console.log(JSON.stringify(location));
-                    let cityName, countryName;
-                    location.results[0].address_components.map(component => {
-                        const cityList = component.types.filter(typeName => typeName === 'administrative_area_level_2');
-                        if (cityList.length > 0) {
-                            cityName = component.long_name;
-                        }
-                        const countryList = component.types.filter(typeName => typeName === 'country');
-                        if (countryList.length > 0) {
-                            countryName = component.long_name;
-                        }
-                    });
-                    this.userForm.patchValue({ location: `${cityName}, ${countryName}` });
-                }
-            }));
     }
 
     initializeSocialSetting() {
@@ -394,19 +375,19 @@ export class ProfileSettings {
     }
 
     getCityAndCountryName(location) {
-        let cityName = '';
-        let countryName = '';
+
+        const userLocation: string[] = [];
         location.results[0].address_components.map(component => {
             const cityList = component.types.filter(typeName => typeName === 'administrative_area_level_2');
             if (cityList.length > 0) {
-                cityName = component.long_name;
+                userLocation.push(component.long_name);
             }
             const countryList = component.types.filter(typeName => typeName === 'country');
             if (countryList.length > 0) {
-                countryName = component.long_name;
+                userLocation.push(component.long_name);
             }
         });
-        return `${cityName}, ${countryName}`;
+        return userLocation.toString();
     }
 
 }

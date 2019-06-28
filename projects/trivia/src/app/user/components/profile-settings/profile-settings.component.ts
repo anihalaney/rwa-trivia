@@ -76,7 +76,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
         }
       }));
 
-    this.subscriptions.push(this.store.select(coreState).pipe(select(u => u.addressUsingUserSuggestion), filter(location => !!location))
+    this.subscriptions.push(this.store.select(coreState).pipe(select(u => u.addressSuggestions), filter(location => !!location))
       .subscribe(locations => {
         this.locations = [];
         locations.predictions.map(location => {
@@ -101,7 +101,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   }
 
   locationChanged(result): void {
-    this.store.dispatch(this.userAction.loadAddressUserSuggestion(result));
+    this.store.dispatch(this.userAction.loadAddressSuggestions(result));
   }
 
   private setCropperSettings() {

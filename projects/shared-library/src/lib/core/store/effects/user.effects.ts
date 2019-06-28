@@ -228,14 +228,14 @@ export class UserEffects {
         );
 
     @Effect()
-    loadAddressUserSuggestion = this.actions$
-        .pipe(ofType(UserActions.LOAD_ADDRESS_USER_SUGGESTION))
+    loadAddressSuggestions = this.actions$
+        .pipe(ofType(UserActions.LOAD_ADDRESS_SUGGESTIONS))
         .pipe(
             debounceTime(2000),
             distinctUntilChanged(),
             switchMap((action: ActionWithPayload<any>) =>
                 this.svc.getAddressSuggestions(action.payload).pipe(
-                    map((result: any) => this.userActions.loadAddressUserSuggestionSuccess(result))
+                    map((result: any) => this.userActions.loadAddressSuggestionsSuccess(result))
                 ))
         );
 

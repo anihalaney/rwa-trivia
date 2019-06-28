@@ -274,35 +274,34 @@ export class UserActions {
   }
 
   static LOAD_ADDRESS_USING_LAT_LONG = 'LOAD_ADDRESS_USING_LAT_LONG';
-  loadAddressUsingLatLong(location: any): ActionWithPayload<User> {
+  loadAddressUsingLatLong(latLong: string): ActionWithPayload<string> {
     return {
       type: UserActions.LOAD_ADDRESS_USING_LAT_LONG,
-      payload: location
+      payload: latLong
     };
   }
 
   static LOAD_ADDRESS_USING_LAT_LONG_SUCCESS = 'LOAD_ADDRESS_USING_LAT_LONG_SUCCESS';
-  loadAddressUsingLatLongSuccess(location: any): ActionWithPayload<any[]> {
+  loadAddressUsingLatLongSuccess(location: any[]): ActionWithPayload<any[]> {
     return {
       type: UserActions.LOAD_ADDRESS_USING_LAT_LONG_SUCCESS,
       payload: location
     };
   }
 
-  static LOAD_ADDRESS_USER_SUGGESTION = 'LOAD_ADDRESS_USER_SUGGESTION';
-  loadAddressUserSuggestion(location: any): ActionWithPayload<User> {
-    console.log('this is tsting');
+  static LOAD_ADDRESS_SUGGESTIONS = 'LOAD_ADDRESS_SUGGESTIONS';
+  loadAddressSuggestions(location: string): ActionWithPayload<string> {
     return {
-      type: UserActions.LOAD_ADDRESS_USER_SUGGESTION,
+      type: UserActions.LOAD_ADDRESS_SUGGESTIONS,
       payload: location
     };
   }
 
-  static LOAD_ADDRESS_USER_SUGGESTION_SUCCESS = 'LOAD_ADDRESS_USER_SUGGESTION_SUCCESS';
-  loadAddressUserSuggestionSuccess(location: any): ActionWithPayload<any[]> {
+  static LOAD_ADDRESS_SUGGESTIONS_SUCCESS = 'LOAD_ADDRESS_SUGGESTIONS_SUCCESS';
+  loadAddressSuggestionsSuccess(suggestions: any[]): ActionWithPayload<any[]> {
     return {
-      type: UserActions.LOAD_ADDRESS_USER_SUGGESTION_SUCCESS,
-      payload: location
+      type: UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS,
+      payload: suggestions
     };
   }
 

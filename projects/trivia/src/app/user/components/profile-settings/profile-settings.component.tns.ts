@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
-  Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, OnInit, AfterViewInit, ViewContainerRef
+  Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, AfterViewInit, ViewContainerRef
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { select, Store } from '@ngrx/store';
@@ -38,7 +38,7 @@ import { LocactionResetDialogComponent } from './locaction-reset-dialog/locactio
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ProfileSettingsComponent extends ProfileSettings implements OnInit, OnDestroy, AfterViewInit {
+export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy, AfterViewInit {
 
   // Properties
   showSelectCategory = false;
@@ -126,9 +126,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
       this.acLocation.autoCompleteTextView.loadSuggestionsAsync = async (text) => {
         return new Promise((resolve, reject) => {
           if (text.length > 3) {
-            this.store.dispatch(this.userAction.loadAddressUserSuggestion(text));
+            this.store.dispatch(this.userAction.loadAddressSuggestions(text));
             this.subscriptions.push(this.store.select(coreState)
-              .pipe(select(u => u.addressUsingUserSuggestion), filter(location => !!location))
+              .pipe(select(u => u.addressSuggestions), filter(location => !!location))
               .subscribe(locations => {
                 const items = [];
                 locations.predictions.map(location => {
@@ -158,12 +158,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
         this.acLocation.nativeElement.readOnly = true;
         this.cd.markForCheck();
       }
-    }
-  }
-
-  ngOnInit(): void {
-    if (this.userType === 0) {
-      this.getLocationPermission();
     }
   }
 
@@ -394,25 +388,26 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   ngOnDestroy() {
   }
 
-  getLocation() {
+  async getLocation() {
+    await this.getLocationPermission();
     if (this.isLocationEnalbed) {
-      geolocation.getCurrentLocation({}).
-        then((position) => {
-          if (position) {
-            this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.latitude},${position.longitude}`));
-          }
-        }, function (e) {
-          console.log('Error: ' + e.message);
-        });
+      try {
+        const position = await geolocation.getCurrentLocation({});
+        console.log(position);
+        if (position) {
+          this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.latitude},${position.longitude}`));
+        }
+      } catch (e) {
+        console.log("Error: " + (e.message || e));
+      }
+
     } else {
-      // openDialog(question) {
       const options = {
         context: {},
         fullscreen: false,
         viewContainerRef: this.vcRef
       };
       this.modal.showModal(LocactionResetDialogComponent, options);
-      // }
     }
   }
   async getLocationPermission() {
@@ -423,9 +418,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
         this.isLocationEnalbed = true;
       } else {
         await geolocation.enableLocationRequest();
-        this.isLocationEnalbed = false;
+        this.isLocationEnalbed = await geolocation.isEnabled();
       }
     } catch (e) {
+      this.isLocationEnalbed = false;
       console.log("Error: " + (e.message || e));
 
     }

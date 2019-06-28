@@ -176,13 +176,11 @@ export class UserService {
     }
 
     getAddressByLatLang(latlong) {
-        console.log(CONFIG.firebaseConfig.apiKey);
         const url = `${CONFIG.addressByLatLongURL}?latlng=${latlong}&key=${CONFIG.firebaseConfig.apiKey}`;
         return this.http.get<any>(url);
     }
 
     getAddressSuggestions(address) {
-        console.log(CONFIG.firebaseConfig.apiKey);
         // tslint:disable-next-line:max-line-length
         const url = `${CONFIG.addressSuggestionsURL}?input=${encodeURIComponent(address)}&key=${CONFIG.firebaseConfig.apiKey}`;
         return this.http.get<any>(url);
