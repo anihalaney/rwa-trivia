@@ -1,4 +1,4 @@
-import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Store, select } from '@ngrx/store';
 import { filter } from 'rxjs/operators';
@@ -6,6 +6,7 @@ import { AppState, appState } from '../../store';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as Platform from 'tns-core-modules/platform';
+import * as application from 'tns-core-modules/application';
 import { isAndroid } from 'tns-core-modules/platform';
 import { android, AndroidActivityBackPressedEventData, AndroidApplication } from 'tns-core-modules/application';
 import { NavigationService } from 'shared-library/core/services/mobile'
@@ -17,7 +18,7 @@ import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as util from 'tns-core-modules/utils/utils';
 import { alert } from 'tns-core-modules/ui/dialogs/dialogs';
-import { CONFIG } from '../../../../../shared-library/src/lib/environments/environment';
+import { projectMeta } from '../../../../../shared-library/src/lib/environments/environment';
 import * as appversion from 'nativescript-appversion';
 import { Utils } from 'shared-library/core/services';
 
@@ -38,9 +39,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private routerExtension: RouterExtensions,
     private firebaseAuthService: FirebaseAuthService,
     private applicationSettingsAction: ApplicationSettingsActions,
-    private utils: Utils) {
+    private utils: Utils,
+    private cd: ChangeDetectorRef) {
 
-    this.checkForceUpdate();
+
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       this.routerExtension.navigate(['/game-play', gameObj['gameId']]);
@@ -54,9 +56,13 @@ export class AppComponent implements OnInit, OnDestroy {
     }));
 
     this.handleBackPress();
+
+
   }
 
   ngOnInit() {
+
+    this.checkForceUpdate();
 
     firebase.init({
       onMessageReceivedCallback: (message) => {
@@ -85,39 +91,51 @@ export class AppComponent implements OnInit, OnDestroy {
       });
     });
 
+    application.on(application.uncaughtErrorEvent, (args) => {
+      this.utils.sendErrorToCrashlytics('uncaughtException', args.error);
+      console.error(args.error);
+    });
+
+
   }
 
   async checkForceUpdate() {
 
     let version;
     try {
-        version = await appversion.getVersionCode();
+      version = await appversion.getVersionCode();
     } catch (error) {
+      this.utils.sendErrorToCrashlytics('appLog', error);
       console.error(error);
     }
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.applicationSettings))
       .subscribe(appSettings => {
+
         if (appSettings && appSettings.length > 0) {
 
           this.applicationSettings = appSettings[0];
-
+       //   console.log('appSettings', this.applicationSettings.crashlytics);
           if (isAndroid && version && this.applicationSettings.android_version
             && this.applicationSettings.android_version > version) {
-            this.displayForceUpdateDialog(CONFIG.firebaseConfig.googlePlayUrl);
+            this.displayForceUpdateDialog(projectMeta.playStoreUrl);
           } else if (!isAndroid && version && this.applicationSettings.ios_version
             && this.applicationSettings.ios_version > version) {
-            this.displayForceUpdateDialog(CONFIG.firebaseConfig.iTunesUrl);
+            this.displayForceUpdateDialog(projectMeta.appStoreUrl);
           }
+
         }
+        this.cd.markForCheck();
       }));
+
+
   }
 
   async displayForceUpdateDialog(url: string) {
 
     const alertOptions = {
       title: 'New version available',
-      message: 'Please, update app to new version to continue reposting.',
+      message: 'New version available, please update to new version to continue.',
       okButtonText: 'Update',
       cancelable: false
     };

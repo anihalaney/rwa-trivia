@@ -42,7 +42,7 @@ export class AuthMiddleware {
 
             } catch (error) {
                 console.error('Error while verifying Firebase ID token:', error);
-                res.status(419).send('Token Expired');
+               return res.status(419).send('Token Expired');
             }
         }
     }
@@ -59,12 +59,12 @@ export class AuthMiddleware {
             if (snapshot.size > 0) {
                 return next();
             } else {
-                res.status(401).send('Unauthorized');
+                return res.status(401).send('Unauthorized');
             }
 
         } catch (error) {
             console.error('Error : ', error);
-            res.status(401).send('Unauthorized');
+            return res.status(401).send('Unauthorized');
         }
     }
 
@@ -77,9 +77,9 @@ export class AuthMiddleware {
     static authorizedOnly(req, res, next) {
         if (!req.user || !req.user.uid) {
             console.error('User not authenticated');
-            res.status(403).send('Unauthorized');
+            return res.status(403).send('Unauthorized');
         }
-        next();
+        return next();
     }
 
     /**
@@ -88,7 +88,7 @@ export class AuthMiddleware {
     static async adminOnly(req, res, next) {
         if (!req.user || !req.user.uid) {
             console.error('User not authenticated');
-            res.status(401).send('Unauthenticated');
+            return res.status(401).send('Unauthenticated');
         }
         try {
             const user = (await admin.firestore().doc(`/users/${req.user.uid}`).get()).data();
@@ -96,12 +96,12 @@ export class AuthMiddleware {
                 return next();
             } else {
                 console.error('Not an admin: ', req.user.uid);
-                res.status(403).send('Unauthorized');
+                return res.status(403).send('Unauthorized');
             }
 
         } catch (error) {
             console.error('Error : ', error);
-            res.status(403).send('Unauthorized');
+            return res.status(403).send('Unauthorized');
         }
     }
 

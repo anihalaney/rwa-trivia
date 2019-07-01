@@ -6,8 +6,17 @@
     visibility: visible;
     }
     
-    .hide-answer-text{
-      visibility: hidden;
-    }
-    
-    
+.hide-answer-text{
+    visibility: hidden;
+}
+ 
+.label-richtext{
+    font-size: 22px;
+    text-transform: none;
+    letter-spacing: .10px;
+    padding-left: 0;
+    font-family: 'hindmedium';
+
+}
+
+

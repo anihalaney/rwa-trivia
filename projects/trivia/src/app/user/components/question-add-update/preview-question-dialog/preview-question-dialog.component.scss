@@ -1,0 +1,70 @@
+.cancelicon
+{
+    float: right;
+    cursor: pointer;
+}
+span
+{
+    // font-size: 18px; font-family: 'hindbold'; 
+}
+P
+{
+    font-size: 14px; font-family: 'hindmedium'; 
+}
+
+.question-list{ margin-top : 20px; }
+.question-list li{ margin-bottom: 12px; text-align: center; }
+.question-list li{ width: 46%; margin-right: 2%; float: left;word-break: break-all; }
+@media screen and ( max-width:767px){
+  .rocateicon{margin:0 16px 0 0; }
+  .question-list li{ width: 100%; }
+  .question-list li:nth-child(2n +2){ margin-right: 0 }
+  .question-cont .btn{ margin-top: 15px; width: 100% }
+  .alignment{margin-top: 3%;}
+  p{margin-top: 3%}
+}
+
+.gameplay li{ padding: 10px; font-size: 16px; font-family: 'hindmedium'; border:1px solid ; border-radius: 4px; cursor: pointer;  position: relative;word-break: break-all;}
+.gameplay li.right:after, .gameplay li.wrong:after{ height: 13px;transform: rotate(45deg); }
+
+.gameplay li.question-answered {cursor: not-allowed;}
+.gameplay li:after{ content: ""; position: absolute; right: 8px; top: 5px; height: 6px; width: 6px; border-right-width: 2px; border-right-style: solid; border-bottom-width: 2px; border-bottom-style: solid; transition: 0.3s ease-in-out; opacity: 0;}
+
+.gameplay li.players-answer.wrong:before{ content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent; }
+.gameplay li.players-answer.wrong:before{ border-right-color: #af3424; border-top-color: #af3424;  }
+.gameplay li.players-answer.wrong:after{ height: 13px;transform: rotate(45deg); opacity: 1; }
+.gameplay li.players-answer.wrong:after{content: "+"; border: 0; height: auto;width: auto;font-size: 24px; top: 2px; line-height: 1; right: 6px;}
+
+.gameplay li.players-answer.right:before { content: ""; position: absolute; right: 0; top: 0; border-style:solid; border-width: 20px; border-color: transparent;}
+.gameplay li.players-answer.right:before { border-right-color: #1f7b2b; border-top-color: #1f7b2b}
+.gameplay li.players-answer.right:after{ height: 13px;transform: rotate(45deg); opacity: 1; }
+
+.answered {
+  border: 4px solid red;
+}
+.correct {
+  border: 4px solid green;
+}
+.answer-status {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
+.question-tags {
+    padding: 15px;
+}
+
+.question {
+    font-size: 17px;
+    padding: 15px;
+}
+
+.question-answered{
+    border-color: #000;
+    border-width: 1;
+    border-radius: 2;
+  }
+
+.close-icon{
+    color:#ffffff; 
+    font-size:25;
+}

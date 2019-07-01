@@ -1,0 +1,14 @@
+.answer {
+  font-weight:500;
+  font-size:18;
+  padding:10;
+  text-align: center;
+}
+
+.right, .wrong {
+  color: #fff;
+}
+
+.display-answer{
+  color:#616161;
+}

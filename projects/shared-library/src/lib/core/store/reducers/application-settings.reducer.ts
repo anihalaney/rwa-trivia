@@ -1,8 +1,4 @@
-import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
-
 import { ActionWithPayload, ApplicationSettingsActions } from '../actions';
-import { Category } from '../../../shared/model';
 
 export function applicationSettings(state: any = [], action: ActionWithPayload<any[]>): any[] {
   switch (action.type) {

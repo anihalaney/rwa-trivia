@@ -17,19 +17,26 @@ service cloud.firestore {
   
   match /databases/{database}/documents {
 
+		match /{document=**} {
+		allow read, write: if isAdmin();
+		}
+
      match /users/{userId} {
-    // only allow creating user document when no roles specified
-    // only allow updating user document when roles are not altered
-    // updating of user happen via API and rules have no effect on API    
+
+        // get stat of played game with other user
+        match /game_played_with/{otherUserId} {
+          allow read: if isUserAuthenticated(userId);        
+        }
+
+        // only allow creating user document when no roles specified
+        // only allow updating user document when roles are not altered
+        // updating of user happen via API and rules have no effect on API    
+
           allow read: if isUserAuthenticated(userId); 
           allow create: if isUserAuthenticated(userId) && !request.resource.data.keys().hasAny(['roles']);         
     			allow update: if isUserAuthenticated(userId) && 
           (!request.resource.data.keys().hasAny(['roles']) || (resource.data.roles == request.resource.data.roles));
     }
-    
-		match /{document=**} {
-		allow read, write: if isAdmin();
-		}
     
     match /categories {
       match /{document=**} {

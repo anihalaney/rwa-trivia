@@ -42,7 +42,8 @@ export enum interceptorConstants {
     SUCCESS = 200,
     BAD_REQUEST = 400,
     FORBIDDEN = 403,
-    MAXIMUM_RE_REQUEST_LIMIT = 3
+    MAXIMUM_RE_REQUEST_LIMIT = 3,
+    ENTITY_NOT_FOUND = 404
 }
 
 
@@ -90,6 +91,7 @@ export enum pushNotificationRouteConstants {
     FRIEND_NOTIFICATIONS = 'friend-notifications',
     QUESTION_NOTIFICATIONS = 'my/questions',
     ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
+    TOKEN_IS_NOT_REGISTERED= 'messaging/registration-token-not-registered'
 }
 
 
@@ -160,8 +162,6 @@ export enum GeneralConstants {
     HELLO = 'Hello',
     TRUE = 'true',
     Error_Message = 'Error : ',
-    BIT_WISER_DEV_STORAGE_BUCKET_NAME = 'rwa-trivia-dev-e57fc.appspot.com',
-    BIT_WISER_PROD_STORAGE_BUCKET_NAME = 'rwa-trivia.appspot.com',
     GAME_EXPIRED_HOURS = 32, // hr
     NAME = 'name',
     DISPLAY_NAME = 'displayName',
@@ -208,6 +208,8 @@ export enum QuestionsConstants {
     BULK_QUESTION = 'bulk-question',
     QUESTION = 'question',
     NEXT = 'next',
+    META_DATA = 'metadata',
+    UPLOAD_FINISHED = 'upload finished',
 }
 
 export enum ResponseMessagesConstants {
@@ -293,6 +295,7 @@ export enum HeaderConstants {
     IMAGE_FORWARD_SLASH_PNG = 'image/png',
     TEXT_FORWARD_SLASH_PLAIN = 'text/plain',
     IMAGE_FORWARD_SLASH_JPEG = 'image/jpeg',
+    ATTACHMENT_QUESTION_IMAGE_PNG = 'attachment; filename=question_image.png',
 }
 
 export enum RoutesConstants {
@@ -356,13 +359,12 @@ export enum RoutesConstants {
     ACCOUNTS = 'accounts',
     ACHIEVEMENT = 'achievement',
     RULES = 'rules',
-    DISPLAY_NAME = 'display-name',
-    DISPLAY_DASH_NAME = 'displayName'
-}
+    GET_QUESTION_IMAGE = 'getQuestionImage',
+    UPLOAD_QUESTION_IMAGE = 'uploadQuestionImage',
 
-export enum AppStoreUrl {
-    PLAYSTOREURL = 'https://play.google.com/store/apps/details?id=io.bitwiser.trivia&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1',
-    APPSTOREURL = 'https://itunes.apple.com/us/app/bitwiser-trivia/id1447244501?mt=8'
+    DISPLAY_NAME = 'display-name',
+    DISPLAY_DASH_NAME = 'displayName',
+    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat'
 }
 
 export enum TermsAndPrivacyUrlConstant {
