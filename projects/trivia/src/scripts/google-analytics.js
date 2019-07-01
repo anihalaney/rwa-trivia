@@ -12,7 +12,8 @@
 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 ga('create', 'UA-122966274-1', 'auto');// add your tracking ID here.
 ga('send', 'pageview');
+  
 window.dataLayer = window.dataLayer || [];
 function gtag() { dataLayer.push(arguments); }
 gtag('js', new Date());
-gtag('config', 'UA-122966274-1');
+
