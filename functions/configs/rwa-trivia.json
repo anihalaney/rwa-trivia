@@ -1,5 +1,6 @@
 {
     "storagebucket":"rwa-trivia.appspot.com",
     "websiteUrl": "https://bitwiser.io",
-    "esPrefix":""
+    "esPrefix":"",
+    "apiKey": "AIzaSyAqSJgn64UBZUbc7p7UDKSLOoburAENGDw"
 }

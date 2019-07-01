@@ -45,25 +45,25 @@ export class UserService {
     }
 
     getOtherUserGamePlayedStat(userId: string, friendList: string[]): Observable<any> {
-      const gamesPlayedWithObs =  friendList.map( friendId =>
-        this.dbService.valueChanges('users', `/${userId}/game_played_with/${friendId}`));
+        const gamesPlayedWithObs = friendList.map(friendId =>
+            this.dbService.valueChanges('users', `/${userId}/game_played_with/${friendId}`));
         return combineLatest(gamesPlayedWithObs)
-        .pipe(map((values) => {
-            return values.map((value, index) => {
-                if (value) {
-                    value['userId'] = friendList[index];
-                    return value;
-                } else {
-                    value = {};
-                    value.created_uid = friendList[index];
-                    return value;
-                }
+            .pipe(map((values) => {
+                return values.map((value, index) => {
+                    if (value) {
+                        value['userId'] = friendList[index];
+                        return value;
+                    } else {
+                        value = {};
+                        value.created_uid = friendList[index];
+                        return value;
+                    }
                 });
-        }),
-        catchError(error => {
-            console.log(error);
-            return of(null);
-        }));
+            }),
+                catchError(error => {
+                    console.log(error);
+                    return of(null);
+                }));
     }
 
     loadAccounts(user): Observable<any> {
@@ -198,13 +198,16 @@ export class UserService {
     }
 
     getAddressByLatLang(latlong) {
-        const url = `${CONFIG.addressByLatLongURL}?latlng=${latlong}&key=${CONFIG.firebaseConfig.apiKey}`;
+        // const url = `${CONFIG.addressByLatLongURL}?latlng=${latlong}&key=${CONFIG.firebaseConfig.apiKey}`;
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_BY_LAT_LANG}/${latlong}`;
         return this.http.get<any>(url);
     }
 
     getAddressSuggestions(address) {
         // tslint:disable-next-line:max-line-length
-        const url = `${CONFIG.addressSuggestionsURL}?input=${encodeURIComponent(address)}&key=${CONFIG.firebaseConfig.apiKey}`;
+        // const url = `${CONFIG.addressSuggestionsURL}?input=${encodeURIComponent(address)}&key=${CONFIG.firebaseConfig.apiKey}`;
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_SUGGESTION}/${address}`;
+
         return this.http.get<any>(url);
     }
 }

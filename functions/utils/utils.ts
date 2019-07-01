@@ -78,4 +78,9 @@ export class Utils {
         return config;
     }
 
+    static getApiKey(): any {
+        return Utils.getConfig().apiKey;
+    }
+
+
 }

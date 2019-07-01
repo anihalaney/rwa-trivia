@@ -133,11 +133,13 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
               .pipe(select(u => u.addressSuggestions), filter(location => !!location))
               .subscribe(locations => {
                 const items = [];
-                locations.predictions.map(location => {
-                  const city = location.terms[0].value;
-                  const country = location.terms[(location.terms.length - 1)].value;
-                  items.push(new TokenModel(`${city}, ${country}`, null));
-                });
+                if (locations.predictions) {
+                  locations.predictions.map(location => {
+                    const city = location.terms[0].value;
+                    const country = location.terms[(location.terms.length - 1)].value;
+                    items.push(new TokenModel(`${city}, ${country}`, null));
+                  });
+                }
                 resolve(items);
                 this.cd.markForCheck();
               }));

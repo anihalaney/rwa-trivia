@@ -361,10 +361,13 @@ export enum RoutesConstants {
     RULES = 'rules',
     GET_QUESTION_IMAGE = 'getQuestionImage',
     UPLOAD_QUESTION_IMAGE = 'uploadQuestionImage',
-
     DISPLAY_NAME = 'display-name',
     DISPLAY_DASH_NAME = 'displayName',
-    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat'
+    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat',
+    ADDRESS_BY_LAT_LANG = 'addressByLatLang',
+    LOCATION = 'location',
+    LAT_LONG = 'latLong',
+    ADDRESS_SUGGESTION = 'addressSuggestion',
 }
 
 export enum TermsAndPrivacyUrlConstant {
@@ -372,4 +375,8 @@ export enum TermsAndPrivacyUrlConstant {
     PRIVACYURL = 'https://bitwiser.io/terms-and-conditions'
 }
 
+export enum GoogleLocationAPI {
+    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
+}
 
