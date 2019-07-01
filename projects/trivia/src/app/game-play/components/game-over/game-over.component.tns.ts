@@ -13,8 +13,12 @@ import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
 import { ReportGameComponent } from './../report-game/report-game.component';
 import { Image } from "tns-core-modules/ui/image";
-import { appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode } from 'shared-library/shared/model';
-import * as firebase from 'nativescript-plugin-firebase';
+import {
+  appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode, FirebaseScreenNameConstants
+} from 'shared-library/shared/model';
+import {
+  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants
+} from '../../../../../../shared-library/src/lib/shared/model';
 
 @Component({
   selector: 'game-over',
@@ -33,6 +37,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
     super(store, userActions, utils, cd);
 
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.GAME_OVER);
 
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();
@@ -67,128 +72,103 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
-      const firebaseAnalyticParameters: Array<Parameter> = this.setEndGameFirebaseAnalyticsParameter();
-      firebase.analytics.logEvent({
-        key: 'completed_game',
-        parameters: firebaseAnalyticParameters
-      }).then(() => {
-        console.log('completed_game event slogged');
-      }
-      );
-
+      this.setEndGameFirebaseAnalyticsParameter();
     }
   }
 
-  setEndGameFirebaseAnalyticsParameter(): Array<Parameter> {
+  setEndGameFirebaseAnalyticsParameter() {
 
-    const analyticsParameter: Parameter[] = [];
+    let analyticsParameter: Parameter[] = [];
 
-
-    const gameId: Parameter = {
-      key: 'gameId',
-      value: this.game.gameId
-    };
-    analyticsParameter.push(gameId);
-
-    const userId: Parameter = {
-      key: 'userId',
-      value: this.user.userId
-    };
-    analyticsParameter.push(userId);
-
-    const playerMode: Parameter = {
-      key: 'playerMode',
-      value: this.game.gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT
-    };
-    analyticsParameter.push(playerMode);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.GAME_ID, this.game.gameId, analyticsParameter);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId, analyticsParameter);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.PLAYER_MODE,
+      this.game.gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT,
+      analyticsParameter
+    );
 
     if (this.game.gameOptions.playerMode === PlayerMode.Opponent) {
-      const opponentType: Parameter = {
-        key: 'opponentType',
-        value: this.game.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
-          this.game.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER
-      };
-      analyticsParameter.push(opponentType);
 
-      const otherUserId: Parameter = {
-        key: 'otherUserId',
-        value: this.otherUserId
-      };
-      analyticsParameter.push(otherUserId);
+      analyticsParameter = this.utils.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
+        this.game.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
+          this.game.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER,
+        analyticsParameter
+      );
 
-      const userScore: Parameter = {
-        key: 'userScore',
-        value: this.game.stats[this.user.userId].score + ''
-      };
-      analyticsParameter.push(userScore);
+      analyticsParameter = this.utils.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.OTHER_USER_ID,
+        this.otherUserId,
+        analyticsParameter
+      );
 
-      const otherUserScore: Parameter = {
-        key: 'otherUserScore',
-        value: this.game.stats[this.otherUserId].score + ''
-      };
-      analyticsParameter.push(otherUserScore);
+      analyticsParameter = this.utils.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.OTHER_USER_SCORE,
+        this.game.stats[this.otherUserId].score.toString(),
+        analyticsParameter
+      );
 
       if (this.game.round < 16 && this.game.stats[this.user.userId].score === this.game.stats[this.otherUserId].score) {
-        const isTie: Parameter = {
-          key: 'isTie',
-          value: 'true'
-        };
-        analyticsParameter.push(isTie);
+        analyticsParameter = this.utils.setAnalyticsParameter(
+          FirebaseAnalyticsKeyConstants.IS_TIE,
+          GeneralConstants.TRUE,
+          analyticsParameter
+        );
       } else {
         let winPlayerId = this.otherUserId;
         if (this.game.round < 16 && this.game.stats[this.user.userId].score > this.game.stats[this.otherUserId].score) {
           winPlayerId = this.user.userId;
         }
-        const winnerPlayerId: Parameter = {
-          key: 'winnerPlayerId',
-          value: winPlayerId
-        };
-        analyticsParameter.push(winnerPlayerId);
+        analyticsParameter = this.utils.setAnalyticsParameter(
+          FirebaseAnalyticsKeyConstants.WINNER_PLAYER_ID,
+          winPlayerId,
+          analyticsParameter
+        );
       }
     } else {
-      const gameStatus: Parameter = {
-        key: 'gameStatus',
-        value: (this.game.playerQnAs.length - this.game.stats[this.user.userId].score !== 4) ? 'Win' : 'Lost'
-      };
-      analyticsParameter.push(gameStatus);
 
-      const userScore: Parameter = {
-        key: 'userScore',
-        value: this.game.stats[this.user.userId].score + ''
-      };
-      analyticsParameter.push(userScore);
+      analyticsParameter = this.utils.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.GAME_STATUS,
+        (this.game.playerQnAs.length - this.game.stats[this.user.userId].score !== 4) ? GeneralConstants.WIN : GeneralConstants.LOST,
+        analyticsParameter
+      );
 
     }
 
-    const gameMode: Parameter = {
-      key: 'gameMode',
-      value: this.game.gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE
-    };
-    analyticsParameter.push(gameMode);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.USER_SCORE,
+      this.game.stats[this.user.userId].score.toString(),
+      analyticsParameter
+    );
 
-    const categories: Parameter = {
-      key: 'categoryIds',
-      value: JSON.stringify(this.game.gameOptions.categoryIds)
-    };
-    analyticsParameter.push(categories);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.GAME_MODE,
+      this.game.gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE,
+      analyticsParameter
+    );
+
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.CATEGORY_IDS,
+      JSON.stringify(this.game.gameOptions.categoryIds),
+      analyticsParameter
+    );
 
     const tagsValue = JSON.stringify(this.game.gameOptions.tags);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.TAGS,
+      tagsValue.substr(0, 100),
+      analyticsParameter
+    );
 
-    const tags: Parameter = {
-      key: 'tags',
-      value: tagsValue.substr(0, 100)
-    };
-    analyticsParameter.push(tags);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.ROUND,
+      this.game.round.toString(),
+      analyticsParameter
+    );
 
-    const round: Parameter = {
-      key: 'round',
-      value: this.game.round + ''
-    };
-    analyticsParameter.push(round);
-
-    return analyticsParameter;
+    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.COMPLETED_GAME, analyticsParameter);
   }
-
 
   shareScore() {
     this.loaderStatus = true;

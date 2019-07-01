@@ -37,7 +37,30 @@ export class Utils extends UtilsCore {
     firebase.crashlytics.log(type, error);
     firebase.crashlytics.sendCrashLog(error);
 
+  }
 
+  setAnalyticsParameter(key: string, value: string, analyticsParameter: Array<Parameter>): Array<Parameter> {
+    analyticsParameter.push({ key: key, value: value });
+    return analyticsParameter;
+  }
+
+  sendFirebaseAnalyticsEvents(eventName: string, analyticsParameter: Array<Parameter>) {
+    firebase.analytics.logEvent({
+      key: eventName,
+      parameters: analyticsParameter
+    }).then(() => {
+      console.log(`${eventName} event slogged`);
+    });
+  }
+
+  setScreenNameInFirebaseAnalytics(screenName: string) {
+    firebase.analytics.setScreenName({
+      screenName: screenName
+    }).then(
+      function () {
+        console.log(`${screenName} Screen is added`);
+      }
+    );
   }
 
 }

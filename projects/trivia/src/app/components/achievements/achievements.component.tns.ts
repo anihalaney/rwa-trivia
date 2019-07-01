@@ -1,5 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Utils } from 'shared-library/core/services';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { AppState } from '../../store';
 import { Achievements } from './achievements';
 @Component({
@@ -12,13 +14,15 @@ export class AchievementsComponent extends Achievements implements OnInit, OnDes
 
   constructor(
     protected store: Store<AppState>,
-    protected cd: ChangeDetectorRef
+    protected cd: ChangeDetectorRef,
+    public utils: Utils
   ) {
     super(store, cd);
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.NEW_GAME);
   }
 
   ngOnInit() {}
 
   ngOnDestroy() {}
-  
+
 }

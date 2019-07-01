@@ -11,7 +11,7 @@ import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/a
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { profileSettingsConstants } from 'shared-library/shared/model';
+import { profileSettingsConstants, FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
@@ -25,8 +25,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
 import { userState } from '../../store';
-import { Parameter, User } from '../../../../../../shared-library/src/lib/shared/model';
-import * as firebase from 'nativescript-plugin-firebase';
+import {
+  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants
+} from '../../../../../../shared-library/src/lib/shared/model';
 
 @Component({
   selector: 'profile-settings',
@@ -71,6 +72,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     super(fb, store, userAction, uUtils, cd, route, router);
     this.initDataItems();
     requestPermissions();
+
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.PROFILE_SETTINGS);
+
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.uUtils.showMessage('success', 'Profile is saved successfully');
@@ -300,27 +304,12 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   setUserLocationFirebaseAnalyticsParameter(user: User) {
 
-    const analyticsParameter: Parameter[] = [];
+    let analyticsParameter: Parameter[] = [];
 
-    const userId: Parameter = {
-      key: 'userId',
-      value: user.userId
-    };
-    analyticsParameter.push(userId);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.LOCATION, user.location, analyticsParameter);
 
-    const location: Parameter = {
-      key: 'location',
-      value: user.location
-    };
-    analyticsParameter.push(location);
-
-    firebase.analytics.logEvent({
-      key: 'user_location',
-      parameters: analyticsParameter
-    }).then(() => {
-      console.log('user_location event slogged');
-    });
-
+    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION, analyticsParameter);
   }
 
   hideKeyboard() {

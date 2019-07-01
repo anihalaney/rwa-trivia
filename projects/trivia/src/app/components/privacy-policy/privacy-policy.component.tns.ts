@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Page } from 'tns-core-modules/ui/page';
 import { openUrl } from 'tns-core-modules/utils/utils';
+import { Utils } from 'shared-library/core/services';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @Component({
   selector: 'privacy-policy',
@@ -12,7 +14,11 @@ import { openUrl } from 'tns-core-modules/utils/utils';
 
 export class PrivacyPolicyComponent {
 
-  constructor(private page: Page) {
+  constructor(
+    private page: Page,
+    private utils: Utils
+    ) {
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.PRIVACY_POLICY);
   }
 
   openUrl(url: any) {

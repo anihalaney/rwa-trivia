@@ -6,6 +6,7 @@ import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AppState } from '../../../store';
 import { GameContinue } from './game-continue';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @Component({
   selector: 'game-continue',
@@ -26,6 +27,7 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
     public routerExtensions: RouterExtensions
   ) {
     super(store, userActions, utils, cd);
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.GAME_CONTINUE);
   }
   ngOnInit() {
     if (this.game) {

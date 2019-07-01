@@ -7,12 +7,12 @@ import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import { Utils } from 'shared-library/core/services';
 import { GameDialog } from './game-dialog';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+
 import {
   resumeEvent, suspendEvent, ApplicationEventData,
   on as applicationOn, off as applicationOff,
 } from 'tns-core-modules/application';
-
-import { Observable, Subscription, timer } from 'rxjs';
 
 
 @Component({
@@ -31,6 +31,7 @@ export class GameDialogComponent extends GameDialog implements OnDestroy {
     public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
     this.registerLifeCycleEvent();
+    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.GAME_DIALOG);
   }
 
   resumeCallBack(args: ApplicationEventData) {
