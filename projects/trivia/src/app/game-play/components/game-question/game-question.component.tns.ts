@@ -39,7 +39,6 @@ export class GameQuestionComponent extends GameQuestion implements OnInit, OnDes
   constructor(private utils: Utils, public store: Store<GamePlayState>, private cd: ChangeDetectorRef) {
     super();
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.GAME_QUESTION);
   }
 
   ngOnInit() {

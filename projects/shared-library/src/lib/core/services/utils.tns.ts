@@ -2,6 +2,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Feedback, FeedbackType, FeedbackPosition } from 'nativescript-feedback';
 import { UtilsCore } from './utilsCore';
 import * as firebase from 'nativescript-plugin-firebase';
+import { Parameter } from '../../shared/model';
 
 @Injectable()
 export class Utils extends UtilsCore {

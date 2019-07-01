@@ -22,7 +22,6 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
     private routerExtension: RouterExtensions, private page: Page, private ngZone: NgZone, public cd: ChangeDetectorRef) {
     super(store, userActions, utils, cd);
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.FRIEND_LIST);
   }
 
   ngOnInit() {

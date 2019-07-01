@@ -36,7 +36,6 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef,
     private utils: Utils) {
 
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.INVITE_MAIL_FRIENDS);
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;

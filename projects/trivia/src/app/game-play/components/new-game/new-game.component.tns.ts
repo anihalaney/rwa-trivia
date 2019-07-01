@@ -3,7 +3,6 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
@@ -12,24 +11,19 @@ import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/a
 import { ListViewEventData } from 'nativescript-ui-listview';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { Router, ActivatedRoute } from '@angular/router';
-import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
 import {
   Category, GameConstant, GameMode, OpponentType, Parameter, PlayerMode,
   FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
 } from 'shared-library/shared/model';
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page } from 'tns-core-modules/ui/page/page';
-import { AppState, appState } from '../../../store';
 import { RouterExtensions } from 'nativescript-angular/router';
 import * as gamePlayActions from './../../store/actions';
-import { NewGame } from './new-game';
-import { Router } from '@angular/router';
+
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',
@@ -71,7 +65,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     private ngZone: NgZone) {
     super(store, utils, gameActions, userActions, cd, route);
     this.initDataItems();
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.NEW_GAME);
   }
   ngOnInit() {
 

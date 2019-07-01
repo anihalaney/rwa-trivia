@@ -40,7 +40,6 @@
               "./node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
-              "projects/trivia/src/scripts/google-analytics.js",
               "./node_modules/firebaseui/dist/firebaseui.js",
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/mathquill/build/mathquill.min.js",

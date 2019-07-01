@@ -67,7 +67,6 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     super(fb, store, cd);
     this.page.actionBarHidden = true;
 
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LOGIN);
 
     this.input = {
       selectedCountry: 'United States',

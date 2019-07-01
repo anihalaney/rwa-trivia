@@ -29,7 +29,6 @@ export class RecentGamesComponent extends RecentGames implements OnInit, OnDestr
     private utils: Utils
     ) {
     super(store, cd, userActions);
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.RECENT_COMPLETED_GAMES);
   }
 
   ngOnInit(): void {

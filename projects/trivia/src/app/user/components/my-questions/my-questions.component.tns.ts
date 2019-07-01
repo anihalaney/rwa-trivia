@@ -42,7 +42,6 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
       this.userDict = userDict;
       this.cd.markForCheck();
     }));
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.MY_QUESTIONS);
   }
 
 

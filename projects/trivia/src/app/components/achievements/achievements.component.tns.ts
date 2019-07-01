@@ -18,7 +18,6 @@ export class AchievementsComponent extends Achievements implements OnInit, OnDes
     public utils: Utils
   ) {
     super(store, cd);
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.NEW_GAME);
   }
 
   ngOnInit() {}

@@ -18,7 +18,6 @@ export class PrivacyPolicyComponent {
     private page: Page,
     private utils: Utils
     ) {
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.PRIVACY_POLICY);
   }
 
   openUrl(url: any) {

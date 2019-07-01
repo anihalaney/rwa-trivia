@@ -100,8 +100,6 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     super(fb, store, utils, questionAction);
     requestPermissions();
 
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.QUESTION_ADD_UPDATE);
-
     this.submitBtnTxt = 'SUBMIT';
     this.actionBarTxt = 'Submit Question';
     this.initDataItems();

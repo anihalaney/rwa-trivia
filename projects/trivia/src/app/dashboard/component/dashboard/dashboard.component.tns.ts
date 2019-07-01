@@ -47,7 +47,6 @@ export class DashboardComponent extends Dashboard implements OnInit, OnDestroy {
       utils,
       cd);
     this.gameStatus = GameStatus;
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.DASHBOARD);
   }
 
   ngOnInit() {

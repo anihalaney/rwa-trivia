@@ -73,7 +73,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     this.initDataItems();
     requestPermissions();
 
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.PROFILE_SETTINGS);
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {

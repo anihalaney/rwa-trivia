@@ -61,7 +61,6 @@ export class ReportGameComponent implements OnInit, OnDestroy {
             new ReportOption('Other')
         ];
 
-        this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.REPORT_GAME);
 
     }
 

@@ -27,7 +27,6 @@ export class GameContinueComponent extends GameContinue implements OnInit, OnDes
     public routerExtensions: RouterExtensions
   ) {
     super(store, userActions, utils, cd);
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.GAME_CONTINUE);
   }
   ngOnInit() {
     if (this.game) {

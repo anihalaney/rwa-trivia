@@ -37,7 +37,6 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef, private routerExtensions: RouterExtensions) {
     super(store, userActions, utils, cd);
 
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.GAME_OVER);
 
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.saveReportQuestion)).subscribe(state => {
       this.cd.markForCheck();

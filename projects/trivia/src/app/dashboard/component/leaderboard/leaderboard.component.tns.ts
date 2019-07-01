@@ -34,7 +34,6 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
       this.renderView = true;
       cd.markForCheck();
     }));
-    this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.LEADERBOARD);
   }
 
   ngOnDestroy() {
