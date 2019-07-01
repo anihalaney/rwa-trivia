@@ -98,13 +98,10 @@ export class QuestionAddUpdateComponent extends QuestionAddUpdate implements OnD
     private vcRef: ViewContainerRef) {
 
     super(fb, store, utils, questionAction);
-<<<<<<< HEAD
     requestPermissions();
-=======
 
     this.utils.setScreenNameInFirebaseAnalytics(FirebaseScreenNameConstants.QUESTION_ADD_UPDATE);
 
->>>>>>> 7df85fabc9d0ff5fb9aae412b0eb942b3748e967
     this.submitBtnTxt = 'SUBMIT';
     this.actionBarTxt = 'Submit Question';
     this.initDataItems();
