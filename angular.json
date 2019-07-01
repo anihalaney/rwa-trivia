@@ -34,7 +34,8 @@
               "./node_modules/firebaseui/dist/firebaseui.css"
             ],
             "scripts": [
-              "./node_modules/firebaseui/dist/firebaseui.js"
+              "./node_modules/firebaseui/dist/firebaseui.js",
+              "projects/trivia/src/scripts/google-analytics.js"
             ]
           },
           "configurations": {
