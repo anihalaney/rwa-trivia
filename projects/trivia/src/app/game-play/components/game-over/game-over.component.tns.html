@@ -175,7 +175,16 @@
                                 *ngIf="game.gameOptions?.playerMode == PlayerMode.Single" stlRippleEffect></Button>
                             <Button row="1" col="2" class="navigate-button Hind-Medium" text="Invite as Friend {{game.gameOptions.opponentType}}"
                                 (rippleTap)="inviteAsFriend()" isEnabled="{{!disableFriendInviteBtn}}"
-                                *ngIf="game.gameOptions.opponentType == opponentType.Random" stlRippleEffect></Button>
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations[otherUserInfo?.email]?.status === 'add'" stlRippleEffect></Button>
+
+                            <Button row="1" col="2" class="navigate-button Hind-Medium friend-request-sent" text="Friend Request Sent"
+                                (rippleTap)="inviteAsFriend()" 
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations[otherUserInfo?.email]?.status === 'pending'" stlRippleEffect></Button>
+
+                            <Button row="1" col="2" class="navigate-button Hind-Medium friends" text="Friends"
+                                (rippleTap)="inviteAsFriend()" 
+                                *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations[otherUserInfo?.email]?.status === 'approved'" stlRippleEffect></Button>
+
                             <Button row="1" col="3" class="navigate-button Hind-Medium" text="Home"
                                 (rippleTap)="gotoDashboard()" stlRippleEffect></Button>
                         </GridLayout>

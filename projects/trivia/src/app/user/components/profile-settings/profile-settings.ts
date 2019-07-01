@@ -178,11 +178,11 @@ export class ProfileSettings {
                     this.toggleLoader(false);
                 }
             }),
-            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations), 
-            skipWhile(userInvitations => !(userInvitations && this.user)),
-            map(userInvitations => { 
-                this.userInvitations = userInvitations; 
-                if (!this.userInvitations[this.user.email]) {
+            flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations),
+            skipWhile(userInvitations => !(userInvitations)),
+            map(userInvitations => {
+                this.userInvitations = userInvitations;
+                if (this.user && this.user.email && !this.userInvitations[this.user.email] && this.loggedInUser) {
                     this.store.dispatch(this.userAction.loadUserInvitationsInfo(this.loggedInUser.userId, this.user.email));
                 }
             }),

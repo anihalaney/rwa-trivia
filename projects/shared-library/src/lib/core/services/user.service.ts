@@ -99,7 +99,7 @@ export class UserService {
         return this.http.get<User>(url);
     }
 
-    loadUserInvitationsInfo(userId ,email: string): Observable<Invitation> {
+    loadUserInvitationsInfo(userId: string , email: string): Observable<Invitation> {
         const queryParams = {
             condition: [
             { name: 'created_uid', comparator: '==', value: userId },
