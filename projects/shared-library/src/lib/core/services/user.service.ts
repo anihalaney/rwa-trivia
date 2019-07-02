@@ -110,15 +110,7 @@ export class UserService {
         return combineLatest(this.dbService.valueChanges('invitations', '', queryParams), this.dbService.valueChanges('friends', userId))
         .pipe(
             map(values => {
-                let isFriend = false;
-                if (values[1] &&  values[1].myFriends) {
-                    values[1].myFriends.map(friend => {
-                        if (friend[invitedUserId]) {
-                            isFriend = true;
-                        }
-                    });
-                }
-                if (isFriend) {
+                if (values[1] &&  values[1].myFriends && values[1].myFriends.some((friend => friend[invitedUserId]))) {
                     return  {'email': invitedUserEmail, 'created_uid': null, 'status': 'approved'};
                 } else if (values[0].length > 0) {
                     return values[0][0];
