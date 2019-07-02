@@ -183,7 +183,8 @@ export class ProfileSettings {
             map(userInvitations => {
                 this.userInvitations = userInvitations;
                 if (this.user && this.user.email && !this.userInvitations[this.user.email] && this.loggedInUser) {
-                    this.store.dispatch(this.userAction.loadUserInvitationsInfo(this.loggedInUser.userId, this.user.email));
+                    this.store.dispatch(this.userAction.loadUserInvitationsInfo(
+                        this.loggedInUser.userId, this.user.email, this.user.userId));
                 }
             }),
             )),

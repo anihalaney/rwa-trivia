@@ -82,10 +82,10 @@ export class UserActions {
   }
 
   static LOAD_USER_INVITATIONS_INFO = 'LOAD_USER_INVITATIONS_INFO';
-  loadUserInvitationsInfo(userId: string, email: string): ActionWithPayload<{}> {
+  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string ): ActionWithPayload<{}> {
     return {
       type: UserActions.LOAD_USER_INVITATIONS_INFO,
-      payload: {userId, email}
+      payload: {userId, invitedUserEmail, invitedUserId}
     };
   }
 

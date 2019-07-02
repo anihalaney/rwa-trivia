@@ -55,7 +55,7 @@ export class UserEffects {
         .pipe(ofType(UserActions.LOAD_USER_INVITATIONS_INFO))
         .pipe(map((action: ActionWithPayload<string>) => action.payload),
             distinct(),
-            mergeMap((data: any) => this.svc.loadUserInvitationsInfo(data.userId, data.email)),
+            mergeMap((data: any) => this.svc.loadUserInvitationsInfo(data.userId, data.invitedUserEmail, data.invitedUserId)),
             map((invitation: Invitation) => this.userActions.loadUserInvitationsInfoSuccess(invitation)));
 
     // get info if the other user is friend or not

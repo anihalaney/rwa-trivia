@@ -86,7 +86,8 @@ export class GameOver implements OnInit {
         this.cd.markForCheck();
         this.userInvitations = userInvitations;
         if (this.user && this.user.email && !this.userInvitations[this.user.email]) {
-          this.store.dispatch(this.userActions.loadUserInvitationsInfo(this.user.userId, this.userDict[this.otherUserId].email));
+          this.store.dispatch(this.userActions.loadUserInvitationsInfo(
+            this.user.userId, this.userDict[this.otherUserId].email, this.otherUserId));
         }
       }
     })

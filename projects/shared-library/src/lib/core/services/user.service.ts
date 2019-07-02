@@ -99,7 +99,7 @@ export class UserService {
         return this.http.get<User>(url);
     }
 
-    loadUserInvitationsInfo(userId: string , invitedUserEmail: string): Observable<Invitation> {
+    loadUserInvitationsInfo(userId: string , invitedUserEmail: string, invitedUserId: string): Observable<Invitation> {
         const queryParams = {
             condition: [
             { name: 'created_uid', comparator: '==', value: userId },
@@ -107,16 +107,27 @@ export class UserService {
             ],
             limit: 1
         };
-
-        return this.dbService.valueChanges('invitations', '', queryParams).pipe(
-            map(invitations => {
-                if (invitations.length > 0) {
-                    return invitations[0];
+        return combineLatest(this.dbService.valueChanges('invitations', '', queryParams), this.dbService.valueChanges('friends', userId))
+        .pipe(
+            map(values => {
+                let isFriend = false;
+                if (values[1] &&  values[1].myFriends) {
+                    values[1].myFriends.map(friend => {
+                        if (friend[invitedUserId]) {
+                            isFriend = true;
+                        }
+                    });
+                }
+                if (isFriend) {
+                    return  {'email': invitedUserEmail, 'created_uid': null, 'status': 'approved'};
+                } else if (values[0].length > 0) {
+                    return values[0][0];
                 } else {
                     return {'email': invitedUserEmail, 'created_uid': null, 'status': 'add'};
                 }
             })
         );
+
     }
 
 
