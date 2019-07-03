@@ -8,82 +8,86 @@ const exec = require('child_process').exec;
 const adapter = new FileSync('db.json')
 const db = low(adapter)
 const { spawn } = require('child_process');
+const yargs = require('yargs');
 // Set some defaults (required if your JSON file is empty)
 db.defaults({ todos: [] }).write()
-const projects = ["trivia", "bitwiser-edu", "trivia-admin"];
-const env = ['dev', 'staging'];
+const projects = ["trivia", "bitwiser-edu", "trivia-admin", "trivia-editor"];
+const configProject = ["trivia", "bitwiser-edu"];
+const env = ['dev', 'staging', 'production'];
+const projectEnvironment = ['dev', 'production'];
 const commandList = {
     "start": 
-        { "command" : "ng serve projectName --configuration=projectName-environment",
+        { "command" : "ng serve projectName --configuration=configProject-environment",
           "args" : [{"projectName" : projects},
+                    {"configProject" : configProject},
                     {"environment": env}]
+        },
+    "deploy-functions-local":  
+        { "command" : "npm run rmdir /s/q functions\\server & tsc --project functions  && firebase serve -P configProject-dev  --only functions",
+        "args" : [
+                    {"configProject" : configProject}
+                ]
+        },
+    "deploy-functions":
+        {
+                        // ng build trivia  --configuration=bitwiser-edu-staging && ng build trivia-admin  --configuration=bitwiser-edu-staging && ng build trivia-editor --configuration=bitwiser-edu-staging && ng run trivia:server && rmdir /s/q functions\server &               tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html &&    extraCmd.index                                                                                rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging   --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging --only functions:ssr && firebase deploy -P bitwiser-edu-staging --only hosting && npm install firebase@6.0.2
+            "command" : "ng build trivia  --configuration=configProject-environment && ng build trivia-admin  --configuration=configProject-environment && ng build trivia-editor --configuration=configProject-environment && ng run trivia:server && rmdir /s/q functions\\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html &&    extraCmd.index                                                                                rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P configProject-environment   --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P configProject-environment --only functions:ssr && firebase deploy -P configProject-environment --only hosting && npm install firebase@6.0.2",
+                        // `ng build trivia  --configuration=trivia-production          && ng build trivia-admin  --configuration=trivia-admin-production &&  ng build trivia-editor  --configuration=trivia-production       && ng run trivia:server && rmdir /s/q functions\\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html [&& firebase -P trivia-production functions:config:set environment.production=true] && rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P trivia-production           --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P trivia-production         --only functions:ssr && firebase deploy -P trivia-production         --only hosting && npm install firebase@6.0.2`
+            "args": [
+                {"projectName" : projects},
+                {"configProject" : configProject},
+                {"environment": env}
+            ],
+            "extraCmd" : 
+                {
+                    "index": { "condition" : "args.environment === 'production'",
+                               "cmd": "firebase -P trivia-production functions:config:set environment.production=true &&" 
+                             }
+                }
+        },
+
+        "prod:deploy-functions":
+        {
+                        
+                        // ng build trivia  --configuration=bitwiser-edu-staging && ng build trivia-admin  --configuration=bitwiser-edu-staging && ng build trivia-editor --configuration=bitwiser-edu-staging && ng run trivia:server && rmdir /s/q functions\server &               tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html &&    extraCmd.index                                                                                rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging   --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging --only functions:ssr && firebase deploy -P bitwiser-edu-staging --only hosting && npm install firebase@6.0.2
+                        // ng build trivia  --configuration=bitwiser-edu-staging && ng build trivia-admin  --configuration=bitwiser-edu-staging && ng build trivia-editor --configuration=bitwiser-edu-staging && ng run trivia:server && rmdir /s/q functions\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html &&                                                                                    rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging   --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging --only functions:ssr && firebase deploy -P bitwiser-edu-staging --only hosting && npm install firebase@6.0.2
+            "command" : "ng build trivia  --configuration=configProject-environment && ng build trivia-admin  --configuration=configProject-environment && ng build trivia-editor --configuration=configProject-environment && ng run trivia:server && rmdir /s/q functions\\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html && firebase -P configProject-environment functions:config:set environment.production=true &&  rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P configProject-environment   --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P configProject-environment --only functions:ssr && firebase deploy -P configProject-environment --only hosting && npm install firebase@6.0.2",
+                        // `ng build trivia  --configuration=trivia-production          && ng build trivia-admin  --configuration=trivia-admin-production &&  ng build trivia-editor  --configuration=trivia-production       && ng run trivia:server && rmdir /s/q functions\\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html [&& firebase -P trivia-production functions:config:set environment.production=true] && rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P trivia-production           --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P trivia-production         --only functions:ssr && firebase deploy -P trivia-production         --only hosting && npm install firebase@6.0.2`
+            "args": [
+                {"projectName" : projects},
+                {"configProject" : configProject},
+                {"environment": env}
+            ]
+            // "extraCmd" : 
+            //     {
+            //         "index": { "condition" : "args.environment === 'production'",
+            //                    "cmd": "firebase -P trivia-production functions:config:set environment.production=true &&" 
+            //                  }
+            //     }
         }
+
+
 }
 
+const argv = yargs
+    .command('lyr', 'Tells whether an year is leap year or not', {
+        year: {
+            description: 'the year to check for',
+            alias: 'y',
+            type: 'number',
+        }
+    })
+    .option('time', {
+        alias: 't',
+        description: 'Tell the present Time',
+        type: 'boolean',
+    })
+    .help()
+    .alias('help', 'h')
+    .argv;
+console.log(argv, 'argv');
 const args = process.argv
 let ExecutableCmd = '';
-
-function parseArgumentsIntoOptions(rawArgs) {
-
-    const args = arg(
-      {
-        '--git': Boolean,
-        '--yes': Boolean,
-        '--install': Boolean,
-        '-g': '--git',
-        '-y': '--yes',
-        '-i': '--install',
-      },
-      {
-        argv: rawArgs.slice(2),
-      }
-    );
-    return {
-      skipPrompts: args['--yes'] || false,
-      git: args['--git'] || false,
-      template: args._[0],
-      runInstall: args['--install'] || false,
-    };
-   }
-
-async function promptForMissingOptions(options) {
-    const defaultTemplate = 'JavaScript';
-    if (options.skipPrompts) {
-      return {
-        ...options,
-        template: options.template || defaultTemplate,
-      };
-    }
-   
-    const questions = [];
-    if (!options.template) {
-      questions.push({
-        type: 'list',
-        name: 'template',
-        message: 'Please choose which project template to use',
-        choices: ['JavaScript', 'TypeScript'],
-        default: defaultTemplate,
-      });
-    }
-   
-    if (!options.git) {
-      questions.push({
-        type: 'confirm',
-        name: 'git',
-        message: 'Initialize a git repository?',
-        default: false,
-      });
-    }
-   
-    const answers = await inquirer.prompt(questions);
-    return {
-      ...options,
-      template: options.template || answers.template,
-      git: options.git || answers.git,
-    };
-   }
-
-
 
 // usage represents the help guide
 const usage = function() {
@@ -104,13 +108,6 @@ function errorLog(error) {
 }
 
 
-// we make sure the length of the arguments is exactly three
-// if (args.length > 3 && args[2] != 'complete') {
-//   errorLog('only one argument can be accepted')
-//   usage()
-//   return
-// }
-
 function prompt(question) {
   const r = rl.createInterface({
     input: process.stdin,
@@ -125,32 +122,6 @@ function prompt(question) {
   })
 }
 
-function newTodo() {
-  const q = chalk.blue('Type in your todo\n')
-  prompt(q).then(todo => {
-    db.get('todos')
-      .push({
-        title: todo,
-        complete: false,
-      })
-      .write()
-  })
-  return
-}
-
-function getTodos() {
-  const todos = db.get('todos').value()
-  let index = 1;
-  todos.forEach(todo => {
-    let todoText = `${index++}. ${todo.title}`
-    if (todo.complete) {
-      todoText += ' ✔ ️'
-    }
-    console.log(chalk.strikethrough(todoText))
-  })
-  return
-}
-
 function validateArgument(newCmd) {
   // check that length
   if (newCmd.args) {
@@ -161,12 +132,46 @@ function validateArgument(newCmd) {
             for (const key in arg) {
                 if (arg.hasOwnProperty(key) && arg[key].indexOf(args[index+3]) >= 0 ) {
                     newCmd.command = newCmd.command.replace(new RegExp(escapeRegExp(key), 'g'), args[index+3]);
+                     newCmd.args[index][key] = args[index+3];
+                     if (key === 'environment') {
+                         args.environment = args[index+3];
+                        console.log(args[index+3]);
+                     }
                 } else {
                     invalidArgument();
                 }
             }
           }
       }
+
+      if (newCmd.extraCmd) {
+
+        for (const cmd in newCmd.extraCmd) {
+            console.log(eval(newCmd.extraCmd[cmd].condition));
+
+            console.log(args.environment);
+            
+            if (newCmd.extraCmd.hasOwnProperty(cmd) && newCmd.command.indexOf(`extraCmd.${cmd}`) >= 0 && eval(newCmd.extraCmd[cmd].condition) ) {
+                newCmd.command = newCmd.command.replace(new RegExp(escapeRegExp(`extraCmd.${cmd}`), 'g'), newCmd.extraCmd[cmd].cmd);
+            } else {
+                newCmd.command = newCmd.command.replace(new RegExp(escapeRegExp(`extraCmd.${cmd}`), 'g'), '');
+            }
+            console.log(newCmd.command);
+
+            // if(cmd){
+            //   for (const key in arg) {
+            //       if (arg.hasOwnProperty(key) && arg[key].indexOf(args[index+3]) >= 0 ) {
+            //           newCmd.command = newCmd.command.replace(new RegExp(escapeRegExp(key), 'g'), args[index+3]);
+    
+            //       } else {
+            //           invalidArgument();
+            //       }
+            //   }
+            // }
+
+        }
+      }
+
       return newCmd.command;
   }
 }
@@ -196,39 +201,39 @@ function buildCommand()
     }
 }
 buildCommand();
-console.log(ExecutableCmd);
-var child = exec(ExecutableCmd, function (err, stdout, stderr) {
+// console.log(ExecutableCmd);
+// var child = exec(ExecutableCmd, function (err, stdout, stderr) {
 
-    console.log('over');
-});
-child.stdout.on('data', function(data) {
+//     console.log('over');
+// });
+// child.stdout.on('data', function(data) {
 
-    process.stdout.write(data);
+//     process.stdout.write(data);
 
-    //process.stdin.resume();
-});
-child.stdout.on('end', function() {
-    console.log('end out');
-});
-child.stdout.on('close', function() {
-    console.log('close out');
-});
-child.on('exit', function() {
-    console.log('exit');
-});
-child.on('close', function() {
-    console.log('close');
-});
-child.on('disconnect', function() {
-    console.log('disconnect');
-});
+//     //process.stdin.resume();
+// });
+// child.stdout.on('end', function() {
+//     console.log('end out');
+// });
+// child.stdout.on('close', function() {
+//     console.log('close out');
+// });
+// child.on('exit', function() {
+//     console.log('exit');
+// });
+// child.on('close', function() {
+//     console.log('close');
+// });
+// child.on('disconnect', function() {
+//     console.log('disconnect');
+// });
 
-// read stdin and send to child process
-process.stdin.on('readable', function() {
+// // read stdin and send to child process
+// process.stdin.on('readable', function() {
 
-    var chunk = process.stdin.read();
+//     var chunk = process.stdin.read();
 
-    if(chunk !== null) {
-        child.stdin.write(chunk);
-    }
-});
+//     if(chunk !== null) {
+//         child.stdin.write(chunk);
+//     }
+// });
