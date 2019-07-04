@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, OnInit, NgZone, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, NgZone, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Utils } from 'shared-library/core/services';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -19,8 +19,8 @@ export class InviteFriendsComponent extends InviteFriends implements OnInit, OnD
   renderView = false;
 
   constructor(public store: Store<AppState>, public userActions: UserActions, public utils: Utils,
-    private routerExtension: RouterExtensions, private page: Page, private ngZone: NgZone) {
-    super(store, userActions, utils);
+    private routerExtension: RouterExtensions, private page: Page, private ngZone: NgZone, public cd: ChangeDetectorRef) {
+    super(store, userActions, utils, cd);
   }
 
   ngOnInit() {

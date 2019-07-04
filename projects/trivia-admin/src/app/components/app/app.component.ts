@@ -1,12 +1,12 @@
-import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, Renderer2 } from '@angular/core';
 import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Store, select } from '@ngrx/store';
 import { skip, take } from 'rxjs/operators';
+import { AppState, appState } from '../../store';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { User } from 'shared-library/shared/model';
-import { AppState, appState } from '../../store';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { ApplicationSettingsActions } from 'shared-library/core/store/actions';
 
 @Component({
   selector: 'app-root',
@@ -26,10 +26,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     public router: Router,
     private location: Location,
+    private applicationSettingsAction: ApplicationSettingsActions,
   ) {
 
-
-
+    this.store.dispatch(this.applicationSettingsAction.loadApplicationSettings());
     this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.user), skip(1)).subscribe(user => {
       this.user = user;
       if (user) {
