@@ -76,7 +76,7 @@ export const reducer: ActionReducerMap<CoreState> = {
   getGameResult: getGameResult,
   countries: countries,
   addressUsingLongLat: addressUsingLongLat,
-  addressSuggestions: addressSuggestions
+  addressSuggestions: addressSuggestions,
   userFriendInvitations: userFriendInvitations
 };
 
