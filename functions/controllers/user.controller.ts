@@ -204,8 +204,12 @@ export class UserController {
             url: `${GoogleLocationAPI.GOOGLE_AUTOCOMPLETE}?input=${location}&key=${apiKey}`,
             json: true
         };
-        const requestResponse = await requestPromise(options);
-        Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        try {
+            const requestResponse = await requestPromise(options);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
     }
 
     static async addressByLatLang(req, res) {
@@ -217,7 +221,11 @@ export class UserController {
             url: `${GoogleLocationAPI.GOOGLE_GEOCODE}?latlng=${latLong}&key=${apiKey}`,
             json: true
         };
-        const requestResponse = await requestPromise(options);
-        Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        try {
+            const requestResponse = await requestPromise(options);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
     }
 }
