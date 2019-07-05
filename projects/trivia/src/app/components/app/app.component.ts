@@ -13,7 +13,7 @@ import { UserActions, ApplicationSettingsActions } from 'shared-library/core/sto
 import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CookieLawComponent } from 'angular2-cookie-law';
-declare var gtag;
+
 
 @Component({
   selector: 'app-root',
@@ -83,14 +83,8 @@ export class AppComponent implements OnInit, OnDestroy {
         return;
       }
       if (this.windowRef && this.windowRef.nativeWindow) {
-        if (this.windowRef.nativeWindow.ga) {
-          // this.windowRef.nativeWindow.ga('set', 'page', evt.urlAfterRedirects);
-          // this.windowRef.nativeWindow.ga('send', 'pageview');
-          gtag('config', 'UA-122966274-1', { 'page_path': evt.urlAfterRedirects });
-        }
-        if (this.windowRef.nativeWindow.scrollTo) {
-          this.windowRef.nativeWindow.scrollTo(0, 0);
-        }
+        this.windowRef.addNavigationsInAnalytics(evt);
+        this.windowRef.scrollDown();
       }
     }));
   }

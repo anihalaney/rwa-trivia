@@ -7,7 +7,7 @@ import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
 import { Subscription } from 'rxjs';
 import { UserService, Utils, WindowRef } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { profileSettingsConstants } from 'shared-library/shared/model';
+import { profileSettingsConstants, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
 import { userState } from '../../store';
 import { ProfileSettings } from './profile-settings';
@@ -220,11 +220,16 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
             this.userForm.get(field).disable();
             this.singleFieldEdit[field] = false;
           }
+
+          if (this.user.location !== this.userCopyForReset.location) {
+            this.pushAnalyticsData();
+          }
           // call saveUser
           this.saveUser(this.user);
           this.setNotificationMsg('', false, 0);
           this.cd.markForCheck();
         } else {
+
           this.userForm.controls['displayName'].setErrors({ 'exist': true });
           this.userForm.controls['displayName'].markAsTouched();
           this.cd.markForCheck();
@@ -236,6 +241,14 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     });
 
+  }
+
+  pushAnalyticsData() {
+    if (this.windowRef.isDataLayerAvailable()) {
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.LOCATION, this.user.location);
+      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION);
+    }
   }
 
   ngOnDestroy() {

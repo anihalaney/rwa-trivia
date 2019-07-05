@@ -8,7 +8,10 @@ import { Observable } from 'rxjs';
 import { map, take, flatMap, skipWhile } from 'rxjs/operators';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, GameMode, GameOptions, OpponentType, PlayerMode } from 'shared-library/shared/model';
+import {
+  Category, GameMode, GameOptions, OpponentType, PlayerMode, FirebaseAnalyticsKeyConstants,
+  FirebaseAnalyticsEventConstants, GameConstants
+} from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { SwiperDirective, SwiperConfigInterface } from 'ngx-swiper-wrapper';
@@ -73,47 +76,47 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
 
     this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1),
-    map(appSettings => {
-      if (appSettings) {
-        this.applicationSettings = appSettings[0];
-        if (this.applicationSettings && this.applicationSettings.lives.enable) {
-          return appSettings;
+      map(appSettings => {
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+          if (this.applicationSettings && this.applicationSettings.lives.enable) {
+            return appSettings;
+          }
         }
-      }
-    }),
-    flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
-    skipWhile(account => !account), take(1), map(account =>  this.life = account.lives)))).subscribe(data => {
-        if (this.applicationSettings) {
-          this.selectedCategories = [];
-          let filteredCategories = [];
-          if (this.applicationSettings && this.applicationSettings.game_play_categories) {
-            filteredCategories = this.categories.filter((category) => {
-              if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-                return category;
+      }),
+      flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
+        skipWhile(account => !account), take(1), map(account => this.life = account.lives)))).subscribe(data => {
+          if (this.applicationSettings) {
+            this.selectedCategories = [];
+            let filteredCategories = [];
+            if (this.applicationSettings && this.applicationSettings.game_play_categories) {
+              filteredCategories = this.categories.filter((category) => {
+                if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+                  return category;
+                }
+              });
+            } else {
+              filteredCategories = this.categories;
+            }
+
+            this.cd.markForCheck();
+
+
+            const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+            ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+
+            this.sortedCategories = sortedCategories;
+
+            sortedCategories.map(category => {
+              category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
+              if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
+                this.selectedCategories.push(category.id);
               }
             });
-          } else {
-            filteredCategories = this.categories;
+            this.cd.markForCheck();
+            // this.cd.detectChanges();
           }
-
-          this.cd.markForCheck();
-
-
-          const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-          ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-
-          this.sortedCategories = sortedCategories;
-
-          sortedCategories.map(category => {
-            category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
-            if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
-              this.selectedCategories.push(category.id);
-            }
-          });
-          this.cd.markForCheck();
-          // this.cd.detectChanges();
-        }
-      });
+        });
   }
 
   ngOnInit() {
@@ -129,17 +132,17 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.challengerUserId = params.userid;
           playerModeControl.setValue(this.challengerUserId ? '1' : '0');
           const isChallengeControl = this.newGameForm.get('isChallenge');
-         isChallengeControl.setValue(this.challengerUserId ? true : false);
-          if ( this.challengerUserId ) {
+          isChallengeControl.setValue(this.challengerUserId ? true : false);
+          if (this.challengerUserId) {
             opponentTypeControl.setValue('1');
           }
 
-          if ( this.challengerUserId ) {
+          if (this.challengerUserId) {
             this.selectFriendId(this.challengerUserId);
           }
 
           this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-          .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+            .pipe(map(val => val.length > 0 ? this.filter(val) : []));
         }),
         flatMap(() => playerModeControl.valueChanges)
       ).subscribe(v => {
@@ -223,39 +226,45 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-
-    if (this.windowRef.nativeWindow.dataLayer) {
-      this.windowRef.nativeWindow.dataLayer.push({
-        'event': 'Start Game Clicked',
-        'userId': this.user.userId
-      });
+    this.newGameForm.updateValueAndValidity();
+    if (this.newGameForm.invalid) {
+      return;
     }
-    // validations
-    // this.newGameForm.updateValueAndValidity();
-    // if (this.newGameForm.invalid) {
-    //   return;
-    // }
 
-    // this.loaderStatus = true;
+    this.loaderStatus = true;
 
-    // const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
+    const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
 
-    // if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
-    //   && !this.friendUserId) {
-    //   if (!this.friendUserId) {
-    //     this.errMsg = 'Please Select Friend';
-    //   }
-    //   this.loaderStatus = false;
-    //   if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
-    //     this.windowRef.nativeWindow.scrollTo(0, 0);
-    //   }
-    //   return;
-    // }
-    // if (this.applicationSettings.lives.enable && this.life === 0) {
-    //   this.redirectToDashboard(this.gameErrorMsg);
-    //   return false;
-    // }
-    // this.startNewGame(gameOptions);
+    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
+      && !this.friendUserId) {
+      if (!this.friendUserId) {
+        this.errMsg = 'Please Select Friend';
+      }
+      this.loaderStatus = false;
+      if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
+        this.windowRef.nativeWindow.scrollTo(0, 0);
+      }
+      return;
+    }
+    if (this.applicationSettings.lives.enable && this.life === 0) {
+      this.redirectToDashboard(this.gameErrorMsg);
+      return false;
+    }
+    this.pushAnalyticsData();
+    this.startNewGame(gameOptions);
+  }
+
+  pushAnalyticsData() {
+    if (this.windowRef.isDataLayerAvailable()) {
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
+        this.gameOptions.opponentType === OpponentType.Random ? GameConstants.RANDOM : GameConstants.FRIEND);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_MODE,
+        this.gameOptions.gameMode === GameMode.Normal ? GameConstants.NORMAL : GameConstants.OFFLINE);
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.CATEGORY_IDS, JSON.stringify(this.gameOptions.categoryIds));
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.TAGS, JSON.stringify(this.gameOptions.tags));
+      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.START_NEW_GAME);
+    }
   }
 
 

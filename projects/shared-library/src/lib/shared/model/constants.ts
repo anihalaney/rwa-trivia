@@ -91,7 +91,7 @@ export enum pushNotificationRouteConstants {
     FRIEND_NOTIFICATIONS = 'friend-notifications',
     QUESTION_NOTIFICATIONS = 'my/questions',
     ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
-    TOKEN_IS_NOT_REGISTERED= 'messaging/registration-token-not-registered'
+    TOKEN_IS_NOT_REGISTERED = 'messaging/registration-token-not-registered'
 }
 
 
@@ -165,7 +165,9 @@ export enum GeneralConstants {
     GAME_EXPIRED_HOURS = 32, // hr
     NAME = 'name',
     DISPLAY_NAME = 'displayName',
-    USER_ID = 'userId'
+    USER_ID = 'userId',
+    WIN = 'Win',
+    LOST = 'Lost'
 }
 
 export enum SocialShareConstants {
@@ -175,7 +177,13 @@ export enum SocialShareConstants {
 
 export enum GameConstants {
     GAME_STATUS = 'GameStatus',
-    GAME_OVER = 'gameOver'
+    GAME_OVER = 'gameOver',
+    RANDOM = 'Random',
+    FRIEND = 'Friend',
+    NORMAL = 'Normal',
+    OFFLINE = 'Offline',
+    SINGLE = 'Single',
+    OPPONENT = 'Opponent'
 }
 
 export enum AccountConstants {
@@ -373,3 +381,54 @@ export enum TermsAndPrivacyUrlConstant {
 }
 
 
+export enum FirebaseAnalyticsEventConstants {
+    USER_LOGIN = 'user_login',
+    COMPLETED_GAME = 'completed_game',
+    START_NEW_GAME = 'start_new_game',
+    USER_LOCATION = 'user_location'
+}
+
+export enum FirebaseScreenNameConstants {
+    NEW_GAME = 'New Game',
+    ACHIEVEMENTS = 'Achievements',
+    PRIVACY_POLICY = 'Privacy Policy',
+    RECENT_COMPLETED_GAMES = 'Recent Completed Games',
+    DASHBOARD = ' Dashboard',
+    LEADERBOARD = 'Leaderboard',
+    GAME_OVER = 'Game Over',
+    REPORT_GAME = 'Report Game',
+    GAME_CONTINUE = 'Game Continue',
+    GAME_QUESTION = 'Game Question',
+    GAME_DIALOG = 'Game Dialog',
+    INVITE_FRIENDS = 'Invite Friends',
+    FRIEND_LIST = 'Friend List',
+    MY_QUESTIONS = 'My Questions',
+    INVITE_MAIL_FRIENDS = 'Invite Mail Friends',
+    PROFILE_SETTINGS = 'Profile Settings',
+    QUESTION_ADD_UPDATE = 'Question Add Update',
+    LOGIN = 'Login',
+    USER_FEEDBACK = 'User Feedback'
+}
+
+export enum AnalyticsEventConstants {
+    EVENT = 'event',
+}
+
+
+export enum FirebaseAnalyticsKeyConstants {
+    USER_ID = 'userId',
+    GAME_ID = 'gameId',
+    PLAYER_MODE = 'playerMode',
+    OPPONENT_TYPE = 'opponentType',
+    OTHER_USER_ID = 'otherUserId',
+    USER_SCORE = 'userScore',
+    OTHER_USER_SCORE = 'otherUserScore',
+    GAME_STATUS = 'gameStatus',
+    GAME_MODE = 'gameMode',
+    CATEGORY_IDS = 'categoryIds',
+    TAGS = 'tags',
+    ROUND = 'round',
+    IS_TIE = 'isTie',
+    WINNER_PLAYER_ID = 'winnerPlayerId',
+    LOCATION = 'location'
+}

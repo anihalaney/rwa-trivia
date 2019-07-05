@@ -3,10 +3,11 @@ import { Store } from '@ngrx/store';
 import { Observable, defer, throwError, from, of } from 'rxjs';
 import { share, take, tap, mapTo, map, filter } from 'rxjs/operators';
 import { CoreState, coreState } from '../store';
-import { User } from '../../shared/model';
+import { User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from '../../shared/model';
 import { UserActions, UIStateActions } from '../store/actions';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { FirebaseAuthService } from './firebase-auth.service';
+import { WindowRef } from '../services';
 
 @Injectable()
 export class AuthenticationProvider {
@@ -19,13 +20,15 @@ export class AuthenticationProvider {
     private uiStateActions: UIStateActions,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(APP_ID) private appId: string,
-    private firebaseAuthService: FirebaseAuthService) {
+    private firebaseAuthService: FirebaseAuthService,
+    private windowRef: WindowRef) {
 
     this.firebaseAuthService.authState().subscribe(afUser => {
       if (afUser) {
         this.firebaseAuthService.getIdToken(afUser, false).then((token) => {
           this.user = new User(afUser);
           this.user.idToken = token;
+          this.pushAnalyticsData();
           this.store.dispatch(this.userActions.loginSuccess(this.user));
         });
       } else {
@@ -34,11 +37,19 @@ export class AuthenticationProvider {
       }
     });
 
+
     this.refreshTokenObserver = defer(() => {
       return from(this.generateToken(true));
     }).pipe(share());
 
 
+  }
+
+  pushAnalyticsData() {
+    if (this.windowRef.isDataLayerAvailable()) {
+      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId);
+      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOGIN);
+    }
   }
 
   ensureLogin(url?: string): Observable<boolean> {
