@@ -4,6 +4,13 @@ const projects = ["trivia", "bitwiser-edu", "trivia-admin", "trivia-editor"];
 const configProject = ["trivia", "bitwiser-edu"];
 const env = ['dev', 'staging', 'production'];
 const packageNames = ["io.bitwiser.trivia", "io.bitwiser.trivia.dev", "io.bitwiser.edu.dev"];
+const firebaseProject = [ "trivia-dev",
+    "trivia-staging",
+    "trivia-production",
+    "bitwiser-edu-dev",
+    "bitwiser-edu-staging",
+    "bitwiser-edu-production"
+];
 
 let argv;
 let executableCmd = '';
@@ -34,82 +41,55 @@ const commandList = {
             }
     },
     "deploy-functions-local":  
-        {   "command" : "npx rimraf functions/server & tsc --project functions  && firebase serve -P configProject-dev  --only functions",
+        {   "command" : "npx rimraf functions/server & tsc --project functions  && firebase serve -P projectName  --only functions",
             "description" : "deploy firebase functions local",
             "options" : { 
-                "configProject" : { 
+                "projectName" : { 
                     "demand" : true,
                     "description": 'configuration project name defined in angular.json e.g. trivia',
                     "type": 'string',
-                    "choices":  configProject
+                    "choices":  firebaseProject
                 }
             }
         },
         "deploy-functions":
-        {
-            //"command" : "npm run ng build trivia  --configuration=configProject-environment && npm run ng build trivia-admin  --configuration=configProject-environment && npm run ng build trivia-editor --configuration=configProject-environment && npm run ng run trivia:server && npm run rmdir /s/q functions\\server && tsc --project functions && npm install firebase@5.2.0 &&     webpack --config webpack.server.config.js &&     cpx dist/index.html functions/dist && rimraf dist/index.html &&      extraCmd.index      rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P configProject-environment   --only functions &&     rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P configProject-environment --only functions:ssr && firebase deploy -P configProject-environment --only hosting && npm install firebase@6.0.2",                        
-     //2:31   "command" : `npm run ng build trivia  --configuration=trivia-staging    && ng build trivia-admin  --configuration=trivia-admin-staging      && ng build trivia-editor --configuration=trivia-production         && ng run trivia:server && npm run rmdir /s/q functions\\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js      && cpx dist/index.html functions/dist    && rimraf dist/index.html                   && npm run rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P trivia-dev --only                  functions && npm run rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P trivia-dev --only functions:ssr            && npm run firebase deploy -P trivia-dev --only hosting && npm install firebase@6.0.2`,
-              "command" : "ng build trivia  --configuration=configProject-environment && ng build trivia-admin  --configuration=configProject-environment && ng build trivia-editor --configuration=configProject-environment && ng run trivia:server && npx rimraf functions/server          && tsc --project functions && npm install firebase@5.2.0 && npx webpack --config webpack.server.config.js && npx cpx dist/index.html functions/dist && npx rimraf dist/index.html               && npx rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P configProject-environment   --only functions && npx rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P configProject-environment --only functions:ssr && firebase deploy -P configProject-environment --only hosting && npm install firebase@6.0.2",
+        {      
+            "command" : "ng build trivia  --configuration=configProject-staging && ng build trivia-admin  --configuration=configProject-staging && ng build trivia-editor --configuration=configProject-staging && ng run trivia:server && npx rimraf functions/server       && tsc --project functions && npm install firebase@5.2.0 && npx webpack --config webpack.server.config.js && npx cpx dist/index.html functions/dist && npx rimraf dist/index.html                                                                                                         && npx rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P projectName   --only functions && npx rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P projectName          --only functions:ssr && firebase deploy -P projectName  --only hosting && npm install firebase@6.0.2",             
               "description" : "deploy firebase functions to staging env",
               "options" : { 
                 "projectName" : { 
                     "demand" : true,
-                    "description": 'project Name e.g. trivia',
+                    "description": 'project Name from .firebaserc e.g. trivia-staging',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  firebaseProject
                 },
                 "configProject" : { 
                     "demand" : true,
                     "description": 'configuration project name defined in angular.json e.g. trivia',
                     "type": 'string',
                     "choices":  configProject
-                },
-                "environment" : { 
-                    "demand" : true,
-                    "description": 'environment',
-                    "type": 'string',
-                    "choices":  env
                 }
             }
         },
         "prod:deploy-functions":
         {
-                        
-                        // ng build trivia  --configuration=bitwiser-edu-staging && ng build trivia-admin  --configuration=bitwiser-edu-staging && ng build trivia-editor --configuration=bitwiser-edu-staging && ng run trivia:server && rmdir /s/q functions\server &               tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html &&    extraCmd.index                                                                                rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging   --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging --only functions:ssr && firebase deploy -P bitwiser-edu-staging --only hosting && npm install firebase@6.0.2
-                        // ng build trivia  --configuration=bitwiser-edu-staging && ng build trivia-admin  --configuration=bitwiser-edu-staging && ng build trivia-editor --configuration=bitwiser-edu-staging && ng run trivia:server && rmdir /s/q functions\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html &&                                                                                    rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging   --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P bitwiser-edu-staging --only functions:ssr && firebase deploy -P bitwiser-edu-staging --only hosting && npm install firebase@6.0.2
-            "command" : "ng build trivia  --configuration=configProject-environment && ng build trivia-admin  --configuration=configProject-environment && ng build trivia-editor --configuration=configProject-environment && ng run trivia:server && rmdir /s/q functions\\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html && firebase -P configProject-environment functions:config:set environment.production=true &&  rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P configProject-environment   --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P configProject-environment --only functions:ssr && firebase deploy -P configProject-environment --only hosting && npm install firebase@6.0.2",
-                        // `ng build trivia  --configuration=trivia-production          && ng build trivia-admin  --configuration=trivia-admin-production &&  ng build trivia-editor  --configuration=trivia-production       && ng run trivia:server && rmdir /s/q functions\\server & tsc --project functions && npm install firebase@5.2.0 && webpack --config webpack.server.config.js && cpx dist/index.html functions/dist && rimraf dist/index.html [&& firebase -P trivia-production functions:config:set environment.production=true] && rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P trivia-production           --only functions && rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P trivia-production         --only functions:ssr && firebase deploy -P trivia-production         --only hosting && npm install firebase@6.0.2`
+            "command" :  "ng build trivia  --configuration=configProject-production && ng build trivia-admin  --configuration=configProject-production && ng build trivia-editor --configuration=configProject-production && ng run trivia:server && npx rimraf functions/server          && tsc --project functions && npm install firebase@5.2.0 && npx webpack --config webpack.server.config.js && npx cpx dist/index.html functions/dist && npx rimraf dist/index.html && npm run firebase -P projectName functions:config:set environment.production=true && npx rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P projectName                --only functions && npx rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P projectName --only functions:ssr && firebase deploy -P projectName  --only hosting && npm install firebase@6.0.2",
             "description" : "deploy firebase functions to production",
             "options" : { 
                 "projectName" : { 
                     "demand" : true,
-                    "description": 'project Name e.g. trivia',
+                    "description": 'project Name from .firebaserc e.g. trivia-staging',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  firebaseProject
                 },
                 "configProject" : { 
                     "demand" : true,
                     "description": 'configuration project name defined in angular.json e.g. trivia',
                     "type": 'string',
                     "choices":  configProject
-                },
-                "environment" : { 
-                    "demand" : true,
-                    "description": 'environment',
-                    "type": 'string',
-                    "choices":  env
                 }
             }
-            // "extraCmd" : 
-            //     {
-            //         "index": { "condition" : "args.environment === 'production'",
-            //                    "cmd": "firebase -P trivia-production functions:config:set environment.production=true &&" 
-            //                  }
-            //     }
         },
-        // "run-scheduler-dev": "npm run compile-scheduler-functions && node scheduler/server/run-scheduler.js dev",
-        // "compile-scheduler-functions": "rmdir /s/q scheduler\\server & tsc --project scheduler",
-
         "dev-android":
         {
             "command" : "tns run android --bundle --env.package_name=packageName --env.project=projectName",
@@ -258,20 +238,20 @@ const commandList = {
 
 }
 
-for (const aCmd in commandList) {
-    if (commandList.hasOwnProperty(aCmd)) {
-        if (process.argv[2] === aCmd) {
+for (const cmd in commandList) {
+    if (commandList.hasOwnProperty(cmd)) {
+        if (process.argv[2] === cmd) {
              argv = yargs
-            .command(aCmd, commandList[aCmd].description, function(){}, function(argv){
-                executableCmd = commandList[aCmd].command;
-                for (const opt in commandList[aCmd].options) {
-                    if (commandList[aCmd].options.hasOwnProperty(opt)) {
+            .command(cmd, commandList[cmd].description, function(){}, function(argv){
+                executableCmd = commandList[cmd].command;
+                for (const opt in commandList[cmd].options) {
+                    if (commandList[cmd].options.hasOwnProperty(opt)) {
                         executableCmd = executableCmd.replace(new RegExp(escapeRegExp(opt), 'g'), argv[opt]);
                     }
                 }
                 executeCommand();
             })
-            .options(commandList[aCmd].options)
+            .options(commandList[cmd].options)
             .help()
             .alias('help', 'h')
             .argv;
@@ -286,8 +266,8 @@ function escapeRegExp(string){
 
 function executeCommand(){
     try {
-        console.log(executableCmd, 'executableCmd');
-        execSync(executableCmd, {stdio: 'inherit'});
+  //      console.log(executableCmd, 'executableCmd');
+         execSync(executableCmd, {stdio: 'inherit'});
     } catch(error) {
         // console.error(error);
     }
