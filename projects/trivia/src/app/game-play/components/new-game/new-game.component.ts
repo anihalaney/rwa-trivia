@@ -203,32 +203,39 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   onSubmit() {
+
+    if (this.windowRef.nativeWindow.dataLayer) {
+      this.windowRef.nativeWindow.dataLayer.push({
+        'event': 'Start Game Clicked',
+        'userId': this.user.userId
+      });
+    }
     // validations
-    this.newGameForm.updateValueAndValidity();
-    if (this.newGameForm.invalid) {
-      return;
-    }
+    // this.newGameForm.updateValueAndValidity();
+    // if (this.newGameForm.invalid) {
+    //   return;
+    // }
 
-    this.loaderStatus = true;
+    // this.loaderStatus = true;
 
-    const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
+    // const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
 
-    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
-      && !this.friendUserId) {
-      if (!this.friendUserId) {
-        this.errMsg = 'Please Select Friend';
-      }
-      this.loaderStatus = false;
-      if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
-        this.windowRef.nativeWindow.scrollTo(0, 0);
-      }
-      return;
-    }
+    // if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
+    //   && !this.friendUserId) {
+    //   if (!this.friendUserId) {
+    //     this.errMsg = 'Please Select Friend';
+    //   }
+    //   this.loaderStatus = false;
+    //   if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
+    //     this.windowRef.nativeWindow.scrollTo(0, 0);
+    //   }
+    //   return;
+    // }
     // if (this.applicationSettings.lives.enable && this.life === 0) {
     //   this.redirectToDashboard(this.gameErrorMsg);
     //   return false;
     // }
-    this.startNewGame(gameOptions);
+    // this.startNewGame(gameOptions);
   }
 
 
