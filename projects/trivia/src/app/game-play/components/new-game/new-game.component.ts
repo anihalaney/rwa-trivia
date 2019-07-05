@@ -223,22 +223,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-<<<<<<< HEAD
 
     if (this.windowRef.nativeWindow.dataLayer) {
       this.windowRef.nativeWindow.dataLayer.push({
         'event': 'Start Game Clicked',
         'userId': this.user.userId
       });
-=======
-    if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.dataLayer) {
-      this.windowRef.nativeWindow.dataLayer.push(
-        {
-          'event':'Start Game Clicked',
-          'userId':this.user.userId
-        }
-      )
->>>>>>> 3364a8361299ea5e8811c19b03528fe86fcb9f9d
     }
     // validations
     // this.newGameForm.updateValueAndValidity();
@@ -265,11 +255,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     //   this.redirectToDashboard(this.gameErrorMsg);
     //   return false;
     // }
-<<<<<<< HEAD
     // this.startNewGame(gameOptions);
-=======
- //   this.startNewGame(gameOptions);
->>>>>>> 3364a8361299ea5e8811c19b03528fe86fcb9f9d
   }
 
 

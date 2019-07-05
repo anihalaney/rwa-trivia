@@ -8,11 +8,7 @@
         m = s.getElementsByTagName(o)[0];
     a.async = 1;
     a.src = g;
-<<<<<<< HEAD
-    m.parentNode.insertBefore(a, m)
-=======
     m.parentNode.insertBefore(a, m);
->>>>>>> 3364a8361299ea5e8811c19b03528fe86fcb9f9d
     window.dataLayer = window.dataLayer || [];
 })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 ga('create', 'UA-122966274-1', 'auto');// add your tracking ID here.
@@ -22,10 +18,6 @@ ga('send', 'pageview');
 function gtag() { dataLayer.push(arguments); }
 gtag('js', new Date());
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 3364a8361299ea5e8811c19b03528fe86fcb9f9d
 (function (w, d, s, l, i) {
     w[l] = w[l] || []; w[l].push({
       'gtm.start':
