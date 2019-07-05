@@ -98,6 +98,29 @@ export class UserService {
         return this.http.get<User>(url);
     }
 
+    loadUserInvitationsInfo(userId: string , invitedUserEmail: string, invitedUserId: string): Observable<Invitation> {
+        const queryParams = {
+            condition: [
+            { name: 'created_uid', comparator: '==', value: userId },
+            { name: 'email', comparator: '==',  value: invitedUserEmail}
+            ],
+            limit: 1
+        };
+        return combineLatest(this.dbService.valueChanges('invitations', '', queryParams), this.dbService.valueChanges('friends', userId))
+        .pipe(
+            map(values => {
+                if (values[1] &&  values[1].myFriends && values[1].myFriends.some((friend => friend[invitedUserId]))) {
+                    return  {'email': invitedUserEmail, 'created_uid': null, 'status': 'approved'};
+                } else if (values[0].length > 0) {
+                    return values[0][0];
+                } else {
+                    return {'email': invitedUserEmail, 'created_uid': null, 'status': 'add'};
+                }
+            })
+        );
+
+    }
+
 
     getUserProfileImage(user: User): Observable<User> {
         if (user.profilePicture && user.profilePicture !== '') {
@@ -141,6 +164,7 @@ export class UserService {
         return this.dbService.valueChanges('invitations', '', queryParams).pipe(
             map(invitations => invitations));
     }
+
 
     setInvitation(invitation: Invitation) {
         this.dbService.updateDoc('invitations', invitation.id, invitation);

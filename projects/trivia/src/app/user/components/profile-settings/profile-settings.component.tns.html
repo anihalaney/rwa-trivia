@@ -83,14 +83,21 @@
                   horizontalAlignment="right" class="edit-profile-btn" text="Edit Profile"></Label>
               </StackLayout>
 
-              <StackLayout stlRippleEffect (rippleTap)="sendFriendRequest()" paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && !user?.isFriend">
+              <StackLayout stlRippleEffect (rippleTap)="sendFriendRequest()" paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && userInvitations[user.email]?.status === 'add'">
                 <Image row="0" col="2" checked="true" horizontalAlignment="center" src="~/assets/images/send-friend-request.png"
                 height="80" width="80" marginRight="5"></Image>
                 <Label  horizontalAlignment="center"
                 class="send-friend-request-span" margin="-10 0 0 0" text="Add Friend"></Label>
               </StackLayout>
 
-              <StackLayout paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && user?.isFriend">
+              <StackLayout paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && userInvitations[user.email]?.status === 'pending'">
+                  <Image row="0" col="2" checked="true" horizontalAlignment="center" src="~/assets/images/send-friend-request.png"
+                  height="80" width="80" marginRight="5"></Image>
+                  <Label  horizontalAlignment="center"
+                  class="send-friend-request-span" margin="-10 0 0 0" text="Friend Request Sent"></Label>
+              </StackLayout>
+
+              <StackLayout paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && userInvitations[user.email]?.status === 'approved'">
                 <Image row="0" col="2" checked="true" horizontalAlignment="center" src="~/assets/images/friends.png"
                 height="80" width="80" marginRight="5"></Image>
                 <Label horizontalAlignment="center"

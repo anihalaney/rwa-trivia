@@ -113,6 +113,7 @@ export class UserService {
             user.location = (dbUser && dbUser.location) ? dbUser.location : '';
             user.profilePicture = (dbUser && dbUser.profilePicture) ? dbUser.profilePicture : '';
             user.userId = userId;
+            user.email = (dbUser && dbUser.email) ? dbUser.email : '';
             let gamePlayed;
             let isFriend = false;
             if (extendedInfo) {

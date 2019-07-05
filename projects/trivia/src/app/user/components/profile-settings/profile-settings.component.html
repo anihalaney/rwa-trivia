@@ -295,12 +295,19 @@
                       </div>
                       <div *ngIf="loggedInUser?.userId && userType === 1" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
                         <div class="savebox textcenter">
-                          <div *ngIf="user?.isFriend" class="friends-div">
-                            <img src="assets/images/friends.png" alt="Friends" />
+                          <div *ngIf="userInvitations[user.email]?.status === 'approved'" class="friends-div">
+                            <div><img src="assets/images/friends.png" alt="Friends" />
+                            </div>
                             <span class="is-friend-span">Friends</span>
                           </div>
-                          <div *ngIf="!user?.isFriend" (click)="sendFriendRequest()" class="friends-div">
-                            <img src="assets/images/send-friend-request.png" alt="Friends" />
+                          <div *ngIf="userInvitations[user.email]?.status === 'pending'" class="friends-div">
+                              <div>
+                                <img src="assets/images/send-friend-request.png" alt="Friend request sent" />
+                              </div>
+                              <span class="send-friend-request-span">Friend Request Sent</span>
+                            </div>
+                          <div *ngIf="userInvitations[user.email]?.status === 'add'" (click)="sendFriendRequest()" class="friends-div">
+                            <div><img src="assets/images/send-friend-request.png" alt="Add Friend" /></div>
                             <span class="send-friend-request-span">Add Friend</span>
                           </div>
                         </div>
