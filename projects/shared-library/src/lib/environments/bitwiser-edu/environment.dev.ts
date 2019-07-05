@@ -16,7 +16,7 @@ export const CONFIG: IConfig = {
     storageBucket: 'bitwiser-edu.appspot.com',
     messagingSenderId: '704157888306'
   },
-  'functionsUrl': `https://bitwiser-edu.firebaseapp.com`,
+  'functionsUrl': `https://bitwiser-edu.firebaseapp.com/${appConstants.API_VERSION}`,
   'editorUrl': 'https://bitwiser-edu.firebaseapp.com/editor',
   'hightlighJsURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js',
   'hightlighCSSURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css',

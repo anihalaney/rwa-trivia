@@ -10,7 +10,7 @@ let executableCmd = '';
 
 const commandList = {
     "start": 
-        {   "command" : `ng serve projectName --configuration=projectName-environment`,
+        {   "command" : `ng serve projectName --configuration=configProject-environment`,
             "description" : "start web/admin/editor app",
             "options" : { 
                         "projectName" : { 
@@ -34,7 +34,7 @@ const commandList = {
             }
     },
     "deploy-functions-local":  
-        {   "command" : "npm run rmdir /s/q functions\\server & tsc --project functions  && firebase serve -P configProject-dev  --only functions",
+        {   "command" : "npx rimraf functions/server & tsc --project functions  && firebase serve -P configProject-dev  --only functions",
             "description" : "deploy firebase functions local",
             "options" : { 
                 "configProject" : { 
@@ -286,7 +286,7 @@ function escapeRegExp(string){
 
 function executeCommand(){
     try {
-    //    console.log(executableCmd, 'executableCmd');
+        console.log(executableCmd, 'executableCmd');
         execSync(executableCmd, {stdio: 'inherit'});
     } catch(error) {
         // console.error(error);
