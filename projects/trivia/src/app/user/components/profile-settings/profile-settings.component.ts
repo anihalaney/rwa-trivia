@@ -102,7 +102,10 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
   }
 
   locationChanged(result): void {
-    this.store.dispatch(this.userAction.loadAddressSuggestions(result));
+    if (result) {
+      this.store.dispatch(this.userAction.loadAddressSuggestions(result));
+    }
+
   }
 
   private setCropperSettings() {

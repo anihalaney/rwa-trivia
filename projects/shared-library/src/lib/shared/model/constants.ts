@@ -91,7 +91,7 @@ export enum pushNotificationRouteConstants {
     FRIEND_NOTIFICATIONS = 'friend-notifications',
     QUESTION_NOTIFICATIONS = 'my/questions',
     ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
-    TOKEN_IS_NOT_REGISTERED= 'messaging/registration-token-not-registered'
+    TOKEN_IS_NOT_REGISTERED = 'messaging/registration-token-not-registered'
 }
 
 
@@ -363,10 +363,13 @@ export enum RoutesConstants {
     RULES = 'rules',
     GET_QUESTION_IMAGE = 'getQuestionImage',
     UPLOAD_QUESTION_IMAGE = 'uploadQuestionImage',
-
     DISPLAY_NAME = 'display-name',
     DISPLAY_DASH_NAME = 'displayName',
-    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat'
+    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat',
+    ADDRESS_BY_LAT_LANG = 'addressByLatLang',
+    LOCATION = 'location',
+    LAT_LONG = 'latLong',
+    ADDRESS_SUGGESTION = 'addressSuggestion',
 }
 
 export enum TermsAndPrivacyUrlConstant {
@@ -420,7 +423,7 @@ export enum FirebaseScreenNameConstants {
     GAME_OVER = 'Game Over',
     REPORT_GAME = 'Report Game',
     GAME_CONTINUE = 'Game Continue',
-    GAME_QUESTION  = 'Game Question',
+    GAME_QUESTION = 'Game Question',
     GAME_DIALOG = 'Game Dialog',
     INVITE_FRIENDS = 'Invite Friends',
     FRIEND_LIST = 'Friend List',
@@ -430,5 +433,10 @@ export enum FirebaseScreenNameConstants {
     QUESTION_ADD_UPDATE = 'Question Add Update',
     LOGIN = 'Login',
     USER_FEEDBACK = 'User Feedback'
+}
+
+export enum GoogleLocationAPI {
+    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
+    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
 }
 
