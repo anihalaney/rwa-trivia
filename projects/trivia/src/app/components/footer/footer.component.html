@@ -25,9 +25,9 @@
         </share-button>
        
       </div>
-      <div *ngIf="!user"  class="store-icon-div pull-left">
-        <a [href]="appStoreUrl" target="_blank"><img class="app-store-img" src="/assets/images/appstore-badge.svg"/></a>        
-        <a target="_blank" [href]='playstoreUrl'><img alt='Get it on Google Play' class="play-store-img" src='assets/images/google-play-badge.png'/></a>
+      <div *ngIf="!user && (appStoreUrl !==''|| playstoreUrl!=='')"  class="store-icon-div pull-left">
+        <a *ngIf="appStoreUrl!==''" [href]="appStoreUrl" target="_blank"><img class="app-store-img" src="/assets/images/appstore-badge.svg"/></a>        
+        <a *ngIf="playstoreUrl!==''" target="_blank" [href]='playstoreUrl'><img alt='Get it on Google Play' class="play-store-img" src='assets/images/google-play-badge.png'/></a>
       </div>
     </div>
   </div>

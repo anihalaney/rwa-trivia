@@ -7,10 +7,12 @@ export class GameOptions {
   maxQuestions: number;
   friendId?: string;
   rematch?: boolean;
+  isChallenge?: boolean;
 
-  constructor() {
+  constructor(isChallenge = false) {
     // Defaults
-    this.playerMode = PlayerMode.Single;
+    this.isChallenge = isChallenge;
+    this.playerMode = isChallenge ? PlayerMode.Opponent : PlayerMode.Single;
     this.gameMode = GameMode.Normal;
     this.categoryIds = [];
     this.tags = [];

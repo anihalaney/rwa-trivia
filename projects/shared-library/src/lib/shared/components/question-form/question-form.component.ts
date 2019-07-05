@@ -1,12 +1,13 @@
 import { Component, Input, Output, OnInit, OnChanges, OnDestroy, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Question, QuestionStatus, Category, User, Answer } from '../../model';
-import { Utils } from '../../../core/services';
-import { Observable, Subscription } from 'rxjs';
+import { Question, QuestionStatus, Category, User, Answer, ApplicationSettings } from '../../model';
+import { QuestionService } from '../../../core/services';
+import { Observable } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
-
+import { QuillImageUpload } from 'ng-quill-tex/lib/models/quill-image-upload';
+import { CropImageDialogComponent } from './../crop-image-dialog/crop-image-dialog.component';
+import { MatDialog } from '@angular/material';
 @Component({
   selector: 'app-question-form',
   templateUrl: './question-form.component.html',
@@ -19,9 +20,12 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() editQuestion: Question;
   @Input() tagsObs: Observable<string[]>;
-  @Input() categoriesObs: Observable<Category[]>;
+  @Input() tagsDictionary: any; //{ [key: number]: Category };
+  @Input() categoriesObs: any; //[[key: number]: ]; /// [key: number]: string };
   @Output() updateStatus = new EventEmitter<boolean>();
   @Output() updateUnpublishedQuestions = new EventEmitter<Question>();
+  @Input() quillConfig: any;
+  @Input() applicationSettings: ApplicationSettings;
 
   questionForm: FormGroup;
   // Properties
@@ -32,6 +36,8 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
   enteredTags: string[] = [];
   user: User;
   subscriptions = [];
+  quillObject: any = {};
+  dialogRef;
 
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
@@ -42,12 +48,14 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private fb: FormBuilder,
-    private utils: Utils) {
+    public dialog: MatDialog,
+    public questionService: QuestionService) {
 
 
   }
 
   ngOnInit() {
+
     this.questionForm = this.fb.group({
       category: [(this.editQuestion.categories.length > 0 ? this.editQuestion.categories[0] : ''), Validators.required]
     });
@@ -55,12 +63,10 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     this.createForm(this.editQuestion);
 
     const questionControl = this.questionForm.get('questionText');
-
     this.subscriptions.push(questionControl.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.answers.valueChanges.pipe(debounceTime(500)).subscribe(v => this.computeAutoTags()));
     this.subscriptions.push(this.categoriesObs.subscribe(categories => this.categories = categories));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
-
   }
 
 
@@ -72,13 +78,18 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   createForm(question: Question) {
     const fgs: FormGroup[] = question.answers.map(answer => {
+      const isRichEditor = (answer.isRichEditor) ? answer.isRichEditor : false;
+      const answerText = (answer.isRichEditor) ? answer.answerObject : answer.answerText;
       const fg = new FormGroup({
-        answerText: new FormControl(answer.answerText, Validators.required),
+        answerText: new FormControl(answerText, Validators.required),
         correct: new FormControl(answer.correct),
+        isRichEditor: new FormControl(isRichEditor),
+        answerObject: new FormControl(answer.answerObject),
       });
       return fg;
     });
     const answersFA = new FormArray(fgs);
+
     let fcs: FormControl[] = question.tags.map(tag => {
       const fc = new FormControl(tag);
       return fc;
@@ -87,15 +98,22 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
       fcs = [new FormControl('')];
     }
     const tagsFA = new FormArray(fcs);
+    const questionText = (question.isRichEditor) ? question.questionObject : question.questionText;
 
+    if (question.isRichEditor) {
+      this.quillObject.questionText =  question.questionText ;
+      this.quillObject.jsonObject = question.questionObject;
+    }
     this.questionForm = this.fb.group({
       category: [(question.categories.length > 0 ? question.categories[0] : ''), Validators.required],
-      questionText: [question.questionText, Validators.required],
+      questionText: [questionText, Validators.required],
       tags: '',
       tagsArray: tagsFA,
       answers: answersFA,
       ordered: [question.ordered],
-      explanation: [question.explanation]
+      explanation: [question.explanation],
+      isRichEditor: question.isRichEditor,
+      maxTime: (question.maxTime) ? question.maxTime : ''
     }, { validator: this.questionFormValidator }
     );
 
@@ -167,6 +185,12 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     question.created_uid = this.editQuestion.created_uid ? this.editQuestion.created_uid : this.user.userId;
     question.approved_uid = this.editQuestion.approved_uid ? this.editQuestion.approved_uid : '';
     question.explanation = this.editQuestion.explanation ? this.editQuestion.explanation : '';
+
+    if (question.isRichEditor) {
+      question.questionText = this.quillObject.questionText;
+      question.questionObject = this.quillObject.jsonObject;
+    }
+
     // call updateQuestion
     this.updateQuestion(question);
   }
@@ -181,6 +205,7 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
     question.tags = [...this.autoTags, ...this.enteredTags];
     question.ordered = formValue.ordered;
     question.explanation = formValue.explanation;
+    question.isRichEditor = formValue.isRichEditor;
     return question;
   }
 
@@ -211,6 +236,44 @@ export class QuestionFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy() {
 
+  }
+
+  onAnswerChanged(event, answerIndex) {
+    const answers = (<FormArray>this.questionForm.get('answers'));
+    answers.controls[answerIndex]['controls'].answerObject.patchValue(event.delta);
+    answers.controls[answerIndex]['controls'].answerText.patchValue(event.html);
+  }
+
+  // Text change in quill editor
+  onTextChanged(text) {
+    this.quillObject.jsonObject = text.delta;
+    this.quillObject.questionText = text.html;
+  }
+
+  // Image Upload
+  fileUploaded(quillImageUpload: QuillImageUpload) {
+    const file: File = quillImageUpload.file;
+
+    this.dialogRef = this.dialog.open(CropImageDialogComponent, {
+      disableClose: false,
+      data: { file: file, applicationSettings: this.applicationSettings }
+    });
+
+    this.dialogRef.componentInstance.ref = this.dialogRef;
+    this.subscriptions.push(this.dialogRef.componentInstance.ref.afterClosed().subscribe(result => {
+      if (result) {
+        const fileName = `questions/${new Date().getTime()}-${file.name}`;
+        this.questionService.saveQuestionImage(result.image, fileName).subscribe(uploadTask => {
+          if (uploadTask != null) {
+            if (uploadTask.task.snapshot.state === 'success') {
+              this.questionService.getQuestionDownloadUrl(fileName).subscribe(imageUrl => {
+                quillImageUpload.setImage(imageUrl);
+              });
+            }
+          }
+        });
+      }
+    }));
   }
 
 }

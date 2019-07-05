@@ -11,8 +11,10 @@ import {
   InviteFriendsComponent,
   QuestionAddUpdateComponent,
   InviteFriendsDialogComponent,
-  InviteMailFriendsComponent
+  InviteMailFriendsComponent,
+  PreviewQuestionDialogComponent
 } from './components';
+import { DropDownModule } from 'nativescript-drop-down/angular';
 
 @NgModule({
   declarations: [
@@ -22,20 +24,21 @@ import {
     InviteFriendsComponent,
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
-    InviteMailFriendsComponent
+    InviteMailFriendsComponent,
+    PreviewQuestionDialogComponent
   ],
   imports: [
     // rwa modules
     SharedModule,
     NativeScriptRouterModule,
     UserRoutingModule,
+    DropDownModule,
 
     //ngrx feature store
     StoreModule.forFeature('user', reducer),
 
     //ngrx effects
     EffectsModule.forFeature(effects)
-
 
   ],
   providers: [],
@@ -45,6 +48,7 @@ import {
     MyQuestionsComponent,
     InviteFriendsComponent
   ],
+  entryComponents: [PreviewQuestionDialogComponent],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class UserModule { }

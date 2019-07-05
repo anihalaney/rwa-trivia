@@ -1,5 +1,5 @@
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Question, Answer, User } from 'shared-library/shared/model';
+import { Question, Answer, User, ApplicationSettings } from 'shared-library/shared/model';
 
 export class GameQuestion {
   @Input() questionIndex: number;
@@ -21,10 +21,11 @@ export class GameQuestion {
   @Input() threeConsecutiveAnswer: boolean;
   @Input() userDict: { [key: string]: User };
   @Input() MAX_TIME_IN_SECONDS: number;
+  @Input() applicationSettings: ApplicationSettings;
 
   answeredIndex: number;
   correctAnswerIndex: number;
-
+  // applicationSettings: ApplicationSettings;
 
   doPlay = true;
 

@@ -23,7 +23,10 @@ export class GameMechanics {
                     if (playerQnA.answerCorrect) {
                         AccountService.setBits(userId);
                     }
+
                     if (game.nextTurnPlayerId && game.nextTurnPlayerId.trim().length > 0 && currentTurnPlayerId !== game.nextTurnPlayerId) {
+                        console.log('CALCULATE_SCORE----------->', currentTurnPlayerId);
+                        console.log('CALCULATE_SCORE  game----------->', game);
                         PushNotification.sendGamePlayPushNotifications(game, currentTurnPlayerId,
                             pushNotificationRouteConstants.GAME_PLAY_NOTIFICATIONS);
                     }

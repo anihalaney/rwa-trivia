@@ -19,7 +19,7 @@
         <question-search [questionsSearchResults]="(questionsSearchResultsObs | async)" [categoryDictionary]="categoryDictObs | async"
           [categoriesObs]="categoriesObs" (onPageChanged)="pageChanged($event)" (onCategoryChanged)="categoryChanged($event)"
           (onTagChanged)="tagChanged($event)" (onSortOrderChanged)="sortOrderChanged($event)" class="flex-container"
-          fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.xs="start">
+          fxLayoutWrap="wrap" fxLayout="row" fxLayoutAlign="center" fxLayoutAlign.xs="start" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
         </question-search>
       </mat-tab>
       <mat-tab label="Unpublished">
@@ -35,11 +35,10 @@
 
         <mat-divider></mat-divider>
 
-
         <question-table [showSort]="false" [showPaginator]="true" [questions]="unpublishedQuestionsObs | async"
-          [totalCount]="10" [categoryDictionary]="categoryDictObs | async" [showApproveButton]="true" [showButtons]="true"
+          [totalCount]="10" [categoryDictionary]="categoryDictObs | async"  [categoriesObs]="categoryDictObs"  [showApproveButton]="true" [showButtons]="true"
           [userDict]="userDict" [user]="user" [clientSidePagination]="true" [tagsObs]="tagsObs" [categoriesObs]="categoriesObs"
-          (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)">
+          (approveUnpublishedQuestion)="approveUnpublishedQuestions($event)" (updateUnpublishedQuestions)="updateUnpublishedQuestions($event)" [quillConfig]="quillConfig" [applicationSettings]="applicationSettings">
         </question-table>
       </mat-tab>
     </mat-tab-group>

@@ -15,7 +15,6 @@ export class UtilsCore {
   }
 
   regExpEscape(s: string) {
-    console.log('in here');
     return String(s).replace(/([-()\[\]{}+?*.$\^|,:#<!\\])/g, '\\$1').
       replace(/\x08/g, '\\x08');
   }
@@ -60,6 +59,10 @@ export class UtilsCore {
     }
   }
 
+  getQuestionUrl(image) {
+    return `${CONFIG.functionsUrl}/question/getQuestionImage/${image}`;
+  }
+
   convertIntoDoubleDigit(digit: Number) {
     return (digit < 10) ? `0${digit}` : `${digit}`;
   }
@@ -93,6 +96,9 @@ export class UtilsCore {
 
   public convertMilliSIntoMinutes(millis) {
     return millis / 60000;
+  }
+
+  showMessage(type, message) {
   }
 
 }

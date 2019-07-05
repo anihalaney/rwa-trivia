@@ -8,10 +8,14 @@ export class ApplicationSettings {
     social_profile: Array<SocialProfile>;
     tokens: Tokens;
     earn_bytes_on_question_contribute: number;
+    enabled_rich_editor: boolean;
     display_achievements: boolean;
+    quill_options: { list, options };
+    max_image_size_of_question?: number;
     android_version: number;
     ios_version: number;
     phone_authentication: boolean;
+    game_play_max_time: number[];
     default_names: Array<string>;
     user_display_name_value: number;
 }

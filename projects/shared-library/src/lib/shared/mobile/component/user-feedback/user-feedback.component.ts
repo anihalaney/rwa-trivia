@@ -7,7 +7,6 @@ import { AppState, appState } from './../../../../../../../trivia/src/app/store'
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from 'shared-library/core/services';
-
 @Component({
   selector: 'user-feedback',
   templateUrl: './user-feedback.component.html',

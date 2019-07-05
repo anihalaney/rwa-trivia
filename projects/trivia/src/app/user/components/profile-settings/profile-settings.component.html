@@ -92,18 +92,18 @@
                 <label class="m-r-51">Location {{userType === 0 ? '*': ''}}</label>
                 <div *ngIf="userType === 0" class="input-edit">
                   <input formControlName="location" [placeholder]="userType === 0 ? 'Enter Location' : ''" type="text"
-                    class="required" aria-label="location">
+                  class="required" aria-label="location">
                   <span class="field-edit-icon" *ngIf="!singleFieldEdit.location  && userType === 0"
-                    (click)="editSingleField('location')"></span>
+                  (click)="editSingleField('location')"></span>
                   <span class="field-save-icon"
-                    *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0"
-                    (click)="onSubmit(true, 'location')"></span>
+                  *ngIf="singleFieldEdit.location && userForm.value.location !==''  && userType === 0"
+                  (click)="onSubmit(true, 'location')"></span>
                 </div>
                 <p class="location-info" *ngIf="userType === 0">Where in the world you are</p>
                 <p *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine"
-                  class="error location-error">
-                  Location
-                  is required!</p>
+                class="error location-error">
+                Location
+                is required!</p>
               </div>
             </div>
           </div>
@@ -128,6 +128,11 @@
                     </div>
                   </div>
                 </div>
+              </div>
+              <div class="new-game-btn-container">
+                  <div class="col-md-3 col-xs-6" *ngIf="loggedInUser">
+                      <button *ngIf="loggedInUserAccount &&  isLivesEnable"  class="startgame" (click)="startNewGame()">Start New Game</button>
+                  </div>
               </div>
             </div>
           </div>
@@ -296,11 +301,11 @@
                       </div>
                       <div *ngIf="loggedInUser?.userId && userType === 1" class="col-lg-2 col-sm-12 col-md-3 col-xs-12">
                         <div class="savebox textcenter">
-                          <div *ngIf="gamePlayedAgainst" class="friends-div">
+                          <div *ngIf="user?.isFriend" class="friends-div">
                             <img src="assets/images/friends.png" alt="Friends" />
                             <span class="is-friend-span">Friends</span>
                           </div>
-                          <div *ngIf="!gamePlayedAgainst" (click)="sendFriendRequest()" class="friends-div">
+                          <div *ngIf="!user?.isFriend" (click)="sendFriendRequest()" class="friends-div">
                             <img src="assets/images/send-friend-request.png" alt="Friends" />
                             <span class="send-friend-request-span">Add Friend</span>
                           </div>
