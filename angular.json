@@ -613,20 +613,8 @@
           },
           "configurations": {
             "trivia-dev": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/trivia/environment.dev.ts"
-                }
-              ]
             },
             "trivia-staging": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/trivia/environment.dev.ts"
-                }
-              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -645,12 +633,6 @@
               ]
             },
             "trivia-production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/environment.prod.ts"
-                }
-              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -669,20 +651,8 @@
               ]
             },
             "bitwiser-edu-dev":{
-              "fileReplacements": [
-                {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/bitwiser-edu/environment.dev.ts"
-                }
-              ]
             },
             "bitwiser-edu-staging": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/bitwiser-edu/environment.dev.ts"
-                }
-              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -701,12 +671,6 @@
               ]
             },
             "bitwiser-edu-production": {
-              "fileReplacements": [
-                {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/bitwiser-edu/environment.prod.ts"
-                }
-              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
