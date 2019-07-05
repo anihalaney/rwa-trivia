@@ -1,4 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, QueryList,
+  ViewChild, ViewChildren, ViewContainerRef
+} from '@angular/core';
 import { FormBuilder, NgModel } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as application from 'application';
@@ -18,6 +21,9 @@ import { CoreState, coreState, UIStateActions } from '../../store';
 import { FirebaseAuthService } from './../../auth/firebase-auth.service';
 import { Login } from './login';
 import { Utils } from '../../services';
+import {
+  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
+} from '../../../shared/model';
 
 @Component({
   selector: 'login',
@@ -60,6 +66,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     private phonenumber: PhoneNumberValidationProvider) {
     super(fb, store, cd);
     this.page.actionBarHidden = true;
+
 
     this.input = {
       selectedCountry: 'United States',
@@ -282,8 +289,10 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     this.subscriptions.push(this.store.select(coreState).pipe(
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
-      take(1)).subscribe(() => {
+      take(1)).subscribe((user) => {
+        this.setLoginFirebaseAnalyticsParameter(user);
         this.loader.hide();
+
         this.subscriptions.push(this.store.select(coreState).pipe(
           map(s => s.loginRedirectUrl), take(1)).subscribe(url => {
             const redirectUrl = url ? url : '/dashboard';
@@ -293,6 +302,17 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
           }));
       }
       ));
+  }
+
+
+  setLoginFirebaseAnalyticsParameter(user: User) {
+
+    let analyticsParameter: Parameter[] = [];
+
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
+
+    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOGIN, analyticsParameter);
+
   }
 
   showMessage(type: string, text: string) {
@@ -316,15 +336,15 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
     };
   }
 
-ngOnDestroy() {
-  if (isAndroid) {
-    android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
+  ngOnDestroy() {
+    if (isAndroid) {
+      android.off(AndroidApplication.activityBackPressedEvent, this.handleBackButtonPressCallBack);
+    }
   }
-}
 
   hideKeyboard() {
-   this.textField
-    .toArray()
+    this.textField
+      .toArray()
       .map((el) => {
         if (isAndroid) {
           el.nativeElement.android.clearFocus();

@@ -3,22 +3,26 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { RouterExtensions } from 'nativescript-angular/router';
-import * as gamePlayActions from './../../store/actions';
-import { filter, take } from 'rxjs/operators';
+import { ListViewEventData } from 'nativescript-ui-listview';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { Router, ActivatedRoute } from '@angular/router';
-import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { ListViewEventData } from 'nativescript-ui-listview';
-import { Page } from 'tns-core-modules/ui/page/page';
+import { filter, take } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
+import { coreState } from 'shared-library/core/store';
+import {
+  Category, GameConstant, GameMode, OpponentType, Parameter, PlayerMode,
+  FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
+} from 'shared-library/shared/model';
+import { Page } from 'tns-core-modules/ui/page/page';
+import { RouterExtensions } from 'nativescript-angular/router';
+import * as gamePlayActions from './../../store/actions';
+
 
 @Component({
   selector: 'new-game',
@@ -199,7 +203,50 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     if (this.gameOptions.playerMode === PlayerMode.Single) {
       delete this.gameOptions.opponentType;
     }
+
+    this.setNewGameFirebaseAnalyticsParameter();
+
     this.startNewGame(this.gameOptions);
+  }
+
+  setNewGameFirebaseAnalyticsParameter() {
+
+    let analyticsParameter: Parameter[] = [];
+
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId, analyticsParameter);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.PLAYER_MODE,
+      this.gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT,
+      analyticsParameter
+    );
+
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
+      this.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
+        this.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER,
+      analyticsParameter
+    );
+
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.GAME_MODE,
+      this.gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE,
+      analyticsParameter
+    );
+
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.CATEGORY_IDS,
+      JSON.stringify(this.gameOptions.categoryIds),
+      analyticsParameter
+    );
+
+    const tagsValue = JSON.stringify(this.gameOptions.tags);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.TAGS,
+      tagsValue.substr(0, 100),
+      analyticsParameter
+    );
+
+    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.START_NEW_GAME, analyticsParameter);
   }
 
   selectCategory(args: ListViewEventData) {
@@ -278,6 +325,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   get tagsHeight() {
     return (60 * this.selectedTags.length) + 20;
   }
+
 
 }
 

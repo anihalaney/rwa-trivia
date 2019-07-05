@@ -13,7 +13,12 @@ import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
 import { ReportGameComponent } from './../report-game/report-game.component';
 import { Image } from "tns-core-modules/ui/image";
-import { appConstants } from 'shared-library/shared/model';
+import {
+  appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode, FirebaseScreenNameConstants
+} from 'shared-library/shared/model';
+import {
+  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants
+} from '../../../../../../shared-library/src/lib/shared/model';
 
 @Component({
   selector: 'game-over',
@@ -60,12 +65,108 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       }
       this.cd.markForCheck();
     }));
+
   }
   ngOnInit() {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
+      this.setEndGameFirebaseAnalyticsParameter();
     }
+  }
+
+  setEndGameFirebaseAnalyticsParameter() {
+
+    let analyticsParameter: Parameter[] = [];
+
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.GAME_ID, this.game.gameId, analyticsParameter);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId, analyticsParameter);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.PLAYER_MODE,
+      this.game.gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT,
+      analyticsParameter
+    );
+
+    if (this.game.gameOptions.playerMode === PlayerMode.Opponent) {
+
+      analyticsParameter = this.utils.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
+        this.game.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
+          this.game.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER,
+        analyticsParameter
+      );
+
+      analyticsParameter = this.utils.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.OTHER_USER_ID,
+        this.otherUserId,
+        analyticsParameter
+      );
+
+      analyticsParameter = this.utils.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.OTHER_USER_SCORE,
+        this.game.stats[this.otherUserId].score.toString(),
+        analyticsParameter
+      );
+
+      if (this.game.round < 16 && this.game.stats[this.user.userId].score === this.game.stats[this.otherUserId].score) {
+        analyticsParameter = this.utils.setAnalyticsParameter(
+          FirebaseAnalyticsKeyConstants.IS_TIE,
+          GeneralConstants.TRUE,
+          analyticsParameter
+        );
+      } else {
+        let winPlayerId = this.otherUserId;
+        if (this.game.round < 16 && this.game.stats[this.user.userId].score > this.game.stats[this.otherUserId].score) {
+          winPlayerId = this.user.userId;
+        }
+        analyticsParameter = this.utils.setAnalyticsParameter(
+          FirebaseAnalyticsKeyConstants.WINNER_PLAYER_ID,
+          winPlayerId,
+          analyticsParameter
+        );
+      }
+    } else {
+
+      analyticsParameter = this.utils.setAnalyticsParameter(
+        FirebaseAnalyticsKeyConstants.GAME_STATUS,
+        (this.game.playerQnAs.length - this.game.stats[this.user.userId].score !== 4) ? GeneralConstants.WIN : GeneralConstants.LOST,
+        analyticsParameter
+      );
+
+    }
+
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.USER_SCORE,
+      this.game.stats[this.user.userId].score.toString(),
+      analyticsParameter
+    );
+
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.GAME_MODE,
+      this.game.gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE,
+      analyticsParameter
+    );
+
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.CATEGORY_IDS,
+      JSON.stringify(this.game.gameOptions.categoryIds),
+      analyticsParameter
+    );
+
+    const tagsValue = JSON.stringify(this.game.gameOptions.tags);
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.TAGS,
+      tagsValue.substr(0, 100),
+      analyticsParameter
+    );
+
+    analyticsParameter = this.utils.setAnalyticsParameter(
+      FirebaseAnalyticsKeyConstants.ROUND,
+      this.game.round.toString(),
+      analyticsParameter
+    );
+
+    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.COMPLETED_GAME, analyticsParameter);
   }
 
   shareScore() {
@@ -92,7 +193,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   reMatchGame() {
     if (this.applicationSettings.lives.enable && this.account.lives === 0) {
-      this.utils.showMessage("error", this.liveErrorMsg);
+      this.utils.showMessage('error', this.liveErrorMsg);
     } else {
       this.reMatch();
     }

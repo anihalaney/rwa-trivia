@@ -11,7 +11,7 @@ import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/a
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { Utils } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { profileSettingsConstants } from 'shared-library/shared/model';
+import { profileSettingsConstants, FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
 import { ImageSource } from 'tns-core-modules/image-source';
@@ -29,6 +29,9 @@ import * as geolocation from 'nativescript-geolocation';
 import { filter } from 'rxjs/operators';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { LocactionResetDialogComponent } from './locaction-reset-dialog/locaction-reset-dialog.component';
+import {
+  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants
+} from '../../../../../../shared-library/src/lib/shared/model';
 
 @Component({
   selector: 'profile-settings',
@@ -79,6 +82,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     super(fb, store, userAction, uUtils, cd, route, router);
     this.initDataItems();
     requestPermissions();
+
+
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'SUCCESS') {
         this.uUtils.showMessage('success', 'Profile is saved successfully');
@@ -341,7 +346,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       return;
     }
 
-
     this.checkDisplayName(this.userForm.get('displayName').value);
 
     this.subscriptions.push(this.store.select(userState).pipe(select(s => s.checkDisplayName)).subscribe(status => {
@@ -356,6 +360,11 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
           // get user object from the forms
           this.getUserFromFormValue(isEditSingleField, field);
           this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
+
+          if (this.user.location !== this.userCopyForReset.location) {
+            this.setUserLocationFirebaseAnalyticsParameter(this.user);
+          }
+
           // call saveUser
           console.log(JSON.stringify(this.user));
           this.saveUser(this.user);
@@ -370,6 +379,16 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
     }));
 
+  }
+
+  setUserLocationFirebaseAnalyticsParameter(user: User) {
+
+    let analyticsParameter: Parameter[] = [];
+
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
+    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.LOCATION, user.location, analyticsParameter);
+
+    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION, analyticsParameter);
   }
 
   hideKeyboard() {

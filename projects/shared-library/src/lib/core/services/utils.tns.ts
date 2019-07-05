@@ -2,6 +2,7 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Feedback, FeedbackType, FeedbackPosition } from 'nativescript-feedback';
 import { UtilsCore } from './utilsCore';
 import * as firebase from 'nativescript-plugin-firebase';
+import { Parameter } from '../../shared/model';
 
 @Injectable()
 export class Utils extends UtilsCore {
@@ -37,7 +38,30 @@ export class Utils extends UtilsCore {
     firebase.crashlytics.log(type, error);
     firebase.crashlytics.sendCrashLog(error);
 
+  }
 
+  setAnalyticsParameter(key: string, value: string, analyticsParameter: Array<Parameter>): Array<Parameter> {
+    analyticsParameter.push({ key: key, value: value });
+    return analyticsParameter;
+  }
+
+  sendFirebaseAnalyticsEvents(eventName: string, analyticsParameter: Array<Parameter>) {
+    firebase.analytics.logEvent({
+      key: eventName,
+      parameters: analyticsParameter
+    }).then(() => {
+      console.log(`${eventName} event slogged`);
+    });
+  }
+
+  setScreenNameInFirebaseAnalytics(screenName: string) {
+    firebase.analytics.setScreenName({
+      screenName: screenName
+    }).then(
+      function () {
+        console.log(`${screenName} Screen is added`);
+      }
+    );
   }
 
 }
