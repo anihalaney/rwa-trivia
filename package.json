@@ -13,6 +13,7 @@
     }
   },
   "scripts": {
+    "cli": "node cli.js",
     "ng": "ng",
     "start-trivia": "ng serve trivia --configuration=trivia-dev",
     "start-trivia-admin": "ng serve trivia-admin --configuration=trivia-admin-dev",

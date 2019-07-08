@@ -11,6 +11,7 @@ const firebaseProject = [ "trivia-dev",
     "bitwiser-edu-staging",
     "bitwiser-edu-production"
 ];
+const schedularEnv = ['dev', 'prod'];
 
 let argv;
 let executableCmd = '';
@@ -34,7 +35,7 @@ const commandList = {
                         },
                         "environment" : { 
                             "demand" : true,
-                            "description": 'environment',
+                            "description": 'project environment e.g. production',
                             "type": 'string',
                             "choices":  env
                         }
@@ -46,7 +47,7 @@ const commandList = {
             "options" : { 
                 "projectName" : { 
                     "demand" : true,
-                    "description": 'configuration project name defined in angular.json e.g. trivia',
+                    "description": 'project Name from .firebaserc e.g. trivia-staging',
                     "type": 'string',
                     "choices":  firebaseProject
                 }
@@ -71,7 +72,7 @@ const commandList = {
                 }
             }
         },
-        "prod:deploy-functions":
+        "prod-deploy-functions":
         {
             "command" :  "ng build trivia  --configuration=configProject-production && ng build trivia-admin  --configuration=configProject-production && ng build trivia-editor --configuration=configProject-production && ng run trivia:server && npx rimraf functions/server          && tsc --project functions && npm install firebase@5.2.0 && npx webpack --config webpack.server.config.js && npx cpx dist/index.html functions/dist && npx rimraf dist/index.html && npm run firebase -P projectName functions:config:set environment.production=true && npx rimraf functions/index.js &&  cp functions/app-functions.js functions/index.js && firebase deploy -P projectName                --only functions && npx rimraf functions/index.js && cp functions/ssr-functions.js functions/index.js && firebase deploy -P projectName --only functions:ssr && firebase deploy -P projectName  --only hosting && npm install firebase@6.0.2",
             "description" : "deploy firebase functions to production",
@@ -92,10 +93,10 @@ const commandList = {
         },
         "dev-android":
         {
-            "command" : "tns run android --bundle --env.package_name=packageName --env.project=projectName",
-            "description" : "run android app in dev environment",
+            "command" : "tns run android --bundle --env.package_name=packageName --env.project=configProject",
+            "description" : "run android app in staging environment",
             "options" : { 
-                "projectName" : { 
+                "configProject" : { 
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
@@ -110,10 +111,10 @@ const commandList = {
             }
         },
         "prod-android": {
-            "command" : "tns run android --bundle --env.prod --env.aot --env.uglify --env.package_name=packageName --env.project=projectName",
+            "command" : "tns run android --bundle --env.prod --env.aot --env.uglify --env.package_name=packageName --env.project=configProject",
             "description" :  "run android app in production environment",
             "options" : { 
-                "projectName" : { 
+                "configProject" : { 
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
@@ -128,10 +129,10 @@ const commandList = {
             }
         },
         "release-dev-android": {
-            "command" : "sh release/projectName/dev-android.sh",
+            "command" : "sh release/configProject/dev-android.sh",
             "description" :  "release android app for staging environment",
             "options" : { 
-                "projectName" : { 
+                "configProject" : { 
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
@@ -140,10 +141,10 @@ const commandList = {
             }
         },
         "release-prod-android": {
-            "command" : "sh release/projectName/prod-android.sh",
+            "command" : "sh release/configProject/prod-android.sh",
             "description" : "release android app in production environment",
             "options" : { 
-                "projectName" : { 
+                "configProject" : { 
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
@@ -152,10 +153,10 @@ const commandList = {
             }
         },
         "dev-ios": {
-            "command" : "tns run ios --bundle  --env.package_name=packageName --env.project=projectName",
+            "command" : "tns run ios --bundle  --env.package_name=packageName --env.project=configProject",
             "description" : "run ios app in staging environment",
             "options" : { 
-                "projectName" : { 
+                "configProject" : { 
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
@@ -170,10 +171,10 @@ const commandList = {
             }
         },
         "prod-ios": {
-            "command" : "tns run ios --bundle --env.prod --env.aot --env.uglify --for-device --env.package_name=packageName --env.project=projectName",
+            "command" : "tns run ios --bundle --env.prod --env.aot --env.uglify --for-device --env.package_name=packageName --env.project=configProject",
             "description" : "run ios app in production environment",
             "options" : { 
-                "projectName" : { 
+                "configProject" : { 
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
@@ -188,10 +189,10 @@ const commandList = {
             }
         },
         "release-dev-ios": {
-            "command" : "rm -rf platforms/ios && tns prepare ios --bundle --release  --env.aot --env.uglify --for-device --env.package_name=packageName  --env.project=projectName",
+            "command" : "rm -rf platforms/ios && tns prepare ios --bundle --release  --env.aot --env.uglify --for-device --env.package_name=packageName  --env.project=configProject",
             "description" : "release ios app in staging environment",
             "options" : { 
-                "projectName" : { 
+                "configProject" : { 
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
@@ -206,10 +207,10 @@ const commandList = {
             }
         },
         "release-prod-ios": {
-            "command" : "rm -rf platforms/ios && tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name=packageName  --env.project=projectName",
+            "command" : "rm -rf platforms/ios && tns prepare ios --bundle --release --env.prod --env.aot --env.uglify --for-device --env.package_name=packageName  --env.project=configProject",
             "description" : "release ios app in production environment",
             "options" : { 
-                "projectName" : { 
+                "configProject" : { 
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
@@ -224,14 +225,14 @@ const commandList = {
             }
         },
         "run-schedular": {
-            "command" : "npx rimraf functions/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js environment",
+            "command" : "npx rimraf scheduler/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js schedularEnv",
             "description" : "run schedular for given environment",
             "options" : { 
-                "environment" : { 
+                "schedularEnv" : { 
                     "demand" : true,
-                    "description": 'environment',
+                    "description": 'schedular environment dev/prod',
                     "type": 'string',
-                    "choices":  env
+                    "choices":  schedularEnv
                 }
             }
         }
@@ -266,8 +267,8 @@ function escapeRegExp(string){
 
 function executeCommand(){
     try {
-  //      console.log(executableCmd, 'executableCmd');
-         execSync(executableCmd, {stdio: 'inherit'});
+      // console.log(executableCmd, 'executableCmd');
+       execSync(executableCmd, {stdio: 'inherit'});
     } catch(error) {
         // console.error(error);
     }
