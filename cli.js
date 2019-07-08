@@ -1,7 +1,7 @@
 const execSync = require('child_process').execSync;
 const yargs = require('yargs');
-const projects = ["trivia", "bitwiser-edu", "trivia-admin", "trivia-editor"];
-const configProject = ["trivia", "bitwiser-edu"];
+const projects = ["trivia", "bitwiser-edu", "trivia-admin", "trivia-editor"]; // projects refers to different web application which we need to run
+const configProject = ["trivia", "bitwiser-edu"]; // config project refers to the certain project env in which we need to run the app 
 const env = ['dev', 'staging', 'production'];
 const packageNames = ["io.bitwiser.trivia", "io.bitwiser.trivia.dev", "io.bitwiser.edu.dev"];
 const firebaseProject = [ "trivia-dev",
@@ -17,31 +17,31 @@ let argv;
 let executableCmd = '';
 
 const commandList = {
-    "start": 
-        {   "command" : `ng serve projectName --configuration=configProject-environment`,
-            "description" : "start web/admin/editor app",
-            "options" : { 
-                        "projectName" : { 
-                            "demand" : true,
-                            "description": 'project Name e.g. trivia',
-                            "type": 'string',
-                            "choices":  projects
-                        },
-                        "configProject" : { 
-                            "demand" : true,
-                            "description": 'configuration project name defined in angular.json e.g. trivia',
-                            "type": 'string',
-                            "choices":  configProject
-                        },
-                        "environment" : { 
-                            "demand" : true,
-                            "description": 'project environment e.g. production',
-                            "type": 'string',
-                            "choices":  env
-                        }
-            }
-    },
-    "deploy-functions-local":  
+        "start": 
+            {   "command" : `ng serve projectName --configuration=configProject-environment`,
+                "description" : "start web/admin/editor app",
+                "options" : { 
+                            "projectName" : { 
+                                "demand" : true,
+                                "description": 'project Name e.g. trivia',
+                                "type": 'string',
+                                "choices":  projects
+                            },
+                            "configProject" : { 
+                                "demand" : true,
+                                "description": 'configuration project name defined in angular.json e.g. trivia',
+                                "type": 'string',
+                                "choices":  configProject
+                            },
+                            "environment" : { 
+                                "demand" : true,
+                                "description": 'project environment e.g. production',
+                                "type": 'string',
+                                "choices":  env
+                            }
+                }
+        },
+        "deploy-functions-local":  
         {   "command" : "npx rimraf functions/server & tsc --project functions  && firebase serve -P projectName  --only functions",
             "description" : "deploy firebase functions local",
             "options" : { 
@@ -100,7 +100,7 @@ const commandList = {
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  configProject
                 },
                 "packageName" : { 
                     "demand" : true,
@@ -118,7 +118,7 @@ const commandList = {
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  configProject
                 },
                 "packageName" : { 
                     "demand" : true,
@@ -136,7 +136,7 @@ const commandList = {
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  configProject
                 }
             }
         },
@@ -148,7 +148,7 @@ const commandList = {
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  configProject
                 }
             }
         },
@@ -160,7 +160,7 @@ const commandList = {
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  configProject
                 },
                 "packageName" : { 
                     "demand" : true,
@@ -178,7 +178,7 @@ const commandList = {
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  configProject
                 },
                 "packageName" : { 
                     "demand" : true,
@@ -196,7 +196,7 @@ const commandList = {
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  configProject
                 },
                 "packageName" : { 
                     "demand" : true,
@@ -214,7 +214,7 @@ const commandList = {
                     "demand" : true,
                     "description": 'project Name e.g. trivia',
                     "type": 'string',
-                    "choices":  projects
+                    "choices":  configProject
                 },
                 "packageName" : { 
                     "demand" : true,
