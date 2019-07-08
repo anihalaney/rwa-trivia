@@ -81,6 +81,22 @@ export class UserActions {
     };
   }
 
+  static LOAD_USER_INVITATIONS_INFO = 'LOAD_USER_INVITATIONS_INFO';
+  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string ): ActionWithPayload<{}> {
+    return {
+      type: UserActions.LOAD_USER_INVITATIONS_INFO,
+      payload: {userId, invitedUserEmail, invitedUserId}
+    };
+  }
+
+  static LOAD_USER_INVITATION_INFO_SUCCESS = 'LOAD_USER_INVITATION_INFO_SUCCESS';
+  loadUserInvitationsInfoSuccess(invitation: Invitation): ActionWithPayload<Invitation> {
+    return {
+      type: UserActions.LOAD_USER_INVITATION_INFO_SUCCESS,
+      payload: invitation
+    };
+  }
+
   static LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS = 'LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS';
   loadOtherUserProfileWithExtendedInfoSuccess(user: User): ActionWithPayload<User> {
     return {

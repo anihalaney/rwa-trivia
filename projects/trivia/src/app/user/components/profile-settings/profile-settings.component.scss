@@ -169,7 +169,14 @@ input:disabled { background-color: #fff; }
   flex-direction: column;
   margin-top: -13px;
   cursor: pointer;
+  div{
+    img{
+      width: 62px;
+      height: 62px;
+    }
+  }
 }
+
 
 .is-friend-span{
   margin-top: -13px;

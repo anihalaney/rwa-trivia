@@ -196,6 +196,14 @@ ul li:last-child{ border-bottom: 0 }
 {
   opacity: 1;
 }
+
+.friend-request-sent{
+  background-color: #f50057;
+}
+
+.friends{
+  background-color: #61d461;
+}
 @media (max-width: 768px){
   .yourimg-spacing{
     margin-top:   44px;
