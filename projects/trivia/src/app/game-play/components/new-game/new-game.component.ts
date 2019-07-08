@@ -24,7 +24,7 @@ import { SwiperDirective, SwiperConfigInterface } from 'ngx-swiper-wrapper';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
-  categories: Category[];
+
   sortedCategories: Category[];
   tags: string[];
   subscriptions = [];
@@ -38,7 +38,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   filteredTags$: Observable<string[]>;
 
   friendUserId: string;
-  loaderStatus = false;
+
 
   challengerUserId: string;
   public config: SwiperConfigInterface = {
@@ -60,17 +60,17 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public store: Store<AppState>,
     public gameActions: GameActions,
     private windowRef: WindowRef,
-    private router: Router,
+    public router: Router,
     public route: ActivatedRoute,
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
     public cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions, cd, route);
+    super(store, utils, gameActions, userActions, windowRef, cd, route, router);
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
-        this.redirectToDashboard(gameCreateStatus);
+        this.redirectToDashboard(gameCreateStatus, false);
       }
       this.cd.markForCheck();
     }));
@@ -235,21 +235,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
 
-    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
-      && !this.friendUserId) {
-      if (!this.friendUserId) {
-        this.errMsg = 'Please Select Friend';
-      }
-      this.loaderStatus = false;
-      if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
-        this.windowRef.nativeWindow.scrollTo(0, 0);
-      }
-      return;
-    }
-    if (this.applicationSettings.lives.enable && this.life === 0) {
-      this.redirectToDashboard(this.gameErrorMsg);
-      return false;
-    }
+    this.validateGameOptions()
+
     this.pushAnalyticsData();
     this.startNewGame(gameOptions);
   }
@@ -282,12 +269,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return gameOptions;
   }
 
-  redirectToDashboard(msg) {
-    this.router.navigate(['/dashboard']);
-    this.snackBar.open(String(msg), '', {
-      duration: 2000,
-    });
-  }
+
   ngOnDestroy() {
   }
 

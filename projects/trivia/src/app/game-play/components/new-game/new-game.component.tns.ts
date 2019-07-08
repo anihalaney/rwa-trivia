@@ -1,5 +1,6 @@
 import {
-  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
+  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -18,7 +19,7 @@ import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { ListViewEventData } from 'nativescript-ui-listview';
 import { Page } from 'tns-core-modules/ui/page/page';
-import { Utils } from 'shared-library/core/services';
+import { Utils, WindowRef } from 'shared-library/core/services';
 
 @Component({
   selector: 'new-game',
@@ -36,7 +37,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   showSelectTag = false;
   dataItem;
   categoriesObs: Observable<Category[]>;
-  categories: Category[];
   customTag: string;
   categoryIds: number[] = [];
   private tagItems: ObservableArray<TokenModel>;
@@ -54,12 +54,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public utils: Utils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
-    private router: Router,
+    public router: Router,
     public route: ActivatedRoute,
     public cd: ChangeDetectorRef,
     private page: Page,
+    public windowRef: WindowRef,
     private ngZone: NgZone) {
-    super(store, utils, gameActions, userActions, cd, route);
+    super(store, utils, gameActions, userActions, windowRef, cd, route, router);
     this.initDataItems();
   }
   ngOnInit() {
@@ -72,7 +73,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.gameOptions.opponentType = 1;
           this.gameOptions.isChallenge = true;
           this.friendUserId = data.userid;
-    }}));
+        }
+      }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       if (gameObj && gameObj['gameId']) {
