@@ -41,7 +41,6 @@
             ],
             "scripts": [
               "./node_modules/firebaseui/dist/firebaseui.js",
-              "projects/trivia/src/scripts/google-analytics.js",
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/mathquill/build/mathquill.min.js",
               "./node_modules/highlightjs/highlight.pack.min.js",
