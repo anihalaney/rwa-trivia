@@ -13,7 +13,7 @@ export const CONFIG: IConfig = {
     messagingSenderId: '704157888306'
   },
   'functionsUrl': 'https://bitwiser-edu.firebaseapp.com',
-  'editorUrl': 'https://bitwiser-edu.firebaseapp.com/editor',
+  'editorUrl': 'https://bitwiser-edu.firebaseapp.com/trivia-editor',
   'termsAndConditionsUrl': 'https://bitwiser-edu.io/terms-and-conditions',
   'privacyUrl': 'https://bitwiser-edu.io/terms-and-conditions'
 };

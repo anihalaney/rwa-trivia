@@ -14,7 +14,7 @@ export const CONFIG: IConfig = {
     messagingSenderId: '479350787602'
   },
   'functionsUrl': `https://bitwiser.io`,
-  'editorUrl': 'https://bitwiser.io/editor',
+  'editorUrl': 'https://bitwiser.io/trivia-editor',
   'termsAndConditionsUrl': 'https://bitwiser.io/terms-and-conditions',
   'privacyUrl': 'https://bitwiser.io/terms-and-conditions'
 };
