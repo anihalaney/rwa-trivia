@@ -2,5 +2,6 @@
     "storagebucket":"bitwiser-edu.appspot.com",
     "websiteUrl": "https://bitwiser-edu.com",
     "esPrefix":"edu:",
-    "apiKey": ""
+    "apiKey": "",
+    "feedURL":  "https://blog.realworldfullstack.io/feed"
 }

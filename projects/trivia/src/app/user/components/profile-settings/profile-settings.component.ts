@@ -12,7 +12,7 @@ import { AppState } from '../../../store';
 import { userState } from '../../store';
 import { ProfileSettings } from './profile-settings';
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { LocactionResetDialogComponent } from './locaction-reset-dialog/locaction-reset-dialog.component';
+import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -25,7 +25,7 @@ import { filter } from 'rxjs/operators';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class ProfileSettingsComponent extends ProfileSettings implements OnInit, OnDestroy {
 
-  dialogRef: MatDialogRef<LocactionResetDialogComponent>;
+  dialogRef: MatDialogRef<LocationResetDialogComponent>;
 
   @ViewChild('cropper') cropper: ImageCropperComponent;
   // Properties
@@ -282,7 +282,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnInit,
         this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.coords.latitude},${position.coords.longitude}`));
       }, error => {
         console.log('error', error);
-        this.dialogRef = this.dialog.open(LocactionResetDialogComponent, {
+        this.dialogRef = this.dialog.open(LocationResetDialogComponent, {
           disableClose: false
         });
       });

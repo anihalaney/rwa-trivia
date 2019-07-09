@@ -2,7 +2,7 @@ import { Component, Input, OnInit, SimpleChanges, OnChanges, ChangeDetectorRef }
 import { Question } from "shared-library/shared/model";
 import { LoadEventData } from 'tns-core-modules/ui/web-view';
 import { isAndroid, isIOS } from 'tns-core-modules/platform';
-import { CONFIG } from './../../../environments/environment';
+import { externalUrl } from './../../../environments/external-url';
 @Component({
     selector: 'render-question',
     templateUrl: 'render-question.component.html',
@@ -24,7 +24,7 @@ export class RenderQuestionComponent implements OnInit, OnChanges {
     // tslint:disable-next-line:max-line-length
     htmlStartTag = `<html><head><body style="font-size:18px;font-weight: bold !important;padding-top:10px;vertical-align: middle;text-align:left;"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"> `;
     // tslint:disable-next-line:max-line-length
-    htmlEndTag = `</body><link rel="stylesheet" href="${CONFIG.katexCSSURL}" crossorigin="anonymous"><link rel="stylesheet" href="${CONFIG.hightlighCSSURL}" crossorigin="anonymous"></html>`;
+    htmlEndTag = `</body><link rel="stylesheet" href="${externalUrl.katexCSS}" crossorigin="anonymous"><link rel="stylesheet" href="${externalUrl.hightlighCSS}" crossorigin="anonymous"></html>`;
 
     questionHeight = 0;
     qIndex = '';

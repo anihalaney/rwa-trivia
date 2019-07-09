@@ -4,7 +4,7 @@ import { QuestionAddUpdateComponent } from './question-add-update/question-add-u
 import { MyQuestionsComponent } from './my-questions/my-questions.component';
 import { InviteFriendsDialogComponent } from './invite-friends/invite-friends-dialog/invite-friends-dialog.component';
 import { InviteMailFriendsComponent } from './invite-friends/invite-friends-dialog/invite-mail-friends/invite-mail-friends.component';
-import { LocactionResetDialogComponent } from './profile-settings/locaction-reset-dialog/locaction-reset-dialog.component';
+import { LocationResetDialogComponent } from './profile-settings/location-reset-dialog/location-reset-dialog.component';
 import { PreviewQuestionDialogComponent } from './question-add-update/preview-question-dialog/preview-question-dialog.component';
 
 export {
@@ -14,7 +14,7 @@ export {
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    LocactionResetDialogComponent,
+    LocationResetDialogComponent,
     PreviewQuestionDialogComponent
 };
 
@@ -25,6 +25,6 @@ export default [
     InviteFriendsComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    LocactionResetDialogComponent,
+    LocationResetDialogComponent,
     PreviewQuestionDialogComponent
 ];
