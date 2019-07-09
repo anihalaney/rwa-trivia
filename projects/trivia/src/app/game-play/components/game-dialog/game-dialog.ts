@@ -386,7 +386,8 @@ export class GameDialog {
     this.isGameLoaded = false;
     this.gameOver = true;
     this.showWinBadge = false;
-    this.store.dispatch(new gameplayactions.SetGameOver(this.game.gameId));
+    // tslint:disable-next-line:max-line-length
+    this.store.dispatch(new gameplayactions.SetGameOver({ playedGame: this.game, userId: this.user.userId, otherUserId: this.otherPlayerUserId }));
   }
 
   afterAnswer(userAnswerId?: number) {

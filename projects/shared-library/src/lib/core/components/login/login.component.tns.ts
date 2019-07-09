@@ -290,7 +290,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
       map(s => s.user),
       filter(u => (u != null && u.userId !== '')),
       take(1)).subscribe((user) => {
-        this.setLoginFirebaseAnalyticsParameter(user);
+
         this.loader.hide();
 
         this.subscriptions.push(this.store.select(coreState).pipe(
@@ -305,15 +305,7 @@ export class LoginComponent extends Login implements OnInit, OnDestroy {
   }
 
 
-  setLoginFirebaseAnalyticsParameter(user: User) {
 
-    let analyticsParameter: Parameter[] = [];
-
-    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
-
-    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOGIN, analyticsParameter);
-
-  }
 
   showMessage(type: string, text: string) {
     this.message = {

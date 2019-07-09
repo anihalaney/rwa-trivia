@@ -133,7 +133,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.getUserFromFormValue(false, '');
       this.disableForm();
       this.assignImageValues();
-      this.saveUser(this.user);
+      this.saveUser(this.user, false);
       this.cd.markForCheck();
     }
   }
@@ -221,7 +221,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
             this.singleFieldEdit[field] = false;
           }
           // call saveUser
-          this.saveUser(this.user);
+          this.saveUser(this.user, false);
           this.setNotificationMsg('', false, 0);
           this.cd.markForCheck();
         } else {

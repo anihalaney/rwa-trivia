@@ -198,7 +198,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   saveProfileImage() {
     this.getUserFromFormValue(false, '');
     this.assignImageValues();
-    this.saveUser(this.user);
+    this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
   }
 
   assignImageValues(): void {
@@ -282,12 +282,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
           this.getUserFromFormValue(isEditSingleField, field);
           this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
 
-          if (this.user.location !== this.userCopyForReset.location) {
-            this.setUserLocationFirebaseAnalyticsParameter(this.user);
-          }
-
           // call saveUser
-          this.saveUser(this.user);
+          this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
 
         } else {
           this.userForm.controls['displayName'].setErrors({ 'exist': true });
@@ -301,15 +297,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   }
 
-  setUserLocationFirebaseAnalyticsParameter(user: User) {
-
-    let analyticsParameter: Parameter[] = [];
-
-    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
-    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.LOCATION, user.location, analyticsParameter);
-
-    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION, analyticsParameter);
-  }
 
   hideKeyboard() {
     this.textField

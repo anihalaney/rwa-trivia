@@ -106,7 +106,7 @@ export class ProfileSettings {
         return this.store.select(appState.coreState)
             .pipe(select(s => s.applicationSettings),
                 map(appSettings => {
-                    this.applicationSettings = {...appSettings[0]};
+                    this.applicationSettings = { ...appSettings[0] };
                     this.socialProfileObj = [...appSettings[0].social_profile];
                     this.socialProfileSettings = appSettings[0].social_profile
                         .filter(profile =>
@@ -180,10 +180,10 @@ export class ProfileSettings {
             flatMap(() => this.initializeSocialSetting()),
             map(() => this.cd.markForCheck()),
             flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
-            skipWhile(account => !account || this.loggedInUserAccount === account))),
+                skipWhile(account => !account || this.loggedInUserAccount === account))),
             map((s) => {
-            return this.loggedInUserAccount = s;
-         })
+                return this.loggedInUserAccount = s;
+            })
         );
     }
 
@@ -314,11 +314,11 @@ export class ProfileSettings {
     }
 
     // store the user object
-    saveUser(user: User) {
+    saveUser(user: User, isLocationChanged: boolean) {
         this.toggleLoader(true);
         this.isEnableEditProfile = false;
         this.disableForm();
-        this.store.dispatch(this.userAction.addUserProfile(user));
+        this.store.dispatch(this.userAction.addUserProfile(user, isLocationChanged));
     }
 
     onSocialProfileInputFocus(i) {
@@ -391,7 +391,7 @@ export class ProfileSettings {
 
     get isLivesEnable(): Boolean {
         const isEnable = (this.loggedInUser && this.loggedInUserAccount && this.loggedInUserAccount.lives > 0 &&
-             this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
+            this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
 }
