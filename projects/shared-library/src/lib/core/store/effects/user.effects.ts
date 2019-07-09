@@ -49,6 +49,15 @@ export class UserEffects {
             mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
 
+    @Effect()
+    // handle location update
+    loadUserInvitationsInfo$ = this.actions$
+        .pipe(ofType(UserActions.LOAD_USER_INVITATIONS_INFO))
+        .pipe(map((action: ActionWithPayload<string>) => action.payload),
+            distinct(),
+            mergeMap((data: any) => this.svc.loadUserInvitationsInfo(data.userId, data.invitedUserEmail, data.invitedUserId)),
+            map((invitation: Invitation) => this.userActions.loadUserInvitationsInfoSuccess(invitation)));
+
     // get info if the other user is friend or not
     @Effect()
     loadOtherUserFriendExtendedInfo$ = this.actions$

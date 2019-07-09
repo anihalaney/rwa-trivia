@@ -29,6 +29,20 @@ export function userDict(state: { [key: string]: User } = {}, action: ActionWith
   }
 }
 
+
+export function userFriendInvitations(state: { [key: string]: Invitation } = {}, action: ActionWithPayload<Invitation>): { [key: string]: Invitation } {
+  switch (action.type) {
+    case UserActions.LOAD_USER_INVITATION_INFO_SUCCESS:
+      const invitations = { ...state };
+      if (action.payload) {
+        invitations[action.payload.email] = { ...action.payload };
+      }
+      return invitations;
+    default:
+      return state;
+  }
+}
+
 export function authInitialized(state: any = false, action: ActionWithPayload<any>): boolean {
   switch (action.type) {
     case UserActions.LOGOFF:

@@ -1,5 +1,5 @@
 import { Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
-import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings } from 'shared-library/shared/model';
+import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings, Invitation } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -8,6 +8,7 @@ import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import * as dashboardactions from '../../../dashboard/store/actions';
 import { gamePlayState } from '../../store';
+import { skipWhile, map, flatMap, take } from 'rxjs/operators';
 
 export class GameOver implements OnInit {
 
@@ -39,7 +40,7 @@ export class GameOver implements OnInit {
   applicationSettings: ApplicationSettings;
   liveErrorMsg = 'Sorry, don\'t have enough life.';
   subscriptions = [];
-
+  userInvitations: { [key: string]: Invitation };
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }
@@ -71,10 +72,26 @@ export class GameOver implements OnInit {
     };
     this.store.dispatch(new dashboardactions.LoadSocialScoreShareUrlSuccess(null));
 
-    this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
-    this.subscriptions.push(this.userDict$.subscribe(userDict => {
+    this.subscriptions.push(store.select(appState.coreState).pipe(select(s => s.userDict),
+    map(userDict => {
       this.userDict = userDict;
-    }));
+    }),
+    flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.userFriendInvitations),
+    skipWhile(userInvitations => !(userInvitations && this.game)),
+    take(1),
+    map(userInvitations => {
+      if (this.game && this.userDict[this.otherUserId]) {
+        this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
+        this.otherUserInfo = this.userDict[this.otherUserId];
+        this.cd.markForCheck();
+        this.userInvitations = userInvitations;
+        if (this.user && this.user.email && !this.userInvitations[this.user.email]) {
+          this.store.dispatch(this.userActions.loadUserInvitationsInfo(
+            this.user.userId, this.userDict[this.otherUserId].email, this.otherUserId));
+        }
+      }
+    })
+    ))).subscribe());
 
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.userAnsweredQuestion)).subscribe(stats => {
       if (stats != null) {
