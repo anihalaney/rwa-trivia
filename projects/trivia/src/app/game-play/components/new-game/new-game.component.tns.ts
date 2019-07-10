@@ -186,21 +186,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   startGame() {
     this.gameOptions.tags = this.selectedTags;
     this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
-    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
-      && !this.friendUserId) {
-      if (!this.friendUserId) {
-        this.errMsg = 'Please Select Friend';
-        this.utils.showMessage('error', this.errMsg);
-      }
-      return;
-    }
-    if (this.applicationSettings.lives.enable && this.life === 0) {
-      this.redirectToDashboard(this.gameErrorMsg);
-      return false;
-    }
+    this.validateGameOptions(true, this.gameOptions);
+
     if (this.gameOptions.playerMode === PlayerMode.Single) {
       delete this.gameOptions.opponentType;
     }
+
     this.startNewGame(this.gameOptions);
   }
 

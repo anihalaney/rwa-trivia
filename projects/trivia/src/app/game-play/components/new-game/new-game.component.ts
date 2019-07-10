@@ -59,7 +59,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     public store: Store<AppState>,
     public gameActions: GameActions,
-    private windowRef: WindowRef,
+    public windowRef: WindowRef,
     public router: Router,
     public route: ActivatedRoute,
     public userActions: UserActions,
@@ -70,7 +70,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
-        this.redirectToDashboard(gameCreateStatus, false);
+        this.redirectToDashboard(gameCreateStatus);
       }
       this.cd.markForCheck();
     }));
@@ -235,23 +235,9 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
 
-    this.validateGameOptions()
+    this.validateGameOptions(false, gameOptions);
 
-    this.pushAnalyticsData();
     this.startNewGame(gameOptions);
-  }
-
-  pushAnalyticsData() {
-    if (this.windowRef.isDataLayerAvailable()) {
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId);
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
-        this.gameOptions.opponentType === OpponentType.Random ? GameConstants.RANDOM : GameConstants.FRIEND);
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_MODE,
-        this.gameOptions.gameMode === GameMode.Normal ? GameConstants.NORMAL : GameConstants.OFFLINE);
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.CATEGORY_IDS, JSON.stringify(this.gameOptions.categoryIds));
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.TAGS, JSON.stringify(this.gameOptions.tags));
-      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.START_NEW_GAME);
-    }
   }
 
 

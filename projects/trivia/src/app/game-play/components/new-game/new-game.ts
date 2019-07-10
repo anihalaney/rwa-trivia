@@ -43,7 +43,7 @@ export class NewGame implements OnDestroy {
     public windowRef: WindowRef,
     public cd: ChangeDetectorRef,
     public route: ActivatedRoute,
-    public router: RouterÎ) {
+    public router: Router) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories), take(1));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
@@ -102,7 +102,7 @@ export class NewGame implements OnDestroy {
   }
 
   validateGameOptions(isMobile: boolean, gameOptions: GameOptions) {
-    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
+    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
       && !this.friendUserId) {
       if (!this.friendUserId) {
         this.errMsg = 'Please Select Friend';
@@ -119,18 +119,15 @@ export class NewGame implements OnDestroy {
     }
 
     if (this.applicationSettings.lives.enable && this.life === 0) {
-      this.redirectToDashboard(this.gameErrorMsg, isMobile);
+      this.redirectToDashboard(this.gameErrorMsg);
       return false;
     }
   }
 
-  redirectToDashboard(msg, isMobile: boolean) {
+  redirectToDashboard(msg) {
     this.router.navigate(['/dashboard']);
-    if (isMobile) {
-      this.utils.showMessage('success', msg);
-    } else {
-      this.utils.showMessage(msg);
-    }
+    this.utils.showMessage('success', msg);
+
   }
 
   startNewGame(gameOptions: GameOptions) {

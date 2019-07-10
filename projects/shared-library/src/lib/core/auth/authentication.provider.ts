@@ -20,15 +20,13 @@ export class AuthenticationProvider {
     private uiStateActions: UIStateActions,
     @Inject(PLATFORM_ID) private platformId: Object,
     @Inject(APP_ID) private appId: string,
-    private firebaseAuthService: FirebaseAuthService,
-    private windowRef: WindowRef) {
+    private firebaseAuthService: FirebaseAuthService) {
 
     this.firebaseAuthService.authState().subscribe(afUser => {
       if (afUser) {
         this.firebaseAuthService.getIdToken(afUser, false).then((token) => {
           this.user = new User(afUser);
           this.user.idToken = token;
-          this.pushAnalyticsData();
           this.store.dispatch(this.userActions.loginSuccess(this.user));
         });
       } else {
@@ -43,13 +41,6 @@ export class AuthenticationProvider {
     }).pipe(share());
 
 
-  }
-
-  pushAnalyticsData() {
-    if (this.windowRef.isDataLayerAvailable()) {
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId);
-      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOGIN);
-    }
   }
 
   ensureLogin(url?: string): Observable<boolean> {

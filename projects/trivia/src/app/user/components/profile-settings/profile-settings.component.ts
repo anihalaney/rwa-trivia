@@ -133,7 +133,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       this.getUserFromFormValue(false, '');
       this.disableForm();
       this.assignImageValues();
-      this.saveUser(this.user);
+      this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
       this.cd.markForCheck();
     }
   }
@@ -221,11 +221,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
             this.singleFieldEdit[field] = false;
           }
 
-          if (this.user.location !== this.userCopyForReset.location) {
-            this.pushAnalyticsData();
-          }
           // call saveUser
-          this.saveUser(this.user);
+          this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
           this.setNotificationMsg('', false, 0);
           this.cd.markForCheck();
         } else {

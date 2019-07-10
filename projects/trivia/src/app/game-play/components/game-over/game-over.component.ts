@@ -84,49 +84,10 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
     if (this.game) {
       this.otherUserId = this.game.playerIds.filter(userId => userId !== this.user.userId)[0];
       this.otherUserInfo = this.userDict[this.otherUserId];
-      this.pushAnalyticsData();
     }
   }
 
-  pushAnalyticsData() {
-    if (this.windowRef.isDataLayerAvailable()) {
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_ID, this.game.gameId);
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId);
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.PLAYER_MODE,
-        this.game.gameOptions.playerMode === PlayerMode.Single ? GameConstants.SINGLE : GameConstants.OPPONENT);
 
-      if (this.game.gameOptions.playerMode === PlayerMode.Opponent) {
-        this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
-          this.game.gameOptions.opponentType === OpponentType.Random ? GameConstants.RANDOM : GameConstants.FRIEND);
-        this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OTHER_USER_ID, this.otherUserId);
-        this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.OTHER_USER_SCORE,
-          this.game.stats[this.otherUserId].score.toString());
-
-        if (this.game.round < 16 && this.game.stats[this.user.userId].score === this.game.stats[this.otherUserId].score) {
-          this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.IS_TIE, GeneralConstants.TRUE);
-        } else {
-          let winPlayerId = this.otherUserId;
-          if (this.game.round < 16 && this.game.stats[this.user.userId].score > this.game.stats[this.otherUserId].score) {
-            winPlayerId = this.user.userId;
-          }
-          this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.WINNER_PLAYER_ID, winPlayerId);
-        }
-
-      } else {
-        this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_STATUS,
-          (this.game.playerQnAs.length - this.game.stats[this.user.userId].score !== 4) ? GeneralConstants.WIN : GeneralConstants.LOST);
-      }
-
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.USER_SCORE,
-        this.game.stats[this.user.userId].score.toString());
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.GAME_MODE,
-        this.game.gameOptions.gameMode === GameMode.Normal ? GameConstants.NORMAL : GameConstants.OFFLINE);
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.CATEGORY_IDS, JSON.stringify(this.game.gameOptions.categoryIds));
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.TAGS, JSON.stringify(this.game.gameOptions.tags));
-      this.windowRef.addAnalyticsParameters(FirebaseAnalyticsKeyConstants.ROUND, this.game.round.toString());
-      this.windowRef.pushAnalyticsEvents(FirebaseAnalyticsEventConstants.COMPLETED_GAME);
-    }
-  }
 
 
   reportQuestion(question) {
