@@ -3,7 +3,7 @@ import { User, Category, Question, Game, Friends, Invitation, Account } from 'sh
 import {
   user, authInitialized, invitationToken, userDict,
   gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
-  addressUsingLongLat, addressSuggestions
+  addressUsingLongLat, addressSuggestions, userFriendInvitations
 } from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
@@ -48,6 +48,7 @@ export interface CoreState {
   countries: Country[];
   addressUsingLongLat: any;
   addressSuggestions: any;
+  userFriendInvitations: { [key: string]: Invitation };
 }
 
 export const reducer: ActionReducerMap<CoreState> = {
@@ -75,7 +76,8 @@ export const reducer: ActionReducerMap<CoreState> = {
   getGameResult: getGameResult,
   countries: countries,
   addressUsingLongLat: addressUsingLongLat,
-  addressSuggestions: addressSuggestions
+  addressSuggestions: addressSuggestions,
+  userFriendInvitations: userFriendInvitations
 };
 
 // Features
