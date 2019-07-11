@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AnalyticsEventConstants } from 'shared-library/shared/model';
+import { CONFIG } from '../../environments/environment';
 
 function _window(): any {
     // return the global native browser window object
@@ -22,7 +23,7 @@ export class WindowRef {
 
     addNavigationsInAnalytics(evt: any) {
         if (this.nativeWindow.ga) {
-            gtag('config', 'UA-122807814-1', { 'page_path': evt.urlAfterRedirects });
+            gtag('config', CONFIG.ua_id, { 'page_path': evt.urlAfterRedirects });
             //  gtag('config', 'UA-122966274-1', { 'page_path': evt.urlAfterRedirects });
         }
     }

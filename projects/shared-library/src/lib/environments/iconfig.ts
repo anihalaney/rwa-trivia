@@ -7,4 +7,5 @@ export interface IConfig {
   hightlighJsURL: string;
   hightlighCSSURL: string;
   katexCSSURL: string;
+  ua_id: string;
 }

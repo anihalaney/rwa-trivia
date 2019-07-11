@@ -18,16 +18,17 @@ export const CONFIG: IConfig = {
   },
   'functionsUrl': `https://bitwiser-edu.firebaseapp.com`,
   'editorUrl': 'https://bitwiser-edu.firebaseapp.com/editor',
-  'hightlighJsURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js',
-  'hightlighCSSURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css',
-  'katexCSSURL' : 'https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css',
-  };
+  'hightlighJsURL': 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js',
+  'hightlighCSSURL': 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css',
+  'katexCSSURL': 'https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css',
+  'ua_id': 'UA-122807814-1'
+};
 
 export const projectMeta = {
-    projectName: 'bitwiser-edu',
-    projectDisplayName: 'Bitwiser-edu',
-    title: 'bitwiser.io: get wiser - bit by bit',
-    playStoreUrl: '',
-    appStoreUrl: '',
-    blogUrl: 'https://bitwiser.io'
+  projectName: 'bitwiser-edu',
+  projectDisplayName: 'Bitwiser-edu',
+  title: 'bitwiser.io: get wiser - bit by bit',
+  playStoreUrl: '',
+  appStoreUrl: '',
+  blogUrl: 'https://bitwiser.io'
 };
