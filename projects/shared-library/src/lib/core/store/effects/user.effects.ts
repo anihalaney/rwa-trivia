@@ -3,7 +3,7 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../../shared/model';
 import { UserService, GameService } from '../../services';
-import { switchMap, map, distinct, mergeMap, filter, take } from 'rxjs/operators';
+import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
@@ -198,12 +198,12 @@ export class UserEffects {
     addFeedback$ = this.actions$
         .pipe(ofType(UserActions.ADD_FEEDBACK))
         .pipe(map((action: ActionWithPayload<any>) => action.payload),
-        switchMap((feedback: any) => this.svc.addFeedback(feedback)),
-        map((res: any) => this.userActions.addFeedbackSuccess()));
+            switchMap((feedback: any) => this.svc.addFeedback(feedback)),
+            map((res: any) => this.userActions.addFeedbackSuccess()));
 
     // Get Country
     @Effect()
-        getCountries$ = this.actions$
+    getCountries$ = this.actions$
         .pipe(ofType(UserActions.GET_COUNTRIES))
         .pipe(
             switchMap(() => {
@@ -236,6 +236,28 @@ export class UserEffects {
                 this.gameService.getGameResult(action.payload)
                     .pipe(map((games: Game[]) => this.userActions.getGameResultSuccess(games)))
             )
+        );
+
+    @Effect()
+    loadAddressUsingLatLong = this.actions$
+        .pipe(ofType(UserActions.LOAD_ADDRESS_USING_LAT_LONG))
+        .pipe(
+            switchMap((action: ActionWithPayload<any>) =>
+                this.svc.getAddressByLatLang(action.payload).pipe(
+                    map((result: any) => this.userActions.loadAddressUsingLatLongSuccess(result))
+                ))
+        );
+
+    @Effect()
+    loadAddressSuggestions = this.actions$
+        .pipe(ofType(UserActions.LOAD_ADDRESS_SUGGESTIONS))
+        .pipe(
+            debounceTime(2000),
+            distinctUntilChanged(),
+            switchMap((action: ActionWithPayload<any>) =>
+                this.svc.getAddressSuggestions(action.payload).pipe(
+                    map((result: any) => this.userActions.loadAddressSuggestionsSuccess(result))
+                ))
         );
 
     constructor(

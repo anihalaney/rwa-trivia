@@ -101,13 +101,14 @@ export class ProfileSettings {
                     }
                 })
             ).subscribe());
+
     }
 
     initializeSocialSetting() {
         return this.store.select(appState.coreState)
             .pipe(select(s => s.applicationSettings),
                 map(appSettings => {
-                    this.applicationSettings = {...appSettings[0]};
+                    this.applicationSettings = { ...appSettings[0] };
                     this.socialProfileObj = [...appSettings[0].social_profile];
                     this.socialProfileSettings = appSettings[0].social_profile
                         .filter(profile =>
@@ -191,10 +192,10 @@ export class ProfileSettings {
             flatMap(() => this.initializeSocialSetting()),
             map(() => this.cd.markForCheck()),
             flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
-            skipWhile(account => !account || this.loggedInUserAccount === account))),
+                skipWhile(account => !account || this.loggedInUserAccount === account))),
             map((s) => {
-            return this.loggedInUserAccount = s;
-         })
+                return this.loggedInUserAccount = s;
+            })
         );
     }
 
@@ -396,13 +397,33 @@ export class ProfileSettings {
         this.store.dispatch(new userActions.CheckDisplayName(displayName));
     }
 
+    getCityAndCountryName(location) {
+
+        const userLocation: string[] = [];
+        if (location.results) {
+            location.results[0].address_components.map(component => {
+                const cityList = component.types.filter(typeName => typeName === 'administrative_area_level_2');
+                if (cityList.length > 0) {
+                    userLocation.push(component.long_name);
+                }
+                const countryList = component.types.filter(typeName => typeName === 'country');
+                if (countryList.length > 0) {
+                    userLocation.push(component.long_name);
+                }
+            });
+            return userLocation.toString();
+        } else {
+            return '';
+        }
+    }
+
     startNewGame() {
         this.router.navigate(['/game-play/challenge/', this.user.userId]);
     }
 
     get isLivesEnable(): Boolean {
         const isEnable = (this.loggedInUser && this.loggedInUserAccount && this.loggedInUserAccount.lives > 0 &&
-             this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
+            this.applicationSettings.lives.enable) || (!this.applicationSettings.lives.enable) ? true : false;
         return isEnable;
     }
 }

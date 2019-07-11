@@ -131,21 +131,39 @@ export function account(state: any = null, action: ActionWithPayload<any>) {
 }
 
 export function getGameResult(state: any = [], action: ActionWithPayload<any>):
-    Game[] {
-    switch (action.type) {
-        case UserActions.GET_GAME_RESULT_SUCCESS:
-            return action.payload;
-        default:
-            return state;
-    }
+  Game[] {
+  switch (action.type) {
+    case UserActions.GET_GAME_RESULT_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
 }
 
 // Load Countries
 export function countries(state: any = [], action: ActionWithPayload<any[]>): Country[] {
   switch (action.type) {
-      case UserActions.LOAD_COUNTRIES_SUCCESS:
-          return action.payload;
-      default:
-          return state;
+    case UserActions.LOAD_COUNTRIES_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
+export function addressUsingLongLat(state: any = null, action: ActionWithPayload<any[]>): any {
+  switch (action.type) {
+    case UserActions.LOAD_ADDRESS_USING_LAT_LONG_SUCCESS:
+      return action.payload;
+    default:
+      return null;
+  }
+}
+
+export function addressSuggestions(state: any = null, action: ActionWithPayload<any[]>): any {
+  switch (action.type) {
+    case UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS:
+      return action.payload;
+    default:
+      return null;
   }
 }

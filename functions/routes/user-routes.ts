@@ -39,6 +39,14 @@ class UserRoutes {
             `/${RoutesConstants.CHECK}/${RoutesConstants.DISPLAY_NAME}/:${RoutesConstants.DISPLAY_DASH_NAME}`,
             AuthMiddleware.authorizedOnly, UserController.checkDisplayName);
 
+        // `/addressSuggestion/:location`
+        this.userRoutes.get(`/${RoutesConstants.ADDRESS_SUGGESTION}/:${RoutesConstants.LOCATION}`,
+            AuthMiddleware.authorizedOnly, UserController.addressSuggestion);
+
+        // `/addressByLatLang/:latLong` 
+        this.userRoutes.get(`/${RoutesConstants.ADDRESS_BY_LAT_LANG}/:${RoutesConstants.LAT_LONG}`,
+            AuthMiddleware.authorizedOnly, UserController.addressByLatLang);
+
     }
 }
 

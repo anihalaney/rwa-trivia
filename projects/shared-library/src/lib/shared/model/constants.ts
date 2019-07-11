@@ -18,11 +18,6 @@ export enum TriggerConstants {
     fromUser = 'support@trivia.com'
 }
 
-export enum RSSFeedConstants {
-    feedURL = 'https://blog.realworldfullstack.io/feed'
-}
-
-
 export enum UserControllerConstants {
     adminEmail = 'akshay@emaxers.com',
     mailTxt = 'Please allow access of bulk upload to below user',
@@ -361,15 +356,12 @@ export enum RoutesConstants {
     RULES = 'rules',
     GET_QUESTION_IMAGE = 'getQuestionImage',
     UPLOAD_QUESTION_IMAGE = 'uploadQuestionImage',
-
     DISPLAY_NAME = 'display-name',
     DISPLAY_DASH_NAME = 'displayName',
-    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat'
+    UPDATE_USER_GAME_PLAYED_WITH_STAT = 'updateusergameplayedwithstat',
+    ADDRESS_BY_LAT_LANG = 'addressByLatLang',
+    LOCATION = 'location',
+    LAT_LONG = 'latLong',
+    ADDRESS_SUGGESTION = 'addressSuggestion',
 }
-
-export enum TermsAndPrivacyUrlConstant {
-    TERMSANDCONDITIONSURL = 'https://bitwiser.io/terms-and-conditions',
-    PRIVACYURL = 'https://bitwiser.io/terms-and-conditions'
-}
-
 

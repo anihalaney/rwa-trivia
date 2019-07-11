@@ -3,7 +3,6 @@ import { Question } from 'shared-library/shared/model';
 
 @Component({
     selector: 'render-question',
-    moduleId: module.id,
     templateUrl: 'render-question.component.html',
     styleUrls: ['render-question.component.css']
 })

@@ -9,7 +9,6 @@ import { CONFIG } from './../../environments/environment';
 import { DbService } from './../db-service';
 import { Utils } from './utils';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
-import { BlockScrollStrategy } from '@angular/cdk/overlay';
 
 @Injectable()
 export class UserService {
@@ -46,25 +45,25 @@ export class UserService {
     }
 
     getOtherUserGamePlayedStat(userId: string, friendList: string[]): Observable<any> {
-      const gamesPlayedWithObs =  friendList.map( friendId =>
-        this.dbService.valueChanges('users', `/${userId}/game_played_with/${friendId}`));
+        const gamesPlayedWithObs = friendList.map(friendId =>
+            this.dbService.valueChanges('users', `/${userId}/game_played_with/${friendId}`));
         return combineLatest(gamesPlayedWithObs)
-        .pipe(map((values) => {
-            return values.map((value, index) => {
-                if (value) {
-                    value['userId'] = friendList[index];
-                    return value;
-                } else {
-                    value = {};
-                    value.created_uid = friendList[index];
-                    return value;
-                }
+            .pipe(map((values) => {
+                return values.map((value, index) => {
+                    if (value) {
+                        value['userId'] = friendList[index];
+                        return value;
+                    } else {
+                        value = {};
+                        value.created_uid = friendList[index];
+                        return value;
+                    }
                 });
-        }),
-        catchError(error => {
-            console.log(error);
-            return of(null);
-        }));
+            }),
+                catchError(error => {
+                    console.log(error);
+                    return of(null);
+                }));
     }
 
     loadAccounts(user): Observable<any> {
@@ -222,4 +221,13 @@ export class UserService {
         return this.http.get<any>(url);
     }
 
+    getAddressByLatLang(latlong) {
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_BY_LAT_LANG}/${latlong}`;
+        return this.http.get<any>(url);
+    }
+
+    getAddressSuggestions(address) {
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_SUGGESTION}/${address}`;
+        return this.http.get<any>(url);
+    }
 }

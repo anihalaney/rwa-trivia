@@ -288,4 +288,37 @@ export class UserActions {
       payload: games
     };
   }
+
+  static LOAD_ADDRESS_USING_LAT_LONG = 'LOAD_ADDRESS_USING_LAT_LONG';
+  loadAddressUsingLatLong(latLong: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_ADDRESS_USING_LAT_LONG,
+      payload: latLong
+    };
+  }
+
+  static LOAD_ADDRESS_USING_LAT_LONG_SUCCESS = 'LOAD_ADDRESS_USING_LAT_LONG_SUCCESS';
+  loadAddressUsingLatLongSuccess(location: any[]): ActionWithPayload<any[]> {
+    return {
+      type: UserActions.LOAD_ADDRESS_USING_LAT_LONG_SUCCESS,
+      payload: location
+    };
+  }
+
+  static LOAD_ADDRESS_SUGGESTIONS = 'LOAD_ADDRESS_SUGGESTIONS';
+  loadAddressSuggestions(location: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_ADDRESS_SUGGESTIONS,
+      payload: location
+    };
+  }
+
+  static LOAD_ADDRESS_SUGGESTIONS_SUCCESS = 'LOAD_ADDRESS_SUGGESTIONS_SUCCESS';
+  loadAddressSuggestionsSuccess(suggestions: any[]): ActionWithPayload<any[]> {
+    return {
+      type: UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS,
+      payload: suggestions
+    };
+  }
+
 }
