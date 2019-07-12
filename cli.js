@@ -53,7 +53,7 @@ const commandList = {
                 "description": 'project Name e.g. trivia',
                 "type": 'string',
                 "choices": projects,
-                "default" : 'trivia-admin',
+                "default" : 'trivia',
                 "alias": ['P', 'p']
             },
             "productVariant": {

@@ -5,7 +5,7 @@ before any command.
 1) add command "cli": "node cli.js" to run the script 
 
 2) to pass the arguments to script we need to prepand "--" to the arguments.
-    e.g. npm run cli serve -- --projectName=trivia --configProject=trivia --environment=dev
+    e.g. node cli.js serve --p=trivia --pv=trivia --e=dev
 
 3) to add new command
     add command in cli.js
@@ -36,42 +36,44 @@ before any command.
         }
     }
 
-4) get help related to any command npm run cli <command> -- -h 
-    e.g. npm run cli start -- -h
+4) get help related to any command node cli.js <command> -h 
+    e.g. node cli.js start -h
+
+5) get command list : node clis.js
 
 Commands :
 
 1)  command: run-web
     description:  this command is used to start web application (trivia, trivia-admin, trivia-editor)
-    e.g.       :  npm run cli start -- --projectName trivia-admin --configProject bitwiser-edu --environment production     
-    arguments  :  projectName = the project to be run e.g. trivia-admin
-                  configProject and enviroment = configuration project name defined in angular.json e.g. bitwiser-edu-dev
-                  where bitwiser-edu is configProject and dev is environment 
+    e.g.       :  node cli.js start --p trivia-admin --pv bitwiser-edu --e production     
+    arguments  :  p = the project to be run e.g. trivia-admin
+                  pv  =  product variant 
+                  e = environment 
 
 2) command: run-functions
-    e.g.       :  npm run cli run-functions -- --projectName trivia-staging
+    e.g.       :  node cli.js run-functions --p trivia-staging
     description:  this command is used to start firebase functions in local
-    arguments  : projectName = project Name from .firebaserc e.g. trivia-staging
+    arguments  : p = project Name from .firebaserc e.g. trivia-staging
 
 
 3) command: deploy-functions
-    e.g.       :  npm run cli deploy-functions -- --projectName trivia-staging --configProject trivia  --environment staging
+    e.g.       :  node cli.js deploy-functions --p trivia-staging --pv trivia  --e staging
     description:  deploy firebase functions to staging/production env
-    arguments  :  projectName = project Name from .firebaserc e.g. trivia-staging
-                  configProject = configuration project name defined in angular.json e.g. trivia
-                  environment = project environment e.g. staging
+    arguments  :  p = project Name from .firebaserc e.g. trivia-staging
+                  pv = product variant
+                  e = project environment e.g. staging
 
 4) command: run-mobile
     description:  run android/ios app in staging/production environment
-    e.g.       :  npm run cli run-mobile -- --configProject trivia --packageName io.bitwiser.trivia.dev --platform android --environment                   staging
-    arguments  :  configProject = project Name e.g. trivia
-                  packageName = project package name defined in firebase e.g. io.bitwiser.trivia.dev
-                  platform = Mobile platform e.g. android
-                  environment = project environment
+    e.g.       :  node cli.js run-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e                   staging
+    arguments  :  pv = project Name e.g. trivia
+                  pk = project package name defined in firebase e.g. io.bitwiser.trivia.dev
+                  plt = Mobile platform e.g. android
+                  e = project environment
 
 
 5) command: run-schedular
-    e.g.       :  npm run cli run-schedular -- --schedularEnv prod
+    e.g.       :  node cli.js run-schedular --se prod
     description:  run schedular for given environment
-    arguments  :  schedularEnv = schedular environment dev/prod
+    arguments  :  se = schedular environment dev/prod
 
