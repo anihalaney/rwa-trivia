@@ -67,5 +67,10 @@
     </array>
 	<key>NSPhotoLibraryUsageDescription</key>
     <string>Please allow gallery access</string>
+	<key>NSLocationUsageDescription</key>
+	<string>App would like to access your location to offer you suggestion for current location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App would like to access your location to offer you suggestion for current location</string>
+
 </dict>
 </plist>

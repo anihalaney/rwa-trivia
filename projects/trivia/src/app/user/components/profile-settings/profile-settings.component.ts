@@ -1,16 +1,19 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { CropperSettings, ImageCropperComponent } from 'ngx-img-cropper';
-import { Subscription } from 'rxjs';
-import { UserService, Utils, WindowRef } from 'shared-library/core/services';
+import { Subscription, Subject } from 'rxjs';
+import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
 import { profileSettingsConstants, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from 'shared-library/shared/model';
 import { AppState } from '../../../store';
 import { userState } from '../../store';
 import { ProfileSettings } from './profile-settings';
+import { MatDialogRef, MatDialog } from '@angular/material';
+import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'profile-settings',
@@ -20,7 +23,9 @@ import { ProfileSettings } from './profile-settings';
 })
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
-export class ProfileSettingsComponent extends ProfileSettings implements OnDestroy {
+export class ProfileSettingsComponent extends ProfileSettings implements OnInit, OnDestroy {
+
+  dialogRef: MatDialogRef<LocationResetDialogComponent>;
 
   @ViewChild('cropper') cropper: ImageCropperComponent;
   // Properties
@@ -30,6 +35,9 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   subscriptions = [];
   checkUserSubscriptions: Subscription;
   isValidDisplayName: boolean = null;
+  locationTerm$ = new Subject<string>();
+  locations = [];
+  // protected captains = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock', 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett' ];
 
   constructor(public fb: FormBuilder,
     public store: Store<AppState>,
@@ -37,7 +45,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     public userAction: UserActions,
     public cd: ChangeDetectorRef,
     public utils: Utils,
-    private userService: UserService,
+    public dialog: MatDialog,
     public route: ActivatedRoute,
     public router: Router) {
 
@@ -61,7 +69,24 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
       }
       this.cd.markForCheck();
     }));
-    // }
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(u => u.addressUsingLongLat), filter(location => !!location))
+      .subscribe(location => {
+        if (location) {
+          this.userForm.patchValue({ location: this.getCityAndCountryName(location) });
+        }
+      }));
+
+    this.subscriptions.push(this.store.select(coreState).pipe(select(u => u.addressSuggestions), filter(location => !!location))
+      .subscribe(locations => {
+        this.locations = [];
+        locations.predictions.map(location => {
+          const city = location.terms[0].value;
+          const country = location.terms[(location.terms.length - 1)].value;
+          this.locations.push(`${city}, ${country}`);
+        });
+        this.cd.markForCheck();
+      }));
 
   }
 
@@ -73,6 +98,15 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
     }
   }
 
+  ngOnInit(): void {
+  }
+
+  locationChanged(result): void {
+    if (result) {
+      this.store.dispatch(this.userAction.loadAddressSuggestions(result));
+    }
+
+  }
 
   private setCropperSettings() {
     this.cropperSettings = new CropperSettings();
@@ -250,6 +284,19 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   ngOnDestroy() {
 
+  }
+
+  getLocation() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.store.dispatch(this.userAction.loadAddressUsingLatLong(`${position.coords.latitude},${position.coords.longitude}`));
+      }, error => {
+        console.log('error', error);
+        this.dialogRef = this.dialog.open(LocationResetDialogComponent, {
+          disableClose: false
+        });
+      });
+    }
   }
 
 }

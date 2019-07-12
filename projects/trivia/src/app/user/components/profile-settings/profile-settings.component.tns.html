@@ -1,12 +1,12 @@
 <ns-action-bar title="Profile" class="Roboto-Regular" showAdd="true"></ns-action-bar>
 <StackLayout iosOverflowSafeArea="false">
-  <ActivityIndicator visibility="{{ loaderBusy ? 'visible' : 'collapsed' }}" [busy]="loaderBusy" width="100"
-    height="100" marginTop="225" class="activity-indicator"></ActivityIndicator>
+  <ActivityIndicator visibility="{{ loaderBusy ? 'visible' : 'collapsed' }}" [busy]="loaderBusy" width="100" height="100"
+    marginTop="225" class="activity-indicator"></ActivityIndicator>
   <ScrollView visibility="{{ !loaderBusy ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
     <StackLayout *ngIf="userForm" [formGroup]="userForm" iosOverflowSafeArea="false">
       <StackLayout (tap)="hideKeyboard()" class="profile-settings Roboto-Regular" iosOverflowSafeArea="false">
-        <CardView class="profile-settings-card gameplay" margin="5" android:elevation="20" ios:elevation="40"
-          radius="15" iosOverflowSafeArea="false">
+        <CardView class="profile-settings-card gameplay" margin="5" android:elevation="20" ios:elevation="40" radius="15"
+          iosOverflowSafeArea="false">
           <StackLayout class="cardStyle" backgroundColor="#ffffff" height="100%" padding="0 10" margin="10">
 
             <StackLayout class="input-field" iosOverflowSafeArea="false">
@@ -27,41 +27,51 @@
                 <Label *ngIf="!singleFieldEdit.displayName && userType === 0" (tap)="editSingleField('displayName')"
                   row="0" col="1" android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
                   horizontalAlignment="right" class="fas" text="&#xf303;"></Label>
-                <Label *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0"
-                  (tap)="onSubmit(true, 'displayName')" row="0" col="1" android:marginTop="22" color="#71b02b"
-                  android:marginRight="2" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
-                  text="&#xf14a;"></Label>
+                <Label *ngIf="singleFieldEdit.displayName && userForm.value.displayName !=='' && userType === 0" (tap)="onSubmit(true, 'displayName')"
+                  row="0" col="1" android:marginTop="22" color="#71b02b" android:marginRight="2" ios:marginTop="8"
+                  fontSize="24" horizontalAlignment="right" class="fa" text="&#xf14a;"></Label>
               </GridLayout>
-              <Label
-                *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
+              <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.required && !userForm.controls.displayName.pristine"
                 class=" error" textWrap="true" text="Display Name is required!"></Label>
-              <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist"
-                class=" error" textWrap="true" text="Display Name is already taken by other user"></Label>
+              <Label *ngIf="userForm.controls.displayName.errors && userForm.controls.displayName.errors.exist" class=" error"
+                textWrap="true" text="Display Name is already taken by other user"></Label>
               <GridLayout row="*" col="*, auto" orientation="horizontal" margin="0 20">
-                <TextField #textField hint="{{userType ===  0 ? 'Location' : 'Undefined'}}" formControlName="location"
-                  class="input">
-                </TextField>
-                <Label *ngIf="!singleFieldEdit.location && userType === 0" (tap)="editSingleField('location')" row="0"
-                  col="1" android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
+                <RadAutoCompleteTextView row="0" col="0" #acLocation [items]="dataLocation" suggestMode="Suggest"
+                  showCloseButton="false" (didAutoComplete)="onTextChangedLocation($event)" (textChanged)="onTextChangedLocation($event)"
+                  borderWidth="0 0 2 0" borderColor="#D3D3D3" width="315" (loaded)="onLoadedLoaction($event)">
+                  <SuggestionView tkAutoCompleteSuggestionView marginTop="20">
+                    <ng-template tkSuggestionItemTemplate let-item="item">
+                      <StackLayout orientation="vertical" padding="10">
+                        <Label [text]="item.text"></Label>
+                      </StackLayout>
+                    </ng-template>
+                  </SuggestionView>
+                </RadAutoCompleteTextView>
+
+                <Label *ngIf="!singleFieldEdit.location && userType === 0 && !isLocationEdit" (tap)="editLocationField()"
+                  row="0" col="1" android:marginTop="24" android:marginRight="4" ios:marginTop="8" fontSize="16"
                   horizontalAlignment="right" class="fas" text="&#xf303;"></Label>
-                <Label *ngIf="singleFieldEdit.location && userForm.value.location !=='' && userType === 0"
-                  (tap)="onSubmit(true, 'location')" row="0" col="1" android:marginTop="22" color="#71b02b"
-                  android:marginRight="2" ios:marginTop="8" fontSize="24" horizontalAlignment="right" class="fa"
-                  text="&#xf14a;"></Label>
+                <Label *ngIf="singleFieldEdit.location && userForm.value.location !=='' && userType === 0" (tap)="onSubmit(true, 'location')"
+                  row="0" col="1" android:marginTop="22" color="#71b02b" android:marginRight="2" ios:marginTop="8"
+                  fontSize="24" horizontalAlignment="right" class="fa" text="&#xf14a;"></Label>
               </GridLayout>
+
+              <Button margin="20 20 20 0" padding="7 0" text="Get Location" stlRippleEffect (rippleTap)="getLocation()"
+                *ngIf="singleFieldEdit.location && userForm.value.location !=='' && userType === 0" borderRadius="0"></Button>
+
               <Label *ngIf="userForm.controls.location.errors && !userForm.controls.location.pristine" class="error"
                 textWrap="true" text="Location is required!"></Label>
-                <StackLayout paddingTop="30" horizontalAlignment="center" *ngIf="loggedInUser && userType !== 0 && loggedInUserAccount && isLivesEnable">
-                  <Label stlRippleEffect (rippleTap)="startNewGame()"
-                    horizontalAlignment="right" class="new-game-btn" text="Start New Game"></Label>
-                </StackLayout>
+              <StackLayout paddingTop="30" horizontalAlignment="center" *ngIf="loggedInUser && userType !== 0 && loggedInUserAccount && isLivesEnable">
+                <Label stlRippleEffect (rippleTap)="startNewGame()" horizontalAlignment="right" class="new-game-btn"
+                  text="Start New Game"></Label>
+              </StackLayout>
             </StackLayout>
 
           </StackLayout>
         </CardView>
 
-        <CardView class="profile-settings-card gameplay" margin="5" android:elevation="20" ios:elevation="40"
-          radius="15" iosOverflowSafeArea="false">
+        <CardView class="profile-settings-card gameplay" margin="5" android:elevation="20" ios:elevation="40" radius="15"
+          iosOverflowSafeArea="false">
           <StackLayout class="cardStyle" backgroundColor="#ffffff" height="100%" padding="0 10" margin="10">
             <SegmentedBar [items]="items" (selectedIndexChange)="onSelectedIndexChange($event)" class="m-2"
               iosOverflowSafeArea="false"></SegmentedBar>
@@ -69,29 +79,33 @@
               iosOverflowSafeArea="false">
 
               <StackLayout paddingTop="30" *ngIf="userType ===  0">
-                <Label stlRippleEffect *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()"
-                  horizontalAlignment="right" class="edit-profile-btn" text="Edit Profile"></Label>
+                <Label stlRippleEffect *ngIf="!isEnableEditProfile" (rippleTap)="editProfile()" horizontalAlignment="right"
+                  class="edit-profile-btn" text="Edit Profile"></Label>
               </StackLayout>
 
-              <StackLayout stlRippleEffect (rippleTap)="sendFriendRequest()" paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && !user?.isFriend">
+              <StackLayout stlRippleEffect (rippleTap)="sendFriendRequest()" paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && userInvitations[user.email]?.status === 'add'">
                 <Image row="0" col="2" checked="true" horizontalAlignment="center" src="~/assets/images/send-friend-request.png"
-                height="80" width="80" marginRight="5"></Image>
-                <Label  horizontalAlignment="center"
-                class="send-friend-request-span" margin="-10 0 0 0" text="Add Friend"></Label>
+                  height="80" width="80" marginRight="5"></Image>
+                <Label horizontalAlignment="center" class="send-friend-request-span" margin="-10 0 0 0" text="Add Friend"></Label>
               </StackLayout>
 
-              <StackLayout paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && user?.isFriend">
+              <StackLayout paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && userInvitations[user.email]?.status === 'pending'">
+                  <Image row="0" col="2" checked="true" horizontalAlignment="center" src="~/assets/images/send-friend-request.png"
+                  height="80" width="80" marginRight="5"></Image>
+                  <Label  horizontalAlignment="center"
+                  class="send-friend-request-span" margin="-10 0 0 0" text="Friend Request Sent"></Label>
+              </StackLayout>
+
+              <StackLayout paddingTop="10"  horizontalAlignment="right" *ngIf="loggedInUser?.userId && userType === 1 && userInvitations[user.email]?.status === 'approved'">
                 <Image row="0" col="2" checked="true" horizontalAlignment="center" src="~/assets/images/friends.png"
-                height="80" width="80" marginRight="5"></Image>
-                <Label horizontalAlignment="center"
-                class="is-friend-span" margin="-10 0 0 0" text="Friends"></Label>
+                  height="80" width="80" marginRight="5"></Image>
+                <Label horizontalAlignment="center" class="is-friend-span" margin="-10 0 0 0" text="Friends"></Label>
               </StackLayout>
               <StackLayout *ngIf="userType ===  0" class="input-field" iosOverflowSafeArea="false">
-                <TextField #textField hint="{{userType ===  0 ? '@username' : ''}}" formControlName="name"
-                  class="input">
+                <TextField #textField hint="{{userType ===  0 ? '@username' : ''}}" formControlName="name" class="input">
                 </TextField>
-                <Label *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error"
-                  textWrap="true" text="Name is required!"></Label>
+                <Label *ngIf="userForm.controls.name.errors && !userForm.controls.name.pristine" class="error" textWrap="true"
+                  text="Name is required!"></Label>
               </StackLayout>
 
               <StackLayout *ngIf="isEnableEditProfile && userType ===  0" class="list-view" iosOverflowSafeArea="false"
@@ -99,21 +113,16 @@
                 <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
                   <Label class="grid-label-text" row="0" col="0" text="PREFERRED CATEGORIES" textWrap="true"
                     iosOverflowSafeArea="false"></Label>
-                  <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-                    text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4"
-                    borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"
+                  <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectCategory ? '&#xf067;' : '&#xf068;' }}"
+                    textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectCategory = !showSelectCategory"
                     iosOverflowSafeArea="false"></Label>
                 </GridLayout>
-                <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}"
-                  iosOverflowSafeArea="false">
-                  <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option"
-                    *ngFor="let category of userCategories" (tap)="selectCategory(category)"
-                    iosOverflowSafeArea="false">
-                    <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0"
-                      textWrap="true"></Label>
+                <StackLayout visibility="{{ !showSelectCategory ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
+                  <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let category of userCategories"
+                    (tap)="selectCategory(category)" iosOverflowSafeArea="false">
+                    <Label class="grid-label-text" [text]="category.categoryName" row="0" col="0" textWrap="true"></Label>
                     <Image row="0" col="2" checked="true" horizontalAlignment="right" src="~/assets/images/check.png"
-                      height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5"
-                      visibility="{{ category.isSelected ? 'visible' : 'hidden' }}"></Image>
+                      height="25" width="25" marginLeft="10" verticalAlignment="center" marginRight="5" visibility="{{ category.isSelected ? 'visible' : 'hidden' }}"></Image>
 
                   </GridLayout>
                 </StackLayout>
@@ -122,24 +131,22 @@
               <StackLayout *ngIf="isEnableEditProfile && userType ===  0" class="list-view" iosOverflowSafeArea="false">
                 <GridLayout class="grid-label" rows="auto,auto" columns="auto,*" iosOverflowSafeArea="false">
                   <Label row="0" col="0" text="PREFERRED TAGS" textWrap="true"></Label>
-                  <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right"
-                    text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}" textWrap="true" padding="4" borderWidth="2"
-                    borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
+                  <Label row="0" col="1" class="fa expand-options" horizontalAlignment="right" text="{{ showSelectTag ? '&#xf067;' : '&#xf068;' }}"
+                    textWrap="true" padding="4" borderWidth="2" borderColor="#A9A9A9" (tap)="showSelectTag = !showSelectTag"></Label>
                 </GridLayout>
                 <StackLayout visibility="{{ !showSelectTag ? 'visible' : 'collapsed' }}" iosOverflowSafeArea="false">
-                  <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option"
-                    *ngFor="let tag of enteredTags" iosOverflowSafeArea="false">
+                  <GridLayout rows="auto,auto" columns="auto,*" class="two-player-option" *ngFor="let tag of enteredTags"
+                    iosOverflowSafeArea="false">
                     <Label [text]="tag" row="0" col="0" textWrap="true" iosOverflowSafeArea="false"></Label>
                     <Label id="cross-button" row="0" col="1" class="fa" text="&#xf00d;" textWrap="true"
                       horizontalAlignment="right" (tap)="removeEnteredTag(tag)" iosOverflowSafeArea="false"></Label>
                   </GridLayout>
                   <GridLayout rows="auto,auto" columns="*,auto" class="two-player-option" iosOverflowSafeArea="false">
                     <Label class="input-label" row="0" col="0" text="Add Tag" textWrap="true"></Label>
-                    <StackLayout row="1" col="0" tkExampleTitle tkToggleNavButton ios:backgroundColor="#ffffff"
-                      iosOverflowSafeArea="false">
-                      <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems"
-                        completionMode="Contains" showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)"
-                        (textChanged)="onTextChanged($event)" border="none" ios:backgroundColor="#ffffff">
+                    <StackLayout row="1" col="0" ios:backgroundColor="#ffffff" iosOverflowSafeArea="false">
+                      <RadAutoCompleteTextView #autocomplete hint="Select Tag" [items]="dataItems" completionMode="Contains"
+                        showCloseButton="true" (didAutoComplete)="onDidAutoComplete($event)" (textChanged)="onTextChanged($event)"
+                        border="none" ios:backgroundColor="#ffffff">
                         <SuggestionView tkAutoCompleteSuggestionView>
                           <ng-template tkSuggestionItemTemplate let-item="item">
                             <StackLayout orientation="vertical" padding="10">
@@ -149,83 +156,72 @@
                         </SuggestionView>
                       </RadAutoCompleteTextView>
                     </StackLayout>
-                    <StackLayout row="1" col="1" marginLeft="10" horizontalAlignment="right"
-                      iosOverflowSafeArea="false">
-                      <Button ios:padding="10" text="Add" class="Roboto-Bold" stlRippleEffect
-                        (tap)="addCustomTag()"></Button>
+                    <StackLayout row="1" col="1" marginLeft="10" horizontalAlignment="right" iosOverflowSafeArea="false">
+                      <Button ios:padding="10" text="Add" class="Roboto-Bold" stlRippleEffect (tap)="addCustomTag()"></Button>
                     </StackLayout>
                   </GridLayout>
                 </StackLayout>
               </StackLayout>
 
-              <StackLayout [ngClass]="{'mt-30': userType !== 0 }" class="list-view social-section"
-                iosOverflowSafeArea="false" *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
+              <StackLayout [ngClass]="{'mt-30': userType !== 0 }" class="list-view social-section" iosOverflowSafeArea="false"
+                *ngIf="socialProfileSettings && socialProfileSettings.length > 0">
                 <StackLayout class="grid-label p-15" iosOverflowSafeArea="false">
                   <Label textWrap="true" text="SOCIAL PROFILE"></Label>
                 </StackLayout>
                 <StackLayout class="input-field" *ngFor="let profile of socialProfileSettings; let i=index"
                   iosOverflowSafeArea="false">
-                  <GridLayout
-                    *ngIf="userType === 0 && profile.enable && ((isEnableEditProfile && i <= socialProfileShowLimit) || (!isEnableEditProfile))"
+                  <GridLayout *ngIf="userType === 0 && profile.enable && ((isEnableEditProfile && i <= socialProfileShowLimit) || (!isEnableEditProfile))"
                     rows="auto,auto,*" columns="*" iosOverflowSafeArea="false">
                     <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
                     <StackLayout class="text-box" row="1" col="0" orientation="horizontal" iosOverflowSafeArea="false">
-                      <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)"
-                        [text]="profile?.url" fontSize="14" textWrap="true"></Label>
+                      <Label verticalAlignment="center" class="label-link" (tap)="onSocialProfileInputFocus(i)" [text]="profile?.url"
+                        fontSize="14" textWrap="true"></Label>
                       <TextField id="myInput" #myInput verticalAlignment="center" hint="Enter Profile ID"
                         [formControlName]="profile.social_name" class="input-box"></TextField>
                     </StackLayout>
-                    <Label *ngIf="userForm.get(profile.social_name).errors" class="error"
-                      text="Please enter valid profile id" row="2" col="0" textWrap="true"></Label>
+                    <Label *ngIf="userForm.get(profile.social_name).errors" class="error" text="Please enter valid profile id"
+                      row="2" col="0" textWrap="true"></Label>
                   </GridLayout>
-                  <GridLayout *ngIf="userType !== 0 && profile.enable" rows="auto,*" columns="*"
-                    iosOverflowSafeArea="false">
+                  <GridLayout *ngIf="userType !== 0 && profile.enable" rows="auto,*" columns="*" iosOverflowSafeArea="false">
                     <Label class="grid-label-text" [text]="profile.display" row="0" col="0" textWrap="true"></Label>
                     <StackLayout marginLeft="14" marginTop="8" row="1" col="0" orientation="horizontal"
                       iosOverflowSafeArea="false">
-                      <Label class="grid-label-text"
-                        (tap)="openUrl(profile?.url, userForm.get([profile.social_name]).value)" color="blue"
-                        text="{{profile?.url}}{{userForm.get([profile.social_name]).value}}" textWrap="true"></Label>
+                      <Label class="grid-label-text" (tap)="openUrl(profile?.url, userForm.get([profile.social_name]).value)"
+                        color="blue" text="{{profile?.url}}{{userForm.get([profile.social_name]).value}}" textWrap="true"></Label>
                     </StackLayout>
                   </GridLayout>
                 </StackLayout>
-                <Button class="p-15 showMore" marginTop="24" horizontalAlignment="center"
-                  *ngIf="(enableSocialProfile > (socialProfileShowLimit + 1)) && isEnableEditProfile" text="Show more"
-                  stlRippleEffect (tap)="showMoreSocialProfile()"></Button>
+                <Button class="p-15 showMore" marginTop="24" horizontalAlignment="center" *ngIf="(enableSocialProfile > (socialProfileShowLimit + 1)) && isEnableEditProfile"
+                  text="Show more" stlRippleEffect (tap)="showMoreSocialProfile()"></Button>
               </StackLayout>
 
-              <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons"
-                iosOverflowSafeArea="false">
+              <StackLayout *ngIf="(isEnableEditProfile && userType === 0)" class="profile-buttons" iosOverflowSafeArea="false">
                 <Label text="Bulk upload Request" textWrap="true" padding="8"></Label>
                 <Button *ngIf="(!user.bulkUploadPermissionStatus
                   || user.bulkUploadPermissionStatus === NONE
                   || user.bulkUploadPermissionStatus === PENDING)
-                  && !user.isRequestedBulkUpload" [text]="bulkUploadBtnText" backgroundColor="#ffffff" color="black"
-                  padding="10 0" (tap)="setBulkUploadRequest()" borderWidth="1" borderRadius="3"
-                  stlRippleEffect></Button>
-                <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING"
-                  text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
+                  && !user.isRequestedBulkUpload"
+                  [text]="bulkUploadBtnText" backgroundColor="#ffffff" color="black" padding="10 0" (tap)="setBulkUploadRequest()"
+                  borderWidth="1" borderRadius="3" stlRippleEffect></Button>
+                <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === PENDING" text="Bulk upload requested on {{user.bulkUploadPermissionStatusUpdateTime | date : 'medium' }}."
                   textWrap="true" padding="8"></Label>
-                <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED"
-                  text="User has bulk upload privilege" textWrap="true" padding="8"></Label>
+                <Label class="sub-text" *ngIf="user.bulkUploadPermissionStatus === APPROVED" text="User has bulk upload privilege"
+                  textWrap="true" padding="8"></Label>
               </StackLayout>
 
-              <StackLayout *ngIf="isEnableEditProfile && userType ===  0" class="profile-buttons"
-                iosOverflowSafeArea="false">
+              <StackLayout *ngIf="isEnableEditProfile && userType ===  0" class="profile-buttons" iosOverflowSafeArea="false">
                 <Button text="SAVE" class="Roboto-Medium" backgroundColor="#71b02f" color="#ffffff" padding="20 0"
                   stlRippleEffect (tap)="onSubmit()"></Button>
               </StackLayout>
             </StackLayout>
 
-            <StackLayout rows="*" [visibility]="selectedIndex === 1 ? 'visible' : 'collapsed'"
-              iosOverflowSafeArea="false">
+            <StackLayout rows="*" [visibility]="selectedIndex === 1 ? 'visible' : 'collapsed'" iosOverflowSafeArea="false">
               <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
                 margin="10">
                 <StackLayout class="stats-main" iosOverflowSafeArea="false">
                   <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
                     <Label row="0" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf109;"></Label>
-                    <Label text="Game" row="0" col="1" class="text-black Hind-Bold" fontSize="16"
-                      verticalAlignment="center"></Label>
+                    <Label text="Game" row="0" col="1" class="text-black Hind-Bold" fontSize="16" verticalAlignment="center"></Label>
                     <Label [text]="account?.gamePlayed" row="0" col="2" class="text-black" fontSize="16"></Label>
                   </GridLayout>
                   <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
@@ -236,15 +232,12 @@
                   </GridLayout>
                   <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
                     <Label row="2" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf091;"></Label>
-                    <Label text="Win-Loss" row="2" col="1" class="text-black Hind-Bold" fontSize="16"
-                      verticalAlignment="center"></Label>
-                    <Label text="{{account?.wins}}-{{account?.losses}}" row="0" col="2" class="text-black"
-                      fontSize="16"></Label>
+                    <Label text="Win-Loss" row="2" col="1" class="text-black Hind-Bold" fontSize="16" verticalAlignment="center"></Label>
+                    <Label text="{{account?.wins}}-{{account?.losses}}" row="0" col="2" class="text-black" fontSize="16"></Label>
                   </GridLayout>
                   <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
                     <Label row="3" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf5a2;"></Label>
-                    <Label text="Badges" row="3" col="1" class="text-black Hind-Bold" fontSize="16"
-                      verticalAlignment="center"></Label>
+                    <Label text="Badges" row="3" col="1" class="text-black Hind-Bold" fontSize="16" verticalAlignment="center"></Label>
                     <Label [text]="account?.badges" row="0" col="2" class="text-black" fontSize="16"></Label>
                   </GridLayout>
                   <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
@@ -264,25 +257,26 @@
             </StackLayout>
 
             <StackLayout rows="*" [visibility]="selectedIndex === 2 && loggedInUser?.userId && userType === 1 && gamePlayedAgainst ? 'visible':'collapsed'"
-            iosOverflowSafeArea="false">
-            <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
-              margin="10">
-              <StackLayout class="stats-main" iosOverflowSafeArea="false">
-                <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
-                  <Label row="0" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf109;"></Label>
-                  <Label text="Game Played Against You" row="0" col="1" class="text-black Hind-Bold" fontSize="16"
-                    verticalAlignment="center"></Label>
-                  <Label [text]="gamePlayedAgainst?.gamePlayed" row="0" col="2" class="text-black" fontSize="16"></Label>
-                </GridLayout>
-                <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
-                  <Label row="1" col="0" fontSize="16" class="far" verticalAlignment="center" text="&#xf09d;"></Label>
-                  <Label text="Games Won-Games Lost" row="1" col="1" class="text-black Hind-Bold" fontSize="16"
-                    verticalAlignment="center"></Label>
-                  <Label text="{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}" row="0" col="2" class="text-black" fontSize="16"></Label>
-                </GridLayout>
+              iosOverflowSafeArea="false">
+              <StackLayout class="cardStyle" orientation="vertical" verticalAlignment="center" backgroundColor="#ffffff"
+                margin="10">
+                <StackLayout class="stats-main" iosOverflowSafeArea="false">
+                  <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="0" col="0" fontSize="16" class="fas" verticalAlignment="center" text="&#xf109;"></Label>
+                    <Label text="Game Played Against You" row="0" col="1" class="text-black Hind-Bold" fontSize="16"
+                      verticalAlignment="center"></Label>
+                    <Label [text]="gamePlayedAgainst?.gamePlayed" row="0" col="2" class="text-black" fontSize="16"></Label>
+                  </GridLayout>
+                  <GridLayout rows="*" columns="30,*,auto" class="stats padding-10" iosOverflowSafeArea="false">
+                    <Label row="1" col="0" fontSize="16" class="far" verticalAlignment="center" text="&#xf09d;"></Label>
+                    <Label text="Games Won-Games Lost" row="1" col="1" class="text-black Hind-Bold" fontSize="16"
+                      verticalAlignment="center"></Label>
+                    <Label text="{{gamePlayedAgainst?.wins}}-{{gamePlayedAgainst?.losses}}" row="0" col="2" class="text-black"
+                      fontSize="16"></Label>
+                  </GridLayout>
+                </StackLayout>
               </StackLayout>
             </StackLayout>
-          </StackLayout>
           </StackLayout>
         </CardView>
       </StackLayout>

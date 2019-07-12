@@ -8,4 +8,6 @@ export interface IConfig {
   hightlighCSSURL: string;
   katexCSSURL: string;
   ua_id: string;
+  termsAndConditionsUrl: string;
+  privacyUrl: string;
 }

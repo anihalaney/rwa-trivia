@@ -78,4 +78,13 @@ export class Utils {
         return config;
     }
 
+    static getApiKey(): any {
+        return Utils.getConfig().apiKey;
+    }
+
+    static getFeedUrl(): any {
+        return Utils.getConfig().feedUrl;
+    }
+
+
 }

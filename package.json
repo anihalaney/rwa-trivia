@@ -5,11 +5,11 @@
   "angular-cli": {},
   "nativescript": {
     "id": "io.bitwiser.trivia.dev",
-    "tns-ios": {
-      "version": "5.4.0"
-    },
     "tns-android": {
       "version": "5.4.0"
+    },
+    "tns-ios": {
+      "version": "5.4.2"
     }
   },
   "scripts": {
@@ -41,10 +41,10 @@
     "compile-functions": "rmdir /s/q functions\\server & tsc --project functions",
     "deploy-trivia-functions": "npm run deploy-trivia-functions-build && npm run deploy-functions-app &&  npm run deploy-functions-ssr && npm run deploy-apps-to-firebase && npm install firebase@6.0.2",
     "deploy-trivia-functions-build": "npm run build-trivia:ssr && npm run compile-ssr-functions",
-    "build-trivia:ssr": "ng build trivia  --configuration=trivia-staging && ng build trivia-admin  --configuration=trivia-admin-staging && ng build trivia-editor --configuration=trivia-production && ng run trivia:server",
+    "build-trivia:ssr": "ng build trivia  --configuration=trivia-staging && ng build trivia-admin  --configuration=trivia-admin-staging && ng build trivia-editor --configuration=trivia-dev && ng run trivia:server",
     "deploy-bitwiser-edu-functions": "npm run deploy-bitwiser-edu-functions-build && npm run deploy-bitwiser-edu-functions-app &&  npm run deploy-bitwiser-edu-functions-ssr && npm run deploy-bitwiser-edu-apps-to-firebase && npm install firebase@6.0.2",
     "deploy-bitwiser-edu-functions-build": "npm run build-bitwiser-edu:ssr && npm run compile-ssr-functions",
-    "build-bitwiser-edu:ssr": "ng build trivia  --configuration=bitwiser-edu-staging && ng build trivia-admin  --configuration=bitwiser-edu-admin-staging && ng build trivia-editor --configuration=bitwiser-edu-production  && ng run trivia:server",
+    "build-bitwiser-edu:ssr": "ng build trivia  --configuration=bitwiser-edu-staging && ng build trivia-admin  --configuration=bitwiser-edu-admin-staging && ng build trivia-editor --configuration=bitwiser-edu-dev  && ng run trivia:server",
     "compile-ssr-functions": "npm run compile-functions && npm run webpack:server && cpx dist/index.html functions/dist && rimraf dist/index.html",
     "webpack:server": "npm install firebase@5.2.0 && webpack --config webpack.server.config.js",
     "deploy-functions-app": "npm run pre-compile-app-functions && firebase deploy -P trivia-dev --only functions",
@@ -142,6 +142,7 @@
     "nativescript-drop-down": "^5.0.0",
     "nativescript-feedback": "^1.3.9",
     "nativescript-floatingactionbutton": "^5.0.3",
+    "nativescript-geolocation": "^5.1.0",
     "nativescript-imagecropper": "^1.0.5",
     "nativescript-imagepicker": "^6.2.0",
     "nativescript-loading-indicator": "^2.5.1",
@@ -163,6 +164,7 @@
     "rxjs": "^6.5.2",
     "stream": "0.0.2",
     "tns-core-modules": "^5.4.2",
+    "uglifyjs-webpack-plugin": "^1.3.0",
     "zone.js": "^0.8.4"
   },
   "devDependencies": {
@@ -206,7 +208,6 @@
     "tslib": "^1.9.3",
     "tslint": "5.16.0",
     "typescript": "~3.1.1",
-    "uglifyjs-webpack-plugin": "^2.1.3",
     "xmlhttprequest": "^1.8.0"
   },
   "jest": {

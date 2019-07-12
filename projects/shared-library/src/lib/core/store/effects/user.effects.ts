@@ -3,7 +3,7 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../../shared/model';
 import { UserService, GameService, Utils } from '../../services';
-import { switchMap, map, distinct, mergeMap, filter, take } from 'rxjs/operators';
+import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
@@ -49,6 +49,15 @@ export class UserEffects {
             distinct(),
             mergeMap((userId: string) => this.svc.loadOtherUserProfileWithExtendedInfo(userId)),
             map((user: User) => this.userActions.loadOtherUserProfileWithExtendedInfoSuccess(user)));
+
+    @Effect()
+    // handle location update
+    loadUserInvitationsInfo$ = this.actions$
+        .pipe(ofType(UserActions.LOAD_USER_INVITATIONS_INFO))
+        .pipe(map((action: ActionWithPayload<string>) => action.payload),
+            distinct(),
+            mergeMap((data: any) => this.svc.loadUserInvitationsInfo(data.userId, data.invitedUserEmail, data.invitedUserId)),
+            map((invitation: Invitation) => this.userActions.loadUserInvitationsInfoSuccess(invitation)));
 
     // get info if the other user is friend or not
     @Effect()
@@ -230,6 +239,28 @@ export class UserEffects {
                 this.gameService.getGameResult(action.payload)
                     .pipe(map((games: Game[]) => this.userActions.getGameResultSuccess(games)))
             )
+        );
+
+    @Effect()
+    loadAddressUsingLatLong = this.actions$
+        .pipe(ofType(UserActions.LOAD_ADDRESS_USING_LAT_LONG))
+        .pipe(
+            switchMap((action: ActionWithPayload<any>) =>
+                this.svc.getAddressByLatLang(action.payload).pipe(
+                    map((result: any) => this.userActions.loadAddressUsingLatLongSuccess(result))
+                ))
+        );
+
+    @Effect()
+    loadAddressSuggestions = this.actions$
+        .pipe(ofType(UserActions.LOAD_ADDRESS_SUGGESTIONS))
+        .pipe(
+            debounceTime(2000),
+            distinctUntilChanged(),
+            switchMap((action: ActionWithPayload<any>) =>
+                this.svc.getAddressSuggestions(action.payload).pipe(
+                    map((result: any) => this.userActions.loadAddressSuggestionsSuccess(result))
+                ))
         );
 
     constructor(

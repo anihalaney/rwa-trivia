@@ -25,7 +25,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthenticationProvider,
     private store: Store<AppState>,
     public router: Router,
-    private location: Location,
     private applicationSettingsAction: ApplicationSettingsActions,
   ) {
 
