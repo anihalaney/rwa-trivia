@@ -166,7 +166,7 @@ const commandList = {
                         --env.package_name=packageName 
                         --env.project=configProject
                         --release 
-                        androidRelease`,           
+                        androidRelease`,
             "description" :  "release android app for staging environment",
             "options" : { 
                 "configProject" : { 
@@ -241,7 +241,7 @@ const commandList = {
                     );
 
 
-                   args.argv.androidRelease = ` --key-store-path certificates/${configProject}/${platformName}/bitwiser.keystore
+                    args.argv.androidRelease = ` --key-store-path certificates/${configProject}/${platformName}/bitwiser.keystore
                     --key-store-password ${keyStorePassword}
                     --key-store-alias ${keyStoreAlias} 
                     --key-store-alias-password ${keyStoreAliasPassword} 
@@ -300,8 +300,8 @@ function escapeRegExp(string){
 function executeCommand(){
     try {
      executableCmd = executableCmd.replace(/(\r\n|\n|\r)/gm, ""); //remove new line
-       console.log(executableCmd, 'executableCmd');
-        // execSync(executableCmd, {stdio: 'inherit'});
+    //   console.log(executableCmd, 'executableCmd');
+     execSync(executableCmd, {stdio: 'inherit'});
     } catch(error) {
         // console.error(error);
     }
