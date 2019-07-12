@@ -83,7 +83,7 @@ const commandList = {
         "deploy-functions":
         {      
             "command" : deployFunctionsCommand,             
-              "description" : "deploy firebase functions to staging env",
+              "description" : "deploy firebase functions to staging/production env",
               "options" : { 
                 "projectName" : { 
                     "demand" : true,
