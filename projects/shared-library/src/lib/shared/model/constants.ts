@@ -18,11 +18,6 @@ export enum TriggerConstants {
     fromUser = 'support@trivia.com'
 }
 
-export enum RSSFeedConstants {
-    feedURL = 'https://blog.realworldfullstack.io/feed'
-}
-
-
 export enum UserControllerConstants {
     adminEmail = 'akshay@emaxers.com',
     mailTxt = 'Please allow access of bulk upload to below user',

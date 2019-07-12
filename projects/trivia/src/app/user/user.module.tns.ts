@@ -12,7 +12,7 @@ import {
   QuestionAddUpdateComponent,
   InviteFriendsDialogComponent,
   InviteMailFriendsComponent,
-  LocactionResetDialogComponent,
+  LocationResetDialogComponent,
   PreviewQuestionDialogComponent
 } from './components';
 
@@ -27,7 +27,7 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
-    LocactionResetDialogComponent,
+    LocationResetDialogComponent,
     PreviewQuestionDialogComponent
   ],
   imports: [
@@ -50,10 +50,10 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
     InviteFriendsComponent,
-    LocactionResetDialogComponent
+    LocationResetDialogComponent
   ],
   entryComponents: [
-    LocactionResetDialogComponent,
+    LocationResetDialogComponent,
     PreviewQuestionDialogComponent
   ],
   schemas: [NO_ERRORS_SCHEMA]

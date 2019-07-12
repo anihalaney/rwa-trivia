@@ -222,16 +222,12 @@ export class UserService {
     }
 
     getAddressByLatLang(latlong) {
-        // const url = `${CONFIG.addressByLatLongURL}?latlng=${latlong}&key=${CONFIG.firebaseConfig.apiKey}`;
         const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_BY_LAT_LANG}/${latlong}`;
         return this.http.get<any>(url);
     }
 
     getAddressSuggestions(address) {
-        // tslint:disable-next-line:max-line-length
-        // const url = `${CONFIG.addressSuggestionsURL}?input=${encodeURIComponent(address)}&key=${CONFIG.firebaseConfig.apiKey}`;
         const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.ADDRESS_SUGGESTION}/${address}`;
-
         return this.http.get<any>(url);
     }
 }
