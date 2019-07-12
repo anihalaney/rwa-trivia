@@ -2,14 +2,14 @@ import { Component, OnInit, ChangeDetectionStrategy, OnDestroy } from '@angular/
 import { ModalDialogParams } from 'nativescript-angular/modal-dialog';
 
 @Component({
-  selector: 'app-locaction-reset-dialog',
-  templateUrl: './locaction-reset-dialog.component.html',
-  styleUrls: ['./locaction-reset-dialog.component.scss'],
+  selector: 'app-location-reset-dialog',
+  templateUrl: './location-reset-dialog.component.html',
+  styleUrls: ['./location-reset-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 
-export class LocactionResetDialogComponent implements OnInit, OnDestroy {
+export class LocationResetDialogComponent implements OnInit, OnDestroy {
 
   constructor(private params: ModalDialogParams) {
   }

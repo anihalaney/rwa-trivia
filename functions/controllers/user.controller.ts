@@ -7,11 +7,13 @@ import {
     ResponseMessagesConstants,
     UserConstants,
     HeaderConstants,
-    User,
-    GoogleLocationAPI
+    User
 } from '../../projects/shared-library/src/lib/shared/model';
 import { Utils } from '../utils/utils';
 import { AccountService } from '../services/account.service';
+import { externalUrl } from '../../projects/shared-library/src/lib/environments/external-url';
+
+
 import * as requestPromise from 'request-promise';
 export class UserController {
 
@@ -196,28 +198,34 @@ export class UserController {
     }
 
     static async addressSuggestion(req, res) {
-
         const location = (req.params.location) ? req.params.location : '';
         const apiKey = Utils.getApiKey();
         const options = {
             // tslint:disable-next-line: max-line-length
-            url: `${GoogleLocationAPI.GOOGLE_AUTOCOMPLETE}?input=${location}&key=${apiKey}`,
+            url: `${externalUrl.autocompleteUrl}?input=${location}&key=${apiKey}`,
             json: true
         };
-        const requestResponse = await requestPromise(options);
-        Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        try {
+            const requestResponse = await requestPromise(options);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
     }
 
     static async addressByLatLang(req, res) {
-
         const latLong = (req.params.latLong) ? req.params.latLong : '';
         const apiKey = Utils.getApiKey();
         const options = {
             // tslint:disable-next-line: max-line-length
-            url: `${GoogleLocationAPI.GOOGLE_GEOCODE}?latlng=${latLong}&key=${apiKey}`,
+            url: `${externalUrl.geocodeUrl}?latlng=${latLong}&key=${apiKey}`,
             json: true
         };
-        const requestResponse = await requestPromise(options);
-        Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        try {
+            const requestResponse = await requestPromise(options);
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, requestResponse);
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
     }
 }

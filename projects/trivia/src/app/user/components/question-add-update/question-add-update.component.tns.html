@@ -77,7 +77,7 @@
                     <StackLayout formArrayName="answers" padding="10">
                         <StackLayout *ngFor="let answer of answers.controls; let i=index" [formGroupName]="i">
                             <GridLayout rows="auto,auto" columns="auto,*" marginBottom="20" >
-                                <GridLayout row="0" col="0" rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10"
+                                <GridLayout row="0" col="0" colSpan="2" rows="auto" columns="auto,*" marginBottom="20" margin="5 10 5 10"
                                     [visibility]="!editQuestion ? 'visible' : 'collapsed'" >
                                     <Label row="0" col="0" text="Rich Editor" textWrap="true" class="label" fontSize="18"
                                         fontWeight="400" color="#616161" marginTop="10" *ngIf="applicationSettings.enabled_rich_editor"></Label>

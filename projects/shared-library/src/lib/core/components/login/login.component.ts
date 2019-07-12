@@ -8,8 +8,8 @@ import { Login } from './login';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import * as firebase from 'firebase/app';
 import * as firebaseui from 'firebaseui';
-import { TermsAndPrivacyUrlConstant } from 'shared-library/shared/model';
 import { WindowRef } from 'shared-library/core/services';
+import { CONFIG } from 'shared-library/environments/environment';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -41,8 +41,8 @@ export class LoginComponent extends Login implements  OnDestroy {
         firebase.auth.PhoneAuthProvider.PROVIDER_ID,
       ],
       signInFlow: 'popup',
-      tosUrl: TermsAndPrivacyUrlConstant.TERMSANDCONDITIONSURL,
-      privacyPolicyUrl: () =>  windowsRef.nativeWindow.open(TermsAndPrivacyUrlConstant.PRIVACYURL, '_blank')
+      tosUrl: CONFIG.termsAndConditionsUrl,
+      privacyPolicyUrl: () =>  windowsRef.nativeWindow.open(CONFIG.privacyUrl, '_blank')
     };
   }
 

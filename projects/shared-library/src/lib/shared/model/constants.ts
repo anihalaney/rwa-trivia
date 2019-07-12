@@ -18,11 +18,6 @@ export enum TriggerConstants {
     fromUser = 'support@trivia.com'
 }
 
-export enum RSSFeedConstants {
-    feedURL = 'https://blog.realworldfullstack.io/feed'
-}
-
-
 export enum UserControllerConstants {
     adminEmail = 'akshay@emaxers.com',
     mailTxt = 'Please allow access of bulk upload to below user',
@@ -368,15 +363,5 @@ export enum RoutesConstants {
     LOCATION = 'location',
     LAT_LONG = 'latLong',
     ADDRESS_SUGGESTION = 'addressSuggestion',
-}
-
-export enum TermsAndPrivacyUrlConstant {
-    TERMSANDCONDITIONSURL = 'https://bitwiser.io/terms-and-conditions',
-    PRIVACYURL = 'https://bitwiser.io/terms-and-conditions'
-}
-
-export enum GoogleLocationAPI {
-    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
-    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
 }
 
