@@ -4,13 +4,13 @@ How to deploy Firebase functions ?
 
     2) Run below command to deploy firebase functions 
 
-        Dev Env : npm run deploy-trivia-functions
-        Prod Env : npm run prod:deploy-trivia-functions
+        Dev Env : node cli deploy-functions --p trivia-staging --pv trivia --e staging
+        Prod Env : node cli deploy-functions --p trivia-production --pv trivia --e production
         
     3) Run below command to start scheduler  
 
-        Dev Env : npm run run-scheduler-dev
-        Prod Env : npm run run-scheduler-prod
+        Dev Env : node cli run-schedular --se dev
+        Prod Env : node cli run-schedular --se prod
 
 
 How to deploy Android app on Google play store? 
@@ -36,8 +36,10 @@ How to deploy Android app on Google play store?
 
     4) Run below command to generate apk file : 
 
-       Dev Env : npm run release:dev:android
-       Prod Env : npm run release:prod:android
+       Dev Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e dev 
+                    --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword>
+       Prod Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia --plt android --e production 
+                    --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword>
 
     5) Deploy App on Google play  store:
 
@@ -84,8 +86,8 @@ Assumption : Ios app deployment will require MAC system and xcode 10 and app dev
 
     2) Run below command to prepare xcode compatible project 
        
-        Dev Env : rm -rf platforms/ios && npm run dev:ios && npm run release:dev:ios
-        Prod Env : rm -rf platforms/ios && npm run prod:ios && npm run release:prod:ios
+        Dev Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt ios --e dev 
+        Prod Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia --plt ios --e production
 
     3) Right click on rwatrivia.xcworkspace directory under platforms/ios directory and select reveal in folder
 
