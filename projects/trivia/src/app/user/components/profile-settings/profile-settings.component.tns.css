@@ -227,7 +227,11 @@
 
 .is-friend-span{
     color: #71b02f;
-  }
-  .send-friend-request-span{
-    color: #f50057;
-  }
+}
+.send-friend-request-span{
+   color: #f50057;
+}
+
+Button{
+    border-radius: 0;
+}

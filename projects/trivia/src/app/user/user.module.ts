@@ -13,8 +13,10 @@ import {
   InviteFriendsComponent,
   InviteFriendsDialogComponent,
   InviteMailFriendsComponent,
-  PreviewQuestionDialogComponent
+  LocationResetDialogComponent
 } from './components';
+// import { ImageCropperModule } from 'ngx-img-cropper';
+import { PreviewQuestionDialogComponent } from './components';
 import { ImageCropperModule } from 'ngx-img-cropper';
 import { NgQuillTexModule } from 'ng-quill-tex';
 
@@ -27,6 +29,7 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
     InviteFriendsDialogComponent,
+    LocationResetDialogComponent,
     PreviewQuestionDialogComponent
   ],
   imports: [
@@ -51,9 +54,11 @@ import { NgQuillTexModule } from 'ng-quill-tex';
     InviteFriendsComponent,
     InviteMailFriendsComponent,
     InviteFriendsDialogComponent,
+    LocationResetDialogComponent
   ],
   entryComponents: [
     InviteFriendsDialogComponent,
+    LocationResetDialogComponent,
     PreviewQuestionDialogComponent
   ]
 })

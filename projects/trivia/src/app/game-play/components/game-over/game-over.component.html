@@ -108,8 +108,14 @@
         <button class="btn-share" type="button" (click)="reMatchGame()"
           *ngIf="game.gameOptions.playerMode == PlayerMode.Single">Play Again</button>
         <button class="btn-share" type="button" (click)="inviteAsFriend()"
-          *ngIf="game.gameOptions.opponentType == opponentType.Random && !disableFriendInviteBtn">Invite as
+          *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations[otherUserInfo?.email]?.status === 'add'">Invite as
           Friend</button>
+        <button class="btn-share friend-request-sent" type="button"
+          *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email && userInvitations[otherUserInfo?.email]?.status === 'pending'">Friend Request Sent</button>
+
+        <button class="btn-share friends" type="button"
+          *ngIf="(game.gameOptions.opponentType == opponentType.Random || game.gameOptions.isChallenge ) && otherUserInfo?.email  && userInvitations[otherUserInfo?.email]?.status === 'approved'">Friends</button>
+
         <img *ngIf="disableRematchBtn" src="/assets/images/ajax-loader.gif" class="rematch-loaderimage"
           alt="Loader Image">
         <button class="btn-share" type="button" [routerLink]="['/']">Home</button>

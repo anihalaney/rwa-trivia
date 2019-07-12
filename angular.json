@@ -584,7 +584,8 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/trivia-editor",
-
+            "baseHref": "/trivia-editor",
+            "deployUrl": "/trivia-editor/",
             "index": "projects/trivia-editor/src/index.html",
             "main": "projects/trivia-editor/src/main.ts",
             "polyfills": "projects/trivia-editor/src/polyfills.ts",
@@ -614,16 +615,16 @@
             "trivia-dev": {
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/trivia/environment.prod.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
                 }
               ]
             },
             "trivia-production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/trivia/environment.prod.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/trivia/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -643,19 +644,19 @@
                 }
               ]
             },
-            "bitwiser-edu-dev":{
+            "bitwiser-edu-dev": {
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/bitwiser-edu/environment.prod.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
                 }
               ]
             },
             "bitwiser-edu-production": {
               "fileReplacements": [
                 {
-                  "replace": "projects/trivia-editor/src/environments/environment.ts",
-                  "with": "projects/trivia-editor/src/environments/bitwiser-edu/environment.prod.ts"
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.prod.ts"
                 }
               ],
               "optimization": true,

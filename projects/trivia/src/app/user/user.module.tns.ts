@@ -12,8 +12,10 @@ import {
   QuestionAddUpdateComponent,
   InviteFriendsDialogComponent,
   InviteMailFriendsComponent,
+  LocationResetDialogComponent,
   PreviewQuestionDialogComponent
 } from './components';
+
 import { DropDownModule } from 'nativescript-drop-down/angular';
 
 @NgModule({
@@ -25,6 +27,7 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     QuestionAddUpdateComponent,
     InviteFriendsDialogComponent,
     InviteMailFriendsComponent,
+    LocationResetDialogComponent,
     PreviewQuestionDialogComponent
   ],
   imports: [
@@ -46,9 +49,13 @@ import { DropDownModule } from 'nativescript-drop-down/angular';
     ProfileSettingsComponent,
     QuestionAddUpdateComponent,
     MyQuestionsComponent,
-    InviteFriendsComponent
+    InviteFriendsComponent,
+    LocationResetDialogComponent
   ],
-  entryComponents: [PreviewQuestionDialogComponent],
+  entryComponents: [
+    LocationResetDialogComponent,
+    PreviewQuestionDialogComponent
+  ],
   schemas: [NO_ERRORS_SCHEMA]
 })
 export class UserModule { }

@@ -82,6 +82,22 @@ export class UserActions {
     };
   }
 
+  static LOAD_USER_INVITATIONS_INFO = 'LOAD_USER_INVITATIONS_INFO';
+  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string ): ActionWithPayload<{}> {
+    return {
+      type: UserActions.LOAD_USER_INVITATIONS_INFO,
+      payload: {userId, invitedUserEmail, invitedUserId}
+    };
+  }
+
+  static LOAD_USER_INVITATION_INFO_SUCCESS = 'LOAD_USER_INVITATION_INFO_SUCCESS';
+  loadUserInvitationsInfoSuccess(invitation: Invitation): ActionWithPayload<Invitation> {
+    return {
+      type: UserActions.LOAD_USER_INVITATION_INFO_SUCCESS,
+      payload: invitation
+    };
+  }
+
   static LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS = 'LOAD_OTHER_USER_PROFILE_EXTENDED_INFO_SUCCESS';
   loadOtherUserProfileWithExtendedInfoSuccess(user: User): ActionWithPayload<User> {
     return {
@@ -273,4 +289,37 @@ export class UserActions {
       payload: games
     };
   }
+
+  static LOAD_ADDRESS_USING_LAT_LONG = 'LOAD_ADDRESS_USING_LAT_LONG';
+  loadAddressUsingLatLong(latLong: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_ADDRESS_USING_LAT_LONG,
+      payload: latLong
+    };
+  }
+
+  static LOAD_ADDRESS_USING_LAT_LONG_SUCCESS = 'LOAD_ADDRESS_USING_LAT_LONG_SUCCESS';
+  loadAddressUsingLatLongSuccess(location: any[]): ActionWithPayload<any[]> {
+    return {
+      type: UserActions.LOAD_ADDRESS_USING_LAT_LONG_SUCCESS,
+      payload: location
+    };
+  }
+
+  static LOAD_ADDRESS_SUGGESTIONS = 'LOAD_ADDRESS_SUGGESTIONS';
+  loadAddressSuggestions(location: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.LOAD_ADDRESS_SUGGESTIONS,
+      payload: location
+    };
+  }
+
+  static LOAD_ADDRESS_SUGGESTIONS_SUCCESS = 'LOAD_ADDRESS_SUGGESTIONS_SUCCESS';
+  loadAddressSuggestionsSuccess(suggestions: any[]): ActionWithPayload<any[]> {
+    return {
+      type: UserActions.LOAD_ADDRESS_SUGGESTIONS_SUCCESS,
+      payload: suggestions
+    };
+  }
+
 }

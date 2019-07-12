@@ -1,5 +1,5 @@
 import {
-    Game, Blog, RSSFeedConstants, interceptorConstants, ResponseMessagesConstants, schedulerConstants
+    Game, Blog, interceptorConstants, ResponseMessagesConstants, schedulerConstants
 } from '../../projects/shared-library/src/lib/shared/model';
 import { BlogService } from '../services/blog.service';
 import { GameService } from '../services/game.service';
@@ -66,7 +66,7 @@ export class SchedulerController {
         try {
             const blogs: Array<Blog> = [];
 
-            Feed.load(RSSFeedConstants.feedURL, async (err, rss) => {
+            Feed.load(Utils.getFeedUrl(), async (err, rss) => {
 
                 let index = 0;
                 let viewCount = 100;
