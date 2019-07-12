@@ -35,11 +35,11 @@ const deployFunctionsCommand = `${buildSsr} &&
                     setConfig
                     npx rimraf functions/index.js && 
                     npx cp functions/app-functions.js functions/index.js && 
-                    firebase deploy -P project --only functions && 
+                    firebase deploy -P projectName --only functions && 
                     npx rimraf functions/index.js && 
                     npx cp functions/ssr-functions.js functions/index.js && 
-                    firebase deploy -P project --only functions:ssr && 
-                    firebase deploy -P project --only hosting && 
+                    firebase deploy -P projectName --only functions:ssr && 
+                    firebase deploy -P projectName --only hosting && 
                     npm install firebase@6.0.2`;
 
 const commandList = {
@@ -53,6 +53,7 @@ const commandList = {
                 "description": 'project Name e.g. trivia',
                 "type": 'string',
                 "choices": projects,
+                "default" : 'trivia',
                 "alias": ['P', 'p']
             },
             "productVariant": {
@@ -60,6 +61,7 @@ const commandList = {
                 "description": 'configuration project name defined in angular.json e.g. trivia',
                 "type": 'string',
                 "choices": productVariants,
+                "default" : 'trivia',
                 "alias": ['PV', 'pv']
             },
             "env": {
@@ -67,6 +69,7 @@ const commandList = {
                 "description": 'project environment e.g. production',
                 "type": 'string',
                 "choices": env,
+                "default" : 'dev',
                 "alias": 'e'
             }
         }
@@ -74,14 +77,15 @@ const commandList = {
     "run-functions":
     {
         "command": `npx rimraf functions/server & 
-                        tsc --project functions  && firebase serve -P project  --only functions`,
+                        tsc --project functions  && firebase serve -P projectName  --only functions`,
         "description": "deploy firebase functions local",
         "options": {
-            "project": {
+            "projectName": {
                 "demand": true,
                 "description": 'project Name from .firebaserc e.g. trivia-staging',
                 "type": 'string',
                 "choices": firebaseProjects,
+                "default": 'trivia-dev',
                 "alias": ['P', 'p']
             }
         }
@@ -91,11 +95,12 @@ const commandList = {
         "command": deployFunctionsCommand,
         "description": "deploy firebase functions to staging/production env",
         "options": {
-            "project": {
+            "projectName": {
                 "demand": true,
                 "description": 'project Name from .firebaserc e.g. trivia-staging',
                 "type": 'string',
                 "choices": firebaseProjects,
+                "default": 'trivia-staging',
                 "alias": ['P', 'p']
             },
             "productVariant": {
@@ -103,6 +108,7 @@ const commandList = {
                 "description": 'configuration project name defined in angular.json e.g. trivia',
                 "type": 'string',
                 "choices": productVariants,
+                "default": 'trivia',
                 "alias": ['PV', 'pv']
             },
             "env": {
@@ -110,6 +116,7 @@ const commandList = {
                 "description": 'project env e.g. staging',
                 "type": 'string',
                 "choices": env,
+                "default": 'staging',
                 "alias": ['E', 'e']
             },
             "setConfig": {
@@ -119,13 +126,13 @@ const commandList = {
         },
         "builder": args => {
             const env = args.argv.env;
-            const project = args.argv.project;
+            const project = args.argv.projectName;
             args.argv.setConfig = env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '';
         }
     },
     "run-mobile":
     {
-        "command": "tns run platform  --bundle env forDevice --env.package_name=packageName --env.project=productVariant ",
+        "command": "tns run platform  --bundle environment forDevice --env.package_name=packageName --env.project=productVariant ",
         "description": "run android/ios app in staging/production environment",
         "options": {
             "productVariant": {
@@ -133,6 +140,7 @@ const commandList = {
                 "description": 'project Name e.g. trivia',
                 "type": 'string',
                 "choices": productVariants,
+                "default" : 'trivia',
                 "alias": ['PV', 'pv']
             },
             "packageName": {
@@ -140,6 +148,7 @@ const commandList = {
                 "description": 'project package name defined in firebase e.g. io.bitwiser.trivia.dev',
                 "type": 'string',
                 "choices": packageNames,
+                "default" : 'io.bitwiser.trivia.dev',
                 "alias": ['pk', 'PK']
             },
             "platform": {
@@ -147,12 +156,14 @@ const commandList = {
                 "description": 'Mobile platform e.g. android',
                 "type": 'string',
                 "choices": platForms,
+                "default" : 'android',
                 "alias": ['plt', 'PLT']
             },
-            "env": {
+            "environment": {
                 "demand": false,
                 "default": "",
                 "coerce": args => args === 'production' ? '--env.prod --env.aot --env.uglify' : '',
+                "default" : 'dev',
                 "alias": ['E', 'e']
             },
             "forDevice": {
@@ -166,7 +177,7 @@ const commandList = {
     "release-mobile": {
         "command": `rm -rf platforms/platformName &&
                         tns buildCmd platformName --bundle 
-                        env
+                        environment
                         --env.aot --env.uglify 
                         forDevice
                         --env.package_name=packageName 
@@ -180,6 +191,7 @@ const commandList = {
                 "description": 'project Name e.g. trivia',
                 "type": 'string',
                 "choices": productVariants,
+                "default": 'trivia',
                 "alias": ['PV', 'pv']
             },
             "packageName": {
@@ -187,18 +199,20 @@ const commandList = {
                 "description": 'project package name defined in firebase e.g. io.bitwiser.trivia.dev',
                 "type": 'string',
                 "choices": packageNames,
-                "alias": 'pck'
+                "default": 'io.bitwiser.trivia.dev',
+                "alias": ['pk', 'PK']
             },
             "platformName": {
                 "demand": true,
                 "description": 'Mobile platform e.g. android',
                 "type": 'string',
                 "choices": platForms,
-                "alias": 'plt'
+                "default": 'ios',
+                "alias": ['plt', 'PLT']
             },
-            "env": {
+            "environment": {
                 "demand": false,
-                "default": "",
+                "default": "dev",
                 "description": 'project environment e.g. production',
                 "coerce": args => args === 'production' ? '--env.prod' : '',
                 "alias": ['E', 'e']
@@ -267,6 +281,7 @@ const commandList = {
                 "description": 'schedular environment dev/prod',
                 "type": 'string',
                 "choices": schedularEnv,
+                "default": 'dev',
                 "alias": 'se'
             }
         }

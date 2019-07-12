@@ -705,7 +705,7 @@
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
-                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.prod.ts"
                 }
               ],
               "optimization": true,
