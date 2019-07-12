@@ -26,7 +26,7 @@ export const CONFIG: IConfig = {
   'termsAndConditionsUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/terms-and-conditions',
   'privacyUrl': 'https://rwa-trivia-dev-e57fc.firebaseapp.com/terms-and-conditions',
   'ua_id': 'UA-122807814-1'
-  };
+};
 
 
   export const projectMeta = {

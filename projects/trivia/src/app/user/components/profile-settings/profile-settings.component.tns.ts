@@ -1,7 +1,4 @@
-import {
-  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
-  ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -24,14 +21,9 @@ import { isAndroid } from 'tns-core-modules/platform';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
+import { FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, Parameter, User } from '../../../../../../shared-library/src/lib/shared/model';
 import { AppState } from '../../../store';
 import { userState } from '../../store';
-import * as geolocation from 'nativescript-geolocation';
-import { filter } from 'rxjs/operators';
-import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
-import {
-  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants
-} from '../../../../../../shared-library/src/lib/shared/model';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 import { ProfileSettings } from './profile-settings';
 

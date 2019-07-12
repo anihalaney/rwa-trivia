@@ -12,6 +12,7 @@ import { appState, categoryDictionary } from '../../../store';
 import { gamePlayState, GamePlayState } from '../../store';
 import * as gameplayactions from '../../store/actions';
 import { GameQuestionComponent } from '../game-question/game-question.component';
+import { Router } from '@angular/router';
 
 
 export class GameDialog {
@@ -65,7 +66,8 @@ export class GameDialog {
     this.genQuestionComponent = questionComponent;
   }
 
-  constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils, public cd: ChangeDetectorRef) {
+  constructor(public store: Store<GamePlayState>, public userActions: UserActions, public utils: Utils,
+    public cd: ChangeDetectorRef, public router: Router) {
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(take(1)).subscribe(s => this.user = s.user));
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
@@ -441,6 +443,27 @@ export class GameDialog {
     this.cd.markForCheck();
   }
 
+  continueGame() {
+    this.currentQuestion = undefined;
+    this.originalAnswers = undefined;
+    if (this.turnFlag) {
+      this.continueNext = false;
+      this.store.dispatch(new gameplayactions.ResetCurrentGame());
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.store.dispatch(new gameplayactions.UpdateGameRound(this.game.gameId));
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.questionAnswered = false;
+      this.showContinueBtn = false;
+      this.continueNext = false;
+      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
+      this.checkGameOver();
+      if (!this.gameOver) {
+        this.getLoader(false);
+      }
+    }
+  }
+
   destroy() {
     this.user = undefined;
     this.gameObs = undefined;
@@ -479,6 +502,9 @@ export class GameDialog {
     this.applicationSettings = undefined;
 
     this.genQuestionComponent = undefined;
+
+    this.store.dispatch(new gameplayactions.ResetCurrentGame());
+    this.utils.unsubscribe([this.timerSub, this.questionSub]);
   }
 
 }
