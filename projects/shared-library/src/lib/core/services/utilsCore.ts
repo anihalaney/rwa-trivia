@@ -6,7 +6,10 @@ import { Answer, User, GameOptions, Game } from '../../shared/model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3cc1eb3a0cf4b5a8b2be6e1999fbc7fd3b5e8784
 export abstract class UtilsCore {
 
   constructor(
@@ -99,9 +102,7 @@ export abstract class UtilsCore {
     return millis / 60000;
   }
 
-  showMessage(type, message) {
-  }
-
+  abstract showMessage(type: string, message: string);
   abstract setLoginFirebaseAnalyticsParameter(user): Observable<User>;
   abstract setNewGameFirebaseAnalyticsParameter(gameOptions: GameOptions, userId: string, gameId: string): Observable<string>;
   abstract setEndGameFirebaseAnalyticsParameter(game: Game, userId: string, otherUserId: string): Observable<string>;

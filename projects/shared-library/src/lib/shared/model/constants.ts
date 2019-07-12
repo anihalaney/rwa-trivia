@@ -172,7 +172,13 @@ export enum SocialShareConstants {
 
 export enum GameConstants {
     GAME_STATUS = 'GameStatus',
-    GAME_OVER = 'gameOver'
+    GAME_OVER = 'gameOver',
+    RANDOM = 'Random',
+    FRIEND = 'Friend',
+    NORMAL = 'Normal',
+    OFFLINE = 'Offline',
+    SINGLE = 'Single',
+    OPPONENT = 'Opponent'
 }
 
 export enum AccountConstants {
@@ -434,4 +440,9 @@ export enum GoogleLocationAPI {
     GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
     GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
 }
+
+export enum AnalyticsEventConstants {
+    EVENT = 'event',
+}
+
 

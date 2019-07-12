@@ -1,12 +1,17 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { Feedback, FeedbackType, FeedbackPosition } from 'nativescript-feedback';
-import { UtilsCore } from './utilsCore';
+import { Feedback, FeedbackPosition, FeedbackType } from 'nativescript-feedback';
 import * as firebase from 'nativescript-plugin-firebase';
-import { Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, GameOptions, PlayerMode, GameConstant, OpponentType, GameMode, Game, GeneralConstants } from '../../shared/model';
-import { of, Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import {
+  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants,
+  Game, GameConstant, GameMode, GameOptions, GeneralConstants, OpponentType, Parameter, PlayerMode, User
+} from '../../shared/model';
+import { UtilsCore } from './utilsCore';
+
 
 @Injectable()
 export class Utils extends UtilsCore {
+
 
   private message: Feedback;
   private messageConfig = {
@@ -21,7 +26,7 @@ export class Utils extends UtilsCore {
     this.message = new Feedback();
   }
 
-  showMessage(type, message) {
+  showMessage(type: string, message: string) {
     switch (type) {
       case 'success':
         this.messageConfig.type = FeedbackType.Success;
@@ -38,8 +43,8 @@ export class Utils extends UtilsCore {
   sendErrorToCrashlytics(type: any, error: any) {
     firebase.crashlytics.log(type, error);
     firebase.crashlytics.sendCrashLog(error);
-
   }
+
 
   setAnalyticsParameter(key: string, value: string, analyticsParameter: Array<Parameter>): Array<Parameter> {
     analyticsParameter.push({ key: key, value: value });

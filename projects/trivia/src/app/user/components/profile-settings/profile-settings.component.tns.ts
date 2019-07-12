@@ -277,7 +277,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   saveProfileImage() {
     this.getUserFromFormValue(false, '');
     this.assignImageValues();
-    this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
+    this.saveUser(this.user,  (this.user.location !== this.userCopyForReset.location) ? true : false);
   }
 
   assignImageValues(): void {

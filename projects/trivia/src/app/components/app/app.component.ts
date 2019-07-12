@@ -12,6 +12,8 @@ import { ApplicationSettingsActions, UserActions } from 'shared-library/core/sto
 import { User } from 'shared-library/shared/model';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { AppState, appState } from '../../store';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -81,13 +83,8 @@ export class AppComponent implements OnInit, OnDestroy {
         return;
       }
       if (this.windowRef && this.windowRef.nativeWindow) {
-        if (this.windowRef.nativeWindow.ga) {
-          this.windowRef.nativeWindow.ga('set', 'page', evt.urlAfterRedirects);
-          this.windowRef.nativeWindow.ga('send', 'pageview');
-        }
-        if (this.windowRef.nativeWindow.scrollTo) {
-          this.windowRef.nativeWindow.scrollTo(0, 0);
-        }
+        this.windowRef.addNavigationsInAnalytics(evt);
+        this.windowRef.scrollDown();
       }
     }));
   }

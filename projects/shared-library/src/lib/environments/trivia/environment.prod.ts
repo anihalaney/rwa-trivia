@@ -14,9 +14,13 @@ export const CONFIG: IConfig = {
     messagingSenderId: '479350787602'
   },
   'functionsUrl': `https://bitwiser.io`,
-  'editorUrl': 'https://bitwiser.io/trivia-editor',
+  'editorUrl': 'https://bitwiser.io/editor',
+  'hightlighJsURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js',
+  'hightlighCSSURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css',
+  'katexCSSURL' : 'https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css',
   'termsAndConditionsUrl': 'https://bitwiser.io/terms-and-conditions',
-  'privacyUrl': 'https://bitwiser.io/terms-and-conditions'
+  'privacyUrl': 'https://bitwiser.io/terms-and-conditions',
+  'ua_id': 'UA-122807814-1'
 };
 
 export const projectMeta = {
