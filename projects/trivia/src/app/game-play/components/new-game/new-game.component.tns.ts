@@ -1,5 +1,6 @@
 import {
-  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
+  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
@@ -76,7 +77,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.gameOptions.opponentType = 1;
           this.gameOptions.isChallenge = true;
           this.friendUserId = data.userid;
-    }}));
+        }
+      }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       if (gameObj && gameObj['gameId']) {
@@ -203,51 +205,10 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     if (this.gameOptions.playerMode === PlayerMode.Single) {
       delete this.gameOptions.opponentType;
     }
-
-    this.setNewGameFirebaseAnalyticsParameter();
-
     this.startNewGame(this.gameOptions);
   }
 
-  setNewGameFirebaseAnalyticsParameter() {
 
-    let analyticsParameter: Parameter[] = [];
-
-    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, this.user.userId, analyticsParameter);
-    analyticsParameter = this.utils.setAnalyticsParameter(
-      FirebaseAnalyticsKeyConstants.PLAYER_MODE,
-      this.gameOptions.playerMode === PlayerMode.Single ? GameConstant.SINGLE : GameConstant.OPPONENT,
-      analyticsParameter
-    );
-
-    analyticsParameter = this.utils.setAnalyticsParameter(
-      FirebaseAnalyticsKeyConstants.OPPONENT_TYPE,
-      this.gameOptions.opponentType === OpponentType.Random ? GameConstant.RANDOM :
-        this.gameOptions.opponentType === OpponentType.Friend ? GameConstant.FRIEND : GameConstant.COMPUTER,
-      analyticsParameter
-    );
-
-    analyticsParameter = this.utils.setAnalyticsParameter(
-      FirebaseAnalyticsKeyConstants.GAME_MODE,
-      this.gameOptions.gameMode === GameMode.Normal ? GameConstant.NORMAL : GameConstant.OFFLINE,
-      analyticsParameter
-    );
-
-    analyticsParameter = this.utils.setAnalyticsParameter(
-      FirebaseAnalyticsKeyConstants.CATEGORY_IDS,
-      JSON.stringify(this.gameOptions.categoryIds),
-      analyticsParameter
-    );
-
-    const tagsValue = JSON.stringify(this.gameOptions.tags);
-    analyticsParameter = this.utils.setAnalyticsParameter(
-      FirebaseAnalyticsKeyConstants.TAGS,
-      tagsValue.substr(0, 100),
-      analyticsParameter
-    );
-
-    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.START_NEW_GAME, analyticsParameter);
-  }
 
   selectCategory(args: ListViewEventData) {
     const category: Category = this.filteredCategories[args.index];

@@ -2,13 +2,12 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../../shared/model';
-import { UserService, GameService } from '../../services';
+import { UserService, GameService, Utils } from '../../services';
 import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { empty } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
-
 
 @Injectable()
 export class UserEffects {
@@ -19,6 +18,7 @@ export class UserEffects {
         .pipe(ofType(UserActions.LOGIN_SUCCESS))
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
             switchMap((user: User) => this.svc.loadUserProfile(user)),
+            mergeMap((user: User) => this.utils.setLoginFirebaseAnalyticsParameter(user)),
             map((user: User) => this.userActions.addUserWithRoles(user)));
 
 
@@ -110,18 +110,18 @@ export class UserEffects {
             switchMap((action: ActionWithPayload<string>) =>
                 this.svc.loadUserFriends(action.payload)
                     .pipe(map((friends: Friends) => {
-                    const friendList = [];
-                    if (friends && friends.myFriends) {
-                        friends.myFriends.map((friend, index) => {
-                            friendList.push(Object.keys(friend)[0]);
-                        });
-                    }
-                    return friendList;
+                        const friendList = [];
+                        if (friends && friends.myFriends) {
+                            friends.myFriends.map((friend, index) => {
+                                friendList.push(Object.keys(friend)[0]);
+                            });
+                        }
+                        return friendList;
                     }),
-                    switchMap((friendsList: string[]) =>
-                        this.svc.getOtherUserGamePlayedStat(action.payload, friendsList)
-                        .pipe(map((friends: Friends) => this.userActions.loadUserFriendsSuccess(friends)))
-                    ))
+                        switchMap((friendsList: string[]) =>
+                            this.svc.getOtherUserGamePlayedStat(action.payload, friendsList)
+                                .pipe(map((friends: Friends) => this.userActions.loadUserFriendsSuccess(friends)))
+                        ))
             )
         );
 
@@ -186,8 +186,10 @@ export class UserEffects {
     addUser$ = this.actions$
         .pipe(ofType(UserActions.ADD_USER_PROFILE))
         .pipe(
-            switchMap((action: ActionWithPayload<User>) => {
-                return this.svc.saveUserProfile(action.payload).pipe(
+            switchMap((action: ActionWithPayload<any>) => {
+                return this.svc.saveUserProfile(action.payload.user).pipe(
+                    // tslint:disable-next-line:max-line-length
+                    mergeMap((status: any) => this.utils.setUserLocationFirebaseAnalyticsParameter(action.payload.user, action.payload.isLocationChanged)),
                     map((status: any) => this.userActions.addUserProfileSuccess())
                 );
             })
@@ -266,5 +268,6 @@ export class UserEffects {
         private gameService: GameService,
         private svc: UserService,
         private store: Store<CoreState>,
+        private utils: Utils,
     ) { }
 }

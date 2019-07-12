@@ -64,7 +64,7 @@ export class AddPlayerQnASuccess implements Action {
 
 export class SetGameOver implements Action {
   readonly type = GamePlayActionTypes.SET_GAME_OVER;
-  constructor(public payload: string) { }
+  constructor(public payload: { playedGame: Game, userId: string, otherUserId: string }) { }
 }
 
 export class ResetCurrentQuestion implements Action {

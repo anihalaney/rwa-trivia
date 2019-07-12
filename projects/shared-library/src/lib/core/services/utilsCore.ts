@@ -1,12 +1,13 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Inject, PLATFORM_ID } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import { CONFIG } from '../../environments/environment';
-import { Answer, User } from '../../shared/model';
+import { Answer, User, GameOptions, Game } from '../../shared/model';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 
-export class UtilsCore {
+
+export abstract class UtilsCore {
 
   constructor(
     @Inject(PLATFORM_ID) public platformId: Object,
@@ -101,4 +102,8 @@ export class UtilsCore {
   showMessage(type, message) {
   }
 
+  abstract setLoginFirebaseAnalyticsParameter(user): Observable<User>;
+  abstract setNewGameFirebaseAnalyticsParameter(gameOptions: GameOptions, userId: string, gameId: string): Observable<string>;
+  abstract setEndGameFirebaseAnalyticsParameter(game: Game, userId: string, otherUserId: string): Observable<string>;
+  abstract setUserLocationFirebaseAnalyticsParameter(user: User, isLocationChanged: boolean): Observable<string>;
 }

@@ -6,4 +6,9 @@ export interface IConfig {
   editorUrl: string;
   termsAndConditionsUrl: string;
   privacyUrl: string;
+  hightlighJsURL: string;
+  hightlighCSSURL: string;
+  katexCSSURL: string;
+  addressByLatLongURL: string;
+  addressSuggestionsURL: string;
 }

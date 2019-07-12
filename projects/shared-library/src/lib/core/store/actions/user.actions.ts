@@ -23,6 +23,7 @@ export class UserActions {
     };
   }
 
+
   static ADD_USER_WITH_ROLES = 'ADD_USER_WITH_ROLES';
   addUserWithRoles(user: User): ActionWithPayload<User> {
     return {
@@ -210,10 +211,10 @@ export class UserActions {
   }
 
   static ADD_USER_PROFILE = 'ADD_USER_PROFILE';
-  addUserProfile(user: User): ActionWithPayload<User> {
+  addUserProfile(user: User, isLocationChanged: boolean): ActionWithPayload<any> {
     return {
       type: UserActions.ADD_USER_PROFILE,
-      payload: user
+      payload: { user: user, isLocationChanged: isLocationChanged }
     };
   }
 

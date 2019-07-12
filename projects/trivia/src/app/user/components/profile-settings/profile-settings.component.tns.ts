@@ -1,29 +1,30 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component, ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, AfterViewInit, ViewContainerRef
+  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component,
+  ElementRef, OnDestroy, QueryList, ViewChild, ViewChildren, ViewContainerRef
 } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
+import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
 import { isAvailable, requestPermissions, takePicture } from 'nativescript-camera';
+import * as geolocation from 'nativescript-geolocation';
+import { ImageCropper } from 'nativescript-imagecropper';
 import * as imagepicker from 'nativescript-imagepicker';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { filter } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { profileSettingsConstants, FirebaseScreenNameConstants } from 'shared-library/shared/model';
+import { profileSettingsConstants } from 'shared-library/shared/model';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { ImageAsset } from 'tns-core-modules/image-asset';
-import { ImageSource } from 'tns-core-modules/image-source';
+import { fromAsset, ImageSource } from 'tns-core-modules/image-source';
 import { isAndroid } from 'tns-core-modules/platform';
-import { AppState } from '../../../store';
-import { ProfileSettings } from './profile-settings';
 import * as dialogs from 'tns-core-modules/ui/dialogs';
-import { fromAsset } from 'tns-core-modules/image-source';
-import { ImageCropper } from 'nativescript-imagecropper';
-import { ActivatedRoute, Router } from '@angular/router';
 import { SegmentedBar, SegmentedBarItem } from 'tns-core-modules/ui/segmented-bar';
 import * as utils from 'tns-core-modules/utils/utils';
+import { AppState } from '../../../store';
 import { userState } from '../../store';
 import * as geolocation from 'nativescript-geolocation';
 import { filter } from 'rxjs/operators';
@@ -32,6 +33,7 @@ import {
   Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants
 } from '../../../../../../shared-library/src/lib/shared/model';
 import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
+import { ProfileSettings } from './profile-settings';
 
 @Component({
   selector: 'profile-settings',
@@ -275,7 +277,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
   saveProfileImage() {
     this.getUserFromFormValue(false, '');
     this.assignImageValues();
-    this.saveUser(this.user);
+    this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
   }
 
   assignImageValues(): void {
@@ -362,13 +364,8 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
           this.getUserFromFormValue(isEditSingleField, field);
           this.user.categoryIds = this.userCategories.filter(c => c.isSelected).map(c => c.id);
 
-          if (this.user.location !== this.userCopyForReset.location) {
-            this.setUserLocationFirebaseAnalyticsParameter(this.user);
-          }
-
           // call saveUser
-          console.log(JSON.stringify(this.user));
-          this.saveUser(this.user);
+          this.saveUser(this.user, (this.user.location !== this.userCopyForReset.location) ? true : false);
 
         } else {
           this.userForm.controls['displayName'].setErrors({ 'exist': true });
@@ -382,15 +379,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
 
   }
 
-  setUserLocationFirebaseAnalyticsParameter(user: User) {
-
-    let analyticsParameter: Parameter[] = [];
-
-    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.USER_ID, user.userId, analyticsParameter);
-    analyticsParameter = this.utils.setAnalyticsParameter(FirebaseAnalyticsKeyConstants.LOCATION, user.location, analyticsParameter);
-
-    this.utils.sendFirebaseAnalyticsEvents(FirebaseAnalyticsEventConstants.USER_LOCATION, analyticsParameter);
-  }
 
   hideKeyboard() {
     this.textField
