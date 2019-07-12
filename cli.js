@@ -53,7 +53,7 @@ const commandList = {
                 "description": 'project Name e.g. trivia',
                 "type": 'string',
                 "choices": projects,
-                "default" : 'trivia',
+                "default": 'trivia',
                 "alias": ['P', 'p']
             },
             "productVariant": {
@@ -61,7 +61,7 @@ const commandList = {
                 "description": 'configuration project name defined in angular.json e.g. trivia',
                 "type": 'string',
                 "choices": productVariants,
-                "default" : 'trivia',
+                "default": 'trivia',
                 "alias": ['PV', 'pv']
             },
             "env": {
@@ -69,7 +69,7 @@ const commandList = {
                 "description": 'project environment e.g. production',
                 "type": 'string',
                 "choices": env,
-                "default" : 'dev',
+                "default": 'dev',
                 "alias": 'e'
             }
         }
@@ -140,7 +140,7 @@ const commandList = {
                 "description": 'project Name e.g. trivia',
                 "type": 'string',
                 "choices": productVariants,
-                "default" : 'trivia',
+                "default": 'trivia',
                 "alias": ['PV', 'pv']
             },
             "packageName": {
@@ -148,7 +148,7 @@ const commandList = {
                 "description": 'project package name defined in firebase e.g. io.bitwiser.trivia.dev',
                 "type": 'string',
                 "choices": packageNames,
-                "default" : 'io.bitwiser.trivia.dev',
+                "default": 'io.bitwiser.trivia.dev',
                 "alias": ['pk', 'PK']
             },
             "platform": {
@@ -156,14 +156,14 @@ const commandList = {
                 "description": 'Mobile platform e.g. android',
                 "type": 'string',
                 "choices": platForms,
-                "default" : 'android',
+                "default": 'android',
                 "alias": ['plt', 'PLT']
             },
             "environment": {
                 "demand": false,
                 "default": "",
                 "coerce": args => args === 'production' ? '--env.prod --env.aot --env.uglify' : '',
-                "default" : 'dev',
+                "default": 'dev',
                 "alias": ['E', 'e']
             },
             "forDevice": {
@@ -172,11 +172,10 @@ const commandList = {
                 "hidden": true
             }
         },
-        "builder": args => args.argv.platform === 'ios' && args.argv.env.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = ''
+        "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.env.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = ''
     },
     "release-mobile": {
-        "command": `rm -rf platforms/platformName &&
-                        tns buildCmd platformName --bundle 
+        "command": `tns buildCmd platformName --bundle 
                         environment
                         --env.aot --env.uglify 
                         forDevice
@@ -296,10 +295,10 @@ function buildCommands() {
     for (const cmd in commandList) {
         argv = argv
             .command(cmd, commandList[cmd].description, function (args) {
-                argv = yargs.options(commandList[cmd].options);  
-                if(commandList[cmd].builder){
+                argv = yargs.options(commandList[cmd].options);
+                if (commandList[cmd].builder) {
                     commandList[cmd].builder(args);
-                }             
+                }
             }, function (argv) {
                 let executableCmd = commandList[cmd].command;
                 for (const opt in commandList[cmd].options) {
@@ -308,7 +307,7 @@ function buildCommands() {
                     }
                 }
                 executeCommand(executableCmd);
-            });            
+            });
     }
 
     argv = argv.help()
@@ -320,13 +319,13 @@ function buildCommands() {
 }
 
 
-function checkCommands (yargs, argv, numRequired) {
-  console.log(argv);
-  if (argv._.length < numRequired) {
-    yargs.showHelp()
-  } else {
-    // check for unknown command
-  }
+function checkCommands(yargs, argv, numRequired) {
+    console.log(argv);
+    if (argv._.length < numRequired) {
+        yargs.showHelp()
+    } else {
+        // check for unknown command
+    }
 }
 
 function escapeRegExp(string) {
@@ -338,7 +337,7 @@ function executeCommand(executableCmd) {
         executableCmd = executableCmd.replace(/(\r\n|\n|\r)/gm, ""); //remove new line
         console.log(`Executing command ${executableCmd}`);
         execSync(executableCmd, { stdio: 'inherit' });
-    } catch (error) {     
+    } catch (error) {
     }
 }
 
