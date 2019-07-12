@@ -323,7 +323,7 @@
             ]
           },
           "configurations": {
-            "trivia-admin-dev": {
+            "trivia-dev": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
@@ -335,7 +335,7 @@
                 }
               ]
             },
-            "trivia-admin-staging": {
+            "trivia-staging": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
@@ -356,7 +356,7 @@
               "vendorChunk": false,
               "buildOptimizer": true
             },
-            "trivia-admin-production": {
+            "trivia-production": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
@@ -377,7 +377,7 @@
               "vendorChunk": false,
               "buildOptimizer": true
             },
-            "bitwiser-edu-admin-dev": {
+            "bitwiser-edu-dev": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
@@ -389,7 +389,7 @@
                 }
               ]
             },
-            "bitwiser-edu-admin-staging": {
+            "bitwiser-edu-staging": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
@@ -410,7 +410,7 @@
               "vendorChunk": false,
               "buildOptimizer": true
             },
-            "bitwiser-edu-admin-production": {
+            "bitwiser-edu-production": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
@@ -439,23 +439,23 @@
             "browserTarget": "trivia-admin:build"
           },
           "configurations": {
-            "trivia-admin-dev": {
-              "browserTarget": "trivia-admin:build:trivia-admin-dev"
+            "trivia-dev": {
+              "browserTarget": "trivia-admin:build:trivia-dev"
             },
-            "trivia-admin-staging": {
-              "browserTarget": "trivia-admin:build:trivia-admin-staging"
+            "trivia-staging": {
+              "browserTarget": "trivia-admin:build:trivia-staging"
             },
-            "trivia-admin-production": {
-              "browserTarget": "trivia-admin:build:trivia-admin-production"
+            "trivia-production": {
+              "browserTarget": "trivia-admin:build:trivia-production"
             },
-            "bitwiser-edu-admin-dev": {
-              "browserTarget": "trivia-admin:build:bitwiser-edu-admin-dev"
+            "bitwiser-edu-dev": {
+              "browserTarget": "trivia-admin:build:bitwiser-edu-dev"
             },
-            "bitwiser-edu-admin-staging": {
-              "browserTarget": "trivia-admin:build:bitwiser-edu-admin-staging"
+            "bitwiser-edu-staging": {
+              "browserTarget": "trivia-admin:build:bitwiser-edu-staging"
             },
-            "bitwiser-edu-admin-production": {
-              "browserTarget": "trivia-admin:build:bitwiser-edu-admin-production"
+            "bitwiser-edu-production": {
+              "browserTarget": "trivia-admin:build:bitwiser-edu-production"
             }
           }
         },
@@ -515,11 +515,11 @@
             "devServerTarget": "trivia-admin:serve"
           },
           "configurations": {
-            "trivia-admin-production": {
-              "devServerTarget": "trivia-admin:serve:trivia-admin-production"
+            "trivia-production": {
+              "devServerTarget": "trivia-admin:serve:trivia-production"
             },
-            "bitwiser-edu-admin-production": {
-              "devServerTarget": "trivia-admin:serve:bitwiser-edu-admin-production"
+            "bitwiser-edu-production": {
+              "devServerTarget": "trivia-admin:serve:bitwiser-edu-production"
             }
           }
         },
@@ -621,6 +621,30 @@
                 }
               ]
             },
+            "trivia-staging": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
             "trivia-production": {
               "fileReplacements": [
                 {
@@ -653,11 +677,35 @@
                 }
               ]
             },
+            "bitwiser-edu-staging": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/shared-library/src/lib/environments/environment.ts",
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
             "bitwiser-edu-production": {
               "fileReplacements": [
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
-                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.prod.ts"
+                  "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
                 }
               ],
               "optimization": true,
@@ -685,8 +733,20 @@
             "browserTarget": "trivia-editor:build"
           },
           "configurations": {
+            "trivia-dev": {
+              "browserTarget": "trivia-editor:build:trivia-dev"
+            },
+            "trivia-staging": {
+              "browserTarget": "trivia-editor:build:trivia-staging"
+            },
             "trivia-production": {
               "browserTarget": "trivia-editor:build:trivia-production"
+            },
+            "bitwiser-edu-dev": {
+              "browserTarget": "trivia-editor:build:bitwiser-edu-dev"
+            },
+            "bitwiser-edu-staging": {
+              "browserTarget": "trivia-editor:build:bitwiser-edu-staging"
             },
             "bitwiser-edu-production": {
               "browserTarget": "trivia-editor:build:bitwiser-edu-production"
@@ -742,8 +802,11 @@
             "devServerTarget": "trivia-editor:serve"
           },
           "configurations": {
-            "production": {
-              "devServerTarget": "trivia-editor:serve:production"
+            "trivia-production": {
+              "devServerTarget": "trivia-editor:serve:trivia-production"
+            },
+            "bitwiser-edu-production": {
+              "devServerTarget": "trivia-editor:serve:bitwiser-edu-production"
             }
           }
         },
