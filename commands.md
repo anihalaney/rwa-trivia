@@ -5,7 +5,7 @@ before any command.
 1) add command "cli": "node cli.js" to run the script 
 
 2) to pass the arguments to script we need to prepand "--" to the arguments.
-    e.g. npm run cli serve -- --projectName=trivia --configProject=trivia --environment=dev
+    e.g. npm run cli serve --projectName=trivia --configProject=trivia --environment=dev
 
 3) to add new command
     add command in cli.js

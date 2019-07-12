@@ -10,9 +10,6 @@ export interface IConfig {
   ua_id: string;
   termsAndConditionsUrl: string;
   privacyUrl: string;
-  hightlighJsURL: string;
-  hightlighCSSURL: string;
-  katexCSSURL: string;
   addressByLatLongURL: string;
   addressSuggestionsURL: string;
 }

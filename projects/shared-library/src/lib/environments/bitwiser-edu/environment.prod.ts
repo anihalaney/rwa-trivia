@@ -19,6 +19,8 @@ export const CONFIG: IConfig = {
   'hightlighJsURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js',
   'hightlighCSSURL' : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/a11y-light.min.css',
   'katexCSSURL' : 'https://cdn.jsdelivr.net/npm/katex@0.10.1/dist/katex.min.css',
+  'addressByLatLongURL': 'https://maps.googleapis.com/maps/api/geocode/json',
+  'addressSuggestionsURL': 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
   'termsAndConditionsUrl': 'https://bitwiser-edu.io/terms-and-conditions',
   'privacyUrl': 'https://bitwiser-edu.io/terms-and-conditions',
   'ua_id': 'UA-122807814-1'
