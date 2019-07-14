@@ -1,5 +1,6 @@
 const execSync = require('child_process').execSync;
 const yargs = require('yargs');
+const path = require('path');
 // Projects refers to different web application which we need to run
 const projects = ["trivia", "trivia-admin", "trivia-editor"];
 // Product variants
@@ -17,6 +18,7 @@ const firebaseProjects = ["trivia-dev",
 ];
 const schedularEnv = ['dev', 'prod'];
 const platForms = ['android', 'ios'];
+var fs = require("fs");
 
 
 
@@ -72,6 +74,9 @@ const commandList = {
                 "default" : 'dev',
                 "alias": 'e'
             }
+        },
+        "builder": (args) => {
+            overrideIndex([args.argv.project], args.argv.productVariant);
         }
     },
     "run-functions":
@@ -128,6 +133,7 @@ const commandList = {
             const env = args.argv.env;
             const project = args.argv.projectName;
             args.argv.setConfig = env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '';
+            overrideIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
         }
     },
     "run-mobile":
@@ -161,7 +167,6 @@ const commandList = {
             },
             "environment": {
                 "demand": false,
-                "default": "",
                 "coerce": args => args === 'production' ? '--env.prod --env.aot --env.uglify' : '',
                 "default" : 'dev',
                 "alias": ['E', 'e']
@@ -299,7 +304,7 @@ function buildCommands() {
                 argv = yargs.options(commandList[cmd].options);  
                 if(commandList[cmd].builder){
                     commandList[cmd].builder(args);
-                }             
+                }            
             }, function (argv) {
                 let executableCmd = commandList[cmd].command;
                 for (const opt in commandList[cmd].options) {
@@ -327,6 +332,24 @@ function checkCommands (yargs, argv, numRequired) {
   } else {
     // check for unknown command
   }
+}
+
+function overrideIndex(projectList, productVarient){
+
+    for (const project of projectList) {
+        let filepath = `./projects/${project}/src/index.html`;
+        var buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+        config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
+        for (const key in config) {
+            if (config.hasOwnProperty(key)) {
+                buffer = buffer.replace(new RegExp(escapeRegExp(`{${key}}`), 'g'), config[key]);
+                
+            }
+        }
+        var options = {encoding:'utf-8', flag:'w'};
+        fs.writeFileSync(filepath, buffer, options);        
+    }
+
 }
 
 function escapeRegExp(string) {
