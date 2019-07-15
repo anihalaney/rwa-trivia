@@ -36,7 +36,15 @@ Commands :
                   pk = project package name defined in firebase e.g. io.bitwiser.trivia.dev
                   plt = Mobile platform e.g. android
                   e = project environment
-
+5) command: release-mobile
+    description:  release android/ios app in staging/production environment
+    e.g.       :  node cli release-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e staging 
+                    --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword> --v <versionCode>
+    arguments  :  pv = project Name e.g. trivia
+                  pk = project package name defined in firebase e.g. io.bitwiser.trivia.dev
+                  plt = Mobile platform e.g. android
+                  e = project environment
+                  v = versionCode for androidManifest.xml
 
 5) command: run-schedular
     e.g.       :  node cli run-schedular --se prod

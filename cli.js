@@ -222,6 +222,13 @@ const commandList = {
                 "coerce": args => args === 'production' ? '--env.prod' : '',
                 "alias": ['E', 'e']
             },
+            "versionCode": {
+                "demand": false,
+                "description": 'versionCode for android build ',
+                "type": 'string',
+                "default": '1',
+                "alias": ['V', 'v']
+            },
             "androidRelease": {
                 "demand": false,
                 "hidden": true
@@ -258,6 +265,7 @@ const commandList = {
                 const keyStorePassword = args.argv.keyStorePassword;
                 const keyStoreAlias = args.argv.keyStoreAlias;
                 const keyStoreAliasPassword = args.argv.keyStoreAliasPassword;
+                const versionCode = args.argv.versionCode;
                 args.options(
                     {
                         'buildCmd': { 'default': 'build' },
@@ -271,6 +279,7 @@ const commandList = {
                     --key-store-alias ${keyStoreAlias} 
                     --key-store-alias-password ${keyStoreAliasPassword} 
                     --copy-to ${productVariant}.apk`;
+                overrideManifest(versionCode);
             } else {
                 args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });
                 args.argv.androidRelease = '';
@@ -340,12 +349,22 @@ function overrideIndex(projectList, productVarient){
             let filepath = `./projects/${project}/src/index.html`;
             let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
             const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
-           
             var compiled = template(buffer);
             buffer = compiled(config);
             var options = {encoding:'utf-8', flag:'w'};
             fs.writeFileSync(filepath, buffer, options);        
     }
+
+}
+
+function overrideManifest(versionCode){
+
+        let filepath = `./App_Resources/Android/AndroidManifest.xml`;
+        let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+        var compiled = template(buffer);
+        buffer = compiled({'versionCode' : versionCode});
+        var options = {encoding:'utf-8', flag:'w'};
+        fs.writeFileSync(filepath, buffer, options); 
 
 }
 
