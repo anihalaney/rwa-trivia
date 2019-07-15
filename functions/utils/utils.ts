@@ -82,5 +82,9 @@ export class Utils {
         return Utils.getConfig().apiKey;
     }
 
+    static getFeedUrl(): any {
+        return Utils.getConfig().feedUrl;
+    }
+
 
 }

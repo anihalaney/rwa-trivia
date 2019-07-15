@@ -28,7 +28,7 @@ import { userState } from '../../store';
 import * as geolocation from 'nativescript-geolocation';
 import { filter } from 'rxjs/operators';
 import { ModalDialogService } from 'nativescript-angular/directives/dialogs';
-import { LocactionResetDialogComponent } from './locaction-reset-dialog/locaction-reset-dialog.component';
+import { LocationResetDialogComponent } from './location-reset-dialog/location-reset-dialog.component';
 
 @Component({
   selector: 'profile-settings',
@@ -116,7 +116,6 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         if (location) {
           const cityAndCountry = this.getCityAndCountryName(location);
           this.userForm.patchValue({ location: cityAndCountry });
-          console.log(this.userForm.value.locaction);
           this.acLocation.nativeElement.text = cityAndCountry;
         }
       }));
@@ -412,7 +411,7 @@ export class ProfileSettingsComponent extends ProfileSettings implements OnDestr
         fullscreen: false,
         viewContainerRef: this.vcRef
       };
-      this.modal.showModal(LocactionResetDialogComponent, options);
+      this.modal.showModal(LocationResetDialogComponent, options);
     }
   }
   async getLocationPermission() {
