@@ -1,5 +1,9 @@
 {
     "projectName": "bitwiser-edu",
     "projectDisplayName": "Trivia",
-    "title": "this is bitwiser-edu"
+    "title": "bitwiser.io: get wiser - bit by bit",
+    "description" : "Open source tech trivia game. by, for and of the developers",
+    "image" : "https://cdn-images-1.medium.com/max/1600/1*5RH1reNYpyBJOKauMMX2tw.png",
+    "fbAppId" : "462351904573050",
+    "url": "https://bitwiser.io"
 }

@@ -1,6 +1,8 @@
 const execSync = require('child_process').execSync;
 const yargs = require('yargs');
 const path = require('path');
+var fs = require("fs");
+var template = require('lodash.template');
 // Projects refers to different web application which we need to run
 const projects = ["trivia", "trivia-admin", "trivia-editor"];
 // Product variants
@@ -18,8 +20,6 @@ const firebaseProjects = ["trivia-dev",
 ];
 const schedularEnv = ['dev', 'prod'];
 const platForms = ['android', 'ios'];
-var fs = require("fs");
-
 
 
 
@@ -337,17 +337,14 @@ function checkCommands (yargs, argv, numRequired) {
 function overrideIndex(projectList, productVarient){
 
     for (const project of projectList) {
-        let filepath = `./projects/${project}/src/index.html`;
-        var buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
-        config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
-        for (const key in config) {
-            if (config.hasOwnProperty(key)) {
-                buffer = buffer.replace(new RegExp(escapeRegExp(`{${key}}`), 'g'), config[key]);
-                
-            }
-        }
-        var options = {encoding:'utf-8', flag:'w'};
-        fs.writeFileSync(filepath, buffer, options);        
+            let filepath = `./projects/${project}/src/index.html`;
+            let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+            const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
+           
+            var compiled = template(buffer);
+            buffer = compiled(config);
+            var options = {encoding:'utf-8', flag:'w'};
+            fs.writeFileSync(filepath, buffer, options);        
     }
 
 }
