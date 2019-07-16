@@ -218,7 +218,7 @@ const commandList = {
             },
             "environment": {
                 "demand": false,
-                "default": "dev",
+                "default": "staging",
                 "description": 'project environment e.g. production',
                 "coerce": args => args === 'production' ? '--env.prod' : '',
                 "alias": ['E', 'e']
@@ -255,13 +255,6 @@ const commandList = {
                 "description": 'key store alias password',
                 "type": 'string'
             },
-            "functionsUrl": {
-                "demand": false,
-                "description": 'functions url e.g. https://bitwiser-edu.firebaseapp.com/v1',
-                "type": 'string',
-                "alias": ['F', 'f'],
-                "default": "https://bitwiser-edu.firebaseapp.com/v1"
-            },
             "buildCmd": {
                 "demand": false,
                 "type": 'string',
@@ -296,7 +289,7 @@ const commandList = {
                 args.argv.androidRelease = '';
             }
         },
-        "asyncBuilder" : async (argv) => await updateManifest(argv.versionCode, argv.token, argv.functionsUrl)
+        "asyncBuilder" : async (argv) => await updateManifest(argv.versionCode, argv.token, argv.productVariant, argv.environment.search('--env.prod') >= 0 ? 'production': 'staging')
     },
     "run-schedular": {
         "command": "npx rimraf scheduler/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js env",
@@ -373,7 +366,7 @@ function overrideIndex(projectList, productVarient){
 
 }
 
-async function updateManifest(versionCode, token, functionsUrl){
+async function updateManifest(versionCode, token, productVarient, environment){
     try{
         let filepath = `./App_Resources/Android/AndroidManifest.xml`;
         let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
@@ -381,9 +374,10 @@ async function updateManifest(versionCode, token, functionsUrl){
         buffer = compiled({'versionCode' : versionCode});
         var options = {encoding:'utf-8', flag:'w'};
         fs.writeFileSync(filepath, buffer, options);
+        const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
         await axios({
             method: 'post',
-            url: `${functionsUrl}/general/updateAndroidVersion`,
+            url: `${config.functionsUrl[environment]}/general/updateAndroidVersion`,
             headers: {'token': token, 'Content-Type': 'application/json'},
             data: { 
                 'androidVersion': versionCode
