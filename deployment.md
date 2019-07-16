@@ -4,8 +4,8 @@ How to deploy Firebase functions ?
 
     2) Run below command to deploy firebase functions 
 
-        Dev Env : node cli deploy-functions --p trivia-staging --pv trivia --e staging
-        Prod Env : node cli deploy-functions --p trivia-production --pv trivia --e production
+        Dev Env : node cli deploy-functions --pv trivia --e staging
+        Prod Env : node cli deploy-functions --pv trivia --e production
         
     3) Run below command to start scheduler  
 

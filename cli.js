@@ -35,11 +35,11 @@ const deployFunctionsCommand = `${buildSsr} &&
                     setConfig
                     npx rimraf functions/index.js && 
                     npx cp functions/app-functions.js functions/index.js && 
-                    firebase deploy -P projectName --only functions && 
+                    firebase deploy -P productVariant-env --only functions && 
                     npx rimraf functions/index.js && 
                     npx cp functions/ssr-functions.js functions/index.js && 
-                    firebase deploy -P projectName --only functions:ssr && 
-                    firebase deploy -P projectName --only hosting && 
+                    firebase deploy -P productVariant-env --only functions:ssr && 
+                    firebase deploy -P productVariant-env --only hosting && 
                     npm install firebase@6.0.2`;
 
 const commandList = {
@@ -77,16 +77,24 @@ const commandList = {
     "run-functions":
     {
         "command": `npx rimraf functions/server & 
-                        tsc --project functions  && firebase serve -P projectName  --only functions`,
+                        tsc --project functions  && firebase serve -P productVariant-environment  --only functions`,
         "description": "deploy firebase functions local",
         "options": {
-            "projectName": {
+            "productVariant": {
                 "demand": true,
-                "description": 'project Name from .firebaserc e.g. trivia-staging',
+                "description": 'project Name e.g. trivia',
                 "type": 'string',
-                "choices": firebaseProjects,
-                "default": 'trivia-dev',
-                "alias": ['P', 'p']
+                "choices": productVariants,
+                "default": 'trivia',
+                "alias": ['PV', 'pv']
+            },
+            "environment": {
+                "demand": true,
+                "description": 'environment e.g. dev',
+                "type": 'string',
+                "choices": env,
+                "default": 'dev',
+                "alias": ['E', 'e']
             }
         }
     },
@@ -95,14 +103,6 @@ const commandList = {
         "command": deployFunctionsCommand,
         "description": "deploy firebase functions to staging/production env",
         "options": {
-            "projectName": {
-                "demand": true,
-                "description": 'project Name from .firebaserc e.g. trivia-staging',
-                "type": 'string',
-                "choices": firebaseProjects,
-                "default": 'trivia-staging',
-                "alias": ['P', 'p']
-            },
             "productVariant": {
                 "demand": true,
                 "description": 'configuration project name defined in angular.json e.g. trivia',
@@ -184,7 +184,7 @@ const commandList = {
                         --env.project=productVariant
                         --release 
                         androidRelease`,
-        "description": "release android app for staging environment",
+        "description": "release android app for staging/production environment",
         "options": {
             "productVariant": {
                 "demand": true,
