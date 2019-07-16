@@ -1,8 +1,10 @@
 {
   "projects": {
     "trivia-dev": "rwa-trivia-dev-e57fc",
+    "trivia-staging": "rwa-trivia-dev-e57fc",
     "trivia-production": "rwa-trivia",
     "bitwiser-edu-dev": "bitwiser-edu",
+    "bitwiser-edu-staging": "bitwiser-edu",
     "bitwiser-edu-production": "bitwiser-edu"
   }
 }

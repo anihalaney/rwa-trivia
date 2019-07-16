@@ -2,8 +2,8 @@ import { ActionReducerMap, createSelector, createFeatureSelector } from '@ngrx/s
 import { User, Category, Question, Game, Friends, Invitation, Account } from 'shared-library/shared/model';
 import {
   user, authInitialized, invitationToken, userDict,
-  gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries, userFriendInvitations,
-  addressUsingLongLat, addressSuggestions
+  gameInvites, userFriends, friendInvitations, userProfileSaveStatus, feedback, account, getGameResult, countries,
+  addressUsingLongLat, addressSuggestions, userFriendInvitations
 } from './user.reducer';
 import { categories } from './categories.reducer';
 import { tags } from './tags.reducer';
