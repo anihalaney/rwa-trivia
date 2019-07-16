@@ -7,9 +7,9 @@ import { Observable, of } from 'rxjs';
 import { GameOptions, Game, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, OpponentType, GameConstants, GameMode, PlayerMode, GeneralConstants } from 'shared-library/shared/model';
 import { WindowRef } from './windowref.service';
 
+
 @Injectable()
 export class Utils extends UtilsCore {
-
 
   constructor(
     @Inject(PLATFORM_ID) public platformId: Object,

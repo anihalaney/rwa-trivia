@@ -7,6 +7,8 @@ import { AppState, appState } from './../../../../../../../trivia/src/app/store'
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { isAndroid } from 'tns-core-modules/platform';
 import { Utils } from 'shared-library/core/services';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+
 @Component({
   selector: 'user-feedback',
   templateUrl: './user-feedback.component.html',
@@ -25,6 +27,7 @@ export class UserFeedbackComponent implements OnDestroy {
 
   constructor(private page: Page, private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions,
     private cd: ChangeDetectorRef, private utils: Utils) {
+
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.feedback)).subscribe(status => {
       if (status === 'SUCCESS') {

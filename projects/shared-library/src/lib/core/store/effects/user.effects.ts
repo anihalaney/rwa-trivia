@@ -9,7 +9,6 @@ import { Store } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 
-
 @Injectable()
 export class UserEffects {
 
