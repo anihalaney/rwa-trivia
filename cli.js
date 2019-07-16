@@ -279,7 +279,7 @@ const commandList = {
                     --key-store-alias ${keyStoreAlias} 
                     --key-store-alias-password ${keyStoreAliasPassword} 
                     --copy-to ${productVariant}.apk`;
-                overrideManifest(versionCode);
+
             } else {
                 args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });
                 args.argv.androidRelease = '';
@@ -354,17 +354,6 @@ function overrideIndex(projectList, productVarient){
             var options = {encoding:'utf-8', flag:'w'};
             fs.writeFileSync(filepath, buffer, options);        
     }
-
-}
-
-function overrideManifest(versionCode){
-
-        let filepath = `./App_Resources/Android/AndroidManifest.xml`;
-        let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
-        var compiled = template(buffer);
-        buffer = compiled({'versionCode' : versionCode});
-        var options = {encoding:'utf-8', flag:'w'};
-        fs.writeFileSync(filepath, buffer, options); 
 
 }
 
