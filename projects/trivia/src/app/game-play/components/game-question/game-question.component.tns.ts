@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, SimpleChanges, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { User, Answer } from 'shared-library/shared/model';
+import { User, FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { GameQuestion } from './game-question';
 import { Store, select } from '@ngrx/store';
