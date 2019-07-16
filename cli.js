@@ -1,8 +1,8 @@
 const execSync = require('child_process').execSync;
 const yargs = require('yargs');
 const path = require('path');
-var fs = require("fs");
-var template = require('lodash.template');
+const fs = require("fs");
+const template = require('lodash.template');
 // Projects refers to different web application which we need to run
 const projects = ["trivia", "trivia-admin", "trivia-editor"];
 // Product variants
