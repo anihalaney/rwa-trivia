@@ -1,6 +1,7 @@
 import { GeneralConstants, interceptorConstants } from '../../projects/shared-library/src/lib/shared/model';
 import { GeneralService } from '../services/general.service';
 import { Utils } from '../utils/utils';
+import { AppSettings } from '../services/app-settings.service';
 
 export class GeneralController {
 
@@ -42,6 +43,19 @@ export class GeneralController {
      */
     static testES(req, res) {
         GeneralService.testES(res);
+    }
+
+        /**
+     * getTestQuestion
+     * return status
+     */
+    static async updateAndroidVersion(req, res): Promise<any> {
+        try {
+            const androidVersion = req.body.androidVersion;
+            Utils.sendResponse(res, interceptorConstants.SUCCESS, await AppSettings.Instance.updateAndroidVersion(androidVersion));
+        } catch (error) {
+            Utils.sendError(res, error);
+        }
     }
 
 }

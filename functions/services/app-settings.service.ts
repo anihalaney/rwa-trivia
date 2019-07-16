@@ -49,6 +49,19 @@ export class AppSettings {
             return Utils.throwError(error);
         }
     }
+
+    async updateAndroidVersion(androidVersion: number) {
+        try {
+            const userRef = AppSettings.applicationSettingsFirestoreClient.collection('application_settings').doc('settings');
+            const docRef = await userRef.get();
+
+            if (docRef.exists) {
+                userRef.set({ android_version: androidVersion }, { merge: true });
+            }
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
 }
 
 

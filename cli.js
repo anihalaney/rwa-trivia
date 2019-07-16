@@ -1,8 +1,9 @@
 const execSync = require('child_process').execSync;
 const yargs = require('yargs');
 const path = require('path');
-var fs = require("fs");
-var template = require('lodash.template');
+const fs = require("fs");
+const axios = require('axios');
+const template = require('lodash.template');
 // Projects refers to different web application which we need to run
 const projects = ["trivia", "trivia-admin", "trivia-editor"];
 // Product variants
@@ -229,6 +230,12 @@ const commandList = {
                 "default": '1',
                 "alias": ['V', 'v']
             },
+            "token": {
+                "demand": false,
+                "description": 'token from schedular token ',
+                "type": 'string',
+                "alias": ['T', 't']
+            },
             "androidRelease": {
                 "demand": false,
                 "hidden": true
@@ -248,6 +255,13 @@ const commandList = {
                 "description": 'key store alias password',
                 "type": 'string'
             },
+            "functionsUrl": {
+                "demand": false,
+                "description": 'functions url e.g. https://bitwiser-edu.firebaseapp.com/v1',
+                "type": 'string',
+                "alias": ['F', 'f'],
+                "default": "https://bitwiser-edu.firebaseapp.com/v1"
+            },
             "buildCmd": {
                 "demand": false,
                 "type": 'string',
@@ -265,7 +279,6 @@ const commandList = {
                 const keyStorePassword = args.argv.keyStorePassword;
                 const keyStoreAlias = args.argv.keyStoreAlias;
                 const keyStoreAliasPassword = args.argv.keyStoreAliasPassword;
-                const versionCode = args.argv.versionCode;
                 args.options(
                     {
                         'buildCmd': { 'default': 'build' },
@@ -273,18 +286,17 @@ const commandList = {
                     }
                 );
 
-
                 args.argv.androidRelease = ` --key-store-path certificates/${productVariant}/${platformName}/bitwiser.keystore
                     --key-store-password ${keyStorePassword}
                     --key-store-alias ${keyStoreAlias} 
                     --key-store-alias-password ${keyStoreAliasPassword} 
                     --copy-to ${productVariant}.apk`;
-
             } else {
                 args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });
                 args.argv.androidRelease = '';
             }
-        }
+        },
+        "asyncBuilder" : async (argv) => await updateManifest(argv.versionCode, argv.token, argv.functionsUrl)
     },
     "run-schedular": {
         "command": "npx rimraf scheduler/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js env",
@@ -312,14 +324,18 @@ function buildCommands() {
             .command(cmd, commandList[cmd].description, function (args) {
                 argv = yargs.options(commandList[cmd].options);  
                 if(commandList[cmd].builder){
-                    commandList[cmd].builder(args);
-                }            
-            }, function (argv) {
+                     commandList[cmd].builder(args);
+                }     
+                
+            }, async function (argv) {
                 let executableCmd = commandList[cmd].command;
                 for (const opt in commandList[cmd].options) {
                     if (commandList[cmd].options.hasOwnProperty(opt)) {
                         executableCmd = executableCmd.replace(new RegExp(escapeRegExp(opt), 'g'), argv[opt]);
                     }
+                }
+                if (commandList[cmd].asyncBuilder) {
+                    await commandList[cmd].asyncBuilder(argv);
                 }
                 executeCommand(executableCmd);
             });            
@@ -346,13 +362,36 @@ function checkCommands (yargs, argv, numRequired) {
 function overrideIndex(projectList, productVarient){
 
     for (const project of projectList) {
-            const filepath = `./projects/${project}/src/index.html`;
-            let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
-            const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
-            const compiled = template(buffer);
-            buffer = compiled(config);
-            const options = {encoding:'utf-8', flag:'w'};
-            fs.writeFileSync(filepath, buffer, options);        
+        const filepath = `./projects/${project}/src/index.html`;
+        let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+        const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
+        const compiled = template(buffer);
+        buffer = compiled(config);
+        const options = {encoding:'utf-8', flag:'w'};
+        fs.writeFileSync(filepath, buffer, options);        
+    }
+
+}
+
+async function updateManifest(versionCode, token, functionsUrl){
+    try{
+        let filepath = `./App_Resources/Android/AndroidManifest.xml`;
+        let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+        var compiled = template(buffer);
+        buffer = compiled({'versionCode' : versionCode});
+        var options = {encoding:'utf-8', flag:'w'};
+        fs.writeFileSync(filepath, buffer, options);
+        await axios({
+            method: 'post',
+            url: `${functionsUrl}/general/updateAndroidVersion`,
+            headers: {'token': token, 'Content-Type': 'application/json'},
+            data: { 
+                'androidVersion': versionCode
+            }
+          });
+        
+    } catch(error) {
+        console.log(error, 'error');
     }
 
 }
