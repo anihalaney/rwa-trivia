@@ -346,12 +346,12 @@ function checkCommands (yargs, argv, numRequired) {
 function overrideIndex(projectList, productVarient){
 
     for (const project of projectList) {
-            let filepath = `./projects/${project}/src/index.html`;
+            const filepath = `./projects/${project}/src/index.html`;
             let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
             const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
-            var compiled = template(buffer);
+            const compiled = template(buffer);
             buffer = compiled(config);
-            var options = {encoding:'utf-8', flag:'w'};
+            const options = {encoding:'utf-8', flag:'w'};
             fs.writeFileSync(filepath, buffer, options);        
     }
 
