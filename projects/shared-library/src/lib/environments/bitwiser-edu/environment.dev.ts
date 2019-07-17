@@ -16,7 +16,7 @@ export const CONFIG: IConfig = {
     storageBucket: 'bitwiser-edu.appspot.com',
     messagingSenderId: '704157888306'
   },
-  'functionsUrl': `https://bitwiser-edu.firebaseapp.com`,
+  'functionsUrl': `https://bitwiser-edu.firebaseapp.com/${appConstants.API_VERSION}`,
   'editorUrl': 'https://bitwiser-edu.firebaseapp.com/trivia-editor',
   'termsAndConditionsUrl': 'https://bitwiser-edu.io/terms-and-conditions',
   'privacyUrl': 'https://bitwiser-edu.io/terms-and-conditions'

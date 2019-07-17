@@ -15,6 +15,7 @@ import { Page } from 'tns-core-modules/ui/page/page';
 import { AppState } from '../../../store';
 import { NewGame } from './new-game';
 
+
 @Component({
   selector: 'new-game',
   templateUrl: './new-game.component.html',

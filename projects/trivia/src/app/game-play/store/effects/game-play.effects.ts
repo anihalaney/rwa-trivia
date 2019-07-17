@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { switchMap, map, filter, mergeMap, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { GameService } from 'shared-library/core/services';
+import { GameService, Utils } from 'shared-library/core/services';
 import { Game, Question, RouterStateUrl } from 'shared-library/shared/model';
 import { GamePlayActionTypes } from '../actions';
 import * as gameplayactions from '../actions/game-play.actions';
@@ -21,6 +21,8 @@ export class GamePlayEffects {
     .pipe(
       switchMap((action: gameplayactions.CreateNewGame) =>
         this.svc.createNewGame(action.payload.gameOptions, action.payload.user).pipe(
+          // tslint:disable-next-line:max-line-length
+          mergeMap((gameId: string) => this.utils.setNewGameFirebaseAnalyticsParameter(action.payload.gameOptions, action.payload.user.userId, gameId)),
           map((gameId: string) => this.gameActions.createNewGameSuccess(gameId)),
           catchError((error) => {
             return of(this.gameActions.createNewGameError(error.error));
@@ -51,12 +53,12 @@ export class GamePlayEffects {
       map((action: any): RouterStateUrl => action.payload.routerState),
       filter((routerState: RouterStateUrl) => {
         if (routerState.url.toLowerCase().startsWith('/game-play/') &&
-        !routerState.url.toLowerCase().startsWith('/game-play/challenge') &&
+          !routerState.url.toLowerCase().startsWith('/game-play/challenge') &&
           routerState.params) {
           return true;
         } else if ((routerState.url.toLowerCase().startsWith('/game-play/') ||
-        routerState.url.toLowerCase().startsWith('/game-play/challenge'))  && (routerState['root'] &&
-        !routerState['url'].toLowerCase().startsWith('/game-play/challenge') )) {
+          routerState.url.toLowerCase().startsWith('/game-play/challenge')) && (routerState['root'] &&
+            !routerState['url'].toLowerCase().startsWith('/game-play/challenge'))) {
           return true;
         } else {
           return false;
@@ -104,7 +106,9 @@ export class GamePlayEffects {
     .pipe(ofType(GamePlayActionTypes.SET_GAME_OVER))
     .pipe(
       switchMap((action: gameplayactions.SetGameOver) =>
-        this.svc.setGameOver(action.payload).pipe(
+        this.svc.setGameOver(action.payload.playedGame.gameId).pipe(
+          // tslint:disable-next-line:max-line-length
+          mergeMap((msg: any) => this.utils.setEndGameFirebaseAnalyticsParameter(action.payload.playedGame, action.payload.userId, action.payload.otherUserId)),
           map((msg: any) => new gameplayactions.UpdateGameSuccess())
         )
       ));
@@ -143,6 +147,7 @@ export class GamePlayEffects {
     public store: Store<GamePlayState>,
     public gameActions: GameActions,
     private svc: GameService,
+    private utils: Utils,
   ) { }
 
 }
