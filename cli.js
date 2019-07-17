@@ -224,11 +224,18 @@ const commandList = {
                 "alias": ['E', 'e']
             },
             "versionCode": {
-                "demand": false,
-                "description": 'versionCode for android build ',
+                "demand": true,
+                "description": 'versionCode for android/ios build ',
                 "type": 'string',
-                "default": '1',
+                "default": '28.0',
                 "alias": ['V', 'v']
+            },
+            "versionName": {
+                "demand": false,
+                "description": 'versionName for android build CFBundleShortVersionString for ios ',
+                "type": 'string',
+                "default": '1.0',
+                "alias": ['VN', 'vn']
             },
             "token": {
                 "demand": false,
@@ -289,7 +296,7 @@ const commandList = {
                 args.argv.androidRelease = '';
             }
         },
-        "asyncBuilder" : async (argv) => await updateManifest(argv.versionCode, argv.token, argv.productVariant, argv.environment.search('--env.prod') >= 0 ? 'production': 'staging')
+        "preCommand" : async (argv) => await updateAppVersion(argv)
     },
     "run-schedular": {
         "command": "npx rimraf scheduler/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js env",
@@ -327,8 +334,8 @@ function buildCommands() {
                         executableCmd = executableCmd.replace(new RegExp(escapeRegExp(opt), 'g'), argv[opt]);
                     }
                 }
-                if (commandList[cmd].asyncBuilder) {
-                    await commandList[cmd].asyncBuilder(argv);
+                if (commandList[cmd].preCommand) {
+                    await commandList[cmd].preCommand(argv);
                 }
                 executeCommand(executableCmd);
             });            
@@ -357,7 +364,7 @@ function replaceVariableInIndex(projectList, productVarient){
     for (const project of projectList) {
         const filepath = `./projects/${project}/src/index.html`;
         let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
-        const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
+        const config = getConfig(productVarient);
         const compiled = template(buffer);
         buffer = compiled(config);
         const options = {encoding:'utf-8', flag:'w'};
@@ -366,21 +373,24 @@ function replaceVariableInIndex(projectList, productVarient){
 
 }
 
-async function updateManifest(versionCode, token, productVarient, environment){
+async function updateAppVersion(argv){
     try{
-        let filepath = `./App_Resources/Android/AndroidManifest.xml`;
+        const environment = argv.environment.search('--env.prod') >= 0 ? 'production': 'staging'; 
+        const filepath = argv.platformName === 'android' ? 
+        `./App_Resources/Android/AndroidManifest.xml` : `./configurations/${argv.productVariant}/ios/info.plist.${environment === 'production' ? 'prod' : 'dev'}`;
         let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
-        var compiled = template(buffer);
-        buffer = compiled({'versionCode' : versionCode});
+        const compiled = template(buffer);
+        buffer = compiled({'versionCode' : argv.versionCode, 'versionName' : argv.versionName, 'EXECUTABLE_NAME': '${EXECUTABLE_NAME}'});
         var options = {encoding:'utf-8', flag:'w'};
         fs.writeFileSync(filepath, buffer, options);
-        const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
+        const config = getConfig(argv.productVariant);
         await axios({
             method: 'post',
-            url: `${config.functionsUrl[environment]}/general/updateAndroidVersion`,
-            headers: {'token': token, 'Content-Type': 'application/json'},
+            url: `${config.functionsUrl[environment]}/general/updateAppVersion`,
+            headers: {'token': argv.token, 'Content-Type': 'application/json'},
             data: { 
-                'androidVersion': versionCode
+                'versionCode': argv.versionCode,
+                'platform': argv.platformName
             }
           });
         
@@ -390,6 +400,9 @@ async function updateManifest(versionCode, token, productVarient, environment){
 
 }
 
+function getConfig(productVarient) {
+    return JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
+}
 function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
