@@ -1,18 +1,17 @@
-import { Component, OnInit, OnDestroy, Renderer2, ViewChild, Inject } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
-import { Store, select } from '@ngrx/store';
+import { Component, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { skip, take, filter } from 'rxjs/operators';
-import { User } from 'shared-library/shared/model';
+import { NavigationEnd, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { CookieLawComponent } from 'angular2-cookie-law';
+import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { filter, skip, take } from 'rxjs/operators';
 import { AuthenticationProvider } from 'shared-library/core/auth';
 import { Utils, WindowRef } from 'shared-library/core/services';
-import { AppState, appState } from '../../store';
-import * as gamePlayActions from '../../game-play/store/actions';
-import { UserActions, ApplicationSettingsActions } from 'shared-library/core/store/actions';
 import { coreState } from 'shared-library/core/store';
-import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { CookieLawComponent } from 'angular2-cookie-law';
+import { ApplicationSettingsActions, UserActions } from 'shared-library/core/store/actions';
+import { User } from 'shared-library/shared/model';
+import * as gamePlayActions from '../../game-play/store/actions';
+import { AppState, appState } from '../../store';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -61,10 +60,11 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     }));
 
-    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      this.router.navigate(['/game-play', gameObj['gameId']]);
-      this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-    }));
+    this.subscriptions.push(this.store.select(appState.coreState)
+      .pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+        this.router.navigate(['/game-play', gameObj['gameId']]);
+        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+      }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.userProfileSaveStatus)).subscribe(status => {
       if (status === 'MAKE FRIEND SUCCESS') {

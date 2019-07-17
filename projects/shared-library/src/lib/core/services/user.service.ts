@@ -217,7 +217,7 @@ export class UserService {
     }
 
     checkDisplayName(displayName: string): Observable<any> {
-        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.CHECK}/${this.RC.DISPLAY_NAME}/${displayName}`;
+        const url = `${CONFIG.functionsUrl}/${this.RC.USER}/${this.RC.CHECK}/${this.RC.DISPLAY_NAME}/${encodeURIComponent(displayName)}`;
         return this.http.get<any>(url);
     }
 

@@ -1,11 +1,11 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy , ChangeDetectorRef, OnDestroy, ViewChildren, QueryList, ElementRef } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import {
+  Component, OnInit, Input, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewChildren, QueryList, ElementRef
+} from '@angular/core';
+import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Store, select } from '@ngrx/store';
-
-import { User } from 'shared-library/shared/model';
+import { User, FirebaseScreenNameConstants } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../../../store';
 import { coreState, UserActions } from 'shared-library/core/store';
-import { Subscription } from 'rxjs';
 import { Utils } from 'shared-library/core/services';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -35,7 +35,9 @@ export class InviteMailFriendsComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder, private store: Store<AppState>, private userAction: UserActions, private cd: ChangeDetectorRef,
     private utils: Utils) {
-      this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
+
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.user)).subscribe(user => {
       this.user = user;
       if (user) {
         this.user = user;
