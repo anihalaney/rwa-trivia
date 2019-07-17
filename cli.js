@@ -176,9 +176,24 @@ const commandList = {
                 "demand": false,
                 "default": "",
                 "hidden": true
-            }
+            },
+            "versionCode": {
+                "demand": false,
+                "description": 'versionCode for android/ios build ',
+                "type": 'string',
+                "default": '28',
+                "alias": ['V', 'v']
+            },
+            "versionName": {
+                "demand": false,
+                "description": 'versionName for android build CFBundleShortVersionString for ios ',
+                "type": 'string',
+                "default": '1.0',
+                "alias": ['VN', 'vn']
+            },
         },
-        "builder": args => args.argv.platform === 'ios' && args.argv.env.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = ''
+        "builder": args => args.argv.platform === 'ios' && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
+        "preCommand" : async (argv) => await updateAppVersion(argv, false)
     },
     "release-mobile": {
         "command": `rm -rf platforms/platformName &&
@@ -296,7 +311,7 @@ const commandList = {
                 args.argv.androidRelease = '';
             }
         },
-        "preCommand" : async (argv) => await updateAppVersion(argv)
+        "preCommand" : async (argv) => await updateAppVersion(argv, true)
     },
     "run-schedular": {
         "command": "npx rimraf scheduler/server  & tsc --project scheduler && node scheduler/server/run-scheduler.js env",
@@ -373,10 +388,11 @@ function replaceVariableInIndex(projectList, productVarient){
 
 }
 
-async function updateAppVersion(argv){
+async function updateAppVersion(argv, isRelease){
     try{
+        const platform = argv.plt;
         const environment = argv.environment.search('--env.prod') >= 0 ? 'production': 'staging'; 
-        const filepath = argv.platformName === 'android' ? 
+        const filepath = platform === 'android' ? 
         `./App_Resources/Android/AndroidManifest.xml` : `./configurations/${argv.productVariant}/ios/info.plist.${environment === 'production' ? 'prod' : 'dev'}`;
         let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
         const compiled = template(buffer);
@@ -384,15 +400,18 @@ async function updateAppVersion(argv){
         var options = {encoding:'utf-8', flag:'w'};
         fs.writeFileSync(filepath, buffer, options);
         const config = getConfig(argv.productVariant);
-        await axios({
-            method: 'post',
-            url: `${config.functionsUrl[environment]}/general/updateAppVersion`,
-            headers: {'token': argv.token, 'Content-Type': 'application/json'},
-            data: { 
-                'versionCode': argv.versionCode,
-                'platform': argv.platformName
-            }
-          });
+        if (isRelease) {
+            await axios({
+                method: 'post',
+                url: `${config.functionsUrl[environment]}/general/updateAppVersion`,
+                headers: {'token': argv.token, 'Content-Type': 'application/json'},
+                data: { 
+                    'versionCode': argv.versionCode,
+                    'platform': platform
+                }
+              });
+        }
+        
         
     } catch(error) {
         console.log(error, 'error');
