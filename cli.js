@@ -76,7 +76,7 @@ const commandList = {
             }
         },
         "builder": (args) => {
-            replaceStringInIndex([args.argv.project], args.argv.productVariant);
+            replaceVariableInIndex([args.argv.project], args.argv.productVariant);
         }
     },
     "run-functions":
@@ -133,7 +133,7 @@ const commandList = {
             const env = args.argv.env;
             const project = args.argv.projectName;
             args.argv.setConfig = env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '';
-            replaceStringInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
+            replaceVariableInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
         }
     },
     "run-mobile":
@@ -343,7 +343,7 @@ function checkCommands (yargs, argv, numRequired) {
   }
 }
 
-function replaceStringInIndex(projectList, productVarient){
+function replaceVariableInIndex(projectList, productVarient){
 
     for (const project of projectList) {
             const filepath = `./projects/${project}/src/index.html`;
