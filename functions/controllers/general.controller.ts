@@ -49,10 +49,10 @@ export class GeneralController {
      * getTestQuestion
      * return status
      */
-    static async updateAndroidVersion(req, res): Promise<any> {
+    static async updateAppVersion(req, res): Promise<any> {
         try {
-            const androidVersion = req.body.androidVersion;
-            Utils.sendResponse(res, interceptorConstants.SUCCESS, await AppSettings.Instance.updateAndroidVersion(androidVersion));
+            Utils.sendResponse(res, interceptorConstants.SUCCESS,
+                await AppSettings.Instance.updateAppVersion(req.body.versionCode, req.body.platform));
         } catch (error) {
             Utils.sendError(res, error);
         }

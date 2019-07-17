@@ -26,9 +26,9 @@ class GeneralRoutes {
         this.generalRoutes.get(`/${RoutesConstants.ES}/${RoutesConstants.CHECK}`,
             AuthMiddleware.adminOnly, GeneralController.testES);
 
-        //  'updateAndroidVersion'
-        this.generalRoutes.post(`/${RoutesConstants.UPDATE_ANDROID_VERSION}`,
-        AuthMiddleware.authTokenOnly, GeneralController.updateAndroidVersion);
+        //  'updateAppVersion'
+        this.generalRoutes.post(`/${RoutesConstants.UPDATE_APP_VERSION}`,
+        AuthMiddleware.authTokenOnly, GeneralController.updateAppVersion);
 
     }
 }

@@ -50,13 +50,14 @@ export class AppSettings {
         }
     }
 
-    async updateAndroidVersion(androidVersion: number) {
+    async updateAppVersion(versionCode: number, platform: string) {
         try {
             const userRef = AppSettings.applicationSettingsFirestoreClient.collection('application_settings').doc('settings');
             const docRef = await userRef.get();
 
             if (docRef.exists) {
-                userRef.set({ android_version: androidVersion }, { merge: true });
+                const updateVersion = platform === 'android' ? { android_version: versionCode } : { ios_version: versionCode };
+                userRef.set(updateVersion, { merge: true });
             }
         } catch (error) {
             return Utils.throwError(error);
