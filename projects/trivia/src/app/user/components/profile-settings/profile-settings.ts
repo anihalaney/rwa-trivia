@@ -326,11 +326,11 @@ export class ProfileSettings {
     }
 
     // store the user object
-    saveUser(user: User) {
+    saveUser(user: User, isLocationChanged: boolean) {
         this.toggleLoader(true);
         this.isEnableEditProfile = false;
         this.disableForm();
-        this.store.dispatch(this.userAction.addUserProfile(user));
+        this.store.dispatch(this.userAction.addUserProfile(user, isLocationChanged));
     }
 
     onSocialProfileInputFocus(i) {

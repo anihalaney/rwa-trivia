@@ -6,6 +6,7 @@ import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AppState } from '../../../store';
 import { GameContinue } from './game-continue';
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
 
 @Component({
   selector: 'game-continue',

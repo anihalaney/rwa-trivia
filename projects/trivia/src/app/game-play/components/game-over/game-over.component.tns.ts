@@ -13,7 +13,12 @@ import { gamePlayState } from '../../store';
 import { GameOver } from './game-over';
 import { ReportGameComponent } from './../report-game/report-game.component';
 import { Image } from "tns-core-modules/ui/image";
-import { appConstants } from 'shared-library/shared/model';
+import {
+  appConstants, GameConstant, GameMode, OpponentType, Parameter, PlayerMode, FirebaseScreenNameConstants
+} from 'shared-library/shared/model';
+import {
+  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants, GeneralConstants
+} from '../../../../../../shared-library/src/lib/shared/model';
 
 @Component({
   selector: 'game-over',
@@ -60,6 +65,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       }
       this.cd.markForCheck();
     }));
+
   }
   ngOnInit() {
     if (this.game) {
@@ -67,6 +73,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
   }
+
 
   shareScore() {
     this.loaderStatus = true;
@@ -92,7 +99,7 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
 
   reMatchGame() {
     if (this.applicationSettings.lives.enable && this.account.lives === 0) {
-      this.utils.showMessage("error", this.liveErrorMsg);
+      this.utils.showMessage('error', this.liveErrorMsg);
     } else {
       this.reMatch();
     }

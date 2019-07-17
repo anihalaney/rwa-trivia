@@ -17,39 +17,21 @@ import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameDialogComponent extends GameDialog implements OnDestroy {
 
-  constructor(public store: Store<GamePlayState>, private router: Router,
+  constructor(public store: Store<GamePlayState>, public router: Router,
     public userActions: UserActions,
     @Inject(MAT_DIALOG_DATA) public data: any, public utils: Utils, public cd: ChangeDetectorRef) {
-    super(store, userActions, utils, cd);
+    super(store, userActions, utils, cd, router);
   }
 
   continueClicked($event) {
-    this.currentQuestion = undefined;
-    this.originalAnswers = undefined;
-    if (this.turnFlag) {
-      this.continueNext = false;
-      this.store.dispatch(new gameplayactions.ResetCurrentGame());
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-      this.store.dispatch(new gameplayactions.UpdateGameRound(this.game.gameId));
-      this.router.navigate(['/dashboard']);
-    } else {
-      this.questionAnswered = false;
-      this.showContinueBtn = false;
-      this.continueNext = false;
-      this.store.dispatch(new gameplayactions.ResetCurrentQuestion());
-      this.checkGameOver();
-      if (!this.gameOver) {
-        this.getLoader(false);
-      }
-      if (this.showLoader) {
-        this.cd.markForCheck();
-      }
+    this.continueGame();
+    if (this.showLoader) {
+      this.cd.markForCheck();
     }
   }
 
+
   ngOnDestroy() {
-    this.store.dispatch(new gameplayactions.ResetCurrentGame());
-    this.utils.unsubscribe([this.timerSub, this.questionSub]);
     this.destroy();
   }
 }

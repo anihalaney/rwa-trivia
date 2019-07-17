@@ -1,24 +1,29 @@
 import {
-  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone } from '@angular/core';
+  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone
+} from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, PlayerMode, OpponentType } from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
-import { RouterExtensions } from 'nativescript-angular/router';
-import * as gamePlayActions from './../../store/actions';
-import { filter, take } from 'rxjs/operators';
+import { ListViewEventData } from 'nativescript-ui-listview';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
 import { Router, ActivatedRoute } from '@angular/router';
-import { coreState } from 'shared-library/core/store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-import { ListViewEventData } from 'nativescript-ui-listview';
-import { Page } from 'tns-core-modules/ui/page/page';
+import { filter, take } from 'rxjs/operators';
 import { Utils } from 'shared-library/core/services';
+import { coreState } from 'shared-library/core/store';
+import {
+  Category, GameConstant, GameMode, OpponentType, Parameter, PlayerMode,
+  FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
+} from 'shared-library/shared/model';
+import { Page } from 'tns-core-modules/ui/page/page';
+import { RouterExtensions } from 'nativescript-angular/router';
+import * as gamePlayActions from './../../store/actions';
+
 
 @Component({
   selector: 'new-game',
@@ -72,7 +77,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.gameOptions.opponentType = 1;
           this.gameOptions.isChallenge = true;
           this.friendUserId = data.userid;
-    }}));
+        }
+      }));
 
     this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
       if (gameObj && gameObj['gameId']) {
@@ -202,6 +208,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.startNewGame(this.gameOptions);
   }
 
+
+
   selectCategory(args: ListViewEventData) {
     const category: Category = this.filteredCategories[args.index];
     if (!category.requiredForGamePlay) {
@@ -278,6 +286,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   get tagsHeight() {
     return (60 * this.selectedTags.length) + 20;
   }
+
 
 }
 

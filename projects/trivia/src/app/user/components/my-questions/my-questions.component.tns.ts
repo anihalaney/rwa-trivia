@@ -8,7 +8,8 @@ import { AppState, appState } from '../../../store';
 import { MyQuestions } from './my-questions';
 import { Page } from 'tns-core-modules/ui/page';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
-
+import { FirebaseScreenNameConstants } from 'shared-library/shared/model';
+import { Utils } from 'shared-library/core/services';
 
 @Component({
   selector: 'my-questions',
@@ -32,7 +33,8 @@ export class MyQuestionsComponent extends MyQuestions implements OnDestroy {
     public questionActions: QuestionActions,
     public routerExtension: RouterExtensions,
     public page: Page,
-    public cd: ChangeDetectorRef
+    public cd: ChangeDetectorRef,
+    private utils: Utils
   ) {
     super(store, questionActions, cd);
     this.userDict$ = store.select(appState.coreState).pipe(select(s => s.userDict));
