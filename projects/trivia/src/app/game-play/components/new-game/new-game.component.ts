@@ -8,7 +8,10 @@ import { Observable } from 'rxjs';
 import { map, take, flatMap, skipWhile } from 'rxjs/operators';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { Category, GameMode, GameOptions, OpponentType, PlayerMode } from 'shared-library/shared/model';
+import {
+  Category, GameMode, GameOptions, OpponentType, PlayerMode, FirebaseAnalyticsKeyConstants,
+  FirebaseAnalyticsEventConstants, GameConstants
+} from 'shared-library/shared/model';
 import { AppState, appState } from '../../../store';
 import { NewGame } from './new-game';
 import { SwiperDirective, SwiperConfigInterface } from 'ngx-swiper-wrapper';
@@ -21,7 +24,7 @@ import { SwiperDirective, SwiperConfigInterface } from 'ngx-swiper-wrapper';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
-  categories: Category[];
+
   sortedCategories: Category[];
   tags: string[];
   subscriptions = [];
@@ -35,7 +38,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   filteredTags$: Observable<string[]>;
 
   friendUserId: string;
-  loaderStatus = false;
+
 
   challengerUserId: string;
   public config: SwiperConfigInterface = {
@@ -56,14 +59,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
     public store: Store<AppState>,
     public gameActions: GameActions,
-    private windowRef: WindowRef,
-    private router: Router,
+    public windowRef: WindowRef,
+    public router: Router,
     public route: ActivatedRoute,
     public userActions: UserActions,
     public utils: Utils,
     public snackBar: MatSnackBar,
     public cd: ChangeDetectorRef) {
-    super(store, utils, gameActions, userActions, cd, route);
+    super(store, utils, gameActions, userActions, windowRef, cd, route, router);
 
     this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
       if (gameCreateStatus) {
@@ -73,47 +76,47 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     }));
 
     this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1),
-    map(appSettings => {
-      if (appSettings) {
-        this.applicationSettings = appSettings[0];
-        if (this.applicationSettings && this.applicationSettings.lives.enable) {
-          return appSettings;
+      map(appSettings => {
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+          if (this.applicationSettings && this.applicationSettings.lives.enable) {
+            return appSettings;
+          }
         }
-      }
-    }),
-    flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
-    skipWhile(account => !account), take(1), map(account =>  this.life = account.lives)))).subscribe(data => {
-        if (this.applicationSettings) {
-          this.selectedCategories = [];
-          let filteredCategories = [];
-          if (this.applicationSettings && this.applicationSettings.game_play_categories) {
-            filteredCategories = this.categories.filter((category) => {
-              if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
-                return category;
+      }),
+      flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
+        skipWhile(account => !account), take(1), map(account => this.life = account.lives)))).subscribe(data => {
+          if (this.applicationSettings) {
+            this.selectedCategories = [];
+            let filteredCategories = [];
+            if (this.applicationSettings && this.applicationSettings.game_play_categories) {
+              filteredCategories = this.categories.filter((category) => {
+                if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+                  return category;
+                }
+              });
+            } else {
+              filteredCategories = this.categories;
+            }
+
+            this.cd.markForCheck();
+
+
+            const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+            ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+
+            this.sortedCategories = sortedCategories;
+
+            sortedCategories.map(category => {
+              category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
+              if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
+                this.selectedCategories.push(category.id);
               }
             });
-          } else {
-            filteredCategories = this.categories;
+            this.cd.markForCheck();
+            // this.cd.detectChanges();
           }
-
-          this.cd.markForCheck();
-
-
-          const sortedCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
-          ...filteredCategories.filter(c => !c.requiredForGamePlay)];
-
-          this.sortedCategories = sortedCategories;
-
-          sortedCategories.map(category => {
-            category.isCategorySelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
-            if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
-              this.selectedCategories.push(category.id);
-            }
-          });
-          this.cd.markForCheck();
-          // this.cd.detectChanges();
-        }
-      });
+        });
   }
 
   ngOnInit() {
@@ -129,17 +132,17 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
           this.challengerUserId = params.userid;
           playerModeControl.setValue(this.challengerUserId ? '1' : '0');
           const isChallengeControl = this.newGameForm.get('isChallenge');
-         isChallengeControl.setValue(this.challengerUserId ? true : false);
-          if ( this.challengerUserId ) {
+          isChallengeControl.setValue(this.challengerUserId ? true : false);
+          if (this.challengerUserId) {
             opponentTypeControl.setValue('1');
           }
 
-          if ( this.challengerUserId ) {
+          if (this.challengerUserId) {
             this.selectFriendId(this.challengerUserId);
           }
 
           this.filteredTags$ = this.newGameForm.get('tagControl').valueChanges
-          .pipe(map(val => val.length > 0 ? this.filter(val) : []));
+            .pipe(map(val => val.length > 0 ? this.filter(val) : []));
         }),
         flatMap(() => playerModeControl.valueChanges)
       ).subscribe(v => {
@@ -223,7 +226,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // validations
     this.newGameForm.updateValueAndValidity();
     if (this.newGameForm.invalid) {
       return;
@@ -233,21 +235,8 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
 
     const gameOptions: GameOptions = this.getGameOptionsFromFormValue(this.newGameForm.value);
 
-    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
-      && !this.friendUserId) {
-      if (!this.friendUserId) {
-        this.errMsg = 'Please Select Friend';
-      }
-      this.loaderStatus = false;
-      if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
-        this.windowRef.nativeWindow.scrollTo(0, 0);
-      }
-      return;
-    }
-    // if (this.applicationSettings.lives.enable && this.life === 0) {
-    //   this.redirectToDashboard(this.gameErrorMsg);
-    //   return false;
-    // }
+    this.validateGameOptions(false, gameOptions);
+
     this.startNewGame(gameOptions);
   }
 
@@ -266,12 +255,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     return gameOptions;
   }
 
-  redirectToDashboard(msg) {
-    this.router.navigate(['/dashboard']);
-    this.snackBar.open(String(msg), '', {
-      duration: 2000,
-    });
-  }
+
   ngOnDestroy() {
   }
 
