@@ -306,3 +306,16 @@ mat-card>:first-child {
   }
  
 }
+
+.game-buttons {
+  padding: 10;
+  margin: 10;
+  border-width: 1;
+  border-color: #D4493D;
+
+  .g-btn {
+    background-color: #D4493D;
+    color: white;
+    font-weight: bold;
+  }
+}
