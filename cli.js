@@ -172,7 +172,7 @@ const commandList = {
                 "hidden": true
             }
         },
-        "builder": args => args.argv.platform === 'ios' && args.argv.env.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = ''
+        "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.env.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = ''
     },
     "release-mobile": {
         "command": `rm -rf platforms/platformName &&
