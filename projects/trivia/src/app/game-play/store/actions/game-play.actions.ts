@@ -116,7 +116,7 @@ export class UpdateGameRound implements Action {
 
 export class UserReaction implements Action {
   readonly type = GamePlayActionTypes.USER_REACTION;
-  constructor(public payload: { questionId: string, userId: string, status: string }) { console.log('===>'); }
+  constructor(public payload: { questionId: string, userId: string, status: string }) {}
 }
 
 export class UpdateUserReactionSuccess implements Action {
