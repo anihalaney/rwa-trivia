@@ -54,6 +54,10 @@ service cloud.firestore {
       match /{document=**} {
         allow read: if isUserAuthenticated(resource.data.created_uid);
       }
+
+      match /{questionId}/reaction/{userId} {
+          allow read: if isUserAuthenticated(userId);           
+      }
     }
     
    match /unpublished_questions {
