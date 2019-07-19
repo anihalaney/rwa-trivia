@@ -13,6 +13,7 @@
             * Places API
             * Token Service API
       3 Save
+      4 You have to add Google map API key into functions/configs/YOUR-PROJECT-NAME.json file in `apiKey` .
 
 
 #### Restrict web API key

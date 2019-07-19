@@ -1,13 +1,11 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Feedback, FeedbackPosition, FeedbackType } from 'nativescript-feedback';
 import * as firebase from 'nativescript-plugin-firebase';
-import { Observable, of } from 'rxjs';
 import {
-  FirebaseAnalyticsEventConstants, FirebaseAnalyticsKeyConstants,
-  Game, GameConstant, GameMode, GameOptions, GeneralConstants, OpponentType, Parameter, PlayerMode, User
+  Parameter, User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, GameOptions,
+  PlayerMode, GameConstant, OpponentType, GameMode, Game, GeneralConstants
 } from '../../shared/model';
-import { UtilsCore } from './utilsCore';
-
+import { of, Observable } from 'rxjs';
 
 @Injectable()
 export class Utils extends UtilsCore {
@@ -44,7 +42,6 @@ export class Utils extends UtilsCore {
     firebase.crashlytics.log(type, error);
     firebase.crashlytics.sendCrashLog(error);
   }
-
 
   setAnalyticsParameter(key: string, value: string, analyticsParameter: Array<Parameter>): Array<Parameter> {
     analyticsParameter.push({ key: key, value: value });

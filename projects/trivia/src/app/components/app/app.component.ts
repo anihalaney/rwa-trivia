@@ -13,7 +13,6 @@ import { User } from 'shared-library/shared/model';
 import * as gamePlayActions from '../../game-play/store/actions';
 import { AppState, appState } from '../../store';
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
