@@ -69,6 +69,37 @@ export class QuestionService {
         }
     }
 
+
+    /**
+     * setQuestion
+     * return ref
+     */
+    static async getReaction(collectionName: string, questionId: string, userId: string): Promise<any> {
+        try {
+               const reaction = await QuestionService.fireStoreClient.doc(
+                   `${collectionName}/${questionId}/${CollectionConstants.REACTION}/${userId}`).get();
+               return reaction.data();
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
+    /**
+     * setQuestion
+     * return ref
+     */
+    static async deleteReaction(collectionName: string, questionId: string, userId: string): Promise<any> {
+        try {
+            return await QuestionService.fireStoreClient
+                .doc(`/${collectionName}/${questionId}/${CollectionConstants.REACTION}/${userId}/`)
+                .delete();
+
+        } catch (error) {
+            return Utils.throwError(error);
+        }
+    }
+
     /**
      * getAllUnpublished Questions
      * return questions
@@ -85,7 +116,7 @@ export class QuestionService {
     static async uploadImage(image: String, imageName: number): Promise<any> {
 
         let filePath =
-            `questions`;
+        `questions`;
         const imageBase64 = image.replace(/^data:image\/\w+;base64,/, '');
         let bufferStream = new Buffer(imageBase64, GeneralConstants.BASE64);
         try {
@@ -143,5 +174,19 @@ export class QuestionService {
             return Utils.throwError(error);
         }
 
+    }
+
+    /**
+     * setUser Game stat with other user
+     * return ref
+     */
+    static async updateReaction(questionId: string, userId: string, reaction: any): Promise<any> {
+        try {
+            return await QuestionService.fireStoreClient
+            .doc(`/${CollectionConstants.QUESTIONS}/${questionId}/${CollectionConstants.REACTION}/${userId}`)
+            .set(reaction, { merge: true });
+        } catch (error) {
+            return Utils.throwError(error);
+        }
     }
 }

@@ -30,6 +30,7 @@ export class Question {
   questionObject?: any;
   isRichEditor?: boolean = false;
   maxTime?: number;
+  reactionsCount?: { [key: string]: Number };
 
 
 
@@ -79,6 +80,7 @@ export class Question {
     question.renderedQuestion = source.renderedQuestion;
     question.isRichEditor = (source.isRichEditor) ? source.isRichEditor : false;
     question.questionObject = (source.questionObject) ? source.questionObject : '' ;
+    question.reactionsCount = (source.reactionsCount) ? source.reactionsCount : {} ;
 
     question.totalQALength = this.countQALength(source);
     return question;

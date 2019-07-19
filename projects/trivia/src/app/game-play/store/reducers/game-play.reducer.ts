@@ -53,3 +53,20 @@ export function saveReportQuestion(state: any = null, action: GamePlayActions): 
   }
 }
 
+export function updateUserReactionStatus(state: any = null, action: GamePlayActions): any {
+  switch (action.type) {
+    case GamePlayActionTypes.UPADTE_USER_REACTION_SUCCESS:
+      return action.payload;
+  }
+}
+
+
+export function getUserReactionStatus(state: any = null, action: GamePlayActions): any {
+  switch (action.type) {
+    case GamePlayActionTypes.GET_USER_REACTION_SUCCESS:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+

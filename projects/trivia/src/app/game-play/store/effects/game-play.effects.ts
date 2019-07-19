@@ -142,6 +142,28 @@ export class GamePlayEffects {
         )
       ));
 
+  @Effect()
+  UserReaction$ = this.actions$
+    .pipe(ofType(GamePlayActionTypes.USER_REACTION))
+    .pipe(
+      switchMap((action: gameplayactions.UserReaction) =>
+        this.svc.userReaction(action.payload.questionId, action.payload.userId, action.payload.status).pipe(
+          map((question: Question) => new gameplayactions.UpdateUserReactionSuccess(question))
+        )
+      )
+    );
+
+    @Effect()
+    getUserReaction$ = this.actions$
+      .pipe(ofType(GamePlayActionTypes.GET_USER_REACTION))
+      .pipe(
+        switchMap((action: gameplayactions.GetUserReaction) =>
+          this.svc.getUserReaction(action.payload.questionId, action.payload.userId).pipe(
+            map((reaction: {status: string}) => new gameplayactions.GetUserReactionSuccess(reaction))
+          )
+        )
+      );
+
   constructor(
     private actions$: Actions,
     public store: Store<GamePlayState>,

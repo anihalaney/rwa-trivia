@@ -282,4 +282,14 @@ export class GameService {
     };
     return this.http.put<any>(url, payload);
   }
+
+  userReaction(questionId: string, userId: string, status: string) {
+    const url = `${CONFIG.functionsUrl}/question/userReaction/${questionId}`;
+    return this.http.post<Question>(url, { userId: userId, status: status});
+  }
+
+  getUserReaction(questionId: string, userId: string) {
+    return this.dbService.valueChanges(`questions/${questionId}/reaction`, userId );
+  }
+
 }
