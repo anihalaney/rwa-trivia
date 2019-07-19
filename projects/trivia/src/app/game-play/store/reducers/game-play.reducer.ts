@@ -41,6 +41,7 @@ export function userAnsweredQuestion(state: any = null, action: GamePlayActions)
   switch (action.type) {
     case GamePlayActionTypes.GET_USERS_ANSWERED_QUESTION_SUCCESS:
       return action.payload;
+    case UserActions.LOGOFF:
     default:
       return null;
   }

@@ -18,6 +18,7 @@ export function newGameId(state: any = "", action: ActionWithPayload<string>): s
     switch (action.type) {
       case GameActions.CREATE_NEW_SUCCESS:
         return action.payload;
+      case UserActions.LOGOFF:
       case GameActions.RESET_NEW:
         return "";
       default:
@@ -30,6 +31,7 @@ export function gameCreateStatus(state: any = '', action: ActionWithPayload<Stri
   switch (action.type) {
     case GameActions.CREATE_NEW_GAME_ERROR:
       return action.payload;
+    case UserActions.LOGOFF:
     default:
       return null;
   }

@@ -14,7 +14,6 @@ import * as gameplayactions from '../../store/actions';
 import { GameQuestionComponent } from '../game-question/game-question.component';
 import { Router } from '@angular/router';
 
-
 export class GameDialog {
   actionBarStatus: String = 'Play Game';
   user: User;
@@ -506,5 +505,4 @@ export class GameDialog {
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.utils.unsubscribe([this.timerSub, this.questionSub]);
   }
-
 }

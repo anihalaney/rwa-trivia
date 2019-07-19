@@ -1,13 +1,15 @@
 import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
 import { BulkActions, BulkActionTypes } from '../actions';
 import { BulkUploadFileInfo, Question, User } from 'shared-library/shared/model';
+import { UserActions } from 'shared-library/core/store';
 
 // for get all BulkUploadFileInfo
 export function bulkUploadFileInfos(state: any = [], action: BulkActions): BulkUploadFileInfo[] {
     switch (action.type) {
         case BulkActionTypes.LOAD_BULK_UPLOAD_SUCCESS:
             return action.payload;
+        case UserActions.LOGOFF:
+            return [];
         default:
             return state;
     }
@@ -18,6 +20,8 @@ export function userBulkUploadFileInfos(state: any = [], action: BulkActions): B
     switch (action.type) {
         case BulkActionTypes.LOAD_USER_BULK_UPLOAD_SUCCESS:
             return action.payload;
+        case UserActions.LOGOFF:
+            return [];
         default:
             return state;
     }
@@ -28,6 +32,8 @@ export function bulkUploadPublishedQuestions(state: any = [], action: BulkAction
     switch (action.type) {
         case BulkActionTypes.LOAD_BULK_UPLOAD_PUBLISHED_QUESTIONS_SUCCESS:
             return action.payload;
+        case UserActions.LOGOFF:
+            return [];
         default:
             return state;
     }
@@ -39,6 +45,8 @@ export function bulkUploadUnpublishedQuestions(state: any = [], action: BulkActi
     switch (action.type) {
         case BulkActionTypes.LOAD_BULK_UPLOAD_UNPUBLISHED_QUESTIONS_SUCCESS:
             return action.payload;
+        case UserActions.LOGOFF:
+            return [];
         default:
             return state;
     }
@@ -49,6 +57,8 @@ export function bulkUploadFileUrl(state: string, action: BulkActions): string {
     switch (action.type) {
         case BulkActionTypes.LOAD_BULK_UPLOAD_FILE_URL_SUCCESS:
             return action.payload;
+        case UserActions.LOGOFF:
+            return '';
         default:
             return null;
     }
@@ -59,6 +69,7 @@ export function bulkUploadArchiveStatus(state: any = 'NONE', action: BulkActions
     switch (action.type) {
         case BulkActionTypes.ARCHIVE_BULK_UPLOAD_SUCCESS:
             return 'ARCHIVED';
+        case UserActions.LOGOFF:
         default:
             return null;
     }
@@ -69,6 +80,8 @@ export function bulkUploadFileInfo(state: any, action: BulkActions): BulkUploadF
     switch (action.type) {
         case BulkActionTypes.LOAD_BULK_UPLOAD_FILE_SUCCESS:
             return action.payload;
+        case UserActions.LOGOFF:
+            return new BulkUploadFileInfo();
         default:
             return state;
     }
@@ -79,6 +92,8 @@ export function getArchiveToggleState(state: any = null, action: BulkActions): b
     switch (action.type) {
         case BulkActionTypes.SAVE_ARCHIVE_TOGGLE_STATE:
             return action.payload.toggle_state;
+        case UserActions.LOGOFF:
+            return false;
         default:
             return state;
     }
@@ -89,6 +104,8 @@ export function getArchiveList(state = [], action: BulkActions): BulkUploadFileI
     switch (action.type) {
         case BulkActionTypes.SAVE_ARCHIVE_LIST:
             return [...action.payload];
+        case UserActions.LOGOFF:
+            return [];
         default:
             return state;
     }

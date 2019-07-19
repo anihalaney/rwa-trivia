@@ -1,13 +1,10 @@
-import { Observable } from 'rxjs';
-import { Action } from '@ngrx/store';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, Game, Friends, Invitation } from '../../../shared/model';
 import { Country } from 'shared-library/shared/mobile/component/countryList/model/country.model';
 
+
 export function user(state: any = null, action: ActionWithPayload<User>): User {
   switch (action.type) {
-    case UserActions.LOGOFF:
-      return null;
     case UserActions.ADD_USER_WITH_ROLES:
       return action.payload;
     default:
@@ -24,6 +21,8 @@ export function userDict(state: { [key: string]: User } = {}, action: ActionWith
         users[action.payload.userId] = { ...action.payload };
       }
       return users;
+    case UserActions.LOGOFF:
+      return {};
     default:
       return state;
   }
@@ -38,6 +37,8 @@ export function userFriendInvitations(state: { [key: string]: Invitation } = {},
         invitations[action.payload.email] = { ...action.payload };
       }
       return invitations;
+    case UserActions.LOGOFF:
+      return {};
     default:
       return state;
   }
@@ -60,6 +61,8 @@ export function invitationToken(state: any = 'NONE', action: ActionWithPayload<s
   switch (action.type) {
     case UserActions.STORE_INVITATION_TOKEN:
       return action.payload;
+    case UserActions.LOGOFF:
+      return null;
     default:
       return state;
   }
@@ -69,6 +72,8 @@ export function gameInvites(state: any = [], action: ActionWithPayload<Game[]>):
   switch (action.type) {
     case UserActions.LOAD_GAME_INVITES_SUCCESS:
       return action.payload;
+    case UserActions.LOGOFF:
+      return [];
     default:
       return state;
   }
@@ -79,6 +84,8 @@ export function userFriends(state: any = null, action: ActionWithPayload<Friends
   switch (action.type) {
     case UserActions.LOAD_USER_FRIENDS_SUCCESS:
       return action.payload;
+    case UserActions.LOGOFF:
+      return null;
     default:
       return state;
   }
@@ -88,6 +95,8 @@ export function friendInvitations(state: any = [], action: ActionWithPayload<Inv
   switch (action.type) {
     case UserActions.LOAD_FRIEND_INVITATION_SUCCESS:
       return action.payload;
+    case UserActions.LOGOFF:
+      return [];
     default:
       return state;
   }
