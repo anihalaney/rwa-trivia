@@ -3,12 +3,13 @@ import { take, switchMap, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
-import { Category, GameOptions, User, ApplicationSettings, PlayerMode } from 'shared-library/shared/model';
-import { Utils } from 'shared-library/core/services';
+import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentType } from 'shared-library/shared/model';
+import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 import { OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
@@ -32,14 +33,17 @@ export class NewGame implements OnDestroy {
   errMsg: string;
   life: number;
   gameErrorMsg: String = 'Sorry, don\'t have enough life.';
+  loaderStatus = false;
 
   constructor(
     public store: Store<AppState>,
     public utils: Utils,
     public gameActions: GameActions,
     public userActions: UserActions,
+    public windowRef: WindowRef,
     public cd: ChangeDetectorRef,
-    public route: ActivatedRoute) {
+    public route: ActivatedRoute,
+    public router: Router) {
     this.categoriesObs = store.select(appState.coreState).pipe(select(s => s.categories), take(1));
     this.tagsObs = store.select(appState.coreState).pipe(select(s => s.tags));
     this.selectedTags = [];
@@ -85,7 +89,7 @@ export class NewGame implements OnDestroy {
             this.noFriendsStatus = true;
           }
           this.cd.markForCheck();
-        }));
+        }) );
     this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.gameOptions = new GameOptions();
@@ -97,6 +101,34 @@ export class NewGame implements OnDestroy {
     return this.tags.filter(option => new RegExp(this.utils.regExpEscape(`${val}`), 'gi').test(option));
   }
 
+  validateGameOptions(isMobile: boolean, gameOptions: GameOptions) {
+    if (Number(gameOptions.playerMode) === PlayerMode.Opponent && Number(gameOptions.opponentType) === OpponentType.Friend
+      && !this.friendUserId) {
+      if (!this.friendUserId) {
+        this.errMsg = 'Please Select Friend';
+        if (isMobile) {
+          this.utils.showMessage('error', this.errMsg);
+        } else {
+          this.loaderStatus = false;
+          if (this.windowRef && this.windowRef.nativeWindow && this.windowRef.nativeWindow.scrollTo) {
+            this.windowRef.nativeWindow.scrollTo(0, 0);
+          }
+        }
+        return;
+      }
+    }
+
+    if (this.applicationSettings.lives.enable && this.life === 0) {
+      this.redirectToDashboard(this.gameErrorMsg);
+      return false;
+    }
+  }
+
+  redirectToDashboard(msg) {
+    this.router.navigate(['/dashboard']);
+    this.utils.showMessage('success', msg);
+
+  }
 
   startNewGame(gameOptions: GameOptions) {
     let user: User;

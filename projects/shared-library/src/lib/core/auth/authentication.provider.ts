@@ -3,10 +3,11 @@ import { Store } from '@ngrx/store';
 import { Observable, defer, throwError, from, of } from 'rxjs';
 import { share, take, tap, mapTo, map, filter } from 'rxjs/operators';
 import { CoreState, coreState } from '../store';
-import { User } from '../../shared/model';
+import { User, FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants } from '../../shared/model';
 import { UserActions, UIStateActions } from '../store/actions';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { FirebaseAuthService } from './firebase-auth.service';
+import { WindowRef } from '../services';
 
 @Injectable()
 export class AuthenticationProvider {
@@ -33,6 +34,7 @@ export class AuthenticationProvider {
         this.store.dispatch(this.userActions.logoff());
       }
     });
+
 
     this.refreshTokenObserver = defer(() => {
       return from(this.generateToken(true));

@@ -1,28 +1,23 @@
-import {
-  Component, OnInit, OnDestroy, ViewChild, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef, NgZone
-} from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { Store, select } from '@ngrx/store';
-import { GameActions, UserActions } from 'shared-library/core/store/actions';
-import { AppState, appState } from '../../../store';
-import { NewGame } from './new-game';
-import { ObservableArray } from 'tns-core-modules/data/observable-array';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { select, Store } from '@ngrx/store';
+import { RouterExtensions } from 'nativescript-angular/router';
 import { TokenModel } from 'nativescript-ui-autocomplete';
 import { RadAutoCompleteTextViewComponent } from 'nativescript-ui-autocomplete/angular';
 import { ListViewEventData } from 'nativescript-ui-listview';
 import { RadListViewComponent } from 'nativescript-ui-listview/angular';
-import { Router, ActivatedRoute } from '@angular/router';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
+import { Observable } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
-import { Utils } from 'shared-library/core/services';
+import { Utils, WindowRef } from 'shared-library/core/services';
 import { coreState } from 'shared-library/core/store';
-import {
-  Category, GameConstant, GameMode, OpponentType, Parameter, PlayerMode,
-  FirebaseAnalyticsKeyConstants, FirebaseAnalyticsEventConstants, FirebaseScreenNameConstants
-} from 'shared-library/shared/model';
+import { GameActions, UserActions } from 'shared-library/core/store/actions';
+import { Category, PlayerMode } from 'shared-library/shared/model';
+import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { Page } from 'tns-core-modules/ui/page/page';
-import { RouterExtensions } from 'nativescript-angular/router';
+import { AppState, appState } from '../../../store';
 import * as gamePlayActions from './../../store/actions';
+import { NewGame } from './new-game';
 
 
 @Component({
@@ -41,7 +36,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   showSelectTag = false;
   dataItem;
   categoriesObs: Observable<Category[]>;
-  categories: Category[];
   customTag: string;
   categoryIds: number[] = [];
   private tagItems: ObservableArray<TokenModel>;
@@ -60,12 +54,13 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public utils: Utils,
     private routerExtension: RouterExtensions,
     public userActions: UserActions,
-    private router: Router,
+    public router: Router,
     public route: ActivatedRoute,
     public cd: ChangeDetectorRef,
     private page: Page,
+    public windowRef: WindowRef,
     private ngZone: NgZone) {
-    super(store, utils, gameActions, userActions, cd, route);
+    super(store, utils, gameActions, userActions, windowRef, cd, route, router);
     this.initDataItems();
     this.modeAvailable = false;
   }
@@ -202,21 +197,12 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
   startGame() {
     this.gameOptions.tags = this.selectedTags;
     this.gameOptions.categoryIds = this.filteredCategories.filter(c => c.requiredForGamePlay || c.isSelected).map(c => c.id);
-    if (Number(this.gameOptions.playerMode) === PlayerMode.Opponent && Number(this.gameOptions.opponentType) === OpponentType.Friend
-      && !this.friendUserId) {
-      if (!this.friendUserId) {
-        this.errMsg = 'Please Select Friend';
-        this.utils.showMessage('error', this.errMsg);
-      }
-      return;
-    }
-    if (this.applicationSettings.lives.enable && this.life === 0) {
-      this.redirectToDashboard(this.gameErrorMsg);
-      return false;
-    }
+    this.validateGameOptions(true, this.gameOptions);
+
     if (this.gameOptions.playerMode === PlayerMode.Single) {
       delete this.gameOptions.opponentType;
     }
+
     this.startNewGame(this.gameOptions);
   }
 

@@ -86,7 +86,7 @@ export enum pushNotificationRouteConstants {
     FRIEND_NOTIFICATIONS = 'friend-notifications',
     QUESTION_NOTIFICATIONS = 'my/questions',
     ACHIEVEMENT_NOTIFICATION = 'achievement-notification',
-    TOKEN_IS_NOT_REGISTERED= 'messaging/registration-token-not-registered'
+    TOKEN_IS_NOT_REGISTERED = 'messaging/registration-token-not-registered'
 }
 
 
@@ -172,7 +172,13 @@ export enum SocialShareConstants {
 
 export enum GameConstants {
     GAME_STATUS = 'GameStatus',
-    GAME_OVER = 'gameOver'
+    GAME_OVER = 'gameOver',
+    RANDOM = 'Random',
+    FRIEND = 'Friend',
+    NORMAL = 'Normal',
+    OFFLINE = 'Offline',
+    SINGLE = 'Single',
+    OPPONENT = 'Opponent'
 }
 
 export enum AccountConstants {
@@ -418,7 +424,7 @@ export enum FirebaseScreenNameConstants {
     GAME_OVER = 'Game Over',
     REPORT_GAME = 'Report Game',
     GAME_CONTINUE = 'Game Continue',
-    GAME_QUESTION  = 'Game Question',
+    GAME_QUESTION = 'Game Question',
     GAME_DIALOG = 'Game Dialog',
     INVITE_FRIENDS = 'Invite Friends',
     FRIEND_LIST = 'Friend List',
@@ -428,5 +434,9 @@ export enum FirebaseScreenNameConstants {
     QUESTION_ADD_UPDATE = 'Question Add Update',
     LOGIN = 'Login',
     USER_FEEDBACK = 'User Feedback'
+}
+
+export enum AnalyticsEventConstants {
+    EVENT = 'event',
 }
 
