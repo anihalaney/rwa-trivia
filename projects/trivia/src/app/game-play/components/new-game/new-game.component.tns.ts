@@ -92,14 +92,14 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
         }
       }));
 
-    this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
-      if (gameObj && gameObj['gameId']) {
-        this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
-        this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
-        this.cd.markForCheck();
-      }
+    // this.subscriptions.push(this.store.select(coreState).pipe(select(s => s.newGameId), filter(g => g !== '')).subscribe(gameObj => {
+    //   if (gameObj && gameObj['gameId']) {
+    //     this.routerExtension.navigate(['/game-play', gameObj['gameId']], { clearHistory: true });
+    //     this.store.dispatch(new gamePlayActions.ResetCurrentQuestion());
+    //     this.cd.markForCheck();
+    //   }
 
-    }));
+    // }));
 
     this.categoriesObs.pipe(take(1)).subscribe(categories => {
       categories.map(category => {

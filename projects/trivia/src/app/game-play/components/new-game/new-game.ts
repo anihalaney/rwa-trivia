@@ -104,7 +104,6 @@ export class NewGame implements OnDestroy {
     if (this.gameOptions.playerMode === PlayerMode.Opponent) {
       gameOptions.friendId = this.friendUserId;
     }
-    console.log('gameOptions', gameOptions);
     this.store.dispatch(new gameplayactions.CreateNewGame({ gameOptions: gameOptions, user: user }));
   }
 
