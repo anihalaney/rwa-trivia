@@ -160,9 +160,6 @@ export class QuestionController {
 
             if (question) {
                 const reaction = await QuestionService.getReaction(CollectionConstants.QUESTIONS, questionId, userId);
-                if (!question.reactionsCount) {
-                    question.reactionsCount = {};
-                }
                 if (reaction) {
                     if (status !== reaction.status) {
                         question.reactionsCount[status] = question.reactionsCount &&
@@ -183,7 +180,8 @@ export class QuestionController {
                 }
                 const newquestion = {...question};
                 await QuestionService.updateQuestion(CollectionConstants.QUESTIONS, newquestion);
-                Utils.sendResponse(res, interceptorConstants.SUCCESS, question);
+                const updatedQuestion = await QuestionService.getQuestionById(questionId);
+                Utils.sendResponse(res, interceptorConstants.SUCCESS, updatedQuestion);
             } else {
                 Utils.sendError(res, interceptorConstants.ENTITY_NOT_FOUND);
             }
