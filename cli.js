@@ -1,5 +1,8 @@
 const execSync = require('child_process').execSync;
 const yargs = require('yargs');
+const path = require('path');
+const fs = require("fs");
+const template = require('lodash.template');
 // Projects refers to different web application which we need to run
 const projects = ["trivia", "trivia-admin", "trivia-editor"];
 // Product variants
@@ -17,7 +20,6 @@ const firebaseProjects = ["trivia-dev",
 ];
 const schedularEnv = ['dev', 'prod'];
 const platForms = ['android', 'ios'];
-
 
 
 
@@ -72,6 +74,9 @@ const commandList = {
                 "default" : 'dev',
                 "alias": 'e'
             }
+        },
+        "builder": (args) => {
+            replaceVariableInIndex([args.argv.project], args.argv.productVariant);
         }
     },
     "run-functions":
@@ -128,6 +133,7 @@ const commandList = {
             const env = args.argv.env;
             const project = args.argv.projectName;
             args.argv.setConfig = env === 'production' ? `npm run firebase -P ${project} functions:config:set environment.production=true` : '';
+            replaceVariableInIndex(['trivia', 'trivia-admin'], args.argv.productVariant);
         }
     },
     "run-mobile":
@@ -161,7 +167,6 @@ const commandList = {
             },
             "environment": {
                 "demand": false,
-                "default": "",
                 "coerce": args => args === 'production' ? '--env.prod --env.aot --env.uglify' : '',
                 "default" : 'dev',
                 "alias": ['E', 'e']
@@ -217,6 +222,13 @@ const commandList = {
                 "coerce": args => args === 'production' ? '--env.prod' : '',
                 "alias": ['E', 'e']
             },
+            "versionCode": {
+                "demand": false,
+                "description": 'versionCode for android build ',
+                "type": 'string',
+                "default": '1',
+                "alias": ['V', 'v']
+            },
             "androidRelease": {
                 "demand": false,
                 "hidden": true
@@ -253,6 +265,7 @@ const commandList = {
                 const keyStorePassword = args.argv.keyStorePassword;
                 const keyStoreAlias = args.argv.keyStoreAlias;
                 const keyStoreAliasPassword = args.argv.keyStoreAliasPassword;
+                const versionCode = args.argv.versionCode;
                 args.options(
                     {
                         'buildCmd': { 'default': 'build' },
@@ -266,6 +279,7 @@ const commandList = {
                     --key-store-alias ${keyStoreAlias} 
                     --key-store-alias-password ${keyStoreAliasPassword} 
                     --copy-to ${productVariant}.apk`;
+
             } else {
                 args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });
                 args.argv.androidRelease = '';
@@ -299,7 +313,7 @@ function buildCommands() {
                 argv = yargs.options(commandList[cmd].options);  
                 if(commandList[cmd].builder){
                     commandList[cmd].builder(args);
-                }             
+                }            
             }, function (argv) {
                 let executableCmd = commandList[cmd].command;
                 for (const opt in commandList[cmd].options) {
@@ -327,6 +341,20 @@ function checkCommands (yargs, argv, numRequired) {
   } else {
     // check for unknown command
   }
+}
+
+function replaceVariableInIndex(projectList, productVarient){
+
+    for (const project of projectList) {
+            const filepath = `./projects/${project}/src/index.html`;
+            let buffer = fs.readFileSync(filepath, {encoding:'utf-8', flag:'r'});
+            const config = JSON.parse(fs.readFileSync(path.resolve(__dirname, `projects/shared-library/src/lib/config/${productVarient}.json`), 'utf8'));
+            const compiled = template(buffer);
+            buffer = compiled(config);
+            const options = {encoding:'utf-8', flag:'w'};
+            fs.writeFileSync(filepath, buffer, options);        
+    }
+
 }
 
 function escapeRegExp(string) {
