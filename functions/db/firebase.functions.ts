@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import {
     friendInvitationConstants, Game, Invitation, LeaderBoardUsers,
     OpponentType, PlayerMode, pushNotificationRouteConstants, Question,
-    QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants
+    QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants, User
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
@@ -229,6 +229,28 @@ export class FirebaseFunctions {
             throw error;
         }
     }
+
+    static async doUserStatusUpdateOperation(change: any, context: any): Promise<boolean> {
+        try {
+
+            // check realtime db status
+            const statusSnapshot = await change.after.ref.once('value');
+            const status = statusSnapshot.val();
+
+            // get firestore db object
+            const user: User = await UserService.getUserById(context.params.userId);
+
+            // update the status
+            user.online = (status === 'online') ? true : false;
+
+            // update the user service
+            return UserService.updateUser({ ...user });
+
+        } catch (error) {
+            console.error('Error :', error);
+            throw error;
+        }
+    }
 }
 
 exports.onQuestionWrite = functions.firestore.document('/questions/{questionId}')
@@ -256,3 +278,7 @@ exports.onUnpublishedQuestionsUpdate = functions.firestore.document('/unpublishe
 
 exports.onQuestionCreate = functions.firestore.document('/questions/{questionId}')
     .onCreate(async (snap, context) => await FirebaseFunctions.doQuestionCreateOperation(snap, context));
+
+// update user's status based on realtime updates
+exports.onUserStatusWrite = functions.database.ref('/users/{userId}')
+    .onWrite(async (change, context) => await FirebaseFunctions.doUserStatusUpdateOperation(change, context));

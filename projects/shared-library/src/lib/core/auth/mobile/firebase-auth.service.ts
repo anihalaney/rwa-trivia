@@ -4,6 +4,7 @@ import * as firebaseApp from 'nativescript-plugin-firebase/app';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Subject, Observable } from 'rxjs';
 import { RouterExtensions } from 'nativescript-angular/router';
+import { User } from 'shared-library/shared/model';
 
 
 @Injectable()
@@ -45,7 +46,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public async refreshToken(forceRefresh: boolean): Promise<string> {
-        const token =  await firebase.getAuthToken({
+        const token = await firebase.getAuthToken({
             forceRefresh: forceRefresh
         });
         return token.token;
@@ -60,7 +61,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public sendPasswordResetEmail(email: string) {
-        return firebase.sendPasswordResetEmail( email );
+        return firebase.sendPasswordResetEmail(email);
     }
 
     public googleLogin(): Promise<any> {
@@ -92,5 +93,14 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
 
     public resumeState(user) {
         this.userSubject.next(user);
+    }
+
+    public updateOnConnect(user: User) {
+
+    }
+
+
+    public updateOnDisconnect(user: User) {
+
     }
 }

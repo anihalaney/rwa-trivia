@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { LoginComponent } from './../../components/login/login.component';
 import { WindowRef } from './../../services/windowref.service';
+import { User } from 'shared-library/shared/model';
+import { AngularFireDatabase } from '@angular/fire/database';
 
 
 @Injectable()
@@ -17,7 +19,8 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
         public router: Router,
         protected afStore: AngularFirestore,
         public dialog: MatDialog,
-        private windowsRef: WindowRef) { }
+        private windowsRef: WindowRef,
+        private db: AngularFireDatabase) { }
 
     authState(): any {
         return this.afAuth.authState;
@@ -87,5 +90,20 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     public resumeState(user) {
 
+    }
+
+    public updateOnConnect(user: User) {
+        this.db.object('.info/connected')
+            .valueChanges().subscribe(connected => {
+                console.log('connected', connected);
+                const status = connected ? 'online' : 'offline';
+                this.db.object(`/users/${user.userId}`).set({ status: status });
+            });
+    }
+
+    public updateOnDisconnect(user: User) {
+        this.db.database.ref(`users/${user.userId}`)
+            .onDisconnect()
+            .update({ status: 'offline' });
     }
 }
