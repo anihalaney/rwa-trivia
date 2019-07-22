@@ -65,7 +65,6 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     public snackBar: MatSnackBar,
     public cd: ChangeDetectorRef) {
     super(store, utils, gameActions, userActions, windowRef, cd, route, router);
-
   }
 
   ngOnInit() {

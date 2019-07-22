@@ -11,7 +11,11 @@ import { AppState, appState } from '../../../store';
 import { gamePlayState } from '../../store';
 import { ReportGameComponent } from '../report-game/report-game.component';
 import { GameOver } from './game-over';
-import { appConstants } from 'shared-library/shared/model';
+import {
+  appConstants, FirebaseAnalyticsKeyConstants,
+  OpponentType, GameConstants, GameMode,
+  FirebaseAnalyticsEventConstants, PlayerMode, GeneralConstants
+} from 'shared-library/shared/model';
 
 @Component({
   selector: 'game-over',
@@ -82,6 +86,9 @@ export class GameOverComponent extends GameOver implements OnInit, OnDestroy {
       this.otherUserInfo = this.userDict[this.otherUserId];
     }
   }
+
+
+
 
   reportQuestion(question) {
     setTimeout(() => this.openDialog(question), 0);

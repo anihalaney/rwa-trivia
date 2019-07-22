@@ -76,7 +76,7 @@ export class SocialService {
         return this.dbService.valueChanges('blogs', '', queryParams).pipe(catchError(error => {
             console.log(error);
             return of(null);
-        }))
+        }));
 
     }
 }

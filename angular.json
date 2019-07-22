@@ -41,6 +41,7 @@
             ],
             "scripts": [
               "./node_modules/firebaseui/dist/firebaseui.js",
+              "projects/trivia/src/scripts/google-analytics.js",
               "./node_modules/jquery/dist/jquery.min.js",
               "./node_modules/mathquill/build/mathquill.min.js",
               "./node_modules/highlightjs/highlight.pack.min.js",
@@ -53,10 +54,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
-                },
-                {
-                  "replace": "projects/trivia/src/index.html",
-                  "with": "projects/trivia/src/assets/index/rwa-trivia/index.html"
                 }
               ],
               "serviceWorker": false
@@ -66,10 +63,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
-                },
-                {
-                  "replace": "projects/trivia/src/index.html",
-                  "with": "projects/trivia/src/assets/index/rwa-trivia/index.html"
                 }
               ],
               "serviceWorker": true,
@@ -88,10 +81,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.prod.ts"
-                },
-                {
-                  "replace": "projects/trivia/src/index.html",
-                  "with": "projects/trivia/src/assets/index/rwa-trivia/index.html"
                 }
               ],
               "scripts": [
@@ -113,10 +102,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
-                },
-                {
-                  "replace": "projects/trivia/src/index.html",
-                  "with": "projects/trivia/src/assets/index/bitwiser-edu/index.html"
                 }
               ],
               "serviceWorker": true
@@ -126,10 +111,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
-                },
-                {
-                  "replace": "projects/trivia/src/index.html",
-                  "with": "projects/trivia/src/assets/index/bitwiser-edu/index.html"
                 }
               ],
               "serviceWorker": true,
@@ -148,10 +129,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.prod.ts"
-                },
-                {
-                  "replace": "projects/trivia/src/index.html",
-                  "with": "projects/trivia/src/assets/index/bitwiser-edu/index.html"
                 }
               ],
               "scripts": [
@@ -327,10 +304,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
-                },
-                {
-                  "replace": "projects/trivia-admin/src/index.html",
-                  "with": "projects/trivia-admin/src/assets/index/rwa-trivia/index.html"
                 }
               ]
             },
@@ -339,10 +312,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.dev.ts"
-                },
-                {
-                  "replace": "projects/trivia-admin/src/index.html",
-                  "with": "projects/trivia-admin/src/assets/index/rwa-trivia/index.html"
                 }
               ],
               "optimization": true,
@@ -360,10 +329,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/trivia/environment.prod.ts"
-                },
-                {
-                  "replace": "projects/trivia-admin/src/index.html",
-                  "with": "projects/trivia-admin/src/assets/index/rwa-trivia/index.html"
                 }
               ],
               "optimization": true,
@@ -381,10 +346,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
-                },
-                {
-                  "replace": "projects/trivia-admin/src/index.html",
-                  "with": "projects/trivia-admin/src/assets/index/bitwiser-edu/index.html"
                 }
               ]
             },
@@ -393,10 +354,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.dev.ts"
-                },
-                {
-                  "replace": "projects/trivia-admin/src/index.html",
-                  "with": "projects/trivia-admin/src/assets/index/bitwiser-edu/index.html"
                 }
               ],
               "optimization": true,
@@ -414,10 +371,6 @@
                 {
                   "replace": "projects/shared-library/src/lib/environments/environment.ts",
                   "with": "projects/shared-library/src/lib/environments/bitwiser-edu/environment.prod.ts"
-                },
-                {
-                  "replace": "projects/trivia-admin/src/index.html",
-                  "with": "projects/trivia-admin/src/assets/index/bitwiser-edu/index.html"
                 }
               ],
               "optimization": true,
