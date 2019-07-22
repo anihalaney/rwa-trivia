@@ -6,5 +6,9 @@
     "image" : "https://cdn-images-1.medium.com/max/1600/1*5RH1reNYpyBJOKauMMX2tw.png",
     "fbAppId" : "1436607329691182",
     "fbAdminId" : "10156413230908290",
-    "url": "https://bitwiser.io"
+    "url": "https://bitwiser.io",
+    "functionsUrl": {
+        "staging" : "https://rwa-trivia-dev-e57fc.firebaseapp.com/v1",
+        "production": "https://bitwiser.io"
+    }
 }
