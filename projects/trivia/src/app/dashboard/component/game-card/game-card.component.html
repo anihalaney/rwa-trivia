@@ -4,12 +4,7 @@
   <div class="row">
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="col-xs-12 textcenter clearfix">
-        <div class="yourimg">
-          <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image">
-        </div>
-        <div class="clear"></div>
-        <span class="dark ellipsis" title="{{user.displayName}}">{{user.displayName}}</span>
-        <div class="light ellipsis div-location" title="{{user?.location}}">{{user?.location}}</div>
+        <app-user-card [user]="user" [type]="userCardType.USER_CARD_TYPE_ONE"></app-user-card>
         <hr>
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
         <div class="div-badge">
@@ -25,9 +20,8 @@
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length == 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
-          <div class="yourimg vs">
-            <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Image" />
-          </div>
+          <app-user-card [user]="user" [type]="userCardType.USER_CARD_TYPE_ONE"></app-user-card>
+          <span class="vs"> Vs </span>
         </div>
         <div class="col-xs-6">
           <div class="yourimg ">
@@ -35,16 +29,6 @@
             <div class="sprite no-opponent"></div>
 
           </div>
-        </div>
-      </div>
-      <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?'div-right-border':''">
-          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
-        </div>
-      </div>
-      <div class="textcenter clearfix ">
-        <div class="col-xs-6 ellipsis div-right-border div-location">
-          <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
         </div>
       </div>
       <div class="textcenter clearfix">
@@ -74,30 +58,11 @@
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
-          <div class="yourimg " [ngClass]="{'vs': game.playerIds.length>1 }">
-            <img [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" [src]="getImageUrl(user)" alt="User Profile Picture" />
-          </div>
+          <app-user-card [user]="user" [type]="userCardType.USER_CARD_TYPE_ONE"></app-user-card>
+          <span class="vs"> Vs </span>
         </div>
         <div class="col-xs-6">
-          <div class="yourimg ">
-            <img  [stlOpenUserProfile]="{userId: otherUserInfo?.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(otherUserInfo)" alt="User Profile Picture" />
-          </div>
-        </div>
-      </div>
-      <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis " [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length ?'div-right-border':''">
-          <span class="dark" title="{{user.displayName}}">{{user.displayName}}</span>
-        </div>
-        <div class="col-xs-6 ellipsis" [ngClass]="user.displayName?.length > otherUserInfo?.displayName.length?'':'div-left-border'">
-          <span class="dark" title="{{otherUserInfo?.displayName}}">{{otherUserInfo?.displayName}}</span>
-        </div>
-      </div>
-      <div class="textcenter clearfix">
-        <div class="col-xs-6 ellipsis div-location div-right-border">
-          <span class="light" *ngIf="user?.location" title="{{user.location}}">{{user.location}}</span>
-        </div>
-        <div class="col-xs-6 ellipsis div-location">
-          <span class="light" *ngIf="otherUserInfo?.displayName" title="{{otherUserInfo?.location}}">{{otherUserInfo?.location}}</span>
+          <app-user-card [user]="otherUserInfo" [type]="userCardType.USER_CARD_TYPE_ONE"></app-user-card>
         </div>
       </div>
       <div class="clearfix">

@@ -22,7 +22,7 @@
                             </GridLayout>
                         </StackLayout>
                         <StackLayout class="question-answered " marginTop="10" *ngFor="let user of selectedCatList | slice:lbsUsersSliceStartIndex:pagination;let j=index;">
-                            <GridLayout rows="*" columns="auto,auto,*,auto" marginTop="10" class=""
+                            <GridLayout rows="*" columns="auto,auto,*,auto" marginTop="10"
                             [ngClass]="{'border-props': (loggedInUserId === user.userId)}">
                                 <Label text="#{{j+1}}" row="0" col="0" class="padding-5 text-black Hind-Bold" fontSize="16"
                                     verticalAlignment="center"></Label>

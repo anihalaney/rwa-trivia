@@ -1,5 +1,5 @@
 import { Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
-import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings, Invitation } from 'shared-library/shared/model';
+import { User, Game, PlayerMode, OpponentType, Account, ApplicationSettings, Invitation, userCardType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { UserActions } from 'shared-library/core/store/actions';
@@ -41,6 +41,8 @@ export class GameOver implements OnInit {
   liveErrorMsg = 'Sorry, don\'t have enough life.';
   subscriptions = [];
   userInvitations: { [key: string]: Invitation };
+  userCardType = userCardType;
+
   continueButtonClicked(event: any) {
     this.gameOverContinueClicked.emit();
   }

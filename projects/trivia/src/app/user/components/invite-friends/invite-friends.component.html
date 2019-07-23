@@ -9,12 +9,7 @@
     <ng-container cdkColumnDef="friends">
       <mat-header-cell *cdkHeaderCellDef>Friends</mat-header-cell>
       <mat-cell class="col-chkbox friend-list-table-cell" *cdkCellDef="let row">
-        <div class="profile">
-          <img [stlOpenUserProfile]="{userId: row.userId, redirectTo: 'otherUserProfile'}" [src]="getImageUrl(userDict[row.userId])" alt="User Profile Image" />
-        </div>
-        <div class="display-name">
-          <label *ngIf="userDict[row.userId]?.displayName" title="{{userDict[row.userId]?.displayName}}">{{userDict[row.userId]?.displayName}}</label>
-        </div>
+        <app-user-card [user]="userDict[row.userId]" [type]="userCardType.USER_CARD_TYPE_SEVEN" > </app-user-card>
       </mat-cell>
     </ng-container>
 

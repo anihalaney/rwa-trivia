@@ -1,4 +1,1 @@
-<label class="text-alignment">Author :</label>
-<label class="alignment-left text-alignment truncate" title="{{userDict[userId]?.displayName}}">{{userDict[userId]?.displayName}}</label>
-<img *ngIf="isGamePlay" [src]="userProfileImageUrl" alt="User Profile Image" />
-<img *ngIf="!isGamePlay" [stlOpenUserProfile]="{userId: userId, redirectTo: 'otherUserProfile'}" [src]="userProfileImageUrl" alt="User Profile Image" />
+<app-user-card  [isGamePlay]="isGamePlay" [user]="userDict[userId]" [type]="2"></app-user-card>

@@ -1,10 +1,9 @@
 import { OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { User } from 'shared-library/shared/model';
+import { User, userCardType } from 'shared-library/shared/model';
 import { Utils } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { Store, select } from '@ngrx/store';
-import * as useractions from '../../../user/store/actions';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
 
@@ -15,6 +14,7 @@ export class InviteFriends implements OnDestroy {
   userDict$: Observable<{ [key: string]: User }>;
   userDict: { [key: string]: User } = {};
   subscriptions = [];
+  userCardType = userCardType;
 
   defaultAvatar = 'assets/images/default-avatar.png';
 

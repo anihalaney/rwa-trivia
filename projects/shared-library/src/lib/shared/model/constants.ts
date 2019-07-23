@@ -445,4 +445,16 @@ export enum AnalyticsEventConstants {
     EVENT = 'event',
 }
 
-
+export enum userCardType {
+    USER_CARD_TYPE_ONE,  // Image, Name, Location vertical alignment
+    USER_CARD_TYPE_TWO,  // Image, Name, Location vertical alignment
+    USER_CARD_TYPE_THREE,  // Image, Name, Location vertical alignment
+    USER_CARD_TYPE_FOUR,
+    USER_CARD_TYPE_FIVE,
+    USER_CARD_TYPE_SIX,
+    USER_CARD_TYPE_SEVEN,
+    USER_CARD_TYPE_EIGHT,
+    USER_CARD_TYPE_NINE,
+    USER_CARD_TYPE_TEN,
+    USER_CARD_TYPE_ELEVEN
+}

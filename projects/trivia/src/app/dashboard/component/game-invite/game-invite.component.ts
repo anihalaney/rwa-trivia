@@ -3,7 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {
   User, Game, Category, GameStatus,
-  GameInviteConstants, CalenderConstants
+  GameInviteConstants, CalenderConstants, userCardType
 } from 'shared-library/shared/model';
 import { AppState,  categoryDictionary } from '../../../store';
 import { Utils } from 'shared-library/core/services';
@@ -28,6 +28,7 @@ export class GameInviteComponent implements OnChanges, OnDestroy {
   gameStatus;
   remainingDays: number;
   subscriptions = [];
+  userCardType = userCardType;
 
 
   constructor(private store: Store<AppState>, private utils: Utils, private userActions: UserActions) {

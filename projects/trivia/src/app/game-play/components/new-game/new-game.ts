@@ -3,7 +3,7 @@ import { take, switchMap, map } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
-import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentType } from 'shared-library/shared/model';
+import { Category, GameOptions, User, ApplicationSettings, PlayerMode, OpponentType, userCardType } from 'shared-library/shared/model';
 import { Utils, WindowRef } from 'shared-library/core/services';
 import { AppState, appState } from '../../../store';
 import { AutoUnsubscribe } from 'ngx-auto-unsubscribe';
@@ -34,6 +34,7 @@ export class NewGame implements OnDestroy {
   life: number;
   gameErrorMsg: String = 'Sorry, don\'t have enough life.';
   loaderStatus = false;
+  userCardType = userCardType;
 
   constructor(
     public store: Store<AppState>,

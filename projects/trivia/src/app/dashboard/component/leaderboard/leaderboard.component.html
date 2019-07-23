@@ -3,21 +3,11 @@
     <div class="col-md-4 col-xs-12 categorybox skyblue">
       <h3>{{categoryDict[cat]?.categoryName.charAt(0).toUpperCase() + categoryDict[cat]?.categoryName.slice(1)}}</h3>
       <ul>
-        <li
-          *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index;">
+        <li *ngFor="let user of leaderBoardStatDict[cat] | slice:lbsUsersSliceStartIndex:lbsUsersSliceLastIndex;let j=index;">
           <div class="row">
             <div class="col-xs-2 has">#{{j+1}}</div>
-            <div class="col-xs-3 yourimg">
-              <img   [stlOpenUserProfile]="{userId: user.userId, redirectTo: loggedInUserId === user.userId ? 'userProfile': 'otherUserProfile'}" [src]="getImageUrl(userDict[user.userId])"
-                alt="User Profile Image" />
-            </div>
-            <div class="col-xs-4 ellipsis">
-              <label *ngIf="userDict[user.userId]?.displayName" class="dark"
-                title="{{userDict[user.userId]?.displayName}}">{{userDict[user.userId]?.displayName}}</label>
-              <div *ngIf="userDict[user.userId]?.location" class="light ellipsis"
-                title="{{userDict[user.userId]?.location}}">{{userDict[user.userId]?.location}}</div>
-              <label *ngIf="!userDict[user.userId]?.displayName" class="dark" title="{{unknown}}">{{unknown}}</label>
-              <div *ngIf="!userDict[user.userId]?.location" class="light ellipsis" title="{{unknown}}">{{unknown}}</div>
+            <div class="col-xs-7">
+                <app-user-card [user]=userDict[user.userId] [type]="userCardType.USER_CARD_TYPE_SIX"></app-user-card>
             </div>
             <div class="col-xs-3">
               <div class="dark">{{user.score}}</div>
