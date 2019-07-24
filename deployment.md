@@ -4,8 +4,8 @@ How to deploy Firebase functions ?
 
     2) Run below command to deploy firebase functions 
 
-        Dev Env : node cli deploy-functions --p trivia-staging --pv trivia --e staging
-        Prod Env : node cli deploy-functions --p trivia-production --pv trivia --e production
+        Dev Env : node cli deploy-functions --pv trivia --e staging
+        Prod Env : node cli deploy-functions --pv trivia --e production
         
     3) Run below command to start scheduler  
 
@@ -32,16 +32,17 @@ How to deploy Android app on Google play store?
 
     2) Update app name and facebook app id informations of dev & prod environment in xml file under configuration/android directory .
 
-    3) Update VersionCode in AndroidManifest.xml file placed under App_Resources/Android directory.
 
-    4) Run below command to generate apk file : 
+    3) Run below command to generate apk file : 
 
-       Dev Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e dev 
-                    --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword>
+       Dev Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e staging 
+                    --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword> --v <versionCode>
+                    --t <token> --vn <versionName>
        Prod Env : node cli release-mobile --pv trivia --pk io.bitwiser.trivia --plt android --e production 
-                    --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword>
+                    --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword> --v <versionCode>
+                    --t <token> --vn <versionName>
 
-    5) Deploy App on Google play  store:
+    4) Deploy App on Google play  store:
 
        Assumption : user already have google play account 
 

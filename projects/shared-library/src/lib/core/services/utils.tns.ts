@@ -45,7 +45,6 @@ export class Utils extends UtilsCore {
     firebase.crashlytics.sendCrashLog(error);
   }
 
-
   setAnalyticsParameter(key: string, value: string, analyticsParameter: Array<Parameter>): Array<Parameter> {
     analyticsParameter.push({ key: key, value: value });
     return analyticsParameter;

@@ -371,7 +371,8 @@ export enum RoutesConstants {
     ADDRESS_BY_LAT_LANG = 'addressByLatLang',
     LOCATION = 'location',
     LAT_LONG = 'latLong',
-    ADDRESS_SUGGESTION = 'addressSuggestion'
+    ADDRESS_SUGGESTION = 'addressSuggestion',
+    UPDATE_APP_VERSION = 'updateAppVersion'
 }
 
 export enum TermsAndPrivacyUrlConstant {
@@ -437,13 +438,7 @@ export enum FirebaseScreenNameConstants {
     USER_FEEDBACK = 'User Feedback'
 }
 
-export enum GoogleLocationAPI {
-    GOOGLE_AUTOCOMPLETE = 'https://maps.googleapis.com/maps/api/place/autocomplete/json',
-    GOOGLE_GEOCODE = 'https://maps.googleapis.com/maps/api/geocode/json'
-}
-
 export enum AnalyticsEventConstants {
     EVENT = 'event',
 }
-
 

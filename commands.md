@@ -17,34 +17,49 @@ Commands :
                   e = environment 
 
 2) command: run-functions
-    e.g.       :  node cli run-functions --p trivia-staging
+    e.g.       :  node cli run-functions --pv trivia --e dev
     description:  this command is used to start firebase functions in local
-    arguments  : p = project Name from .firebaserc e.g. trivia-staging
+    arguments  : pv = product variant  e.g. trivia
+                 e = environment e.g. dev
 
 
 3) command: deploy-functions
-    e.g.       :  node cli deploy-functions --p trivia-staging --pv trivia  --e staging
+    e.g.       :  node cli deploy-functions --pv trivia  --e staging
     description:  deploy firebase functions to staging/production env
-    arguments  :  p = project Name from .firebaserc e.g. trivia-staging
-                  pv = product variant
+    arguments  :  pv = product variant e.g. trivia
                   e = project environment e.g. staging
 
 4) command: run-mobile
     description:  run android/ios app in staging/production environment
     e.g.       :  node cli run-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e staging
-    arguments  :  pv = project Name e.g. trivia
+    arguments  :  pv = productVarient e.g. trivia
                   pk = project package name defined in firebase e.g. io.bitwiser.trivia.dev
                   plt = Mobile platform e.g. android
                   e = project environment
 
+5) command: release-mobile
+    description:  release android app for staging/production environment
+    e.g.       :  node cli release-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e dev 
+                    --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword>
+                    --t <token> --v 28 --vn 1.1
+    arguments  :  pv = productVarient e.g. trivia
+                  pk = project package name defined in firebase e.g. io.bitwiser.trivia.dev
+                  plt = Mobile platform e.g. android
+                  e = project environment
+                  keyStorePassword = keyStorePassword for android(optional)
+                  keyStoreAlias  = key store store alias  for android(optional)         
+                  keyStoreAliasPassword  = key store alias password  for android(optional)
+                  token = token from schedular token
+                  v = versionCode for android/ios build
+                  vn = versionName for android build CFBundleShortVersionString for ios
 
-5) command: run-schedular
+6) command: run-schedular
     e.g.       :  node cli run-schedular --se prod
     description:  run schedular for given environment
     arguments  :  se = schedular environment dev/prod
 
 
-3) to add new command
+7) to add new command
     add command in cli.js
     in given format 
     "command-name" : {
