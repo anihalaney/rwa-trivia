@@ -236,15 +236,8 @@ export class FirebaseFunctions {
 
             // check realtime db status
             const userDataStatus = change.after.val();
-
+            const token = context.params.tokenId;
             console.log('userDataStatus', userDataStatus);
-            // get firestore db object
-            let userStatus: UserStatus = await UserStatusService.getUserStatusById(context.params.tokenId);
-
-            if (!userStatus) {
-                userStatus = new UserStatus();
-                userStatus.userId = userDataStatus.userId;
-            }
 
             const onlineStatus = (userDataStatus.status === 'online') ? true : false;
 
@@ -252,14 +245,19 @@ export class FirebaseFunctions {
             const user: User = await UserService.getUserById(userDataStatus.userId);
 
             if (userDataStatus.device === TriggerConstants.ANDROID) {
-                const deviceTokenIndex = user.androidPushTokens.findIndex((androidPushToken) =>
-                    androidPushToken.token === userDataStatus.token);
+                const deviceTokenIndex = user.androidPushTokens
+                    .findIndex(
+                        (androidPushToken) =>
+                            (androidPushToken === token ||
+                                (androidPushToken && androidPushToken.token && androidPushToken.token === token)));
                 if (deviceTokenIndex !== -1) {
                     user.androidPushTokens[deviceTokenIndex].online = onlineStatus;
                 }
             } else {
-                const deviceTokenIndex = user.iosPushTokens.findIndex((iosPushToken) =>
-                    iosPushToken.token === userDataStatus.token);
+                const deviceTokenIndex = user.iosPushTokens
+                    .findIndex((iosPushToken) =>
+                        (iosPushToken === token ||
+                            (iosPushToken && iosPushToken.token && iosPushToken.token === token)));
                 if (deviceTokenIndex !== -1) {
                     user.iosPushTokens[deviceTokenIndex].online = onlineStatus;
                 }
@@ -268,12 +266,21 @@ export class FirebaseFunctions {
             await UserService.updateUser({ ...user });
 
             const androidOnlineDeviceIndex = user.androidPushTokens.findIndex((androidPushToken) =>
-                androidPushToken.online);
+                androidPushToken.token && androidPushToken.online);
             const iosOnlineDeviceIndex = user.iosPushTokens.findIndex((iosPushToken) =>
-                iosPushToken.online);
+                iosPushToken.token && iosPushToken.online);
 
             console.log('androidOnlineDeviceIndex', androidOnlineDeviceIndex);
             console.log('iosOnlineDeviceIndex', iosOnlineDeviceIndex);
+
+            // get firestore db object
+            let userStatus: UserStatus = await UserStatusService.getUserStatusById(userDataStatus.userId);
+
+            if (!userStatus) {
+                userStatus = new UserStatus();
+                userStatus.userId = userDataStatus.userId;
+            }
+
             // update the status
             userStatus.online = (androidOnlineDeviceIndex !== -1 || iosOnlineDeviceIndex !== -1) ? true : false;
             userStatus.lastUpdated = new Date().getTime();

@@ -93,16 +93,16 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
     }
 
     public updateOnConnect(user: User, token: string, device: string) {
-        // this.db.object(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
-        //     .valueChanges().subscribe(connected => {
-        //         const status = connected ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
-        //         this.db.object(`/${CollectionConstants.USERS}/${user.userId}`).set({ status: status });
-        //     });
+        this.db.object(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
+            .valueChanges().subscribe(connected => {
+                const status = connected ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
+                this.db.object(`/${CollectionConstants.USERS}/${token}`).set({ status, userId: user.userId, device });
+            });
     }
 
     public updateOnDisconnect(user: User, token: string, device: string) {
-        // this.db.database.ref(`${CollectionConstants.USERS}/${user.userId}`)
-        //     .onDisconnect()
-        //     .update({ status: UserStatusConstants.OFFLINE });
+        this.db.database.ref(`${CollectionConstants.USERS}/${token}`)
+            .onDisconnect()
+            .update({ status: UserStatusConstants.OFFLINE });
     }
 }

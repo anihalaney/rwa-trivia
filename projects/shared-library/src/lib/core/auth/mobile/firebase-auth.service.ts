@@ -101,7 +101,7 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
             .then(connected => {
                 console.log('connected', connected);
                 const status = connected.key === UserStatusConstants.CONNECTED ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
-                firebaseApp.database().ref(`/${CollectionConstants.USERS}/${token}`).set({ status: status, userId: user.userId, device });
+                firebaseApp.database().ref(`/${CollectionConstants.USERS}/${token}`).set({ status, userId: user.userId, device });
             });
     }
 

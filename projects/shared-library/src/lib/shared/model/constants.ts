@@ -456,3 +456,9 @@ export enum UserStatusConstants {
     CONNECTED= 'connected'
 }
 
+export enum DrawerConstants {
+    UPDATE_TOKEN_STATUS = 'update token status',
+    LOGOUT = 'logout'
+}
+
+

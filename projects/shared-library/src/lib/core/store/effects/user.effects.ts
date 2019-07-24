@@ -72,10 +72,10 @@ export class UserEffects {
     UpdateUser$ = this.actions$
         .pipe(ofType(UserActions.UPDATE_USER))
         .pipe(
-            switchMap((action: ActionWithPayload<User>) => {
-                this.svc.updateUser(action.payload);
-                return empty();
-            }
+            switchMap((action: ActionWithPayload<any>) =>
+                this.svc.updateUser(action.payload.user).pipe(
+                    map((status: any) => this.userActions.updateUserSuccess(action.payload.status))
+                )
             )
         );
 

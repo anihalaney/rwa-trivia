@@ -27,8 +27,8 @@ export class User {
   croppedImageUrl: any;
   originalImageUrl: any;
   imageType: string;
-  androidPushTokens?: Array<DeviceToken>;
-  iosPushTokens?: Array<DeviceToken>;
+  androidPushTokens?: Array<any>;
+  iosPushTokens?: Array<any>;
   lastGamePlayOption?: GameOptions;
   account?: Account;
   achievements: string[];

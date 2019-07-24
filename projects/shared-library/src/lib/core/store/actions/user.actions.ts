@@ -83,10 +83,10 @@ export class UserActions {
   }
 
   static LOAD_USER_INVITATIONS_INFO = 'LOAD_USER_INVITATIONS_INFO';
-  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string ): ActionWithPayload<{}> {
+  loadUserInvitationsInfo(userId: string, invitedUserEmail: string, invitedUserId: string): ActionWithPayload<{}> {
     return {
       type: UserActions.LOAD_USER_INVITATIONS_INFO,
-      payload: {userId, invitedUserEmail, invitedUserId}
+      payload: { userId, invitedUserEmail, invitedUserId }
     };
   }
 
@@ -107,10 +107,18 @@ export class UserActions {
   }
 
   static UPDATE_USER = 'UPDATE_USER';
-  updateUser(user: User): ActionWithPayload<User> {
+  updateUser(user: User, status: any): ActionWithPayload<any> {
     return {
       type: UserActions.UPDATE_USER,
-      payload: user
+      payload: { user, status }
+    };
+  }
+
+  static UPDATE_USER_SUCCESS = 'UPDATE_USER_SUCCESS';
+  updateUserSuccess(status: string): ActionWithPayload<string> {
+    return {
+      type: UserActions.UPDATE_USER_SUCCESS,
+      payload: status
     };
   }
 
