@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { LoginComponent } from './../../components/login/login.component';
 import { WindowRef } from './../../services/windowref.service';
-import { User } from 'shared-library/shared/model';
+import { User, UserStatusConstants, CollectionConstants } from 'shared-library/shared/model';
 import { AngularFireDatabase } from '@angular/fire/database';
 
 
@@ -92,18 +92,17 @@ export class WebFirebaseAuthService implements FirebaseAuthService {
 
     }
 
-    public updateOnConnect(user: User) {
-        this.db.object('.info/connected')
-            .valueChanges().subscribe(connected => {
-                console.log('connected', connected);
-                const status = connected ? 'online' : 'offline';
-                this.db.object(`/users/${user.userId}`).set({ status: status });
-            });
+    public updateOnConnect(user: User, token: string, device: string) {
+        // this.db.object(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
+        //     .valueChanges().subscribe(connected => {
+        //         const status = connected ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
+        //         this.db.object(`/${CollectionConstants.USERS}/${user.userId}`).set({ status: status });
+        //     });
     }
 
-    public updateOnDisconnect(user: User) {
-        this.db.database.ref(`users/${user.userId}`)
-            .onDisconnect()
-            .update({ status: 'offline' });
+    public updateOnDisconnect(user: User, token: string, device: string) {
+        // this.db.database.ref(`${CollectionConstants.USERS}/${user.userId}`)
+        //     .onDisconnect()
+        //     .update({ status: UserStatusConstants.OFFLINE });
     }
 }

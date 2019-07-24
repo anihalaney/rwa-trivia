@@ -15,7 +15,9 @@ export enum UserStatConstants {
 export enum TriggerConstants {
     invitationTxt = 'Please accept invitation to play Trivia Game',
     invitationMailSubject = 'bitwiser.io: Friend Request',
-    fromUser = 'support@trivia.com'
+    fromUser = 'support@trivia.com',
+    ANDROID = 'android',
+    IOS = 'ios'
 }
 
 export enum UserControllerConstants {
@@ -114,6 +116,9 @@ export enum CollectionConstants {
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
     ACHIEVEMENT_RULES = 'achievement_rules',
+    USER_STATUS = 'user_status',
+    INFO = '.info',
+    CONNECTED = 'connected'
 }
 
 export enum UserConstants {
@@ -443,5 +448,11 @@ export enum GoogleLocationAPI {
 
 export enum AnalyticsEventConstants {
     EVENT = 'event',
+}
+
+export enum UserStatusConstants {
+    ONLINE = 'online',
+    OFFLINE = 'offline',
+    CONNECTED= 'connected'
 }
 

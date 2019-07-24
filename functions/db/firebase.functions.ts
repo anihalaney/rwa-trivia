@@ -1,11 +1,11 @@
 
 import * as functions from 'firebase-functions';
-import { readFileSync } from 'fs';
+import { readFileSync, stat } from 'fs';
 import { resolve } from 'path';
 import {
     friendInvitationConstants, Game, Invitation, LeaderBoardUsers,
     OpponentType, PlayerMode, pushNotificationRouteConstants, Question,
-    QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants, User
+    QuestionStatus, SystemStatConstants, TriggerConstants, UserStatConstants, UserStatus, User
 } from '../../projects/shared-library/src/lib/shared/model';
 import { AccountService } from '../services/account.service';
 import { AppSettings } from '../services/app-settings.service';
@@ -20,6 +20,7 @@ import { PushNotification } from '../utils/push-notifications';
 import { UserContributionStat } from '../utils/user-contribution-stat';
 import admin from './firebase.client';
 import { UserService } from '../services/user.service';
+import { UserStatusService } from '../services/user-status.service';
 const mailConfig = JSON.parse(readFileSync(resolve(__dirname, '../../../config/mail.config.json'), 'utf8'));
 
 export class FirebaseFunctions {
@@ -234,17 +235,52 @@ export class FirebaseFunctions {
         try {
 
             // check realtime db status
-            const statusSnapshot = await change.after.ref.once('value');
-            const status = statusSnapshot.val();
+            const userDataStatus = change.after.val();
+
+            console.log('userDataStatus', userDataStatus);
+            // get firestore db object
+            let userStatus: UserStatus = await UserStatusService.getUserStatusById(context.params.tokenId);
+
+            if (!userStatus) {
+                userStatus = new UserStatus();
+                userStatus.userId = userDataStatus.userId;
+            }
+
+            const onlineStatus = (userDataStatus.status === 'online') ? true : false;
 
             // get firestore db object
-            const user: User = await UserService.getUserById(context.params.userId);
+            const user: User = await UserService.getUserById(userDataStatus.userId);
 
+            if (userDataStatus.device === TriggerConstants.ANDROID) {
+                const deviceTokenIndex = user.androidPushTokens.findIndex((androidPushToken) =>
+                    androidPushToken.token === userDataStatus.token);
+                if (deviceTokenIndex !== -1) {
+                    user.androidPushTokens[deviceTokenIndex].online = onlineStatus;
+                }
+            } else {
+                const deviceTokenIndex = user.iosPushTokens.findIndex((iosPushToken) =>
+                    iosPushToken.token === userDataStatus.token);
+                if (deviceTokenIndex !== -1) {
+                    user.iosPushTokens[deviceTokenIndex].online = onlineStatus;
+                }
+            }
+            console.log('user', user);
+            await UserService.updateUser({ ...user });
+
+            const androidOnlineDeviceIndex = user.androidPushTokens.findIndex((androidPushToken) =>
+                androidPushToken.online);
+            const iosOnlineDeviceIndex = user.iosPushTokens.findIndex((iosPushToken) =>
+                iosPushToken.online);
+
+            console.log('androidOnlineDeviceIndex', androidOnlineDeviceIndex);
+            console.log('iosOnlineDeviceIndex', iosOnlineDeviceIndex);
             // update the status
-            user.online = (status === 'online') ? true : false;
+            userStatus.online = (androidOnlineDeviceIndex !== -1 || iosOnlineDeviceIndex !== -1) ? true : false;
+            userStatus.lastUpdated = new Date().getTime();
+            console.log('userStatus', userStatus);
 
             // update the user service
-            return UserService.updateUser({ ...user });
+            return UserStatusService.updateUserStatus({ ...userStatus });
 
         } catch (error) {
             console.error('Error :', error);
@@ -280,5 +316,5 @@ exports.onQuestionCreate = functions.firestore.document('/questions/{questionId}
     .onCreate(async (snap, context) => await FirebaseFunctions.doQuestionCreateOperation(snap, context));
 
 // update user's status based on realtime updates
-exports.onUserStatusWrite = functions.database.ref('/users/{userId}')
+exports.onUserStatusWrite = functions.database.ref('/users/{tokenId}')
     .onWrite(async (change, context) => await FirebaseFunctions.doUserStatusUpdateOperation(change, context));

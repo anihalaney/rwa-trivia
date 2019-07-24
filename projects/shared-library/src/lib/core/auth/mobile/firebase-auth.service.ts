@@ -4,7 +4,7 @@ import * as firebaseApp from 'nativescript-plugin-firebase/app';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Subject, Observable } from 'rxjs';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { User } from 'shared-library/shared/model';
+import { User, CollectionConstants, UserStatusConstants } from 'shared-library/shared/model';
 
 
 @Injectable()
@@ -95,12 +95,19 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         this.userSubject.next(user);
     }
 
-    public updateOnConnect(user: User) {
-
+    public updateOnConnect(user: User, token: string, device: string) {
+        firebaseApp.database().ref(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
+            .once('value')
+            .then(connected => {
+                console.log('connected', connected);
+                const status = connected.key === UserStatusConstants.CONNECTED ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
+                firebaseApp.database().ref(`/${CollectionConstants.USERS}/${token}`).set({ status: status, userId: user.userId, device });
+            });
     }
 
-
-    public updateOnDisconnect(user: User) {
-
+    public updateOnDisconnect(user: User, token: string, device: string) {
+        firebaseApp.database().ref(`${CollectionConstants.USERS}/${token}`)
+            .onDisconnect()
+            .update({ status: UserStatusConstants.OFFLINE });
     }
 }

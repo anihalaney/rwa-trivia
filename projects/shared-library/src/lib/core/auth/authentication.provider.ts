@@ -27,9 +27,9 @@ export class AuthenticationProvider {
         this.firebaseAuthService.getIdToken(afUser, false).then((token) => {
           this.user = new User(afUser);
           this.user.idToken = token;
+          console.log('token', token);
           this.store.dispatch(this.userActions.loginSuccess(this.user));
-          this.firebaseAuthService.updateOnConnect(this.user);
-          this.firebaseAuthService.updateOnDisconnect(this.user);
+
         });
       } else {
         // user not logged in
@@ -43,6 +43,11 @@ export class AuthenticationProvider {
     }).pipe(share());
 
 
+  }
+
+  updateUserStatus(token: string, device: string) {
+    this.firebaseAuthService.updateOnConnect(this.user, token, device);
+    this.firebaseAuthService.updateOnDisconnect(this.user, token, device);
   }
 
 

@@ -15,14 +15,14 @@ export class PushNotification {
           //  console.log('next dbUser----------------->', dbUser);
             const notificationPromises = [];
             if (dbUser.androidPushTokens && dbUser.androidPushTokens.length > 0) {
-                for (const token of dbUser.androidPushTokens) {
-                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
+                for (const androidPushToken of dbUser.androidPushTokens) {
+                    notificationPromises.push(PushNotification.sendNotification(androidPushToken.token, title, body, data, dbUser));
                 }
             }
 
             if (dbUser.iosPushTokens && dbUser.iosPushTokens.length > 0) {
-                for (const token of dbUser.iosPushTokens) {
-                    notificationPromises.push(PushNotification.sendNotification(token, title, body, data, dbUser));
+                for (const iosPushToken of dbUser.iosPushTokens) {
+                    notificationPromises.push(PushNotification.sendNotification(iosPushToken.token, title, body, data, dbUser));
                 }
             }
 
