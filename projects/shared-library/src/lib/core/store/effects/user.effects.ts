@@ -188,8 +188,8 @@ export class UserEffects {
         .pipe(
             switchMap((action: ActionWithPayload<any>) => {
                 return this.svc.saveUserProfile(action.payload.user).pipe(
-                    // tslint:disable-next-line:max-line-length
-                    mergeMap((status: any) => this.utils.setUserLocationFirebaseAnalyticsParameter(action.payload.user, action.payload.isLocationChanged)),
+                    mergeMap((status: any) =>
+                        this.utils.setUserLocationFirebaseAnalyticsParameter(action.payload.user, action.payload.isLocationChanged)),
                     map((status: any) => this.userActions.addUserProfileSuccess())
                 );
             })

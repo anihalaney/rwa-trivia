@@ -91,10 +91,10 @@
         </div>
         <div class="col-sm-5 col-xs-12 withsocial">
           <h3>You can also login with your social account</h3>
-          <a (click)="fbLogin()"><img src="/assets/images/faceboockbtn.png" alt="facebook" /></a>
-          <a (click)="googleLogin()"><img src="/assets/images/gpulsebtn.png" alt="Google Plus" /></a>
-          <a (click)="emailSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'phone'"><img src="/assets/images/sign-email.png" alt="Email Login" /></a>
-          <a (click)="phoneSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'email'"><img src="/assets/images/sign-phone.png" alt="Phone Login" /></a>
+          <a (click)="fbLogin()" ><img src="/assets/images/faceboockbtn.png" class="signin" alt="facebook" /></a>
+          <a (click)="googleLogin()" ><img src="/assets/images/gpulsebtn.png" class="signin" alt="Google Plus" /></a>
+          <a (click)="emailSignIn()"  *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'phone'"><img src="/assets/images/sign-email.png" class="signin" alt="Email Login" /></a>
+          <a (click)="phoneSignIn()" *ngIf="applicationSettings && applicationSettings.phone_authentication && signInMethod === 'email'"><img src="/assets/images/sign-phone.png" class="signin" alt="Phone Login" /></a>
         </div>
       </div>
     </div>
