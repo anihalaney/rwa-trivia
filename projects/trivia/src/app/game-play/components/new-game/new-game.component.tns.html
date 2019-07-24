@@ -99,7 +99,7 @@
 
                         <StackLayout row="2" col="0" colSpan="3" *ngIf="gameOptions.opponentType == 1"
                             paddingBottom="0">
-                            <RadListView #friendListView [items]="dataItem" ios:height="130">
+                            <RadListView #friendListView [items]="uFriends" ios:height="130">
                                 <ng-template let-item="item">
                                     <StackLayout paddingTop="10" (tap)="selectFriendId(item)">
                                         <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray"

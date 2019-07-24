@@ -5,42 +5,42 @@
   <meta charset="utf-8">
   <base href="/">
 
-  <title>bitwiser.io: get wiser - bit by bit</title>
+  <title><%= title %></title>
   <meta name="apple-itunes-app" content="app-id=1447244501"/>
-  <meta name="description" content="Open source tech trivia game. by, for and of the developers" />
+  <meta name="description" content="<%= description %>" />
 
   <!-- Schema.org markup for Google+ -->
-  <meta itemprop="name" content="bitwiser.io: get wiser - bit by bit">
-  <meta itemprop="description" content="Open source tech trivia game. by, for and of the developers">
-  <meta itemprop="image" content="https://cdn-images-1.medium.com/max/1600/1*5RH1reNYpyBJOKauMMX2tw.png">
+  <meta itemprop="name" content="<%= title %>">
+  <meta itemprop="description" content="<%= description %>">
+  <meta itemprop="image" content="<%= image %>">
 
   <!-- Facebook Open graph -->
-  <meta property="og:url" content="https://bitwiser.io" />
+  <meta property="og:url" content="<%= url %>" />
   <meta property="og:type" content="article" />
-  <meta property="og:title" content="bitwiser.io: get wiser - bit by bit" />
-  <meta property="og:description" content="Open source tech trivia game. by, for and of the developers" />
-  <meta property="og:image" content="https://cdn-images-1.medium.com/max/1600/1*5RH1reNYpyBJOKauMMX2tw.png" />
-  <meta property="fb:app_id" content="1436607329691182" />
-  <meta property="fb:admins" content="10156413230908290" />
+  <meta property="og:title" content="<%= title %>" />
+  <meta property="og:description" content="<%= description %>" />
+  <meta property="og:image" content="<%= image %>" />
+  <meta property="fb:app_id" content="<%= fbAppId %>" />
+  <meta property="fb:admins" content="<%= fbAdminId %>" />
   <!--meta property="og:site_name" content="Site Name, i.e. Moz" /-->
 
   <!-- Twitter Card data -->
   <meta name="twitter:card" content="summary">
   <!--meta name="twitter:site" content="@publisher_handle"-->
-  <meta name="twitter:title" content="bitwiser.io: get wiser - bit by bit">
-  <meta name="twitter:description" content="Open source tech trivia game. by, for and of the developers">
+  <meta name="twitter:title" content="<%= title %>">
+  <meta name="twitter:description" content="<%= description %>">
   <!--meta name="twitter:creator" content="@author_handle"-->
   <!-- Twitter summary card with large image must be at least 280x150px -->
-  <meta name="twitter:image:src" content="https://cdn-images-1.medium.com/max/1600/1*5RH1reNYpyBJOKauMMX2tw.png">
+  <meta name="twitter:image:src" content="<%= image %>">
 
   <meta name="viewport" content="width=device-width,  initial-scale=1, maximum-scale=1, user-scalable=no">
 
   <meta name="theme-color" content="#1976d2">
 
   <link id="appFavicon" type="image/x-icon" href="favicon.ico">
-  <link href="/assets/icons/rwa-trivia/Icon-192.png">
-  <link id="appManifest" rel="manifest" href="/assets/manifest/rwa-trivia/manifest.json ">
-  <meta name="theme-color " content="#1976d2 ">  
+  <link href="/assets/icons/<%= projectName %>/Icon-192.png">
+  <link id="appManifest" rel="manifest" href="/assets/manifest/<%= projectName %>/manifest.json ">
+  <meta name="theme-color " content="#1976d2 ">
 </head>
 
 <body>  

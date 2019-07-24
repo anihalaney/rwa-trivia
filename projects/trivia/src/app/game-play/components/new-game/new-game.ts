@@ -1,5 +1,5 @@
 import { Observable, Subscription, empty } from 'rxjs';
-import { take, switchMap, map } from 'rxjs/operators';
+import { take, switchMap, map, flatMap, skipWhile } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import * as gameplayactions from '../../store/actions';
 import { GameActions, UserActions } from 'shared-library/core/store/actions/index';
@@ -34,6 +34,8 @@ export class NewGame implements OnDestroy {
   life: number;
   gameErrorMsg: String = 'Sorry, don\'t have enough life.';
   loaderStatus = false;
+  filteredCategories: Category[];
+  selectedCategories: number[];
 
   constructor(
     public store: Store<AppState>,
@@ -52,6 +54,7 @@ export class NewGame implements OnDestroy {
     this.subscriptions.push(this.categoriesObs.subscribe(categories => { this.categories = categories; this.cd.markForCheck(); }));
     this.subscriptions.push(this.tagsObs.subscribe(tags => this.tags = tags));
     let challengerUserId = '';
+
     this.subscriptions.push(this.route.params.pipe(map(data => challengerUserId = data.userid),
       switchMap(() => this.store.select(appState.coreState).pipe(select(s => s.user)))).subscribe(user => {
         if (user) {
@@ -67,33 +70,87 @@ export class NewGame implements OnDestroy {
         }
       }));
 
-    this.subscriptions.push(
-      this.route.params.pipe(map(data => data),
-        switchMap((data) => {
-          if (!data.userid) {
-            return this.store.select(appState.coreState).pipe(select(s => s.userFriends));
-          } else {
-            return empty();
+
+    this.store.select(appState.coreState).pipe(select(s => s.applicationSettings), take(1),
+      map(appSettings => {
+        if (appSettings) {
+          this.applicationSettings = appSettings[0];
+          if (this.applicationSettings && this.applicationSettings.lives.enable) {
+            return appSettings;
           }
-        })).subscribe((uFriends: any) => {
-          if (uFriends) {
-            this.uFriends = [];
-            uFriends.map(friend => {
-              if (this.userDict && !this.userDict[friend.userId]) {
-                this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
+        }
+      }),
+      flatMap(() => this.store.select(appState.coreState).pipe(select(s => s.account),
+        skipWhile(account => !account), take(1), map(account => this.life = account.lives)))).subscribe(data => {
+          if (this.applicationSettings) {
+            this.selectedCategories = [];
+            let filteredCategories = [];
+            if (this.applicationSettings && this.applicationSettings.game_play_categories) {
+              filteredCategories = this.categories.filter((category) => {
+                if (this.applicationSettings.game_play_categories.indexOf(Number(category.id)) > -1) {
+                  return category;
+                }
+              });
+            } else {
+              filteredCategories = this.categories;
+            }
+
+
+            this.filteredCategories = [...filteredCategories.filter(c => c.requiredForGamePlay),
+            ...filteredCategories.filter(c => !c.requiredForGamePlay)];
+
+
+            this.filteredCategories.map(category => {
+              category.isSelected = this.isCategorySelected(category.id, category.requiredForGamePlay);
+              if (this.isCategorySelected(category.id, category.requiredForGamePlay)) {
+                this.selectedCategories.push(category.id);
               }
-              this.uFriends = [...this.uFriends, ...friend.userId];
             });
-            this.noFriendsStatus = false;
-          } else {
-            this.noFriendsStatus = true;
           }
           this.cd.markForCheck();
-        }) );
+        });
+
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.userFriends)).subscribe((uFriends: any) => {
+      if (uFriends) {
+        this.uFriends = [];
+        uFriends.map(friend => {
+          this.uFriends = [...this.uFriends, ...friend.userId];
+          if (this.userDict && !this.userDict[friend.userId]) {
+            this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
+          }
+        });
+        this.noFriendsStatus = false;
+      } else {
+        this.noFriendsStatus = true;
+      }
+      this.cd.markForCheck();
+    }));
+
+    this.subscriptions.push(this.store.select(appState.coreState).pipe(select(s => s.gameCreateStatus)).subscribe(gameCreateStatus => {
+      if (gameCreateStatus) {
+        this.redirectToDashboard(gameCreateStatus);
+      }
+      this.cd.markForCheck();
+    }));
+
+
     this.store.dispatch(this.gameActions.resetNewGame());
     this.store.dispatch(new gameplayactions.ResetCurrentGame());
     this.gameOptions = new GameOptions();
 
+  }
+
+  isCategorySelected(categoryId: number, requiredForGamePlay: boolean) {
+    if (requiredForGamePlay) {
+      return true;
+    }
+    if (this.user.categoryIds && this.user.categoryIds.length > 0) {
+      return this.user.categoryIds.includes(categoryId);
+    } else if (this.user.lastGamePlayOption && this.user.lastGamePlayOption.categoryIds.length > 0) {
+      return this.user.lastGamePlayOption.categoryIds.includes(categoryId);
+    }
+    return true;
   }
 
 
