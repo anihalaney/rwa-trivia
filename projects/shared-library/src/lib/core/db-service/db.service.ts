@@ -14,7 +14,7 @@ export abstract class DbService {
     public CreateDocWithoutDocID(collectionName: string, document: any): any {
     }
 
-    public setDoc(collectionName: string, docId: any, document: any): any {
+    public setDoc(collectionName: string, docId: any, document: any, timeStamp?: {createdOn?: boolean, updatedOn?: boolean}): any {
 
     }
 

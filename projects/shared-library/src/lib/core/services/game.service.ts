@@ -289,12 +289,12 @@ export class GameService {
         const reaction = data.data();
           if (reaction) {
             if (status !== reaction.status) {
-             return this.dbService.setDoc(collection, userId, { status: status });
+             return this.dbService.setDoc(collection, userId, { status: status }, {updatedOn: true});
             } else {
              return this.dbService.deleteDoc(collection, userId);
             }
           } else {
-            return this.dbService.setDoc(collection, userId , { status: status });
+            return this.dbService.setDoc(collection, userId , { status: status }, {createdOn: true, updatedOn: true});
           }
       });
   }
