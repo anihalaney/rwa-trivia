@@ -12,15 +12,12 @@ export class UserReaction implements OnChanges {
   userReactionStatus;
 
   constructor(public store: Store<GamePlayState>, public cd: ChangeDetectorRef) {
-    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.updateUserReactionStatus)).subscribe(state => {
-      if (state) {
-        this.question.reactionsCount = state.reactionsCount;
-      }
-      this.cd.markForCheck();
-    }));
-
     this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.getUserReactionStatus)).subscribe(s => {
         this.userReactionStatus = s;
+        this.cd.markForCheck();
+    }));
+    this.subscriptions.push(this.store.select(gamePlayState).pipe(select(s => s.getQuestionSuccess)).subscribe(question => {
+        this.question = question;
         this.cd.markForCheck();
     }));
 
@@ -33,6 +30,7 @@ export class UserReaction implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.question && changes.user) {
       this.store.dispatch(new gameplayactions.GetUserReaction({ questionId : this.question.id, userId: this.user.userId }));
+      this.store.dispatch(new gameplayactions.GetQuestion(this.question.id));
     }
   }
 

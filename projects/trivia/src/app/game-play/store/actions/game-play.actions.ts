@@ -23,7 +23,9 @@ export enum GamePlayActionTypes {
   USER_REACTION = '[GamePlay] UserReaction',
   UPADTE_USER_REACTION_SUCCESS = '[GamePlay] UpdateUserReactionSuccess',
   GET_USER_REACTION = '[GamePlay] GetUserReaction',
-  GET_USER_REACTION_SUCCESS = '[GamePlay] GetUserReactionSuccess'
+  GET_USER_REACTION_SUCCESS = '[GamePlay] GetUserReactionSuccess',
+  GET_QUESTION = '[GamePlay] GetQuestion',
+  GET_QUESTION_SUCCESS = '[GamePlay] GetQuestionSuccess'
 }
 
 export class CreateNewGame implements Action {
@@ -66,6 +68,12 @@ export class GetUserReactionSuccess implements Action {
   readonly type = GamePlayActionTypes.GET_USER_REACTION_SUCCESS;
   constructor(public payload: {status: string}) { } // question
 }
+
+export class GetQuestionSuccess implements Action {
+  readonly type = GamePlayActionTypes.GET_QUESTION_SUCCESS;
+  constructor(public payload: Question) { } // question
+}
+
 
 export class AddPlayerQnA implements Action {
   readonly type = GamePlayActionTypes.ADD_PLAYER_QNA;
@@ -119,9 +127,14 @@ export class UserReaction implements Action {
   constructor(public payload: { questionId: string, userId: string, status: string }) {}
 }
 
+export class GetQuestion implements Action {
+  readonly type = GamePlayActionTypes.GET_QUESTION;
+  constructor(public payload: string ) {}
+}
+
 export class UpdateUserReactionSuccess implements Action {
   readonly type = GamePlayActionTypes.UPADTE_USER_REACTION_SUCCESS;
-  constructor(public payload: any) { }
+  payload = null;
 }
 
 export type GamePlayActions
@@ -143,4 +156,6 @@ export type GamePlayActions
   | UserReaction
   | UpdateUserReactionSuccess
   | GetUserReaction
-  | GetUserReactionSuccess;
+  | GetUserReactionSuccess
+  | GetQuestion
+  | GetQuestionSuccess;

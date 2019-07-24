@@ -5,7 +5,8 @@ import {
   currentGame, currentGameQuestion, updateGame, userAnsweredQuestion,
   saveReportQuestion,
   updateUserReactionStatus,
-  getUserReactionStatus
+  getUserReactionStatus,
+  getQuestionSuccess
 } from './game-play.reducer';
 
 export * from './game-play.reducer';
@@ -18,6 +19,7 @@ export interface GamePlayState {
   saveReportQuestion: string;
   updateUserReactionStatus: any;
   getUserReactionStatus: any;
+  getQuestionSuccess: any;
 }
 
 export const reducer: ActionReducerMap<GamePlayState> = {
@@ -27,7 +29,8 @@ export const reducer: ActionReducerMap<GamePlayState> = {
   userAnsweredQuestion: userAnsweredQuestion,
   saveReportQuestion: saveReportQuestion,
   updateUserReactionStatus: updateUserReactionStatus,
-  getUserReactionStatus: getUserReactionStatus
+  getUserReactionStatus: getUserReactionStatus,
+  getQuestionSuccess: getQuestionSuccess
 };
 
 export const gamePlayState = createFeatureSelector<GamePlayState>('gameplay');

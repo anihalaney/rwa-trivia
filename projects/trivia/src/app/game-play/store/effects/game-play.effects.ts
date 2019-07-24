@@ -147,11 +147,21 @@ export class GamePlayEffects {
     .pipe(ofType(GamePlayActionTypes.USER_REACTION))
     .pipe(
       switchMap((action: gameplayactions.UserReaction) =>
-        this.svc.userReaction(action.payload.questionId, action.payload.userId, action.payload.status).pipe(
-          map((question: Question) => new gameplayactions.UpdateUserReactionSuccess(question))
-        )
+        this.svc.userReaction(action.payload.questionId, action.payload.userId, action.payload.status).then( ref => {
+          return new gameplayactions.UpdateUserReactionSuccess();
+        })
       )
     );
+    @Effect()
+    GetQuestion$ = this.actions$
+      .pipe(ofType(GamePlayActionTypes.GET_QUESTION))
+      .pipe(
+        switchMap((action: gameplayactions.GetQuestion) =>
+          this.svc.getQuestion(action.payload).pipe(
+            map((question: Question) => new gameplayactions.GetQuestionSuccess(question))
+          )
+        )
+      );
 
     @Effect()
     getUserReaction$ = this.actions$

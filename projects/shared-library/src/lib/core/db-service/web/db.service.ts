@@ -99,4 +99,8 @@ export class WebDbService extends DbService {
     public upload(filePath: string, imageBlob: any) {
         return this._afstorage.upload(filePath, imageBlob);
     }
+
+    public deleteDoc(collectionName: string, docId: any): any {
+        return this._afStore.firestore.collection(collectionName).doc(docId).delete();
+    }
 }

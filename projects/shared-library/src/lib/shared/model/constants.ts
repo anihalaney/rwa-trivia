@@ -114,7 +114,7 @@ export enum CollectionConstants {
     STATS_SYSTEM = 'system',
     ACHIEVEMENTS = 'achievements',
     ACHIEVEMENT_RULES = 'achievement_rules',
-    REACTION = 'reaction'
+    REACTIONS = 'reactions'
 }
 
 export enum UserConstants {
@@ -371,8 +371,7 @@ export enum RoutesConstants {
     ADDRESS_BY_LAT_LANG = 'addressByLatLang',
     LOCATION = 'location',
     LAT_LONG = 'latLong',
-    ADDRESS_SUGGESTION = 'addressSuggestion',
-    USER_REACTION = 'userReaction',
+    ADDRESS_SUGGESTION = 'addressSuggestion'
 }
 
 export enum TermsAndPrivacyUrlConstant {

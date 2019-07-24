@@ -26,10 +26,6 @@ class QuestionRoutes {
             AuthMiddleware.authorizedOnly, QuestionController.getNextQuestion);
 
 
-        //  'userReaction/:questionId'
-        this.questionRoutes.post(`/:${RoutesConstants.USER_REACTION}/:${RoutesConstants.QUESTION_ID}`,
-        AuthMiddleware.authorizedOnly, QuestionController.userReaction);
-
         //  '/:start/:size'
         this.questionRoutes.post(`/:${RoutesConstants.START}/:${RoutesConstants.SIZE}`,
             AuthMiddleware.adminOnly, QuestionController.getQuestions);

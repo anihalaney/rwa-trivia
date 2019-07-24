@@ -142,54 +142,6 @@ export class QuestionController {
     }
 
 
-        /**
-     * userReactionOnQuestion
-     * return question
-     */
-    static async userReaction(req, res): Promise<any> {
-
-        try {
-            const questionId = req.params.questionId;
-            const userId = req.body.userId;
-            const status = req.body.status;
-            if (!questionId) {
-                Utils.sendResponse(res, interceptorConstants.BAD_REQUEST, ResponseMessagesConstants.QUESTION_ID_IS_NOT_AVAILABLE);
-            }
-
-            const question: Question = await QuestionService.getQuestionById(questionId);
-
-            if (question) {
-                const reaction = await QuestionService.getReaction(CollectionConstants.QUESTIONS, questionId, userId);
-                if (reaction) {
-                    if (status !== reaction.status) {
-                        question.reactionsCount[status] = question.reactionsCount &&
-                        question.reactionsCount[status] ? Utils.changeFieldValue(1) : 1;
-
-                        question.reactionsCount[reaction.status] = question.reactionsCount &&
-                        question.reactionsCount[reaction.status] ? Utils.changeFieldValue(-1) : 0;
-                        await QuestionService.updateReaction(questionId, userId, {status: status});
-                    } else {
-                       question.reactionsCount[status] = question.reactionsCount &&
-                        question.reactionsCount[status] ? Utils.changeFieldValue(-1) : 0;
-                       await QuestionService.deleteReaction(CollectionConstants.QUESTIONS, questionId, userId);
-                    }
-                } else {
-                    question.reactionsCount[status] = question.reactionsCount &&
-                     question.reactionsCount[status] ? Utils.changeFieldValue(1) : 1;
-                    await QuestionService.updateReaction(questionId, userId, { status: status });
-                }
-                const newquestion = {...question};
-                await QuestionService.updateQuestion(CollectionConstants.QUESTIONS, newquestion);
-                const updatedQuestion = await QuestionService.getQuestionById(questionId);
-                Utils.sendResponse(res, interceptorConstants.SUCCESS, updatedQuestion);
-            } else {
-                Utils.sendError(res, interceptorConstants.ENTITY_NOT_FOUND);
-            }
-        } catch (error) {
-            Utils.sendError(res, error);
-        }
-    }
-
     /**
      * changeUnpublishedQuestionStatus
      * return status

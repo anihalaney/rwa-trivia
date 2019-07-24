@@ -95,11 +95,17 @@ export class TNSDbService extends DbService {
     }
 
     public getDoc(collectionName: string, docId: any): any {
-
+        const collectionRef = firebaseApp.firestore().collection(collectionName);
+        return collectionRef.doc(docId);
     }
 
     public upload(filePath: string, imageBlob: any): any {
 
+    }
+
+    public deleteDoc(collectionName: string, docId: any): any {
+        const collectionRef = firebaseApp.firestore().collection(collectionName);
+        return collectionRef.doc(docId).delete();
     }
 
 }

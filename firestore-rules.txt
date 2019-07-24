@@ -55,8 +55,16 @@ service cloud.firestore {
         allow read: if isUserAuthenticated(resource.data.created_uid);
       }
 
-      match /{questionId}/reaction/{userId} {
-          allow read: if isUserAuthenticated(userId);           
+      match /{questionId} {
+          allow read: if isUserAuthenticated(request.auth.uid);
+          match /reactions {
+              match /{userId} {
+                    allow read: if isUserAuthenticated(request.auth.uid); 
+                    allow create: if isUserAuthenticated(userId);
+                    allow update: if isUserAuthenticated(userId); 
+                    allow delete: if isUserAuthenticated(userId); 
+              }      
+        }
       }
     }
     

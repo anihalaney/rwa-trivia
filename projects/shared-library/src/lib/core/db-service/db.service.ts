@@ -43,4 +43,8 @@ export abstract class DbService {
     public upload(filePath: string, imageBlob: any): any {
 
     }
+
+    public deleteDoc(collectionName: string, docId: any): any {
+
+    }
 }

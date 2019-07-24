@@ -284,12 +284,27 @@ export class GameService {
   }
 
   userReaction(questionId: string, userId: string, status: string) {
-    const url = `${CONFIG.functionsUrl}/question/userReaction/${questionId}`;
-    return this.http.post<Question>(url, { userId: userId, status: status});
+      const collection = `questions/${questionId}/reactions`;
+      return this.dbService.getDoc(collection, userId).get().then(data => {
+        const reaction = data.data();
+          if (reaction) {
+            if (status !== reaction.status) {
+             return this.dbService.setDoc(collection, userId, { status: status });
+            } else {
+             return this.dbService.deleteDoc(collection, userId);
+            }
+          } else {
+            return this.dbService.setDoc(collection, userId , { status: status });
+          }
+      });
   }
 
   getUserReaction(questionId: string, userId: string) {
-    return this.dbService.valueChanges(`questions/${questionId}/reaction`, userId );
+    return this.dbService.valueChanges(`questions/${questionId}/reactions`, userId );
+  }
+
+  getQuestion(questionId: string) {
+    return this.dbService.valueChanges(`questions`, questionId );
   }
 
 }
