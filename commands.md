@@ -41,6 +41,7 @@ Commands :
     description:  release android app for staging/production environment
     e.g.       :  node cli release-mobile --pv trivia --pk io.bitwiser.trivia.dev --plt android --e dev 
                     --keyStorePassword <keyStorePassword> --keyStoreAlias <keyStoreAlias> --keyStoreAliasPassword <keyStoreAliasPassword>
+                    --t <token> --v 28 --vn 1.1
     arguments  :  pv = productVarient e.g. trivia
                   pk = project package name defined in firebase e.g. io.bitwiser.trivia.dev
                   plt = Mobile platform e.g. android
@@ -48,6 +49,9 @@ Commands :
                   keyStorePassword = keyStorePassword for android(optional)
                   keyStoreAlias  = key store store alias  for android(optional)         
                   keyStoreAliasPassword  = key store alias password  for android(optional)
+                  token = token from schedular token
+                  v = versionCode for android/ios build
+                  vn = versionName for android build CFBundleShortVersionString for ios
 
 6) command: run-schedular
     e.g.       :  node cli run-schedular --se prod
