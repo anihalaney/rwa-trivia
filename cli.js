@@ -196,7 +196,7 @@ const commandList = {
                 "alias": ['VN', 'vn']
             },
         },
-        "builder": args => args.argv.platform === 'ios' && args.argv.env && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
+        "builder": args => args.argv.platform === 'ios'  && args.argv.environment.search('--env.prod') >= 0 ? args.argv.forDevice = ' --for-device' : args.argv.forDevice = '',
         "preCommand" : async (argv) => await updateAppVersion(argv, false)
     },
     "release-mobile": {
@@ -307,7 +307,7 @@ const commandList = {
                 args.argv.androidRelease = ` --key-store-path certificates/${productVariant}/${platformName}/bitwiser.keystore
                     --key-store-password ${keyStorePassword}
                     --key-store-alias ${keyStoreAlias} 
-                    --key-store-alias-password ${keyStoreAliasPassword} 
+                    --key-store-alias-password ${keyStoreAliasPassword}
                     --copy-to ${productVariant}.apk`;
             } else {
                 args.options({ 'buildCmd': { 'default': 'prepare' }, 'forDevice': { 'default': '--for-device' } });
