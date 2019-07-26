@@ -17,7 +17,8 @@ export enum TriggerConstants {
     invitationMailSubject = 'bitwiser.io: Friend Request',
     fromUser = 'support@trivia.com',
     ANDROID = 'android',
-    IOS = 'ios'
+    IOS = 'ios',
+    WEB = 'web'
 }
 
 export enum UserControllerConstants {
@@ -453,7 +454,7 @@ export enum AnalyticsEventConstants {
 export enum UserStatusConstants {
     ONLINE = 'online',
     OFFLINE = 'offline',
-    CONNECTED= 'connected'
+    CONNECTED = 'connected'
 }
 
 export enum DrawerConstants {

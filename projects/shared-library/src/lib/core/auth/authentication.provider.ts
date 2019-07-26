@@ -4,7 +4,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 import { Store } from '@ngrx/store';
 import { defer, from, Observable, of, throwError } from 'rxjs';
 import { filter, map, mapTo, share, take, tap } from 'rxjs/operators';
-import { User } from '../../shared/model';
+import { User, UserStatusConstants } from '../../shared/model';
 import { CoreState, coreState } from '../store';
 import { UIStateActions, UserActions } from '../store/actions';
 import { FirebaseAuthService } from './firebase-auth.service';
@@ -14,6 +14,7 @@ export class AuthenticationProvider {
 
   refreshTokenObserver: Observable<any>;
   user: User;
+  pushToken: string;
 
   constructor(private store: Store<CoreState>,
     private userActions: UserActions,
@@ -27,7 +28,6 @@ export class AuthenticationProvider {
         this.firebaseAuthService.getIdToken(afUser, false).then((token) => {
           this.user = new User(afUser);
           this.user.idToken = token;
-          console.log('token', token);
           this.store.dispatch(this.userActions.loginSuccess(this.user));
 
         });
@@ -45,12 +45,13 @@ export class AuthenticationProvider {
 
   }
 
-  updateUserStatus(token: string, device: string) {
-    this.firebaseAuthService.updateOnConnect(this.user, token, device);
-    this.firebaseAuthService.updateOnDisconnect(this.user, token, device);
+  updateDevicePushToken(token: string) {
+    this.firebaseAuthService.updatePushToken(token);
   }
 
-
+  updateUserConnection() {
+    this.firebaseAuthService.updateOnConnect(this.user);
+  }
 
   ensureLogin(url?: string): Observable<boolean> {
     if (isPlatformBrowser(this.platformId)) {

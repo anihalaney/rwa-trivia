@@ -3,8 +3,8 @@ import { Effect, Actions, ofType } from '@ngrx/effects';
 import { ActionWithPayload, UserActions } from '../actions';
 import { User, RouterStateUrl, Game, Friends, Invitation, Account } from '../../../shared/model';
 import { UserService, GameService, Utils } from '../../services';
-import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { empty } from 'rxjs';
+import { switchMap, map, distinct, mergeMap, filter, take, debounceTime, distinctUntilChanged, catchError } from 'rxjs/operators';
+import { empty, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { coreState, CoreState } from '../reducers';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
@@ -19,8 +19,13 @@ export class UserEffects {
         .pipe(map((action: ActionWithPayload<User>) => action.payload),
             switchMap((user: User) => this.svc.loadUserProfile(user)),
             mergeMap((user: User) => this.utils.setLoginFirebaseAnalyticsParameter(user)),
-            map((user: User) => this.userActions.addUserWithRoles(user)));
-
+            map((user: User) => this.userActions.addUserWithRoles(user)),
+            catchError((error) => {
+                console.log(error);
+                this.userActions.addUserWithRoles(null);
+                return of({});
+            })
+        );
 
     // Load users based on url
     @Effect()

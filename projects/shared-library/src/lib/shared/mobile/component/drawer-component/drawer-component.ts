@@ -88,11 +88,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
             if (status !== null) {
                 switch (status) {
                     case DrawerConstants.UPDATE_TOKEN_STATUS:
-                        if (isAndroid) {
-                            this.authProvider.updateUserStatus(this.pushToken, TriggerConstants.ANDROID);
-                        } else {
-                            this.authProvider.updateUserStatus(this.pushToken, TriggerConstants.IOS);
-                        }
+                        this.authProvider.updateUserConnection();
                         break;
                     case DrawerConstants.LOGOUT:
                         this.resetValues();
@@ -111,6 +107,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
                 if (!this.pushToken) {
                     firebase.getCurrentPushToken().then((token) => {
                         this.pushToken = token;
+                        this.authProvider.updateDevicePushToken(token);
                         const deviceToken: DeviceToken = new DeviceToken();
                         deviceToken.token = token;
                         deviceToken.online = true;
@@ -124,7 +121,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
                                 user.androidPushTokens.push(deviceToken);
                                 this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
                             } else {
-                                this.authProvider.updateUserStatus(this.pushToken, TriggerConstants.ANDROID);
+                                this.authProvider.updateUserConnection();
                             }
 
                         } else {
@@ -137,7 +134,7 @@ export class DrawerComponent implements OnInit, OnDestroy {
                                 user.iosPushTokens.push(deviceToken);
                                 this.updateUser(user, DrawerConstants.UPDATE_TOKEN_STATUS);
                             } else {
-                                this.authProvider.updateUserStatus(this.pushToken, TriggerConstants.IOS);
+                                this.authProvider.updateUserConnection();
                             }
 
                         }
@@ -220,13 +217,15 @@ export class DrawerComponent implements OnInit, OnDestroy {
     }
 
     resetValues() {
+
         this.authProvider.logout();
-         /* We have used Timeout because authprovide.logout() nullify object after some time */
+        /* We have used Timeout because authprovide.logout() nullify object after some time */
         setTimeout(() => {
             this.logOut = false;
             this.pushToken = undefined;
             this.activeMenu = 'Home';
             this.closeDrawer();
+            this.store.dispatch(this.userActions.loginSuccess(null));
             this.routerExtension.navigate(['/dashboard'], { clearHistory: true });
         }, 2000);
 

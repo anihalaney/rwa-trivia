@@ -4,17 +4,24 @@ import * as firebaseApp from 'nativescript-plugin-firebase/app';
 import * as firebase from 'nativescript-plugin-firebase';
 import { Subject, Observable } from 'rxjs';
 import { RouterExtensions } from 'nativescript-angular/router';
-import { User, CollectionConstants, UserStatusConstants } from 'shared-library/shared/model';
+import { User, CollectionConstants, UserStatusConstants, TriggerConstants } from 'shared-library/shared/model';
+import { isAndroid } from 'tns-core-modules/ui/page/page';
 
 
 @Injectable()
 export class TNSFirebaseAuthService implements FirebaseAuthService {
 
     private userSubject: Subject<firebase.User>;
+    private pushToken: string;
+    private user: any;
+
     constructor(private routerExtension: RouterExtensions) {
         this.userSubject = new Subject<firebase.User>();
         firebase.addAuthStateListener({
-            onAuthStateChanged: (data) => this.userSubject.next(data.user),
+            onAuthStateChanged: (data) => {
+                this.user = data.user;
+                return this.userSubject.next(data.user);
+            }
         });
     }
 
@@ -38,6 +45,8 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
     }
 
     public signOut() {
+        this.updateTokenStatus(this.user.uid, UserStatusConstants.OFFLINE);
+        this.updatePushToken(undefined);
         firebaseApp.auth().signOut();
     }
 
@@ -95,19 +104,29 @@ export class TNSFirebaseAuthService implements FirebaseAuthService {
         this.userSubject.next(user);
     }
 
-    public updateOnConnect(user: User, token: string, device: string) {
+    public updatePushToken(token: string) {
+        this.pushToken = token;
+    }
+
+    public updateOnConnect(user: User) {
         firebaseApp.database().ref(`${CollectionConstants.INFO}/${CollectionConstants.CONNECTED}`)
             .once('value')
             .then(connected => {
                 console.log('connected', connected);
                 const status = connected.key === UserStatusConstants.CONNECTED ? UserStatusConstants.ONLINE : UserStatusConstants.OFFLINE;
-                firebaseApp.database().ref(`/${CollectionConstants.USERS}/${token}`).set({ status, userId: user.userId, device });
+                this.updateOnDisconnect();
+                this.updateTokenStatus(user.userId, status);
             });
     }
 
-    public updateOnDisconnect(user: User, token: string, device: string) {
-        firebaseApp.database().ref(`${CollectionConstants.USERS}/${token}`)
+    private updateOnDisconnect() {
+        firebaseApp.database().ref(`${CollectionConstants.USERS}/${this.pushToken}`)
             .onDisconnect()
             .update({ status: UserStatusConstants.OFFLINE });
+    }
+
+    public updateTokenStatus(userId: string, status: string) {
+        firebaseApp.database().ref(`/${CollectionConstants.USERS}/${this.pushToken}`)
+            .set({ status, userId, device: (isAndroid) ? TriggerConstants.ANDROID : TriggerConstants.IOS });
     }
 }
