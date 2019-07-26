@@ -49,7 +49,7 @@ export class RecentGameCardComponent implements OnInit, OnChanges, OnDestroy {
             this.otherUserId = this.getOpponentId(this.game);
             if (this.otherUserId !== undefined) {
                 if (this.userDict[this.otherUserId] === undefined) {
-                    this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
+                    // this.store.dispatch(this.userActions.loadOtherUserProfile(this.otherUserId));
                     this.cd.markForCheck();
                 }
             }

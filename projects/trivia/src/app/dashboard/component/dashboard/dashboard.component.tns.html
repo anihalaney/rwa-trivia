@@ -87,7 +87,7 @@
                         backgroundColor="white" iosOverflowSafeArea="false">
                         <StackLayout *ngIf="gameInvites" iosOverflowSafeArea="false">
                             <Label text="Invitation to play games" orientation="horizontal" horizontalAlignment="center"
-                                padding="10" textWrap="true" class="title Roboto-Medium">
+                                padding="10" textWrap="true" class="title-black Roboto-Medium" color="black">
                             </Label>
                             <StackLayout *ngFor="let game of gameInvites" iosOverflowSafeArea="false">
                                 <game-invite [userDict]="userDict" [game]="game" ></game-invite>
@@ -102,7 +102,7 @@
                         backgroundColor="white" iosOverflowSafeArea="false">
                         <StackLayout *ngIf="friendInvitations" iosOverflowSafeArea="false">
                             <Label text="Friend Invitations" orientation="horizontal" horizontalAlignment="center"
-                                padding="10" textWrap="true" class="title Roboto-Medium">
+                                padding="10" textWrap="true" class="title-black Roboto-Medium">
                             </Label>
                             <StackLayout *ngFor="let invitation of friendInvitations | slice:friendInviteSliceStartIndex:friendInviteSliceLastIndex"
                                 iosOverflowSafeArea="false">

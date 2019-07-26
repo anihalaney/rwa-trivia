@@ -101,16 +101,12 @@
                             paddingBottom="0">
                             <RadListView #friendListView [items]="dataItem" ios:height="130">
                                 <ng-template let-item="item">
-                                    <StackLayout paddingTop="10" (tap)="selectFriendId(item)">
-                                        <Image [src]="getImageUrl(userDict[item])" backgroundColor="gray"
-                                            stretch="aspectFill" height="64" width="64" marginLeft="10"
-                                            verticalAlignment="center" marginRight="10" borderRadius="50"></Image>
-                                        <Label class="nameLabel" text="{{userDict[item]?.displayName}}"
-                                            horizontalAlignment="center" textWrap="true"></Label>
-                                        <Image visibility="{{ (item === friendUserId) ? 'visible' : 'collapsed'}}"
-                                            src="~/assets/images/check.png" height="30" width="30" marginLeft="10"
-                                            verticalAlignment="center" marginRight="5"></Image>
-                                    </StackLayout>
+                                    <GridLayout paddingTop="10" rows="auto,*" columns="*" (tap)="selectFriendIdApp(item)">                   
+                                        <app-user-card  row="0" col="0" horizontalAlignment="center" [userId]="item" [type]="userCardType.USER_IMAGE_NAME_VERTICAL_NO_REDIRECT" > </app-user-card>
+                                        <Image row="1" col="0" visibility="{{ (item === friendUserId) ? 'visible' : 'collapsed'}}"
+                                        src="~/assets/images/check.png" height="30" width="30" marginLeft="10"
+                                        verticalAlignment="center" marginRight="5"  horizontalAlignment="center"></Image>
+                                    </GridLayout>
                                 </ng-template>
                                 <ListViewLinearLayout tkListViewLayout scrollDirection="Horizontal">
                                 </ListViewLinearLayout>

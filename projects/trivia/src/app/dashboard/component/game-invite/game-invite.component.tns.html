@@ -1,12 +1,6 @@
-<GridLayout rows="auto,auto,auto" columns="auto,*,auto,auto" padding="5"  iosOverflowSafeArea="false">
-    <Image [stlOpenUserProfile]="{userId: game.playerIds[0], redirectTo: 'otherUserProfile'}" row="0" col="0" rowSpan="3" [src]="getImageUrl(userDict[game.playerIds[0]])" 
-    stretch="aspectFill" height="50" width="50"
-    marginLeft="10" verticalAlignment="center" marginRight="10"  borderRadius="50" paddingLeft="10" paddingTop="10"></Image>
-    <Label row="0" col="1" text="{{userDict[game.playerIds[0]]?.displayName}}" textWrap="true" class="sub-title"></Label>
-    <Label row="1" col="1" text="{{categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
-            + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}" fontSize="12"></Label>
-    <Label row="2" col="1" text="{{remainingDays}} days left to accept invitation" marginBottom="11"
-        horizontalAlignment="left" textWrap="true" color="#fe4f20" fontSize="12"></Label>
-    <Button row="0" col="2" class="fa " text="&#xf058;" width="50" fontSize="40"  tap="" verticalAlignment="top" backgroundColor="#fff" color="#71b02b" [nsRouterLink]="['/game-play', game.gameId]" stlRippleEffect></Button>
-    <Button row="0" col="3" class="fa " text="&#xf057;" width="50" fontSize="40" backgroundColor="#fff" color="#f50057" tap="" verticalAlignment="top"  (tap)="rejectGameInvitation()" stlRippleEffect></Button>
+<GridLayout rows="auto,auto,auto" columns="*,auto,auto" padding="5"  iosOverflowSafeArea="false">
+    <app-user-card row="0" col="0" [user]="userDict[game.playerIds[0]]" [type]="userCardType.USER_IMAGE_NAME_CATEGORY_HORIZONTAL" [otherInfo]="{category:categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
+        + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1), remainingDays:remainingDays}"></app-user-card>
+    <Button row="0" col="1" class="fa " text="&#xf058;" width="50" fontSize="40" verticalAlignment="top" backgroundColor="#fff" color="#71b02b" [nsRouterLink]="['/game-play', game.gameId]" stlRippleEffect></Button>
+    <Button row="0" col="2" class="fa " text="&#xf057;" width="50" fontSize="40" backgroundColor="#fff" color="#f50057" verticalAlignment="top"  (tap)="rejectGameInvitation()" stlRippleEffect></Button>
 </GridLayout>

@@ -4,7 +4,7 @@
   <div class="row">
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Single">
       <div class="col-xs-12 textcenter clearfix">
-        <app-user-card [user]="user" [type]="userCardType.USER_CARD_TYPE_ONE"></app-user-card>
+        <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
         <hr>
         <div class="dark">Score {{game.stats[user.userId].score}}</div>
         <div class="div-badge">
@@ -20,7 +20,7 @@
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length == 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
-          <app-user-card [user]="user" [type]="userCardType.USER_CARD_TYPE_ONE"></app-user-card>
+          <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
           <span class="vs"> Vs </span>
         </div>
         <div class="col-xs-6">
@@ -58,11 +58,11 @@
     <ng-container *ngIf="game.gameOptions.playerMode == PlayerMode.Opponent && game.playerIds.length > 1">
       <div class="textcenter clearfix">
         <div class="col-xs-6 div-right-border">
-          <app-user-card [user]="user" [type]="userCardType.USER_CARD_TYPE_ONE"></app-user-card>
+          <app-user-card [userId]="user.userId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
           <span class="vs"> Vs </span>
         </div>
         <div class="col-xs-6">
-          <app-user-card [user]="otherUserInfo" [type]="userCardType.USER_CARD_TYPE_ONE"></app-user-card>
+          <app-user-card [userId]="otherUserId" [type]="userCardType.USER_WEB_IMAGE_NAME_LOCATION_VERTICAL"></app-user-card>
         </div>
       </div>
       <div class="clearfix">

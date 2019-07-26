@@ -6,7 +6,7 @@ import { Utils } from 'shared-library/core/services';
 import { UserActions } from 'shared-library/core/store/actions';
 import { AppState } from '../../../store';
 import { GameContinue } from './game-continue';
-import { userCardType } from 'shared-library/shared/model';
+
 
 @Component({
   selector: 'game-continue',
@@ -17,8 +17,6 @@ import { userCardType } from 'shared-library/shared/model';
 
 @AutoUnsubscribe({ 'arrayName': 'subscriptions' })
 export class GameContinueComponent extends GameContinue implements OnInit, OnDestroy {
-
-  userCardType = userCardType;
 
   constructor(public store: Store<AppState>,
     public dialog: MatDialog,

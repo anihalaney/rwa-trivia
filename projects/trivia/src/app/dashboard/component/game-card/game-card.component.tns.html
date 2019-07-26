@@ -1,6 +1,6 @@
     <StackLayout *ngIf="cardType == 'opponent'" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
-        <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
-            <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+        <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false" class="waiting-opponent">
+            <!-- <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
                 width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" iosOverflowSafeArea="false">
                 <GridLayout rows="*,*,*,*" columns="*" iosOverflowSafeArea="false">
@@ -11,8 +11,13 @@
     + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
                         textWrap="true" class="tagging"> </Label>
                 </GridLayout>
+            </StackLayout> -->
 
-            </StackLayout>
+            <app-user-card [userId]="user.userId" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE" 
+            [otherInfo]="{correctCount:game.stats[user.userId]?.score,questionRound:game.round,totalRound:totalRound, category:categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
+                + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}"
+            > </app-user-card>
+
             <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="center" iosOverflowSafeArea="false">
 
                 <Image *ngIf="game.stats[user.userId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
@@ -73,8 +78,8 @@
 
     <StackLayout *ngIf="cardType == 'twoPlayer' && myTurn" class="mobile Roboto-Regular" [nsRouterLink]="['/game-play', game.gameId]"
         clearHistory="true" iosOverflowSafeArea="false">
-        <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
-            <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}" row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
+        <GridLayout rows="*" columns="auto,*" iosOverflowSafeArea="false">
+            <!-- <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}" row="0" col="0" *ngIf="otherUserInfo" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray"
                 stretch="aspectFill" height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" *ngIf="otherUserInfo" iosOverflowSafeArea="false">
                 <GridLayout rows="*,*" columns="*" iosOverflowSafeArea="false">
@@ -82,7 +87,10 @@
                     <Label row="1" column="0" text="Round {{game.round}} | Score {{game.stats[otherUserId]?.score}}"
                         textWrap="true" class="sub-title"></Label>
                 </GridLayout>
-            </StackLayout>
+            </StackLayout> -->
+            <app-user-card row="0" col="0" [userId]="otherUserId"  [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE" 
+            [otherInfo]="{correctCount:game.stats[otherUserId]?.score,questionRound:game.round,totalRound:totalRound}"
+            > </app-user-card>
             <StackLayout *ngIf="otherUserId" row="0" col="2" orientation="horizontal" horizontalAlignment="right" iosOverflowSafeArea="false">
 
                 <Image *ngIf="game.stats[otherUserId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
@@ -114,7 +122,7 @@
             <StackLayout row="0" col="2" class="hr-light m-10" iosOverflowSafeArea="false"></StackLayout>
         </GridLayout>
         <GridLayout rows="*" columns="auto,auto,*" iosOverflowSafeArea="false">
-            <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
+            <!-- <Image  [stlOpenUserProfile]="{userId: user.userId, redirectTo: 'userProfile'}" row="0" col="0" src="{{getImageUrl(user)}}" backgroundColor="gray" stretch="aspectFill" height="64"
                 width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" iosOverflowSafeArea="false">
                 <GridLayout rows="*,*" columns="*" iosOverflowSafeArea="false">
@@ -123,7 +131,11 @@
                         textWrap="true" class="sub-title"></Label>
                 </GridLayout>
 
-            </StackLayout>
+            </StackLayout> -->
+            <app-user-card [userId]="user.userId"  [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE" 
+            [otherInfo]="{correctCount:game.stats[user.userId]?.score,questionRound:game.round,totalRound:totalRound}"
+            > </app-user-card>
+
             <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="right" iosOverflowSafeArea="false">
 
                 <Image *ngIf="game.stats[user.userId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
@@ -151,8 +163,8 @@
 
 
     <StackLayout *ngIf="cardType == 'theirTurn' && !myTurn" class="mobile Roboto-Regular" iosOverflowSafeArea="false">
-        <GridLayout rows="*,*" columns="auto,auto,*" *ngIf="otherUserInfo" iosOverflowSafeArea="false">
-            <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}" row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill"
+        <GridLayout rows="*" columns="auto, *" *ngIf="otherUserId" iosOverflowSafeArea="false" class="their-turn">
+            <!-- <Image [stlOpenUserProfile]="{userId: otherUserId, redirectTo: 'otherUserProfile'}" row="0" col="0" src="{{getImageUrl(otherUserInfo)}}" backgroundColor="gray" stretch="aspectFill"
                 height="64" width="64" marginLeft="2" verticalAlignment="center" borderRadius="50"></Image>
             <StackLayout row="0" col="1" paddingLeft="20" paddingTop="10" iosOverflowSafeArea="false">
                 <GridLayout rows="*,*,*,*" columns="*" iosOverflowSafeArea="false">
@@ -163,8 +175,12 @@
     + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}}"
                         textWrap="true" class="tagging"> </Label>
                 </GridLayout>
-            </StackLayout>
-            <StackLayout row="0" col="2" orientation="horizontal" horizontalAlignment="right" *ngIf="otherUserId" iosOverflowSafeArea="false">
+            </StackLayout> -->
+            <app-user-card [userId]="otherUserId" row="0" col="0" [type]="userCardType.USER_IMAGE_NAME_WITH_SCORE" 
+            [otherInfo]="{correctCount:game.stats[user.userId]?.score,questionRound:game.round,totalRound:totalRound, category:categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.charAt(0)?.toUpperCase()
+                + categoryDict[game.gameOptions?.categoryIds[randomCategoryId]]?.categoryName?.slice(1)}"
+            ></app-user-card>
+            <StackLayout row="0" col="1" orientation="horizontal" horizontalAlignment="right" *ngIf="otherUserId" iosOverflowSafeArea="false">
                 <Image *ngIf="game.stats[otherUserId]?.score >= 1" src="~/assets/images/score1.png" height="30" width="30"
                     marginLeft="2" verticalAlignment="center" marginLeft="2" padding="20" borderRadius="50"></Image>
 

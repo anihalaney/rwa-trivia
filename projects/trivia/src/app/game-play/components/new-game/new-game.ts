@@ -81,7 +81,7 @@ export class NewGame implements OnDestroy {
             this.uFriends = [];
             uFriends.map(friend => {
               if (this.userDict && !this.userDict[friend.userId]) {
-                this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
+                // this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
               }
               this.uFriends = [...this.uFriends, ...friend.userId];
             });
@@ -163,6 +163,7 @@ export class NewGame implements OnDestroy {
   }
 
   selectFriendId(friendId: string) {
+    console.log('event fired', friendId);
     this.friendUserId = friendId;
     this.errMsg = undefined;
   }

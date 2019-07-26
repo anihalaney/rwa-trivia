@@ -1,5 +1,5 @@
 import { Input, Output, EventEmitter } from '@angular/core';
-import { Question, Answer, User, ApplicationSettings } from 'shared-library/shared/model';
+import { Question, Answer, User, ApplicationSettings, userCardType } from 'shared-library/shared/model';
 
 export class GameQuestion {
   @Input() questionIndex: number;
@@ -25,6 +25,7 @@ export class GameQuestion {
 
   answeredIndex: number;
   correctAnswerIndex: number;
+  userCardType = userCardType;
   // applicationSettings: ApplicationSettings;
 
   doPlay = true;

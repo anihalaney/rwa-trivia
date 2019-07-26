@@ -249,7 +249,7 @@ export class NewGameComponent extends NewGame implements OnInit, OnDestroy {
     this.customTag = args.text;
   }
 
-  selectFriendId(friendId: string) {
+  selectFriendIdApp(friendId: string) {
     this.friendUserId = friendId;
     this.listViewComponent.listView.refresh();
   }

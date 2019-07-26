@@ -40,6 +40,7 @@ export class LeaderboardComponent extends Leaderboard implements OnDestroy {
     super(store, userActions, utils, route, cd, ngZone);
     this.page.on('loaded', () => this.ngZone.run(() => {
       this.renderView = true;
+      this.cd.markForCheck();
     }));
 
     this.items = [];

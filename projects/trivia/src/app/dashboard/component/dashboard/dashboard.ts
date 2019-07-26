@@ -175,7 +175,7 @@ export class Dashboard implements OnDestroy {
                     playerIds.map(playerId => {
                         if (playerId !== this.user.userId) {
                             if (this.userDict[playerId] === undefined) {
-                                this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
+                                // this.store.dispatch(this.userActions.loadOtherUserProfile(playerId));
                             }
 
                         }

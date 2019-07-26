@@ -32,7 +32,7 @@ export class InviteFriends implements OnDestroy {
       if (uFriends !== null && uFriends !== undefined) {
         this.uFriends = [];
         uFriends.map((friend, index) => {
-          this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
+          // this.store.dispatch(this.userActions.loadOtherUserProfile(friend.userId));
           this.uFriends.push(friend);
           this.uFriends[index].userId = friend.userId;
         });
